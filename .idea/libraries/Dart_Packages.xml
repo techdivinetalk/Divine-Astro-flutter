@@ -100,6 +100,13 @@
             </list>
           </value>
         </entry>
+        <entry key="custom_rating_bar">
+          <value>
+            <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/custom_rating_bar-2.0.5/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="dart_style">
           <value>
             <list>
@@ -310,6 +317,13 @@
             </list>
           </value>
         </entry>
+        <entry key="percent_indicator">
+          <value>
+            <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/percent_indicator-4.2.3/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="petitparser">
           <value>
             <list>
@@ -335,6 +349,13 @@
           <value>
             <list>
               <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/pub_semver-2.1.4/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="readmore">
+          <value>
+            <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/readmore-2.2.0/lib" />
             </list>
           </value>
         </entry>
@@ -509,6 +530,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/convert-3.1.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/crypto-3.0.3/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/cupertino_icons-1.0.5/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/custom_rating_bar-2.0.5/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/dart_style-2.3.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/dartx-1.2.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/dbus-0.7.8/lib" />
@@ -536,10 +558,12 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/path_provider_linux-2.1.11/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/path_provider_platform_interface-2.1.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/path_provider_windows-2.1.7/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/percent_indicator-4.2.3/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/petitparser-5.4.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/platform-3.1.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.5/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/pub_semver-2.1.4/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/readmore-2.2.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences-2.2.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences_android-2.2.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences_foundation-2.3.2/lib" />
