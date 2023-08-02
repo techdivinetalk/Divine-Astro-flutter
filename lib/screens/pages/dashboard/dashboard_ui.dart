@@ -8,7 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../common/colors.dart';
 import '../../../gen/assets.gen.dart';
-import '../profile/Profile_UI.dart';
+import '../profile/profile_ui.dart';
 import '../side_menu/side_menu_ui.dart';
 import 'dashboard_controller.dart';
 
