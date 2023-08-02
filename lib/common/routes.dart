@@ -1,11 +1,11 @@
-import 'package:divine_astrologer/screens/pages/blocked_user/BlockedUser_bindings.dart';
-import 'package:divine_astrologer/screens/pages/blocked_user/BlockedUser_UI.dart';
+import 'package:divine_astrologer/screens/pages/blocked_user/blockedUser_bindings.dart';
+import 'package:divine_astrologer/screens/pages/blocked_user/blockedUser_UI.dart';
 import 'package:divine_astrologer/screens/pages/dashboard/dashboard_ui.dart';
-import 'package:divine_astrologer/screens/pages/edit_profile/EditProfile_binding.dart';
+import 'package:divine_astrologer/screens/pages/edit_profile/editProfile_binding.dart';
 import 'package:get/get.dart';
 
 import '../screens/pages/dashboard/dashboard_bindings.dart';
-import '../screens/pages/edit_profile/EditProfile_UI.dart';
+import '../screens/pages/edit_profile/editProfile_UI.dart';
 import '../screens/splash/splash_binding.dart';
 import '../screens/splash/splash_ui.dart';
 

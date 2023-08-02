@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../../../common/CustomLightYellowButton.dart';
-import '../../../common/TextFieldCustom.dart';
+import '../../../common/customLightYellowButton.dart';
+import '../../../common/textFieldCustom.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
 import '../../../common/strings.dart';

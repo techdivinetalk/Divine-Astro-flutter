@@ -28,7 +28,7 @@ class SideMenuDrawer extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ListTile(
-              leading: Assets.images.icReportSvg.svg(),
+              leading: Assets.images.icReport.svg(),
               title: const Text('Report an Astrologer'),
               onTap: () => {},
             ),

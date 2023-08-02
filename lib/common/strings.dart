@@ -11,7 +11,7 @@ class AppString {
   static String senderCategory = "Sender Category";
   static String readMore = "Read more";
   static String showLess = "Show less";
-  static String goLive = "Go live";
+  static String goLive = "Go Live";
   static String sessionType = "Session Type";
   static String chat = "CHAT";
   static String call = "CALL";

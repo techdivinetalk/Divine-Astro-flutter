@@ -8,14 +8,18 @@ class CustomLightYellowButton extends StatelessWidget {
   final String name;
   final VoidCallback onTaped;
 
-  const CustomLightYellowButton({super.key, required this.name, required this.onTaped, });
+  const CustomLightYellowButton({
+    super.key,
+    required this.name,
+    required this.onTaped,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 25.h),
       child: InkWell(
-        onTap: ()=> onTaped(),
+        onTap: () => onTaped(),
         child: Container(
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
@@ -25,10 +29,10 @@ class CustomLightYellowButton extends StatelessWidget {
                 child: Padding(
               padding: EdgeInsets.all(15.h),
               child: Text(
-                name!,
-
+                name,
                 style: AppTextStyle.textStyle16(
-                    fontWeight: FontWeight.w600, fontColor: AppColors.darkCoffee),
+                    fontWeight: FontWeight.w600,
+                    fontColor: AppColors.brownColour),
               ),
             ))),
       ),

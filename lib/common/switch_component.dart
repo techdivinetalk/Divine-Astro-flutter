@@ -12,8 +12,8 @@ class SwitchWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlutterSwitch(
-      inactiveTextColor: AppColors.darkGreen,
-      activeTextColor: AppColors.darkGreen,
+      inactiveTextColor: AppColors.darkBlue,
+      activeTextColor: AppColors.darkBlue,
       width: 58.0,
       height: 28.0,
       toggleSize: 20.0,
@@ -23,11 +23,13 @@ class SwitchWidget extends StatelessWidget {
       padding: 2.0,
       valueFontSize: 12.0,
       // toggleColor: const Color.fromRGBO(225, 225, 225, 1),
+      activeTextFontWeight: FontWeight.w400,
+      inactiveTextFontWeight: FontWeight.w400,
       activeToggleColor: AppColors.appYellowColour,
       inactiveToggleColor: Colors.grey,
       toggleColor: AppColors.greyColour,
       switchBorder: Border.all(
-        color: AppColors.darkGreen,
+        color: AppColors.darkBlue,
         width: 01.0,
       ),
       toggleBorder: Border.all(

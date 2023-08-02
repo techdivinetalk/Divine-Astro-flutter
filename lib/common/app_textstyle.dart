@@ -45,8 +45,6 @@ class AppTextStyle {
     );
   }
 
-
-
   static TextStyle textStyle16({Color? fontColor, FontWeight? fontWeight}) {
     return TextStyle(
       fontSize: 16.sp,
@@ -63,6 +61,14 @@ class AppTextStyle {
     );
   }
 
+  static TextStyle textStyleStatic20(
+      {Color? fontColor, FontWeight? fontWeight}) {
+    return TextStyle(
+      fontSize: 20.sp,
+      fontWeight: fontWeight ?? FontWeight.w400,
+      color: fontColor ?? AppColors.blackColor,
+    );
+  }
 
   static TextStyle textStylebold16({Color? fontColor, FontWeight? fontWeight}) {
     return TextStyle(
@@ -77,14 +83,6 @@ class AppTextStyle {
       fontSize: 20.sp,
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.italic,
-      color: fontColor ?? AppColors.blackColor,
-    );
-  }
-
-  static TextStyle textStyle20({Color? fontColor, FontWeight? fontWeight}) {
-    return TextStyle(
-      fontSize: 20.sp,
-      fontWeight: fontWeight ?? FontWeight.w400,
       color: fontColor ?? AppColors.blackColor,
     );
   }

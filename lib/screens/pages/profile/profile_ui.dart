@@ -10,7 +10,7 @@ import '../../../common/routes.dart';
 import '../../../common/strings.dart';
 import '../../../gen/assets.gen.dart';
 import '../side_menu/side_menu_ui.dart';
-import 'Profile_controller.dart';
+import 'profile_controller.dart';
 
 class ProfileUI extends GetView<ProfileController> {
   const ProfileUI({Key? key}) : super(key: key);
@@ -26,7 +26,6 @@ class ProfileUI extends GetView<ProfileController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -35,7 +34,7 @@ class ProfileUI extends GetView<ProfileController> {
                       Stack(
                         alignment: Alignment.topRight,
                         children: [
-                          Assets.images.bgTmpUserSvg
+                          Assets.images.bgTmpUser
                               .svg(height: 80.h, width: 80.w),
                           Container(
                             decoration: const BoxDecoration(
@@ -59,7 +58,7 @@ class ProfileUI extends GetView<ProfileController> {
                           child: Text(
                             AppString.follow,
                             style: TextStyle(
-                                color: AppColors.darkCoffee,
+                                color: AppColors.brownColour,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14.sp),
                           ))
@@ -119,7 +118,7 @@ class ProfileUI extends GetView<ProfileController> {
                         ),
                         Row(
                           children: [
-                            Assets.images.icLanguageSvg.svg(
+                            Assets.images.icLanguage.svg(
                               height: 13.h,
                               width: 13.w,
                             ),
@@ -140,7 +139,7 @@ class ProfileUI extends GetView<ProfileController> {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Assets.images.icSuitcaseSvg.svg(
+                            Assets.images.icSuitcase.svg(
                               height: 13.h,
                               width: 13.w,
                             ),
@@ -600,7 +599,7 @@ class ProfileUI extends GetView<ProfileController> {
                   },
                   child: Row(
                     children: [
-                      Assets.images.icEdit.svg(height: 18.h,width: 18.w),
+                      Assets.images.icEdit.svg(height: 18.h, width: 18.w),
                       SizedBox(
                         width: 15.w,
                       ),
@@ -615,7 +614,8 @@ class ProfileUI extends GetView<ProfileController> {
                     onTap: () {},
                     child: Row(
                       children: [
-                        Assets.images.icOrderHistory.svg(height: 18.h,width: 18.w),
+                        Assets.images.icOrderHistory
+                            .svg(height: 18.h, width: 18.w),
                         SizedBox(
                           width: 15.w,
                         ),
@@ -629,7 +629,8 @@ class ProfileUI extends GetView<ProfileController> {
                     onTap: () {},
                     child: Row(
                       children: [
-                        Assets.images.icBankDetail.svg(height: 18.h,width: 18.w),
+                        Assets.images.icBankDetail
+                            .svg(height: 18.h, width: 18.w),
                         SizedBox(
                           width: 15.w,
                         ),
@@ -643,7 +644,7 @@ class ProfileUI extends GetView<ProfileController> {
                     onTap: () {},
                     child: Row(
                       children: [
-                        Assets.images.icPrice.svg(height: 18.h,width: 18.w),
+                        Assets.images.icPrice.svg(height: 18.h, width: 18.w),
                         SizedBox(
                           width: 15.w,
                         ),
@@ -657,7 +658,7 @@ class ProfileUI extends GetView<ProfileController> {
                     onTap: () {},
                     child: Row(
                       children: [
-                        Assets.images.icCalling.svg(height: 18.h,width: 18.w),
+                        Assets.images.icCalling.svg(height: 18.h, width: 18.w),
                         SizedBox(
                           width: 15.w,
                         ),
@@ -675,7 +676,7 @@ class ProfileUI extends GetView<ProfileController> {
                   },
                   child: Row(
                     children: [
-                      Assets.images.icBlock.svg(height: 18.h,width: 18.w),
+                      Assets.images.icBlock.svg(height: 18.h, width: 18.w),
                       SizedBox(
                         width: 15.w,
                       ),

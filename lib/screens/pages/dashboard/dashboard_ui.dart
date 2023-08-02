@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import '../../../common/colors.dart';
 import '../../../gen/assets.gen.dart';
 import '../profile/profile_ui.dart';
-import '../side_menu/side_menu_ui.dart';
 import 'dashboard_controller.dart';
 
 class DashboardScreen extends GetView<DashboardController> {
@@ -18,8 +17,6 @@ class DashboardScreen extends GetView<DashboardController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // appBar: commonDashboardAppBar(),
-        drawer: const SideMenuDrawer(),
         key: controller.scaffoldkey,
         body:
             Obx(() => widgetOptions.elementAt(controller.selectedIndex.value)),
@@ -62,8 +59,6 @@ class DashboardScreen extends GetView<DashboardController> {
                 ),
                 BottomNavigationBarItem(
                   icon: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       controller.selectedIndex.value == 2
                           ? Assets.images.icSelectedSuggest.svg(height: 24.h)
@@ -85,7 +80,6 @@ class DashboardScreen extends GetView<DashboardController> {
                       controller.selectedIndex.value == 3
                           ? Assets.images.icSelectedWallet.svg(height: 24.h)
                           : Assets.images.icUnselectedWallet.svg(height: 24.h),
-
                       const SizedBox(height: 5),
                       Text("Wallet",
                           maxLines: 2,
@@ -133,40 +127,9 @@ class DashboardScreen extends GetView<DashboardController> {
 
   static const List<Widget> widgetOptions = <Widget>[
     HomeUI(),
-
     PerformanceUI(),
     SuggestRemediesUI(),
     WalletUI(),
     ProfileUI()
   ];
-
-  PreferredSizeWidget commonDashboardAppBar() {
-    return AppBar(
-        backgroundColor: AppColors.white,
-        elevation: 0,
-        title: Obx(
-          () => SizedBox(
-            height: kToolbarHeight,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                controller.isShowTitle.isTrue
-                    ? Text(
-                        controller.appbarTitle.value,
-                        style: AppTextStyle.textStyle16(),
-                      )
-                    : Container(),
-                InkWell(
-                    onTap: () {
-                      controller.isShowTitle.value =
-                          !controller.isShowTitle.value;
-                    },
-                    child: Icon(controller.isShowTitle.value
-                        ? Icons.visibility
-                        : Icons.visibility_off))
-              ],
-            ),
-          ),
-        ));
-  }
 }
