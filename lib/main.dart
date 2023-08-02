@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
           fallbackLocale: AppTranslations.fallbackLocale,
           translations: AppTranslations(),
           theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
             useMaterial3: true,
           ),
           builder: (context, widget) {
