@@ -10,3 +10,4 @@ class HomeUI extends GetView<SplashController> {
     return const Scaffold();
   }
 }
+

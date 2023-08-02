@@ -4,10 +4,11 @@ import 'package:divine_astrologer/screens/pages/performance/performance_ui.dart'
 import 'package:divine_astrologer/screens/pages/suggest_remedies/suggest_remedies_ui.dart';
 import 'package:divine_astrologer/screens/pages/wallet/wallet_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../common/colors.dart';
 import '../../../gen/assets.gen.dart';
-import '../profile/profile_ui.dart';
+import '../profile/Profile_UI.dart';
 import '../side_menu/side_menu_ui.dart';
 import 'dashboard_controller.dart';
 
@@ -17,7 +18,7 @@ class DashboardScreen extends GetView<DashboardController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: commonDashboardAppBar(),
+        // appBar: commonDashboardAppBar(),
         drawer: const SideMenuDrawer(),
         key: controller.scaffoldkey,
         backgroundColor: Colors.white,
@@ -32,12 +33,16 @@ class DashboardScreen extends GetView<DashboardController> {
                 BottomNavigationBarItem(
                   icon: Column(
                     children: [
-                      Assets.images.icHome.image(),
+                      controller.selectedIndex.value == 0
+                          ? Assets.images.icSelectedHome.svg(height: 24.h)
+                          : Assets.images.icUnselectedHome.svg(height: 24.h),
                       const SizedBox(height: 5),
                       Text("Home",
                           maxLines: 2,
                           style: AppTextStyle.textStyle10(
-                              fontColor: AppColors.darkGreen))
+                              fontColor: controller.selectedIndex.value == 0
+                                  ? AppColors.darkBlue
+                                  : AppColors.lightGrey))
                     ],
                   ),
                   label: '',
@@ -45,12 +50,16 @@ class DashboardScreen extends GetView<DashboardController> {
                 BottomNavigationBarItem(
                   icon: Column(
                     children: [
-                      Assets.images.icPerformance.image(),
+                      controller.selectedIndex.value == 1
+                          ? Assets.images.icSelectedPerfom.svg(height: 24.h)
+                          : Assets.images.icUnselectedPerfom.svg(height: 24.h),
                       const SizedBox(height: 5),
                       Text("Performance",
                           maxLines: 2,
                           style: AppTextStyle.textStyle10(
-                              fontColor: AppColors.darkGreen))
+                              fontColor: controller.selectedIndex.value == 1
+                                  ? AppColors.darkBlue
+                                  : AppColors.lightGrey))
                     ],
                   ),
                   label: '',
@@ -60,12 +69,16 @@ class DashboardScreen extends GetView<DashboardController> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Assets.images.icSuggestRemedies.image(),
+                      controller.selectedIndex.value == 2
+                          ? Assets.images.icSelectedSuggest.svg(height: 24.h)
+                          : Assets.images.icUnselectedSuggest.svg(height: 24.h),
                       const SizedBox(height: 5),
                       Text("Suggest \nRemedies",
                           maxLines: 2,
                           style: AppTextStyle.textStyle10(
-                              fontColor: AppColors.darkGreen))
+                              fontColor: controller.selectedIndex.value == 2
+                                  ? AppColors.darkBlue
+                                  : AppColors.lightGrey))
                     ],
                   ),
                   label: '',
@@ -73,12 +86,17 @@ class DashboardScreen extends GetView<DashboardController> {
                 BottomNavigationBarItem(
                   icon: Column(
                     children: [
-                      Assets.images.icWallet.image(),
+                      controller.selectedIndex.value == 3
+                          ? Assets.images.icSelectedWallet.svg(height: 24.h)
+                          : Assets.images.icUnselectedWallet.svg(height: 24.h),
+
                       const SizedBox(height: 5),
                       Text("Wallet",
                           maxLines: 2,
                           style: AppTextStyle.textStyle10(
-                              fontColor: AppColors.darkGreen))
+                              fontColor: controller.selectedIndex.value == 3
+                                  ? AppColors.darkBlue
+                                  : AppColors.lightGrey))
                     ],
                   ),
                   label: "",
@@ -86,13 +104,19 @@ class DashboardScreen extends GetView<DashboardController> {
                 BottomNavigationBarItem(
                   icon: Column(
                     children: [
-                      Assets.images.icProfile.image(),
+                      controller.selectedIndex.value == 3
+                          ? Assets.images.icProfilePhoto.svg(height: 24.h)
+                          : Assets.images.icProfilePhoto.svg(height: 24.h),
                       const SizedBox(height: 5),
-                      const Text(
+                      Text(
                         "Profile",
                         maxLines: 2,
                         style: TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.w400),
+                            fontSize: 10,
+                            fontWeight: FontWeight.w400,
+                            color: controller.selectedIndex.value == 4
+                                ? AppColors.darkBlue
+                                : AppColors.lightGrey),
                       )
                     ],
                   ),
@@ -101,7 +125,6 @@ class DashboardScreen extends GetView<DashboardController> {
               ],
               elevation: 0,
               currentIndex: controller.selectedIndex.value,
-              selectedItemColor: Colors.amber[800],
               onTap: (value) {
                 _onItemTapped(value);
               },
@@ -114,6 +137,7 @@ class DashboardScreen extends GetView<DashboardController> {
 
   static const List<Widget> widgetOptions = <Widget>[
     HomeUI(),
+
     PerformanceUI(),
     SuggestRemediesUI(),
     WalletUI(),
