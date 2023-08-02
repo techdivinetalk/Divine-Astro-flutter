@@ -26,6 +26,7 @@ class SideMenuDrawer extends StatelessWidget {
                     child: const Icon(Icons.close))
               ],
             ),
+            const SizedBox(height: 10),
             ListTile(
               leading: Assets.images.icReport.image(),
               title: const Text('Report an Astrologer'),

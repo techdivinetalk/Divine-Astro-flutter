@@ -20,12 +20,8 @@ class DashboardScreen extends GetView<DashboardController> {
         appBar: commonDashboardAppBar(),
         drawer: const SideMenuDrawer(),
         key: controller.scaffoldkey,
-        backgroundColor: Colors.white,
-        body: Stack(
-          children: <Widget>[
+        body:
             Obx(() => widgetOptions.elementAt(controller.selectedIndex.value)),
-          ],
-        ),
         bottomNavigationBar: Obx(() => BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               items: <BottomNavigationBarItem>[
@@ -141,7 +137,9 @@ class DashboardScreen extends GetView<DashboardController> {
                       controller.isShowTitle.value =
                           !controller.isShowTitle.value;
                     },
-                    child: const Icon(Icons.visibility))
+                    child: Icon(controller.isShowTitle.value
+                        ? Icons.visibility
+                        : Icons.visibility_off))
               ],
             ),
           ),

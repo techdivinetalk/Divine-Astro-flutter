@@ -26,6 +26,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "auto_size_text",
+      "rootUri": "file:///Users/mtpc-483/.pub-cache/hosted/pub.dev/auto_size_text-3.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "boolean_selector",
       "rootUri": "file:///Users/mtpc-483/.pub-cache/hosted/pub.dev/boolean_selector-2.1.1",
       "packageUri": "lib/",
@@ -146,6 +152,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "flutter_holo_date_picker",
+      "rootUri": "file:///Users/mtpc-483/.pub-cache/hosted/pub.dev/flutter_holo_date_picker-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_lints",
       "rootUri": "file:///Users/mtpc-483/.pub-cache/hosted/pub.dev/flutter_lints-2.0.2",
       "packageUri": "lib/",
@@ -154,6 +166,12 @@
     {
       "name": "flutter_screenutil",
       "rootUri": "file:///Users/mtpc-483/.pub-cache/hosted/pub.dev/flutter_screenutil-5.8.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_switch",
+      "rootUri": "file:///Users/mtpc-483/.pub-cache/hosted/pub.dev/flutter_switch-0.3.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -446,7 +464,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-08-01T14:07:15.113496Z",
+  "generated": "2023-08-02T14:20:32.409822Z",
   "generator": "pub",
   "generatorVersion": "3.0.5"
 }
