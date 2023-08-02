@@ -20,4 +20,26 @@ class AppString {
   static String promotionOffer = "PROMOTION OFFER";
   static String status = "Status";
   static String nextOnlineTiming = "Next Online Timing";
+  static String follow = "Follow";
+  static String profile = "Profile";
+  static String editProfile = "Edit Profile";
+  static String orderHistory = "Order History";
+  static String bankDetails = "Bank Details";
+  static String priceChangeRequest = "Price Change Request";
+  static String numberChangeRequest = "Number Change Request";
+  static String blockedUsers = "Blocked Users";
+  static String unblock = "Unblock";
+  static String searchBlockUserHint = "Search For Blocked User";
+  static String ratings = "Ratings";
+  static String userReview = "User Review";
+  static String years = "Years";
+  static String name = "Name";
+  static String experience = "Experience";
+  static String descriptions = "Descriptions";
+  static String speciality = "Speciality";
+  static String hintTextName = "Please Enter Name";
+  static String hintSpeciality = "Please Enter Speciality";
+  static String hintDescriptions = "Please Enter Descriptions";
+  static String hintExperience = "Please Enter Experience";
+  static String saveChanges = "Save Changes";
 }

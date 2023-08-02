@@ -28,32 +28,32 @@ class SideMenuDrawer extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ListTile(
-              leading: Assets.images.icReport.image(),
+              leading: Assets.images.icReportSvg.svg(),
               title: const Text('Report an Astrologer'),
               onTap: () => {},
             ),
             ListTile(
-              leading: Assets.images.icSettings.image(),
+              leading: Assets.images.icSetting.svg(),
               title: const Text('Settings'),
               onTap: () => {Navigator.of(context).pop()},
             ),
             ListTile(
-              leading: Assets.images.icContactUs.image(),
+              leading: Assets.images.icContactUs1.svg(),
               title: const Text('Contact Us'),
               onTap: () => {Navigator.of(context).pop()},
             ),
             ListTile(
-              leading: Assets.images.icShareFeedback.image(),
+              leading: Assets.images.icFeedBack.svg(),
               title: const Text('Share Feedback'),
               onTap: () => {Navigator.of(context).pop()},
             ),
             ListTile(
-              leading: Assets.images.icImportContacts.image(),
+              leading: Assets.images.icImportContact.svg(),
               title: const Text('Important numbers'),
               onTap: () => {Navigator.of(context).pop()},
             ),
             ListTile(
-              leading: Assets.images.icDonation.image(),
+              leading: Assets.images.icDonations.svg(),
               title: const Text('Donation'),
               onTap: () => {Navigator.of(context).pop()},
             ),
