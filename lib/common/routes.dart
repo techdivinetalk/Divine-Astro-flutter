@@ -1,7 +1,11 @@
+import 'package:divine_astrologer/screens/home_screen_options/earning/earning_bindings.dart';
+import 'package:divine_astrologer/screens/home_screen_options/earning/earning_ui.dart';
 import 'package:divine_astrologer/screens/pages/blocked_user/blockedUser_bindings.dart';
 import 'package:divine_astrologer/screens/pages/blocked_user/blockedUser_UI.dart';
 import 'package:divine_astrologer/screens/pages/dashboard/dashboard_ui.dart';
 import 'package:divine_astrologer/screens/pages/edit_profile/editProfile_binding.dart';
+import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_bindings.dart';
+import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_ui.dart';
 import 'package:get/get.dart';
 
 import '../screens/pages/dashboard/dashboard_bindings.dart';
@@ -16,6 +20,8 @@ class RouteName {
   static const String dashboard = "/dashboard";
   static const String blockedUser = "/blockedUser";
   static const String editProfileUI = "/editProfileUI";
+  static const String referAstrologer = "/referAstrologer";
+  static const String yourEarning = "/yourEarning";
 }
 
 class Routes {
@@ -36,5 +42,13 @@ class Routes {
         page: () => const EditProfileUI(),
         name: RouteName.editProfileUI,
         binding: EditProfileBinding()),
+    GetPage(
+        page: () => const ReferAnAstrologer(),
+        name: RouteName.referAstrologer,
+        binding: ReferAstrologerBinding()),
+    GetPage(
+        page: () => const YourEarning(),
+        name: RouteName.yourEarning,
+        binding: YourEarningBinding()),
   ];
 }
