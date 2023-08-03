@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import 'EditProfile_controller.dart';
+import 'editProfile_controller.dart';
 
 class EditProfileBinding extends Bindings {
   @override

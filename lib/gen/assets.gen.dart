@@ -14,17 +14,21 @@ import 'package:flutter/services.dart';
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// File path: assets/images/bg_tmpUser.png
-  AssetGenImage get bgTmpUserPng =>
-      const AssetGenImage('assets/images/bg_tmpUser.png');
+  /// File path: assets/images/bg_tmpBank.svg
+  SvgGenImage get bgTmpBank =>
+      const SvgGenImage('assets/images/bg_tmpBank.svg');
 
   /// File path: assets/images/bg_tmpUser.svg
-  SvgGenImage get bgTmpUserSvg =>
+  SvgGenImage get bgTmpUser =>
       const SvgGenImage('assets/images/bg_tmpUser.svg');
 
   /// File path: assets/images/bg_userProfile.png
-  AssetGenImage get bgUserProfile =>
+  AssetGenImage get bgUserProfilePng =>
       const AssetGenImage('assets/images/bg_userProfile.png');
+
+  /// File path: assets/images/bg_userProfile.svg
+  SvgGenImage get bgUserProfileSvg =>
+      const SvgGenImage('assets/images/bg_userProfile.svg');
 
   /// File path: assets/images/ic_ContactUs1.svg
   SvgGenImage get icContactUs1 =>
@@ -52,10 +56,6 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_book.svg
   SvgGenImage get icBook => const SvgGenImage('assets/images/ic_book.svg');
 
-  /// File path: assets/images/ic_bookAlt.png
-  AssetGenImage get icBookAlt =>
-      const AssetGenImage('assets/images/ic_bookAlt.png');
-
   /// File path: assets/images/ic_calling.svg
   SvgGenImage get icCalling =>
       const SvgGenImage('assets/images/ic_calling.svg');
@@ -63,17 +63,13 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_cart.svg
   SvgGenImage get icCart => const SvgGenImage('assets/images/ic_cart.svg');
 
-  /// File path: assets/images/ic_contact_us.png
-  AssetGenImage get icContactUs =>
-      const AssetGenImage('assets/images/ic_contact_us.png');
-
-  /// File path: assets/images/ic_donation.png
-  AssetGenImage get icDonation =>
-      const AssetGenImage('assets/images/ic_donation.png');
-
   /// File path: assets/images/ic_donations.svg
   SvgGenImage get icDonations =>
       const SvgGenImage('assets/images/ic_donations.svg');
+
+  /// File path: assets/images/ic_ecommerce.svg
+  SvgGenImage get icEcommerce =>
+      const SvgGenImage('assets/images/ic_ecommerce.svg');
 
   /// File path: assets/images/ic_edit.svg
   SvgGenImage get icEdit => const SvgGenImage('assets/images/ic_edit.svg');
@@ -83,62 +79,61 @@ class $AssetsImagesGen {
       const SvgGenImage('assets/images/ic_feedBack.svg');
 
   /// File path: assets/images/ic_fiveStar.png
-  AssetGenImage get icFiveStar =>
+  AssetGenImage get icFiveStarPng =>
       const AssetGenImage('assets/images/ic_fiveStar.png');
 
+  /// File path: assets/images/ic_fiveStar.svg
+  SvgGenImage get icFiveStarSvg =>
+      const SvgGenImage('assets/images/ic_fiveStar.svg');
+
   /// File path: assets/images/ic_fourStar.png
-  AssetGenImage get icFourStar =>
+  AssetGenImage get icFourStarPng =>
       const AssetGenImage('assets/images/ic_fourStar.png');
 
-  /// File path: assets/images/ic_home.png
-  AssetGenImage get icHome => const AssetGenImage('assets/images/ic_home.png');
+  /// File path: assets/images/ic_fourStar.svg
+  SvgGenImage get icFourStarSvg =>
+      const SvgGenImage('assets/images/ic_fourStar.svg');
 
-  /// File path: assets/images/ic_import_contacts.png
-  AssetGenImage get icImportContacts =>
-      const AssetGenImage('assets/images/ic_import_contacts.png');
-
-  /// File path: assets/images/ic_language.png
-  AssetGenImage get icLanguagePng =>
-      const AssetGenImage('assets/images/ic_language.png');
+  /// File path: assets/images/ic_go_live.svg
+  SvgGenImage get icGoLive => const SvgGenImage('assets/images/ic_go_live.svg');
 
   /// File path: assets/images/ic_language.svg
-  SvgGenImage get icLanguageSvg =>
+  SvgGenImage get icLanguage =>
       const SvgGenImage('assets/images/ic_language.svg');
 
-  /// File path: assets/images/ic_menuButton.png
-  AssetGenImage get icMenuButton =>
-      const AssetGenImage('assets/images/ic_menuButton.png');
+  /// File path: assets/images/ic_offline.svg
+  SvgGenImage get icOffline =>
+      const SvgGenImage('assets/images/ic_offline.svg');
 
   /// File path: assets/images/ic_oneStar.png
-  AssetGenImage get icOneStar =>
+  AssetGenImage get icOneStarPng =>
       const AssetGenImage('assets/images/ic_oneStar.png');
+
+  /// File path: assets/images/ic_oneStar.svg
+  SvgGenImage get icOneStarSvg =>
+      const SvgGenImage('assets/images/ic_oneStar.svg');
 
   /// File path: assets/images/ic_orderHistory.svg
   SvgGenImage get icOrderHistory =>
       const SvgGenImage('assets/images/ic_orderHistory.svg');
 
-  /// File path: assets/images/ic_performance.png
-  AssetGenImage get icPerformance =>
-      const AssetGenImage('assets/images/ic_performance.png');
-
   /// File path: assets/images/ic_price.svg
   SvgGenImage get icPrice => const SvgGenImage('assets/images/ic_price.svg');
 
-  /// File path: assets/images/ic_profile.png
-  AssetGenImage get icProfile =>
-      const AssetGenImage('assets/images/ic_profile.png');
+  /// File path: assets/images/ic_priceChange.svg
+  SvgGenImage get icPriceChange =>
+      const SvgGenImage('assets/images/ic_priceChange.svg');
 
   /// File path: assets/images/ic_profilePhoto.svg
   SvgGenImage get icProfilePhoto =>
       const SvgGenImage('assets/images/ic_profilePhoto.svg');
 
-  /// File path: assets/images/ic_report.png
-  AssetGenImage get icReportPng =>
-      const AssetGenImage('assets/images/ic_report.png');
+  /// File path: assets/images/ic_refer_a_friend.svg
+  SvgGenImage get icReferAFriend =>
+      const SvgGenImage('assets/images/ic_refer_a_friend.svg');
 
   /// File path: assets/images/ic_report.svg
-  SvgGenImage get icReportSvg =>
-      const SvgGenImage('assets/images/ic_report.svg');
+  SvgGenImage get icReport => const SvgGenImage('assets/images/ic_report.svg');
 
   /// File path: assets/images/ic_selectedPerfom.svg
   SvgGenImage get icSelectedPerfom =>
@@ -156,37 +151,32 @@ class $AssetsImagesGen {
   SvgGenImage get icSetting =>
       const SvgGenImage('assets/images/ic_setting.svg');
 
-  /// File path: assets/images/ic_settings.png
-  AssetGenImage get icSettings =>
-      const AssetGenImage('assets/images/ic_settings.png');
-
   /// File path: assets/images/ic_share_feedback.png
   AssetGenImage get icShareFeedback =>
       const AssetGenImage('assets/images/ic_share_feedback.png');
 
-  /// File path: assets/images/ic_side_menu.png
-  AssetGenImage get icSideMenu =>
-      const AssetGenImage('assets/images/ic_side_menu.png');
-
-  /// File path: assets/images/ic_suggest_remedies.png
-  AssetGenImage get icSuggestRemedies =>
-      const AssetGenImage('assets/images/ic_suggest_remedies.png');
-
-  /// File path: assets/images/ic_suitcase.png
-  AssetGenImage get icSuitcasePng =>
-      const AssetGenImage('assets/images/ic_suitcase.png');
-
   /// File path: assets/images/ic_suitcase.svg
-  SvgGenImage get icSuitcaseSvg =>
+  SvgGenImage get icSuitcase =>
       const SvgGenImage('assets/images/ic_suitcase.svg');
 
   /// File path: assets/images/ic_threeStar.png
-  AssetGenImage get icThreeStar =>
+  AssetGenImage get icThreeStarPng =>
       const AssetGenImage('assets/images/ic_threeStar.png');
 
+  /// File path: assets/images/ic_threeStar.svg
+  SvgGenImage get icThreeStarSvg =>
+      const SvgGenImage('assets/images/ic_threeStar.svg');
+
   /// File path: assets/images/ic_twoStar.png
-  AssetGenImage get icTwoStar =>
+  AssetGenImage get icTwoStarPng =>
       const AssetGenImage('assets/images/ic_twoStar.png');
+
+  /// File path: assets/images/ic_twoStar.svg
+  SvgGenImage get icTwoStarSvg =>
+      const SvgGenImage('assets/images/ic_twoStar.svg');
+
+  /// File path: assets/images/ic_unlock.svg
+  SvgGenImage get icUnlock => const SvgGenImage('assets/images/ic_unlock.svg');
 
   /// File path: assets/images/ic_unselectedPerfom.svg
   SvgGenImage get icUnselectedPerfom =>
@@ -201,17 +191,26 @@ class $AssetsImagesGen {
       const SvgGenImage('assets/images/ic_unselectedWallet.svg');
 
   /// File path: assets/images/ic_user.png
-  AssetGenImage get icUser => const AssetGenImage('assets/images/ic_user.png');
+  AssetGenImage get icUserPng =>
+      const AssetGenImage('assets/images/ic_user.png');
 
-  /// File path: assets/images/ic_wallet.png
-  AssetGenImage get icWallet =>
-      const AssetGenImage('assets/images/ic_wallet.png');
+  /// File path: assets/images/ic_user.svg
+  SvgGenImage get icUserSvg => const SvgGenImage('assets/images/ic_user.svg');
+
+  /// File path: assets/images/ic_visibility.svg
+  SvgGenImage get icVisibility =>
+      const SvgGenImage('assets/images/ic_visibility.svg');
+
+  /// File path: assets/images/ic_visibility_off.svg
+  SvgGenImage get icVisibilityOff =>
+      const SvgGenImage('assets/images/ic_visibility_off.svg');
 
   /// List of all assets
   List<dynamic> get values => [
-        bgTmpUserPng,
-        bgTmpUserSvg,
-        bgUserProfile,
+        bgTmpBank,
+        bgTmpUser,
+        bgUserProfilePng,
+        bgUserProfileSvg,
         icContactUs1,
         icImportContact,
         icSelectedHome,
@@ -219,46 +218,45 @@ class $AssetsImagesGen {
         icBankDetail,
         icBlock,
         icBook,
-        icBookAlt,
         icCalling,
         icCart,
-        icContactUs,
-        icDonation,
         icDonations,
+        icEcommerce,
         icEdit,
         icFeedBack,
-        icFiveStar,
-        icFourStar,
-        icHome,
-        icImportContacts,
-        icLanguagePng,
-        icLanguageSvg,
-        icMenuButton,
-        icOneStar,
+        icFiveStarPng,
+        icFiveStarSvg,
+        icFourStarPng,
+        icFourStarSvg,
+        icGoLive,
+        icLanguage,
+        icOffline,
+        icOneStarPng,
+        icOneStarSvg,
         icOrderHistory,
-        icPerformance,
         icPrice,
-        icProfile,
+        icPriceChange,
         icProfilePhoto,
-        icReportPng,
-        icReportSvg,
+        icReferAFriend,
+        icReport,
         icSelectedPerfom,
         icSelectedSuggest,
         icSelectedWallet,
         icSetting,
-        icSettings,
         icShareFeedback,
-        icSideMenu,
-        icSuggestRemedies,
-        icSuitcasePng,
-        icSuitcaseSvg,
-        icThreeStar,
-        icTwoStar,
+        icSuitcase,
+        icThreeStarPng,
+        icThreeStarSvg,
+        icTwoStarPng,
+        icTwoStarSvg,
+        icUnlock,
         icUnselectedPerfom,
         icUnselectedSuggest,
         icUnselectedWallet,
-        icUser,
-        icWallet
+        icUserPng,
+        icUserSvg,
+        icVisibility,
+        icVisibilityOff
       ];
 }
 
