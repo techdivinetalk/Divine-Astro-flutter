@@ -45,55 +45,6 @@ class HomeUI extends GetView<HomeController> {
                           children: [
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-
-      body:
-          // FloatingOverlay(
-          //   controller: controller.floatingController,
-          //   floatingChild: SizedBox.square(
-          //     dimension: 100.0,
-          //     child: Container(
-          //       decoration: BoxDecoration(
-          //         color: Theme.of(context).primaryColor,
-          //         border: Border.all(
-          //           color: Colors.black,
-          //           width: 5.0,
-          //         ),
-          //       ),
-          //       child: Icon(Icons.abc),
-          //     ),
-          //   ),
-          //   child:
-          SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-          child: Column(
-            children: [
-              Obx(() => controller.isShowTitle.value
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "₹100000",
-                                style: AppTextStyle.textStyle16(
-                                    fontColor: AppColors.appRedColour,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              Text(
-                                AppString.today,
-                                style: AppTextStyle.textStyle16(
-                                    fontColor: AppColors.darkBlue,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ],
-                          ),
-                          SizedBox(width: 15.w),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
                                 children: [
                                   Text(
                                     "₹100000",
@@ -270,57 +221,6 @@ class HomeUI extends GetView<HomeController> {
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                     colors: [AppColors.gradientTop, AppColors.gradientBottom],
-                                  const Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 20,
-                                  )
-                                ],
-                              ),
-                              Text(
-                                AppString.total,
-                                style: AppTextStyle.textStyle16(
-                                    fontColor: AppColors.darkBlue,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ],
-                          ),
-                          SizedBox(width: 10.w),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    "₹100000",
-                                    style: AppTextStyle.textStyle16(
-                                        fontColor: AppColors.appRedColour,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                  const Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 20,
-                                  )
-                                ],
-                              ),
-                              Text(
-                                AppString.followers,
-                                style: AppTextStyle.textStyle16(
-                                    fontColor: AppColors.darkBlue,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ],
-                          ),
-                        ])
-                  : Container()),
-              SizedBox(height: 10.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    AppString.noticeBoard,
-                    style: AppTextStyle.textStyle16(
-                        fontColor: AppColors.darkBlue,
-                        fontWeight: FontWeight.w400),
                   ),
                 ),
                 child: Center(
@@ -340,7 +240,6 @@ class HomeUI extends GetView<HomeController> {
               ))
         ],
       ),
-      // ),
     );
   }
 

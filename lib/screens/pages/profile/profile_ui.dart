@@ -267,13 +267,11 @@ class ProfileUI extends GetView<ProfileController> {
                               ),
                               Row(
                                 children: [
-                                  Assets.images.icUserSvg.svg(
-                                    height: 20.h,
-                                    width: 20.h,
-                                  ),
-                                  SizedBox(
-                                    width: 8.w,
-                                  ),
+                                  Assets.images.icUser.svg(
+                                      height: 20.h,
+                                      width: 20.h,
+                                      color: AppColors.appYellowColour),
+                                  SizedBox(width: 8.w),
                                   Text(
                                     "16045 ${AppString.total}",
                                     style: AppTextStyle.textStyle14(),
@@ -289,7 +287,7 @@ class ProfileUI extends GetView<ProfileController> {
                             //5
                             Row(
                               children: [
-                                Assets.images.icFiveStarSvg.svg(
+                                Assets.images.icFiveStar.svg(
                                   width: 80.w,
                                 ),
                                 LinearPercentIndicator(
@@ -313,7 +311,7 @@ class ProfileUI extends GetView<ProfileController> {
                             //4
                             Row(
                               children: [
-                                Assets.images.icFourStarSvg.svg(
+                                Assets.images.icFourStar.svg(
                                   width: 70.w,
                                 ),
                                 LinearPercentIndicator(
@@ -337,7 +335,7 @@ class ProfileUI extends GetView<ProfileController> {
                             //3
                             Row(
                               children: [
-                                Assets.images.icThreeStarSvg.svg(
+                                Assets.images.icThreeStar.svg(
                                   width: 55.w,
                                 ),
                                 LinearPercentIndicator(
@@ -361,7 +359,7 @@ class ProfileUI extends GetView<ProfileController> {
                             //2
                             Row(
                               children: [
-                                Assets.images.icTwoStarSvg.svg(
+                                Assets.images.icTwoStar.svg(
                                   width: 35.w,
                                 ),
                                 LinearPercentIndicator(
@@ -385,7 +383,7 @@ class ProfileUI extends GetView<ProfileController> {
                             //1
                             Row(
                               children: [
-                                Assets.images.icOneStarSvg.svg(
+                                Assets.images.icOneStar.svg(
                                   width: 15.w,
                                 ),
                                 LinearPercentIndicator(
@@ -446,7 +444,7 @@ class ProfileUI extends GetView<ProfileController> {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Assets.images.bgUserProfileSvg.svg(
+                                Assets.images.bgUserProfile.svg(
                                   height: 45.h,
                                   width: 45.h,
                                 ),

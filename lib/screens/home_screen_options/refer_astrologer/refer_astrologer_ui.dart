@@ -47,7 +47,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   inputType: TextInputType.text,
                   inputAction: TextInputAction.next,
                   hintText: AppString.enterNameMsg,
-                  errorBorder: AppColors.appRedColour,
+                  errorBorder: AppColors.white,
                 ),
                 const SizedBox(height: 20),
                 Text(
@@ -93,8 +93,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                 Text(
                   AppString.mandatoryFields,
                   style: AppTextStyle.textStyle14(
-                      fontWeight: FontWeight.w400,
-                      fontColor: AppColors.appRedColour),
+                      fontWeight: FontWeight.w400, fontColor: AppColors.white),
                 ),
                 const SizedBox(height: 5),
               ],
@@ -116,8 +115,8 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                     controller.yesOrNoOptionTapped(isYesTapped: true);
                   },
                   child: Container(
-                      height: 37.h,
-                      width: 58.w,
+                      height: 35.h,
+                      width: 60.w,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         boxShadow: [
@@ -130,7 +129,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                             ? AppColors.darkBlue
                             : AppColors.white,
                         borderRadius:
-                            const BorderRadius.all(Radius.circular(20)),
+                            const BorderRadius.all(Radius.circular(15)),
                       ),
                       child: Text(
                         "Yes",
@@ -148,8 +147,8 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                     controller.yesOrNoOptionTapped(isYesTapped: false);
                   },
                   child: Container(
-                      height: 37.h,
-                      width: 58.w,
+                      height: 35.h,
+                      width: 60.w,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         boxShadow: [
@@ -162,7 +161,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                             ? AppColors.darkBlue
                             : AppColors.white,
                         borderRadius:
-                            const BorderRadius.all(Radius.circular(20)),
+                            const BorderRadius.all(Radius.circular(15)),
                       ),
                       child: Text(
                         "No",

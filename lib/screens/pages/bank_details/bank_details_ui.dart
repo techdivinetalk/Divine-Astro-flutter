@@ -104,8 +104,6 @@ class BankDetailsUI extends GetView<BankDetailController> {
               SizedBox(
                 height: 25.w,
               ),
-              Assets.images.bgTmpBank
-                  .svg(height: 18.h, width: 18.w),
             ],
           ),
         ),
