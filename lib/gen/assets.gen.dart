@@ -60,6 +60,9 @@ class $AssetsImagesGen {
   SvgGenImage get icCalling =>
       const SvgGenImage('assets/images/ic_calling.svg');
 
+  /// File path: assets/images/ic_cart.svg
+  SvgGenImage get icCart => const SvgGenImage('assets/images/ic_cart.svg');
+
   /// File path: assets/images/ic_contact_us.png
   AssetGenImage get icContactUs =>
       const AssetGenImage('assets/images/ic_contact_us.png');
@@ -218,6 +221,7 @@ class $AssetsImagesGen {
         icBook,
         icBookAlt,
         icCalling,
+        icCart,
         icContactUs,
         icDonation,
         icDonations,
