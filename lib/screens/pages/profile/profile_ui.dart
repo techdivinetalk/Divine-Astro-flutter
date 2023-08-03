@@ -267,7 +267,7 @@ class ProfileUI extends GetView<ProfileController> {
                               ),
                               Row(
                                 children: [
-                                  Assets.images.icUser.image(
+                                  Assets.images.icUserSvg.svg(
                                     height: 20.h,
                                     width: 20.h,
                                   ),
@@ -289,7 +289,7 @@ class ProfileUI extends GetView<ProfileController> {
                             //5
                             Row(
                               children: [
-                                Assets.images.icFiveStar.image(
+                                Assets.images.icFiveStarSvg.svg(
                                   width: 80.w,
                                 ),
                                 LinearPercentIndicator(
@@ -313,7 +313,7 @@ class ProfileUI extends GetView<ProfileController> {
                             //4
                             Row(
                               children: [
-                                Assets.images.icFourStar.image(
+                                Assets.images.icFourStarSvg.svg(
                                   width: 70.w,
                                 ),
                                 LinearPercentIndicator(
@@ -337,7 +337,7 @@ class ProfileUI extends GetView<ProfileController> {
                             //3
                             Row(
                               children: [
-                                Assets.images.icThreeStar.image(
+                                Assets.images.icThreeStarSvg.svg(
                                   width: 55.w,
                                 ),
                                 LinearPercentIndicator(
@@ -361,7 +361,7 @@ class ProfileUI extends GetView<ProfileController> {
                             //2
                             Row(
                               children: [
-                                Assets.images.icTwoStar.image(
+                                Assets.images.icTwoStarSvg.svg(
                                   width: 35.w,
                                 ),
                                 LinearPercentIndicator(
@@ -385,7 +385,7 @@ class ProfileUI extends GetView<ProfileController> {
                             //1
                             Row(
                               children: [
-                                Assets.images.icOneStar.image(
+                                Assets.images.icOneStarSvg.svg(
                                   width: 15.w,
                                 ),
                                 LinearPercentIndicator(
@@ -446,7 +446,7 @@ class ProfileUI extends GetView<ProfileController> {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Assets.images.bgUserProfile.image(
+                                Assets.images.bgUserProfileSvg.svg(
                                   height: 45.h,
                                   width: 45.h,
                                 ),
@@ -482,8 +482,26 @@ class ProfileUI extends GetView<ProfileController> {
                                               const SizedBox(
                                                 width: 10,
                                               ),
-                                              const Icon(
-                                                  Icons.more_vert_rounded),
+                                              PopupMenuButton(
+                                                surfaceTintColor:
+                                                    Colors.transparent,
+                                                color: Colors.white,
+                                                itemBuilder: (context) => [
+                                                  PopupMenuItem(
+                                                      child: InkWell(
+                                                    onTap: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Text(
+                                                      AppString.reportComment,
+                                                      style: AppTextStyle
+                                                          .textStyle13(),
+                                                    ),
+                                                  )),
+                                                ],
+                                                child: const Icon(
+                                                    Icons.more_vert_rounded),
+                                              )
                                             ],
                                           ),
                                         ],
@@ -626,48 +644,62 @@ class ProfileUI extends GetView<ProfileController> {
                       ],
                     )),
                 PopupMenuItem(
-                    onTap: () {},
-                    child: Row(
-                      children: [
-                        Assets.images.icBankDetail
-                            .svg(height: 18.h, width: 18.w),
-                        SizedBox(
-                          width: 15.w,
-                        ),
-                        Text(
-                          AppString.bankDetails,
-                          style: AppTextStyle.textStyle13(),
-                        )
-                      ],
-                    )),
+                    child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Get.toNamed(RouteName.bankDetailsUI);
+                  },
+                  child: Row(
+                    children: [
+                      Assets.images.icBankDetail.svg(height: 18.h, width: 18.w),
+                      SizedBox(
+                        width: 15.w,
+                      ),
+                      Text(
+                        AppString.bankDetails,
+                        style: AppTextStyle.textStyle13(),
+                      )
+                    ],
+                  ),
+                )),
                 PopupMenuItem(
-                    onTap: () {},
-                    child: Row(
-                      children: [
-                        Assets.images.icPrice.svg(height: 18.h, width: 18.w),
-                        SizedBox(
-                          width: 15.w,
-                        ),
-                        Text(
-                          AppString.priceChangeRequest,
-                          style: AppTextStyle.textStyle13(),
-                        )
-                      ],
-                    )),
+                    child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Get.toNamed(RouteName.priceHistoryUI);
+                  },
+                  child: Row(
+                    children: [
+                      Assets.images.icPrice.svg(height: 18.h, width: 18.w),
+                      SizedBox(
+                        width: 15.w,
+                      ),
+                      Text(
+                        AppString.priceChangeRequest,
+                        style: AppTextStyle.textStyle13(),
+                      )
+                    ],
+                  ),
+                )),
                 PopupMenuItem(
-                    onTap: () {},
-                    child: Row(
-                      children: [
-                        Assets.images.icCalling.svg(height: 18.h, width: 18.w),
-                        SizedBox(
-                          width: 15.w,
-                        ),
-                        Text(
-                          AppString.numberChangeRequest,
-                          style: AppTextStyle.textStyle13(),
-                        )
-                      ],
-                    )),
+                    child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Get.toNamed(RouteName.numberChangeReqUI);
+                  },
+                  child: Row(
+                    children: [
+                      Assets.images.icCalling.svg(height: 18.h, width: 18.w),
+                      SizedBox(
+                        width: 15.w,
+                      ),
+                      Text(
+                        AppString.numberChangeRequest,
+                        style: AppTextStyle.textStyle13(),
+                      )
+                    ],
+                  ),
+                )),
                 PopupMenuItem(
                     child: InkWell(
                   onTap: () {

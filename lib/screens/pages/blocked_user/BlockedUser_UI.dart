@@ -1,10 +1,14 @@
+import 'package:divine_astrologer/common/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../../common/CustomLightYellowButton.dart';
+import '../../../common/common_bottomsheet.dart';
 import '../../../common/textFieldCustom.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/strings.dart';
+import '../../../gen/assets.gen.dart';
 import 'BlockUserController.dart';
 
 class BlockedUserUI extends GetView<BlockUserController> {
@@ -59,16 +63,55 @@ class BlockedUserUI extends GetView<BlockUserController> {
                               style: AppTextStyle.textStyle16(),
                             ),
                             const Expanded(child: SizedBox()),
-                            Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 15.w, vertical: 8.h),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                    border: Border.all(width: 1)),
-                                child: Text(
-                                  AppString.unblock,
-                                  style: AppTextStyle.textStyle12(),
-                                ))
+                            InkWell(
+                              onTap: () {
+                                openBottomSheet(context,
+                                    functionalityWidget: Column(
+                                      children: [
+                                        Assets.images.icUnlock
+                                            .svg(height: 64.h, width: 64.h),
+                                        SizedBox(
+                                          height: 15.h,
+                                        ),
+                                        Text(
+                                          "Unblock Deep Pratap?",
+                                          style: AppTextStyle.textStyle20(
+                                              fontWeight: FontWeight.w700,
+                                              fontColor: AppColors.darkBlue),
+                                        ),
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
+                                        Center(
+                                          child: Text(
+                                            AppString.unBlockMsg,
+                                            textAlign: TextAlign.center,
+                                            style: AppTextStyle.textStyle16(
+                                                fontWeight: FontWeight.w400,
+                                                fontColor: AppColors.blackColor),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5.h,
+                                        ),
+                                        CustomLightYellowButton(
+                                          name: AppString.unblock,
+                                          onTaped: () {},
+                                        ),
+                                      ],
+                                    ));
+                              },
+                              child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 15.w, vertical: 8.h),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      border: Border.all(width: 1)),
+                                  child: Text(
+                                    AppString.unblock,
+                                    style: AppTextStyle.textStyle12(),
+                                  )),
+                            )
                           ],
                         ),
                         SizedBox(

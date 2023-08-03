@@ -17,17 +17,17 @@ class CustomLightYellowButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 25.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 25.h),
       child: InkWell(
         onTap: () => onTaped(),
         child: Container(
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 color: AppColors.lightYellow,
-                borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(12)),
             child: Center(
                 child: Padding(
-              padding: EdgeInsets.all(15.h),
+              padding: EdgeInsets.all(10.h),
               child: Text(
                 name,
                 style: AppTextStyle.textStyle16(

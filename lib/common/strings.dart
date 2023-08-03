@@ -27,17 +27,38 @@ class AppString {
   static String bankDetails = "Bank Details";
   static String priceChangeRequest = "Price Change Request";
   static String numberChangeRequest = "Number Change Request";
+  static String primaryPhoneNumber = "Primary Phone Number";
+  static String secondaryPhoneNumber = "Secondary Phone Number";
   static String blockedUsers = "Blocked Users";
+  static String reportComment = "Report Comment";
   static String unblock = "Unblock";
   static String searchBlockUserHint = "Search For Blocked User";
   static String ratings = "Ratings";
   static String userReview = "User Review";
   static String years = "Years";
+  static String update = "Update";
   static String name = "Name";
   static String experience = "Experience";
+  static String approved = "Approved";
+  static String serviceType = "Service Type";
+  static String priceRequested = "Price Requested";
+  static String requestRaised = "Request Raised";
+  static String priceChangeBtn = "Raise Request for New Price";
   static String descriptions = "Descriptions";
   static String speciality = "Speciality";
+  static String accountHolderName = "Account Holder Name";
+  static String bankAccountNumber = "Bank Account Number";
+  static String attachments = "Attachments";
+  static String iFSCCode = "IFSC Code";
+  static String yourBankDetails = "Your Bank Details";
+  static String customerPrice = "Customer Price";
+  static String numChangeMsgTitle =
+      "You will get Call Chat alerts on these numbers.";
+  static String requestPriceChangeBtn = "Request Price Change";
   static String hintTextName = "Please Enter Name";
+  static String holderNameHintText = "Please Enter Holder Name";
+  static String accountNumHintText = "Please Enter bank Account Number";
+  static String ifscCodeHintText = "Please Enter bank IFSC Code";
   static String hintSpeciality = "Please Enter Speciality";
   static String hintDescriptions = "Please Enter Descriptions";
   static String hintExperience = "Please Enter Experience";
@@ -81,4 +102,7 @@ class AppString {
   static String orderDateTime = "Order Date-Time : ";
   static String rate = "Rate : ";
   static String duration = "Duration : ";
+  static String priceChangeCondition = "Conditions for price change Request";
+  static String unBlockMsg =
+      "If you unblock this user, then they’ll again be able to connect with you on the platform.";
 }
