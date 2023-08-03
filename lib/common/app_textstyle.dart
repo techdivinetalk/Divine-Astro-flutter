@@ -53,6 +53,23 @@ class AppTextStyle {
     );
   }
 
+  static TextStyle textStyle20({Color? fontColor, FontWeight? fontWeight}) {
+    return TextStyle(
+      fontSize: 20.sp,
+      fontWeight: fontWeight ?? FontWeight.w400,
+      color: fontColor ?? AppColors.blackColor,
+    );
+  }
+
+  static TextStyle textStyleStatic20(
+      {Color? fontColor, FontWeight? fontWeight}) {
+    return TextStyle(
+      fontSize: 20.sp,
+      fontWeight: fontWeight ?? FontWeight.w400,
+      color: fontColor ?? AppColors.blackColor,
+    );
+  }
+
   static TextStyle textStylebold16({Color? fontColor, FontWeight? fontWeight}) {
     return TextStyle(
       fontSize: 16.sp,

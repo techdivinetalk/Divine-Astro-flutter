@@ -4,29 +4,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:readmore/readmore.dart';
-
+import '../../../common/app_textstyle.dart';
+import '../../../common/colors.dart';
+import '../../../common/routes.dart';
+import '../../../common/strings.dart';
+import '../../../gen/assets.gen.dart';
+import '../side_menu/side_menu_ui.dart';
 import 'profile_controller.dart';
 
 class ProfileUI extends GetView<ProfileController> {
   const ProfileUI({Key? key}) : super(key: key);
 
-  PopupMenuItem _buildPopupMenuItem(String menuTitle, IconData iconData) {
-    return PopupMenuItem(
-        height: 50,
-        child: Row(
-          children: [
-            Icon(
-              iconData,
-              color: Colors.black,
-            ),
-            Text(menuTitle)
-          ],
-        ));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: commonAppBar(),
+      drawer: const SideMenuDrawer(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -41,15 +34,12 @@ class ProfileUI extends GetView<ProfileController> {
                       Stack(
                         alignment: Alignment.topRight,
                         children: [
-                          Image.asset(
-                            "assets/images/bg_tmpUser.png",
-                            height: 80.h,
-                            width: 80.w,
-                          ),
+                          Assets.images.bgTmpUser
+                              .svg(height: 80.h, width: 80.w),
                           Container(
                             decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Color(0xff27C884)),
+                                color: AppColors.lightGreen),
                             height: 13.h,
                             width: 13.h,
                           ),
@@ -62,13 +52,13 @@ class ProfileUI extends GetView<ProfileController> {
                           padding: EdgeInsets.symmetric(
                               horizontal: 20.w, vertical: 5.h),
                           decoration: BoxDecoration(
-                              color: const Color(0xffFDD48E),
+                              color: AppColors.lightYellow,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(30.h))),
                           child: Text(
-                            "Follow",
+                            AppString.follow,
                             style: TextStyle(
-                                color: const Color(0xff5F3C08),
+                                color: AppColors.brownColour,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14.sp),
                           ))
@@ -86,16 +76,14 @@ class ProfileUI extends GetView<ProfileController> {
                           children: [
                             Text(
                               'Pushpak',
-                              style: TextStyle(
-                                  fontSize: 20.sp, fontWeight: FontWeight.bold),
+                              style: AppTextStyle.textStyle20(),
                             ),
                             Row(
                               children: [
                                 Text(
                                   '4.5 ',
-                                  style: TextStyle(
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.bold),
+                                  style: AppTextStyle.textStyle14(
+                                      fontWeight: FontWeight.w700),
                                 ),
                                 Icon(
                                   Icons.star,
@@ -110,8 +98,7 @@ class ProfileUI extends GetView<ProfileController> {
                         ),
                         Row(
                           children: [
-                            Image.asset(
-                              "assets/images/ic_bookAlt.png",
+                            Assets.images.icBook.svg(
                               height: 15.h,
                               width: 15.w,
                             ),
@@ -121,9 +108,7 @@ class ProfileUI extends GetView<ProfileController> {
                             Expanded(
                               child: Text(
                                 'Vedic, Numerology, Prashana',
-                                style: TextStyle(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w500),
+                                style: AppTextStyle.textStyle12(),
                               ),
                             ),
                           ],
@@ -133,10 +118,9 @@ class ProfileUI extends GetView<ProfileController> {
                         ),
                         Row(
                           children: [
-                            Image.asset(
-                              "assets/images/ic_language.png",
-                              height: 15.h,
-                              width: 15.w,
+                            Assets.images.icLanguage.svg(
+                              height: 13.h,
+                              width: 13.w,
                             ),
                             SizedBox(
                               width: 5.h,
@@ -144,9 +128,7 @@ class ProfileUI extends GetView<ProfileController> {
                             Expanded(
                               child: Text(
                                 'Hindi',
-                                style: TextStyle(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w500),
+                                style: AppTextStyle.textStyle12(),
                               ),
                             ),
                           ],
@@ -157,10 +139,9 @@ class ProfileUI extends GetView<ProfileController> {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Image.asset(
-                              "assets/images/ic_suitcase.png",
-                              height: 15.h,
-                              width: 15.w,
+                            Assets.images.icSuitcase.svg(
+                              height: 13.h,
+                              width: 13.w,
                             ),
                             SizedBox(
                               width: 5.w,
@@ -169,10 +150,8 @@ class ProfileUI extends GetView<ProfileController> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Exp: 10 Years',
-                                  style: TextStyle(
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.w500),
+                                  'Exp: 10 ${AppString.years}',
+                                  style: AppTextStyle.textStyle12(),
                                 ),
                                 SizedBox(
                                   height: 5.h,
@@ -183,19 +162,17 @@ class ProfileUI extends GetView<ProfileController> {
                                       '₹25',
                                       style: TextStyle(
                                           fontSize: 12.sp,
-                                          fontWeight: FontWeight.w500,
+                                          fontWeight: FontWeight.w400,
                                           decoration:
                                               TextDecoration.lineThrough,
-                                          decorationColor: Colors.red),
+                                          decorationColor: AppColors.redColor),
                                     ),
                                     SizedBox(
                                       width: 5.h,
                                     ),
                                     Text(
                                       '₹5/Min',
-                                      style: TextStyle(
-                                          fontSize: 12.sp,
-                                          fontWeight: FontWeight.w500),
+                                      style: AppTextStyle.textStyle12(),
                                     ),
                                   ],
                                 ),
@@ -226,16 +203,15 @@ class ProfileUI extends GetView<ProfileController> {
                 child: ReadMoreText(
                   "I am a certified and professional Legal Astrologer with more than 10 years of experience. And I wouldhave felt happy to serve you through astrology.",
                   trimLines: 2,
-                  colorClickableText: Colors.pink,
                   trimMode: TrimMode.Line,
-                  trimCollapsedText: 'Read more',
-                  trimExpandedText: 'Show less',
+                  trimCollapsedText: AppString.readMore,
+                  trimExpandedText: AppString.showLess,
                   moreStyle: TextStyle(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.bold,
-                      color: const Color(0xffFDD48E),
+                      color: AppColors.lightYellow,
                       decoration: TextDecoration.underline,
-                      decorationColor: const Color(0xffFDD48E)),
+                      decorationColor: AppColors.lightYellow),
                 ),
               ),
               SizedBox(
@@ -246,17 +222,17 @@ class ProfileUI extends GetView<ProfileController> {
                 decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
+                          color: AppColors.blackColor.withOpacity(0.2),
                           blurRadius: 1.0,
                           offset: const Offset(0.0, 3.0)),
                     ],
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.all(Radius.circular(10.h))),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Ratings",
+                      AppString.ratings,
                       style: TextStyle(
                           fontSize: 20.sp, fontWeight: FontWeight.w400),
                     ),
@@ -271,11 +247,14 @@ class ProfileUI extends GetView<ProfileController> {
                             children: [
                               Row(
                                 children: [
-                                  Text(
-                                    "4.5 ",
-                                    style: TextStyle(
-                                        fontSize: 17.sp,
-                                        fontWeight: FontWeight.w400),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 20.h),
+                                    child: Text(
+                                      "4.5 ",
+                                      style: TextStyle(
+                                          fontSize: 17.sp,
+                                          fontWeight: FontWeight.w400),
+                                    ),
                                   ),
                                   Icon(
                                     Icons.star,
@@ -288,8 +267,7 @@ class ProfileUI extends GetView<ProfileController> {
                               ),
                               Row(
                                 children: [
-                                  Image.asset(
-                                    "assets/images/ic_user.png",
+                                  Assets.images.icUser.image(
                                     height: 20.h,
                                     width: 20.h,
                                   ),
@@ -297,10 +275,8 @@ class ProfileUI extends GetView<ProfileController> {
                                     width: 8.w,
                                   ),
                                   Text(
-                                    "16045 total ",
-                                    style: TextStyle(
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w400),
+                                    "16045 ${AppString.total}",
+                                    style: AppTextStyle.textStyle14(),
                                   ),
                                 ],
                               ),
@@ -313,8 +289,7 @@ class ProfileUI extends GetView<ProfileController> {
                             //5
                             Row(
                               children: [
-                                Image.asset(
-                                  "assets/images/ic_fiveStar.png",
+                                Assets.images.icFiveStar.image(
                                   width: 80.w,
                                 ),
                                 LinearPercentIndicator(
@@ -324,12 +299,11 @@ class ProfileUI extends GetView<ProfileController> {
                                   lineHeight: 10.0,
                                   animationDuration: 2000,
                                   percent: 0.6,
-                                  // center: Text("90.0%"),
                                   // ignore: deprecated_member_use
                                   linearStrokeCap: LinearStrokeCap.round,
                                   backgroundColor:
-                                      const Color(0xffFDD48E).withOpacity(0.4),
-                                  progressColor: const Color(0xffFDD48E),
+                                      AppColors.lightYellow.withOpacity(0.4),
+                                  progressColor: AppColors.lightYellow,
                                 ),
                               ],
                             ),
@@ -339,8 +313,7 @@ class ProfileUI extends GetView<ProfileController> {
                             //4
                             Row(
                               children: [
-                                Image.asset(
-                                  "assets/images/ic_fourStar.png",
+                                Assets.images.icFourStar.image(
                                   width: 70.w,
                                 ),
                                 LinearPercentIndicator(
@@ -350,12 +323,11 @@ class ProfileUI extends GetView<ProfileController> {
                                   lineHeight: 10.0,
                                   animationDuration: 2000,
                                   percent: 0.2,
-                                  // center: Text("90.0%"),
                                   // ignore: deprecated_member_use
                                   linearStrokeCap: LinearStrokeCap.round,
                                   backgroundColor:
-                                      const Color(0xffFDD48E).withOpacity(0.4),
-                                  progressColor: const Color(0xffFDD48E),
+                                      AppColors.lightYellow.withOpacity(0.4),
+                                  progressColor: AppColors.lightYellow,
                                 ),
                               ],
                             ),
@@ -365,8 +337,7 @@ class ProfileUI extends GetView<ProfileController> {
                             //3
                             Row(
                               children: [
-                                Image.asset(
-                                  "assets/images/ic_threeStar.png",
+                                Assets.images.icThreeStar.image(
                                   width: 55.w,
                                 ),
                                 LinearPercentIndicator(
@@ -376,12 +347,11 @@ class ProfileUI extends GetView<ProfileController> {
                                   lineHeight: 10.0,
                                   animationDuration: 2000,
                                   percent: 0.5,
-                                  // center: Text("90.0%"),
                                   // ignore: deprecated_member_use
                                   linearStrokeCap: LinearStrokeCap.round,
                                   backgroundColor:
-                                      const Color(0xffFDD48E).withOpacity(0.4),
-                                  progressColor: const Color(0xffFDD48E),
+                                      AppColors.lightYellow.withOpacity(0.4),
+                                  progressColor: AppColors.lightYellow,
                                 ),
                               ],
                             ),
@@ -391,8 +361,7 @@ class ProfileUI extends GetView<ProfileController> {
                             //2
                             Row(
                               children: [
-                                Image.asset(
-                                  "assets/images/ic_twoStar.png",
+                                Assets.images.icTwoStar.image(
                                   width: 35.w,
                                 ),
                                 LinearPercentIndicator(
@@ -402,11 +371,10 @@ class ProfileUI extends GetView<ProfileController> {
                                   lineHeight: 10.0,
                                   animationDuration: 2000,
                                   percent: 0.8,
-                                  // center: Text("90.0%"),
                                   // ignore: deprecated_member_use
                                   linearStrokeCap: LinearStrokeCap.round,
                                   backgroundColor:
-                                      const Color(0xffFDD48E).withOpacity(0.4),
+                                      AppColors.lightYellow.withOpacity(0.4),
                                   progressColor: const Color(0xffFDD48E),
                                 ),
                               ],
@@ -417,8 +385,7 @@ class ProfileUI extends GetView<ProfileController> {
                             //1
                             Row(
                               children: [
-                                Image.asset(
-                                  "assets/images/ic_oneStar.png",
+                                Assets.images.icOneStar.image(
                                   width: 15.w,
                                 ),
                                 LinearPercentIndicator(
@@ -428,12 +395,11 @@ class ProfileUI extends GetView<ProfileController> {
                                   lineHeight: 10.0,
                                   animationDuration: 2000,
                                   percent: 0.5,
-                                  // center: Text("90.0%"),
                                   // ignore: deprecated_member_use
                                   linearStrokeCap: LinearStrokeCap.round,
                                   backgroundColor:
-                                      const Color(0xffFDD48E).withOpacity(0.4),
-                                  progressColor: const Color(0xffFDD48E),
+                                      AppColors.lightYellow.withOpacity(0.4),
+                                  progressColor: AppColors.lightYellow,
                                 ),
                               ],
                             ),
@@ -454,142 +420,152 @@ class ProfileUI extends GetView<ProfileController> {
                 decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
+                          color: AppColors.blackColor.withOpacity(0.2),
                           blurRadius: 1.0,
                           offset: const Offset(0.0, 3.0)),
                     ],
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: const BorderRadius.all(Radius.circular(10))),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "User Review",
-                      style: TextStyle(
-                          fontSize: 20.sp, fontWeight: FontWeight.w400),
+                      AppString.userReview,
+                      style: AppTextStyle.textStyle20(),
                     ),
                     SizedBox(
                       height: 10.h,
                     ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Image.asset(
-                          "assets/images/bg_userProfile.png",
-                          height: 45.h,
-                          width: 45.h,
-                        ),
-                        SizedBox(
-                          width: 10.h,
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Rahul Shah",
-                                    style: TextStyle(
-                                        fontSize: 15.sp,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                  Row(
+                    ListView.builder(
+                      itemCount: 2,
+                      primary: false,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Assets.images.bgUserProfile.image(
+                                  height: 45.h,
+                                  width: 45.h,
+                                ),
+                                SizedBox(
+                                  width: 10.h,
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      RatingBar.readOnly(
-                                        filledIcon: Icons.star,
-                                        emptyIcon: Icons.star,
-                                        emptyColor: const Color(0xffFCB742)
-                                            .withOpacity(0.3),
-                                        filledColor: const Color(0xffFCB742),
-                                        initialRating: 4,
-                                        size: 15.h,
-                                        maxRating: 5,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Rahul Shah",
+                                            style: AppTextStyle.textStyle14(),
+                                          ),
+                                          Row(
+                                            children: [
+                                              RatingBar.readOnly(
+                                                filledIcon: Icons.star,
+                                                emptyIcon: Icons.star,
+                                                emptyColor: AppColors.darkYellow
+                                                    .withOpacity(0.3),
+                                                filledColor:
+                                                    AppColors.darkYellow,
+                                                initialRating: 4,
+                                                size: 15.h,
+                                                maxRating: 5,
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              const Icon(
+                                                  Icons.more_vert_rounded),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 3.h,
+                                      ),
+                                      Text(
+                                        "12 Feb 2021, 03:00 PM",
+                                        style: AppTextStyle.textStyle12(),
                                       ),
                                       const SizedBox(
-                                        width: 10,
+                                        height: 5,
                                       ),
-                                      Image.asset(
-                                        "assets/images/ic_menuButton.png",
-                                        height: 14.h,
-                                        width: 14.h,
+                                      Text(
+                                        "It was really nice, talking to Pushpak sir it made me more confident.",
+                                        style: AppTextStyle.textStyle12(),
+                                      ),
+                                      SizedBox(
+                                        height: 15.h,
+                                      ),
+                                      // TextFieldCustom(
+                                      //     "Reply here...",
+                                      //     TextInputType.text,
+                                      //     TextInputAction.done),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            height: 40.h,
+                                            width: 40.h,
+                                            decoration: const BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Colors.grey),
+                                          ),
+                                          SizedBox(
+                                            width: 10.h,
+                                          ),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Pushpak",
+                                                  style:
+                                                      AppTextStyle.textStyle14(
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                ),
+                                                Text(
+                                                  "12 Feb 2021, 03:10 PM",
+                                                  style: AppTextStyle
+                                                      .textStyle12(),
+                                                ),
+                                                SizedBox(
+                                                  height: 8.h,
+                                                ),
+                                                Text(
+                                                  "It was really nice, talking to Pushpak sir it made me more confident.",
+                                                  style: AppTextStyle
+                                                      .textStyle12(),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       )
                                     ],
                                   ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 5.h,
-                              ),
-                              Text(
-                                "12 Feb 2021, 03:00 PM",
-                                style: TextStyle(
-                                    fontSize: 13.sp,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                "It was really nice, talking to Pushpak sir it made me more confident.",
-                                style: TextStyle(
-                                    fontSize: 13.sp,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(
-                                height: 15.h,
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    height: 40.h,
-                                    width: 40.h,
-                                    decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.grey),
-                                  ),
-                                  SizedBox(
-                                    width: 10.h,
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Pushpak",
-                                          style: TextStyle(
-                                              fontSize: 14.sp,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          "12 Feb 2021, 03:10 PM",
-                                          style: TextStyle(
-                                              fontSize: 13.sp,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        SizedBox(
-                                          height: 8.h,
-                                        ),
-                                        Text(
-                                          "It was really nice, talking to Pushpak sir it made me more confident.",
-                                          style: TextStyle(
-                                              fontSize: 13.sp,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8.sp),
+                              child: const Divider(),
+                            )
+                          ],
+                        );
+                      },
+                    ),
                   ],
                 ),
               )
@@ -597,6 +573,124 @@ class ProfileUI extends GetView<ProfileController> {
           ),
         ),
       ),
+    );
+  }
+
+  commonAppBar() {
+    return AppBar(
+      surfaceTintColor: Colors.transparent,
+      centerTitle: false,
+      title: Text(
+        AppString.profile,
+        style: AppTextStyle.textStyle16(),
+      ),
+      actions: [
+        Padding(
+            padding: EdgeInsets.all(11.h),
+            child: PopupMenuButton(
+              surfaceTintColor: Colors.transparent,
+              color: Colors.white,
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                    child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Get.toNamed(RouteName.editProfileUI);
+                  },
+                  child: Row(
+                    children: [
+                      Assets.images.icEdit.svg(height: 18.h, width: 18.w),
+                      SizedBox(
+                        width: 15.w,
+                      ),
+                      Text(
+                        AppString.editProfile,
+                        style: AppTextStyle.textStyle13(),
+                      )
+                    ],
+                  ),
+                )),
+                PopupMenuItem(
+                    onTap: () {},
+                    child: Row(
+                      children: [
+                        Assets.images.icOrderHistory
+                            .svg(height: 18.h, width: 18.w),
+                        SizedBox(
+                          width: 15.w,
+                        ),
+                        Text(
+                          AppString.orderHistory,
+                          style: AppTextStyle.textStyle13(),
+                        )
+                      ],
+                    )),
+                PopupMenuItem(
+                    onTap: () {},
+                    child: Row(
+                      children: [
+                        Assets.images.icBankDetail
+                            .svg(height: 18.h, width: 18.w),
+                        SizedBox(
+                          width: 15.w,
+                        ),
+                        Text(
+                          AppString.bankDetails,
+                          style: AppTextStyle.textStyle13(),
+                        )
+                      ],
+                    )),
+                PopupMenuItem(
+                    onTap: () {},
+                    child: Row(
+                      children: [
+                        Assets.images.icPrice.svg(height: 18.h, width: 18.w),
+                        SizedBox(
+                          width: 15.w,
+                        ),
+                        Text(
+                          AppString.priceChangeRequest,
+                          style: AppTextStyle.textStyle13(),
+                        )
+                      ],
+                    )),
+                PopupMenuItem(
+                    onTap: () {},
+                    child: Row(
+                      children: [
+                        Assets.images.icCalling.svg(height: 18.h, width: 18.w),
+                        SizedBox(
+                          width: 15.w,
+                        ),
+                        Text(
+                          AppString.numberChangeRequest,
+                          style: AppTextStyle.textStyle13(),
+                        )
+                      ],
+                    )),
+                PopupMenuItem(
+                    child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Get.toNamed(RouteName.blockedUser);
+                  },
+                  child: Row(
+                    children: [
+                      Assets.images.icBlock.svg(height: 18.h, width: 18.w),
+                      SizedBox(
+                        width: 15.w,
+                      ),
+                      Text(
+                        AppString.blockedUsers,
+                        style: AppTextStyle.textStyle13(),
+                      )
+                    ],
+                  ),
+                )),
+              ],
+              child: const Icon(Icons.more_vert_rounded),
+            )),
+      ],
     );
   }
 }
