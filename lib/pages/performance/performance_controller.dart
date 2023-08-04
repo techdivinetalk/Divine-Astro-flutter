@@ -1,11 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PerformanceController extends GetxController {
-
-
-
-
   var percentageSubTitle = <ScoreModelClass>[
     ScoreModelClass("Total user converted from first user offer."),
     ScoreModelClass("Total repeated orders out of total orders received."),

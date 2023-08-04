@@ -127,4 +127,5 @@ class AppString {
   static String remedysuggested = "Remedy suggested";
   static String wallet = "Wallet";
   static String all = "All";
+  static String suggestRemedies = "Suggest Remedies";
 }

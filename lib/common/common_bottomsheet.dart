@@ -84,12 +84,7 @@ selectDateOrTime(BuildContext context,
     required String btnTitle,
     required String pickerStyle,
     required bool looping}) {
-<<<<<<< HEAD
-  showCupertinoModalPopup(
-=======
   return showCupertinoModalPopup(
-
->>>>>>> yashdev
     context: context,
     builder: (context) => Column(
       mainAxisSize: MainAxisSize.min,
