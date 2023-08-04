@@ -280,6 +280,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.18.1"
   js:
     dependency: transitive
     description:
@@ -533,6 +541,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      sha256: ee86a4531180216d0229ac83db2b3b8428ad4e2fd5f4aff28b89a5aed149bb55
+      url: "https://pub.dev"
+    source: hosted
+    version: "22.2.7"
+  syncfusion_flutter_gauges:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_gauges
+      sha256: f10e2bbf4ed9a012f757a11d06f9813763b50850270caf817e255166a300ef25
+      url: "https://pub.dev"
+    source: hosted
+    version: "22.2.7"
   term_glyph:
     dependency: transitive
     description:

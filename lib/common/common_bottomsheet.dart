@@ -12,6 +12,7 @@ import 'date_picker/date_picker_widget.dart';
 Future openBottomSheet(BuildContext context,
     {String? title, String? btnTitle, required Widget functionalityWidget}) {
   return showModalBottomSheet(
+    isScrollControlled: true,
     backgroundColor: Colors.transparent,
     context: context,
     builder: (context) => Column(
@@ -83,7 +84,12 @@ selectDateOrTime(BuildContext context,
     required String btnTitle,
     required String pickerStyle,
     required bool looping}) {
+<<<<<<< HEAD
   showCupertinoModalPopup(
+=======
+  return showCupertinoModalPopup(
+
+>>>>>>> yashdev
     context: context,
     builder: (context) => Column(
       mainAxisSize: MainAxisSize.min,
