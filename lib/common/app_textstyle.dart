@@ -52,6 +52,13 @@ class AppTextStyle {
       color: fontColor ?? AppColors.blackColor,
     );
   }
+  static TextStyle textStyle24({Color? fontColor, FontWeight? fontWeight}) {
+    return TextStyle(
+      fontSize: 24.sp,
+      fontWeight: fontWeight ?? FontWeight.w700,
+      color: fontColor ?? AppColors.blackColor,
+    );
+  }
 
   static TextStyle textStyle20({Color? fontColor, FontWeight? fontWeight}) {
     return TextStyle(

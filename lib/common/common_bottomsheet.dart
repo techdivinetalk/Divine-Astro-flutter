@@ -10,7 +10,8 @@ import 'package:get/get.dart';
 
 Future openBottomSheet(BuildContext context,
     {String? title, String? btnTitle, required Widget functionalityWidget}) {
-  return showCupertinoModalPopup(
+  return showModalBottomSheet(
+    backgroundColor: Colors.transparent,
     context: context,
     builder: (context) => Column(
       mainAxisSize: MainAxisSize.min,
@@ -36,13 +37,13 @@ Future openBottomSheet(BuildContext context,
           decoration: BoxDecoration(
             borderRadius:
                 const BorderRadius.vertical(top: Radius.circular(50.0)),
-            border: Border.all(color: const Color(0xFFFCB742), width: 2),
+            border: Border.all(color: Colors.white, width: 2),
             color: Colors.white,
           ),
           child: Column(
             children: [
               const SizedBox(height: 20),
-              const SizedBox(height: 20),
+              if (title != null) const SizedBox(height: 20),
               if (title != null)
                 Text(
                   title,
@@ -67,7 +68,7 @@ Future openBottomSheet(BuildContext context,
                       btnTitle,
                       style: const TextStyle(color: Color(0xFF5F3C08)),
                     )),
-              const SizedBox(height: 30),
+              const SizedBox(height: 10),
             ],
           ),
         ),
