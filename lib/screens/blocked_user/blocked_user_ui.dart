@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../../common/CustomLightYellowButton.dart';
+import '../../../common/custom_light_yellow_btn.dart';
 import '../../../common/common_bottomsheet.dart';
-import '../../../common/textFieldCustom.dart';
+import '../../../common/text_field_custom.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/strings.dart';
 import '../../../gen/assets.gen.dart';
-import 'BlockUserController.dart';
+import 'block_user_controller.dart';
 
 class BlockedUserUI extends GetView<BlockUserController> {
   const BlockedUserUI({super.key});

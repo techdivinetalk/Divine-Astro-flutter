@@ -9,7 +9,7 @@ import '../../../common/colors.dart';
 import '../../../common/routes.dart';
 import '../../../common/strings.dart';
 import '../../../gen/assets.gen.dart';
-import '../side_menu/side_menu_ui.dart';
+import '../../screens/side_menu/side_menu_ui.dart';
 import 'profile_controller.dart';
 
 class ProfileUI extends GetView<ProfileController> {

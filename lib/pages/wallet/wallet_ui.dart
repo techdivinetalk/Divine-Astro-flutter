@@ -1,6 +1,5 @@
 import 'package:divine_astrologer/common/strings.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
-import 'package:divine_astrologer/screens/pages/wallet/wallet_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -9,7 +8,8 @@ import '../../../common/app_textstyle.dart';
 import '../../../common/appbar.dart';
 import '../../../common/colors.dart';
 import '../../../common/common_bottomsheet.dart';
-import '../side_menu/side_menu_ui.dart';
+import '../../screens/side_menu/side_menu_ui.dart';
+import 'wallet_controller.dart';
 
 class WalletUI extends GetView<WalletController> {
   const WalletUI({Key? key}) : super(key: key);

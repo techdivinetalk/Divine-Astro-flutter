@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
 import '../../../common/appbar.dart';
 import '../../../common/routes.dart';
-import '../side_menu/side_menu_ui.dart';
+import '../../screens/side_menu/side_menu_ui.dart';
 import 'home_controller.dart';
 
 class HomeUI extends GetView<HomeController> {

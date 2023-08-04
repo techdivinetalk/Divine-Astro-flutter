@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../../../common/customLightYellowButton.dart';
-import '../../../common/textFieldCustom.dart';
+import '../../../common/custom_light_yellow_btn.dart';
+import '../../../common/text_field_custom.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
 import '../../../common/strings.dart';
 import '../../../gen/assets.gen.dart';
-import 'EditProfile_controller.dart';
+import 'edit_profile_controller.dart';
 
 class EditProfileUI extends GetView<EditProfileController> {
   const EditProfileUI({super.key});

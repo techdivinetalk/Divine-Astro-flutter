@@ -1,24 +1,22 @@
+import 'package:divine_astrologer/screens/blocked_user/blocked_user_bindings.dart';
 import 'package:divine_astrologer/screens/home_screen_options/earning/earning_bindings.dart';
 import 'package:divine_astrologer/screens/home_screen_options/earning/earning_ui.dart';
-import 'package:divine_astrologer/screens/pages/bank_details/bank_detail_binding.dart';
-import 'package:divine_astrologer/screens/pages/bank_details/bank_details_ui.dart';
-import 'package:divine_astrologer/screens/pages/blocked_user/blockedUser_bindings.dart';
-import 'package:divine_astrologer/screens/pages/blocked_user/blockedUser_UI.dart';
-import 'package:divine_astrologer/screens/pages/dashboard/dashboard_ui.dart';
-import 'package:divine_astrologer/screens/pages/edit_profile/editProfile_binding.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_bindings.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_ui.dart';
-import 'package:divine_astrologer/screens/pages/number_change/number_change_binding.dart';
-import 'package:divine_astrologer/screens/pages/number_change/number_change_ui.dart';
-import 'package:divine_astrologer/screens/pages/price_change/price_change_binding.dart';
-import 'package:divine_astrologer/screens/pages/price_change/price_change_ui.dart';
-
 import 'package:get/get.dart';
-
-import '../screens/pages/dashboard/dashboard_bindings.dart';
-import '../screens/pages/edit_profile/editProfile_UI.dart';
-import '../screens/pages/price_history/price_history_binding.dart';
-import '../screens/pages/price_history/price_history_ui.dart';
+import '../screens/bank_details/bank_detail_binding.dart';
+import '../screens/bank_details/bank_details_ui.dart';
+import '../screens/blocked_user/blocked_user_ui.dart';
+import '../screens/dashboard/dashboard_bindings.dart';
+import '../screens/dashboard/dashboard_ui.dart';
+import '../screens/edit_profile/edit_profile_ui.dart';
+import '../screens/edit_profile/edit_profile_binding.dart';
+import '../screens/number_change/number_change_binding.dart';
+import '../screens/number_change/number_change_ui.dart';
+import '../screens/price_change/price_change_binding.dart';
+import '../screens/price_change/price_change_ui.dart';
+import '../screens/price_history/price_history_binding.dart';
+import '../screens/price_history/price_history_ui.dart';
 import '../screens/splash/splash_binding.dart';
 import '../screens/splash/splash_ui.dart';
 

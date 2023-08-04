@@ -1,14 +1,14 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
-import 'package:divine_astrologer/screens/pages/home/home_ui.dart';
-import 'package:divine_astrologer/screens/pages/performance/performance_ui.dart';
-import 'package:divine_astrologer/screens/pages/suggest_remedies/suggest_remedies_ui.dart';
-import 'package:divine_astrologer/screens/pages/wallet/wallet_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../common/colors.dart';
 import '../../../gen/assets.gen.dart';
-import '../profile/profile_ui.dart';
+import '../../pages/home/home_ui.dart';
+import '../../pages/performance/performance_ui.dart';
+import '../../pages/profile/profile_ui.dart';
+import '../../pages/suggest_remedies/suggest_remedies_ui.dart';
+import '../../pages/wallet/wallet_ui.dart';
 import 'dashboard_controller.dart';
 
 class DashboardScreen extends GetView<DashboardController> {
