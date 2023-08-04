@@ -101,3 +101,71 @@ class _WhiteTextFieldState extends State<WhiteTextField> {
     );
   }
 }
+
+class AppTextField extends StatelessWidget {
+  const AppTextField(
+      {Key? key,
+      this.controller,
+      this.prefixIcon,
+      this.hintText,
+      this.readOnly,
+      this.onTap})
+      : super(key: key);
+  final TextEditingController? controller;
+  final Widget? prefixIcon;
+  final String? hintText;
+  final bool? readOnly;
+  final VoidCallback? onTap;
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      style: TextStyle(
+        fontWeight: FontWeight.w400,
+        fontSize: 16.sp,
+        color: AppColors.darkBlue,
+      ),
+      readOnly: readOnly ?? false,
+      onTap: () {
+        onTap!.call();
+      },
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+              color: AppColors.darkBlue.withOpacity(.15),
+            )),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+              color: AppColors.darkBlue.withOpacity(.15),
+            )),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+              color: AppColors.darkBlue.withOpacity(.15),
+            )),
+        isDense: true,
+        hintText: hintText,
+        prefixIcon: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(width: 10.w),
+            SizedBox(
+              height: 15.h,
+              width: 15.w,
+              child: prefixIcon,
+            ),
+            SizedBox(width: 8.w),
+          ],
+        ),
+        prefixIconConstraints: BoxConstraints(minHeight: 24.h, minWidth: 24.w),
+        hintStyle: TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: 16.sp,
+          color: AppColors.darkBlue.withOpacity(.5),
+        ),
+      ),
+    );
+  }
+}

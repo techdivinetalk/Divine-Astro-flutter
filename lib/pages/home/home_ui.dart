@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
 import '../../../common/appbar.dart';
 import '../../../common/routes.dart';
+import '../../common/common_bottomsheet.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'home_controller.dart';
 
@@ -115,7 +116,9 @@ class HomeUI extends GetView<HomeController> {
                                 ),
                                 child: Center(
                                   child: InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      Get.toNamed(RouteName.checkKundli);
+                                    },
                                     child: Text(
                                       "Check Kundli",
                                       style: AppTextStyle.textStyle14(
@@ -326,7 +329,7 @@ class HomeUI extends GetView<HomeController> {
               ),
               SizedBox(height: 16.h),
               Text(
-                AppString.chat,
+                AppString.chat.toUpperCase(),
                 style: AppTextStyle.textStyle12(
                     fontColor: AppColors.darkBlue, fontWeight: FontWeight.w700),
               ),
@@ -337,7 +340,7 @@ class HomeUI extends GetView<HomeController> {
               ),
               SizedBox(height: 16.h),
               Text(
-                AppString.call,
+                AppString.call.toUpperCase(),
                 style: AppTextStyle.textStyle12(
                     fontColor: AppColors.darkBlue, fontWeight: FontWeight.w700),
               ),
@@ -401,11 +404,11 @@ class HomeUI extends GetView<HomeController> {
                 child: Center(
                   child: InkWell(
                     onTap: () {
-                      //   openDateOrTimePicker(Get.context!,
-                      //       title: "Schedule Your Next Online Date",
-                      //       btnTitle: "Confirm Next Online Date",
-                      //       looping: true,
-                      //       pickerStyle: "DateCalendar");
+                      selectDateOrTime(Get.context!,
+                          title: "Select Your Date of Birth",
+                          btnTitle: "Confirm Date of Birth",
+                          pickerStyle: "DateCalendar",
+                          looping: true);
                     },
                     child: Text(
                       "Schedule Now",

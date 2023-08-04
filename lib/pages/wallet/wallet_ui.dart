@@ -1,5 +1,7 @@
 import 'package:divine_astrologer/common/strings.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/pages/wallet/wallet_controller.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -8,8 +10,8 @@ import '../../../common/app_textstyle.dart';
 import '../../../common/appbar.dart';
 import '../../../common/colors.dart';
 import '../../../common/common_bottomsheet.dart';
+import '../../../common/common_options_row.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
-import 'wallet_controller.dart';
 
 class WalletUI extends GetView<WalletController> {
   const WalletUI({Key? key}) : super(key: key);
@@ -17,33 +19,14 @@ class WalletUI extends GetView<WalletController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      backgroundColor: AppColors.white,
       drawer: const SideMenuDrawer(),
       appBar: commonAppbar(
-          title: "Wallet",
+          title: AppString.wallet,
           trailingWidget: InkWell(
             child: Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: Container(
-                width: 90.w,
-                height: 28.h,
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.darkBlue, width: 1.0),
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "₹ 999",
-                      style: AppTextStyle.textStyle10(
-                          fontWeight: FontWeight.w700,
-                          fontColor: AppColors.darkBlue),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                padding: EdgeInsets.only(right: 20.w),
+                child: Assets.images.icOrderHistory.svg()),
           )),
       body: SingleChildScrollView(
         child: Padding(
@@ -104,131 +87,85 @@ class WalletUI extends GetView<WalletController> {
 
   Widget durationWidget() {
     return Container(
-      padding: EdgeInsets.all(12.h),
-      decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 3.0,
-                offset: const Offset(0.0, 3.0)),
-          ],
-          color: AppColors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(20))),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "June - 2023 ",
-            style: AppTextStyle.textStyle16(
-                fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
-          ),
-          Assets.images.icDownArrow.svg()
-        ],
-      ),
-    );
+        padding: EdgeInsets.all(8.h),
+        decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 3.0,
+                  offset: const Offset(0.0, 3.0)),
+            ],
+            color: AppColors.white,
+            borderRadius: const BorderRadius.all(Radius.circular(20))),
+        child: durationOptions());
   }
 
   Widget balanceView() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return SizedBox(
+      height: 60.h,
+      width: ScreenUtil().screenWidth,
+      child: ListView.builder(
+        controller: controller.amountScrollController,
+        scrollDirection: Axis.horizontal,
+        shrinkWrap: true,
+        itemCount: controller.amountTypeList.length,
+        itemBuilder: (context, index) {
+          return Row(
+            children: [
+              SizedBox(
+                width: 60.w,
+                child: amountDetailView(
+                    amountType: controller.amountTypeList[index],
+                    amount: "10000",
+                    is2linesRequired:
+                        controller.amountTypeList[index] == AppString.tds
+                            ? false
+                            : true,
+                    boldTextStyle: controller.amountTypeList[index] ==
+                            AppString.totalAmount
+                        ? true
+                        : false),
+              ),
+              const SizedBox(width: 10)
+            ],
+          );
+        },
+      ),
+    );
+    // Container();
+  }
+
+  Widget amountDetailView(
+      {required String amountType,
+      required String amount,
+      required bool is2linesRequired,
+      required bool boldTextStyle}) {
+    return Column(
       children: [
-        Column(
-          children: [
-            Text(AppString.availableBalance,
-                textAlign: TextAlign.center,
+        if (is2linesRequired)
+          Text(amountType,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              style: AppTextStyle.textStyle12(
+                  fontColor: AppColors.darkBlue,
+                  fontWeight:
+                      boldTextStyle ? FontWeight.w700 : FontWeight.w400)),
+        if (!is2linesRequired)
+          Padding(
+            padding: const EdgeInsets.only(top: 10, bottom: 9),
+            child: Text("${AppString.tds}  ",
                 maxLines: 2,
                 style: AppTextStyle.textStyle12(
                     fontColor: AppColors.darkBlue,
                     fontWeight: FontWeight.w400)),
-            const SizedBox(height: 10),
-            Text("₹100000",
-                maxLines: 2,
-                textAlign: TextAlign.center,
-                style: AppTextStyle.textStyle10(
-                    fontColor: AppColors.darkBlue,
-                    fontWeight: FontWeight.w400)),
-          ],
-        ),
-        const SizedBox(width: 6),
-        Column(
-          children: [
-            Text(AppString.pgCharges,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                style: AppTextStyle.textStyle12(
-                    fontColor: AppColors.darkBlue,
-                    fontWeight: FontWeight.w400)),
-            const SizedBox(height: 10),
-            Text("₹100000",
-                maxLines: 2,
-                textAlign: TextAlign.center,
-                style: AppTextStyle.textStyle10(
-                    fontColor: AppColors.darkBlue,
-                    fontWeight: FontWeight.w400)),
-          ],
-        ),
-        const SizedBox(width: 6),
-        Column(
-          children: [
-            Text(AppString.subTotal,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                style: AppTextStyle.textStyle12(
-                    fontColor: AppColors.darkBlue,
-                    fontWeight: FontWeight.w400)),
-            const SizedBox(height: 10),
-            Text("₹100000",
-                maxLines: 2,
-                textAlign: TextAlign.center,
-                style: AppTextStyle.textStyle10(
-                    fontColor: AppColors.darkBlue,
-                    fontWeight: FontWeight.w400)),
-          ],
-        ),
-        const SizedBox(width: 6),
-        Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 8),
-              child: Text("${AppString.tds}  ",
-                  maxLines: 2,
-                  style: AppTextStyle.textStyle12(
-                      fontColor: AppColors.darkBlue,
-                      fontWeight: FontWeight.w400)),
-            ),
-            const SizedBox(height: 10),
-            Text("₹100000",
-                maxLines: 2,
-                textAlign: TextAlign.center,
-                style: AppTextStyle.textStyle10(
-                    fontColor: AppColors.darkBlue,
-                    fontWeight: FontWeight.w400)),
-          ],
-        ),
-        // const SizedBox(width: 6),
-        // Text(AppString.gst,
-        //     maxLines: 2,
-        //     style: AppTextStyle.textStyle12(
-        //         fontColor: AppColors.darkBlue,
-        //         fontWeight: FontWeight.w400)),
-        const SizedBox(width: 6),
-        Column(
-          children: [
-            Text(AppString.payableAmount,
-                maxLines: 2,
-                textAlign: TextAlign.center,
-                style: AppTextStyle.textStyle12(
-                    fontColor: AppColors.darkBlue,
-                    fontWeight: FontWeight.w700)),
-            const SizedBox(height: 10),
-            Text("₹100000",
-                maxLines: 2,
-                textAlign: TextAlign.center,
-                style: AppTextStyle.textStyle10(
-                    fontColor: AppColors.darkBlue,
-                    fontWeight: FontWeight.w700)),
-          ],
-        ),
+          ),
+        const SizedBox(height: 10),
+        Text(amount, //"₹100000",
+            maxLines: 2,
+            textAlign: TextAlign.center,
+            style: AppTextStyle.textStyle10(
+                fontColor: AppColors.darkBlue,
+                fontWeight: boldTextStyle ? FontWeight.w700 : FontWeight.w400)),
       ],
     );
   }
@@ -324,6 +261,14 @@ class WalletUI extends GetView<WalletController> {
                 ),
               ],
             ),
+            const SizedBox(height: 20),
+            CommonOptionRow(
+              leftBtnTitle: AppString.refund,
+              onLeftTap: () {},
+              onRightTap: () {},
+              rightBtnTitle: AppString.suggestedRemediesEarning,
+            ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -470,5 +415,63 @@ class WalletUI extends GetView<WalletController> {
         )
       ],
     );
+  }
+
+  Widget durationOptions() {
+    return Obx(() => DropdownButtonHideUnderline(
+          child: DropdownButton2<String>(
+            isExpanded: true,
+            hint: Text(
+              "June - 2023 ",
+              style: AppTextStyle.textStyle16(
+                  fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+            ),
+            items: controller.durationOptions
+                .map((String item) => DropdownMenuItem<String>(
+                      value: item,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Text(
+                          item,
+                          style: AppTextStyle.textStyle16(
+                              fontWeight: FontWeight.w400,
+                              fontColor: AppColors.darkBlue),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ))
+                .toList(),
+            style: AppTextStyle.textStyle16(
+                fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+            value: controller.selectedValue.value,
+            onChanged: (String? value) {
+              controller.selectedValue.value = value ?? "Daily";
+            },
+            iconStyleData: const IconStyleData(
+              icon: Icon(
+                Icons.keyboard_arrow_down,
+              ),
+              iconSize: 35,
+              iconEnabledColor: AppColors.blackColor,
+            ),
+            dropdownStyleData: DropdownStyleData(
+              width: ScreenUtil().screenWidth * 0.9,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                color: AppColors.white,
+              ),
+              offset: const Offset(-8, -17),
+              scrollbarTheme: ScrollbarThemeData(
+                radius: const Radius.circular(40),
+                thickness: MaterialStateProperty.all<double>(6),
+                thumbVisibility: MaterialStateProperty.all<bool>(false),
+              ),
+            ),
+            menuItemStyleData: const MenuItemStyleData(
+              height: 40,
+              padding: EdgeInsets.only(left: 14, right: 14),
+            ),
+          ),
+        ));
   }
 }

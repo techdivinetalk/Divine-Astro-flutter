@@ -627,20 +627,25 @@ class ProfileUI extends GetView<ProfileController> {
                   ),
                 )),
                 PopupMenuItem(
-                    onTap: () {},
-                    child: Row(
-                      children: [
-                        Assets.images.icOrderHistory
-                            .svg(height: 18.h, width: 18.w),
-                        SizedBox(
-                          width: 15.w,
-                        ),
-                        Text(
-                          AppString.orderHistory,
-                          style: AppTextStyle.textStyle13(),
-                        )
-                      ],
-                    )),
+                    child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Get.toNamed(RouteName.orderHistory);
+                  },
+                  child: Row(
+                    children: [
+                      Assets.images.icOrderHistory
+                          .svg(height: 18.h, width: 18.w),
+                      SizedBox(
+                        width: 15.w,
+                      ),
+                      Text(
+                        AppString.orderHistory,
+                        style: AppTextStyle.textStyle13(),
+                      )
+                    ],
+                  ),
+                )),
                 PopupMenuItem(
                     child: InkWell(
                   onTap: () {

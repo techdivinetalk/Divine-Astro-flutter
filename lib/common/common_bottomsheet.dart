@@ -4,9 +4,10 @@ import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_holo_date_picker/date_picker_theme.dart';
-import 'package:flutter_holo_date_picker/widget/date_picker_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
+import 'date_picker/date_picker_widget.dart';
 
 Future openBottomSheet(BuildContext context,
     {String? title, String? btnTitle, required Widget functionalityWidget}) {
@@ -77,12 +78,12 @@ Future openBottomSheet(BuildContext context,
   );
 }
 
-Future openDateOrTimePicker(BuildContext context,
+selectDateOrTime(BuildContext context,
     {required String title,
     required String btnTitle,
     required String pickerStyle,
     required bool looping}) {
-  return showCupertinoModalPopup(
+  showCupertinoModalPopup(
     context: context,
     builder: (context) => Column(
       mainAxisSize: MainAxisSize.min,
@@ -97,56 +98,37 @@ Future openDateOrTimePicker(BuildContext context,
                 borderRadius: const BorderRadius.all(Radius.circular(50.0)),
                 border: Border.all(color: AppColors.darkBlue),
                 color: AppColors.darkBlue),
-            child: const Icon(
-              Icons.close_rounded,
-              color: AppColors.white,
-            ),
+            child: Assets.images.icClose.svg(height: 12.h, width: 12.h),
           ),
         ),
         const SizedBox(height: 10),
         Container(
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
-            color: Colors.white,
+          decoration: BoxDecoration(
+            borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(50.0)),
+            border: Border.all(color: AppColors.white, width: 2),
+            color: AppColors.white,
           ),
           child: Column(
             children: [
-              // const SizedBox(height: 20),
-              // Align(
-              //     alignment: Alignment.center,
-              //     child: Icon(
-              //       pickerStyle == "DateCalendar"
-              //           ? Icons.calendar_month
-              //           : Icons.access_time_rounded,
-              //       size: 50,
-              //       color: const Color(0xFFFCB742),
-              //     )),
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Assets.images.icOffline.svg(),
-                  const SizedBox(width: 20),
-                  Material(
-                    child: Text(
-                      "You are Offline Now!",
-                      style:
-                          AppTextStyle.textStyle16(fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Container(
-                height: 1,
-                width: ScreenUtil().screenWidth * 0.8,
-                color: AppColors.greyColour,
-              ),
+              Align(
+                  alignment: Alignment.center,
+                  child: Icon(
+                    pickerStyle == "DateCalendar"
+                        ? Icons.calendar_month
+                        : Icons.access_time_rounded,
+                    size: 50,
+                    color: AppColors.darkBlue,
+                  )),
               const SizedBox(height: 20),
               Material(
                 child: Text(
                   title,
-                  style: AppTextStyle.textStyle16(fontWeight: FontWeight.w700),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.darkBlue,
+                      fontSize: 20.0),
                 ),
               ),
               const SizedBox(height: 20),
@@ -158,18 +140,24 @@ Future openDateOrTimePicker(BuildContext context,
                   dateFormat: pickerStyle == "DateCalendar"
                       ? "MMM/dd/yyyy"
                       : "MM/dd/yyyy",
-                  // pickerType: pickerStyle,
-                  // looping: looping,
+                  pickerType: pickerStyle,
+                  looping: looping,
+                  onConfirm: (DateTime newDate, _) {
+                    if (pickerStyle == "DateCalendar") {
+                      // debugPrint(Utils.dateToString(newDate));
+                    } else {
+                      // debugPrint(Utils.dateToString(newDate, format: "h:mm a"));
+                    }
+                  },
                   onChange: (DateTime newDate, _) {
-                    //  _selectedDate = newDate;
                     debugPrint("$newDate");
                   },
                   pickerTheme: DateTimePickerTheme(
                     pickerHeight: 180,
                     itemHeight: 44,
-                    backgroundColor: Colors.white,
+                    backgroundColor: AppColors.white,
                     itemTextStyle: const TextStyle(
-                        color: Color(0xFF0E2339),
+                        color: AppColors.darkBlue,
                         fontSize: 20,
                         fontWeight: FontWeight.w700),
                     dividerColor: Colors.black.withOpacity(0.5),
@@ -186,7 +174,7 @@ Future openDateOrTimePicker(BuildContext context,
                   onPressed: () {
                     Get.back();
                   },
-                  color: AppColors.lightYellow,
+                  color: AppColors.appYellowColour,
                   child: Text(
                     btnTitle,
                     style: const TextStyle(color: AppColors.brownColour),

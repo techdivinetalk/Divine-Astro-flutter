@@ -1,4 +1,6 @@
 import 'package:divine_astrologer/screens/blocked_user/blocked_user_bindings.dart';
+import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_binding.dart';
+import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/earning/earning_bindings.dart';
 import 'package:divine_astrologer/screens/home_screen_options/earning/earning_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_bindings.dart';
@@ -13,6 +15,8 @@ import '../screens/edit_profile/edit_profile_ui.dart';
 import '../screens/edit_profile/edit_profile_binding.dart';
 import '../screens/number_change/number_change_binding.dart';
 import '../screens/number_change/number_change_ui.dart';
+import '../screens/order_history/order_history_ui.dart';
+import '../screens/order_history/order_history_binding.dart';
 import '../screens/price_change/price_change_binding.dart';
 import '../screens/price_change/price_change_ui.dart';
 import '../screens/price_history/price_history_binding.dart';
@@ -27,12 +31,14 @@ class RouteName {
   static const String dashboard = "/dashboard";
   static const String blockedUser = "/blockedUser";
   static const String editProfileUI = "/editProfileUI";
+  static const String orderHistory = "/orderHistory";
   static const String referAstrologer = "/referAstrologer";
   static const String yourEarning = "/yourEarning";
   static const String priceHistoryUI = "/priceHistoryUI";
   static const String priceChangeReqUI = "/priceChangeReqUI";
   static const String numberChangeReqUI = "/numberChangeReqUI";
   static const String bankDetailsUI = "/bankDetailsUI";
+  static const String checkKundli = "/checkKundli";
 }
 
 class Routes {
@@ -53,6 +59,10 @@ class Routes {
         page: () => const EditProfileUI(),
         name: RouteName.editProfileUI,
         binding: EditProfileBinding()),
+    GetPage(
+        page: () => const OrderHistoryUI(),
+        name: RouteName.orderHistory,
+        binding: OrderHistoryBinding()),
     GetPage(
         page: () => const ReferAnAstrologer(),
         name: RouteName.referAstrologer,
@@ -77,5 +87,9 @@ class Routes {
         page: () => const BankDetailsUI(),
         name: RouteName.bankDetailsUI,
         binding: BankDetailBinding()),
+    GetPage(
+        page: () => const KundliUi(),
+        name: RouteName.checkKundli,
+        binding: KundliBinding()),
   ];
 }

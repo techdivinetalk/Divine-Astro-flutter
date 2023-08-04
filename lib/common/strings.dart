@@ -13,8 +13,8 @@ class AppString {
   static String showLess = "Show less";
   static String goLive = "Go Live";
   static String sessionType = "Session Type";
-  static String chat = "CHAT";
-  static String call = "CALL";
+  static String chat = "Chat";
+  static String call = "Call";
   static String offerType = "Offer Type";
   static String firstFreeOffer = "FIRST FREE CONSULATION OFFER";
   static String promotionOffer = "PROMOTION OFFER";
@@ -68,7 +68,7 @@ class AppString {
   static String subTotal = "Sub\nTotal:";
   static String tds = "TDS: ";
   static String gst = "GST:";
-  static String payableAmount = "Payable\nAmount:";
+  static String totalAmount = "Total \nAmount:";
   static String referAnAstrologer = "Refer an Astrologer:";
   static String settings = "Settings:";
   static String contactUs = "Contact Us:";
@@ -105,4 +105,9 @@ class AppString {
   static String priceChangeCondition = "Conditions for price change Request";
   static String unBlockMsg =
       "If you unblock this user, then they’ll again be able to connect with you on the platform.";
+  static String refund = "Refund";
+  static String liveGifts = "Live Gifts";
+  static String remedysuggested = "Remedy suggested";
+  static String wallet = "Wallet";
+  static String all = "All";
 }

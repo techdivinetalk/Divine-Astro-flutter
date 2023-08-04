@@ -1,4 +1,5 @@
-import 'package:divine_astrologer/common/app_textstyle.dart';
+// ignore_for_file: deprecated_member_use_from_same_package
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -17,107 +18,131 @@ class DashboardScreen extends GetView<DashboardController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: AppColors.white,
         key: controller.scaffoldkey,
         body:
             Obx(() => widgetOptions.elementAt(controller.selectedIndex.value)),
-        bottomNavigationBar: Obx(() => BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: Column(
-                    children: [
-                      controller.selectedIndex.value == 0
-                          ? Assets.images.icSelectedHome.svg(height: 24.h)
-                          : Assets.images.icUnselectedHome.svg(height: 24.h),
-                      const SizedBox(height: 5),
-                      Text("Home",
-                          maxLines: 2,
-                          style: AppTextStyle.textStyle10(
-                              fontColor: controller.selectedIndex.value == 0
-                                  ? AppColors.darkBlue
-                                  : AppColors.lightGrey))
-                    ],
+        bottomNavigationBar: Obx(() => SafeArea(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 1),
+                  Container(
+                    width: ScreenUtil().screenWidth * 0.9,
+                    height: 1,
+                    color: AppColors.lightGrey.withOpacity(0.50),
                   ),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: Column(
-                    children: [
-                      controller.selectedIndex.value == 1
-                          ? Assets.images.icSelectedPerfom.svg(height: 24.h)
-                          : Assets.images.icUnselectedPerfom.svg(height: 24.h),
-                      const SizedBox(height: 5),
-                      Text("Performance",
-                          maxLines: 2,
-                          style: AppTextStyle.textStyle10(
-                              fontColor: controller.selectedIndex.value == 1
-                                  ? AppColors.darkBlue
-                                  : AppColors.lightGrey))
+                  const SizedBox(height: 10),
+                  BottomNavigationBar(
+                    backgroundColor: AppColors.white,
+                    type: BottomNavigationBarType.fixed,
+                    selectedFontSize: 10,
+                    unselectedFontSize: 10,
+                    selectedItemColor: AppColors.darkBlue,
+                    unselectedItemColor: AppColors.lightGrey,
+                    items: <BottomNavigationBarItem>[
+                      BottomNavigationBarItem(
+                        icon: Column(
+                          children: [
+                            Assets.images.icSelectedHome.svg(
+                                height: 22.h,
+                                color: controller.selectedIndex.value == 0
+                                    ? AppColors.darkBlue
+                                    : AppColors.lightGrey),
+                            const SizedBox(height: 5),
+                          ],
+                        ),
+                        label: 'Home',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Column(
+                          children: [
+                            Assets.images.icSelectedPerfom.svg(
+                                height: 22.h,
+                                color: controller.selectedIndex.value == 1
+                                    ? AppColors.darkBlue
+                                    : AppColors.lightGrey),
+                            const SizedBox(height: 5),
+                            // Text("Performance",
+                            //     maxLines: 2,
+                            //     style: AppTextStyle.textStyle10(
+                            //         fontColor: controller.selectedIndex.value == 1
+                            //             ? AppColors.darkBlue
+                            //             : AppColors.lightGrey))
+                          ],
+                        ),
+                        label: 'Performance',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Column(
+                          children: [
+                            Assets.images.icSelectedSuggest.svg(
+                                height: 22.h,
+                                color: controller.selectedIndex.value == 2
+                                    ? AppColors.darkBlue
+                                    : AppColors.lightGrey),
+                            const SizedBox(height: 5),
+                            // Text("Suggest \nRemedies",
+                            //     maxLines: 2,
+                            //     style: AppTextStyle.textStyle10(
+                            //         fontColor: controller.selectedIndex.value == 2
+                            //             ? AppColors.darkBlue
+                            //             : AppColors.lightGrey))
+                          ],
+                        ),
+                        label: 'Suggest \nRemedies',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Column(
+                          children: [
+                            Assets.images.icSelectedWallet.svg(
+                                height: 22.h,
+                                color: controller.selectedIndex.value == 3
+                                    ? AppColors.darkBlue
+                                    : AppColors.lightGrey),
+                            const SizedBox(height: 5),
+                            // Text("Wallet",
+                            //     maxLines: 2,
+                            //     style: AppTextStyle.textStyle10(
+                            //         fontColor: controller.selectedIndex.value == 3
+                            //             ? AppColors.darkBlue
+                            //             : AppColors.lightGrey))
+                          ],
+                        ),
+                        label: "Wallet",
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Column(
+                          children: [
+                            Assets.images.icProfilePhoto.svg(
+                                height: 22.h,
+                                color: controller.selectedIndex.value == 4
+                                    ? AppColors.darkBlue
+                                    : AppColors.lightGrey),
+                            const SizedBox(height: 5),
+                            // Text(
+                            //   "Profile",
+                            //   maxLines: 2,
+                            //   style: TextStyle(
+                            //       fontSize: 10,
+                            //       fontWeight: FontWeight.w400,
+                            //       color: controller.selectedIndex.value == 4
+                            //           ? AppColors.darkBlue
+                            //           : AppColors.lightGrey),
+                            // )
+                          ],
+                        ),
+                        label: "Profile",
+                      ),
                     ],
+                    elevation: 0,
+                    currentIndex: controller.selectedIndex.value,
+                    onTap: (value) {
+                      _onItemTapped(value);
+                    },
                   ),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: Column(
-                    children: [
-                      controller.selectedIndex.value == 2
-                          ? Assets.images.icSelectedSuggest.svg(height: 24.h)
-                          : Assets.images.icUnselectedSuggest.svg(height: 24.h),
-                      const SizedBox(height: 5),
-                      Text("Suggest \nRemedies",
-                          maxLines: 2,
-                          style: AppTextStyle.textStyle10(
-                              fontColor: controller.selectedIndex.value == 2
-                                  ? AppColors.darkBlue
-                                  : AppColors.lightGrey))
-                    ],
-                  ),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: Column(
-                    children: [
-                      controller.selectedIndex.value == 3
-                          ? Assets.images.icSelectedWallet.svg(height: 24.h)
-                          : Assets.images.icUnselectedWallet.svg(height: 24.h),
-                      const SizedBox(height: 5),
-                      Text("Wallet",
-                          maxLines: 2,
-                          style: AppTextStyle.textStyle10(
-                              fontColor: controller.selectedIndex.value == 3
-                                  ? AppColors.darkBlue
-                                  : AppColors.lightGrey))
-                    ],
-                  ),
-                  label: "",
-                ),
-                BottomNavigationBarItem(
-                  icon: Column(
-                    children: [
-                      controller.selectedIndex.value == 3
-                          ? Assets.images.icProfilePhoto.svg(height: 24.h)
-                          : Assets.images.icProfilePhoto.svg(height: 24.h),
-                      const SizedBox(height: 5),
-                      Text(
-                        "Profile",
-                        maxLines: 2,
-                        style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w400,
-                            color: controller.selectedIndex.value == 4
-                                ? AppColors.darkBlue
-                                : AppColors.lightGrey),
-                      )
-                    ],
-                  ),
-                  label: "",
-                ),
-              ],
-              elevation: 0,
-              currentIndex: controller.selectedIndex.value,
-              onTap: (value) {
-                _onItemTapped(value);
-              },
+                ],
+              ),
             )));
   }
 

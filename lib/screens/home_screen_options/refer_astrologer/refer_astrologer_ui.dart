@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../../common/text_field_custom.dart';
 import '../../../common/custom_light_yellow_btn.dart';
+import '../../../common/text_field_custom.dart';
 
 class ReferAnAstrologer extends GetView<ReferAstrologerController> {
   const ReferAnAstrologer({Key? key}) : super(key: key);
@@ -93,7 +93,8 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                 Text(
                   AppString.mandatoryFields,
                   style: AppTextStyle.textStyle14(
-                      fontWeight: FontWeight.w400, fontColor: AppColors.white),
+                      fontWeight: FontWeight.w400,
+                      fontColor: AppColors.darkBlue),
                 ),
                 const SizedBox(height: 5),
               ],
