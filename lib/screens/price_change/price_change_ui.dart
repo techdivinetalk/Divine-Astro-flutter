@@ -79,11 +79,11 @@ class PriceChangeReqUI extends GetView<PriceChangeReqController> {
                   )),
               SizedBox(height: 15.w),
               ListView.builder(
-                  itemCount: controller.listData.length,
+                  itemCount: controller.priceList.length,
                   shrinkWrap: true,
                   primary: false,
                   itemBuilder: (context, index) {
-                    var item = controller.listData[index];
+                    var item = controller.priceList[index];
                     return Column(
                       children: [
                         Container(

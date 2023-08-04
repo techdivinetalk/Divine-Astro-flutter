@@ -1,3 +1,5 @@
+import 'package:divine_astrologer/pages/performance/rank_system/rank_system_binding.dart';
+import 'package:divine_astrologer/pages/performance/rank_system/rank_system_ui.dart';
 import 'package:divine_astrologer/screens/blocked_user/blocked_user_bindings.dart';
 import 'package:divine_astrologer/screens/home_screen_options/earning/earning_bindings.dart';
 import 'package:divine_astrologer/screens/home_screen_options/earning/earning_ui.dart';
@@ -33,6 +35,7 @@ class RouteName {
   static const String priceChangeReqUI = "/priceChangeReqUI";
   static const String numberChangeReqUI = "/numberChangeReqUI";
   static const String bankDetailsUI = "/bankDetailsUI";
+  static const String rankSystemUI = "/rankSystemUI";
 }
 
 class Routes {
@@ -77,5 +80,9 @@ class Routes {
         page: () => const BankDetailsUI(),
         name: RouteName.bankDetailsUI,
         binding: BankDetailBinding()),
+    GetPage(
+        page: () => const RankSystemUI(),
+        name: RouteName.rankSystemUI,
+        binding: RankSystemBinding()),
   ];
 }

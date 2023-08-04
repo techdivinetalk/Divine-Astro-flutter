@@ -18,4 +18,5 @@ class AppColors {
   static const Color greyColor = Colors.grey;
   static const Color lightGrey = Color(0xff87919C);
   static const Color extraLightGrey = Color(0xffD9D9D9);
+  static const Color markerColor = Color(0xffc5c5d8);
 }

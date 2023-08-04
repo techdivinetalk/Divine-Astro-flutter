@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 Future openBottomSheet(BuildContext context,
     {String? title, String? btnTitle, required Widget functionalityWidget}) {
   return showModalBottomSheet(
+    isScrollControlled: true,
     backgroundColor: Colors.transparent,
     context: context,
     builder: (context) => Column(
@@ -83,6 +84,7 @@ Future openDateOrTimePicker(BuildContext context,
     required String pickerStyle,
     required bool looping}) {
   return showCupertinoModalPopup(
+
     context: context,
     builder: (context) => Column(
       mainAxisSize: MainAxisSize.min,
