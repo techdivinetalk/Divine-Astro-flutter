@@ -239,7 +239,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0),
                             borderSide: const BorderSide(
-                              color: AppColors.darkYellow,
+                              color: AppColors.appYellowColour,
                               width: 1.0,
                             )),
                       ),

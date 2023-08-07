@@ -9,7 +9,7 @@ import '../../../common/routes.dart';
 import '../../../common/strings.dart';
 import '../../../gen/assets.gen.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
-import 'Profile_controller.dart';
+import 'profile_controller.dart';
 
 class ProfileUI extends GetView<ProfilePageController> {
   const ProfileUI({Key? key}) : super(key: key);
@@ -47,7 +47,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                         Container(
                           decoration: BoxDecoration(
                             border: Border.all(
-                                width: 6, color: AppColors.darkYellow),
+                                width: 6, color: AppColors.appYellowColour),
                             borderRadius: BorderRadius.circular(80),
                           ),
                           child: ClipRRect(
@@ -87,12 +87,12 @@ class ProfileUI extends GetView<ProfilePageController> {
                                       'Edit Profile',
                                       style: AppTextStyle.textStyle10(
                                           fontWeight: FontWeight.w500,
-                                          fontColor: AppColors.darkYellow),
+                                          fontColor: AppColors.appYellowColour),
                                     ),
                                     Icon(
                                       Icons.arrow_right,
                                       size: 18.h,
-                                      color: AppColors.darkYellow,
+                                      color: AppColors.appYellowColour,
                                     )
                                   ],
                                 ),
