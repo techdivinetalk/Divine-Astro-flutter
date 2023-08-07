@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.13.0"
+  animated_checkmark:
+    dependency: transitive
+    description:
+      name: animated_checkmark
+      sha256: "878db0c6754c4145e9e17b46f20e304da060ac7a65f8ab4ab43494093f3f8443"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   args:
     dependency: transitive
     description:
@@ -57,6 +65,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
+  chips_choice:
+    dependency: "direct main"
+    description:
+      name: chips_choice
+      sha256: "593a9bf48238abb057f81b1bc33557f28588126d3bd8b9deae3123cc697aa1bf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   clock:
     dependency: transitive
     description:
@@ -153,6 +169,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.8"
+  dropdown_button2:
+    dependency: "direct main"
+    description:
+      name: dropdown_button2
+      sha256: "9c4f30b2d1506fe171e807f15d69e4f70ab48359de350663dbde69015d7c1454"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.7"
   fake_async:
     dependency: transitive
     description:
@@ -177,6 +201,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.4"
+  flexi_chip:
+    dependency: transitive
+    description:
+      name: flexi_chip
+      sha256: "5942219bdbd94a7527b69eb5640e6bd05d8ec6a41a5a4a1a10ca22a5a1f41beb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.8"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -281,7 +313,7 @@ packages:
     source: hosted
     version: "4.0.2"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
@@ -629,6 +661,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  widget_event:
+    dependency: transitive
+    description:
+      name: widget_event
+      sha256: b71014bc7d8ec85a325357e76e6b5769ee1d8a67d099a6ce5c429440a19dbf18
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.5"
   win32:
     dependency: transitive
     description:

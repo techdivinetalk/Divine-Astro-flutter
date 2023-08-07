@@ -3,16 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:readmore/readmore.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
 import '../../../common/routes.dart';
 import '../../../common/strings.dart';
 import '../../../gen/assets.gen.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
-import 'profile_controller.dart';
+import 'Profile_controller.dart';
 
-class ProfileUI extends GetView<ProfileController> {
+class ProfileUI extends GetView<ProfilePageController> {
   const ProfileUI({Key? key}) : super(key: key);
 
   @override
@@ -26,199 +25,220 @@ class ProfileUI extends GetView<ProfileController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    children: [
-                      Stack(
-                        alignment: Alignment.topRight,
-                        children: [
-                          Assets.images.bgTmpUser
-                              .svg(height: 80.h, width: 80.w),
-                          Container(
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.lightGreen),
-                            height: 13.h,
-                            width: 13.h,
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20.w, vertical: 5.h),
-                          decoration: BoxDecoration(
-                              color: AppColors.lightYellow,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(30.h))),
-                          child: Text(
-                            AppString.follow,
-                            style: TextStyle(
-                                color: AppColors.brownColour,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14.sp),
-                          ))
-                    ],
+              Container(
+                padding: EdgeInsets.all(12.h),
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 3.0,
+                        offset: const Offset(0.0, 3.0)),
+                  ],
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(20),
                   ),
-                  SizedBox(
-                    width: 10.h,
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Pushpak',
-                              style: AppTextStyle.textStyle20(),
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  '4.5 ',
-                                  style: AppTextStyle.textStyle14(
-                                      fontWeight: FontWeight.w700),
-                                ),
-                                Icon(
-                                  Icons.star,
-                                  size: 16.h,
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5.h,
-                        ),
-                        Row(
-                          children: [
-                            Assets.images.icBook.svg(
-                              height: 15.h,
-                              width: 15.w,
-                            ),
-                            SizedBox(
-                              width: 5.h,
-                            ),
-                            Expanded(
-                              child: Text(
-                                'Vedic, Numerology, Prashana',
-                                style: AppTextStyle.textStyle12(),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5.h,
-                        ),
-                        Row(
-                          children: [
-                            Assets.images.icLanguage.svg(
-                              height: 13.h,
-                              width: 13.w,
-                            ),
-                            SizedBox(
-                              width: 5.h,
-                            ),
-                            Expanded(
-                              child: Text(
-                                'Hindi',
-                                style: AppTextStyle.textStyle12(),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5.h,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Assets.images.icSuitcase.svg(
-                              height: 13.h,
-                              width: 13.w,
-                            ),
-                            SizedBox(
-                              width: 5.w,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Exp: 10 ${AppString.years}',
-                                  style: AppTextStyle.textStyle12(),
-                                ),
-                                SizedBox(
-                                  height: 5.h,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '₹25',
-                                      style: TextStyle(
-                                          fontSize: 12.sp,
-                                          fontWeight: FontWeight.w400,
-                                          decoration:
-                                              TextDecoration.lineThrough,
-                                          decorationColor: AppColors.redColor),
-                                    ),
-                                    SizedBox(
-                                      width: 5.h,
-                                    ),
-                                    Text(
-                                      '₹5/Min',
-                                      style: AppTextStyle.textStyle12(),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 6, color: AppColors.darkYellow),
+                            borderRadius: BorderRadius.circular(80),
+                          ),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(80),
+
+                              // Image border
+                              child: Assets.images.bgUserTmpPro.image(
+                                  height: 70.h,
+                                  width: 70.h,
+                                  fit: BoxFit.cover)),
                         ),
                       ],
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      width: 10.h,
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Paras',
+                                style: AppTextStyle.textStyle20(
+                                    fontWeight: FontWeight.w600,
+                                    fontColor: AppColors.darkBlue),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  Get.toNamed(RouteName.editProfileUI);
+                                },
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Edit Profile',
+                                      style: AppTextStyle.textStyle10(
+                                          fontWeight: FontWeight.w500,
+                                          fontColor: AppColors.darkYellow),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_right,
+                                      size: 18.h,
+                                      color: AppColors.darkYellow,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 3.h,
+                          ),
+                          Text(
+                            '+91- 9876543210',
+                            style: AppTextStyle.textStyle14(
+                                fontWeight: FontWeight.w400,
+                                fontColor: AppColors.darkBlue),
+                          ),
+                          SizedBox(
+                            height: 3.h,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                '${AppString.customerId} - ',
+                                style: AppTextStyle.textStyle14(
+                                    fontWeight: FontWeight.w400,
+                                    fontColor: AppColors.darkBlue),
+                              ),
+                              SizedBox(
+                                width: 5.h,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  '1234567891',
+                                  style: AppTextStyle.textStyle14(
+                                      fontWeight: FontWeight.w400,
+                                      fontColor: AppColors.darkBlue),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 15.h),
-                child: const Divider(),
+                padding: EdgeInsets.symmetric(vertical: 20.h),
+                child: Text(
+                  AppString.profileOptions,
+                  style: AppTextStyle.textStyle16(
+                      fontWeight: FontWeight.w500,
+                      fontColor: AppColors.darkBlue),
+                ),
               ),
-              Container(
-                padding: EdgeInsets.all(10.h),
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 1.0,
-                          offset: const Offset(0.0, 3.0)),
-                    ],
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(10.h))),
-                child: ReadMoreText(
-                  "I am a certified and professional Legal Astrologer with more than 10 years of experience. And I wouldhave felt happy to serve you through astrology.",
-                  trimLines: 2,
-                  trimMode: TrimMode.Line,
-                  trimCollapsedText: AppString.readMore,
-                  trimExpandedText: AppString.showLess,
-                  moreStyle: TextStyle(
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.lightYellow,
-                      decoration: TextDecoration.underline,
-                      decorationColor: AppColors.lightYellow),
+              MediaQuery.removePadding(
+                context: context,
+                removeLeft: true,
+                removeBottom: true,
+                removeTop: true,
+                removeRight: true,
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  primary: false,
+                  itemCount: controller.profileList.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 0.80.h,
+                      crossAxisSpacing: 20.h,
+                      mainAxisSpacing: 15.h),
+                  itemBuilder: (BuildContext context, int index) {
+                    ProfileOptionModelClass item =
+                        controller.profileList[index];
+                    return GridTile(
+                      child: Container(
+                        // height: 130.h,
+                        // width: 116.h,
+                        padding: EdgeInsets.all(10.h),
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 3.0,
+                                offset: const Offset(0.0, 3.0)),
+                          ],
+                          color: Colors.white,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                        ),
+                        child: Center(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              item.widget ?? const SizedBox(),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              Text(
+                                item.name.toString(),
+                                textAlign: TextAlign.center,
+                                style: AppTextStyle.textStyle10(
+                                    fontWeight: FontWeight.w500,
+                                    fontColor: AppColors.darkBlue),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
               SizedBox(
-                height: 20.h,
+                height: 10.h,
               ),
+              // Container(
+              //   padding: EdgeInsets.all(10.h),
+              //   decoration: BoxDecoration(
+              //       boxShadow: [
+              //         BoxShadow(
+              //             color: Colors.black.withOpacity(0.2),
+              //             blurRadius: 1.0,
+              //             offset: const Offset(0.0, 3.0)),
+              //       ],
+              //       color: Colors.white,
+              //       borderRadius: BorderRadius.all(Radius.circular(10.h))),
+              //   child: ReadMoreText(
+              //     "I am a certified and professional Legal Astrologer with more than 10 years of experience. And I wouldhave felt happy to serve you through astrology.",
+              //     trimLines: 2,
+              //     trimMode: TrimMode.Line,
+              //     trimCollapsedText: AppString.readMore,
+              //     trimExpandedText: AppString.showLess,
+              //     moreStyle: TextStyle(
+              //         fontSize: 15.sp,
+              //         fontWeight: FontWeight.bold,
+              //         color: AppColors.lightYellow,
+              //         decoration: TextDecoration.underline,
+              //         decorationColor: AppColors.lightYellow),
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: 20.h,
+              // ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 20.h),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
                 decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
@@ -270,6 +290,7 @@ class ProfileUI extends GetView<ProfileController> {
                                   Assets.images.icUser.svg(
                                       height: 20.h,
                                       width: 20.h,
+                                      // ignore: deprecated_member_use_from_same_package
                                       color: AppColors.appYellowColour),
                                   SizedBox(width: 8.w),
                                   Text(

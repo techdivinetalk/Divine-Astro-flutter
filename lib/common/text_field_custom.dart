@@ -47,6 +47,7 @@ class WhiteTextField extends StatefulWidget {
   final TextInputType inputType;
   final TextInputAction inputAction;
   final Icon? icon;
+  final Widget? suffixIcon;
   final Color? errorBorder;
 
   const WhiteTextField(
@@ -55,7 +56,7 @@ class WhiteTextField extends StatefulWidget {
       required this.inputType,
       required this.inputAction,
       this.errorBorder,
-      this.icon});
+      this.icon,this.suffixIcon});
 
   @override
   State<WhiteTextField> createState() => _WhiteTextFieldState();
@@ -81,8 +82,10 @@ class _WhiteTextFieldState extends State<WhiteTextField> {
           hintText: widget.hintText,
           helperStyle: AppTextStyle.textStyle16(),
           fillColor: AppColors.white,
+          hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.greyColor),
           hoverColor: AppColors.white,
           prefixIcon: widget.icon,
+          suffixIcon: widget.suffixIcon,
           filled: true,
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
@@ -116,6 +119,7 @@ class AppTextField extends StatelessWidget {
   final String? hintText;
   final bool? readOnly;
   final VoidCallback? onTap;
+
   @override
   Widget build(BuildContext context) {
     return TextField(

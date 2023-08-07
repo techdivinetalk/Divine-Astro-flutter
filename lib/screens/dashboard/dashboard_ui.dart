@@ -1,4 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,8 +7,8 @@ import '../../../gen/assets.gen.dart';
 import '../../pages/home/home_ui.dart';
 import '../../pages/performance/performance_ui.dart';
 import '../../pages/profile/profile_ui.dart';
-import '../../pages/suggest_remedies/suggest_remedies_ui.dart';
 import '../../pages/wallet/wallet_ui.dart';
+import '../chat_assistance/chat_assistance_ui.dart';
 import 'dashboard_controller.dart';
 
 class DashboardScreen extends GetView<DashboardController> {
@@ -153,7 +152,8 @@ class DashboardScreen extends GetView<DashboardController> {
   static const List<Widget> widgetOptions = <Widget>[
     HomeUI(),
     PerformanceUI(),
-    SuggestRemediesUI(),
+    // SuggestRemediesUI(),
+    ChatAssistancePage(),
     WalletUI(),
     ProfileUI()
   ];
