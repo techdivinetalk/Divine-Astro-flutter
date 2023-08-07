@@ -12,9 +12,11 @@ class AppString {
   static String readMore = "Read more";
   static String showLess = "Show less";
   static String goLive = "Go Live";
+  static String live = "Live";
   static String sessionType = "Session Type";
-  static String chat = "CHAT";
-  static String call = "CALL";
+  static String chat = "Chat";
+  static String totalMarksObtained = "Total Marks Obtained";
+  static String call = "Call";
   static String offerType = "Offer Type";
   static String firstFreeOffer = "FIRST FREE CONSULATION OFFER";
   static String promotionOffer = "PROMOTION OFFER";
@@ -32,13 +34,25 @@ class AppString {
   static String blockedUsers = "Blocked Users";
   static String reportComment = "Report Comment";
   static String unblock = "Unblock";
+  static String performance = "Performance";
+  static String rankSystem = "Rank System";
+  static String availabilityTitle = "Today’s Availability (in mins)";
   static String searchBlockUserHint = "Search For Blocked User";
   static String ratings = "Ratings";
   static String userReview = "User Review";
   static String years = "Years";
+  static String date = "Date";
+  static String overallScore = "Overall Score";
   static String update = "Update";
   static String name = "Name";
+  static String rank = "Rank";
+  static String diamond = "Diamond";
+  static String busyChat = "Busy Chat";
+  static String busyCall = "Busy Call";
+  static String availableChat = "Available Chat";
+  static String availableLive = "Available Live";
   static String experience = "Experience";
+  static String availableCall = "Available Call";
   static String approved = "Approved";
   static String serviceType = "Service Type";
   static String priceRequested = "Price Requested";
@@ -67,8 +81,11 @@ class AppString {
   static String pgCharges = "PG \nCharges:";
   static String subTotal = "Sub\nTotal:";
   static String tds = "TDS: ";
+  static String available = "Available";
+  static String astrologerRank = "Astrologer Rank";
+  static String busy = "Busy";
   static String gst = "GST:";
-  static String payableAmount = "Payable\nAmount:";
+  static String totalAmount = "Total \nAmount:";
   static String referAnAstrologer = "Refer an Astrologer:";
   static String settings = "Settings:";
   static String contactUs = "Contact Us:";
@@ -105,4 +122,10 @@ class AppString {
   static String priceChangeCondition = "Conditions for price change Request";
   static String unBlockMsg =
       "If you unblock this user, then they’ll again be able to connect with you on the platform.";
+  static String refund = "Refund";
+  static String liveGifts = "Live Gifts";
+  static String remedysuggested = "Remedy suggested";
+  static String wallet = "Wallet";
+  static String all = "All";
+  static String suggestRemedies = "Suggest Remedies";
 }
