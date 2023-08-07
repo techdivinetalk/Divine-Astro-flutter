@@ -26,6 +26,7 @@ dependencies:
   intl: ^0.18.1
   syncfusion_flutter_gauges: ^22.2.7
   flutter_expanded_tile: ^0.3.7
+  chips_choice: ^3.0.0
 
 dev_dependencies:
   flutter_test:

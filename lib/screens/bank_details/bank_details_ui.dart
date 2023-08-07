@@ -32,9 +32,9 @@ class BankDetailsUI extends GetView<BankDetailController> {
             children: [
               Row(
                 children: [
-                  Assets.images.icBankDetail.svg(height: 112.h, width: 112.w),
+                  Assets.images.icBankDetail.svg(height: 100.h, width: 101.w),
                   SizedBox(
-                    width: 10.w,
+                    width: 20.w,
                   ),
                   Text(
                     "State Bank Of \nIndia",
