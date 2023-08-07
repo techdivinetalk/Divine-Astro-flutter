@@ -60,7 +60,7 @@ class CommonOptionRow extends StatelessWidget {
               gradient: const LinearGradient(
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,
-                colors: [AppColors.gradientTop, AppColors.gradientBottom],
+                colors: [AppColors.appYellowColour, AppColors.gradientBottom],
               ),
               borderRadius: BorderRadius.circular(22.0),
             ),

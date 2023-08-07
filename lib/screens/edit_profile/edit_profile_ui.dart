@@ -136,7 +136,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide: const BorderSide(
-                          color: AppColors.darkYellow,
+                          color: AppColors.appYellowColour,
                           width: 1.0,
                         )),
                   ),

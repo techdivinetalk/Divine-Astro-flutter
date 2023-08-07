@@ -65,10 +65,10 @@ Future openBottomSheet(BuildContext context,
                     onPressed: () {
                       Get.back();
                     },
-                    color: const Color(0xFFFDD48E),
+                    color: AppColors.lightYellow,
                     child: Text(
                       btnTitle,
-                      style: const TextStyle(color: Color(0xFF5F3C08)),
+                      style: const TextStyle(color: AppColors.brownColour),
                     )),
               const SizedBox(height: 10),
             ],

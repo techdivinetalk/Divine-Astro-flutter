@@ -373,7 +373,7 @@ class ProfileUI extends GetView<ProfileController> {
                                   linearStrokeCap: LinearStrokeCap.round,
                                   backgroundColor:
                                       AppColors.lightYellow.withOpacity(0.4),
-                                  progressColor: const Color(0xffFDD48E),
+                                  progressColor: AppColors.lightYellow,
                                 ),
                               ],
                             ),
@@ -469,10 +469,11 @@ class ProfileUI extends GetView<ProfileController> {
                                               RatingBar.readOnly(
                                                 filledIcon: Icons.star,
                                                 emptyIcon: Icons.star,
-                                                emptyColor: AppColors.darkYellow
+                                                emptyColor: AppColors
+                                                    .appYellowColour
                                                     .withOpacity(0.3),
                                                 filledColor:
-                                                    AppColors.darkYellow,
+                                                    AppColors.appYellowColour,
                                                 initialRating: 4,
                                                 size: 15.h,
                                                 maxRating: 5,

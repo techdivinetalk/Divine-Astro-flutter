@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -31,11 +33,11 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
         fillColor: Colors.white70,
         enabledBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(30.0)),
-          borderSide: BorderSide(color: AppColors.darkYellow, width: 1),
+          borderSide: BorderSide(color: AppColors.appYellowColour, width: 1),
         ),
         focusedBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(30.0)),
-          borderSide: BorderSide(color: AppColors.darkYellow),
+          borderSide: BorderSide(color: AppColors.appYellowColour),
         ),
       ),
     );
@@ -93,7 +95,7 @@ class _WhiteTextFieldState extends State<WhiteTextField> {
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: const BorderSide(
-                color: AppColors.darkYellow,
+                color: AppColors.appYellowColour,
                 width: 1.0,
               )),
         ),
@@ -103,19 +105,23 @@ class _WhiteTextFieldState extends State<WhiteTextField> {
 }
 
 class AppTextField extends StatelessWidget {
-  const AppTextField(
+  AppTextField(
       {Key? key,
       this.controller,
       this.prefixIcon,
       this.hintText,
       this.readOnly,
+      this.textInputType,
       this.onTap})
       : super(key: key);
+
   final TextEditingController? controller;
   final Widget? prefixIcon;
   final String? hintText;
   final bool? readOnly;
   final VoidCallback? onTap;
+  TextInputType? textInputType = TextInputType.name;
+
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -129,6 +135,7 @@ class AppTextField extends StatelessWidget {
       onTap: () {
         onTap!.call();
       },
+      keyboardType: textInputType,
       decoration: InputDecoration(
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
@@ -152,7 +159,7 @@ class AppTextField extends StatelessWidget {
           children: [
             SizedBox(width: 10.w),
             SizedBox(
-              height: 15.h,
+              height: 30.h,
               width: 15.w,
               child: prefixIcon,
             ),
