@@ -1,6 +1,9 @@
+import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../common/routes.dart';
 
 class SideMenuDrawer extends StatelessWidget {
   const SideMenuDrawer({super.key});
@@ -8,6 +11,8 @@ class SideMenuDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: AppColors.white,
+      surfaceTintColor: Colors.transparent,
       child: SafeArea(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -55,7 +60,10 @@ class SideMenuDrawer extends StatelessWidget {
             ListTile(
               leading: Assets.images.icDonations.svg(),
               title: const Text('Donation'),
-              onTap: () => {Navigator.of(context).pop()},
+              onTap: () => {
+                Navigator.of(context).pop(),
+                Get.toNamed(RouteName.donationUi)
+              },
             ),
           ],
         ),

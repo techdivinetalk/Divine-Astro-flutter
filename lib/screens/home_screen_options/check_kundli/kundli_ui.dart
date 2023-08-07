@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../common/colors.dart';
 import '../../../common/common_bottomsheet.dart';
 import '../../../common/custom_radio_button.dart';
+import '../../../common/routes.dart';
 import '../../../common/text_field_custom.dart';
 import '../../../gen/assets.gen.dart';
 import 'kundli_controller.dart';
@@ -229,7 +230,9 @@ class CheckYours extends GetView<KundliController> {
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(25.0)),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Get.toNamed(RouteName.kundliDetail);
+                },
                 color: AppColors.lightYellow,
                 child: Text(
                   "Submit",
@@ -365,7 +368,9 @@ class CheckOther extends GetView<KundliController> {
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(25.0)),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  openAlertView();
+                },
                 color: AppColors.lightYellow,
                 child: Text(
                   "Submit",
@@ -374,6 +379,66 @@ class CheckOther extends GetView<KundliController> {
           ),
         ),
       ],
+    );
+  }
+
+  openAlertView() {
+    return Get.dialog(
+      Center(
+        child: Container(
+          decoration: const BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.all(Radius.circular(15)),
+          ),
+          padding: const EdgeInsets.all(25.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  border: Border.all(color: AppColors.appRedColour, width: 2),
+                  borderRadius: const BorderRadius.all(Radius.circular(15)),
+                ),
+                width: 50,
+                height: 50,
+              ),
+              const SizedBox(height: 15),
+              Material(
+                child: Text(
+                  "Please Fill All the Fields",
+                  style: AppTextStyle.textStyle16(fontWeight: FontWeight.w500),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                height: 40,
+                width: 139,
+                decoration: const BoxDecoration(
+                  color: AppColors.lightYellow,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Text(
+                        "Okay",
+                        style: AppTextStyle.textStyle16(
+                            fontColor: AppColors.brownColour,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

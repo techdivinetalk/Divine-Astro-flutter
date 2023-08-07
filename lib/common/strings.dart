@@ -8,6 +8,7 @@ class AppString {
   static String total = "Total";
   static String noticeBoard = "Notice board";
   static String viewAll = "View All";
+  static String message = "Message";
   static String senderCategory = "Sender Category";
   static String readMore = "Read more";
   static String showLess = "Show less";
@@ -23,6 +24,8 @@ class AppString {
   static String status = "Status";
   static String nextOnlineTiming = "Next Online Timing";
   static String follow = "Follow";
+  static String customerId = "Customer Id";
+  static String profileOptions = "Profile Options";
   static String profile = "Profile";
   static String editProfile = "Edit Profile";
   static String orderHistory = "Order History";
@@ -33,6 +36,7 @@ class AppString {
   static String secondaryPhoneNumber = "Secondary Phone Number";
   static String blockedUsers = "Blocked Users";
   static String reportComment = "Report Comment";
+  static String chatAssistance = "Chat Assistance";
   static String unblock = "Unblock";
   static String performance = "Performance";
   static String rankSystem = "Rank System";

@@ -54,7 +54,7 @@ class HomeUI extends GetView<HomeController> {
                                         fontWeight: FontWeight.w700),
                                   ),
                                   Text(
-                                    AppString.today,
+                                    "today".tr,
                                     style: AppTextStyle.textStyle16(
                                         fontColor: AppColors.darkBlue,
                                         fontWeight: FontWeight.w400),
@@ -64,7 +64,8 @@ class HomeUI extends GetView<HomeController> {
                               SizedBox(width: 15.w),
                               InkWell(
                                 onTap: () {
-                                  Get.toNamed(RouteName.yourEarning);
+                                  controller.earningDetailPopup(Get.context!);
+                                  // Get.toNamed(RouteName.yourEarning);
                                 },
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,37 +94,39 @@ class HomeUI extends GetView<HomeController> {
                                 ),
                               ),
                               SizedBox(width: 10.w),
-                              Container(
-                                width: 116.w,
-                                height: 54.h,
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.black.withOpacity(0.2),
-                                        blurRadius: 1.0,
-                                        offset: const Offset(0.0, 3.0)),
-                                  ],
-                                  gradient: const LinearGradient(
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
-                                    colors: [
-                                      AppColors.gradientTop,
-                                      AppColors.gradientBottom
+                              InkWell(
+                                onTap: () {
+                                  Get.toNamed(RouteName.checkKundli);
+                                },
+                                child: Container(
+                                  width: 116.w,
+                                  height: 54.h,
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.black.withOpacity(0.2),
+                                          blurRadius: 1.0,
+                                          offset: const Offset(0.0, 3.0)),
                                     ],
+                                    gradient: const LinearGradient(
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                      colors: [
+                                        AppColors.appYellowColour,
+                                        AppColors.gradientBottom
+                                      ],
+                                    ),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(20)),
                                   ),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(20)),
-                                ),
-                                child: Center(
-                                  child: InkWell(
-                                    onTap: () {
-                                      Get.toNamed(RouteName.checkKundli);
-                                    },
-                                    child: Text(
-                                      "Check Kundli",
-                                      style: AppTextStyle.textStyle14(
-                                          fontColor: AppColors.brownColour,
-                                          fontWeight: FontWeight.w500),
+                                  child: Center(
+                                    child: InkWell(
+                                      child: Text(
+                                        "Check Kundli",
+                                        style: AppTextStyle.textStyle14(
+                                            fontColor: AppColors.brownColour,
+                                            fontWeight: FontWeight.w500),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -163,7 +166,7 @@ class HomeUI extends GetView<HomeController> {
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
                           colors: [
-                            AppColors.gradientTop,
+                            AppColors.appYellowColour,
                             AppColors.gradientBottom
                           ],
                         ),
@@ -223,7 +226,10 @@ class HomeUI extends GetView<HomeController> {
                   gradient: const LinearGradient(
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
-                    colors: [AppColors.gradientTop, AppColors.gradientBottom],
+                    colors: [
+                      AppColors.appYellowColour,
+                      AppColors.gradientBottom
+                    ],
                   ),
                 ),
                 child: Center(
@@ -397,7 +403,10 @@ class HomeUI extends GetView<HomeController> {
                   gradient: const LinearGradient(
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
-                    colors: [AppColors.gradientTop, AppColors.gradientBottom],
+                    colors: [
+                      AppColors.appYellowColour,
+                      AppColors.gradientBottom
+                    ],
                   ),
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
                 ),
@@ -405,8 +414,8 @@ class HomeUI extends GetView<HomeController> {
                   child: InkWell(
                     onTap: () {
                       selectDateOrTime(Get.context!,
-                          title: "Select Your Date of Birth",
-                          btnTitle: "Confirm Date of Birth",
+                          title: "Schedule Your Next Online Date",
+                          btnTitle: "Confirm Next Online Date",
                           pickerStyle: "DateCalendar",
                           looping: true);
                     },
@@ -563,7 +572,7 @@ class HomeUI extends GetView<HomeController> {
                   offset: const Offset(0.0, 3.0)),
             ],
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: AppColors.darkYellow, width: 1),
+            border: Border.all(color: AppColors.appYellowColour, width: 1),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -659,7 +668,7 @@ class HomeUI extends GetView<HomeController> {
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                       borderSide: const BorderSide(
-                        color: AppColors.darkYellow,
+                        color: AppColors.appYellowColour,
                         width: 1.0,
                       )),
                 ),

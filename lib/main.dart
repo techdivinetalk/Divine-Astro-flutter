@@ -31,57 +31,64 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppTheme(
       child: ScreenUtilInit(
-          //designSize: Size(Get.width, Get.height),
+          designSize: Size(Get.width, Get.height),
           builder: (context, child) {
-        return GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          initialRoute: RouteName.initial,
-          getPages: Routes.routes,
-          locale: AppTranslations.locale,
-          fallbackLocale: AppTranslations.fallbackLocale,
-          translations: AppTranslations(),
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
-            useMaterial3: true,
-          ),
-          builder: (context, widget) {
-            return Stack(
-              children: <Widget>[
-                Obx(() => IgnorePointer(
-                    ignoring: Get.find<ProgressService>().showProgress.value,
-                    child: widget)),
-                StreamBuilder<bool?>(
-                  initialData: true,
-                  stream: Get.find<NetworkService>().internetConnectionStream,
-                  builder: (context, snapshot) {
-                    final appTheme = AppTheme.of(context);
-                    return SafeArea(
-                      child: AnimatedContainer(
-                        height:
-                            snapshot.data as bool ? 0 : appTheme.getHeight(100),
-                        duration: Utils.animationDuration,
-                        color: appTheme.redColor,
-                        child: Material(
-                          type: MaterialType.transparency,
-                          child: Center(
-                              child: Text(AppString.noInternetConnection,
-                                  style: appTheme.customTextStyle(
-                                    fontSize: 40,
-                                    color: appTheme.whiteColor,
-                                  ))),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                Obx(() => Get.find<ProgressService>().showProgress.isTrue
-                    ? Center(child: CustomProgressDialog())
-                    : const Offstage())
+            return GetMaterialApp(
+              debugShowCheckedModeBanner: false,
+              initialRoute: RouteName.initial,
+              getPages: Routes.routes,
+              locale: AppTranslations.locale,
+              fallbackLocale: AppTranslations.fallbackLocale,
+              translations: AppTranslations(),
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+                useMaterial3: true,
+              ),
+              localizationsDelegates: const [
+                DefaultMaterialLocalizations.delegate,
+                DefaultWidgetsLocalizations.delegate,
               ],
+              builder: (context, widget) {
+                return Stack(
+                  children: <Widget>[
+                    Obx(() => IgnorePointer(
+                        ignoring:
+                            Get.find<ProgressService>().showProgress.value,
+                        child: widget)),
+                    StreamBuilder<bool?>(
+                      initialData: true,
+                      stream:
+                          Get.find<NetworkService>().internetConnectionStream,
+                      builder: (context, snapshot) {
+                        final appTheme = AppTheme.of(context);
+                        return SafeArea(
+                          child: AnimatedContainer(
+                            height: snapshot.data as bool
+                                ? 0
+                                : appTheme.getHeight(100),
+                            duration: Utils.animationDuration,
+                            color: appTheme.redColor,
+                            child: Material(
+                              type: MaterialType.transparency,
+                              child: Center(
+                                  child: Text(AppString.noInternetConnection,
+                                      style: appTheme.customTextStyle(
+                                        fontSize: 40,
+                                        color: appTheme.whiteColor,
+                                      ))),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    Obx(() => Get.find<ProgressService>().showProgress.isTrue
+                        ? Center(child: CustomProgressDialog())
+                        : const Offstage())
+                  ],
+                );
+              },
             );
-          },
-        );
-      }),
+          }),
     );
   }
 }

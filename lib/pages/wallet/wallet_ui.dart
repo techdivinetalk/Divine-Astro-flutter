@@ -126,7 +126,7 @@ class WalletUI extends GetView<WalletController> {
                         ? true
                         : false),
               ),
-              const SizedBox(width: 10)
+              const SizedBox(width: 7)
             ],
           );
         },
@@ -154,6 +154,7 @@ class WalletUI extends GetView<WalletController> {
           Padding(
             padding: const EdgeInsets.only(top: 10, bottom: 9),
             child: Text("${AppString.tds}  ",
+                textAlign: TextAlign.center,
                 maxLines: 2,
                 style: AppTextStyle.textStyle12(
                     fontColor: AppColors.darkBlue,

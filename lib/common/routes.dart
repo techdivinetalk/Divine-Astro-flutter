@@ -1,12 +1,15 @@
-import 'package:divine_astrologer/pages/performance/rank_system/rank_system_binding.dart';
-import 'package:divine_astrologer/pages/performance/rank_system/rank_system_ui.dart';
 import 'package:divine_astrologer/screens/blocked_user/blocked_user_bindings.dart';
+import 'package:divine_astrologer/screens/chat_message/chat_message_binding.dart';
+import 'package:divine_astrologer/screens/chat_message/chat_message_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_binding.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/earning/earning_bindings.dart';
 import 'package:divine_astrologer/screens/home_screen_options/earning/earning_ui.dart';
+import 'package:divine_astrologer/screens/home_screen_options/kundli_detail/kundli_detail.binding.dart';
+import 'package:divine_astrologer/screens/home_screen_options/kundli_detail/kundli_detail_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_bindings.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_ui.dart';
+import 'package:divine_astrologer/screens/side_menu/donation/donation_ui.dart';
 import 'package:get/get.dart';
 import '../screens/bank_details/bank_detail_binding.dart';
 import '../screens/bank_details/bank_details_ui.dart';
@@ -23,6 +26,10 @@ import '../screens/price_change/price_change_binding.dart';
 import '../screens/price_change/price_change_ui.dart';
 import '../screens/price_history/price_history_binding.dart';
 import '../screens/price_history/price_history_ui.dart';
+import '../screens/side_menu/donation/donation_binding.dart';
+import '../screens/side_menu/donation_detail/donation_detail_ui.dart';
+import '../screens/rank_system/rank_system_binding.dart';
+import '../screens/rank_system/rank_system_ui.dart';
 import '../screens/splash/splash_binding.dart';
 import '../screens/splash/splash_ui.dart';
 
@@ -42,6 +49,10 @@ class RouteName {
   static const String bankDetailsUI = "/bankDetailsUI";
   static const String checkKundli = "/checkKundli";
   static const String rankSystemUI = "/rankSystemUI";
+  static const String kundliDetail = "/kundliDetail";
+  static const String donationUi = "/donationUi";
+  static const String donationDetailPage = "/donationDetailPage";
+  static const String chatMessageUI = "/chatMessageUI";
 }
 
 class Routes {
@@ -98,5 +109,21 @@ class Routes {
         page: () => const RankSystemUI(),
         name: RouteName.rankSystemUI,
         binding: RankSystemBinding()),
+    GetPage(
+        page: () => const KundliDetailUi(),
+        name: RouteName.kundliDetail,
+        binding: KundliDetailBinding()),
+    GetPage(
+        page: () => const DonationUi(),
+        name: RouteName.donationUi,
+        binding: DonationBinding()),
+    GetPage(
+        page: () => const DonationDetailUi(),
+        name: RouteName.donationDetailPage,
+        binding: DonationBinding()),
+    GetPage(
+        page: () => const ChatMessageUI(),
+        name: RouteName.chatMessageUI,
+        binding: ChatMessageBinding()),
   ];
 }
