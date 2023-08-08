@@ -4,6 +4,7 @@ import '../../pages/home/home_controller.dart';
 import '../../pages/profile/profile_controller.dart';
 import '../../pages/wallet/wallet_controller.dart';
 import '../chat_assistance/chat_assistance_controller.dart';
+import '../suggest_remedies/suggest_remedies_controller.dart';
 import 'dashboard_controller.dart';
 
 class DashboardBinding extends Bindings {
@@ -14,5 +15,6 @@ class DashboardBinding extends Bindings {
     Get.put(WalletController());
     Get.put(ProfilePageController());
     Get.put(ChatAssistanceController());
+    Get.put(SuggestRemediesController());
   }
 }

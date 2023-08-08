@@ -3,6 +3,8 @@ import 'package:divine_astrologer/screens/auth/login/login_ui.dart';
 import 'package:divine_astrologer/screens/blocked_user/blocked_user_bindings.dart';
 import 'package:divine_astrologer/screens/chat_message/chat_message_binding.dart';
 import 'package:divine_astrologer/screens/chat_message/chat_message_ui.dart';
+import 'package:divine_astrologer/screens/final_sub_remedy/final_remedies_sub_binding.dart';
+import 'package:divine_astrologer/screens/final_sub_remedy/final_remedies_sub_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_binding.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/earning/earning_bindings.dart';
@@ -14,6 +16,8 @@ import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/r
 import 'package:divine_astrologer/screens/side_menu/category_detail/category_detail_binding.dart';
 import 'package:divine_astrologer/screens/side_menu/category_detail/category_detail_ui.dart';
 import 'package:divine_astrologer/screens/side_menu/donation/donation_ui.dart';
+import 'package:divine_astrologer/screens/suggest_remedies_sub/suggest_remedies_sub_binding.dart';
+import 'package:divine_astrologer/screens/suggest_remedies_sub/suggest_remedies_sub_ui.dart';
 import 'package:get/get.dart';
 import '../screens/bank_details/bank_detail_binding.dart';
 import '../screens/bank_details/bank_details_ui.dart';
@@ -59,6 +63,8 @@ class RouteName {
   static const String donationDetailPage = "/donationDetailPage";
   static const String chatMessageUI = "/chatMessageUI";
   static const String categoryDetail = "/categoryDetail";
+  static const String suggestRemediesSubUI = "/suggestRemediesSubUI";
+  static const String finalRemediesSubUI = "/finalRemediesSubUI";
 }
 
 class Routes {
@@ -135,6 +141,14 @@ class Routes {
         page: () => const ChatMessageUI(),
         name: RouteName.chatMessageUI,
         binding: ChatMessageBinding()),
+    GetPage(
+        page: () => const SuggestRemediesSubUI(),
+        name: RouteName.suggestRemediesSubUI,
+        binding: SuggestRemediesSubBinding()),
+    GetPage(
+        page: () => const FinalRemediesSubUI(),
+        name: RouteName.finalRemediesSubUI,
+        binding: FinalRemediesSubBinding()),
     GetPage(
         page: () => const CategoryDetailUi(),
         name: RouteName.categoryDetail,
