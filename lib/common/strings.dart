@@ -97,11 +97,13 @@ class AppString {
   static String shareFeedback = "Share Feedback:";
   static String importantNumbers = "Important numbers";
   static String donation = "Donation:";
+  static String addContact = "Add Contact";
   static String mobileNumber = "Mobile Number*";
   static String astrologySkill = "Astrology Skill*";
   static String platform = "Platform";
   static String mandatoryFields = "*Marked fields are Mandatory.*";
   static String submitForm = "Submit Form";
+  static String waitlist = "Waitlist";
   static String anotherPlatform =
       "Are they currently working on any other platform?";
   static String enterNameMsg = "Enter Astrologer’s Name";
@@ -114,6 +116,8 @@ class AppString {
   static String totalEarning = "Total Earning";
   static String chatEarning = "Chat Earning";
   static String callEarning = "Call Earning";
+  static String waitingQueue = "Waiting Queue";
+  static String nextInLine = "Next In Line";
   static String reportEarning = "Report Earning";
   static String suggestedRemediesEarning = "Suggested Remedies Earning";
   static String help = "Help ";

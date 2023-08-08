@@ -1,4 +1,4 @@
-import 'package:divine_astrologer/screens/side_menu/category_detail/category_detail_controller.dart';
+import 'package:divine_astrologer/screens/suggest_remedies_flow/category_detail/category_detail_controller.dart';
 import 'package:get/get.dart';
 
 class CategoryDetailBinding extends Bindings {

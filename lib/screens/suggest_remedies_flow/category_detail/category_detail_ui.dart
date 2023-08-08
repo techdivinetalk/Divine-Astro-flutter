@@ -1,6 +1,8 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/appbar.dart';
-import 'package:divine_astrologer/screens/side_menu/category_detail/category_detail_controller.dart';
+import 'package:divine_astrologer/common/common_bottomsheet.dart';
+import 'package:divine_astrologer/common/routes.dart';
+import 'package:divine_astrologer/screens/suggest_remedies_flow/category_detail/category_detail_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -8,6 +10,7 @@ import 'package:readmore/readmore.dart';
 
 import '../../../../common/colors.dart';
 import '../../../../gen/assets.gen.dart';
+import '../../../common/custom_light_yellow_btn.dart';
 import '../../../common/strings.dart';
 
 class CategoryDetailUi extends GetView<CategoryDetailController> {
@@ -17,7 +20,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: commonDetailAppbar(
-        title: "Donation for cow",
+        title: "Suggest Remedy",
         trailingWidget: Container(
           margin: EdgeInsets.only(right: 16.w),
           width: 47.w,
@@ -50,6 +53,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
               Row(
                 children: [
                   Text("₹15000", style: AppTextStyle.textStyle20lineThrough()),
+                  const SizedBox(width: 15),
                   Text(
                     "₹1500",
                     style: AppTextStyle.textStyle20(
@@ -108,7 +112,39 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(25.0)),
               ),
-              onPressed: () {},
+              onPressed: () {
+                openBottomSheet(
+                  context,
+                  functionalityWidget: Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Are You Sure You Want To Suggest 'Product Name' To User?",
+                          style: AppTextStyle.textStyle20(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          "On purchase 30% referral bonus will be added in your wallet",
+                          style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w600,
+                              fontColor: AppColors.darkBlue.withOpacity(0.5)),
+                        ),
+                        const SizedBox(height: 10),
+                        CustomLightYellowCurveButton(
+                          name: "Suggest Now",
+                          onTaped: () {
+                            Get.offNamedUntil(RouteName.orderHistory,
+                                ModalRoute.withName(RouteName.dashboard));
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
               color: AppColors.lightYellow,
               child: Text(
                 "Suggest Now",

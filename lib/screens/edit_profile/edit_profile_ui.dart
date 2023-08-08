@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:chips_choice/chips_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -85,6 +83,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                             offset: const Offset(0.3, 3.0)),
                       ]),
                   child: Wrap(
+                    direction: Axis.horizontal,
                     children: [
                       ...List.generate(controller.tags.length + 1, (index) {
                         if (index == controller.tags.length) {
@@ -160,6 +159,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                                   padding:
                                       EdgeInsets.only(top: 9.h, bottom: 9.h),
                                   child: Row(
+                                    mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -187,26 +187,57 @@ class EditProfileUI extends GetView<EditProfileController> {
                         }
                         return Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 4.w, vertical: 0.h),
-                          child: Chip(
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                            label: Text(
-                              controller.tags[index],
-                              style: AppTextStyle.textStyle14(
-                                  fontColor: AppColors.darkBlue),
-                            ),
-                            deleteIcon: Icon(
-                              Icons.close,
-                              size: 18.sp,
-                            ),
-                            onDeleted: () {
-                              log("message");
-                              controller.tags.removeAt(index);
-                            },
-                            backgroundColor: AppColors.lightYellow,
-                            clipBehavior: Clip.antiAlias,
+                              horizontal: 4.w, vertical: 6.h),
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black.withOpacity(0.2),
+                                        blurRadius: 1.0,
+                                        offset: const Offset(0.0, 3.0)),
+                                  ],
+                                  gradient: const LinearGradient(
+                                    begin: Alignment.bottomCenter,
+                                    end: Alignment.topCenter,
+                                    colors: [
+                                      AppColors.appYellowColour,
+                                      AppColors.gradientBottom
+                                    ],
+                                  ),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(20)),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 15.w, vertical: 8.h),
+                                  child: Text(
+                                    controller.tags[index],
+                                    style: AppTextStyle.textStyle14(
+                                        fontColor: AppColors.darkBlue),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 8.w,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  controller.tags.removeAt(index);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all()),
+                                  child: Icon(
+                                    Icons.close,
+                                    size: 18.sp,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         );
                       }).toList(),

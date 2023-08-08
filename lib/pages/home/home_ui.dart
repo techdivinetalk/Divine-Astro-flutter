@@ -45,9 +45,7 @@ class HomeUI extends GetView<HomeController> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                               InkWell(
-                                onTap: () {
-                                  Get.toNamed(RouteName.categoryDetail);
-                                },
+                                onTap: () {},
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -139,22 +137,27 @@ class HomeUI extends GetView<HomeController> {
                             ])
                       : Container()),
                   SizedBox(height: 10.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        AppString.noticeBoard,
-                        style: AppTextStyle.textStyle16(
-                            fontColor: AppColors.darkBlue,
-                            fontWeight: FontWeight.w400),
-                      ),
-                      Text(
-                        AppString.viewAll,
-                        style: AppTextStyle.textStyle12(
-                            fontColor: AppColors.darkBlue,
-                            fontWeight: FontWeight.w400),
-                      )
-                    ],
+                  InkWell(
+                    onTap: () {
+                      Get.toNamed(RouteName.noticeBoard);
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          AppString.noticeBoard,
+                          style: AppTextStyle.textStyle16(
+                              fontColor: AppColors.darkBlue,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        Text(
+                          AppString.viewAll,
+                          style: AppTextStyle.textStyle12(
+                              fontColor: AppColors.darkBlue,
+                              fontWeight: FontWeight.w400),
+                        )
+                      ],
+                    ),
                   ),
                   SizedBox(height: 10.h),
                   senderCategoryWidget(),
@@ -258,57 +261,64 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget senderCategoryWidget() {
-    return Container(
-      padding: EdgeInsets.all(10.h),
-      decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 3.0,
-                offset: const Offset(0.0, 3.0)),
-          ],
-          color: Colors.white,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(20),
-          ),
-          border: Border.all(color: AppColors.lightYellow)),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Sender Category",
-                style: AppTextStyle.textStyle16(
-                    fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
-              ),
-              Text(
-                "07:16 pm  23/06/2023",
-                style: AppTextStyle.textStyle10(
-                    fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
-              )
+    return InkWell(
+      onTap: () {
+        Get.toNamed(RouteName.noticeDetail);
+      },
+      child: Container(
+        padding: EdgeInsets.all(10.h),
+        decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 3.0,
+                  offset: const Offset(0.0, 3.0)),
             ],
-          ),
-          const SizedBox(height: 10),
-          ReadMoreText(
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and",
-            trimLines: 4,
-            colorClickableText: AppColors.blackColor,
-            trimMode: TrimMode.Line,
-            trimCollapsedText: AppString.readMore,
-            trimExpandedText: " ${AppString.showLess}",
-            moreStyle: TextStyle(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w700,
-              color: AppColors.blackColor,
+            color: Colors.white,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(20),
             ),
-            lessStyle: TextStyle(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w700,
-              color: AppColors.blackColor,
+            border: Border.all(color: AppColors.lightYellow)),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Sender Category",
+                  style: AppTextStyle.textStyle16(
+                      fontWeight: FontWeight.w500,
+                      fontColor: AppColors.darkBlue),
+                ),
+                Text(
+                  "07:16 pm  23/06/2023",
+                  style: AppTextStyle.textStyle10(
+                      fontWeight: FontWeight.w400,
+                      fontColor: AppColors.darkBlue),
+                )
+              ],
             ),
-          ),
-        ],
+            const SizedBox(height: 10),
+            ReadMoreText(
+              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and",
+              trimLines: 4,
+              colorClickableText: AppColors.blackColor,
+              trimMode: TrimMode.Line,
+              trimCollapsedText: AppString.readMore,
+              trimExpandedText: " ${AppString.showLess}",
+              moreStyle: TextStyle(
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w700,
+                color: AppColors.blackColor,
+              ),
+              lessStyle: TextStyle(
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w700,
+                color: AppColors.blackColor,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

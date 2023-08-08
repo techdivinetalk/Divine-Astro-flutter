@@ -1,4 +1,5 @@
 import 'package:custom_rating_bar/custom_rating_bar.dart';
+import 'package:divine_astrologer/common/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,7 +20,8 @@ class ProfileUI extends GetView<ProfilePageController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: commonAppBar(),
+      appBar:
+          commonAppbar(title: AppString.profile, trailingWidget: Container()),
       drawer: const SideMenuDrawer(),
       body: SingleChildScrollView(
         child: Padding(
@@ -81,7 +83,6 @@ class ProfileUI extends GetView<ProfilePageController> {
                               ),
                               InkWell(
                                 onTap: () {
-
                                   Get.toNamed(RouteName.editProfileUI);
                                 },
                                 child: Row(
@@ -177,11 +178,9 @@ class ProfileUI extends GetView<ProfilePageController> {
                               context: context,
                               builder: (context) => const LanguagePopup(),
                             );
-                          }
-                          else{
+                          } else if (item.nav != "") {
                             Get.toNamed(item.nav.toString());
                           }
-
                         },
                         child: Container(
                           // height: 130.h,
@@ -629,143 +628,6 @@ class ProfileUI extends GetView<ProfilePageController> {
           ),
         ),
       ),
-    );
-  }
-
-  commonAppBar() {
-    return AppBar(
-      surfaceTintColor: Colors.transparent,
-      centerTitle: false,
-      title: Text(
-        AppString.profile,
-        style: AppTextStyle.textStyle16(),
-      ),
-      actions: [
-        Padding(
-            padding: EdgeInsets.all(11.h),
-            child: PopupMenuButton(
-              surfaceTintColor: Colors.transparent,
-              color: Colors.white,
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                    child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Get.toNamed(RouteName.editProfileUI);
-                  },
-                  child: Row(
-                    children: [
-                      Assets.images.icEdit.svg(height: 18.h, width: 18.w),
-                      SizedBox(
-                        width: 15.w,
-                      ),
-                      Text(
-                        AppString.editProfile,
-                        style: AppTextStyle.textStyle13(),
-                      )
-                    ],
-                  ),
-                )),
-                PopupMenuItem(
-                    child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Get.toNamed(RouteName.orderHistory);
-                  },
-                  child: Row(
-                    children: [
-                      Assets.images.icOrderHistory
-                          .svg(height: 18.h, width: 18.w),
-                      SizedBox(
-                        width: 15.w,
-                      ),
-                      Text(
-                        AppString.orderHistory,
-                        style: AppTextStyle.textStyle13(),
-                      )
-                    ],
-                  ),
-                )),
-                PopupMenuItem(
-                    child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Get.toNamed(RouteName.bankDetailsUI);
-                  },
-                  child: Row(
-                    children: [
-                      Assets.images.icBankDetail.svg(height: 18.h, width: 18.w),
-                      SizedBox(
-                        width: 15.w,
-                      ),
-                      Text(
-                        AppString.bankDetails,
-                        style: AppTextStyle.textStyle13(),
-                      )
-                    ],
-                  ),
-                )),
-                PopupMenuItem(
-                    child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Get.toNamed(RouteName.priceHistoryUI);
-                  },
-                  child: Row(
-                    children: [
-                      Assets.images.icPrice.svg(height: 18.h, width: 18.w),
-                      SizedBox(
-                        width: 15.w,
-                      ),
-                      Text(
-                        AppString.priceChangeRequest,
-                        style: AppTextStyle.textStyle13(),
-                      )
-                    ],
-                  ),
-                )),
-                PopupMenuItem(
-                    child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Get.toNamed(RouteName.numberChangeReqUI);
-                  },
-                  child: Row(
-                    children: [
-                      Assets.images.icCalling.svg(height: 18.h, width: 18.w),
-                      SizedBox(
-                        width: 15.w,
-                      ),
-                      Text(
-                        AppString.numberChangeRequest,
-                        style: AppTextStyle.textStyle13(),
-                      )
-                    ],
-                  ),
-                )),
-                PopupMenuItem(
-                    child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Get.toNamed(RouteName.blockedUser);
-                  },
-                  child: Row(
-                    children: [
-                      Assets.images.icBlock.svg(height: 18.h, width: 18.w),
-                      SizedBox(
-                        width: 15.w,
-                      ),
-                      Text(
-                        AppString.blockedUsers,
-                        style: AppTextStyle.textStyle13(),
-                      )
-                    ],
-                  ),
-                )),
-              ],
-              child: const Icon(Icons.more_vert_rounded),
-            )),
-      ],
     );
   }
 }

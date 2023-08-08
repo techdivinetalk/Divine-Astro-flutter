@@ -1,4 +1,5 @@
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/strings.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,6 +34,22 @@ class SideMenuDrawer extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ListTile(
+              leading: Assets.images.icWaiting.svg(),
+              title: Text(AppString.waitlist),
+              onTap: () => {
+                Navigator.of(context).pop(),
+                Get.toNamed(RouteName.waitList)
+              },
+            ),
+            ListTile(
+              leading: Assets.images.icOrderHistory.svg(),
+              title: Text(AppString.orderHistory),
+              onTap: () => {
+                Navigator.of(context).pop(),
+                Get.toNamed(RouteName.orderHistory)
+              },
+            ),
+            ListTile(
               leading: Assets.images.icReport.svg(),
               title: const Text('Report an Astrologer'),
               onTap: () => {},
@@ -55,7 +72,10 @@ class SideMenuDrawer extends StatelessWidget {
             ListTile(
               leading: Assets.images.icImportContact.svg(),
               title: const Text('Important numbers'),
-              onTap: () => {Navigator.of(context).pop()},
+              onTap: () => {
+                Navigator.of(context).pop(),
+                Get.toNamed(RouteName.importantNumbers)
+              },
             ),
             ListTile(
               leading: Assets.images.icDonations.svg(),
