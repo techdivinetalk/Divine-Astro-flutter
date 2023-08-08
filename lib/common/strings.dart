@@ -37,6 +37,7 @@ class AppString {
   static String blockedUsers = "Blocked Users";
   static String reportComment = "Report Comment";
   static String chatAssistance = "Chat Assistance";
+  static String suggestRemedy = "Suggest Remedy";
   static String unblock = "Unblock";
   static String performance = "Performance";
   static String rankSystem = "Rank System";
@@ -131,5 +132,6 @@ class AppString {
   static String remedysuggested = "Remedy suggested";
   static String wallet = "Wallet";
   static String all = "All";
+  static String suggest = "Suggest";
   static String suggestRemedies = "Suggest Remedies";
 }

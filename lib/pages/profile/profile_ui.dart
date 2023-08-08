@@ -1,4 +1,5 @@
 import 'package:custom_rating_bar/custom_rating_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ import '../../../common/strings.dart';
 import '../../../gen/assets.gen.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'profile_controller.dart';
+import 'widget/language_popup.dart';
 
 class ProfileUI extends GetView<ProfilePageController> {
   const ProfileUI({Key? key}) : super(key: key);
@@ -79,6 +81,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                               ),
                               InkWell(
                                 onTap: () {
+
                                   Get.toNamed(RouteName.editProfileUI);
                                 },
                                 child: Row(
@@ -159,46 +162,61 @@ class ProfileUI extends GetView<ProfilePageController> {
                   itemCount: controller.profileList.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
-                      childAspectRatio: 0.80.h,
+                      // childAspectRatio: 0.90.h,
                       crossAxisSpacing: 20.h,
                       mainAxisSpacing: 15.h),
                   itemBuilder: (BuildContext context, int index) {
                     ProfileOptionModelClass item =
                         controller.profileList[index];
                     return GridTile(
-                      child: Container(
-                        // height: 130.h,
-                        // width: 116.h,
-                        padding: EdgeInsets.all(10.h),
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                blurRadius: 3.0,
-                                offset: const Offset(0.0, 3.0)),
-                          ],
-                          color: Colors.white,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                        child: Center(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              item.widget ?? const SizedBox(),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              Text(
-                                item.name.toString(),
-                                textAlign: TextAlign.center,
-                                style: AppTextStyle.textStyle10(
-                                    fontWeight: FontWeight.w500,
-                                    fontColor: AppColors.darkBlue),
-                              ),
+                      child: InkWell(
+                        onTap: () {
+                          if (index == 4) {
+                            showCupertinoModalPopup(
+                              barrierColor: AppColors.darkBlue.withOpacity(0.5),
+                              context: context,
+                              builder: (context) => const LanguagePopup(),
+                            );
+                          }
+                          else{
+                            Get.toNamed(item.nav.toString());
+                          }
+
+                        },
+                        child: Container(
+                          // height: 130.h,
+                          // width: 116.h,
+                          padding: EdgeInsets.all(10.h),
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 3.0,
+                                  offset: const Offset(0.0, 3.0)),
                             ],
+                            color: Colors.white,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          child: Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                item.widget ?? const SizedBox(),
+                                SizedBox(
+                                  height: 10.h,
+                                ),
+                                Text(
+                                  item.name.toString(),
+                                  textAlign: TextAlign.center,
+                                  style: AppTextStyle.textStyle10(
+                                      fontWeight: FontWeight.w500,
+                                      fontColor: AppColors.darkBlue),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
