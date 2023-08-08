@@ -113,7 +113,7 @@ class AppTextStyle {
       color: color ?? AppColors.darkBlue,
       decoration: TextDecoration.lineThrough,
       decorationThickness: thickness ?? 1.5,
-      decorationColor: color ?? AppColors.darkBlue,
+      decorationColor: color ?? AppColors.appRedColour,
       fontSize: 20.sp,
       fontWeight: fontWeight ?? FontWeight.w700,
     );
