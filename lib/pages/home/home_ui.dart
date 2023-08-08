@@ -44,22 +44,27 @@ class HomeUI extends GetView<HomeController> {
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "₹100000",
-                                    style: AppTextStyle.textStyle16(
-                                        fontColor: AppColors.appRedColour,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                  Text(
-                                    "today".tr,
-                                    style: AppTextStyle.textStyle16(
-                                        fontColor: AppColors.darkBlue,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ],
+                              InkWell(
+                                onTap: () {
+                                  Get.toNamed(RouteName.categoryDetail);
+                                },
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "₹100000",
+                                      style: AppTextStyle.textStyle16(
+                                          fontColor: AppColors.appRedColour,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                    Text(
+                                      "today".tr,
+                                      style: AppTextStyle.textStyle16(
+                                          fontColor: AppColors.darkBlue,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ],
+                                ),
                               ),
                               SizedBox(width: 15.w),
                               InkWell(

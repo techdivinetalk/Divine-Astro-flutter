@@ -1,3 +1,5 @@
+import 'package:divine_astrologer/screens/auth/login/login_binding.dart';
+import 'package:divine_astrologer/screens/auth/login/login_ui.dart';
 import 'package:divine_astrologer/screens/blocked_user/blocked_user_bindings.dart';
 import 'package:divine_astrologer/screens/chat_message/chat_message_binding.dart';
 import 'package:divine_astrologer/screens/chat_message/chat_message_ui.dart';
@@ -9,6 +11,8 @@ import 'package:divine_astrologer/screens/home_screen_options/kundli_detail/kund
 import 'package:divine_astrologer/screens/home_screen_options/kundli_detail/kundli_detail_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_bindings.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_ui.dart';
+import 'package:divine_astrologer/screens/side_menu/category_detail/category_detail_binding.dart';
+import 'package:divine_astrologer/screens/side_menu/category_detail/category_detail_ui.dart';
 import 'package:divine_astrologer/screens/side_menu/donation/donation_ui.dart';
 import 'package:get/get.dart';
 import '../screens/bank_details/bank_detail_binding.dart';
@@ -37,6 +41,7 @@ class RouteName {
   static const initial = dashboard;
 
   static const String root = "/";
+  static const String login = "/login";
   static const String dashboard = "/dashboard";
   static const String blockedUser = "/blockedUser";
   static const String editProfileUI = "/editProfileUI";
@@ -53,6 +58,7 @@ class RouteName {
   static const String donationUi = "/donationUi";
   static const String donationDetailPage = "/donationDetailPage";
   static const String chatMessageUI = "/chatMessageUI";
+  static const String categoryDetail = "/categoryDetail";
 }
 
 class Routes {
@@ -61,6 +67,10 @@ class Routes {
         page: () => const SplashUI(),
         name: RouteName.root,
         binding: SplashBinding()),
+    GetPage(
+        page: () => const LoginUI(),
+        name: RouteName.login,
+        binding: LoginBinding()),
     GetPage(
         page: () => const DashboardScreen(),
         name: RouteName.dashboard,
@@ -125,5 +135,9 @@ class Routes {
         page: () => const ChatMessageUI(),
         name: RouteName.chatMessageUI,
         binding: ChatMessageBinding()),
+    GetPage(
+        page: () => const CategoryDetailUi(),
+        name: RouteName.categoryDetail,
+        binding: CategoryDetailBinding()),
   ];
 }
