@@ -32,16 +32,12 @@ class CommonOptionRow extends StatelessWidget {
               border: Border.all(color: AppColors.darkBlue, width: 1.0),
               borderRadius: BorderRadius.circular(22.0),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  leftBtnTitle,
-                  style: AppTextStyle.textStyle14(
-                      fontWeight: FontWeight.w500,
-                      fontColor: AppColors.darkBlue),
-                ),
-              ],
+            child: Center(
+              child: Text(
+                leftBtnTitle,
+                style: AppTextStyle.textStyle14(
+                    fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+              ),
             ),
           ),
         ),

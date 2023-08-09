@@ -8,7 +8,7 @@ import '../../../gen/assets.gen.dart';
 import '../../pages/home/home_ui.dart';
 import '../../pages/performance/performance_ui.dart';
 import '../../pages/profile/profile_ui.dart';
-import '../../pages/wallet/wallet_ui.dart';
+import '../../pages/suggest_remedies/suggest_remedies_ui.dart';
 import '../chat_assistance/chat_assistance_ui.dart';
 import 'dashboard_controller.dart';
 
@@ -95,13 +95,14 @@ class DashboardScreen extends GetView<DashboardController> {
                       BottomNavigationBarItem(
                         icon: Column(
                           children: [
-                            Assets.images.icSelectedWallet.svg(
+                            Assets.images.icChatBottom.svg(
                                 height: 22.h,
                                 color: controller.selectedIndex.value == 3
                                     ? AppColors.darkBlue
                                     : AppColors.lightGrey),
                             const SizedBox(height: 5),
-                            // Text("Wallet",
+                            // Text("Chat \nAssistance",
+                            //     textAlign: TextAlign.center,
                             //     maxLines: 2,
                             //     style: AppTextStyle.textStyle10(
                             //         fontColor: controller.selectedIndex.value == 3
@@ -109,7 +110,7 @@ class DashboardScreen extends GetView<DashboardController> {
                             //             : AppColors.lightGrey))
                           ],
                         ),
-                        label: "Wallet",
+                        label: "Chat Assistance",
                       ),
                       BottomNavigationBarItem(
                         icon: Column(
@@ -153,9 +154,9 @@ class DashboardScreen extends GetView<DashboardController> {
   static const List<Widget> widgetOptions = <Widget>[
     HomeUI(),
     PerformanceUI(),
-    // SuggestRemediesUI(),
+    SuggestRemediesUI(),
+    // WalletUI(),
     ChatAssistancePage(),
-    WalletUI(),
     ProfileUI()
   ];
 }

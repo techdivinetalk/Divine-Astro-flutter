@@ -9,16 +9,14 @@ import '../../../common/appbar.dart';
 import '../../../common/colors.dart';
 import '../../../common/strings.dart';
 import '../../../gen/assets.gen.dart';
-import '../../screens/side_menu/side_menu_ui.dart';
-import 'suggest_remedies_controller.dart';
+import 'suggest_remedies_sub_controller.dart';
 
-class SuggestRemediesUI extends GetView<SuggestRemediesController> {
-  const SuggestRemediesUI({super.key});
+class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
+  const SuggestRemediesSubUI({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: const SideMenuDrawer(),
         backgroundColor: AppColors.white,
         appBar: commonAppbar(
             title: AppString.suggestRemedy,
@@ -35,15 +33,15 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
                 child: GridView.builder(
                     itemCount: controller.item.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
+                        crossAxisCount: 2,
                         crossAxisSpacing: 25.h,
-                        childAspectRatio: 0.75,
+                        childAspectRatio: 0.68,
                         mainAxisSpacing: 30.h),
                     itemBuilder: (BuildContext context, int index) {
                       var item = controller.item[index];
                       return InkWell(
                         onTap: () {
-                          Get.toNamed(RouteName.suggestRemediesSubUI);
+                          Get.toNamed(RouteName.finalRemediesSubUI);
                         },
                         child: Container(
                           width: 300,
@@ -66,12 +64,19 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
                                 child: Assets.images.bgSuggestedRemedy
                                     .image(fit: BoxFit.fill),
                               ),
-                              SizedBox(height: 8.h),
+                              SizedBox(height: 12.h),
                               Text(item.first,
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.w400,
                                     fontSize: 12.sp,
-                                    color: AppColors.darkBlue,
+                                    color: AppColors.blackColor,
+                                  )),
+                              SizedBox(height: 8.h),
+                              Text(item.last,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 12.sp,
+                                    color: AppColors.lightGrey,
                                   )),
                             ],
                           ),

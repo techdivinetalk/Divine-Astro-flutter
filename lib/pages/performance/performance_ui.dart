@@ -75,9 +75,9 @@ class PerformanceUI extends GetView<PerformanceController> {
                 shrinkWrap: true,
                 primary: false,
                 itemCount: controller.scoreList.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 0.50.h,
+                    childAspectRatio: 0.77,
                     crossAxisSpacing: 10),
                 itemBuilder: (BuildContext context, int index) {
                   ScoreModelClass item = controller.scoreList[index];
@@ -380,8 +380,8 @@ class PerformanceUI extends GetView<PerformanceController> {
                                 ));
                           },
                           child: Container(
-                              height: 40.h,
-                              width: 120.h,
+                              // height: 40.h,
+                              // width: 120.h,
                               padding: EdgeInsets.all(12.h),
                               decoration: BoxDecoration(
                                   boxShadow: [

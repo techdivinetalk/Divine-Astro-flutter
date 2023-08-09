@@ -9,7 +9,7 @@ class AppTextStyle {
     return TextStyle(
       fontSize: 10.sp,
       fontWeight: fontWeight ?? FontWeight.w400,
-      color: fontColor ?? AppColors.blackColor,
+      color: fontColor ?? AppColors.darkBlue,
     );
   }
 
@@ -17,7 +17,7 @@ class AppTextStyle {
     return TextStyle(
       fontSize: 12.sp,
       fontWeight: fontWeight ?? FontWeight.w400,
-      color: fontColor ?? AppColors.blackColor,
+      color: fontColor ?? AppColors.darkBlue,
     );
   }
 
@@ -25,7 +25,7 @@ class AppTextStyle {
     return TextStyle(
       fontSize: 13.sp,
       fontWeight: fontWeight ?? FontWeight.w400,
-      color: fontColor ?? AppColors.blackColor,
+      color: fontColor ?? AppColors.darkBlue,
     );
   }
 
@@ -33,7 +33,7 @@ class AppTextStyle {
     return TextStyle(
       fontSize: 14.sp,
       fontWeight: fontWeight ?? FontWeight.w400,
-      color: fontColor ?? AppColors.blackColor,
+      color: fontColor ?? AppColors.darkBlue,
     );
   }
 
@@ -41,7 +41,7 @@ class AppTextStyle {
     return TextStyle(
       fontSize: 15.sp,
       fontWeight: fontWeight ?? FontWeight.w700,
-      color: fontColor ?? AppColors.blackColor,
+      color: fontColor ?? AppColors.darkBlue,
     );
   }
 
@@ -49,14 +49,15 @@ class AppTextStyle {
     return TextStyle(
       fontSize: 16.sp,
       fontWeight: fontWeight ?? FontWeight.w400,
-      color: fontColor ?? AppColors.blackColor,
+      color: fontColor ?? AppColors.darkBlue,
     );
   }
+
   static TextStyle textStyle24({Color? fontColor, FontWeight? fontWeight}) {
     return TextStyle(
       fontSize: 24.sp,
       fontWeight: fontWeight ?? FontWeight.w700,
-      color: fontColor ?? AppColors.blackColor,
+      color: fontColor ?? AppColors.darkBlue,
     );
   }
 
@@ -64,7 +65,7 @@ class AppTextStyle {
     return TextStyle(
       fontSize: 20.sp,
       fontWeight: fontWeight ?? FontWeight.w400,
-      color: fontColor ?? AppColors.blackColor,
+      color: fontColor ?? AppColors.darkBlue,
     );
   }
 
@@ -73,7 +74,7 @@ class AppTextStyle {
     return TextStyle(
       fontSize: 20.sp,
       fontWeight: fontWeight ?? FontWeight.w400,
-      color: fontColor ?? AppColors.blackColor,
+      color: fontColor ?? AppColors.darkBlue,
     );
   }
 
@@ -81,7 +82,7 @@ class AppTextStyle {
     return TextStyle(
       fontSize: 16.sp,
       fontWeight: fontWeight ?? FontWeight.w700,
-      color: fontColor ?? AppColors.blackColor,
+      color: fontColor ?? AppColors.darkBlue,
     );
   }
 
@@ -90,18 +91,30 @@ class AppTextStyle {
       fontSize: 20.sp,
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.italic,
-      color: fontColor ?? AppColors.blackColor,
+      color: fontColor ?? AppColors.darkBlue,
     );
   }
 
   static TextStyle textStyleUtilsUnderLine14(
       {Color? color, FontWeight? fontWeight, double? thickness}) {
     return TextStyle(
-      color: color ?? AppColors.blackColor,
+      color: color ?? AppColors.darkBlue,
       decoration: TextDecoration.underline,
       decorationThickness: thickness ?? 1.5,
-      decorationColor: color ?? AppColors.blackColor,
+      decorationColor: color ?? AppColors.darkBlue,
       fontSize: 14.sp,
+      fontWeight: fontWeight ?? FontWeight.w700,
+    );
+  }
+
+  static TextStyle textStyle20lineThrough(
+      {Color? color, FontWeight? fontWeight, double? thickness}) {
+    return TextStyle(
+      color: color ?? AppColors.darkBlue,
+      decoration: TextDecoration.lineThrough,
+      decorationThickness: thickness ?? 1.5,
+      decorationColor: color ?? AppColors.appRedColour,
+      fontSize: 20.sp,
       fontWeight: fontWeight ?? FontWeight.w700,
     );
   }

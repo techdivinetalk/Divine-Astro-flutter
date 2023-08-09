@@ -1,6 +1,13 @@
+import 'package:divine_astrologer/screens/auth/login/login_binding.dart';
+import 'package:divine_astrologer/screens/auth/login/login_ui.dart';
 import 'package:divine_astrologer/screens/blocked_user/blocked_user_bindings.dart';
 import 'package:divine_astrologer/screens/chat_message/chat_message_binding.dart';
 import 'package:divine_astrologer/screens/chat_message/chat_message_ui.dart';
+import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_bindings.dart';
+import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_ui.dart';
+import 'package:divine_astrologer/screens/home_screen_options/notice_board_detail/notice_detail_ui.dart';
+import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy/final_remedies_sub_binding.dart';
+import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy/final_remedies_sub_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_binding.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/earning/earning_bindings.dart';
@@ -9,7 +16,11 @@ import 'package:divine_astrologer/screens/home_screen_options/kundli_detail/kund
 import 'package:divine_astrologer/screens/home_screen_options/kundli_detail/kundli_detail_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_bindings.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_ui.dart';
+import 'package:divine_astrologer/screens/suggest_remedies_flow/category_detail/category_detail_binding.dart';
+import 'package:divine_astrologer/screens/suggest_remedies_flow/category_detail/category_detail_ui.dart';
 import 'package:divine_astrologer/screens/side_menu/donation/donation_ui.dart';
+import 'package:divine_astrologer/screens/suggest_remedies_flow/suggest_remedies_sub/suggest_remedies_sub_binding.dart';
+import 'package:divine_astrologer/screens/suggest_remedies_flow/suggest_remedies_sub/suggest_remedies_sub_ui.dart';
 import 'package:get/get.dart';
 import '../screens/bank_details/bank_detail_binding.dart';
 import '../screens/bank_details/bank_details_ui.dart';
@@ -18,6 +29,7 @@ import '../screens/dashboard/dashboard_bindings.dart';
 import '../screens/dashboard/dashboard_ui.dart';
 import '../screens/edit_profile/edit_profile_ui.dart';
 import '../screens/edit_profile/edit_profile_binding.dart';
+import '../screens/home_screen_options/notice_board_detail/notice_detail_bindings.dart';
 import '../screens/number_change/number_change_binding.dart';
 import '../screens/number_change/number_change_ui.dart';
 import '../screens/order_history/order_history_ui.dart';
@@ -30,6 +42,10 @@ import '../screens/side_menu/donation/donation_binding.dart';
 import '../screens/side_menu/donation_detail/donation_detail_ui.dart';
 import '../screens/rank_system/rank_system_binding.dart';
 import '../screens/rank_system/rank_system_ui.dart';
+import '../screens/side_menu/important_numbers/important_numbers_binding.dart';
+import '../screens/side_menu/important_numbers/important_numbers_ui.dart';
+import '../screens/side_menu/wait_list/wait_list_binding.dart';
+import '../screens/side_menu/wait_list/wait_list_ui.dart';
 import '../screens/splash/splash_binding.dart';
 import '../screens/splash/splash_ui.dart';
 
@@ -37,6 +53,7 @@ class RouteName {
   static const initial = dashboard;
 
   static const String root = "/";
+  static const String login = "/login";
   static const String dashboard = "/dashboard";
   static const String blockedUser = "/blockedUser";
   static const String editProfileUI = "/editProfileUI";
@@ -53,6 +70,13 @@ class RouteName {
   static const String donationUi = "/donationUi";
   static const String donationDetailPage = "/donationDetailPage";
   static const String chatMessageUI = "/chatMessageUI";
+  static const String suggestRemediesSubUI = "/suggestRemediesSubUI";
+  static const String finalRemediesSubUI = "/finalRemediesSubUI";
+  static const String categoryDetail = "/categoryDetail";
+  static const String noticeBoard = "/noticeBoard";
+  static const String noticeDetail = "/noticeDetail";
+  static const String importantNumbers = "/importantNumbers";
+  static const String waitList = "/waitList";
 }
 
 class Routes {
@@ -61,6 +85,10 @@ class Routes {
         page: () => const SplashUI(),
         name: RouteName.root,
         binding: SplashBinding()),
+    GetPage(
+        page: () => const LoginUI(),
+        name: RouteName.login,
+        binding: LoginBinding()),
     GetPage(
         page: () => const DashboardScreen(),
         name: RouteName.dashboard,
@@ -125,5 +153,33 @@ class Routes {
         page: () => const ChatMessageUI(),
         name: RouteName.chatMessageUI,
         binding: ChatMessageBinding()),
+    GetPage(
+        page: () => const SuggestRemediesSubUI(),
+        name: RouteName.suggestRemediesSubUI,
+        binding: SuggestRemediesSubBinding()),
+    GetPage(
+        page: () => const FinalRemediesSubUI(),
+        name: RouteName.finalRemediesSubUI,
+        binding: FinalRemediesSubBinding()),
+    GetPage(
+        page: () => const CategoryDetailUi(),
+        name: RouteName.categoryDetail,
+        binding: CategoryDetailBinding()),
+    GetPage(
+        page: () => const NoticeBoardUi(),
+        name: RouteName.noticeBoard,
+        binding: NoticeBoardBinding()),
+    GetPage(
+        page: () => const NoticeDetailUi(),
+        name: RouteName.noticeDetail,
+        binding: NoticeDetailBinding()),
+    GetPage(
+        page: () => const ImportantNumbersUI(),
+        name: RouteName.importantNumbers,
+        binding: ImportantNumbersBinding()),
+    GetPage(
+        page: () => const WaitListUI(),
+        name: RouteName.waitList,
+        binding: WaitListBinding()),
   ];
 }

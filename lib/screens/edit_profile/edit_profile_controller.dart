@@ -2,8 +2,10 @@ import 'package:get/get.dart';
 
 class EditProfileController extends GetxController {
   var tagIndexes = [1].obs;
+  // Rx<List<int>> tagIndexes = Rx([1]);
 
-  var tags = ['Vedic'].obs;
+  // List<String> tags = [].obs;
+  RxList<String> tags = <String>[].obs;
   RxInt tag = 0.obs;
   // list of string options
   var options = [

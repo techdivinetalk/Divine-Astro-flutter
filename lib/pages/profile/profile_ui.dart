@@ -1,4 +1,6 @@
 import 'package:custom_rating_bar/custom_rating_bar.dart';
+import 'package:divine_astrologer/common/appbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -10,6 +12,7 @@ import '../../../common/strings.dart';
 import '../../../gen/assets.gen.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'profile_controller.dart';
+import 'widget/language_popup.dart';
 
 class ProfileUI extends GetView<ProfilePageController> {
   const ProfileUI({Key? key}) : super(key: key);
@@ -17,7 +20,8 @@ class ProfileUI extends GetView<ProfilePageController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: commonAppBar(),
+      appBar:
+          commonAppbar(title: AppString.profile, trailingWidget: Container()),
       drawer: const SideMenuDrawer(),
       body: SingleChildScrollView(
         child: Padding(
@@ -159,46 +163,59 @@ class ProfileUI extends GetView<ProfilePageController> {
                   itemCount: controller.profileList.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
-                      childAspectRatio: 0.80.h,
+                      // childAspectRatio: 0.90.h,
                       crossAxisSpacing: 20.h,
                       mainAxisSpacing: 15.h),
                   itemBuilder: (BuildContext context, int index) {
                     ProfileOptionModelClass item =
                         controller.profileList[index];
                     return GridTile(
-                      child: Container(
-                        // height: 130.h,
-                        // width: 116.h,
-                        padding: EdgeInsets.all(10.h),
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                blurRadius: 3.0,
-                                offset: const Offset(0.0, 3.0)),
-                          ],
-                          color: Colors.white,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                        child: Center(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              item.widget ?? const SizedBox(),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              Text(
-                                item.name.toString(),
-                                textAlign: TextAlign.center,
-                                style: AppTextStyle.textStyle10(
-                                    fontWeight: FontWeight.w500,
-                                    fontColor: AppColors.darkBlue),
-                              ),
+                      child: InkWell(
+                        onTap: () {
+                          if (index == 4) {
+                            showCupertinoModalPopup(
+                              barrierColor: AppColors.darkBlue.withOpacity(0.5),
+                              context: context,
+                              builder: (context) => const LanguagePopup(),
+                            );
+                          } else if (item.nav != "") {
+                            Get.toNamed(item.nav.toString());
+                          }
+                        },
+                        child: Container(
+                          // height: 130.h,
+                          // width: 116.h,
+                          padding: EdgeInsets.all(10.h),
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 3.0,
+                                  offset: const Offset(0.0, 3.0)),
                             ],
+                            color: Colors.white,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          child: Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                item.widget ?? const SizedBox(),
+                                SizedBox(
+                                  height: 10.h,
+                                ),
+                                Text(
+                                  item.name.toString(),
+                                  textAlign: TextAlign.center,
+                                  style: AppTextStyle.textStyle10(
+                                      fontWeight: FontWeight.w500,
+                                      fontColor: AppColors.darkBlue),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -611,143 +628,6 @@ class ProfileUI extends GetView<ProfilePageController> {
           ),
         ),
       ),
-    );
-  }
-
-  commonAppBar() {
-    return AppBar(
-      surfaceTintColor: Colors.transparent,
-      centerTitle: false,
-      title: Text(
-        AppString.profile,
-        style: AppTextStyle.textStyle16(),
-      ),
-      actions: [
-        Padding(
-            padding: EdgeInsets.all(11.h),
-            child: PopupMenuButton(
-              surfaceTintColor: Colors.transparent,
-              color: Colors.white,
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                    child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Get.toNamed(RouteName.editProfileUI);
-                  },
-                  child: Row(
-                    children: [
-                      Assets.images.icEdit.svg(height: 18.h, width: 18.w),
-                      SizedBox(
-                        width: 15.w,
-                      ),
-                      Text(
-                        AppString.editProfile,
-                        style: AppTextStyle.textStyle13(),
-                      )
-                    ],
-                  ),
-                )),
-                PopupMenuItem(
-                    child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Get.toNamed(RouteName.orderHistory);
-                  },
-                  child: Row(
-                    children: [
-                      Assets.images.icOrderHistory
-                          .svg(height: 18.h, width: 18.w),
-                      SizedBox(
-                        width: 15.w,
-                      ),
-                      Text(
-                        AppString.orderHistory,
-                        style: AppTextStyle.textStyle13(),
-                      )
-                    ],
-                  ),
-                )),
-                PopupMenuItem(
-                    child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Get.toNamed(RouteName.bankDetailsUI);
-                  },
-                  child: Row(
-                    children: [
-                      Assets.images.icBankDetail.svg(height: 18.h, width: 18.w),
-                      SizedBox(
-                        width: 15.w,
-                      ),
-                      Text(
-                        AppString.bankDetails,
-                        style: AppTextStyle.textStyle13(),
-                      )
-                    ],
-                  ),
-                )),
-                PopupMenuItem(
-                    child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Get.toNamed(RouteName.priceHistoryUI);
-                  },
-                  child: Row(
-                    children: [
-                      Assets.images.icPrice.svg(height: 18.h, width: 18.w),
-                      SizedBox(
-                        width: 15.w,
-                      ),
-                      Text(
-                        AppString.priceChangeRequest,
-                        style: AppTextStyle.textStyle13(),
-                      )
-                    ],
-                  ),
-                )),
-                PopupMenuItem(
-                    child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Get.toNamed(RouteName.numberChangeReqUI);
-                  },
-                  child: Row(
-                    children: [
-                      Assets.images.icCalling.svg(height: 18.h, width: 18.w),
-                      SizedBox(
-                        width: 15.w,
-                      ),
-                      Text(
-                        AppString.numberChangeRequest,
-                        style: AppTextStyle.textStyle13(),
-                      )
-                    ],
-                  ),
-                )),
-                PopupMenuItem(
-                    child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Get.toNamed(RouteName.blockedUser);
-                  },
-                  child: Row(
-                    children: [
-                      Assets.images.icBlock.svg(height: 18.h, width: 18.w),
-                      SizedBox(
-                        width: 15.w,
-                      ),
-                      Text(
-                        AppString.blockedUsers,
-                        style: AppTextStyle.textStyle13(),
-                      )
-                    ],
-                  ),
-                )),
-              ],
-              child: const Icon(Icons.more_vert_rounded),
-            )),
-      ],
     );
   }
 }

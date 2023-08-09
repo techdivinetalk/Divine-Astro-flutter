@@ -17,4 +17,8 @@ class AppColors {
   static const Color lightGrey = Color(0xff87919C);
   static const Color extraLightGrey = Color(0xffD9D9D9);
   static const Color markerColor = Color(0xffc5c5d8);
+  static const Color teal = Color(0xFF41C1D1);
+  static const Color pink = Color(0XFFEF5862);
+
+
 }
