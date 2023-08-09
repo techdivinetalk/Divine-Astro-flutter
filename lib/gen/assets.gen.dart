@@ -22,9 +22,24 @@ class $AssetsImagesGen {
   AssetGenImage get bgChatWallpaper =>
       const AssetGenImage('assets/images/bg_chat_wallpaper.png');
 
+  /// File path: assets/images/bg_delete_account.svg
+  SvgGenImage get bgDeleteAccount =>
+      const SvgGenImage('assets/images/bg_delete_account.svg');
+
+  /// File path: assets/images/bg_heart.png
+  AssetGenImage get bgHeart =>
+      const AssetGenImage('assets/images/bg_heart.png');
+
   /// File path: assets/images/bg_kundli_detail.svg
   SvgGenImage get bgKundliDetail =>
       const SvgGenImage('assets/images/bg_kundli_detail.svg');
+
+  /// File path: assets/images/bg_liveTemp.png
+  AssetGenImage get bgLiveTemp =>
+      const AssetGenImage('assets/images/bg_liveTemp.png');
+
+  /// File path: assets/images/bg_logout.svg
+  SvgGenImage get bgLogout => const SvgGenImage('assets/images/bg_logout.svg');
 
   /// File path: assets/images/bg_register_logo.png
   AssetGenImage get bgRegisterLogo =>
@@ -49,6 +64,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/bg_userTmpPro.png
   AssetGenImage get bgUserTmpPro =>
       const AssetGenImage('assets/images/bg_userTmpPro.png');
+
+  /// File path: assets/images/delete_accout.svg
+  SvgGenImage get deleteAccout =>
+      const SvgGenImage('assets/images/delete_accout.svg');
 
   /// File path: assets/images/divine_logo.png
   AssetGenImage get divineLogo =>
@@ -242,6 +261,9 @@ class $AssetsImagesGen {
   SvgGenImage get icLocation =>
       const SvgGenImage('assets/images/ic_location.svg');
 
+  /// File path: assets/images/ic_logout.svg
+  SvgGenImage get icLogout => const SvgGenImage('assets/images/ic_logout.svg');
+
   /// File path: assets/images/ic_mars.png
   AssetGenImage get icMars => const AssetGenImage('assets/images/ic_mars.png');
 
@@ -288,6 +310,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_refer_a_friend.svg
   SvgGenImage get icReferAFriend =>
       const SvgGenImage('assets/images/ic_refer_a_friend.svg');
+
+  /// File path: assets/images/ic_remediesLeft.svg
+  SvgGenImage get icRemediesLeft =>
+      const SvgGenImage('assets/images/ic_remediesLeft.svg');
 
   /// File path: assets/images/ic_report.svg
   SvgGenImage get icReport => const SvgGenImage('assets/images/ic_report.svg');
@@ -392,13 +418,18 @@ class $AssetsImagesGen {
   List<dynamic> get values => [
         bgChatUserPro,
         bgChatWallpaper,
+        bgDeleteAccount,
+        bgHeart,
         bgKundliDetail,
+        bgLiveTemp,
+        bgLogout,
         bgRegisterLogo,
         bgServiceLogo,
         bgSuggestedRemedy,
         bgTmpUser,
         bgUserProfile,
         bgUserTmpPro,
+        deleteAccout,
         divineLogo,
         icBankDetail,
         icContactUs1,
@@ -452,6 +483,7 @@ class $AssetsImagesGen {
         icLanguages,
         icLeftArrow,
         icLocation,
+        icLogout,
         icMars,
         icMoon,
         icOffline,
@@ -465,6 +497,7 @@ class $AssetsImagesGen {
         icProfilePhoto,
         icRate,
         icReferAFriend,
+        icRemediesLeft,
         icReport,
         icSearch,
         icSelectedPerfom,
