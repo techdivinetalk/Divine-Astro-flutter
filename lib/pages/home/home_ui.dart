@@ -19,6 +19,7 @@ class HomeUI extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.white,
       drawer: const SideMenuDrawer(),
       appBar: commonAppbar(
           title: controller.appbarTitle.value,

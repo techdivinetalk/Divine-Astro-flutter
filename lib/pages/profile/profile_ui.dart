@@ -20,6 +20,7 @@ class ProfileUI extends GetView<ProfilePageController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.white,
       appBar:
           commonAppbar(title: AppString.profile, trailingWidget: Container()),
       drawer: const SideMenuDrawer(),

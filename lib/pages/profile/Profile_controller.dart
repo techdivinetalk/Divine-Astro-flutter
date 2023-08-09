@@ -25,7 +25,7 @@ class ProfilePageController extends GetxController {
     ProfileOptionModelClass(
         "Price Change",
         Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
-        '/priceChangeReqUI'),
+        '/priceHistoryUI'),
     ProfileOptionModelClass(
         "Number Change",
         Assets.images.icNumChanges.svg(width: 30.h, height: 30.h),

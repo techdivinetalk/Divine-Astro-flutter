@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import '../../common/app_textstyle.dart';
+import '../../common/appbar.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../common/routes.dart';
 import '../../common/strings.dart';
@@ -17,14 +18,9 @@ class PerformanceUI extends GetView<PerformanceController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
-        centerTitle: false,
-        title: Text(
-          AppString.performance,
-          style: AppTextStyle.textStyle16(),
-        ),
-      ),
+      backgroundColor: AppColors.white,
+      appBar: commonAppbar(
+          title: AppString.performance, trailingWidget: Container()),
       drawer: const SideMenuDrawer(),
       body: SingleChildScrollView(
         child: Padding(
