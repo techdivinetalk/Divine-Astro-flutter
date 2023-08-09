@@ -6,6 +6,9 @@ import 'package:divine_astrologer/screens/chat_message/chat_message_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_bindings.dart';
 import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/notice_board_detail/notice_detail_ui.dart';
+import 'package:divine_astrologer/screens/live_tips/live_tips_binding.dart';
+import 'package:divine_astrologer/screens/live_tips/live_tips_ui.dart';
+import 'package:divine_astrologer/screens/side_menu/settings/settings_ui.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy/final_remedies_sub_binding.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy/final_remedies_sub_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_binding.dart';
@@ -44,6 +47,7 @@ import '../screens/rank_system/rank_system_binding.dart';
 import '../screens/rank_system/rank_system_ui.dart';
 import '../screens/side_menu/important_numbers/important_numbers_binding.dart';
 import '../screens/side_menu/important_numbers/important_numbers_ui.dart';
+import '../screens/side_menu/settings/settings_binding.dart';
 import '../screens/side_menu/wait_list/wait_list_binding.dart';
 import '../screens/side_menu/wait_list/wait_list_ui.dart';
 import '../screens/splash/splash_binding.dart';
@@ -77,6 +81,8 @@ class RouteName {
   static const String noticeDetail = "/noticeDetail";
   static const String importantNumbers = "/importantNumbers";
   static const String waitList = "/waitList";
+  static const String settingsUI = "/settingsUI";
+  static const String liveTipsUI = "/liveTipsUI";
 }
 
 class Routes {
@@ -181,5 +187,13 @@ class Routes {
         page: () => const WaitListUI(),
         name: RouteName.waitList,
         binding: WaitListBinding()),
+    GetPage(
+        page: () => const SettingsUI(),
+        name: RouteName.settingsUI,
+        binding: SettingsBinding()),
+    GetPage(
+        page: () => const LiveTipsUI(),
+        name: RouteName.liveTipsUI,
+        binding: LiveTipsBinding()),
   ];
 }

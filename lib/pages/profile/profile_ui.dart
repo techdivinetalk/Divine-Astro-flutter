@@ -12,7 +12,6 @@ import '../../../common/strings.dart';
 import '../../../gen/assets.gen.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'profile_controller.dart';
-import 'widget/language_popup.dart';
 
 class ProfileUI extends GetView<ProfilePageController> {
   const ProfileUI({Key? key}) : super(key: key);
@@ -118,7 +117,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                           Row(
                             children: [
                               Text(
-                                '${AppString.customerId} - ',
+                                "today".tr,
+                                // '${AppString.customerId} - ',
                                 style: AppTextStyle.textStyle14(
                                     fontWeight: FontWeight.w400,
                                     fontColor: AppColors.darkBlue),
@@ -173,11 +173,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                       child: InkWell(
                         onTap: () {
                           if (index == 4) {
-                            showCupertinoModalPopup(
-                              barrierColor: AppColors.darkBlue.withOpacity(0.5),
-                              context: context,
-                              builder: (context) => const LanguagePopup(),
-                            );
+                            controller.changeLanguagePopup(Get.context!);
                           } else if (item.nav != "") {
                             Get.toNamed(item.nav.toString());
                           }
@@ -625,6 +621,74 @@ class ProfileUI extends GetView<ProfilePageController> {
                 ),
               )
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+class LanguageWidget extends StatefulWidget {
+  final int index;
+
+  const LanguageWidget({super.key, required this.index});
+
+  @override
+  State<LanguageWidget> createState() => _LanguageWidgetState();
+}
+
+class _LanguageWidgetState extends State<LanguageWidget> {
+  final List<String> languagesMain = ["Eng", "हिन्दी", "मराठी", "ગુજરાતી"];
+
+  final List<String> languages = ["English", "Hindi", "Marathi", "Gujarati"];
+
+  final List<Color> colors = [
+    AppColors.appYellowColour,
+    AppColors.teal,
+    AppColors.pink,
+    AppColors.pink
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(100.r),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {},
+          child: Ink(
+            height: 100.h,
+            width: 100.h,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                colors: [
+                  colors[widget.index].withOpacity(0),
+                  colors[widget.index].withOpacity(0.2),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  languagesMain[widget.index],
+                  style: AppTextStyle.textStyle20(fontWeight: FontWeight.w700),
+
+
+                ),
+                SizedBox(height: 10.h),
+                Text(
+                  languages[widget.index],
+                  style: AppTextStyle.textStyle16(),
+
+                ),
+              ],
+            ),
           ),
         ),
       ),

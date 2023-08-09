@@ -1,8 +1,6 @@
 class AppString {
-  static const String noInternetConnection =
-      "Please check your Internet connection";
-  static String timeoutMessage =
-      "Something went wrong.\nPlease check you internet connection and please try again.";
+  static const String noInternetConnection = "Please check your Internet connection";
+  static String timeoutMessage = "Something went wrong.\nPlease check you internet connection and please try again.";
   static String today = "Today";
   static String followers = "Followers";
   static String total = "Total";
@@ -14,6 +12,9 @@ class AppString {
   static String showLess = "Show less";
   static String goLive = "Go Live";
   static String live = "Live";
+  static String congratulations = "Congratulations";
+  static String tips = "Tips";
+  static String startLive = "Start Live";
   static String sessionType = "Session Type";
   static String chat = "Chat";
   static String totalMarksObtained = "Total Marks Obtained";
@@ -87,12 +88,19 @@ class AppString {
   static String subTotal = "Sub\nTotal:";
   static String tds = "TDS: ";
   static String available = "Available";
+  static String changeAppLanguage = "Change app language";
   static String astrologerRank = "Astrologer Rank";
   static String busy = "Busy";
+  static String deleteMyAccount = "Delete My Account";
+  static String logoutMyAccount = "Logout My Account";
+  static String termsAndConditions = "Terms And Conditions";
   static String gst = "GST:";
+  static String general = "General";
+  static String privacyPolicy = "Privacy Policy";
+  static String english = "English";
   static String totalAmount = "Total \nAmount:";
   static String referAnAstrologer = "Refer an Astrologer:";
-  static String settings = "Settings:";
+  static String settings = "Settings";
   static String contactUs = "Contact Us:";
   static String shareFeedback = "Share Feedback:";
   static String importantNumbers = "Important numbers";
@@ -116,6 +124,7 @@ class AppString {
   static String totalEarning = "Total Earning";
   static String chatEarning = "Chat Earning";
   static String callEarning = "Call Earning";
+  static String remediesLeft = "Remedies Left";
   static String waitingQueue = "Waiting Queue";
   static String nextInLine = "Next In Line";
   static String reportEarning = "Report Earning";
@@ -133,7 +142,7 @@ class AppString {
       "If you unblock this user, then they’ll again be able to connect with you on the platform.";
   static String refund = "Refund";
   static String liveGifts = "Live Gifts";
-  static String remedysuggested = "Remedy suggested";
+  static String remedySuggested = "Remedy suggested";
   static String wallet = "Wallet";
   static String all = "All";
   static String suggest = "Suggest";
