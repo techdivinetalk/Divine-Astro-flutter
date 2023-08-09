@@ -1,5 +1,4 @@
 // ignore_for_file: deprecated_member_use_from_same_package
-
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +8,7 @@ import '../../../common/appbar.dart';
 import '../../../common/colors.dart';
 import '../../../common/strings.dart';
 import '../../../gen/assets.gen.dart';
+import '../../common/app_textstyle.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'suggest_remedies_controller.dart';
 
@@ -27,11 +27,61 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
                   padding: EdgeInsets.only(right: 20.w),
                   child: Assets.images.icSearch.svg(color: AppColors.darkBlue)),
             )),
-        body: Column(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 5.h),
+          child: Column(
+            children: [
+              InkWell(
+                onTap: () {
+                  controller.remediesLeftPopup(Get.context!);
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(12.h),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 3.0,
+                          offset: const Offset(0.0, 3.0)),
+                    ],
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                                text: '10  ',
+                                style: AppTextStyle.textStyle16(
+                                    fontColor: AppColors.redColor,
+                                    fontWeight: FontWeight.w400)),
+                            TextSpan(
+                                text: AppString.remediesLeft,
+                                style: AppTextStyle.textStyle16(
+                                    fontColor: AppColors.darkBlue,
+                                    fontWeight: FontWeight.w400)),
+                          ],
+                        ),
+                      ),
+                      Icon(
+                        Icons.help_outline,
+                        size: 20.sp,
+                        color: AppColors.greyColor,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 25.h,
+              ),
+              Expanded(
                 child: GridView.builder(
                     itemCount: controller.item.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -79,8 +129,8 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
                       );
                     }),
               ),
-            ),
-          ],
+            ],
+          ),
         ));
   }
 }

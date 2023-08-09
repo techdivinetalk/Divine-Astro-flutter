@@ -167,7 +167,7 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
                 AppString.chat,
                 AppString.call,
                 AppString.liveGifts,
-                AppString.remedysuggested
+                AppString.remedySuggested
               ].map((e) => Tab(text: e)).toList(),
             ),
           ),

@@ -164,7 +164,9 @@ class HomeUI extends GetView<HomeController> {
                   senderCategoryWidget(),
                   SizedBox(height: 10.h),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed(RouteName.liveTipsUI);
+                    },
                     child: Container(
                       height: 60,
                       decoration: BoxDecoration(

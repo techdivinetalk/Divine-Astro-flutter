@@ -58,7 +58,10 @@ class SideMenuDrawer extends StatelessWidget {
             ListTile(
               leading: Assets.images.icSetting.svg(),
               title: const Text('Settings'),
-              onTap: () => {Navigator.of(context).pop()},
+              onTap: () => {
+                Navigator.of(context).pop(),
+                Get.toNamed(RouteName.settingsUI)
+              },
             ),
             ListTile(
               leading: Assets.images.icContactUs1.svg(),
