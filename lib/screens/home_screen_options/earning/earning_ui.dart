@@ -15,7 +15,7 @@ class YourEarning extends GetView<YourEarningController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: commonDetailAppbar(title: AppString.yourEarning),
+      appBar: commonDetailAppbar(title: "yourEarning".tr),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
@@ -68,7 +68,7 @@ class YourEarning extends GetView<YourEarningController> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            AppString.lifeTimeEarning,
+            "lifeTimeEarning".tr,
             style: AppTextStyle.textStyle16(
                 fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
           ),

@@ -21,7 +21,7 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
         drawer: const SideMenuDrawer(),
         backgroundColor: AppColors.white,
         appBar: commonAppbar(
-            title: AppString.suggestRemedy,
+            title: "suggestRemedy".tr,
             trailingWidget: InkWell(
               child: Padding(
                   padding: EdgeInsets.only(right: 20.w),
@@ -62,7 +62,7 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
                                     fontColor: AppColors.redColor,
                                     fontWeight: FontWeight.w400)),
                             TextSpan(
-                                text: AppString.remediesLeft,
+                                text: "remediesLeft".tr,
                                 style: AppTextStyle.textStyle16(
                                     fontColor: AppColors.darkBlue,
                                     fontWeight: FontWeight.w400)),

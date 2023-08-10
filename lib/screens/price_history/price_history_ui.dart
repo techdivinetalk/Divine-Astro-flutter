@@ -20,7 +20,7 @@ class PriceHistoryUI extends GetView<PriceHistoryController> {
         backgroundColor: Colors.white,
         centerTitle: false,
         title: Text(
-          AppString.priceChangeRequest,
+          "priceChangeRequest".tr,
           style: AppTextStyle.textStyle16(),
         ),
       ),
@@ -53,7 +53,7 @@ class PriceHistoryUI extends GetView<PriceHistoryController> {
                           .svg(height: 20.h, width: 20.w),
                       SizedBox(width: 10.w),
                       Text(
-                        AppString.priceChangeBtn,
+                        "priceChangeBtn".tr,
                         style: AppTextStyle.textStyle20(
                             fontWeight: FontWeight.w400,
                             fontColor: AppColors.darkBlue),
@@ -80,13 +80,13 @@ class PriceHistoryUI extends GetView<PriceHistoryController> {
                       Row(
                         children: [
                           Text(
-                            "${AppString.serviceType} : ",
+                            "${"serviceType".tr} : ",
                             style: AppTextStyle.textStyle16(
                                 fontWeight: FontWeight.w400,
                                 fontColor: AppColors.darkBlue),
                           ),
                           Text(
-                            AppString.call,
+                            "call".tr,
                             style: AppTextStyle.textStyle16(
                                 fontWeight: FontWeight.w700,
                                 fontColor: AppColors.darkBlue),
@@ -99,7 +99,7 @@ class PriceHistoryUI extends GetView<PriceHistoryController> {
                       Row(
                         children: [
                           Text(
-                            "${AppString.priceRequested} : ",
+                            "${'priceRequested'.tr} : ",
                             style: AppTextStyle.textStyle16(
                                 fontWeight: FontWeight.w400,
                                 fontColor: AppColors.darkBlue),
@@ -118,7 +118,7 @@ class PriceHistoryUI extends GetView<PriceHistoryController> {
                       Row(
                         children: [
                           Text(
-                            "${AppString.requestRaised} : ",
+                            "${"requestRaised".tr} : ",
                             style: AppTextStyle.textStyle16(
                                 fontWeight: FontWeight.w400,
                                 fontColor: AppColors.darkBlue),
@@ -137,13 +137,13 @@ class PriceHistoryUI extends GetView<PriceHistoryController> {
                       Row(
                         children: [
                           Text(
-                            "${AppString.status} : ",
+                            "${"status".tr} : ",
                             style: AppTextStyle.textStyle16(
                                 fontWeight: FontWeight.w400,
                                 fontColor: AppColors.darkBlue),
                           ),
                           Text(
-                            AppString.approved,
+                            "approved".tr,
                             style: AppTextStyle.textStyle16(
                                 fontWeight: FontWeight.w700,
                                 fontColor: AppColors.darkGreen),

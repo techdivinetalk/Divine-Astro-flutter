@@ -16,7 +16,7 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: commonDetailAppbar(title: AppString.noticeBoard),
+      appBar: commonDetailAppbar(title: "noticeBoard".tr),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
@@ -101,8 +101,8 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
               trimLines: 4,
               colorClickableText: AppColors.blackColor,
               trimMode: TrimMode.Line,
-              trimCollapsedText: AppString.readMore,
-              trimExpandedText: " ${AppString.showLess}",
+              trimCollapsedText: "readMore".tr,
+              trimExpandedText: "showLess".tr,
               moreStyle: TextStyle(
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w700,

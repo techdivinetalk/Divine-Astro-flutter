@@ -1,6 +1,12 @@
+import 'package:divine_astrologer/common/getStorage/get_storage.dart';
+import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
+import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'common/routes.dart';
 import 'common/app_theme.dart';
@@ -14,8 +20,23 @@ import 'utils/utils.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
   await initServices();
   runApp(const MyApp());
+}
+
+Future<bool> saveLanguage(String? lang) async {
+  final box = GetStorage();
+  await box.write('lang', lang);
+  return true;
+}
+
+saveLanguageId(int userLanguageId) async {
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  if (kDebugMode) {
+    print("userLanguageId ++${userLanguageId.toString()}");
+  }
+  await pref.setInt('languageIds', userLanguageId);
 }
 
 Future<void> initServices() async {
@@ -34,11 +55,12 @@ class MyApp extends StatelessWidget {
           designSize: Size(Get.width, Get.height),
           builder: (context, child) {
             return GetMaterialApp(
+
               debugShowCheckedModeBanner: false,
               initialRoute: RouteName.initial,
               getPages: Routes.routes,
-              locale: AppTranslations.locale,
-              fallbackLocale: AppTranslations.fallbackLocale,
+              locale: getLanStrToLocale(GetStorages.get(GetStorageKeys.language) ?? ""),
+                fallbackLocale: AppTranslations.fallbackLocale,
               translations: AppTranslations(),
               theme: ThemeData(
                 colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),

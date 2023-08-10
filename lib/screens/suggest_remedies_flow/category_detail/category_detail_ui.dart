@@ -20,7 +20,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: commonDetailAppbar(
-        title: "Suggest Remedy",
+        title: "suggestRemedy".tr,
         trailingWidget: Container(
           margin: EdgeInsets.only(right: 16.w),
           width: 47.w,
@@ -69,7 +69,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "About Pooja",
+                      "aboutPooja".tr,
                       style: AppTextStyle.textStyle16(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.appYellowColour),
@@ -80,8 +80,8 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                       trimLines: 4,
                       colorClickableText: AppColors.blackColor,
                       trimMode: TrimMode.Line,
-                      trimCollapsedText: AppString.readMore,
-                      trimExpandedText: " ${AppString.showLess}",
+                      trimCollapsedText: "readMore".tr,
+                      trimExpandedText: "showLess".tr,
                       moreStyle: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
@@ -134,7 +134,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                         ),
                         const SizedBox(height: 10),
                         CustomLightYellowCurveButton(
-                          name: "Suggest Now",
+                          name: "suggestNow".tr,
                           onTaped: () {
                             Get.offNamedUntil(RouteName.orderHistory,
                                 ModalRoute.withName(RouteName.dashboard));
@@ -147,7 +147,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
               },
               color: AppColors.lightYellow,
               child: Text(
-                "Suggest Now",
+                "suggestNow".tr,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 20.sp,

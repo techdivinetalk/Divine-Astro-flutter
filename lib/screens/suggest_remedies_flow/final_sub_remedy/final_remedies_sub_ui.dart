@@ -19,7 +19,7 @@ class FinalRemediesSubUI extends GetView<FinalRemediesSubController> {
     return Scaffold(
         backgroundColor: AppColors.white,
         appBar: commonAppbar(
-            title: AppString.suggestRemedy,
+            title: "suggestRemedy".tr,
             trailingWidget: InkWell(
               child: Padding(
                   padding: EdgeInsets.only(right: 20.w),
@@ -109,7 +109,7 @@ class FinalRemediesSubUI extends GetView<FinalRemediesSubController> {
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(
                                             vertical: 10.h),
-                                        child: Text(AppString.suggest,
+                                        child: Text("suggest".tr,
                                             style: TextStyle(
                                               fontWeight: FontWeight.w500,
                                               fontSize: 12.sp,

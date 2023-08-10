@@ -17,7 +17,7 @@ class RankSystemUI extends GetView<RankSystemController> {
         surfaceTintColor: Colors.transparent,
         centerTitle: false,
         title: Text(
-          AppString.rankSystem,
+          "rankSystem".tr,
           style: AppTextStyle.textStyle16(),
         ),
       ),
@@ -50,7 +50,7 @@ class RankSystemUI extends GetView<RankSystemController> {
                           child: Column(
                             children: [
                               Text(
-                                AppString.totalMarksObtained,
+                                "totalMarksObtained".tr,
                                 textAlign: TextAlign.center,
                                 style: AppTextStyle.textStyle12(
                                     fontWeight: FontWeight.w700,

@@ -22,7 +22,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
         backgroundColor: Colors.white,
         centerTitle: false,
         title: Text(
-          AppString.blockedUsers,
+          "blockedUsers".tr,
           style: AppTextStyle.textStyle16(),
         ),
       ),
@@ -31,7 +31,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
         child: Column(
           children: [
             WhiteTextField(
-                hintText: AppString.searchBlockUserHint,
+                hintText: "searchBlockUserHint".tr,
                 inputAction: TextInputAction.done,
                 inputType: TextInputType.text,
                 icon: const Icon(Icons.search)),
@@ -84,7 +84,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                                         ),
                                         Center(
                                           child: Text(
-                                            AppString.unBlockMsg,
+                                            "unBlockMsg".tr,
                                             textAlign: TextAlign.center,
                                             style: AppTextStyle.textStyle16(
                                                 fontWeight: FontWeight.w400,
@@ -95,7 +95,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                                           height: 5.h,
                                         ),
                                         CustomLightYellowButton(
-                                          name: AppString.unblock,
+                                          name: "unblock".tr,
                                           onTaped: () {},
                                         ),
                                       ],
@@ -108,7 +108,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                                       borderRadius: BorderRadius.circular(30),
                                       border: Border.all(width: 1)),
                                   child: Text(
-                                    AppString.unblock,
+                                    "unblock".tr,
                                     style: AppTextStyle.textStyle12(),
                                   )),
                             )

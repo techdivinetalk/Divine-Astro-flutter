@@ -30,10 +30,17 @@ class AppString {
   static String profile = "Profile";
   static String editProfile = "Edit Profile";
   static String orderHistory = "Order History";
+  static String uploadStory = "upload story";
   static String bankDetails = "Bank Details";
   static String priceChangeRequest = "Price Change Request";
   static String numberChangeRequest = "Number Change Request";
+  static String chooseLanguage = "Choose Language";
+  static String priceChange = "Price Change";
+  static String numberChange = "Number Change";
+  static String fAndQ = "F&Q";
   static String primaryPhoneNumber = "Primary Phone Number";
+  static String uploadYourPhoto = "Upload your photo";
+  static String customerSupport = "Customer Support";
   static String secondaryPhoneNumber = "Secondary Phone Number";
   static String blockedUsers = "Blocked Users";
   static String reportComment = "Report Comment";
@@ -84,9 +91,9 @@ class AppString {
   static String hintExperience = "Please Enter Experience";
   static String saveChanges = "Save Changes";
   static String availableBalance = "Available \nBalance:";
-  static String pgCharges = "PG \nCharges:";
-  static String subTotal = "Sub\nTotal:";
-  static String tds = "TDS: ";
+  static String pgCharges = "PG \nCharges ";
+  static String subTotal = "Sub\nTotal ";
+  static String tds = "TDS ";
   static String available = "Available";
   static String changeAppLanguage = "Change app language";
   static String astrologerRank = "Astrologer Rank";
@@ -94,22 +101,22 @@ class AppString {
   static String deleteMyAccount = "Delete My Account";
   static String logoutMyAccount = "Logout My Account";
   static String termsAndConditions = "Terms And Conditions";
-  static String gst = "GST:";
+  static String gst = "GST";
   static String general = "General";
   static String privacyPolicy = "Privacy Policy";
   static String english = "English";
   static String totalAmount = "Total \nAmount:";
-  static String referAnAstrologer = "Refer an Astrologer:";
+  static String referAnAstrologer = "Refer an Astrologer";
   static String settings = "Settings";
-  static String contactUs = "Contact Us:";
-  static String shareFeedback = "Share Feedback:";
+  static String contactUs = "Contact Us";
+  static String shareFeedback = "Share Feedback ";
   static String importantNumbers = "Important numbers";
-  static String donation = "Donation:";
+  static String donation = "Donation ";
   static String addContact = "Add Contact";
-  static String mobileNumber = "Mobile Number*";
+  static String mobileNumber = "Mobile Number";
   static String astrologySkill = "Astrology Skill*";
   static String platform = "Platform";
-  static String mandatoryFields = "*Marked fields are Mandatory.*";
+  static String mandatoryFields = "*Marked fields are Mandatory.";
   static String submitForm = "Submit Form";
   static String waitlist = "Waitlist";
   static String anotherPlatform =
@@ -128,6 +135,7 @@ class AppString {
   static String waitingQueue = "Waiting Queue";
   static String nextInLine = "Next In Line";
   static String reportEarning = "Report Earning";
+
   static String suggestedRemediesEarning = "Suggested Remedies Earning";
   static String help = "Help ";
   static String orderId = "Order Id :  ";
@@ -147,4 +155,21 @@ class AppString {
   static String all = "All";
   static String suggest = "Suggest";
   static String suggestRemedies = "Suggest Remedies";
+
+
+  static String reportAnAstrologer = "Report an Astrologer";
+  static String daily = "Daily";
+  static String weekly = "Weekly";
+  static String monthly = "Monthly";
+  static String custom = "Custom";
+  static String aboutPooja = "About Pooja";
+  static String suggestNow = "Suggest Now";
+  static String clientPaid = "Client Paid";
+  static String okay = "Okay";
+  static String home = "Home";
+  static String anyFeedbacks = "Any Feedbacks?";
+  static String feedbacksText = "You are free to share your thoughts in order to help us improve.";
+  static String eCommerce = "E-commerce";
+  static String checkKundli = "Check Kundli";
+  static String chooseYourAppLanguage = "Choose Your App Language";
 }

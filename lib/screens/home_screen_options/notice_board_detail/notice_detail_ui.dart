@@ -76,8 +76,8 @@ class NoticeDetailUi extends GetView<NoticeDetailController> {
             trimLines: 4,
             colorClickableText: AppColors.blackColor,
             trimMode: TrimMode.Line,
-            trimCollapsedText: AppString.readMore,
-            trimExpandedText: " ${AppString.showLess}",
+            trimCollapsedText: "readMore".tr,
+            trimExpandedText: "showLess".tr,
             moreStyle: TextStyle(
               fontSize: 12.sp,
               fontWeight: FontWeight.w700,

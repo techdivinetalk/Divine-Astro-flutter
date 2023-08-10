@@ -58,7 +58,7 @@ class SuggestRemediesController extends GetxController {
                               fontColor: AppColors.redColor,
                               fontWeight: FontWeight.w600)),
                       TextSpan(
-                          text: AppString.remediesLeft,
+                          text: "remediesLeft".tr,
                           style: AppTextStyle.textStyle20(
                               fontColor: AppColors.darkBlue,
                               fontWeight: FontWeight.w600)),

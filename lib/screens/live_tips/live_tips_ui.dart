@@ -65,7 +65,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
               Expanded(
                 flex: 0,
                 child: Text(
-                  AppString.tips,
+                  "tips".tr,
                   style: TextStyle(
                       fontSize: 32.sp,
                       color: AppColors.white,
@@ -118,7 +118,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 20.h),
                         child: Text(
-                          AppString.startLive,
+                          "startLive".tr,
                           style: TextStyle(
                             fontSize: 20.sp,
                             color: AppColors.brownColour,

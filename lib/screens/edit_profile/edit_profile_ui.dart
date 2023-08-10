@@ -22,7 +22,7 @@ class EditProfileUI extends GetView<EditProfileController> {
         mainAxisSize: MainAxisSize.min,
         children: [
           CustomLightYellowButton(
-            name: AppString.saveChanges,
+            name: "saveChanges".tr,
             onTaped: () {},
           ),
         ],
@@ -32,7 +32,7 @@ class EditProfileUI extends GetView<EditProfileController> {
         backgroundColor: Colors.white,
         centerTitle: false,
         title: Text(
-          AppString.editProfile,
+          "editProfile".tr,
           style: AppTextStyle.textStyle16(),
         ),
       ),
@@ -46,7 +46,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    AppString.name,
+                    "name".tr,
                     style: AppTextStyle.textStyle14(),
                   ),
                   Assets.images.icEdit.svg(),
@@ -56,14 +56,14 @@ class EditProfileUI extends GetView<EditProfileController> {
                 height: 5.h,
               ),
               WhiteTextField(
-                  hintText: AppString.hintTextName,
+                  hintText: "hintTextName".tr,
                   inputAction: TextInputAction.next,
                   inputType: TextInputType.text),
               SizedBox(
                 height: 20.h,
               ),
               Text(
-                AppString.speciality,
+                "speciality".tr,
                 style: AppTextStyle.textStyle14(),
               ),
               SizedBox(
@@ -252,7 +252,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    AppString.experience,
+                    "experience".tr,
                     style: AppTextStyle.textStyle14(),
                   ),
                   Assets.images.icEdit.svg(),
@@ -262,7 +262,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                 height: 5.h,
               ),
               WhiteTextField(
-                  hintText: AppString.hintExperience,
+                  hintText: "hintExperience".tr,
                   inputAction: TextInputAction.done,
                   inputType: TextInputType.text),
               SizedBox(
@@ -272,7 +272,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    AppString.descriptions,
+                    "descriptions".tr,
                     style: AppTextStyle.textStyle14(),
                   ),
                   Assets.images.icEdit.svg(),
@@ -296,7 +296,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
-                    hintText: AppString.hintDescriptions,
+                    hintText: "hintDescriptions".tr,
                     helperStyle: AppTextStyle.textStyle16(),
                     fillColor: Colors.white,
                     hoverColor: Colors.white,

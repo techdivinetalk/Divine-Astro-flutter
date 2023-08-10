@@ -18,7 +18,7 @@ class PriceChangeReqUI extends GetView<PriceChangeReqController> {
         backgroundColor: Colors.white,
         centerTitle: false,
         title: Text(
-          AppString.priceChangeRequest,
+          "priceChangeRequest".tr,
           style: AppTextStyle.textStyle16(),
         ),
       ),
@@ -29,7 +29,7 @@ class PriceChangeReqUI extends GetView<PriceChangeReqController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${AppString.priceChangeCondition} -",
+                "${"priceChangeCondition".tr} -",
                 style: AppTextStyle.textStyle16(fontWeight: FontWeight.w400),
               ),
               SizedBox(
@@ -56,7 +56,7 @@ class PriceChangeReqUI extends GetView<PriceChangeReqController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        AppString.customerPrice,
+                        "customerPrice".tr,
                         style: AppTextStyle.textStyle16(
                             fontWeight: FontWeight.w400,
                             fontColor: AppColors.darkBlue),
@@ -154,7 +154,7 @@ class PriceChangeReqUI extends GetView<PriceChangeReqController> {
                     );
                   }),
               CustomLightYellowButton(
-                name: AppString.requestPriceChangeBtn,
+                name: "requestPriceChangeBtn".tr,
                 onTaped: () {},
               ),
             ],

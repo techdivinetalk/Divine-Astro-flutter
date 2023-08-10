@@ -1,6 +1,5 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/strings.dart';
 import 'package:divine_astrologer/common/switch_component.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
@@ -89,7 +88,7 @@ class HomeUI extends GetView<HomeController> {
                                       ],
                                     ),
                                     Text(
-                                      AppString.total,
+                                      "total".tr,
                                       style: AppTextStyle.textStyle16(
                                           fontColor: AppColors.darkBlue,
                                           fontWeight: FontWeight.w400),
@@ -126,7 +125,7 @@ class HomeUI extends GetView<HomeController> {
                                   child: Center(
                                     child: InkWell(
                                       child: Text(
-                                        "Check Kundli",
+                                        "checkKundli".tr,
                                         style: AppTextStyle.textStyle14(
                                             fontColor: AppColors.brownColour,
                                             fontWeight: FontWeight.w500),
@@ -146,13 +145,13 @@ class HomeUI extends GetView<HomeController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          AppString.noticeBoard,
+                          "noticeBoard".tr,
                           style: AppTextStyle.textStyle16(
                               fontColor: AppColors.darkBlue,
                               fontWeight: FontWeight.w400),
                         ),
                         Text(
-                          AppString.viewAll,
+                          "viewAll".tr,
                           style: AppTextStyle.textStyle12(
                               fontColor: AppColors.darkBlue,
                               fontWeight: FontWeight.w400),
@@ -188,7 +187,7 @@ class HomeUI extends GetView<HomeController> {
                           Assets.images.icGoLive.svg(),
                           const SizedBox(width: 15),
                           Text(
-                            AppString.goLive,
+                            "goLive".tr,
                             style: AppTextStyle.textStyle20(
                                 fontWeight: FontWeight.w700,
                                 fontColor: AppColors.brownColour),
@@ -207,7 +206,7 @@ class HomeUI extends GetView<HomeController> {
                   SizedBox(height: 10.h),
                   fullScreenBtnWidget(
                       imageName: Assets.images.icReferAFriend.svg(),
-                      btnTitle: "Refer an Astrologer ",
+                      btnTitle: "referAnAstrologer".tr,
                       onbtnTap: () {
                         Get.toNamed(RouteName.referAstrologer);
                       }),
@@ -216,7 +215,7 @@ class HomeUI extends GetView<HomeController> {
                   SizedBox(height: 10.h),
                   fullScreenBtnWidget(
                       imageName: Assets.images.icEcommerce.svg(),
-                      btnTitle: "E-commerce",
+                      btnTitle: "eCommerce".tr,
                       onbtnTap: () {}),
                   SizedBox(height: 10.h),
                   feedbackWidget(),
@@ -249,7 +248,7 @@ class HomeUI extends GetView<HomeController> {
                     children: [
                       Assets.images.icHelp.svg(),
                       Text(
-                        AppString.help,
+                        "help".tr,
                         style: AppTextStyle.textStyle10(
                             fontColor: AppColors.brownColour,
                             fontWeight: FontWeight.w700),
@@ -307,8 +306,8 @@ class HomeUI extends GetView<HomeController> {
               trimLines: 4,
               colorClickableText: AppColors.blackColor,
               trimMode: TrimMode.Line,
-              trimCollapsedText: AppString.readMore,
-              trimExpandedText: " ${AppString.showLess}",
+              trimCollapsedText: "readMore".tr,
+              trimExpandedText: "showLess".tr,
               moreStyle: TextStyle(
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w700,
@@ -347,13 +346,13 @@ class HomeUI extends GetView<HomeController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                AppString.sessionType,
+                "sessionType".tr,
                 style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
               ),
               SizedBox(height: 16.h),
               Text(
-                AppString.chat.toUpperCase(),
+                "chat".tr.toUpperCase(),
                 style: AppTextStyle.textStyle12(
                     fontColor: AppColors.darkBlue, fontWeight: FontWeight.w700),
               ),
@@ -364,7 +363,7 @@ class HomeUI extends GetView<HomeController> {
               ),
               SizedBox(height: 16.h),
               Text(
-                AppString.call.toUpperCase(),
+                "call".tr.toUpperCase(),
                 style: AppTextStyle.textStyle12(
                     fontColor: AppColors.darkBlue, fontWeight: FontWeight.w700),
               ),
@@ -378,7 +377,7 @@ class HomeUI extends GetView<HomeController> {
           Column(
             children: [
               Text(
-                AppString.status,
+                "status".tr,
                 style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
               ),
@@ -403,7 +402,7 @@ class HomeUI extends GetView<HomeController> {
           Column(
             children: [
               Text(
-                AppString.nextOnlineTiming,
+                "nextOnlineTiming".tr,
                 style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
               ),
@@ -478,12 +477,12 @@ class HomeUI extends GetView<HomeController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                AppString.offerType,
+                "offerType".tr,
                 style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
               ),
               Text(
-                AppString.status,
+                "status".tr,
                 style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
               ),
@@ -494,7 +493,7 @@ class HomeUI extends GetView<HomeController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                AppString.firstFreeOffer,
+                "firstFreeOffer".tr,
                 style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
               ),
@@ -514,7 +513,7 @@ class HomeUI extends GetView<HomeController> {
               Row(
                 children: [
                   Text(
-                    AppString.promotionOffer,
+                    "promotionOffer".tr,
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w700,
                         fontColor: AppColors.darkBlue),
@@ -646,14 +645,14 @@ class HomeUI extends GetView<HomeController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Any Feedbacks?",
+              "anyFeedbacks".tr,
               style: AppTextStyle.textStyle16(fontColor: AppColors.darkBlue),
             ),
             SizedBox(
               height: 10.h,
             ),
             Text(
-              "You are free to share your thoughts in order to help us improve.",
+              "feedbacksText".tr,
               style: AppTextStyle.textStyle14(fontColor: AppColors.darkBlue),
             ),
             SizedBox(height: 10.h),
