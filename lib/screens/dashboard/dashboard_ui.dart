@@ -1,6 +1,5 @@
 // ignore_for_file: deprecated_member_use_from_same_package
 
-import 'package:divine_astrologer/pages/profile/Profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -64,7 +63,6 @@ class DashboardScreen extends GetView<DashboardController> {
                                     ? AppColors.darkBlue
                                     : AppColors.lightGrey),
                             const SizedBox(height: 5),
-
                           ],
                         ),
                         label: 'performance'.tr,
@@ -78,7 +76,6 @@ class DashboardScreen extends GetView<DashboardController> {
                                     ? AppColors.darkBlue
                                     : AppColors.lightGrey),
                             const SizedBox(height: 5),
-
                           ],
                         ),
                         label: 'suggestRemediesHome'.tr,
@@ -92,7 +89,6 @@ class DashboardScreen extends GetView<DashboardController> {
                                     ? AppColors.darkBlue
                                     : AppColors.lightGrey),
                             const SizedBox(height: 5),
-
                           ],
                         ),
                         label: "chatAssistance".tr,
@@ -106,7 +102,6 @@ class DashboardScreen extends GetView<DashboardController> {
                                     ? AppColors.darkBlue
                                     : AppColors.lightGrey),
                             const SizedBox(height: 5),
-
                           ],
                         ),
                         label: "profile".tr,
@@ -123,7 +118,7 @@ class DashboardScreen extends GetView<DashboardController> {
             )));
   }
 
-  void _onItemTapped(int index) async{
+  void _onItemTapped(int index) async {
     controller.selectedIndex.value = index;
   }
 

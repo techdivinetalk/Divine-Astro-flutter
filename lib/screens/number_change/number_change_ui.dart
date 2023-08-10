@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../common/app_textstyle.dart';
-import '../../../common/strings.dart';
+
 import 'number_change_controller.dart';
 
 class NumberChangeReqUI extends GetView<NumberChangeReqController> {

@@ -8,37 +8,99 @@ import '../../gen/assets.gen.dart';
 
 class ProfilePageController extends GetxController {
   var languageList = <ChangeLanguageModelClass>[
-    ChangeLanguageModelClass('English', 'Eng', AppColors.appYellowColour, (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "en_US" ? true :false),
-    ChangeLanguageModelClass('Hindi', 'हिन्दी', AppColors.teal, (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "hi_IN" ? true :false),
-    ChangeLanguageModelClass('Marathi', 'मराठी', AppColors.pink, (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "mr_IN" ? true :false),
-    ChangeLanguageModelClass('Gujarati', 'ગુજરાતી', AppColors.pink, (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "gu_IN" ? true :false),
+    ChangeLanguageModelClass(
+        'English',
+        'Eng',
+        AppColors.appYellowColour,
+        (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "en_US"
+            ? true
+            : false),
+    ChangeLanguageModelClass(
+        'Hindi',
+        'हिन्दी',
+        AppColors.teal,
+        (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "hi_IN"
+            ? true
+            : false),
+    ChangeLanguageModelClass(
+        'Marathi',
+        'मराठी',
+        AppColors.pink,
+        (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "mr_IN"
+            ? true
+            : false),
+    ChangeLanguageModelClass(
+        'Gujarati',
+        'ગુજરાતી',
+        AppColors.pink,
+        (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "gu_IN"
+            ? true
+            : false),
   ].obs;
 
-  init(){
+  init() {
     profileList = <ProfileOptionModelClass>[
-      ProfileOptionModelClass("bankDetails".tr, Assets.images.icBankDetailNew.svg(width: 30.h, height: 30.h), '/bankDetailsUI'),
-      ProfileOptionModelClass("uploadStory".tr, Assets.images.icUploadStory.svg(width: 30.h, height: 30.h), ''),
-      ProfileOptionModelClass("uploadYourPhoto".tr, Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h), ''),
-      ProfileOptionModelClass("customerSupport".tr, Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), ''),
-      ProfileOptionModelClass("chooseLanguage".tr, Assets.images.icLanguages.svg(width: 30.h, height: 30.h), '/languagePopup'),
-      ProfileOptionModelClass("F&Q", Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
-      ProfileOptionModelClass("priceChange".tr, Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h), '/priceHistoryUI'),
-      ProfileOptionModelClass("numberChange".tr, Assets.images.icNumChanges.svg(width: 30.h, height: 30.h), '/numberChangeReqUI'),
-      ProfileOptionModelClass("blockedUsers".tr, Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h), '/blockedUser'),
+      ProfileOptionModelClass(
+          "bankDetails".tr,
+          Assets.images.icBankDetailNew.svg(width: 30.h, height: 30.h),
+          '/bankDetailsUI'),
+      ProfileOptionModelClass("uploadStory".tr,
+          Assets.images.icUploadStory.svg(width: 30.h, height: 30.h), ''),
+      ProfileOptionModelClass("uploadYourPhoto".tr,
+          Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h), ''),
+      ProfileOptionModelClass("customerSupport".tr,
+          Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), ''),
+      ProfileOptionModelClass(
+          "chooseLanguage".tr,
+          Assets.images.icLanguages.svg(width: 30.h, height: 30.h),
+          '/languagePopup'),
+      ProfileOptionModelClass(
+          "F&Q", Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
+      ProfileOptionModelClass(
+          "priceChange".tr,
+          Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
+          '/priceHistoryUI'),
+      ProfileOptionModelClass(
+          "numberChange".tr,
+          Assets.images.icNumChanges.svg(width: 30.h, height: 30.h),
+          '/numberChangeReqUI'),
+      ProfileOptionModelClass(
+          "blockedUsers".tr,
+          Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h),
+          '/blockedUser'),
     ].obs;
   }
 
   ChangeLanguageModelClass? selectedLanguage;
-   var profileList = <ProfileOptionModelClass>[
-    ProfileOptionModelClass("bankDetails".tr, Assets.images.icBankDetailNew.svg(width: 30.h, height: 30.h), '/bankDetailsUI'),
-    ProfileOptionModelClass("uploadStory".tr, Assets.images.icUploadStory.svg(width: 30.h, height: 30.h), ''),
-    ProfileOptionModelClass("uploadYourPhoto".tr, Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h), ''),
-    ProfileOptionModelClass("customerSupport".tr, Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), ''),
-    ProfileOptionModelClass("chooseLanguage".tr, Assets.images.icLanguages.svg(width: 30.h, height: 30.h), '/languagePopup'),
-    ProfileOptionModelClass("F&Q", Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
-    ProfileOptionModelClass("priceChange".tr, Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h), '/priceHistoryUI'),
-    ProfileOptionModelClass("numberChange".tr, Assets.images.icNumChanges.svg(width: 30.h, height: 30.h), '/numberChangeReqUI'),
-    ProfileOptionModelClass("blockedUsers".tr, Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h), '/blockedUser'),
+  var profileList = <ProfileOptionModelClass>[
+    ProfileOptionModelClass(
+        "bankDetails".tr,
+        Assets.images.icBankDetailNew.svg(width: 30.h, height: 30.h),
+        '/bankDetailsUI'),
+    ProfileOptionModelClass("uploadStory".tr,
+        Assets.images.icUploadStory.svg(width: 30.h, height: 30.h), ''),
+    ProfileOptionModelClass("uploadYourPhoto".tr,
+        Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h), ''),
+    ProfileOptionModelClass("customerSupport".tr,
+        Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), ''),
+    ProfileOptionModelClass(
+        "chooseLanguage".tr,
+        Assets.images.icLanguages.svg(width: 30.h, height: 30.h),
+        '/languagePopup'),
+    ProfileOptionModelClass(
+        "F&Q", Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
+    ProfileOptionModelClass(
+        "priceChange".tr,
+        Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
+        '/priceHistoryUI'),
+    ProfileOptionModelClass(
+        "numberChange".tr,
+        Assets.images.icNumChanges.svg(width: 30.h, height: 30.h),
+        '/numberChangeReqUI'),
+    ProfileOptionModelClass(
+        "blockedUsers".tr,
+        Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h),
+        '/blockedUser'),
   ].obs;
 
   selectedLanguageData(ChangeLanguageModelClass item) {
@@ -55,26 +117,26 @@ class ProfilePageController extends GetxController {
     if (selectedLanguage != null) {
       if (selectedLanguage!.languagesMain == "English") {
         Get.updateLocale(const Locale('en', 'US'));
-        GetStorages.set(GetStorageKeys.language,'en_US');
+        GetStorages.set(GetStorageKeys.language, 'en_US');
         init();
       } else if (selectedLanguage!.languagesMain == "Hindi") {
         Get.updateLocale(const Locale('hi', 'IN'));
-        GetStorages.set(GetStorageKeys.language,"hi_IN");
+        GetStorages.set(GetStorageKeys.language, "hi_IN");
         init();
       } else if (selectedLanguage!.languagesMain == "Marathi") {
         Get.updateLocale(const Locale('mr', 'IN'));
-        GetStorages.set(GetStorageKeys.language,"mr_IN");
+        GetStorages.set(GetStorageKeys.language, "mr_IN");
         init();
       } else if (selectedLanguage!.languagesMain == "Gujarati") {
         Get.updateLocale(const Locale('gu', 'IN'));
         // AppTranslations.locale = const Locale('gu', 'IN');
-        GetStorages.set(GetStorageKeys.language,"gu_IN");
+        GetStorages.set(GetStorageKeys.language, "gu_IN");
         init();
       }
     } else {
       Get.back();
     }
-    update(['set_lang','profile_option']);
+    update(['set_lang', 'profile_option']);
   }
 }
 

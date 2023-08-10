@@ -12,7 +12,7 @@ import '../../common/app_textstyle.dart';
 import '../../common/appbar.dart';
 import '../../common/colors.dart';
 import '../../common/common_options_row.dart';
-import '../../common/strings.dart';
+
 import '../../gen/assets.gen.dart';
 import '../side_menu/side_menu_ui.dart';
 import 'order_history_controller.dart';
@@ -163,11 +163,11 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
               unselectedLabelStyle:
                   AppTextStyle.textStyle16(fontWeight: FontWeight.w400),
               tabs: [
-                "${"all".tr}",
+                ("all".tr),
                 "chat".tr,
                 "call".tr,
                 "liveGifts".tr,
-                "${"remedySuggested".tr}",
+                ("remedySuggested".tr),
               ].map((e) => Tab(text: e)).toList(),
             ),
           ),

@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 
 import '../../../common/appbar.dart';
 import '../../../common/colors.dart';
-import '../../../common/strings.dart';
+
 import '../../../gen/assets.gen.dart';
 import '../../common/app_textstyle.dart';
 import '../../screens/side_menu/side_menu_ui.dart';

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
-import '../../../common/strings.dart';
+
 import '../../../gen/assets.gen.dart';
 import 'settings_controller.dart';
 
@@ -127,8 +127,7 @@ class SettingsUI extends GetView<SettingsController> {
                 height: 15.h,
               ),
               InkWell(
-                onTap: (){
-
+                onTap: () {
                   controller.logOutPopup(Get.context!);
                 },
                 child: Container(
@@ -158,10 +157,8 @@ class SettingsUI extends GetView<SettingsController> {
                 height: 15.h,
               ),
               InkWell(
-                onTap: (){
-
+                onTap: () {
                   controller.deleteAccountPopup(Get.context!);
-
                 },
                 child: Container(
                   decoration: BoxDecoration(

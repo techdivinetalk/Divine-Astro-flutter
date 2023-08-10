@@ -1,4 +1,3 @@
-import 'package:divine_astrologer/common/strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -14,6 +13,7 @@ class WalletController extends GetxController {
     "tds".tr,
     "totalAmount".tr
   ];
-  var durationOptions = ['daily'.tr, 'weekly'.tr, 'monthly'.tr, 'custom'.tr].obs;
+  var durationOptions =
+      ['daily'.tr, 'weekly'.tr, 'monthly'.tr, 'custom'.tr].obs;
   RxString selectedValue = "daily".tr.obs;
 }

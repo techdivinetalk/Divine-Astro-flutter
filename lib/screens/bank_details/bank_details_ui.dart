@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import '../../../common/text_field_custom.dart';
 import '../../../common/app_textstyle.dart';
-import '../../../common/strings.dart';
+
 import '../../../gen/assets.gen.dart';
 import '../../common/appbar.dart';
 import 'bank_detail_controller.dart';

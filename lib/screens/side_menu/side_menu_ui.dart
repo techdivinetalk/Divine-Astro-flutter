@@ -1,5 +1,4 @@
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/strings.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -57,7 +56,7 @@ class SideMenuDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: Assets.images.icSetting.svg(),
-              title:  Text('settings'.tr),
+              title: Text('settings'.tr),
               onTap: () => {
                 Navigator.of(context).pop(),
                 Get.toNamed(RouteName.settingsUI)
@@ -65,17 +64,17 @@ class SideMenuDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: Assets.images.icContactUs1.svg(),
-              title:  Text('contactUs'.tr),
+              title: Text('contactUs'.tr),
               onTap: () => {Navigator.of(context).pop()},
             ),
             ListTile(
               leading: Assets.images.icFeedBack.svg(),
-              title:  Text('shareFeedback'.tr),
+              title: Text('shareFeedback'.tr),
               onTap: () => {Navigator.of(context).pop()},
             ),
             ListTile(
               leading: Assets.images.icImportContact.svg(),
-              title:  Text('importantNumbers'.tr),
+              title: Text('importantNumbers'.tr),
               onTap: () => {
                 Navigator.of(context).pop(),
                 Get.toNamed(RouteName.importantNumbers)
@@ -83,7 +82,7 @@ class SideMenuDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: Assets.images.icDonations.svg(),
-              title:  Text('donation'.tr),
+              title: Text('donation'.tr),
               onTap: () => {
                 Navigator.of(context).pop(),
                 Get.toNamed(RouteName.donationUi)

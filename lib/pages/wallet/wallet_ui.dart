@@ -1,4 +1,3 @@
-import 'package:divine_astrologer/common/strings.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_controller.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -121,10 +120,10 @@ class WalletUI extends GetView<WalletController> {
                         controller.amountTypeList[index] == "tds".tr
                             ? false
                             : true,
-                    boldTextStyle: controller.amountTypeList[index] ==
-                            "totalAmount".tr
-                        ? true
-                        : false),
+                    boldTextStyle:
+                        controller.amountTypeList[index] == "totalAmount".tr
+                            ? true
+                            : false),
               ),
               const SizedBox(width: 7)
             ],

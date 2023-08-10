@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
-import '../../../common/strings.dart';
+
 import '../../common/appbar.dart';
 import 'rank_system_controller.dart';
 

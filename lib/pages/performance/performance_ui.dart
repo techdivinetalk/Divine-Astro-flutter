@@ -7,7 +7,6 @@ import '../../common/app_textstyle.dart';
 import '../../common/appbar.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../common/routes.dart';
-import '../../common/strings.dart';
 import '../../gen/assets.gen.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'performance_controller.dart';
@@ -19,8 +18,8 @@ class PerformanceUI extends GetView<PerformanceController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: commonAppbar(
-          title: "performance".tr, trailingWidget: Container()),
+      appBar:
+          commonAppbar(title: "performance".tr, trailingWidget: Container()),
       drawer: const SideMenuDrawer(),
       body: SingleChildScrollView(
         child: Padding(

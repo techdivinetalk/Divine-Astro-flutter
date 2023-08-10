@@ -15,12 +15,14 @@ import 'common/colors.dart';
 import 'common/routes.dart';
 import 'common/app_theme.dart';
 import 'common/custom_progress_dialog.dart';
+import 'common/strings.dart';
 import 'di/firebase_network_service.dart';
 
 import 'di/progress_service.dart';
 import 'di/shared_preference_service.dart';
 import 'gen/fonts.gen.dart';
 import 'localization/translations.dart';
+import 'utils/utils.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -87,32 +89,32 @@ class MyApp extends StatelessWidget {
                         ignoring:
                             Get.find<ProgressService>().showProgress.value,
                         child: widget)),
-                    // StreamBuilder<bool?>(
-                    //   initialData: true,
-                    //   stream: Get.find<FirebaseNetworkService>()
-                    //       .databaseConnectionStream,
-                    //   builder: (context, snapshot) {
-                    //     final appTheme = AppTheme.of(context);
-                    //     return SafeArea(
-                    //       child: AnimatedContainer(
-                    //         height: snapshot.data as bool
-                    //             ? 0
-                    //             : appTheme.getHeight(36),
-                    //         duration: Utils.animationDuration,
-                    //         color: appTheme.redColor,
-                    //         child: Material(
-                    //           type: MaterialType.transparency,
-                    //           child: Center(
-                    //               child: Text(AppString.noInternetConnection,
-                    //                   style: appTheme.customTextStyle(
-                    //                     fontSize: 16.sp,
-                    //                     color: appTheme.whiteColor,
-                    //                   ))),
-                    //         ),
-                    //       ),
-                    //     );
-                    //   },
-                    // ),
+                    StreamBuilder<bool?>(
+                      initialData: true,
+                      stream: Get.find<FirebaseNetworkService>()
+                          .databaseConnectionStream,
+                      builder: (context, snapshot) {
+                        final appTheme = AppTheme.of(context);
+                        return SafeArea(
+                          child: AnimatedContainer(
+                            height: snapshot.data as bool
+                                ? 0
+                                : appTheme.getHeight(36),
+                            duration: Utils.animationDuration,
+                            color: appTheme.redColor,
+                            child: Material(
+                              type: MaterialType.transparency,
+                              child: Center(
+                                  child: Text(AppString.noInternetConnection,
+                                      style: appTheme.customTextStyle(
+                                        fontSize: 16.sp,
+                                        color: appTheme.whiteColor,
+                                      ))),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                     Obx(() => Get.find<ProgressService>().showProgress.isTrue
                         ? Center(child: CustomProgressDialog())
                         : const Offstage())

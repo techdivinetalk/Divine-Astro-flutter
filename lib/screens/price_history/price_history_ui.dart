@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
 import '../../../common/routes.dart';
-import '../../../common/strings.dart';
+
 import '../../../gen/assets.gen.dart';
 import 'price_history_controller.dart';
 
@@ -30,9 +30,8 @@ class PriceHistoryUI extends GetView<PriceHistoryController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             InkWell(
-              onTap: (){
+              onTap: () {
                 Get.toNamed(RouteName.priceChangeReqUI);
-
               },
               child: Container(
                   padding: EdgeInsets.all(10.h),

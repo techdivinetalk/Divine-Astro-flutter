@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import '../../../common/appbar.dart';
 import '../../../common/colors.dart';
 import '../../../common/routes.dart';
-import '../../../common/strings.dart';
+
 import '../../../gen/assets.gen.dart';
 import 'final_remedies_sub_controller.dart';
 

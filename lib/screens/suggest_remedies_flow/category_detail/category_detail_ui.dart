@@ -11,7 +11,6 @@ import 'package:readmore/readmore.dart';
 import '../../../../common/colors.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../common/custom_light_yellow_btn.dart';
-import '../../../common/strings.dart';
 
 class CategoryDetailUi extends GetView<CategoryDetailController> {
   const CategoryDetailUi({Key? key}) : super(key: key);

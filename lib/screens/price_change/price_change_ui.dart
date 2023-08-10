@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../../common/custom_light_yellow_btn.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
-import '../../../common/strings.dart';
+
 import 'price_change_req_controller.dart';
 
 class PriceChangeReqUI extends GetView<PriceChangeReqController> {

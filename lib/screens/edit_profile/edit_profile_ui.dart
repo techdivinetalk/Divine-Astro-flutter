@@ -6,7 +6,7 @@ import '../../../common/custom_light_yellow_btn.dart';
 import '../../../common/text_field_custom.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
-import '../../../common/strings.dart';
+
 import '../../../gen/assets.gen.dart';
 import '../../common/common_bottomsheet.dart';
 import 'edit_profile_controller.dart';

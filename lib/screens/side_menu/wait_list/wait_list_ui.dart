@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
-import '../../../common/strings.dart';
+
 import '../../../gen/assets.gen.dart';
 import 'wait_list_controller.dart';
 

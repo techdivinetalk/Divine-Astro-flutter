@@ -1,6 +1,5 @@
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/appbar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -245,7 +244,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                               shape: BoxShape
                                                                   .circle,
                                                               border: item
-                                                                      .isSelected!
+                                                                      .isSelected
                                                                   ? Border.all(
                                                                       width: 1,
                                                                       color: Colors

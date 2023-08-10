@@ -1,5 +1,5 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
-import 'package:divine_astrologer/common/strings.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -84,18 +84,18 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                                 ],
                               ),
                             ),
-
                             Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
-                                  color: AppColors.lightYellow
-                              ),
+                                  color: AppColors.lightYellow),
                               child: Padding(
-                                padding:  EdgeInsets.symmetric(horizontal: 15.w,vertical: 10.h),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15.w, vertical: 10.h),
                                 child: Text(
                                   "addContact".tr,
-                                  style:
-                                  AppTextStyle.textStyle16(fontWeight: FontWeight.w600,fontColor: AppColors.brownColour),
+                                  style: AppTextStyle.textStyle16(
+                                      fontWeight: FontWeight.w600,
+                                      fontColor: AppColors.brownColour),
                                 ),
                               ),
                             )
@@ -109,7 +109,6 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                   );
                 },
               ),
-
             ],
           ),
         ),
