@@ -14,7 +14,7 @@ class RankSystemUI extends GetView<RankSystemController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: commonDetailAppbar(title: AppString.rankSystem),
+      appBar: commonDetailAppbar(title: "rankSystem".tr),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(12.h),
@@ -44,7 +44,7 @@ class RankSystemUI extends GetView<RankSystemController> {
                           child: Column(
                             children: [
                               Text(
-                                AppString.totalMarksObtained,
+                                "totalMarksObtained".tr,
                                 textAlign: TextAlign.center,
                                 style: AppTextStyle.textStyle12(
                                     fontWeight: FontWeight.w700,

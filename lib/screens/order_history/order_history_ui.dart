@@ -27,7 +27,7 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
       child: Scaffold(
         drawer: const SideMenuDrawer(),
         appBar: commonDetailAppbar(
-            title: AppString.orderHistory,
+            title: "orderHistory".tr,
             trailingWidget: InkWell(
               child: Padding(
                   padding: EdgeInsets.only(right: 20.w),
@@ -76,7 +76,7 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 20),
                         child: Text(
-                          item,
+                          item.tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w400,
                               fontColor: AppColors.darkBlue),
@@ -89,7 +89,7 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
                 fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
             value: controller.selectedValue.value,
             onChanged: (String? value) {
-              controller.selectedValue.value = value ?? "Daily";
+              controller.selectedValue.value = value ?? "daily".tr;
             },
             iconStyleData: const IconStyleData(
               icon: Icon(
@@ -163,11 +163,11 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
               unselectedLabelStyle:
                   AppTextStyle.textStyle16(fontWeight: FontWeight.w400),
               tabs: [
-                "  ${AppString.all}  ",
-                AppString.chat,
-                AppString.call,
-                AppString.liveGifts,
-                AppString.remedySuggested
+                "${"all".tr}",
+                "chat".tr,
+                "call".tr,
+                "liveGifts".tr,
+                "${"remedySuggested".tr}",
               ].map((e) => Tab(text: e)).toList(),
             ),
           ),
@@ -316,12 +316,12 @@ class OrderInfo extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             CommonOptionRow(
-              leftBtnTitle: AppString.refund,
+              leftBtnTitle: "refund".tr,
               onLeftTap: () {},
               onRightTap: () {
                 Get.toNamed(RouteName.categoryDetail);
               },
-              rightBtnTitle: AppString.suggestedRemediesEarning,
+              rightBtnTitle: "suggestedRemediesEarning".tr,
             ),
             const SizedBox(height: 10),
           ],
@@ -474,7 +474,7 @@ class SuggestRemedies extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Client Paid :",
+                Text("${"clientPaid".tr} :",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: AppColors.darkBlue)),

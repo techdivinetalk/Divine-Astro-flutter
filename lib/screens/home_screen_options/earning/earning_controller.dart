@@ -8,11 +8,11 @@ import '../../../gen/assets.gen.dart';
 class YourEarningController extends GetxController {
   ScrollController earningScrollController = ScrollController();
   List<String> earningList = [
-    AppString.totalEarning,
-    AppString.chatEarning,
-    AppString.callEarning,
-    AppString.reportEarning,
-    AppString.suggestedRemediesEarning
+    "totalEarning".tr,
+    "chatEarning".tr,
+    "callEarning".tr,
+    "reportEarning".tr,
+    "suggestedRemediesEarning".tr
   ];
   List<SvgPicture> earningImgList = [
     Assets.images.icCalc.svg(),

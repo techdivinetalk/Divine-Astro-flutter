@@ -8,7 +8,7 @@ import 'hi.dart';
 import 'mr.dart';
 
 class AppTranslations extends Translations {
-  static Locale get locale => Get.deviceLocale!;
+  static Locale  locale = Get.deviceLocale!;
   static const fallbackLocale = Locale('en', 'US');
   static const gujaratiLocale = Locale('gu', 'IN');
   static const hindiLocale = Locale('hi', 'IN');

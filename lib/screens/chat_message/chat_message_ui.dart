@@ -215,7 +215,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
                       decoration: InputDecoration(
-                        hintText: AppString.message,
+                        hintText: "viewAll".tr,
                         helperStyle: AppTextStyle.textStyle16(),
                         fillColor: AppColors.white,
                         hintStyle: AppTextStyle.textStyle16(

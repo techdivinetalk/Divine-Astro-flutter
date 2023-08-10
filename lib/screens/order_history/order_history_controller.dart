@@ -6,6 +6,6 @@ class OrderHistoryController extends GetxController {
   ScrollController orderAllScrollController = ScrollController();
   TabController? tabbarController;
 
-  final List<String> durationOptions = ['Daily', 'Weekly', 'Monthly', 'Custom'];
-  RxString selectedValue = "Daily".obs;
+  var durationOptions = ['daily'.tr, 'weekly'.tr, 'monthly'.tr, 'custom'.tr].obs;
+  RxString selectedValue = "daily".tr.obs;
 }

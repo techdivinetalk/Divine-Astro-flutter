@@ -21,7 +21,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
       drawer: const SideMenuDrawer(),
       backgroundColor: AppColors.white,
       appBar: commonAppbar(
-          title: AppString.chatAssistance,
+          title: "chatAssistance".tr,
           trailingWidget: InkWell(
             child: Padding(
                 padding: EdgeInsets.only(right: 20.w),

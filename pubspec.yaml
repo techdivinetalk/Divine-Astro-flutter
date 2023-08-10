@@ -31,6 +31,8 @@ dependencies:
   country_state_city: ^0.1.6
   firebase_core: ^2.15.0
   firebase_database: ^10.2.4
+  get_storage: ^2.1.1
+
 
 dev_dependencies:
   flutter_test:

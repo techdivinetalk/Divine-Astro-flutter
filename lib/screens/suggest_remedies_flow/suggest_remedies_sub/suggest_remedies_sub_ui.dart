@@ -19,7 +19,7 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
     return Scaffold(
         backgroundColor: AppColors.white,
         appBar: commonAppbar(
-            title: AppString.suggestRemedy,
+            title: "suggestRemedy".tr,
             trailingWidget: InkWell(
               child: Padding(
                   padding: EdgeInsets.only(right: 20.w),

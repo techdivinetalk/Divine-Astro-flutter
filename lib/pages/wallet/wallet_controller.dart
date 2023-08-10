@@ -8,12 +8,12 @@ class WalletController extends GetxController {
   ScrollController orderScrollController = ScrollController();
   ScrollController amountScrollController = ScrollController();
   List<String> amountTypeList = [
-    AppString.availableBalance,
-    AppString.pgCharges,
-    AppString.subTotal,
-    AppString.tds,
-    AppString.totalAmount
+    "availableBalance".tr,
+    "pgCharges".tr,
+    "subTotal".tr,
+    "tds".tr,
+    "totalAmount".tr
   ];
-  final List<String> durationOptions = ['Daily', 'Weekly', 'Monthly', 'Custom'];
-  RxString selectedValue = "Daily".obs;
+  var durationOptions = ['daily'.tr, 'weekly'.tr, 'monthly'.tr, 'custom'.tr].obs;
+  RxString selectedValue = "daily".tr.obs;
 }

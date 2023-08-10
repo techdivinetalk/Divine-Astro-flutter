@@ -22,7 +22,7 @@ class WalletUI extends GetView<WalletController> {
       backgroundColor: AppColors.white,
       drawer: const SideMenuDrawer(),
       appBar: commonAppbar(
-          title: AppString.wallet,
+          title: "wallet".tr,
           trailingWidget: InkWell(
             child: Padding(
                 padding: EdgeInsets.only(right: 20.w),
@@ -118,11 +118,11 @@ class WalletUI extends GetView<WalletController> {
                     amountType: controller.amountTypeList[index],
                     amount: "10000",
                     is2linesRequired:
-                        controller.amountTypeList[index] == AppString.tds
+                        controller.amountTypeList[index] == "tds".tr
                             ? false
                             : true,
                     boldTextStyle: controller.amountTypeList[index] ==
-                            AppString.totalAmount
+                            "totalAmount".tr
                         ? true
                         : false),
               ),
@@ -153,7 +153,7 @@ class WalletUI extends GetView<WalletController> {
         if (!is2linesRequired)
           Padding(
             padding: const EdgeInsets.only(top: 10, bottom: 9),
-            child: Text("${AppString.tds}  ",
+            child: Text("${"tds".tr}  ",
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 style: AppTextStyle.textStyle12(
@@ -264,10 +264,10 @@ class WalletUI extends GetView<WalletController> {
             ),
             const SizedBox(height: 20),
             CommonOptionRow(
-              leftBtnTitle: AppString.refund,
+              leftBtnTitle: "refund".tr,
               onLeftTap: () {},
               onRightTap: () {},
-              rightBtnTitle: AppString.suggestedRemediesEarning,
+              rightBtnTitle: "suggestedRemediesEarning".tr,
             ),
             const SizedBox(height: 20),
           ],
@@ -286,7 +286,7 @@ class WalletUI extends GetView<WalletController> {
               children: [
                 Assets.images.icOrder.svg(),
                 const SizedBox(width: 15),
-                Text(AppString.orderId,
+                Text("orderId".tr,
                     style:
                         AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
               ],
@@ -303,7 +303,7 @@ class WalletUI extends GetView<WalletController> {
               children: [
                 Assets.images.icUser.svg(),
                 const SizedBox(width: 15),
-                Text(AppString.name,
+                Text("name".tr,
                     style:
                         AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
               ],
@@ -320,7 +320,7 @@ class WalletUI extends GetView<WalletController> {
               children: [
                 Assets.images.icGender.svg(),
                 const SizedBox(width: 15),
-                Text(AppString.gender,
+                Text("gender".tr,
                     style:
                         AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
               ],
@@ -337,7 +337,7 @@ class WalletUI extends GetView<WalletController> {
               children: [
                 Assets.images.icCalendar.svg(),
                 const SizedBox(width: 15),
-                Text(AppString.dob,
+                Text("dob".tr,
                     style:
                         AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
               ],
@@ -354,7 +354,7 @@ class WalletUI extends GetView<WalletController> {
               children: [
                 Assets.images.icLocation.svg(),
                 const SizedBox(width: 15),
-                Text(AppString.pob,
+                Text("pob".tr,
                     style:
                         AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
               ],
@@ -371,7 +371,7 @@ class WalletUI extends GetView<WalletController> {
               children: [
                 Assets.images.icCalendar.svg(),
                 const SizedBox(width: 15),
-                Text(AppString.orderDateTime,
+                Text("orderDateTime".tr,
                     style:
                         AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
               ],
@@ -388,7 +388,7 @@ class WalletUI extends GetView<WalletController> {
               children: [
                 Assets.images.icRate.svg(),
                 const SizedBox(width: 15),
-                Text(AppString.rate,
+                Text("rate".tr,
                     style:
                         AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
               ],
@@ -405,7 +405,7 @@ class WalletUI extends GetView<WalletController> {
               children: [
                 Assets.images.icClock.svg(),
                 const SizedBox(width: 15),
-                Text(AppString.duration,
+                Text("duration".tr,
                     style:
                         AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
               ],
@@ -433,7 +433,7 @@ class WalletUI extends GetView<WalletController> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 20),
                         child: Text(
-                          item,
+                          item.tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w400,
                               fontColor: AppColors.darkBlue),
@@ -446,7 +446,7 @@ class WalletUI extends GetView<WalletController> {
                 fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
             value: controller.selectedValue.value,
             onChanged: (String? value) {
-              controller.selectedValue.value = value ?? "Daily";
+              controller.selectedValue.value = value ?? "daily".tr;
             },
             iconStyleData: const IconStyleData(
               icon: Icon(

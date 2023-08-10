@@ -1,5 +1,5 @@
-import 'package:divine_astrologer/common/strings.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'app_textstyle.dart';
 import 'colors.dart';
@@ -62,7 +62,7 @@ class CommonOptionRow extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                AppString.suggestRemedies,
+                "suggestRemedies".tr,
                 style: AppTextStyle.textStyle14(
                     fontColor: AppColors.brownColour,
                     fontWeight: FontWeight.w500),

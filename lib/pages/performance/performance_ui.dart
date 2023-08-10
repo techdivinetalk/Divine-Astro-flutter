@@ -20,7 +20,7 @@ class PerformanceUI extends GetView<PerformanceController> {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: commonAppbar(
-          title: AppString.performance, trailingWidget: Container()),
+          title: "performance".tr, trailingWidget: Container()),
       drawer: const SideMenuDrawer(),
       body: SingleChildScrollView(
         child: Padding(
@@ -431,7 +431,7 @@ class PerformanceUI extends GetView<PerformanceController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppString.availabilityTitle,
+            "availabilityTitle".tr,
             style: AppTextStyle.textStyle12(
                 fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
           ),
@@ -447,7 +447,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      AppString.sessionType,
+                      "sessionType".tr,
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
@@ -456,7 +456,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                       height: 10.h,
                     ),
                     Text(
-                      AppString.chat.toUpperCase(),
+                      "chat".tr.toUpperCase(),
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w700,
                           fontColor: AppColors.darkBlue),
@@ -465,7 +465,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                       height: 10.h,
                     ),
                     Text(
-                      AppString.call.toUpperCase(),
+                      "call".tr.toUpperCase(),
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w700,
                           fontColor: AppColors.darkBlue),
@@ -474,7 +474,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                       height: 10.h,
                     ),
                     Text(
-                      AppString.live.toUpperCase(),
+                      "live".tr.toUpperCase(),
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w700,
                           fontColor: AppColors.darkBlue),
@@ -491,7 +491,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      AppString.available,
+                      "available".tr,
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
@@ -536,7 +536,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      AppString.busy,
+                      "busy".tr,
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
@@ -614,7 +614,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                   Expanded(
                     child: Text(
                       textAlign: TextAlign.center,
-                      AppString.date,
+                      "date".tr,
                       style: AppTextStyle.textStyle10(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
@@ -626,7 +626,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                   Expanded(
                     child: Text(
                       textAlign: TextAlign.center,
-                      AppString.availableChat,
+                      "availableChat".tr,
                       style: AppTextStyle.textStyle10(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
@@ -638,7 +638,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                   Expanded(
                     child: Text(
                       textAlign: TextAlign.center,
-                      AppString.availableCall,
+                      "availableCall".tr,
                       style: AppTextStyle.textStyle10(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
@@ -650,7 +650,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                   Expanded(
                     child: Text(
                       textAlign: TextAlign.center,
-                      AppString.busyChat,
+                      "busyChat".tr,
                       style: AppTextStyle.textStyle10(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
@@ -662,7 +662,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                   Expanded(
                     child: Text(
                       textAlign: TextAlign.center,
-                      AppString.busyCall,
+                      "busyCall".tr,
                       style: AppTextStyle.textStyle10(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
@@ -674,7 +674,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                   Expanded(
                     child: Text(
                       textAlign: TextAlign.center,
-                      AppString.availableLive,
+                      "availableLive".tr,
                       style: AppTextStyle.textStyle10(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
@@ -809,7 +809,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        AppString.overallScore,
+                        "overallScore".tr,
                         style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w700,
                             fontColor: AppColors.darkBlue),
@@ -831,7 +831,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        AppString.rank,
+                        "rank".tr,
                         style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w700,
                             fontColor: AppColors.darkBlue),
@@ -847,7 +847,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                             width: 10.w,
                           ),
                           Text(
-                            AppString.diamond,
+                            "diamond".tr,
                             style: AppTextStyle.textStyle12(
                                 fontWeight: FontWeight.w400,
                                 fontColor: AppColors.darkBlue),

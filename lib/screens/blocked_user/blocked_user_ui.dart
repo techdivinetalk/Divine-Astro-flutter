@@ -18,13 +18,15 @@ class BlockedUserUI extends GetView<BlockUserController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: commonDetailAppbar(title: AppString.blockedUsers),
+      appBar: commonDetailAppbar(
+        title: "blockedUsers".tr,
+      ),
       body: Padding(
         padding: EdgeInsets.all(14.h),
         child: Column(
           children: [
             WhiteTextField(
-                hintText: AppString.searchBlockUserHint,
+                hintText: "searchBlockUserHint".tr,
                 inputAction: TextInputAction.done,
                 inputType: TextInputType.text,
                 icon: const Icon(Icons.search)),
@@ -66,17 +68,21 @@ class BlockedUserUI extends GetView<BlockUserController> {
                                         children: [
                                           Assets.images.icUnlock
                                               .svg(height: 64.h, width: 64.h),
-                                          SizedBox(height: 15.h),
+                                          SizedBox(
+                                            height: 15.h,
+                                          ),
                                           Text(
                                             "Unblock Deep Pratap?",
                                             style: AppTextStyle.textStyle20(
                                                 fontWeight: FontWeight.w700,
                                                 fontColor: AppColors.darkBlue),
                                           ),
-                                          SizedBox(height: 10.h),
+                                          SizedBox(
+                                            height: 10.h,
+                                          ),
                                           Center(
                                             child: Text(
-                                              AppString.unBlockMsg,
+                                              "unBlockMsg".tr,
                                               textAlign: TextAlign.center,
                                               style: AppTextStyle.textStyle16(
                                                   fontWeight: FontWeight.w400,
@@ -88,7 +94,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                                             height: 5.h,
                                           ),
                                           CustomLightYellowButton(
-                                            name: AppString.unblock,
+                                            name: "unblock".tr,
                                             onTaped: () {},
                                           ),
                                         ],
@@ -102,7 +108,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                                       borderRadius: BorderRadius.circular(30),
                                       border: Border.all(width: 1)),
                                   child: Text(
-                                    AppString.unblock,
+                                    "unblock".tr,
                                     style: AppTextStyle.textStyle12(),
                                   )),
                             )

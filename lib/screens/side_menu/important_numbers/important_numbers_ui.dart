@@ -17,7 +17,7 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
         centerTitle: false,
         forceMaterialTransparency: true,
         backgroundColor: AppColors.white,
-        title: Text(AppString.importantNumbers,
+        title: Text("importantNumbers".tr,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
@@ -93,7 +93,7 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                               child: Padding(
                                 padding:  EdgeInsets.symmetric(horizontal: 15.w,vertical: 10.h),
                                 child: Text(
-                                  AppString.addContact,
+                                  "addContact".tr,
                                   style:
                                   AppTextStyle.textStyle16(fontWeight: FontWeight.w600,fontColor: AppColors.brownColour),
                                 ),
