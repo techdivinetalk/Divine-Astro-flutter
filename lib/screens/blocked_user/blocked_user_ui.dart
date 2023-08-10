@@ -9,6 +9,7 @@ import '../../../common/text_field_custom.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/strings.dart';
 import '../../../gen/assets.gen.dart';
+import '../../common/appbar.dart';
 import 'block_user_controller.dart';
 
 class BlockedUserUI extends GetView<BlockUserController> {
@@ -17,15 +18,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.white,
-        centerTitle: false,
-        title: Text(
-          AppString.blockedUsers,
-          style: AppTextStyle.textStyle16(),
-        ),
-      ),
+      appBar: commonDetailAppbar(title: AppString.blockedUsers),
       body: Padding(
         padding: EdgeInsets.all(14.h),
         child: Column(
@@ -66,39 +59,40 @@ class BlockedUserUI extends GetView<BlockUserController> {
                             InkWell(
                               onTap: () {
                                 openBottomSheet(context,
-                                    functionalityWidget: Column(
-                                      children: [
-                                        Assets.images.icUnlock
-                                            .svg(height: 64.h, width: 64.h),
-                                        SizedBox(
-                                          height: 15.h,
-                                        ),
-                                        Text(
-                                          "Unblock Deep Pratap?",
-                                          style: AppTextStyle.textStyle20(
-                                              fontWeight: FontWeight.w700,
-                                              fontColor: AppColors.darkBlue),
-                                        ),
-                                        SizedBox(
-                                          height: 10.h,
-                                        ),
-                                        Center(
-                                          child: Text(
-                                            AppString.unBlockMsg,
-                                            textAlign: TextAlign.center,
-                                            style: AppTextStyle.textStyle16(
-                                                fontWeight: FontWeight.w400,
-                                                fontColor: AppColors.blackColor),
+                                    functionalityWidget: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20, right: 20, top: 20),
+                                      child: Column(
+                                        children: [
+                                          Assets.images.icUnlock
+                                              .svg(height: 64.h, width: 64.h),
+                                          SizedBox(height: 15.h),
+                                          Text(
+                                            "Unblock Deep Pratap?",
+                                            style: AppTextStyle.textStyle20(
+                                                fontWeight: FontWeight.w700,
+                                                fontColor: AppColors.darkBlue),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          height: 5.h,
-                                        ),
-                                        CustomLightYellowButton(
-                                          name: AppString.unblock,
-                                          onTaped: () {},
-                                        ),
-                                      ],
+                                          SizedBox(height: 10.h),
+                                          Center(
+                                            child: Text(
+                                              AppString.unBlockMsg,
+                                              textAlign: TextAlign.center,
+                                              style: AppTextStyle.textStyle16(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontColor:
+                                                      AppColors.blackColor),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 5.h,
+                                          ),
+                                          CustomLightYellowButton(
+                                            name: AppString.unblock,
+                                            onTaped: () {},
+                                          ),
+                                        ],
+                                      ),
                                     ));
                               },
                               child: Container(

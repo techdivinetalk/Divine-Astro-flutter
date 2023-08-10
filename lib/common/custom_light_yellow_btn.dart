@@ -53,7 +53,7 @@ class CustomLightYellowCurveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 25.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
       child: InkWell(
         onTap: () => onTaped(),
         child: Container(

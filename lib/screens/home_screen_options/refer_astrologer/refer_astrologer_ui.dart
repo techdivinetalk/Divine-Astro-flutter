@@ -16,6 +16,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.white,
       appBar: commonDetailAppbar(title: AppString.referAnAstrologer),
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,

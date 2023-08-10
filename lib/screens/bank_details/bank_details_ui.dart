@@ -7,6 +7,7 @@ import '../../../common/text_field_custom.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/strings.dart';
 import '../../../gen/assets.gen.dart';
+import '../../common/appbar.dart';
 import 'bank_detail_controller.dart';
 
 class BankDetailsUI extends GetView<BankDetailController> {
@@ -15,15 +16,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.white,
-        centerTitle: false,
-        title: Text(
-          AppString.yourBankDetails,
-          style: AppTextStyle.textStyle16(fontWeight: FontWeight.w600),
-        ),
-      ),
+      appBar: commonDetailAppbar(title: AppString.yourBankDetails),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(12.h),

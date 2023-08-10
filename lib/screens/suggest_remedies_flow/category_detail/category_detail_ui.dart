@@ -116,7 +116,8 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                 openBottomSheet(
                   context,
                   functionalityWidget: Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    padding:
+                        const EdgeInsets.only(top: 20, left: 20, right: 20),
                     child: Column(
                       children: [
                         Text(
@@ -132,7 +133,6 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                               fontWeight: FontWeight.w600,
                               fontColor: AppColors.darkBlue.withOpacity(0.5)),
                         ),
-                        const SizedBox(height: 10),
                         CustomLightYellowCurveButton(
                           name: "Suggest Now",
                           onTaped: () {
