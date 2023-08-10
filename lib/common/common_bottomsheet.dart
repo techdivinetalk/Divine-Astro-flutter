@@ -44,14 +44,13 @@ Future openBottomSheet(BuildContext context,
           ),
           child: Column(
             children: [
-              const SizedBox(height: 20),
-              if (title != null) const SizedBox(height: 20),
+              if (title != null) const SizedBox(height: 10),
               if (title != null)
                 Text(
                   title,
                   style: AppTextStyle.textStyle16(fontWeight: FontWeight.w700),
                 ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               SizedBox(
                   width: ScreenUtil().screenWidth, child: functionalityWidget),
               const SizedBox(height: 20),

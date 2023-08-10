@@ -44,7 +44,7 @@ class KundliUi extends GetView<KundliController> {
                     ),
                   ),
                   surfaceTintColor: AppColors.white,
-                  expandedHeight: 280.h,
+                  expandedHeight: 300.h,
                   pinned: true,
                   centerTitle: false,
                   title: Text("Kundli",
@@ -68,7 +68,7 @@ class KundliUi extends GetView<KundliController> {
                           labelPadding: EdgeInsets.zero,
                           splashBorderRadius: BorderRadius.circular(20),
                           padding: EdgeInsets.symmetric(
-                              vertical: 5.w, horizontal: 5.h),
+                              vertical: 10.w, horizontal: 8.h),
                           labelStyle: AppTextStyle.textStyle14(
                               fontWeight: FontWeight.w500),
                           indicator: BoxDecoration(
@@ -215,29 +215,32 @@ class CheckYours extends GetView<KundliController> {
                   hintText: "Birth Palace",
                   onTap: () {},
                 ),
+                SizedBox(height: 20.h),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding:
+                        EdgeInsets.only(bottom: 36.h, left: 20.w, right: 20.h),
+                    child: MaterialButton(
+                        height: 50,
+                        minWidth: Get.width,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                        ),
+                        onPressed: () {
+                          Get.toNamed(RouteName.kundliDetail);
+                        },
+                        color: AppColors.lightYellow,
+                        child: Text(
+                          "Submit",
+                          style: AppTextStyle.textStyle20(
+                              fontWeight: FontWeight.w600),
+                        )),
+                  ),
+                ),
                 SizedBox(height: 100.h),
               ],
             ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: EdgeInsets.only(bottom: 36.h, left: 20.w, right: 20.h),
-            child: MaterialButton(
-                height: 50,
-                minWidth: Get.width,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                ),
-                onPressed: () {
-                  Get.toNamed(RouteName.kundliDetail);
-                },
-                color: AppColors.lightYellow,
-                child: Text(
-                  "Submit",
-                  style: AppTextStyle.textStyle20(fontWeight: FontWeight.w600),
-                )),
           ),
         ),
       ],
@@ -353,29 +356,32 @@ class CheckOther extends GetView<KundliController> {
                   hintText: "Birth Palace",
                   onTap: () {},
                 ),
+                SizedBox(height: 20.h),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding:
+                        EdgeInsets.only(bottom: 36.h, left: 20.w, right: 20.h),
+                    child: MaterialButton(
+                        height: 50,
+                        minWidth: Get.width,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                        ),
+                        onPressed: () {
+                          openAlertView();
+                        },
+                        color: AppColors.lightYellow,
+                        child: Text(
+                          "Submit",
+                          style: AppTextStyle.textStyle20(
+                              fontWeight: FontWeight.w600),
+                        )),
+                  ),
+                ),
                 SizedBox(height: 100.h),
               ],
             ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: EdgeInsets.only(bottom: 36.h, left: 20.w, right: 20.h),
-            child: MaterialButton(
-                height: 50,
-                minWidth: Get.width,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                ),
-                onPressed: () {
-                  openAlertView();
-                },
-                color: AppColors.lightYellow,
-                child: Text(
-                  "Submit",
-                  style: AppTextStyle.textStyle20(fontWeight: FontWeight.w600),
-                )),
           ),
         ),
       ],

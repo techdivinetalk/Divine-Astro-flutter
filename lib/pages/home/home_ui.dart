@@ -19,6 +19,7 @@ class HomeUI extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.white,
       drawer: const SideMenuDrawer(),
       appBar: commonAppbar(
           title: controller.appbarTitle.value,
@@ -163,7 +164,9 @@ class HomeUI extends GetView<HomeController> {
                   senderCategoryWidget(),
                   SizedBox(height: 10.h),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed(RouteName.liveTipsUI);
+                    },
                     child: Container(
                       height: 60,
                       decoration: BoxDecoration(

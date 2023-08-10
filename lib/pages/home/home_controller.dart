@@ -48,6 +48,7 @@ class HomeController extends GetxController {
                 headerPadding: EdgeInsets.only(left: 8.0, right: 0.0),
                 contentPadding: EdgeInsets.only(left: 25.0, right: 25.0),
                 contentBackgroundColor: AppColors.white,
+                headerColor: AppColors.white,
               ),
               controller: expandedTileController!,
               title: Row(
@@ -157,6 +158,7 @@ class HomeController extends GetxController {
                   headerPadding: EdgeInsets.only(left: 8.0, right: 0.0),
                   contentPadding: EdgeInsets.only(left: 25.0, right: 25.0),
                   contentBackgroundColor: AppColors.white,
+                  headerColor: AppColors.white,
                 ),
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
