@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "764246952124",
+    "firebase_url": "https://divine2-0-uat-default-rtdb.firebaseio.com",
+    "project_id": "divine2-0-uat",
+    "storage_bucket": "divine2-0-uat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764246952124:android:3f4a894f37aa04856fe8b9",
+        "android_client_info": {
+          "package_name": "com.divine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6TwQ1az8IU6mmhKZoeLa4kfdQa0BrbQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764246952124:android:dba9eba1fb1f4d806fe8b9",
+        "android_client_info": {
+          "package_name": "com.divine.astrologer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6TwQ1az8IU6mmhKZoeLa4kfdQa0BrbQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
