@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../../../common/appbar.dart';
 import '../../../common/colors.dart';
 import '../../../common/routes.dart';
 import '../../../gen/assets.gen.dart';
@@ -12,26 +13,9 @@ class DonationUi extends GetView<DonationController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          forceMaterialTransparency: true,
-          backgroundColor: AppColors.white,
-          title: Text("Donation",
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 16.sp,
-                color: AppColors.darkBlue,
-              )),
-          leading: InkWell(
-            onTap: () {
-              Get.back();
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8),
-              child: Center(child: Assets.images.icLeftArrow.svg()),
-            ),
-          ),
-          actions: [
-            Container(
+        appBar: commonDetailAppbar(
+            title: "Donation",
+            trailingWidget: Container(
               margin: EdgeInsets.only(right: 16.w),
               width: 47.w,
               height: 26.h,
@@ -46,9 +30,7 @@ class DonationUi extends GetView<DonationController> {
                       color: AppColors.darkBlue,
                     )),
               ),
-            )
-          ],
-        ),
+            )),
         body: Padding(
           padding: EdgeInsets.only(left: 32.w, right: 32.w),
           child: GridView.builder(

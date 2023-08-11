@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import '../../common/app_textstyle.dart';
 import '../../common/colors.dart';
 import '../../common/common_bottomsheet.dart';
-import '../../common/strings.dart';
+
 import '../../gen/assets.gen.dart';
 
 class LiveTipsController extends GetxController {
@@ -37,7 +37,7 @@ class LiveTipsController extends GetxController {
                 SizedBox(height: 20.h),
                 Center(
                   child: Text(
-                    AppString.congratulations,
+                    "congratulations".tr,
                     style: TextStyle(
                       fontSize: 24.sp,
                       color: AppColors.darkBlue,
@@ -124,7 +124,7 @@ class LiveTipsController extends GetxController {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      AppString.totalEarning,
+                      "totalEarning".tr,
                       style: AppTextStyle.textStyle16(
                           fontColor: AppColors.darkBlue,
                           fontWeight: FontWeight.w600),

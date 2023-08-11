@@ -1,5 +1,5 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
-import 'package:divine_astrologer/common/strings.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -17,7 +17,7 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
         centerTitle: false,
         forceMaterialTransparency: true,
         backgroundColor: AppColors.white,
-        title: Text(AppString.importantNumbers,
+        title: Text("importantNumbers".tr,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
@@ -84,18 +84,18 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                                 ],
                               ),
                             ),
-
                             Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
-                                  color: AppColors.lightYellow
-                              ),
+                                  color: AppColors.lightYellow),
                               child: Padding(
-                                padding:  EdgeInsets.symmetric(horizontal: 15.w,vertical: 10.h),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15.w, vertical: 10.h),
                                 child: Text(
-                                  AppString.addContact,
-                                  style:
-                                  AppTextStyle.textStyle16(fontWeight: FontWeight.w600,fontColor: AppColors.brownColour),
+                                  "addContact".tr,
+                                  style: AppTextStyle.textStyle16(
+                                      fontWeight: FontWeight.w600,
+                                      fontColor: AppColors.brownColour),
                                 ),
                               ),
                             )
@@ -109,7 +109,6 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                   );
                 },
               ),
-
             ],
           ),
         ),

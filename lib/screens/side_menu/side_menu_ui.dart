@@ -1,5 +1,4 @@
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/strings.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -36,7 +35,7 @@ class SideMenuDrawer extends StatelessWidget {
             const SizedBox(height: 10),
             ListTile(
               leading: Assets.images.icWaiting.svg(),
-              title: Text(AppString.waitlist),
+              title: Text("waitlist".tr),
               onTap: () => {
                 Navigator.of(context).pop(),
                 Get.toNamed(RouteName.waitList)
@@ -44,7 +43,7 @@ class SideMenuDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: Assets.images.icOrderHistory.svg(),
-              title: Text(AppString.orderHistory),
+              title: Text("orderHistory".tr),
               onTap: () => {
                 Navigator.of(context).pop(),
                 Get.toNamed(RouteName.orderHistory)
@@ -52,12 +51,12 @@ class SideMenuDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: Assets.images.icReport.svg(),
-              title: const Text('Report an Astrologer'),
+              title: Text("reportAnAstrologer".tr),
               onTap: () => {},
             ),
             ListTile(
               leading: Assets.images.icSetting.svg(),
-              title: const Text('Settings'),
+              title: Text('settings'.tr),
               onTap: () => {
                 Navigator.of(context).pop(),
                 Get.toNamed(RouteName.settingsUI)
@@ -65,17 +64,17 @@ class SideMenuDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: Assets.images.icContactUs1.svg(),
-              title: const Text('Contact Us'),
+              title: Text('contactUs'.tr),
               onTap: () => {Navigator.of(context).pop()},
             ),
             ListTile(
               leading: Assets.images.icFeedBack.svg(),
-              title: const Text('Share Feedback'),
+              title: Text('shareFeedback'.tr),
               onTap: () => {Navigator.of(context).pop()},
             ),
             ListTile(
               leading: Assets.images.icImportContact.svg(),
-              title: const Text('Important numbers'),
+              title: Text('importantNumbers'.tr),
               onTap: () => {
                 Navigator.of(context).pop(),
                 Get.toNamed(RouteName.importantNumbers)
@@ -83,7 +82,7 @@ class SideMenuDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: Assets.images.icDonations.svg(),
-              title: const Text('Donation'),
+              title: Text('donation'.tr),
               onTap: () => {
                 Navigator.of(context).pop(),
                 Get.toNamed(RouteName.donationUi)

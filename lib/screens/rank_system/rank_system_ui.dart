@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
-import '../../../common/strings.dart';
+
+import '../../common/appbar.dart';
 import 'rank_system_controller.dart';
 
 class RankSystemUI extends GetView<RankSystemController> {
@@ -13,14 +14,7 @@ class RankSystemUI extends GetView<RankSystemController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
-        centerTitle: false,
-        title: Text(
-          AppString.rankSystem,
-          style: AppTextStyle.textStyle16(),
-        ),
-      ),
+      appBar: commonDetailAppbar(title: "rankSystem".tr),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(12.h),
@@ -50,7 +44,7 @@ class RankSystemUI extends GetView<RankSystemController> {
                           child: Column(
                             children: [
                               Text(
-                                AppString.totalMarksObtained,
+                                "totalMarksObtained".tr,
                                 textAlign: TextAlign.center,
                                 style: AppTextStyle.textStyle12(
                                     fontWeight: FontWeight.w700,

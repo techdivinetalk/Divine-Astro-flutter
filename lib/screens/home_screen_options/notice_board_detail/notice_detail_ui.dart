@@ -1,7 +1,7 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/strings.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -76,8 +76,8 @@ class NoticeDetailUi extends GetView<NoticeDetailController> {
             trimLines: 4,
             colorClickableText: AppColors.blackColor,
             trimMode: TrimMode.Line,
-            trimCollapsedText: AppString.readMore,
-            trimExpandedText: " ${AppString.showLess}",
+            trimCollapsedText: "readMore".tr,
+            trimExpandedText: "showLess".tr,
             moreStyle: TextStyle(
               fontSize: 12.sp,
               fontWeight: FontWeight.w700,

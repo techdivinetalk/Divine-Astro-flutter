@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
-import '../../../common/strings.dart';
+
 import '../../../gen/assets.gen.dart';
 import 'wait_list_controller.dart';
 
@@ -18,7 +18,7 @@ class WaitListUI extends GetView<WaitListUIController> {
         centerTitle: false,
         forceMaterialTransparency: true,
         backgroundColor: AppColors.white,
-        title: Text(AppString.waitlist,
+        title: Text("waitlist".tr,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
@@ -32,7 +32,7 @@ class WaitListUI extends GetView<WaitListUIController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                AppString.nextInLine,
+                "nextInLine".tr,
                 style: AppTextStyle.textStyle20(fontColor: AppColors.darkBlue),
               ),
               SizedBox(
@@ -77,7 +77,7 @@ class WaitListUI extends GetView<WaitListUIController> {
                 child: const Divider(),
               ),
               Text(
-                AppString.waitingQueue,
+                "waitingQueue".tr,
                 style: AppTextStyle.textStyle20(fontColor: AppColors.darkBlue),
               ),
               SizedBox(

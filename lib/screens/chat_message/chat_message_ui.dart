@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../common/app_textstyle.dart';
-import '../../common/strings.dart';
 import '../../gen/assets.gen.dart';
 import 'chat_message_controller.dart';
 
@@ -12,12 +11,12 @@ class ChatMessageUI extends GetView<ChatMessageController> {
 
   @override
   Widget build(BuildContext context) {
-    final messages = [
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-      'This is a short message.',
-      'This is a relatively longer line of text.',
-      'Hi!'
-    ];
+    // final messages = [
+    //   'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+    //   'This is a short message.',
+    //   'This is a relatively longer line of text.',
+    //   'Hi!'
+    // ];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.lightYellow,
@@ -215,7 +214,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
                       decoration: InputDecoration(
-                        hintText: AppString.message,
+                        hintText: "viewAll".tr,
                         helperStyle: AppTextStyle.textStyle16(),
                         fillColor: AppColors.white,
                         hintStyle: AppTextStyle.textStyle16(

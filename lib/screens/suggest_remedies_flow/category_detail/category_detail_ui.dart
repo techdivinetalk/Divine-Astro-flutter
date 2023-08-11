@@ -11,7 +11,6 @@ import 'package:readmore/readmore.dart';
 import '../../../../common/colors.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../common/custom_light_yellow_btn.dart';
-import '../../../common/strings.dart';
 
 class CategoryDetailUi extends GetView<CategoryDetailController> {
   const CategoryDetailUi({Key? key}) : super(key: key);
@@ -20,7 +19,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: commonDetailAppbar(
-        title: "Suggest Remedy",
+        title: "suggestRemedy".tr,
         trailingWidget: Container(
           margin: EdgeInsets.only(right: 16.w),
           width: 47.w,
@@ -69,7 +68,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "About Pooja",
+                      "aboutPooja".tr,
                       style: AppTextStyle.textStyle16(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.appYellowColour),
@@ -80,8 +79,8 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                       trimLines: 4,
                       colorClickableText: AppColors.blackColor,
                       trimMode: TrimMode.Line,
-                      trimCollapsedText: AppString.readMore,
-                      trimExpandedText: " ${AppString.showLess}",
+                      trimCollapsedText: "readMore".tr,
+                      trimExpandedText: "showLess".tr,
                       moreStyle: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
@@ -116,7 +115,8 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                 openBottomSheet(
                   context,
                   functionalityWidget: Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    padding:
+                        const EdgeInsets.only(top: 20, left: 20, right: 20),
                     child: Column(
                       children: [
                         Text(
@@ -132,9 +132,8 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                               fontWeight: FontWeight.w600,
                               fontColor: AppColors.darkBlue.withOpacity(0.5)),
                         ),
-                        const SizedBox(height: 10),
                         CustomLightYellowCurveButton(
-                          name: "Suggest Now",
+                          name: "suggestNow".tr,
                           onTaped: () {
                             Get.offNamedUntil(RouteName.orderHistory,
                                 ModalRoute.withName(RouteName.dashboard));
@@ -147,7 +146,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
               },
               color: AppColors.lightYellow,
               child: Text(
-                "Suggest Now",
+                "suggestNow".tr,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 20.sp,

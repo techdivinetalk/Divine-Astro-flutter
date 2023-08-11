@@ -1,7 +1,7 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/strings.dart';
+
 import 'package:divine_astrologer/screens/home_screen_options/earning/earning_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,7 +15,7 @@ class YourEarning extends GetView<YourEarningController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: commonDetailAppbar(title: AppString.yourEarning),
+      appBar: commonDetailAppbar(title: "yourEarning".tr),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
@@ -68,7 +68,7 @@ class YourEarning extends GetView<YourEarningController> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            AppString.lifeTimeEarning,
+            "lifeTimeEarning".tr,
             style: AppTextStyle.textStyle16(
                 fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
           ),

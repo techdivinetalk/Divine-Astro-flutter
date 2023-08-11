@@ -5,8 +5,9 @@ import 'package:get/get.dart';
 
 import '../../../common/text_field_custom.dart';
 import '../../../common/app_textstyle.dart';
-import '../../../common/strings.dart';
+
 import '../../../gen/assets.gen.dart';
+import '../../common/appbar.dart';
 import 'bank_detail_controller.dart';
 
 class BankDetailsUI extends GetView<BankDetailController> {
@@ -15,15 +16,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.white,
-        centerTitle: false,
-        title: Text(
-          AppString.yourBankDetails,
-          style: AppTextStyle.textStyle16(fontWeight: FontWeight.w600),
-        ),
-      ),
+      appBar: commonDetailAppbar(title: "yourBankDetails".tr),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(12.h),
@@ -49,7 +42,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
               ),
               //account Holder Name
               Text(
-                AppString.accountHolderName,
+                "accountHolderName".tr,
                 style: AppTextStyle.textStyle20(
                     fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
               ),
@@ -57,7 +50,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
                 height: 5.h,
               ),
               WhiteTextField(
-                  hintText: AppString.holderNameHintText,
+                  hintText: "holderNameHintText".tr,
                   inputAction: TextInputAction.next,
                   inputType: TextInputType.text),
               SizedBox(
@@ -65,7 +58,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
               ),
               //Bank Account Number
               Text(
-                AppString.bankAccountNumber,
+                "bankAccountNumber".tr,
                 style: AppTextStyle.textStyle20(
                     fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
               ),
@@ -73,7 +66,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
                 height: 5.h,
               ),
               WhiteTextField(
-                  hintText: AppString.accountNumHintText,
+                  hintText: "accountNumHintText".tr,
                   inputAction: TextInputAction.next,
                   inputType: TextInputType.text),
               SizedBox(
@@ -81,7 +74,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
               ),
               //IFSC Code
               Text(
-                AppString.iFSCCode,
+                "iFSCCode".tr,
                 style: AppTextStyle.textStyle20(
                     fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
               ),
@@ -89,7 +82,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
                 height: 5.h,
               ),
               WhiteTextField(
-                  hintText: AppString.ifscCodeHintText,
+                  hintText: "ifscCodeHintText".tr,
                   inputAction: TextInputAction.next,
                   inputType: TextInputType.text),
               SizedBox(
@@ -97,7 +90,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
               ),
               //attachments
               Text(
-                AppString.attachments,
+                "attachments".tr,
                 style: AppTextStyle.textStyle20(
                     fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
               ),

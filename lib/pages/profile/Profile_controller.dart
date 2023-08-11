@@ -1,118 +1,143 @@
-import 'package:divine_astrologer/pages/profile/profile_ui.dart';
+import 'package:divine_astrologer/common/getStorage/get_storage.dart';
+import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../../common/app_textstyle.dart';
 import '../../common/colors.dart';
-import '../../common/common_bottomsheet.dart';
 import '../../gen/assets.gen.dart';
 
 class ProfilePageController extends GetxController {
+  var languageList = <ChangeLanguageModelClass>[
+    ChangeLanguageModelClass(
+        'English',
+        'Eng',
+        AppColors.appYellowColour,
+        (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "en_US"
+            ? true
+            : false),
+    ChangeLanguageModelClass(
+        'Hindi',
+        'हिन्दी',
+        AppColors.teal,
+        (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "hi_IN"
+            ? true
+            : false),
+    ChangeLanguageModelClass(
+        'Marathi',
+        'मराठी',
+        AppColors.pink,
+        (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "mr_IN"
+            ? true
+            : false),
+    ChangeLanguageModelClass(
+        'Gujarati',
+        'ગુજરાતી',
+        AppColors.pink,
+        (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "gu_IN"
+            ? true
+            : false),
+  ].obs;
 
-  changeLanguagePopup(BuildContext context) async {
-    await openBottomSheet(context,
-      functionalityWidget: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          GestureDetector(
-            onTap: () {
-              Get.back();
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.white, width: 1.5),
-                  borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                  color: AppColors.white.withOpacity(0.1)),
-              child: const Icon(
-                Icons.close,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Container(
-            width: double.maxFinite,
-            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 0.h),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
-              color: AppColors.white,
-            ),
-            child: Column(
-              children: [
-                Text(
-                  'Choose Your App Language',
-                  style: AppTextStyle.textStyle20(fontWeight: FontWeight.w500),
-                ),
-                SizedBox(height: 32.h),
-                SizedBox(
-                  height: 270.h,
-                  child: GridView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      mainAxisSpacing: 30.h,
-                      crossAxisSpacing: 30.h,
-                    ),
-                    itemCount: 4,
-                    itemBuilder: (context, index) => LanguageWidget(index: index),
-                  ),
-                ),
-                MaterialButton(
-                  onPressed: () {},
-                  color: AppColors.lightYellow,
-                  minWidth: double.maxFinite,
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  shape: const StadiumBorder(),
-                  child: Text(
-                    'Set Language',
-                    style: AppTextStyle.textStyle16(fontWeight: FontWeight.w600,fontColor: AppColors.brownColour),
-
-
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),);
+  init() {
+    profileList = <ProfileOptionModelClass>[
+      ProfileOptionModelClass(
+          "bankDetails".tr,
+          Assets.images.icBankDetailNew.svg(width: 30.h, height: 30.h),
+          '/bankDetailsUI'),
+      ProfileOptionModelClass("uploadStory".tr,
+          Assets.images.icUploadStory.svg(width: 30.h, height: 30.h), ''),
+      ProfileOptionModelClass("uploadYourPhoto".tr,
+          Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h), ''),
+      ProfileOptionModelClass("customerSupport".tr,
+          Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), ''),
+      ProfileOptionModelClass(
+          "chooseLanguage".tr,
+          Assets.images.icLanguages.svg(width: 30.h, height: 30.h),
+          '/languagePopup'),
+      ProfileOptionModelClass(
+          "F&Q", Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
+      ProfileOptionModelClass(
+          "priceChange".tr,
+          Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
+          '/priceHistoryUI'),
+      ProfileOptionModelClass(
+          "numberChange".tr,
+          Assets.images.icNumChanges.svg(width: 30.h, height: 30.h),
+          '/numberChangeReqUI'),
+      ProfileOptionModelClass(
+          "blockedUsers".tr,
+          Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h),
+          '/blockedUser'),
+    ].obs;
   }
 
+  ChangeLanguageModelClass? selectedLanguage;
   var profileList = <ProfileOptionModelClass>[
     ProfileOptionModelClass(
-        "Bank Details",
+        "bankDetails".tr,
         Assets.images.icBankDetailNew.svg(width: 30.h, height: 30.h),
         '/bankDetailsUI'),
-    ProfileOptionModelClass("upload story",
+    ProfileOptionModelClass("uploadStory".tr,
         Assets.images.icUploadStory.svg(width: 30.h, height: 30.h), ''),
-    ProfileOptionModelClass("Upload your photo",
+    ProfileOptionModelClass("uploadYourPhoto".tr,
         Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h), ''),
-    ProfileOptionModelClass("Customer Support",
+    ProfileOptionModelClass("customerSupport".tr,
         Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), ''),
     ProfileOptionModelClass(
-        "Choose Language",
+        "chooseLanguage".tr,
         Assets.images.icLanguages.svg(width: 30.h, height: 30.h),
         '/languagePopup'),
     ProfileOptionModelClass(
         "F&Q", Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
     ProfileOptionModelClass(
-        "Price Change",
+        "priceChange".tr,
         Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
         '/priceHistoryUI'),
     ProfileOptionModelClass(
-        "Number Change",
+        "numberChange".tr,
         Assets.images.icNumChanges.svg(width: 30.h, height: 30.h),
         '/numberChangeReqUI'),
     ProfileOptionModelClass(
-        "Blocked user",
+        "blockedUsers".tr,
         Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h),
         '/blockedUser'),
   ].obs;
 
+  selectedLanguageData(ChangeLanguageModelClass item) {
+    List.generate(
+        languageList.length, (index) => languageList[index].isSelected = false);
 
+    item.isSelected = true;
+    selectedLanguage = item;
 
+    update(['set_language']);
+  }
 
-
+  getSelectedLanguage() {
+    if (selectedLanguage != null) {
+      if (selectedLanguage!.languagesMain == "English") {
+        Get.updateLocale(const Locale('en', 'US'));
+        GetStorages.set(GetStorageKeys.language, 'en_US');
+        init();
+      } else if (selectedLanguage!.languagesMain == "Hindi") {
+        Get.updateLocale(const Locale('hi', 'IN'));
+        GetStorages.set(GetStorageKeys.language, "hi_IN");
+        init();
+      } else if (selectedLanguage!.languagesMain == "Marathi") {
+        Get.updateLocale(const Locale('mr', 'IN'));
+        GetStorages.set(GetStorageKeys.language, "mr_IN");
+        init();
+      } else if (selectedLanguage!.languagesMain == "Gujarati") {
+        Get.updateLocale(const Locale('gu', 'IN'));
+        // AppTranslations.locale = const Locale('gu', 'IN');
+        GetStorages.set(GetStorageKeys.language, "gu_IN");
+        init();
+      }
+    } else {
+      Get.back();
+    }
+    update(['set_lang', 'profile_option']);
+  }
 }
 
 class ProfileOptionModelClass {
@@ -121,4 +146,13 @@ class ProfileOptionModelClass {
   String? nav;
 
   ProfileOptionModelClass(this.name, this.widget, this.nav);
+}
+
+class ChangeLanguageModelClass {
+  String? languagesMain, languages;
+  Color? colors;
+  bool isSelected;
+
+  ChangeLanguageModelClass(
+      this.languagesMain, this.languages, this.colors, this.isSelected);
 }

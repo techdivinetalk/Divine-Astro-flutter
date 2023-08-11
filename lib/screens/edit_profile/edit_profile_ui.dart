@@ -6,7 +6,7 @@ import '../../../common/custom_light_yellow_btn.dart';
 import '../../../common/text_field_custom.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
-import '../../../common/strings.dart';
+
 import '../../../gen/assets.gen.dart';
 import '../../common/common_bottomsheet.dart';
 import 'edit_profile_controller.dart';
@@ -22,7 +22,7 @@ class EditProfileUI extends GetView<EditProfileController> {
         mainAxisSize: MainAxisSize.min,
         children: [
           CustomLightYellowButton(
-            name: AppString.saveChanges,
+            name: "saveChanges".tr,
             onTaped: () {},
           ),
         ],
@@ -32,7 +32,7 @@ class EditProfileUI extends GetView<EditProfileController> {
         backgroundColor: Colors.white,
         centerTitle: false,
         title: Text(
-          AppString.editProfile,
+          "editProfile".tr,
           style: AppTextStyle.textStyle16(),
         ),
       ),
@@ -46,7 +46,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    AppString.name,
+                    "name".tr,
                     style: AppTextStyle.textStyle14(),
                   ),
                   Assets.images.icEdit.svg(),
@@ -56,14 +56,14 @@ class EditProfileUI extends GetView<EditProfileController> {
                 height: 5.h,
               ),
               WhiteTextField(
-                  hintText: AppString.hintTextName,
+                  hintText: "hintTextName".tr,
                   inputAction: TextInputAction.next,
                   inputType: TextInputType.text),
               SizedBox(
                 height: 20.h,
               ),
               Text(
-                AppString.speciality,
+                "speciality".tr,
                 style: AppTextStyle.textStyle14(),
               ),
               SizedBox(
@@ -91,59 +91,65 @@ class EditProfileUI extends GetView<EditProfileController> {
                             onTap: () {
                               openBottomSheet(context, functionalityWidget:
                                   StatefulBuilder(builder: (context, setState) {
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ChipsChoice<int>.multiple(
-                                      spacing: 10,
-                                      value: controller.tagIndexes,
-                                      onChanged: (val) {
-                                        controller.tagIndexes.clear();
-                                        controller.tags.clear();
-                                        debugPrint("$val");
-                                        for (var element in val) {
-                                          controller.tagIndexes.add(element);
-                                          controller.tags
-                                              .add(controller.options[element]);
-                                        }
-                                        setState(() {});
-                                      },
-                                      choiceItems:
-                                          C2Choice.listFrom<int, String>(
-                                        source: controller.options,
-                                        value: (i, v) => i,
-                                        label: (i, v) => v,
-                                        tooltip: (i, v) => v,
-                                        delete: (i, v) => () {
-                                          controller.options.removeAt(i);
+                                return Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      ChipsChoice<int>.multiple(
+                                        spacing: 10,
+                                        value: controller.tagIndexes,
+                                        onChanged: (val) {
+                                          controller.tagIndexes.clear();
+                                          controller.tags.clear();
+                                          debugPrint("$val");
+                                          for (var element in val) {
+                                            controller.tagIndexes.add(element);
+                                            controller.tags.add(
+                                                controller.options[element]);
+                                          }
+                                          setState(() {});
                                         },
-                                      ),
-                                      choiceStyle: C2ChipStyle.toned(
-                                        iconSize: 0,
-                                        backgroundColor: Colors.white,
-                                        selectedStyle: C2ChipStyle.filled(
-                                          selectedStyle: C2ChipStyle(
-                                            foregroundStyle:
-                                                AppTextStyle.textStyle16(
-                                                    fontColor: AppColors.white),
-                                            borderWidth: 1,
-                                            backgroundColor: AppColors.darkBlue,
-                                            borderStyle: BorderStyle.solid,
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(25)),
+                                        choiceItems:
+                                            C2Choice.listFrom<int, String>(
+                                          source: controller.options,
+                                          value: (i, v) => i,
+                                          label: (i, v) => v,
+                                          tooltip: (i, v) => v,
+                                          delete: (i, v) => () {
+                                            controller.options.removeAt(i);
+                                          },
+                                        ),
+                                        choiceStyle: C2ChipStyle.toned(
+                                          iconSize: 0,
+                                          backgroundColor: Colors.white,
+                                          selectedStyle: C2ChipStyle.filled(
+                                            selectedStyle: C2ChipStyle(
+                                              foregroundStyle:
+                                                  AppTextStyle.textStyle16(
+                                                      fontColor:
+                                                          AppColors.white),
+                                              borderWidth: 1,
+                                              backgroundColor:
+                                                  AppColors.darkBlue,
+                                              borderStyle: BorderStyle.solid,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(25)),
+                                            ),
+                                          ),
+                                          borderWidth: 1,
+                                          borderStyle: BorderStyle.solid,
+                                          borderColor: AppColors.darkBlue,
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(20),
                                           ),
                                         ),
-                                        borderWidth: 1,
-                                        borderStyle: BorderStyle.solid,
-                                        borderColor: AppColors.darkBlue,
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(20),
-                                        ),
+                                        wrapped: true,
                                       ),
-                                      wrapped: true,
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 );
                               }));
                             },
@@ -169,9 +175,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                                         color: AppColors.darkBlue,
                                         size: 19.sp,
                                       ),
-                                      SizedBox(
-                                        width: 5.w,
-                                      ),
+                                      SizedBox(width: 5.w),
                                       Text(
                                         "Add Speciality",
                                         style: AppTextStyle.textStyle12(
@@ -220,11 +224,10 @@ class EditProfileUI extends GetView<EditProfileController> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                width: 8.w,
-                              ),
+                              SizedBox(width: 8.w),
                               InkWell(
                                 onTap: () {
+                                  controller.tagIndexes.removeAt(index);
                                   controller.tags.removeAt(index);
                                 },
                                 child: Container(
@@ -252,7 +255,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    AppString.experience,
+                    "experience".tr,
                     style: AppTextStyle.textStyle14(),
                   ),
                   Assets.images.icEdit.svg(),
@@ -262,7 +265,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                 height: 5.h,
               ),
               WhiteTextField(
-                  hintText: AppString.hintExperience,
+                  hintText: "hintExperience".tr,
                   inputAction: TextInputAction.done,
                   inputType: TextInputType.text),
               SizedBox(
@@ -272,7 +275,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    AppString.descriptions,
+                    "descriptions".tr,
                     style: AppTextStyle.textStyle14(),
                   ),
                   Assets.images.icEdit.svg(),
@@ -296,7 +299,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
-                    hintText: AppString.hintDescriptions,
+                    hintText: "hintDescriptions".tr,
                     helperStyle: AppTextStyle.textStyle16(),
                     fillColor: Colors.white,
                     hoverColor: Colors.white,

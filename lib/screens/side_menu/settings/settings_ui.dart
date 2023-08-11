@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
-import '../../../common/strings.dart';
+
 import '../../../gen/assets.gen.dart';
 import 'settings_controller.dart';
 
@@ -17,7 +17,7 @@ class SettingsUI extends GetView<SettingsController> {
         centerTitle: false,
         forceMaterialTransparency: true,
         backgroundColor: AppColors.white,
-        title: Text(AppString.settings,
+        title: Text("settings".tr,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
@@ -30,7 +30,7 @@ class SettingsUI extends GetView<SettingsController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(AppString.changeAppLanguage,
+              Text("changeAppLanguage".tr,
                   style: TextStyle(
                     color: AppColors.darkBlue,
                     fontWeight: FontWeight.w500,
@@ -50,7 +50,7 @@ class SettingsUI extends GetView<SettingsController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        AppString.english,
+                        "english".tr,
                         style: AppTextStyle.textStyle16(
                             fontColor: AppColors.darkBlue),
                       ),
@@ -65,7 +65,7 @@ class SettingsUI extends GetView<SettingsController> {
               SizedBox(
                 height: 20.h,
               ),
-              Text(AppString.general,
+              Text("general".tr,
                   style: TextStyle(
                     color: AppColors.darkBlue,
                     fontWeight: FontWeight.w500,
@@ -85,7 +85,7 @@ class SettingsUI extends GetView<SettingsController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        AppString.termsAndConditions,
+                        "termsAndConditions".tr,
                         style: AppTextStyle.textStyle16(
                             fontColor: AppColors.darkBlue),
                       ),
@@ -111,7 +111,7 @@ class SettingsUI extends GetView<SettingsController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        AppString.privacyPolicy,
+                        "privacyPolicy".tr,
                         style: AppTextStyle.textStyle16(
                             fontColor: AppColors.darkBlue),
                       ),
@@ -127,8 +127,7 @@ class SettingsUI extends GetView<SettingsController> {
                 height: 15.h,
               ),
               InkWell(
-                onTap: (){
-
+                onTap: () {
                   controller.logOutPopup(Get.context!);
                 },
                 child: Container(
@@ -145,7 +144,7 @@ class SettingsUI extends GetView<SettingsController> {
                           width: 8.w,
                         ),
                         Text(
-                          AppString.logoutMyAccount,
+                          "logoutMyAccount".tr,
                           style: AppTextStyle.textStyle16(
                               fontColor: AppColors.darkBlue),
                         ),
@@ -158,10 +157,8 @@ class SettingsUI extends GetView<SettingsController> {
                 height: 15.h,
               ),
               InkWell(
-                onTap: (){
-
+                onTap: () {
                   controller.deleteAccountPopup(Get.context!);
-
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -177,7 +174,7 @@ class SettingsUI extends GetView<SettingsController> {
                           width: 8.w,
                         ),
                         Text(
-                          AppString.deleteMyAccount,
+                          "deleteMyAccount".tr,
                           style: AppTextStyle.textStyle16(
                               fontColor: AppColors.appRedColour),
                         ),

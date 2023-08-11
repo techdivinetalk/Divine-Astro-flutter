@@ -1,6 +1,5 @@
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/appbar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -8,8 +7,8 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
 import '../../../common/routes.dart';
-import '../../../common/strings.dart';
 import '../../../gen/assets.gen.dart';
+import '../../common/common_bottomsheet.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'profile_controller.dart';
 
@@ -20,8 +19,7 @@ class ProfileUI extends GetView<ProfilePageController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar:
-          commonAppbar(title: AppString.profile, trailingWidget: Container()),
+      appBar: commonAppbar(title: "profile".tr, trailingWidget: Container()),
       drawer: const SideMenuDrawer(),
       body: SingleChildScrollView(
         child: Padding(
@@ -88,7 +86,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 child: Row(
                                   children: [
                                     Text(
-                                      'Edit Profile',
+                                      'editProfile'.tr,
                                       style: AppTextStyle.textStyle10(
                                           fontWeight: FontWeight.w500,
                                           fontColor: AppColors.appYellowColour),
@@ -118,8 +116,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                           Row(
                             children: [
                               Text(
-                                "today".tr,
-                                // '${AppString.customerId} - ',
+                                "${"customerId".tr}-",
                                 style: AppTextStyle.textStyle14(
                                     fontWeight: FontWeight.w400,
                                     fontColor: AppColors.darkBlue),
@@ -146,7 +143,7 @@ class ProfileUI extends GetView<ProfilePageController> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.h),
                 child: Text(
-                  AppString.profileOptions,
+                  "profileOptions".tr,
                   style: AppTextStyle.textStyle16(
                       fontWeight: FontWeight.w500,
                       fontColor: AppColors.darkBlue),
@@ -164,7 +161,6 @@ class ProfileUI extends GetView<ProfilePageController> {
                   itemCount: controller.profileList.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
-                      // childAspectRatio: 0.90.h,
                       crossAxisSpacing: 20.h,
                       mainAxisSpacing: 15.h),
                   itemBuilder: (BuildContext context, int index) {
@@ -174,7 +170,197 @@ class ProfileUI extends GetView<ProfilePageController> {
                       child: InkWell(
                         onTap: () {
                           if (index == 4) {
-                            controller.changeLanguagePopup(Get.context!);
+                            openBottomSheet(
+                              context,
+                              functionalityWidget: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.back();
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: AppColors.white,
+                                              width: 1.5),
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(50.0)),
+                                          color:
+                                              AppColors.white.withOpacity(0.1)),
+                                      child: const Icon(
+                                        Icons.close,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: double.maxFinite,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 24.w, vertical: 0.h),
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(50.0)),
+                                      color: AppColors.white,
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          'chooseYourAppLanguage'.tr,
+                                          style: AppTextStyle.textStyle20(
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        SizedBox(height: 32.h),
+                                        SizedBox(
+                                          child: GridView.builder(
+                                              padding: EdgeInsets.zero,
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              gridDelegate:
+                                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 3,
+                                                mainAxisSpacing: 30.h,
+                                                crossAxisSpacing: 30.h,
+                                              ),
+                                              itemCount: controller
+                                                  .languageList.length,
+                                              itemBuilder: (context, index) {
+                                                ChangeLanguageModelClass item =
+                                                    controller
+                                                        .languageList[index];
+                                                return GetBuilder<
+                                                        ProfilePageController>(
+                                                    id: "set_language",
+                                                    builder: (controller) {
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          controller
+                                                              .selectedLanguageData(
+                                                                  item);
+                                                        },
+                                                        child: Container(
+                                                          decoration: BoxDecoration(
+                                                              shape: BoxShape
+                                                                  .circle,
+                                                              border: item
+                                                                      .isSelected
+                                                                  ? Border.all(
+                                                                      width: 1,
+                                                                      color: Colors
+                                                                          .grey)
+                                                                  : Border.all(
+                                                                      width: 0,
+                                                                      color: Colors
+                                                                          .white)),
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              shape: BoxShape
+                                                                  .circle,
+                                                              gradient:
+                                                                  LinearGradient(
+                                                                colors: [
+                                                                  item.colors!
+                                                                      .withOpacity(
+                                                                          0),
+                                                                  item.colors!
+                                                                      .withOpacity(
+                                                                          0.2),
+                                                                ],
+                                                                begin: Alignment
+                                                                    .topLeft,
+                                                                end: Alignment
+                                                                    .bottomRight,
+                                                              ),
+                                                            ),
+                                                            child: ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10.r),
+                                                              child: Material(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                child: Column(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Text(
+                                                                      item.languagesMain
+                                                                          .toString(),
+                                                                      style: AppTextStyle.textStyle20(
+                                                                          fontWeight:
+                                                                              FontWeight.w700),
+                                                                    ),
+                                                                    SizedBox(
+                                                                        height:
+                                                                            10.h),
+                                                                    Text(
+                                                                      item.languages
+                                                                          .toString(),
+                                                                      style: AppTextStyle
+                                                                          .textStyle16(),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    });
+                                              }),
+                                        ),
+                                        SizedBox(
+                                          height: 30.h,
+                                        ),
+                                        GetBuilder<ProfilePageController>(
+                                            id: "set_lang",
+                                            builder: (controller1) {
+                                              return InkWell(
+                                                onTap: () {
+                                                  controller1
+                                                      .getSelectedLanguage();
+                                                  Get.back();
+                                                },
+                                                child: Container(
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  decoration: BoxDecoration(
+                                                      color:
+                                                          AppColors.lightYellow,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        vertical: 15.0),
+                                                    child: Center(
+                                                      child: Text(
+                                                        'okay'.tr,
+                                                        style: AppTextStyle
+                                                            .textStyle16(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                fontColor: AppColors
+                                                                    .brownColour),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
                           } else if (item.nav != "") {
                             Get.toNamed(item.nav.toString());
                           }
@@ -223,34 +409,6 @@ class ProfileUI extends GetView<ProfilePageController> {
               SizedBox(
                 height: 10.h,
               ),
-              // Container(
-              //   padding: EdgeInsets.all(10.h),
-              //   decoration: BoxDecoration(
-              //       boxShadow: [
-              //         BoxShadow(
-              //             color: Colors.black.withOpacity(0.2),
-              //             blurRadius: 1.0,
-              //             offset: const Offset(0.0, 3.0)),
-              //       ],
-              //       color: Colors.white,
-              //       borderRadius: BorderRadius.all(Radius.circular(10.h))),
-              //   child: ReadMoreText(
-              //     "I am a certified and professional Legal Astrologer with more than 10 years of experience. And I wouldhave felt happy to serve you through astrology.",
-              //     trimLines: 2,
-              //     trimMode: TrimMode.Line,
-              //     trimCollapsedText: AppString.readMore,
-              //     trimExpandedText: AppString.showLess,
-              //     moreStyle: TextStyle(
-              //         fontSize: 15.sp,
-              //         fontWeight: FontWeight.bold,
-              //         color: AppColors.lightYellow,
-              //         decoration: TextDecoration.underline,
-              //         decorationColor: AppColors.lightYellow),
-              //   ),
-              // ),
-              // SizedBox(
-              //   height: 20.h,
-              // ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
                 decoration: BoxDecoration(
@@ -266,7 +424,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      AppString.ratings,
+                      "ratings".tr,
                       style: TextStyle(
                           fontSize: 20.sp, fontWeight: FontWeight.w400),
                     ),
@@ -308,7 +466,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                       color: AppColors.appYellowColour),
                                   SizedBox(width: 8.w),
                                   Text(
-                                    "16045 ${AppString.total}",
+                                    "16045 ${"total".tr}",
                                     style: AppTextStyle.textStyle14(),
                                   ),
                                 ],
@@ -463,7 +621,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      AppString.userReview,
+                      "userReview".tr,
                       style: AppTextStyle.textStyle20(),
                     ),
                     SizedBox(
@@ -527,7 +685,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                       Navigator.pop(context);
                                                     },
                                                     child: Text(
-                                                      AppString.reportComment,
+                                                      "reportComment".tr,
                                                       style: AppTextStyle
                                                           .textStyle13(),
                                                     ),
@@ -622,74 +780,6 @@ class ProfileUI extends GetView<ProfilePageController> {
                 ),
               )
             ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-
-class LanguageWidget extends StatefulWidget {
-  final int index;
-
-  const LanguageWidget({super.key, required this.index});
-
-  @override
-  State<LanguageWidget> createState() => _LanguageWidgetState();
-}
-
-class _LanguageWidgetState extends State<LanguageWidget> {
-  final List<String> languagesMain = ["Eng", "हिन्दी", "मराठी", "ગુજરાતી"];
-
-  final List<String> languages = ["English", "Hindi", "Marathi", "Gujarati"];
-
-  final List<Color> colors = [
-    AppColors.appYellowColour,
-    AppColors.teal,
-    AppColors.pink,
-    AppColors.pink
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(100.r),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {},
-          child: Ink(
-            height: 100.h,
-            width: 100.h,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                colors: [
-                  colors[widget.index].withOpacity(0),
-                  colors[widget.index].withOpacity(0.2),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  languagesMain[widget.index],
-                  style: AppTextStyle.textStyle20(fontWeight: FontWeight.w700),
-
-
-                ),
-                SizedBox(height: 10.h),
-                Text(
-                  languages[widget.index],
-                  style: AppTextStyle.textStyle16(),
-
-                ),
-              ],
-            ),
           ),
         ),
       ),

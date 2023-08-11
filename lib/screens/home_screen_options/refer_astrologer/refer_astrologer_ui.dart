@@ -1,7 +1,7 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/strings.dart';
+
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,12 +16,13 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: commonDetailAppbar(title: AppString.referAnAstrologer),
+      backgroundColor: AppColors.white,
+      appBar: commonDetailAppbar(title: "referAnAstrologer".tr),
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           CustomLightYellowButton(
-            name: AppString.submitForm,
+            name: "submitForm".tr,
             onTaped: () {
               if (controller.formKey.currentState!.validate()) {
                 controller.formKey.currentState!.save();
@@ -39,59 +40,59 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${AppString.name}*",
+                  "${"name".tr}*",
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 5),
                 WhiteTextField(
                   inputType: TextInputType.text,
                   inputAction: TextInputAction.next,
-                  hintText: AppString.enterNameMsg,
+                  hintText: "enterNameMsg".tr,
                   errorBorder: AppColors.white,
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  AppString.mobileNumber,
+                  "mobileNumber".tr,
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 5),
                 WhiteTextField(
                   inputType: TextInputType.text,
                   inputAction: TextInputAction.next,
-                  hintText: AppString.enterNumberMsg,
+                  hintText: "enterNumberMsg".tr,
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  AppString.astrologySkill,
+                  "astrologySkill".tr,
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 5),
                 WhiteTextField(
                   inputType: TextInputType.text,
                   inputAction: TextInputAction.next,
-                  hintText: AppString.enterSkillsMsg,
+                  hintText: "enterSkillsMsg".tr,
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  "${AppString.experience}*",
+                  "${"experience".tr}*",
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 5),
                 WhiteTextField(
                   inputType: TextInputType.text,
                   inputAction: TextInputAction.done,
-                  hintText: AppString.enterExperienceMsg,
+                  hintText: "enterExperienceMsg".tr,
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  AppString.anotherPlatform,
+                  "anotherPlatform".tr,
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 5),
                 yesNoOptionWiddet(),
                 const SizedBox(height: 20),
                 Text(
-                  AppString.mandatoryFields,
+                  "mandatoryFields".tr,
                   style: AppTextStyle.textStyle14(
                       fontWeight: FontWeight.w400,
                       fontColor: AppColors.darkBlue),
@@ -182,7 +183,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                 children: [
                   const SizedBox(height: 20),
                   Text(
-                    AppString.platform,
+                    "platform".tr,
                     style:
                         AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                   ),
@@ -190,7 +191,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   WhiteTextField(
                     inputType: TextInputType.text,
                     inputAction: TextInputAction.done,
-                    hintText: AppString.enterPlatformMsg,
+                    hintText: "enterPlatformMsg".tr,
                   ),
                 ],
               )

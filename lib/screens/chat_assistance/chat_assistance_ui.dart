@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../common/appbar.dart';
 import '../../common/colors.dart';
-import '../../common/strings.dart';
+
 import '../../gen/assets.gen.dart';
 import '../side_menu/side_menu_ui.dart';
 import 'chat_assistance_controller.dart';
@@ -21,7 +21,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
       drawer: const SideMenuDrawer(),
       backgroundColor: AppColors.white,
       appBar: commonAppbar(
-          title: AppString.chatAssistance,
+          title: "chatAssistance".tr,
           trailingWidget: InkWell(
             child: Padding(
                 padding: EdgeInsets.only(right: 20.w),

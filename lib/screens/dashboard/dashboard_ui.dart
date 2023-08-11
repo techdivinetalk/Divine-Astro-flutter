@@ -52,7 +52,7 @@ class DashboardScreen extends GetView<DashboardController> {
                             const SizedBox(height: 5),
                           ],
                         ),
-                        label: 'Home',
+                        label: 'home'.tr,
                       ),
                       BottomNavigationBarItem(
                         icon: Column(
@@ -63,15 +63,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                     ? AppColors.darkBlue
                                     : AppColors.lightGrey),
                             const SizedBox(height: 5),
-                            // Text("Performance",
-                            //     maxLines: 2,
-                            //     style: AppTextStyle.textStyle10(
-                            //         fontColor: controller.selectedIndex.value == 1
-                            //             ? AppColors.darkBlue
-                            //             : AppColors.lightGrey))
                           ],
                         ),
-                        label: 'Performance',
+                        label: 'performance'.tr,
                       ),
                       BottomNavigationBarItem(
                         icon: Column(
@@ -82,15 +76,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                     ? AppColors.darkBlue
                                     : AppColors.lightGrey),
                             const SizedBox(height: 5),
-                            // Text("Suggest \nRemedies",
-                            //     maxLines: 2,
-                            //     style: AppTextStyle.textStyle10(
-                            //         fontColor: controller.selectedIndex.value == 2
-                            //             ? AppColors.darkBlue
-                            //             : AppColors.lightGrey))
                           ],
                         ),
-                        label: 'Suggest \nRemedies',
+                        label: 'suggestRemediesHome'.tr,
                       ),
                       BottomNavigationBarItem(
                         icon: Column(
@@ -101,16 +89,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                     ? AppColors.darkBlue
                                     : AppColors.lightGrey),
                             const SizedBox(height: 5),
-                            // Text("Chat \nAssistance",
-                            //     textAlign: TextAlign.center,
-                            //     maxLines: 2,
-                            //     style: AppTextStyle.textStyle10(
-                            //         fontColor: controller.selectedIndex.value == 3
-                            //             ? AppColors.darkBlue
-                            //             : AppColors.lightGrey))
                           ],
                         ),
-                        label: "Chat Assistance",
+                        label: "chatAssistance".tr,
                       ),
                       BottomNavigationBarItem(
                         icon: Column(
@@ -121,19 +102,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                     ? AppColors.darkBlue
                                     : AppColors.lightGrey),
                             const SizedBox(height: 5),
-                            // Text(
-                            //   "Profile",
-                            //   maxLines: 2,
-                            //   style: TextStyle(
-                            //       fontSize: 10,
-                            //       fontWeight: FontWeight.w400,
-                            //       color: controller.selectedIndex.value == 4
-                            //           ? AppColors.darkBlue
-                            //           : AppColors.lightGrey),
-                            // )
                           ],
                         ),
-                        label: "Profile",
+                        label: "profile".tr,
                       ),
                     ],
                     elevation: 0,
@@ -147,7 +118,7 @@ class DashboardScreen extends GetView<DashboardController> {
             )));
   }
 
-  void _onItemTapped(int index) {
+  void _onItemTapped(int index) async {
     controller.selectedIndex.value = index;
   }
 
@@ -155,7 +126,6 @@ class DashboardScreen extends GetView<DashboardController> {
     HomeUI(),
     PerformanceUI(),
     SuggestRemediesUI(),
-    // WalletUI(),
     ChatAssistancePage(),
     ProfileUI()
   ];

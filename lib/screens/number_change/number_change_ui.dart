@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../common/app_textstyle.dart';
-import '../../../common/strings.dart';
+
 import 'number_change_controller.dart';
 
 class NumberChangeReqUI extends GetView<NumberChangeReqController> {
@@ -18,7 +18,7 @@ class NumberChangeReqUI extends GetView<NumberChangeReqController> {
         backgroundColor: Colors.white,
         centerTitle: false,
         title: Text(
-          AppString.numberChangeRequest,
+          "numberChangeRequest".tr,
           style: AppTextStyle.textStyle16(fontWeight: FontWeight.w600),
         ),
       ),
@@ -29,7 +29,7 @@ class NumberChangeReqUI extends GetView<NumberChangeReqController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                AppString.numChangeMsgTitle,
+                "numChangeMsgTitle".tr,
                 style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w400,
@@ -42,7 +42,7 @@ class NumberChangeReqUI extends GetView<NumberChangeReqController> {
               ),
               //primary Phone Number
               Text(
-                AppString.primaryPhoneNumber,
+                "primaryPhoneNumber".tr,
                 style: AppTextStyle.textStyle20(fontColor: AppColors.darkBlue),
               ),
               SizedBox(
@@ -88,7 +88,7 @@ class NumberChangeReqUI extends GetView<NumberChangeReqController> {
                             horizontal: 8.w, vertical: 10.h),
                         child: Center(
                           child: Text(
-                            AppString.update,
+                            "update".tr,
                             style: AppTextStyle.textStyle16(
                                 fontColor: AppColors.white),
                           ),
@@ -103,7 +103,7 @@ class NumberChangeReqUI extends GetView<NumberChangeReqController> {
               ),
               //Secondary Phone Number
               Text(
-                AppString.secondaryPhoneNumber,
+                "secondaryPhoneNumber".tr,
                 style: AppTextStyle.textStyle20(fontColor: AppColors.darkBlue),
               ),
               SizedBox(
@@ -149,7 +149,7 @@ class NumberChangeReqUI extends GetView<NumberChangeReqController> {
                             horizontal: 8.w, vertical: 10.h),
                         child: Center(
                           child: Text(
-                            AppString.update,
+                            "update".tr,
                             style: AppTextStyle.textStyle16(
                                 fontColor: AppColors.brownColour),
                           ),
