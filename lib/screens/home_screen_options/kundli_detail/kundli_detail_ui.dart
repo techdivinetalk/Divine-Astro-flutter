@@ -63,7 +63,7 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                     surfaceTintColor: AppColors.white,
                     expandedHeight: 280.h,
                     pinned: true,
-                    title: Text("Kundli",
+                    title: Text("kundliText".tr,
                         style: AppTextStyle.textStyle16(
                             fontWeight: FontWeight.w400,
                             fontColor: AppColors.darkBlue)),
@@ -99,35 +99,35 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                             tabs: [
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 30.w),
-                                child: const Tab(text: "Birth Details"),
+                                child:  Tab(text: "birthDetails".tr),
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 30.w),
-                                child: const Tab(text: "Lagna"),
+                                child:  Tab(text: "lagna".tr),
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 30.w),
-                                child: const Tab(text: "Moon"),
+                                child:  Tab(text: "moon".tr),
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 30.w),
-                                child: const Tab(text: "Sun"),
+                                child:  Tab(text: "sun".tr),
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 30.w),
-                                child: const Tab(text: "Navamansha"),
+                                child:  Tab(text: "navamansha".tr),
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 30.w),
-                                child: const Tab(text: "Dosha"),
+                                child:  Tab(text: "dosha".tr),
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 30.w),
-                                child: const Tab(text: "Basic Panchang"),
+                                child:  Tab(text: "basicPanchang".tr),
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 30.w),
-                                child: const Tab(text: "Prediction"),
+                                child:  Tab(text: "prediction".tr),
                               ),
                             ],
                           ),

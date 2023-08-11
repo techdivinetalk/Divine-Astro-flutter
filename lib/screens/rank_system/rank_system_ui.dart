@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
-import '../../../common/strings.dart';
 import 'rank_system_controller.dart';
 
 class RankSystemUI extends GetView<RankSystemController> {
@@ -73,7 +71,7 @@ class RankSystemUI extends GetView<RankSystemController> {
                           child: Column(
                             children: [
                               Text(
-                                "Astrologer\nRank",
+                                "astrologerRank".tr,
                                 textAlign: TextAlign.center,
                                 style: AppTextStyle.textStyle12(
                                     fontWeight: FontWeight.w700,
@@ -154,12 +152,12 @@ class RankSystemUI extends GetView<RankSystemController> {
                   children: [
                     TextSpan(
                         text:
-                            'Note : The data will undergo regular refresh cycles with a frequency of once every ',
+                            'noteText'.tr,
                         style: AppTextStyle.textStyle12(
                             fontColor: AppColors.greyColor,
                             fontWeight: FontWeight.w600)),
                     TextSpan(
-                        text: '10 days.',
+                        text: ' 10 ${'day'.tr}.',
                         style: AppTextStyle.textStyle12(
                             fontColor: AppColors.darkBlue,
                             fontWeight: FontWeight.w600)),
