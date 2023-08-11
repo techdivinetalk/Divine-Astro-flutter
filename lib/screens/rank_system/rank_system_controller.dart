@@ -8,37 +8,33 @@ class RankSystemController extends GetxController {
   var systemRankList = <SystemRankModelClass>[
     SystemRankModelClass(
       "90%+",
-      "Diamond",
+      "diamond".tr,
       Assets.images.icDiamond.image(height: 21.h, width: 21.h),
     ),
     SystemRankModelClass(
       "89-80%",
-      "Platinum",
+      "platinum".tr,
       Assets.images.icPlatinum.image(height: 21.h, width: 21.h),
     ),
     SystemRankModelClass(
       "79-70%",
-      "Gold",
+      "gold".tr,
       Assets.images.icGold.image(height: 21.h, width: 21.h),
     ),
     SystemRankModelClass(
       "69-60%",
-      "Silver",
+      "silver".tr,
       Assets.images.icSilver.image(height: 21.h, width: 21.h),
     ),
     SystemRankModelClass(
       "59-36%",
-      "Bronze",
+      "bronze".tr,
       Assets.images.icBronze.image(height: 21.h, width: 21.h),
     ),
-    SystemRankModelClass(
-      "90%+",
-      "Diamond",
-      Assets.images.icDiamond.image(height: 21.h, width: 21.h),
-    ),
+
     SystemRankModelClass(
       "Less than 35%",
-      "Unranked",
+      "unranked".tr,
       null,
     ),
   ].obs;

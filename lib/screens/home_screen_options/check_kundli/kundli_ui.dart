@@ -40,14 +40,15 @@ class KundliUi extends GetView<KundliController> {
                       StretchMode.blurBackground
                     ],
                     background: Center(
-                      child: Assets.images.icKundli.svg(),
+                      child: Assets.images.icKundli
+                          .svg(height: 180.h, width: 180.w),
                     ),
                   ),
                   surfaceTintColor: AppColors.white,
                   expandedHeight: 300.h,
                   pinned: true,
                   centerTitle: false,
-                  title: Text("Kundli",
+                  title: Text("kundliText".tr,
                       style: AppTextStyle.textStyle16(
                           fontWeight: FontWeight.w400)),
                   bottom: PreferredSize(
@@ -78,12 +79,12 @@ class KundliUi extends GetView<KundliController> {
                           tabs: [
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 30.w),
-                              child: const Tab(text: "Check Yours"),
+                              child: Tab(text: "checkYours".tr),
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 30.w),
-                              child: const Tab(
-                                text: "Check Others",
+                              child: Tab(
+                                text: "checkOthers".tr,
                               ),
                             ),
                           ],
@@ -119,14 +120,14 @@ class CheckYours extends GetView<KundliController> {
       children: [
         SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            padding: EdgeInsets.symmetric(horizontal: 20.w,vertical: 25.h),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: kToolbarHeight.h * 2.6),
                 AppTextField(
                   prefixIcon: Assets.images.icUser.svg(),
-                  hintText: "Enter Name",
+                  hintText: "hintTextName".tr,
                   onTap: () {},
                 ),
                 SizedBox(height: 20.h),
@@ -147,7 +148,7 @@ class CheckYours extends GetView<KundliController> {
                         ),
                         SizedBox(width: 16.w),
                         Text(
-                          "Male",
+                          "male".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w600),
                         )
@@ -167,7 +168,7 @@ class CheckYours extends GetView<KundliController> {
                         ),
                         SizedBox(width: 16.w),
                         Text(
-                          "Female",
+                          "female".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w600),
                         )
@@ -182,14 +183,14 @@ class CheckYours extends GetView<KundliController> {
                       child: AppTextField(
                         onTap: () {
                           selectDateOrTime(Get.context!,
-                              title: "Select Your Date of Birth",
-                              btnTitle: "Confirm Date of Birth",
+                              title: "selectYourDateBirth".tr,
+                              btnTitle: "confirmDateBirth".tr,
                               pickerStyle: "DateCalendar",
                               looping: true);
                         },
                         readOnly: true,
                         prefixIcon: Assets.images.icCalendar.svg(),
-                        hintText: "Birth Date",
+                        hintText: "birthDate".tr,
                       ),
                     ),
                     SizedBox(width: 20.w),
@@ -197,14 +198,14 @@ class CheckYours extends GetView<KundliController> {
                       child: AppTextField(
                         onTap: () {
                           selectDateOrTime(Get.context!,
-                              title: "Select Your Time of Birth",
-                              btnTitle: "Confirm Time of Birth",
+                              title: "selectYourTimeBirth".tr,
+                              btnTitle: "confirmTimeBirth".tr,
                               pickerStyle: "TimeCalendar",
                               looping: true);
                         },
                         readOnly: true,
                         prefixIcon: Assets.images.icBirthTIme.svg(),
-                        hintText: "Birth Time",
+                        hintText: "birthTime".tr,
                       ),
                     ),
                   ],
@@ -212,7 +213,7 @@ class CheckYours extends GetView<KundliController> {
                 SizedBox(height: 20.h),
                 AppTextField(
                   prefixIcon: Assets.images.icLocation.svg(),
-                  hintText: "Birth Palace",
+                  hintText: "birthPalace".tr,
                   onTap: () {},
                 ),
                 SizedBox(height: 20.h),
@@ -232,7 +233,7 @@ class CheckYours extends GetView<KundliController> {
                         },
                         color: AppColors.lightYellow,
                         child: Text(
-                          "Submit",
+                          "submit".tr,
                           style: AppTextStyle.textStyle20(
                               fontWeight: FontWeight.w600),
                         )),
@@ -260,14 +261,14 @@ class CheckOther extends GetView<KundliController> {
       children: [
         SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            padding: EdgeInsets.symmetric(horizontal: 20.w,vertical: 25.h),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: kToolbarHeight.h * 2.6),
                 AppTextField(
                   prefixIcon: Assets.images.icUser.svg(),
-                  hintText: "Enter Name",
+                  hintText: "hintTextName".tr,
                   onTap: () {},
                 ),
                 SizedBox(height: 20.h),
@@ -288,7 +289,7 @@ class CheckOther extends GetView<KundliController> {
                         ),
                         SizedBox(width: 16.w),
                         Text(
-                          "Male",
+                          "male".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w600),
                         )
@@ -308,7 +309,7 @@ class CheckOther extends GetView<KundliController> {
                         ),
                         SizedBox(width: 16.w),
                         Text(
-                          "Female",
+                          "female".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w600),
                         )
@@ -323,14 +324,14 @@ class CheckOther extends GetView<KundliController> {
                       child: AppTextField(
                         onTap: () {
                           selectDateOrTime(Get.context!,
-                              title: "Select Your Date of Birth",
-                              btnTitle: "Confirm Date of Birth",
+                              title: "selectYourDateBirth".tr,
+                              btnTitle: "confirmDateBirth".tr,
                               pickerStyle: "DateCalendar",
                               looping: true);
                         },
                         readOnly: true,
                         prefixIcon: Assets.images.icCalendar.svg(),
-                        hintText: "Birth Date",
+                        hintText: "birthDate".tr,
                       ),
                     ),
                     SizedBox(width: 20.w),
@@ -338,14 +339,14 @@ class CheckOther extends GetView<KundliController> {
                       child: AppTextField(
                         onTap: () {
                           selectDateOrTime(Get.context!,
-                              title: "Select Your Time of Birth",
-                              btnTitle: "Confirm Time of Birth",
+                              title: "selectYourTimeBirth".tr,
+                              btnTitle: "confirmTimeBirth".tr,
                               pickerStyle: "TimeCalendar",
                               looping: true);
                         },
                         readOnly: true,
                         prefixIcon: Assets.images.icBirthTIme.svg(),
-                        hintText: "Birth Time",
+                        hintText: "birthTime".tr,
                       ),
                     ),
                   ],
@@ -353,7 +354,7 @@ class CheckOther extends GetView<KundliController> {
                 SizedBox(height: 20.h),
                 AppTextField(
                   prefixIcon: Assets.images.icLocation.svg(),
-                  hintText: "Birth Palace",
+                  hintText: "birthPalace".tr,
                   onTap: () {},
                 ),
                 SizedBox(height: 20.h),
@@ -373,7 +374,7 @@ class CheckOther extends GetView<KundliController> {
                         },
                         color: AppColors.lightYellow,
                         child: Text(
-                          "Submit",
+                          "submit".tr,
                           style: AppTextStyle.textStyle20(
                               fontWeight: FontWeight.w600),
                         )),
@@ -412,7 +413,7 @@ class CheckOther extends GetView<KundliController> {
               const SizedBox(height: 15),
               Material(
                 child: Text(
-                  "Please Fill All the Fields",
+                  "allFieldsText".tr,
                   style: AppTextStyle.textStyle16(fontWeight: FontWeight.w500),
                 ),
               ),
@@ -432,7 +433,7 @@ class CheckOther extends GetView<KundliController> {
                     child: Material(
                       color: Colors.transparent,
                       child: Text(
-                        "Okay",
+                        "okay".tr,
                         style: AppTextStyle.textStyle16(
                             fontColor: AppColors.brownColour,
                             fontWeight: FontWeight.w600),

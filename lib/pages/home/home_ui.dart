@@ -437,7 +437,7 @@ class HomeUI extends GetView<HomeController> {
                           looping: true);
                     },
                     child: Text(
-                      "Schedule Now",
+                      "scheduleNow".tr,
                       style: AppTextStyle.textStyle10(
                           fontColor: AppColors.brownColour,
                           fontWeight: FontWeight.w400),
@@ -595,7 +595,7 @@ class HomeUI extends GetView<HomeController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Training Videos",
+                "trainingVideos".tr,
                 style: AppTextStyle.textStyle16(fontWeight: FontWeight.w500),
               ),
               SizedBox(
@@ -671,7 +671,7 @@ class HomeUI extends GetView<HomeController> {
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
-                  hintText: "Type your feedback here! ",
+                  hintText: "feedbackHintText".tr,
                   helperStyle: AppTextStyle.textStyle16(),
                   fillColor: Colors.white,
                   hoverColor: Colors.white,
@@ -701,7 +701,7 @@ class HomeUI extends GetView<HomeController> {
                       borderRadius: BorderRadius.circular(30)),
                   child: Center(
                       child: Text(
-                    "Submit Feedback",
+                    "submitFeedback".tr,
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w600,
                         fontColor: AppColors.brownColour),

@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import '../../../../common/colors.dart';
 
@@ -22,37 +23,37 @@ class BasicPanchangUi extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Day",
+                  Text("day".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(.5))),
                   SizedBox(height: 16.h),
-                  Text("Tithi",
+                  Text("tithi".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(.5))),
                   SizedBox(height: 16.h),
-                  Text("Yog",
+                  Text("yog".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(.5))),
                   SizedBox(height: 16.h),
-                  Text("Nakshatra",
+                  Text("nakshatra".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(.5))),
                   SizedBox(height: 16.h),
-                  Text("Sunrise",
+                  Text("sunrise".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(.5))),
                   SizedBox(height: 16.h),
-                  Text("Sunset",
+                  Text("sunset".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(.5))),
                   SizedBox(height: 16.h),
-                  Text("Karana",
+                  Text("karana".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(.5))),

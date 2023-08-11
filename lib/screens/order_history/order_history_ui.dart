@@ -218,14 +218,14 @@ class OrderInfo extends StatelessWidget {
             if (index % 2 == 0 && index != 2)
               orderDetailView(
                   orderId: 785421,
-                  type: "CHAT",
+                  type: "chat".tr,
                   amount: "+ ₹100000",
                   details: "with Username(user id) for 8 minutes ",
                   time: "23 June 23, 02:46 PM"),
             if (index % 2 == 1)
               orderDetailView(
                   orderId: 785421,
-                  type: "CALL",
+                  type: "call".tr,
                   amount: "- ₹100000",
                   details:
                       "Policy Violation - Shared Personal Information with User  ",
@@ -263,7 +263,7 @@ class OrderInfo extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Order Id : $orderId",
+                  "${"orderId".tr} : $orderId",
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500),
                 ),
                 Icon(
@@ -352,14 +352,14 @@ class SuggestRemedies extends StatelessWidget {
             if (index % 2 == 0 && index != 2)
               remediesDetail(
                   orderId: 785421,
-                  type: "CHAT",
+                  type: "chat".tr,
                   amount: "+ ₹100000",
                   details: "with Username(user id) for 8 minutes ",
                   time: "23 June 23, 02:46 PM"),
             if (index % 2 == 1)
               remediesDetail(
                   orderId: 785421,
-                  type: "CALL",
+                  type: "call".tr,
                   amount: "- ₹100000",
                   details:
                       "Policy Violation - Shared Personal Information with User  ",

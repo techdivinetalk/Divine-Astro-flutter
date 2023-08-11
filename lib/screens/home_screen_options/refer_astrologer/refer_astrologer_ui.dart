@@ -134,7 +134,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                             const BorderRadius.all(Radius.circular(15)),
                       ),
                       child: Text(
-                        "Yes",
+                        "yes".tr,
                         textAlign: TextAlign.center,
                         style: AppTextStyle.textStyle14(
                             fontWeight: FontWeight.w600,
@@ -166,7 +166,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                             const BorderRadius.all(Radius.circular(15)),
                       ),
                       child: Text(
-                        "No",
+                        "no".tr,
                         textAlign: TextAlign.center,
                         style: AppTextStyle.textStyle14(
                             fontWeight: FontWeight.w600,
