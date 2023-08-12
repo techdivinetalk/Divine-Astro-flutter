@@ -47,7 +47,7 @@ class SettingsController extends GetxController {
                   Assets.images.bgDeleteAccount.svg(),
                   SizedBox(height: 20.h),
                   Text(
-                    'Delete Account?',
+                    "${'deleteAccount'.tr}?",
                     style: TextStyle(
                       fontSize: 24.sp,
                       color: AppColors.redColor,
@@ -56,7 +56,7 @@ class SettingsController extends GetxController {
                   ),
                   SizedBox(height: 20.h),
                   Text(
-                    'Are you sure you want to delete your account ?',
+                    'deleteText'.tr,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       overflow: TextOverflow.visible,
@@ -75,7 +75,7 @@ class SettingsController extends GetxController {
                             minimumSize: Size.zero,
                           ),
                           child: Text(
-                            'Delete Account',
+                            'deleteAccount'.tr,
                             style: TextStyle(
                               fontSize: 16.sp,
                               color: AppColors.brownColour,
@@ -127,7 +127,7 @@ class SettingsController extends GetxController {
                 Assets.images.bgLogout.svg(),
                 SizedBox(height: 20.h),
                 Text(
-                  'Logout?',
+                  "${'logout'.tr}?",
                   style: TextStyle(
                     fontSize: 24.sp,
                     color: AppColors.redColor,
@@ -136,7 +136,7 @@ class SettingsController extends GetxController {
                 ),
                 SizedBox(height: 20.h),
                 Text(
-                  'Are you sure you want to logout ?',
+                  'logoutText'.tr,
                   style:
                       AppTextStyle.textStyle16(fontColor: AppColors.darkBlue),
                 ),
@@ -152,7 +152,7 @@ class SettingsController extends GetxController {
                           minimumSize: Size.zero,
                         ),
                         child: Text(
-                          'Logout',
+                          'logout'.tr,
                           style: TextStyle(
                             fontSize: 16.sp,
                             color: AppColors.brownColour,

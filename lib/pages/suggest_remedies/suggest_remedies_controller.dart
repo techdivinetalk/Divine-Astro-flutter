@@ -87,7 +87,7 @@ class SuggestRemediesController extends GetxController {
                             padding: EdgeInsets.symmetric(vertical: 15.h),
                             child: Center(
                               child: Text(
-                                'Okay',
+                                'okay'.tr,
                                 style: TextStyle(
                                   fontSize: 16.sp,
                                   color: AppColors.brownColour,

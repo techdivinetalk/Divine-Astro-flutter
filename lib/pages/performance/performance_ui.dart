@@ -392,7 +392,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                               child: Column(
                                 children: [
                                   Text(
-                                    item.scoreName.toString(),
+                                    item.scoreName!.tr.toString(),
                                     style: AppTextStyle.textStyle12(
                                         fontColor: AppColors.darkBlue),
                                   ),

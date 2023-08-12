@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import '../../../../common/colors.dart';
 
@@ -22,72 +23,72 @@ class PersonalDetailUi extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Birth Date",
+                  Text("birthDate".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(0.5))),
                   SizedBox(height: 16.h),
-                  Text("Birth Time",
+                  Text("birthTime".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(0.5))),
                   SizedBox(height: 16.h),
-                  Text("Birth Place",
+                  Text("birthPlace".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(0.5))),
                   SizedBox(height: 16.h),
-                  Text("Gan",
+                  Text("gan".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(0.5))),
                   SizedBox(height: 16.h),
-                  Text("Sign Lord",
+                  Text("signLord".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(0.5))),
                   SizedBox(height: 16.h),
-                  Text("Sign",
+                  Text("sign".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(0.5))),
                   SizedBox(height: 16.h),
-                  Text("Yoni",
+                  Text("yoni".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(0.5))),
                   SizedBox(height: 16.h),
-                  Text("Nakshatra Lord",
+                  Text("nakshatraLord".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(0.5))),
                   SizedBox(height: 16.h),
-                  Text("Nakshatra",
+                  Text("nakshatra".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(0.5))),
                   SizedBox(height: 16.h),
-                  Text("Varna",
+                  Text("varna".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(0.5))),
                   SizedBox(height: 16.h),
-                  Text("Vashya",
+                  Text("vashya".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(0.5))),
                   SizedBox(height: 16.h),
-                  Text("Nadi",
+                  Text("nadi".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(0.5))),
                   SizedBox(height: 16.h),
-                  Text("Charan",
+                  Text("charan".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(0.5))),
                   SizedBox(height: 16.h),
-                  Text("Tatva",
+                  Text("tatva".tr,
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(0.5))),

@@ -13,12 +13,12 @@ class PerformanceController extends GetxController {
   ].obs;
 
   var scoreList = <ScoreModelClass>[
-    ScoreModelClass("Conversion Rate"),
-    ScoreModelClass("Repurchase Rate"),
-    ScoreModelClass("Online Hours"),
-    ScoreModelClass("Live Hours"),
-    ScoreModelClass("E-commerce"),
-    ScoreModelClass("Busy Hours"),
+    ScoreModelClass("conversionRate".tr),
+    ScoreModelClass("repurchaseRate".tr),
+    ScoreModelClass("onlineHours".tr),
+    ScoreModelClass("liveHours".tr),
+    ScoreModelClass("eCommerce".tr),
+    ScoreModelClass("busyHours".tr),
   ].obs;
 
   var percentageList = <PercentageModelClass>[
