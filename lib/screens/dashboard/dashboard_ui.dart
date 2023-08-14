@@ -122,11 +122,11 @@ class DashboardScreen extends GetView<DashboardController> {
     controller.selectedIndex.value = index;
   }
 
-  static const List<Widget> widgetOptions = <Widget>[
-    HomeUI(),
-    PerformanceUI(),
-    SuggestRemediesUI(),
-    ChatAssistancePage(),
+  static List<Widget> widgetOptions = <Widget>[
+    const HomeUI(),
+    const PerformanceUI(),
+    const SuggestRemediesUI(),
+    const ChatAssistancePage(),
     ProfileUI()
   ];
 }

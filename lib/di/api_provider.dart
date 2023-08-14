@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:divine_astrologer/di/progress_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -8,16 +10,24 @@ import 'package:http/http.dart' as http;
 import '../common/app_exception.dart';
 import '../common/strings.dart';
 import 'network_service.dart';
-import 'progress_service.dart';
 import 'shared_preference_service.dart';
 
 class ApiProvider {
-  final String baseUrl = "";
+  final String baseUrl = "https://wakanda-api.divinetalk.live/admin/v6/";
+  static String imageBaseUrl = "https://divinenew.s3.ap-south-1.amazonaws.com/";
+
   final String jsonHeaderName = "Content-Type";
-  final String jsonHeaderValue = "application/json; charset=UTF-8";
+  final String jsonHeaderValue = "application/json";
   final String jsonAuthenticationName = "Authorization";
   final int successResponse = 200;
   String _token = "";
+  final String loginUrl = "astroLogin";
+  final String getProfileUrl = "getAstrologerProfile";
+  final String getReviewRating = "getReviewRating";
+  final String blockCustomerlist = "blockCustomerlist";
+  final String blockCustomer = "blockCustomer";
+
+  //
   final NetworkService networkManager = Get.find<NetworkService>();
   final ProgressService progressService = Get.find<ProgressService>();
   final SharedPreferenceService preferenceService =
@@ -26,18 +36,28 @@ class ApiProvider {
   Map<String, String> getJsonHeader() {
     var header = <String, String>{};
     header[jsonHeaderName] = jsonHeaderValue;
+
+    return header;
+  }
+
+  Future<Map<String, String>> getJsonHeaderURL() async {
+    _token = await _getAuthToken();
+    var header = <String, String>{};
+    // header[jsonHeaderName] = jsonHeaderValue;
+    header[jsonAuthenticationName] = 'Bearer $_token';
+    header[jsonHeaderName] = "application/json";
     return header;
   }
 
   Future<Map<String, String>> getAuthorisedHeader() async {
-    if (_token.isEmpty) {
-      _token = await _getAuthToken();
-    }
+    //if (_token.isEmpty) {
+    _token = await _getAuthToken();
+    //}
     var header = getJsonHeader();
     if (_token.isNotEmpty) {
       header[jsonAuthenticationName] = 'Bearer $_token';
     }
-    debugPrint("Token is $_token");
+    log("Token is $_token");
     return header;
   }
 
@@ -49,28 +69,27 @@ class ApiProvider {
     if (_token.isNotEmpty) {
       header[jsonAuthenticationName] = 'Bearer $_token';
     }
-    debugPrint("Token is $_token");
+    log("Token is $_token");
     return header;
   }
 
   Future<String> _getAuthToken() async {
-    /* var user = preferenceService.getUserDetail();
-    if (user != null && user.token != null) {
-      return user.token!.trim();
+    var token = preferenceService.getToken();
+    if (token != null) {
+      return token;
     } else {
       return "";
-    }*/
-    return "";
+    }
   }
 
   get(String url,
       {Map<String, String>? headers, bool closeDialogOnTimeout = true}) async {
     if (headers == null) {
       headers = await getAuthorisedHeader();
-      debugPrint("headers: $headers");
+      log("headers: $headers");
     }
     if (await networkManager.isConnected() ?? false) {
-      debugPrint('url: $baseUrl$url');
+      log('url: $baseUrl$url');
       var response = await http
           .get(Uri.parse(baseUrl + url), headers: headers)
           .timeout(const Duration(seconds: 15), onTimeout: () {
@@ -79,7 +98,7 @@ class ApiProvider {
         }
         throw CustomException(AppString.timeoutMessage);
       });
-      debugPrint('response: ${response.body}');
+      log('response: ${response.body}');
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);
@@ -90,10 +109,10 @@ class ApiProvider {
       {Map<String, String>? headers, bool closeDialogOnTimeout = true}) async {
     if (headers == null) {
       headers = await getAuthorisedHeader();
-      debugPrint("headers: $headers");
+      log("headers: $headers");
     }
     if (await networkManager.isConnected() ?? false) {
-      debugPrint('url: $baseUrl$url');
+      log('url: $baseUrl$url');
       var response = await http
           .delete(Uri.parse(baseUrl + url), headers: headers)
           .timeout(const Duration(seconds: 15), onTimeout: () {
@@ -102,7 +121,7 @@ class ApiProvider {
         }
         throw CustomException(AppString.timeoutMessage);
       });
-      debugPrint('response: ${response.body}');
+      log('response: ${response.body}');
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);
@@ -113,10 +132,10 @@ class ApiProvider {
       {Map<String, String>? headers, bool closeDialogOnTimeout = true}) async {
     if (headers == null) {
       headers = await getAuthorisedHeader();
-      debugPrint("headers: $headers");
+      log("headers: $headers");
     }
     if (await networkManager.isConnected() ?? false) {
-      debugPrint('url:$baseUrl$url');
+      log('url:$baseUrl$url');
       var response = await http
           .get(url, headers: headers)
           .timeout(const Duration(seconds: 15), onTimeout: () {
@@ -125,7 +144,7 @@ class ApiProvider {
         }
         throw CustomException(AppString.timeoutMessage);
       });
-      debugPrint('response: ${response.body}');
+      log('response: ${response.body}');
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);
@@ -133,16 +152,19 @@ class ApiProvider {
   }
 
   Future<http.Response> post(String url,
-      {Map<String, String>? headers,
+      {String? endPoint,
+      Map<String, String>? headers,
       dynamic body,
       Encoding? encoding,
       bool closeDialogOnTimeout = true}) async {
+    endPoint ??= baseUrl;
     headers ??= await getAuthorisedHeader();
     if (await networkManager.isConnected() ?? false) {
-      debugPrint('url: $baseUrl$url');
-      debugPrint('body: $body');
+      log('url: $endPoint$url');
+      log('body: $body');
+      log("headers: $headers");
       var response = await http
-          .post(Uri.parse(baseUrl + url),
+          .post(Uri.parse(endPoint + url),
               headers: headers, body: body, encoding: encoding)
           .timeout(const Duration(seconds: 15), onTimeout: () {
         if (closeDialogOnTimeout) {
@@ -150,7 +172,7 @@ class ApiProvider {
         }
         throw CustomException(AppString.timeoutMessage);
       });
-      debugPrint('response: ${response.body}');
+      log('response: ${response.body}');
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);
@@ -164,8 +186,8 @@ class ApiProvider {
       bool closeDialogOnTimeout = true}) async {
     headers ??= await getAuthorisedHeader();
     if (await networkManager.isConnected() ?? false) {
-      debugPrint('url: $baseUrl$url');
-      debugPrint('body: $body');
+      log('url: $baseUrl$url');
+      log('body: $body');
       var response = await http
           .put(Uri.parse(baseUrl + url),
               headers: headers, body: body, encoding: encoding)
@@ -175,7 +197,7 @@ class ApiProvider {
         }
         throw CustomException(AppString.timeoutMessage);
       });
-      debugPrint('response: ${response.body}');
+      log('response: ${response.body}');
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);
@@ -207,9 +229,9 @@ class ApiProvider {
           request.fields[key] = value.toString();
         }
       });
-      debugPrint("request : $request");
+      log("request : $request");
       final response = await http.Response.fromStream(await request.send());
-      debugPrint(response.body);
+      log(response.body);
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);

@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import '../../common/app_textstyle.dart';
 import '../../common/colors.dart';
 import '../../common/common_bottomsheet.dart';
+import '../../di/shared_preference_service.dart';
+import '../../model/res_login.dart';
 
 class HomeController extends GetxController {
   RxBool chatSwitch = false.obs;
@@ -16,6 +18,9 @@ class HomeController extends GetxController {
   RxBool isShowTitle = true.obs;
   ExpandedTileController? expandedTileController = ExpandedTileController();
   ExpandedTileController? expandedTile2Controller = ExpandedTileController();
+  UserData? userData = UserData();
+  SharedPreferenceService preferenceService =
+      Get.find<SharedPreferenceService>();
 
   earningDetailPopup(BuildContext context) async {
     await openBottomSheet(context,
@@ -269,5 +274,13 @@ class HomeController extends GetxController {
             SizedBox(height: 10.h),
           ],
         ));
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    userData = preferenceService.getUserDetail();
+    appbarTitle.value = userData?.name ?? "Astrologer Name";
   }
 }
