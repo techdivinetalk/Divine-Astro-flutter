@@ -1,12 +1,27 @@
+// ignore_for_file: file_names
+
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../../common/app_exception.dart';
 import '../../common/colors.dart';
+import '../../di/shared_preference_service.dart';
 import '../../gen/assets.gen.dart';
+import '../../model/res_login.dart';
+import '../../model/res_review_ratings.dart';
+import '../../model/res_user_profile.dart';
+import '../../repository/user_repository.dart';
 
 class ProfilePageController extends GetxController {
+  // ProfilePageController(this.userRepository);
+  final UserRepository userRepository = Get.put(UserRepository());
+  UserData? userData;
+  GetUserProfile? userProfile;
+  var preference = Get.find<SharedPreferenceService>();
+  RxBool profileDataSync = false.obs;
+
   var languageList = <ChangeLanguageModelClass>[
     ChangeLanguageModelClass(
         'English',
@@ -137,6 +152,46 @@ class ProfilePageController extends GetxController {
       Get.back();
     }
     update(['set_lang', 'profile_option']);
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    userData = preference.getUserDetail();
+    // getUserProfileDetails();
+    // getReviewRating();
+  }
+
+  getUserProfileDetails() async {
+    Map<String, dynamic> params = {"role_id": userData?.roleId};
+    try {
+      var data = await userRepository.getProfileDetail(params);
+      userProfile = data;
+      debugPrint("Data $data");
+      profileDataSync.value = true;
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        Get.snackbar("Error", error.toString()).show();
+      }
+    }
+  }
+
+  getReviewRating() async {
+    try {
+      Map<String, dynamic> params = {"role_id": 7, "page": 1};
+      ResReviewRatings data = await userRepository.getReviewRatings(params);
+      debugPrint("Data $data");
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        Get.snackbar("Error", error.toString()).show();
+      }
+    }
   }
 }
 

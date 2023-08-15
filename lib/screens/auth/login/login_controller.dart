@@ -1,12 +1,24 @@
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../../common/app_exception.dart';
+import '../../../common/routes.dart';
+import '../../../di/shared_preference_service.dart';
+import '../../../model/res_login.dart';
+import '../../../repository/user_repository.dart';
+
 class LoginController extends GetxController {
+  LoginController(this.userRepository);
+  final UserRepository userRepository;
+  SharedPreferenceService preferenceService =
+      Get.find<SharedPreferenceService>();
   late TextEditingController countryCodeController;
   late TextEditingController mobileNumberController;
   RxString get countryCode => countryCodeController.text.obs;
+  var enable = true.obs;
 
   RxBool hasError = false.obs;
 
@@ -31,11 +43,40 @@ class LoginController extends GetxController {
     update();
   }
 
+  login() async {
+    Map<String, dynamic> params = {
+      "mobile_no": mobileNumberController.text,
+      "device_token": await FirebaseMessaging.instance.getToken()
+    };
+    try {
+      ResLogin data = await userRepository.userLogin(params);
+      navigateToDashboard(data);
+    } catch (error) {
+      enable.value = true;
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        Get.snackbar("Error", error.toString()).show();
+      }
+    }
+  }
+
+  navigateToDashboard(ResLogin data) {
+    preferenceService.erase();
+    preferenceService.setUserDetail(data.data!);
+    preferenceService.setToken(data.token!);
+    mobileNumberController.clear();
+    Get.offAllNamed(RouteName.dashboard,
+        arguments: [data.data!.phoneNo, data.data!.sessionId]);
+    enable.value = true;
+  }
+
   @override
   void onInit() {
     super.onInit();
     countryCodeController = TextEditingController(text: "+91");
-    mobileNumberController = TextEditingController();
+    mobileNumberController = TextEditingController(text: "");
   }
 
   @override

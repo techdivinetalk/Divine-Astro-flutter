@@ -54,7 +54,7 @@ import '../screens/splash/splash_binding.dart';
 import '../screens/splash/splash_ui.dart';
 
 class RouteName {
-  static const initial = dashboard;
+  static const initial = root;
 
   static const String root = "/";
   static const String login = "/login";
@@ -92,9 +92,7 @@ class Routes {
         name: RouteName.root,
         binding: SplashBinding()),
     GetPage(
-        page: () => const LoginUI(),
-        name: RouteName.login,
-        binding: LoginBinding()),
+        page: () => LoginUI(), name: RouteName.login, binding: LoginBinding()),
     GetPage(
         page: () => const DashboardScreen(),
         name: RouteName.dashboard,

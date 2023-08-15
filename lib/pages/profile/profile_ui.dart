@@ -1,5 +1,6 @@
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/appbar.dart';
+import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -9,14 +10,17 @@ import '../../../common/colors.dart';
 import '../../../common/routes.dart';
 import '../../../gen/assets.gen.dart';
 import '../../common/common_bottomsheet.dart';
+import '../../di/shared_preference_service.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'profile_controller.dart';
 
 class ProfileUI extends GetView<ProfilePageController> {
-  const ProfileUI({Key? key}) : super(key: key);
+  ProfileUI({Key? key}) : super(key: key);
+  var preference = Get.find<SharedPreferenceService>();
 
   @override
   Widget build(BuildContext context) {
+    var userData = preference.getUserDetail();
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: commonAppbar(title: "profile".tr, trailingWidget: Container()),
@@ -47,20 +51,21 @@ class ProfileUI extends GetView<ProfilePageController> {
                     Column(
                       children: [
                         Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 6, color: AppColors.appYellowColour),
-                            borderRadius: BorderRadius.circular(80),
-                          ),
-                          child: ClipRRect(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: 6, color: AppColors.appYellowColour),
+                              borderRadius: BorderRadius.circular(80),
+                            ),
+                            child: ClipRRect(
                               borderRadius: BorderRadius.circular(80),
 
                               // Image border
-                              child: Assets.images.bgUserTmpPro.image(
+                              child: Image.network(
+                                  "${ApiProvider.imageBaseUrl}${userData?.image ?? ""}",
                                   height: 70.h,
                                   width: 70.h,
-                                  fit: BoxFit.cover)),
-                        ),
+                                  fit: BoxFit.cover),
+                            )),
                       ],
                     ),
                     SizedBox(
@@ -74,7 +79,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Paras',
+                                userData?.name ?? "",
                                 style: AppTextStyle.textStyle20(
                                     fontWeight: FontWeight.w600,
                                     fontColor: AppColors.darkBlue),
@@ -105,7 +110,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                             height: 3.h,
                           ),
                           Text(
-                            '+91- 9876543210',
+                            '+91- ${userData?.phoneNo ?? ""}',
                             style: AppTextStyle.textStyle14(
                                 fontWeight: FontWeight.w400,
                                 fontColor: AppColors.darkBlue),
@@ -126,7 +131,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                               ),
                               Expanded(
                                 child: Text(
-                                  '1234567891',
+                                  "${userData?.id ?? ""}",
                                   style: AppTextStyle.textStyle14(
                                       fontWeight: FontWeight.w400,
                                       fontColor: AppColors.darkBlue),

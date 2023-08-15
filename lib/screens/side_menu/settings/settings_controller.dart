@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/common/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -5,9 +6,12 @@ import 'package:get/get.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
 import '../../../common/common_bottomsheet.dart';
+import '../../../di/shared_preference_service.dart';
 import '../../../gen/assets.gen.dart';
 
 class SettingsController extends GetxController {
+  SharedPreferenceService preferenceService =
+      Get.find<SharedPreferenceService>();
   deleteAccountPopup(BuildContext context) async {
     await openBottomSheet(
       context,
@@ -145,7 +149,10 @@ class SettingsController extends GetxController {
                   children: [
                     Expanded(
                       child: FilledButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          preferenceService.erase();
+                          Get.offAndToNamed(RouteName.login);
+                        },
                         style: FilledButton.styleFrom(
                           backgroundColor: AppColors.lightYellow,
                           padding: EdgeInsets.symmetric(vertical: 16.h),

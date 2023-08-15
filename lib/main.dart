@@ -18,6 +18,7 @@ import 'common/custom_progress_dialog.dart';
 import 'common/strings.dart';
 import 'di/firebase_network_service.dart';
 
+import 'di/network_service.dart';
 import 'di/progress_service.dart';
 import 'di/shared_preference_service.dart';
 import 'gen/fonts.gen.dart';
@@ -49,7 +50,7 @@ saveLanguageId(int userLanguageId) async {
 Future<void> initServices() async {
   await Get.putAsync(() => ProgressService().init());
   await Get.putAsync(() => SharedPreferenceService().init());
-  // await Get.putAsync(() => NetworkService().init());
+  await Get.putAsync(() => NetworkService().init());
   await Get.putAsync(() => FirebaseNetworkService().init());
 }
 

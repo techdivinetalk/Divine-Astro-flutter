@@ -12,7 +12,8 @@ import '../../../common/custom_light_yellow_btn.dart';
 import 'login_controller.dart';
 
 class LoginUI extends GetView<LoginController> {
-  const LoginUI({Key? key}) : super(key: key);
+  LoginUI({Key? key}) : super(key: key);
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -46,11 +47,14 @@ class LoginUI extends GetView<LoginController> {
                   SizedBox(height: 10.h),
                   CustomLightYellowButton(
                     name: "Verify",
-                    onTaped: () {
-                      // if (controller.formKey.currentState!.validate()) {
-                      //   controller.formKey.currentState!.save();
-                      // } else {}
-                    },
+                    onTaped: controller.enable.value
+                        ? () {
+                            if (_formKey.currentState!.validate()) {
+                              controller.login();
+                              controller.enable.value = false;
+                            }
+                          }
+                        : () {},
                   ),
                 ],
               ),
@@ -84,51 +88,79 @@ class LoginUI extends GetView<LoginController> {
   }
 
   Widget mobileField() {
-    return Container(
-      alignment: Alignment.center,
-      height: 50.h,
-      decoration:
-          BoxDecoration(borderRadius: BorderRadius.circular(10), boxShadow: [
-        BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 3.0,
-            offset: const Offset(0.3, 3.0)),
-      ]),
-      child: GetBuilder<LoginController>(
-        builder: (controller) => TextFormField(
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            hintText: "Enter Registered Number",
-            fillColor: AppColors.white,
-            hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.greyColor),
-            prefixIcon: InkWell(
-              onTap: () => countryPickerSheet(Get.context!, (value) {
-                controller.setCode(value.phoneCode);
-                Get.back();
-              }),
-              child: Row(mainAxisSize: MainAxisSize.min, children: [
-                const SizedBox(width: 15),
-                Text(
-                  controller.countryCode.value,
-                ),
-                const Icon(Icons.arrow_drop_down)
-              ]),
+    return Form(
+      key: _formKey,
+      child: Container(
+        alignment: Alignment.center,
+        decoration:
+            BoxDecoration(borderRadius: BorderRadius.circular(10), boxShadow: [
+          BoxShadow(
+              color: controller.enable.value
+                  ? Colors.white
+                  : Colors.black.withOpacity(0.3),
+              blurRadius: 3.0,
+              offset: const Offset(0.3, 3.0)),
+        ]),
+        child: GetBuilder<LoginController>(
+          builder: (controller) => TextFormField(
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please Enter Valid Phone Number';
+              } else if (value.length != 10) {
+                return 'Mobile number should be 10 digits';
+              }
+              return null;
+            },
+            controller: controller.mobileNumberController,
+            keyboardType: TextInputType.number,
+            enabled: controller.enable.value,
+            showCursor: true,
+            decoration: InputDecoration(
+              hintText: "Enter Registered Number",
+              fillColor: AppColors.white,
+              hintStyle:
+                  AppTextStyle.textStyle16(fontColor: AppColors.greyColor),
+              prefixIcon: InkWell(
+                onTap: () => countryPickerSheet(Get.context!, (value) {
+                  controller.setCode(value.phoneCode);
+                  Get.back();
+                }),
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  const SizedBox(width: 15),
+                  Text(
+                    controller.countryCode.value,
+                  ),
+                  const Icon(Icons.arrow_drop_down)
+                ]),
+              ),
+              filled: true,
+              errorStyle:
+                  AppTextStyle.textStyle16(fontColor: AppColors.appRedColour),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: const BorderSide(
+                    color: AppColors.appYellowColour,
+                    width: 1.0,
+                  )),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: const BorderSide(
+                    color: AppColors.appYellowColour,
+                    width: 1.0,
+                  )),
+              errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: const BorderSide(
+                    color: AppColors.redColor,
+                    width: 1.0,
+                  )),
+              focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: const BorderSide(
+                    color: AppColors.redColor,
+                    width: 1.0,
+                  )),
             ),
-            filled: true,
-            enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(
-                  color: controller.hasError.value
-                      ? AppColors.appRedColour
-                      : AppColors.white,
-                  width: 1.0,
-                )),
-            focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: const BorderSide(
-                  color: AppColors.appYellowColour,
-                  width: 1.0,
-                )),
           ),
         ),
       ),
