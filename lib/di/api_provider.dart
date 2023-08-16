@@ -27,6 +27,7 @@ class ApiProvider {
   final String getReviewRating = "getReviewRating";
   final String blockCustomerlist = "blockCustomerlist";
   final String blockCustomer = "blockCustomer";
+  final String constantDetails = "constantDetails";
 
   //
   final NetworkService networkManager = Get.find<NetworkService>();

@@ -33,7 +33,8 @@ dependencies:
   firebase_database: ^10.2.4
   firebase_messaging: ^14.6.5
   get_storage: ^2.1.1
-  dio: 
+  dio:
+  url_launcher: ^6.1.12
 
 
 dev_dependencies:
