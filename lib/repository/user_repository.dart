@@ -149,18 +149,17 @@ class UserRepository extends ApiProvider {
     //progressService.showProgressDialog(true);
     try {
       // debugPrint("Params $param");
-      final response = await post(constantDetails, headers: await getJsonHeaderURL());
+      final response =
+          await post(constantDetails, headers: await getJsonHeaderURL());
       //progressService.showProgressDialog(false);
       if (response.statusCode == 200) {
-        final constantDetailsModelClass = ConstantDetailsModelClass.fromJson(json.decode(response.body));
-        if (constantDetailsModelClass.statusCode == successResponse && constantDetailsModelClass.success!) {
+        final constantDetailsModelClass =
+            ConstantDetailsModelClass.fromJson(json.decode(response.body));
+        if (constantDetailsModelClass.statusCode == successResponse &&
+            constantDetailsModelClass.success) {
           return constantDetailsModelClass;
         } else {
-          throw Get.snackbar("message", "",
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: AppColors.darkBlue,
-              colorText: AppColors.white,
-              duration: const Duration(seconds: 3));
+          throw CustomException(json.decode(response.body)["error"]);
         }
       } else {
         throw CustomException(json.decode(response.body)[0]["message"]);
@@ -172,5 +171,4 @@ class UserRepository extends ApiProvider {
       rethrow;
     }
   }
-
 }

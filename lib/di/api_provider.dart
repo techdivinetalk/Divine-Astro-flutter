@@ -30,6 +30,7 @@ class ApiProvider {
   final String getShopUrl = "getShop";
   final String getProductListUrl = "getProductList";
   final String getProductDetailsUrl = "getProductDetails";
+  final String constantDetails = "constantDetails";
 
   //
   final NetworkService networkManager = Get.find<NetworkService>();
