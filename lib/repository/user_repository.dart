@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../common/app_exception.dart';
 import '../di/api_provider.dart';
+import '../model/constant_details_model_class.dart';
 import '../model/res_blocked_customers.dart';
 import '../model/res_login.dart';
 import '../model/res_review_ratings.dart';
@@ -143,4 +144,33 @@ class UserRepository extends ApiProvider {
       rethrow;
     }
   }
+
+  Future<ConstantDetailsModelClass> constantDetailsData() async {
+    //progressService.showProgressDialog(true);
+    try {
+      // debugPrint("Params $param");
+      final response = await post(constantDetails, headers: await getJsonHeaderURL());
+      //progressService.showProgressDialog(false);
+      if (response.statusCode == 200) {
+        final constantDetailsModelClass = ConstantDetailsModelClass.fromJson(json.decode(response.body));
+        if (constantDetailsModelClass.statusCode == successResponse && constantDetailsModelClass.success!) {
+          return constantDetailsModelClass;
+        } else {
+          throw Get.snackbar("message", "",
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: AppColors.darkBlue,
+              colorText: AppColors.white,
+              duration: const Duration(seconds: 3));
+        }
+      } else {
+        throw CustomException(json.decode(response.body)[0]["message"]);
+      }
+    } catch (e, s) {
+      //progressService.showProgressDialog(false);
+      preferenceService.erase();
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
 }

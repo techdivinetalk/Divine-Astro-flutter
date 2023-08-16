@@ -1,13 +1,14 @@
+import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
-import '../../common/app_textstyle.dart';
-import '../../common/colors.dart';
-import '../../common/common_bottomsheet.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../common/app_exception.dart';
 import '../../di/shared_preference_service.dart';
+import '../../model/constant_details_model_class.dart';
 import '../../model/res_login.dart';
+import '../../repository/user_repository.dart';
 
 class HomeController extends GetxController {
   RxBool chatSwitch = false.obs;
@@ -21,266 +22,48 @@ class HomeController extends GetxController {
   UserData? userData = UserData();
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
-
-  earningDetailPopup(BuildContext context) async {
-    await openBottomSheet(context,
-        functionalityWidget: Column(
-          // crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Actual Payment:",
-                    style: AppTextStyle.textStyle16(
-                        fontWeight: FontWeight.w500,
-                        fontColor: AppColors.appRedColour),
-                  ),
-                  Text(
-                    "₹1000000000",
-                    style: AppTextStyle.textStyle16(
-                        fontWeight: FontWeight.w500,
-                        fontColor: AppColors.appRedColour),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 10.h),
-            ExpandedTile(
-              theme: const ExpandedTileThemeData(
-                headerPadding: EdgeInsets.only(left: 8.0, right: 0.0),
-                contentPadding: EdgeInsets.only(left: 25.0, right: 25.0),
-                contentBackgroundColor: AppColors.white,
-                headerColor: AppColors.white,
-              ),
-              controller: expandedTileController!,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Actual Payment:",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w500,
-                        fontColor: AppColors.darkBlue),
-                  ),
-                  Text(
-                    "₹1000000000",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w500,
-                        fontColor: AppColors.darkBlue),
-                  ),
-                ],
-              ),
-              content: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "-Amount:",
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: AppColors.darkBlue.withOpacity(0.5)),
-                      ),
-                      Text(
-                        "₹1000000000",
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: AppColors.darkBlue.withOpacity(0.5)),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "-Last Billing Cycle",
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: AppColors.darkBlue.withOpacity(0.5)),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          SizedBox(width: 12.h),
-                          Text(
-                            "Refund:",
-                            style: AppTextStyle.textStyle12(
-                                fontWeight: FontWeight.w500,
-                                fontColor: AppColors.darkBlue.withOpacity(0.5)),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        "₹1000000000",
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: AppColors.darkBlue.withOpacity(0.5)),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            SizedBox(width: 12.h),
-                            Text(
-                              "Supplement:",
-                              style: AppTextStyle.textStyle12(
-                                  fontWeight: FontWeight.w500,
-                                  fontColor:
-                                      AppColors.darkBlue.withOpacity(0.5)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Text(
-                        "₹1000000000",
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: AppColors.darkBlue.withOpacity(0.5)),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10.h),
-                ],
-              ),
-            ),
-            ExpandedTile(
-                controller: expandedTile2Controller!,
-                theme: const ExpandedTileThemeData(
-                  headerPadding: EdgeInsets.only(left: 8.0, right: 0.0),
-                  contentPadding: EdgeInsets.only(left: 25.0, right: 25.0),
-                  contentBackgroundColor: AppColors.white,
-                  headerColor: AppColors.white,
-                ),
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Total Tax:",
-                      style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
-                    ),
-                    Text(
-                      "₹1000000000",
-                      style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
-                    ),
-                  ],
-                ),
-                content: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            "-TDS:",
-                            style: AppTextStyle.textStyle12(
-                                fontWeight: FontWeight.w500,
-                                fontColor: AppColors.darkBlue.withOpacity(0.5)),
-                          ),
-                        ),
-                        Text(
-                          "₹1000000000",
-                          style: AppTextStyle.textStyle12(
-                              fontWeight: FontWeight.w500,
-                              fontColor: AppColors.darkBlue.withOpacity(0.5)),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            "-Payment Gateway:",
-                            style: AppTextStyle.textStyle12(
-                                fontWeight: FontWeight.w500,
-                                fontColor: AppColors.darkBlue.withOpacity(0.5)),
-                          ),
-                        ),
-                        Text(
-                          "₹1000000000",
-                          style: AppTextStyle.textStyle12(
-                              fontWeight: FontWeight.w500,
-                              fontColor: AppColors.darkBlue.withOpacity(0.5)),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10.h),
-                  ],
-                )),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      "Status:",
-                      style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
-                    ),
-                  ),
-                  Text(
-                    "to be settled",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w500,
-                        fontColor: AppColors.darkBlue),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 10.h),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      "Time Period",
-                      style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
-                    ),
-                  ),
-                  Text(
-                    "16th May 2023 - 23rd May 2023",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w500,
-                        fontColor: AppColors.darkBlue),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 10.h),
-          ],
-        ));
-  }
+  final UserRepository userRepository = Get.put(UserRepository());
 
   @override
   void onInit() {
     super.onInit();
-
+    getConstantDetailsData();
     userData = preferenceService.getUserDetail();
     appbarTitle.value = userData?.name ?? "Astrologer Name";
+  }
+
+  ConstantDetailsModelClass? getConstantDetails;
+  RxBool profileDataSync = false.obs;
+
+  getConstantDetailsData() async {
+    try {
+      var data = await userRepository.constantDetailsData();
+      getConstantDetails = data;
+      // debugPrint("ConstantDetails Data==> $data");
+      profileDataSync.value = true;
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        Get.snackbar("Error", error.toString()).show();
+      }
+    }
+  }
+
+  whatsapp() async {
+    var contact = getConstantDetails?.data.whatsappNo ?? '';
+    var androidUrl = "whatsapp://send?phone=$contact&text=Hi";
+    var iosUrl = "https://wa.me/$contact?text=${Uri.parse('Hi')}";
+
+    try {
+      if (Platform.isIOS) {
+        await launchUrl(Uri.parse(iosUrl));
+      } else {
+        await launchUrl(Uri.parse(androidUrl));
+      }
+    } on Exception {
+      log('WhatsApp is not installed.');
+    }
   }
 }
