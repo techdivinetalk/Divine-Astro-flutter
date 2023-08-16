@@ -17,6 +17,7 @@ class ApiProvider {
   static String imageBaseUrl = "https://divinenew.s3.ap-south-1.amazonaws.com/";
 
   final String jsonHeaderName = "Content-Type";
+  final String jsonCookietName = "Cookie";
   final String jsonHeaderValue = "application/json";
   final String jsonAuthenticationName = "Authorization";
   final int successResponse = 200;
@@ -43,9 +44,10 @@ class ApiProvider {
   Future<Map<String, String>> getJsonHeaderURL() async {
     _token = await _getAuthToken();
     var header = <String, String>{};
-    // header[jsonHeaderName] = jsonHeaderValue;
+    header[jsonHeaderName] = jsonHeaderValue;
     header[jsonAuthenticationName] = 'Bearer $_token';
-    header[jsonHeaderName] = "application/json";
+    header[jsonCookietName] =
+        'XSRF-TOKEN=eyJpdiI6IlgwVmd1bkhGSHY5Q0NleDZtN3R6dmc9PSIsInZhbHVlIjoiQ1FteHVNNVg3RnFzMHkxS0JUL3g3dG94TEIvTktBU29CYU8xRmtoajRYZndQTnNsQ1k5YjNUMjlvRWlTS25Od3VhVUZWdHFMRVZSeU9GQ1kybXZmWnplZHZMTXZKTjUrRzkreGZteHZVT2gzUzd4ZzgzNWVqbzI3TTlHUDg2R1MiLCJtYWMiOiIzMDA0YmY4MmJiZTVjY2NhMzVlOTA2NWY2NjAwOGQzOTVkNDA3NjY3YWYzZmUwMGUyMWQ0OGU3ZTM1OTIzOTE0IiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IkxLMk5HUm5qWGoxV1RVT0REcDVoNWc9PSIsInZhbHVlIjoiT0JtbEU1cExneTdxUENOZWovaHB3ajMvdmRkQ24zNC9lT3BSL3BYTjJndmFNR3NPcnkrejRXM1V6bytEd00zRjNVNFlCeEdVd2NacTlEbUVXNE1SYUpNbFBkcUF1bWZ2V0oxakRvd0ZpaVFZWHZZNSt6bE1BMVk1TnUwNWJCbmoiLCJtYWMiOiJjZjNkYTQ0YzAzZTA4YzBlOTczZmRjZjIyYzYwMWI1N2UzOGUwNDA1NTdhZGVjZjg0MzUzMmUwNjNlZmY5OWEwIiwidGFnIjoiIn0%3D';
     return header;
   }
 
