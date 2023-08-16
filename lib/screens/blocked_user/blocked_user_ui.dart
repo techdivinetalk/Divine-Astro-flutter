@@ -49,7 +49,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(50),
                                     child: Image.network(
-                                        "${ApiProvider.imageBaseUrl}${controller.blockedUserData?.data?.first.astroBlockCustomer?[index].customerId}",
+                                        "${ApiProvider.imageBaseUrl}${controller.blockedUserData?.data?[index].image}",
                                         height: 50.h,
                                         width: 50.h,
                                         fit: BoxFit.cover),

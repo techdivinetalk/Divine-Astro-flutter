@@ -15,6 +15,7 @@ import '../../../common/routes.dart';
 import '../../../gen/assets.gen.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../di/shared_preference_service.dart';
+import '../../repository/user_repository.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 
 class ProfileUI extends GetView<ProfilePageController> {
@@ -23,6 +24,7 @@ class ProfileUI extends GetView<ProfilePageController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(ProfilePageController(Get.put(UserRepository())));
     var userData = preference.getUserDetail();
     return Scaffold(
       backgroundColor: AppColors.white,

@@ -17,6 +17,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(ChatAssistanceController());
     return Scaffold(
       drawer: const SideMenuDrawer(),
       backgroundColor: AppColors.white,

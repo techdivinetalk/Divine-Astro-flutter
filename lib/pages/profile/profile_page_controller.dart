@@ -158,8 +158,8 @@ class ProfilePageController extends GetxController {
   void onInit() {
     super.onInit();
     userData = preference.getUserDetail();
-    // getUserProfileDetails();
-    // getReviewRating();
+    getUserProfileDetails();
+    getReviewRating();
   }
 
 //getPercentage

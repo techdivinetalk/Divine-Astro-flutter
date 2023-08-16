@@ -38,6 +38,7 @@ class BlockUserController extends GetxController {
   }
 
   unblockUser({required num customerId}) async {
+    blockedUserDataSync.value = false;
     Map<String, dynamic> params = {
       "role_id": userData?.roleId ?? 0,
       "customer_id": customerId,

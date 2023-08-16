@@ -17,6 +17,7 @@ class HomeUI extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(HomeController());
     return Scaffold(
       backgroundColor: AppColors.white,
       drawer: const SideMenuDrawer(),
