@@ -102,7 +102,6 @@ class HomeUI extends GetView<HomeController> {
                                   Get.toNamed(RouteName.checkKundli);
                                 },
                                 child: Container(
-                                  width: 116.w,
                                   height: 54.h,
                                   decoration: BoxDecoration(
                                     boxShadow: [
@@ -122,14 +121,15 @@ class HomeUI extends GetView<HomeController> {
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(20)),
                                   ),
-                                  child: Center(
-                                    child: InkWell(
-                                      child: Text(
-                                        "checkKundli".tr,
-                                        style: AppTextStyle.textStyle14(
-                                            fontColor: AppColors.brownColour,
-                                            fontWeight: FontWeight.w500),
-                                      ),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 15.w),
+                                  alignment: Alignment.center,
+                                  child: InkWell(
+                                    child: Text(
+                                      "checkKundli".tr,
+                                      style: AppTextStyle.textStyle14(
+                                          fontColor: AppColors.brownColour,
+                                          fontWeight: FontWeight.w500),
                                     ),
                                   ),
                                 ),
