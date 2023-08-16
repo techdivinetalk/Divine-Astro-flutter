@@ -1,6 +1,8 @@
 // ignore_for_file: deprecated_member_use_from_same_package
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/routes.dart';
+import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -27,64 +29,68 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
             )),
         body: Column(
           children: [
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
-                child: GridView.builder(
-                    itemCount: controller.item.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 25.h,
-                        childAspectRatio: 0.68,
-                        mainAxisSpacing: 30.h),
-                    itemBuilder: (BuildContext context, int index) {
-                      var item = controller.item[index];
-                      return InkWell(
-                        onTap: () {
-                          Get.toNamed(RouteName.finalRemediesSubUI);
-                        },
-                        child: Container(
-                          width: 300,
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  blurRadius: 3.0,
-                                  offset: const Offset(0.0, 3.0)),
-                            ],
-                            color: Colors.white,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(20),
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Assets.images.bgSuggestedRemedy
-                                    .image(fit: BoxFit.fill),
+            Obx(() => controller.shopDataSync.value == true
+                ? Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 15.w, vertical: 10.h),
+                      child: GridView.builder(
+                          itemCount: controller.shopData?.shops?.length ?? 0,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 25.h,
+                                  childAspectRatio: 0.68,
+                                  mainAxisSpacing: 30.h),
+                          itemBuilder: (BuildContext context, int index) {
+                            var item = controller.shopData?.shops?[index];
+                            return InkWell(
+                              onTap: () {
+                                Get.toNamed(RouteName.finalRemediesSubUI);
+                              },
+                              child: Container(
+                                width: 300,
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black.withOpacity(0.2),
+                                        blurRadius: 3.0,
+                                        offset: const Offset(0.0, 3.0)),
+                                  ],
+                                  color: Colors.white,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(20),
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: CachedNetworkImage(
+                                            imageUrl:
+                                                "${ApiProvider.imageBaseUrl}${item?.shopImage}")),
+                                    SizedBox(height: 12.h),
+                                    Text(item?.shopName ?? "",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 12.sp,
+                                          color: AppColors.blackColor,
+                                        )),
+                                    SizedBox(height: 8.h),
+                                    Text(item?.shopName ?? "",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 12.sp,
+                                          color: AppColors.lightGrey,
+                                        )),
+                                  ],
+                                ),
                               ),
-                              SizedBox(height: 12.h),
-                              Text(item.first,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12.sp,
-                                    color: AppColors.blackColor,
-                                  )),
-                              SizedBox(height: 8.h),
-                              Text(item.last,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12.sp,
-                                    color: AppColors.lightGrey,
-                                  )),
-                            ],
-                          ),
-                        ),
-                      );
-                    }),
-              ),
-            ),
+                            );
+                          }),
+                    ),
+                  )
+                : const SizedBox())
           ],
         ));
   }

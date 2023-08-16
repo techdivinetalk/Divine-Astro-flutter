@@ -151,7 +151,8 @@ class SettingsController extends GetxController {
                       child: FilledButton(
                         onPressed: () {
                           preferenceService.erase();
-                          Get.offAndToNamed(RouteName.login);
+                          Get.offNamed(RouteName.login);
+                          // Get.offAndToNamed(RouteName.login);
                         },
                         style: FilledButton.styleFrom(
                           backgroundColor: AppColors.lightYellow,

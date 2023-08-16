@@ -24,9 +24,12 @@ class ApiProvider {
   String _token = "";
   final String loginUrl = "astroLogin";
   final String getProfileUrl = "getAstrologerProfile";
-  final String getReviewRating = "getReviewRating";
-  final String blockCustomerlist = "blockCustomerlist";
-  final String blockCustomer = "blockCustomer";
+  final String getReviewRatingUrl = "getReviewRating";
+  final String blockCustomerlistUrl = "blockCustomerlist";
+  final String blockCustomerUrl = "blockCustomer";
+  final String getShopUrl = "getShop";
+  final String getProductListUrl = "getProductList";
+  final String getProductDetailsUrl = "getProductDetails";
 
   //
   final NetworkService networkManager = Get.find<NetworkService>();
@@ -47,7 +50,7 @@ class ApiProvider {
     header[jsonHeaderName] = jsonHeaderValue;
     header[jsonAuthenticationName] = 'Bearer $_token';
     header[jsonCookietName] =
-        'XSRF-TOKEN=eyJpdiI6IlgwVmd1bkhGSHY5Q0NleDZtN3R6dmc9PSIsInZhbHVlIjoiQ1FteHVNNVg3RnFzMHkxS0JUL3g3dG94TEIvTktBU29CYU8xRmtoajRYZndQTnNsQ1k5YjNUMjlvRWlTS25Od3VhVUZWdHFMRVZSeU9GQ1kybXZmWnplZHZMTXZKTjUrRzkreGZteHZVT2gzUzd4ZzgzNWVqbzI3TTlHUDg2R1MiLCJtYWMiOiIzMDA0YmY4MmJiZTVjY2NhMzVlOTA2NWY2NjAwOGQzOTVkNDA3NjY3YWYzZmUwMGUyMWQ0OGU3ZTM1OTIzOTE0IiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IkxLMk5HUm5qWGoxV1RVT0REcDVoNWc9PSIsInZhbHVlIjoiT0JtbEU1cExneTdxUENOZWovaHB3ajMvdmRkQ24zNC9lT3BSL3BYTjJndmFNR3NPcnkrejRXM1V6bytEd00zRjNVNFlCeEdVd2NacTlEbUVXNE1SYUpNbFBkcUF1bWZ2V0oxakRvd0ZpaVFZWHZZNSt6bE1BMVk1TnUwNWJCbmoiLCJtYWMiOiJjZjNkYTQ0YzAzZTA4YzBlOTczZmRjZjIyYzYwMWI1N2UzOGUwNDA1NTdhZGVjZjg0MzUzMmUwNjNlZmY5OWEwIiwidGFnIjoiIn0%3D';
+        'XSRF-TOKEN=eyJpdiI6InRmWENhS2puUXVZaWE3bnJudFFxZFE9PSIsInZhbHVlIjoiallhbFZ2dms3eVRCN0NxUmlqTk1NVnlYa2lYc082QUZqeFlMeGlTYkhISkdiN0swbDgwbTBxenkwby9mbnQrSnBuUzY3aGcwc2V1UGZUdnNnVWtXcVJOejNmc1ZYQ2JoVHd2SzhndlRUQzlZWXhuL1N0d1hGYUFyUzN6UjRudXYiLCJtYWMiOiJiNTIxNzgzZTgyZWVkMDE1NjcyYjcxNzgwOTcxMmVkZDM5NDU5Mjc4MDI3OGY5ZmU5ZGUwMjU5YWM5MzhjYmY5IiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IjdIR1J4eXZ5ckk4bG9rVTdDMFM1Mmc9PSIsInZhbHVlIjoieUc0NGIrMG9qMWM4UXlwcE1WRUlrZDZPUXZTQ0hKNk5XcEtuM0dwQnBXakxsVERzdXFlVk1CcllqaWh2dVZhdnBOeFFreUE3QVJjK3NqbEVkbGVtWE5wRmlQejhnV3lhZEtnd2pGL3pza1BBL0dYMHcybWp6VU8wVjFFMlhIMVciLCJtYWMiOiI0NjYxYTczYzlhM2I4MjM1ZGM0M2Y1ZTNjNWYxYmNkMWNmOTlhNjZkZTgwZDY4NmE4YTFhYjZhNjNmZmI0ZmY1IiwidGFnIjoiIn0%3D';
     return header;
   }
 

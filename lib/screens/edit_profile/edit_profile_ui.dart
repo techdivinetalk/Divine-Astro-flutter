@@ -57,6 +57,7 @@ class EditProfileUI extends GetView<EditProfileController> {
               ),
               WhiteTextField(
                   hintText: "hintTextName".tr,
+                  controller: controller.nameController,
                   inputAction: TextInputAction.next,
                   inputType: TextInputType.text),
               SizedBox(
@@ -66,9 +67,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                 "speciality".tr,
                 style: AppTextStyle.textStyle14(),
               ),
-              SizedBox(
-                height: 5.h,
-              ),
+              SizedBox(height: 5.h),
               Obx(
                 () => Container(
                   width: MediaQuery.of(context).size.width,
@@ -248,9 +247,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 20.h,
-              ),
+              SizedBox(height: 20.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -261,13 +258,14 @@ class EditProfileUI extends GetView<EditProfileController> {
                   Assets.images.icEdit.svg(),
                 ],
               ),
-              SizedBox(
-                height: 5.h,
-              ),
+              SizedBox(height: 5.h),
               WhiteTextField(
-                  hintText: "hintExperience".tr,
-                  inputAction: TextInputAction.done,
-                  inputType: TextInputType.text),
+                hintText: "hintExperience".tr,
+                controller: controller.experienceController,
+                inputAction: TextInputAction.next,
+                inputType: TextInputType.text,
+                maxLines: 1,
+              ),
               SizedBox(
                 height: 20.h,
               ),
@@ -281,44 +279,14 @@ class EditProfileUI extends GetView<EditProfileController> {
                   Assets.images.icEdit.svg(),
                 ],
               ),
-              SizedBox(
-                height: 5.h,
-              ),
-              Container(
-                height: 70.h,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          blurRadius: 3.0,
-                          offset: const Offset(0.3, 3.0)),
-                    ]),
-                child: TextFormField(
-                  maxLines: 4,
-                  keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.done,
-                  decoration: InputDecoration(
-                    hintText: "hintDescriptions".tr,
-                    helperStyle: AppTextStyle.textStyle16(),
-                    fillColor: Colors.white,
-                    hoverColor: Colors.white,
-                    filled: true,
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: const BorderSide(
-                          color: Colors.white,
-                          width: 1.0,
-                        )),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: const BorderSide(
-                          color: AppColors.appYellowColour,
-                          width: 1.0,
-                        )),
-                  ),
-                ),
-              ),
+              SizedBox(height: 5.h),
+              WhiteTextField(
+                hintText: "descriptions".tr,
+                controller: controller.descriptionController,
+                inputAction: TextInputAction.next,
+                inputType: TextInputType.text,
+                maxLines: 3,
+              )
             ],
           ),
         ),

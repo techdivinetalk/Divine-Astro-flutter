@@ -1,9 +1,6 @@
 import 'dart:convert';
-
-import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/model/res_user_profile.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../common/app_exception.dart';
 import '../di/api_provider.dart';
@@ -39,31 +36,25 @@ class UserRepository extends ApiProvider {
   Future<GetUserProfile> getProfileDetail(Map<String, dynamic> param) async {
     //progressService.showProgressDialog(true);
     try {
-      debugPrint("Params $param");
       final response = await post(getProfileUrl,
-          body: jsonEncode({'role_id': 7}), headers: await getJsonHeaderURL());
+          body: jsonEncode(param), headers: await getJsonHeaderURL());
       //progressService.showProgressDialog(false);
-      if (response.statusCode == 200) {
-        final customerLoginModel =
-            GetUserProfile.fromJson(json.decode(response.body));
-        if (customerLoginModel.statusCode == successResponse &&
-            customerLoginModel.success!) {
-          return customerLoginModel;
-        } else {
-          preferenceService.erase();
 
-          throw Get.snackbar("message", "",
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: AppColors.darkBlue,
-              colorText: AppColors.white,
-              duration: const Duration(seconds: 3));
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final customerLoginModel =
+              GetUserProfile.fromJson(json.decode(response.body));
+
+          return customerLoginModel;
         }
       } else {
-        throw CustomException(json.decode(response.body)[0]["message"]);
+        throw CustomException(json.decode(response.body)["error"]);
       }
     } catch (e, s) {
       //progressService.showProgressDialog(false);
-      preferenceService.erase();
+
       debugPrint("we got $e $s");
       rethrow;
     }
@@ -72,20 +63,21 @@ class UserRepository extends ApiProvider {
   Future<ResReviewRatings> getReviewRatings(Map<String, dynamic> param) async {
     //progressService.showProgressDialog(true);
     try {
-      final response =
-          await post(getReviewRating, body: jsonEncode(param).toString());
+      final response = await post(getReviewRatingUrl,
+          body: jsonEncode(param).toString(),
+          headers: await getJsonHeaderURL());
       //progressService.showProgressDialog(false);
 
       if (response.statusCode == 200) {
-        if (response.body == "") {
-          throw CustomException("Unknown Error");
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body)["error"]);
         } else {
           final blockedCustomerList =
               ResReviewRatings.fromJson(json.decode(response.body));
           return blockedCustomerList;
         }
       } else {
-        throw CustomException(json.decode(response.body)["message"]);
+        throw CustomException(json.decode(response.body)["error"]);
       }
     } catch (e, s) {
       //progressService.showProgressDialog(false);
@@ -98,13 +90,14 @@ class UserRepository extends ApiProvider {
       Map<String, dynamic> param) async {
     //progressService.showProgressDialog(true);
     try {
-      final response =
-          await post(blockCustomerlist, body: jsonEncode(param).toString());
+      final response = await post(blockCustomerlistUrl,
+          body: jsonEncode(param).toString(),
+          headers: await getJsonHeaderURL());
       //progressService.showProgressDialog(false);
-      debugPrint("Response here : ${response.body}");
+
       if (response.statusCode == 200) {
-        if (response.body != "") {
-          throw CustomException("Unknown Error");
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body)["error"]);
         } else {
           final blockedCustomerList =
               ResBlockedCustomers.fromJson(json.decode(response.body));
@@ -116,7 +109,7 @@ class UserRepository extends ApiProvider {
           }
         }
       } else {
-        throw CustomException(json.decode(response.body)["message"]);
+        throw CustomException(json.decode(response.body)["error"]);
       }
     } catch (e, s) {
       //progressService.showProgressDialog(false);
@@ -129,25 +122,20 @@ class UserRepository extends ApiProvider {
       Map<String, dynamic> param) async {
     //progressService.showProgressDialog(true);
     try {
-      final response =
-          await post(blockCustomer, body: jsonEncode(param).toString());
+      final response = await post(blockCustomerUrl,
+          body: jsonEncode(param).toString(),
+          headers: await getJsonHeaderURL());
       //progressService.showProgressDialog(false);
-      debugPrint("Response here : ${response.body}");
       if (response.statusCode == 200) {
-        if (response.body != "") {
-          throw CustomException("Unknown Error");
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body)["error"]);
         } else {
           final blockedCustomerList =
               ResBlockedCustomers.fromJson(json.decode(response.body));
-          if (blockedCustomerList.statusCode == successResponse &&
-              blockedCustomerList.success!) {
-            return blockedCustomerList;
-          } else {
-            throw CustomException("Unknown Error");
-          }
+          return blockedCustomerList;
         }
       } else {
-        throw CustomException(json.decode(response.body)["message"]);
+        throw CustomException(json.decode(response.body)["error"]);
       }
     } catch (e, s) {
       //progressService.showProgressDialog(false);
