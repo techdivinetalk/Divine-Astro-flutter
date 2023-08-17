@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'package:divine_astrologer/model/res_reply_review.dart';
 import 'package:divine_astrologer/model/res_user_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../common/app_exception.dart';
+import '../common/routes.dart';
 import '../di/api_provider.dart';
 import '../model/constant_details_model_class.dart';
 import '../model/res_blocked_customers.dart';
@@ -40,6 +42,8 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
+          preferenceService.erase();
+          Get.offNamed(RouteName.login);
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final customerLoginModel =

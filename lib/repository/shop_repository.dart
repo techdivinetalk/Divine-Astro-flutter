@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/model/res_order_history.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../common/app_exception.dart';
 import '../di/api_provider.dart';
 import '../model/res_get_shop.dart';
@@ -16,6 +18,8 @@ class ShopRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
+          preferenceService.erase();
+          Get.offNamed(RouteName.login);
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final orderHistoryModel =
@@ -44,6 +48,8 @@ class ShopRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
+          preferenceService.erase();
+          Get.offNamed(RouteName.login);
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final shopModel = ResGetShop.fromJson(json.decode(response.body));
