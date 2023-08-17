@@ -21,7 +21,7 @@ Map<String, String> en() {
   "chat" : "Chat",
   "totalMarksObtained" : "Total Marks Obtained",
   "call" : "Call",
-  "uploadStory" : "upload story",
+  "uploadStory" : "Upload story",
   "uploadYourPhoto" : "Upload your photo",
   "customerSupport" : "Customer Support",
   "chooseLanguage" : "Choose Language",

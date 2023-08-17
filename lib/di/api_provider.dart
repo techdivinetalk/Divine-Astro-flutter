@@ -17,15 +17,20 @@ class ApiProvider {
   static String imageBaseUrl = "https://divinenew.s3.ap-south-1.amazonaws.com/";
 
   final String jsonHeaderName = "Content-Type";
+  final String jsonCookietName = "Cookie";
   final String jsonHeaderValue = "application/json";
   final String jsonAuthenticationName = "Authorization";
   final int successResponse = 200;
   String _token = "";
   final String loginUrl = "astroLogin";
   final String getProfileUrl = "getAstrologerProfile";
-  final String getReviewRating = "getReviewRating";
-  final String blockCustomerlist = "blockCustomerlist";
-  final String blockCustomer = "blockCustomer";
+  final String getReviewRatingUrl = "getReviewRating";
+  final String blockCustomerlistUrl = "blockCustomerlist";
+  final String blockCustomerUrl = "blockCustomer";
+  final String getShopUrl = "getShop";
+  final String getProductListUrl = "getProductList";
+  final String getProductDetailsUrl = "getProductDetails";
+  final String constantDetails = "constantDetails";
 
   //
   final NetworkService networkManager = Get.find<NetworkService>();
@@ -43,9 +48,10 @@ class ApiProvider {
   Future<Map<String, String>> getJsonHeaderURL() async {
     _token = await _getAuthToken();
     var header = <String, String>{};
-    // header[jsonHeaderName] = jsonHeaderValue;
+    header[jsonHeaderName] = jsonHeaderValue;
     header[jsonAuthenticationName] = 'Bearer $_token';
-    header[jsonHeaderName] = "application/json";
+    header[jsonCookietName] =
+        'XSRF-TOKEN=eyJpdiI6InRmWENhS2puUXVZaWE3bnJudFFxZFE9PSIsInZhbHVlIjoiallhbFZ2dms3eVRCN0NxUmlqTk1NVnlYa2lYc082QUZqeFlMeGlTYkhISkdiN0swbDgwbTBxenkwby9mbnQrSnBuUzY3aGcwc2V1UGZUdnNnVWtXcVJOejNmc1ZYQ2JoVHd2SzhndlRUQzlZWXhuL1N0d1hGYUFyUzN6UjRudXYiLCJtYWMiOiJiNTIxNzgzZTgyZWVkMDE1NjcyYjcxNzgwOTcxMmVkZDM5NDU5Mjc4MDI3OGY5ZmU5ZGUwMjU5YWM5MzhjYmY5IiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IjdIR1J4eXZ5ckk4bG9rVTdDMFM1Mmc9PSIsInZhbHVlIjoieUc0NGIrMG9qMWM4UXlwcE1WRUlrZDZPUXZTQ0hKNk5XcEtuM0dwQnBXakxsVERzdXFlVk1CcllqaWh2dVZhdnBOeFFreUE3QVJjK3NqbEVkbGVtWE5wRmlQejhnV3lhZEtnd2pGL3pza1BBL0dYMHcybWp6VU8wVjFFMlhIMVciLCJtYWMiOiI0NjYxYTczYzlhM2I4MjM1ZGM0M2Y1ZTNjNWYxYmNkMWNmOTlhNjZkZTgwZDY4NmE4YTFhYjZhNjNmZmI0ZmY1IiwidGFnIjoiIn0%3D';
     return header;
   }
 

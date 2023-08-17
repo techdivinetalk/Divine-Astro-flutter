@@ -17,6 +17,7 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(SuggestRemediesController());
     return Scaffold(
         drawer: const SideMenuDrawer(),
         backgroundColor: AppColors.white,

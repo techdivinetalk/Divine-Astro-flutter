@@ -1,5 +1,5 @@
 class ResReviewRatings {
-  Data? data;
+  ReviewData? data;
   bool? success;
   int? statusCode;
   String? message;
@@ -7,7 +7,7 @@ class ResReviewRatings {
   ResReviewRatings({this.data, this.success, this.statusCode, this.message});
 
   ResReviewRatings.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? ReviewData.fromJson(json['data']) : null;
     success = json['success'];
     statusCode = json['status_code'];
     message = json['message'];
@@ -25,9 +25,9 @@ class ResReviewRatings {
   }
 }
 
-class Data {
+class ReviewData {
   int? totalReviews;
-  double? totalRating;
+  num? totalRating;
   int? i1Rating;
   int? i2Rating;
   int? i3Rating;
@@ -36,7 +36,7 @@ class Data {
   List<AllReviews>? allReviews;
   AstrologerDetails? astrologerDetails;
 
-  Data(
+  ReviewData(
       {this.totalReviews,
       this.totalRating,
       this.i1Rating,
@@ -47,7 +47,7 @@ class Data {
       this.allReviews,
       this.astrologerDetails});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  ReviewData.fromJson(Map<String, dynamic> json) {
     totalReviews = json['total_reviews'];
     totalRating = json['total_rating'];
     i1Rating = json['1_rating'];
@@ -92,21 +92,20 @@ class AllReviews {
   int? customerId;
   String? reviewDate;
   String? comment;
-  double? rating;
+  num? rating;
   int? id;
-  // Null? replyData;
+  ReplyData? replyData;
 
-  AllReviews({
-    this.isAnonymous,
-    this.customerName,
-    this.customerImage,
-    this.customerId,
-    this.reviewDate,
-    this.comment,
-    this.rating,
-    this.id,
-    // this.replyData
-  });
+  AllReviews(
+      {this.isAnonymous,
+      this.customerName,
+      this.customerImage,
+      this.customerId,
+      this.reviewDate,
+      this.comment,
+      this.rating,
+      this.id,
+      this.replyData});
 
   AllReviews.fromJson(Map<String, dynamic> json) {
     isAnonymous = json['is_anonymous'];
@@ -130,7 +129,7 @@ class AllReviews {
     data['comment'] = comment;
     data['rating'] = rating;
     data['id'] = id;
-    // data['reply_data'] = this.replyData;
+    // data['reply_data'] = replyData;
     return data;
   }
 }
@@ -158,4 +157,8 @@ class AstrologerDetails {
     data['image'] = image;
     return data;
   }
+}
+
+class ReplyData {
+  int? id;
 }

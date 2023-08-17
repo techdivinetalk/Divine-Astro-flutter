@@ -1,4 +1,5 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -17,90 +18,95 @@ class KundliUi extends GetView<KundliController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: DefaultTabController(
-        length: 2,
-        child: NestedScrollView(
-          headerSliverBuilder: (context, value) {
-            return [
-              SliverOverlapAbsorber(
-                handle:
-                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                sliver: SliverAppBar(
-                  leading: InkWell(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8),
-                      child: Center(child: Assets.images.icLeftArrow.svg()),
+      body: GestureDetector(
+        onTap: () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
+        child: DefaultTabController(
+          length: 2,
+          child: NestedScrollView(
+            headerSliverBuilder: (context, value) {
+              return [
+                SliverOverlapAbsorber(
+                  handle:
+                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                  sliver: SliverAppBar(
+                    leading: InkWell(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8),
+                        child: Center(child: Assets.images.icLeftArrow.svg()),
+                      ),
                     ),
-                  ),
-                  flexibleSpace: FlexibleSpaceBar(
-                    stretchModes: const <StretchMode>[
-                      StretchMode.blurBackground
-                    ],
-                    background: Center(
-                      child: Assets.images.icKundli
-                          .svg(height: 180.h, width: 180.w),
+                    flexibleSpace: FlexibleSpaceBar(
+                      stretchModes: const <StretchMode>[
+                        StretchMode.blurBackground
+                      ],
+                      background: Center(
+                        child: Assets.images.icKundli
+                            .svg(height: 180.h, width: 180.w),
+                      ),
                     ),
-                  ),
-                  surfaceTintColor: AppColors.white,
-                  expandedHeight: 300.h,
-                  pinned: true,
-                  centerTitle: false,
-                  title: Text("kundliText".tr,
-                      style: AppTextStyle.textStyle16(
-                          fontWeight: FontWeight.w400)),
-                  bottom: PreferredSize(
-                    preferredSize: const Size.fromHeight(kTextTabBarHeight),
-                    child: Card(
-                      surfaceTintColor: AppColors.white,
-                      margin: EdgeInsets.symmetric(horizontal: 30.w),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(35)),
-                      child: Center(
-                        child: TabBar(
-                          indicatorSize: TabBarIndicatorSize.label,
-                          indicatorWeight: 0.0,
-                          isScrollable: true,
-                          labelColor: AppColors.brownColour,
-                          unselectedLabelColor: AppColors.blackColor,
-                          dividerColor: Colors.transparent,
-                          labelPadding: EdgeInsets.zero,
-                          splashBorderRadius: BorderRadius.circular(20),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10.w, horizontal: 8.h),
-                          labelStyle: AppTextStyle.textStyle14(
-                              fontWeight: FontWeight.w500),
-                          indicator: BoxDecoration(
-                            color: AppColors.lightYellow,
-                            borderRadius: BorderRadius.circular(28),
-                          ),
-                          tabs: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 30.w),
-                              child: Tab(text: "checkYours".tr),
+                    surfaceTintColor: AppColors.white,
+                    expandedHeight: 300.h,
+                    pinned: true,
+                    centerTitle: false,
+                    title: Text("kundliText".tr,
+                        style: AppTextStyle.textStyle16(
+                            fontWeight: FontWeight.w400)),
+                    bottom: PreferredSize(
+                      preferredSize: const Size.fromHeight(kTextTabBarHeight),
+                      child: Card(
+                        surfaceTintColor: AppColors.white,
+                        margin: EdgeInsets.symmetric(horizontal: 30.w),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(35)),
+                        child: Center(
+                          child: TabBar(
+                            indicatorSize: TabBarIndicatorSize.label,
+                            indicatorWeight: 0.0,
+                            isScrollable: true,
+                            labelColor: AppColors.brownColour,
+                            unselectedLabelColor: AppColors.blackColor,
+                            dividerColor: Colors.transparent,
+                            labelPadding: EdgeInsets.zero,
+                            splashBorderRadius: BorderRadius.circular(20),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10.w, horizontal: 8.h),
+                            labelStyle: AppTextStyle.textStyle14(
+                                fontWeight: FontWeight.w500),
+                            indicator: BoxDecoration(
+                              color: AppColors.lightYellow,
+                              borderRadius: BorderRadius.circular(28),
                             ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 30.w),
-                              child: Tab(
-                                text: "checkOthers".tr,
+                            onTap: (value) => SystemChannels.textInput
+                                .invokeMethod('TextInput.hide'),
+                            tabs: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 30.w),
+                                child: Tab(text: "checkYours".tr),
                               ),
-                            ),
-                          ],
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 30.w),
+                                child: Tab(
+                                  text: "checkOthers".tr,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ];
-          },
-          body: const TabBarView(
-            children: [
-              CheckYours(),
-              CheckOther(),
-            ],
+              ];
+            },
+            body: const TabBarView(
+              children: [
+                CheckYours(),
+                CheckOther(),
+              ],
+            ),
           ),
         ),
       ),
@@ -120,7 +126,7 @@ class CheckYours extends GetView<KundliController> {
       children: [
         SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w,vertical: 25.h),
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 25.h),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -261,7 +267,7 @@ class CheckOther extends GetView<KundliController> {
       children: [
         SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w,vertical: 25.h),
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 25.h),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

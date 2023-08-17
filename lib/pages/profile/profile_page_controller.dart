@@ -1,5 +1,3 @@
-// ignore_for_file: file_names
-
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
 import 'package:flutter/material.dart';
@@ -15,12 +13,14 @@ import '../../model/res_user_profile.dart';
 import '../../repository/user_repository.dart';
 
 class ProfilePageController extends GetxController {
-  // ProfilePageController(this.userRepository);
-  final UserRepository userRepository = Get.put(UserRepository());
+  final UserRepository userRepository;
+  ProfilePageController(this.userRepository);
   UserData? userData;
   GetUserProfile? userProfile;
+  ResReviewRatings? ratingsData;
   var preference = Get.find<SharedPreferenceService>();
   RxBool profileDataSync = false.obs;
+  RxBool reviewDataSync = false.obs;
 
   var languageList = <ChangeLanguageModelClass>[
     ChangeLanguageModelClass(
@@ -158,10 +158,17 @@ class ProfilePageController extends GetxController {
   void onInit() {
     super.onInit();
     userData = preference.getUserDetail();
-    // getUserProfileDetails();
-    // getReviewRating();
+    getUserProfileDetails();
+    getReviewRating();
   }
 
+//getPercentage
+  double getPercentage(
+      {required int ratingNumbers, required double totalReviews}) {
+    return ((ratingNumbers) / totalReviews);
+  }
+
+//API Calls
   getUserProfileDetails() async {
     Map<String, dynamic> params = {"role_id": userData?.roleId};
     try {
@@ -181,9 +188,11 @@ class ProfilePageController extends GetxController {
 
   getReviewRating() async {
     try {
-      Map<String, dynamic> params = {"role_id": 7, "page": 1};
-      ResReviewRatings data = await userRepository.getReviewRatings(params);
-      debugPrint("Data $data");
+      Map<String, dynamic> params = {"role_id": userData?.roleId, "page": 1};
+      var response = await userRepository.getReviewRatings(params);
+      ratingsData = response;
+
+      debugPrint("Data $response");
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
@@ -192,6 +201,7 @@ class ProfilePageController extends GetxController {
         Get.snackbar("Error", error.toString()).show();
       }
     }
+    reviewDataSync.value = true;
   }
 }
 

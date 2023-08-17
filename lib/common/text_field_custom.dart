@@ -46,17 +46,21 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
 
 class WhiteTextField extends StatefulWidget {
   final String hintText;
+  final int maxLines;
   final TextInputType inputType;
   final TextInputAction inputAction;
   final Icon? icon;
   final Widget? suffixIcon;
   final Color? errorBorder;
+  final TextEditingController? controller;
 
   const WhiteTextField(
       {super.key,
       required this.hintText,
       required this.inputType,
       required this.inputAction,
+      this.maxLines = 1,
+      this.controller,
       this.errorBorder,
       this.icon,
       this.suffixIcon});
@@ -69,7 +73,6 @@ class _WhiteTextFieldState extends State<WhiteTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50.h,
       decoration:
           BoxDecoration(borderRadius: BorderRadius.circular(10), boxShadow: [
         BoxShadow(
@@ -78,7 +81,8 @@ class _WhiteTextFieldState extends State<WhiteTextField> {
             offset: const Offset(0.3, 3.0)),
       ]),
       child: TextFormField(
-        maxLines: 3,
+        controller: widget.controller,
+        maxLines: widget.maxLines,
         keyboardType: widget.inputType,
         textInputAction: widget.inputAction,
         decoration: InputDecoration(
@@ -158,18 +162,20 @@ class AppTextField extends StatelessWidget {
             )),
         isDense: true,
         hintText: hintText,
-        prefixIcon: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(width: 10.w),
-            SizedBox(
-              height: 30.h,
-              width: 15.w,
-              child: prefixIcon,
-            ),
-            SizedBox(width: 8.w),
-          ],
-        ),
+        prefixIcon: prefixIcon != null
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(width: 10.w),
+                  SizedBox(
+                    height: 30.h,
+                    width: 15.w,
+                    child: prefixIcon,
+                  ),
+                  SizedBox(width: 8.w),
+                ],
+              )
+            : const SizedBox(),
         prefixIconConstraints: BoxConstraints(minHeight: 24.h, minWidth: 24.w),
         hintStyle: TextStyle(
           fontWeight: FontWeight.w400,
