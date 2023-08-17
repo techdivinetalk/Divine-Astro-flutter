@@ -80,7 +80,7 @@ class LoginController extends GetxController {
   void onInit() {
     super.onInit();
     countryCodeController = TextEditingController(text: "+91");
-    mobileNumberController = TextEditingController(text: "9852364175");
+    mobileNumberController = TextEditingController(text: "");
   }
 
   @override
