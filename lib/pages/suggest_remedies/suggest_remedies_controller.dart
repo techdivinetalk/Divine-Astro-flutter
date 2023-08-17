@@ -2,12 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../common/app_exception.dart';
 import '../../common/app_textstyle.dart';
 import '../../common/colors.dart';
 import '../../common/common_bottomsheet.dart';
+import '../../di/shared_preference_service.dart';
 import '../../gen/assets.gen.dart';
+import '../../model/res_get_shop.dart';
+import '../../model/res_login.dart';
+import '../../repository/shop_repository.dart';
 
 class SuggestRemediesController extends GetxController {
+  final ShopRepository shopRepository;
+  SuggestRemediesController(this.shopRepository);
+  UserData? userData;
+  SharedPreferenceService preferenceService =
+      Get.find<SharedPreferenceService>();
+  RxBool shopDataSync = false.obs;
+  int orderId = 100;
+
+  ShopData? shopData;
   var item = [
     ["Pooja"],
     ["Puja Saman"],
@@ -107,5 +121,37 @@ class SuggestRemediesController extends GetxController {
         ],
       ),
     );
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    if (Get.arguments != null) {
+      if (Get.arguments is int) {
+        orderId = Get.arguments;
+      }
+    }
+    userData = preferenceService.getUserDetail();
+    getShopData();
+  }
+
+  //API Call
+  getShopData() async {
+    Map<String, dynamic> params = {
+      "role_id": userData?.roleId ?? 0,
+      "order_id": orderId
+    };
+    try {
+      var response = await shopRepository.getShopData(params);
+      shopData = response.data;
+      shopDataSync.value = true;
+    } catch (error) {
+      if (error is AppException) {
+        error.onException();
+      } else {
+        Get.snackbar("Error", error.toString()).show();
+      }
+    }
   }
 }

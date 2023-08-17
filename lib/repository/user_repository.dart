@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:divine_astrologer/model/res_reply_review.dart';
 import 'package:divine_astrologer/model/res_user_profile.dart';
 import 'package:flutter/material.dart';
 
@@ -11,10 +12,9 @@ import '../model/res_review_ratings.dart';
 
 class UserRepository extends ApiProvider {
   Future<ResLogin> userLogin(Map<String, dynamic> param) async {
-    //progressService.showProgressDialog(true);
     try {
       final response = await post(loginUrl, body: jsonEncode(param).toString());
-      //progressService.showProgressDialog(false);
+
       if (response.statusCode == 200) {
         final astrologerLoginModel =
             ResLogin.fromJson(json.decode(response.body));
@@ -28,18 +28,15 @@ class UserRepository extends ApiProvider {
         throw CustomException(json.decode(response.body)["message"]);
       }
     } catch (e, s) {
-      //progressService.showProgressDialog(false);
       debugPrint("we got $e $s");
       rethrow;
     }
   }
 
   Future<GetUserProfile> getProfileDetail(Map<String, dynamic> param) async {
-    //progressService.showProgressDialog(true);
     try {
       final response = await post(getProfileUrl,
           body: jsonEncode(param), headers: await getJsonHeaderURL());
-      //progressService.showProgressDialog(false);
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
@@ -54,20 +51,16 @@ class UserRepository extends ApiProvider {
         throw CustomException(json.decode(response.body)["error"]);
       }
     } catch (e, s) {
-      //progressService.showProgressDialog(false);
-
       debugPrint("we got $e $s");
       rethrow;
     }
   }
 
   Future<ResReviewRatings> getReviewRatings(Map<String, dynamic> param) async {
-    //progressService.showProgressDialog(true);
     try {
       final response = await post(getReviewRatingUrl,
           body: jsonEncode(param).toString(),
           headers: await getJsonHeaderURL());
-      //progressService.showProgressDialog(false);
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
@@ -81,7 +74,29 @@ class UserRepository extends ApiProvider {
         throw CustomException(json.decode(response.body)["error"]);
       }
     } catch (e, s) {
-      //progressService.showProgressDialog(false);
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<ResReviewReply> reviewReply(Map<String, dynamic> param) async {
+    try {
+      final response = await post(reviewReplyUrl,
+          body: jsonEncode(param).toString(),
+          headers: await getJsonHeaderURL());
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final resReviewReply =
+              ResReviewReply.fromJson(json.decode(response.body));
+          return resReviewReply;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
       debugPrint("we got $e $s");
       rethrow;
     }
@@ -89,12 +104,10 @@ class UserRepository extends ApiProvider {
 
   Future<ResBlockedCustomers> getBlockedCustomerList(
       Map<String, dynamic> param) async {
-    //progressService.showProgressDialog(true);
     try {
       final response = await post(blockCustomerlistUrl,
           body: jsonEncode(param).toString(),
           headers: await getJsonHeaderURL());
-      //progressService.showProgressDialog(false);
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
@@ -113,7 +126,6 @@ class UserRepository extends ApiProvider {
         throw CustomException(json.decode(response.body)["error"]);
       }
     } catch (e, s) {
-      //progressService.showProgressDialog(false);
       debugPrint("we got $e $s");
       rethrow;
     }
@@ -121,12 +133,11 @@ class UserRepository extends ApiProvider {
 
   Future<ResBlockedCustomers> blockUnblockCustomer(
       Map<String, dynamic> param) async {
-    //progressService.showProgressDialog(true);
     try {
       final response = await post(blockCustomerUrl,
           body: jsonEncode(param).toString(),
           headers: await getJsonHeaderURL());
-      //progressService.showProgressDialog(false);
+
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
           throw CustomException(json.decode(response.body)["error"]);
@@ -139,19 +150,17 @@ class UserRepository extends ApiProvider {
         throw CustomException(json.decode(response.body)["error"]);
       }
     } catch (e, s) {
-      //progressService.showProgressDialog(false);
       debugPrint("we got $e $s");
       rethrow;
     }
   }
 
   Future<ConstantDetailsModelClass> constantDetailsData() async {
-    //progressService.showProgressDialog(true);
     try {
       // debugPrint("Params $param");
       final response =
           await post(constantDetails, headers: await getJsonHeaderURL());
-      //progressService.showProgressDialog(false);
+
       if (response.statusCode == 200) {
         final constantDetailsModelClass =
             ConstantDetailsModelClass.fromJson(json.decode(response.body));
@@ -165,7 +174,6 @@ class UserRepository extends ApiProvider {
         throw CustomException(json.decode(response.body)[0]["message"]);
       }
     } catch (e, s) {
-      //progressService.showProgressDialog(false);
       preferenceService.erase();
       debugPrint("we got $e $s");
       rethrow;

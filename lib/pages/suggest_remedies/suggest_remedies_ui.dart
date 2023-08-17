@@ -1,5 +1,8 @@
 // ignore_for_file: deprecated_member_use_from_same_package
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/routes.dart';
+import 'package:divine_astrologer/di/api_provider.dart';
+import 'package:divine_astrologer/repository/shop_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -17,17 +20,27 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(SuggestRemediesController());
+    Get.put(SuggestRemediesController(ShopRepository()));
+
     return Scaffold(
         drawer: const SideMenuDrawer(),
         backgroundColor: AppColors.white,
-        appBar: commonAppbar(
-            title: "suggestRemedy".tr,
-            trailingWidget: InkWell(
-              child: Padding(
-                  padding: EdgeInsets.only(right: 20.w),
-                  child: Assets.images.icSearch.svg(color: AppColors.darkBlue)),
-            )),
+        appBar: Get.currentRoute == RouteName.dashboard
+            ? commonAppbar(
+                title: "suggestRemedy".tr,
+                trailingWidget: InkWell(
+                  child: Padding(
+                      padding: EdgeInsets.only(right: 20.w),
+                      child: Assets.images.icSearch
+                          .svg(color: AppColors.darkBlue)),
+                ))
+            : commonDetailAppbar(
+                title: "suggestRemedy".tr,
+                trailingWidget: InkWell(
+                    child: Padding(
+                        padding: EdgeInsets.only(right: 20.w),
+                        child: Assets.images.icSearch
+                            .svg(color: AppColors.darkBlue)))),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 5.h),
           child: Column(
@@ -79,57 +92,61 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 25.h,
-              ),
-              Expanded(
-                child: GridView.builder(
-                    itemCount: controller.item.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 25.h,
-                        childAspectRatio: 0.75,
-                        mainAxisSpacing: 30.h),
-                    itemBuilder: (BuildContext context, int index) {
-                      var item = controller.item[index];
-                      return InkWell(
-                        onTap: () {
-                          Get.toNamed(RouteName.suggestRemediesSubUI);
-                        },
-                        child: Container(
-                          width: 300,
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  blurRadius: 3.0,
-                                  offset: const Offset(0.0, 3.0)),
-                            ],
-                            color: Colors.white,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(20),
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Assets.images.bgSuggestedRemedy
-                                    .image(fit: BoxFit.fill),
+              SizedBox(height: 25.h),
+              Obx(() => controller.shopDataSync.value == true
+                  ? Expanded(
+                      child: GridView.builder(
+                          itemCount: controller.shopData?.shops?.length ?? 0,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 25.h,
+                                  childAspectRatio: 0.75,
+                                  mainAxisSpacing: 30.h),
+                          itemBuilder: (BuildContext context, int index) {
+                            var item = controller.shopData?.shops?[index];
+                            return InkWell(
+                              onTap: () {
+                                Get.toNamed(RouteName.suggestRemediesSubUI,
+                                    arguments: item?.id);
+                              },
+                              child: Container(
+                                width: 300,
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black.withOpacity(0.2),
+                                        blurRadius: 3.0,
+                                        offset: const Offset(0.0, 3.0)),
+                                  ],
+                                  color: Colors.white,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(20),
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              "${ApiProvider.imageBaseUrl}${item?.shopImage}",
+                                          fit: BoxFit.fill,
+                                        )),
+                                    SizedBox(height: 8.h),
+                                    Text(item?.shopName ?? "",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 12.sp,
+                                          color: AppColors.darkBlue,
+                                        )),
+                                  ],
+                                ),
                               ),
-                              SizedBox(height: 8.h),
-                              Text(item.first,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12.sp,
-                                    color: AppColors.darkBlue,
-                                  )),
-                            ],
-                          ),
-                        ),
-                      );
-                    }),
-              ),
+                            );
+                          }),
+                    )
+                  : const SizedBox())
             ],
           ),
         ));

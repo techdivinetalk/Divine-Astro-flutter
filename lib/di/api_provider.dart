@@ -31,6 +31,8 @@ class ApiProvider {
   final String getProductListUrl = "getProductList";
   final String getProductDetailsUrl = "getProductDetails";
   final String constantDetails = "constantDetails";
+  final String getOrderHistoryUrl = "getOrderHistory";
+  final String reviewReplyUrl = "reviewReply";
 
   //
   final NetworkService networkManager = Get.find<NetworkService>();
@@ -51,7 +53,7 @@ class ApiProvider {
     header[jsonHeaderName] = jsonHeaderValue;
     header[jsonAuthenticationName] = 'Bearer $_token';
     header[jsonCookietName] =
-        'XSRF-TOKEN=eyJpdiI6InRmWENhS2puUXVZaWE3bnJudFFxZFE9PSIsInZhbHVlIjoiallhbFZ2dms3eVRCN0NxUmlqTk1NVnlYa2lYc082QUZqeFlMeGlTYkhISkdiN0swbDgwbTBxenkwby9mbnQrSnBuUzY3aGcwc2V1UGZUdnNnVWtXcVJOejNmc1ZYQ2JoVHd2SzhndlRUQzlZWXhuL1N0d1hGYUFyUzN6UjRudXYiLCJtYWMiOiJiNTIxNzgzZTgyZWVkMDE1NjcyYjcxNzgwOTcxMmVkZDM5NDU5Mjc4MDI3OGY5ZmU5ZGUwMjU5YWM5MzhjYmY5IiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IjdIR1J4eXZ5ckk4bG9rVTdDMFM1Mmc9PSIsInZhbHVlIjoieUc0NGIrMG9qMWM4UXlwcE1WRUlrZDZPUXZTQ0hKNk5XcEtuM0dwQnBXakxsVERzdXFlVk1CcllqaWh2dVZhdnBOeFFreUE3QVJjK3NqbEVkbGVtWE5wRmlQejhnV3lhZEtnd2pGL3pza1BBL0dYMHcybWp6VU8wVjFFMlhIMVciLCJtYWMiOiI0NjYxYTczYzlhM2I4MjM1ZGM0M2Y1ZTNjNWYxYmNkMWNmOTlhNjZkZTgwZDY4NmE4YTFhYjZhNjNmZmI0ZmY1IiwidGFnIjoiIn0%3D';
+        'XSRF-TOKEN=eyJpdiI6Img1Yk1VWXFaK0dxNGhlMVhuWFIzOUE9PSIsInZhbHVlIjoib3N5amJxZzhLT3k5NWM2bW4yL1o2VnJQWG5WL0VhYVE0SzE0WjdXdTlESWtQbC92OHZuVlF6UFp0T3NrVVpvODFkNDV1L3piY2x4Um8xK1NYcjdWUFpxNmFHYTFGcno0RFRTMGJvSi9sUVR2bDZDK08wSFNtbzAxdWVad1JCbzEiLCJtYWMiOiIzMDZmNjk4MTg1MDQ3MTk4NzYxMzc0NmE5ODEwOTk2ZWM2ZGM3YTg1M2Q3MzVlNzU2MGVlYzZjY2ZiZWE5NTAyIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6Ik13VkZqMTMrcENOL0NLR1l4ZjFlYVE9PSIsInZhbHVlIjoibGR2SE1ETGtsTGJ2WjJCU0NqVWJLQ0I3TjNwY0daWXZSSHRFTXlEd3NETHNZNDFJc0tqTVFBWVJ5d2QzbUVSamlOUzcvUFY1dkhXR2MyTHpwWUlKcC81YWV0dWVPSk1MaWZnZkU3NEdyL1dmcGdZVWwvMVpyLy9XTSs3OHlQZlEiLCJtYWMiOiI3M2RjZmVkZGFiMDM0MjczNGMyMjNjYzkzZmU4MjVlNmNiY2QxMzcyNzExNTU0MzUxMTZlMTAwNWJkNWVlZjE0IiwidGFnIjoiIn0%3D';
     return header;
   }
 
@@ -178,7 +180,7 @@ class ApiProvider {
         }
         throw CustomException(AppString.timeoutMessage);
       });
-      log('response: ${response.body}');
+      // log('response: ${response.body}');
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);

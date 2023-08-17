@@ -45,17 +45,19 @@ class LoginUI extends GetView<LoginController> {
                     ),
                   ),
                   SizedBox(height: 10.h),
-                  CustomLightYellowButton(
-                    name: "Verify",
-                    onTaped: controller.enable.value
-                        ? () {
-                            if (_formKey.currentState!.validate()) {
-                              controller.login();
-                              controller.enable.value = false;
+                  Obx(
+                    () => CustomLightYellowButton(
+                      name: "Verify",
+                      onTaped: controller.enable.value
+                          ? () {
+                              if (_formKey.currentState!.validate()) {
+                                controller.enable.value = false;
+                                controller.login();
+                              }
                             }
-                          }
-                        : () {},
-                  ),
+                          : () {},
+                    ),
+                  )
                 ],
               ),
             ),

@@ -2,8 +2,8 @@ import 'package:get/get.dart';
 
 import '../../../common/app_exception.dart';
 import '../../../di/shared_preference_service.dart';
-import '../../../model/res_get_shop.dart';
 import '../../../model/res_login.dart';
+import '../../../model/res_product_list.dart';
 import '../../../repository/shop_repository.dart';
 
 class SuggestRemediesSubController extends GetxController {
@@ -12,9 +12,10 @@ class SuggestRemediesSubController extends GetxController {
   UserData? userData;
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
-  RxBool shopDataSync = false.obs;
 
-  ShopData? shopData;
+  ProductData? productList;
+  RxBool productListSync = false.obs;
+  int shopId = 10;
 
   var item = [
     ['Navgrah Shanti Pooja', "Starting from ₹15000"],
@@ -23,16 +24,21 @@ class SuggestRemediesSubController extends GetxController {
     ['Navgrah Shanti Pooja', "Starting from ₹15000"],
   ];
 
-//API Call
-  getShopData() async {
-    Map<String, dynamic> params = {
-      "role_id": userData?.roleId ?? 0,
-      "order_id": 100
-    };
+  @override
+  void onInit() {
+    super.onInit();
+    if (Get.arguments != null) {
+      shopId = Get.arguments;
+      userData = preferenceService.getUserDetail();
+      getProductList();
+    }
+  }
+
+  getProductList() async {
+    Map<String, dynamic> params = {"shop_id": shopId};
     try {
-      var response = await shopRepository.getShopData(params);
-      shopData = response.data;
-      shopDataSync.value = true;
+      var response = await shopRepository.getProductList(params);
+      productList = response.data;
     } catch (error) {
       if (error is AppException) {
         error.onException();
@@ -40,12 +46,6 @@ class SuggestRemediesSubController extends GetxController {
         Get.snackbar("Error", error.toString()).show();
       }
     }
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
-    userData = preferenceService.getUserDetail();
-    getShopData();
+    productListSync.value = true;
   }
 }

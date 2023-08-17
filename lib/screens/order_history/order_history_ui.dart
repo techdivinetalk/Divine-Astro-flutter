@@ -15,6 +15,7 @@ import '../../common/common_options_row.dart';
 
 import '../../gen/assets.gen.dart';
 import '../side_menu/side_menu_ui.dart';
+import 'all_tab/all_option_ui.dart';
 import 'order_history_controller.dart';
 
 class OrderHistoryUI extends GetView<OrderHistoryController> {
@@ -175,7 +176,7 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
             child: TabBarView(
               controller: controller.tabbarController,
               children: [
-                OrderInfo(controller: scrollController),
+                AllTabInfo(),
                 OrderInfo(controller: scrollController),
                 OrderInfo(controller: scrollController),
                 OrderInfo(controller: scrollController),
