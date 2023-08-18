@@ -30,14 +30,11 @@ class KundliUi extends GetView<KundliController> {
                 SliverOverlapAbsorber(
                   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                   sliver: SliverAppBar(
-                    leading: InkWell(
-                      onTap: () {
+                    leading: IconButton(
+                      onPressed: () {
                         Get.back();
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8.0, right: 8),
-                        child: Center(child: Assets.images.icLeftArrow.svg()),
-                      ),
+                      icon: Icon(Icons.arrow_back_ios_new_rounded),
                     ),
                     flexibleSpace: FlexibleSpaceBar(
                       stretchModes: const <StretchMode>[StretchMode.blurBackground],
@@ -217,7 +214,16 @@ class CheckYours extends GetView<KundliController> {
                                   controller.params.value.year = data.year;
                                 }
                               },
-                              onChange: (value) {},
+                              onChange: (value) {
+                                if (value != "") {
+                                  DateTime data = DateFormat("dd MMMM yyyy").parse(value);
+                                  dateController.text =
+                                      "${data.day.toString().padLeft(2, '0')}/${data.month.toString().padLeft(2, '0')}/${data.year.toString()}";
+                                  controller.params.value.day = data.day;
+                                  controller.params.value.month = data.month;
+                                  controller.params.value.year = data.year;
+                                }
+                              },
                             );
                           },
                           readOnly: true,
@@ -434,7 +440,16 @@ class CheckOther extends GetView<KundliController> {
                                   controller.params.value.year = data.year;
                                 }
                               },
-                              onChange: (value) {},
+                              onChange: (value) {
+                                if (value != "") {
+                                  DateTime data = DateFormat("dd MMMM yyyy").parse(value);
+                                  dateController.text =
+                                      "${data.day.toString().padLeft(2, '0')}/${data.month.toString().padLeft(2, '0')}/${data.year.toString()}";
+                                  controller.params.value.day = data.day;
+                                  controller.params.value.month = data.month;
+                                  controller.params.value.year = data.year;
+                                }
+                              },
                             );
                           },
                           readOnly: true,

@@ -22,7 +22,7 @@ class KalsarpaDosh {
         type: json["type"],
         oneLine: json["one_line"],
         name: json["name"],
-        report: Report.fromJson(json["report"]),
+        report: json["report"] == null ? Report() : Report.fromJson(json["report"]),
       );
 
   Map<String, dynamic> toJson() => {
