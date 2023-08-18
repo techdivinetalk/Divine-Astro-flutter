@@ -65,11 +65,11 @@ class $AssetsImagesGen {
   AssetGenImage get bgUserTmpPro =>
       const AssetGenImage('assets/images/bg_userTmpPro.png');
 
-  /// File path: assets/images/create_acc_location.png
+  /// File path: assets/images/create_acc_location.svg
   SvgGenImage get createAccLocation =>
       const SvgGenImage('assets/images/create_acc_location.svg');
 
-  /// File path: assets/images/create_acc_location.png
+  /// File path: assets/images/create_acc_search.svg
   SvgGenImage get createAccSearch =>
       const SvgGenImage('assets/images/create_acc_search.svg');
 
@@ -422,6 +422,10 @@ class $AssetsImagesGen {
   SvgGenImage get icWedding =>
       const SvgGenImage('assets/images/ic_wedding.svg');
 
+  /// File path: assets/images/left_arrow.svg
+  SvgGenImage get leftArrow =>
+      const SvgGenImage('assets/images/left_arrow.svg');
+
   /// List of all assets
   List<dynamic> get values => [
         bgChatUserPro,
@@ -437,6 +441,8 @@ class $AssetsImagesGen {
         bgTmpUser,
         bgUserProfile,
         bgUserTmpPro,
+        createAccLocation,
+        createAccSearch,
         deleteAccout,
         divineLogo,
         icBankDetail,
@@ -531,7 +537,8 @@ class $AssetsImagesGen {
         icVisibility,
         icVisibilityOff,
         icWaiting,
-        icWedding
+        icWedding,
+        leftArrow
       ];
 }
 
