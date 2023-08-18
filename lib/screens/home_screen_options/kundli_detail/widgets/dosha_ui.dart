@@ -1,13 +1,15 @@
-// ignore_for_file: file_names
-
 import 'package:divine_astrologer/common/app_textstyle.dart';
+import 'package:divine_astrologer/screens/home_screen_options/kundli_detail/kundli_detail_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import '../../../../common/colors.dart';
 
 class DoshaUi extends StatelessWidget {
-  const DoshaUi({Key? key}) : super(key: key);
+  final KundliDetailController controller;
+
+  const DoshaUi({Key? key, required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,28 +17,37 @@ class DoshaUi extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(height: kToolbarHeight.h * 2.5),
-          SizedBox(height: 25.h),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Column(
-              children: [
-                details(
-                    title: "Manglik Dosha",
-                    details:
-                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specim"),
-                details(
-                    title: "Kalsarp Dosha",
-                    details:
-                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's "),
-                details(
+          SizedBox(height: 40.h),
+          Obx(
+            () => Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  details(
+                      title: "Manglik Dosha",
+                      details: controller.manglikDosh.value.manglikReport == null
+                          ? ""
+                          : controller.manglikDosh.value.manglikReport!),
+                  details(
+                      title: "Kalsarp Dosha",
+                      details: controller.kalsarpaDosh.value.oneLine == null
+                          ? ""
+                          : controller.kalsarpaDosh.value.oneLine!),
+                  details(
                     title: "Sadesathi Dosha",
-                    details:
-                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's "),
-                details(
+                    details: controller.sadesathiDosh.value.isUndergoingSadhesati == null
+                        ? ""
+                        : "${controller.sadesathiDosh.value.isUndergoingSadhesati!} ${controller.sadesathiDosh.value.sadhesatiStatus! ? " ${controller.sadesathiDosh.value.sadhesatiPhase!} of Sadesathi from ${controller.sadesathiDosh.value.startDate!} to ${controller.sadesathiDosh.value.endDate!}." : ""}",
+                  ),
+                  details(
                     title: "Pitri Dosha",
-                    details:
-                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specim"),
-              ],
+                    details: controller.pitraDosh.value.conclusion == null
+                        ? ""
+                        : controller.pitraDosh.value.conclusion!,
+                  ),
+                ],
+              ),
             ),
           )
         ],
@@ -50,13 +61,12 @@ class DoshaUi extends StatelessWidget {
       children: [
         Text(title,
             style: AppTextStyle.textStyle20(
-                fontWeight: FontWeight.w500,
-                fontColor: AppColors.appYellowColour)),
+                fontWeight: FontWeight.w500, fontColor: AppColors.appYellowColour)),
         SizedBox(height: 5.h),
         Text(
           details,
           style: AppTextStyle.textStyle12(
-              fontWeight: FontWeight.w500, fontColor: AppColors.greyColor),
+              fontWeight: FontWeight.w500, fontColor: AppColors.blackColor.withOpacity(.5)),
         ),
         SizedBox(height: 16.h)
       ],

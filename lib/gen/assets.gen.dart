@@ -65,6 +65,14 @@ class $AssetsImagesGen {
   AssetGenImage get bgUserTmpPro =>
       const AssetGenImage('assets/images/bg_userTmpPro.png');
 
+  /// File path: assets/images/create_acc_location.png
+  SvgGenImage get createAccLocation =>
+      const SvgGenImage('assets/images/create_acc_location.svg');
+
+  /// File path: assets/images/create_acc_location.png
+  SvgGenImage get createAccSearch =>
+      const SvgGenImage('assets/images/create_acc_search.svg');
+
   /// File path: assets/images/delete_accout.svg
   SvgGenImage get deleteAccout =>
       const SvgGenImage('assets/images/delete_accout.svg');
