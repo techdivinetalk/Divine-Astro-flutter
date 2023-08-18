@@ -20,4 +20,8 @@ class AppColors {
   static const Color teal = Color(0xFF41C1D1);
   static const Color pink = Color(0XFFEF5862);
   static const Color transparent = Colors.transparent;
+  static const Color textColor = Color(0xFF0E2339);
+  static const Color appColorDark = Color(0xFFFCB742);
+
+
 }

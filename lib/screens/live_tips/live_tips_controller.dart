@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -7,8 +8,21 @@ import '../../common/colors.dart';
 import '../../common/common_bottomsheet.dart';
 
 import '../../gen/assets.gen.dart';
+import '../live_page/constant.dart';
+import '../live_page/live_page.dart';
 
 class LiveTipsController extends GetxController {
+  var pref = Get.find<SharedPreferenceService>();
+  String liveId = "";
+
+  jumpToLivePage() {
+    Get.to(LivePage(
+      liveID: "100",
+      isHost: true,
+      localUserID: localUserID,
+    ));
+  }
+
   giftPopup(BuildContext context) async {
     await openBottomSheet(
       context,
@@ -146,5 +160,12 @@ class LiveTipsController extends GetxController {
         ],
       ),
     );
+  }
+
+  @override
+  void onReady() {
+    var data = pref.getUserDetail();
+    liveId = data!.id.toString();
+    super.onReady();
   }
 }
