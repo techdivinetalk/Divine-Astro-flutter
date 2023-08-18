@@ -19,6 +19,7 @@ class LoginController extends GetxController {
   late TextEditingController mobileNumberController;
   RxString get countryCode => countryCodeController.text.obs;
   var enable = true.obs;
+  String? deviceToken;
 
   RxBool hasError = false.obs;
 
@@ -44,6 +45,7 @@ class LoginController extends GetxController {
   }
 
   login() async {
+    deviceToken = await FirebaseMessaging.instance.getToken();
     Map<String, dynamic> params = {
       "mobile_no": mobileNumberController.text,
       "device_token": await FirebaseMessaging.instance.getToken()
@@ -66,7 +68,9 @@ class LoginController extends GetxController {
     preferenceService.erase();
     preferenceService.setUserDetail(data.data!);
     preferenceService.setToken(data.token!);
+
     mobileNumberController.clear();
+    preferenceService.setDeviceToken(deviceToken ?? "");
     Get.offAllNamed(RouteName.dashboard,
         arguments: [data.data!.phoneNo, data.data!.sessionId]);
     enable.value = true;

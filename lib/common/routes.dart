@@ -35,6 +35,7 @@ import '../screens/edit_profile/edit_profile_binding.dart';
 import '../screens/home_screen_options/notice_board_detail/notice_detail_bindings.dart';
 import '../screens/number_change/number_change_binding.dart';
 import '../screens/number_change/number_change_ui.dart';
+import '../screens/order_history/all_tab/suggest_remedies_view.dart';
 import '../screens/order_history/order_history_ui.dart';
 import '../screens/order_history/order_history_binding.dart';
 import '../screens/price_change/price_change_binding.dart';
@@ -83,6 +84,7 @@ class RouteName {
   static const String waitList = "/waitList";
   static const String settingsUI = "/settingsUI";
   static const String liveTipsUI = "/liveTipsUI";
+  static const String suggestRemediesView = "/suggestRemediesView";
 }
 
 class Routes {
@@ -157,6 +159,9 @@ class Routes {
         page: () => const ChatMessageUI(),
         name: RouteName.chatMessageUI,
         binding: ChatMessageBinding()),
+    GetPage(
+        page: () => const SuggestRemediesView(),
+        name: RouteName.suggestRemediesView),
     GetPage(
         page: () => const SuggestRemediesSubUI(),
         name: RouteName.suggestRemediesSubUI,

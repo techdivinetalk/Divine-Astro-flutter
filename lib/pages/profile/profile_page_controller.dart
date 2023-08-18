@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
+import 'package:divine_astrologer/model/res_reply_review.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -18,6 +19,7 @@ class ProfilePageController extends GetxController {
   UserData? userData;
   GetUserProfile? userProfile;
   ResReviewRatings? ratingsData;
+  ResReviewReply? reviewReply;
   var preference = Get.find<SharedPreferenceService>();
   RxBool profileDataSync = false.obs;
   RxBool reviewDataSync = false.obs;
@@ -163,7 +165,7 @@ class ProfilePageController extends GetxController {
   }
 
 //getPercentage
-  double getPercentage(
+  double getReviewPercentage(
       {required int ratingNumbers, required double totalReviews}) {
     return ((ratingNumbers) / totalReviews);
   }
@@ -174,7 +176,7 @@ class ProfilePageController extends GetxController {
     try {
       var data = await userRepository.getProfileDetail(params);
       userProfile = data;
-      debugPrint("Data $data");
+
       profileDataSync.value = true;
     } catch (error) {
       debugPrint("error $error");
@@ -193,6 +195,28 @@ class ProfilePageController extends GetxController {
       ratingsData = response;
 
       debugPrint("Data $response");
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        Get.snackbar("Error", error.toString()).show();
+      }
+    }
+    reviewDataSync.value = true;
+  }
+
+  getReplyOnReview({required String textMsg, required int reviewId}) async {
+    try {
+      Map<String, dynamic> params = {
+        "review_id": reviewId,
+        "comment": textMsg,
+        "role_id": userData?.roleId ?? 7
+      };
+      var response = await userRepository.reviewReply(params);
+      reviewReply = response;
+
+      getReviewRating();
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {

@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use_from_same_package
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -96,11 +98,22 @@ class DashboardScreen extends GetView<DashboardController> {
                       BottomNavigationBarItem(
                         icon: Column(
                           children: [
-                            Assets.images.icProfilePhoto.svg(
-                                height: 22.h,
-                                color: controller.selectedIndex.value == 4
-                                    ? AppColors.darkBlue
-                                    : AppColors.lightGrey),
+                            controller.userData?.image != null
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(22),
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          "${ApiProvider.imageBaseUrl}${controller.userData?.image}",
+                                      fit: BoxFit.cover,
+                                      height: 30,
+                                      width: 30,
+                                    ),
+                                  )
+                                : Assets.images.icProfilePhoto.svg(
+                                    height: 22.h,
+                                    color: controller.selectedIndex.value == 4
+                                        ? AppColors.darkBlue
+                                        : AppColors.lightGrey),
                             const SizedBox(height: 5),
                           ],
                         ),

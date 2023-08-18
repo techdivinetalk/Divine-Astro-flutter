@@ -116,7 +116,9 @@ class AllReviews {
     comment = json['comment'];
     rating = json['rating'];
     id = json['id'];
-    // replyData = json['reply_data'];
+    replyData = json['reply_data'] != null
+        ? ReplyData.fromJson(json['reply_data'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -129,7 +131,34 @@ class AllReviews {
     data['comment'] = comment;
     data['rating'] = rating;
     data['id'] = id;
-    // data['reply_data'] = replyData;
+    if (replyData != null) {
+      data['reply_data'] = replyData!.toJson();
+    }
+    return data;
+  }
+}
+
+class ReplyData {
+  int? replyId;
+  String? reply;
+  String? replyDate;
+  String? astrologerImage;
+
+  ReplyData({this.replyId, this.reply, this.replyDate, this.astrologerImage});
+
+  ReplyData.fromJson(Map<String, dynamic> json) {
+    replyId = json['reply_id'];
+    reply = json['reply'];
+    replyDate = json['reply_date'];
+    astrologerImage = json['astrologer_image'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['reply_id'] = replyId;
+    data['reply'] = reply;
+    data['reply_date'] = replyDate;
+    data['astrologer_image'] = astrologerImage;
     return data;
   }
 }
@@ -157,8 +186,4 @@ class AstrologerDetails {
     data['image'] = image;
     return data;
   }
-}
-
-class ReplyData {
-  int? id;
 }

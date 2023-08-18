@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/switch_component.dart';
@@ -232,7 +230,7 @@ class HomeUI extends GetView<HomeController> {
               right: 10.0,
               top: Get.height * 0.4,
               child: GestureDetector(
-                onTap: (){
+                onTap: () {
                   // log("Number-->${controller.getConstantDetails!.data.whatsappNo}");
                   controller.whatsapp();
                 },
@@ -723,6 +721,7 @@ class HomeUI extends GetView<HomeController> {
       ),
     );
   }
+
   earningDetailPopup(BuildContext context) async {
     await openBottomSheet(context,
         functionalityWidget: Column(
@@ -841,7 +840,7 @@ class HomeUI extends GetView<HomeController> {
                               style: AppTextStyle.textStyle12(
                                   fontWeight: FontWeight.w500,
                                   fontColor:
-                                  AppColors.darkBlue.withOpacity(0.5)),
+                                      AppColors.darkBlue.withOpacity(0.5)),
                             ),
                           ],
                         ),
@@ -976,5 +975,4 @@ class HomeUI extends GetView<HomeController> {
           ],
         ));
   }
-
 }

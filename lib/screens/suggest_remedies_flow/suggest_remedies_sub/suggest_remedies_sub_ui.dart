@@ -29,67 +29,80 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
             )),
         body: Column(
           children: [
-            Obx(() => controller.shopDataSync.value == true
-                ? Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 15.w, vertical: 10.h),
-                      child: GridView.builder(
-                          itemCount: controller.shopData?.shops?.length ?? 0,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 25.h,
-                                  childAspectRatio: 0.68,
-                                  mainAxisSpacing: 30.h),
-                          itemBuilder: (BuildContext context, int index) {
-                            var item = controller.shopData?.shops?[index];
-                            return InkWell(
-                              onTap: () {
-                                Get.toNamed(RouteName.finalRemediesSubUI);
-                              },
-                              child: Container(
-                                width: 300,
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.black.withOpacity(0.2),
-                                        blurRadius: 3.0,
-                                        offset: const Offset(0.0, 3.0)),
-                                  ],
-                                  color: Colors.white,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(20),
+            Obx(() => controller.productListSync.value == true
+                ? controller.productList?.products?.isEmpty ?? true
+                    ? const Center(child: Text("No data available"))
+                    : Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 15.w, vertical: 10.h),
+                          child: GridView.builder(
+                              itemCount:
+                                  controller.productList?.products?.length ?? 0,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 25.h,
+                                      childAspectRatio: 0.68,
+                                      mainAxisSpacing: 30.h),
+                              itemBuilder: (BuildContext context, int index) {
+                                var item =
+                                    controller.productList?.products?[index];
+                                return InkWell(
+                                  onTap: () {
+                                    Get.toNamed(RouteName.finalRemediesSubUI);
+                                  },
+                                  child: Container(
+                                    width: 300,
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.2),
+                                            blurRadius: 3.0,
+                                            offset: const Offset(0.0, 3.0)),
+                                      ],
+                                      color: Colors.white,
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(20),
+                                      ),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            child: CachedNetworkImage(
+                                                imageUrl:
+                                                    "${ApiProvider.imageBaseUrl}${item?.prodImage}")),
+                                        SizedBox(height: 12.h),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 8.0, right: 8.0),
+                                          child: Text(item?.prodName ?? "",
+                                              maxLines: 2,
+                                              softWrap: true,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 12.sp,
+                                                color: AppColors.blackColor,
+                                              )),
+                                        ),
+                                        SizedBox(height: 8.h),
+                                        Text("₹ ${item?.productPriceInr}",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 12.sp,
+                                              color: AppColors.lightGrey,
+                                            )),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                child: Column(
-                                  children: [
-                                    ClipRRect(
-                                        borderRadius: BorderRadius.circular(20),
-                                        child: CachedNetworkImage(
-                                            imageUrl:
-                                                "${ApiProvider.imageBaseUrl}${item?.shopImage}")),
-                                    SizedBox(height: 12.h),
-                                    Text(item?.shopName ?? "",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12.sp,
-                                          color: AppColors.blackColor,
-                                        )),
-                                    SizedBox(height: 8.h),
-                                    Text(item?.shopName ?? "",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12.sp,
-                                          color: AppColors.lightGrey,
-                                        )),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }),
-                    ),
-                  )
+                                );
+                              }),
+                        ),
+                      )
                 : const SizedBox())
           ],
         ));
