@@ -1,11 +1,20 @@
+// ignore_for_file: depend_on_referenced_packages
+
+import 'dart:io';
+import 'package:compress_images_flutter/compress_images_flutter.dart';
+import 'package:path/path.dart' as p;
+import 'package:aws_s3_upload/aws_s3_upload.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
 import 'package:divine_astrologer/model/res_reply_review.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../common/app_exception.dart';
 import '../../common/colors.dart';
+import '../../di/api_provider.dart';
 import '../../di/shared_preference_service.dart';
 import '../../gen/assets.gen.dart';
 import '../../model/res_login.dart';
@@ -18,11 +27,16 @@ class ProfilePageController extends GetxController {
   ProfilePageController(this.userRepository);
   UserData? userData;
   GetUserProfile? userProfile;
+  RxString? userProfileImage = "".obs;
   ResReviewRatings? ratingsData;
   ResReviewReply? reviewReply;
   var preference = Get.find<SharedPreferenceService>();
   RxBool profileDataSync = false.obs;
   RxBool reviewDataSync = false.obs;
+  File? image;
+  final picker = ImagePicker();
+  XFile? pickedFile;
+  File? uploadFile;
 
   var languageList = <ChangeLanguageModelClass>[
     ChangeLanguageModelClass(
@@ -96,8 +110,10 @@ class ProfilePageController extends GetxController {
         '/bankDetailsUI'),
     ProfileOptionModelClass("uploadStory".tr,
         Assets.images.icUploadStory.svg(width: 30.h, height: 30.h), ''),
-    ProfileOptionModelClass("uploadYourPhoto".tr,
-        Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h), ''),
+    ProfileOptionModelClass(
+        "uploadYourPhoto".tr,
+        Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h),
+        '/uploadYourPhotosUi'),
     ProfileOptionModelClass("customerSupport".tr,
         Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), ''),
     ProfileOptionModelClass(
@@ -160,6 +176,7 @@ class ProfilePageController extends GetxController {
   void onInit() {
     super.onInit();
     userData = preference.getUserDetail();
+    userProfileImage?.value = "${userData?.image}";
     getUserProfileDetails();
     getReviewRating();
   }
@@ -226,6 +243,106 @@ class ProfilePageController extends GetxController {
       }
     }
     reviewDataSync.value = true;
+  }
+
+//Update profile image
+  updateProfileImage(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Divine Astrologer"),
+          content: const Text("Select media option"),
+          actions: [
+            TextButton(
+              child: const Text("Camera"),
+              onPressed: () async {
+                Get.back();
+                await getImage(true);
+              },
+            ),
+            TextButton(
+              child: const Text("Gallery"),
+              onPressed: () async {
+                Get.back();
+                await getImage(false);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future getImage(bool isCamera) async {
+    pickedFile = await picker.pickImage(
+        source: isCamera ? ImageSource.camera : ImageSource.gallery,
+        imageQuality: 90,
+        maxWidth: 250);
+
+    if (pickedFile != null) {
+      image = File(pickedFile!.path);
+
+      await cropImage();
+    }
+  }
+
+  cropImage() async {
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: image!.path,
+      aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+        CropAspectRatioPreset.ratio3x2,
+        CropAspectRatioPreset.original,
+        CropAspectRatioPreset.ratio4x3,
+        CropAspectRatioPreset.ratio16x9
+      ],
+      uiSettings: [
+        AndroidUiSettings(
+            toolbarTitle: 'Update image',
+            toolbarColor: AppColors.white,
+            toolbarWidgetColor: AppColors.blackColor,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        IOSUiSettings(
+          title: 'Update image',
+        ),
+      ],
+    );
+    if (croppedFile != null) {
+      final file = File(croppedFile.path);
+
+      uploadFile =
+          await CompressImagesFlutter().compressImage(file.path, quality: 30);
+
+      uploadImageToS3Bucket(uploadFile);
+    } else {
+      debugPrint("Image is not cropped.");
+    }
+  }
+
+  uploadImageToS3Bucket(File? selectedFile) async {
+    var userData = preference.getUserDetail();
+    var extension = p.extension(selectedFile!.path);
+
+    var response = await AwsS3.uploadFile(
+      accessKey: ApiProvider().awsAccessKey,
+      secretKey: ApiProvider().awsSecretKey,
+      file: selectedFile,
+      bucket: ApiProvider().awsBucket,
+      destDir: 'astrologer/${userData?.id}',
+      filename: 'profile_image$extension',
+      region: ApiProvider().awsRegion,
+    );
+    if (response != null) {
+      userProfileImage?.value = "";
+      userProfileImage?.value = response;
+      userData?.image = response;
+      preference.setUserDetail(userData!);
+      debugPrint("Uploaded Url : $response");
+    } else {
+      CustomException("Something went wrong");
+    }
   }
 }
 

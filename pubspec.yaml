@@ -40,6 +40,10 @@ dependencies:
   zego_uikit_signaling_plugin: ^2.3.2
   svgaplayer_flutter: ^2.2.0
   permission_handler: ^10.4.3
+  image_picker: ^1.0.2
+  image_cropper:
+  aws_s3_upload: ^1.5.0
+  compress_images_flutter: ^0.0.3+5
 
 
 dev_dependencies:
