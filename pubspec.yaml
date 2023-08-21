@@ -40,6 +40,7 @@ dependencies:
   zego_uikit_signaling_plugin: ^2.3.2
   svgaplayer_flutter: ^2.2.0
   permission_handler: ^10.4.3
+  fluttertoast: ^8.2.2
 
 
 dev_dependencies:
