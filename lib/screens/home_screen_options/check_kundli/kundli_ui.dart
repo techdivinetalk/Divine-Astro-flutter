@@ -1,8 +1,10 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
+import 'package:divine_astrologer/common/select_your_birth_place_sheet.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../common/colors.dart';
 import '../../../common/common_bottomsheet.dart';
@@ -26,25 +28,18 @@ class KundliUi extends GetView<KundliController> {
             headerSliverBuilder: (context, value) {
               return [
                 SliverOverlapAbsorber(
-                  handle:
-                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                   sliver: SliverAppBar(
-                    leading: InkWell(
-                      onTap: () {
+                    leading: IconButton(
+                      onPressed: () {
                         Get.back();
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8.0, right: 8),
-                        child: Center(child: Assets.images.icLeftArrow.svg()),
-                      ),
+                      icon: Icon(Icons.arrow_back_ios_new_rounded),
                     ),
                     flexibleSpace: FlexibleSpaceBar(
-                      stretchModes: const <StretchMode>[
-                        StretchMode.blurBackground
-                      ],
+                      stretchModes: const <StretchMode>[StretchMode.blurBackground],
                       background: Center(
-                        child: Assets.images.icKundli
-                            .svg(height: 180.h, width: 180.w),
+                        child: Assets.images.icKundli.svg(height: 180.h, width: 180.w),
                       ),
                     ),
                     surfaceTintColor: AppColors.white,
@@ -52,15 +47,13 @@ class KundliUi extends GetView<KundliController> {
                     pinned: true,
                     centerTitle: false,
                     title: Text("kundliText".tr,
-                        style: AppTextStyle.textStyle16(
-                            fontWeight: FontWeight.w400)),
+                        style: AppTextStyle.textStyle16(fontWeight: FontWeight.w400)),
                     bottom: PreferredSize(
                       preferredSize: const Size.fromHeight(kTextTabBarHeight),
                       child: Card(
                         surfaceTintColor: AppColors.white,
                         margin: EdgeInsets.symmetric(horizontal: 30.w),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(35)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35)),
                         child: Center(
                           child: TabBar(
                             indicatorSize: TabBarIndicatorSize.label,
@@ -71,16 +64,14 @@ class KundliUi extends GetView<KundliController> {
                             dividerColor: Colors.transparent,
                             labelPadding: EdgeInsets.zero,
                             splashBorderRadius: BorderRadius.circular(20),
-                            padding: EdgeInsets.symmetric(
-                                vertical: 10.w, horizontal: 8.h),
-                            labelStyle: AppTextStyle.textStyle14(
-                                fontWeight: FontWeight.w500),
+                            padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 8.h),
+                            labelStyle: AppTextStyle.textStyle14(fontWeight: FontWeight.w500),
                             indicator: BoxDecoration(
                               color: AppColors.lightYellow,
                               borderRadius: BorderRadius.circular(28),
                             ),
-                            onTap: (value) => SystemChannels.textInput
-                                .invokeMethod('TextInput.hide'),
+                            onTap: (value) =>
+                                SystemChannels.textInput.invokeMethod('TextInput.hide'),
                             tabs: [
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 30.w),
@@ -101,7 +92,7 @@ class KundliUi extends GetView<KundliController> {
                 ),
               ];
             },
-            body: const TabBarView(
+            body: TabBarView(
               children: [
                 CheckYours(),
                 CheckOther(),
@@ -115,9 +106,13 @@ class KundliUi extends GetView<KundliController> {
 }
 
 class CheckYours extends GetView<KundliController> {
-  const CheckYours({
-    Key? key,
-  }) : super(key: key);
+  CheckYours({Key? key}) : super(key: key);
+  final formKey = GlobalKey<FormState>();
+  final Rx<Gender> gender = Gender.male.obs;
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController timeController = TextEditingController();
+  final TextEditingController placeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -127,126 +122,207 @@ class CheckYours extends GetView<KundliController> {
         SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 25.h),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: kToolbarHeight.h * 2.6),
-                AppTextField(
-                  prefixIcon: Assets.images.icUser.svg(),
-                  hintText: "hintTextName".tr,
-                  onTap: () {},
-                ),
-                SizedBox(height: 20.h),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        Obx(
-                          () => CustomRadio<Gender>(
-                            value: Gender.male,
-                            groupValue: controller.gender.value,
-                            onChanged: (value) {
-                              controller.gender.value = value;
-                            },
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: kToolbarHeight.h * 2.6),
+                  AppTextField(
+                    controller: nameController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your name';
+                      }
+                      return null;
+                    },
+                    prefixIcon: Assets.images.icUser.svg(),
+                    hintText: "hintTextName".tr,
+                    onTap: () {},
+                  ),
+                  SizedBox(height: 20.h),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        children: [
+                          Obx(
+                            () => CustomRadio<Gender>(
+                              value: Gender.male,
+                              groupValue: controller.gender.value,
+                              onChanged: (value) {
+                                controller.gender.value = value;
+                              },
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 16.w),
-                        Text(
-                          "male".tr,
-                          style: AppTextStyle.textStyle16(
-                              fontWeight: FontWeight.w600),
-                        )
-                      ],
-                    ),
-                    SizedBox(width: 64.w),
-                    Row(
-                      children: [
-                        Obx(
-                          () => CustomRadio<Gender>(
-                            value: Gender.female,
-                            groupValue: controller.gender.value,
-                            onChanged: (value) {
-                              controller.gender.value = value;
-                            },
+                          SizedBox(width: 16.w),
+                          Text(
+                            "male".tr,
+                            style: AppTextStyle.textStyle16(fontWeight: FontWeight.w600),
+                          )
+                        ],
+                      ),
+                      SizedBox(width: 64.w),
+                      Row(
+                        children: [
+                          Obx(
+                            () => CustomRadio<Gender>(
+                              value: Gender.female,
+                              groupValue: controller.gender.value,
+                              onChanged: (value) {
+                                controller.gender.value = value;
+                              },
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 16.w),
-                        Text(
-                          "female".tr,
-                          style: AppTextStyle.textStyle16(
-                              fontWeight: FontWeight.w600),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
-                Row(
-                  children: [
-                    Expanded(
-                      child: AppTextField(
-                        onTap: () {
-                          selectDateOrTime(Get.context!,
+                          SizedBox(width: 16.w),
+                          Text(
+                            "female".tr,
+                            style: AppTextStyle.textStyle16(fontWeight: FontWeight.w600),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20.h),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: AppTextField(
+                          controller: dateController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Date should not be empty";
+                            }
+                            return null;
+                          },
+                          onTap: () {
+                            selectDateOrTime(
+                              Get.context!,
                               title: "selectYourDateBirth".tr,
                               btnTitle: "confirmDateBirth".tr,
                               pickerStyle: "DateCalendar",
-                              looping: true);
-                        },
-                        readOnly: true,
-                        prefixIcon: Assets.images.icCalendar.svg(),
-                        hintText: "birthDate".tr,
+                              looping: true,
+                              onConfirm: (value) {
+                                if (value != "") {
+                                  DateTime data = DateFormat("dd MMMM yyyy").parse(value);
+                                  dateController.text =
+                                      "${data.day.toString().padLeft(2, '0')}/${data.month.toString().padLeft(2, '0')}/${data.year.toString()}";
+                                  controller.params.value.day = data.day;
+                                  controller.params.value.month = data.month;
+                                  controller.params.value.year = data.year;
+                                }
+                              },
+                              onChange: (value) {
+                                if (value != "") {
+                                  DateTime data = DateFormat("dd MMMM yyyy").parse(value);
+                                  dateController.text =
+                                      "${data.day.toString().padLeft(2, '0')}/${data.month.toString().padLeft(2, '0')}/${data.year.toString()}";
+                                  controller.params.value.day = data.day;
+                                  controller.params.value.month = data.month;
+                                  controller.params.value.year = data.year;
+                                }
+                              },
+                            );
+                          },
+                          readOnly: true,
+                          prefixIcon: Assets.images.icCalendar.svg(),
+                          hintText: "birthDate".tr,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 20.w),
-                    Expanded(
-                      child: AppTextField(
-                        onTap: () {
-                          selectDateOrTime(Get.context!,
+                      SizedBox(width: 20.w),
+                      Expanded(
+                        child: AppTextField(
+                          controller: timeController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Time should not be empty";
+                            }
+                            return null;
+                          },
+                          onTap: () {
+                            selectDateOrTime(
+                              Get.context!,
                               title: "selectYourTimeBirth".tr,
                               btnTitle: "confirmTimeBirth".tr,
                               pickerStyle: "TimeCalendar",
-                              looping: true);
-                        },
-                        readOnly: true,
-                        prefixIcon: Assets.images.icBirthTIme.svg(),
-                        hintText: "birthTime".tr,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
-                AppTextField(
-                  prefixIcon: Assets.images.icLocation.svg(),
-                  hintText: "birthPalace".tr,
-                  onTap: () {},
-                ),
-                SizedBox(height: 20.h),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding:
-                        EdgeInsets.only(bottom: 36.h, left: 20.w, right: 20.h),
-                    child: MaterialButton(
-                        height: 50,
-                        minWidth: Get.width,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                              looping: true,
+                              onConfirm: (value) {
+                                if (value != "") {
+                                  DateTime data = DateFormat("h:mm a").parse(value);
+                                  timeController.text = value;
+                                  controller.params.value.hour = data.hour;
+                                  controller.params.value.min = data.minute;
+                                }
+                              },
+                              onChange: (value) {
+                                if (value != "") {
+                                  DateTime data = DateFormat("h:mm a").parse(value);
+                                  timeController.text = value;
+                                  controller.params.value.hour = data.hour;
+                                  controller.params.value.min = data.minute;
+                                }
+                              },
+                            );
+                          },
+                          readOnly: true,
+                          prefixIcon: Assets.images.icBirthTIme.svg(),
+                          hintText: "birthTime".tr,
                         ),
-                        onPressed: () {
-                          Get.toNamed(RouteName.kundliDetail);
-                        },
-                        color: AppColors.lightYellow,
-                        child: Text(
-                          "submit".tr,
-                          style: AppTextStyle.textStyle20(
-                              fontWeight: FontWeight.w600),
-                        )),
+                      ),
+                    ],
                   ),
-                ),
-                SizedBox(height: 100.h),
-              ],
+                  SizedBox(height: 20.h),
+                  AppTextField(
+                    controller: placeController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Place should not be empty";
+                      }
+                      return null;
+                    },
+                    prefixIcon: Assets.images.icLocation.svg(),
+                    hintText: "birthPalace".tr,
+                    onTap: () {
+                      selectPlaceOfBirth(context, (value) {
+                        placeController.text = value.name;
+                        controller.params.value.lat = double.parse(value.latitude!);
+                        controller.params.value.long = double.parse(value.latitude!);
+                        controller.params.value.location = value.name;
+                        Get.back();
+                      });
+                    },
+                    readOnly: true,
+                  ),
+                  SizedBox(height: 20.h),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: FilledButton(
+                            style: FilledButton.styleFrom(
+                              backgroundColor: AppColors.lightYellow,
+                              padding: EdgeInsets.symmetric(vertical: 16.h),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                              ),
+                            ),
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                Get.toNamed(RouteName.kundliDetail);
+                              }
+                            },
+                            child: Text(
+                              "submit".tr,
+                              style: AppTextStyle.textStyle20(
+                                  fontWeight: FontWeight.w600, fontColor: AppColors.brownColour),
+                            )),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 100.h),
+                ],
+              ),
             ),
           ),
         ),
@@ -256,9 +332,13 @@ class CheckYours extends GetView<KundliController> {
 }
 
 class CheckOther extends GetView<KundliController> {
-  const CheckOther({
-    Key? key,
-  }) : super(key: key);
+  CheckOther({Key? key}) : super(key: key);
+  final formKey = GlobalKey<FormState>();
+  final Rx<Gender> gender = Gender.male.obs;
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController timeController = TextEditingController();
+  final TextEditingController placeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -268,126 +348,208 @@ class CheckOther extends GetView<KundliController> {
         SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 25.h),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: kToolbarHeight.h * 2.6),
-                AppTextField(
-                  prefixIcon: Assets.images.icUser.svg(),
-                  hintText: "hintTextName".tr,
-                  onTap: () {},
-                ),
-                SizedBox(height: 20.h),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        Obx(
-                          () => CustomRadio<Gender>(
-                            value: Gender.male,
-                            groupValue: controller.gender.value,
-                            onChanged: (value) {
-                              controller.gender.value = value;
-                            },
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: kToolbarHeight.h * 2.6),
+                  AppTextField(
+                    controller: nameController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Name should not be empty";
+                      }
+                      return null;
+                    },
+                    prefixIcon: Assets.images.icUser.svg(),
+                    hintText: "hintTextName".tr,
+                    onTap: () {},
+                  ),
+                  SizedBox(height: 20.h),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        children: [
+                          Obx(
+                            () => CustomRadio<Gender>(
+                              value: Gender.male,
+                              groupValue: gender.value,
+                              onChanged: (value) {
+                                gender.value = value;
+                              },
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 16.w),
-                        Text(
-                          "male".tr,
-                          style: AppTextStyle.textStyle16(
-                              fontWeight: FontWeight.w600),
-                        )
-                      ],
-                    ),
-                    SizedBox(width: 64.w),
-                    Row(
-                      children: [
-                        Obx(
-                          () => CustomRadio<Gender>(
-                            value: Gender.female,
-                            groupValue: controller.gender.value,
-                            onChanged: (value) {
-                              controller.gender.value = value;
-                            },
+                          SizedBox(width: 16.w),
+                          Text(
+                            "male".tr,
+                            style: AppTextStyle.textStyle16(fontWeight: FontWeight.w600),
+                          )
+                        ],
+                      ),
+                      SizedBox(width: 64.w),
+                      Row(
+                        children: [
+                          Obx(
+                            () => CustomRadio<Gender>(
+                              value: Gender.female,
+                              groupValue: gender.value,
+                              onChanged: (value) {
+                                gender.value = value;
+                              },
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 16.w),
-                        Text(
-                          "female".tr,
-                          style: AppTextStyle.textStyle16(
-                              fontWeight: FontWeight.w600),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
-                Row(
-                  children: [
-                    Expanded(
-                      child: AppTextField(
-                        onTap: () {
-                          selectDateOrTime(Get.context!,
+                          SizedBox(width: 16.w),
+                          Text(
+                            "female".tr,
+                            style: AppTextStyle.textStyle16(fontWeight: FontWeight.w600),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20.h),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: AppTextField(
+                          controller: dateController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Date should not be empty";
+                            }
+                            return null;
+                          },
+                          onTap: () {
+                            selectDateOrTime(
+                              Get.context!,
                               title: "selectYourDateBirth".tr,
                               btnTitle: "confirmDateBirth".tr,
                               pickerStyle: "DateCalendar",
-                              looping: true);
-                        },
-                        readOnly: true,
-                        prefixIcon: Assets.images.icCalendar.svg(),
-                        hintText: "birthDate".tr,
+                              looping: true,
+                              onConfirm: (value) {
+                                if (value != "") {
+                                  DateTime data = DateFormat("dd MMMM yyyy").parse(value);
+                                  dateController.text =
+                                      "${data.day.toString().padLeft(2, '0')}/${data.month.toString().padLeft(2, '0')}/${data.year.toString()}";
+                                  controller.params.value.day = data.day;
+                                  controller.params.value.month = data.month;
+                                  controller.params.value.year = data.year;
+                                }
+                              },
+                              onChange: (value) {
+                                if (value != "") {
+                                  DateTime data = DateFormat("dd MMMM yyyy").parse(value);
+                                  dateController.text =
+                                      "${data.day.toString().padLeft(2, '0')}/${data.month.toString().padLeft(2, '0')}/${data.year.toString()}";
+                                  controller.params.value.day = data.day;
+                                  controller.params.value.month = data.month;
+                                  controller.params.value.year = data.year;
+                                }
+                              },
+                            );
+                          },
+                          readOnly: true,
+                          prefixIcon: Assets.images.icCalendar.svg(),
+                          hintText: "birthDate".tr,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 20.w),
-                    Expanded(
-                      child: AppTextField(
-                        onTap: () {
-                          selectDateOrTime(Get.context!,
+                      SizedBox(width: 20.w),
+                      Expanded(
+                        child: AppTextField(
+                          controller: timeController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Time should not be empty";
+                            }
+                            return null;
+                          },
+                          onTap: () {
+                            selectDateOrTime(
+                              Get.context!,
                               title: "selectYourTimeBirth".tr,
                               btnTitle: "confirmTimeBirth".tr,
                               pickerStyle: "TimeCalendar",
-                              looping: true);
-                        },
-                        readOnly: true,
-                        prefixIcon: Assets.images.icBirthTIme.svg(),
-                        hintText: "birthTime".tr,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
-                AppTextField(
-                  prefixIcon: Assets.images.icLocation.svg(),
-                  hintText: "birthPalace".tr,
-                  onTap: () {},
-                ),
-                SizedBox(height: 20.h),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding:
-                        EdgeInsets.only(bottom: 36.h, left: 20.w, right: 20.h),
-                    child: MaterialButton(
-                        height: 50,
-                        minWidth: Get.width,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                              looping: true,
+                              onConfirm: (value) {
+                                if (value != "") {
+                                  DateTime data = DateFormat("h:mm a").parse(value);
+                                  timeController.text = value;
+                                  controller.params.value.hour = data.hour;
+                                  controller.params.value.min = data.minute;
+                                }
+                              },
+                              onChange: (value) {
+                                if (value != "") {
+                                  DateTime data = DateFormat("h:mm a").parse(value);
+                                  timeController.text = value;
+                                  controller.params.value.hour = data.hour;
+                                  controller.params.value.min = data.minute;
+                                }
+                              },
+                            );
+                          },
+                          readOnly: true,
+                          prefixIcon: Assets.images.icBirthTIme.svg(),
+                          hintText: "birthTime".tr,
                         ),
-                        onPressed: () {
-                          openAlertView();
-                        },
-                        color: AppColors.lightYellow,
-                        child: Text(
-                          "submit".tr,
-                          style: AppTextStyle.textStyle20(
-                              fontWeight: FontWeight.w600),
-                        )),
+                      ),
+                    ],
                   ),
-                ),
-                SizedBox(height: 100.h),
-              ],
+                  SizedBox(height: 20.h),
+                  AppTextField(
+                    controller: placeController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Place should not be empty";
+                      }
+                      return null;
+                    },
+                    prefixIcon: Assets.images.icLocation.svg(),
+                    hintText: "birthPalace".tr,
+                    onTap: () {
+                      selectPlaceOfBirth(context, (value) {
+                        placeController.text = value.name;
+                        controller.params.value.lat = double.parse(value.latitude!);
+                        controller.params.value.long = double.parse(value.latitude!);
+                        controller.params.value.location = value.name;
+                        Navigator.pop(context);
+                        // Get.back();
+                      });
+                    },
+                    readOnly: true,
+                  ),
+                  SizedBox(height: 20.h),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: FilledButton(
+                            style: FilledButton.styleFrom(
+                              backgroundColor: AppColors.lightYellow,
+                              padding: EdgeInsets.symmetric(vertical: 16.h),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                              ),
+                            ),
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                Get.toNamed(RouteName.kundliDetail);
+                              }
+                            },
+                            child: Text(
+                              "submit".tr,
+                              style: AppTextStyle.textStyle20(
+                                  fontWeight: FontWeight.w600, fontColor: AppColors.brownColour),
+                            )),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 100.h),
+                ],
+              ),
             ),
           ),
         ),
@@ -441,8 +603,7 @@ class CheckOther extends GetView<KundliController> {
                       child: Text(
                         "okay".tr,
                         style: AppTextStyle.textStyle16(
-                            fontColor: AppColors.brownColour,
-                            fontWeight: FontWeight.w600),
+                            fontColor: AppColors.brownColour, fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),

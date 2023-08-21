@@ -105,7 +105,8 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                     //   barrierColor: AppColors.darkBlue.withOpacity(0.5),
                     //   builder: (context) => const GiftPopup(),
                     // );
-                    controller.giftPopup(Get.context!);
+                    //controller.giftPopup(Get.context!);
+                    controller.jumpToLivePage();
                   },
                   child: Container(
                     width: double.infinity,

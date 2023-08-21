@@ -11,8 +11,7 @@ class TextFieldCustom extends StatefulWidget {
   final TextInputType inputType;
   final TextInputAction inputAction;
 
-  const TextFieldCustom(this.hintText, this.inputType, this.inputAction,
-      {super.key});
+  const TextFieldCustom(this.hintText, this.inputType, this.inputAction, {super.key});
 
   @override
   State<TextFieldCustom> createState() => _TextFieldCustomState();
@@ -73,12 +72,9 @@ class _WhiteTextFieldState extends State<WhiteTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration:
-          BoxDecoration(borderRadius: BorderRadius.circular(10), boxShadow: [
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), boxShadow: [
         BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 3.0,
-            offset: const Offset(0.3, 3.0)),
+            color: Colors.black.withOpacity(0.3), blurRadius: 3.0, offset: const Offset(0.3, 3.0)),
       ]),
       child: TextFormField(
         controller: widget.controller,
@@ -116,13 +112,14 @@ class AppTextField extends StatelessWidget {
   AppTextField(
       {Key? key,
       this.controller,
+      this.validator,
       this.prefixIcon,
       this.hintText,
       this.readOnly,
       this.textInputType,
       this.onTap})
       : super(key: key);
-
+  final String? Function(String?)? validator;
   final TextEditingController? controller;
   final Widget? prefixIcon;
   final String? hintText;
@@ -132,8 +129,9 @@ class AppTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: controller,
+      validator: validator,
       style: TextStyle(
         fontWeight: FontWeight.w400,
         fontSize: 16.sp,

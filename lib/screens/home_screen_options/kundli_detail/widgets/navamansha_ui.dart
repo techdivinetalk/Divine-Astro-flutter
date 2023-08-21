@@ -1,10 +1,13 @@
+import 'package:divine_astrologer/screens/home_screen_options/kundli_detail/kundli_detail_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../gen/assets.gen.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 class NavamanshaUi extends StatelessWidget {
-  const NavamanshaUi({Key? key}) : super(key: key);
+  final KundliDetailController controller;
+
+  const NavamanshaUi({Key? key, required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,10 +15,18 @@ class NavamanshaUi extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(height: kToolbarHeight.h * 2.5),
-          SizedBox(height: 25.h),
-          Container(
-            child: Assets.images.icKundliChart
-                .image(width: ScreenUtil().screenWidth * 0.9),
+          SizedBox(height: 40.h),
+          Obx(
+            () => AnimatedCrossFade(
+              duration: const Duration(milliseconds: 200),
+              crossFadeState: controller.navamashaChart.value.svg == null
+                  ? CrossFadeState.showSecond
+                  : CrossFadeState.showFirst,
+              secondChild: const SizedBox(width: double.maxFinite),
+              firstChild: SvgPicture.string(
+                controller.navamashaChart.value.svg!,
+              ),
+            ),
           ),
         ],
       ),

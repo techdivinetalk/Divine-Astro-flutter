@@ -183,6 +183,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    _onConfirm();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
       child: GestureDetector(
@@ -211,6 +212,21 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
             DateFormat("h:mm a").parse("$_currMonth:$_currDay $dayTime");
 
         widget.onChange!(parseDate, _calcSelectIndexList());
+      }
+    }
+  }
+
+  void _onConfirm() {
+    if (widget.onConfirm != null) {
+      if (widget.pickerType == "DateCalendar") {
+        DateTime dateTime = DateTime(_currYear!, _currMonth!, _currDay!);
+        widget.onConfirm!(dateTime, _calcSelectIndexList());
+      } else {
+        var dayTime = _currYear == 1 ? "AM" : "PM";
+        DateTime parseDate =
+        DateFormat("h:mm a").parse("$_currMonth:$_currDay $dayTime");
+
+        widget.onConfirm!(parseDate, _calcSelectIndexList());
       }
     }
   }

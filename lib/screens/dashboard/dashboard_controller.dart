@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../model/res_login.dart';
 
@@ -17,5 +18,13 @@ class DashboardController extends GetxController
   void onInit() {
     super.onInit();
     userData = preferenceService.getUserDetail();
+    askPermission();
+  }
+
+  void askPermission() async{
+    await [
+      Permission.camera,
+      Permission.microphone,
+    ].request();
   }
 }
