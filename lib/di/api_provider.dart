@@ -57,6 +57,11 @@ class ApiProvider {
   final String username = "625170";
   final String password = "4eb3e540da68887ac72d4d45d7da9906";
 
+  ///ReferAn Astrologer Base
+  final elasticDivineTalkBase = "https://crm-api.divinetalk.live/api/v1/";
+
+  final referAnAstrologer = "testaddQuickLeadByApp";
+
   //
   final NetworkService networkManager = Get.find<NetworkService>();
   final ProgressService progressService = Get.find<ProgressService>();
