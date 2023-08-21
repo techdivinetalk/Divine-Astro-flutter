@@ -57,10 +57,6 @@ class LivePageState extends State<LivePage> {
             .listen((event) {
           onInRoomCommandMessageReceived(event);
         })),
-        (ZegoUIKit().getSignalingPlugin().getInvitationReceivedStream().listen((event) {
-          liveController.connect.startCoHost();
-          print(event.toString());
-        }))
       ]);
     });
   }
@@ -109,10 +105,10 @@ class LivePageState extends State<LivePage> {
             ..topMenuBarConfig
             ..avatarBuilder = customAvatarBuilder
             ..bottomMenuBarConfig.hostButtons = const [
-              ZegoMenuBarButtonName.soundEffectButton,
-              ZegoMenuBarButtonName.switchCameraButton,
-              ZegoMenuBarButtonName.toggleCameraButton,
-              ZegoMenuBarButtonName.toggleMicrophoneButton,
+              //ZegoMenuBarButtonName.soundEffectButton,
+              //ZegoMenuBarButtonName.switchCameraButton,
+              //ZegoMenuBarButtonName.toggleCameraButton,
+              //ZegoMenuBarButtonName.toggleMicrophoneButton,
             ]
             ..bottomMenuBarConfig.coHostButtons = [
               ZegoMenuBarButtonName.toggleCameraButton,
