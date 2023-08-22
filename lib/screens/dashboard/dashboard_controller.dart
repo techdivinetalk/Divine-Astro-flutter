@@ -8,6 +8,7 @@ import '../../model/res_login.dart';
 class DashboardController extends GetxController
     with GetSingleTickerProviderStateMixin {
   RxInt selectedIndex = 0.obs;
+  RxString userProfileImage = " ".obs;
   final GlobalKey<ScaffoldState> scaffoldkey = GlobalKey();
   DashboardController();
   SharedPreferenceService preferenceService =
@@ -18,10 +19,11 @@ class DashboardController extends GetxController
   void onInit() {
     super.onInit();
     userData = preferenceService.getUserDetail();
+    userProfileImage.value = userData?.image ?? "";
     askPermission();
   }
 
-  void askPermission() async{
+  void askPermission() async {
     await [
       Permission.camera,
       Permission.microphone,

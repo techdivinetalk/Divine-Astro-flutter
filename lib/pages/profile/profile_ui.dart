@@ -17,6 +17,7 @@ import '../../common/common_bottomsheet.dart';
 import '../../di/shared_preference_service.dart';
 import '../../repository/user_repository.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
+import 'package:file_picker/file_picker.dart';
 
 class ProfileUI extends GetView<ProfilePageController> {
   ProfileUI({Key? key}) : super(key: key);
@@ -66,22 +67,22 @@ class ProfileUI extends GetView<ProfilePageController> {
                                     onTap: () {
                                       controller.updateProfileImage(context);
                                     },
-                                    child: Obx(
-                                      () => ClipRRect(
+                                    child: ClipRRect(
                                         borderRadius: BorderRadius.circular(80),
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              "${controller.userProfileImage?.value}",
-                                          fit: BoxFit.cover,
-                                          height: 70.h,
-                                          width: 70.h,
-                                          placeholder: (context, url) =>
-                                              const CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) =>
-                                              const Icon(Icons.error),
-                                        ),
-                                      ),
-                                    ))),
+                                        child: Obx(
+                                          () => CachedNetworkImage(
+                                            imageUrl: controller
+                                                .userProfileImage.value,
+                                            fit: BoxFit.cover,
+                                            height: 70.h,
+                                            width: 70.h,
+                                            placeholder: (context, url) =>
+                                                const CircularProgressIndicator(),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const Icon(Icons.error),
+                                          ),
+                                        )))),
                           ],
                         ),
                         SizedBox(width: 10.h),
@@ -217,7 +218,7 @@ class ProfileUI extends GetView<ProfilePageController> {
           ProfileOptionModelClass item = controller.profileList[index];
           return GridTile(
             child: InkWell(
-              onTap: () {
+              onTap: () async {
                 if (index == 4) {
                   openBottomSheet(
                     context,
@@ -384,6 +385,16 @@ class ProfileUI extends GetView<ProfilePageController> {
                       ],
                     ),
                   );
+                } else if (index == 1) {
+                  FilePickerResult? result =
+                      await FilePicker.platform.pickFiles(
+                    type: FileType.video,
+                    allowCompression: false,
+                  );
+                  if (result != null) {
+                    Get.toNamed(RouteName.uploadStoryUi,
+                        arguments: "${result.files.single.path}");
+                  }
                 } else if (item.nav != "") {
                   Get.toNamed(item.nav.toString());
                 }

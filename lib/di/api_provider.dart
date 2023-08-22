@@ -24,11 +24,6 @@ class ApiProvider {
   final String jsonAuthenticationName = "Authorization";
   final int successResponse = 200;
   String _token = "";
-  //AWS
-  final String awsAccessKey = "AKIA2IL7UUQTRWRVLKEB";
-  final String awsSecretKey = "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";
-  final String awsBucket = "divinenew";
-  final String awsRegion = "ap-south-1";
 
   final String loginUrl = "astroLogin";
   final String getProfileUrl = "getAstrologerProfile";
@@ -81,7 +76,7 @@ class ApiProvider {
     header[jsonHeaderName] = jsonHeaderValue;
     header[jsonAuthenticationName] = 'Bearer $_token';
     header[jsonCookietName] =
-        'XSRF-TOKEN=eyJpdiI6IlVSd20yb0dvNHc1K3JRa0cwbnNINVE9PSIsInZhbHVlIjoiNzBHZlFYeXJ2eWh1RUtBUDgrNlY4U2tEb2tBZjVxazJqcFF0WmJta0FDTDdRSXc1OXFmZGppRGpTM0pldmxOZ0RleFFkYVBUMmVFTUpuVDl2Ty9aa3lYYnN4c2xZa0oxNHFrM2ZWSXBvOWFsNVJHVEVERWwzOFMwWDMwczRWUGUiLCJtYWMiOiI1MDMzZWFhOTk4Mzg2YmRmYTRiNDNmNTU5NTIxMmIzMzEzZmNhMjM4YzcxZmQwZGRhYzA0N2FkZmUxMmZkNDkwIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IkVHMFFFamxaQUxtMGhYek5tSS9oTVE9PSIsInZhbHVlIjoiWXBsS1pDZ3lERmhpYnJzNzRiUlZYYVdHcllHTEhZZ0JsUkpTVmFHTnpNY0YzdFl3bUZGZyt6WFZNNmlmMlRXQ0g0ZDB5TkIzRWYwUjVjK2FzZE1lR3BYUkpkN0ErMnZadDdveDN6NnQyQ2R6Vml5ZHdjWTFFQmkyb0dWVnQ1Q2EiLCJtYWMiOiJjMGQ0YWY4ZWRmMWQ4Zjk2MzU1MjQ0YzRmNDFiYzFjZWRlZjU5ZTBlZjIwNDQ2OWNhMzI3MmQ1NWMzOTRjMjUxIiwidGFnIjoiIn0%3D';
+        'XSRF-TOKEN=eyJpdiI6ImRHY1FIZ2J1eS8wenMvQlk0cWM5R1E9PSIsInZhbHVlIjoiNXZsMHVTZ1c1bEtSUUF3eVdvTDVpdy9QL1FpY0g4S0Nncit5OUw2YlhVbW5uVXhBNTNORzdZdmEyVVkra0hBMjFaTXJ5YWdHTHlwMG5BWFlaZGVMWDZSN3AwUUxIUEMxQ1ZiZmxOWkZJaXhJeStMUzBsZnhLeWd4MW5XMCtMNnkiLCJtYWMiOiI5YjkxY2VhNGE0OGE2OTY3NzhmZTVlMjQ4M2I4MTBlMjA1MTdjNGRlZjdmYzFlNzMzYTNkMGRiMjM2NjM1N2EzIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6Iml6THowdW85NUZxMzZPTldmV2JySEE9PSIsInZhbHVlIjoiNklBTHJxVi9Eek1lWDNkVnVhNGphdHRyZ2tFQXlCVWFTeFE4b2FJUTZqSlpuV0xtdkJTSmdtVFFkMWtLYi9FejRmZWE5Wis1azFXaG1UMnNVOE01UE1CNVBSc2JVVkR3WnAxeWc4bTF6WU1Xb3drNmpvREJMM1UxS0xzNTdFaXYiLCJtYWMiOiI4NmQxNzliNmQ0MzlhNTNiYzAwODgwMjU5NWU4ZTg0MzAxZjE3YWE3ODA2NjhmNjRiYjg2YmVjNmM2NjlkZWMzIiwidGFnIjoiIn0%3D';
     return header;
   }
 

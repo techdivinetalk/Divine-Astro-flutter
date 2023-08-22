@@ -45,6 +45,7 @@ dependencies:
   aws_s3_upload: ^1.5.0
   compress_images_flutter: ^0.0.3+5
   fluttertoast: ^8.2.2
+  video_trimmer: ^2.1.0
 
 
 dev_dependencies:
