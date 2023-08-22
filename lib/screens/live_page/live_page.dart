@@ -3,7 +3,10 @@
 // Flutter imports:
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ui';
 
+import 'package:divine_astrologer/screens/live_page/live_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 //
@@ -16,9 +19,11 @@ import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_stre
 import 'package:zego_uikit_prebuilt_live_streaming/src/components/message/view.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import 'package:http/http.dart' as http;
+import '../../common/cached_network_image.dart';
 import '../../common/colors.dart';
 import '../../common/custom_button.dart';
 import '../../common/custom_text.dart';
+import '../../common/custom_text_field.dart';
 import '../../gen/assets.gen.dart';
 import 'constant.dart';
 import 'gift.dart';
@@ -27,11 +32,14 @@ class LivePage extends StatefulWidget {
   final String liveID;
   final bool isHost;
   final String localUserID;
+  final String? astrologerName, astrologerImage;
 
   const LivePage({
     Key? key,
     required this.liveID,
     required this.localUserID,
+    this.astrologerImage,
+    this.astrologerName,
     this.isHost = false,
   }) : super(key: key);
 
@@ -42,7 +50,7 @@ class LivePage extends StatefulWidget {
 class LivePageState extends State<LivePage> {
   final liveController = ZegoUIKitPrebuiltLiveStreamingController();
   final List<StreamSubscription<dynamic>?> subscriptions = [];
-
+  final controller = Get.put(LiveController());
   final liveStateNotifier =
       ValueNotifier<ZegoLiveStreamingState>(ZegoLiveStreamingState.idle);
 
@@ -50,6 +58,11 @@ class LivePageState extends State<LivePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      liveController.connect.onRequestCoHostEvent = (user){
+        print(user.name);
+        controller.coHostUser = user;
+        liveController.connect.hostAgreeCoHostRequest(user);
+      };
       subscriptions.addAll([
         (ZegoUIKit()
             .getSignalingPlugin()
@@ -117,8 +130,10 @@ class LivePageState extends State<LivePage> {
               ZegoMenuBarButtonName.switchCameraButton,
               ZegoMenuBarButtonName.soundEffectButton,
             ]
+            ..bottomMenuBarConfig.showInRoomMessageButton = false
             ..bottomMenuBarConfig.audienceButtons = []
             ..audioVideoViewConfig.useVideoViewAspectFill = true
+            ..maxCoHostCount = 1
 
             /// gallery-layout, show top and bottom if have two audio-video views
             ..layout = ZegoLayout.gallery()
@@ -149,7 +164,7 @@ class LivePageState extends State<LivePage> {
             }
 
             /// hide the co-host audio-video view to audience and other co-hosts
-            ..audioVideoViewConfig.visible = (
+            /*..audioVideoViewConfig.visible = (
               ZegoUIKitUser localUser,
               ZegoLiveStreamingRole localRole,
               ZegoUIKitUser targetUser,
@@ -168,7 +183,7 @@ class LivePageState extends State<LivePage> {
 
               /// if user is a co-host, only show host's audio-video view
               return targetUserRole == ZegoLiveStreamingRole.host;
-            }
+            }*/
             ..onLiveStreamingStateUpdate = (ZegoLiveStreamingState state) {
               liveStateNotifier.value = state;
             }
@@ -343,35 +358,47 @@ class LivePageState extends State<LivePage> {
                                 Get.back();
                               },
                               icon: Assets.images.leftArrow.svg()),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 14.w, vertical: 8.h),
-                            decoration: BoxDecoration(
-                                color: AppColors.blackColor.withOpacity(.1),
-                                borderRadius: BorderRadius.circular(40)),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SizedBox(
-                                  width: 35.w,
-                                  height: 35.h,
-                                  child: CircleAvatar(
-                                    child: Text("A"),
-                                  ),
-                                ),
-                                SizedBox(width: 10.w),
-                                Column(
+                          ClipRRect(
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
+                                decoration: BoxDecoration(
+                                    color: AppColors.blackColor.withOpacity(.3),
+                                    borderRadius: BorderRadius.circular(40)),
+                                child: Row(
                                   mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    CustomText(
-                                      "Rumi",
-                                      fontSize: 12.sp,
+                                    Container(
+                                      width: 49.w,
+                                      height: 49.h,
+                                      clipBehavior: Clip.antiAlias,
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: circleAvatar(),
                                     ),
-                                    CustomText("Toret", fontSize: 10.sp),
+                                    SizedBox(width: 10.w),
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        CustomText(
+                                          widget.astrologerName ?? "",
+                                          fontSize: 16.sp,
+                                          fontColor: AppColors.white,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        CustomText(
+                                          "Toret",
+                                          fontSize: 12.sp,
+                                          fontColor: AppColors.white,
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
-                              ],
+                              ),
                             ),
                           ),
                         ],
@@ -387,11 +414,80 @@ class LivePageState extends State<LivePage> {
                       children: [
                         messageView,
                         const SizedBox(
-                          height: padding,
+                          height: 16,
                         ),
-                        shortMessageView,
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(40),
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                              child: CustomTextField(
+                                onTap: () {
+                                  showCupertinoModalPopup(
+                                    barrierColor:
+                                    AppColors.textColor.withOpacity(.5),
+                                    context: context,
+                                    builder: (context) => SingleChildScrollView(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context)
+                                              .viewInsets
+                                              .bottom,
+                                        ),
+                                        child: Material(
+                                          color: AppColors.transparent,
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 14.w,
+                                                right: 14.w,
+                                                bottom: 18.h),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                              BorderRadius.circular(40.sp),
+                                              child: BackdropFilter(
+                                                filter: ImageFilter.blur(
+                                                    sigmaX: 5, sigmaY: 5),
+                                                child: CustomTextField(
+                                                  controller: controller.msg,
+                                                  hintText: 'Say Hi...',
+                                                  autoFocus: true,
+                                                  fillColor: AppColors.white
+                                                      .withOpacity(.5),
+                                                  inputBorder:
+                                                  OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color: AppColors.textColor
+                                                          .withOpacity(0.5),
+                                                    ),
+                                                    borderRadius:
+                                                    BorderRadius.circular(
+                                                        40.sp),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                readOnly: true,
+                                hintText: 'Say Hi...',
+                                inputBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color:
+                                    AppColors.textColor.withOpacity(0.15),
+                                  ),
+                                  borderRadius: BorderRadius.circular(40.sp),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                         const SizedBox(
-                          height: 40 + shortMessageHeight,
+                          height: 16,
                         ),
                       ],
                     ),
@@ -402,13 +498,100 @@ class LivePageState extends State<LivePage> {
     );
   }
 
+  Widget circleAvatar() {
+    if (widget.astrologerImage != null || widget.astrologerImage!.isNotEmpty) {
+      return CachedNetworkPhoto(
+        url: widget.astrologerImage,
+        fit: BoxFit.fill,
+      );
+    }
+    return CircleAvatar(
+      child: Text(widget.astrologerName![0].toUpperCase()),
+    );
+  }
+
   Widget sideButtons() {
     return Column(
       children: [
-        IconButton(onPressed: () {}, icon: Icon(Icons.ac_unit)),
-        IconButton(onPressed: () {}, icon: Icon(Icons.ac_unit)),
-        IconButton(onPressed: () {}, icon: Icon(Icons.ac_unit)),
-        IconButton(onPressed: () {}, icon: Icon(Icons.ac_unit)),
+        ClipOval(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
+            child: InkWell(
+              onTap: (){
+                liveController.connect.removeCoHost(controller.coHostUser!);
+              },
+              child: Container(
+                width: 56.w,
+                height: 56.h,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.redColor),
+                child: const Center(child: Icon(Icons.call_end,color: AppColors.white)),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 16.h),
+        ClipOval(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
+            child: Container(
+              width: 56.w,
+              height: 56.h,
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.appRedColour),
+              child: const Center(child: Icon(Icons.exit_to_app,color: AppColors.white)),
+            ),
+          ),
+        ),
+        SizedBox(height: 16.h),
+        ClipOval(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
+            child: Container(
+              width: 56.w,
+              height: 56.h,
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.white.withOpacity(.6)),
+              child: Center(child: Assets.images.leaderboardLive.svg()),
+            ),
+          ),
+        ),
+        SizedBox(height: 16.h),
+        ClipOval(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
+            child: Container(
+              width: 56.w,
+              height: 56.h,
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.white.withOpacity(.6)),
+              child: Center(child: Assets.images.giftLive.svg()),
+            ),
+          ),
+        ),
+        SizedBox(height: 16.h),
+        ClipOval(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
+            child: Container(
+              width: 56.w,
+              height: 56.h,
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.white.withOpacity(.6)),
+              child: Center(child: Assets.images.waitlistLive.svg()),
+            ),
+          ),
+        ),
       ],
     );
   }
