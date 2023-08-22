@@ -24,9 +24,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
           CustomLightYellowButton(
             name: "submitForm".tr,
             onTaped: () {
-              if (controller.formKey.currentState!.validate()) {
-                controller.formKey.currentState!.save();
-              } else {}
+              controller.submitForm();
             },
           ),
         ],
@@ -35,7 +33,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: Form(
-            key: controller.formKey,
+            key: controller.formState,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -44,7 +42,14 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 5),
-                WhiteTextField(
+                ReferAstrologerField(
+                  validator: (value) {
+                    if (value! == "") {
+                      return "";
+                    }
+                    return null;
+                  },
+                  controller: controller.state.astrologerName,
                   inputType: TextInputType.text,
                   inputAction: TextInputAction.next,
                   hintText: "enterNameMsg".tr,
@@ -56,7 +61,14 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 5),
-                WhiteTextField(
+                ReferAstrologerField(
+                  validator: (value) {
+                    if (value! == "") {
+                      return "";
+                    }
+                    return null;
+                  },
+                  controller: controller.state.mobileNumber,
                   inputType: TextInputType.text,
                   inputAction: TextInputAction.next,
                   hintText: "enterNumberMsg".tr,
@@ -67,7 +79,14 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 5),
-                WhiteTextField(
+                ReferAstrologerField(
+                  validator: (value) {
+                    if (value! == "") {
+                      return "";
+                    }
+                    return null;
+                  },
+                  controller: controller.state.astrologySkills,
                   inputType: TextInputType.text,
                   inputAction: TextInputAction.next,
                   hintText: "enterSkillsMsg".tr,
@@ -78,7 +97,14 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 5),
-                WhiteTextField(
+                ReferAstrologerField(
+                  validator: (value) {
+                    if (value! == "") {
+                      return "";
+                    }
+                    return null;
+                  },
+                  controller: controller.state.astrologerExperience,
                   inputType: TextInputType.text,
                   inputAction: TextInputAction.done,
                   hintText: "enterExperienceMsg".tr,
@@ -112,91 +138,193 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Obx(() => InkWell(
-                  onTap: () {
-                    controller.yesOrNoOptionTapped(isYesTapped: true);
-                  },
-                  child: Container(
-                      height: 35.h,
-                      width: 60.w,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 3.0,
-                              offset: const Offset(0.0, 3.0)),
-                        ],
-                        color: controller.isYesSelected.value
-                            ? AppColors.darkBlue
-                            : AppColors.white,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(15)),
-                      ),
-                      child: Text(
-                        "yes".tr,
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle14(
-                            fontWeight: FontWeight.w600,
-                            fontColor: controller.isYesSelected.value
-                                ? AppColors.white
-                                : AppColors.darkBlue),
-                      )),
-                )),
+            GetBuilder<ReferAstrologerController>(
+              builder: (controller) => InkWell(
+                onTap: () {
+                  controller.workingForPlatForm(value: WorkingForPlatform.yes);
+                },
+                child: Container(
+                    height: 35.h,
+                    width: 60.w,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 3.0,
+                            offset: const Offset(0.0, 3.0)),
+                      ],
+                      color: controller.isYes
+                          ? AppColors.darkBlue
+                          : AppColors.white,
+                      borderRadius: const BorderRadius.all(Radius.circular(15)),
+                    ),
+                    child: Text(
+                      "yes".tr,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyle.textStyle14(
+                          fontWeight: FontWeight.w600,
+                          fontColor: controller.isYes
+                              ? AppColors.white
+                              : AppColors.darkBlue),
+                    )),
+              ),
+            ),
             const SizedBox(width: 25),
-            Obx(() => InkWell(
-                  onTap: () {
-                    controller.yesOrNoOptionTapped(isYesTapped: false);
-                  },
-                  child: Container(
-                      height: 35.h,
-                      width: 60.w,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 3.0,
-                              offset: const Offset(0.0, 3.0)),
-                        ],
-                        color: controller.isNoSelected.value
-                            ? AppColors.darkBlue
-                            : AppColors.white,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(15)),
-                      ),
-                      child: Text(
-                        "no".tr,
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle14(
-                            fontWeight: FontWeight.w600,
-                            fontColor: controller.isNoSelected.value
-                                ? AppColors.white
-                                : AppColors.darkBlue),
-                      )),
-                )),
+            GetBuilder<ReferAstrologerController>(
+              builder: (controller) => InkWell(
+                onTap: () {
+                  controller.workingForPlatForm(value: WorkingForPlatform.no);
+                },
+                child: Container(
+                    height: 35.h,
+                    width: 60.w,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 3.0,
+                            offset: const Offset(0.0, 3.0)),
+                      ],
+                      color: controller.isNo
+                          ? AppColors.darkBlue
+                          : AppColors.white,
+                      borderRadius: const BorderRadius.all(Radius.circular(15)),
+                    ),
+                    child: Text(
+                      "no".tr,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyle.textStyle14(
+                          fontWeight: FontWeight.w600,
+                          fontColor: controller.isNo
+                              ? AppColors.white
+                              : AppColors.darkBlue),
+                    )),
+              ),
+            ),
           ],
         ),
-        Obx(() => controller.isYesSelected.value
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 20),
-                  Text(
-                    "platform".tr,
-                    style:
-                        AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
-                  ),
-                  const SizedBox(height: 5),
-                  WhiteTextField(
-                    inputType: TextInputType.text,
-                    inputAction: TextInputAction.done,
-                    hintText: "enterPlatformMsg".tr,
-                  ),
-                ],
-              )
-            : Container())
+        GetBuilder<ReferAstrologerController>(
+          builder: (controller) => controller.isYes
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    Text(
+                      "platform".tr,
+                      style:
+                          AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                    ),
+                    const SizedBox(height: 5),
+                    ReferAstrologerField(
+                      validator: (value) {
+                        if (controller.isYes) {
+                          if (value! == "") {
+                            return "";
+                          }
+                        }
+                        return null;
+                      },
+                      inputType: TextInputType.text,
+                      inputAction: TextInputAction.done,
+                      hintText: "enterPlatformMsg".tr,
+                    ),
+                  ],
+                )
+              : Container(),
+        )
       ],
+    );
+  }
+}
+
+
+
+
+
+class ReferAstrologerField extends StatelessWidget {
+  final String hintText;
+  final TextInputType inputType;
+  final TextInputAction inputAction;
+  final Icon? icon;
+  final Widget? suffixIcon;
+  final Color? errorBorder;
+  final TextEditingController? controller;
+  final String? Function(String? value)? validator;
+
+  const ReferAstrologerField({
+    super.key,
+    required this.hintText,
+    required this.inputType,
+    required this.inputAction,
+    this.errorBorder,
+    this.icon,
+    this.suffixIcon,
+    this.controller,
+    this.validator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 55.h,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 1.0,
+            offset: const Offset(0.1, 1.0),
+          ),
+        ],
+      ),
+      child: TextFormField(
+        controller: controller,
+        keyboardType: inputType,
+        validator: validator,
+        textInputAction: inputAction,
+        decoration: InputDecoration(
+          isDense: true,
+          errorStyle: const TextStyle(height: 0),
+          hintText: hintText,
+          helperStyle: AppTextStyle.textStyle16(),
+          fillColor: AppColors.white,
+          hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.grey),
+          hoverColor: AppColors.white,
+          prefixIcon: icon,
+          suffixIcon: suffixIcon,
+          filled: true,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: BorderSide(
+              color: errorBorder ?? AppColors.white,
+              width: 1.0,
+            ),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: BorderSide(
+              color: errorBorder ?? AppColors.white,
+              width: 1.0,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide:  const BorderSide(
+              color: AppColors.redColor,
+              width: 1.0,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide:  const BorderSide(
+              color: AppColors.yellow,
+              width: 1.0,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

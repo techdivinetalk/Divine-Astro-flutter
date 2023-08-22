@@ -62,20 +62,26 @@ class ProfileUI extends GetView<ProfilePageController> {
                                       color: AppColors.appYellowColour),
                                   borderRadius: BorderRadius.circular(80),
                                 ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(80),
-                                  child: CachedNetworkImage(
-                                    imageUrl:
-                                        "${ApiProvider.imageBaseUrl}${controller.userData?.image}",
-                                    fit: BoxFit.cover,
-                                    height: 70.h,
-                                    width: 70.h,
-                                    placeholder: (context, url) =>
-                                        const CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
-                                  ),
-                                )),
+                                child: InkWell(
+                                    onTap: () {
+                                      controller.updateProfileImage(context);
+                                    },
+                                    child: Obx(
+                                      () => ClipRRect(
+                                        borderRadius: BorderRadius.circular(80),
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              "${controller.userProfileImage?.value}",
+                                          fit: BoxFit.cover,
+                                          height: 70.h,
+                                          width: 70.h,
+                                          placeholder: (context, url) =>
+                                              const CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
+                                        ),
+                                      ),
+                                    ))),
                           ],
                         ),
                         SizedBox(width: 10.h),

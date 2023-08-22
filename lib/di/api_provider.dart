@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -22,6 +24,12 @@ class ApiProvider {
   final String jsonAuthenticationName = "Authorization";
   final int successResponse = 200;
   String _token = "";
+  //AWS
+  final String awsAccessKey = "AKIA2IL7UUQTRWRVLKEB";
+  final String awsSecretKey = "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";
+  final String awsBucket = "divinenew";
+  final String awsRegion = "ap-south-1";
+
   final String loginUrl = "astroLogin";
   final String getProfileUrl = "getAstrologerProfile";
   final String getReviewRatingUrl = "getReviewRating";
@@ -49,10 +57,16 @@ class ApiProvider {
   final String username = "625170";
   final String password = "4eb3e540da68887ac72d4d45d7da9906";
 
+  ///ReferAn Astrologer Base
+  final elasticDivineTalkBase = "https://crm-api.divinetalk.live/api/v1/";
+
+  final referAnAstrologer = "testaddQuickLeadByApp";
+
   //
   final NetworkService networkManager = Get.find<NetworkService>();
   final ProgressService progressService = Get.find<ProgressService>();
-  final SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
+  final SharedPreferenceService preferenceService =
+      Get.find<SharedPreferenceService>();
 
   Map<String, String> getJsonHeader() {
     var header = <String, String>{};
@@ -104,7 +118,8 @@ class ApiProvider {
     }
   }
 
-  get(String url, {Map<String, String>? headers, bool closeDialogOnTimeout = true}) async {
+  get(String url,
+      {Map<String, String>? headers, bool closeDialogOnTimeout = true}) async {
     if (headers == null) {
       headers = await getAuthorisedHeader();
       log("headers: $headers");
@@ -126,7 +141,8 @@ class ApiProvider {
     }
   }
 
-  delete(String url, {Map<String, String>? headers, bool closeDialogOnTimeout = true}) async {
+  delete(String url,
+      {Map<String, String>? headers, bool closeDialogOnTimeout = true}) async {
     if (headers == null) {
       headers = await getAuthorisedHeader();
       log("headers: $headers");
@@ -148,15 +164,17 @@ class ApiProvider {
     }
   }
 
-  getWithPrams(Uri url, {Map<String, String>? headers, bool closeDialogOnTimeout = true}) async {
+  getWithPrams(Uri url,
+      {Map<String, String>? headers, bool closeDialogOnTimeout = true}) async {
     if (headers == null) {
       headers = await getAuthorisedHeader();
       log("headers: $headers");
     }
     if (await networkManager.isConnected() ?? false) {
       log('url:$baseUrl$url');
-      var response =
-          await http.get(url, headers: headers).timeout(const Duration(seconds: 15), onTimeout: () {
+      var response = await http
+          .get(url, headers: headers)
+          .timeout(const Duration(seconds: 15), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
         }
@@ -182,7 +200,8 @@ class ApiProvider {
       log('body: $body');
       log("headers: $headers");
       var response = await http
-          .post(Uri.parse(endPoint + url), headers: headers, body: body, encoding: encoding)
+          .post(Uri.parse(endPoint + url),
+              headers: headers, body: body, encoding: encoding)
           .timeout(const Duration(seconds: 15), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
@@ -206,7 +225,8 @@ class ApiProvider {
       log('url: $baseUrl$url');
       log('body: $body');
       var response = await http
-          .put(Uri.parse(baseUrl + url), headers: headers, body: body, encoding: encoding)
+          .put(Uri.parse(baseUrl + url),
+              headers: headers, body: body, encoding: encoding)
           .timeout(const Duration(seconds: 15), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
@@ -220,7 +240,8 @@ class ApiProvider {
     }
   }
 
-  Future uploadImage(Map<String, File> images, Map<String, dynamic> body, String url,
+  Future uploadImage(
+      Map<String, File> images, Map<String, dynamic> body, String url,
       {String type = "POST", Map<String, String>? headers}) async {
     if (await networkManager.isConnected() ?? false) {
       var uri = Uri.parse(baseUrl + url);
@@ -229,7 +250,8 @@ class ApiProvider {
       request.headers.addAll(headers ?? await getAuthorisedHeader());
       debugPrint("header : ${request.headers}");
       images.forEach((key, value) async {
-        final multipartFile = await http.MultipartFile.fromPath(key, value.path);
+        final multipartFile =
+            await http.MultipartFile.fromPath(key, value.path);
         request.files.add(multipartFile);
       });
       body.forEach((key, value) {
@@ -253,7 +275,8 @@ class ApiProvider {
   }
 
   Map<String, String> getAstrologyHeader() {
-    String basicAuth = 'Basic ${base64.encode(utf8.encode('$username:$password'))}';
+    String basicAuth =
+        'Basic ${base64.encode(utf8.encode('$username:$password'))}';
     Map<String, String> headers = {
       'authorization': basicAuth,
       'Content-Type': 'application/json',

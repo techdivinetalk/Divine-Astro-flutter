@@ -52,6 +52,7 @@ class WhiteTextField extends StatefulWidget {
   final Widget? suffixIcon;
   final Color? errorBorder;
   final TextEditingController? controller;
+  final String? Function(String? value)? validator;
 
   const WhiteTextField(
       {super.key,
@@ -62,7 +63,9 @@ class WhiteTextField extends StatefulWidget {
       this.controller,
       this.errorBorder,
       this.icon,
-      this.suffixIcon});
+      this.suffixIcon,
+        this.validator
+      });
 
   @override
   State<WhiteTextField> createState() => _WhiteTextFieldState();
@@ -77,6 +80,7 @@ class _WhiteTextFieldState extends State<WhiteTextField> {
             color: Colors.black.withOpacity(0.3), blurRadius: 3.0, offset: const Offset(0.3, 3.0)),
       ]),
       child: TextFormField(
+        validator: widget.validator,
         controller: widget.controller,
         maxLines: widget.maxLines,
         keyboardType: widget.inputType,
