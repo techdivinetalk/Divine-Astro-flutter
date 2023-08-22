@@ -1,7 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'dart:io';
-import 'package:compress_images_flutter/compress_images_flutter.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path/path.dart' as p;
 import 'package:aws_s3_upload/aws_s3_upload.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
@@ -14,23 +14,24 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../common/app_exception.dart';
 import '../../common/colors.dart';
-import '../../di/api_provider.dart';
 import '../../di/shared_preference_service.dart';
 import '../../gen/assets.gen.dart';
 import '../../model/res_login.dart';
 import '../../model/res_review_ratings.dart';
 import '../../model/res_user_profile.dart';
 import '../../repository/user_repository.dart';
+import '../../screens/dashboard/dashboard_controller.dart';
 
 class ProfilePageController extends GetxController {
   final UserRepository userRepository;
   ProfilePageController(this.userRepository);
   UserData? userData;
   GetUserProfile? userProfile;
-  RxString? userProfileImage = "".obs;
+  RxString userProfileImage = "".obs;
   ResReviewRatings? ratingsData;
   ResReviewReply? reviewReply;
   var preference = Get.find<SharedPreferenceService>();
+  var dashboardController = Get.find<DashboardController>();
   RxBool profileDataSync = false.obs;
   RxBool reviewDataSync = false.obs;
   File? image;
@@ -108,8 +109,10 @@ class ProfilePageController extends GetxController {
         "bankDetails".tr,
         Assets.images.icBankDetailNew.svg(width: 30.h, height: 30.h),
         '/bankDetailsUI'),
-    ProfileOptionModelClass("uploadStory".tr,
-        Assets.images.icUploadStory.svg(width: 30.h, height: 30.h), ''),
+    ProfileOptionModelClass(
+        "uploadStory".tr,
+        Assets.images.icUploadStory.svg(width: 30.h, height: 30.h),
+        '/uploadStoryUi'),
     ProfileOptionModelClass(
         "uploadYourPhoto".tr,
         Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h),
@@ -176,7 +179,7 @@ class ProfilePageController extends GetxController {
   void onInit() {
     super.onInit();
     userData = preference.getUserDetail();
-    userProfileImage?.value = "${userData?.image}";
+    userProfileImage.value = "${userData?.image}";
     getUserProfileDetails();
     getReviewRating();
   }
@@ -310,35 +313,50 @@ class ProfilePageController extends GetxController {
       ],
     );
     if (croppedFile != null) {
-      final file = File(croppedFile.path);
+      // final file = File(croppedFile.path);
 
-      uploadFile =
-          await CompressImagesFlutter().compressImage(file.path, quality: 30);
-
-      uploadImageToS3Bucket(uploadFile);
+      uploadFile = File(croppedFile.path);
+      final filePath = uploadFile!.absolute.path;
+      final lastIndex = filePath.lastIndexOf(RegExp(r'.png|.jp'));
+      final splitted = filePath.substring(0, (lastIndex));
+      final outPath = "${splitted}_out${filePath.substring(lastIndex)}";
+      var result = await FlutterImageCompress.compressAndGetFile(
+        filePath,
+        outPath,
+        minWidth: 500,
+      );
+      if (result != null) {
+        uploadImageToS3Bucket(File(result.path));
+      }
     } else {
       debugPrint("Image is not cropped.");
     }
   }
 
   uploadImageToS3Bucket(File? selectedFile) async {
-    var userData = preference.getUserDetail();
+    var commonConstants = await userRepository.constantDetailsData();
+    var dataString = commonConstants.data.awsCredentails.baseurl?.split(".");
     var extension = p.extension(selectedFile!.path);
 
     var response = await AwsS3.uploadFile(
-      accessKey: ApiProvider().awsAccessKey,
-      secretKey: ApiProvider().awsSecretKey,
+      accessKey: commonConstants.data.awsCredentails.accesskey!,
+      secretKey: commonConstants.data.awsCredentails.secretKey!,
       file: selectedFile,
-      bucket: ApiProvider().awsBucket,
+      bucket: dataString![0].split("//")[1],
       destDir: 'astrologer/${userData?.id}',
-      filename: 'profile_image$extension',
-      region: ApiProvider().awsRegion,
+      filename: '${DateTime.now().millisecondsSinceEpoch.toString()}$extension',
+      region: dataString[2],
     );
     if (response != null) {
-      userProfileImage?.value = "";
-      userProfileImage?.value = response;
+      dashboardController.userProfileImage.value = response;
+      userProfileImage.value = response;
       userData?.image = response;
       preference.setUserDetail(userData!);
+      Get.snackbar("Profile image update successfully", "",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: AppColors.white,
+          colorText: AppColors.blackColor,
+          duration: const Duration(seconds: 3));
       debugPrint("Uploaded Url : $response");
     } else {
       CustomException("Something went wrong");
