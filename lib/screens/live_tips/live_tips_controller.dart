@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,13 +14,24 @@ import '../live_page/live_page.dart';
 
 class LiveTipsController extends GetxController {
   var pref = Get.find<SharedPreferenceService>();
-  String liveId = "";
+  String liveId = "",name = "",image = "";
+
+  @override
+  void onReady() {
+    var data = pref.getUserDetail();
+    liveId = data!.id.toString();
+    name = data.name!;
+    image = ApiProvider.imageBaseUrl+data.image!;
+    super.onReady();
+  }
 
   jumpToLivePage() {
     Get.to(LivePage(
       liveID: "100",
       isHost: true,
       localUserID: localUserID,
+      astrologerImage: image,
+      astrologerName: name,
     ));
   }
 
@@ -160,12 +172,5 @@ class LiveTipsController extends GetxController {
         ],
       ),
     );
-  }
-
-  @override
-  void onReady() {
-    var data = pref.getUserDetail();
-    liveId = data!.id.toString();
-    super.onReady();
   }
 }
