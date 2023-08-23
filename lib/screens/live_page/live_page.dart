@@ -1,10 +1,11 @@
-// Dart imports:
-
-// Flutter imports:
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:divine_astrologer/common/co-host_request.dart';
+import 'package:divine_astrologer/common/end_cohost.dart';
+import 'package:divine_astrologer/common/end_session_dialog.dart';
+import 'package:divine_astrologer/common/gift_sheet.dart';
 import 'package:divine_astrologer/screens/live_page/live_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +22,10 @@ import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import 'package:http/http.dart' as http;
 import '../../common/cached_network_image.dart';
 import '../../common/colors.dart';
-import '../../common/custom_button.dart';
 import '../../common/custom_text.dart';
 import '../../common/custom_text_field.dart';
+import '../../common/leader_board_sheet.dart';
+import '../../common/waitlist_sheet.dart';
 import '../../gen/assets.gen.dart';
 import 'constant.dart';
 import 'gift.dart';
@@ -58,18 +60,32 @@ class LivePageState extends State<LivePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      liveController.connect.onRequestCoHostEvent = (user){
-        print(user.name);
+      liveController.connect.onRequestCoHostEvent = (user) {
         controller.coHostUser = user;
-        liveController.connect.hostAgreeCoHostRequest(user);
+        showCupertinoModalPopup(
+            context: context,
+            builder: (BuildContext context) {
+              return CoHostRequest(onAccept: () {
+                liveController.connect.hostAgreeCoHostRequest(user);
+                controller.isCoHosting.value = true;
+              });
+            });
       };
       subscriptions.addAll([
-        (ZegoUIKit()
+        ZegoUIKit()
             .getSignalingPlugin()
             .getInRoomCommandMessageReceivedEventStream()
             .listen((event) {
           onInRoomCommandMessageReceived(event);
-        })),
+        }),
+        ZegoUIKit()
+            .getSignalingPlugin()
+            .getInvitationReceivedStream()
+            .listen((event) {
+          if (event["type"] == 10) {
+            controller.isCoHosting.value = false;
+          }
+        }),
       ]);
     });
   }
@@ -77,7 +93,6 @@ class LivePageState extends State<LivePage> {
   @override
   void dispose() {
     super.dispose();
-
     for (final subscription in subscriptions) {
       subscription?.cancel();
     }
@@ -110,8 +125,8 @@ class LivePageState extends State<LivePage> {
         return ZegoUIKitPrebuiltLiveStreaming(
           appID: yourAppID,
           appSign: yourAppSign /*input your AppSign*/,
-          userID: localUserID,
-          userName: 'user_$localUserID',
+          userID: widget.localUserID,
+          userName: 'user_${widget.localUserID}',
           liveID: widget.liveID,
           controller: liveController,
           config: (widget.isHost ? hostConfig : audienceConfig)
@@ -273,6 +288,47 @@ class LivePageState extends State<LivePage> {
     );
   }
 
+  Container buildAstrologerLiveStartWidget() {
+    return Container(
+      height: 65.h,
+      margin: EdgeInsets.only(left: 22.w),
+      decoration: BoxDecoration(
+          color: AppColors.lightBlack.withOpacity(.3),
+          borderRadius: BorderRadius.circular(10)),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(width: 16.w),
+          Container(
+            width: 32.w,
+            height: 32.h,
+            clipBehavior: Clip.antiAlias,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+            ),
+            child: circleAvatar(),
+          ),
+          SizedBox(width: 8.w),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomText("Astrologers's Live Star",
+                  fontSize: 14.sp,
+                  fontColor: AppColors.white,
+                  fontWeight: FontWeight.bold),
+              CustomText("Cillian Murphy",
+                  fontSize: 10.sp, fontColor: AppColors.white),
+            ],
+          ),
+          SizedBox(width: 16.w),
+          Assets.images.starLive.image(),
+          SizedBox(width: 16.w),
+        ],
+      ),
+    );
+  }
+
   Widget foreground(BoxConstraints constraints) {
     const shortMessageHeight = 30.0;
     const padding = 10.0;
@@ -350,57 +406,13 @@ class LivePageState extends State<LivePage> {
                     top: 20.h,
                     child: SizedBox(
                       width: Get.width,
-                      child: Row(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          IconButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              icon: Assets.images.leftArrow.svg()),
-                          ClipRRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
-                                decoration: BoxDecoration(
-                                    color: AppColors.blackColor.withOpacity(.3),
-                                    borderRadius: BorderRadius.circular(40)),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      width: 49.w,
-                                      height: 49.h,
-                                      clipBehavior: Clip.antiAlias,
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: circleAvatar(),
-                                    ),
-                                    SizedBox(width: 10.w),
-                                    Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        CustomText(
-                                          widget.astrologerName ?? "",
-                                          fontSize: 16.sp,
-                                          fontColor: AppColors.white,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                        CustomText(
-                                          "Toret",
-                                          fontSize: 12.sp,
-                                          fontColor: AppColors.white,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+                          buildTopMenu(),
+                          SizedBox(height: 20.h),
+                          buildAstrologerLiveStartWidget()
                         ],
                       ),
                     ),
@@ -418,71 +430,138 @@ class LivePageState extends State<LivePage> {
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(40),
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                              child: CustomTextField(
-                                onTap: () {
-                                  showCupertinoModalPopup(
-                                    barrierColor:
-                                    AppColors.textColor.withOpacity(.5),
-                                    context: context,
-                                    builder: (context) => SingleChildScrollView(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context)
-                                              .viewInsets
-                                              .bottom,
-                                        ),
-                                        child: Material(
-                                          color: AppColors.transparent,
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                                left: 14.w,
-                                                right: 14.w,
-                                                bottom: 18.h),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                              BorderRadius.circular(40.sp),
-                                              child: BackdropFilter(
-                                                filter: ImageFilter.blur(
-                                                    sigmaX: 5, sigmaY: 5),
-                                                child: CustomTextField(
-                                                  controller: controller.msg,
-                                                  hintText: 'Say Hi...',
-                                                  autoFocus: true,
-                                                  fillColor: AppColors.white
-                                                      .withOpacity(.5),
-                                                  inputBorder:
-                                                  OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: AppColors.textColor
-                                                          .withOpacity(0.5),
+                          child: SizedBox(
+                            width: Get.width,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(40),
+                                    child: BackdropFilter(
+                                      filter: ImageFilter.blur(
+                                          sigmaX: 5, sigmaY: 5),
+                                      child: CustomTextField(
+                                        onTap: () {
+                                          showCupertinoModalPopup(
+                                            barrierColor: AppColors.textColor
+                                                .withOpacity(.5),
+                                            context: context,
+                                            builder: (context) =>
+                                                SingleChildScrollView(
+                                              child: Padding(
+                                                padding: EdgeInsets.only(
+                                                  bottom: MediaQuery.of(context)
+                                                      .viewInsets
+                                                      .bottom,
+                                                ),
+                                                child: Material(
+                                                  color: AppColors.transparent,
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 14.w,
+                                                        right: 14.w,
+                                                        bottom: 18.h),
+                                                    child: Row(
+                                                      children: [
+                                                        Expanded(
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        40.sp),
+                                                            child:
+                                                                BackdropFilter(
+                                                              filter: ImageFilter
+                                                                  .blur(
+                                                                      sigmaX: 5,
+                                                                      sigmaY:
+                                                                          5),
+                                                              child:
+                                                                  CustomTextField(
+                                                                controller:
+                                                                    controller
+                                                                        .msg,
+                                                                hintText:
+                                                                    'Say Hi...',
+                                                                autoFocus: true,
+                                                                fillColor: AppColors
+                                                                    .white
+                                                                    .withOpacity(
+                                                                        .5),
+                                                                inputBorder:
+                                                                    OutlineInputBorder(
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                    color: AppColors
+                                                                        .textColor
+                                                                        .withOpacity(
+                                                                            0.5),
+                                                                  ),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              40.sp),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(width: 16.w),
+                                                        InkWell(
+                                                            onTap: () {
+                                                              if (controller
+                                                                  .msg
+                                                                  .text
+                                                                  .isNotEmpty) {
+                                                                liveController
+                                                                    .message
+                                                                    .send(controller
+                                                                        .msg
+                                                                        .text);
+                                                                controller.msg
+                                                                    .text = "";
+                                                                Get.back();
+                                                              }
+                                                            },
+                                                            child: Assets.images
+                                                                .icSendMsg
+                                                                .svg())
+                                                      ],
                                                     ),
-                                                    borderRadius:
-                                                    BorderRadius.circular(
-                                                        40.sp),
                                                   ),
                                                 ),
                                               ),
                                             ),
+                                          );
+                                        },
+                                        readOnly: true,
+                                        hintText: 'Say Hi...',
+                                        inputBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: AppColors.textColor
+                                                .withOpacity(0.15),
                                           ),
+                                          borderRadius:
+                                              BorderRadius.circular(40.sp),
                                         ),
                                       ),
                                     ),
-                                  );
-                                },
-                                readOnly: true,
-                                hintText: 'Say Hi...',
-                                inputBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color:
-                                    AppColors.textColor.withOpacity(0.15),
                                   ),
-                                  borderRadius: BorderRadius.circular(40.sp),
                                 ),
-                              ),
+                                IconButton(
+                                    onPressed: () {
+                                      ZegoUIKit.instance.turnMicrophoneOn(!controller.isMicroPhoneOn.value);
+                                      controller.isMicroPhoneOn.value = !controller.isMicroPhoneOn.value;
+                                    },
+                                    icon: Assets.images.audioDisableLive.svg()),
+                                IconButton(
+                                    onPressed: () {
+                                      ZegoUIKit.instance.turnCameraOn(!controller.isCameraOn.value);
+                                      controller.isCameraOn.value = !controller.isCameraOn.value;
+                                    },
+                                    icon: Assets.images.videoDisableLive.svg())
+                              ],
                             ),
                           ),
                         ),
@@ -495,6 +574,62 @@ class LivePageState extends State<LivePage> {
                 ],
               );
       },
+    );
+  }
+
+  Row buildTopMenu() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: Assets.images.leftArrow.svg()),
+        ClipRRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
+              decoration: BoxDecoration(
+                  color: AppColors.blackColor.withOpacity(.3),
+                  borderRadius: BorderRadius.circular(40)),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 49.w,
+                    height: 49.h,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    child: circleAvatar(),
+                  ),
+                  SizedBox(width: 10.w),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(
+                        widget.astrologerName ?? "",
+                        fontSize: 16.sp,
+                        fontColor: AppColors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      CustomText(
+                        "Toret",
+                        fontSize: 12.sp,
+                        fontColor: AppColors.white,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -513,21 +648,67 @@ class LivePageState extends State<LivePage> {
   Widget sideButtons() {
     return Column(
       children: [
+        Obx(
+          () => controller.isCoHosting.value
+              ? ClipOval(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
+                    child: InkWell(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return EndCoHost(
+                                name: controller.coHostUser!.name,
+                                onNo: () {},
+                                onYes: () {
+                                  liveController.connect
+                                      .removeCoHost(controller.coHostUser!);
+                                  controller.isCoHosting.value = false;
+                                });
+                          },
+                        );
+                      },
+                      child: Container(
+                        width: 56.w,
+                        height: 56.h,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: const BoxDecoration(
+                            shape: BoxShape.circle, color: AppColors.redColor),
+                        child: const Center(
+                            child:
+                                Icon(Icons.call_end, color: AppColors.white)),
+                      ),
+                    ),
+                  ),
+                )
+              : const SizedBox(),
+        ),
+        SizedBox(height: 16.h),
         ClipOval(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
             child: InkWell(
-              onTap: (){
-                liveController.connect.removeCoHost(controller.coHostUser!);
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return EndSession(
+                        onNo: () {},
+                        onYes: () {
+                          Get.back();
+                        });
+                  },
+                );
               },
               child: Container(
                 width: 56.w,
                 height: 56.h,
                 clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.redColor),
-                child: const Center(child: Icon(Icons.call_end,color: AppColors.white)),
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle, color: AppColors.appRedColour),
+                child: const Center(
+                    child: Icon(Icons.exit_to_app, color: AppColors.white)),
               ),
             ),
           ),
@@ -536,14 +717,23 @@ class LivePageState extends State<LivePage> {
         ClipOval(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
-            child: Container(
-              width: 56.w,
-              height: 56.h,
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.appRedColour),
-              child: const Center(child: Icon(Icons.exit_to_app,color: AppColors.white)),
+            child: InkWell(
+              onTap: () {
+                showCupertinoModalPopup(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const LeaderBoard();
+                    });
+              },
+              child: Container(
+                width: 56.w,
+                height: 56.h,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.white.withOpacity(.6)),
+                child: Center(child: Assets.images.leaderboardLive.svg()),
+              ),
             ),
           ),
         ),
@@ -551,14 +741,26 @@ class LivePageState extends State<LivePage> {
         ClipOval(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
-            child: Container(
-              width: 56.w,
-              height: 56.h,
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.white.withOpacity(.6)),
-              child: Center(child: Assets.images.leaderboardLive.svg()),
+            child: InkWell(
+              onTap: () {
+                showCupertinoModalPopup(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return GiftSheet(
+                        url: widget.astrologerImage,
+                        name: widget.astrologerName,
+                      );
+                    });
+              },
+              child: Container(
+                width: 56.w,
+                height: 56.h,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.white.withOpacity(.6)),
+                child: Center(child: Assets.images.giftLive.svg()),
+              ),
             ),
           ),
         ),
@@ -566,29 +768,26 @@ class LivePageState extends State<LivePage> {
         ClipOval(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
-            child: Container(
-              width: 56.w,
-              height: 56.h,
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.white.withOpacity(.6)),
-              child: Center(child: Assets.images.giftLive.svg()),
-            ),
-          ),
-        ),
-        SizedBox(height: 16.h),
-        ClipOval(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
-            child: Container(
-              width: 56.w,
-              height: 56.h,
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.white.withOpacity(.6)),
-              child: Center(child: Assets.images.waitlistLive.svg()),
+            child: InkWell(
+              onTap: () {
+                showCupertinoModalPopup(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return WaitList(
+                        onAccept: () {},
+                        onReject: () {},
+                      );
+                    });
+              },
+              child: Container(
+                width: 56.w,
+                height: 56.h,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.white.withOpacity(.6)),
+                child: Center(child: Assets.images.waitlistLive.svg()),
+              ),
             ),
           ),
         ),
@@ -607,7 +806,7 @@ class LivePageState extends State<LivePage> {
       final senderUserID = commandMessage.senderUserID;
       final message = utf8.decode(commandMessage.message);
       debugPrint('onInRoomCommandMessageReceived: $message');
-      if (senderUserID != localUserID) {
+      if (senderUserID != widget.localUserID) {
         GiftWidget.show(context, "assets/sports-car.svga");
       }
     }

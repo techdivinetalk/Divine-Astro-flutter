@@ -29,7 +29,7 @@ class LiveTipsController extends GetxController {
     Get.to(LivePage(
       liveID: "100",
       isHost: true,
-      localUserID: localUserID,
+      localUserID: liveId,
       astrologerImage: image,
       astrologerName: name,
     ));
