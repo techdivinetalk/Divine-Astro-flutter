@@ -81,6 +81,9 @@ class $AssetsImagesGen {
   AssetGenImage get divineLogo =>
       const AssetGenImage('assets/images/divine_logo.png');
 
+  /// File path: assets/images/gift_live.svg
+  SvgGenImage get giftLive => const SvgGenImage('assets/images/gift_live.svg');
+
   /// File path: assets/images/ic-bankDetail.svg
   SvgGenImage get icBankDetail =>
       const SvgGenImage('assets/images/ic-bankDetail.svg');
@@ -422,9 +425,17 @@ class $AssetsImagesGen {
   SvgGenImage get icWedding =>
       const SvgGenImage('assets/images/ic_wedding.svg');
 
+  /// File path: assets/images/leaderboard_live.svg
+  SvgGenImage get leaderboardLive =>
+      const SvgGenImage('assets/images/leaderboard_live.svg');
+
   /// File path: assets/images/left_arrow.svg
   SvgGenImage get leftArrow =>
       const SvgGenImage('assets/images/left_arrow.svg');
+
+  /// File path: assets/images/waitlist_live.svg
+  SvgGenImage get waitlistLive =>
+      const SvgGenImage('assets/images/waitlist_live.svg');
 
   /// List of all assets
   List<dynamic> get values => [
@@ -445,6 +456,7 @@ class $AssetsImagesGen {
         createAccSearch,
         deleteAccout,
         divineLogo,
+        giftLive,
         icBankDetail,
         icContactUs1,
         icImportContact,
@@ -538,7 +550,9 @@ class $AssetsImagesGen {
         icVisibilityOff,
         icWaiting,
         icWedding,
-        leftArrow
+        leaderboardLive,
+        leftArrow,
+        waitlistLive
       ];
 }
 

@@ -42,6 +42,7 @@ import '../screens/price_change/price_change_binding.dart';
 import '../screens/price_change/price_change_ui.dart';
 import '../screens/price_history/price_history_binding.dart';
 import '../screens/price_history/price_history_ui.dart';
+import '../screens/profile_options/upload_story/upload_story_ui.dart';
 import '../screens/profile_options/upload_your_photos/upload_your_photos.dart';
 import '../screens/side_menu/donation/donation_binding.dart';
 import '../screens/side_menu/donation_detail/donation_detail_ui.dart';
@@ -87,6 +88,7 @@ class RouteName {
   static const String liveTipsUI = "/liveTipsUI";
   static const String suggestRemediesView = "/suggestRemediesView";
   static const String uploadYourPhotosUi = "/uploadYourPhotosUi";
+  static const String uploadStoryUi = "/uploadStoryUi";
 }
 
 class Routes {
@@ -201,6 +203,8 @@ class Routes {
         name: RouteName.liveTipsUI,
         binding: LiveTipsBinding()),
     GetPage(
-        page: () => UploadYourPhotosUi(), name: RouteName.uploadYourPhotosUi),
+        page: () => const UploadYourPhotosUi(),
+        name: RouteName.uploadYourPhotosUi),
+    GetPage(page: () => const UploadStoryUi(), name: RouteName.uploadStoryUi),
   ];
 }
