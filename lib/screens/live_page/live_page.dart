@@ -17,7 +17,6 @@ import 'package:get/get.dart';
 
 // Package imports:
 import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
-import 'package:zego_uikit_prebuilt_live_streaming/src/components/message/view.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import 'package:http/http.dart' as http;
 import '../../common/cached_network_image.dart';
@@ -551,14 +550,18 @@ class LivePageState extends State<LivePage> {
                                 ),
                                 IconButton(
                                     onPressed: () {
-                                      ZegoUIKit.instance.turnMicrophoneOn(!controller.isMicroPhoneOn.value);
-                                      controller.isMicroPhoneOn.value = !controller.isMicroPhoneOn.value;
+                                      ZegoUIKit.instance.turnMicrophoneOn(
+                                          !controller.isMicroPhoneOn.value);
+                                      controller.isMicroPhoneOn.value =
+                                          !controller.isMicroPhoneOn.value;
                                     },
                                     icon: Assets.images.audioDisableLive.svg()),
                                 IconButton(
                                     onPressed: () {
-                                      ZegoUIKit.instance.turnCameraOn(!controller.isCameraOn.value);
-                                      controller.isCameraOn.value = !controller.isCameraOn.value;
+                                      ZegoUIKit.instance.turnCameraOn(
+                                          !controller.isCameraOn.value);
+                                      controller.isCameraOn.value =
+                                          !controller.isCameraOn.value;
                                     },
                                     icon: Assets.images.videoDisableLive.svg())
                               ],

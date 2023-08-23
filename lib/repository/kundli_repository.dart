@@ -27,7 +27,8 @@ class KundliRepository extends ApiProvider {
         //   throw CustomException("Unknown Error");
         // }
       } else {
-        throw CustomException(json.decode(response.body)["error"][0]["message"]);
+        throw CustomException(
+            json.decode(response.body)["error"][0]["message"]);
       }
     } catch (e, s) {
       debugPrint("we got $e $s");
@@ -38,7 +39,9 @@ class KundliRepository extends ApiProvider {
   Future<BirthDetails> getBirthDetails(Map<String, dynamic> params) async {
     try {
       final response = await post(birthDetails,
-          endPoint: astrologyBaseUrl, headers: getAstrologyHeader(), body: jsonEncode(params));
+          endPoint: astrologyBaseUrl,
+          headers: getAstrologyHeader(),
+          body: jsonEncode(params));
       if (response.statusCode == 200) {
         final birthDetails = birthDetailsFromJson(response.body);
         // if (astroDetails.status) {
@@ -47,7 +50,8 @@ class KundliRepository extends ApiProvider {
         //   throw CustomException("Unknown Error");
         // }
       } else {
-        throw CustomException(json.decode(response.body)["error"][0]['message']);
+        throw CustomException(
+            json.decode(response.body)["error"][0]['message']);
       }
     } catch (e, s) {
       debugPrint("we got $e $s");
@@ -55,10 +59,13 @@ class KundliRepository extends ApiProvider {
     }
   }
 
-  Future<KalsarpaDosh> getKalsarpaDoshDetails(Map<String, dynamic> params) async {
+  Future<KalsarpaDosh> getKalsarpaDoshDetails(
+      Map<String, dynamic> params) async {
     try {
       final response = await post(kalsarpaDetails,
-          endPoint: astrologyBaseUrl, headers: getAstrologyHeader(), body: jsonEncode(params));
+          endPoint: astrologyBaseUrl,
+          headers: getAstrologyHeader(),
+          body: jsonEncode(params));
       if (response.statusCode == 200) {
         final kalsarpaDoshDetails = kalsarpaDoshFromJson(response.body);
         // if (astroDetails.status) {
@@ -67,8 +74,9 @@ class KundliRepository extends ApiProvider {
         //   throw CustomException("Unknown Error");
         // }
       } else {
-        print('Json: ${jsonDecode(response.body)['error'][0]['message']}');
-        throw CustomException(json.decode(response.body)["error"][0]['message']);
+        debugPrint('Json: ${jsonDecode(response.body)['error'][0]['message']}');
+        throw CustomException(
+            json.decode(response.body)["error"][0]['message']);
       }
     } catch (e, s) {
       debugPrint("we got $e $s");
@@ -79,7 +87,9 @@ class KundliRepository extends ApiProvider {
   Future<ManglikDosh> getManglikDoshDetails(Map<String, dynamic> params) async {
     try {
       final response = await post(manglik,
-          endPoint: astrologyBaseUrl, headers: getAstrologyHeader(), body: jsonEncode(params));
+          endPoint: astrologyBaseUrl,
+          headers: getAstrologyHeader(),
+          body: jsonEncode(params));
       if (response.statusCode == 200) {
         final manglikDosh = manglikDoshFromJson(response.body);
         // if (astroDetails.status) {
@@ -88,7 +98,7 @@ class KundliRepository extends ApiProvider {
         //   throw CustomException("Unknown Error");
         // }
       } else {
-        print('Json: ${jsonDecode(response.body)['error']}');
+        debugPrint('Json: ${jsonDecode(response.body)['error']}');
         throw CustomException(json.decode(response.body)["error"]);
       }
     } catch (e, s) {
@@ -100,7 +110,9 @@ class KundliRepository extends ApiProvider {
   Future<PitraDosh> getPitraDoshDetails(Map<String, dynamic> params) async {
     try {
       final response = await post(pitraDoshReport,
-          endPoint: astrologyBaseUrl, headers: getAstrologyHeader(), body: jsonEncode(params));
+          endPoint: astrologyBaseUrl,
+          headers: getAstrologyHeader(),
+          body: jsonEncode(params));
       if (response.statusCode == 200) {
         final pitraDosh = pitraDoshFromJson(response.body);
         // if (astroDetails.status) {
@@ -117,10 +129,13 @@ class KundliRepository extends ApiProvider {
     }
   }
 
-  Future<HoroChart> getHoroChart(Map<String, dynamic> params, String chartId) async {
+  Future<HoroChart> getHoroChart(
+      Map<String, dynamic> params, String chartId) async {
     try {
       final response = await post('$horoChartImage$chartId',
-          endPoint: astrologyBaseUrl, headers: getAstrologyHeader(), body: jsonEncode(params));
+          endPoint: astrologyBaseUrl,
+          headers: getAstrologyHeader(),
+          body: jsonEncode(params));
       if (response.statusCode == 200) {
         final horoChart = horoChartFromJson(response.body);
         // if (astroDetails.status) {
@@ -129,7 +144,8 @@ class KundliRepository extends ApiProvider {
         //   throw CustomException("Unknown Error");
         // }
       } else {
-        throw CustomException(json.decode(response.body)["error"][0]["message"]);
+        throw CustomException(
+            json.decode(response.body)["error"][0]["message"]);
       }
     } catch (e, s) {
       debugPrint("we got $e $s");
@@ -137,10 +153,13 @@ class KundliRepository extends ApiProvider {
     }
   }
 
-  Future<SadesathiDosh> getSadesathiDoshDetails(Map<String, dynamic> params) async {
+  Future<SadesathiDosh> getSadesathiDoshDetails(
+      Map<String, dynamic> params) async {
     try {
       final response = await post(sadhesatiStatus,
-          endPoint: astrologyBaseUrl, headers: getAstrologyHeader(), body: jsonEncode(params));
+          endPoint: astrologyBaseUrl,
+          headers: getAstrologyHeader(),
+          body: jsonEncode(params));
       if (response.statusCode == 200) {
         final sadesathiDosh = sadesathiDoshFromJson(response.body);
         // if (astroDetails.status) {
@@ -149,8 +168,9 @@ class KundliRepository extends ApiProvider {
         //   throw CustomException("Unknown Error");
         // }
       } else {
-        print('Json: ${jsonDecode(response.body)['error'][0]['message']}');
-        throw CustomException(json.decode(response.body)["error"][0]['message']);
+        debugPrint('Json: ${jsonDecode(response.body)['error'][0]['message']}');
+        throw CustomException(
+            json.decode(response.body)["error"][0]['message']);
       }
     } catch (e, s) {
       debugPrint("we got $e $s");
@@ -158,10 +178,13 @@ class KundliRepository extends ApiProvider {
     }
   }
 
-  Future<KundliPrediction> getKundliPredictionDetails(Map<String, dynamic> params) async {
+  Future<KundliPrediction> getKundliPredictionDetails(
+      Map<String, dynamic> params) async {
     try {
       final response = await post(kundliPrediction,
-          endPoint: astrologyBaseUrl, headers: getAstrologyHeader(), body: jsonEncode(params));
+          endPoint: astrologyBaseUrl,
+          headers: getAstrologyHeader(),
+          body: jsonEncode(params));
       if (response.statusCode == 200) {
         final kundliPrediction = kundliPredictionFromJson(response.body);
         // if (astroDetails.status) {
@@ -170,8 +193,9 @@ class KundliRepository extends ApiProvider {
         //   throw CustomException("Unknown Error");
         // }
       } else {
-        print('Json: ${jsonDecode(response.body)['error'][0]['message']}');
-        throw CustomException(json.decode(response.body)["error"][0]["message"]);
+        debugPrint('Json: ${jsonDecode(response.body)['error'][0]['message']}');
+        throw CustomException(
+            json.decode(response.body)["error"][0]["message"]);
       }
     } catch (e, s) {
       debugPrint("we got $e $s");

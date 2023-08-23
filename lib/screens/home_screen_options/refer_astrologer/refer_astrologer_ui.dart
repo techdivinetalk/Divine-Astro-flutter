@@ -8,7 +8,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../common/custom_light_yellow_btn.dart';
-import '../../../common/text_field_custom.dart';
 
 class ReferAnAstrologer extends GetView<ReferAstrologerController> {
   const ReferAnAstrologer({Key? key}) : super(key: key);
@@ -239,10 +238,6 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
   }
 }
 
-
-
-
-
 class ReferAstrologerField extends StatelessWidget {
   final String hintText;
   final TextInputType inputType;
@@ -311,14 +306,14 @@ class ReferAstrologerField extends StatelessWidget {
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide:  const BorderSide(
+            borderSide: const BorderSide(
               color: AppColors.redColor,
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide:  const BorderSide(
+            borderSide: const BorderSide(
               color: AppColors.yellow,
               width: 1.0,
             ),

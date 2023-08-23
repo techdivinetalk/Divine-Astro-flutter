@@ -10,7 +10,7 @@ class CoHostRequest extends StatelessWidget {
   final VoidCallback? onReject, onAccept;
   final String? name;
 
-  const CoHostRequest({Key? key, this.onReject, this.onAccept,this.name})
+  const CoHostRequest({Key? key, this.onReject, this.onAccept, this.name})
       : super(key: key);
 
   @override
@@ -43,11 +43,11 @@ class CoHostRequest extends StatelessWidget {
                         child: Assets.images.avatar.svg(),
                       ),
                       SizedBox(width: 10.w),
-                      CustomText(name??"",
+                      CustomText(name ?? "",
                           fontSize: 20.sp,
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.textColor),
-                      Spacer(),
+                      const Spacer(),
                       const Icon(Icons.call,
                           color: AppColors.textColor, size: 16),
                       SizedBox(width: 10.w),

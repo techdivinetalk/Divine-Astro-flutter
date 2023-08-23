@@ -14,6 +14,13 @@ import 'package:flutter/services.dart';
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/audio_disable_live.svg
+  SvgGenImage get audioDisableLive =>
+      const SvgGenImage('assets/images/audio_disable_live.svg');
+
+  /// File path: assets/images/avatar.svg
+  SvgGenImage get avatar => const SvgGenImage('assets/images/avatar.svg');
+
   /// File path: assets/images/bg_chatUserPro.png
   AssetGenImage get bgChatUserPro =>
       const AssetGenImage('assets/images/bg_chatUserPro.png');
@@ -83,6 +90,10 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/gift_live.svg
   SvgGenImage get giftLive => const SvgGenImage('assets/images/gift_live.svg');
+
+  /// File path: assets/images/gift_total.svg
+  SvgGenImage get giftTotal =>
+      const SvgGenImage('assets/images/gift_total.svg');
 
   /// File path: assets/images/ic-bankDetail.svg
   SvgGenImage get icBankDetail =>
@@ -433,12 +444,34 @@ class $AssetsImagesGen {
   SvgGenImage get leftArrow =>
       const SvgGenImage('assets/images/left_arrow.svg');
 
+  /// File path: assets/images/medal_one.png
+  AssetGenImage get medalOne =>
+      const AssetGenImage('assets/images/medal_one.png');
+
+  /// File path: assets/images/medal_three.png
+  AssetGenImage get medalThree =>
+      const AssetGenImage('assets/images/medal_three.png');
+
+  /// File path: assets/images/medal_two.png
+  AssetGenImage get medalTwo =>
+      const AssetGenImage('assets/images/medal_two.png');
+
+  /// File path: assets/images/star_live.png
+  AssetGenImage get starLive =>
+      const AssetGenImage('assets/images/star_live.png');
+
+  /// File path: assets/images/video_disable_live.svg
+  SvgGenImage get videoDisableLive =>
+      const SvgGenImage('assets/images/video_disable_live.svg');
+
   /// File path: assets/images/waitlist_live.svg
   SvgGenImage get waitlistLive =>
       const SvgGenImage('assets/images/waitlist_live.svg');
 
   /// List of all assets
   List<dynamic> get values => [
+        audioDisableLive,
+        avatar,
         bgChatUserPro,
         bgChatWallpaper,
         bgDeleteAccount,
@@ -457,6 +490,7 @@ class $AssetsImagesGen {
         deleteAccout,
         divineLogo,
         giftLive,
+        giftTotal,
         icBankDetail,
         icContactUs1,
         icImportContact,
@@ -552,6 +586,11 @@ class $AssetsImagesGen {
         icWedding,
         leaderboardLive,
         leftArrow,
+        medalOne,
+        medalThree,
+        medalTwo,
+        starLive,
+        videoDisableLive,
         waitlistLive
       ];
 }
