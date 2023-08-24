@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/refer_astrologer/refer_astrologer_response.dart';

@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/model/notice_response.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,8 +15,21 @@ class NoticeDetailUi extends GetView<NoticeDetailController> {
 
   @override
   Widget build(BuildContext context) {
+    final NoticeDatum data = Get.arguments as NoticeDatum;
     return Scaffold(
-      appBar: commonDetailAppbar(title: "Sender category"),
+      appBar: commonDetailAppbar(
+        title: data.title.toString(),
+        trailingWidget: Container(
+          margin: EdgeInsets.only(right: 20.sp),
+          child: Text(
+            data.getTimeAndDate(),
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 10.sp,
+            ),
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
@@ -24,7 +38,7 @@ class NoticeDetailUi extends GetView<NoticeDetailController> {
             children: [
               const SizedBox(height: 20),
               Text(
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                data.description.toString(),
                 style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
               )
             ],
