@@ -17,6 +17,7 @@ import 'shared_preference_service.dart';
 class ApiProvider {
   static const String version = 'v6';
   final String baseUrl = "https://wakanda-api.divinetalk.live/admin/$version/";
+  final String baseUrlv7 = "https://wakanda-api.divinetalk.live/admin/v7/";
   static String imageBaseUrl = "https://divinenew.s3.ap-south-1.amazonaws.com/";
 
   final String jsonHeaderName = "Content-Type";

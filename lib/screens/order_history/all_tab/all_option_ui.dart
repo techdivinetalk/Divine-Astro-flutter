@@ -7,14 +7,14 @@ import '../../../common/colors.dart';
 import '../../../repository/shop_repository.dart';
 import 'all_option_controller.dart';
 
-class AllTabInfo extends GetView<AllOptionControler> {
+class AllTabInfo extends GetView<AllOptionController> {
   const AllTabInfo({Key? key}) : super(key: key);
 
   // final ScrollController? controller;
 
   @override
   Widget build(BuildContext context) {
-    Get.put(AllOptionControler(Get.put(ShopRepository())));
+    Get.put(AllOptionController(Get.put(ShopRepository())));
     return Obx(() => controller.allOrderHistorySync.value
         ? ListView.builder(
             controller: controller.orderScrollController,
