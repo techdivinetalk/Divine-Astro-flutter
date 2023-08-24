@@ -80,9 +80,12 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                 const CircularProgressIndicator(),
                                             errorWidget:
                                                 (context, url, error) =>
-                                                    const Icon(Icons.error),
+                                                    Image.asset(Assets.images.defaultProfile.path),
                                           ),
-                                        )))),
+                                        ),
+                                    ),
+                                ),
+                            ),
                           ],
                         ),
                         SizedBox(width: 10.h),
@@ -655,6 +658,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                     height: 40,
                     width: 40,
                     fit: BoxFit.cover,
+                    errorWidget: (context, url, error) => Image.asset(Assets.images.defaultProfile.path),
                   ),
                 ),
                 SizedBox(width: 10.h),

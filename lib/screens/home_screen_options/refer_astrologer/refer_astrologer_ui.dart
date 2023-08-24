@@ -247,6 +247,8 @@ class ReferAstrologerField extends StatelessWidget {
   final Color? errorBorder;
   final TextEditingController? controller;
   final String? Function(String? value)? validator;
+  final int? maxLine;
+  final double? height;
 
   const ReferAstrologerField({
     super.key,
@@ -258,12 +260,14 @@ class ReferAstrologerField extends StatelessWidget {
     this.suffixIcon,
     this.controller,
     this.validator,
+    this.maxLine,
+    this.height,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 55.h,
+      height: height ?? 55.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
@@ -278,6 +282,7 @@ class ReferAstrologerField extends StatelessWidget {
         controller: controller,
         keyboardType: inputType,
         validator: validator,
+        maxLines: maxLine,
         textInputAction: inputAction,
         decoration: InputDecoration(
           isDense: true,
