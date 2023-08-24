@@ -10,6 +10,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
+import 'package:lottie/lottie.dart';
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
@@ -17,6 +18,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/audio_disable_live.svg
   SvgGenImage get audioDisableLive =>
       const SvgGenImage('assets/images/audio_disable_live.svg');
+
+  /// File path: assets/images/audio_enable_live.svg
+  SvgGenImage get audioEnableLive =>
+      const SvgGenImage('assets/images/audio_enable_live.svg');
 
   /// File path: assets/images/avatar.svg
   SvgGenImage get avatar => const SvgGenImage('assets/images/avatar.svg');
@@ -72,6 +77,10 @@ class $AssetsImagesGen {
   AssetGenImage get bgUserTmpPro =>
       const AssetGenImage('assets/images/bg_userTmpPro.png');
 
+  /// File path: assets/images/champion_live.png
+  AssetGenImage get championLive =>
+      const AssetGenImage('assets/images/champion_live.png');
+
   /// File path: assets/images/create_acc_location.svg
   SvgGenImage get createAccLocation =>
       const SvgGenImage('assets/images/create_acc_location.svg');
@@ -79,6 +88,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/create_acc_search.svg
   SvgGenImage get createAccSearch =>
       const SvgGenImage('assets/images/create_acc_search.svg');
+
+  /// File path: assets/images/default_profile.png
+  AssetGenImage get defaultProfile =>
+      const AssetGenImage('assets/images/default_profile.png');
 
   /// File path: assets/images/delete_accout.svg
   SvgGenImage get deleteAccout =>
@@ -456,13 +469,25 @@ class $AssetsImagesGen {
   AssetGenImage get medalTwo =>
       const AssetGenImage('assets/images/medal_two.png');
 
+  /// File path: assets/images/planet_star_live.png
+  AssetGenImage get planetStarLive =>
+      const AssetGenImage('assets/images/planet_star_live.png');
+
   /// File path: assets/images/star_live.png
   AssetGenImage get starLive =>
       const AssetGenImage('assets/images/star_live.png');
 
+  /// File path: assets/images/star_live_big.png
+  AssetGenImage get starLiveBig =>
+      const AssetGenImage('assets/images/star_live_big.png');
+
   /// File path: assets/images/video_disable_live.svg
   SvgGenImage get videoDisableLive =>
       const SvgGenImage('assets/images/video_disable_live.svg');
+
+  /// File path: assets/images/vidio_enable_live.svg
+  SvgGenImage get vidioEnableLive =>
+      const SvgGenImage('assets/images/vidio_enable_live.svg');
 
   /// File path: assets/images/waitlist_live.svg
   SvgGenImage get waitlistLive =>
@@ -471,6 +496,7 @@ class $AssetsImagesGen {
   /// List of all assets
   List<dynamic> get values => [
         audioDisableLive,
+        audioEnableLive,
         avatar,
         bgChatUserPro,
         bgChatWallpaper,
@@ -485,8 +511,10 @@ class $AssetsImagesGen {
         bgTmpUser,
         bgUserProfile,
         bgUserTmpPro,
+        championLive,
         createAccLocation,
         createAccSearch,
+        defaultProfile,
         deleteAccout,
         divineLogo,
         giftLive,
@@ -589,16 +617,31 @@ class $AssetsImagesGen {
         medalOne,
         medalThree,
         medalTwo,
+        planetStarLive,
         starLive,
+        starLiveBig,
         videoDisableLive,
+        vidioEnableLive,
         waitlistLive
       ];
+}
+
+class $AssetsLottieGen {
+  const $AssetsLottieGen();
+
+  /// File path: assets/lottie/sound_waves.json
+  LottieGenImage get soundWaves =>
+      const LottieGenImage('assets/lottie/sound_waves.json');
+
+  /// List of all assets
+  List<LottieGenImage> get values => [soundWaves];
 }
 
 class Assets {
   Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsLottieGen lottie = $AssetsLottieGen();
 }
 
 class AssetGenImage {
@@ -720,6 +763,65 @@ class SvgGenImage {
       colorBlendMode: colorBlendMode,
       clipBehavior: clipBehavior,
       cacheColorFilter: cacheColorFilter,
+    );
+  }
+
+  String get path => _assetName;
+
+  String get keyName => _assetName;
+}
+
+class LottieGenImage {
+  const LottieGenImage(this._assetName);
+
+  final String _assetName;
+
+  LottieBuilder lottie({
+    Animation<double>? controller,
+    bool? animate,
+    FrameRate? frameRate,
+    bool? repeat,
+    bool? reverse,
+    LottieDelegates? delegates,
+    LottieOptions? options,
+    void Function(LottieComposition)? onLoaded,
+    LottieImageProviderFactory? imageProviderFactory,
+    Key? key,
+    AssetBundle? bundle,
+    Widget Function(BuildContext, Widget, LottieComposition?)? frameBuilder,
+    ImageErrorWidgetBuilder? errorBuilder,
+    double? width,
+    double? height,
+    BoxFit? fit,
+    AlignmentGeometry? alignment,
+    String? package,
+    bool? addRepaintBoundary,
+    FilterQuality? filterQuality,
+    void Function(String)? onWarning,
+  }) {
+    return Lottie.asset(
+      _assetName,
+      controller: controller,
+      animate: animate,
+      frameRate: frameRate,
+      repeat: repeat,
+      reverse: reverse,
+      delegates: delegates,
+      options: options,
+      onLoaded: onLoaded,
+      imageProviderFactory: imageProviderFactory,
+      key: key,
+      bundle: bundle,
+      frameBuilder: frameBuilder,
+      errorBuilder: errorBuilder,
+      width: width,
+      height: height,
+      fit: fit,
+      alignment: alignment,
+      package: package,
+      addRepaintBoundary: addRepaintBoundary,
+      filterQuality: filterQuality,
+      onWarning: onWarning,
     );
   }
 
