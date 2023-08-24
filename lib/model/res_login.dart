@@ -37,7 +37,7 @@ class UserData {
   int? rating;
   num? balance;
   String? legalDocuments;
-  int? experiance;
+  String? experiance;
   String? description;
   int? isChat;
   int? isCall;
@@ -172,7 +172,7 @@ class UserData {
     rating = json['rating'];
     balance = json['balance'];
     legalDocuments = json['legal_documents'];
-    experiance = json['experiance'];
+    experiance = json['experiance'].toString();
     description = json['description'];
     isChat = json['is_chat'];
     isCall = json['is_call'];

@@ -116,8 +116,10 @@ class LoginUI extends GetView<LoginController> {
             controller: controller.mobileNumberController,
             keyboardType: TextInputType.number,
             enabled: controller.enable.value,
+            maxLength: 10,
             showCursor: true,
             decoration: InputDecoration(
+              counterText: '',
               hintText: "Enter Registered Number",
               fillColor: AppColors.white,
               hintStyle:
