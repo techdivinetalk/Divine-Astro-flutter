@@ -16,7 +16,8 @@ class LiveController extends GetxController {
 
   final hostConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host(
     plugins: [ZegoUIKitSignalingPlugin()],
-  )..durationConfig.isVisible = false;
+  )..durationConfig.isVisible = false
+  ..previewConfig.showPreviewForHost = false  ;
   late Timer _timer;
   ZegoUIKitUser? coHostUser;
   var msg = TextEditingController();

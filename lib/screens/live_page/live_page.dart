@@ -7,6 +7,7 @@ import 'package:divine_astrologer/common/end_cohost.dart';
 import 'package:divine_astrologer/common/end_session_dialog.dart';
 import 'package:divine_astrologer/common/gift_sheet.dart';
 import 'package:divine_astrologer/common/unblock_user.dart';
+import 'package:divine_astrologer/screens/blocked_user/blocked_user_ui.dart';
 import 'package:divine_astrologer/screens/live_page/live_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -256,64 +257,73 @@ class LivePageState extends State<LivePage> {
 
   Widget messageItem(ZegoInRoomMessage message) {
     bool isOtherUser = widget.localUserID != message.user.id;
-    print(isOtherUser);
-    return Container(
-      width: 200.w,
-      margin: EdgeInsets.symmetric(
-        vertical: 4.h,
-        horizontal: 2,
-      ),
-      padding: const EdgeInsets.symmetric(
-        vertical: 8,
-        horizontal: 4,
-      ),
-      decoration: BoxDecoration(
-        border: Border.all(color: AppColors.white, width: .8),
-        color: Colors.black.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Row(
-        children: [
-          RichText(
-            maxLines: 5,
-            text: TextSpan(
-              children: [
-                WidgetSpan(
-                  child: SizedBox(
-                    width: 18,
-                    child: Center(
-                      child: ZegoAvatar(
-                        user: message.user,
-                        avatarSize: const Size(18, 18),
+    return InkWell(
+      onTap: (){
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return UnblockOrBlockUser(name: message.user.name,isForBlocUser: true);
+          },
+        );
+      },
+      child: Container(
+        width: 200.w,
+        margin: EdgeInsets.symmetric(
+          vertical: 4.h,
+          horizontal: 2,
+        ),
+        padding: const EdgeInsets.symmetric(
+          vertical: 8,
+          horizontal: 4,
+        ),
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.white, width: .8),
+          color: Colors.black.withOpacity(0.05),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Row(
+          children: [
+            RichText(
+              maxLines: 5,
+              text: TextSpan(
+                children: [
+                  WidgetSpan(
+                    child: SizedBox(
+                      width: 18,
+                      child: Center(
+                        child: ZegoAvatar(
+                          user: message.user,
+                          avatarSize: const Size(18, 18),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                WidgetSpan(child: SizedBox(width: 4.w)),
-                TextSpan(
-                  text: '${message.user.name}: ',
-                  style: const TextStyle(
-                    color: AppColors.appColorDark,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
+                  WidgetSpan(child: SizedBox(width: 4.w)),
+                  TextSpan(
+                    text: '${message.user.name}: ',
+                    style: const TextStyle(
+                      color: AppColors.appColorDark,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                TextSpan(
-                  text: message.message,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                  ),
-                )
-              ],
+                  TextSpan(
+                    text: message.message,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-          SizedBox(width: 8.w),
-          Spacer(),
-          isOtherUser
-              ? Icon(Icons.more_vert, color: AppColors.white)
-              : SizedBox(),
-        ],
+            SizedBox(width: 8.w),
+            Spacer(),
+            isOtherUser
+                ? Icon(Icons.more_vert, color: AppColors.white)
+                : SizedBox(),
+          ],
+        ),
       ),
     );
   }
@@ -820,7 +830,6 @@ class LivePageState extends State<LivePage> {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    //return const LiveStar();
                     return EndSession(
                         onNo: () {},
                         onYes: () {
