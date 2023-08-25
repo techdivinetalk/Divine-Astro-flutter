@@ -7,6 +7,7 @@ import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 import '../../../common/appbar.dart';
 import '../../../common/routes.dart';
@@ -29,7 +30,8 @@ class HomeUI extends GetView<HomeController> {
                 padding: const EdgeInsets.only(right: 20),
                 child: InkWell(
                     onTap: () {
-                      controller.isShowTitle.value = !controller.isShowTitle.value;
+                      controller.isShowTitle.value =
+                          !controller.isShowTitle.value;
                     },
                     child: controller.isShowTitle.value
                         ? Assets.images.icVisibility.svg()
@@ -43,36 +45,13 @@ class HomeUI extends GetView<HomeController> {
               child: Column(
                 children: [
                   Obx(() => controller.isShowTitle.value
-                      ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          InkWell(
-                            onTap: () {},
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "₹100000",
-                                  style: AppTextStyle.textStyle16(
-                                      fontColor: AppColors.appRedColour,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                                Text(
-                                  "today".tr,
-                                  style: AppTextStyle.textStyle16(
-                                      fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 15.w),
-                          InkWell(
-                            onTap: () {
-                              earningDetailPopup(Get.context!);
-                              // Get.toNamed(RouteName.yourEarning);
-                            },
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                              InkWell(
+                                onTap: () {},
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       "₹100000",
@@ -80,54 +59,86 @@ class HomeUI extends GetView<HomeController> {
                                           fontColor: AppColors.appRedColour,
                                           fontWeight: FontWeight.w700),
                                     ),
-                                    const Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 20,
-                                    )
+                                    Text(
+                                      "today".tr,
+                                      style: AppTextStyle.textStyle16(
+                                          fontColor: AppColors.darkBlue,
+                                          fontWeight: FontWeight.w400),
+                                    ),
                                   ],
                                 ),
-                                Text(
-                                  "total".tr,
-                                  style: AppTextStyle.textStyle16(
-                                      fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 10.w),
-                          InkWell(
-                            onTap: () {
-                              Get.toNamed(RouteName.checkKundli);
-                            },
-                            child: Container(
-                              height: 54.h,
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black.withOpacity(0.2),
-                                      blurRadius: 1.0,
-                                      offset: const Offset(0.0, 3.0)),
-                                ],
-                                gradient: const LinearGradient(
-                                  begin: Alignment.bottomCenter,
-                                  end: Alignment.topCenter,
-                                  colors: [AppColors.appYellowColour, AppColors.gradientBottom],
-                                ),
-                                borderRadius: const BorderRadius.all(Radius.circular(20)),
                               ),
-                              padding: EdgeInsets.symmetric(horizontal: 15.w),
-                              alignment: Alignment.center,
-                              child: InkWell(
-                                child: Text(
-                                  "checkKundli".tr,
-                                  style: AppTextStyle.textStyle14(
-                                      fontColor: AppColors.brownColour,
-                                      fontWeight: FontWeight.w500),
+                              SizedBox(width: 15.w),
+                              InkWell(
+                                onTap: () {
+                                  earningDetailPopup(Get.context!);
+                                  // Get.toNamed(RouteName.yourEarning);
+                                },
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "₹100000",
+                                          style: AppTextStyle.textStyle16(
+                                              fontColor: AppColors.appRedColour,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        const Icon(
+                                          Icons.arrow_forward_ios,
+                                          size: 20,
+                                        )
+                                      ],
+                                    ),
+                                    Text(
+                                      "total".tr,
+                                      style: AppTextStyle.textStyle16(
+                                          fontColor: AppColors.darkBlue,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                          ),
-                        ])
+                              SizedBox(width: 10.w),
+                              InkWell(
+                                onTap: () {
+                                  Get.toNamed(RouteName.checkKundli);
+                                },
+                                child: Container(
+                                  height: 54.h,
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.black.withOpacity(0.2),
+                                          blurRadius: 1.0,
+                                          offset: const Offset(0.0, 3.0)),
+                                    ],
+                                    gradient: const LinearGradient(
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                      colors: [
+                                        AppColors.appYellowColour,
+                                        AppColors.gradientBottom
+                                      ],
+                                    ),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(20)),
+                                  ),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 15.w),
+                                  alignment: Alignment.center,
+                                  child: InkWell(
+                                    child: Text(
+                                      "checkKundli".tr,
+                                      style: AppTextStyle.textStyle14(
+                                          fontColor: AppColors.brownColour,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ])
                       : Container()),
                   SizedBox(height: 10.h),
                   InkWell(
@@ -140,12 +151,14 @@ class HomeUI extends GetView<HomeController> {
                         Text(
                           "noticeBoard".tr,
                           style: AppTextStyle.textStyle16(
-                              fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
+                              fontColor: AppColors.darkBlue,
+                              fontWeight: FontWeight.w400),
                         ),
                         Text(
                           "viewAll".tr,
                           style: AppTextStyle.textStyle12(
-                              fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
+                              fontColor: AppColors.darkBlue,
+                              fontWeight: FontWeight.w400),
                         )
                       ],
                     ),
@@ -166,7 +179,10 @@ class HomeUI extends GetView<HomeController> {
                         gradient: const LinearGradient(
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
-                          colors: [AppColors.appYellowColour, AppColors.gradientBottom],
+                          colors: [
+                            AppColors.appYellowColour,
+                            AppColors.gradientBottom
+                          ],
                         ),
                       ),
                       child: Row(
@@ -177,14 +193,16 @@ class HomeUI extends GetView<HomeController> {
                           Text(
                             "goLive".tr,
                             style: AppTextStyle.textStyle20(
-                                fontWeight: FontWeight.w700, fontColor: AppColors.brownColour),
+                                fontWeight: FontWeight.w700,
+                                fontColor: AppColors.brownColour),
                           ),
                         ],
                       ),
                     ),
                   ),
                   SizedBox(height: 10.h),
-                  Container(height: 1.h, color: AppColors.darkBlue.withOpacity(0.5)),
+                  Container(
+                      height: 1.h, color: AppColors.darkBlue.withOpacity(0.5)),
                   SizedBox(height: 10.h),
                   sessionTypeWidget(),
                   SizedBox(height: 10.h),
@@ -227,7 +245,10 @@ class HomeUI extends GetView<HomeController> {
                     gradient: const LinearGradient(
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
-                      colors: [AppColors.appYellowColour, AppColors.gradientBottom],
+                      colors: [
+                        AppColors.appYellowColour,
+                        AppColors.gradientBottom
+                      ],
                     ),
                   ),
                   child: Center(
@@ -238,7 +259,8 @@ class HomeUI extends GetView<HomeController> {
                         Text(
                           "help".tr,
                           style: AppTextStyle.textStyle10(
-                              fontColor: AppColors.brownColour, fontWeight: FontWeight.w700),
+                              fontColor: AppColors.brownColour,
+                              fontWeight: FontWeight.w700),
                         )
                       ],
                     ),
@@ -277,12 +299,14 @@ class HomeUI extends GetView<HomeController> {
                 Text(
                   "Sender Category",
                   style: AppTextStyle.textStyle16(
-                      fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                      fontWeight: FontWeight.w500,
+                      fontColor: AppColors.darkBlue),
                 ),
                 Text(
                   "07:16 pm  23/06/2023",
                   style: AppTextStyle.textStyle10(
-                      fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                      fontWeight: FontWeight.w400,
+                      fontColor: AppColors.darkBlue),
                 )
               ],
             ),
@@ -370,14 +394,16 @@ class HomeUI extends GetView<HomeController> {
               SizedBox(height: 18.h),
               Obx(() => SwitchWidget(
                     onTap: () {
-                      controller.chatSwitch.value = !controller.chatSwitch.value;
+                      controller.chatSwitch.value =
+                          !controller.chatSwitch.value;
                     },
                     switchValue: controller.chatSwitch.value,
                   )),
               SizedBox(height: 20.h),
               Obx(() => SwitchWidget(
                     onTap: () {
-                      controller.callSwitch.value = !controller.callSwitch.value;
+                      controller.callSwitch.value =
+                          !controller.callSwitch.value;
                     },
                     switchValue: controller.callSwitch.value,
                   )),
@@ -404,7 +430,10 @@ class HomeUI extends GetView<HomeController> {
                   gradient: const LinearGradient(
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
-                    colors: [AppColors.appYellowColour, AppColors.gradientBottom],
+                    colors: [
+                      AppColors.appYellowColour,
+                      AppColors.gradientBottom
+                    ],
                   ),
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
                 ),
@@ -422,7 +451,8 @@ class HomeUI extends GetView<HomeController> {
                     child: Text(
                       "scheduleNow".tr,
                       style: AppTextStyle.textStyle10(
-                          fontColor: AppColors.brownColour, fontWeight: FontWeight.w400),
+                          fontColor: AppColors.brownColour,
+                          fontWeight: FontWeight.w400),
                     ),
                   ),
                 ),
@@ -497,12 +527,14 @@ class HomeUI extends GetView<HomeController> {
                   Text(
                     "promotionOffer".tr,
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+                        fontWeight: FontWeight.w700,
+                        fontColor: AppColors.darkBlue),
                   ),
                   Text(
                     "  (₹5/Min)",
                     style: AppTextStyle.textStyle10(
-                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue),
                   ),
                 ],
               ),
@@ -521,7 +553,9 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget fullScreenBtnWidget(
-      {required Widget imageName, required String? btnTitle, required VoidCallback? onbtnTap}) {
+      {required Widget imageName,
+      required String? btnTitle,
+      required VoidCallback? onbtnTap}) {
     return Container(
         padding: EdgeInsets.all(10.h),
         decoration: BoxDecoration(
@@ -589,7 +623,8 @@ class HomeUI extends GetView<HomeController> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              color: AppColors.greyColor, borderRadius: BorderRadius.circular(10)),
+                              color: AppColors.greyColor,
+                              borderRadius: BorderRadius.circular(10)),
                           height: 150.h,
                           width: 110.h,
                         ),
@@ -613,8 +648,9 @@ class HomeUI extends GetView<HomeController> {
   Widget feedbackWidget() {
     return Container(
       width: ScreenUtil().screenWidth,
-      decoration:
-          BoxDecoration(borderRadius: BorderRadius.circular(10), color: const Color(0xffEDEDED)),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: const Color(0xffEDEDED)),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
         child: Column(
@@ -633,12 +669,14 @@ class HomeUI extends GetView<HomeController> {
             ),
             SizedBox(height: 10.h),
             Container(
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    blurRadius: 3.0,
-                    offset: const Offset(0.3, 3.0)),
-              ]),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        blurRadius: 3.0,
+                        offset: const Offset(0.3, 3.0)),
+                  ]),
               child: TextFormField(
                 maxLines: 6,
                 // maxLength: 96,
@@ -666,24 +704,363 @@ class HomeUI extends GetView<HomeController> {
               ),
             ),
             SizedBox(height: 20.h),
-            Center(
-              child: Container(
-                  width: ScreenUtil().screenWidth / 1.5,
-                  height: 56,
-                  decoration: BoxDecoration(
-                      color: AppColors.lightYellow, borderRadius: BorderRadius.circular(30)),
-                  child: Center(
-                      child: Text(
-                    "submitFeedback".tr,
-                    style: AppTextStyle.textStyle16(
-                        fontWeight: FontWeight.w600, fontColor: AppColors.brownColour),
-                  ))),
+            GestureDetector(
+              onTap: () {
+                forceUpdateAlert(Get.context!);
+              },
+              child: Center(
+                child: Container(
+                    width: ScreenUtil().screenWidth / 1.5,
+                    height: 56,
+                    decoration: BoxDecoration(
+                        color: AppColors.lightYellow,
+                        borderRadius: BorderRadius.circular(30)),
+                    child: Center(
+                        child: Text(
+                      "submitFeedback".tr,
+                      style: AppTextStyle.textStyle16(
+                          fontWeight: FontWeight.w600,
+                          fontColor: AppColors.brownColour),
+                    ))),
+              ),
             ),
             SizedBox(height: 20.h),
           ],
         ),
       ),
     );
+  }
+
+  forceUpdateAlert(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+              backgroundColor: Colors.white,
+              contentPadding: EdgeInsets.zero,
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15.0))),
+              content: Builder(
+                builder: (context) {
+                  return GetBuilder<HomeController>(
+                      id: "score_update",
+                      builder: (controller) {
+                        return Container(
+                          width: MediaQuery.of(context).size.width / 0.2,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20.w, vertical: 15.h),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  height: 15.h,
+                                ),
+                                Center(
+                                  child: Text(
+                                    "${'payAttention'.tr}!",
+                                    style: AppTextStyle.textStyle20(
+                                        fontColor: AppColors.redColor,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 30.h,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.black.withOpacity(0.2),
+                                          blurRadius: 3.0,
+                                          offset: const Offset(0.0, 3.0)),
+                                    ],
+                                    color: Colors.white,
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(20),
+                                    ),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                      Center(
+                                        child: Text(
+                                          controller.yourScore[
+                                              controller.scoreIndex]['title'],
+                                          style: AppTextStyle.textStyle14(
+                                              fontColor: AppColors.blackColor,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                      SizedBox(
+                                          height: 170.h,
+                                          child: SfRadialGauge(
+                                              backgroundColor: Colors.white,
+                                              animationDuration: 4500,
+                                              axes: <RadialAxis>[
+                                                RadialAxis(
+                                                    radiusFactor: 0.9,
+                                                    canScaleToFit: true,
+                                                    axisLabelStyle:
+                                                        const GaugeTextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                    showLastLabel: false,
+                                                    maximum: 50,
+                                                    // maximum: 150,
+                                                    ranges: <GaugeRange>[
+                                                      GaugeRange(
+                                                        gradient:
+                                                            const SweepGradient(
+                                                          colors: <Color>[
+                                                            Color(0xFFfb481f),
+                                                            Color(0xFFfb8304),
+                                                            Color(0xFFe5c310),
+                                                            Color(0xFF93da3c),
+                                                            Color(0xFF70c441),
+                                                            Color(0xFF38a84f)
+                                                          ],
+                                                        ),
+                                                        // gradient: Gradient.,
+                                                        endWidth: 15,
+                                                        startWidth: 15,
+                                                        startValue: 0,
+                                                        endValue: 50,
+                                                      ),
+                                                      // GaugeRange(
+                                                      //
+                                                      //     gradient: const SweepGradient(
+                                                      //       colors: <Color>[
+                                                      //         Color(0xFFe5c310),
+                                                      //         Color(0xFF93da3c)
+                                                      //       ],
+                                                      //     ),
+                                                      //     endWidth: 15,
+                                                      //     startWidth: 15,
+                                                      //     startValue: 50,
+                                                      //     endValue: 100,
+                                                      //     ),
+                                                      // GaugeRange(
+                                                      //     gradient: const SweepGradient(
+                                                      //       colors: <Color>[
+                                                      //         Color(0xFF70c441),
+                                                      //         Color(0xFF38a84f)
+                                                      //       ],
+                                                      //     ),
+                                                      //     startValue: 100,
+                                                      //     endWidth: 15,
+                                                      //     startWidth: 15,
+                                                      //     endValue: 150,
+                                                      //     )
+                                                    ],
+                                                    pointers: const <GaugePointer>[
+                                                      MarkerPointer(
+                                                        animationDuration: 5000,
+                                                        value: 40,
+                                                        enableAnimation: true,
+                                                        borderColor: AppColors
+                                                            .markerColor,
+                                                        borderWidth: 9,
+                                                        markerWidth: 9,
+                                                        markerHeight: 9,
+                                                        // overlayRadius: 800,
+                                                        markerType: MarkerType
+                                                            .invertedTriangle,
+                                                        animationType:
+                                                            AnimationType
+                                                                .elasticOut,
+                                                        markerOffset: -6,
+                                                      )
+                                                    ],
+                                                    annotations: <GaugeAnnotation>[
+                                                      GaugeAnnotation(
+                                                          widget: Column(
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 20.h,
+                                                              ),
+                                                              Text(
+                                                                "yourScore".tr,
+                                                                style: AppTextStyle
+                                                                    .textStyle12(
+                                                                        fontColor:
+                                                                            AppColors.darkBlue),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 10.h,
+                                                              ),
+                                                              Text(
+                                                                controller.yourScore[
+                                                                        controller
+                                                                            .scoreIndex]
+                                                                    ['score'],
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                    color: AppColors
+                                                                        .darkBlue,
+                                                                    fontSize:
+                                                                        25.sp),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 10.h,
+                                                              ),
+                                                              Text(
+                                                                "Out of 100",
+                                                                style: AppTextStyle
+                                                                    .textStyle12(
+                                                                        fontColor:
+                                                                            AppColors.darkBlue),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          angle: 90,
+                                                          horizontalAlignment:
+                                                              GaugeAlignment
+                                                                  .center,
+                                                          verticalAlignment:
+                                                              GaugeAlignment
+                                                                  .center,
+                                                          axisValue: 10,
+                                                          positionFactor: 0.5)
+                                                    ])
+                                              ])),
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 35.h,
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () {
+                                          controller.onPreviousTap();
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(width: 1),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child: Text(
+                                                "previous".tr.toUpperCase(),
+                                                style: AppTextStyle.textStyle16(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontColor:
+                                                        AppColors.darkBlue),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 20.w),
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () {
+                                          controller.onNextTap();
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(width: 1),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child: Text(
+                                                "next".tr.toUpperCase(),
+                                                style: AppTextStyle.textStyle16(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontColor:
+                                                        AppColors.darkBlue),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 15.h,
+                                ),
+                                controller.scoreIndex ==
+                                        controller.yourScore.length - 1
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              gradient: const LinearGradient(
+                                                begin: Alignment.bottomCenter,
+                                                end: Alignment.topCenter,
+                                                colors: [
+                                                  AppColors.appYellowColour,
+                                                  AppColors.gradientBottom
+                                                ],
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child: Text(
+                                                "close".tr.toUpperCase(),
+                                                style: AppTextStyle.textStyle16(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontColor:
+                                                        AppColors.brownColour),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        decoration: BoxDecoration(
+                                            color: AppColors.lightGrey,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Center(
+                                            child: Text(
+                                              "viewScore".tr.toUpperCase(),
+                                              style: AppTextStyle.textStyle16(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontColor: AppColors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                              ],
+                            ),
+                          ),
+                        );
+                      });
+                },
+              ),
+            ));
   }
 
   earningDetailPopup(BuildContext context) async {
@@ -699,12 +1076,14 @@ class HomeUI extends GetView<HomeController> {
                   Text(
                     "Actual Payment:",
                     style: AppTextStyle.textStyle16(
-                        fontWeight: FontWeight.w500, fontColor: AppColors.appRedColour),
+                        fontWeight: FontWeight.w500,
+                        fontColor: AppColors.appRedColour),
                   ),
                   Text(
                     "₹1000000000",
                     style: AppTextStyle.textStyle16(
-                        fontWeight: FontWeight.w500, fontColor: AppColors.appRedColour),
+                        fontWeight: FontWeight.w500,
+                        fontColor: AppColors.appRedColour),
                   ),
                 ],
               ),
@@ -724,12 +1103,14 @@ class HomeUI extends GetView<HomeController> {
                   Text(
                     "Actual Payment:",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                        fontWeight: FontWeight.w500,
+                        fontColor: AppColors.darkBlue),
                   ),
                   Text(
                     "₹1000000000",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                        fontWeight: FontWeight.w500,
+                        fontColor: AppColors.darkBlue),
                   ),
                 ],
               ),
@@ -799,7 +1180,8 @@ class HomeUI extends GetView<HomeController> {
                               "Supplement:",
                               style: AppTextStyle.textStyle12(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.darkBlue.withOpacity(0.5)),
+                                  fontColor:
+                                      AppColors.darkBlue.withOpacity(0.5)),
                             ),
                           ],
                         ),
@@ -830,12 +1212,14 @@ class HomeUI extends GetView<HomeController> {
                     Text(
                       "Total Tax:",
                       style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
                     ),
                     Text(
                       "₹1000000000",
                       style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ],
                 ),
@@ -892,13 +1276,15 @@ class HomeUI extends GetView<HomeController> {
                     child: Text(
                       "Status:",
                       style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ),
                   Text(
                     "to be settled",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                        fontWeight: FontWeight.w500,
+                        fontColor: AppColors.darkBlue),
                   ),
                 ],
               ),
@@ -913,13 +1299,15 @@ class HomeUI extends GetView<HomeController> {
                     child: Text(
                       "Time Period",
                       style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ),
                   Text(
                     "16th May 2023 - 23rd May 2023",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                        fontWeight: FontWeight.w500,
+                        fontColor: AppColors.darkBlue),
                   ),
                 ],
               ),

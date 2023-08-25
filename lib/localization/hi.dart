@@ -234,5 +234,13 @@ Map<String, String> hi() {
     "checkOthers" : "दूसरों की जाँच करें",
     "suggestRemediesHome" : "उपाय \nसुझाएं",
     "chooseYourAppLanguage" : "अपनी ऐप भाषा चुनें",
+    "payAttention" : "ध्यान देना",
+    "yourScore" : "तुम्हारे अंक",
+    "previous" : "पहले का",
+    "next" : "अगला",
+    "close" : "बंद करना",
+    "viewScore" : "स्कोर देखें",
+    "gotIt" : "समझ गया",
+
   };
 }

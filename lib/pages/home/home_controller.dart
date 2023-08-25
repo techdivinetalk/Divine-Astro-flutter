@@ -23,6 +23,29 @@ class HomeController extends GetxController {
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
   final UserRepository userRepository = Get.put(UserRepository());
+  int scoreIndex = 0;
+  List<Map<String, dynamic>> yourScore = [
+    {"title": "Your Conversion Rate", "score": "80"},
+    {"title": "Your Repurchase Rate", "score": "60"},
+    {"title": "Your Online Hours", "score": "50"},
+    {"title": "Your Live Hours", "score": "70"},
+    {"title": "E-Commerce", "score": "80"},
+    {"title": "Your Busy Hours", "score": "60"},
+  ];
+
+  onNextTap() {
+    if (scoreIndex < yourScore.length - 1) {
+      scoreIndex++;
+      update(['score_update']);
+    }
+  }
+
+  onPreviousTap() {
+    if (scoreIndex > 0) {
+      scoreIndex--;
+      update(['score_update']);
+    }
+  }
 
   @override
   void onInit() {

@@ -151,6 +151,10 @@ class AppString {
 
   static String suggestedRemediesEarning = "Suggested Remedies Earning";
   static String help = "Help ";
+  static String next = "Next";
+  static String gotIt = "Got It";
+  static String viewScore = "View Score";
+  static String close = "Close";
   static String orderId = "Order Id :  ";
   static String gender = "Gender : ";
   static String dob = "DOB : ";
@@ -162,9 +166,12 @@ class AppString {
   static String unBlockMsg =
       "If you unblock this user, then they’ll again be able to connect with you on the platform.";
   static String refund = "Refund";
+  static String payAttention = "Pay Attention";
+  static String yourScore = "Your Score";
   static String liveGifts = "Live Gifts";
   static String remedySuggested = "Remedy suggested";
   static String wallet = "Wallet";
+  static String previous = "Previous";
   static String all = "All";
   static String suggest = "Suggest";
   static String suggestRemedies = "Suggest Remedies";

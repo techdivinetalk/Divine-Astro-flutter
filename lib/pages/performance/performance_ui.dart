@@ -1,4 +1,6 @@
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/pages/performance/widget/information_ui.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -852,7 +854,16 @@ class PerformanceUI extends GetView<PerformanceController> {
                                 fontColor: AppColors.darkBlue),
                           ),
                           const Expanded(child: SizedBox()),
-                          Assets.images.icInfo.svg(height: 21.h, width: 21.h),
+                          GestureDetector(
+                              onTap: (){
+                                showCupertinoModalPopup(
+                                  context: Get.context!,
+                                  barrierColor:
+                                  AppColors.darkBlue.withOpacity(0.5),
+                                  builder: (context) => const InformationUI(),
+                                );
+                              },
+                              child: Assets.images.icInfo.svg(height: 21.h, width: 21.h)),
                         ],
                       ),
                     ],
