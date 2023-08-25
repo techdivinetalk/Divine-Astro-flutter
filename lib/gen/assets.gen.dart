@@ -637,11 +637,77 @@ class $AssetsLottieGen {
   List<LottieGenImage> get values => [soundWaves];
 }
 
+class $AssetsSvgGen {
+  const $AssetsSvgGen();
+
+  /// File path: assets/svg/block.svg
+  SvgGenImage get block => const SvgGenImage('assets/svg/block.svg');
+
+  /// File path: assets/svg/block_user.svg
+  SvgGenImage get blockUser => const SvgGenImage('assets/svg/block_user.svg');
+
+  /// File path: assets/svg/disconnect.svg
+  SvgGenImage get disconnect => const SvgGenImage('assets/svg/disconnect.svg');
+
+  /// File path: assets/svg/reply.svg
+  SvgGenImage get reply => const SvgGenImage('assets/svg/reply.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [block, blockUser, disconnect, reply];
+}
+
+class $AssetsSvgaGen {
+  const $AssetsSvgaGen();
+
+  /// File path: assets/svga/blue_lover.svga
+  String get blueLover => 'assets/svga/blue_lover.svga';
+
+  /// File path: assets/svga/box_of_roses.svga
+  String get boxOfRoses => 'assets/svga/box_of_roses.svga';
+
+  /// File path: assets/svga/box_of_roses_second.svga
+  String get boxOfRosesSecond => 'assets/svga/box_of_roses_second.svga';
+
+  /// File path: assets/svga/christmas_reindeer_and_sleigh.svga
+  String get christmasReindeerAndSleigh =>
+      'assets/svga/christmas_reindeer_and_sleigh.svga';
+
+  /// File path: assets/svga/lovers.svga
+  String get lovers => 'assets/svga/lovers.svga';
+
+  /// File path: assets/svga/new_year_countdown.svga
+  String get newYearCountdown => 'assets/svga/new_year_countdown.svga';
+
+  /// File path: assets/svga/new_year_gifts.svga
+  String get newYearGifts => 'assets/svga/new_year_gifts.svga';
+
+  /// File path: assets/svga/sports_car.svga
+  String get sportsCar => 'assets/svga/sports_car.svga';
+
+  /// File path: assets/svga/white_horse.svga
+  String get whiteHorse => 'assets/svga/white_horse.svga';
+
+  /// List of all assets
+  List<String> get values => [
+        blueLover,
+        boxOfRoses,
+        boxOfRosesSecond,
+        christmasReindeerAndSleigh,
+        lovers,
+        newYearCountdown,
+        newYearGifts,
+        sportsCar,
+        whiteHorse
+      ];
+}
+
 class Assets {
   Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLottieGen lottie = $AssetsLottieGen();
+  static const $AssetsSvgGen svg = $AssetsSvgGen();
+  static const $AssetsSvgaGen svga = $AssetsSvgaGen();
 }
 
 class AssetGenImage {
