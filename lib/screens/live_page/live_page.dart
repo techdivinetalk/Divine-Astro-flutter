@@ -6,6 +6,8 @@ import 'package:divine_astrologer/common/co-host_request.dart';
 import 'package:divine_astrologer/common/end_cohost.dart';
 import 'package:divine_astrologer/common/end_session_dialog.dart';
 import 'package:divine_astrologer/common/gift_sheet.dart';
+import 'package:divine_astrologer/common/unblock_user.dart';
+import 'package:divine_astrologer/screens/blocked_user/blocked_user_ui.dart';
 import 'package:divine_astrologer/screens/live_page/live_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,17 +15,22 @@ import 'package:flutter/material.dart';
 //
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 // Package imports:
 import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import 'package:http/http.dart' as http;
+import '../../common/block_success.dart';
 import '../../common/cached_network_image.dart';
 import '../../common/colors.dart';
 import '../../common/custom_text.dart';
 import '../../common/custom_text_field.dart';
 import '../../common/leader_board_sheet.dart';
+import '../../common/live_star.dart';
+import '../../common/switch_component.dart';
 import '../../common/waitlist_sheet.dart';
 import '../../gen/assets.gen.dart';
 import 'constant.dart';
@@ -64,10 +71,21 @@ class LivePageState extends State<LivePage> {
         showCupertinoModalPopup(
             context: context,
             builder: (BuildContext context) {
-              return CoHostRequest(onAccept: () {
-                liveController.connect.hostAgreeCoHostRequest(user);
-                controller.isCoHosting.value = true;
-              });
+              return CoHostRequest(
+                  name: user.name,
+                  onAccept: () {
+                    liveController.connect.hostAgreeCoHostRequest(user).then((value){
+                      ZegoUIKit().getSignalingPlugin().sendInvitation(
+                        inviterName: ZegoUIKit().getLocalUser().name,
+                        invitees: [user.id ?? ""],
+                        timeout: 60,
+                        type: 11,
+                        data: '',
+                      );
+                    });
+                    controller.isCoHosting.value = true;
+                    controller.startTimer();
+                  });
             });
       };
       subscriptions.addAll([
@@ -83,6 +101,8 @@ class LivePageState extends State<LivePage> {
             .listen((event) {
           if (event["type"] == 10) {
             controller.isCoHosting.value = false;
+            controller.duration.value = "";
+            controller.stopTimer();
           }
         }),
       ]);
@@ -128,7 +148,7 @@ class LivePageState extends State<LivePage> {
           userName: 'user_${widget.localUserID}',
           liveID: widget.liveID,
           controller: liveController,
-          config: (widget.isHost ? hostConfig : audienceConfig)
+          config: (widget.isHost ? controller.hostConfig : audienceConfig)
             ..topMenuBarConfig
             ..avatarBuilder = customAvatarBuilder
             ..bottomMenuBarConfig.hostButtons = const [
@@ -236,51 +256,72 @@ class LivePageState extends State<LivePage> {
   }
 
   Widget messageItem(ZegoInRoomMessage message) {
-    return Container(
-      width: 200.w,
-      margin: EdgeInsets.symmetric(
-        vertical: 4.h,
-        horizontal: 2,
-      ),
-      padding: const EdgeInsets.symmetric(
-        vertical: 8,
-        horizontal: 8,
-      ),
-      decoration: BoxDecoration(
-        border: Border.all(color: AppColors.white, width: .8),
-        color: Colors.black.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: RichText(
-        text: TextSpan(
+    bool isOtherUser = widget.localUserID != message.user.id;
+    return InkWell(
+      onTap: (){
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return UnblockOrBlockUser(name: message.user.name,isForBlocUser: true);
+          },
+        );
+      },
+      child: Container(
+        width: 200.w,
+        margin: EdgeInsets.symmetric(
+          vertical: 4.h,
+          horizontal: 2,
+        ),
+        padding: const EdgeInsets.symmetric(
+          vertical: 8,
+          horizontal: 4,
+        ),
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.white, width: .8),
+          color: Colors.black.withOpacity(0.05),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Row(
           children: [
-            WidgetSpan(
-              child: SizedBox(
-                width: 18,
-                child: Center(
-                  child: ZegoAvatar(
-                    user: message.user,
-                    avatarSize: const Size(18, 18),
+            RichText(
+              maxLines: 5,
+              text: TextSpan(
+                children: [
+                  WidgetSpan(
+                    child: SizedBox(
+                      width: 18,
+                      child: Center(
+                        child: ZegoAvatar(
+                          user: message.user,
+                          avatarSize: const Size(18, 18),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  WidgetSpan(child: SizedBox(width: 4.w)),
+                  TextSpan(
+                    text: '${message.user.name}: ',
+                    style: const TextStyle(
+                      color: AppColors.appColorDark,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextSpan(
+                    text: message.message,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                    ),
+                  )
+                ],
               ),
             ),
-            WidgetSpan(child: SizedBox(width: 4.w)),
-            TextSpan(
-              text: '${message.user.name}: ',
-              style: const TextStyle(
-                color: AppColors.appColorDark,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextSpan(
-              text: message.message,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-              ),
-            )
+            SizedBox(width: 8.w),
+            Spacer(),
+            isOtherUser
+                ? Icon(Icons.more_vert, color: AppColors.white)
+                : SizedBox(),
           ],
         ),
       ),
@@ -323,6 +364,58 @@ class LivePageState extends State<LivePage> {
           SizedBox(width: 16.w),
           Assets.images.starLive.image(),
           SizedBox(width: 16.w),
+        ],
+      ),
+    );
+  }
+
+  Container buildCallDurationWidget() {
+    return Container(
+      height: 73.h,
+      margin: EdgeInsets.only(left: 22.w),
+      decoration: BoxDecoration(
+          color: AppColors.lightBlack.withOpacity(.3),
+          borderRadius: BorderRadius.circular(28)),
+      child: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          Container(
+            height: 48.h,
+            decoration: BoxDecoration(
+                color: AppColors.textColor,
+                borderRadius: BorderRadius.circular(28)),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(width: 16.w),
+                Container(
+                  width: 32.w,
+                  height: 32.h,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: circleAvatar(),
+                ),
+                SizedBox(width: 8.w),
+                Lottie.asset('assets/lottie/sound_waves.json'),
+                SizedBox(width: 8.w),
+                CustomText(controller.duration.value,
+                    fontSize: 16.sp, fontColor: AppColors.white),
+                SizedBox(width: 16.w),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 4.0.w),
+                child: CustomText("${controller.coHostUser!.name} is on call",
+                    fontSize: 12.sp, fontColor: AppColors.white),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -411,7 +504,11 @@ class LivePageState extends State<LivePage> {
                         children: [
                           buildTopMenu(),
                           SizedBox(height: 20.h),
-                          buildAstrologerLiveStartWidget()
+                          buildAstrologerLiveStartWidget(),
+                          SizedBox(height: 20.h),
+                          Obx(() => controller.isCoHosting.value
+                              ? buildCallDurationWidget()
+                              : const SizedBox())
                         ],
                       ),
                     ),
@@ -555,7 +652,7 @@ class LivePageState extends State<LivePage> {
                                       controller.isMicroPhoneOn.value =
                                           !controller.isMicroPhoneOn.value;
                                     },
-                                    icon: Assets.images.audioDisableLive.svg()),
+                                    icon: Obx(()=>controller.isMicroPhoneOn.value ? Assets.images.audioDisableLive.svg() : Assets.images.audioEnableLive.svg())),
                                 IconButton(
                                     onPressed: () {
                                       ZegoUIKit.instance.turnCameraOn(
@@ -563,7 +660,7 @@ class LivePageState extends State<LivePage> {
                                       controller.isCameraOn.value =
                                           !controller.isCameraOn.value;
                                     },
-                                    icon: Assets.images.videoDisableLive.svg())
+                                    icon: Obx(()=>controller.isCameraOn.value ? Assets.images.videoDisableLive.svg() : Assets.images.vidioEnableLive.svg()))
                               ],
                             ),
                           ),
@@ -632,6 +729,42 @@ class LivePageState extends State<LivePage> {
             ),
           ),
         ),
+        Spacer(),
+        Obx(() => ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10,sigmaY: 10),
+            child: FlutterSwitch(
+              inactiveTextColor: AppColors.white,
+              activeTextColor: AppColors.white,
+              width: 100.0.w,
+              height: 40.0.h,
+              toggleSize: 32.0,
+              value: controller.isCallOnOff.value,
+              showOnOff: true,
+              borderRadius: 30.0,
+              padding: 4.0,
+              activeText: "Call On",
+              inactiveText: "Call Off",
+              valueFontSize: 12.0,
+              activeTextFontWeight: FontWeight.bold,
+              inactiveTextFontWeight: FontWeight.bold,
+              activeToggleColor: AppColors.appYellowColour,
+              inactiveToggleColor: Colors.grey,
+              toggleColor: AppColors.greyColour,
+              switchBorder: Border.all(
+                color: AppColors.appYellowColour,
+                width: 2.0,
+              ),
+              activeColor: Colors.black.withOpacity(.1),
+              inactiveColor: Colors.black.withOpacity(.1),
+              onToggle: (val) {
+                controller.isCallOnOff.value = !controller.isCallOnOff.value;
+              },
+            ),
+          ),
+        )),
+        SizedBox(width: 20.w)
       ],
     );
   }
@@ -665,6 +798,7 @@ class LivePageState extends State<LivePage> {
                                 name: controller.coHostUser!.name,
                                 onNo: () {},
                                 onYes: () {
+                                  controller.stopTimer();
                                   liveController.connect
                                       .removeCoHost(controller.coHostUser!);
                                   controller.isCoHosting.value = false;

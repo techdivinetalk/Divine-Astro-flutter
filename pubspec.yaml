@@ -47,6 +47,8 @@ dependencies:
   fluttertoast: ^8.2.2
   video_trimmer: ^2.1.0
   flutter_image_compress: ^2.0.4
+  lottie: ^2.6.0
+
 
 
 dev_dependencies:
@@ -64,12 +66,13 @@ flutter_gen:
     flutter_svg: true
     flare_flutter: false
     rive: false
-    lottie: false
+    lottie: true
 
 flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/lottie/
   fonts:
   - family: Poppins
     fonts:

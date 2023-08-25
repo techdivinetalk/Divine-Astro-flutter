@@ -11,21 +11,20 @@ import '../../../gen/assets.gen.dart';
 import '../../../model/res_login.dart';
 import '../../../repository/shop_repository.dart';
 
-class AllOptionControler extends GetxController {
+class AllOptionController extends GetxController {
   ScrollController orderScrollController = ScrollController();
 
   final ShopRepository shopRepository;
-  AllOptionControler(this.shopRepository);
+  AllOptionController(this.shopRepository);
   UserData? userData;
-  SharedPreferenceService preferenceService =
-      Get.find<SharedPreferenceService>();
+  SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
   List<OrderData>? orderHistoryData;
   RxBool allOrderHistorySync = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-    getOrderHistory();
+    // getOrderHistory();
   }
 
   showDetails({required int index}) {
@@ -151,25 +150,25 @@ class AllOptionControler extends GetxController {
     return returnString;
   }
 
-//API Call
-  getOrderHistory() async {
-    Map<String, dynamic> params = {
-      "type": 1,
-      "role_id": 7,
-      "page": 1,
-      "device_token":
-          "cxAfLAIyQuaF6bwXpQaR1A:APA91bHPWkT5Qh7a8ESzOqhBcwLjSvogGmlqkO2Kr4aFNn8xXmyUlHD8UFj--uiSZcss5UopDakvn3tS8yypcXlSg4hYehlEji7jQDrNpPdriSXv3rRgrEtuzDbm-pHiozkm8qS03Cmz"
-    };
-    try {
-      var response = await shopRepository.getOrderHistory(params);
-      orderHistoryData = response.data;
-    } catch (error) {
-      if (error is AppException) {
-        error.onException();
-      } else {
-        Get.snackbar("Error", error.toString()).show();
-      }
-    }
-    allOrderHistorySync.value = true;
-  }
+// //API Call
+//   getOrderHistory() async {
+//     Map<String, dynamic> params = {
+//       "type": 1,
+//       "role_id": 7,
+//       "page": 1,
+//       "device_token":
+//           "cxAfLAIyQuaF6bwXpQaR1A:APA91bHPWkT5Qh7a8ESzOqhBcwLjSvogGmlqkO2Kr4aFNn8xXmyUlHD8UFj--uiSZcss5UopDakvn3tS8yypcXlSg4hYehlEji7jQDrNpPdriSXv3rRgrEtuzDbm-pHiozkm8qS03Cmz"
+//     };
+//     try {
+//       var response = await shopRepository.getOrderHistory(params);
+//       orderHistoryData = response.data;
+//     } catch (error) {
+//       if (error is AppException) {
+//         error.onException();
+//       } else {
+//         Get.snackbar("Error", error.toString()).show();
+//       }
+//     }
+//     allOrderHistorySync.value = true;
+//   }
 }

@@ -11,6 +11,7 @@ class SharedPreferenceService extends GetxService {
   static const tokenKey = "token";
   static const deviceTokenKey = "deviceTokenKey";
   static const userKey = "user";
+  static const specialAbility = "specialAbility";
 
   Future<SharedPreferenceService> init() async {
     prefs = await SharedPreferences.getInstance();
@@ -54,5 +55,13 @@ class SharedPreferenceService extends GetxService {
 
   Future erase() {
     return prefs!.clear();
+  }
+
+  Future<bool> setSpecialAbility(String value) async {
+    return await prefs!.setString(specialAbility, value);
+  }
+
+  String? getSpecialAbility() {
+    return prefs!.getString(specialAbility);
   }
 }

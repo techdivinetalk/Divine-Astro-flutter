@@ -104,6 +104,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                 fit: BoxFit.cover,
                                 height: 30,
                                 width: 30,
+                                errorWidget: (context, url, error) => Image.asset(Assets.images.defaultProfile.path),
                               ),
                             ),
                             const SizedBox(height: 5),

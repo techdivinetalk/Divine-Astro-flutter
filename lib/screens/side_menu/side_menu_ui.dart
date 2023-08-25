@@ -27,7 +27,7 @@ class SideMenuDrawer extends StatelessWidget {
                 ),
                 InkWell(
                     onTap: () {
-                      Get.back();
+                     Navigator.pop(context);
                     },
                     child: const Icon(Icons.close))
               ],
