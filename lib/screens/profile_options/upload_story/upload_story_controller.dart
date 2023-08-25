@@ -1,9 +1,12 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:aws_s3_upload/aws_s3_upload.dart';
+import 'package:divine_astrologer/common/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
@@ -69,11 +72,28 @@ class UploadStoryController extends GetxController {
     );
     if (response != null) {
       debugPrint("Uploaded Url : $response");
-
-      Get.back();
+      await uploadStory(response);
       CustomException("Video uploaded successfully");
     } else {
       CustomException("Something went wrong");
+    }
+  }
+
+  Future<void> uploadStory(String url) async {
+    try {
+      Map<String, dynamic> param = {"media_url": url};
+      final response = await userRepository.uploadAstroStory(param);
+      if (response.statusCode == 200 && response.success == true) {
+        Get.back();
+        Get.snackbar("Story Uploaded Successfully", "",
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: AppColors.white,
+            colorText: AppColors.blackColor,
+            duration: const Duration(seconds: 3));
+      }
+    } catch (err) {
+      Fluttertoast.showToast(msg: "Something went wrong");
+      log(err.toString());
     }
   }
 }

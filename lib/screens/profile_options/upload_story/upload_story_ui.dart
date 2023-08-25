@@ -5,6 +5,7 @@ import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/screens/profile_options/upload_story/upload_story_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:video_trimmer/video_trimmer.dart';
@@ -23,6 +24,7 @@ class UploadStoryUi extends GetView<UploadStoryController> {
             padding: const EdgeInsets.only(right: 8),
             child: InkWell(
               onTap: () {
+                Fluttertoast.showToast(msg: "Uploading Story..");
                 controller.saveVideo();
               },
               child: const Text("Upload"),
