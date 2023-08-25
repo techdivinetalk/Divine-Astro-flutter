@@ -20,7 +20,7 @@ class LiveTipsController extends GetxController {
     var data = pref.getUserDetail();
     liveId = data!.id.toString();
     name = data.name!;
-    image = ApiProvider.imageBaseUrl + data.image!;
+    image = data.image!;
     super.onReady();
   }
 

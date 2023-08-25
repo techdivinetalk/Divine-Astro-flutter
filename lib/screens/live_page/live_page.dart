@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:divine_astrologer/common/block_user_list.dart';
 import 'package:divine_astrologer/common/co-host_request.dart';
 import 'package:divine_astrologer/common/end_cohost.dart';
 import 'package:divine_astrologer/common/end_session_dialog.dart';
 import 'package:divine_astrologer/common/gift_sheet.dart';
 import 'package:divine_astrologer/common/unblock_user.dart';
+import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/screens/blocked_user/blocked_user_ui.dart';
 import 'package:divine_astrologer/screens/live_page/live_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -55,7 +57,7 @@ class LivePage extends StatefulWidget {
   State<StatefulWidget> createState() => LivePageState();
 }
 
-class LivePageState extends State<LivePage> {
+class LivePageState extends State<LivePage>   {
   final liveController = ZegoUIKitPrebuiltLiveStreamingController();
   final List<StreamSubscription<dynamic>?> subscriptions = [];
   final controller = Get.put(LiveController());
@@ -66,22 +68,30 @@ class LivePageState extends State<LivePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      liveController.connect.onRequestCoHostEvent = (user) {
+      liveController.connect.onRequestCoHostEvent = (user) async {
         controller.coHostUser = user;
+        String type = await controller.getCallType(user.id);
+        controller.setVisibilityCoHost(type);
         showCupertinoModalPopup(
-            context: context,
+            context: Get.context!,
             builder: (BuildContext context) {
               return CoHostRequest(
                   name: user.name,
+                  onReject: () {
+                    liveController.connect.hostRejectCoHostRequest(user);
+                    controller.setCallType(user.id);
+                  },
                   onAccept: () {
-                    liveController.connect.hostAgreeCoHostRequest(user).then((value){
+                    liveController.connect
+                        .hostAgreeCoHostRequest(user)
+                        .then((value) {
                       ZegoUIKit().getSignalingPlugin().sendInvitation(
-                        inviterName: ZegoUIKit().getLocalUser().name,
-                        invitees: [user.id ?? ""],
-                        timeout: 60,
-                        type: 11,
-                        data: '',
-                      );
+                            inviterName: ZegoUIKit().getLocalUser().name,
+                            invitees: [user.id ?? ""],
+                            timeout: 60,
+                            type: 11,
+                            data: '',
+                          );
                     });
                     controller.isCoHosting.value = true;
                     controller.startTimer();
@@ -149,7 +159,6 @@ class LivePageState extends State<LivePage> {
           liveID: widget.liveID,
           controller: liveController,
           config: (widget.isHost ? controller.hostConfig : audienceConfig)
-            ..topMenuBarConfig
             ..avatarBuilder = customAvatarBuilder
             ..bottomMenuBarConfig.hostButtons = const [
               //ZegoMenuBarButtonName.soundEffectButton,
@@ -168,7 +177,6 @@ class LivePageState extends State<LivePage> {
             ..bottomMenuBarConfig.audienceButtons = []
             ..audioVideoViewConfig.useVideoViewAspectFill = true
             ..maxCoHostCount = 1
-
             /// gallery-layout, show top and bottom if have two audio-video views
             ..layout = ZegoLayout.gallery()
             ..topMenuBarConfig = ZegoTopMenuBarConfig(
@@ -239,7 +247,7 @@ class LivePageState extends State<LivePage> {
           removeTop: true,
           removeBottom: true,
           child: SizedBox(
-            width: 200,
+            //width: 200,
             height: 200,
             child: ListView.builder(
               shrinkWrap: true,
@@ -257,12 +265,14 @@ class LivePageState extends State<LivePage> {
 
   Widget messageItem(ZegoInRoomMessage message) {
     bool isOtherUser = widget.localUserID != message.user.id;
+    print(message.user.inRoomAttributes.value);
     return InkWell(
-      onTap: (){
+      onTap: () {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return UnblockOrBlockUser(name: message.user.name,isForBlocUser: true);
+            return UnblockOrBlockUser(
+                name: message.user.name, isForBlocUser: true);
           },
         );
       },
@@ -652,7 +662,10 @@ class LivePageState extends State<LivePage> {
                                       controller.isMicroPhoneOn.value =
                                           !controller.isMicroPhoneOn.value;
                                     },
-                                    icon: Obx(()=>controller.isMicroPhoneOn.value ? Assets.images.audioDisableLive.svg() : Assets.images.audioEnableLive.svg())),
+                                    icon: Obx(() => controller
+                                            .isMicroPhoneOn.value
+                                        ? Assets.images.audioDisableLive.svg()
+                                        : Assets.images.audioEnableLive.svg())),
                                 IconButton(
                                     onPressed: () {
                                       ZegoUIKit.instance.turnCameraOn(
@@ -660,7 +673,9 @@ class LivePageState extends State<LivePage> {
                                       controller.isCameraOn.value =
                                           !controller.isCameraOn.value;
                                     },
-                                    icon: Obx(()=>controller.isCameraOn.value ? Assets.images.videoDisableLive.svg() : Assets.images.vidioEnableLive.svg()))
+                                    icon: Obx(() => controller.isCameraOn.value
+                                        ? Assets.images.videoDisableLive.svg()
+                                        : Assets.images.vidioEnableLive.svg()))
                               ],
                             ),
                           ),
@@ -683,6 +698,10 @@ class LivePageState extends State<LivePage> {
       children: [
         IconButton(
             onPressed: () {
+              if(controller.coHostUser != null){
+                controller.setCallType(controller.coHostUser!.id);
+              }
+              controller.stopTimer();
               Get.back();
             },
             icon: Assets.images.leftArrow.svg()),
@@ -731,39 +750,40 @@ class LivePageState extends State<LivePage> {
         ),
         Spacer(),
         Obx(() => ClipRRect(
-          borderRadius: BorderRadius.circular(30),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10,sigmaY: 10),
-            child: FlutterSwitch(
-              inactiveTextColor: AppColors.white,
-              activeTextColor: AppColors.white,
-              width: 100.0.w,
-              height: 40.0.h,
-              toggleSize: 32.0,
-              value: controller.isCallOnOff.value,
-              showOnOff: true,
-              borderRadius: 30.0,
-              padding: 4.0,
-              activeText: "Call On",
-              inactiveText: "Call Off",
-              valueFontSize: 12.0,
-              activeTextFontWeight: FontWeight.bold,
-              inactiveTextFontWeight: FontWeight.bold,
-              activeToggleColor: AppColors.appYellowColour,
-              inactiveToggleColor: Colors.grey,
-              toggleColor: AppColors.greyColour,
-              switchBorder: Border.all(
-                color: AppColors.appYellowColour,
-                width: 2.0,
+              borderRadius: BorderRadius.circular(30),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: FlutterSwitch(
+                  inactiveTextColor: AppColors.white,
+                  activeTextColor: AppColors.white,
+                  width: 100.0.w,
+                  height: 40.0.h,
+                  toggleSize: 32.0,
+                  value: controller.isCallOnOff.value,
+                  showOnOff: true,
+                  borderRadius: 30.0,
+                  padding: 4.0,
+                  activeText: "Call On",
+                  inactiveText: "Call Off",
+                  valueFontSize: 12.0,
+                  activeTextFontWeight: FontWeight.bold,
+                  inactiveTextFontWeight: FontWeight.bold,
+                  activeToggleColor: AppColors.appYellowColour,
+                  inactiveToggleColor: Colors.grey,
+                  toggleColor: AppColors.greyColour,
+                  switchBorder: Border.all(
+                    color: AppColors.appYellowColour,
+                    width: 2.0,
+                  ),
+                  activeColor: Colors.black.withOpacity(.1),
+                  inactiveColor: Colors.black.withOpacity(.1),
+                  onToggle: (val) {
+                    controller.isCallOnOff.value =
+                        !controller.isCallOnOff.value;
+                  },
+                ),
               ),
-              activeColor: Colors.black.withOpacity(.1),
-              inactiveColor: Colors.black.withOpacity(.1),
-              onToggle: (val) {
-                controller.isCallOnOff.value = !controller.isCallOnOff.value;
-              },
-            ),
-          ),
-        )),
+            )),
         SizedBox(width: 20.w)
       ],
     );
@@ -798,6 +818,9 @@ class LivePageState extends State<LivePage> {
                                 name: controller.coHostUser!.name,
                                 onNo: () {},
                                 onYes: () {
+                                  if(controller.coHostUser != null){
+                                    controller.setCallType(controller.coHostUser!.id);
+                                  }
                                   controller.stopTimer();
                                   liveController.connect
                                       .removeCoHost(controller.coHostUser!);
@@ -812,9 +835,7 @@ class LivePageState extends State<LivePage> {
                         clipBehavior: Clip.antiAlias,
                         decoration: const BoxDecoration(
                             shape: BoxShape.circle, color: AppColors.redColor),
-                        child: const Center(
-                            child:
-                                Icon(Icons.call_end, color: AppColors.white)),
+                        child: Assets.svg.disconnect.svg(),
                       ),
                     ),
                   ),
@@ -833,6 +854,9 @@ class LivePageState extends State<LivePage> {
                     return EndSession(
                         onNo: () {},
                         onYes: () {
+                          if(controller.coHostUser != null){
+                            controller.setCallType(controller.coHostUser!.id);
+                          }
                           Get.back();
                         });
                   },
@@ -870,6 +894,31 @@ class LivePageState extends State<LivePage> {
                     shape: BoxShape.circle,
                     color: AppColors.white.withOpacity(.6)),
                 child: Center(child: Assets.images.leaderboardLive.svg()),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 16.h),
+        ClipOval(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
+            child: InkWell(
+              onTap: () {
+                showCupertinoModalPopup(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const BlockUserList();
+                    });
+              },
+              child: Container(
+                width: 56.w,
+                height: 56.h,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.white.withOpacity(.6)),
+                child: Center(
+                    child: Assets.svg.blockUser.svg(width: 30.w, height: 30.w)),
               ),
             ),
           ),
@@ -933,9 +982,9 @@ class LivePageState extends State<LivePage> {
   }
 
   /// if you use unreliable message channel, you need subscription this method.
-  void onInRoomCommandMessageReceived(
+  Future<void> onInRoomCommandMessageReceived(
     ZegoSignalingPluginInRoomCommandMessageReceivedEvent event,
-  ) {
+  ) async {
     final messages = event.messages;
 
     /// You can display different animations according to gift-type
@@ -944,7 +993,11 @@ class LivePageState extends State<LivePage> {
       final message = utf8.decode(commandMessage.message);
       debugPrint('onInRoomCommandMessageReceived: $message');
       if (senderUserID != widget.localUserID) {
-        GiftWidget.show(context, "assets/sports-car.svga");
+        var data = jsonDecode(message);
+        for (var i = 0; i < data["gift_count"]; i++) {
+          await Future.delayed(const Duration(seconds: 1));
+          GiftWidget.show(context, "assets/svga/"+controller.svgaAnime[data["gift_type"]]);
+        }
       }
     }
   }
@@ -975,34 +1028,36 @@ class LivePageState extends State<LivePage> {
       debugPrint("[ERROR], Send Gift Fail, ${error.toString()}");
     }
   }
-}
 
-Widget customAvatarBuilder(
-  BuildContext context,
-  Size size,
-  ZegoUIKitUser? user,
-  Map<String, dynamic> extraInfo,
-) {
-  return CachedNetworkImage(
-    imageUrl: 'https://robohash.org/${user?.id}.png',
-    imageBuilder: (context, imageProvider) => Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        image: DecorationImage(
-          image: imageProvider,
-          fit: BoxFit.cover,
+  Widget customAvatarBuilder(
+      BuildContext context,
+      Size size,
+      ZegoUIKitUser? user,
+      Map<String, dynamic> extraInfo,
+      ) {
+    return CachedNetworkImage(
+      imageUrl: 'https://robohash.org/${user?.id}.png',
+      imageBuilder: (context, imageProvider) => Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: imageProvider,
+            fit: BoxFit.cover,
+          ),
         ),
       ),
-    ),
-    progressIndicatorBuilder: (context, url, downloadProgress) =>
-        CircularProgressIndicator(value: downloadProgress.progress),
-    errorWidget: (context, url, error) {
-      ZegoLoggerService.logInfo(
-        '$user avatar url is invalid',
-        tag: 'live audio',
-        subTag: 'live page',
-      );
-      return ZegoAvatar(user: user, avatarSize: size);
-    },
-  );
+      progressIndicatorBuilder: (context, url, downloadProgress) =>
+          CircularProgressIndicator(value: downloadProgress.progress),
+      errorWidget: (context, url, error) {
+        ZegoLoggerService.logInfo(
+          '$user avatar url is invalid',
+          tag: 'live audio',
+          subTag: 'live page',
+        );
+        return ZegoAvatar(user: user, avatarSize: size);
+      },
+    );
+  }
 }
+
+
