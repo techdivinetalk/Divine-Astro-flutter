@@ -247,7 +247,7 @@ class LivePageState extends State<LivePage>   {
           removeTop: true,
           removeBottom: true,
           child: SizedBox(
-            //width: 200,
+            width: 240,
             height: 200,
             child: ListView.builder(
               shrinkWrap: true,
