@@ -39,8 +39,8 @@ class GiftOrderHistoryModelClass {
 class GiftDataList {
   int? id;
   int? amount;
-  String? orderId;
-  Status? status;
+  int? orderId;
+  String? status;
   int? transactionId;
   DateTime? createdAt;
   int? productType;
@@ -73,7 +73,7 @@ class GiftDataList {
     id: json["id"],
     amount: json["amount"],
     orderId: json["order_id"],
-    status: statusValues.map[json["status"]]!,
+    status: json["status"],
     transactionId: json["transaction_id"],
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
     productType: json["product_type"],
@@ -90,7 +90,7 @@ class GiftDataList {
     "id": id,
     "amount": amount,
     "order_id": orderId,
-    "status": statusValues.reverse[status],
+    "status": status,
     "transaction_id": transactionId,
     "created_at": createdAt?.toIso8601String(),
     "product_type": productType,
@@ -106,8 +106,8 @@ class GiftDataList {
 
 class GetCustomers {
   int? id;
-  Name? name;
-  Avatar? avatar;
+  String? name;
+  String? avatar;
   int? customerNo;
 
   GetCustomers({
@@ -119,38 +119,18 @@ class GetCustomers {
 
   factory GetCustomers.fromJson(Map<String, dynamic> json) => GetCustomers(
     id: json["id"],
-    name: nameValues.map[json["name"]]!,
-    avatar: avatarValues.map[json["avatar"]]!,
+    name: json["name"],
+    avatar: json["avatar"],
     customerNo: json["customer_no"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "name": nameValues.reverse[name],
-    "avatar": avatarValues.reverse[avatar],
+    "name": name,
+    "avatar": avatar,
     "customer_no": customerNo,
   };
 }
-
-enum Avatar {
-  GROUP_121666_PNG,
-  THE_20230308154525054_JPG
-}
-
-final avatarValues = EnumValues({
-  "Group_121666.png": Avatar.GROUP_121666_PNG,
-  "2023-03-08-15-45-25-054.jpg": Avatar.THE_20230308154525054_JPG
-});
-
-enum Name {
-  KARAN,
-  RA_M_J_F_H_D_J_JADA_Z
-}
-
-final nameValues = EnumValues({
-  "Karan": Name.KARAN,
-  "Ra\ud83d\ude2fM@  jF\ud83e\udee1 h   \ud83d\ude3c d€@j jada \ud83e\udd21                Z": Name.RA_M_J_F_H_D_J_JADA_Z
-});
 
 class GetGift {
   String? giftName;
@@ -174,24 +154,4 @@ class GetGift {
     "gift_image": giftImage,
     "id": id,
   };
-}
-
-enum Status {
-  COMPLETED
-}
-
-final statusValues = EnumValues({
-  "completed": Status.COMPLETED
-});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }

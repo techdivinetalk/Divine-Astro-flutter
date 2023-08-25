@@ -39,8 +39,8 @@ class AllOrderHistoryModelClass {
 class AllHistoryData {
   int? id;
   int? amount;
-  String? orderId;
-  Status? status;
+  int? orderId;
+  String? status;
   int? transactionId;
   DateTime? createdAt;
   int? productType;
@@ -73,7 +73,7 @@ class AllHistoryData {
     id: json["id"],
     amount: json["amount"],
     orderId: json["order_id"],
-    status: statusValues.map[json["status"]]!,
+    status: json["status"],
     transactionId: json["transaction_id"],
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
     productType: json["product_type"],
@@ -90,7 +90,7 @@ class AllHistoryData {
     "id": id,
     "amount": amount,
     "order_id": orderId,
-    "status": statusValues.reverse[status],
+    "status": status,
     "transaction_id": transactionId,
     "created_at": createdAt?.toIso8601String(),
     "product_type": productType,
@@ -106,8 +106,8 @@ class AllHistoryData {
 
 class GetCustomers {
   int? id;
-  Name? name;
-  Avatar? avatar;
+  String? name;
+  String? avatar;
   int? customerNo;
 
   GetCustomers({
@@ -119,15 +119,15 @@ class GetCustomers {
 
   factory GetCustomers.fromJson(Map<String, dynamic> json) => GetCustomers(
     id: json["id"],
-    name: nameValues.map[json["name"]]!,
-    avatar: avatarValues.map[json["avatar"]]!,
+    name: json["name"],
+    avatar: json["avatar"],
     customerNo: json["customer_no"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "name": nameValues.reverse[name],
-    "avatar": avatarValues.reverse[avatar],
+    "name": name,
+    "avatar": avatar,
     "customer_no": customerNo,
   };
 }
