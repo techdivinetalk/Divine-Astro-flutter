@@ -230,5 +230,13 @@ Map<String, String> mr() {
     "selectYourDateBirth" : "तुमची जन्मतारीख निवडा",
     "suggestRemediesHome" : "उपाय \nसुचवा",
     "chooseYourAppLanguage" : "तुमची अॅप भाषा निवडा",
+    "payAttention" : "लक्ष द्या",
+    "yourScore" : "तुमचा स्कोअर",
+    "previous" : "मागील",
+    "next" : "पुढे",
+    "close" : "बंद",
+    "viewScore" : "स्कोअर पहा",
+    "gotIt" : "समजले",
+
   };
 }

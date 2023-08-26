@@ -231,5 +231,13 @@ Map<String, String> gu() {
     "checkKundli" : "કુંડળી તપાસો",
     "suggestRemediesHome" : "ઉપાયો\nસૂચવો",
     "chooseYourAppLanguage" : "તમારી એપ્લિકેશન ભાષા પસંદ કરો",
+    "payAttention" : "ધ્યાન આપો",
+    "yourScore" : "તમારો સ્કોર",
+    "previous" : "અગાઉના",
+    "next" : "આગળ",
+    "close" : "બંધ",
+    "viewScore" : "સ્કોર જુઓ",
+    "gotIt" : "જાણ્યું",
+
   };
 }

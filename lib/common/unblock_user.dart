@@ -51,7 +51,7 @@ class UnblockOrBlockUser extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.disabled_visible,color: Colors.redAccent),
+                    Assets.svg.block.svg(),
                     SizedBox(width: 16.w),
                     Text("${isForBlocUser ? "Block" : "Unblock"} $name?",style: TextStyle(fontSize: 16.sp,color: AppColors.textColor),)
                   ],
@@ -62,7 +62,7 @@ class UnblockOrBlockUser extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.replay,color: AppColors.textColor),
+                    Assets.svg.reply.svg(),
                     SizedBox(width: 16.w),
                     Text("Reply",style: TextStyle(fontSize: 16.sp,color: AppColors.textColor),)
                   ],

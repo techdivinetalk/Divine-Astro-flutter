@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:divine_astrologer/model/res_reply_review.dart';
 import 'package:divine_astrologer/model/res_user_profile.dart';
 import 'package:divine_astrologer/model/update_profile_response.dart';
+import 'package:divine_astrologer/model/upload_story_response.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -197,6 +198,29 @@ class UserRepository extends ApiProvider {
         } else {
           final editResponse = updateProfileResponseFromJson(response.body);
           return editResponse;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<UploadStoryResponse> uploadAstroStory(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await post(uploadAstroStories,
+          body: jsonEncode(param), headers: await getJsonHeaderURL());
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body));
+        } else {
+          final uploadStoryResponse =
+              uploadStoryResponseFromJson(response.body);
+          return uploadStoryResponse;
         }
       } else {
         throw CustomException(json.decode(response.body)["error"]);

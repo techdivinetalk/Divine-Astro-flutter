@@ -1,4 +1,5 @@
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +8,7 @@ import 'package:get/get.dart';
 import '../../../common/app_exception.dart';
 import '../../../common/routes.dart';
 import '../../../di/shared_preference_service.dart';
+import '../../../model/firebase_model.dart';
 import '../../../model/res_login.dart';
 import '../../../repository/user_repository.dart';
 
@@ -52,6 +54,7 @@ class LoginController extends GetxController {
     };
     try {
       ResLogin data = await userRepository.userLogin(params);
+      updateLoginDatainFirebase(data);
       navigateToDashboard(data);
     } catch (error) {
       enable.value = true;
@@ -74,6 +77,20 @@ class LoginController extends GetxController {
     Get.offAllNamed(RouteName.dashboard,
         arguments: [data.data!.phoneNo, data.data!.sessionId]);
     enable.value = true;
+  }
+
+  void updateLoginDatainFirebase(ResLogin data) {
+    FirebaseUserData userData = FirebaseUserData(
+      data.data!.name!,
+      data.data!.deviceToken!,
+      data.data!.image!,
+      RealTime(0, data.data!.deviceModel!),
+    );
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
+
+    final DatabaseReference databaseRef =
+    firebaseDatabase.ref().child("astrologer/${data.data?.id}");
+    databaseRef.set(userData.toJson());
   }
 
   @override
