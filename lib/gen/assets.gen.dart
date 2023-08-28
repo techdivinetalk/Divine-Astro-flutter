@@ -211,6 +211,10 @@ class $AssetsImagesGen {
   SvgGenImage get icDonations =>
       const SvgGenImage('assets/images/ic_donations.svg');
 
+  /// File path: assets/images/ic_double_tick.png
+  AssetGenImage get icDoubleTick =>
+      const AssetGenImage('assets/images/ic_double_tick.png');
+
   /// File path: assets/images/ic_down_arrow.svg
   SvgGenImage get icDownArrow =>
       const SvgGenImage('assets/images/ic_down_arrow.svg');
@@ -547,6 +551,7 @@ class $AssetsImagesGen {
         icDiamond,
         icDonationDetailCow,
         icDonations,
+        icDoubleTick,
         icDownArrow,
         icDropDown,
         icEcommerce,
