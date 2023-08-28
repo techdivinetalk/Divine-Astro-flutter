@@ -1,120 +1,142 @@
-// import 'package:firebase_messaging/firebase_messaging.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+import 'dart:math' as math;
 
-// const channel = AndroidNotificationChannel(
-//   "ChannelId",
-//   "ChannelName",
-//   importance: Importance.high,
-// );
-// final _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-// // ignore: type_annotate_public_apis
-// Map<String, dynamic>? notificationDetails;
-// BuildContext? contextDetail;
-// String? previousTransId;
-// String? previosConversationId;
+import '../common/common_functions.dart';
+import '../common/routes.dart';
 
-// Future<void> firebaseMessagingConfig(BuildContext buildContext) async {
-//   contextDetail = buildContext;
-//   initMessaging();
-//   final _firebaseMessaging = FirebaseMessaging.instance;
+const channel = AndroidNotificationChannel(
+  "DivineAstrologer",
+  "AstrologerNotification",
+  importance: Importance.high,
+);
+final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-//   await _firebaseMessaging.requestPermission(
-//       alert: true,
-//       announcement: false,
-//       badge: true,
-//       carPlay: false,
-//       criticalAlert: false,
-//       provisional: false,
-//       sound: true);
+// ignore: type_annotate_public_apis
+Map<String, dynamic>? notificationDetails;
+BuildContext? contextDetail;
+String? previousTransId;
+String? previosConversationId;
 
-//   _firebaseMessaging.setForegroundNotificationPresentationOptions(
-//     alert: true,
-//     badge: true,
-//     sound: true,
-//   );
+Future<void> firebaseMessagingConfig(BuildContext buildContext) async {
+  contextDetail = buildContext;
+  initMessaging();
+  final firebaseMessaging = FirebaseMessaging.instance;
 
-//   //Terminated Notification Configuration
-//   FirebaseMessaging.instance.getInitialMessage().then((message) {
-//     if (message != null) {
-//       //   badgeCounter.value = badgeCounter.value + 1;
-//       //   setInt(PreferenceKey.badge, badgeCounter.value);
-//       //   FlutterAppBadger.updateBadgeCount(badgeCounter.value);
-//       debugPrint("Notification Data : ${message.data}");
-//       // navigateToScreen(message: message.data, fromNotification: true);
-//     }
-//   });
+  await firebaseMessaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true);
 
-//   FirebaseMessaging.onMessage.listen((message) {
-//     // if (NavigationUtils.getRouteName(contextDetail!) != routePaymentChat &&
-//     //     !isPaymentScreen &&
-//     //     (conversationIdDetail != message.data["conversationId"])) {
-//     //   if (message.data['unreadCount'] != null) {
-//     //     badgeCounter.value = int.parse(message.data['unreadCount'] ?? 0);
-//     //   } else {}
+  firebaseMessaging.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
 
-//     //   //   setInt("badge", badgeCounter.value);
-//     //   FlutterAppBadger.updateBadgeCount(badgeCounter.value);
-//     //   showNotification(message);
-//     // }
-//     showNotification(message);
-//   });
+  // //Terminated Notification Configuration
+  // FirebaseMessaging.instance.getInitialMessage().then((message) {
+  //   showNotificationWithActions(message: "Get", title: "Notification");
+  // });
 
-//   FirebaseMessaging.onMessageOpenedApp.listen((message) {
-//     print('Message clicked!');
-//     //  badgeCounter.value = badgeCounter.value + 1;
-//     //  setInt(PreferenceKey.badge, badgeCounter.value);
-//     //  FlutterAppBadger.updateBadgeCount(badgeCounter.value);
-//     debugPrint("Notification Data : ${message.data}");
-//     // navigateToScreen(message: message.data, fromNotification: true);
-//   });
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    if (message.notification != null) {
+      debugPrint("Notification received : 1");
+      checkNotification();
+    }
+  });
 
-//   // ignore: unused_element
-//   Future<void> _firebaseMessagingBackgroundHandler(
-//       RemoteMessage message) async {
-//     debugPrint("Notification Data : ${message.data}");
-//     // navigateToScreen(message: message.data, fromNotification: true);
-//   }
+  FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    debugPrint('Got a message whilst in the foreground!');
+    if (message.notification != null) {
+      debugPrint("Notification received : 2");
+      checkNotification();
+    }
+  });
 
-// //  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-// }
+  FirebaseMessaging.onBackgroundMessage((message) async {
+    debugPrint("Notification received : 3");
+    return checkNotification();
+  });
+  // ignore: unused_element
+  Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+    if (message.notification != null) {
+      debugPrint("Notification received : 4");
+      checkNotification();
+    }
+  }
+}
 
-// void initMessaging() {
-//   var initializationSettingsAndroid = AndroidInitializationSettings(
-//       "@mipmap/ic_launcher"); // <- default icon name is @mipmap/ic_launcher
-//   var initSetting = InitializationSettings(
-//     android: initializationSettingsAndroid,
-//   );
-//   _flutterLocalNotificationsPlugin.initialize(
-//     initSetting,
-//   );
-// }
+void initMessaging() async {
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings("@mipmap/ic_launcher");
+  const DarwinInitializationSettings initializationSettingsDarwin =
+      DarwinInitializationSettings(
+          onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
-// Future<void> onSelectNotification(String? payload) {
-//   print(payload);
-//   // badgeCounter.value = 0;
-//   // // setInt(PreferenceKey.badge, 0);
-//   // FlutterAppBadger.removeBadge();
-//   // navigateToScreen(message: notificationDetails, fromNotification: true);
-//   return Future.value();
-// }
+  const InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsDarwin);
+  flutterLocalNotificationsPlugin.initialize(initializationSettings,
+      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
+}
 
-// void showNotification(RemoteMessage message) {
-//   var notification = message.notification;
-//   notificationDetails = message.data;
-//   var android = message.notification?.android;
-//   if (notification != null && android != null) {
-//     _flutterLocalNotificationsPlugin.show(
-//       notification.hashCode,
-//       notification.title,
-//       notification.body,
-//       NotificationDetails(
-//         android: AndroidNotificationDetails(
-//           channel.id,
-//           channel.name,
-//           icon: android.smallIcon,
-//         ),
-//       ),
-//     );
-//   }
-// }
+void onDidReceiveLocalNotification(
+    int id, String? title, String? body, String? payload) async {
+  // display a dialog with the notification details, tap ok to go to another page
+  showDialog(
+    context: Get.context!,
+    builder: (BuildContext context) => CupertinoAlertDialog(
+      title: Text(title ?? ""),
+      content: Text(body ?? ""),
+      actions: [
+        CupertinoDialogAction(
+          isDefaultAction: true,
+          child: const Text('Ok'),
+          onPressed: () async {
+            // Navigator.of(context, rootNavigator: true).pop();
+            // await Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => SecondScreen(payload),
+            //   ),
+            // );
+          },
+        )
+      ],
+    ),
+  );
+}
+
+void onDidReceiveNotificationResponse(
+    NotificationResponse notificationResponse) async {
+  final String? payload = notificationResponse.payload;
+  if (notificationResponse.payload != null) {
+    debugPrint('notification payload: $payload');
+  }
+  if (Get.currentRoute == RouteName.chatMessageUI) {
+  } else {
+    await Get.toNamed(RouteName.chatMessageUI);
+  }
+}
+
+Future<void> showNotificationWithActions(
+    {required String title, required String message}) async {
+  const AndroidNotificationDetails androidNotificationDetails =
+      AndroidNotificationDetails(
+    "DivineAstrologer",
+    "AstrologerNotification",
+    importance: Importance.high,
+  );
+  const NotificationDetails notificationDetails =
+      NotificationDetails(android: androidNotificationDetails);
+  await flutterLocalNotificationsPlugin.show(
+      math.Random().nextInt(10000), title, message, notificationDetails);
+}
