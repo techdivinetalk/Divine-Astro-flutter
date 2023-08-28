@@ -61,6 +61,10 @@ class LiveController extends GetxController {
     database.ref().child("user/$id").update({"callType": ""});
   }
 
+  setAvailibility(String id,bool available){
+    database.ref().child("astrologer/$id").update({"is_available": available});
+  }
+
   Future<String> getCallType(String id) async {
     var snapShot = await database.ref().child("user/$id").get();
     return (snapShot.value as Map)["callType"];

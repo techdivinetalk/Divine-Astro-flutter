@@ -160,6 +160,7 @@ class LivePageState extends State<LivePage>   {
           controller: liveController,
           config: (widget.isHost ? controller.hostConfig : audienceConfig)
             ..avatarBuilder = customAvatarBuilder
+            ..memberButtonConfig.icon = const SizedBox()
             ..bottomMenuBarConfig.hostButtons = const [
               //ZegoMenuBarButtonName.soundEffectButton,
               //ZegoMenuBarButtonName.switchCameraButton,
@@ -778,6 +779,7 @@ class LivePageState extends State<LivePage>   {
                   activeColor: Colors.black.withOpacity(.1),
                   inactiveColor: Colors.black.withOpacity(.1),
                   onToggle: (val) {
+                    controller.setAvailibility(widget.localUserID, !controller.isCallOnOff.value);
                     controller.isCallOnOff.value =
                         !controller.isCallOnOff.value;
                   },
