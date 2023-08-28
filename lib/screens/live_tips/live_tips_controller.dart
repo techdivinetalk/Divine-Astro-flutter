@@ -9,16 +9,17 @@ import '../../common/colors.dart';
 import '../../common/common_bottomsheet.dart';
 
 import '../../gen/assets.gen.dart';
+import '../live_page/constant.dart';
 import '../live_page/live_page.dart';
 
 class LiveTipsController extends GetxController {
   var pref = Get.find<SharedPreferenceService>();
-  String liveId = "", name = "", image = "";
+  String astroId = "", name = "", image = "";
 
   @override
   void onReady() {
     var data = pref.getUserDetail();
-    liveId = data!.id.toString();
+    astroId = data!.id.toString();
     name = data.name!;
     image = data.image!;
     super.onReady();
@@ -28,7 +29,7 @@ class LiveTipsController extends GetxController {
     Get.to(LivePage(
       liveID: "100",
       isHost: true,
-      localUserID: liveId,
+      localUserID: astroId,
       astrologerImage: image,
       astrologerName: name,
     ));
