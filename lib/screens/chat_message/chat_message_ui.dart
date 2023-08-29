@@ -147,6 +147,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
 
   Widget rightView(BuildContext context, ChatMessage chatMessage) {
     int msgType = chatMessage.type ?? 0;
+    print("msgType is +$msgType");
     return Align(
       alignment: Alignment.centerRight,
       child: Container(

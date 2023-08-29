@@ -148,15 +148,29 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
       .ref("user/8601/realTime/notification/${newMessage.time}")
       .set(message.toJson());
 
-  // removeMsg();
+  removeNotificationNode(nodeId: "/${newMessage.time}");
 }
 
-removeNotificationNode() {
+removeNotificationNode({String? nodeId}) {
+  if(nodeId == null){
+    FirebaseDatabase.instance
+        .ref()
+        .child("astrologer/573/realTime/notification")
+        .remove();
+  }else{
+    FirebaseDatabase.instance
+        .ref()
+        .child("astrologer/573/realTime/notification$nodeId")
+        .remove();
+  }
+}
+
+/*removeNotificationNode() {
   FirebaseDatabase.instance
       .ref()
       .child("astrologer/573/realTime/notification")
       .remove();
-}
+}*/
 
 String messageDateTime(int datetime) {
   var millis = datetime;

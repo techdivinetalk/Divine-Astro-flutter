@@ -148,6 +148,7 @@ class ChatMessageController extends GetxController {
         chatMessages.indexWhere((element) => newMessage.id == element.id);
     if (index >= 0) {
       chatMessages[index].type = newMessage.type;
+      chatMessages.refresh();
     } else {
       chatMessages.add(newMessage);
       // chatMessages.insert(0, newMessage);
