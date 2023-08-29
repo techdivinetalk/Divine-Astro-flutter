@@ -22,6 +22,7 @@ class CustomTextField extends StatelessWidget {
     this.autoFocus,
     this.inputBorder,
     this.fillColor,
+    this.suffixIconPadding
   }) : super(key: key);
 
   final TextEditingController? controller;
@@ -38,6 +39,7 @@ class CustomTextField extends StatelessWidget {
   final double? height;
   final bool? readOnly;
   final bool? autoFocus;
+  final double? suffixIconPadding;
   final Color? fillColor;
   final InputBorder? inputBorder;
 
@@ -76,7 +78,7 @@ class CustomTextField extends StatelessWidget {
             ) : null,
             suffixIcon: suffixIcon != null ? Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: 15.sp,
+                horizontal: suffixIconPadding ?? 15.sp,
               ),
               child: suffixIcon,
             ) : const SizedBox(),
