@@ -176,6 +176,12 @@ class AppString {
   static String suggest = "Suggest";
   static String suggestRemedies = "Suggest Remedies";
 
+  static String itSpam = "It’s a spam";
+  static String hateSpeechSymbols = "Hate speech or symbols";
+  static String violenceOrganisations = "Violence or dangerous organisations";
+  static String falseInformation = "False information";
+  static String scamFraud = "Scam Fraud";
+  static String bullyingHarassment = "Bullying harassment";
 
   static String reportAnAstrologer = "Report an Astrologer";
   static String daily = "Daily";

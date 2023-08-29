@@ -241,6 +241,14 @@ Map<String, String> hi() {
     "close" : "बंद करना",
     "viewScore" : "स्कोर देखें",
     "gotIt" : "समझ गया",
+    'itSpam': 'यह एक स्पैम है',
+    'hateSpeechSymbols': 'नफरत फैलाने वाले भाषण या प्रतीक',
+    'violenceOrganisations': 'हिंसा या खतरनाक संगठन',
+    'falseInformation': 'झूठी सूचना',
+    'scamFraud': 'घोटाला धोखाधड़ी',
+    'bullyingHarassment': 'बदमाशी उत्पीड़न',
+    'thankYouForReporting': 'रिपोर्टिंग के लिए धन्यवाद!',
+    'thankYouDes': 'हम आपकी रिपोर्ट की समीक्षा करेंगे और आवश्यक कार्रवाई की जाएगी.',
 
   };
 }
