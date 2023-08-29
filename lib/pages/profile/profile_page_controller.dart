@@ -39,6 +39,15 @@ class ProfilePageController extends GetxController {
   XFile? pickedFile;
   File? uploadFile;
 
+  List<List<String>> reportReason = <List<String>>[
+    ["itSpam"],
+    ["hateSpeechSymbols"],
+    ["violenceOrganisations"],
+    ["falseInformation"],
+    ["scamFraud"],
+    ["bullyingHarassment"],
+  ];
+
   var languageList = <ChangeLanguageModelClass>[
     ChangeLanguageModelClass(
         'English',

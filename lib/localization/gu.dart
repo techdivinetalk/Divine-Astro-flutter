@@ -238,6 +238,14 @@ Map<String, String> gu() {
     "close" : "બંધ",
     "viewScore" : "સ્કોર જુઓ",
     "gotIt" : "જાણ્યું",
+    'itSpam': 'તે સ્પામ છે',
+    'hateSpeechSymbols': 'અપ્રિય ભાષણ અથવા પ્રતીકો',
+    'violenceOrganisations': 'હિંસા અથવા ખતરનાક સંસ્થાઓ',
+    'falseInformation': 'ખોટી માહિતી',
+    'scamFraud': 'સ્કેમ ફ્રોડ',
+    'bullyingHarassment': 'પજવણી',
+    'thankYouForReporting': 'જાણ કરવા બદલ આભાર!',
+    'thankYouDes': 'અમે તમારા રિપોર્ટની સમીક્ષા કરીશું અને જરૂરી પગલાં લેવામાં આવશે.',
 
   };
 }
