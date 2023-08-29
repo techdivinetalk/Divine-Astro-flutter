@@ -8,9 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../common/common_functions.dart';
 import '../../di/api_provider.dart';
 import '../../di/fcm_notification.dart';
-import '../../di/hive_services.dart';
 import '../../model/res_login.dart';
-import '../live_page/constant.dart';
 
 class DashboardController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -39,13 +37,6 @@ class DashboardController extends GetxController
   void onReady() {
     super.onReady();
     checkNotification();
-    getHiveDatabase();
-  }
-
-  void getHiveDatabase() async {
-    // At Login to set data
-    // HiveServices hiveServices = HiveServices(boxName: userChatData);
-    // await hiveServices.initialize();
   }
 
   void askPermission() async {

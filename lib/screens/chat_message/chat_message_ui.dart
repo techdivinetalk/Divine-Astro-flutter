@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -57,51 +58,86 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                     removeBottom: true,
                     removeTop: true,
                     child: Obx(
-                      () => ListView.builder(
-                        controller: controller.messgeScrollController,
-                        itemCount: controller.chatMessages.length,
-                        shrinkWrap: true,
-                        reverse: false,
-                        itemBuilder: (context, index) {
-                          var chatMessage = controller.chatMessages[index];
-                          return Padding(
-                            padding: EdgeInsets.all(12.h),
-                            child: Column(
-                              children: [
-                                chatMessage.msgType == "image"
-                                    ? imageMessage(
-                                        controller.chatMessages[index]
-                                                .base64Image ??
-                                            "",
-                                        chatDetail:
-                                            controller.chatMessages[index],
-                                        index: index,
-                                        chatMessage.senderId ==
-                                            controller.userData?.id)
-                                    : chatMessage.senderId ==
-                                            controller.userData?.id
-                                        ? rightView(
-                                            context,
-                                            chatMessage.message ?? "",
-                                            messageDateTime(
-                                                chatMessage.time ?? 0),
-                                            chatMessage.type!)
-                                        : leftView(
-                                            context,
-                                            chatMessage.message ?? "",
-                                            messageDateTime(
-                                                chatMessage.time ?? 0)),
-                              ],
-                            ),
-                          );
-                        },
+                      () => AnimatedCrossFade(
+                        duration: const Duration(milliseconds: 200),
+                        crossFadeState: controller.chatMessages.isEmpty
+                            ? CrossFadeState.showSecond
+                            : CrossFadeState.showFirst,
+                        secondChild: Container(),
+                        firstChild: ListView.builder(
+                          controller: controller.messgeScrollController,
+                          itemCount: controller.chatMessages.length,
+                          shrinkWrap: true,
+                          reverse: false,
+                          itemBuilder: (context, index) {
+                            var chatMessage = controller.chatMessages[index];
+
+                            return Padding(
+                              padding: EdgeInsets.all(12.h),
+                              child: Column(
+                                children: [
+                                  chatMessage.msgType == "image"
+                                      ? imageMessage(
+                                          controller.chatMessages[index]
+                                                  .base64Image ??
+                                              "",
+                                          chatDetail:
+                                              controller.chatMessages[index],
+                                          index: index,
+                                          chatMessage.senderId ==
+                                              controller.userData?.id)
+                                      : chatMessage.senderId ==
+                                              controller.userData?.id
+                                          ? rightView(
+                                              context,
+                                              chatMessage,
+                                            )
+                                          : leftView(
+                                              context,
+                                              chatMessage.message ?? "",
+                                              messageDateTime(
+                                                  chatMessage.time ?? 0)),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     )),
               ),
-              SizedBox(
-                height: 10.h,
-              ),
-              chatBottomBar()
+              SizedBox(height: 10.h),
+              chatBottomBar(),
+              Obx(() => Offstage(
+                    offstage: controller.emojiShowing.value,
+                    child: SizedBox(
+                      height: 300,
+                      child: EmojiPicker(
+                          // onEmojiSelected: (Category? category, Emoji emoji) {
+                          //   _onEmojiSelected(emoji);
+                          // },
+                          onBackspacePressed: () {
+                            _onBackspacePressed();
+                          },
+                          textEditingController: controller.messageController,
+                          config: const Config(
+                              columns: 7,
+                              emojiSizeMax: 32.0,
+                              verticalSpacing: 0,
+                              horizontalSpacing: 0,
+                              initCategory: Category.RECENT,
+                              bgColor: Color(0xFFF2F2F2),
+                              indicatorColor: AppColors.appRedColour,
+                              iconColor: Colors.grey,
+                              iconColorSelected: AppColors.appRedColour,
+                              enableSkinTones: true,
+                              recentTabBehavior: RecentTabBehavior.RECENT,
+                              recentsLimit: 28,
+                              replaceEmojiOnLimitExceed: false,
+                              backspaceColor: AppColors.appRedColour,
+                              categoryIcons: CategoryIcons(),
+                              buttonMode: ButtonMode.MATERIAL)),
+                    ),
+                  ))
             ],
           ),
         ],
@@ -109,8 +145,8 @@ class ChatMessageUI extends GetView<ChatMessageController> {
     );
   }
 
-  Widget rightView(
-      BuildContext context, String msgText, String time, int msgType) {
+  Widget rightView(BuildContext context, ChatMessage chatMessage) {
+    int msgType = chatMessage.type ?? 0;
     return Align(
       alignment: Alignment.centerRight,
       child: Container(
@@ -135,7 +171,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                msgText,
+                chatMessage.message ?? "",
                 style: AppTextStyle.textStyle14(
                     fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
               ),
@@ -144,7 +180,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    time,
+                    messageDateTime(chatMessage.time ?? 0),
                     style: AppTextStyle.textStyle10(
                       fontColor: AppColors.darkBlue,
                     ),
@@ -249,7 +285,11 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                             AppTextStyle.textStyle16(fontColor: AppColors.grey),
                         hoverColor: AppColors.white,
                         prefixIcon: InkWell(
-                          onTap: () async {},
+                          onTap: () async {
+                            controller.emojiShowing.value =
+                                !controller.emojiShowing.value;
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          },
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(6.w, 5.h, 6.w, 8.h),
                             child: Assets.images.icEmoji.svg(),
@@ -355,5 +395,12 @@ class ChatMessageUI extends GetView<ChatMessageController> {
               ],
             ),
     );
+  }
+
+  _onBackspacePressed() {
+    controller.messageController
+      ..text = controller.messageController.text.characters.toString()
+      ..selection = TextSelection.fromPosition(
+          TextPosition(offset: controller.messageController.text.length));
   }
 }
