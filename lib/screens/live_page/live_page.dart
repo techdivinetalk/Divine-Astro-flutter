@@ -57,7 +57,7 @@ class LivePage extends StatefulWidget {
   State<StatefulWidget> createState() => LivePageState();
 }
 
-class LivePageState extends State<LivePage>   {
+class LivePageState extends State<LivePage> {
   final liveController = ZegoUIKitPrebuiltLiveStreamingController();
   final List<StreamSubscription<dynamic>?> subscriptions = [];
   final controller = Get.put(LiveController());
@@ -110,6 +110,26 @@ class LivePageState extends State<LivePage>   {
             .getInvitationReceivedStream()
             .listen((event) {
           if (event["type"] == 10) {
+            controller.hostConfig.audioVideoViewConfig.visible = (
+              ZegoUIKitUser localUser,
+              ZegoLiveStreamingRole localRole,
+              ZegoUIKitUser targetUser,
+              ZegoLiveStreamingRole targetUserRole,
+            ) {
+              if (ZegoLiveStreamingRole.host == localRole) {
+                /// host can see all user's view
+                return true;
+              }
+
+              /// comment below if you want the co-host hide their own audio-video view.
+              if (localUser.id == targetUser.id) {
+                /// local view
+                return true;
+              }
+
+              /// if user is a co-host, only show host's audio-video view
+              return targetUserRole == ZegoLiveStreamingRole.host;
+            };
             controller.isCoHosting.value = false;
             controller.duration.value = "";
             controller.stopTimer();
@@ -155,11 +175,13 @@ class LivePageState extends State<LivePage>   {
           appID: yourAppID,
           appSign: yourAppSign /*input your AppSign*/,
           userID: widget.localUserID,
-          userName: 'user_${widget.localUserID}',
+          //userName: 'user_${widget.localUserID}',
+          userName: widget.astrologerName ?? "user_${widget.localUserID}",
           liveID: widget.liveID,
           controller: liveController,
           config: (widget.isHost ? controller.hostConfig : audienceConfig)
             ..avatarBuilder = customAvatarBuilder
+            ..memberButtonConfig.icon = const SizedBox()
             ..bottomMenuBarConfig.hostButtons = const [
               //ZegoMenuBarButtonName.soundEffectButton,
               //ZegoMenuBarButtonName.switchCameraButton,
@@ -177,6 +199,7 @@ class LivePageState extends State<LivePage>   {
             ..bottomMenuBarConfig.audienceButtons = []
             ..audioVideoViewConfig.useVideoViewAspectFill = true
             ..maxCoHostCount = 1
+
             /// gallery-layout, show top and bottom if have two audio-video views
             ..layout = ZegoLayout.gallery()
             ..topMenuBarConfig = ZegoTopMenuBarConfig(
@@ -247,8 +270,8 @@ class LivePageState extends State<LivePage>   {
           removeTop: true,
           removeBottom: true,
           child: SizedBox(
-            width: 240,
-            height: 200,
+            width: 200.w,
+            height: 200.h,
             child: ListView.builder(
               shrinkWrap: true,
               padding: EdgeInsets.zero,
@@ -317,17 +340,20 @@ class LivePageState extends State<LivePage>   {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  TextSpan(
-                    text: message.message,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                    ),
-                  )
                 ],
               ),
             ),
-            SizedBox(width: 8.w),
+            Flexible(
+              child: Text(
+                message.message,
+                maxLines: 5,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+            SizedBox(width: 2.w),
             Spacer(),
             isOtherUser
                 ? Icon(Icons.more_vert, color: AppColors.white)
@@ -614,25 +640,7 @@ class LivePageState extends State<LivePage>   {
                                                           ),
                                                         ),
                                                         SizedBox(width: 16.w),
-                                                        InkWell(
-                                                            onTap: () {
-                                                              if (controller
-                                                                  .msg
-                                                                  .text
-                                                                  .isNotEmpty) {
-                                                                liveController
-                                                                    .message
-                                                                    .send(controller
-                                                                        .msg
-                                                                        .text);
-                                                                controller.msg
-                                                                    .text = "";
-                                                                Get.back();
-                                                              }
-                                                            },
-                                                            child: Assets.images
-                                                                .icSendMsg
-                                                                .svg())
+                                                        sendMsg()
                                                       ],
                                                     ),
                                                   ),
@@ -692,17 +700,39 @@ class LivePageState extends State<LivePage>   {
     );
   }
 
+  InkWell sendMsg() {
+    return InkWell(
+        onTap: () {
+          if (controller.msg.text.isNotEmpty) {
+            //liveController.message.send("${controller.msg.text}*${widget.astrologerName}");
+            liveController.message.send(controller.msg.text);
+            controller.msg.text = "";
+            Get.back();
+          }
+        },
+        child: Assets.images.icSendMsg.svg());
+  }
+
   Row buildTopMenu() {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         IconButton(
             onPressed: () {
-              if(controller.coHostUser != null){
-                controller.setCallType(controller.coHostUser!.id);
-              }
-              controller.stopTimer();
-              Get.back();
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return EndSession(
+                      onNo: () {},
+                      onYes: () {
+                        if (controller.coHostUser != null) {
+                          controller.setCallType(controller.coHostUser!.id);
+                        }
+                        controller.stopTimer();
+                        Get.back();
+                      });
+                },
+              );
             },
             icon: Assets.images.leftArrow.svg()),
         ClipRRect(
@@ -778,6 +808,8 @@ class LivePageState extends State<LivePage>   {
                   activeColor: Colors.black.withOpacity(.1),
                   inactiveColor: Colors.black.withOpacity(.1),
                   onToggle: (val) {
+                    controller.setAvailibility(
+                        widget.localUserID, !controller.isCallOnOff.value);
                     controller.isCallOnOff.value =
                         !controller.isCallOnOff.value;
                   },
@@ -818,8 +850,9 @@ class LivePageState extends State<LivePage>   {
                                 name: controller.coHostUser!.name,
                                 onNo: () {},
                                 onYes: () {
-                                  if(controller.coHostUser != null){
-                                    controller.setCallType(controller.coHostUser!.id);
+                                  if (controller.coHostUser != null) {
+                                    controller
+                                        .setCallType(controller.coHostUser!.id);
                                   }
                                   controller.stopTimer();
                                   liveController.connect
@@ -854,7 +887,7 @@ class LivePageState extends State<LivePage>   {
                     return EndSession(
                         onNo: () {},
                         onYes: () {
-                          if(controller.coHostUser != null){
+                          if (controller.coHostUser != null) {
                             controller.setCallType(controller.coHostUser!.id);
                           }
                           Get.back();
@@ -996,7 +1029,8 @@ class LivePageState extends State<LivePage>   {
         var data = jsonDecode(message);
         for (var i = 0; i < data["gift_count"]; i++) {
           await Future.delayed(const Duration(seconds: 1));
-          GiftWidget.show(context, "assets/svga/"+controller.svgaAnime[data["gift_type"]]);
+          GiftWidget.show(context,
+              "assets/svga/" + controller.svgaAnime[data["gift_type"]]);
         }
       }
     }
@@ -1030,21 +1064,21 @@ class LivePageState extends State<LivePage>   {
   }
 
   Widget customAvatarBuilder(
-      BuildContext context,
-      Size size,
-      ZegoUIKitUser? user,
-      Map<String, dynamic> extraInfo,
-      ) {
+    BuildContext context,
+    Size size,
+    ZegoUIKitUser? user,
+    Map<String, dynamic> extraInfo,
+  ) {
     return CachedNetworkImage(
       imageUrl: 'https://robohash.org/${user?.id}.png',
       imageBuilder: (context, imageProvider) => Container(
+        width: 100.w,
+        height: 100.h,
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          image: DecorationImage(
-            image: imageProvider,
-            fit: BoxFit.cover,
-          ),
-        ),
+            shape: BoxShape.circle,
+            image: DecorationImage(
+                fit: BoxFit.fill,
+                image: AssetImage(Assets.images.bgChatWallpaper.path))),
       ),
       progressIndicatorBuilder: (context, url, downloadProgress) =>
           CircularProgressIndicator(value: downloadProgress.progress),
@@ -1059,5 +1093,3 @@ class LivePageState extends State<LivePage>   {
     );
   }
 }
-
-

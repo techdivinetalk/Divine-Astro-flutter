@@ -28,6 +28,7 @@ import 'package:get/get.dart';
 import '../screens/bank_details/bank_detail_binding.dart';
 import '../screens/bank_details/bank_details_ui.dart';
 import '../screens/blocked_user/blocked_user_ui.dart';
+import '../screens/chat_message/widgets/image_preview.dart';
 import '../screens/dashboard/dashboard_bindings.dart';
 import '../screens/dashboard/dashboard_ui.dart';
 import '../screens/edit_profile/edit_profile_ui.dart';
@@ -89,6 +90,7 @@ class RouteName {
   static const String suggestRemediesView = "/suggestRemediesView";
   static const String uploadYourPhotosUi = "/uploadYourPhotosUi";
   static const String uploadStoryUi = "/uploadStoryUi";
+  static const String imagePreviewUi = "/imagePreviewUi";
 }
 
 class Routes {
@@ -206,5 +208,9 @@ class Routes {
         page: () => const UploadYourPhotosUi(),
         name: RouteName.uploadYourPhotosUi),
     GetPage(page: () => const UploadStoryUi(), name: RouteName.uploadStoryUi),
+    GetPage(
+      page: () => const ImagePreviewUi(),
+      name: RouteName.imagePreviewUi,
+    ),
   ];
 }
