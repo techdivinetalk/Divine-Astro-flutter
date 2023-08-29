@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -22,6 +25,7 @@ class DashboardController extends GetxController
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
   UserData? userData;
+  StreamSubscription<DatabaseEvent>? notiticationCheck;
 
   @override
   void onInit() {
@@ -36,7 +40,14 @@ class DashboardController extends GetxController
   @override
   void onReady() {
     super.onReady();
-    checkNotification();
+    notiticationCheck ??= FirebaseDatabase.instance
+        .ref("astrologer/${userData?.id}/realTime/notification")
+        .onValue
+        .listen((event) {
+      debugPrint("Your event $event");
+      checkNotification();
+      debugPrint("Value has been updated: ${event.snapshot.value}");
+    });
   }
 
   void askPermission() async {
@@ -44,6 +55,14 @@ class DashboardController extends GetxController
       Permission.camera,
       Permission.microphone,
     ].request();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    if (notiticationCheck != null) {
+      notiticationCheck!.cancel();
+    }
   }
 
   void loadPreDefineData() async {

@@ -1,5 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -41,6 +42,7 @@ class ChatMessageController extends GetxController {
   String userDataKey = "userKey";
   bool sendReadMessageStatus = false;
   RxBool emojiShowing = true.obs;
+  // StreamSubscription<DatabaseEvent>? notiticationCheck;
 
   @override
   void onInit() {
@@ -53,18 +55,26 @@ class ChatMessageController extends GetxController {
     userData = preferenceService.getUserDetail();
     currentUserId.value = 8601;
 
-    Stream<DatabaseEvent> notiticationCheck = firebaseDatabase
-        .ref()
-        .child("astrologer/${userData?.id}/realTime/notification")
-        .onValue;
+    // notiticationCheck ??= firebaseDatabase
+    //     .ref("astrologer/${userData?.id}/realTime/notification")
+    //     .onValue
+    //     .listen((event) {
+    //   debugPrint("Your event $event");
+    //   checkNotification();
+    //   debugPrint("Value has been updated: ${event.snapshot.value}");
+    // });
 
-    notiticationCheck.listen((event) {
-      checkNotification();
-      debugPrint("Valuesssssss: ${event.snapshot.value}");
-    });
     userDataKey = "userKey_${userData?.id}_$currentUserId";
     getChatList();
   }
+
+  // @override
+  // void onClose() {
+  //   super.onClose();
+  //   if (notiticationCheck != null) {
+  //     notiticationCheck!.cancel();
+  //   }
+  // }
 
   @override
   void onReady() {
@@ -87,7 +97,7 @@ class ChatMessageController extends GetxController {
       chatMessages.value = msg.chatMessages ?? [];
       if (sendReadMessageStatus) {
         for (int i = 0; i < chatMessages.length; i++) {
-          if (chatMessages[i].type != 2) {
+          if (chatMessages[i].type != 2 && chatMessages[i].senderId == 8601) {
             updateMsgDelieveredStatus(chatMessages[i], 2);
           }
         }
@@ -116,6 +126,8 @@ class ChatMessageController extends GetxController {
       //     firebaseDatabase.ref().child("astrologer/${userData?.id}/engagement");
 
       // messagesRef.set(message.toJson());
+      debugPrint(
+          "Messages1234 sent - ${message.senderId} -- Receiver ${message.receiverId}");
       Future.delayed(const Duration(milliseconds: 56)).then((value) {
         messgeScrollController.jumpTo(
           messgeScrollController.position.maxScrollExtent,

@@ -52,7 +52,7 @@ void checkNotification() async {
       .get();
   if (snapshot.value != null) {
     var notificationList = snapshot.value as Map;
-    debugPrint("Valuessssss---- $notificationList");
+
     notificationList.forEach((key, value) async {
       var newMessage = ChatMessage(
           id: int.parse(key),
@@ -65,6 +65,7 @@ void checkNotification() async {
           base64Image: value["base64Image"],
           downloadedPath: "",
           msgType: value["msgType"]);
+
       if (Get.currentRoute == RouteName.chatMessageUI) {
         var chatController = Get.find<ChatMessageController>();
         if (chatController.currentUserId.value.toString() ==
@@ -152,25 +153,18 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
 }
 
 removeNotificationNode({String? nodeId}) {
-  if(nodeId == null){
+  if (nodeId == null) {
     FirebaseDatabase.instance
         .ref()
         .child("astrologer/573/realTime/notification")
         .remove();
-  }else{
+  } else {
     FirebaseDatabase.instance
         .ref()
         .child("astrologer/573/realTime/notification$nodeId")
         .remove();
   }
 }
-
-/*removeNotificationNode() {
-  FirebaseDatabase.instance
-      .ref()
-      .child("astrologer/573/realTime/notification")
-      .remove();
-}*/
 
 String messageDateTime(int datetime) {
   var millis = datetime;
