@@ -9,7 +9,10 @@ import 'colors.dart';
 class UnblockOrBlockUser extends StatelessWidget {
   final String? name;
   final bool isForBlocUser;
-  const UnblockOrBlockUser({Key? key,this.name,required this.isForBlocUser}) : super(key: key);
+  final VoidCallback? blockUnblockTap;
+
+  const UnblockOrBlockUser({Key? key, this.name, required this.isForBlocUser,this.blockUnblockTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,23 +51,38 @@ class UnblockOrBlockUser extends StatelessWidget {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Assets.svg.block.svg(),
-                    SizedBox(width: 16.w),
-                    Text("${isForBlocUser ? "Block" : "Unblock"} $name?",style: TextStyle(fontSize: 16.sp,color: AppColors.textColor),)
-                  ],
+                InkWell(
+                  onTap: () {
+                    Get.back();
+                    blockUnblockTap!.call();
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Assets.svg.block.svg(),
+                      SizedBox(width: 16.w),
+                      Text(
+                        "${isForBlocUser ? "Block" : "Unblock"} $name?",
+                        style: TextStyle(
+                            fontSize: 16.sp, color: AppColors.textColor),
+                      )
+                    ],
+                  ),
                 ),
                 SizedBox(height: 20.h),
-                Center(child: Divider(color: AppColors.textColor.withOpacity(.2))),
+                Center(
+                    child: Divider(color: AppColors.textColor.withOpacity(.2))),
                 SizedBox(height: 20.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Assets.svg.reply.svg(),
                     SizedBox(width: 16.w),
-                    Text("Reply",style: TextStyle(fontSize: 16.sp,color: AppColors.textColor),)
+                    Text(
+                      "Reply",
+                      style: TextStyle(
+                          fontSize: 16.sp, color: AppColors.textColor),
+                    )
                   ],
                 ),
               ],
