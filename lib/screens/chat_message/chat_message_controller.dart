@@ -42,7 +42,9 @@ class ChatMessageController extends GetxController {
   String userDataKey = "userKey";
   bool sendReadMessageStatus = false;
   RxBool emojiShowing = true.obs;
-  // StreamSubscription<DatabaseEvent>? notiticationCheck;
+  FocusNode msgFocus = FocusNode();
+  RxInt unreadMessageIndex = 0.obs;
+  RxBool scrollToBottom = false.obs;
 
   @override
   void onInit() {
@@ -54,27 +56,15 @@ class ChatMessageController extends GetxController {
     }
     userData = preferenceService.getUserDetail();
     currentUserId.value = 8601;
-
-    // notiticationCheck ??= firebaseDatabase
-    //     .ref("astrologer/${userData?.id}/realTime/notification")
-    //     .onValue
-    //     .listen((event) {
-    //   debugPrint("Your event $event");
-    //   checkNotification();
-    //   debugPrint("Value has been updated: ${event.snapshot.value}");
-    // });
-
     userDataKey = "userKey_${userData?.id}_$currentUserId";
     getChatList();
-  }
 
-  // @override
-  // void onClose() {
-  //   super.onClose();
-  //   if (notiticationCheck != null) {
-  //     notiticationCheck!.cancel();
-  //   }
-  // }
+    msgFocus.addListener(() {
+      if (msgFocus.hasFocus) {
+        emojiShowing.value = true;
+      }
+    });
+  }
 
   @override
   void onReady() {
@@ -96,11 +86,23 @@ class ChatMessageController extends GetxController {
       var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
       chatMessages.value = msg.chatMessages ?? [];
       if (sendReadMessageStatus) {
+        unreadMessageIndex.value = chatMessages
+                .firstWhere(
+                    (element) =>
+                        element.type != 2 && element.senderId != userData?.id,
+                    orElse: () => ChatMessage())
+                .id ??
+            -1;
         for (int i = 0; i < chatMessages.length; i++) {
-          if (chatMessages[i].type != 2 && chatMessages[i].senderId == 8601) {
+          if (chatMessages[i].type != 2) {
             updateMsgDelieveredStatus(chatMessages[i], 2);
+            chatMessages[i].type = 2;
           }
         }
+        databaseMessage.value.chatMessages = chatMessages;
+        await hiveServices.addData(
+            key: userDataKey,
+            data: jsonEncode(databaseMessage.value.toOfflineJson()));
       }
     }
   }
@@ -110,18 +112,7 @@ class ChatMessageController extends GetxController {
       var time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       // type 1= New chat message, 2 = Delievered, 3= Msg read, 4= Other messages
       addNewMessage(time, "text", messageText: messageController.text.trim());
-
       messageController.clear();
-      // final DatabaseReference messagesRef =
-      //     firebaseDatabase.ref().child("astrologer/${userData?.id}/engagement");
-
-      // messagesRef.set(message.toJson());
-
-      Future.delayed(const Duration(milliseconds: 56)).then((value) {
-        messgeScrollController.jumpTo(
-          messgeScrollController.position.maxScrollExtent,
-        );
-      });
     }
   }
 
@@ -143,7 +134,7 @@ class ChatMessageController extends GetxController {
         msgType: msgType,
         kundliId: kundliId,
         type: 0);
-    updateChatMessages(newMessage);
+    updateChatMessages(newMessage, false);
     Message msg = Message(
       message: messageText ?? "",
       receiverId: '8601',
@@ -161,21 +152,32 @@ class ChatMessageController extends GetxController {
         .set(msg.toJson());
   }
 
-  updateChatMessages(ChatMessage newMessage) async {
+  updateChatMessages(ChatMessage newMessage, bool isFromNotification) async {
     var index =
         chatMessages.indexWhere((element) => newMessage.id == element.id);
     if (index >= 0) {
       chatMessages[index].type = newMessage.type;
       chatMessages.refresh();
     } else {
+      newMessage.type = isFromNotification ? 2 : newMessage.type;
       chatMessages.add(newMessage);
-      // chatMessages.insert(0, newMessage);
     }
-
+    unreadMessageIndex.value = chatMessages
+            .firstWhere(
+              (element) =>
+                  element.type != 2 && element.senderId != userData?.id,
+              orElse: () => ChatMessage(),
+            )
+            .id ??
+        -1;
+    if (!isFromNotification) {
+      Future.delayed(const Duration(milliseconds: 200)).then((value) {
+        messgeScrollController.jumpTo(
+          messgeScrollController.position.maxScrollExtent,
+        );
+      });
+    }
     setHiveDatabase();
-    // Future.delayed(const Duration(seconds: 5)).then((value) async {
-    //   // await hiveServices.close();
-    // });
   }
 
   void setHiveDatabase() async {

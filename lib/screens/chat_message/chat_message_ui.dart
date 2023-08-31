@@ -14,6 +14,7 @@ import '../../common/routes.dart';
 import '../../gen/assets.gen.dart';
 import '../../model/chat_offline_model.dart';
 import 'chat_message_controller.dart';
+import 'package:badges/badges.dart' as badges;
 
 class ChatMessageUI extends GetView<ChatMessageController> {
   const ChatMessageUI({super.key});
@@ -64,43 +65,64 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                             ? CrossFadeState.showSecond
                             : CrossFadeState.showFirst,
                         secondChild: Container(),
-                        firstChild: ListView.builder(
-                          controller: controller.messgeScrollController,
-                          itemCount: controller.chatMessages.length,
-                          shrinkWrap: true,
-                          reverse: false,
-                          itemBuilder: (context, index) {
-                            var chatMessage = controller.chatMessages[index];
+                        firstChild: NotificationListener(
+                          onNotification: (t) {
+                            if (t is ScrollEndNotification) {
+                              controller.scrollToBottom.value = controller
+                                          .messgeScrollController
+                                          .position
+                                          .pixels <
+                                      controller.messgeScrollController.position
+                                          .maxScrollExtent
+                                  ? true
+                                  : false;
+                            }
 
-                            return Padding(
-                              padding: EdgeInsets.all(12.h),
-                              child: Column(
-                                children: [
-                                  chatMessage.msgType == "image"
-                                      ? imageMessage(
-                                          controller.chatMessages[index]
-                                                  .base64Image ??
-                                              "",
-                                          chatDetail:
-                                              controller.chatMessages[index],
-                                          index: index,
-                                          chatMessage.senderId ==
-                                              controller.userData?.id)
-                                      : chatMessage.senderId ==
-                                              controller.userData?.id
-                                          ? rightView(
-                                              context,
-                                              chatMessage,
-                                            )
-                                          : leftView(
-                                              context,
-                                              chatMessage.message ?? "",
-                                              messageDateTime(
-                                                  chatMessage.time ?? 0)),
-                                ],
-                              ),
-                            );
+                            return true;
                           },
+                          child: ListView.builder(
+                            controller: controller.messgeScrollController,
+                            itemCount: controller.chatMessages.length,
+                            shrinkWrap: true,
+                            reverse: false,
+                            itemBuilder: (context, index) {
+                              var chatMessage = controller.chatMessages[index];
+
+                              return Padding(
+                                padding: EdgeInsets.all(12.h),
+                                child: Column(
+                                  children: [
+                                    if (chatMessage.id ==
+                                        controller.unreadMessageIndex.value)
+                                      unreadMessageView(),
+                                    chatMessage.msgType == "kundli"
+                                        ? kundliView()
+                                        : chatMessage.msgType == "image"
+                                            ? imageMessage(
+                                                controller.chatMessages[index]
+                                                        .base64Image ??
+                                                    "",
+                                                chatDetail: controller
+                                                    .chatMessages[index],
+                                                index: index,
+                                                chatMessage.senderId ==
+                                                    controller.userData?.id)
+                                            : chatMessage.senderId ==
+                                                    controller.userData?.id
+                                                ? rightView(
+                                                    context,
+                                                    chatMessage,
+                                                  )
+                                                : leftView(
+                                                    context,
+                                                    chatMessage.message ?? "",
+                                                    messageDateTime(
+                                                        chatMessage.time ?? 0)),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     )),
@@ -140,6 +162,28 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                   ))
             ],
           ),
+          Positioned(
+            bottom: 90.h,
+            right: 25.w,
+            child: Obx(() => controller.scrollToBottom.value
+                ? InkWell(
+                    onTap: () {
+                      controller.messgeScrollController.animateTo(
+                          controller
+                              .messgeScrollController.position.maxScrollExtent,
+                          duration: const Duration(milliseconds: 20),
+                          curve: Curves.easeOut);
+                    },
+                    child: badges.Badge(
+                      badgeContent: controller.unreadMessageIndex != -1
+                          ? Text('3')
+                          : Text('0'),
+                      child: Icon(Icons.arrow_drop_down_circle_outlined,
+                          color: AppColors.appColorDark, size: 50.h),
+                    ),
+                  )
+                : const SizedBox()),
+          )
         ],
       ),
     );
@@ -147,7 +191,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
 
   Widget rightView(BuildContext context, ChatMessage chatMessage) {
     int msgType = chatMessage.type ?? 0;
-    print("msgType is +$msgType");
+
     return Align(
       alignment: Alignment.centerRight,
       child: Container(
@@ -277,6 +321,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.newline,
                       maxLines: 1,
+                      focusNode: controller.msgFocus,
                       decoration: InputDecoration(
                         hintText: "message".tr,
                         isDense: true,
@@ -395,6 +440,96 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                 )
               ],
             ),
+    );
+  }
+
+  Widget kundliView() {
+    return Card(
+      child: Container(
+        padding: EdgeInsets.all(12.h),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                  shape: BoxShape.circle, color: AppColors.extraLightGrey),
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Text(
+                  "P",
+                  style: AppTextStyle.textStyle24(
+                      fontColor: AppColors.white, fontWeight: FontWeight.w600),
+                ),
+              ),
+            ),
+            SizedBox(width: 15.w),
+            Expanded(
+              child: InkWell(
+                onTap: () {},
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Paras Shah",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.sp,
+                        color: AppColors.darkBlue,
+                      ),
+                    ),
+                    SizedBox(height: 5.h),
+                    Text(
+                      "20 December 1989, 04:32 AM",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 10.sp,
+                        color: AppColors.lightGrey,
+                      ),
+                    ),
+                    SizedBox(height: 5.h),
+                    Text(
+                      "Mumbai, Maharashtra, India",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 10.sp,
+                        color: AppColors.lightGrey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top: 15),
+              child: Icon(
+                Icons.keyboard_arrow_right,
+                size: 35,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget unreadMessageView() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        padding: EdgeInsets.all(10.h),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 1.0,
+                offset: const Offset(0.0, 3.0)),
+          ],
+          color: AppColors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
+        ),
+        child: const Text("Unread Messages"),
+      ),
     );
   }
 

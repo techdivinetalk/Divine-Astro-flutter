@@ -1,39 +1,3 @@
-import 'package:get/get.dart';
-
-class ChatList {
-  int? chatId;
-  String? chatName;
-  String? profileImage;
-  List<ChatMessage>? chatMessages;
-
-  ChatList({
-    this.chatId,
-    this.chatName,
-    this.profileImage,
-    this.chatMessages,
-  });
-
-  ChatList.fromOfflineJson(Map<String, dynamic> json) {
-    chatId = json['chatId'];
-    chatName = json['chatName'];
-    profileImage = json['profileImage'];
-    json['data'].forEach((v) {
-      chatMessages!.add(ChatMessage.fromOfflineJson(v));
-    });
-  }
-
-  Map<String, dynamic> toOfflineJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['chatId'] = chatId;
-    data['chatName'] = chatName;
-    data['profileImage'] = profileImage;
-    if (chatMessages != null) {
-      data['data'] = chatMessages!.map((v) => v.toOfflineJson()).toList();
-    }
-    return data;
-  }
-}
-
 class ChatMessagesOffline {
   List<ChatMessage>? chatMessages;
   ChatMessagesOffline({
