@@ -10,6 +10,7 @@ import '../common/app_exception.dart';
 import '../common/routes.dart';
 import '../di/api_provider.dart';
 import '../model/constant_details_model_class.dart';
+import '../model/delete_customer_model_class.dart';
 import '../model/res_blocked_customers.dart';
 import '../model/res_login.dart';
 import '../model/res_review_ratings.dart';
@@ -230,4 +231,37 @@ class UserRepository extends ApiProvider {
       rethrow;
     }
   }
+
+  Future<DeleteAccountModelClass> deleteUserAccount(
+      Map<String, dynamic> param) async {
+    //progressService.showProgressDialog(true);
+    try {
+      final response =
+      await post(deleteAccount, body: jsonEncode(param).toString());
+      //progressService.showProgressDialog(false);
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          preferenceService.erase();
+          Get.offNamed(RouteName.login);
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final deleteProfile = customerDeleteFromJson(response.body);
+          if (deleteProfile.statusCode == successResponse &&
+              deleteProfile.success) {
+            return deleteProfile;
+          } else {
+            throw CustomException(deleteProfile.message);
+          }
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      //progressService.showProgressDialog(false);
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+
 }

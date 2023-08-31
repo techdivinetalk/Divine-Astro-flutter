@@ -1,11 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
 
+import '../../../common/common_bottomsheet.dart';
+import '../../../common/routes.dart';
 import '../../../gen/assets.gen.dart';
 import 'settings_controller.dart';
+import 'widget/delete_account_popup.dart';
 
 class SettingsUI extends GetView<SettingsController> {
   const SettingsUI({super.key});
@@ -128,7 +132,7 @@ class SettingsUI extends GetView<SettingsController> {
               ),
               InkWell(
                 onTap: () {
-                  controller.logOutPopup(Get.context!);
+                  logOutPopup(Get.context!);
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -158,7 +162,13 @@ class SettingsUI extends GetView<SettingsController> {
               ),
               InkWell(
                 onTap: () {
-                  controller.deleteAccountPopup(Get.context!);
+                  // controller.deleteAccountPopup(Get.context!);
+                  showCupertinoModalPopup(
+                    context: context,
+                    barrierColor:
+                    AppColors.darkBlue.withOpacity(0.5),
+                    builder: (context) => const DeleteAccountPopup(),
+                  );
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -186,6 +196,86 @@ class SettingsUI extends GetView<SettingsController> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  logOutPopup(BuildContext context) async {
+    await openBottomSheet(
+      context,
+      functionalityWidget: Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.white, width: 1.5),
+                  borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+                  color: AppColors.white.withOpacity(0.1)),
+              child: const Icon(
+                Icons.close,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+              color: AppColors.white,
+            ),
+            child: Column(
+              children: [
+                SizedBox(height: 16.h),
+                Assets.images.bgLogout.svg(),
+                SizedBox(height: 20.h),
+                Text(
+                  "${'logout'.tr}?",
+                  style: TextStyle(
+                    fontSize: 24.sp,
+                    color: AppColors.redColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                Text(
+                  'logoutText'.tr,
+                  style:
+                  AppTextStyle.textStyle16(fontColor: AppColors.darkBlue),
+                ),
+                SizedBox(height: 20.h),
+                Row(
+                  children: [
+                    Expanded(
+                      child: FilledButton(
+                        onPressed: () {
+                          controller.preferenceService.erase();
+                          Get.offNamed(RouteName.login);
+                          // Get.offAndToNamed(RouteName.login);
+                        },
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.lightYellow,
+                          padding: EdgeInsets.symmetric(vertical: 16.h),
+                          minimumSize: Size.zero,
+                        ),
+                        child: Text(
+                          'logout'.tr,
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            color: AppColors.brownColour,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

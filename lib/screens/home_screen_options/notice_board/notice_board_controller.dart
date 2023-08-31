@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/repository/notice_repository.dart';
 import 'package:divine_astrologer/utils/enum.dart';
@@ -22,7 +25,7 @@ class NoticeBoardController extends GetxController {
   void getAllNotices() async {
     loading = Loading.loading;
     update();
-    await Future.delayed(const Duration(milliseconds: 2000));
+    // await Future.delayed(const Duration(milliseconds: 2000));
 //     String data = '''
 //     {
 //     "data": [
@@ -69,6 +72,7 @@ class NoticeBoardController extends GetxController {
     try {
       final response = await repository.noticeAPi();
       noticeList = response.data;
+      log("NoticData==>${jsonEncode(noticeList.toString())}");
       loading = Loading.loaded;
       update();
     } catch (err) {

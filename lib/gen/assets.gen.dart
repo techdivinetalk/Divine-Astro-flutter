@@ -461,6 +461,9 @@ class $AssetsImagesGen {
   SvgGenImage get leftArrow =>
       const SvgGenImage('assets/images/left_arrow.svg');
 
+  /// File path: assets/images/logo.svg
+  SvgGenImage get logo => const SvgGenImage('assets/images/logo.svg');
+
   /// File path: assets/images/medal_one.png
   AssetGenImage get medalOne =>
       const AssetGenImage('assets/images/medal_one.png');
@@ -622,6 +625,7 @@ class $AssetsImagesGen {
         icWedding,
         leaderboardLive,
         leftArrow,
+        logo,
         medalOne,
         medalThree,
         medalTwo,

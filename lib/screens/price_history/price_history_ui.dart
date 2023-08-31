@@ -47,15 +47,18 @@ class PriceHistoryUI extends GetView<PriceHistoryController> {
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Assets.images.icPriceChange
                           .svg(height: 20.h, width: 20.w),
-                      SizedBox(width: 10.w),
-                      Text(
-                        "priceChangeBtn".tr,
-                        style: AppTextStyle.textStyle20(
-                            fontWeight: FontWeight.w400,
-                            fontColor: AppColors.darkBlue),
+                      SizedBox(width: 15.w),
+                      Expanded(
+                        child: Text(
+                          "priceChangeBtn".tr,
+                          style: AppTextStyle.textStyle20(
+                              fontWeight: FontWeight.w400,
+                              fontColor: AppColors.darkBlue),
+                        ),
                       ),
                     ],
                   )),

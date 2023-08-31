@@ -1,5 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path/path.dart' as p;
@@ -223,7 +225,7 @@ class ProfilePageController extends GetxController {
       var response = await userRepository.getReviewRatings(params);
       ratingsData = response;
 
-      debugPrint("Data $response");
+      log("Data==>${jsonEncode(ratingsData!.data)}");
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
