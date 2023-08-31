@@ -194,6 +194,7 @@ class AppString {
   static String okay = "Okay";
   static String home = "Home";
   static String logout = "Logout";
+  static String deleteAccountMsg = "Are you sure you want to delete your account ?";
   static String deleteAccount = "Delete Account";
   static String deleteAccountText = "Are you sure you want to delete your account ?";
   static String logoutText = "Are you sure you want to logout ?";

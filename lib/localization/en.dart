@@ -48,6 +48,7 @@ Map<String, String> en() {
     "blockedUsers": "Blocked Users",
     "reportComment": "Report Comment",
     "chatAssistance": "Chat Assistance",
+    "chatAssistanceHome": "     Chat\nAssistance",
     "suggestRemedy": "Suggest Remedy",
     "unblock": "Unblock",
     "performance": "Performance",
@@ -176,6 +177,7 @@ Map<String, String> en() {
     "weekly": "Weekly",
     "monthly": "Monthly",
     "custom": "Custom",
+    'deleteAccountMsg': 'Are you sure you want to delete your account ?',
     "aboutPooja": "About Pooja",
     "suggestNow": "Suggest Now",
     "clientPaid": "Client Paid",
@@ -249,5 +251,6 @@ Map<String, String> en() {
     'thankYouForReporting': 'Thank You For Reporting!',
     'thankYouDes':
         'We’ll review your report and necessary actions will be taken.',
+
   };
 }

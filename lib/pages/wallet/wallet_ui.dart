@@ -19,7 +19,6 @@ class WalletUI extends GetView<WalletController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      drawer: const SideMenuDrawer(),
       appBar: commonAppbar(
           title: "wallet".tr,
           trailingWidget: InkWell(

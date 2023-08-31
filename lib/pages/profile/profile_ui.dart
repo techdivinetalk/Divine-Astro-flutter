@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
 import '../../../common/routes.dart';
@@ -39,6 +40,7 @@ class ProfileUI extends GetView<ProfilePageController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+
               Container(
                   padding: EdgeInsets.all(12.h),
                   decoration: BoxDecoration(
@@ -699,8 +701,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                                     onTap: () {
                                       Navigator.pop(context);
                                       showCupertinoModalPopup(
-                                        barrierColor: AppColors.darkBlue
-                                            .withOpacity(0.5),
+                                        barrierColor:
+                                            AppColors.darkBlue.withOpacity(0.5),
                                         context: context,
                                         builder: (context) => ReportPostReasons(
                                           onPressed: () {
@@ -917,7 +919,6 @@ class ReportPostReasons extends GetView<ProfilePageController> {
     );
   }
 }
-
 
 class ThankYouReportUI extends GetView<ProfilePageController> {
   const ThankYouReportUI({
