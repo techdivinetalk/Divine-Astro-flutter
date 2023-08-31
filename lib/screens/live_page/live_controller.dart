@@ -44,7 +44,6 @@ class LiveController extends GetxController {
     }
     ..previewConfig.showPreviewForHost = false;
 
-
   Timer? _timer;
   ZegoUIKitUser? coHostUser;
   var msg = TextEditingController();
@@ -53,6 +52,7 @@ class LiveController extends GetxController {
   var isMicroPhoneOn = true.obs;
   var isCallOnOff = true.obs;
   var duration = "".obs;
+  var typeOfCall = "";
   var audioStream = false;
   int total = 0;
   FirebaseDatabase database = FirebaseDatabase.instance;
@@ -61,8 +61,12 @@ class LiveController extends GetxController {
     database.ref().child("user/$id").update({"callType": ""});
   }
 
-  setAvailibility(String id,bool available){
+  setAvailibility(String id, bool available) {
     database.ref().child("astrologer/$id").update({"is_available": available});
+  }
+
+  setBusyStatus(String id, int status) {
+    database.ref().child("astrologer/$id/realTime").update({"isEngagedStatus": status});
   }
 
   Future<String> getCallType(String id) async {
@@ -71,49 +75,7 @@ class LiveController extends GetxController {
   }
 
   setVisibilityCoHost(String isAudioCall) {
-    if (isAudioCall == "audio" || isAudioCall == "private") {
-      hostConfig.audioVideoViewConfig.visible = (
-        ZegoUIKitUser localUser,
-        ZegoLiveStreamingRole localRole,
-        ZegoUIKitUser targetUser,
-        ZegoLiveStreamingRole targetUserRole,
-      ) {
-        /*if (ZegoLiveStreamingRole.host == localRole) {
-                /// host can see all user's view
-                return true;
-              }*/
-
-        /// comment below if you want the co-host hide their own audio-video view.
-        /*if (localUser.id == targetUser.id) {
-                /// local view
-                return true;
-              }*/
-
-        /// if user is a co-host, only show host's audio-video view
-        return targetUserRole == ZegoLiveStreamingRole.host;
-      };
-    } else {
-      hostConfig.audioVideoViewConfig.visible = (
-        ZegoUIKitUser localUser,
-        ZegoLiveStreamingRole localRole,
-        ZegoUIKitUser targetUser,
-        ZegoLiveStreamingRole targetUserRole,
-      ) {
-        if (ZegoLiveStreamingRole.host == localRole) {
-          /// host can see all user's view
-          return true;
-        }
-
-        /// comment below if you want the co-host hide their own audio-video view.
-        if (localUser.id == targetUser.id) {
-          /// local view
-          return true;
-        }
-
-        /// if user is a co-host, only show host's audio-video view
-        return targetUserRole == ZegoLiveStreamingRole.host;
-      };
-    }
+    typeOfCall = isAudioCall;
   }
 
   startTimer() {

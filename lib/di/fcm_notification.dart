@@ -123,7 +123,7 @@ void onDidReceiveNotificationResponse(
   }
   if (Get.currentRoute == RouteName.chatMessageUI) {
   } else {
-    await Get.toNamed(RouteName.chatMessageUI);
+    await Get.toNamed(RouteName.chatMessageUI, arguments: true);
   }
 }
 

@@ -477,6 +477,9 @@ class $AssetsImagesGen {
   AssetGenImage get planetStarLive =>
       const AssetGenImage('assets/images/planet_star_live.png');
 
+  /// File path: assets/images/report.svg
+  SvgGenImage get report => const SvgGenImage('assets/images/report.svg');
+
   /// File path: assets/images/star_live.png
   AssetGenImage get starLive =>
       const AssetGenImage('assets/images/star_live.png');
@@ -623,6 +626,7 @@ class $AssetsImagesGen {
         medalThree,
         medalTwo,
         planetStarLive,
+        report,
         starLive,
         starLiveBig,
         videoDisableLive,

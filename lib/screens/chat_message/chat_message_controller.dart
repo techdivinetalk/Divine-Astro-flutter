@@ -1,5 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -39,20 +40,46 @@ class ChatMessageController extends GetxController {
   final preference = Get.find<SharedPreferenceService>();
   RxInt currentUserId = 8601.obs;
   String userDataKey = "userKey";
+  bool sendReadMessageStatus = false;
+  RxBool emojiShowing = true.obs;
+  // StreamSubscription<DatabaseEvent>? notiticationCheck;
 
   @override
   void onInit() {
     super.onInit();
+    if (Get.arguments != null) {
+      if (Get.arguments is bool) {
+        sendReadMessageStatus = true;
+      }
+    }
     userData = preferenceService.getUserDetail();
     currentUserId.value = 8601;
-    userDataKey = "userKey${userData?.id}$currentUserId";
+
+    // notiticationCheck ??= firebaseDatabase
+    //     .ref("astrologer/${userData?.id}/realTime/notification")
+    //     .onValue
+    //     .listen((event) {
+    //   debugPrint("Your event $event");
+    //   checkNotification();
+    //   debugPrint("Value has been updated: ${event.snapshot.value}");
+    // });
+
+    userDataKey = "userKey_${userData?.id}_$currentUserId";
     getChatList();
   }
+
+  // @override
+  // void onClose() {
+  //   super.onClose();
+  //   if (notiticationCheck != null) {
+  //     notiticationCheck!.cancel();
+  //   }
+  // }
 
   @override
   void onReady() {
     super.onReady();
-    Future.delayed(const Duration(milliseconds: 75)).then((value) {
+    Future.delayed(const Duration(milliseconds: 56)).then((value) {
       messgeScrollController.jumpTo(
         messgeScrollController.position.maxScrollExtent,
       );
@@ -65,8 +92,17 @@ class ChatMessageController extends GetxController {
     await Hive.initFlutter();
     await hiveServices.initialize();
     var res = await hiveServices.getData(key: userDataKey);
-    var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
-    chatMessages.value = msg.chatMessages ?? [];
+    if (res != null) {
+      var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
+      chatMessages.value = msg.chatMessages ?? [];
+      if (sendReadMessageStatus) {
+        for (int i = 0; i < chatMessages.length; i++) {
+          if (chatMessages[i].type != 2 && chatMessages[i].senderId == 8601) {
+            updateMsgDelieveredStatus(chatMessages[i], 2);
+          }
+        }
+      }
+    }
   }
 
   sendMsg() {
@@ -77,20 +113,29 @@ class ChatMessageController extends GetxController {
       Message message = Message(
         message: messageController.text.trim(),
         receiverId: '8601',
+        senderId: '573',
         time: time,
         type: 0,
-        title: "${userData?.name} sent you image",
+        title: "${userData?.name} sent you text",
         msgType: "text",
         awsURL: "",
         base64Image: "",
       );
       messageController.clear();
-      final DatabaseReference messagesRef =
-          firebaseDatabase.ref().child("astrologer/${userData?.id}/engagement");
+      // final DatabaseReference messagesRef =
+      //     firebaseDatabase.ref().child("astrologer/${userData?.id}/engagement");
 
-      messagesRef.set(message.toJson());
-
-      // removeMsg();
+      // messagesRef.set(message.toJson());
+      debugPrint(
+          "Messages1234 sent - ${message.senderId} -- Receiver ${message.receiverId}");
+      Future.delayed(const Duration(milliseconds: 56)).then((value) {
+        messgeScrollController.jumpTo(
+          messgeScrollController.position.maxScrollExtent,
+        );
+      });
+      firebaseDatabase
+          .ref("user/8601/realTime/notification/$time")
+          .set(message.toJson());
     }
   }
 
@@ -115,28 +160,30 @@ class ChatMessageController extends GetxController {
         chatMessages.indexWhere((element) => newMessage.id == element.id);
     if (index >= 0) {
       chatMessages[index].type = newMessage.type;
+      chatMessages.refresh();
     } else {
       chatMessages.add(newMessage);
+      // chatMessages.insert(0, newMessage);
     }
 
-    Future.delayed(const Duration(milliseconds: 200)).then((value) {
-      messgeScrollController.jumpTo(
-        messgeScrollController.position.maxScrollExtent,
-      );
-    });
     setHiveDatabase();
+    // Future.delayed(const Duration(seconds: 5)).then((value) async {
+    //   // await hiveServices.close();
+    // });
   }
 
   void setHiveDatabase() async {
-    var userDataKey = "userKey${userData?.id}$currentUserId";
+    var userDataKey = "userKey_${userData?.id}_$currentUserId";
     HiveServices hiveServices = HiveServices(boxName: userChatData);
     await hiveServices.initialize();
     databaseMessage.value.chatMessages = chatMessages;
     await hiveServices.addData(
         key: userDataKey,
         data: jsonEncode(databaseMessage.value.toOfflineJson()));
-    await hiveServices.close();
+    // await hiveServices.close(); //KHYATI
   }
+
+//OpenEmoji Keyboard
 
 //download image
   downloadImage(
@@ -228,15 +275,21 @@ class ChatMessageController extends GetxController {
       Message message = Message(
           message: "",
           receiverId: '8601',
+          senderId: '573',
           time: time,
           type: 0,
           title: "${userData?.name} sent you image",
           msgType: "image",
           awsURL: uploadFile,
           base64Image: base64Image);
-      final DatabaseReference messagesRef =
-          firebaseDatabase.ref().child("astrologer/${userData?.id}/engagement");
-      messagesRef.set(message.toJson());
+      // final DatabaseReference messagesRef =
+      //     firebaseDatabase.ref().child("astrologer/${userData?.id}/engagement");
+      // messagesRef.set(message.toJson());
+
+      firebaseDatabase
+          .ref("user/8601/realTime/notification/$time")
+          .set(message.toJson());
+      // receiverNotification.set(message.toJson());
       storeMessageInLocal(time,
           awsUrl: uploadFile,
           base64Image: base64Image,
@@ -248,6 +301,7 @@ class ChatMessageController extends GetxController {
 class Message {
   String message;
   String receiverId;
+  String senderId;
   String time;
   String title;
   String? base64Image;
@@ -258,6 +312,7 @@ class Message {
   Message({
     required this.message,
     required this.receiverId,
+    required this.senderId,
     required this.time,
     required this.type,
     required this.title,
@@ -270,6 +325,7 @@ class Message {
       : time = json['time'] as String,
         message = json['message'] as String,
         receiverId = json['receiver_id'] as String,
+        senderId = json['sender_id'] as String,
         title = json['title'] as String,
         base64Image = json['base64Image'] as String,
         awsURL = json['awsURL'] as String,
@@ -280,6 +336,7 @@ class Message {
         'time': time.toString(),
         'message': message,
         'receiver_id': receiverId,
+        'sender_id': senderId,
         'title': title,
         'base64Image': base64Image,
         'awsURL': awsURL,

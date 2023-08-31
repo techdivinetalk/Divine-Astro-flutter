@@ -86,11 +86,11 @@ class GiftWidgetState extends State<GiftWidget>
             ..forward().whenComplete(() {
               widget.onRemove();
             }));
-          return SVGAImage(animationController!);
+          return Align(alignment: Alignment.bottomCenter,child: SVGAImage(animationController!));
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         } else {
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );

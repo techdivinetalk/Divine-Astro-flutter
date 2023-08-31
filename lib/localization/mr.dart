@@ -237,6 +237,14 @@ Map<String, String> mr() {
     "close" : "बंद",
     "viewScore" : "स्कोअर पहा",
     "gotIt" : "समजले",
+    'itSpam': 'तो एक स्पॅम आहे',
+    'hateSpeechSymbols': 'द्वेषयुक्त भाषण किंवा चिन्हे',
+    'violenceOrganisations': 'हिंसा किंवा धोकादायक संघटना',
+    'falseInformation': 'खोटी माहिती',
+    'scamFraud': 'घोटाळा फसवणूक',
+    'bullyingHarassment': 'गुंडगिरीचा छळ',
+    'thankYouForReporting': 'अहवाल दिल्याबद्दल धन्यवाद!',
+    'thankYouDes': 'आम्ही तुमच्या अहवालाचे पुनरावलोकन करू आणि आवश्यक ती कारवाई केली जाईल.',
 
   };
 }

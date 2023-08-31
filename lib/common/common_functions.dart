@@ -57,47 +57,72 @@ void checkNotification() async {
       var newMessage = ChatMessage(
           id: int.parse(key),
           message: value["message"],
-          receiverId: 573,
-          senderId: 8601,
+          receiverId: int.tryParse(value["receiver_id"]),
+          senderId: int.tryParse(value["sender_id"]),
           time: int.parse(key),
           type: value["type"],
           awsUrl: value["awsURL"],
           base64Image: value["base64Image"],
           downloadedPath: "",
           msgType: value["msgType"]);
+
       if (Get.currentRoute == RouteName.chatMessageUI) {
         var chatController = Get.find<ChatMessageController>();
         if (chatController.currentUserId.value.toString() ==
-            value["sender_id"]) {
+                value["sender_id"] ||
+            chatController.currentUserId.value.toString() ==
+                value["receiver_id"]) {
           chatController.updateChatMessages(newMessage);
-          updateMsgDelieveredStatus(newMessage, 2);
+          if (value["sender_id"] == "8601") {
+            updateMsgDelieveredStatus(newMessage, 2);
+          }
         } else {
-          showNotificationWithActions(
-              message: "${value["message"]}", title: "${value["title"]}");
-          // await DatabaseHelper().insert(newMessage); //KHYATI
-          updateMsgDelieveredStatus(newMessage, 1);
+          if (value["type"] == 0) {
+            showNotificationWithActions(
+                message: "${value["message"]}", title: "${value["title"]}");
+            updateMsgDelieveredStatus(newMessage, 1);
+          }
+
+          setHiveDatabase("userKey_573_8601", newMessage);
         }
       } else {
-        showNotificationWithActions(
-            message: "${value["message"]}", title: "${value["title"]}");
-        // await DatabaseHelper().insert(newMessage); //KHYATI
-        updateMsgDelieveredStatus(newMessage, 1);
+        if (value["type"] == 0) {
+          showNotificationWithActions(
+              message: "${value["message"]}", title: "${value["title"]}");
+          updateMsgDelieveredStatus(newMessage, 1);
+        }
+
+        setHiveDatabase("userKey_573_8601", newMessage);
       }
-      // await DatabaseHelper().insert(newMessage);
     });
     removeNotificationNode();
     debugPrint("$snapshot");
   }
 }
 
-void setHiveDatabase(String userDataKey) async {
-  // HiveServices hiveServices = HiveServices(boxName: userChatData);
-  // await hiveServices.initialize();
-  // databaseMessage.value.chatMessages = chatMessages;
-  // await hiveServices.addData(
-  //     key: userDataKey,
-  //     data: jsonEncode(databaseMessage.value.toOfflineJson()));
-  // await hiveServices.close();
+void setHiveDatabase(String userDataKey, ChatMessage newMessage) async {
+  var databaseMessage = ChatMessagesOffline();
+  HiveServices hiveServices = HiveServices(boxName: userChatData);
+  await hiveServices.initialize();
+  var res = await hiveServices.getData(key: userDataKey);
+
+  var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
+  databaseMessage = msg;
+  List<ChatMessage>? chatMessages = databaseMessage.chatMessages;
+  var index =
+      chatMessages!.indexWhere((element) => newMessage.id == element.id);
+  if (index >= 0) {
+    chatMessages[index].type = newMessage.type;
+  } else {
+    chatMessages.add(newMessage);
+  }
+  databaseMessage.chatMessages = chatMessages;
+
+  await hiveServices.addData(
+      key: userDataKey, data: jsonEncode(databaseMessage.toOfflineJson()));
+  Future.delayed(const Duration(seconds: 5)).then((value) async {
+    await hiveServices.close();
+  });
 }
 
 void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
@@ -105,6 +130,7 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   Message message = Message(
     message: newMessage.message ?? "",
     receiverId: newMessage.receiverId!.toString(),
+    senderId: newMessage.senderId!.toString(),
     time: newMessage.time.toString(),
     type: type,
     title: "",
@@ -114,20 +140,30 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   );
   FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
 
-  final DatabaseReference messagesRef = firebaseDatabase
-      .ref()
-      .child("astrologer/${newMessage.receiverId}/engagement");
+  // final DatabaseReference messagesRef = firebaseDatabase
+  //     .ref()
+  //     .child("astrologer/${newMessage.receiverId}/engagement");
 
-  messagesRef.set(message.toJson());
+  // messagesRef.set(message.toJson());
+  firebaseDatabase
+      .ref("user/8601/realTime/notification/${newMessage.time}")
+      .set(message.toJson());
 
-  // removeMsg();
+  removeNotificationNode(nodeId: "/${newMessage.time}");
 }
 
-removeNotificationNode() {
-  FirebaseDatabase.instance
-      .ref()
-      .child("astrologer/573/realTime/notification")
-      .remove();
+removeNotificationNode({String? nodeId}) {
+  if (nodeId == null) {
+    FirebaseDatabase.instance
+        .ref()
+        .child("astrologer/573/realTime/notification")
+        .remove();
+  } else {
+    FirebaseDatabase.instance
+        .ref()
+        .child("astrologer/573/realTime/notification$nodeId")
+        .remove();
+  }
 }
 
 String messageDateTime(int datetime) {

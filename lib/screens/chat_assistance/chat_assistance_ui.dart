@@ -46,7 +46,7 @@ class ChatAssistanceTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        Get.toNamed(RouteName.chatMessageUI);
+        Get.toNamed(RouteName.chatMessageUI, arguments: true);
       },
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(50.r),

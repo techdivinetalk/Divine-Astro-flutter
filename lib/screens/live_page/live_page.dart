@@ -67,6 +67,7 @@ class LivePageState extends State<LivePage> {
   @override
   void initState() {
     super.initState();
+    controller.setAvailibility(widget.localUserID, true);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       liveController.connect.onRequestCoHostEvent = (user) async {
         controller.coHostUser = user;
@@ -79,12 +80,14 @@ class LivePageState extends State<LivePage> {
                   name: user.name,
                   onReject: () {
                     liveController.connect.hostRejectCoHostRequest(user);
+                    controller.setBusyStatus(widget.localUserID,0);
                     controller.setCallType(user.id);
                   },
                   onAccept: () {
                     liveController.connect
                         .hostAgreeCoHostRequest(user)
                         .then((value) {
+                      controller.setBusyStatus(widget.localUserID,1);
                       ZegoUIKit().getSignalingPlugin().sendInvitation(
                             inviterName: ZegoUIKit().getLocalUser().name,
                             invitees: [user.id ?? ""],
@@ -110,26 +113,6 @@ class LivePageState extends State<LivePage> {
             .getInvitationReceivedStream()
             .listen((event) {
           if (event["type"] == 10) {
-            controller.hostConfig.audioVideoViewConfig.visible = (
-              ZegoUIKitUser localUser,
-              ZegoLiveStreamingRole localRole,
-              ZegoUIKitUser targetUser,
-              ZegoLiveStreamingRole targetUserRole,
-            ) {
-              if (ZegoLiveStreamingRole.host == localRole) {
-                /// host can see all user's view
-                return true;
-              }
-
-              /// comment below if you want the co-host hide their own audio-video view.
-              if (localUser.id == targetUser.id) {
-                /// local view
-                return true;
-              }
-
-              /// if user is a co-host, only show host's audio-video view
-              return targetUserRole == ZegoLiveStreamingRole.host;
-            };
             controller.isCoHosting.value = false;
             controller.duration.value = "";
             controller.stopTimer();
@@ -169,93 +152,126 @@ class LivePageState extends State<LivePage> {
     )..bottomMenuBarConfig.coHostExtendButtons = [giftButton];
     //..bottomMenuBarConfig.audienceExtendButtons = [giftButton];
 
-    return SafeArea(
-      child: LayoutBuilder(builder: (context, constraints) {
-        return ZegoUIKitPrebuiltLiveStreaming(
-          appID: yourAppID,
-          appSign: yourAppSign /*input your AppSign*/,
-          userID: widget.localUserID,
-          //userName: 'user_${widget.localUserID}',
-          userName: widget.astrologerName ?? "user_${widget.localUserID}",
-          liveID: widget.liveID,
-          controller: liveController,
-          config: (widget.isHost ? controller.hostConfig : audienceConfig)
-            ..avatarBuilder = customAvatarBuilder
-            ..memberButtonConfig.icon = const SizedBox()
-            ..bottomMenuBarConfig.hostButtons = const [
-              //ZegoMenuBarButtonName.soundEffectButton,
-              //ZegoMenuBarButtonName.switchCameraButton,
-              //ZegoMenuBarButtonName.toggleCameraButton,
-              //ZegoMenuBarButtonName.toggleMicrophoneButton,
-            ]
-            ..bottomMenuBarConfig.coHostButtons = [
-              ZegoMenuBarButtonName.toggleCameraButton,
-              ZegoMenuBarButtonName.toggleMicrophoneButton,
-              ZegoMenuBarButtonName.coHostControlButton,
-              ZegoMenuBarButtonName.switchCameraButton,
-              ZegoMenuBarButtonName.soundEffectButton,
-            ]
-            ..bottomMenuBarConfig.showInRoomMessageButton = false
-            ..bottomMenuBarConfig.audienceButtons = []
-            ..audioVideoViewConfig.useVideoViewAspectFill = true
-            ..maxCoHostCount = 1
-
-            /// gallery-layout, show top and bottom if have two audio-video views
-            ..layout = ZegoLayout.gallery()
-            ..topMenuBarConfig = ZegoTopMenuBarConfig(
-              height: 0,
-            )
-
-            // ///  only the host can view the video of the co-host
-            // ..audioVideoViewConfig.playCoHostVideo = (
-            //   ZegoUIKitUser localUser,
-            //   ZegoLiveStreamingRole localRole,
-            //   ZegoUIKitUser coHost,
-            // ) {
-            //   /// only play co-host video by host,
-            //   /// audience and other co-hosts can't play
-            //   return ZegoLiveStreamingRole.host == localRole;
-            // }
-
-            ///  only the host can hear the audio of the co-host
-            ..audioVideoViewConfig.playCoHostAudio = (
-              ZegoUIKitUser localUser,
-              ZegoLiveStreamingRole localRole,
-              ZegoUIKitUser coHost,
-            ) {
-              /// only play co-host audio by host,
-              /// audience and other co-hosts can't play
-              return ZegoLiveStreamingRole.host == localRole;
-            }
-
-            /// hide the co-host audio-video view to audience and other co-hosts
-            /*..audioVideoViewConfig.visible = (
-              ZegoUIKitUser localUser,
-              ZegoLiveStreamingRole localRole,
-              ZegoUIKitUser targetUser,
-              ZegoLiveStreamingRole targetUserRole,
-            ) {
-              if (ZegoLiveStreamingRole.host == localRole) {
-                /// host can see all user's view
-                return true;
-              }
-
-              /// comment below if you want the co-host hide their own audio-video view.
-              if (localUser.id == targetUser.id) {
-                /// local view
-                return true;
-              }
-
-              /// if user is a co-host, only show host's audio-video view
-              return targetUserRole == ZegoLiveStreamingRole.host;
-            }*/
-            ..onLiveStreamingStateUpdate = (ZegoLiveStreamingState state) {
-              liveStateNotifier.value = state;
-            }
-            ..inRoomMessageConfig.visible = false
-            ..foreground = foreground(constraints),
+    return WillPopScope(
+      onWillPop: () async {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return EndSession(
+                onNo: () {},
+                onYes: () {
+                  if (controller.coHostUser != null) {
+                    controller.setCallType(controller.coHostUser!.id);
+                  }
+                  controller.stopTimer();
+                  controller.setBusyStatus(widget.localUserID,0);
+                  GiftWidget.clear();
+                  Get.back();
+                });
+          },
         );
-      }),
+        return false;
+      },
+      child: SafeArea(
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          body: LayoutBuilder(builder: (context, constraints) {
+            return ZegoUIKitPrebuiltLiveStreaming(
+              appID: yourAppID,
+              appSign: yourAppSign /*input your AppSign*/,
+              userID: widget.localUserID,
+              //userName: 'user_${widget.localUserID}',
+              userName: widget.astrologerName ?? "user_${widget.localUserID}",
+              liveID: widget.liveID,
+              controller: liveController,
+              config: (widget.isHost ? controller.hostConfig : audienceConfig)
+                ..avatarBuilder = customAvatarBuilder
+                ..memberButtonConfig.icon = const SizedBox()
+                ..confirmDialogInfo = null
+                ..markAsLargeRoom = false
+                ..bottomMenuBarConfig.hostButtons = const [
+                  //ZegoMenuBarButtonName.soundEffectButton,
+                  //ZegoMenuBarButtonName.switchCameraButton,
+                  //ZegoMenuBarButtonName.toggleCameraButton,
+                  //ZegoMenuBarButtonName.toggleMicrophoneButton,
+                ]
+                ..bottomMenuBarConfig.coHostButtons = [
+                  ZegoMenuBarButtonName.toggleCameraButton,
+                  ZegoMenuBarButtonName.toggleMicrophoneButton,
+                  ZegoMenuBarButtonName.coHostControlButton,
+                  ZegoMenuBarButtonName.switchCameraButton,
+                  ZegoMenuBarButtonName.soundEffectButton,
+                ]
+                ..bottomMenuBarConfig.showInRoomMessageButton = false
+                ..bottomMenuBarConfig.audienceButtons = []
+                ..audioVideoViewConfig.useVideoViewAspectFill = true
+                ..maxCoHostCount = 1
+
+                /// gallery-layout, show top and bottom if have two audio-video views
+                ..layout = ZegoLayout.gallery()
+                ..topMenuBarConfig = ZegoTopMenuBarConfig(
+                  height: 0,
+                )
+
+                // ///  only the host can view the video of the co-host
+                // ..audioVideoViewConfig.playCoHostVideo = (
+                //   ZegoUIKitUser localUser,
+                //   ZegoLiveStreamingRole localRole,
+                //   ZegoUIKitUser coHost,
+                // ) {
+                //   /// only play co-host video by host,
+                //   /// audience and other co-hosts can't play
+                //   return ZegoLiveStreamingRole.host == localRole;
+                // }
+
+                ///  only the host can hear the audio of the co-host
+                ..audioVideoViewConfig.playCoHostAudio = (
+                  ZegoUIKitUser localUser,
+                  ZegoLiveStreamingRole localRole,
+                  ZegoUIKitUser coHost,
+                ) {
+                  /// only play co-host audio by host,
+                  /// audience and other co-hosts can't play
+                  return ZegoLiveStreamingRole.host == localRole;
+                }
+
+                /// hide the co-host audio-video view to audience and other co-hosts
+                ..audioVideoViewConfig.visible = (
+                  ZegoUIKitUser localUser,
+                  ZegoLiveStreamingRole localRole,
+                  ZegoUIKitUser targetUser,
+                  ZegoLiveStreamingRole targetUserRole,
+                ) {
+
+                  if (controller.typeOfCall == "audio" ||
+                      controller.typeOfCall == "private") {
+                    return false;
+                  } else {
+                    return true;
+                  }
+                  if (ZegoLiveStreamingRole.host == localRole) {
+                    /// host can see all user's view
+                    return true;
+                  }
+
+                  /// comment below if you want the co-host hide their own audio-video view.
+                  if (localUser.id == targetUser.id) {
+                    /// local view
+                    return true;
+                  }
+
+                  /// if user is a co-host, only show host's audio-video view
+                  return targetUserRole == ZegoLiveStreamingRole.host;
+                }
+                ..onLiveStreamingStateUpdate = (ZegoLiveStreamingState state) {
+                  liveStateNotifier.value = state;
+                }
+                ..inRoomMessageConfig.visible = false
+                ..foreground = foreground(constraints),
+            );
+          }),
+        ),
+      ),
     );
   }
 
@@ -265,21 +281,16 @@ class LivePageState extends State<LivePage> {
       builder: (context, snapshot) {
         final messages = snapshot.data ?? <ZegoInRoomMessage>[];
 
-        return MediaQuery.removePadding(
-          context: context,
-          removeTop: true,
-          removeBottom: true,
-          child: SizedBox(
-            width: 200.w,
-            height: 200.h,
-            child: ListView.builder(
-              shrinkWrap: true,
-              padding: EdgeInsets.zero,
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                return messageItem(messages[index]);
-              },
-            ),
+        return SizedBox(
+          width: 220.w,
+          height: 200.h,
+          child: ListView.builder(
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            itemCount: messages.length,
+            itemBuilder: (context, index) {
+              return messageItem(messages[index]);
+            },
           ),
         );
       },
@@ -288,7 +299,6 @@ class LivePageState extends State<LivePage> {
 
   Widget messageItem(ZegoInRoomMessage message) {
     bool isOtherUser = widget.localUserID != message.user.id;
-    print(message.user.inRoomAttributes.value);
     return InkWell(
       onTap: () {
         showDialog(
@@ -300,14 +310,15 @@ class LivePageState extends State<LivePage> {
         );
       },
       child: Container(
-        width: 200.w,
+        width: 220.w,
+        alignment: Alignment.centerLeft,
         margin: EdgeInsets.symmetric(
           vertical: 4.h,
           horizontal: 2,
         ),
-        padding: const EdgeInsets.symmetric(
-          vertical: 8,
-          horizontal: 4,
+        padding: EdgeInsets.symmetric(
+          vertical: 4.h,
+          horizontal: 1.w,
         ),
         decoration: BoxDecoration(
           border: Border.all(color: AppColors.white, width: .8),
@@ -315,35 +326,30 @@ class LivePageState extends State<LivePage> {
           borderRadius: BorderRadius.circular(5),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            RichText(
-              maxLines: 5,
-              text: TextSpan(
-                children: [
-                  WidgetSpan(
-                    child: SizedBox(
-                      width: 18,
-                      child: Center(
-                        child: ZegoAvatar(
-                          user: message.user,
-                          avatarSize: const Size(18, 18),
-                        ),
-                      ),
-                    ),
-                  ),
-                  WidgetSpan(child: SizedBox(width: 4.w)),
-                  TextSpan(
-                    text: '${message.user.name}: ',
-                    style: const TextStyle(
-                      color: AppColors.appColorDark,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+            SizedBox(width: 4.w),
+            SizedBox(
+              width: 18,
+              child: Center(
+                child: ZegoAvatar(
+                  user: message.user,
+                  avatarSize: const Size(18, 18),
+                ),
               ),
             ),
-            Flexible(
+            SizedBox(width: 4.w),
+            Text(
+              '${message.user.name}: ',
+              style: const TextStyle(
+                color: AppColors.appColorDark,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(
+              width: 100.w,
               child: Text(
                 message.message,
                 maxLines: 5,
@@ -353,10 +359,12 @@ class LivePageState extends State<LivePage> {
                 ),
               ),
             ),
-            SizedBox(width: 2.w),
             Spacer(),
             isOtherUser
-                ? Icon(Icons.more_vert, color: AppColors.white)
+                ? Icon(
+                    Icons.more_vert,
+                    color: Colors.white,
+                  )
                 : SizedBox(),
           ],
         ),
@@ -367,7 +375,7 @@ class LivePageState extends State<LivePage> {
   Container buildAstrologerLiveStartWidget() {
     return Container(
       height: 65.h,
-      margin: EdgeInsets.only(left: 22.w),
+      margin: EdgeInsets.only(left: 22.w, top: 22.h),
       decoration: BoxDecoration(
           color: AppColors.lightBlack.withOpacity(.3),
           borderRadius: BorderRadius.circular(10)),
@@ -522,7 +530,10 @@ class LivePageState extends State<LivePage> {
         },
       ),
     );
+    return foregroundView(messageView);
+  }
 
+  foregroundView(messageView) {
     return ValueListenableBuilder<ZegoLiveStreamingState>(
       valueListenable: liveStateNotifier,
       builder: (context, liveState, _) {
@@ -539,9 +550,12 @@ class LivePageState extends State<LivePage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           buildTopMenu(),
-                          SizedBox(height: 20.h),
-                          buildAstrologerLiveStartWidget(),
-                          SizedBox(height: 20.h),
+                          Obx(() => controller.isCoHosting.isFalse
+                              ? const SizedBox()
+                              : SizedBox(height: 20.h)),
+                          Obx(() => controller.isCoHosting.isFalse
+                              ? buildAstrologerLiveStartWidget()
+                              : const SizedBox()),
                           Obx(() => controller.isCoHosting.value
                               ? buildCallDurationWidget()
                               : const SizedBox())
@@ -561,7 +575,7 @@ class LivePageState extends State<LivePage> {
                           height: 16,
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
                           child: SizedBox(
                             width: Get.width,
                             child: Row(
@@ -574,83 +588,22 @@ class LivePageState extends State<LivePage> {
                                       filter: ImageFilter.blur(
                                           sigmaX: 5, sigmaY: 5),
                                       child: CustomTextField(
-                                        onTap: () {
-                                          showCupertinoModalPopup(
-                                            barrierColor: AppColors.textColor
-                                                .withOpacity(.5),
-                                            context: context,
-                                            builder: (context) =>
-                                                SingleChildScrollView(
-                                              child: Padding(
-                                                padding: EdgeInsets.only(
-                                                  bottom: MediaQuery.of(context)
-                                                      .viewInsets
-                                                      .bottom,
-                                                ),
-                                                child: Material(
-                                                  color: AppColors.transparent,
-                                                  child: Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 14.w,
-                                                        right: 14.w,
-                                                        bottom: 18.h),
-                                                    child: Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        40.sp),
-                                                            child:
-                                                                BackdropFilter(
-                                                              filter: ImageFilter
-                                                                  .blur(
-                                                                      sigmaX: 5,
-                                                                      sigmaY:
-                                                                          5),
-                                                              child:
-                                                                  CustomTextField(
-                                                                controller:
-                                                                    controller
-                                                                        .msg,
-                                                                hintText:
-                                                                    'Say Hi...',
-                                                                autoFocus: true,
-                                                                fillColor: AppColors
-                                                                    .white
-                                                                    .withOpacity(
-                                                                        .5),
-                                                                inputBorder:
-                                                                    OutlineInputBorder(
-                                                                  borderSide:
-                                                                      BorderSide(
-                                                                    color: AppColors
-                                                                        .textColor
-                                                                        .withOpacity(
-                                                                            0.5),
-                                                                  ),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              40.sp),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        SizedBox(width: 16.w),
-                                                        sendMsg()
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        readOnly: true,
+                                        readOnly: false,
                                         hintText: 'Say Hi...',
+                                        controller: controller.msg,
+                                        suffixIconPadding: 8.w,
+                                        suffixIcon: InkWell(
+                                          onTap: () {
+                                            if (controller
+                                                .msg.text.isNotEmpty) {
+                                              //liveController.message.send("${controller.msg.text}*${widget.astrologerName}");
+                                              liveController.message
+                                                  .send(controller.msg.text);
+                                              controller.msg.text = "";
+                                            }
+                                          },
+                                          child: Assets.images.icSendMsg.svg(),
+                                        ),
                                         inputBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: AppColors.textColor
@@ -855,6 +808,7 @@ class LivePageState extends State<LivePage> {
                                         .setCallType(controller.coHostUser!.id);
                                   }
                                   controller.stopTimer();
+                                  controller.setBusyStatus(widget.localUserID,0);
                                   liveController.connect
                                       .removeCoHost(controller.coHostUser!);
                                   controller.isCoHosting.value = false;
@@ -890,6 +844,7 @@ class LivePageState extends State<LivePage> {
                           if (controller.coHostUser != null) {
                             controller.setCallType(controller.coHostUser!.id);
                           }
+                          controller.setBusyStatus(widget.localUserID,0);
                           Get.back();
                         });
                   },

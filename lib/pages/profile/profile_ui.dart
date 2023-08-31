@@ -5,6 +5,7 @@ import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ import '../../../common/colors.dart';
 import '../../../common/routes.dart';
 import '../../../gen/assets.gen.dart';
 import '../../common/common_bottomsheet.dart';
+import '../../common/custom_text.dart';
 import '../../di/shared_preference_service.dart';
 import '../../repository/user_repository.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
@@ -57,34 +59,33 @@ class ProfileUI extends GetView<ProfilePageController> {
                         Column(
                           children: [
                             Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 6,
-                                      color: AppColors.appYellowColour),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: 6, color: AppColors.appYellowColour),
+                                borderRadius: BorderRadius.circular(80),
+                              ),
+                              child: InkWell(
+                                onTap: () {
+                                  controller.updateProfileImage(context);
+                                },
+                                child: ClipRRect(
                                   borderRadius: BorderRadius.circular(80),
-                                ),
-                                child: InkWell(
-                                    onTap: () {
-                                      controller.updateProfileImage(context);
-                                    },
-                                    child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(80),
-                                        child: Obx(
-                                          () => CachedNetworkImage(
-                                            imageUrl: controller
-                                                .userProfileImage.value,
-                                            fit: BoxFit.cover,
-                                            height: 70.h,
-                                            width: 70.h,
-                                            placeholder: (context, url) =>
-                                                const CircularProgressIndicator(),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    Image.asset(Assets.images.defaultProfile.path),
-                                          ),
-                                        ),
+                                  child: Obx(
+                                    () => CachedNetworkImage(
+                                      imageUrl:
+                                          controller.userProfileImage.value,
+                                      fit: BoxFit.cover,
+                                      height: 70.h,
+                                      width: 70.h,
+                                      placeholder: (context, url) =>
+                                          const CircularProgressIndicator(),
+                                      errorWidget: (context, url, error) =>
+                                          Image.asset(Assets
+                                              .images.defaultProfile.path),
                                     ),
+                                  ),
                                 ),
+                              ),
                             ),
                           ],
                         ),
@@ -658,7 +659,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                     height: 40,
                     width: 40,
                     fit: BoxFit.cover,
-                    errorWidget: (context, url, error) => Image.asset(Assets.images.defaultProfile.path),
+                    errorWidget: (context, url, error) =>
+                        Image.asset(Assets.images.defaultProfile.path),
                   ),
                 ),
                 SizedBox(width: 10.h),
@@ -696,6 +698,16 @@ class ProfileUI extends GetView<ProfilePageController> {
                                       child: InkWell(
                                     onTap: () {
                                       Navigator.pop(context);
+                                      showCupertinoModalPopup(
+                                        barrierColor: AppColors.darkBlue
+                                            .withOpacity(0.5),
+                                        context: context,
+                                        builder: (context) => ReportPostReasons(
+                                          onPressed: () {
+                                            // Get.back();
+                                          },
+                                        ),
+                                      );
                                     },
                                     child: Text(
                                       "reportComment".tr,
@@ -800,6 +812,189 @@ class ProfileUI extends GetView<ProfilePageController> {
             hintText: "Reply here...",
             hintStyle: TextStyle(color: AppColors.greyColor),
             border: InputBorder.none),
+      ),
+    );
+  }
+}
+
+class ReportPostReasons extends GetView<ProfilePageController> {
+  const ReportPostReasons({
+    Key? key,
+    required this.onPressed,
+  }) : super(key: key);
+
+  final void Function() onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.transparent,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            child: Container(
+              padding: const EdgeInsets.all(15.0),
+              decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.white, width: 1.5),
+                  borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+                  color: AppColors.white.withOpacity(0.1)),
+              child: const Icon(
+                Icons.close,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            width: double.maxFinite,
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
+              color: AppColors.white,
+            ),
+            child: Column(
+              children: [
+                Assets.images.report.svg(),
+                SizedBox(height: 20.h),
+                CustomText("reportingQue".tr,
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w700,
+                    fontColor: AppColors.darkBlue),
+                SizedBox(height: 20.h),
+                MediaQuery.removePadding(
+                  context: context,
+                  removeBottom: true,
+                  removeRight: true,
+                  removeLeft: true,
+                  removeTop: true,
+                  child: ListView.builder(
+                    itemCount: controller.reportReason.length,
+                    shrinkWrap: true,
+                    reverse: true,
+                    itemBuilder: (context, index) {
+                      var report = controller.reportReason[index];
+                      return Padding(
+                        padding: EdgeInsets.all(12.h),
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                                onTap: () {
+                                  Get.back();
+                                  // controller.reportStory(report.first);
+                                  showCupertinoModalPopup(
+                                    barrierColor:
+                                        AppColors.darkBlue.withOpacity(0.5),
+                                    context: context,
+                                    builder: (context) => ThankYouReportUI(
+                                      onPressed: () {
+                                        // Get.back();
+                                      },
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  report.first.tr,
+                                  style: AppTextStyle.textStyle16(
+                                      fontColor: AppColors.darkBlue,
+                                      fontWeight: FontWeight.w400),
+                                )),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: 15.h),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+class ThankYouReportUI extends GetView<ProfilePageController> {
+  const ThankYouReportUI({
+    Key? key,
+    required this.onPressed,
+  }) : super(key: key);
+
+  final void Function() onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.transparent,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            child: Container(
+              padding: const EdgeInsets.all(15.0),
+              decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.white, width: 1.5),
+                  borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+                  color: AppColors.white.withOpacity(0.1)),
+              child: const Icon(
+                Icons.close,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            width: double.maxFinite,
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
+              color: AppColors.white,
+            ),
+            child: Column(
+              children: [
+                SizedBox(height: 20.h),
+                CustomText("thankYouForReporting".tr,
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w700,
+                    fontColor: AppColors.darkBlue),
+                SizedBox(height: 20.h),
+                Text(
+                  "thankYouDes".tr,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyle.textStyle16(fontWeight: FontWeight.w400),
+                ),
+                SizedBox(height: 30.h),
+                MaterialButton(
+                    elevation: 0,
+                    height: 56,
+                    minWidth: Get.width,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                    ),
+                    onPressed: () {
+                      Get.back();
+                    },
+                    color: AppColors.yellow,
+                    child: Text(
+                      "okay".tr,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.sp,
+                        color: AppColors.brownColour,
+                      ),
+                    ))
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
