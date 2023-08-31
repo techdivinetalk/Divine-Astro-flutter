@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+
 class ChatList {
   int? chatId;
   String? chatName;
@@ -64,6 +65,7 @@ class ChatMessage {
   String? awsUrl;
   String? base64Image;
   String? downloadedPath;
+  String? kundliId;
   int? time;
   int? type;
 
@@ -77,6 +79,7 @@ class ChatMessage {
       this.awsUrl,
       this.base64Image,
       this.downloadedPath,
+      this.kundliId,
       this.type});
 
   ChatMessage.fromOfflineJson(Map<String, dynamic> json) {
@@ -89,6 +92,7 @@ class ChatMessage {
     msgType = json['msgType'];
     awsUrl = json['awsUrl'];
     base64Image = json['base64Image'];
+    kundliId = json['kundli_id'];
     downloadedPath = json['downloadedPath'];
   }
 
@@ -104,6 +108,7 @@ class ChatMessage {
     data['msgType'] = msgType;
     data['awsUrl'] = awsUrl;
     data['base64Image'] = base64Image;
+    data['kundli_id'] = kundliId;
     data['downloadedPath'] = downloadedPath;
 
     return data;

@@ -109,50 +109,56 @@ class ChatMessageController extends GetxController {
     if (messageController.text.trim().isNotEmpty) {
       var time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       // type 1= New chat message, 2 = Delievered, 3= Msg read, 4= Other messages
-      storeMessageInLocal(time);
-      Message message = Message(
-        message: messageController.text.trim(),
-        receiverId: '8601',
-        senderId: '573',
-        time: time,
-        type: 0,
-        title: "${userData?.name} sent you text",
-        msgType: "text",
-        awsURL: "",
-        base64Image: "",
-      );
+      addNewMessage(time, "text", messageText: messageController.text.trim());
+
       messageController.clear();
       // final DatabaseReference messagesRef =
       //     firebaseDatabase.ref().child("astrologer/${userData?.id}/engagement");
 
       // messagesRef.set(message.toJson());
-      debugPrint(
-          "Messages1234 sent - ${message.senderId} -- Receiver ${message.receiverId}");
+
       Future.delayed(const Duration(milliseconds: 56)).then((value) {
         messgeScrollController.jumpTo(
           messgeScrollController.position.maxScrollExtent,
         );
       });
-      firebaseDatabase
-          .ref("user/8601/realTime/notification/$time")
-          .set(message.toJson());
     }
   }
 
-  storeMessageInLocal(String time,
-      {String? awsUrl, String? base64Image, String? downloadedPath}) async {
+  addNewMessage(String time, String? msgType,
+      {String? messageText,
+      String? awsUrl,
+      String? base64Image,
+      String? downloadedPath,
+      String? kundliId}) async {
     var newMessage = ChatMessage(
         id: int.parse(time),
-        message: messageController.text.trim(),
+        message: messageText,
         receiverId: 8601,
         senderId: userData?.id,
         time: int.parse(time),
         awsUrl: awsUrl,
         base64Image: base64Image,
         downloadedPath: downloadedPath,
-        msgType: messageController.text.trim() != "" ? "text" : "image",
+        msgType: msgType,
+        kundliId: kundliId,
         type: 0);
     updateChatMessages(newMessage);
+    Message msg = Message(
+      message: messageText ?? "",
+      receiverId: '8601',
+      senderId: '573',
+      time: time,
+      type: 0,
+      title: "${userData?.name} sent you $msgType",
+      msgType: msgType,
+      awsURL: awsUrl,
+      base64Image: base64Image,
+      kundliId: kundliId ?? "",
+    );
+    firebaseDatabase
+        .ref("user/8601/realTime/notification/$time")
+        .set(msg.toJson());
   }
 
   updateChatMessages(ChatMessage newMessage) async {
@@ -200,6 +206,7 @@ class ChatMessageController extends GetxController {
     File file2 = File(filePathAndName);
     file2.writeAsBytesSync(response.bodyBytes);
     chatMessages[index].downloadedPath = filePathAndName;
+    chatMessages.refresh();
     setHiveDatabase();
   }
 //Upload image
@@ -272,25 +279,26 @@ class ChatMessageController extends GetxController {
     debugPrint(base64Image);
     var uploadFile = await uploadImageToS3Bucket(File(fileData.path), time);
     if (uploadFile != "") {
-      Message message = Message(
-          message: "",
-          receiverId: '8601',
-          senderId: '573',
-          time: time,
-          type: 0,
-          title: "${userData?.name} sent you image",
-          msgType: "image",
-          awsURL: uploadFile,
-          base64Image: base64Image);
+      // Message message = Message(
+      //     message: "",
+      //     receiverId: '8601',
+      //     senderId: '573',
+      //     time: time,
+      //     type: 0,
+      //     title: "${userData?.name} sent you image",
+      //     msgType: "image",
+      //     awsURL: uploadFile,
+      //     kundliId: "",
+      //     base64Image: base64Image);
       // final DatabaseReference messagesRef =
       //     firebaseDatabase.ref().child("astrologer/${userData?.id}/engagement");
       // messagesRef.set(message.toJson());
 
-      firebaseDatabase
-          .ref("user/8601/realTime/notification/$time")
-          .set(message.toJson());
+      // firebaseDatabase
+      //     .ref("user/8601/realTime/notification/$time")
+      //     .set(message.toJson());
       // receiverNotification.set(message.toJson());
-      storeMessageInLocal(time,
+      addNewMessage(time, "image",
           awsUrl: uploadFile,
           base64Image: base64Image,
           downloadedPath: outPath);
@@ -307,6 +315,8 @@ class Message {
   String? base64Image;
   String? awsURL;
   String? msgType;
+  String? kundliId;
+
   int type;
 
   Message({
@@ -317,6 +327,7 @@ class Message {
     required this.type,
     required this.title,
     required this.msgType,
+    this.kundliId,
     this.base64Image,
     this.awsURL,
   });
@@ -330,6 +341,7 @@ class Message {
         base64Image = json['base64Image'] as String,
         awsURL = json['awsURL'] as String,
         msgType = json['msgType'] as String,
+        kundliId = json['kundli_id'] as String,
         type = json['type'] as int;
 
   Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
@@ -341,6 +353,7 @@ class Message {
         'base64Image': base64Image,
         'awsURL': awsURL,
         'msgType': msgType,
+        'kundli_id': kundliId,
         'type': type,
       };
 }
