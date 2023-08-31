@@ -72,7 +72,7 @@ void checkNotification() async {
                 value["sender_id"] ||
             chatController.currentUserId.value.toString() ==
                 value["receiver_id"]) {
-          chatController.updateChatMessages(newMessage);
+          chatController.updateChatMessages(newMessage, true);
           if (value["sender_id"] == "8601") {
             updateMsgDelieveredStatus(newMessage, 2);
           }
@@ -168,6 +168,6 @@ removeNotificationNode({String? nodeId}) {
 
 String messageDateTime(int datetime) {
   var millis = datetime;
-  var dt = DateTime.fromMillisecondsSinceEpoch(millis);
+  var dt = DateTime.fromMillisecondsSinceEpoch(millis * 1000);
   return DateFormat('hh:mm a').format(dt);
 }

@@ -15,20 +15,25 @@ class DonationUi extends GetView<DonationController> {
     return Scaffold(
         appBar: commonDetailAppbar(
             title: "Donation",
-            trailingWidget: Container(
-              margin: EdgeInsets.only(right: 16.w),
-              width: 47.w,
-              height: 26.h,
-              decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.greyColor, width: 1),
-                  borderRadius: BorderRadius.circular(10)),
-              child: Center(
-                child: Text("₹500",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 12.sp,
-                      color: AppColors.darkBlue,
-                    )),
+            trailingWidget: GestureDetector(
+              onTap: (){
+                Get.toNamed(RouteName.walletScreenUI);
+              },
+              child: Container(
+                margin: EdgeInsets.only(right: 16.w),
+                width: 47.w,
+                height: 26.h,
+                decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.greyColor, width: 1),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Center(
+                  child: Text("₹500",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12.sp,
+                        color: AppColors.darkBlue,
+                      )),
+                ),
               ),
             )),
         body: Padding(

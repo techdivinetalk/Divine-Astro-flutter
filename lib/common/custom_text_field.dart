@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'colors.dart';
@@ -22,7 +23,8 @@ class CustomTextField extends StatelessWidget {
     this.autoFocus,
     this.inputBorder,
     this.fillColor,
-    this.suffixIconPadding
+    this.suffixIconPadding,
+    this.textInputFormatter
   }) : super(key: key);
 
   final TextEditingController? controller;
@@ -42,6 +44,7 @@ class CustomTextField extends StatelessWidget {
   final double? suffixIconPadding;
   final Color? fillColor;
   final InputBorder? inputBorder;
+  final List<TextInputFormatter>? textInputFormatter;
 
   OutlineInputBorder get border => OutlineInputBorder(
     borderSide: BorderSide(
@@ -66,6 +69,7 @@ class CustomTextField extends StatelessWidget {
           validator: validator,
           autofocus: autoFocus ?? false,
           readOnly: readOnly ?? false,
+          inputFormatters: textInputFormatter ?? [],
           cursorColor: AppColors.textColor.withOpacity(0.15),
           decoration: InputDecoration(
             filled: true,

@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 
 //
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
@@ -35,6 +36,7 @@ import '../../common/live_star.dart';
 import '../../common/switch_component.dart';
 import '../../common/waitlist_sheet.dart';
 import '../../gen/assets.gen.dart';
+import '../../repository/user_repository.dart';
 import 'constant.dart';
 import 'gift.dart';
 
@@ -60,7 +62,7 @@ class LivePage extends StatefulWidget {
 class LivePageState extends State<LivePage> {
   final liveController = ZegoUIKitPrebuiltLiveStreamingController();
   final List<StreamSubscription<dynamic>?> subscriptions = [];
-  final controller = Get.put(LiveController());
+  final controller = Get.put(LiveController(Get.put(UserRepository())));
   final liveStateNotifier =
       ValueNotifier<ZegoLiveStreamingState>(ZegoLiveStreamingState.idle);
 
@@ -69,9 +71,10 @@ class LivePageState extends State<LivePage> {
     super.initState();
     controller.setAvailibility(widget.localUserID, true);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      controller.getBlockedCustomerList();
       liveController.connect.onRequestCoHostEvent = (user) async {
         controller.coHostUser = user;
-        String type = await controller.getCallType(user.id);
+        String type = await controller.getCallType(widget.localUserID);
         controller.setVisibilityCoHost(type);
         showCupertinoModalPopup(
             context: Get.context!,
@@ -81,7 +84,7 @@ class LivePageState extends State<LivePage> {
                   onReject: () {
                     liveController.connect.hostRejectCoHostRequest(user);
                     controller.setBusyStatus(widget.localUserID,0);
-                    controller.setCallType(user.id);
+                    controller.setCallType(widget.localUserID);
                   },
                   onAccept: () {
                     liveController.connect
@@ -161,12 +164,12 @@ class LivePageState extends State<LivePage> {
                 onNo: () {},
                 onYes: () {
                   if (controller.coHostUser != null) {
-                    controller.setCallType(controller.coHostUser!.id);
+                    controller.setCallType(widget.localUserID);
                   }
                   controller.stopTimer();
                   controller.setBusyStatus(widget.localUserID,0);
                   GiftWidget.clear();
-                  Get.back();
+                  controller.stopStream(widget.localUserID);
                 });
           },
         );
@@ -275,6 +278,8 @@ class LivePageState extends State<LivePage> {
     );
   }
 
+
+
   Widget messageWidget() {
     return StreamBuilder<List<ZegoInRoomMessage>>(
       stream: liveController.message.stream(),
@@ -304,8 +309,17 @@ class LivePageState extends State<LivePage> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return UnblockOrBlockUser(
-                name: message.user.name, isForBlocUser: true);
+            if(controller.blockIds.contains(message.user.id)){
+              return UnblockOrBlockUser(
+                  name: message.user.name, isForBlocUser: false,blockUnblockTap: (){
+                    controller.unblockUser(customerId: message.user.id,name: message.user.name);
+              },);
+            }else{
+              return UnblockOrBlockUser(
+                  name: message.user.name, isForBlocUser: true,blockUnblockTap: (){
+                controller.blockUser(customerId: message.user.id,name: message.user.name);
+              },);
+            }
           },
         );
       },
@@ -591,7 +605,11 @@ class LivePageState extends State<LivePage> {
                                         readOnly: false,
                                         hintText: 'Say Hi...',
                                         controller: controller.msg,
+                                        keyboardType: TextInputType.text,
                                         suffixIconPadding: 8.w,
+                                        textInputFormatter: [
+                                          FilteringTextInputFormatter(RegExp(r'[a-zA-Z]'), allow: true)
+                                        ],
                                         suffixIcon: InkWell(
                                           onTap: () {
                                             if (controller
@@ -679,10 +697,10 @@ class LivePageState extends State<LivePage> {
                       onNo: () {},
                       onYes: () {
                         if (controller.coHostUser != null) {
-                          controller.setCallType(controller.coHostUser!.id);
+                          controller.setCallType(widget.localUserID);
                         }
                         controller.stopTimer();
-                        Get.back();
+                        controller.stopStream(widget.localUserID);
                       });
                 },
               );
@@ -805,7 +823,7 @@ class LivePageState extends State<LivePage> {
                                 onYes: () {
                                   if (controller.coHostUser != null) {
                                     controller
-                                        .setCallType(controller.coHostUser!.id);
+                                        .setCallType(widget.localUserID);
                                   }
                                   controller.stopTimer();
                                   controller.setBusyStatus(widget.localUserID,0);
@@ -842,10 +860,10 @@ class LivePageState extends State<LivePage> {
                         onNo: () {},
                         onYes: () {
                           if (controller.coHostUser != null) {
-                            controller.setCallType(controller.coHostUser!.id);
+                            controller.setCallType(widget.localUserID);
                           }
                           controller.setBusyStatus(widget.localUserID,0);
-                          Get.back();
+                          controller.stopStream(widget.localUserID);
                         });
                   },
                 );

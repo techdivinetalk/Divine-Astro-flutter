@@ -40,6 +40,7 @@ Map<String, String> hi() {
     "blockedUsers": "रोके गए उपयोगकर्ता",
     "reportComment": "रिपोर्ट टिप्पणी",
     "chatAssistance": "चैट सहायता",
+    "chatAssistanceHome": "चैट सहायता",
     "suggestRemedy": "उपाय सुझाएं",
     "unblock": "अनब्लॉक",
     "performance": "प्रदर्शन",
@@ -237,6 +238,8 @@ Map<String, String> hi() {
     "payAttention" : "ध्यान देना",
     "yourScore" : "तुम्हारे अंक",
     "previous" : "पहले का",
+    'deleteAccountMsg': 'क्या आप इस खाते को हटाने के लिए सुनिश्चित हैं ?',
+
     "next" : "अगला",
     "close" : "बंद करना",
     "viewScore" : "स्कोर देखें",

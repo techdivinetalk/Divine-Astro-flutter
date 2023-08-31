@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 
 import 'common/app_theme.dart';
 import 'common/colors.dart';
@@ -28,7 +29,9 @@ Future<void> main() async {
   await Firebase.initializeApp();
   await GetStorage.init();
   await initServices();
-  runApp(const MyApp());
+  ZegoUIKit().initLog().then((value){
+    runApp(const MyApp());
+  });
 }
 
 Future<bool> saveLanguage(String? lang) async {

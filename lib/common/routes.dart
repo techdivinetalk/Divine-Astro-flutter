@@ -1,3 +1,5 @@
+import 'package:divine_astrologer/pages/wallet/wallet_binding.dart';
+import 'package:divine_astrologer/pages/wallet/wallet_ui.dart';
 import 'package:divine_astrologer/screens/auth/login/login_binding.dart';
 import 'package:divine_astrologer/screens/auth/login/login_ui.dart';
 import 'package:divine_astrologer/screens/blocked_user/blocked_user_bindings.dart';
@@ -91,6 +93,7 @@ class RouteName {
   static const String uploadYourPhotosUi = "/uploadYourPhotosUi";
   static const String uploadStoryUi = "/uploadStoryUi";
   static const String imagePreviewUi = "/imagePreviewUi";
+  static const String walletScreenUI = "/walletScreenUI";
 }
 
 class Routes {
@@ -212,5 +215,9 @@ class Routes {
       page: () => const ImagePreviewUi(),
       name: RouteName.imagePreviewUi,
     ),
+    GetPage(
+        page: () => const WalletUI(),
+        name: RouteName.walletScreenUI,
+        binding: WalletBinding()),
   ];
 }

@@ -249,7 +249,7 @@ class HomeUI extends GetView<HomeController> {
   Widget senderCategoryWidget() {
     return InkWell(
       onTap: () {
-        Get.toNamed(RouteName.noticeDetail);
+        // Get.toNamed(RouteName.noticeDetail);
       },
       child: Container(
         padding: EdgeInsets.all(16.h),
