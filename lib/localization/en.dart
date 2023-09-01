@@ -251,6 +251,6 @@ Map<String, String> en() {
     'thankYouForReporting': 'Thank You For Reporting!',
     'thankYouDes':
         'We’ll review your report and necessary actions will be taken.',
-
+    'bankName':'Bank Name',
   };
 }

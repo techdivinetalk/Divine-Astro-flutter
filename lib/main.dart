@@ -14,6 +14,7 @@ import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_stre
 
 import 'common/app_theme.dart';
 import 'common/colors.dart';
+import 'common/common_functions.dart';
 import 'common/custom_progress_dialog.dart';
 import 'common/routes.dart';
 import 'common/strings.dart';
@@ -73,6 +74,7 @@ class MyApp extends StatelessWidget {
           designSize: Size(Get.width, Get.height),
           builder: (context, child) {
             return GetMaterialApp(
+              navigatorKey: navigatorKey,
               color: AppColors.white,
               debugShowCheckedModeBanner: false,
               initialRoute: RouteName.initial,

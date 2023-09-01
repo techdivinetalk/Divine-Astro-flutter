@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:divine_astrologer/model/login_images.dart';
+import 'package:divine_astrologer/model/update_bank_response.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,6 +14,8 @@ class SharedPreferenceService extends GetxService {
   static const deviceTokenKey = "deviceTokenKey";
   static const userKey = "user";
   static const specialAbility = "specialAbility";
+  static const loginImages = "loginImages";
+  static const updatedBankDetails = "updatedBankDetails";
 
   Future<SharedPreferenceService> init() async {
     prefs = await SharedPreferences.getInstance();
@@ -63,5 +67,25 @@ class SharedPreferenceService extends GetxService {
 
   String? getSpecialAbility() {
     return prefs!.getString(specialAbility);
+  }
+
+  Future<void> saveLoginImages(String json) async {
+    prefs!.setString(loginImages, json);
+  }
+
+  LoginImages? getLoginImages() {
+    String? images = prefs!.getString(loginImages);
+    if (images != null) return loginImagesFromJson(images);
+    return null;
+  }
+
+  Future<void> saveUpdatedBankDetails(String json) async {
+    await prefs!.setString(updatedBankDetails, json);
+  }
+
+  UpdateBankResponse? getUpdatedBankDetails() {
+    String? data = prefs!.getString(updatedBankDetails);
+    if (data != null) return updateBankResponseFromJson(data);
+    return null;
   }
 }

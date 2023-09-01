@@ -248,6 +248,6 @@ Map<String, String> gu() {
     'bullyingHarassment': 'પજવણી',
     'thankYouForReporting': 'જાણ કરવા બદલ આભાર!',
     'thankYouDes': 'અમે તમારા રિપોર્ટની સમીક્ષા કરીશું અને જરૂરી પગલાં લેવામાં આવશે.',
-
+    'bankName':'બેંકનું નામ',
   };
 }

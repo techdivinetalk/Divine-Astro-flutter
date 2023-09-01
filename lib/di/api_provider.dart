@@ -43,6 +43,9 @@ class ApiProvider {
   final String updateProfileDetails = "updateProfileDetails";
   final String uploadAstroStories = "uploadAstroStories";
   final String deleteAccount = "deleteAccount";
+  final String logout = "logout";
+  final String getIntroPageDesc = "getIntroPageDesc";
+  final String updateBankDetails = "updateBankDetails";
 
   //Kundli APIs
   final String astrologyBaseUrl = "https://json.astrologyapi.com/v1/";
