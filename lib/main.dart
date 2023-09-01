@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 
@@ -32,7 +33,8 @@ Future<void> main() async {
   await Firebase.initializeApp();
   await GetStorage.init();
   await initServices();
-  ZegoUIKit().initLog().then((value){
+
+  ZegoUIKit().initLog().then((value) {
     runApp(const MyApp());
   });
 }
@@ -57,6 +59,7 @@ Future<void> initServices() async {
   await Get.putAsync(() => NetworkService().init());
   await Get.putAsync(() => FirebaseNetworkService().init());
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await Hive.initFlutter();
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

@@ -9,7 +9,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
@@ -79,7 +78,6 @@ class ChatMessageController extends GetxController {
   getChatList() async {
     chatMessages.clear();
     HiveServices hiveServices = HiveServices(boxName: userChatData);
-    await Hive.initFlutter();
     await hiveServices.initialize();
     var res = await hiveServices.getData(key: userDataKey);
     if (res != null) {
@@ -126,7 +124,7 @@ class ChatMessageController extends GetxController {
         id: int.parse(time),
         message: messageText,
         receiverId: 8601,
-        senderId: userData?.id,
+        senderId: 573,
         time: int.parse(time),
         awsUrl: awsUrl,
         base64Image: base64Image,
@@ -135,6 +133,7 @@ class ChatMessageController extends GetxController {
         kundliId: kundliId,
         type: 0);
     updateChatMessages(newMessage, false);
+
     Message msg = Message(
       message: messageText ?? "",
       receiverId: '8601',
@@ -191,9 +190,7 @@ class ChatMessageController extends GetxController {
     // await hiveServices.close(); //KHYATI
   }
 
-//OpenEmoji Keyboard
-
-//download image
+//MARK: Download image
   downloadImage(
       {required String fileName,
       required ChatMessage chatDetail,
@@ -211,8 +208,8 @@ class ChatMessageController extends GetxController {
     chatMessages.refresh();
     setHiveDatabase();
   }
-//Upload image
 
+//MARK: Upload image
   Future getImage(bool isCamera) async {
     pickedFile = await picker.pickImage(
         source: isCamera ? ImageSource.camera : ImageSource.gallery);
@@ -278,28 +275,9 @@ class ChatMessageController extends GetxController {
     List<int> imageBytes = File(result!.path).readAsBytesSync();
     String base64Image = base64Encode(imageBytes);
     String time = ("${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
-    debugPrint(base64Image);
+
     var uploadFile = await uploadImageToS3Bucket(File(fileData.path), time);
     if (uploadFile != "") {
-      // Message message = Message(
-      //     message: "",
-      //     receiverId: '8601',
-      //     senderId: '573',
-      //     time: time,
-      //     type: 0,
-      //     title: "${userData?.name} sent you image",
-      //     msgType: "image",
-      //     awsURL: uploadFile,
-      //     kundliId: "",
-      //     base64Image: base64Image);
-      // final DatabaseReference messagesRef =
-      //     firebaseDatabase.ref().child("astrologer/${userData?.id}/engagement");
-      // messagesRef.set(message.toJson());
-
-      // firebaseDatabase
-      //     .ref("user/8601/realTime/notification/$time")
-      //     .set(message.toJson());
-      // receiverNotification.set(message.toJson());
       addNewMessage(time, "image",
           awsUrl: uploadFile,
           base64Image: base64Image,

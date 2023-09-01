@@ -63,6 +63,7 @@ void checkNotification() async {
           type: value["type"],
           awsUrl: value["awsURL"],
           base64Image: value["base64Image"],
+          kundliId: value["kundli_id"],
           downloadedPath: "",
           msgType: value["msgType"]);
 
@@ -95,7 +96,7 @@ void checkNotification() async {
         setHiveDatabase("userKey_573_8601", newMessage);
       }
     });
-    removeNotificationNode();
+    // removeNotificationNode();
     debugPrint("$snapshot");
   }
 }
@@ -106,11 +107,13 @@ void setHiveDatabase(String userDataKey, ChatMessage newMessage) async {
   await hiveServices.initialize();
   var res = await hiveServices.getData(key: userDataKey);
 
-  var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
-  databaseMessage = msg;
-  List<ChatMessage>? chatMessages = databaseMessage.chatMessages;
-  var index =
-      chatMessages!.indexWhere((element) => newMessage.id == element.id);
+  if (res != null) {
+    var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
+    databaseMessage = msg;
+  }
+  List<ChatMessage>? chatMessages = databaseMessage.chatMessages ?? [];
+
+  var index = chatMessages.indexWhere((element) => newMessage.id == element.id);
   if (index >= 0) {
     chatMessages[index].type = newMessage.type;
   } else {
