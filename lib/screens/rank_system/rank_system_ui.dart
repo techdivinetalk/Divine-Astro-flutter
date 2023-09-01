@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -5,6 +6,7 @@ import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
 
 import '../../common/appbar.dart';
+import '../../model/performance_model_class.dart';
 import 'rank_system_controller.dart';
 
 class RankSystemUI extends GetView<RankSystemController> {
@@ -81,18 +83,18 @@ class RankSystemUI extends GetView<RankSystemController> {
                       ],
                     ),
                     ListView.builder(
-                        itemCount: controller.systemRankList.length,
+                        itemCount: controller.rankSystemList?.length,
                         shrinkWrap: true,
                         primary: false,
                         itemBuilder: (context, index) {
-                          var item = controller.systemRankList[index];
+                          RankSystem? item = controller.rankSystemList?[index];
                           return Row(
                             children: [
                               Expanded(
                                 child: Column(
                                   children: [
                                     Text(
-                                      item.percentage.toString(),
+                                      item?.percentageRange ?? "",
                                       textAlign: TextAlign.center,
                                       style: AppTextStyle.textStyle12(
                                           fontWeight: FontWeight.w700,
@@ -111,7 +113,7 @@ class RankSystemUI extends GetView<RankSystemController> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        item.image ??
+                                        setImage(item?.rank ?? "") ??
                                             SizedBox(
                                               width: 10.w,
                                             ),
@@ -119,7 +121,7 @@ class RankSystemUI extends GetView<RankSystemController> {
                                           width: 10.w,
                                         ),
                                         Text(
-                                          item.astrologerRank.toString(),
+                                          item?.rank ??'',
                                           textAlign: TextAlign.center,
                                           style: AppTextStyle.textStyle12(
                                               fontWeight: FontWeight.w700,
@@ -163,5 +165,21 @@ class RankSystemUI extends GetView<RankSystemController> {
         ),
       ),
     );
+  }
+  setImage(String rank){
+    if(rank == "Diamond"){
+      return Assets.images.icDiamond.image(height: 21.h, width: 21.h);
+    }else if(rank == "Platinum"){
+      return Assets.images.icPlatinum.image(height: 21.h, width: 21.h);
+    }else if(rank == "Gold"){
+      return Assets.images.icGold.image(height: 21.h, width: 21.h);
+    }else if(rank == "Silver"){
+      return Assets.images.icSilver.image(height: 21.h, width: 21.h);
+    }else if(rank == "Bronze"){
+      return Assets.images.icBronze.image(height: 21.h, width: 21.h);
+    }
+    else{
+      return SizedBox(  width: 10.w,);
+    }
   }
 }

@@ -1,8 +1,9 @@
 // ignore_for_file: depend_on_referenced_packages
-
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:divine_astrologer/pages/profile/profile_ui.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path/path.dart' as p;
 import 'package:aws_s3_upload/aws_s3_upload.dart';
@@ -23,6 +24,7 @@ import '../../model/res_review_ratings.dart';
 import '../../model/res_user_profile.dart';
 import '../../repository/user_repository.dart';
 import '../../screens/dashboard/dashboard_controller.dart';
+import '../../utils/utils.dart';
 
 class ProfilePageController extends GetxController {
   final UserRepository userRepository;
@@ -42,12 +44,12 @@ class ProfilePageController extends GetxController {
   File? uploadFile;
 
   List<List<String>> reportReason = <List<String>>[
-    ["itSpam"],
-    ["hateSpeechSymbols"],
-    ["violenceOrganisations"],
-    ["falseInformation"],
-    ["scamFraud"],
-    ["bullyingHarassment"],
+    ["itSpam",''],
+    ["hateSpeechSymbols",''],
+    ["violenceOrganisations",''],
+    ["falseInformation",''],
+    ["scamFraud",''],
+    ["bullyingHarassment",''],
   ];
 
   var languageList = <ChangeLanguageModelClass>[
@@ -235,6 +237,32 @@ class ProfilePageController extends GetxController {
       }
     }
     reviewDataSync.value = true;
+  }
+
+
+  void reportReviews(String reportComment, reviewID,) async {
+    Map<String, dynamic> param = {
+      "review_id": reviewID,
+      "comment": reportComment
+    };
+
+    final response = await UserRepository().reportUserReviews(param);
+    if (response.statusCode == 200) {
+      // Get.back();
+      showCupertinoModalPopup(
+        barrierColor:
+        AppColors.darkBlue.withOpacity(0.5),
+        context: Get.context!,
+        builder: (context) => ThankYouReportUI(
+          onPressed: () {
+            // Get.back();
+          },
+        ),
+      );
+    } else {
+      Get.back();
+      divineSnackBar(data: "${response.message}",color: AppColors.redColor);
+    }
   }
 
   getReplyOnReview({required String textMsg, required int reviewId}) async {

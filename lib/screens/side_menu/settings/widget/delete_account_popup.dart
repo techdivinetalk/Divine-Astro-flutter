@@ -150,7 +150,10 @@ class DeleteAccountPopup extends GetView<SettingsController> {
                                 SizedBox(width: 30.w),
                                 InkWell(
                                   onTap: () {
-                                    controller.deleteUserAccounts();
+                                    // controller.deleteUserAccounts();
+                                    Get.back();
+
+
                                   },
                                   child: Text(
                                     "yes".tr.toUpperCase(),

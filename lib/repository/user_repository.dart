@@ -11,6 +11,7 @@ import '../common/routes.dart';
 import '../di/api_provider.dart';
 import '../model/constant_details_model_class.dart';
 import '../model/delete_customer_model_class.dart';
+import '../model/report_review_model_class.dart';
 import '../model/res_blocked_customers.dart';
 import '../model/res_login.dart';
 import '../model/res_review_ratings.dart';
@@ -85,6 +86,33 @@ class UserRepository extends ApiProvider {
       rethrow;
     }
   }
+
+
+  Future<ReportReviewModelClass> reportUserReviews(Map<String, dynamic> param) async {
+    try {
+      final response = await post(reportUserReview,
+          body: jsonEncode(param).toString(),
+          headers: await getJsonHeaderURL());
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final blockedCustomerList =
+          ReportReviewModelClass.fromJson(json.decode(response.body));
+          return blockedCustomerList;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+
+
 
   Future<ResReviewReply> reviewReply(Map<String, dynamic> param) async {
     try {
@@ -262,6 +290,8 @@ class UserRepository extends ApiProvider {
       rethrow;
     }
   }
+
+
 
 
 }

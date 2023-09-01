@@ -26,6 +26,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/avatar.svg
   SvgGenImage get avatar => const SvgGenImage('assets/images/avatar.svg');
 
+  /// File path: assets/images/bg_MeterFinal.svg
+  SvgGenImage get bgMeterFinal =>
+      const SvgGenImage('assets/images/bg_MeterFinal.svg');
+
   /// File path: assets/images/bg_chatUserPro.png
   AssetGenImage get bgChatUserPro =>
       const AssetGenImage('assets/images/bg_chatUserPro.png');
@@ -168,6 +172,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_calendar.svg
   SvgGenImage get icCalendar =>
       const SvgGenImage('assets/images/ic_calendar.svg');
+
+  /// File path: assets/images/ic_calender.svg
+  SvgGenImage get icCalender =>
+      const SvgGenImage('assets/images/ic_calender.svg');
 
   /// File path: assets/images/ic_call.svg
   SvgGenImage get icCall => const SvgGenImage('assets/images/ic_call.svg');
@@ -508,6 +516,7 @@ class $AssetsImagesGen {
         audioDisableLive,
         audioEnableLive,
         avatar,
+        bgMeterFinal,
         bgChatUserPro,
         bgChatWallpaper,
         bgDeleteAccount,
@@ -545,6 +554,7 @@ class $AssetsImagesGen {
         icBronze,
         icCalc,
         icCalendar,
+        icCalender,
         icCall,
         icCalling,
         icCart,
