@@ -672,11 +672,19 @@ class $AssetsSvgGen {
   /// File path: assets/svg/disconnect.svg
   SvgGenImage get disconnect => const SvgGenImage('assets/svg/disconnect.svg');
 
+  /// File path: assets/svg/grey_container.svg
+  SvgGenImage get greyContainer =>
+      const SvgGenImage('assets/svg/grey_container.svg');
+
+  /// File path: assets/svg/ic_add.svg
+  SvgGenImage get icAdd => const SvgGenImage('assets/svg/ic_add.svg');
+
   /// File path: assets/svg/reply.svg
   SvgGenImage get reply => const SvgGenImage('assets/svg/reply.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [block, blockUser, disconnect, reply];
+  List<SvgGenImage> get values =>
+      [block, blockUser, disconnect, greyContainer, icAdd, reply];
 }
 
 class $AssetsSvgaGen {

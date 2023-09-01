@@ -19,6 +19,7 @@ import 'package:path/path.dart' as p;
 
 import '../screens/chat_message/chat_message_controller.dart';
 import '../screens/live_page/constant.dart';
+import 'colors.dart';
 
 final UserRepository userRepository = Get.find<UserRepository>();
 SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
@@ -168,4 +169,25 @@ String messageDateTime(int datetime) {
   var millis = datetime;
   var dt = DateTime.fromMillisecondsSinceEpoch(millis * 1000);
   return DateFormat('hh:mm a').format(dt);
+}
+
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+void divineSnackBar({required String data, Color? color,Duration? duration}) {
+  BuildContext? context = navigator?.context;
+  if (context != null) {
+    final snackBar = SnackBar(
+      duration: duration ?? const Duration(milliseconds: 4000),
+      content: Text(
+        data,
+        style:
+        TextStyle(color: color != null ? AppColors.white : AppColors.blackColor),
+      ),
+      backgroundColor: color ?? AppColors.yellow,
+      showCloseIcon: true,
+      closeIconColor: color != null ? AppColors.white : AppColors.blackColor,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 }

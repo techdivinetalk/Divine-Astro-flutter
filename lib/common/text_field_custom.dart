@@ -11,7 +11,8 @@ class TextFieldCustom extends StatefulWidget {
   final TextInputType inputType;
   final TextInputAction inputAction;
 
-  const TextFieldCustom(this.hintText, this.inputType, this.inputAction, {super.key});
+  const TextFieldCustom(this.hintText, this.inputType, this.inputAction,
+      {super.key});
 
   @override
   State<TextFieldCustom> createState() => _TextFieldCustomState();
@@ -53,6 +54,7 @@ class WhiteTextField extends StatefulWidget {
   final Color? errorBorder;
   final TextEditingController? controller;
   final String? Function(String? value)? validator;
+  final bool isDense;
 
   const WhiteTextField(
       {super.key,
@@ -63,9 +65,9 @@ class WhiteTextField extends StatefulWidget {
       this.controller,
       this.errorBorder,
       this.icon,
+      this.isDense = false,
       this.suffixIcon,
-        this.validator
-      });
+      this.validator});
 
   @override
   State<WhiteTextField> createState() => _WhiteTextFieldState();
@@ -75,10 +77,16 @@ class _WhiteTextFieldState extends State<WhiteTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), boxShadow: [
-        BoxShadow(
-            color: Colors.black.withOpacity(0.3), blurRadius: 3.0, offset: const Offset(0.3, 3.0)),
-      ]),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 3.0,
+            offset: const Offset(0.3, 1.0),
+          ),
+        ],
+      ),
       child: TextFormField(
         validator: widget.validator,
         controller: widget.controller,
@@ -87,6 +95,7 @@ class _WhiteTextFieldState extends State<WhiteTextField> {
         textInputAction: widget.inputAction,
         decoration: InputDecoration(
           hintText: widget.hintText,
+          isDense: widget.isDense,
           helperStyle: AppTextStyle.textStyle16(),
           fillColor: AppColors.white,
           hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.greyColor),

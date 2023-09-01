@@ -1,101 +1,148 @@
+import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:flutter/material.dart';
+import 'package:divine_astrologer/screens/bank_details/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
-import '../../../common/text_field_custom.dart';
-import '../../../common/app_textstyle.dart';
-
-import '../../../gen/assets.gen.dart';
-import '../../common/appbar.dart';
 import 'bank_detail_controller.dart';
+import 'package:flutter/material.dart';
 
 class BankDetailsUI extends GetView<BankDetailController> {
   const BankDetailsUI({super.key});
 
+  Widget get sizedBox25 => SizedBox(height: 20.w);
+
+  Widget get sizedBox5 => SizedBox(height: 8.w);
+
+  Widget title(String data) => Text(
+        data,
+        style: AppTextStyle.textStyle16(
+          fontWeight: FontWeight.w400,
+          fontColor: AppColors.darkBlue,
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: commonDetailAppbar(title: "yourBankDetails".tr),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(12.h),
+    return Theme(
+      data: ThemeData(useMaterial3: false),
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        bottomNavigationBar: Container(
+          margin: EdgeInsets.symmetric(horizontal: 12.w),
+          child: CustomMaterialButton(
+            height: 50.h,
+            buttonName: "Submit",
+            textColor: AppColors.brownColour,
+            onPressed: () => controller.submit(),
+          ),
+        ),
+        body: SafeArea(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Assets.images.icBankDetail.svg(height: 100.h, width: 101.w),
-                  SizedBox(
-                    width: 20.w,
+              BackNavigationWidget(
+                title: "yourBankDetails".tr,
+                onPressedBack: () => Get.back(),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 17.w,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Form(
+                            key: controller.formKey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                title("bankName".tr),
+                                sizedBox5,
+                                WrapperContainer(
+                                  child: BankDetailsField(
+                                    validator: bankDetailValidator,
+                                    controller: controller.state.bankName,
+                                    hintText: "holderNameHintText".tr,
+                                    inputAction: TextInputAction.next,
+                                    inputType: TextInputType.text,
+                                  ),
+                                ),
+                                sizedBox25,
+                                title("accountHolderName".tr),
+                                sizedBox5,
+                                WrapperContainer(
+                                  child: BankDetailsField(
+                                    validator: bankDetailValidator,
+                                    controller: controller.state.holderName,
+                                    hintText: "holderNameHintText".tr,
+                                    inputAction: TextInputAction.next,
+                                    inputType: TextInputType.text,
+                                  ),
+                                ),
+                                sizedBox25,
+                                title("bankAccountNumber".tr),
+                                sizedBox5,
+                                WrapperContainer(
+                                  child: BankDetailsField(
+                                    validator: bankDetailValidator,
+                                    controller: controller.state.accountNumber,
+                                    hintText: "accountNumHintText".tr,
+                                    inputAction: TextInputAction.next,
+                                    inputType: TextInputType.text,
+                                  ),
+                                ),
+                                sizedBox25,
+                                title("iFSCCode".tr),
+                                sizedBox5,
+                                WrapperContainer(
+                                  child: BankDetailsField(
+                                    validator: bankDetailValidator,
+                                    controller: controller.state.ifscCode,
+                                    hintText: "ifscCodeHintText".tr,
+                                    inputAction: TextInputAction.next,
+                                    inputType: TextInputType.text,
+                                  ),
+                                ),
+                                sizedBox25,
+                                title("attachments".tr),
+                                sizedBox5,
+                              ],
+                            )),
+                        GetBuilder<BankDetailController>(
+                          builder: (controller) => Row(
+                            children: [
+                              ImagePickerButton(
+                                title: "Passbook",
+                                file: controller.passBook,
+                                onTap: () {
+                                  controller.pickFile().then((value) {
+                                    if (value != null) {
+                                      controller.addPassBook(value);
+                                    }
+                                  });
+                                },
+                              ),
+                              SizedBox(width: 12.w),
+                              ImagePickerButton(
+                                file: controller.cancelledCheque,
+                                title: "Cancelled Cheque",
+                                onTap: () {
+                                  controller.pickFile().then((value) {
+                                    if (value != null) {
+                                      controller.addCancelledCheque(value);
+                                    }
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  Text(
-                    "State Bank Of \nIndia",
-                    style: AppTextStyle.textStyle24(
-                        fontWeight: FontWeight.w700,
-                        fontColor: AppColors.darkBlue),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 25.w,
-              ),
-              //account Holder Name
-              Text(
-                "accountHolderName".tr,
-                style: AppTextStyle.textStyle20(
-                    fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
-              ),
-              SizedBox(
-                height: 5.h,
-              ),
-              WhiteTextField(
-                  hintText: "holderNameHintText".tr,
-                  inputAction: TextInputAction.next,
-                  inputType: TextInputType.text),
-              SizedBox(
-                height: 25.w,
-              ),
-              //Bank Account Number
-              Text(
-                "bankAccountNumber".tr,
-                style: AppTextStyle.textStyle20(
-                    fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
-              ),
-              SizedBox(
-                height: 5.h,
-              ),
-              WhiteTextField(
-                  hintText: "accountNumHintText".tr,
-                  inputAction: TextInputAction.next,
-                  inputType: TextInputType.text),
-              SizedBox(
-                height: 25.w,
-              ),
-              //IFSC Code
-              Text(
-                "iFSCCode".tr,
-                style: AppTextStyle.textStyle20(
-                    fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
-              ),
-              SizedBox(
-                height: 5.h,
-              ),
-              WhiteTextField(
-                  hintText: "ifscCodeHintText".tr,
-                  inputAction: TextInputAction.next,
-                  inputType: TextInputType.text),
-              SizedBox(
-                height: 25.w,
-              ),
-              //attachments
-              Text(
-                "attachments".tr,
-                style: AppTextStyle.textStyle20(
-                    fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
-              ),
-              SizedBox(
-                height: 25.w,
+                ),
               ),
             ],
           ),

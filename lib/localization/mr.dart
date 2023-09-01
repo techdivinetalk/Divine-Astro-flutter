@@ -247,6 +247,6 @@ Map<String, String> mr() {
     'bullyingHarassment': 'गुंडगिरीचा छळ',
     'thankYouForReporting': 'अहवाल दिल्याबद्दल धन्यवाद!',
     'thankYouDes': 'आम्ही तुमच्या अहवालाचे पुनरावलोकन करू आणि आवश्यक ती कारवाई केली जाईल.',
-
+    'bankName':'बँकेचे नाव',
   };
 }
