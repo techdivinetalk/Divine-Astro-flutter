@@ -118,8 +118,7 @@ class OrderHistoryController extends GetxController {
           emptyMsg.value = data.message ?? "No data found!";
         }
       } else if (type == 2) {
-        ChatOrderHistoryModelClass data =
-            await OrderHistoryRepository().getChatOrderHistory(params);
+        ChatOrderHistoryModelClass data = await OrderHistoryRepository().getChatOrderHistory(params);
         apiCalling.value = false;
         var history = data.data;
 

@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
 import '../../../common/routes.dart';
@@ -700,15 +699,15 @@ class ProfileUI extends GetView<ProfilePageController> {
                                       child: InkWell(
                                     onTap: () {
                                       Navigator.pop(context);
+
                                       showCupertinoModalPopup(
                                         barrierColor:
                                             AppColors.darkBlue.withOpacity(0.5),
                                         context: context,
                                         builder: (context) => ReportPostReasons(
-                                          onPressed: () {
-                                            // Get.back();
-                                          },
-                                        ),
+                                            reviewData!.id.toString()),
+
+                                        // builder: (context) => ReportPostReasons(reviewData?.id.),
                                       );
                                     },
                                     child: Text(
@@ -819,14 +818,16 @@ class ProfileUI extends GetView<ProfilePageController> {
   }
 }
 
-class ReportPostReasons extends GetView<ProfilePageController> {
-  const ReportPostReasons({
-    Key? key,
-    required this.onPressed,
-  }) : super(key: key);
+class ReportPostReasons extends StatefulWidget {
+  String reviewID;
 
-  final void Function() onPressed;
+  ReportPostReasons(this.reviewID, {super.key});
 
+  @override
+  State<ReportPostReasons> createState() => _ReportPostReasonsState();
+}
+
+class _ReportPostReasonsState extends State<ReportPostReasons> {
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -851,69 +852,62 @@ class ReportPostReasons extends GetView<ProfilePageController> {
             ),
           ),
           const SizedBox(height: 10),
-          Container(
-            width: double.maxFinite,
-            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
-              color: AppColors.white,
-            ),
-            child: Column(
-              children: [
-                Assets.images.report.svg(),
-                SizedBox(height: 20.h),
-                CustomText("reportingQue".tr,
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w700,
-                    fontColor: AppColors.darkBlue),
-                SizedBox(height: 20.h),
-                MediaQuery.removePadding(
-                  context: context,
-                  removeBottom: true,
-                  removeRight: true,
-                  removeLeft: true,
-                  removeTop: true,
-                  child: ListView.builder(
-                    itemCount: controller.reportReason.length,
-                    shrinkWrap: true,
-                    reverse: true,
-                    itemBuilder: (context, index) {
-                      var report = controller.reportReason[index];
-                      return Padding(
-                        padding: EdgeInsets.all(12.h),
-                        child: Column(
-                          children: [
-                            GestureDetector(
-                                onTap: () {
-                                  Get.back();
-                                  // controller.reportStory(report.first);
-                                  showCupertinoModalPopup(
-                                    barrierColor:
-                                        AppColors.darkBlue.withOpacity(0.5),
-                                    context: context,
-                                    builder: (context) => ThankYouReportUI(
-                                      onPressed: () {
-                                        // Get.back();
-                                      },
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  report.first.tr,
-                                  style: AppTextStyle.textStyle16(
-                                      fontColor: AppColors.darkBlue,
-                                      fontWeight: FontWeight.w400),
-                                )),
-                          ],
-                        ),
-                      );
-                    },
+          GetBuilder<ProfilePageController>(builder: (controller) {
+            return Container(
+              width: double.maxFinite,
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
+                color: AppColors.white,
+              ),
+              child: Column(
+                children: [
+                  Assets.images.report.svg(),
+                  SizedBox(height: 20.h),
+                  CustomText("reportingQue".tr,
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w700,
+                      fontColor: AppColors.darkBlue),
+                  SizedBox(height: 20.h),
+                  MediaQuery.removePadding(
+                    context: context,
+                    removeBottom: true,
+                    removeRight: true,
+                    removeLeft: true,
+                    removeTop: true,
+                    child: ListView.builder(
+                      itemCount: controller.reportReason.length,
+                      shrinkWrap: true,
+                      reverse: true,
+                      itemBuilder: (context, index) {
+                        var report = controller.reportReason[index];
+                        return Padding(
+                          padding: EdgeInsets.all(12.h),
+                          child: Column(
+                            children: [
+                              GestureDetector(
+                                  onTap: () {
+                                    Get.back();
+                                    controller.reportReviews(
+                                        report.first, widget.reviewID);
+                                  },
+                                  child: Text(
+                                    report.first.tr,
+                                    style: AppTextStyle.textStyle16(
+                                        fontColor: AppColors.darkBlue,
+                                        fontWeight: FontWeight.w400),
+                                  )),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                ),
-                SizedBox(height: 15.h),
-              ],
-            ),
-          ),
+                  SizedBox(height: 15.h),
+                ],
+              ),
+            );
+          }),
         ],
       ),
     );

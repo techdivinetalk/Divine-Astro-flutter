@@ -748,124 +748,226 @@ class HomeUI extends GetView<HomeController> {
                                         ),
                                       ),
                                       SizedBox(
-                                        height: 10.h,
+                                        height: 20.h,
                                       ),
-                                      SizedBox(
-                                          height: 170.h,
-                                          child: SfRadialGauge(
-                                              backgroundColor: Colors.white,
-                                              animationDuration: 4500,
-                                              axes: <RadialAxis>[
-                                                RadialAxis(
-                                                    radiusFactor: 0.9,
-                                                    canScaleToFit: true,
-                                                    axisLabelStyle:
-                                                        const GaugeTextStyle(color: Colors.white),
-                                                    showLastLabel: false,
-                                                    maximum: 50,
-                                                    // maximum: 150,
-                                                    ranges: <GaugeRange>[
-                                                      GaugeRange(
-                                                        gradient: const SweepGradient(
-                                                          colors: <Color>[
-                                                            Color(0xFFfb481f),
-                                                            Color(0xFFfb8304),
-                                                            Color(0xFFe5c310),
-                                                            Color(0xFF93da3c),
-                                                            Color(0xFF70c441),
-                                                            Color(0xFF38a84f)
-                                                          ],
+                                      Stack(
+                                        children: [
+                                          Center(
+                                              child: Assets.images.bgMeterFinal.svg(height: 135.h,width: 270.h)),
+                                          Positioned(
+                                            bottom: 0,
+                                            left: 115.h,
+                                            child: Column(
+                                              children: [
+                                                SizedBox(
+                                                  height: 5.h,
+                                                ),
+                                                Text(
+                                                  "Your Score",
+                                                  style: AppTextStyle.textStyle10(
+                                                      fontColor: AppColors.darkBlue),
+                                                ),
+                                                SizedBox(
+                                                  height: 5.h,
+                                                ),
+                                                Text(
+                                                  '80',
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.w700,
+                                                      color: AppColors.darkBlue,
+                                                      fontSize: 20.sp),
+                                                ),
+                                                SizedBox(
+                                                  height: 5.h,
+                                                ),
+                                                Text(
+                                                  "Out of 100",
+                                                  style: AppTextStyle.textStyle10(
+                                                      fontColor: AppColors.darkBlue),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Center(
+                                            child: SizedBox(
+                                              height: 140.h,width: 280.h,
+                                              child: Stack(
+                                                children: [
+                                                  Positioned(
+                                                    bottom: 0,
+                                                    left: 10.w,
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          "0",
+                                                          style: TextStyle(
+                                                              fontSize: 11.sp,
+                                                              fontWeight: FontWeight.w400,
+                                                              color: Colors.black),
                                                         ),
-                                                        // gradient: Gradient.,
-                                                        endWidth: 15,
-                                                        startWidth: 15,
-                                                        startValue: 0,
-                                                        endValue: 50,
-                                                      ),
-                                                      // GaugeRange(
-                                                      //
-                                                      //     gradient: const SweepGradient(
-                                                      //       colors: <Color>[
-                                                      //         Color(0xFFe5c310),
-                                                      //         Color(0xFF93da3c)
-                                                      //       ],
-                                                      //     ),
-                                                      //     endWidth: 15,
-                                                      //     startWidth: 15,
-                                                      //     startValue: 50,
-                                                      //     endValue: 100,
-                                                      //     ),
-                                                      // GaugeRange(
-                                                      //     gradient: const SweepGradient(
-                                                      //       colors: <Color>[
-                                                      //         Color(0xFF70c441),
-                                                      //         Color(0xFF38a84f)
-                                                      //       ],
-                                                      //     ),
-                                                      //     startValue: 100,
-                                                      //     endWidth: 15,
-                                                      //     startWidth: 15,
-                                                      //     endValue: 150,
-                                                      //     )
-                                                    ],
-                                                    pointers: const <GaugePointer>[
-                                                      MarkerPointer(
-                                                        animationDuration: 5000,
-                                                        value: 40,
-                                                        enableAnimation: true,
-                                                        borderColor: AppColors.markerColor,
-                                                        borderWidth: 9,
-                                                        markerWidth: 9,
-                                                        markerHeight: 9,
-                                                        // overlayRadius: 800,
-                                                        markerType: MarkerType.invertedTriangle,
-                                                        animationType: AnimationType.elasticOut,
-                                                        markerOffset: -6,
-                                                      )
-                                                    ],
-                                                    annotations: <GaugeAnnotation>[
-                                                      GaugeAnnotation(
-                                                          widget: Column(
-                                                            children: [
-                                                              SizedBox(
-                                                                height: 20.h,
-                                                              ),
-                                                              Text(
-                                                                "yourScore".tr,
-                                                                style: AppTextStyle.textStyle12(
-                                                                    fontColor: AppColors.darkBlue),
-                                                              ),
-                                                              SizedBox(
-                                                                height: 10.h,
-                                                              ),
-                                                              Text(
-                                                                controller.yourScore[
-                                                                    controller.scoreIndex]['score'],
-                                                                style: TextStyle(
-                                                                    fontWeight: FontWeight.w700,
-                                                                    color: AppColors.darkBlue,
-                                                                    fontSize: 25.sp),
-                                                              ),
-                                                              SizedBox(
-                                                                height: 10.h,
-                                                              ),
-                                                              Text(
-                                                                "Out of 100",
-                                                                style: AppTextStyle.textStyle12(
-                                                                    fontColor: AppColors.darkBlue),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          angle: 90,
-                                                          horizontalAlignment:
-                                                              GaugeAlignment.center,
-                                                          verticalAlignment: GaugeAlignment.center,
-                                                          axisValue: 10,
-                                                          positionFactor: 0.5)
-                                                    ])
-                                              ])),
+                                                        SizedBox(
+                                                          width: 240.w,
+                                                        ),
+                                                        Text(
+                                                          "100",
+                                                          style: TextStyle(
+                                                              fontSize: 11.sp,
+                                                              fontWeight: FontWeight.w400,
+                                                              color: Colors.black),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+
+                                                  Positioned(
+                                                    top: 25.h,
+                                                    left: 70.w,
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          "25",
+                                                          style: TextStyle(
+                                                              fontSize: 11.sp,
+                                                              fontWeight: FontWeight.w400,
+                                                              color: Colors.black),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 110.w,
+                                                        ),
+                                                        Text(
+                                                          "50",
+                                                          style: TextStyle(
+                                                              fontSize: 11.sp,
+                                                              fontWeight: FontWeight.w400,
+                                                              color: Colors.black),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+
+                                        ],
+                                      ),
+                                      // SizedBox(
+                                      //     height: 170.h,
+                                      //     child: SfRadialGauge(
+                                      //         backgroundColor: Colors.white,
+                                      //         animationDuration: 4500,
+                                      //         axes: <RadialAxis>[
+                                      //           RadialAxis(
+                                      //               radiusFactor: 0.9,
+                                      //               canScaleToFit: true,
+                                      //               axisLabelStyle:
+                                      //                   const GaugeTextStyle(color: Colors.white),
+                                      //               showLastLabel: false,
+                                      //               maximum: 50,
+                                      //               // maximum: 150,
+                                      //               ranges: <GaugeRange>[
+                                      //                 GaugeRange(
+                                      //                   gradient: const SweepGradient(
+                                      //                     colors: <Color>[
+                                      //                       Color(0xFFfb481f),
+                                      //                       Color(0xFFfb8304),
+                                      //                       Color(0xFFe5c310),
+                                      //                       Color(0xFF93da3c),
+                                      //                       Color(0xFF70c441),
+                                      //                       Color(0xFF38a84f)
+                                      //                     ],
+                                      //                   ),
+                                      //                   // gradient: Gradient.,
+                                      //                   endWidth: 15,
+                                      //                   startWidth: 15,
+                                      //                   startValue: 0,
+                                      //                   endValue: 50,
+                                      //                 ),
+                                      //                 // GaugeRange(
+                                      //                 //
+                                      //                 //     gradient: const SweepGradient(
+                                      //                 //       colors: <Color>[
+                                      //                 //         Color(0xFFe5c310),
+                                      //                 //         Color(0xFF93da3c)
+                                      //                 //       ],
+                                      //                 //     ),
+                                      //                 //     endWidth: 15,
+                                      //                 //     startWidth: 15,
+                                      //                 //     startValue: 50,
+                                      //                 //     endValue: 100,
+                                      //                 //     ),
+                                      //                 // GaugeRange(
+                                      //                 //     gradient: const SweepGradient(
+                                      //                 //       colors: <Color>[
+                                      //                 //         Color(0xFF70c441),
+                                      //                 //         Color(0xFF38a84f)
+                                      //                 //       ],
+                                      //                 //     ),
+                                      //                 //     startValue: 100,
+                                      //                 //     endWidth: 15,
+                                      //                 //     startWidth: 15,
+                                      //                 //     endValue: 150,
+                                      //                 //     )
+                                      //               ],
+                                      //               pointers: const <GaugePointer>[
+                                      //                 MarkerPointer(
+                                      //                   animationDuration: 5000,
+                                      //                   value: 40,
+                                      //                   enableAnimation: true,
+                                      //                   borderColor: AppColors.markerColor,
+                                      //                   borderWidth: 9,
+                                      //                   markerWidth: 9,
+                                      //                   markerHeight: 9,
+                                      //                   // overlayRadius: 800,
+                                      //                   markerType: MarkerType.invertedTriangle,
+                                      //                   animationType: AnimationType.elasticOut,
+                                      //                   markerOffset: -6,
+                                      //                 )
+                                      //               ],
+                                      //               annotations: <GaugeAnnotation>[
+                                      //                 GaugeAnnotation(
+                                      //                     widget: Column(
+                                      //                       children: [
+                                      //                         SizedBox(
+                                      //                           height: 20.h,
+                                      //                         ),
+                                      //                         Text(
+                                      //                           "yourScore".tr,
+                                      //                           style: AppTextStyle.textStyle12(
+                                      //                               fontColor: AppColors.darkBlue),
+                                      //                         ),
+                                      //                         SizedBox(
+                                      //                           height: 10.h,
+                                      //                         ),
+                                      //                         Text(
+                                      //                           controller.yourScore[
+                                      //                               controller.scoreIndex]['score'],
+                                      //                           style: TextStyle(
+                                      //                               fontWeight: FontWeight.w700,
+                                      //                               color: AppColors.darkBlue,
+                                      //                               fontSize: 25.sp),
+                                      //                         ),
+                                      //                         SizedBox(
+                                      //                           height: 10.h,
+                                      //                         ),
+                                      //                         Text(
+                                      //                           "Out of 100",
+                                      //                           style: AppTextStyle.textStyle12(
+                                      //                               fontColor: AppColors.darkBlue),
+                                      //                         ),
+                                      //                       ],
+                                      //                     ),
+                                      //                     angle: 90,
+                                      //                     horizontalAlignment:
+                                      //                         GaugeAlignment.center,
+                                      //                     verticalAlignment: GaugeAlignment.center,
+                                      //                     axisValue: 10,
+                                      //                     positionFactor: 0.5)
+                                      //               ])
+                                      //         ])),
                                       SizedBox(
-                                        height: 10.h,
+                                        height: 20.h,
                                       ),
                                     ],
                                   ),

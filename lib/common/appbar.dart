@@ -33,7 +33,7 @@ PreferredSizeWidget commonDetailAppbar(
     centerTitle: false,
     leading: InkWell(
         onTap: () {
-          Get.back();
+         Navigator.pop(Get.context!);
         },
         child: const Icon(Icons.arrow_back_ios)),
     iconTheme: const IconThemeData(color: AppColors.blackColor),
