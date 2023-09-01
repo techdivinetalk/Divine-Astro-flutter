@@ -116,7 +116,7 @@ class ChatMessageController extends GetxController {
     await hiveServices.addData(
         key: userDataKey,
         data: jsonEncode(databaseMessage.value.toOfflineJson()));
-    Future.delayed(const Duration(seconds: 2))
+    Future.delayed(const Duration(seconds: 1))
         .then((value) => unreadMessageIndex.value = -1);
   }
 
@@ -186,12 +186,12 @@ class ChatMessageController extends GetxController {
             )
             .id ??
         -1;
+    setHiveDatabase();
     if (!isFromNotification) {
       Future.delayed(const Duration(milliseconds: 200)).then((value) {
         scrollToBottomFunc();
       });
     }
-    setHiveDatabase();
   }
 
   void setHiveDatabase() async {
