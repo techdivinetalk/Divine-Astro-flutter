@@ -44,10 +44,12 @@ class ChatMessageController extends GetxController {
   FocusNode msgFocus = FocusNode();
   RxInt unreadMessageIndex = 0.obs;
   RxBool scrollToBottom = false.obs;
-
+  HiveServices hiveServices = HiveServices(boxName: userChatData);
+  RxInt unreadMsgCount = 0.obs;
   @override
   void onInit() {
     super.onInit();
+
     if (Get.arguments != null) {
       if (Get.arguments is bool) {
         sendReadMessageStatus = true;
@@ -68,16 +70,20 @@ class ChatMessageController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    Future.delayed(const Duration(milliseconds: 56)).then((value) {
-      messgeScrollController.jumpTo(
-        messgeScrollController.position.maxScrollExtent,
-      );
+    Future.delayed(const Duration(milliseconds: 600)).then((value) {
+      scrollToBottomFunc();
     });
+  }
+
+  scrollToBottomFunc() {
+    messgeScrollController.animateTo(
+        messgeScrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeOut);
   }
 
   getChatList() async {
     chatMessages.clear();
-    HiveServices hiveServices = HiveServices(boxName: userChatData);
     await hiveServices.initialize();
     var res = await hiveServices.getData(key: userDataKey);
     if (res != null) {
@@ -91,18 +97,27 @@ class ChatMessageController extends GetxController {
                     orElse: () => ChatMessage())
                 .id ??
             -1;
-        for (int i = 0; i < chatMessages.length; i++) {
-          if (chatMessages[i].type != 2) {
-            updateMsgDelieveredStatus(chatMessages[i], 2);
-            chatMessages[i].type = 2;
-          }
-        }
-        databaseMessage.value.chatMessages = chatMessages;
-        await hiveServices.addData(
-            key: userDataKey,
-            data: jsonEncode(databaseMessage.value.toOfflineJson()));
+        if (unreadMessageIndex.value != -1) {
+          updateReadMessageStatus();
+        } else {}
       }
     }
+  }
+
+  updateReadMessageStatus() async {
+    for (int i = 0; i < chatMessages.length; i++) {
+      if (chatMessages[i].type != 2) {
+        updateMsgDelieveredStatus(chatMessages[i], 2);
+        chatMessages[i].type = 2;
+      }
+    }
+    databaseMessage.value.chatMessages = chatMessages;
+    unreadMsgCount.value = 0;
+    await hiveServices.addData(
+        key: userDataKey,
+        data: jsonEncode(databaseMessage.value.toOfflineJson()));
+    Future.delayed(const Duration(seconds: 2))
+        .then((value) => unreadMessageIndex.value = -1);
   }
 
   sendMsg() {
@@ -134,21 +149,9 @@ class ChatMessageController extends GetxController {
         type: 0);
     updateChatMessages(newMessage, false);
 
-    Message msg = Message(
-      message: messageText ?? "",
-      receiverId: '8601',
-      senderId: '573',
-      time: time,
-      type: 0,
-      title: "${userData?.name} sent you $msgType",
-      msgType: msgType,
-      awsURL: awsUrl,
-      base64Image: base64Image,
-      kundliId: kundliId ?? "",
-    );
     firebaseDatabase
         .ref("user/8601/realTime/notification/$time")
-        .set(msg.toJson());
+        .set(newMessage.toOfflineJson());
   }
 
   updateChatMessages(ChatMessage newMessage, bool isFromNotification) async {
@@ -158,8 +161,22 @@ class ChatMessageController extends GetxController {
       chatMessages[index].type = newMessage.type;
       chatMessages.refresh();
     } else {
-      newMessage.type = isFromNotification ? 2 : newMessage.type;
-      chatMessages.add(newMessage);
+      if (isFromNotification &&
+          messgeScrollController.position.pixels >
+              messgeScrollController.position.maxScrollExtent - 100) {
+        newMessage.type = 2;
+        chatMessages.add(newMessage);
+
+        updateMsgDelieveredStatus(newMessage, 2);
+        scrollToBottomFunc();
+      } else {
+        newMessage.type = 1;
+        chatMessages.add(newMessage);
+        unreadMsgCount.value = chatMessages
+            .where((e) => e.type != 2 && e.senderId != userData?.id)
+            .length;
+        updateMsgDelieveredStatus(newMessage, 1);
+      }
     }
     unreadMessageIndex.value = chatMessages
             .firstWhere(
@@ -171,9 +188,7 @@ class ChatMessageController extends GetxController {
         -1;
     if (!isFromNotification) {
       Future.delayed(const Duration(milliseconds: 200)).then((value) {
-        messgeScrollController.jumpTo(
-          messgeScrollController.position.maxScrollExtent,
-        );
+        scrollToBottomFunc();
       });
     }
     setHiveDatabase();
@@ -187,7 +202,6 @@ class ChatMessageController extends GetxController {
     await hiveServices.addData(
         key: userDataKey,
         data: jsonEncode(databaseMessage.value.toOfflineJson()));
-    // await hiveServices.close(); //KHYATI
   }
 
 //MARK: Download image
@@ -284,56 +298,4 @@ class ChatMessageController extends GetxController {
           downloadedPath: outPath);
     }
   }
-}
-
-class Message {
-  String message;
-  String receiverId;
-  String senderId;
-  String time;
-  String title;
-  String? base64Image;
-  String? awsURL;
-  String? msgType;
-  String? kundliId;
-
-  int type;
-
-  Message({
-    required this.message,
-    required this.receiverId,
-    required this.senderId,
-    required this.time,
-    required this.type,
-    required this.title,
-    required this.msgType,
-    this.kundliId,
-    this.base64Image,
-    this.awsURL,
-  });
-
-  Message.fromJson(Map<dynamic, dynamic> json)
-      : time = json['time'] as String,
-        message = json['message'] as String,
-        receiverId = json['receiver_id'] as String,
-        senderId = json['sender_id'] as String,
-        title = json['title'] as String,
-        base64Image = json['base64Image'] as String,
-        awsURL = json['awsURL'] as String,
-        msgType = json['msgType'] as String,
-        kundliId = json['kundli_id'] as String,
-        type = json['type'] as int;
-
-  Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
-        'time': time.toString(),
-        'message': message,
-        'receiver_id': receiverId,
-        'sender_id': senderId,
-        'title': title,
-        'base64Image': base64Image,
-        'awsURL': awsURL,
-        'msgType': msgType,
-        'kundli_id': kundliId,
-        'type': type,
-      };
 }

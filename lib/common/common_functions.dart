@@ -57,11 +57,11 @@ void checkNotification() async {
       var newMessage = ChatMessage(
           id: int.parse(key),
           message: value["message"],
-          receiverId: int.tryParse(value["receiver_id"]),
-          senderId: int.tryParse(value["sender_id"]),
+          receiverId: value["receiver_id"],
+          senderId: value["sender_id"],
           time: int.parse(key),
           type: value["type"],
-          awsUrl: value["awsURL"],
+          awsUrl: value["awsUrl"],
           base64Image: value["base64Image"],
           kundliId: value["kundli_id"],
           downloadedPath: "",
@@ -69,14 +69,10 @@ void checkNotification() async {
 
       if (Get.currentRoute == RouteName.chatMessageUI) {
         var chatController = Get.find<ChatMessageController>();
-        if (chatController.currentUserId.value.toString() ==
-                value["sender_id"] ||
-            chatController.currentUserId.value.toString() ==
-                value["receiver_id"]) {
+        if (chatController.currentUserId.value == value["sender_id"] ||
+            chatController.currentUserId.value == value["receiver_id"]) {
           chatController.updateChatMessages(newMessage, true);
-          if (value["sender_id"] == "8601") {
-            updateMsgDelieveredStatus(newMessage, 2);
-          }
+          if (value["sender_id"] == 8601) {}
         } else {
           if (value["type"] == 0) {
             showNotificationWithActions(
@@ -130,15 +126,14 @@ void setHiveDatabase(String userDataKey, ChatMessage newMessage) async {
 
 void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   // type 1= New chat message, 2 = Delievered, 3= Msg read, 4= Other messages
-  Message message = Message(
+  ChatMessage message = ChatMessage(
     message: newMessage.message ?? "",
-    receiverId: newMessage.receiverId!.toString(),
-    senderId: newMessage.senderId!.toString(),
-    time: newMessage.time.toString(),
+    receiverId: newMessage.receiverId!,
+    senderId: newMessage.senderId!,
+    time: newMessage.time,
     type: type,
-    title: "",
     msgType: newMessage.msgType,
-    awsURL: newMessage.awsUrl,
+    awsUrl: newMessage.awsUrl,
     base64Image: newMessage.base64Image,
   );
   FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
@@ -150,7 +145,7 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   // messagesRef.set(message.toJson());
   firebaseDatabase
       .ref("user/8601/realTime/notification/${newMessage.time}")
-      .set(message.toJson());
+      .set(message.toOfflineJson());
 
   removeNotificationNode(nodeId: "/${newMessage.time}");
 }

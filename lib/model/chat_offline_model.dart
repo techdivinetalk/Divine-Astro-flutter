@@ -65,7 +65,6 @@ class ChatMessage {
     data['id'] = id;
     data['receiver_id'] = receiverId;
     data['sender_id'] = senderId;
-
     data['message'] = message;
     data['time'] = time;
     data['type'] = type;
@@ -74,7 +73,6 @@ class ChatMessage {
     data['base64Image'] = base64Image;
     data['kundli_id'] = kundliId;
     data['downloadedPath'] = downloadedPath;
-
     return data;
   }
 }
