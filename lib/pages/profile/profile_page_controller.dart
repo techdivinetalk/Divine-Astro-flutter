@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:divine_astrologer/common/zego_services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path/path.dart' as p;
 import 'package:aws_s3_upload/aws_s3_upload.dart';
@@ -44,12 +45,12 @@ class ProfilePageController extends GetxController {
   File? uploadFile;
 
   List<List<String>> reportReason = <List<String>>[
-    ["itSpam",''],
-    ["hateSpeechSymbols",''],
-    ["violenceOrganisations",''],
-    ["falseInformation",''],
-    ["scamFraud",''],
-    ["bullyingHarassment",''],
+    ["itSpam", ''],
+    ["hateSpeechSymbols", ''],
+    ["violenceOrganisations", ''],
+    ["falseInformation", ''],
+    ["scamFraud", ''],
+    ["bullyingHarassment", ''],
   ];
 
   var languageList = <ChangeLanguageModelClass>[
@@ -239,8 +240,10 @@ class ProfilePageController extends GetxController {
     reviewDataSync.value = true;
   }
 
-
-  void reportReviews(String reportComment, reviewID,) async {
+  void reportReviews(
+    String reportComment,
+    reviewID,
+  ) async {
     Map<String, dynamic> param = {
       "review_id": reviewID,
       "comment": reportComment
@@ -250,8 +253,7 @@ class ProfilePageController extends GetxController {
     if (response.statusCode == 200) {
       // Get.back();
       showCupertinoModalPopup(
-        barrierColor:
-        AppColors.darkBlue.withOpacity(0.5),
+        barrierColor: AppColors.darkBlue.withOpacity(0.5),
         context: Get.context!,
         builder: (context) => ThankYouReportUI(
           onPressed: () {
@@ -261,7 +263,7 @@ class ProfilePageController extends GetxController {
       );
     } else {
       Get.back();
-      divineSnackBar(data: "${response.message}",color: AppColors.redColor);
+      divineSnackBar(data: "${response.message}", color: AppColors.redColor);
     }
   }
 
@@ -391,6 +393,8 @@ class ProfilePageController extends GetxController {
       userProfileImage.value = response;
       userData?.image = response;
       preference.setUserDetail(userData!);
+      await ZegoServices()
+          .initZegoInvitationServices("${userData?.id}", "${userData?.name}");
       Get.snackbar("Profile image update successfully", "",
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: AppColors.white,

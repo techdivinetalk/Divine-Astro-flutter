@@ -36,6 +36,8 @@ dependencies:
   html: ^0.15.4
   cached_network_image: ^3.2.3
   url_launcher: ^6.1.12
+  zego_uikit: ^2.9.3
+  zego_uikit_prebuilt_call: ^3.12.3
   zego_uikit_prebuilt_live_streaming: ^2.15.3
   zego_uikit_signaling_plugin: ^2.3.2
   svgaplayer_flutter: ^2.2.0
@@ -53,6 +55,9 @@ dependencies:
   hive_flutter: ^1.1.0
   emoji_picker_flutter: ^1.6.1
   badges: ^3.1.2
+
+dependency_overrides:
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
