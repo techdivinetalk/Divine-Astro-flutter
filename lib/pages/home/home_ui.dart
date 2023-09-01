@@ -2,6 +2,7 @@ import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/switch_component.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/screens/video_call/video_call.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -199,7 +200,9 @@ class HomeUI extends GetView<HomeController> {
                 fullScreenBtnWidget(
                     imageName: Assets.images.icEcommerce.svg(),
                     btnTitle: "eCommerce".tr,
-                    onbtnTap: () {}),
+                    onbtnTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => VideoCallPage()));
+                    }),
                 SizedBox(height: 10.h),
                 feedbackWidget(),
                 SizedBox(height: 20.h),
@@ -387,28 +390,28 @@ class HomeUI extends GetView<HomeController> {
                     fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
               ),
               SizedBox(height: 18.h),
-              Container(
-                width: 128.w,
-                height: 31.h,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [AppColors.appYellowColour, AppColors.gradientBottom],
+              InkWell(
+                onTap: () {
+                  selectDateOrTime(Get.context!,
+                      title: "Schedule Your Next Online Date",
+                      btnTitle: "Confirm Next Online Date",
+                      pickerStyle: "DateCalendar",
+                      looping: true,
+                      onConfirm: (value) {},
+                      onChange: (value) {});
+                },
+                child: Container(
+                  width: 128.w,
+                  height: 31.h,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [AppColors.appYellowColour, AppColors.gradientBottom],
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-                child: Center(
-                  child: InkWell(
-                    onTap: () {
-                      selectDateOrTime(Get.context!,
-                          title: "Schedule Your Next Online Date",
-                          btnTitle: "Confirm Next Online Date",
-                          pickerStyle: "DateCalendar",
-                          looping: true,
-                          onConfirm: (value) {},
-                          onChange: (value) {});
-                    },
+                  child: Center(
                     child: Text(
                       "scheduleNow".tr,
                       style: AppTextStyle.textStyle10(

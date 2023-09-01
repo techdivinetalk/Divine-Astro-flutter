@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/common/zego_services.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -68,11 +69,11 @@ class LoginController extends GetxController {
     }
   }
 
-  navigateToDashboard(ResLogin data) {
+  navigateToDashboard(ResLogin data) async {
     preferenceService.erase();
+    await ZegoServices().initZegoInvitationServices("${data.data?.id}", "${data.data?.name}");
     preferenceService.setUserDetail(data.data!);
     preferenceService.setToken(data.token!);
-
     mobileNumberController.clear();
     preferenceService.setDeviceToken(deviceToken ?? "");
     Get.offAllNamed(RouteName.dashboard,

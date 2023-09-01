@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:divine_astrologer/common/zego_services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -53,7 +54,8 @@ class SharedPreferenceService extends GetxService {
     return prefs!.remove(key);
   }
 
-  Future erase() {
+  Future erase() async {
+    await ZegoServices().unInitZegoInvitationServices();
     return prefs!.clear();
   }
 

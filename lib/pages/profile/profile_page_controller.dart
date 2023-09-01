@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:divine_astrologer/common/zego_services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path/path.dart' as p;
 import 'package:aws_s3_upload/aws_s3_upload.dart';
@@ -363,6 +364,7 @@ class ProfilePageController extends GetxController {
       userProfileImage.value = response;
       userData?.image = response;
       preference.setUserDetail(userData!);
+      await ZegoServices().initZegoInvitationServices("${userData?.id}", "${userData?.name}");
       Get.snackbar("Profile image update successfully", "",
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: AppColors.white,
