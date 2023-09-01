@@ -1,24 +1,22 @@
-import 'package:firebase_core/firebase_core.dart';
-
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 
-import 'common/colors.dart';
-import 'common/routes.dart';
 import 'common/app_theme.dart';
+import 'common/colors.dart';
 import 'common/custom_progress_dialog.dart';
+import 'common/routes.dart';
 import 'common/strings.dart';
 import 'di/firebase_network_service.dart';
-
 import 'di/network_service.dart';
 import 'di/progress_service.dart';
 import 'di/shared_preference_service.dart';
@@ -31,7 +29,9 @@ Future<void> main() async {
   await Firebase.initializeApp();
   await GetStorage.init();
   await initServices();
-  runApp(const MyApp());
+  ZegoUIKit().initLog().then((value){
+    runApp(const MyApp());
+  });
 }
 
 Future<bool> saveLanguage(String? lang) async {
@@ -74,12 +74,14 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               initialRoute: RouteName.initial,
               getPages: Routes.routes,
-              locale: getLanStrToLocale(
-                  GetStorages.get(GetStorageKeys.language) ?? ""),
+              locale: getLanStrToLocale(GetStorages.get(GetStorageKeys.language) ?? ""),
               fallbackLocale: AppTranslations.fallbackLocale,
               translations: AppTranslations(),
               theme: ThemeData(
-                colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+                colorScheme: ColorScheme.fromSeed(
+                    seedColor: Colors.white,
+                    background: AppColors.white,
+                    surfaceTint: AppColors.white),
                 useMaterial3: true,
                 fontFamily: FontFamily.poppins,
                 // cardTheme: const CardTheme(
@@ -93,20 +95,15 @@ class MyApp extends StatelessWidget {
                 return Stack(
                   children: <Widget>[
                     Obx(() => IgnorePointer(
-                        ignoring:
-                            Get.find<ProgressService>().showProgress.value,
-                        child: widget)),
+                        ignoring: Get.find<ProgressService>().showProgress.value, child: widget)),
                     StreamBuilder<bool?>(
                       initialData: true,
-                      stream: Get.find<FirebaseNetworkService>()
-                          .databaseConnectionStream,
+                      stream: Get.find<FirebaseNetworkService>().databaseConnectionStream,
                       builder: (context, snapshot) {
                         final appTheme = AppTheme.of(context);
                         return SafeArea(
                           child: AnimatedContainer(
-                            height: snapshot.data as bool
-                                ? 0
-                                : appTheme.getHeight(36),
+                            height: snapshot.data as bool ? 0 : appTheme.getHeight(36),
                             duration: Utils.animationDuration,
                             color: appTheme.redColor,
                             child: Material(

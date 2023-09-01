@@ -1,37 +1,64 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:divine_astrologer/common/app_textstyle.dart';
+import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/model/order_history_model/gift_order_history.dart';
+import 'package:divine_astrologer/screens/order_history/order_history_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../../common/app_textstyle.dart';
-import '../../../common/colors.dart';
-import '../../../model/order_history_model/remedy_suggested_order_history.dart';
-import '../order_history_controller.dart';
+class LiveGiftsHistory extends StatelessWidget {
+  const LiveGiftsHistory({Key? key, this.controller}) : super(key: key);
 
-class SuggestRemedies extends StatelessWidget {
-  const SuggestRemedies({Key? key}) : super(key: key);
-
-  // final ScrollController? controller;
+  final ScrollController? controller;
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<OrderHistoryController>(builder: (controller) {
       return ListView.separated(
+        // controller: controller,
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
-        itemCount: controller.remedySuggestedHistoryList.length,
+        itemCount: controller.giftHistoryList.length,
         padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(top: 30),
         separatorBuilder: (context, index) => const SizedBox(height: 20),
         itemBuilder: (context, index) {
-          return remediesDetail(index, controller.remedySuggestedHistoryList);
+          return orderDetailView(controller.giftHistoryList, index);
+          /*return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (index == 2)
+                orderDetailView(
+                    orderId: 785421,
+                    type: "PENALTY",
+                    amount: "- ₹100000",
+                    details: "Policy Violation - Shared Personal Information with User  ",
+                    time: "23 June 23, 02:46 PM"),
+              if (index % 2 == 0 && index != 2)
+                orderDetailView(
+                    orderId: 785421,
+                    type: "chat".tr,
+                    amount: "+ ₹100000",
+                    details: "with Username(user id) for 8 minutes ",
+                    time: "23 June 23, 02:46 PM"),
+              if (index % 2 == 1)
+                orderDetailView(
+                    orderId: 785421,
+                    type: "call".tr,
+                    amount: "- ₹100000",
+                    details: "Policy Violation - Shared Personal Information with User  ",
+                    time: "23 June 23, 02:46 PM"),
+              separator,
+            ],
+          );*/
         },
       );
     });
   }
 
-  Widget remediesDetail(int index, List<RemedySuggestedDataList> data) {
+  Widget orderDetailView(List<GiftDataList> data, int index) {
     return InkWell(
       onTap: () {},
       child: Container(
@@ -55,7 +82,7 @@ class SuggestRemedies extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    data[index].getCustomers != null
+                    data[index].getGift != null
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: SizedBox(
@@ -63,7 +90,7 @@ class SuggestRemedies extends StatelessWidget {
                               width: 65,
                               child: CachedNetworkImage(
                                 imageUrl:
-                                    ApiProvider.imageBaseUrl + data[index].getCustomers!.avatar!,
+                                    ApiProvider.imageBaseUrl + data[index].getGift!.giftImage!,
                                 errorWidget: (context, s, d) => Assets.images.bgTmpUser.svg(),
                                 fit: BoxFit.cover,
                               ),
@@ -78,7 +105,7 @@ class SuggestRemedies extends StatelessWidget {
                             style: AppTextStyle.textStyle12(
                                 fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
                         Text(
-                            "${data[index].getCustomers != null ? data[index].getCustomers!.name : "Username"}",
+                            "${data[index].getCustomers != null ? data[index].getCustomers?.name : "UserName"}",
                             style: AppTextStyle.textStyle20(
                                 fontWeight: FontWeight.w600, fontColor: AppColors.darkBlue))
                       ],
@@ -115,7 +142,21 @@ class SuggestRemedies extends StatelessWidget {
                 Text("Date Time :",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
-                Text(DateFormat("dd MMM, hh:mm aa").format(data[index].createdAt!),
+                Text(
+                  DateFormat("dd MMM, hh:mm aa").format(data[index].createdAt!),
+                  style: AppTextStyle.textStyle12(
+                      fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Gift Name :",
+                    style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                Text("${data[index].getGift?.giftName}",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
               ],
@@ -124,22 +165,10 @@ class SuggestRemedies extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Remedy Suggested :",
+                Text("Gift Price :",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
-                Text("${data[index].productDetails?.prodName}",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("${"clientPaid".tr} :",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
-                Text("₹1000",
+                Text("₹${data[index].amount}",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
               ],
@@ -148,7 +177,7 @@ class SuggestRemedies extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Referral Bonus :",
+                Text("Quantity :",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
                 Text("30%",
@@ -176,5 +205,87 @@ class SuggestRemedies extends StatelessWidget {
         ),
       ),
     );
+    /*return InkWell(
+      onTap: () {},
+      child: Container(
+        padding: const EdgeInsets.all(12.0),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: AppColors.white,
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 3.0,
+                  offset: const Offset(0.3, 3.0)),
+            ]),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "${"orderId".tr} : $orderId",
+                  style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500),
+                ),
+                const Icon(
+                  Icons.help_outline,
+                  size: 20,
+                  color: AppColors.darkBlue,
+                )
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "$type",
+                  style: AppTextStyle.textStyle12(
+                      fontWeight: FontWeight.w400,
+                      fontColor:
+                          "$type" == "PENALTY" ? AppColors.appRedColour : AppColors.darkBlue),
+                ),
+                Text(
+                  "$amount",
+                  style: AppTextStyle.textStyle12(
+                      fontWeight: FontWeight.w400,
+                      fontColor:
+                          amount!.contains("+") ? AppColors.lightGreen : AppColors.appRedColour),
+                )
+              ],
+            ),
+            Text(
+              "$details ",
+              textAlign: TextAlign.start,
+              style: AppTextStyle.textStyle12(
+                  fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  "$time",
+                  textAlign: TextAlign.end,
+                  style: AppTextStyle.textStyle12(
+                      fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            CommonOptionRow(
+              leftBtnTitle: "refund".tr,
+              onLeftTap: () {},
+              onRightTap: () {
+                Get.toNamed(RouteName.categoryDetail);
+              },
+              rightBtnTitle: "suggestedRemediesEarning".tr,
+            ),
+            const SizedBox(height: 10),
+          ],
+        ),
+      ),
+    );*/
   }
 }

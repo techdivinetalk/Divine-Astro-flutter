@@ -100,8 +100,11 @@ class BlockedUserUI extends GetView<BlockUserController> {
                                                     controller.unblockUser(
                                                         customerId: controller
                                                                 .blockedUserData
-                                                                ?.data?[index]
-                                                                .id ??
+                                                                ?.data
+                                                                ?.first
+                                                                .astroBlockCustomer![
+                                                                    index]
+                                                                .customerId ??
                                                             0);
                                                   },
                                                 ),

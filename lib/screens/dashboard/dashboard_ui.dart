@@ -25,6 +25,8 @@ class DashboardScreen extends GetView<DashboardController> {
             Obx(() => widgetOptions.elementAt(controller.selectedIndex.value)),
         bottomNavigationBar: Obx(() => SafeArea(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 1),
@@ -39,6 +41,7 @@ class DashboardScreen extends GetView<DashboardController> {
                     type: BottomNavigationBarType.fixed,
                     selectedFontSize: 10,
                     unselectedFontSize: 10,
+
                     selectedItemColor: AppColors.darkBlue,
                     unselectedItemColor: AppColors.lightGrey,
                     items: <BottomNavigationBarItem>[
@@ -83,6 +86,8 @@ class DashboardScreen extends GetView<DashboardController> {
                       ),
                       BottomNavigationBarItem(
                         icon: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Assets.images.icChatBottom.svg(
                                 height: 22.h,
@@ -92,7 +97,7 @@ class DashboardScreen extends GetView<DashboardController> {
                             const SizedBox(height: 5),
                           ],
                         ),
-                        label: "chatAssistance".tr,
+                        label: "chatAssistanceHome".tr,
                       ),
                       BottomNavigationBarItem(
                         icon: Column(

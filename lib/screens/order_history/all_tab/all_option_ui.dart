@@ -21,7 +21,7 @@ class AllTabInfo extends GetView<AllOptionController> {
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemCount: controller.orderHistoryData?.length ?? 0,
-            padding: const EdgeInsets.only(top: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(top: 30),
             itemBuilder: (context, index) {
               Widget separator = const SizedBox(height: 20);
               var orderDetails = controller.orderHistoryData?[index];
@@ -98,15 +98,13 @@ class AllTabInfo extends GetView<AllOptionController> {
                   "$type",
                   style: AppTextStyle.textStyle12(
                       fontWeight: FontWeight.w400,
-                      fontColor: "$type" == "PENALTY"
-                          ? AppColors.appRedColour
-                          : AppColors.darkBlue),
+                      fontColor:
+                          "$type" == "PENALTY" ? AppColors.appRedColour : AppColors.darkBlue),
                 ),
                 Text(
                   "+ $amount",
                   style: AppTextStyle.textStyle12(
-                      fontWeight: FontWeight.w400,
-                      fontColor: AppColors.lightGreen),
+                      fontWeight: FontWeight.w400, fontColor: AppColors.lightGreen),
                 )
               ],
             ),
@@ -124,8 +122,7 @@ class AllTabInfo extends GetView<AllOptionController> {
                   "$time",
                   textAlign: TextAlign.end,
                   style: AppTextStyle.textStyle12(
-                      fontWeight: FontWeight.w400,
-                      fontColor: AppColors.darkBlue),
+                      fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
                 ),
               ],
             ),
@@ -150,10 +147,7 @@ class AllTabInfo extends GetView<AllOptionController> {
                       gradient: const LinearGradient(
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
-                        colors: [
-                          AppColors.appYellowColour,
-                          AppColors.gradientBottom
-                        ],
+                        colors: [AppColors.appYellowColour, AppColors.gradientBottom],
                       ),
                       borderRadius: BorderRadius.circular(22.0),
                     ),
@@ -161,8 +155,7 @@ class AllTabInfo extends GetView<AllOptionController> {
                       child: Text(
                         "suggestRemedies".tr,
                         style: AppTextStyle.textStyle14(
-                            fontColor: AppColors.brownColour,
-                            fontWeight: FontWeight.w500),
+                            fontColor: AppColors.brownColour, fontWeight: FontWeight.w500),
                       ),
                     ),
                   ),

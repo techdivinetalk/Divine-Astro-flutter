@@ -5,9 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class BlockSuccess extends StatelessWidget {
-  final String? url;
+  final String? url,text;
 
-  const BlockSuccess({Key? key, this.url}) : super(key: key);
+  const BlockSuccess({Key? key, this.url,this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,16 +46,23 @@ class BlockSuccess extends StatelessWidget {
             title: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CachedNetworkPhoto(
+                Container(
                   width: 32.w,
                   height: 32.h,
-                  url: url ?? "",
-                  fit: BoxFit.fill,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: CachedNetworkPhoto(
+                    width: 32.w,
+                    height: 32.h,
+                    url: url ?? "",
+                    fit: BoxFit.fill,
+                  ),
                 ),
                 SizedBox(width: 16.w),
                 Expanded(
                   child: Text(
-                    "Username has been blocked!",
+                    text ?? "",
                     maxLines: 2,
                     style: TextStyle(fontSize: 16.sp, color: AppColors.textColor),
                   ),
