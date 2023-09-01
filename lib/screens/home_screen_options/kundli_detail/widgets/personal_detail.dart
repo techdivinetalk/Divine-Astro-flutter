@@ -32,7 +32,7 @@ class PersonalDetailUi extends StatelessWidget {
             ),
             detailTile(
               "birthPlace".tr,
-              controller.kundliController.params.value.location!,
+              controller.kundliController.submittedParams.location!,
             ),
             detailTile(
               "gan".tr,

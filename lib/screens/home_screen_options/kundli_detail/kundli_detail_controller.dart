@@ -18,7 +18,7 @@ import '../../../gen/assets.gen.dart';
 class KundliDetailController extends GetxController {
   RxInt currentIndex = 0.obs;
   List<Widget> detailPageImage = [
-    Assets.images.icGirlKundli.svg(),
+    Assets.images.icGirlKundli.svg(width: 87.w, height: 87.h),
     Assets.images.icWedding.svg(width: 87.w, height: 87.h),
     Assets.images.icMoon.svg(width: 87.w, height: 87.h),
     Assets.images.icSun.svg(width: 87.w, height: 87.h),
@@ -55,31 +55,40 @@ class KundliDetailController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    if (_kundliController.submittedGender != Gender.female) {
+      detailPageImage[0] = Assets.images.icBoyKundli.svg(width: 87.w, height: 87.h);
+    }
     params = {
-      "day": kundliController.params.value.day,
-      "month": kundliController.params.value.month,
-      "year": kundliController.params.value.year,
-      "hour": kundliController.params.value.hour,
-      "min": kundliController.params.value.min,
-      "lat": kundliController.params.value.lat,
-      "lon": kundliController.params.value.long,
+      "day": kundliController.submittedParams.day,
+      "month": kundliController.submittedParams.month,
+      "year": kundliController.submittedParams.year,
+      "hour": kundliController.submittedParams.hour,
+      "min": kundliController.submittedParams.min,
+      "lat": kundliController.submittedParams.lat,
+      "lon": kundliController.submittedParams.long,
       "tzone": 5.5,
     };
-    astroDetailsApi();
-    birthDetailsApi();
-    kalsarpaDetails();
-    lagnaChartApi();
-    moonChartApi();
-    sunChartApi();
-    navamashaChartApi();
-    mangalikDoshApi();
-    kalsarpaDoshApi();
-    sadesathiDoshApi();
-    pitraDoshApi();
-    kundliPredictionApi();
+    getApiData();
   }
 
-  void astroDetailsApi() async {
+  getApiData() async {
+    await Future.wait([
+      astroDetailsApi(),
+      birthDetailsApi(),
+      kalsarpaDetails(),
+      lagnaChartApi(),
+      moonChartApi(),
+      sunChartApi(),
+      navamashaChartApi(),
+      mangalikDoshApi(),
+      kalsarpaDoshApi(),
+      sadesathiDoshApi(),
+      pitraDoshApi(),
+      kundliPredictionApi(),
+    ]);
+  }
+
+  Future<void> astroDetailsApi() async {
     try {
       AstroDetails response = await kundliRepository.getAstroDetails(params);
       astroDetails.value = response;
@@ -94,7 +103,7 @@ class KundliDetailController extends GetxController {
     update();
   }
 
-  void birthDetailsApi() async {
+  Future<void> birthDetailsApi() async {
     try {
       BirthDetails response = await kundliRepository.getBirthDetails(params);
       birthDetails.value = response;
@@ -109,7 +118,7 @@ class KundliDetailController extends GetxController {
     update();
   }
 
-  void kalsarpaDetails() async {
+  Future<void> kalsarpaDetails() async {
     try {
       KalsarpaDosh response = await kundliRepository.getKalsarpaDoshDetails(params);
       kalsarpaDosh.value = response;
@@ -124,7 +133,7 @@ class KundliDetailController extends GetxController {
     update();
   }
 
-  void lagnaChartApi() async {
+  Future<void> lagnaChartApi() async {
     try {
       HoroChart response = await kundliRepository.getHoroChart(params, ':chartId');
       lagnaChart.value = response;
@@ -137,9 +146,10 @@ class KundliDetailController extends GetxController {
         Get.snackbar("Error", error.toString()).show();
       }
     }
+    update();
   }
 
-  void moonChartApi() async {
+  Future<void> moonChartApi() async {
     try {
       HoroChart response = await kundliRepository.getHoroChart(params, 'MOON');
       moonChart.value = response;
@@ -152,9 +162,10 @@ class KundliDetailController extends GetxController {
         Get.snackbar("Error", error.toString()).show();
       }
     }
+    update();
   }
 
-  void sunChartApi() async {
+  Future<void> sunChartApi() async {
     try {
       HoroChart response = await kundliRepository.getHoroChart(params, 'SUN');
       sunChart.value = response;
@@ -167,9 +178,10 @@ class KundliDetailController extends GetxController {
         Get.snackbar("Error", error.toString()).show();
       }
     }
+    update();
   }
 
-  void navamashaChartApi() async {
+  Future<void> navamashaChartApi() async {
     try {
       HoroChart response = await kundliRepository.getHoroChart(params, 'D9');
       navamashaChart.value = response;
@@ -182,9 +194,10 @@ class KundliDetailController extends GetxController {
         Get.snackbar("Error", error.toString()).show();
       }
     }
+    update();
   }
 
-  void mangalikDoshApi() async {
+  Future<void> mangalikDoshApi() async {
     try {
       ManglikDosh response = await kundliRepository.getManglikDoshDetails(params);
       manglikDosh.value = response;
@@ -197,9 +210,10 @@ class KundliDetailController extends GetxController {
         Get.snackbar("Error", error.toString()).show();
       }
     }
+    update();
   }
 
-  void kalsarpaDoshApi() async {
+  Future<void> kalsarpaDoshApi() async {
     try {
       KalsarpaDosh response = await kundliRepository.getKalsarpaDoshDetails(params);
       kalsarpaDosh.value = response;
@@ -212,9 +226,10 @@ class KundliDetailController extends GetxController {
         Get.snackbar("Error", error.toString()).show();
       }
     }
+    update();
   }
 
-  void sadesathiDoshApi() async {
+  Future<void> sadesathiDoshApi() async {
     try {
       SadesathiDosh response = await kundliRepository.getSadesathiDoshDetails(params);
       sadesathiDosh.value = response;
@@ -227,9 +242,10 @@ class KundliDetailController extends GetxController {
         Get.snackbar("Error", error.toString()).show();
       }
     }
+    update();
   }
 
-  void pitraDoshApi() async {
+  Future<void> pitraDoshApi() async {
     try {
       PitraDosh response = await kundliRepository.getPitraDoshDetails(params);
       pitraDosh.value = response;
@@ -242,9 +258,10 @@ class KundliDetailController extends GetxController {
         Get.snackbar("Error", error.toString()).show();
       }
     }
+    update();
   }
 
-  void kundliPredictionApi() async {
+  Future<void> kundliPredictionApi() async {
     try {
       KundliPrediction response = await kundliRepository.getKundliPredictionDetails(params);
       kundliPrediction.value = response;
@@ -257,5 +274,6 @@ class KundliDetailController extends GetxController {
         Get.snackbar("Error", error.toString()).show();
       }
     }
+    update();
   }
 }

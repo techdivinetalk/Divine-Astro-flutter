@@ -31,8 +31,7 @@ class LoginUI extends GetView<LoginController> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(top: 50.h, bottom: 50.h),
-                    child: Assets.images.divineLogo
-                        .image(width: ScreenUtil().screenWidth * 0.55),
+                    child: Assets.images.divineLogo.image(width: ScreenUtil().screenWidth * 0.55),
                   ),
                   imageSlider(),
                   SizedBox(height: 10.h),
@@ -69,8 +68,7 @@ class LoginUI extends GetView<LoginController> {
 
   Widget imageSlider() {
     return CarouselSlider(
-      options: CarouselOptions(
-          height: ScreenUtil().screenHeight * 0.33, viewportFraction: 1),
+      options: CarouselOptions(height: ScreenUtil().screenHeight * 0.33, viewportFraction: 1),
       items: controller.imgList
           .map((item) => Column(
                 children: [
@@ -94,12 +92,9 @@ class LoginUI extends GetView<LoginController> {
       key: _formKey,
       child: Container(
         alignment: Alignment.center,
-        decoration:
-            BoxDecoration(borderRadius: BorderRadius.circular(10), boxShadow: [
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), boxShadow: [
           BoxShadow(
-              color: controller.enable.value
-                  ? Colors.white
-                  : Colors.black.withOpacity(0.3),
+              color: controller.enable.value ? Colors.white : Colors.black.withOpacity(0.3),
               blurRadius: 3.0,
               offset: const Offset(0.3, 3.0)),
         ]),
@@ -118,12 +113,12 @@ class LoginUI extends GetView<LoginController> {
             enabled: controller.enable.value,
             maxLength: 10,
             showCursor: true,
+            inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
             decoration: InputDecoration(
               counterText: '',
               hintText: "Enter Registered Number",
               fillColor: AppColors.white,
-              hintStyle:
-                  AppTextStyle.textStyle16(fontColor: AppColors.greyColor),
+              hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.greyColor),
               prefixIcon: InkWell(
                 onTap: () => countryPickerSheet(Get.context!, (value) {
                   controller.setCode(value.phoneCode);
@@ -138,8 +133,7 @@ class LoginUI extends GetView<LoginController> {
                 ]),
               ),
               filled: true,
-              errorStyle:
-                  AppTextStyle.textStyle16(fontColor: AppColors.appRedColour),
+              errorStyle: AppTextStyle.textStyle16(fontColor: AppColors.appRedColour),
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                   borderSide: const BorderSide(
