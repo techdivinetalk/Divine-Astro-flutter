@@ -19,11 +19,10 @@ import 'widget/date_selection_ui.dart';
 
 class PerformanceUI extends GetView<PerformanceController> {
   PerformanceUI({Key? key}) : super(key: key);
-  @override
-  PerformanceController controller = Get.put(PerformanceController());
 
   @override
   Widget build(BuildContext context) {
+    PerformanceController controller = Get.put(PerformanceController());
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar:
@@ -68,7 +67,7 @@ class PerformanceUI extends GetView<PerformanceController> {
     );
   }
 
-  Widget yourScore(){
+  Widget yourScore() {
     return GetBuilder<PerformanceController>(
       init: PerformanceController(),
       builder: (DisposableInterface disposableInterface) {
@@ -206,7 +205,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                                       left: 20, right: 20, top: 20),
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         "${item.scoreName} ( Percentage vs Marks )",
@@ -258,15 +257,15 @@ class PerformanceUI extends GetView<PerformanceController> {
                                                         Text(
                                                           "Percentage",
                                                           textAlign:
-                                                          TextAlign.center,
+                                                              TextAlign.center,
                                                           style: AppTextStyle
                                                               .textStyle12(
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .w700,
-                                                              fontColor:
-                                                              AppColors
-                                                                  .darkBlue),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  fontColor:
+                                                                      AppColors
+                                                                          .darkBlue),
                                                         ),
                                                         SizedBox(
                                                           height: 5.h,
@@ -280,15 +279,15 @@ class PerformanceUI extends GetView<PerformanceController> {
                                                         Text(
                                                           "Marks",
                                                           textAlign:
-                                                          TextAlign.center,
+                                                              TextAlign.center,
                                                           style: AppTextStyle
                                                               .textStyle12(
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .w700,
-                                                              fontColor:
-                                                              AppColors
-                                                                  .darkBlue),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  fontColor:
+                                                                      AppColors
+                                                                          .darkBlue),
                                                         ),
                                                         SizedBox(
                                                           height: 5.h,
@@ -303,7 +302,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                                               ),
                                               ListView.builder(
                                                   physics:
-                                                  const NeverScrollableScrollPhysics(),
+                                                      const NeverScrollableScrollPhysics(),
                                                   itemCount: controller
                                                       .percentageList.length,
                                                   shrinkWrap: true,
@@ -322,15 +321,15 @@ class PerformanceUI extends GetView<PerformanceController> {
                                                                 item.name
                                                                     .toString(),
                                                                 textAlign:
-                                                                TextAlign
-                                                                    .center,
+                                                                    TextAlign
+                                                                        .center,
                                                                 style: AppTextStyle.textStyle12(
                                                                     fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
+                                                                        FontWeight
+                                                                            .w400,
                                                                     fontColor:
-                                                                    AppColors
-                                                                        .darkBlue),
+                                                                        AppColors
+                                                                            .darkBlue),
                                                               ),
                                                               SizedBox(
                                                                 height: 10.h,
@@ -345,15 +344,15 @@ class PerformanceUI extends GetView<PerformanceController> {
                                                                 item.score
                                                                     .toString(),
                                                                 textAlign:
-                                                                TextAlign
-                                                                    .center,
+                                                                    TextAlign
+                                                                        .center,
                                                                 style: AppTextStyle.textStyle12(
                                                                     fontWeight:
-                                                                    FontWeight
-                                                                        .w700,
+                                                                        FontWeight
+                                                                            .w700,
                                                                     fontColor:
-                                                                    AppColors
-                                                                        .darkBlue),
+                                                                        AppColors
+                                                                            .darkBlue),
                                                               ),
                                                               SizedBox(
                                                                 height: 10.h,
@@ -373,8 +372,8 @@ class PerformanceUI extends GetView<PerformanceController> {
                                 ));
                           },
                           child: Container(
-                            // height: 40.h,
-                            // width: 120.h,
+                              // height: 40.h,
+                              // width: 120.h,
                               padding: EdgeInsets.all(12.h),
                               decoration: BoxDecoration(
                                   boxShadow: [
@@ -586,8 +585,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                                 fontColor: AppColors.darkBlue),
                           ),
                           const Expanded(child: SizedBox()),
-                          Assets.images.icInfo
-                              .svg(height: 21.h, width: 21.h),
+                          Assets.images.icInfo.svg(height: 21.h, width: 21.h),
                         ],
                       ),
                     ],
@@ -1451,20 +1449,15 @@ class DurationUI extends StatelessWidget {
                   fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
               value: controller.selectedOption.value,
               onChanged: (String? value) {
-                if(value == controller.durationOptions.last){
+                if (value == controller.durationOptions.last) {
                   showCupertinoModalPopup(
                     context: Get.context!,
-                    barrierColor:
-                    AppColors.darkBlue.withOpacity(0.5),
+                    barrierColor: AppColors.darkBlue.withOpacity(0.5),
                     builder: (context) => const DateSelection(),
                   );
-                }
-                else{
+                } else {
                   controller.updateDurationValue(value!);
                 }
-
-
-
               },
               iconStyleData: const IconStyleData(
                 icon: Icon(

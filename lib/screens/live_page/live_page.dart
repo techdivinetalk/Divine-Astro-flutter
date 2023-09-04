@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:custom_timer/custom_timer.dart';
 import 'package:divine_astrologer/common/block_user_list.dart';
 import 'package:divine_astrologer/common/co-host_request.dart';
 import 'package:divine_astrologer/common/end_cohost.dart';
@@ -42,7 +43,7 @@ import 'gift.dart';
 
 class LivePage extends StatefulWidget {
   final String liveID;
-  final bool isHost;
+  final bool isHost, isFrontCamera;
   final String localUserID;
   final String? astrologerName, astrologerImage;
 
@@ -53,23 +54,31 @@ class LivePage extends StatefulWidget {
     this.astrologerImage,
     this.astrologerName,
     this.isHost = false,
+    this.isFrontCamera = true,
   }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => LivePageState();
 }
 
-class LivePageState extends State<LivePage> {
+class LivePageState extends State<LivePage>
+    with SingleTickerProviderStateMixin {
   final liveController = ZegoUIKitPrebuiltLiveStreamingController();
   final List<StreamSubscription<dynamic>?> subscriptions = [];
   final controller = Get.put(LiveController(Get.put(UserRepository())));
   final liveStateNotifier =
       ValueNotifier<ZegoLiveStreamingState>(ZegoLiveStreamingState.idle);
+  late CustomTimerController timeController = CustomTimerController(
+      vsync: this,
+      begin: const Duration(minutes: 9),
+      end: Duration.zero,
+      initialState: CustomTimerState.reset,
+      interval: CustomTimerInterval.seconds);
 
   @override
   void initState() {
     super.initState();
-    controller.setAvailibility(widget.localUserID, true);
+    controller.setAvailibility(widget.localUserID, true, timeController);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       controller.getBlockedCustomerList();
       liveController.connect.onRequestCoHostEvent = (user) async {
@@ -95,7 +104,7 @@ class LivePageState extends State<LivePage> {
                           customerId: user.id);
                     });
                     controller.isCoHosting.value = true;
-                    controller.startTimer();
+                    timeController.start();
                   });
             });
       };
@@ -107,6 +116,9 @@ class LivePageState extends State<LivePage> {
           onInRoomCommandMessageReceived(event);
         }),
       ]);
+    });
+    Future.delayed(const Duration(seconds: 1)).then((value) {
+      ZegoUIKit().useFrontFacingCamera(widget.isFrontCamera);
     });
   }
 
@@ -148,7 +160,7 @@ class LivePageState extends State<LivePage> {
             return EndSession(
                 onNo: () {},
                 onYes: () {
-                  controller.stopTimer();
+                  timeController.reset();
                   controller.setBusyStatus(widget.localUserID, 0,
                       customerId: "");
                   GiftWidget.clear();
@@ -174,7 +186,7 @@ class LivePageState extends State<LivePage> {
                 ..avatarBuilder = customAvatarBuilder
                 ..memberButtonConfig.icon = const SizedBox()
                 ..confirmDialogInfo = null
-                ..markAsLargeRoom = true
+                ..markAsLargeRoom = false
                 ..bottomMenuBarConfig.hostButtons = const [
                   //ZegoMenuBarButtonName.soundEffectButton,
                   //ZegoMenuBarButtonName.switchCameraButton,
@@ -446,8 +458,14 @@ class LivePageState extends State<LivePage> {
                 SizedBox(width: 8.w),
                 Lottie.asset('assets/lottie/sound_waves.json'),
                 SizedBox(width: 8.w),
-                CustomText(controller.duration.value,
-                    fontSize: 16.sp, fontColor: AppColors.white),
+                CustomTimer(
+                    controller: timeController,
+                    builder: (state, remaining) {
+                      return CustomText(
+                          "${remaining.minutes} m ${remaining.seconds} s",
+                          fontSize: 16.sp,
+                          fontColor: AppColors.white);
+                    }),
                 SizedBox(width: 16.w),
               ],
             ),
@@ -702,7 +720,7 @@ class LivePageState extends State<LivePage> {
                         if (controller.coHostUser != null) {
                           controller.setCallType(widget.localUserID);
                         }
-                        controller.stopTimer();
+                        timeController.reset();
                         controller.stopStream(widget.localUserID);
                       });
                 },
@@ -710,6 +728,7 @@ class LivePageState extends State<LivePage> {
             },
             icon: Assets.images.leftArrow.svg()),
         ClipRRect(
+          borderRadius: BorderRadius.circular(40),
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
             child: Container(
@@ -782,8 +801,8 @@ class LivePageState extends State<LivePage> {
                   activeColor: Colors.black.withOpacity(.1),
                   inactiveColor: Colors.black.withOpacity(.1),
                   onToggle: (val) {
-                    controller.setAvailibility(
-                        widget.localUserID, !controller.isCallOnOff.value);
+                    controller.setAvailibility(widget.localUserID,
+                        !controller.isCallOnOff.value, timeController);
                     controller.isCallOnOff.value =
                         !controller.isCallOnOff.value;
                   },
@@ -827,7 +846,7 @@ class LivePageState extends State<LivePage> {
                                   if (controller.coHostUser != null) {
                                     controller.setCallType(widget.localUserID);
                                   }
-                                  controller.stopTimer();
+                                  timeController.reset();
                                   controller.setBusyStatus(
                                       widget.localUserID, 0,
                                       customerId: "");
@@ -839,8 +858,8 @@ class LivePageState extends State<LivePage> {
                         );
                       },
                       child: Container(
-                        width: 56.w,
-                        height: 56.h,
+                        width: 50.w,
+                        height: 50.h,
                         clipBehavior: Clip.antiAlias,
                         decoration: const BoxDecoration(
                             shape: BoxShape.circle, color: AppColors.redColor),
@@ -851,7 +870,7 @@ class LivePageState extends State<LivePage> {
                 )
               : const SizedBox(),
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: 12.h),
         ClipOval(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
@@ -874,8 +893,8 @@ class LivePageState extends State<LivePage> {
                 );
               },
               child: Container(
-                width: 56.w,
-                height: 56.h,
+                width: 50.w,
+                height: 50.h,
                 clipBehavior: Clip.antiAlias,
                 decoration: const BoxDecoration(
                     shape: BoxShape.circle, color: AppColors.appRedColour),
@@ -885,7 +904,7 @@ class LivePageState extends State<LivePage> {
             ),
           ),
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: 12.h),
         ClipOval(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
@@ -898,8 +917,8 @@ class LivePageState extends State<LivePage> {
                     });
               },
               child: Container(
-                width: 56.w,
-                height: 56.h,
+                width: 50.w,
+                height: 50.h,
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -909,7 +928,7 @@ class LivePageState extends State<LivePage> {
             ),
           ),
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: 12.h),
         ClipOval(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
@@ -922,8 +941,8 @@ class LivePageState extends State<LivePage> {
                     });
               },
               child: Container(
-                width: 56.w,
-                height: 56.h,
+                width: 50.w,
+                height: 50.h,
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -934,7 +953,7 @@ class LivePageState extends State<LivePage> {
             ),
           ),
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: 12.h),
         ClipOval(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
@@ -950,8 +969,8 @@ class LivePageState extends State<LivePage> {
                     });
               },
               child: Container(
-                width: 56.w,
-                height: 56.h,
+                width: 50.w,
+                height: 50.h,
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -961,7 +980,7 @@ class LivePageState extends State<LivePage> {
             ),
           ),
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: 12.h),
         ClipOval(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
@@ -977,8 +996,8 @@ class LivePageState extends State<LivePage> {
                     });
               },
               child: Container(
-                width: 56.w,
-                height: 56.h,
+                width: 50.w,
+                height: 50.h,
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,

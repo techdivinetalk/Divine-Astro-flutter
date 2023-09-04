@@ -17,6 +17,7 @@ class LiveTipsController extends GetxController {
   var pref = Get.find<SharedPreferenceService>();
   String astroId = "", name = "", image = "";
   FirebaseDatabase database = FirebaseDatabase.instance;
+  var isFrontCamera = true.obs;
 
   @override
   void onReady() {
@@ -27,14 +28,15 @@ class LiveTipsController extends GetxController {
     super.onReady();
   }
 
-  jumpToLivePage() {
+  jumpToLivePage(bool front) {
     database.ref().child("live/$astroId").update({
       "id": astroId,
       "name": name,
       "image": image,
       "isEngaged": 0,
       "isAvailable": 1,
-      "coHostUser":""
+      "coHostUser":"",
+      "callType":"",
     });
     Get.to(LivePage(
       liveID: astroId.toString(),
@@ -42,6 +44,7 @@ class LiveTipsController extends GetxController {
       localUserID: astroId,
       astrologerImage: image,
       astrologerName: name,
+      isFrontCamera: front,
     ));
   }
 

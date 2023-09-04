@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:custom_timer/custom_timer.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -155,14 +156,13 @@ class LiveController extends GetxController {
     database.ref().child("live/$id").update({"callType": ""});
   }
 
-  setAvailibility(String id, bool available) {
+  setAvailibility(String id, bool available,CustomTimerController controller) {
     database.ref().child("live/$id").update({"isAvailable": available});
     database.ref().child("live/$id/coHostUser").onValue.listen((event) {
       final user = event.snapshot.value as String? ?? "";
       if (user.isEmpty) {
         isCoHosting.value = false;
-        duration.value = "";
-        stopTimer();
+        controller.reset();
       }
     });
   }
@@ -210,30 +210,6 @@ class LiveController extends GetxController {
         /// if user is a co-host, only show host's audio-video view
         return targetUserRole == ZegoLiveStreamingRole.host;
       };
-    }
-  }
-
-  startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      total = total + 1;
-      int h, m, s;
-
-      h = total ~/ 3600;
-
-      m = ((total - h * 3600)) ~/ 60;
-
-      s = total - (h * 3600) - (m * 60);
-
-      //String result = "$h:$m:$s";
-      duration.value = "$m m $s s";
-    });
-  }
-
-  stopTimer() {
-    duration.value = "";
-    total = 0;
-    if (_timer != null) {
-      _timer!.cancel();
     }
   }
 }

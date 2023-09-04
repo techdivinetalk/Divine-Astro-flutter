@@ -44,21 +44,44 @@ class LiveTipsUI extends GetView<LiveTipsController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                flex: 0,
-                child: Padding(
-                  padding: EdgeInsets.only(top: 20.h),
-                  child: InkWell(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: Icon(
-                      Icons.chevron_left_outlined,
-                      color: AppColors.white,
-                      size: 45.sp,
+              Row(
+                children: [
+                  Expanded(
+                    flex: 0,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 20.h),
+                      child: InkWell(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: Icon(
+                          Icons.chevron_left_outlined,
+                          color: AppColors.white,
+                          size: 45.sp,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  const Spacer(),
+                  Expanded(
+                    flex: 0,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 20.h),
+                      child: InkWell(
+                        onTap: () {
+                          controller.isFrontCamera.value = !controller.isFrontCamera.value;
+                        },
+                        child: Obx(()=>
+                          Icon(
+                            controller.isFrontCamera.value ? Icons.camera_front : Icons.camera_alt,
+                            color: AppColors.white,
+                            size: 28.sp,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const Expanded(flex: 1, child: SizedBox()),
               Expanded(
@@ -106,7 +129,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                     //   builder: (context) => const GiftPopup(),
                     // );
                     //controller.giftPopup(Get.context!);
-                    controller.jumpToLivePage();
+                    controller.jumpToLivePage(controller.isFrontCamera.value);
                   },
                   child: Container(
                     width: double.infinity,
