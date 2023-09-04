@@ -63,9 +63,9 @@ class ChatMessage {
     awsUrl = json['awsUrl'];
     base64Image = json['base64Image'];
     kundliId = json['kundli_id'];
-    kundliName = json['kundli_name'] as String;
-    kundliDateTime = json['kundli_date_time'] as String;
-    kundliPlace = json['kundli_place'] as String;
+    kundliName = json['kundli_name'];
+    kundliDateTime = json['kundli_date_time'];
+    kundliPlace = json['kundli_place'];
     downloadedPath = json['downloadedPath'];
   }
 

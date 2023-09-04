@@ -37,7 +37,7 @@ class ChatMessageController extends GetxController {
   XFile? pickedFile;
   File? uploadFile;
   final preference = Get.find<SharedPreferenceService>();
-  RxInt currentUserId = 8601.obs;
+  RxInt currentUserId = 8693.obs;
   String userDataKey = "userKey";
   bool sendReadMessageStatus = false;
   RxBool emojiShowing = true.obs;
@@ -56,7 +56,7 @@ class ChatMessageController extends GetxController {
       }
     }
     userData = preferenceService.getUserDetail();
-    currentUserId.value = 8601;
+    currentUserId.value = 8693;
     userDataKey = "userKey_${userData?.id}_$currentUserId";
     getChatList();
 
@@ -138,7 +138,7 @@ class ChatMessageController extends GetxController {
     var newMessage = ChatMessage(
         id: int.parse(time),
         message: messageText,
-        receiverId: 8601,
+        receiverId: 8693,
         senderId: 573,
         time: int.parse(time),
         awsUrl: awsUrl,
@@ -150,7 +150,7 @@ class ChatMessageController extends GetxController {
     updateChatMessages(newMessage, false);
 
     firebaseDatabase
-        .ref("user/8601/realTime/notification/$time")
+        .ref("user/8693/realTime/notification/$time")
         .set(newMessage.toOfflineJson());
   }
 
@@ -166,9 +166,8 @@ class ChatMessageController extends GetxController {
               messgeScrollController.position.maxScrollExtent - 100) {
         newMessage.type = 2;
         chatMessages.add(newMessage);
-
-        updateMsgDelieveredStatus(newMessage, 2);
         scrollToBottomFunc();
+        updateMsgDelieveredStatus(newMessage, 2);
       } else {
         newMessage.type = 1;
         chatMessages.add(newMessage);
@@ -188,6 +187,7 @@ class ChatMessageController extends GetxController {
         -1;
     setHiveDatabase();
     if (!isFromNotification) {
+      // updateReadMessageStatus();
       Future.delayed(const Duration(milliseconds: 200)).then((value) {
         scrollToBottomFunc();
       });

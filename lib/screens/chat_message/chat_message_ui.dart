@@ -100,7 +100,9 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                                         controller.unreadMessageIndex.value)
                                       unreadMessageView(),
                                     chatMessage.msgType == "kundli"
-                                        ? kundliView()
+                                        ? kundliView(
+                                            chatDetail: chatMessage,
+                                            index: index)
                                         : chatMessage.msgType == "image"
                                             ? imageMsgView(
                                                 controller.chatMessages[index]
@@ -473,7 +475,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
     );
   }
 
-  Widget kundliView() {
+  Widget kundliView({required ChatMessage chatDetail, required int index}) {
     return Card(
       child: Container(
         padding: EdgeInsets.all(12.h),
@@ -487,7 +489,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Text(
-                  "P",
+                  chatDetail.kundliName?[0] ?? "",
                   style: AppTextStyle.textStyle24(
                       fontColor: AppColors.white, fontWeight: FontWeight.w600),
                 ),
@@ -501,7 +503,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Paras Shah",
+                      chatDetail.kundliName ?? "",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16.sp,
@@ -510,7 +512,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                     ),
                     SizedBox(height: 5.h),
                     Text(
-                      "20 December 1989, 04:32 AM",
+                      chatDetail.kundliDateTime ?? "",
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 10.sp,
@@ -519,7 +521,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                     ),
                     SizedBox(height: 5.h),
                     Text(
-                      "Mumbai, Maharashtra, India",
+                      chatDetail.kundliPlace ?? "",
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 10.sp,
