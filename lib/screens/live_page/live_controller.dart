@@ -179,17 +179,7 @@ class LiveController extends GetxController {
 
   setVisibilityCoHost(String isAudioCall) {
     typeOfCall = isAudioCall;
-    return;
     if (typeOfCall == "video") {
-      hostConfig.audioVideoViewConfig.playCoHostAudio = (
-          ZegoUIKitUser localUser,
-          ZegoLiveStreamingRole localRole,
-          ZegoUIKitUser coHost,
-          ) {
-        /// only play co-host audio by host,
-        /// audience and other co-hosts can't play
-        return false;
-      };
       hostConfig.audioVideoViewConfig.visible = (
         ZegoUIKitUser localUser,
         ZegoLiveStreamingRole localRole,
@@ -220,28 +210,6 @@ class LiveController extends GetxController {
         /// if user is a co-host, only show host's audio-video view
         return targetUserRole == ZegoLiveStreamingRole.host;
       };
-      if (typeOfCall == "private") {
-        ///  only the host can hear the audio of the co-host
-        hostConfig.audioVideoViewConfig.playCoHostAudio = (
-          ZegoUIKitUser localUser,
-          ZegoLiveStreamingRole localRole,
-          ZegoUIKitUser coHost,
-        ) {
-          /// only play co-host audio by host,
-          /// audience and other co-hosts can't play
-          return ZegoLiveStreamingRole.host == localRole;
-        };
-      }else {
-        hostConfig.audioVideoViewConfig.playCoHostAudio = (
-            ZegoUIKitUser localUser,
-            ZegoLiveStreamingRole localRole,
-            ZegoUIKitUser coHost,
-            ) {
-          /// only play co-host audio by host,
-          /// audience and other co-hosts can't play
-          return false;
-        };
-      }
     }
   }
 
