@@ -8,8 +8,6 @@ import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
-
 import '../../../common/appbar.dart';
 import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';

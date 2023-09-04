@@ -32,8 +32,7 @@ class SpecialityList {
       );
 
   factory SpecialityList.fromJson(Map<String, dynamic> json) => SpecialityList(
-        data: List<SpecialityData>.from(
-            json["data"].map((x) => SpecialityData.fromJson(x))),
+        data: List<SpecialityData>.from(json["data"].map((x) => SpecialityData.fromJson(x))),
         success: json["success"],
         statusCode: json["status_code"],
         message: json["message"],

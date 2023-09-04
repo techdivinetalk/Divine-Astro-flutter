@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -7,7 +8,9 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../common/app_exception.dart';
 import '../../di/shared_preference_service.dart';
 import '../../model/constant_details_model_class.dart';
+import '../../model/home_page_model_class.dart';
 import '../../model/res_login.dart';
+import '../../repository/home_page_repository.dart';
 import '../../repository/user_repository.dart';
 
 class HomeController extends GetxController {
@@ -50,13 +53,40 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getConstantDetailsData();
     userData = preferenceService.getUserDetail();
     appbarTitle.value = userData?.name ?? "Astrologer Name";
+    getConstantDetailsData();
+    // getDashboardDetail();
   }
 
   ConstantDetailsModelClass? getConstantDetails;
   RxBool profileDataSync = false.obs;
+
+  HomeData? homeData;
+  RxBool shopDataSync = false.obs;
+
+  getDashboardDetail() async {
+    Map<String, dynamic> params = {
+      "role_id": userData?.roleId ?? 0,
+      "device_token": userData?.deviceToken,
+    };
+
+    log("roleID==>${userData!.roleId}");
+    log("deviceToken==>${userData?.deviceToken}");
+    try {
+      var response = await HomePageRepository().getDashboardData(params);
+      homeData = response.data;
+      shopDataSync.value = true;
+
+      log("DashboardData==>${jsonEncode(homeData)}");
+    } catch (error) {
+      if (error is AppException) {
+        error.onException();
+      } else {
+        Get.snackbar("Error", error.toString()).show();
+      }
+    }
+  }
 
   getConstantDetailsData() async {
     try {
