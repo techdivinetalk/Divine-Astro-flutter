@@ -1,4 +1,6 @@
+import 'package:divine_astrologer/common/zego_services.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/model/login_images.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -68,11 +70,11 @@ class LoginController extends GetxController {
     }
   }
 
-  navigateToDashboard(ResLogin data) {
+  navigateToDashboard(ResLogin data) async {
     preferenceService.erase();
+    await ZegoServices().initZegoInvitationServices("${data.data?.id}", "${data.data?.name}");
     preferenceService.setUserDetail(data.data!);
     preferenceService.setToken(data.token!);
-
     mobileNumberController.clear();
     preferenceService.setDeviceToken(deviceToken ?? "");
     Get.offAllNamed(RouteName.dashboard,
@@ -97,6 +99,7 @@ class LoginController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    getLoginImages();
     countryCodeController = TextEditingController(text: "+91");
     mobileNumberController = TextEditingController(text: "");
   }
@@ -106,5 +109,24 @@ class LoginController extends GetxController {
     super.dispose();
     countryCodeController.dispose();
     mobileNumberController.dispose();
+  }
+
+  LoginImages? loginImages;
+  List<LoginDatum> get images => loginImages?.data.data ?? <LoginDatum>[];
+  String get amazonUrl => loginImages!.data.baseurl;
+
+
+  void getLoginImages() async {
+    if (preferenceService.getLoginImages() != null) {
+      loginImages = preferenceService.getLoginImages()!;
+    } else {
+      loginImages = await getInitialLoginImages();
+      update();
+    }
+  }
+
+  Future<LoginImages> getInitialLoginImages() async {
+    final response = await userRepository.getInitialLoginImages();
+    return response;
   }
 }

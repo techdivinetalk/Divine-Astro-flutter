@@ -1,6 +1,7 @@
+import 'package:divine_astrologer/common/zego_services.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
-import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/model/res_login.dart';
+import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -42,13 +43,13 @@ class EditProfileController extends GetxController {
         "name": state.nameController.text.trim(),
         "experiance": state.experienceController.text.trim(),
         "description": state.descriptionController.text.trim(),
-        "astrologer_speciality_id":
-            tags.map((element) => element.id).toList().join(",")
+        "astrologer_speciality_id": tags.map((element) => element.id).toList().join(",")
       };
       final response = await repository.updateProfile(param);
       if (response.statusCode == 200) {
-        state.preferenceService
-            .setUserDetail(UserData.fromJson(response.data!.toJson()));
+        UserData data = UserData.fromJson(response.data!.toJson());
+        state.preferenceService.setUserDetail(data);
+        await ZegoServices().initZegoInvitationServices("${data.id}", "${data.name}");
         Get.back();
         Get.snackbar("Success", response.message.toString());
       }

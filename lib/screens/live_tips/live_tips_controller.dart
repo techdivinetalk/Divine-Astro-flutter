@@ -34,6 +34,7 @@ class LiveTipsController extends GetxController {
       "image": image,
       "isEngaged": 0,
       "isAvailable": 1,
+      "coHostUser":""
     });
     Get.to(LivePage(
       liveID: astroId.toString(),

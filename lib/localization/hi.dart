@@ -252,6 +252,6 @@ Map<String, String> hi() {
     'bullyingHarassment': 'बदमाशी उत्पीड़न',
     'thankYouForReporting': 'रिपोर्टिंग के लिए धन्यवाद!',
     'thankYouDes': 'हम आपकी रिपोर्ट की समीक्षा करेंगे और आवश्यक कार्रवाई की जाएगी.',
-
+    'bankName':'बैंक का नाम',
   };
 }

@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'package:divine_astrologer/model/log_out_response.dart';
+import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/model/res_reply_review.dart';
 import 'package:divine_astrologer/model/res_user_profile.dart';
+import 'package:divine_astrologer/model/update_bank_response.dart';
 import 'package:divine_astrologer/model/update_profile_response.dart';
 import 'package:divine_astrologer/model/upload_story_response.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +14,7 @@ import '../common/routes.dart';
 import '../di/api_provider.dart';
 import '../model/constant_details_model_class.dart';
 import '../model/delete_customer_model_class.dart';
+import '../model/report_review_model_class.dart';
 import '../model/res_blocked_customers.dart';
 import '../model/res_login.dart';
 import '../model/res_review_ratings.dart';
@@ -75,6 +79,30 @@ class UserRepository extends ApiProvider {
         } else {
           final blockedCustomerList =
               ResReviewRatings.fromJson(json.decode(response.body));
+          return blockedCustomerList;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<ReportReviewModelClass> reportUserReviews(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await post(reportUserReview,
+          body: jsonEncode(param).toString(),
+          headers: await getJsonHeaderURL());
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final blockedCustomerList =
+              ReportReviewModelClass.fromJson(json.decode(response.body));
           return blockedCustomerList;
         }
       } else {
@@ -237,7 +265,7 @@ class UserRepository extends ApiProvider {
     //progressService.showProgressDialog(true);
     try {
       final response =
-      await post(deleteAccount, body: jsonEncode(param).toString());
+          await post(deleteAccount, body: jsonEncode(param).toString());
       //progressService.showProgressDialog(false);
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
@@ -263,5 +291,75 @@ class UserRepository extends ApiProvider {
     }
   }
 
+  Future<LogOutResponse> logOut() async {
+    //progressService.showProgressDialog(true);
+    try {
+      final response = await post(logout);
+      //progressService.showProgressDialog(false);
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          preferenceService.erase();
+          Get.offNamed(RouteName.login);
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final logOutResponse = logOutResponseFromJson(response.body);
+          if (logOutResponse.statusCode == successResponse &&
+              logOutResponse.success!) {
+            return logOutResponse;
+          } else {
+            throw CustomException(logOutResponse.message!);
+          }
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      //progressService.showProgressDialog(false);
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
 
+  Future<LoginImages> getInitialLoginImages() async {
+    try {
+      final response = await post(getIntroPageDesc);
+      if (response.statusCode == 200) {
+        final loginImagesResponse = loginImagesFromJson(response.body);
+        if (loginImagesResponse.statusCode == successResponse &&
+            loginImagesResponse.success!) {
+          return loginImagesResponse;
+        } else {
+          throw CustomException(loginImagesResponse.message!);
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<UpdateBankResponse> updateBankDetailsApi(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await post(updateBankDetails,
+          body: jsonEncode(param).toString(),
+          headers: await getJsonHeaderURL());
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final updatedBankResponse = updateBankResponseFromJson(response.body);
+          return updatedBankResponse;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
 }

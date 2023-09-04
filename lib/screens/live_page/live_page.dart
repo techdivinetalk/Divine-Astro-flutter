@@ -83,21 +83,16 @@ class LivePageState extends State<LivePage> {
                   name: user.name,
                   onReject: () {
                     liveController.connect.hostRejectCoHostRequest(user);
-                    controller.setBusyStatus(widget.localUserID,0);
+                    controller.setBusyStatus(widget.localUserID, 0,
+                        customerId: "");
                     controller.setCallType(widget.localUserID);
                   },
                   onAccept: () {
                     liveController.connect
                         .hostAgreeCoHostRequest(user)
                         .then((value) {
-                      controller.setBusyStatus(widget.localUserID,1);
-                      ZegoUIKit().getSignalingPlugin().sendInvitation(
-                            inviterName: ZegoUIKit().getLocalUser().name,
-                            invitees: [user.id ?? ""],
-                            timeout: 60,
-                            type: 11,
-                            data: '',
-                          );
+                      controller.setBusyStatus(widget.localUserID, 1,
+                          customerId: user.id);
                     });
                     controller.isCoHosting.value = true;
                     controller.startTimer();
@@ -110,16 +105,6 @@ class LivePageState extends State<LivePage> {
             .getInRoomCommandMessageReceivedEventStream()
             .listen((event) {
           onInRoomCommandMessageReceived(event);
-        }),
-        ZegoUIKit()
-            .getSignalingPlugin()
-            .getInvitationReceivedStream()
-            .listen((event) {
-          if (event["type"] == 10) {
-            controller.isCoHosting.value = false;
-            controller.duration.value = "";
-            controller.stopTimer();
-          }
         }),
       ]);
     });
@@ -163,11 +148,9 @@ class LivePageState extends State<LivePage> {
             return EndSession(
                 onNo: () {},
                 onYes: () {
-                  if (controller.coHostUser != null) {
-                    controller.setCallType(widget.localUserID);
-                  }
                   controller.stopTimer();
-                  controller.setBusyStatus(widget.localUserID,0);
+                  controller.setBusyStatus(widget.localUserID, 0,
+                      customerId: "");
                   GiftWidget.clear();
                   controller.stopStream(widget.localUserID);
                 });
@@ -177,7 +160,7 @@ class LivePageState extends State<LivePage> {
       },
       child: SafeArea(
         child: Scaffold(
-          resizeToAvoidBottomInset: true,
+          resizeToAvoidBottomInset: false,
           body: LayoutBuilder(builder: (context, constraints) {
             return ZegoUIKitPrebuiltLiveStreaming(
               appID: yourAppID,
@@ -191,7 +174,7 @@ class LivePageState extends State<LivePage> {
                 ..avatarBuilder = customAvatarBuilder
                 ..memberButtonConfig.icon = const SizedBox()
                 ..confirmDialogInfo = null
-                ..markAsLargeRoom = false
+                ..markAsLargeRoom = true
                 ..bottomMenuBarConfig.hostButtons = const [
                   //ZegoMenuBarButtonName.soundEffectButton,
                   //ZegoMenuBarButtonName.switchCameraButton,
@@ -216,16 +199,16 @@ class LivePageState extends State<LivePage> {
                   height: 0,
                 )
 
-                // ///  only the host can view the video of the co-host
-                // ..audioVideoViewConfig.playCoHostVideo = (
-                //   ZegoUIKitUser localUser,
-                //   ZegoLiveStreamingRole localRole,
-                //   ZegoUIKitUser coHost,
-                // ) {
-                //   /// only play co-host video by host,
-                //   /// audience and other co-hosts can't play
-                //   return ZegoLiveStreamingRole.host == localRole;
-                // }
+                ///  only the host can view the video of the co-host
+                ..audioVideoViewConfig.playCoHostVideo = (
+                  ZegoUIKitUser localUser,
+                  ZegoLiveStreamingRole localRole,
+                  ZegoUIKitUser coHost,
+                ) {
+                  /// only play co-host video by host,
+                  /// audience and other co-hosts can't play
+                  return true;
+                }
 
                 ///  only the host can hear the audio of the co-host
                 ..audioVideoViewConfig.playCoHostAudio = (
@@ -245,7 +228,6 @@ class LivePageState extends State<LivePage> {
                   ZegoUIKitUser targetUser,
                   ZegoLiveStreamingRole targetUserRole,
                 ) {
-
                   if (controller.typeOfCall == "audio" ||
                       controller.typeOfCall == "private") {
                     return false;
@@ -278,8 +260,6 @@ class LivePageState extends State<LivePage> {
     );
   }
 
-
-
   Widget messageWidget() {
     return StreamBuilder<List<ZegoInRoomMessage>>(
       stream: liveController.message.stream(),
@@ -309,16 +289,24 @@ class LivePageState extends State<LivePage> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            if(controller.blockIds.contains(message.user.id)){
+            if (controller.blockIds.contains(message.user.id)) {
               return UnblockOrBlockUser(
-                  name: message.user.name, isForBlocUser: false,blockUnblockTap: (){
-                    controller.unblockUser(customerId: message.user.id,name: message.user.name);
-              },);
-            }else{
+                name: message.user.name,
+                isForBlocUser: false,
+                blockUnblockTap: () {
+                  controller.unblockUser(
+                      customerId: message.user.id, name: message.user.name);
+                },
+              );
+            } else {
               return UnblockOrBlockUser(
-                  name: message.user.name, isForBlocUser: true,blockUnblockTap: (){
-                controller.blockUser(customerId: message.user.id,name: message.user.name);
-              },);
+                name: message.user.name,
+                isForBlocUser: true,
+                blockUnblockTap: () {
+                  controller.blockUser(
+                      customerId: message.user.id, name: message.user.name);
+                },
+              );
             }
           },
         );
@@ -548,126 +536,141 @@ class LivePageState extends State<LivePage> {
   }
 
   foregroundView(messageView) {
-    return ValueListenableBuilder<ZegoLiveStreamingState>(
-      valueListenable: liveStateNotifier,
-      builder: (context, liveState, _) {
-        return ZegoLiveStreamingState.idle == liveState
-            ? Container()
-            : Stack(
-                children: [
-                  Positioned(
-                    top: 20.h,
-                    child: SizedBox(
-                      width: Get.width,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          buildTopMenu(),
-                          Obx(() => controller.isCoHosting.isFalse
-                              ? const SizedBox()
-                              : SizedBox(height: 20.h)),
-                          Obx(() => controller.isCoHosting.isFalse
-                              ? buildAstrologerLiveStartWidget()
-                              : const SizedBox()),
-                          Obx(() => controller.isCoHosting.value
-                              ? buildCallDurationWidget()
-                              : const SizedBox())
-                        ],
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        messageView,
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 12.w),
-                          child: SizedBox(
-                            width: Get.width,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Expanded(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(40),
-                                    child: BackdropFilter(
-                                      filter: ImageFilter.blur(
-                                          sigmaX: 5, sigmaY: 5),
-                                      child: CustomTextField(
-                                        readOnly: false,
-                                        hintText: 'Say Hi...',
-                                        controller: controller.msg,
-                                        keyboardType: TextInputType.text,
-                                        suffixIconPadding: 8.w,
-                                        textInputFormatter: [
-                                          FilteringTextInputFormatter(RegExp(r'[a-zA-Z]'), allow: true)
-                                        ],
-                                        suffixIcon: InkWell(
-                                          onTap: () {
-                                            if (controller
-                                                .msg.text.isNotEmpty) {
-                                              //liveController.message.send("${controller.msg.text}*${widget.astrologerName}");
-                                              liveController.message
-                                                  .send(controller.msg.text);
-                                              controller.msg.text = "";
-                                            }
-                                          },
-                                          child: Assets.images.icSendMsg.svg(),
-                                        ),
-                                        inputBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: AppColors.textColor
-                                                .withOpacity(0.15),
+    return Stack(
+      children: [
+        Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: SingleChildScrollView(
+            child: ValueListenableBuilder<ZegoLiveStreamingState>(
+              valueListenable: liveStateNotifier,
+              builder: (context, liveState, _) {
+                return ZegoLiveStreamingState.idle == liveState
+                    ? Container()
+                    : SizedBox(
+                        height: Get.height - 22.h,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            const Spacer(),
+                            messageView,
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12.w),
+                              child: SizedBox(
+                                width: Get.width,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Expanded(
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(40),
+                                        child: BackdropFilter(
+                                          filter: ImageFilter.blur(
+                                              sigmaX: 5, sigmaY: 5),
+                                          child: CustomTextField(
+                                            readOnly: false,
+                                            hintText: 'Say Hi...',
+                                            controller: controller.msg,
+                                            keyboardType: TextInputType.text,
+                                            suffixIconPadding: 8.w,
+                                            textInputFormatter: [
+                                              FilteringTextInputFormatter(
+                                                  RegExp(r'[a-zA-Z]'),
+                                                  allow: true)
+                                            ],
+                                            suffixIcon: InkWell(
+                                              onTap: () {
+                                                if (controller
+                                                    .msg.text.isNotEmpty) {
+                                                  //liveController.message.send("${controller.msg.text}*${widget.astrologerName}");
+                                                  liveController.message.send(
+                                                      controller.msg.text);
+                                                  controller.msg.text = "";
+                                                }
+                                              },
+                                              child:
+                                                  Assets.images.icSendMsg.svg(),
+                                            ),
+                                            inputBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: AppColors.textColor
+                                                    .withOpacity(0.15),
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(40.sp),
+                                            ),
                                           ),
-                                          borderRadius:
-                                              BorderRadius.circular(40.sp),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                    IconButton(
+                                        onPressed: () {
+                                          ZegoUIKit.instance.turnMicrophoneOn(
+                                              !controller.isMicroPhoneOn.value);
+                                          controller.isMicroPhoneOn.value =
+                                              !controller.isMicroPhoneOn.value;
+                                        },
+                                        icon: Obx(() =>
+                                            controller.isMicroPhoneOn.value
+                                                ? Assets.images.audioEnableLive
+                                                    .svg()
+                                                : Assets.images.audioDisableLive
+                                                    .svg())),
+                                    IconButton(
+                                        onPressed: () {
+                                          ZegoUIKit.instance.turnCameraOn(
+                                              !controller.isCameraOn.value);
+                                          controller.isCameraOn.value =
+                                              !controller.isCameraOn.value;
+                                        },
+                                        icon: Obx(() =>
+                                            controller.isCameraOn.value
+                                                ? Assets.images.vidioEnableLive
+                                                    .svg()
+                                                : Assets.images.videoDisableLive
+                                                    .svg()))
+                                  ],
                                 ),
-                                IconButton(
-                                    onPressed: () {
-                                      ZegoUIKit.instance.turnMicrophoneOn(
-                                          !controller.isMicroPhoneOn.value);
-                                      controller.isMicroPhoneOn.value =
-                                          !controller.isMicroPhoneOn.value;
-                                    },
-                                    icon: Obx(() => controller
-                                            .isMicroPhoneOn.value
-                                        ? Assets.images.audioDisableLive.svg()
-                                        : Assets.images.audioEnableLive.svg())),
-                                IconButton(
-                                    onPressed: () {
-                                      ZegoUIKit.instance.turnCameraOn(
-                                          !controller.isCameraOn.value);
-                                      controller.isCameraOn.value =
-                                          !controller.isCameraOn.value;
-                                    },
-                                    icon: Obx(() => controller.isCameraOn.value
-                                        ? Assets.images.videoDisableLive.svg()
-                                        : Assets.images.vidioEnableLive.svg()))
-                              ],
+                              ),
                             ),
-                          ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                          ],
                         ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              );
-      },
+                      );
+              },
+            ),
+          ),
+        ),
+        Positioned(
+          top: 20.h,
+          child: SizedBox(
+            width: Get.width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                buildTopMenu(),
+                Obx(() => controller.isCoHosting.isFalse
+                    ? const SizedBox()
+                    : SizedBox(height: 20.h)),
+                Obx(() => controller.isCoHosting.isFalse
+                    ? buildAstrologerLiveStartWidget()
+                    : const SizedBox()),
+                Obx(() => controller.isCoHosting.value
+                    ? buildCallDurationWidget()
+                    : const SizedBox())
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -822,11 +825,12 @@ class LivePageState extends State<LivePage> {
                                 onNo: () {},
                                 onYes: () {
                                   if (controller.coHostUser != null) {
-                                    controller
-                                        .setCallType(widget.localUserID);
+                                    controller.setCallType(widget.localUserID);
                                   }
                                   controller.stopTimer();
-                                  controller.setBusyStatus(widget.localUserID,0);
+                                  controller.setBusyStatus(
+                                      widget.localUserID, 0,
+                                      customerId: "");
                                   liveController.connect
                                       .removeCoHost(controller.coHostUser!);
                                   controller.isCoHosting.value = false;
@@ -862,7 +866,8 @@ class LivePageState extends State<LivePage> {
                           if (controller.coHostUser != null) {
                             controller.setCallType(widget.localUserID);
                           }
-                          controller.setBusyStatus(widget.localUserID,0);
+                          controller.setBusyStatus(widget.localUserID, 0,
+                              customerId: "");
                           controller.stopStream(widget.localUserID);
                         });
                   },

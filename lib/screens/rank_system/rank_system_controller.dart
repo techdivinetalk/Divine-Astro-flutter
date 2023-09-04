@@ -3,8 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../gen/assets.gen.dart';
+import '../../model/performance_model_class.dart';
 
 class RankSystemController extends GetxController {
+
+  List<RankSystem>? rankSystemList = <RankSystem>[];
+
+  var dataImage = [Assets.images.icDiamond.image(height: 21.h, width: 21.h),];
+
   var systemRankList = <SystemRankModelClass>[
     SystemRankModelClass(
       "90%+",

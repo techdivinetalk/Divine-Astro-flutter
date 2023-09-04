@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,5 +28,27 @@ class SettingsController extends GetxController {
         Get.snackbar("Error", error.toString()).show();
       }
     }
+  }
+
+  void logOut() {
+    preferenceService.erase().whenComplete(
+          () => Get.offAllNamed(RouteName.login),
+        );
+
+    // userRepository.logOut().then(
+    //   (value) async {
+    //     if (value.statusCode == 200 && value.success == true) {
+    //       preferenceService.erase().whenComplete(
+    //             () => Get.offAllNamed(RouteName.login),
+    //           );
+    //     }
+    //   },
+    // ).onError((error, stackTrace) {
+    //   if (error is AppException) {
+    //     error.onException();
+    //   } else {
+    //     divineSnackBar(data: error.toString(), color: AppColors.redColor);
+    //   }
+    // });
   }
 }

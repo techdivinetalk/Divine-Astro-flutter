@@ -103,7 +103,10 @@ class Routes {
         name: RouteName.root,
         binding: SplashBinding()),
     GetPage(
-        page: () => LoginUI(), name: RouteName.login, binding: LoginBinding()),
+      page: () => LoginUI(),
+      name: RouteName.login,
+      binding: LoginBinding(),
+    ),
     GetPage(
         page: () => const DashboardScreen(),
         name: RouteName.dashboard,

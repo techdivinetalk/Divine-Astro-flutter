@@ -15,7 +15,9 @@ import '../../repository/user_repository.dart';
 
 class LiveController extends GetxController {
   var pref = Get.find<SharedPreferenceService>();
+
   LiveController(this.userRepository);
+
   final UserRepository userRepository;
 
   var svgaAnime = [
@@ -69,15 +71,19 @@ class LiveController extends GetxController {
   var blockCustomer = <AstroBlockCustomer>[].obs;
 
   getBlockedCustomerList() async {
-    Map<String, dynamic> params = {"role_id": pref.getUserDetail()?.roleId ?? 0};
+    Map<String, dynamic> params = {
+      "role_id": pref.getUserDetail()?.roleId ?? 0
+    };
     try {
       var blockedUserData = await userRepository.getBlockedCustomerList(params);
       blockIds.clear();
       blockCustomer.clear();
-      if(blockedUserData.data != null && blockedUserData.data!.isNotEmpty){
+      if (blockedUserData.data != null && blockedUserData.data!.isNotEmpty) {
         var data = blockedUserData.data;
-        if(data?.first.astroBlockCustomer != null && data!.first.astroBlockCustomer!.isNotEmpty){
-          blockCustomer.addAll(data.first.astroBlockCustomer as Iterable<AstroBlockCustomer>);
+        if (data?.first.astroBlockCustomer != null &&
+            data!.first.astroBlockCustomer!.isNotEmpty) {
+          blockCustomer.addAll(
+              data.first.astroBlockCustomer as Iterable<AstroBlockCustomer>);
           for (var element in data.first.astroBlockCustomer!) {
             blockIds.add(element.customerId.toString());
           }
@@ -92,17 +98,20 @@ class LiveController extends GetxController {
     }
   }
 
-  unblockUser({required String customerId,required String name}) async {
+  unblockUser({required String customerId, required String name}) async {
     Map<String, dynamic> params = {
       "role_id": pref.getUserDetail()?.roleId ?? 0,
       "customer_id": customerId,
       "is_block": 0
     };
     try {
-      ResBlockedCustomers response = await userRepository.blockUnblockCustomer(params);
-      showDialog(context: Get.context!, builder: (builder){
-        return BlockSuccess(text: "$name has been Unblocked!");
-      });
+      ResBlockedCustomers response =
+          await userRepository.blockUnblockCustomer(params);
+      showDialog(
+          context: Get.context!,
+          builder: (builder) {
+            return BlockSuccess(text: "$name has been Unblocked!");
+          });
       getBlockedCustomerList();
     } catch (error) {
       if (error is AppException) {
@@ -113,17 +122,20 @@ class LiveController extends GetxController {
     }
   }
 
-  blockUser({required String customerId,required String name}) async {
+  blockUser({required String customerId, required String name}) async {
     Map<String, dynamic> params = {
       "role_id": pref.getUserDetail()?.roleId ?? 0,
       "customer_id": customerId,
       "is_block": 1
     };
     try {
-      ResBlockedCustomers response = await userRepository.blockUnblockCustomer(params);
-      showDialog(context: Get.context!, builder: (builder){
-        return BlockSuccess(text: "$name has been blocked!");
-      });
+      ResBlockedCustomers response =
+          await userRepository.blockUnblockCustomer(params);
+      showDialog(
+          context: Get.context!,
+          builder: (builder) {
+            return BlockSuccess(text: "$name has been blocked!");
+          });
       getBlockedCustomerList();
     } catch (error) {
       if (error is AppException) {
@@ -134,7 +146,7 @@ class LiveController extends GetxController {
     }
   }
 
-  stopStream(String id){
+  stopStream(String id) {
     Get.back();
     database.ref().child("live/$id").remove();
   }
@@ -145,10 +157,19 @@ class LiveController extends GetxController {
 
   setAvailibility(String id, bool available) {
     database.ref().child("live/$id").update({"isAvailable": available});
+    database.ref().child("live/$id/coHostUser").onValue.listen((event) {
+      final user = event.snapshot.value as String? ?? "";
+      if (user.isEmpty) {
+        isCoHosting.value = false;
+        duration.value = "";
+        stopTimer();
+      }
+    });
   }
 
-  setBusyStatus(String id, int status) {
+  setBusyStatus(String id, int status, {customerId}) {
     database.ref().child("live/$id").update({"isEngaged": status});
+    database.ref().child("live/$id").update({"coHostUser": customerId});
   }
 
   Future<String> getCallType(String id) async {
@@ -158,6 +179,70 @@ class LiveController extends GetxController {
 
   setVisibilityCoHost(String isAudioCall) {
     typeOfCall = isAudioCall;
+    return;
+    if (typeOfCall == "video") {
+      hostConfig.audioVideoViewConfig.playCoHostAudio = (
+          ZegoUIKitUser localUser,
+          ZegoLiveStreamingRole localRole,
+          ZegoUIKitUser coHost,
+          ) {
+        /// only play co-host audio by host,
+        /// audience and other co-hosts can't play
+        return false;
+      };
+      hostConfig.audioVideoViewConfig.visible = (
+        ZegoUIKitUser localUser,
+        ZegoLiveStreamingRole localRole,
+        ZegoUIKitUser targetUser,
+        ZegoLiveStreamingRole targetUserRole,
+      ) {
+        if (ZegoLiveStreamingRole.host == localRole) {
+          /// host can see all user's view
+          return true;
+        }
+
+        /// comment below if you want the co-host hide their own audio-video view.
+        if (localUser.id == targetUser.id) {
+          /// local view
+          return true;
+        }
+
+        /// if user is a co-host, only show host's audio-video view
+        return targetUserRole == ZegoLiveStreamingRole.host;
+      };
+    } else {
+      hostConfig.audioVideoViewConfig.visible = (
+        ZegoUIKitUser localUser,
+        ZegoLiveStreamingRole localRole,
+        ZegoUIKitUser targetUser,
+        ZegoLiveStreamingRole targetUserRole,
+      ) {
+        /// if user is a co-host, only show host's audio-video view
+        return targetUserRole == ZegoLiveStreamingRole.host;
+      };
+      if (typeOfCall == "private") {
+        ///  only the host can hear the audio of the co-host
+        hostConfig.audioVideoViewConfig.playCoHostAudio = (
+          ZegoUIKitUser localUser,
+          ZegoLiveStreamingRole localRole,
+          ZegoUIKitUser coHost,
+        ) {
+          /// only play co-host audio by host,
+          /// audience and other co-hosts can't play
+          return ZegoLiveStreamingRole.host == localRole;
+        };
+      }else {
+        hostConfig.audioVideoViewConfig.playCoHostAudio = (
+            ZegoUIKitUser localUser,
+            ZegoLiveStreamingRole localRole,
+            ZegoUIKitUser coHost,
+            ) {
+          /// only play co-host audio by host,
+          /// audience and other co-hosts can't play
+          return false;
+        };
+      }
+    }
   }
 
   startTimer() {

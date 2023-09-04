@@ -70,8 +70,8 @@ class BlockUserList extends GetView<LiveController> {
                           return Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(40),
-                                border:
-                                    Border.all(color: AppColors.appColorDark),
+                                border: Border.all(
+                                    color: AppColors.appYellowColour),
                                 color: AppColors.white),
                             height: 50.h,
                             child: Row(
@@ -109,11 +109,18 @@ class BlockUserList extends GetView<LiveController> {
                                         context: context,
                                         builder: (BuildContext context) {
                                           return UnblockOrBlockUser(
-                                              name: item.getCustomers?.name ?? "",
-                                              isForBlocUser: false,blockUnblockTap: (){
-                                                Get.back();
-                                                controller.unblockUser(customerId: item.customerId.toString(),name: item.getCustomers?.name ?? "");
-                                          },);
+                                            name: item.getCustomers?.name ?? "",
+                                            isForBlocUser: false,
+                                            blockUnblockTap: () {
+                                              Get.back();
+                                              controller.unblockUser(
+                                                  customerId: item.customerId
+                                                      .toString(),
+                                                  name:
+                                                      item.getCustomers?.name ??
+                                                          "");
+                                            },
+                                          );
                                         },
                                       );
                                     },

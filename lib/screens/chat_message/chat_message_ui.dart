@@ -68,14 +68,17 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                         firstChild: NotificationListener(
                           onNotification: (t) {
                             if (t is ScrollEndNotification) {
-                              controller.scrollToBottom.value = controller
-                                          .messgeScrollController
-                                          .position
-                                          .pixels <
-                                      controller.messgeScrollController.position
-                                          .maxScrollExtent
-                                  ? true
-                                  : false;
+                              bool atScrollViewBottom = controller
+                                      .messgeScrollController.position.pixels <
+                                  controller.messgeScrollController.position
+                                          .maxScrollExtent -
+                                      100;
+                              controller.scrollToBottom.value =
+                                  atScrollViewBottom;
+                              if (atScrollViewBottom == false &&
+                                  controller.unreadMsgCount.value > 0) {
+                                controller.updateReadMessageStatus();
+                              }
                             }
 
                             return true;
@@ -89,7 +92,8 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                               var chatMessage = controller.chatMessages[index];
 
                               return Padding(
-                                padding: EdgeInsets.all(12.h),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 4, horizontal: 12),
                                 child: Column(
                                   children: [
                                     if (chatMessage.id ==
@@ -98,26 +102,19 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                                     chatMessage.msgType == "kundli"
                                         ? kundliView()
                                         : chatMessage.msgType == "image"
-                                            ? imageMessage(
+                                            ? imageMsgView(
                                                 controller.chatMessages[index]
                                                         .base64Image ??
                                                     "",
                                                 chatDetail: controller
                                                     .chatMessages[index],
                                                 index: index,
+                                                chatMessage.senderId == 573)
+                                            : textMsgView(
+                                                context,
+                                                chatMessage,
                                                 chatMessage.senderId ==
-                                                    controller.userData?.id)
-                                            : chatMessage.senderId ==
-                                                    controller.userData?.id
-                                                ? rightView(
-                                                    context,
-                                                    chatMessage,
-                                                  )
-                                                : leftView(
-                                                    context,
-                                                    chatMessage.message ?? "",
-                                                    messageDateTime(
-                                                        chatMessage.time ?? 0)),
+                                                    controller.userData?.id),
                                   ],
                                 ),
                               );
@@ -168,128 +165,26 @@ class ChatMessageUI extends GetView<ChatMessageController> {
             child: Obx(() => controller.scrollToBottom.value
                 ? InkWell(
                     onTap: () {
-                      controller.messgeScrollController.animateTo(
-                          controller
-                              .messgeScrollController.position.maxScrollExtent,
-                          duration: const Duration(milliseconds: 20),
-                          curve: Curves.easeOut);
+                      controller.scrollToBottomFunc();
+
+                      controller.updateReadMessageStatus();
                     },
                     child: badges.Badge(
-                      badgeContent: controller.unreadMessageIndex != -1
-                          ? Text('3')
-                          : Text('0'),
+                      showBadge: controller.unreadMsgCount.value > 0,
+                      badgeStyle: const badges.BadgeStyle(
+                        badgeColor: AppColors.appYellowColour,
+                      ),
+                      badgeContent: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("${controller.unreadMsgCount.value}"),
+                      ),
                       child: Icon(Icons.arrow_drop_down_circle_outlined,
-                          color: AppColors.appColorDark, size: 50.h),
+                          color: AppColors.appYellowColour, size: 50.h),
                     ),
                   )
                 : const SizedBox()),
           )
         ],
-      ),
-    );
-  }
-
-  Widget rightView(BuildContext context, ChatMessage chatMessage) {
-    int msgType = chatMessage.type ?? 0;
-
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Container(
-        clipBehavior: Clip.antiAlias,
-        width: ScreenUtil().screenWidth * 0.5,
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 3.0,
-              offset: const Offset(0.0, 3.0),
-            ),
-          ],
-          color: Colors.white,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(10),
-          ),
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(12.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                chatMessage.message ?? "",
-                style: AppTextStyle.textStyle14(
-                    fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
-              ),
-              SizedBox(height: 4.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    messageDateTime(chatMessage.time ?? 0),
-                    style: AppTextStyle.textStyle10(
-                      fontColor: AppColors.darkBlue,
-                    ),
-                  ),
-                  SizedBox(width: 8.w),
-                  msgType == 0
-                      ? Assets.images.icSingleTick.svg()
-                      : msgType == 1
-                          ? Assets.images.icDoubleTick
-                              .image(color: AppColors.greyColor)
-                          : msgType == 2
-                              ? Assets.images.icDoubleTick.image()
-                              : Assets.images.icSingleTick.svg()
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget leftView(BuildContext context, String msgText, String time) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        clipBehavior: Clip.antiAlias,
-        width: ScreenUtil().screenWidth * 0.5,
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 3.0,
-              offset: const Offset(0.0, 3.0),
-            ),
-          ],
-          color: AppColors.white,
-          borderRadius: BorderRadius.all(Radius.circular(10.sp)),
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(12.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                msgText,
-                style: AppTextStyle.textStyle14(
-                  fontColor: AppColors.appRedColour,
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    time,
-                    style: AppTextStyle.textStyle10(
-                      fontColor: AppColors.darkBlue,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -360,7 +255,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0.sp),
                             borderSide: const BorderSide(
-                              color: AppColors.appColorDark,
+                              color: AppColors.appYellowColour,
                               width: 1.0,
                             )),
                       ),
@@ -382,64 +277,199 @@ class ChatMessageUI extends GetView<ChatMessageController> {
     );
   }
 
-  Widget imageMessage(String image, bool yourMessage,
-      {required ChatMessage chatDetail, required int index}) {
-    Uint8List bytesImage = const Base64Decoder().convert(image);
-    return Align(
-      alignment: yourMessage ? Alignment.centerRight : Alignment.centerLeft,
-      child: chatDetail.downloadedPath != ""
-          ? InkWell(
-              onTap: () {
-                Get.toNamed(RouteName.imagePreviewUi,
-                    arguments: chatDetail.downloadedPath);
-              },
-              child: Container(
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(10.0.sp)),
-                height: 150.h,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0.sp),
-                  child: Image.file(File(chatDetail.downloadedPath!)),
-                ),
-              ),
-            )
-          : Stack(
+  Widget textMsgView(
+      BuildContext context, ChatMessage chatMessage, bool yourMessage) {
+    RxInt msgType = (chatMessage.type ?? 0).obs;
+    return SizedBox(
+      width: double.maxFinite,
+      child: Column(
+        crossAxisAlignment:
+            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 3.0,
+                    offset: const Offset(0.0, 3.0)),
+              ],
+              color: Colors.white,
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+            ),
+            constraints: BoxConstraints(
+                maxWidth: ScreenUtil().screenWidth * 0.7,
+                minWidth: ScreenUtil().screenWidth * 0.25),
+            child: Stack(
+              alignment:
+                  yourMessage ? Alignment.centerRight : Alignment.centerLeft,
               children: [
-                Container(
-                  height: 150.h,
-                  width: ScreenUtil().screenWidth * 0.5,
-                  decoration: BoxDecoration(
-                    color: const Color(0xffFFFFFF),
-                    borderRadius: BorderRadius.circular(10.0.sp),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0.sp),
-                    child: ImageFiltered(
-                      imageFilter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-                      child: Image.memory(
-                        bytesImage,
-                        fit: BoxFit.cover,
-                      ),
+                Column(
+                  children: [
+                    Wrap(
+                      alignment: WrapAlignment.end,
+                      children: [
+                        Text(
+                          chatMessage.message ?? "",
+                          style: AppTextStyle.textStyle14(
+                              fontColor: yourMessage
+                                  ? AppColors.darkBlue
+                                  : AppColors.appRedColour),
+                        ),
+                      ],
                     ),
+                    SizedBox(height: 20.h)
+                  ],
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Row(
+                    children: [
+                      Text(
+                        messageDateTime(chatMessage.time ?? 0),
+                        style: AppTextStyle.textStyle10(
+                          fontColor: AppColors.darkBlue,
+                        ),
+                      ),
+                      if (yourMessage) SizedBox(width: 8.w),
+                      if (yourMessage)
+                        Obx(() => msgType.value == 0
+                            ? Assets.images.icSingleTick.svg()
+                            : msgType.value == 1
+                                ? Assets.images.icDoubleTick
+                                    .image(color: AppColors.greyColor)
+                                : msgType.value == 2
+                                    ? Assets.images.icDoubleTick.image()
+                                    : Assets.images.icSingleTick.svg())
+                    ],
                   ),
                 ),
-                InkWell(
-                  onTap: () {
-                    controller.downloadImage(
-                        fileName: image, chatDetail: chatDetail, index: index);
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 150.h,
-                    width: ScreenUtil().screenWidth * 0.5,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0.sp),
-                    ),
-                    child: const Icon(Icons.download),
-                  ),
-                )
               ],
             ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget imageMsgView(String image, bool yourMessage,
+      {required ChatMessage chatDetail, required int index}) {
+    Uint8List bytesImage = const Base64Decoder().convert(image);
+    RxInt msgType = (chatDetail.type ?? 0).obs;
+    return SizedBox(
+      width: double.maxFinite,
+      child: Column(
+        crossAxisAlignment:
+            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8.0),
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 3.0,
+                    offset: const Offset(0.0, 3.0)),
+              ],
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(8.r)),
+            ),
+            constraints: BoxConstraints(
+                maxWidth: ScreenUtil().screenWidth * 0.7,
+                minWidth: ScreenUtil().screenWidth * 0.25),
+            child: chatDetail.downloadedPath != ""
+                ? InkWell(
+                    onTap: () {
+                      Get.toNamed(RouteName.imagePreviewUi,
+                          arguments: chatDetail.downloadedPath);
+                    },
+                    child: Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0.r),
+                          child: Image.file(
+                            File(chatDetail.downloadedPath!),
+                            fit: BoxFit.cover,
+                            height: 200.h,
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 4,
+                          right: 10,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                messageDateTime(chatDetail.time ?? 0),
+                                style: AppTextStyle.textStyle10(
+                                  fontColor: AppColors.darkBlue,
+                                ),
+                              ),
+                              SizedBox(width: 8.w),
+                              if (yourMessage)
+                                Obx(() => msgType.value == 0
+                                    ? Assets.images.icSingleTick.svg()
+                                    : msgType.value == 1
+                                        ? Assets.images.icDoubleTick
+                                            .image(color: AppColors.greyColor)
+                                        : msgType.value == 2
+                                            ? Assets.images.icDoubleTick.image()
+                                            : Assets.images.icSingleTick.svg())
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0.sp),
+                        child: ImageFiltered(
+                          imageFilter:
+                              ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                          child: Image.memory(
+                            bytesImage,
+                            fit: BoxFit.cover,
+                            height: 200.h,
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          controller.downloadImage(
+                              fileName: image,
+                              chatDetail: chatDetail,
+                              index: index);
+                        },
+                        child: const Icon(Icons.download),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              messageDateTime(chatDetail.time ?? 0),
+                              style: AppTextStyle.textStyle10(
+                                fontColor: AppColors.darkBlue,
+                              ),
+                            ),
+                            SizedBox(width: 8.w),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+          )
+        ],
+      ),
     );
   }
 

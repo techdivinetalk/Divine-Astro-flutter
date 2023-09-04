@@ -251,8 +251,9 @@ class SettingsUI extends GetView<SettingsController> {
                     Expanded(
                       child: FilledButton(
                         onPressed: () {
-                          controller.preferenceService.erase();
-                          Get.offNamed(RouteName.login);
+                          controller.logOut();
+                          // controller.preferenceService.erase();
+                          // Get.offNamed(RouteName.login);
                           // Get.offAndToNamed(RouteName.login);
                         },
                         style: FilledButton.styleFrom(

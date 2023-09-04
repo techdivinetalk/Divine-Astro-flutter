@@ -26,6 +26,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/avatar.svg
   SvgGenImage get avatar => const SvgGenImage('assets/images/avatar.svg');
 
+  /// File path: assets/images/bg_MeterFinal.svg
+  SvgGenImage get bgMeterFinal =>
+      const SvgGenImage('assets/images/bg_MeterFinal.svg');
+
   /// File path: assets/images/bg_chatUserPro.png
   AssetGenImage get bgChatUserPro =>
       const AssetGenImage('assets/images/bg_chatUserPro.png');
@@ -168,6 +172,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_calendar.svg
   SvgGenImage get icCalendar =>
       const SvgGenImage('assets/images/ic_calendar.svg');
+
+  /// File path: assets/images/ic_calender.svg
+  SvgGenImage get icCalender =>
+      const SvgGenImage('assets/images/ic_calender.svg');
 
   /// File path: assets/images/ic_call.svg
   SvgGenImage get icCall => const SvgGenImage('assets/images/ic_call.svg');
@@ -508,6 +516,7 @@ class $AssetsImagesGen {
         audioDisableLive,
         audioEnableLive,
         avatar,
+        bgMeterFinal,
         bgChatUserPro,
         bgChatWallpaper,
         bgDeleteAccount,
@@ -545,6 +554,7 @@ class $AssetsImagesGen {
         icBronze,
         icCalc,
         icCalendar,
+        icCalender,
         icCall,
         icCalling,
         icCart,
@@ -662,11 +672,19 @@ class $AssetsSvgGen {
   /// File path: assets/svg/disconnect.svg
   SvgGenImage get disconnect => const SvgGenImage('assets/svg/disconnect.svg');
 
+  /// File path: assets/svg/grey_container.svg
+  SvgGenImage get greyContainer =>
+      const SvgGenImage('assets/svg/grey_container.svg');
+
+  /// File path: assets/svg/ic_add.svg
+  SvgGenImage get icAdd => const SvgGenImage('assets/svg/ic_add.svg');
+
   /// File path: assets/svg/reply.svg
   SvgGenImage get reply => const SvgGenImage('assets/svg/reply.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [block, blockUser, disconnect, reply];
+  List<SvgGenImage> get values =>
+      [block, blockUser, disconnect, greyContainer, icAdd, reply];
 }
 
 class $AssetsSvgaGen {
