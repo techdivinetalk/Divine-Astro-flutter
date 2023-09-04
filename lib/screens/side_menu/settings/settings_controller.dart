@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/routes.dart';
+import 'package:divine_astrologer/model/pivacy_policy_model.dart';
+import 'package:divine_astrologer/model/terms_and_condition_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../common/app_exception.dart';
@@ -46,5 +48,13 @@ class SettingsController extends GetxController {
         divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     });
+  }
+
+  Future<TermsConditionModel> getTermsCondition() async {
+    return userRepository.getTermsCondition();
+  }
+
+  Future<PrivacyPolicyModel> getPrivacyPolicy() async {
+    return userRepository.getPrivacyPolicy();
   }
 }

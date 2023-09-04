@@ -64,6 +64,11 @@ class ApiProvider {
   //chat
   final String getChatList = "getChatList";
 
+  //privacy policy & terms
+  final String termsAndCondition = "termsAndCondition";
+  final String privacyPolicy = "privacyPolicy";
+  
+  final String astroScheduleOnline = "astroScheduleOnline";
 
   //Basic Auth
   final String username = "625170";
