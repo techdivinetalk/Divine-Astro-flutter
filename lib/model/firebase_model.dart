@@ -6,11 +6,11 @@ class FirebaseUserData {
   RealTime realTime;
 
   FirebaseUserData(
-      this.name,
-      this.deviceToken,
-      this.profileImage,
-      this.realTime,
-      );
+    this.name,
+    this.deviceToken,
+    this.profileImage,
+    this.realTime,
+  );
 
   FirebaseUserData.fromJson(Map<dynamic, dynamic> json)
       : name = json['name'] as String,
@@ -19,28 +19,32 @@ class FirebaseUserData {
         realTime = RealTime.fromJson(json["realTime"]);
 
   Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
-    'name': name.toString(),
-    'deviceToken': deviceToken,
-    'profileImage': profileImage,
-    "realTime": realTime.toJson(),
-  };
+        'name': name.toString(),
+        'deviceToken': deviceToken,
+        'profileImage': profileImage,
+        "realTime": realTime.toJson(),
+      };
 }
 
 class RealTime {
   final int isEngagedStatus;
+  final int walletBalance;
   final String uniqueId;
 
-  RealTime(
-      this.isEngagedStatus,
-      this.uniqueId,
-      );
+  RealTime({
+    required this.isEngagedStatus,
+    required this.walletBalance,
+    required this.uniqueId,
+  });
 
   RealTime.fromJson(Map<dynamic, dynamic> json)
       : isEngagedStatus = json['isEngagedStatus'] as int,
+        walletBalance = json['wallet_balance'] as int,
         uniqueId = json['uniqueId'] as String;
 
   Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
-    'isEngagedStatus': isEngagedStatus,
-    'uniqueId': uniqueId,
-  };
+        'isEngagedStatus': isEngagedStatus,
+        'wallet_balance': walletBalance,
+        'uniqueId': uniqueId,
+      };
 }

@@ -20,6 +20,7 @@ import '../../di/hive_services.dart';
 import '../../di/shared_preference_service.dart';
 import '../../model/chat_offline_model.dart';
 import '../../model/get_kundli_data.dart';
+import '../../repository/chat_repository.dart';
 import '../../repository/kundli_repository.dart';
 import '../../repository/user_repository.dart';
 import 'package:path_provider/path_provider.dart';
@@ -50,8 +51,9 @@ class ChatMessageController extends GetxController {
   RxBool scrollToBottom = false.obs;
   HiveServices hiveServices = HiveServices(boxName: userChatData);
   RxInt unreadMsgCount = 0.obs;
-  ChatMessageController(this.kundliRepository);
+  ChatMessageController(this.kundliRepository, this.chatRepository);
   final KundliRepository? kundliRepository;
+  final ChatRepository chatRepository;
   @override
   void onInit() {
     super.onInit();
@@ -108,6 +110,10 @@ class ChatMessageController extends GetxController {
           updateReadMessageStatus();
         } else {}
       }
+    } else {
+      Map<String, int> params = {"customer_id": currentUserId.value};
+      var response = await chatRepository.getChatListApi(params);
+      debugPrint("$response");
     }
   }
 
