@@ -15,53 +15,54 @@ import 'performance_controller.dart';
 
 class PerformanceUI extends GetView<PerformanceController> {
   PerformanceUI({Key? key}) : super(key: key);
-  @override
-  PerformanceController controller = Get.put(PerformanceController());
 
   @override
   Widget build(BuildContext context) {
+    PerformanceController controller = Get.put(PerformanceController());
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar:
           commonAppbar(title: "performance".tr, trailingWidget: Container()),
       drawer: const SideMenuDrawer(),
-      body: GetBuilder<PerformanceController>(
-        builder: (controller) {
-          return SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.all(12.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TodayAvailabilityWidget(daysAvailiblity: controller.performanceData?.data?.todaysAvailiblity),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  LastAvailabilityWidget(
-                      last30DaysAvailiblity: controller.performanceData?.data?.last30DaysAvailiblity),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  // durationWidget(),
-                  const DurationUI(),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  OverAllScoreData(score: controller.performanceData?.data?.score),
-                  SizedBox(
-                    height: 30.h,
-                  ),
-                  const YourScoreWidget(),
-                  // yourScore(),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                ],
-              ),
+      body: GetBuilder<PerformanceController>(builder: (controller) {
+        return SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(12.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TodayAvailabilityWidget(
+                    daysAvailiblity:
+                        controller.performanceData?.data?.todaysAvailiblity),
+                SizedBox(
+                  height: 20.h,
+                ),
+                LastAvailabilityWidget(
+                    last30DaysAvailiblity: controller
+                        .performanceData?.data?.last30DaysAvailiblity),
+                SizedBox(
+                  height: 20.h,
+                ),
+                // durationWidget(),
+                const DurationUI(),
+                SizedBox(
+                  height: 20.h,
+                ),
+                OverAllScoreData(
+                    score: controller.performanceData?.data?.score),
+                SizedBox(
+                  height: 30.h,
+                ),
+                const YourScoreWidget(),
+                // yourScore(),
+                SizedBox(
+                  height: 20.h,
+                ),
+              ],
             ),
-          );
-        }
-      ),
+          ),
+        );
+      }),
     );
   }
 
@@ -507,10 +508,6 @@ class PerformanceUI extends GetView<PerformanceController> {
       },
     );
   }
-
-// Widget overallScoreWidget() {
-//   return
-// }
 }
 
 class YourScoreWidget extends GetView<PerformanceController> {
@@ -566,7 +563,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                   ),
                                   Text(
                                     item?.performance?.isNotEmpty ?? false
-                                        ? '${item?.performance?[0].value??0}'
+                                        ? '${item?.performance?[0].value ?? 0}'
                                         : "0",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w700,
@@ -578,7 +575,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                   ),
                                   Text(
                                     item?.performance?.isNotEmpty ?? false
-                                        ? 'Out of ${item?.performance?[0].valueOutOff??0}'
+                                        ? 'Out of ${item?.performance?[0].valueOutOff ?? 0}'
                                         : "Out of 0",
                                     // "Out of 100",
                                     style: AppTextStyle.textStyle10(
