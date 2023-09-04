@@ -41,17 +41,15 @@ class PerformanceController extends GetxController {
     PercentageModelClass("45+", '100'),
   ].obs;
 
-  var durationValue = ['today', 'last_week', 'last_month', 'Select Custom'].obs;
+  var durationValue = ['today', 'last_week', 'last_month'].obs;
 
-  var durationOptions =
-      ['Today', 'Last Week', 'Last Month', 'Select Custom'].obs;
+  var durationOptions = ['Today', 'Last Week', 'Last Month'].obs;
   RxString selectedValue = "today".obs;
   RxString selectedOption = "Today".obs;
 
-
   updateDurationValue(String val) {
     selectedOption.value = val;
-    int index =durationOptions.indexOf(val);
+    int index = durationOptions.indexOf(val);
     selectedValue.value = durationValue[index];
   }
 
@@ -67,51 +65,26 @@ class PerformanceController extends GetxController {
     await getPerformanceList();
   }
 
-  //Today's available
-
-  String? availableChat, busyChat;
-  String? availableCall, busyCall;
-  String? availableLive, busyLive;
-
-  //Last 30 days
-  String? lastAvailableChat, lastAvailableCall;
-  String? lastBusyCall, lastBusyChat, lastBusyLive;
+  RxList<BusyHours?> overAllScoreList = <BusyHours?>[].obs;
 
   getPerformanceList() async {
     try {
       // Map<String, dynamic> params = {"filter": selectedOption.value};
-      Map<String, dynamic> params = {"filter": 'last_week'};
+      Map<String, dynamic> params = {"filter": 'last_month'};
       var response = await PerformanceRepository().getPerformance(params);
+      log("Res-->${jsonEncode(response.data)}");
       performanceData = response;
-      //Today's available
-      availableChat =
-          performanceData?.data?.todaysAvailiblity?.availableChat.toString();
-      print("availableChat-->$availableChat");
-      busyChat = performanceData?.data?.todaysAvailiblity?.busyChat.toString();
-      availableCall =
-          performanceData?.data?.todaysAvailiblity?.availableCall.toString();
-      busyCall = performanceData?.data?.todaysAvailiblity?.busyCall.toString();
-      availableLive =
-          performanceData?.data?.todaysAvailiblity?.availableLive.toString();
-      busyLive = performanceData?.data?.todaysAvailiblity?.busyLive.toString();
-      //Last 30 days
-      lastAvailableChat = performanceData
-          ?.data?.last30DaysAvailiblity?.availableChat
-          .toString();
-      lastAvailableCall = performanceData
-          ?.data?.last30DaysAvailiblity?.availableCall
-          .toString();
-      lastBusyChat =
-          performanceData?.data?.last30DaysAvailiblity?.busyChat.toString();
-      lastBusyCall =
-          performanceData?.data?.last30DaysAvailiblity?.busyCall.toString();
-      lastBusyLive =
-          performanceData?.data?.last30DaysAvailiblity?.busyLive.toString();
+      overAllScoreList.value = [
+        response.data?.response?.conversionRate,
+        response.data?.response?.repurchaseRate,
+        response.data?.response?.onlineHours,
+        response.data?.response?.liveHours,
+        response.data?.response?.eCommerce,
+        response.data?.response?.busyHours,
+      ];
 
-      update(['permomre']);
-      //Rank System
-      RankSystemController rankSystemController =
-          Get.put(RankSystemController());
+      update();
+      RankSystemController rankSystemController = Get.put(RankSystemController());
       rankSystemController.rankSystemList = performanceData?.data?.rankSystem;
 
       log("performanceData==>${jsonEncode(performanceData!.data)}");

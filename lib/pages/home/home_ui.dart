@@ -9,7 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
-
 import '../../../common/appbar.dart';
 import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';

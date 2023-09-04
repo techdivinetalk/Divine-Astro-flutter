@@ -49,6 +49,7 @@ class ApiProvider {
   final String logout = "Logout";
   final String updateBankDetails = "updateBankDetails";
   final String getKundliData = "getKundliData";
+  final String getHomePageData = "astroDashboard";
 
   //Kundli APIs
   final String astrologyBaseUrl = "https://json.astrologyapi.com/v1/";
@@ -67,7 +68,7 @@ class ApiProvider {
   //privacy policy & terms
   final String termsAndCondition = "termsAndCondition";
   final String privacyPolicy = "privacyPolicy";
-  
+
   final String astroScheduleOnline = "astroScheduleOnline";
 
   //Basic Auth
@@ -99,7 +100,7 @@ class ApiProvider {
     header[jsonAuthenticationName] = 'Bearer $_token';
     header[jsonCookietName] = version == 6
         ? 'XSRF-TOKEN=eyJpdiI6ImRHY1FIZ2J1eS8wenMvQlk0cWM5R1E9PSIsInZhbHVlIjoiNXZsMHVTZ1c1bEtSUUF3eVdvTDVpdy9QL1FpY0g4S0Nncit5OUw2YlhVbW5uVXhBNTNORzdZdmEyVVkra0hBMjFaTXJ5YWdHTHlwMG5BWFlaZGVMWDZSN3AwUUxIUEMxQ1ZiZmxOWkZJaXhJeStMUzBsZnhLeWd4MW5XMCtMNnkiLCJtYWMiOiI5YjkxY2VhNGE0OGE2OTY3NzhmZTVlMjQ4M2I4MTBlMjA1MTdjNGRlZjdmYzFlNzMzYTNkMGRiMjM2NjM1N2EzIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6Iml6THowdW85NUZxMzZPTldmV2JySEE9PSIsInZhbHVlIjoiNklBTHJxVi9Eek1lWDNkVnVhNGphdHRyZ2tFQXlCVWFTeFE4b2FJUTZqSlpuV0xtdkJTSmdtVFFkMWtLYi9FejRmZWE5Wis1azFXaG1UMnNVOE01UE1CNVBSc2JVVkR3WnAxeWc4bTF6WU1Xb3drNmpvREJMM1UxS0xzNTdFaXYiLCJtYWMiOiI4NmQxNzliNmQ0MzlhNTNiYzAwODgwMjU5NWU4ZTg0MzAxZjE3YWE3ODA2NjhmNjRiYjg2YmVjNmM2NjlkZWMzIiwidGFnIjoiIn0%3D'
-        : "XSRF-TOKEN=eyJpdiI6InhaMncwZnBRSjhBMWs2Wm9sYjM4ZUE9PSIsInZhbHVlIjoiZVFDeTA2R29VbElhV3B5V2Z4N1dXQ0NidWwySzBFVFZaRENsdGJKMkk0azVXM3ZCcEdDblFIeEdYejhkcURqRi9wRHlxQnRPTEtYRGJYVVhTZGNHbGhZWGVKMjFndjZpQ2xOdEdGODl4TlY3dXdvZlA3M09YdHpZdm0rM21YYS8iLCJtYWMiOiIyYmVlOTk5M2IzMjIzMDRmYzRkN2ZhZTFkYjJjODNkNGUzMjhlNjJhOWQxZjhjMDA1YTAxNzVmMWE4MGJkNjAwIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IjQ2d0NTSUdOcStUeHYyc29kSWFsVnc9PSIsInZhbHVlIjoiMTlnVitFQUtvdmw1U2lYaFRDcEpIdjR6N2dSbUd1VFRGQ1I3WGFaRk51Y1JVU3psczdVRXZCQWd4ZUl5VENaK2RJNlZ4ZmltZHFaajU3SXJydlN0QzhvVnlaczNvbkxsYVo4bnp0VU5HR0VmaFNNbUkwRklvUmJRUGZzV1NtdXAiLCJtYWMiOiI4OTk1MDUyMDMzZWU3NTA2MWJiNTM3M2JmZDdhMDk5NTI0NjA1NjE3MmI2NWMxMmM4YmEyYTk2MWFjN2U1MjU1IiwidGFnIjoiIn0%3D ";
+        : "XSRF-TOKEN=eyJpdiI6IkFuR3pFWGFRaUxXYzI2Y3VHNjY0cXc9PSIsInZhbHVlIjoiWlFVNWMzbGF1R2k0ME1Qc0FUYXpQUU1VWjBnbUhoSCtjSDA2ZzQzS21qUGdRN3lqK1JXTEErM2dDa2VlNTAvYzRBNGRPeFNuVDFGUklDOFo4c1FnelBBVlBOZkhDNUs2Tk1kazVUT1d5SEVEbzh0Nnoyb0VXM2tOM1A5OUpQVDciLCJtYWMiOiI5MmJkNjg5YzEyNmVlNmZiMzcxZmExNTY0ODg0MDlkMDRjMzY3OGU0YzBmOTZjNjE3NTU1OGM4MjVkZDVkMDUzIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6ImJ4UE9WaUIwa3l2cXF5MjBWRkR2aHc9PSIsInZhbHVlIjoicU1ZNlAwT0RQWXR6UmFJeW95UkxKVzBoOUE3d3Vld2k4NVN4WmhMc2J4aE4ycGt6WXV2THVjL0hYamFJblUvTkV2MDNIU05pWWJnQnIyYlA3bEthUFZnTG04TFFPczZhZnlmU2hObVVXcVJHby83Ump2QTlnT2dESkczSnZFREwiLCJtYWMiOiJhMjYzOGJiMGUxZTM3NjcxYWZkZWFhMTU0MDEyNzZiYjQwNzdlOTU0YTcwNjUxYTJiMWE5NzY4NGQ3ZGE1Mjk2IiwidGFnIjoiIn0%3D";
     return header;
   }
 
