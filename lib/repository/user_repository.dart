@@ -294,7 +294,7 @@ class UserRepository extends ApiProvider {
   Future<LogOutResponse> logOut() async {
     //progressService.showProgressDialog(true);
     try {
-      final response = await post(logout);
+      final response = await post(logout, headers: await getJsonHeaderURL());
       //progressService.showProgressDialog(false);
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
