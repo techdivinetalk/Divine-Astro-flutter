@@ -221,8 +221,7 @@ class HomeUI extends GetView<HomeController> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const VideoCallPage()));
-                             
+                              builder: (context) => VideoCallPage()));
                     }),
                 SizedBox(height: 10.h),
                 feedbackWidget(),
@@ -338,77 +337,6 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget sessionTypeWidget() {
-<<<<<<< HEAD
-    return Container(
-      padding: EdgeInsets.all(16.h),
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 1.0,
-              offset: const Offset(0.0, 3.0)),
-        ],
-        color: AppColors.white,
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "sessionType".tr,
-                style: AppTextStyle.textStyle12(
-                    fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
-              ),
-              SizedBox(height: 16.h),
-              Text(
-                "chat".tr.toUpperCase(),
-                style: AppTextStyle.textStyle12(
-                    fontColor: AppColors.darkBlue, fontWeight: FontWeight.w700),
-              ),
-              Text(
-                "₹25/Min",
-                style: AppTextStyle.textStyle10(
-                    fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
-              ),
-              SizedBox(height: 16.h),
-              Text(
-                "call".tr.toUpperCase(),
-                style: AppTextStyle.textStyle12(
-                    fontColor: AppColors.darkBlue, fontWeight: FontWeight.w700),
-              ),
-              Text(
-                "₹25/Min",
-                style: AppTextStyle.textStyle10(
-                    fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              Text(
-                "status".tr,
-                style: AppTextStyle.textStyle12(
-                    fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
-              ),
-              SizedBox(height: 18.h),
-              Obx(() => SwitchWidget(
-                    onTap: () {
-                      controller.chatSwitch.value =
-                          !controller.chatSwitch.value;
-                    },
-                    switchValue: controller.chatSwitch.value,
-                  )),
-              SizedBox(height: 20.h),
-              Obx(() => SwitchWidget(
-                    onTap: () {
-                      controller.callSwitch.value =
-                          !controller.callSwitch.value;
-                    },
-=======
     return GetBuilder<HomeController>(
       builder: (controller) => Container(
         padding: EdgeInsets.all(16.h),
@@ -482,7 +410,6 @@ class HomeUI extends GetView<HomeController> {
                 Obx(
                   () => SwitchWidget(
                     onTap: () => controller.callSwitchFN(),
->>>>>>> dev_divit
                     switchValue: controller.callSwitch.value,
                   ),
                 ),
@@ -505,36 +432,10 @@ class HomeUI extends GetView<HomeController> {
                       btnTitle: "Confirm Next Online Date",
                       pickerStyle: "DateCalendar",
                       looping: true,
-<<<<<<< HEAD
-                      onConfirm: (value) {},
-                      onChange: (value) {});
-                },
-                child: Container(
-                  width: 128.w,
-                  height: 31.h,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      colors: [
-                        AppColors.appYellowColour,
-                        AppColors.gradientBottom
-                      ],
-                    ),
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "scheduleNow".tr,
-                      style: AppTextStyle.textStyle10(
-                          fontColor: AppColors.brownColour,
-                          fontWeight: FontWeight.w400),
-=======
                       onConfirm: (value) {
                         //controller.scheduleCall();
                       },
-                      onChange: (value) {
-                      },
+                      onChange: (value) {},
                     );
 
                     // selectDateOrTime(Get.context!,
@@ -566,7 +467,6 @@ class HomeUI extends GetView<HomeController> {
                             fontColor: AppColors.brownColour,
                             fontWeight: FontWeight.w400),
                       ),
->>>>>>> dev_divit
                     ),
                   ),
                 ),

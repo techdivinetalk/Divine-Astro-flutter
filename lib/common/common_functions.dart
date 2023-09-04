@@ -23,12 +23,12 @@ import 'colors.dart';
 
 final UserRepository userRepository = Get.find<UserRepository>();
 SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
+var userData = preferenceService.getUserDetail();
 
 Future<String> uploadImageToS3Bucket(
     File? selectedFile, String fileName) async {
   var commonConstants = await userRepository.constantDetailsData();
   var dataString = commonConstants.data.awsCredentails.baseurl?.split(".");
-  var userData = preferenceService.getUserDetail();
   var extension = p.extension(selectedFile!.path);
   var response = await AwsS3.uploadFile(
     accessKey: commonConstants.data.awsCredentails.accesskey!,
@@ -49,7 +49,7 @@ Future<String> uploadImageToS3Bucket(
 void checkNotification() async {
   final snapshot = await FirebaseDatabase.instance
       .ref()
-      .child("astrologer/573/realTime/notification")
+      .child("astrologer/${userData?.id}/realTime/notification")
       .get();
   if (snapshot.value != null) {
     var notificationList = snapshot.value as Map;
@@ -86,7 +86,8 @@ void checkNotification() async {
             updateMsgDelieveredStatus(newMessage, 1);
           }
 
-          setHiveDatabase("userKey_573_8601", newMessage);
+          setHiveDatabase(
+              "userKey_${userData?.id}_${currentChatUserId.value}", newMessage);
         }
       } else {
         if (value["type"] == 0) {
@@ -95,7 +96,8 @@ void checkNotification() async {
           updateMsgDelieveredStatus(newMessage, 1);
         }
 
-        setHiveDatabase("userKey_573_8601", newMessage);
+        setHiveDatabase(
+            "userKey_${userData?.id}_${currentChatUserId.value}", newMessage);
       }
     });
     removeNotificationNode();
@@ -150,22 +152,24 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
 
   // messagesRef.set(message.toJson());
   firebaseDatabase
-      .ref("user/8693/realTime/notification/${newMessage.time}")
+      .ref(
+          "user/${currentChatUserId.value}/realTime/notification/${newMessage.time}")
       .set(message.toOfflineJson());
 
   removeNotificationNode(nodeId: "/${newMessage.time}");
 }
 
 removeNotificationNode({String? nodeId}) {
+  var userData = preferenceService.getUserDetail();
   if (nodeId == null) {
     FirebaseDatabase.instance
         .ref()
-        .child("astrologer/573/realTime/notification")
+        .child("astrologer/${userData?.id}/realTime/notification")
         .remove();
   } else {
     FirebaseDatabase.instance
         .ref()
-        .child("astrologer/573/realTime/notification$nodeId")
+        .child("astrologer/${userData?.id}/realTime/notification$nodeId")
         .remove();
   }
 }
