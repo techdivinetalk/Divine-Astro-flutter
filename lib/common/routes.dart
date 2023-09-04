@@ -10,6 +10,8 @@ import 'package:divine_astrologer/screens/home_screen_options/notice_board/notic
 import 'package:divine_astrologer/screens/home_screen_options/notice_board_detail/notice_detail_ui.dart';
 import 'package:divine_astrologer/screens/live_tips/live_tips_binding.dart';
 import 'package:divine_astrologer/screens/live_tips/live_tips_ui.dart';
+import 'package:divine_astrologer/screens/side_menu/settings/inner_pages/privacy_policy_ui.dart';
+import 'package:divine_astrologer/screens/side_menu/settings/inner_pages/terms_condition_ui.dart';
 import 'package:divine_astrologer/screens/side_menu/settings/settings_ui.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy/final_remedies_sub_binding.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy/final_remedies_sub_ui.dart';
@@ -94,6 +96,8 @@ class RouteName {
   static const String uploadStoryUi = "/uploadStoryUi";
   static const String imagePreviewUi = "/imagePreviewUi";
   static const String walletScreenUI = "/walletScreenUI";
+  static const String privacyPolicy = "/privacyPolicy";
+  static const String termsCondition = "/termsCondition";
 }
 
 class Routes {
@@ -222,5 +226,13 @@ class Routes {
         page: () => const WalletUI(),
         name: RouteName.walletScreenUI,
         binding: WalletBinding()),
+    GetPage(
+      page: () => const PrivacyPolicyUI(),
+      name: RouteName.privacyPolicy,
+    ),
+    GetPage(
+      page: () => const TermsConditionUI(),
+      name: RouteName.termsCondition,
+    ),
   ];
 }

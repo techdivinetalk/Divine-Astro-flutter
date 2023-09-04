@@ -1,4 +1,6 @@
 
+import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 abstract class AppException implements Exception {
@@ -36,7 +38,7 @@ class CustomException extends AppException {
         String? dismissButtonText,
         shouldShowFlushBar = true}) {
     if (shouldShowFlushBar) {
-      Get.snackbar(title, message).show();
+      divineSnackBar(data: message,color: AppColors.redColor);
     } else {
       debugPrint(message);
     }

@@ -1,5 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:divine_astrologer/model/astro_schedule_response.dart';
+import 'package:divine_astrologer/repository/notice_repository.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:get/get.dart';
@@ -11,7 +14,7 @@ import '../../model/res_login.dart';
 import '../../repository/user_repository.dart';
 
 class HomeController extends GetxController {
-  RxBool chatSwitch = false.obs;
+  RxBool chatSwitch = true.obs;
   RxBool callSwitch = false.obs;
   RxBool consultantOfferSwitch = false.obs;
   RxBool promotionOfferSwitch = false.obs;
@@ -87,6 +90,47 @@ class HomeController extends GetxController {
       }
     } on Exception {
       log('WhatsApp is not installed.');
+    }
+  }
+
+  void chatSwitchFN() {
+    chatSwitch.value = !chatSwitch.value;
+    if (chatSwitch.value) {
+      callSwitch.value = false;
+    } else {
+      callSwitch.value = true;
+    }
+  }
+
+  void callSwitchFN() {
+    callSwitch.value = !callSwitch.value;
+    if (callSwitch.value) {
+      chatSwitch.value = false;
+    } else {
+      chatSwitch.value = true;
+    }
+  }
+
+  final noticeRepository = Get.put(NoticeRepository());
+
+  void scheduleCall() async {
+    ///Type 1: for call 2 for chat.
+
+    int type = 2;
+    if (callSwitch.value) type = 1;
+    if (chatSwitch.value) type = 2;
+
+    AstroScheduleRequest request = AstroScheduleRequest(
+      scheduleDate: "",
+      scheduleTime: "",
+      type: type,
+    );
+
+    final response = await noticeRepository.astroScheduleOnlineAPI(
+      request.toJson(),
+    );
+    if (response.statusCode == 200 && response.success) {
+      divineSnackBar(data: response.message);
     }
   }
 }

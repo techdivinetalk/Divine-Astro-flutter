@@ -66,6 +66,7 @@ class DashboardController extends GetxController
   }
 
   void loadPreDefineData() async {
+    await Future.delayed(const Duration(milliseconds: 100));
     SpecialityList response = await repository.loadPreDefineData();
     await preferenceService.setSpecialAbility(response.toPrettyJson());
   }
