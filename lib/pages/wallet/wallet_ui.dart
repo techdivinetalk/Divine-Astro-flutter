@@ -10,7 +10,6 @@ import '../../../common/appbar.dart';
 import '../../../common/colors.dart';
 import '../../../common/common_bottomsheet.dart';
 import '../../../common/common_options_row.dart';
-import '../../screens/side_menu/side_menu_ui.dart';
 
 class WalletUI extends GetView<WalletController> {
   const WalletUI({Key? key}) : super(key: key);

@@ -3,7 +3,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/appbar.dart';
-import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -655,7 +654,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                   borderRadius: BorderRadius.circular(40),
                   child: CachedNetworkImage(
                     imageUrl:
-                        "${ApiProvider.imageBaseUrl}${reviewData?.customerImage}",
+                        "${controller.preference.getBaseImageURL()}${reviewData?.customerImage}",
                     height: 40,
                     width: 40,
                     fit: BoxFit.cover,
@@ -747,7 +746,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                               borderRadius: BorderRadius.circular(40),
                               child: CachedNetworkImage(
                                 imageUrl:
-                                    "${ApiProvider.imageBaseUrl}${reviewData?.replyData?.astrologerImage}",
+                                    "${controller.preference.getBaseImageURL()}/${reviewData?.replyData?.astrologerImage}",
                                 height: 40,
                                 width: 40,
                                 fit: BoxFit.cover,

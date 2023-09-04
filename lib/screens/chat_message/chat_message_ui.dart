@@ -111,7 +111,8 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                                                 chatDetail: controller
                                                     .chatMessages[index],
                                                 index: index,
-                                                chatMessage.senderId == 573)
+                                                chatMessage.senderId ==
+                                                    controller.userData?.id)
                                             : textMsgView(
                                                 context,
                                                 chatMessage,
@@ -476,29 +477,32 @@ class ChatMessageUI extends GetView<ChatMessageController> {
   }
 
   Widget kundliView({required ChatMessage chatDetail, required int index}) {
-    return Card(
-      child: Container(
-        padding: EdgeInsets.all(12.h),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: AppColors.extraLightGrey),
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Text(
-                  chatDetail.kundliName?[0] ?? "",
-                  style: AppTextStyle.textStyle24(
-                      fontColor: AppColors.white, fontWeight: FontWeight.w600),
+    return InkWell(
+      onTap: () {
+        controller.navigateToKundliDetail(chatDetail.kundliId!);
+      },
+      child: Card(
+        child: Container(
+          padding: EdgeInsets.all(12.h),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle, color: AppColors.extraLightGrey),
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Text(
+                    chatDetail.kundliName?[0] ?? "",
+                    style: AppTextStyle.textStyle24(
+                        fontColor: AppColors.white,
+                        fontWeight: FontWeight.w600),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(width: 15.w),
-            Expanded(
-              child: InkWell(
-                onTap: () {},
+              SizedBox(width: 15.w),
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -531,15 +535,15 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                   ],
                 ),
               ),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top: 15),
-              child: Icon(
-                Icons.keyboard_arrow_right,
-                size: 35,
+              const Padding(
+                padding: EdgeInsets.only(top: 15),
+                child: Icon(
+                  Icons.keyboard_arrow_right,
+                  size: 35,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -48,6 +48,7 @@ class ApiProvider {
   final String getIntroPageDesc = "getIntroPageDesc";
   final String logout = "logout";
   final String updateBankDetails = "updateBankDetails";
+  final String getKundliData = "getKundliData";
 
   //Kundli APIs
   final String astrologyBaseUrl = "https://json.astrologyapi.com/v1/";

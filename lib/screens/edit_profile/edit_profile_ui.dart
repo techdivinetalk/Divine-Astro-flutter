@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../common/custom_light_yellow_btn.dart';
-import '../../../common/text_field_custom.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
 
@@ -98,7 +97,8 @@ class EditProfileUI extends GetView<EditProfileController> {
                             return InkWell(
                               onTap: () {
                                 openBottomSheet(context, functionalityWidget:
-                                    StatefulBuilder(builder: (context, setState) {
+                                    StatefulBuilder(
+                                        builder: (context, setState) {
                                   return Padding(
                                     padding: const EdgeInsets.all(20),
                                     child: Column(
@@ -113,7 +113,8 @@ class EditProfileUI extends GetView<EditProfileController> {
                                             controller.tags.clear();
                                             debugPrint("$val");
                                             for (var element in val) {
-                                              controller.tagIndexes.add(element);
+                                              controller.tagIndexes
+                                                  .add(element);
                                               controller.tags.add(
                                                   controller.options[element]);
                                             }
@@ -152,7 +153,8 @@ class EditProfileUI extends GetView<EditProfileController> {
                                             borderWidth: 1,
                                             borderStyle: BorderStyle.solid,
                                             borderColor: AppColors.darkBlue,
-                                            borderRadius: const BorderRadius.all(
+                                            borderRadius:
+                                                const BorderRadius.all(
                                               Radius.circular(20),
                                             ),
                                           ),
@@ -178,7 +180,8 @@ class EditProfileUI extends GetView<EditProfileController> {
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Icon(
                                           Icons.add,

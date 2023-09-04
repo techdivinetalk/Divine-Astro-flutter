@@ -326,10 +326,10 @@ class UserRepository extends ApiProvider {
       if (response.statusCode == 200) {
         final loginImagesResponse = loginImagesFromJson(response.body);
         if (loginImagesResponse.statusCode == successResponse &&
-            loginImagesResponse.success!) {
+            loginImagesResponse.success) {
           return loginImagesResponse;
         } else {
-          throw CustomException(loginImagesResponse.message!);
+          throw CustomException(loginImagesResponse.message);
         }
       } else {
         throw CustomException(json.decode(response.body)["message"]);

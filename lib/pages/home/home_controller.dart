@@ -50,7 +50,7 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getConstantDetailsData();
+    // getConstantDetailsData();
     userData = preferenceService.getUserDetail();
     appbarTitle.value = userData?.name ?? "Astrologer Name";
   }

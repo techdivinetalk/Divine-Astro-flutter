@@ -8,7 +8,6 @@ import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 import '../../../common/appbar.dart';
 import '../../../common/routes.dart';
@@ -31,7 +30,8 @@ class HomeUI extends GetView<HomeController> {
                 padding: const EdgeInsets.only(right: 20),
                 child: InkWell(
                     onTap: () {
-                      controller.isShowTitle.value = !controller.isShowTitle.value;
+                      controller.isShowTitle.value =
+                          !controller.isShowTitle.value;
                     },
                     child: controller.isShowTitle.value
                         ? Assets.images.icVisibility.svg()
@@ -44,35 +44,13 @@ class HomeUI extends GetView<HomeController> {
             child: Column(
               children: [
                 Obx(() => controller.isShowTitle.value
-                    ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                        InkWell(
-                          onTap: () {},
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "₹100000",
-                                style: AppTextStyle.textStyle16(
-                                    fontColor: AppColors.appRedColour, fontWeight: FontWeight.w700),
-                              ),
-                              Text(
-                                "today".tr,
-                                style: AppTextStyle.textStyle16(
-                                    fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 15.w),
-                        InkWell(
-                          onTap: () {
-                            earningDetailPopup(Get.context!);
-                            // Get.toNamed(RouteName.yourEarning);
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                            InkWell(
+                              onTap: () {},
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     "₹100000",
@@ -80,47 +58,79 @@ class HomeUI extends GetView<HomeController> {
                                         fontColor: AppColors.appRedColour,
                                         fontWeight: FontWeight.w700),
                                   ),
-                                  const Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 20,
-                                  )
+                                  Text(
+                                    "today".tr,
+                                    style: AppTextStyle.textStyle16(
+                                        fontColor: AppColors.darkBlue,
+                                        fontWeight: FontWeight.w400),
+                                  ),
                                 ],
                               ),
-                              Text(
-                                "total".tr,
-                                style: AppTextStyle.textStyle16(
-                                    fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 10.w),
-                        InkWell(
-                          onTap: () {
-                            Get.toNamed(RouteName.checkKundli);
-                          },
-                          child: Ink(
-                            height: 54.h,
-                            decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                                colors: [AppColors.appYellowColour, AppColors.gradientBottom],
-                              ),
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
                             ),
-                            padding: EdgeInsets.symmetric(horizontal: 15.w),
-                            // alignment: Alignment.center,
-                            child: Center(
-                              child: Text(
-                                "checkKundli".tr,
-                                style: AppTextStyle.textStyle14(
-                                    fontColor: AppColors.brownColour, fontWeight: FontWeight.w500),
+                            SizedBox(width: 15.w),
+                            InkWell(
+                              onTap: () {
+                                earningDetailPopup(Get.context!);
+                                // Get.toNamed(RouteName.yourEarning);
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "₹100000",
+                                        style: AppTextStyle.textStyle16(
+                                            fontColor: AppColors.appRedColour,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                      const Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 20,
+                                      )
+                                    ],
+                                  ),
+                                  Text(
+                                    "total".tr,
+                                    style: AppTextStyle.textStyle16(
+                                        fontColor: AppColors.darkBlue,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                        ),
-                      ])
+                            SizedBox(width: 10.w),
+                            InkWell(
+                              onTap: () {
+                                Get.toNamed(RouteName.checkKundli);
+                              },
+                              child: Ink(
+                                height: 54.h,
+                                decoration: const BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.bottomCenter,
+                                    end: Alignment.topCenter,
+                                    colors: [
+                                      AppColors.appYellowColour,
+                                      AppColors.gradientBottom
+                                    ],
+                                  ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                ),
+                                padding: EdgeInsets.symmetric(horizontal: 15.w),
+                                // alignment: Alignment.center,
+                                child: Center(
+                                  child: Text(
+                                    "checkKundli".tr,
+                                    style: AppTextStyle.textStyle14(
+                                        fontColor: AppColors.brownColour,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ])
                     : Container()),
                 SizedBox(height: 10.h),
                 InkWell(
@@ -133,12 +143,14 @@ class HomeUI extends GetView<HomeController> {
                       Text(
                         "noticeBoard".tr,
                         style: AppTextStyle.textStyle16(
-                            fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
+                            fontColor: AppColors.darkBlue,
+                            fontWeight: FontWeight.w400),
                       ),
                       Text(
                         "viewAll".tr,
                         style: AppTextStyle.textStyle12(
-                            fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
+                            fontColor: AppColors.darkBlue,
+                            fontWeight: FontWeight.w400),
                       )
                     ],
                   ),
@@ -164,7 +176,10 @@ class HomeUI extends GetView<HomeController> {
                       gradient: const LinearGradient(
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
-                        colors: [AppColors.appYellowColour, AppColors.gradientBottom],
+                        colors: [
+                          AppColors.appYellowColour,
+                          AppColors.gradientBottom
+                        ],
                       ),
                     ),
                     child: Row(
@@ -175,14 +190,16 @@ class HomeUI extends GetView<HomeController> {
                         Text(
                           "goLive".tr,
                           style: AppTextStyle.textStyle20(
-                              fontWeight: FontWeight.w700, fontColor: AppColors.brownColour),
+                              fontWeight: FontWeight.w700,
+                              fontColor: AppColors.brownColour),
                         ),
                       ],
                     ),
                   ),
                 ),
                 SizedBox(height: 10.h),
-                Container(height: 1.h, color: AppColors.darkBlue.withOpacity(0.5)),
+                Container(
+                    height: 1.h, color: AppColors.darkBlue.withOpacity(0.5)),
                 SizedBox(height: 10.h),
                 sessionTypeWidget(),
                 SizedBox(height: 10.h),
@@ -201,7 +218,10 @@ class HomeUI extends GetView<HomeController> {
                     imageName: Assets.images.icEcommerce.svg(),
                     btnTitle: "eCommerce".tr,
                     onbtnTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => VideoCallPage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const VideoCallPage()));
                     }),
                 SizedBox(height: 10.h),
                 feedbackWidget(),
@@ -226,7 +246,10 @@ class HomeUI extends GetView<HomeController> {
                     gradient: const LinearGradient(
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
-                      colors: [AppColors.appYellowColour, AppColors.gradientBottom],
+                      colors: [
+                        AppColors.appYellowColour,
+                        AppColors.gradientBottom
+                      ],
                     ),
                   ),
                   child: Center(
@@ -237,7 +260,8 @@ class HomeUI extends GetView<HomeController> {
                         Text(
                           "help".tr,
                           style: AppTextStyle.textStyle10(
-                              fontColor: AppColors.brownColour, fontWeight: FontWeight.w700),
+                              fontColor: AppColors.brownColour,
+                              fontWeight: FontWeight.w700),
                         )
                       ],
                     ),
@@ -276,12 +300,14 @@ class HomeUI extends GetView<HomeController> {
                 Text(
                   "Sender Category",
                   style: AppTextStyle.textStyle16(
-                      fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                      fontWeight: FontWeight.w500,
+                      fontColor: AppColors.darkBlue),
                 ),
                 Text(
                   "07:16 pm  23/06/2023",
                   style: AppTextStyle.textStyle10(
-                      fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                      fontWeight: FontWeight.w400,
+                      fontColor: AppColors.darkBlue),
                 )
               ],
             ),
@@ -369,14 +395,16 @@ class HomeUI extends GetView<HomeController> {
               SizedBox(height: 18.h),
               Obx(() => SwitchWidget(
                     onTap: () {
-                      controller.chatSwitch.value = !controller.chatSwitch.value;
+                      controller.chatSwitch.value =
+                          !controller.chatSwitch.value;
                     },
                     switchValue: controller.chatSwitch.value,
                   )),
               SizedBox(height: 20.h),
               Obx(() => SwitchWidget(
                     onTap: () {
-                      controller.callSwitch.value = !controller.callSwitch.value;
+                      controller.callSwitch.value =
+                          !controller.callSwitch.value;
                     },
                     switchValue: controller.callSwitch.value,
                   )),
@@ -407,7 +435,10 @@ class HomeUI extends GetView<HomeController> {
                     gradient: LinearGradient(
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
-                      colors: [AppColors.appYellowColour, AppColors.gradientBottom],
+                      colors: [
+                        AppColors.appYellowColour,
+                        AppColors.gradientBottom
+                      ],
                     ),
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
@@ -415,7 +446,8 @@ class HomeUI extends GetView<HomeController> {
                     child: Text(
                       "scheduleNow".tr,
                       style: AppTextStyle.textStyle10(
-                          fontColor: AppColors.brownColour, fontWeight: FontWeight.w400),
+                          fontColor: AppColors.brownColour,
+                          fontWeight: FontWeight.w400),
                     ),
                   ),
                 ),
@@ -490,12 +522,14 @@ class HomeUI extends GetView<HomeController> {
                   Text(
                     "promotionOffer".tr,
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+                        fontWeight: FontWeight.w700,
+                        fontColor: AppColors.darkBlue),
                   ),
                   Text(
                     "  (₹5/Min)",
                     style: AppTextStyle.textStyle10(
-                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue),
                   ),
                 ],
               ),
@@ -514,7 +548,9 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget fullScreenBtnWidget(
-      {required Widget imageName, required String? btnTitle, required VoidCallback? onbtnTap}) {
+      {required Widget imageName,
+      required String? btnTitle,
+      required VoidCallback? onbtnTap}) {
     return Container(
         padding: EdgeInsets.all(16.h),
         decoration: BoxDecoration(
@@ -584,7 +620,8 @@ class HomeUI extends GetView<HomeController> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                          color: AppColors.extraLightGrey, borderRadius: BorderRadius.circular(10)),
+                          color: AppColors.extraLightGrey,
+                          borderRadius: BorderRadius.circular(10)),
                       height: 174.h,
                       width: 110.h,
                     ),
@@ -631,7 +668,8 @@ class HomeUI extends GetView<HomeController> {
             ),
             SizedBox(height: 10.h),
             Container(
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
               child: TextFormField(
                 maxLines: 6,
                 // maxLength: 96,
@@ -672,12 +710,14 @@ class HomeUI extends GetView<HomeController> {
                     width: ScreenUtil().screenWidth / 1.5,
                     height: 56,
                     decoration: BoxDecoration(
-                        color: AppColors.lightYellow, borderRadius: BorderRadius.circular(30)),
+                        color: AppColors.lightYellow,
+                        borderRadius: BorderRadius.circular(30)),
                     child: Center(
                         child: Text(
                       "submitFeedback".tr,
                       style: AppTextStyle.textStyle16(
-                          fontWeight: FontWeight.w600, fontColor: AppColors.brownColour),
+                          fontWeight: FontWeight.w600,
+                          fontColor: AppColors.brownColour),
                     ))),
               ),
             ),
@@ -704,9 +744,11 @@ class HomeUI extends GetView<HomeController> {
                         return Container(
                           width: MediaQuery.of(context).size.width / 0.2,
                           decoration: BoxDecoration(
-                              color: Colors.white, borderRadius: BorderRadius.circular(15)),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15)),
                           child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20.w, vertical: 15.h),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
@@ -718,7 +760,8 @@ class HomeUI extends GetView<HomeController> {
                                   child: Text(
                                     "${'payAttention'.tr}!",
                                     style: AppTextStyle.textStyle20(
-                                        fontColor: AppColors.redColor, fontWeight: FontWeight.w600),
+                                        fontColor: AppColors.redColor,
+                                        fontWeight: FontWeight.w600),
                                   ),
                                 ),
                                 SizedBox(
@@ -744,7 +787,8 @@ class HomeUI extends GetView<HomeController> {
                                       ),
                                       Center(
                                         child: Text(
-                                          controller.yourScore[controller.scoreIndex]['title'],
+                                          controller.yourScore[
+                                              controller.scoreIndex]['title'],
                                           style: AppTextStyle.textStyle14(
                                               fontColor: AppColors.blackColor,
                                               fontWeight: FontWeight.w400),
@@ -756,7 +800,10 @@ class HomeUI extends GetView<HomeController> {
                                       Stack(
                                         children: [
                                           Center(
-                                              child: Assets.images.bgMeterFinal.svg(height: 135.h,width: 270.h)),
+                                              child: Assets.images.bgMeterFinal
+                                                  .svg(
+                                                      height: 135.h,
+                                                      width: 270.h)),
                                           Positioned(
                                             bottom: 0,
                                             left: 115.h,
@@ -767,8 +814,10 @@ class HomeUI extends GetView<HomeController> {
                                                 ),
                                                 Text(
                                                   "Your Score",
-                                                  style: AppTextStyle.textStyle10(
-                                                      fontColor: AppColors.darkBlue),
+                                                  style:
+                                                      AppTextStyle.textStyle10(
+                                                          fontColor: AppColors
+                                                              .darkBlue),
                                                 ),
                                                 SizedBox(
                                                   height: 5.h,
@@ -776,7 +825,8 @@ class HomeUI extends GetView<HomeController> {
                                                 Text(
                                                   '80',
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.w700,
+                                                      fontWeight:
+                                                          FontWeight.w700,
                                                       color: AppColors.darkBlue,
                                                       fontSize: 20.sp),
                                                 ),
@@ -785,15 +835,18 @@ class HomeUI extends GetView<HomeController> {
                                                 ),
                                                 Text(
                                                   "Out of 100",
-                                                  style: AppTextStyle.textStyle10(
-                                                      fontColor: AppColors.darkBlue),
+                                                  style:
+                                                      AppTextStyle.textStyle10(
+                                                          fontColor: AppColors
+                                                              .darkBlue),
                                                 ),
                                               ],
                                             ),
                                           ),
                                           Center(
                                             child: SizedBox(
-                                              height: 140.h,width: 280.h,
+                                              height: 140.h,
+                                              width: 280.h,
                                               child: Stack(
                                                 children: [
                                                   Positioned(
@@ -805,8 +858,11 @@ class HomeUI extends GetView<HomeController> {
                                                           "0",
                                                           style: TextStyle(
                                                               fontSize: 11.sp,
-                                                              fontWeight: FontWeight.w400,
-                                                              color: Colors.black),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color:
+                                                                  Colors.black),
                                                         ),
                                                         SizedBox(
                                                           width: 240.w,
@@ -815,13 +871,15 @@ class HomeUI extends GetView<HomeController> {
                                                           "100",
                                                           style: TextStyle(
                                                               fontSize: 11.sp,
-                                                              fontWeight: FontWeight.w400,
-                                                              color: Colors.black),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color:
+                                                                  Colors.black),
                                                         ),
                                                       ],
                                                     ),
                                                   ),
-
                                                   Positioned(
                                                     top: 25.h,
                                                     left: 70.w,
@@ -831,8 +889,11 @@ class HomeUI extends GetView<HomeController> {
                                                           "25",
                                                           style: TextStyle(
                                                               fontSize: 11.sp,
-                                                              fontWeight: FontWeight.w400,
-                                                              color: Colors.black),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color:
+                                                                  Colors.black),
                                                         ),
                                                         SizedBox(
                                                           width: 110.w,
@@ -841,18 +902,19 @@ class HomeUI extends GetView<HomeController> {
                                                           "50",
                                                           style: TextStyle(
                                                               fontSize: 11.sp,
-                                                              fontWeight: FontWeight.w400,
-                                                              color: Colors.black),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color:
+                                                                  Colors.black),
                                                         ),
                                                       ],
                                                     ),
                                                   ),
-
                                                 ],
                                               ),
                                             ),
                                           ),
-
                                         ],
                                       ),
                                       // SizedBox(
@@ -980,7 +1042,8 @@ class HomeUI extends GetView<HomeController> {
                                 ),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                       child: InkWell(
@@ -990,7 +1053,8 @@ class HomeUI extends GetView<HomeController> {
                                         child: Container(
                                           decoration: BoxDecoration(
                                               border: Border.all(width: 1),
-                                              borderRadius: BorderRadius.circular(10)),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Center(
@@ -998,7 +1062,8 @@ class HomeUI extends GetView<HomeController> {
                                                 "previous".tr.toUpperCase(),
                                                 style: AppTextStyle.textStyle16(
                                                     fontWeight: FontWeight.w600,
-                                                    fontColor: AppColors.darkBlue),
+                                                    fontColor:
+                                                        AppColors.darkBlue),
                                               ),
                                             ),
                                           ),
@@ -1014,7 +1079,8 @@ class HomeUI extends GetView<HomeController> {
                                         child: Container(
                                           decoration: BoxDecoration(
                                               border: Border.all(width: 1),
-                                              borderRadius: BorderRadius.circular(10)),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Center(
@@ -1022,7 +1088,8 @@ class HomeUI extends GetView<HomeController> {
                                                 "next".tr.toUpperCase(),
                                                 style: AppTextStyle.textStyle16(
                                                     fontWeight: FontWeight.w600,
-                                                    fontColor: AppColors.darkBlue),
+                                                    fontColor:
+                                                        AppColors.darkBlue),
                                               ),
                                             ),
                                           ),
@@ -1034,7 +1101,8 @@ class HomeUI extends GetView<HomeController> {
                                 SizedBox(
                                   height: 15.h,
                                 ),
-                                controller.scoreIndex == controller.yourScore.length - 1
+                                controller.scoreIndex ==
+                                        controller.yourScore.length - 1
                                     ? GestureDetector(
                                         onTap: () {
                                           Navigator.pop(context);
@@ -1049,7 +1117,8 @@ class HomeUI extends GetView<HomeController> {
                                                   AppColors.gradientBottom
                                                 ],
                                               ),
-                                              borderRadius: BorderRadius.circular(10)),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Center(
@@ -1057,7 +1126,8 @@ class HomeUI extends GetView<HomeController> {
                                                 "close".tr.toUpperCase(),
                                                 style: AppTextStyle.textStyle16(
                                                     fontWeight: FontWeight.w600,
-                                                    fontColor: AppColors.brownColour),
+                                                    fontColor:
+                                                        AppColors.brownColour),
                                               ),
                                             ),
                                           ),
@@ -1066,7 +1136,8 @@ class HomeUI extends GetView<HomeController> {
                                     : Container(
                                         decoration: BoxDecoration(
                                             color: AppColors.lightGrey,
-                                            borderRadius: BorderRadius.circular(10)),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Center(
@@ -1102,12 +1173,14 @@ class HomeUI extends GetView<HomeController> {
                   Text(
                     "Actual Payment:",
                     style: AppTextStyle.textStyle16(
-                        fontWeight: FontWeight.w500, fontColor: AppColors.appRedColour),
+                        fontWeight: FontWeight.w500,
+                        fontColor: AppColors.appRedColour),
                   ),
                   Text(
                     "₹1000000000",
                     style: AppTextStyle.textStyle16(
-                        fontWeight: FontWeight.w500, fontColor: AppColors.appRedColour),
+                        fontWeight: FontWeight.w500,
+                        fontColor: AppColors.appRedColour),
                   ),
                 ],
               ),
@@ -1127,12 +1200,14 @@ class HomeUI extends GetView<HomeController> {
                   Text(
                     "Actual Payment:",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                        fontWeight: FontWeight.w500,
+                        fontColor: AppColors.darkBlue),
                   ),
                   Text(
                     "₹1000000000",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                        fontWeight: FontWeight.w500,
+                        fontColor: AppColors.darkBlue),
                   ),
                 ],
               ),
@@ -1202,7 +1277,8 @@ class HomeUI extends GetView<HomeController> {
                               "Supplement:",
                               style: AppTextStyle.textStyle12(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.darkBlue.withOpacity(0.5)),
+                                  fontColor:
+                                      AppColors.darkBlue.withOpacity(0.5)),
                             ),
                           ],
                         ),
@@ -1233,12 +1309,14 @@ class HomeUI extends GetView<HomeController> {
                     Text(
                       "Total Tax:",
                       style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
                     ),
                     Text(
                       "₹1000000000",
                       style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ],
                 ),
@@ -1295,13 +1373,15 @@ class HomeUI extends GetView<HomeController> {
                     child: Text(
                       "Status:",
                       style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ),
                   Text(
                     "to be settled",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                        fontWeight: FontWeight.w500,
+                        fontColor: AppColors.darkBlue),
                   ),
                 ],
               ),
@@ -1316,13 +1396,15 @@ class HomeUI extends GetView<HomeController> {
                     child: Text(
                       "Time Period",
                       style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ),
                   Text(
                     "16th May 2023 - 23rd May 2023",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                        fontWeight: FontWeight.w500,
+                        fontColor: AppColors.darkBlue),
                   ),
                 ],
               ),
