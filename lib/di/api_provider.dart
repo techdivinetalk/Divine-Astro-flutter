@@ -46,7 +46,7 @@ class ApiProvider {
   final String reportUserReview = "reportReview";
   final String getPerformanceData = "performance";
   final String getIntroPageDesc = "getIntroPageDesc";
-  final String logout = "logout";
+  final String logout = "Logout";
   final String updateBankDetails = "updateBankDetails";
   final String getKundliData = "getKundliData";
 
@@ -60,6 +60,10 @@ class ApiProvider {
   final String sadhesatiStatus = "sadhesati_current_status";
   final String pitraDoshReport = "pitra_dosha_report";
   final String horoChartImage = "horo_chart_image/";
+
+  //chat
+  final String getChatList = "getChatList";
+
 
   //Basic Auth
   final String username = "625170";

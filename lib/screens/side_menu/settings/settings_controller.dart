@@ -31,24 +31,20 @@ class SettingsController extends GetxController {
   }
 
   void logOut() {
-    preferenceService.erase().whenComplete(
-          () => Get.offAllNamed(RouteName.login),
-        );
-
-    // userRepository.logOut().then(
-    //   (value) async {
-    //     if (value.statusCode == 200 && value.success == true) {
-    //       preferenceService.erase().whenComplete(
-    //             () => Get.offAllNamed(RouteName.login),
-    //           );
-    //     }
-    //   },
-    // ).onError((error, stackTrace) {
-    //   if (error is AppException) {
-    //     error.onException();
-    //   } else {
-    //     divineSnackBar(data: error.toString(), color: AppColors.redColor);
-    //   }
-    // });
+    userRepository.logOut().then(
+      (value) async {
+        if (value.statusCode == 200 && value.success == true) {
+          preferenceService.erase().whenComplete(
+                () => Get.offAllNamed(RouteName.login),
+              );
+        }
+      },
+    ).onError((error, stackTrace) {
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      }
+    });
   }
 }
