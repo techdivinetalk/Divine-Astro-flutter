@@ -21,7 +21,7 @@ class TermsConditionUI extends GetView<SettingsController> {
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
-              color: AppColors.textColor,
+              color: AppColors.darkBlue,
             )),
         leading: IconButton(
           onPressed: () {

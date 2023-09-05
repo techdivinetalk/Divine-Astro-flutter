@@ -1,8 +1,9 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:async';
 
 import 'package:custom_timer/custom_timer.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
@@ -89,9 +90,9 @@ class LiveController extends GetxController {
           for (var element in data.first.astroBlockCustomer!) {
             blockIds.add(element.customerId.toString());
             database.ref().child("live/$astroId/").update({
-              "blockUser": {element.customerId : {
-                "id":element.customerId
-              }}
+              "blockUser": {
+                element.customerId: {"id": element.customerId}
+              }
             });
           }
         }

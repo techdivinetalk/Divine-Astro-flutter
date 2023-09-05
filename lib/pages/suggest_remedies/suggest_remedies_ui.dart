@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use_from_same_package
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/routes.dart';
-import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/repository/shop_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -130,7 +129,7 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
                                         borderRadius: BorderRadius.circular(20),
                                         child: CachedNetworkImage(
                                           imageUrl:
-                                              "${ApiProvider.imageBaseUrl}${item?.shopImage}",
+                                              "${controller.preferenceService.getBaseImageURL()}/${item?.shopImage}",
                                           fit: BoxFit.fill,
                                         )),
                                     SizedBox(height: 8.h),

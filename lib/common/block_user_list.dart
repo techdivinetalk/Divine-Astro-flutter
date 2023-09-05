@@ -81,7 +81,7 @@ class BlockUserList extends GetView<LiveController> {
                                     width: 20.w,
                                     child: CustomText(
                                       (index + 1).toString(),
-                                      fontColor: AppColors.textColor,
+                                      fontColor: AppColors.darkBlue,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16.sp,
                                     )),
@@ -100,7 +100,7 @@ class BlockUserList extends GetView<LiveController> {
                                 SizedBox(width: 16.w),
                                 CustomText(item.getCustomers?.name ?? "",
                                     fontSize: 16.sp,
-                                    fontColor: AppColors.textColor,
+                                    fontColor: AppColors.darkBlue,
                                     fontWeight: FontWeight.w600),
                                 const Spacer(),
                                 IconButton(

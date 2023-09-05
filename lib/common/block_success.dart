@@ -5,9 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class BlockSuccess extends StatelessWidget {
-  final String? url,text;
+  final String? url, text;
 
-  const BlockSuccess({Key? key, this.url,this.text}) : super(key: key);
+  const BlockSuccess({Key? key, this.url, this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,8 @@ class BlockSuccess extends StatelessWidget {
                   child: Text(
                     text ?? "",
                     maxLines: 2,
-                    style: TextStyle(fontSize: 16.sp, color: AppColors.textColor),
+                    style:
+                        TextStyle(fontSize: 16.sp, color: AppColors.darkBlue),
                   ),
                 ),
               ],

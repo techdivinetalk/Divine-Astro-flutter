@@ -4,9 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class EndCoHost extends StatelessWidget {
-  final VoidCallback? onYes,onNo;
+  final VoidCallback? onYes, onNo;
   final String? name;
-  const EndCoHost({Key? key,this.onYes,this.onNo,this.name}) : super(key: key);
+  const EndCoHost({Key? key, this.onYes, this.onNo, this.name})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,23 +15,38 @@ class EndCoHost extends StatelessWidget {
       backgroundColor: AppColors.white,
       surfaceTintColor: AppColors.white,
       shape: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.appColorDark),
+        borderSide: const BorderSide(color: AppColors.appYellowColour),
         borderRadius: BorderRadius.circular(20),
       ),
       title: Text.rich(TextSpan(children: <InlineSpan>[
-        TextSpan(text: "Are you sure you want to Disconnect the call with ",style: TextStyle(fontSize: 16.sp,color: AppColors.textColor)),
-        TextSpan(text: name ?? "",style: TextStyle(fontSize: 16.sp,color: AppColors.textColor,fontWeight: FontWeight.bold))
+        TextSpan(
+            text: "Are you sure you want to Disconnect the call with ",
+            style: TextStyle(fontSize: 16.sp, color: AppColors.darkBlue)),
+        TextSpan(
+            text: name ?? "",
+            style: TextStyle(
+                fontSize: 16.sp,
+                color: AppColors.darkBlue,
+                fontWeight: FontWeight.bold))
       ])),
       actions: [
         TextButton(
-          child: Text("Yes",style: TextStyle(fontSize: 16.sp,color: AppColors.textColor,fontWeight: FontWeight.bold)),
+          child: Text("Yes",
+              style: TextStyle(
+                  fontSize: 16.sp,
+                  color: AppColors.darkBlue,
+                  fontWeight: FontWeight.bold)),
           onPressed: () async {
             onYes!();
             Get.back();
           },
         ),
         TextButton(
-          child: Text("No",style: TextStyle(fontSize: 16.sp,color: AppColors.textColor,fontWeight: FontWeight.bold)),
+          child: Text("No",
+              style: TextStyle(
+                  fontSize: 16.sp,
+                  color: AppColors.darkBlue,
+                  fontWeight: FontWeight.bold)),
           onPressed: () async {
             onNo!();
             Get.back();

@@ -192,7 +192,7 @@ void divineSnackBar({required String data, Color? color, Duration? duration}) {
         style: TextStyle(
             color: color != null ? AppColors.white : AppColors.blackColor),
       ),
-      backgroundColor: color ?? AppColors.yellow,
+      backgroundColor: color ?? AppColors.lightYellow,
       showCloseIcon: true,
       closeIconColor: color != null ? AppColors.white : AppColors.blackColor,
     );

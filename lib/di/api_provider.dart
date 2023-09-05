@@ -18,7 +18,6 @@ class ApiProvider {
   static const String version = 'v7';
   final String baseUrl = "https://wakanda-api.divinetalk.live/admin/$version/";
   final String baseUrlv7 = "https://wakanda-api.divinetalk.live/admin/v7/";
-  static String imageBaseUrl = "https://divinenew.s3.ap-south-1.amazonaws.com/";
 
   final String jsonHeaderName = "Content-Type";
   final String jsonCookietName = "Cookie";

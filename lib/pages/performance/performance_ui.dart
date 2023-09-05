@@ -1,7 +1,6 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/model/performance_model_class.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -14,11 +13,10 @@ import '../../screens/side_menu/side_menu_ui.dart';
 import 'performance_controller.dart';
 
 class PerformanceUI extends GetView<PerformanceController> {
-  PerformanceUI({Key? key}) : super(key: key);
+  const PerformanceUI({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    PerformanceController controller = Get.put(PerformanceController());
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar:

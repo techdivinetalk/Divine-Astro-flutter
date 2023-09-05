@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/switch_component.dart';
@@ -10,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
 import '../../../common/appbar.dart';
 import '../../../common/routes.dart';
@@ -224,7 +221,7 @@ class HomeUI extends GetView<HomeController> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => VideoCallPage()));
+                              builder: (context) => const VideoCallPage()));
                     }),
                 SizedBox(height: 10.h),
                 feedbackWidget(),
@@ -1442,15 +1439,15 @@ class SelectedTime extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if(controller.selectedTime.value.isNotEmpty){
+        if (controller.selectedTime.value.isNotEmpty) {
           return Text(
-            "${controller.selectedDate.value.toCustomFormattedString()} ${controller.selectedTime.value}" ,
+            "${controller.selectedDate.value.toCustomFormattedString()} ${controller.selectedTime.value}",
             style: AppTextStyle.textStyle10(
               fontColor: AppColors.darkBlue,
               fontWeight: FontWeight.w400,
             ),
           );
-        }else {
+        } else {
           return Text(
             controller.selectedDate.value.toCustomFormattedString(),
             style: AppTextStyle.textStyle10(
@@ -1459,7 +1456,6 @@ class SelectedTime extends GetView<HomeController> {
             ),
           );
         }
-
       },
     );
   }

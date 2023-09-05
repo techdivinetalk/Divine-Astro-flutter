@@ -1,4 +1,3 @@
-import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import '../../common/colors.dart';
 import '../../common/common_bottomsheet.dart';
 
 import '../../gen/assets.gen.dart';
-import '../live_page/constant.dart';
 import '../live_page/live_page.dart';
 
 class LiveTipsController extends GetxController {
@@ -35,8 +33,8 @@ class LiveTipsController extends GetxController {
       "image": image,
       "isEngaged": 0,
       "isAvailable": true,
-      "coHostUser":"",
-      "callType":"",
+      "coHostUser": "",
+      "callType": "",
     });
     Get.to(LivePage(
       liveID: astroId.toString(),

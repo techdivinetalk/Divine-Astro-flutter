@@ -981,7 +981,7 @@ class ThankYouReportUI extends GetView<ProfilePageController> {
                     onPressed: () {
                       Get.back();
                     },
-                    color: AppColors.yellow,
+                    color: AppColors.lightYellow,
                     child: Text(
                       "okay".tr,
                       style: TextStyle(

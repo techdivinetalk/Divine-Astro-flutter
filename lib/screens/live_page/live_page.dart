@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages, unused_local_variable, use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
@@ -9,8 +11,6 @@ import 'package:divine_astrologer/common/end_cohost.dart';
 import 'package:divine_astrologer/common/end_session_dialog.dart';
 import 'package:divine_astrologer/common/gift_sheet.dart';
 import 'package:divine_astrologer/common/unblock_user.dart';
-import 'package:divine_astrologer/di/shared_preference_service.dart';
-import 'package:divine_astrologer/screens/blocked_user/blocked_user_ui.dart';
 import 'package:divine_astrologer/screens/live_page/live_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,14 +27,11 @@ import 'package:lottie/lottie.dart';
 import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import 'package:http/http.dart' as http;
-import '../../common/block_success.dart';
 import '../../common/cached_network_image.dart';
 import '../../common/colors.dart';
 import '../../common/custom_text.dart';
 import '../../common/custom_text_field.dart';
 import '../../common/leader_board_sheet.dart';
-import '../../common/live_star.dart';
-import '../../common/switch_component.dart';
 import '../../common/waitlist_sheet.dart';
 import '../../gen/assets.gen.dart';
 import '../../repository/user_repository.dart';
@@ -358,7 +355,7 @@ class LivePageState extends State<LivePage>
             Text(
               '${message.user.name}: ',
               style: const TextStyle(
-                color: AppColors.appColorDark,
+                color: AppColors.appYellowColour,
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
               ),
@@ -374,13 +371,13 @@ class LivePageState extends State<LivePage>
                 ),
               ),
             ),
-            Spacer(),
+            const Spacer(),
             isOtherUser
-                ? Icon(
+                ? const Icon(
                     Icons.more_vert,
                     color: Colors.white,
                   )
-                : SizedBox(),
+                : const SizedBox(),
           ],
         ),
       ),
@@ -441,7 +438,7 @@ class LivePageState extends State<LivePage>
           Container(
             height: 48.h,
             decoration: BoxDecoration(
-                color: AppColors.textColor,
+                color: AppColors.darkBlue,
                 borderRadius: BorderRadius.circular(28)),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -617,7 +614,7 @@ class LivePageState extends State<LivePage>
                                             ),
                                             inputBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
-                                                color: AppColors.textColor
+                                                color: AppColors.darkBlue
                                                     .withOpacity(0.15),
                                               ),
                                               borderRadius:
@@ -772,7 +769,7 @@ class LivePageState extends State<LivePage>
             ),
           ),
         ),
-        Spacer(),
+        const Spacer(),
         Obx(() => ClipRRect(
               borderRadius: BorderRadius.circular(30),
               child: BackdropFilter(
@@ -1028,7 +1025,7 @@ class LivePageState extends State<LivePage>
         for (var i = 0; i < data["gift_count"]; i++) {
           await Future.delayed(const Duration(seconds: 1));
           GiftWidget.show(context,
-              "assets/svga/" + controller.svgaAnime[data["gift_type"]]);
+              "assets/svga/${controller.svgaAnime[data["gift_type"]]}");
         }
       }
     }

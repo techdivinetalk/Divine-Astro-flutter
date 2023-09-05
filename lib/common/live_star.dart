@@ -19,7 +19,7 @@ class LiveStar extends StatelessWidget {
               backgroundColor: AppColors.white,
               surfaceTintColor: AppColors.white,
               shape: OutlineInputBorder(
-                borderSide: const BorderSide(color: AppColors.appColorDark),
+                borderSide: const BorderSide(color: AppColors.appYellowColour),
                 borderRadius: BorderRadius.circular(20),
               ),
               title: Row(
@@ -32,7 +32,7 @@ class LiveStar extends StatelessWidget {
                       children: [
                         Center(
                           child: Container(
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.black,
                             ),
@@ -59,12 +59,12 @@ class LiveStar extends StatelessWidget {
                             text: "Raj ",
                             style: TextStyle(
                                 fontSize: 16.sp,
-                                color: AppColors.textColor,
+                                color: AppColors.darkBlue,
                                 fontWeight: FontWeight.bold)),
                         TextSpan(
                             text: "is your",
-                            style:
-                                TextStyle(fontSize: 16.sp, color: AppColors.textColor))
+                            style: TextStyle(
+                                fontSize: 16.sp, color: AppColors.darkBlue))
                       ])),
                       Text.rich(TextSpan(children: <InlineSpan>[
                         TextSpan(
@@ -75,13 +75,13 @@ class LiveStar extends StatelessWidget {
                                 fontWeight: FontWeight.bold)),
                         TextSpan(
                             text: "now!!!",
-                            style:
-                                TextStyle(fontSize: 16.sp, color: AppColors.textColor))
+                            style: TextStyle(
+                                fontSize: 16.sp, color: AppColors.darkBlue))
                       ])),
                       Text("Okay! Got it.",
                           style: TextStyle(
                               fontSize: 12.sp,
-                              color: AppColors.textColor,
+                              color: AppColors.darkBlue,
                               decoration: TextDecoration.underline)),
                     ],
                   )
@@ -89,15 +89,15 @@ class LiveStar extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 0,
+                top: 0,
                 right: 30.h,
                 child: Assets.images.planetStarLive
-                    .image(width: 132.w,height: 132.h)),
+                    .image(width: 132.w, height: 132.h)),
             Positioned(
-              bottom: 20,
+                bottom: 20,
                 right: 40.h,
-                child: Assets.images.starLiveBig
-                    .image(width: 80.w,height: 80.h))
+                child:
+                    Assets.images.starLiveBig.image(width: 80.w, height: 80.h))
           ],
         ),
       ),

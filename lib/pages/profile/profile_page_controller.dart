@@ -71,14 +71,14 @@ class ProfilePageController extends GetxController {
     ChangeLanguageModelClass(
         'Marathi',
         'मराठी',
-        AppColors.pink,
+        AppColors.appRedColour,
         (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "mr_IN"
             ? true
             : false),
     ChangeLanguageModelClass(
         'Gujarati',
         'ગુજરાતી',
-        AppColors.pink,
+        AppColors.appRedColour,
         (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "gu_IN"
             ? true
             : false),

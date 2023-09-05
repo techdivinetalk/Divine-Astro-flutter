@@ -39,24 +39,25 @@ class LeaderBoard extends StatelessWidget {
           const SizedBox(height: 10),
           ClipRRect(
             borderRadius:
-            const BorderRadius.vertical(top: Radius.circular(50.0)),
+                const BorderRadius.vertical(top: Radius.circular(50.0)),
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 15,sigmaY: 15),
+              filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(50.0)),
+                      const BorderRadius.vertical(top: Radius.circular(50.0)),
                   color: AppColors.white.withOpacity(0.1),
                 ),
                 child: ListView.separated(
                   itemCount: 5,
                   shrinkWrap: true,
-                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                   itemBuilder: (context, index) {
                     return Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(40),
-                          border: Border.all(color: AppColors.appColorDark),
+                          border: Border.all(color: AppColors.appYellowColour),
                           color: AppColors.white),
                       height: 80.h,
                       child: Row(
@@ -69,7 +70,8 @@ class LeaderBoard extends StatelessWidget {
                             height: 48.h,
                             clipBehavior: Clip.antiAlias,
                             decoration: const BoxDecoration(
-                                shape: BoxShape.circle, color: AppColors.blackColor),
+                                shape: BoxShape.circle,
+                                color: AppColors.blackColor),
                           ),
                           SizedBox(width: 16.w),
                           Column(
@@ -78,10 +80,11 @@ class LeaderBoard extends StatelessWidget {
                             children: [
                               CustomText("Username_1",
                                   fontSize: 16.sp,
-                                  fontColor: AppColors.textColor,
+                                  fontColor: AppColors.darkBlue,
                                   fontWeight: FontWeight.bold),
                               CustomText("₹1000",
-                                  fontSize: 18.sp, fontColor: AppColors.textColor),
+                                  fontSize: 18.sp,
+                                  fontColor: AppColors.darkBlue),
                             ],
                           ),
                         ],
@@ -112,7 +115,7 @@ class LeaderBoard extends StatelessWidget {
           width: 32.w,
           child: CustomText(
             index.toString(),
-            fontColor: AppColors.textColor,
+            fontColor: AppColors.darkBlue,
             fontSize: 32.sp,
           ));
     }
