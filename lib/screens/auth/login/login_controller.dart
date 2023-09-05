@@ -84,20 +84,20 @@ class LoginController extends GetxController {
   }
 
   void updateLoginDatainFirebase(ResLogin data) {
-    FirebaseUserData userData = FirebaseUserData(
+    FirebaseUserData firebaseUserData = FirebaseUserData(
       data.data!.name!,
       data.data!.deviceToken!,
       data.data!.image!,
       RealTime(
           isEngagedStatus: 0,
-          uniqueId: data.data!.deviceModel!,
+          uniqueId: data.data!.deviceModel ?? "",
           walletBalance: 0),
     );
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
 
     final DatabaseReference databaseRef =
         firebaseDatabase.ref().child("astrologer/${data.data?.id}");
-    databaseRef.set(userData.toJson());
+    databaseRef.set(firebaseUserData.toJson());
   }
 
   @override

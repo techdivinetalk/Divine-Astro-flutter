@@ -97,12 +97,18 @@ class ProfileUI extends GetView<ProfilePageController> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        controller.userData?.name ?? "",
-                                        style: AppTextStyle.textStyle20(
-                                            fontWeight: FontWeight.w600,
-                                            fontColor: AppColors.darkBlue),
+                                      Flexible(
+                                        child: Text(
+                                          controller.userData?.name ?? "",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          softWrap: true,
+                                          style: AppTextStyle.textStyle20(
+                                              fontWeight: FontWeight.w600,
+                                              fontColor: AppColors.darkBlue),
+                                        ),
                                       ),
+                                      const SizedBox(width: 5),
                                       InkWell(
                                         onTap: () {
                                           Get.toNamed(RouteName.editProfileUI);

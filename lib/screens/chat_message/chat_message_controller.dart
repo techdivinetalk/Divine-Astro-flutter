@@ -66,7 +66,7 @@ class ChatMessageController extends GetxController {
     userData = preferenceService.getUserDetail();
     currentUserId.value = 8693;
     currentChatUserId.value = 8693;
-    userDataKey = "userKey_${userData?.id}_$currentUserId";
+    userDataKey = "userKey_${userData?.id}_${currentUserId.value}";
     getChatList();
 
     msgFocus.addListener(() {
@@ -111,9 +111,9 @@ class ChatMessageController extends GetxController {
         } else {}
       }
     } else {
-      Map<String, int> params = {"customer_id": currentUserId.value};
-      var response = await chatRepository.getChatListApi(params);
-      debugPrint("$response");
+      // Map<String, int> params = {"customer_id": currentUserId.value};
+      // var response = await chatRepository.getChatListApi(params);
+      // debugPrint("$response");
     }
   }
 
@@ -181,6 +181,12 @@ class ChatMessageController extends GetxController {
         chatMessages.add(newMessage);
         scrollToBottomFunc();
         updateMsgDelieveredStatus(newMessage, 2);
+        if (messgeScrollController.position.pixels ==
+            messgeScrollController.position.maxScrollExtent) {
+          Future.delayed(const Duration(seconds: 1)).then((value) {
+            scrollToBottomFunc();
+          });
+        }
       } else {
         newMessage.type = 1;
         chatMessages.add(newMessage);

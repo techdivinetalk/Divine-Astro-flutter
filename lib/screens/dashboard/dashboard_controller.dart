@@ -42,17 +42,19 @@ class DashboardController extends GetxController
     firebaseMessagingConfig(Get.context!);
   }
 
-  // @override
-  // void onReady() {
-  //   super.onReady();
-  //    notiticationCheck ??= FirebaseDatabase.instance.ref("astrologer/${userData?.id}/realTime/notification")
-  //       .onValue
-  //       .listen((event) {
-  //     debugPrint("Your event $event");
-  //     checkNotification();
-  //     debugPrint("Value has been updated: ${event.snapshot.value}");
-  //   });
-  // }
+  @override
+  void onReady() {
+    super.onReady();
+    userData = preferenceService.getUserDetail();
+    notiticationCheck ??= FirebaseDatabase.instance
+        .ref("astrologer/${userData?.id}/realTime/notification")
+        .onValue
+        .listen((event) {
+      debugPrint("Your event $event");
+      checkNotification();
+      debugPrint("Value has been updated: ${event.snapshot.value}");
+    });
+  }
 
   void askPermission() async {
     await [

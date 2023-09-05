@@ -25,7 +25,7 @@ class FirebaseNetworkService extends GetxService {
         firebaseDatabase.ref().child(".info/connected").onValue;
 
     Stream<DatabaseEvent> randomCheck =
-        firebaseDatabase.ref().child("astrologer/573/watcher").onValue;
+        firebaseDatabase.ref().child("astrologer/9/watcher").onValue;
 
     infoConnect.listen((event) {
       final connected = event.snapshot.value as bool? ?? false;
