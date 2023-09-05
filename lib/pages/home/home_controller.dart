@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
 import 'package:divine_astrologer/repository/notice_repository.dart';
+import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
@@ -60,7 +61,7 @@ class HomeController extends GetxController {
     userData = preferenceService.getUserDetail();
     appbarTitle.value = userData?.name ?? "Astrologer Name";
     getConstantDetailsData();
-    // getDashboardDetail();
+    getDashboardDetail();
   }
 
   ConstantDetailsModelClass? getConstantDetails;
@@ -143,25 +144,42 @@ class HomeController extends GetxController {
   }
 
   final noticeRepository = Get.put(NoticeRepository());
+  Rx<DateTime> selectedDate = DateTime.now().obs;
+  Rx<String> selectedTime = ''.obs;
+
+  void selectDate(String value) {
+    selectedDate(value.toDate());
+  }
+
+  void selectTime(String value) {
+    selectedTime(value);
+  }
 
   void scheduleCall() async {
-    ///Type 1: for call 2 for chat.
+    try {
+      ///Type 1: for call 2 for chat.
 
-    int type = 2;
-    if (callSwitch.value) type = 1;
-    if (chatSwitch.value) type = 2;
+      if (selectedTime.value.isEmpty) return;
+      int type = 2;
+      if (callSwitch.value) type = 1;
+      if (chatSwitch.value) type = 2;
 
-    AstroScheduleRequest request = AstroScheduleRequest(
-      scheduleDate: "",
-      scheduleTime: "",
-      type: type,
-    );
+      AstroScheduleRequest request = AstroScheduleRequest(
+        scheduleDate: selectedDate.value.toFormattedString(),
+        scheduleTime: selectedTime.value,
+        type: type,
+      );
 
-    final response = await noticeRepository.astroScheduleOnlineAPI(
-      request.toJson(),
-    );
-    if (response.statusCode == 200 && response.success) {
-      divineSnackBar(data: response.message);
+      final response = await noticeRepository.astroScheduleOnlineAPI(
+        request.toJson(),
+      );
+      if (response.statusCode == 200 && response.success) {
+        divineSnackBar(data: response.message);
+      }
+    } catch (err) {
+      if (err is AppException) {
+        err.onException();
+      }
     }
   }
 }

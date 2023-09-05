@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/switch_component.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/screens/video_call/video_call.dart';
+import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -432,19 +435,21 @@ class HomeUI extends GetView<HomeController> {
                       btnTitle: "Confirm Next Online Date",
                       pickerStyle: "DateCalendar",
                       looping: true,
-                      onConfirm: (value) {
-                        //controller.scheduleCall();
+                      onConfirm: (value) {},
+                      onChange: (value) => controller.selectDate(value),
+                      onClickOkay: () {
+                        selectDateOrTime(
+                          Get.context!,
+                          title: "Schedule Your Next Online Time",
+                          btnTitle: "Confirm Next Online Time",
+                          pickerStyle: "TimeCalendar",
+                          looping: true,
+                          onConfirm: (value) {},
+                          onChange: (value) => controller.selectTime(value),
+                          onClickOkay: () => controller.scheduleCall(),
+                        );
                       },
-                      onChange: (value) {},
                     );
-
-                    // selectDateOrTime(Get.context!,
-                    //     title: "Schedule Your Next Online Time",
-                    //     btnTitle: "Confirm Next Online Time",
-                    //     pickerStyle: "TimeCalendar",
-                    //     looping: true,
-                    //     onConfirm: (value) {},
-                    //     onChange: (value) {});
                   },
                   child: Container(
                     width: 128.w,
@@ -471,12 +476,7 @@ class HomeUI extends GetView<HomeController> {
                   ),
                 ),
                 SizedBox(height: 20.h),
-                Text(
-                  DateFormat("d MMMM y, h:mm a").format(DateTime.now()),
-                  style: AppTextStyle.textStyle10(
-                      fontColor: AppColors.darkBlue,
-                      fontWeight: FontWeight.w400),
-                ),
+                const SelectedTime(),
               ],
             ),
           ],
@@ -1432,5 +1432,35 @@ class HomeUI extends GetView<HomeController> {
             SizedBox(height: 10.h),
           ],
         ));
+  }
+}
+
+class SelectedTime extends GetView<HomeController> {
+  const SelectedTime({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () {
+        if(controller.selectedTime.value.isNotEmpty){
+          return Text(
+            "${controller.selectedDate.value.toCustomFormattedString()} ${controller.selectedTime.value}" ,
+            style: AppTextStyle.textStyle10(
+              fontColor: AppColors.darkBlue,
+              fontWeight: FontWeight.w400,
+            ),
+          );
+        }else {
+          return Text(
+            controller.selectedDate.value.toCustomFormattedString(),
+            style: AppTextStyle.textStyle10(
+              fontColor: AppColors.darkBlue,
+              fontWeight: FontWeight.w400,
+            ),
+          );
+        }
+
+      },
+    );
   }
 }

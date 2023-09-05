@@ -44,7 +44,7 @@ class NoticeRepository extends ApiProvider {
             astroScheduleResponse.success) {
           return astroScheduleResponse;
         } else {
-          throw CustomException(json.decode(response.body));
+          throw CustomException(json.decode(response.body)["message"]);
         }
       } else {
         throw CustomException(json.decode(response.body));

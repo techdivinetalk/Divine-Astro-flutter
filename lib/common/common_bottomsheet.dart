@@ -88,6 +88,7 @@ selectDateOrTime(BuildContext context,
     required String pickerStyle,
     required Function(String datetime) onChange,
     required Function(String datetime) onConfirm,
+    Function()? onClickOkay,
     required bool looping}) {
   return showCupertinoModalPopup(
     context: context,
@@ -179,6 +180,9 @@ selectDateOrTime(BuildContext context,
                   ),
                   onPressed: () {
                     Navigator.pop(context);
+                    if(onClickOkay != null){
+                      onClickOkay();
+                    }
                     // Get.back();
                   },
                   color: AppColors.appYellowColour,
