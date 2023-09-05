@@ -78,6 +78,7 @@ class LivePageState extends State<LivePage>
   @override
   void initState() {
     super.initState();
+    controller.astroId = widget.localUserID;
     controller.setAvailibility(widget.localUserID, true, timeController);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       controller.getBlockedCustomerList();

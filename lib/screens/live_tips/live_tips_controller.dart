@@ -34,7 +34,7 @@ class LiveTipsController extends GetxController {
       "name": name,
       "image": image,
       "isEngaged": 0,
-      "isAvailable": 1,
+      "isAvailable": true,
       "coHostUser":"",
       "callType":"",
     });

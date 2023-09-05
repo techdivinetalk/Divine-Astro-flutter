@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:divine_astrologer/common/zego_services.dart';
 import 'package:divine_astrologer/model/login_images.dart';
@@ -28,6 +29,7 @@ class SharedPreferenceService extends GetxService {
     String userData = prefs!.getString(userKey) ?? "";
     // log("userData:: $userData");
     if (userData.isNotEmpty) {
+      log(userData);
       var jsonDecoded = jsonDecode(userData);
       userDetail = UserData.fromJson(jsonDecoded);
     }
