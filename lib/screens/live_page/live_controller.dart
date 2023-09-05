@@ -70,6 +70,7 @@ class LiveController extends GetxController {
   FirebaseDatabase database = FirebaseDatabase.instance;
   ResBlockedCustomers? blockedUserData;
   var blockCustomer = <AstroBlockCustomer>[].obs;
+  String? astroId;
 
   getBlockedCustomerList() async {
     Map<String, dynamic> params = {
@@ -87,6 +88,11 @@ class LiveController extends GetxController {
               data.first.astroBlockCustomer as Iterable<AstroBlockCustomer>);
           for (var element in data.first.astroBlockCustomer!) {
             blockIds.add(element.customerId.toString());
+            database.ref().child("live/$astroId/").update({
+              "blockUser": {element.customerId : {
+                "id":element.customerId
+              }}
+            });
           }
         }
       }
@@ -156,7 +162,7 @@ class LiveController extends GetxController {
     database.ref().child("live/$id").update({"callType": ""});
   }
 
-  setAvailibility(String id, bool available,CustomTimerController controller) {
+  setAvailibility(String id, bool available, CustomTimerController controller) {
     database.ref().child("live/$id").update({"isAvailable": available});
     database.ref().child("live/$id/coHostUser").onValue.listen((event) {
       final user = event.snapshot.value as String? ?? "";
