@@ -7,6 +7,7 @@ import 'package:divine_astrologer/model/res_user_profile.dart';
 import 'package:divine_astrologer/model/terms_and_condition_model.dart';
 import 'package:divine_astrologer/model/update_bank_response.dart';
 import 'package:divine_astrologer/model/update_profile_response.dart';
+import 'package:divine_astrologer/model/upload_image_model.dart';
 import 'package:divine_astrologer/model/upload_story_response.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -420,6 +421,41 @@ class UserRepository extends ApiProvider {
       }
     } catch (e, s) {
       preferenceService.erase();
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<UploadImageResponse> uploadYourPhotoApi(
+      Map<String, dynamic> param) async {
+    //progressService.showProgressDialog(true);
+    try {
+      final response = await post(
+        uploadAstrologerimage,
+        body: jsonEncode(param),
+        headers: await getJsonHeaderURL(),
+      );
+      //progressService.showProgressDialog(false);
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          preferenceService.erase();
+          Get.offNamed(RouteName.login);
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final uploadImageResponse =
+              uploadImageResponseFromJson(response.body);
+          if (uploadImageResponse.statusCode == successResponse &&
+              uploadImageResponse.success) {
+            return uploadImageResponse;
+          } else {
+            throw CustomException(uploadImageResponse.message);
+          }
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      //progressService.showProgressDialog(false);
       debugPrint("we got $e $s");
       rethrow;
     }
