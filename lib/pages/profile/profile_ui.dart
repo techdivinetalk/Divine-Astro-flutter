@@ -3,7 +3,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/appbar.dart';
-import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -98,12 +97,18 @@ class ProfileUI extends GetView<ProfilePageController> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        controller.userData?.name ?? "",
-                                        style: AppTextStyle.textStyle20(
-                                            fontWeight: FontWeight.w600,
-                                            fontColor: AppColors.darkBlue),
+                                      Flexible(
+                                        child: Text(
+                                          controller.userData?.name ?? "",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          softWrap: true,
+                                          style: AppTextStyle.textStyle20(
+                                              fontWeight: FontWeight.w600,
+                                              fontColor: AppColors.darkBlue),
+                                        ),
                                       ),
+                                      const SizedBox(width: 5),
                                       InkWell(
                                         onTap: () {
                                           Get.toNamed(RouteName.editProfileUI);
@@ -655,7 +660,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                   borderRadius: BorderRadius.circular(40),
                   child: CachedNetworkImage(
                     imageUrl:
-                        "${ApiProvider.imageBaseUrl}${reviewData?.customerImage}",
+                        "${controller.preference.getBaseImageURL()}${reviewData?.customerImage}",
                     height: 40,
                     width: 40,
                     fit: BoxFit.cover,
@@ -747,7 +752,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                               borderRadius: BorderRadius.circular(40),
                               child: CachedNetworkImage(
                                 imageUrl:
-                                    "${ApiProvider.imageBaseUrl}${reviewData?.replyData?.astrologerImage}",
+                                    "${controller.preference.getBaseImageURL()}/${reviewData?.replyData?.astrologerImage}",
                                 height: 40,
                                 width: 40,
                                 fit: BoxFit.cover,
@@ -976,7 +981,7 @@ class ThankYouReportUI extends GetView<ProfilePageController> {
                     onPressed: () {
                       Get.back();
                     },
-                    color: AppColors.yellow,
+                    color: AppColors.lightYellow,
                     child: Text(
                       "okay".tr,
                       style: TextStyle(

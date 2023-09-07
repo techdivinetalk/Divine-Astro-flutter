@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../common/common_functions.dart';
-import '../../di/api_provider.dart';
 import '../../di/fcm_notification.dart';
 import '../../model/res_login.dart';
 
@@ -28,10 +27,16 @@ class DashboardController extends GetxController
   StreamSubscription<DatabaseEvent>? notiticationCheck;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
+    var commonConstants = await userRepository.constantDetailsData();
+
     userData = preferenceService.getUserDetail();
-    userProfileImage.value = "${ApiProvider.imageBaseUrl} ${userData?.image}";
+    preferenceService
+        .setBaseImageURL(commonConstants.data.awsCredentails.baseurl!);
+
+    userProfileImage.value =
+        "${preferenceService.getBaseImageURL()}/${userData?.image}";
     askPermission();
     loadPreDefineData();
     firebaseMessagingConfig(Get.context!);
@@ -40,6 +45,7 @@ class DashboardController extends GetxController
   @override
   void onReady() {
     super.onReady();
+    userData = preferenceService.getUserDetail();
     notiticationCheck ??= FirebaseDatabase.instance
         .ref("astrologer/${userData?.id}/realTime/notification")
         .onValue
@@ -66,6 +72,7 @@ class DashboardController extends GetxController
   }
 
   void loadPreDefineData() async {
+    await Future.delayed(const Duration(milliseconds: 100));
     SpecialityList response = await repository.loadPreDefineData();
     await preferenceService.setSpecialAbility(response.toPrettyJson());
   }

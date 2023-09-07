@@ -72,7 +72,8 @@ class LoginController extends GetxController {
 
   navigateToDashboard(ResLogin data) async {
     preferenceService.erase();
-    await ZegoServices().initZegoInvitationServices("${data.data?.id}", "${data.data?.name}");
+    await ZegoServices()
+        .initZegoInvitationServices("${data.data?.id}", "${data.data?.name}");
     preferenceService.setUserDetail(data.data!);
     preferenceService.setToken(data.token!);
     mobileNumberController.clear();
@@ -83,17 +84,20 @@ class LoginController extends GetxController {
   }
 
   void updateLoginDatainFirebase(ResLogin data) {
-    FirebaseUserData userData = FirebaseUserData(
+    FirebaseUserData firebaseUserData = FirebaseUserData(
       data.data!.name!,
       data.data!.deviceToken!,
       data.data!.image!,
-      RealTime(0, data.data!.deviceModel!),
+      RealTime(
+          isEngagedStatus: 0,
+          uniqueId: data.data!.deviceModel ?? "",
+          walletBalance: 0),
     );
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
 
     final DatabaseReference databaseRef =
-    firebaseDatabase.ref().child("astrologer/${data.data?.id}");
-    databaseRef.set(userData.toJson());
+        firebaseDatabase.ref().child("astrologer/${data.data?.id}");
+    databaseRef.set(firebaseUserData.toJson());
   }
 
   @override
@@ -114,7 +118,6 @@ class LoginController extends GetxController {
   LoginImages? loginImages;
   List<LoginDatum> get images => loginImages?.data.data ?? <LoginDatum>[];
   String get amazonUrl => loginImages!.data.baseurl;
-
 
   void getLoginImages() async {
     if (preferenceService.getLoginImages() != null) {

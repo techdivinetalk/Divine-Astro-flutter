@@ -1,7 +1,8 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/order_history_model/gift_order_history.dart';
 import 'package:divine_astrologer/screens/order_history/order_history_controller.dart';
@@ -9,10 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../../di/shared_preference_service.dart';
+
 class LiveGiftsHistory extends StatelessWidget {
-  const LiveGiftsHistory({Key? key, this.controller}) : super(key: key);
+  LiveGiftsHistory({Key? key, this.controller}) : super(key: key);
 
   final ScrollController? controller;
+  SharedPreferenceService preferenceService =
+      Get.find<SharedPreferenceService>();
 
   @override
   Widget build(BuildContext context) {
@@ -90,8 +95,9 @@ class LiveGiftsHistory extends StatelessWidget {
                               width: 65,
                               child: CachedNetworkImage(
                                 imageUrl:
-                                    ApiProvider.imageBaseUrl + data[index].getGift!.giftImage!,
-                                errorWidget: (context, s, d) => Assets.images.bgTmpUser.svg(),
+                                    "${preferenceService.getBaseImageURL()}/${data[index].getGift!.giftImage!}",
+                                errorWidget: (context, s, d) =>
+                                    Assets.images.bgTmpUser.svg(),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -103,11 +109,13 @@ class LiveGiftsHistory extends StatelessWidget {
                       children: [
                         Text("Order Id : ${data[index].orderId}",
                             style: AppTextStyle.textStyle12(
-                                fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                                fontWeight: FontWeight.w400,
+                                fontColor: AppColors.darkBlue)),
                         Text(
                             "${data[index].getCustomers != null ? data[index].getCustomers?.name : "UserName"}",
                             style: AppTextStyle.textStyle20(
-                                fontWeight: FontWeight.w600, fontColor: AppColors.darkBlue))
+                                fontWeight: FontWeight.w600,
+                                fontColor: AppColors.darkBlue))
                       ],
                     )
                   ],
@@ -118,7 +126,8 @@ class LiveGiftsHistory extends StatelessWidget {
                     width: 90,
                     height: 37,
                     decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.lightGreen, width: 1.0),
+                      border:
+                          Border.all(color: AppColors.lightGreen, width: 1.0),
                       borderRadius: BorderRadius.circular(22.0),
                     ),
                     child: Row(
@@ -127,7 +136,8 @@ class LiveGiftsHistory extends StatelessWidget {
                         Text(
                           "${data[index].status}",
                           style: AppTextStyle.textStyle14(
-                              fontWeight: FontWeight.w500, fontColor: AppColors.lightGreen),
+                              fontWeight: FontWeight.w500,
+                              fontColor: AppColors.lightGreen),
                         ),
                       ],
                     ),
@@ -141,11 +151,13 @@ class LiveGiftsHistory extends StatelessWidget {
               children: [
                 Text("Date Time :",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue)),
                 Text(
                   DateFormat("dd MMM, hh:mm aa").format(data[index].createdAt!),
                   style: AppTextStyle.textStyle12(
-                      fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                      fontWeight: FontWeight.w400,
+                      fontColor: AppColors.darkBlue),
                 ),
               ],
             ),
@@ -155,10 +167,12 @@ class LiveGiftsHistory extends StatelessWidget {
               children: [
                 Text("Gift Name :",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue)),
                 Text("${data[index].getGift?.giftName}",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
@@ -167,10 +181,12 @@ class LiveGiftsHistory extends StatelessWidget {
               children: [
                 Text("Gift Price :",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue)),
                 Text("₹${data[index].amount}",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
@@ -179,10 +195,12 @@ class LiveGiftsHistory extends StatelessWidget {
               children: [
                 Text("Quantity :",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue)),
                 Text("30%",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
@@ -197,7 +215,8 @@ class LiveGiftsHistory extends StatelessWidget {
                 ),
                 Text("₹300",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w600, fontColor: AppColors.lightGreen)),
+                        fontWeight: FontWeight.w600,
+                        fontColor: AppColors.lightGreen)),
               ],
             ),
             const SizedBox(height: 8),

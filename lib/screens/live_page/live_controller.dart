@@ -1,7 +1,9 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:async';
 
+import 'package:custom_timer/custom_timer.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
@@ -69,6 +71,7 @@ class LiveController extends GetxController {
   FirebaseDatabase database = FirebaseDatabase.instance;
   ResBlockedCustomers? blockedUserData;
   var blockCustomer = <AstroBlockCustomer>[].obs;
+  String? astroId;
 
   getBlockedCustomerList() async {
     Map<String, dynamic> params = {
@@ -86,6 +89,11 @@ class LiveController extends GetxController {
               data.first.astroBlockCustomer as Iterable<AstroBlockCustomer>);
           for (var element in data.first.astroBlockCustomer!) {
             blockIds.add(element.customerId.toString());
+            database.ref().child("live/$astroId/").update({
+              "blockUser": {
+                element.customerId: {"id": element.customerId}
+              }
+            });
           }
         }
       }
@@ -155,14 +163,13 @@ class LiveController extends GetxController {
     database.ref().child("live/$id").update({"callType": ""});
   }
 
-  setAvailibility(String id, bool available) {
+  setAvailibility(String id, bool available, CustomTimerController controller) {
     database.ref().child("live/$id").update({"isAvailable": available});
     database.ref().child("live/$id/coHostUser").onValue.listen((event) {
       final user = event.snapshot.value as String? ?? "";
       if (user.isEmpty) {
         isCoHosting.value = false;
-        duration.value = "";
-        stopTimer();
+        controller.reset();
       }
     });
   }
@@ -179,17 +186,7 @@ class LiveController extends GetxController {
 
   setVisibilityCoHost(String isAudioCall) {
     typeOfCall = isAudioCall;
-    return;
     if (typeOfCall == "video") {
-      hostConfig.audioVideoViewConfig.playCoHostAudio = (
-          ZegoUIKitUser localUser,
-          ZegoLiveStreamingRole localRole,
-          ZegoUIKitUser coHost,
-          ) {
-        /// only play co-host audio by host,
-        /// audience and other co-hosts can't play
-        return false;
-      };
       hostConfig.audioVideoViewConfig.visible = (
         ZegoUIKitUser localUser,
         ZegoLiveStreamingRole localRole,
@@ -220,52 +217,6 @@ class LiveController extends GetxController {
         /// if user is a co-host, only show host's audio-video view
         return targetUserRole == ZegoLiveStreamingRole.host;
       };
-      if (typeOfCall == "private") {
-        ///  only the host can hear the audio of the co-host
-        hostConfig.audioVideoViewConfig.playCoHostAudio = (
-          ZegoUIKitUser localUser,
-          ZegoLiveStreamingRole localRole,
-          ZegoUIKitUser coHost,
-        ) {
-          /// only play co-host audio by host,
-          /// audience and other co-hosts can't play
-          return ZegoLiveStreamingRole.host == localRole;
-        };
-      }else {
-        hostConfig.audioVideoViewConfig.playCoHostAudio = (
-            ZegoUIKitUser localUser,
-            ZegoLiveStreamingRole localRole,
-            ZegoUIKitUser coHost,
-            ) {
-          /// only play co-host audio by host,
-          /// audience and other co-hosts can't play
-          return false;
-        };
-      }
-    }
-  }
-
-  startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      total = total + 1;
-      int h, m, s;
-
-      h = total ~/ 3600;
-
-      m = ((total - h * 3600)) ~/ 60;
-
-      s = total - (h * 3600) - (m * 60);
-
-      //String result = "$h:$m:$s";
-      duration.value = "$m m $s s";
-    });
-  }
-
-  stopTimer() {
-    duration.value = "";
-    total = 0;
-    if (_timer != null) {
-      _timer!.cancel();
     }
   }
 }

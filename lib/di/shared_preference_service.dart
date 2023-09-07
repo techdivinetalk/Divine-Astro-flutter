@@ -17,6 +17,7 @@ class SharedPreferenceService extends GetxService {
   static const specialAbility = "specialAbility";
   static const loginImages = "loginImages";
   static const updatedBankDetails = "updatedBankDetails";
+  static const baseImageUrl = "baseImageUrl";
 
   Future<SharedPreferenceService> init() async {
     prefs = await SharedPreferences.getInstance();
@@ -26,8 +27,9 @@ class SharedPreferenceService extends GetxService {
   UserData? getUserDetail() {
     UserData? userDetail;
     String userData = prefs!.getString(userKey) ?? "";
-    log("userData:: $userData");
+    // log("userData:: $userData");
     if (userData.isNotEmpty) {
+      log(userData);
       var jsonDecoded = jsonDecode(userData);
       userDetail = UserData.fromJson(jsonDecoded);
     }
@@ -89,5 +91,13 @@ class SharedPreferenceService extends GetxService {
     String? data = prefs!.getString(updatedBankDetails);
     if (data != null) return updateBankResponseFromJson(data);
     return null;
+  }
+
+  String? getBaseImageURL() {
+    return prefs!.getString(baseImageUrl);
+  }
+
+  Future<bool> setBaseImageURL(String imageUrl) async {
+    return await prefs!.setString(baseImageUrl, imageUrl);
   }
 }

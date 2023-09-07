@@ -60,8 +60,8 @@ class UserData {
   String? ifscCode;
   String? accountHolderName;
   String? accountType;
-  double? totalPayout;
-  double? totalPayment;
+  num? totalPayout;
+  num? totalPayment;
   // Null? razorpayContactId;
   String? employmentType;
   String? bankName;

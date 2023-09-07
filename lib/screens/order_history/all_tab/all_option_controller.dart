@@ -3,7 +3,6 @@ import 'package:divine_astrologer/model/res_order_history.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../common/app_exception.dart';
 import '../../../common/app_textstyle.dart';
 
 import '../../../di/shared_preference_service.dart';
@@ -17,7 +16,8 @@ class AllOptionController extends GetxController {
   final ShopRepository shopRepository;
   AllOptionController(this.shopRepository);
   UserData? userData;
-  SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
+  SharedPreferenceService preferenceService =
+      Get.find<SharedPreferenceService>();
   List<OrderData>? orderHistoryData;
   RxBool allOrderHistorySync = false.obs;
 

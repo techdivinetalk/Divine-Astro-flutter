@@ -1,5 +1,4 @@
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -49,7 +48,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(50),
                                     child: Image.network(
-                                        "${ApiProvider.imageBaseUrl}${controller.blockedUserData?.data?[index].image}",
+                                        "${controller.preferenceService.getBaseImageURL()}/${controller.blockedUserData?.data?[index].image}",
                                         height: 50.h,
                                         width: 50.h,
                                         fit: BoxFit.cover),

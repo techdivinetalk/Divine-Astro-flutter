@@ -78,52 +78,58 @@ class SettingsUI extends GetView<SettingsController> {
               SizedBox(
                 height: 20.h,
               ),
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(width: 0.6, color: Colors.grey)),
-                child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "termsAndConditions".tr,
-                        style: AppTextStyle.textStyle16(
-                            fontColor: AppColors.darkBlue),
-                      ),
-                      Icon(
-                        Icons.keyboard_arrow_right,
-                        size: 30.sp,
-                      )
-                    ],
+              InkWell(
+                onTap: () => Get.toNamed(RouteName.termsCondition),
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(width: 0.6, color: Colors.grey)),
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "termsAndConditions".tr,
+                          style: AppTextStyle.textStyle16(
+                              fontColor: AppColors.darkBlue),
+                        ),
+                        Icon(
+                          Icons.keyboard_arrow_right,
+                          size: 30.sp,
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
               SizedBox(
                 height: 15.h,
               ),
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(width: 0.6, color: Colors.grey)),
-                child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "privacyPolicy".tr,
-                        style: AppTextStyle.textStyle16(
-                            fontColor: AppColors.darkBlue),
-                      ),
-                      Icon(
-                        Icons.keyboard_arrow_right,
-                        size: 30.sp,
-                      )
-                    ],
+              InkWell(
+                onTap: () => Get.toNamed(RouteName.privacyPolicy),
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(width: 0.6, color: Colors.grey)),
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "privacyPolicy".tr,
+                          style: AppTextStyle.textStyle16(
+                              fontColor: AppColors.darkBlue),
+                        ),
+                        Icon(
+                          Icons.keyboard_arrow_right,
+                          size: 30.sp,
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),

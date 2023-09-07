@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/model/res_login.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +13,15 @@ import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import '../../common/app_exception.dart';
 import '../../common/colors.dart';
 import '../../common/common_functions.dart';
 import '../../di/hive_services.dart';
 import '../../di/shared_preference_service.dart';
 import '../../model/chat_offline_model.dart';
+import '../../model/get_kundli_data.dart';
+import '../../repository/chat_repository.dart';
+import '../../repository/kundli_repository.dart';
 import '../../repository/user_repository.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -37,7 +42,7 @@ class ChatMessageController extends GetxController {
   XFile? pickedFile;
   File? uploadFile;
   final preference = Get.find<SharedPreferenceService>();
-  RxInt currentUserId = 8601.obs;
+  RxInt currentUserId = 8693.obs;
   String userDataKey = "userKey";
   bool sendReadMessageStatus = false;
   RxBool emojiShowing = true.obs;
@@ -46,6 +51,9 @@ class ChatMessageController extends GetxController {
   RxBool scrollToBottom = false.obs;
   HiveServices hiveServices = HiveServices(boxName: userChatData);
   RxInt unreadMsgCount = 0.obs;
+  ChatMessageController(this.kundliRepository, this.chatRepository);
+  final KundliRepository? kundliRepository;
+  final ChatRepository chatRepository;
   @override
   void onInit() {
     super.onInit();
@@ -56,8 +64,9 @@ class ChatMessageController extends GetxController {
       }
     }
     userData = preferenceService.getUserDetail();
-    currentUserId.value = 8601;
-    userDataKey = "userKey_${userData?.id}_$currentUserId";
+    currentUserId.value = 8693;
+    currentChatUserId.value = 8693;
+    userDataKey = "userKey_${userData?.id}_${currentUserId.value}";
     getChatList();
 
     msgFocus.addListener(() {
@@ -101,6 +110,10 @@ class ChatMessageController extends GetxController {
           updateReadMessageStatus();
         } else {}
       }
+    } else {
+      // Map<String, int> params = {"customer_id": currentUserId.value};
+      // var response = await chatRepository.getChatListApi(params);
+      // debugPrint("$response");
     }
   }
 
@@ -138,8 +151,8 @@ class ChatMessageController extends GetxController {
     var newMessage = ChatMessage(
         id: int.parse(time),
         message: messageText,
-        receiverId: 8601,
-        senderId: 573,
+        receiverId: currentUserId.value,
+        senderId: userData?.id,
         time: int.parse(time),
         awsUrl: awsUrl,
         base64Image: base64Image,
@@ -150,7 +163,7 @@ class ChatMessageController extends GetxController {
     updateChatMessages(newMessage, false);
 
     firebaseDatabase
-        .ref("user/8601/realTime/notification/$time")
+        .ref("user/${currentChatUserId.value}/realTime/notification/$time")
         .set(newMessage.toOfflineJson());
   }
 
@@ -166,9 +179,14 @@ class ChatMessageController extends GetxController {
               messgeScrollController.position.maxScrollExtent - 100) {
         newMessage.type = 2;
         chatMessages.add(newMessage);
-
-        updateMsgDelieveredStatus(newMessage, 2);
         scrollToBottomFunc();
+        updateMsgDelieveredStatus(newMessage, 2);
+        if (messgeScrollController.position.pixels ==
+            messgeScrollController.position.maxScrollExtent) {
+          Future.delayed(const Duration(seconds: 1)).then((value) {
+            scrollToBottomFunc();
+          });
+        }
       } else {
         newMessage.type = 1;
         chatMessages.add(newMessage);
@@ -188,6 +206,7 @@ class ChatMessageController extends GetxController {
         -1;
     setHiveDatabase();
     if (!isFromNotification) {
+      // updateReadMessageStatus();
       Future.delayed(const Duration(milliseconds: 200)).then((value) {
         scrollToBottomFunc();
       });
@@ -195,7 +214,7 @@ class ChatMessageController extends GetxController {
   }
 
   void setHiveDatabase() async {
-    var userDataKey = "userKey_${userData?.id}_$currentUserId";
+    var userDataKey = "userKey_${userData?.id}_${currentUserId.value}";
     HiveServices hiveServices = HiveServices(boxName: userChatData);
     await hiveServices.initialize();
     databaseMessage.value.chatMessages = chatMessages;
@@ -297,5 +316,23 @@ class ChatMessageController extends GetxController {
           base64Image: base64Image,
           downloadedPath: outPath);
     }
+  }
+
+// Show Kundli
+  navigateToKundliDetail(String kundliId) async {
+    try {
+      Map<String, String> params = {"kundli_id": kundliId};
+      ResGetKundli response = await kundliRepository!.getKundliDetais(params);
+      debugPrint("Response $response");
+      Get.toNamed(RouteName.kundliDetail);
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        Get.snackbar("Error", error.toString()).show();
+      }
+    }
+    update();
   }
 }

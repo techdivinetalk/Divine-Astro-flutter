@@ -319,7 +319,7 @@ class ReferAstrologerField extends StatelessWidget {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: const BorderSide(
-              color: AppColors.yellow,
+              color: AppColors.lightYellow,
               width: 1.0,
             ),
           ),

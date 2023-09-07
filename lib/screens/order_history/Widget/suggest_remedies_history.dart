@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
@@ -7,14 +9,17 @@ import 'package:intl/intl.dart';
 
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
+import '../../../di/shared_preference_service.dart';
 import '../../../model/order_history_model/remedy_suggested_order_history.dart';
 import '../order_history_controller.dart';
 
 class SuggestRemedies extends StatelessWidget {
-  const SuggestRemedies({Key? key}) : super(key: key);
+  SuggestRemedies({Key? key}) : super(key: key);
 
   // final ScrollController? controller;
 
+  SharedPreferenceService preferenceService =
+      Get.find<SharedPreferenceService>();
   @override
   Widget build(BuildContext context) {
     return GetBuilder<OrderHistoryController>(builder: (controller) {
@@ -63,8 +68,9 @@ class SuggestRemedies extends StatelessWidget {
                               width: 65,
                               child: CachedNetworkImage(
                                 imageUrl:
-                                    ApiProvider.imageBaseUrl + data[index].getCustomers!.avatar!,
-                                errorWidget: (context, s, d) => Assets.images.bgTmpUser.svg(),
+                                    "${preferenceService.getBaseImageURL()}/${data[index].getCustomers!.avatar!}",
+                                errorWidget: (context, s, d) =>
+                                    Assets.images.bgTmpUser.svg(),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -76,11 +82,13 @@ class SuggestRemedies extends StatelessWidget {
                       children: [
                         Text("Order Id : ${data[index].orderId}",
                             style: AppTextStyle.textStyle12(
-                                fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                                fontWeight: FontWeight.w400,
+                                fontColor: AppColors.darkBlue)),
                         Text(
                             "${data[index].getCustomers != null ? data[index].getCustomers!.name : "Username"}",
                             style: AppTextStyle.textStyle20(
-                                fontWeight: FontWeight.w600, fontColor: AppColors.darkBlue))
+                                fontWeight: FontWeight.w600,
+                                fontColor: AppColors.darkBlue))
                       ],
                     )
                   ],
@@ -91,7 +99,8 @@ class SuggestRemedies extends StatelessWidget {
                     width: 90,
                     height: 37,
                     decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.lightGreen, width: 1.0),
+                      border:
+                          Border.all(color: AppColors.lightGreen, width: 1.0),
                       borderRadius: BorderRadius.circular(22.0),
                     ),
                     child: Row(
@@ -100,7 +109,8 @@ class SuggestRemedies extends StatelessWidget {
                         Text(
                           "${data[index].status}",
                           style: AppTextStyle.textStyle14(
-                              fontWeight: FontWeight.w500, fontColor: AppColors.lightGreen),
+                              fontWeight: FontWeight.w500,
+                              fontColor: AppColors.lightGreen),
                         ),
                       ],
                     ),
@@ -114,10 +124,14 @@ class SuggestRemedies extends StatelessWidget {
               children: [
                 Text("Date Time :",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
-                Text(DateFormat("dd MMM, hh:mm aa").format(data[index].createdAt!),
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue)),
+                Text(
+                    DateFormat("dd MMM, hh:mm aa")
+                        .format(data[index].createdAt!),
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
@@ -126,10 +140,12 @@ class SuggestRemedies extends StatelessWidget {
               children: [
                 Text("Remedy Suggested :",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue)),
                 Text("${data[index].productDetails?.prodName}",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
@@ -138,10 +154,12 @@ class SuggestRemedies extends StatelessWidget {
               children: [
                 Text("${"clientPaid".tr} :",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue)),
                 Text("₹1000",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
@@ -150,10 +168,12 @@ class SuggestRemedies extends StatelessWidget {
               children: [
                 Text("Referral Bonus :",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue)),
                 Text("30%",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
@@ -168,7 +188,8 @@ class SuggestRemedies extends StatelessWidget {
                 ),
                 Text("₹300",
                     style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w600, fontColor: AppColors.lightGreen)),
+                        fontWeight: FontWeight.w600,
+                        fontColor: AppColors.lightGreen)),
               ],
             ),
             const SizedBox(height: 8),

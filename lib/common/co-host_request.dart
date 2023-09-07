@@ -26,7 +26,7 @@ class CoHostRequest extends StatelessWidget {
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(50.0)),
                 color: AppColors.white,
-                border: Border.all(color: AppColors.appColorDark)),
+                border: Border.all(color: AppColors.appYellowColour)),
             child: Column(
               children: [
                 SizedBox(height: 20.h),
@@ -46,15 +46,15 @@ class CoHostRequest extends StatelessWidget {
                       CustomText(name ?? "",
                           fontSize: 20.sp,
                           fontWeight: FontWeight.w500,
-                          fontColor: AppColors.textColor),
+                          fontColor: AppColors.darkBlue),
                       const Spacer(),
                       const Icon(Icons.call,
-                          color: AppColors.textColor, size: 16),
+                          color: AppColors.darkBlue, size: 16),
                       SizedBox(width: 10.w),
                       CustomText("09 M 38 S",
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
-                          fontColor: AppColors.textColor),
+                          fontColor: AppColors.darkBlue),
                       SizedBox(width: 32.w),
                     ],
                   ),
@@ -72,13 +72,13 @@ class CoHostRequest extends StatelessWidget {
                               Get.back();
                             },
                             color: AppColors.white,
-                            border: Border.all(color: AppColors.textColor),
+                            border: Border.all(color: AppColors.darkBlue),
                             radius: 28,
                             child: Center(
                               child: CustomText("Reject",
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.bold,
-                                  fontColor: AppColors.textColor),
+                                  fontColor: AppColors.darkBlue),
                             )),
                       ),
                     ),

@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../gen/assets.gen.dart';
-import 'cached_network_image.dart';
 import 'colors.dart';
 
 class UnblockOrBlockUser extends StatelessWidget {
@@ -11,7 +10,8 @@ class UnblockOrBlockUser extends StatelessWidget {
   final bool isForBlocUser;
   final VoidCallback? blockUnblockTap;
 
-  const UnblockOrBlockUser({Key? key, this.name, required this.isForBlocUser,this.blockUnblockTap})
+  const UnblockOrBlockUser(
+      {Key? key, this.name, required this.isForBlocUser, this.blockUnblockTap})
       : super(key: key);
 
   @override
@@ -45,7 +45,7 @@ class UnblockOrBlockUser extends StatelessWidget {
             backgroundColor: AppColors.white,
             surfaceTintColor: AppColors.white,
             shape: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.white),
+              borderSide: const BorderSide(color: AppColors.white),
               borderRadius: BorderRadius.circular(20),
             ),
             title: Column(
@@ -64,14 +64,14 @@ class UnblockOrBlockUser extends StatelessWidget {
                       Text(
                         "${isForBlocUser ? "Block" : "Unblock"} $name?",
                         style: TextStyle(
-                            fontSize: 16.sp, color: AppColors.textColor),
+                            fontSize: 16.sp, color: AppColors.darkBlue),
                       )
                     ],
                   ),
                 ),
                 SizedBox(height: 20.h),
                 Center(
-                    child: Divider(color: AppColors.textColor.withOpacity(.2))),
+                    child: Divider(color: AppColors.darkBlue.withOpacity(.2))),
                 SizedBox(height: 20.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -80,8 +80,8 @@ class UnblockOrBlockUser extends StatelessWidget {
                     SizedBox(width: 16.w),
                     Text(
                       "Reply",
-                      style: TextStyle(
-                          fontSize: 16.sp, color: AppColors.textColor),
+                      style:
+                          TextStyle(fontSize: 16.sp, color: AppColors.darkBlue),
                     )
                   ],
                 ),

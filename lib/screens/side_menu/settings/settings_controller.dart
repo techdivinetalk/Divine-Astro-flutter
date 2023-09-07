@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/routes.dart';
+import 'package:divine_astrologer/model/pivacy_policy_model.dart';
+import 'package:divine_astrologer/model/terms_and_condition_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../common/app_exception.dart';
@@ -31,24 +33,28 @@ class SettingsController extends GetxController {
   }
 
   void logOut() {
-    preferenceService.erase().whenComplete(
-          () => Get.offAllNamed(RouteName.login),
-        );
+    userRepository.logOut().then(
+      (value) async {
+        if (value.statusCode == 200 && value.success == true) {
+          preferenceService.erase().whenComplete(
+                () => Get.offAllNamed(RouteName.login),
+              );
+        }
+      },
+    ).onError((error, stackTrace) {
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      }
+    });
+  }
 
-    // userRepository.logOut().then(
-    //   (value) async {
-    //     if (value.statusCode == 200 && value.success == true) {
-    //       preferenceService.erase().whenComplete(
-    //             () => Get.offAllNamed(RouteName.login),
-    //           );
-    //     }
-    //   },
-    // ).onError((error, stackTrace) {
-    //   if (error is AppException) {
-    //     error.onException();
-    //   } else {
-    //     divineSnackBar(data: error.toString(), color: AppColors.redColor);
-    //   }
-    // });
+  Future<TermsConditionModel> getTermsCondition() async {
+    return userRepository.getTermsCondition();
+  }
+
+  Future<PrivacyPolicyModel> getPrivacyPolicy() async {
+    return userRepository.getPrivacyPolicy();
   }
 }

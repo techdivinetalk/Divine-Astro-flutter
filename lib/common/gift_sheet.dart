@@ -55,17 +55,17 @@ class GiftSheet extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.textColor)),
+                            color: AppColors.darkBlue)),
                     SizedBox(height: 8.h),
                     Text("Congratulations!",
                         style: TextStyle(
                             fontSize: 20.sp,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.textColor)),
+                            color: AppColors.darkBlue)),
                     SizedBox(height: 4.h),
                     Text("You've Have Received 4 Gifts",
                         style: TextStyle(
-                            fontSize: 14.sp, color: AppColors.textColor)),
+                            fontSize: 14.sp, color: AppColors.darkBlue)),
                     SizedBox(height: 20.h),
                     SizedBox(
                       height: 155.h,
@@ -90,11 +90,11 @@ class GiftSheet extends StatelessWidget {
                                         style: TextStyle(
                                             fontSize: 20.sp,
                                             fontWeight: FontWeight.w600,
-                                            color: AppColors.textColor)),
+                                            color: AppColors.darkBlue)),
                                     Text("Has given 3 hears",
                                         style: TextStyle(
                                             fontSize: 16.sp,
-                                            color: AppColors.textColor)),
+                                            color: AppColors.darkBlue)),
                                   ],
                                 ),
                                 const Spacer(),
@@ -102,7 +102,7 @@ class GiftSheet extends StatelessWidget {
                                     style: TextStyle(
                                         fontSize: 20.sp,
                                         fontWeight: FontWeight.bold,
-                                        color: AppColors.textColor)),
+                                        color: AppColors.darkBlue)),
                                 SizedBox(width: 10.w),
                                 SizedBox(
                                   width: 34.w,
@@ -126,13 +126,13 @@ class GiftSheet extends StatelessWidget {
                         SizedBox(width: 32.w),
                         Text("Total Recieved",
                             style: TextStyle(
-                                fontSize: 20.sp, color: AppColors.textColor)),
+                                fontSize: 20.sp, color: AppColors.darkBlue)),
                         const Spacer(),
                         Text("₹15",
                             style: TextStyle(
                                 fontSize: 20.sp,
                                 fontWeight: FontWeight.bold,
-                                color: AppColors.textColor)),
+                                color: AppColors.darkBlue)),
                         SizedBox(width: 10.w),
                         SizedBox(
                           width: 34.w,
@@ -174,7 +174,7 @@ class GiftSheet extends StatelessWidget {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                              color: AppColors.appColorDark, width: 2),
+                              color: AppColors.appYellowColour, width: 2),
                         ),
                       )
                     ],

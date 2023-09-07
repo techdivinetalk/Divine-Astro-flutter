@@ -109,7 +109,7 @@ class CustomMaterialButton extends StatelessWidget {
           Expanded(
             child: MaterialButton(
               height: height ?? 55.h,
-              color: color ?? AppColors.yellow,
+              color: color ?? AppColors.lightYellow,
               highlightElevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(79.sp),
@@ -256,7 +256,7 @@ class BankDetailsField extends StatelessWidget {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: const BorderSide(
-              color: AppColors.yellow,
+              color: AppColors.lightYellow,
               width: 1.0,
             ),
           ),

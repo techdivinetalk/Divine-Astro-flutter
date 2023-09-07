@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:divine_astrologer/common/routes.dart';
-import 'package:divine_astrologer/model/res_order_history.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../common/app_exception.dart';

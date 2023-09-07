@@ -5,27 +5,27 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'colors.dart';
 
 class CustomTextField extends StatelessWidget {
-  const CustomTextField({
-    Key? key,
-    this.controller,
-    this.validator,
-    this.enabled = true,
-    this.keyboardType = TextInputType.name,
-    this.showCursor = true,
-    this.onTap,
-    this.focusNode,
-    this.hintText,
-    this.prefixIcon,
-    this.suffixIcon,
-    this.isDense,
-    this.height,
-    this.readOnly,
-    this.autoFocus,
-    this.inputBorder,
-    this.fillColor,
-    this.suffixIconPadding,
-    this.textInputFormatter
-  }) : super(key: key);
+  const CustomTextField(
+      {Key? key,
+      this.controller,
+      this.validator,
+      this.enabled = true,
+      this.keyboardType = TextInputType.name,
+      this.showCursor = true,
+      this.onTap,
+      this.focusNode,
+      this.hintText,
+      this.prefixIcon,
+      this.suffixIcon,
+      this.isDense,
+      this.height,
+      this.readOnly,
+      this.autoFocus,
+      this.inputBorder,
+      this.fillColor,
+      this.suffixIconPadding,
+      this.textInputFormatter})
+      : super(key: key);
 
   final TextEditingController? controller;
   final String? Function(String?)? validator;
@@ -47,11 +47,11 @@ class CustomTextField extends StatelessWidget {
   final List<TextInputFormatter>? textInputFormatter;
 
   OutlineInputBorder get border => OutlineInputBorder(
-    borderSide: BorderSide(
-      color: AppColors.textColor.withOpacity(0.15),
-    ),
-    borderRadius: BorderRadius.circular(10.sp),
-  );
+        borderSide: BorderSide(
+          color: AppColors.darkBlue.withOpacity(0.15),
+        ),
+        borderRadius: BorderRadius.circular(10.sp),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -70,26 +70,30 @@ class CustomTextField extends StatelessWidget {
           autofocus: autoFocus ?? false,
           readOnly: readOnly ?? false,
           inputFormatters: textInputFormatter ?? [],
-          cursorColor: AppColors.textColor.withOpacity(0.15),
+          cursorColor: AppColors.darkBlue.withOpacity(0.15),
           decoration: InputDecoration(
             filled: true,
             fillColor: fillColor ?? AppColors.transparent,
             hintText: hintText,
             isDense: isDense,
-            prefixIcon: prefixIcon != null ? Padding(
-              padding: EdgeInsets.symmetric(vertical: 14.0.sp),
-              child: prefixIcon,
-            ) : null,
-            suffixIcon: suffixIcon != null ? Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: suffixIconPadding ?? 15.sp,
-              ),
-              child: suffixIcon,
-            ) : const SizedBox(),
+            prefixIcon: prefixIcon != null
+                ? Padding(
+                    padding: EdgeInsets.symmetric(vertical: 14.0.sp),
+                    child: prefixIcon,
+                  )
+                : null,
+            suffixIcon: suffixIcon != null
+                ? Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: suffixIconPadding ?? 15.sp,
+                    ),
+                    child: suffixIcon,
+                  )
+                : const SizedBox(),
             hintStyle: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w400,
-              color: AppColors.textColor.withOpacity(0.5),
+              color: AppColors.darkBlue.withOpacity(0.5),
             ),
             enabledBorder: inputBorder ?? border,
             focusedBorder: inputBorder ?? border,

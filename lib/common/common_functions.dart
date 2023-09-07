@@ -23,12 +23,12 @@ import 'colors.dart';
 
 final UserRepository userRepository = Get.find<UserRepository>();
 SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
+var userData = preferenceService.getUserDetail();
 
 Future<String> uploadImageToS3Bucket(
     File? selectedFile, String fileName) async {
   var commonConstants = await userRepository.constantDetailsData();
   var dataString = commonConstants.data.awsCredentails.baseurl?.split(".");
-  var userData = preferenceService.getUserDetail();
   var extension = p.extension(selectedFile!.path);
   var response = await AwsS3.uploadFile(
     accessKey: commonConstants.data.awsCredentails.accesskey!,
@@ -49,7 +49,7 @@ Future<String> uploadImageToS3Bucket(
 void checkNotification() async {
   final snapshot = await FirebaseDatabase.instance
       .ref()
-      .child("astrologer/573/realTime/notification")
+      .child("astrologer/${userData?.id}/realTime/notification")
       .get();
   if (snapshot.value != null) {
     var notificationList = snapshot.value as Map;
@@ -65,6 +65,9 @@ void checkNotification() async {
           awsUrl: value["awsUrl"],
           base64Image: value["base64Image"],
           kundliId: value["kundli_id"],
+          kundliName: value["kundli_name"],
+          kundliDateTime: value["kundli_date_time"],
+          kundliPlace: value["kundli_place"],
           downloadedPath: "",
           msgType: value["msgType"]);
 
@@ -73,7 +76,9 @@ void checkNotification() async {
         if (chatController.currentUserId.value == value["sender_id"] ||
             chatController.currentUserId.value == value["receiver_id"]) {
           chatController.updateChatMessages(newMessage, true);
-          if (value["sender_id"] == 8601) {}
+          if (value["sender_id"] == chatController.currentUserId.value) {
+            chatController.updateChatMessages(newMessage, true);
+          }
         } else {
           if (value["type"] == 0) {
             showNotificationWithActions(
@@ -81,7 +86,8 @@ void checkNotification() async {
             updateMsgDelieveredStatus(newMessage, 1);
           }
 
-          setHiveDatabase("userKey_573_8601", newMessage);
+          setHiveDatabase(
+              "userKey_${userData?.id}_${currentChatUserId.value}", newMessage);
         }
       } else {
         if (value["type"] == 0) {
@@ -90,10 +96,11 @@ void checkNotification() async {
           updateMsgDelieveredStatus(newMessage, 1);
         }
 
-        setHiveDatabase("userKey_573_8601", newMessage);
+        setHiveDatabase(
+            "userKey_${userData?.id}_${currentChatUserId.value}", newMessage);
       }
     });
-    // removeNotificationNode();
+    removeNotificationNode();
     debugPrint("$snapshot");
   }
 }
@@ -145,22 +152,24 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
 
   // messagesRef.set(message.toJson());
   firebaseDatabase
-      .ref("user/8601/realTime/notification/${newMessage.time}")
+      .ref(
+          "user/${currentChatUserId.value}/realTime/notification/${newMessage.time}")
       .set(message.toOfflineJson());
 
   removeNotificationNode(nodeId: "/${newMessage.time}");
 }
 
 removeNotificationNode({String? nodeId}) {
+  var userData = preferenceService.getUserDetail();
   if (nodeId == null) {
     FirebaseDatabase.instance
         .ref()
-        .child("astrologer/573/realTime/notification")
+        .child("astrologer/${userData?.id}/realTime/notification")
         .remove();
   } else {
     FirebaseDatabase.instance
         .ref()
-        .child("astrologer/573/realTime/notification$nodeId")
+        .child("astrologer/${userData?.id}/realTime/notification$nodeId")
         .remove();
   }
 }
@@ -171,20 +180,19 @@ String messageDateTime(int datetime) {
   return DateFormat('hh:mm a').format(dt);
 }
 
-
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-void divineSnackBar({required String data, Color? color,Duration? duration}) {
+void divineSnackBar({required String data, Color? color, Duration? duration}) {
   BuildContext? context = navigator?.context;
   if (context != null) {
     final snackBar = SnackBar(
       duration: duration ?? const Duration(milliseconds: 4000),
       content: Text(
         data,
-        style:
-        TextStyle(color: color != null ? AppColors.white : AppColors.blackColor),
+        style: TextStyle(
+            color: color != null ? AppColors.white : AppColors.blackColor),
       ),
-      backgroundColor: color ?? AppColors.yellow,
+      backgroundColor: color ?? AppColors.lightYellow,
       showCloseIcon: true,
       closeIconColor: color != null ? AppColors.white : AppColors.blackColor,
     );
