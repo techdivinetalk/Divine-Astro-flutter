@@ -389,6 +389,19 @@ class HomeUI extends GetView<HomeController> {
                       fontColor: AppColors.darkBlue,
                       fontWeight: FontWeight.w400),
                 ),
+                SizedBox(height: 16.h),
+                Text(
+                  "Video".tr.toUpperCase(),
+                  style: AppTextStyle.textStyle12(
+                      fontColor: AppColors.darkBlue,
+                      fontWeight: FontWeight.w700),
+                ),
+                Text(
+                  "₹25/Min",
+                  style: AppTextStyle.textStyle10(
+                      fontColor: AppColors.darkBlue,
+                      fontWeight: FontWeight.w400),
+                ),
               ],
             ),
             Column(
@@ -411,6 +424,13 @@ class HomeUI extends GetView<HomeController> {
                   () => SwitchWidget(
                     onTap: () => controller.callSwitchFN(),
                     switchValue: controller.callSwitch.value,
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                Obx(
+                      () => SwitchWidget(
+                    onTap: () {},
+                    switchValue: controller.videoSwitch.value,
                   ),
                 ),
               ],

@@ -41,7 +41,6 @@ Future<void> main() async {
     runApp(const MyApp());
   });
 }
-
 Future<bool> saveLanguage(String? lang) async {
   final box = GetStorage();
   await box.write('lang', lang);

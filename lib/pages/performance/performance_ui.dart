@@ -17,6 +17,7 @@ class PerformanceUI extends GetView<PerformanceController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(PerformanceController());
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar:
