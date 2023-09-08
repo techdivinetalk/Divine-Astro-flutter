@@ -17,10 +17,9 @@ import 'shared_preference_service.dart';
 class ApiProvider {
   static const String version = 'v7';
   final String baseUrl = "https://wakanda-api.divinetalk.live/admin/$version/";
-  final String baseUrlv7 = "https://wakanda-api.divinetalk.live/admin/v7/";
 
   final String jsonHeaderName = "Content-Type";
-  final String jsonCookietName = "Cookie";
+  final String jsonCookieName = "Cookie";
   final String jsonHeaderValue = "application/json";
   final String jsonAuthenticationName = "Authorization";
   final int successResponse = 200;
@@ -49,6 +48,14 @@ class ApiProvider {
   final String updateBankDetails = "updateBankDetails";
   final String getKundliData = "getKundliData";
   final String getHomePageData = "astroDashboard";
+  final String agoraEndCall = "agoraEndCall";
+
+  //Astro Internal API
+  final String horoChartImageInt = "getChartImage/";
+  final String getAstroDetailsInt = "getAstroDetails";
+  final String getBirthDetailsInt = "getBirthDetails";
+  final String getManglikDetailsInt = "getManglikDetails";
+  final String getGeneralNakshatraReportInt = "getGeneralNakshatraReport";
 
   //Kundli APIs
   final String astrologyBaseUrl = "https://json.astrologyapi.com/v1/";
@@ -63,6 +70,10 @@ class ApiProvider {
 
   //chat
   final String getChatList = "getChatList";
+  final String chatAcceptAPI = "partner_chat_accept";
+  final String endChatAPI = "end_chat";
+
+  final String uploadAstrologerimage = "uploadAstrologerimage";
 
   //privacy policy & terms
   final String termsAndCondition = "termsAndCondition";
@@ -97,8 +108,8 @@ class ApiProvider {
     var header = <String, String>{};
     header[jsonHeaderName] = jsonHeaderValue;
     header[jsonAuthenticationName] = 'Bearer $_token';
-    header[jsonCookietName] = version == 6
-        ? 'XSRF-TOKEN=eyJpdiI6IjVieExpdkYxUDc5TkFtVFJmaTYwWGc9PSIsInZhbHVlIjoiRVF3TTQwR3FGd1h2OXJsY1FtT1pxaHQyaUEzTEcvdTk1eGtxbFZWL0RRMUFubXZPZUF1NlFGQ253SUxhVDZscXlnZElHUzM5MEFGSDYwempWN0d3Q2lIenloWmp3aGo2MXdDUUtnODRraFo1TTNUSE4zSXl0dFFDT2ZKZlhoa3oiLCJtYWMiOiIwYTE0M2Y5ZDA0ZDBkYjZkOGUzYmIzYjZjZTJkNjc2MzYzZDZkZGNkOWMwMzJkYWZkOWQ0NGI3ZGU1ZDQ5YjM5IiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6InRJa3F0OXFwN1VoaTdqM0srbXZ0bVE9PSIsInZhbHVlIjoiYmxpWUE1anU4TUlhN0Y4MG1GdUpFL0ZldkRGUWpVRWdsd05hNVk5eWZ3Z2tKL2xiWWFoMjlkQXNuRmdsZ09ZR3IrbSsybnZ4L1VqeHBNZ25ROFU5bkJKZ0pTOURiQXc4SDFNa0piSHlvYWYyYU5oZVZXaTcxWlQ4YVlZRzkxekgiLCJtYWMiOiI2ZDMwNjBiYjBhMTM3NTJlYzRkNmQ4MDBkYzgyOTRjNjFhOTgxZjYyMTc2ZTllZmEwYzVlMDFmMTk3NjRmZDYxIiwidGFnIjoiIn0%3D'
+    header[jsonCookieName] = version == 6
+        ? 'XSRF-TOKEN=eyJpdiI6Ii9XZXZTMmtHdFZrRml3V0NENHNJQUE9PSIsInZhbHVlIjoibExkdm9ObFJNbG1QWlZMSDJ3cWxJRHFjbk1qUVJFOEZjc0M4K3Q2K2s3UVJsazhpQjZ2WmZYU3o5SjBGQ09LTTRjckk0TVEvVEEwcklDMHJqSjVRYTdjY3hsaktMVWxlSkV0UVhUd21GUmdNNDBlU3hROHpMOFhMK2VOREljbFIiLCJtYWMiOiI5YTM2NDA4NWIyZGNlZTNjZjRiOWFlMjFiZjE5NjYzMGEyZDM4YzE4ZGJlYmEzYWMzZWRiZjZjODhiYzI3YTNiIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6Ilo2T0FFd0dpeEgzcStDUkx6T2VoaUE9PSIsInZhbHVlIjoicHY1TDB1ZWVwK0ppemVvVzM2TDdDMklQNTBaTUV0dUtLQlhBY00vdVk2SzhDM0E1WWJQdmY2UWRLT21kbHVLUi9vbEFuVDJzUkJienZJeWFXSHZTcWEwZUJhSGhuSlhVSFZRTXM1alFXZnBHZlJGNTVCWVA3UzBqbDNadkw0UkciLCJtYWMiOiI4NDllOWQ4N2Y0ZjM5YjU0NDdiZWVkNWVkZGZiZjgxYWU2YzgzOGQ1ZmQ3NmIwZjViZjA4Mjc2MzhlMjQyNDAxIiwidGFnIjoiIn0%3D'
         : "XSRF-TOKEN=eyJpdiI6IkFuR3pFWGFRaUxXYzI2Y3VHNjY0cXc9PSIsInZhbHVlIjoiWlFVNWMzbGF1R2k0ME1Qc0FUYXpQUU1VWjBnbUhoSCtjSDA2ZzQzS21qUGdRN3lqK1JXTEErM2dDa2VlNTAvYzRBNGRPeFNuVDFGUklDOFo4c1FnelBBVlBOZkhDNUs2Tk1kazVUT1d5SEVEbzh0Nnoyb0VXM2tOM1A5OUpQVDciLCJtYWMiOiI5MmJkNjg5YzEyNmVlNmZiMzcxZmExNTY0ODg0MDlkMDRjMzY3OGU0YzBmOTZjNjE3NTU1OGM4MjVkZDVkMDUzIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6ImJ4UE9WaUIwa3l2cXF5MjBWRkR2aHc9PSIsInZhbHVlIjoicU1ZNlAwT0RQWXR6UmFJeW95UkxKVzBoOUE3d3Vld2k4NVN4WmhMc2J4aE4ycGt6WXV2THVjL0hYamFJblUvTkV2MDNIU05pWWJnQnIyYlA3bEthUFZnTG04TFFPczZhZnlmU2hObVVXcVJHby83Ump2QTlnT2dESkczSnZFREwiLCJtYWMiOiJhMjYzOGJiMGUxZTM3NjcxYWZkZWFhMTU0MDEyNzZiYjQwNzdlOTU0YTcwNjUxYTJiMWE5NzY4NGQ3ZGE1Mjk2IiwidGFnIjoiIn0%3D";
     return header;
   }

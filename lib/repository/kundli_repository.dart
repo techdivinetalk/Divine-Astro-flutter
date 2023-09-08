@@ -15,21 +15,23 @@ import 'package:get/get.dart';
 
 import '../common/routes.dart';
 import '../model/get_kundli_data.dart' as kundli_data;
+import '../model/internal/astro_details_model.dart';
+import '../model/internal/birth_details_model.dart';
+import '../model/internal/horo_chart_model_class.dart';
+import '../model/internal/kundli_prediction_model.dart';
+import '../model/internal/manglik_dosh_model.dart';
 
 class KundliRepository extends ApiProvider {
-  Future<AstroDetails> getAstroDetails(Map<String, dynamic> params) async {
+  //done
+  Future<AstroDetailsModel> getAstroDetails(Map<String, dynamic> params) async {
     try {
-      final response = await post(astroDetails,
-          endPoint: astrologyBaseUrl,
-          headers: getAstrologyHeader(),
+      final response = await post(getAstroDetailsInt,
+          
+          headers: await getJsonHeaderURL(version: 7),
           body: jsonEncode(params).toString());
       if (response.statusCode == 200) {
-        final astroDetails = astroDetailsFromJson(response.body);
-        // if (astroDetails.status) {
+        final astroDetails = astroDetailsModelFromJson(response.body);
         return astroDetails;
-        // } else {
-        //   throw CustomException("Unknown Error");
-        // }
       } else {
         throw CustomException(
             json.decode(response.body)["error"][0]["message"]);
@@ -38,21 +40,19 @@ class KundliRepository extends ApiProvider {
       debugPrint("we got $e $s");
       rethrow;
     }
+
   }
 
-  Future<BirthDetails> getBirthDetails(Map<String, dynamic> params) async {
+  //done
+  Future<BirthDetailsModel> getBirthDetails(Map<String, dynamic> params) async {
     try {
-      final response = await post(birthDetails,
-          endPoint: astrologyBaseUrl,
-          headers: getAstrologyHeader(),
+      final response = await post(getBirthDetailsInt,
+
+          headers: await getJsonHeaderURL(version: 7),
           body: jsonEncode(params));
       if (response.statusCode == 200) {
-        final birthDetails = birthDetailsFromJson(response.body);
-        // if (astroDetails.status) {
+        final birthDetails = birthDetailsModelFromJson(response.body);
         return birthDetails;
-        // } else {
-        //   throw CustomException("Unknown Error");
-        // }
       } else {
         throw CustomException(
             json.decode(response.body)["error"][0]['message']);
@@ -63,20 +63,17 @@ class KundliRepository extends ApiProvider {
     }
   }
 
-  Future<KalsarpaDosh> getKalsarpaDoshDetails(
+//done
+  Future<ManglikDoshModel> getKalsarpaDoshDetails(
       Map<String, dynamic> params) async {
     try {
-      final response = await post(kalsarpaDetails,
-          endPoint: astrologyBaseUrl,
-          headers: getAstrologyHeader(),
+      final response = await post(getManglikDetailsInt,
+
+          headers: await getJsonHeaderURL(version: 7),
           body: jsonEncode(params));
       if (response.statusCode == 200) {
-        final kalsarpaDoshDetails = kalsarpaDoshFromJson(response.body);
-        // if (astroDetails.status) {
+        final kalsarpaDoshDetails = manglikDoshModelFromJson(response.body);
         return kalsarpaDoshDetails;
-        // } else {
-        //   throw CustomException("Unknown Error");
-        // }
       } else {
         debugPrint('Json: ${jsonDecode(response.body)['error'][0]['message']}');
         throw CustomException(
@@ -88,19 +85,17 @@ class KundliRepository extends ApiProvider {
     }
   }
 
-  Future<ManglikDosh> getManglikDoshDetails(Map<String, dynamic> params) async {
+//done
+  Future<ManglikDoshModel> getManglikDoshDetails(
+      Map<String, dynamic> params) async {
     try {
-      final response = await post(manglik,
-          endPoint: astrologyBaseUrl,
-          headers: getAstrologyHeader(),
+      final response = await post(getManglikDetailsInt,
+
+          headers: await getJsonHeaderURL(version: 7),
           body: jsonEncode(params));
       if (response.statusCode == 200) {
-        final manglikDosh = manglikDoshFromJson(response.body);
-        // if (astroDetails.status) {
+        final manglikDosh = manglikDoshModelFromJson(response.body);
         return manglikDosh;
-        // } else {
-        //   throw CustomException("Unknown Error");
-        // }
       } else {
         debugPrint('Json: ${jsonDecode(response.body)['error']}');
         throw CustomException(json.decode(response.body)["error"]);
@@ -111,19 +106,17 @@ class KundliRepository extends ApiProvider {
     }
   }
 
-  Future<PitraDosh> getPitraDoshDetails(Map<String, dynamic> params) async {
+//done
+  Future<ManglikDoshModel> getPitraDoshDetails(
+      Map<String, dynamic> params) async {
     try {
-      final response = await post(pitraDoshReport,
-          endPoint: astrologyBaseUrl,
-          headers: getAstrologyHeader(),
+      final response = await post(getManglikDetailsInt,
+
+          headers: await getJsonHeaderURL(version: 7),
           body: jsonEncode(params));
       if (response.statusCode == 200) {
-        final pitraDosh = pitraDoshFromJson(response.body);
-        // if (astroDetails.status) {
+        final pitraDosh = manglikDoshModelFromJson(response.body);
         return pitraDosh;
-        // } else {
-        //   throw CustomException("Unknown Error");
-        // }
       } else {
         throw CustomException(json.decode(response.body)["error"]);
       }
@@ -133,20 +126,18 @@ class KundliRepository extends ApiProvider {
     }
   }
 
-  Future<HoroChart> getHoroChart(
-      Map<String, dynamic> params, String chartId) async {
+
+  //done
+  Future<HoroChartModel> getHoroChart(Map<String, dynamic> params,
+      String chartId) async {
     try {
-      final response = await post('$horoChartImage$chartId',
-          endPoint: astrologyBaseUrl,
-          headers: getAstrologyHeader(),
+      final response = await post('$horoChartImageInt$chartId',
+
+          headers: await getJsonHeaderURL(version: 7),
           body: jsonEncode(params));
       if (response.statusCode == 200) {
-        final horoChart = horoChartFromJson(response.body);
-        // if (astroDetails.status) {
+        final horoChart = horoChartModelFromJson(response.body);
         return horoChart;
-        // } else {
-        //   throw CustomException("Unknown Error");
-        // }
       } else {
         throw CustomException(
             json.decode(response.body)["error"][0]["message"]);
@@ -157,20 +148,17 @@ class KundliRepository extends ApiProvider {
     }
   }
 
-  Future<SadesathiDosh> getSadesathiDoshDetails(
+  //done
+  Future<ManglikDoshModel> getSadesathiDoshDetails(
       Map<String, dynamic> params) async {
     try {
-      final response = await post(sadhesatiStatus,
-          endPoint: astrologyBaseUrl,
-          headers: getAstrologyHeader(),
+      final response = await post(getManglikDetailsInt,
+
+          headers: await getJsonHeaderURL(version: 7),
           body: jsonEncode(params));
       if (response.statusCode == 200) {
-        final sadesathiDosh = sadesathiDoshFromJson(response.body);
-        // if (astroDetails.status) {
+        final sadesathiDosh = manglikDoshModelFromJson(response.body);
         return sadesathiDosh;
-        // } else {
-        //   throw CustomException("Unknown Error");
-        // }
       } else {
         debugPrint('Json: ${jsonDecode(response.body)['error'][0]['message']}');
         throw CustomException(
@@ -182,20 +170,17 @@ class KundliRepository extends ApiProvider {
     }
   }
 
-  Future<KundliPrediction> getKundliPredictionDetails(
+  //done
+  Future<KundliPredictionModel> getKundliPredictionDetails(
       Map<String, dynamic> params) async {
     try {
-      final response = await post(kundliPrediction,
-          endPoint: astrologyBaseUrl,
-          headers: getAstrologyHeader(),
+      final response = await post(getGeneralNakshatraReportInt,
+
+          headers: await getJsonHeaderURL(version: 7),
           body: jsonEncode(params));
       if (response.statusCode == 200) {
-        final kundliPrediction = kundliPredictionFromJson(response.body);
-        // if (astroDetails.status) {
+        final kundliPrediction = kundliPredictionModelFromJson(response.body);
         return kundliPrediction;
-        // } else {
-        //   throw CustomException("Unknown Error");
-        // }
       } else {
         debugPrint('Json: ${jsonDecode(response.body)['error'][0]['message']}');
         throw CustomException(
@@ -222,7 +207,7 @@ class KundliRepository extends ApiProvider {
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final customerLoginModel =
-              kundli_data.ResGetKundli.fromJson(json.decode(response.body));
+          kundli_data.ResGetKundli.fromJson(json.decode(response.body));
 
           return customerLoginModel;
         }

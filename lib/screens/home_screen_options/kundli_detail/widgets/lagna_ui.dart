@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
+import '../../../../common/custom_progress_dialog.dart';
+
 class LagnaUi extends StatelessWidget {
   final KundliDetailController controller;
 
@@ -19,12 +21,20 @@ class LagnaUi extends StatelessWidget {
           Obx(
             () => AnimatedCrossFade(
               duration: const Duration(milliseconds: 200),
-              crossFadeState: controller.lagnaChart.value.svg == null
+              crossFadeState: controller.lagnaChart.value.data?.svg == null
                   ? CrossFadeState.showSecond
                   : CrossFadeState.showFirst,
-              secondChild: const SizedBox(width: double.maxFinite),
+              secondChild: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  SizedBox(height: kToolbarHeight.h * 2.5),
+                  SizedBox(height: 50.h),
+                  const LoadingWidget(),
+                ],
+              ),
               firstChild: SvgPicture.string(
-                controller.lagnaChart.value.svg!,
+                controller.lagnaChart.value.data?.svg??'',
               ),
             ),
           ),

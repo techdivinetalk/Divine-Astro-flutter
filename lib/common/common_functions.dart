@@ -5,6 +5,8 @@ import 'dart:io';
 
 import 'package:aws_s3_upload/aws_s3_upload.dart';
 import 'package:divine_astrologer/common/routes.dart';
+import 'package:divine_astrologer/model/chat/req_common_chat_model.dart';
+import 'package:divine_astrologer/repository/chat_repository.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +15,7 @@ import 'package:intl/intl.dart';
 import '../di/fcm_notification.dart';
 import '../di/hive_services.dart';
 import '../di/shared_preference_service.dart';
+import '../model/chat/res_common_chat_success.dart';
 import '../model/chat_offline_model.dart';
 import '../repository/user_repository.dart';
 import 'package:path/path.dart' as p;
@@ -150,7 +153,7 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   //     .ref()
   //     .child("astrologer/${newMessage.receiverId}/engagement");
 
-  // messagesRef.set(message.toJson());
+  // messagesRef.set(message.toOfflineJson());
   firebaseDatabase
       .ref(
           "user/${currentChatUserId.value}/realTime/notification/${newMessage.time}")
@@ -197,5 +200,23 @@ void divineSnackBar({required String data, Color? color, Duration? duration}) {
       closeIconColor: color != null ? AppColors.white : AppColors.blackColor,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+}
+
+acceptOrRejectChat({required int? orderId, required int? queueId}) async {
+// *accept_or_reject: 1 = accept, 3 = chat reject by timeout
+// * is_timeout: should be 1 when reject by timeout"
+
+  ResCommonChatStatus response = await ChatRepository().chatAccept(
+      ReqCommonChatParams(
+              queueId: queueId,
+              orderId: orderId,
+              isTimeout: 0,
+              acceptOrReject: 1)
+          .toJson());
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    return false;
   }
 }

@@ -35,6 +35,10 @@ class LiveTipsController extends GetxController {
       "isAvailable": true,
       "coHostUser": "",
       "callType": "",
+      "duration":0,
+      "callStatus":0,
+      "userId":0,
+      "userName":""
     });
     Get.to(LivePage(
       liveID: astroId.toString(),

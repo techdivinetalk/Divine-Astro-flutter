@@ -12,6 +12,7 @@ import 'package:divine_astrologer/common/end_session_dialog.dart';
 import 'package:divine_astrologer/common/gift_sheet.dart';
 import 'package:divine_astrologer/common/unblock_user.dart';
 import 'package:divine_astrologer/screens/live_page/live_controller.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -61,13 +62,14 @@ class LivePage extends StatefulWidget {
 class LivePageState extends State<LivePage>
     with SingleTickerProviderStateMixin {
   final liveController = ZegoUIKitPrebuiltLiveStreamingController();
+  final event = ZegoUIKitPrebuiltLiveStreamingEvents();
   final List<StreamSubscription<dynamic>?> subscriptions = [];
   final controller = Get.put(LiveController(Get.put(UserRepository())));
   final liveStateNotifier =
       ValueNotifier<ZegoLiveStreamingState>(ZegoLiveStreamingState.idle);
   late CustomTimerController timeController = CustomTimerController(
       vsync: this,
-      begin: const Duration(minutes: 9),
+      begin: const Duration(minutes: 1),
       end: Duration.zero,
       initialState: CustomTimerState.reset,
       interval: CustomTimerInterval.seconds);
@@ -76,13 +78,16 @@ class LivePageState extends State<LivePage>
   void initState() {
     super.initState();
     controller.astroId = widget.localUserID;
-    controller.setAvailibility(widget.localUserID, true, timeController);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      controller.listenCallStatus();
+      controller.setAvailibility(widget.localUserID, true, timeController);
+      controller.listenWaitList(liveController);
       controller.getBlockedCustomerList();
-      liveController.connect.onRequestCoHostEvent = (user) async {
+      event.hostEvents.onCoHostRequestReceived = (user) async {
         controller.coHostUser = user;
         String type = await controller.getCallType(widget.localUserID);
-        controller.setVisibilityCoHost(type);
+        int duration = await controller.getDuration(widget.localUserID);
+        //controller.setVisibilityCoHost(type);
         showCupertinoModalPopup(
             context: Get.context!,
             builder: (BuildContext context) {
@@ -114,9 +119,28 @@ class LivePageState extends State<LivePage>
           onInRoomCommandMessageReceived(event);
         }),
       ]);
+      liveController.message.stream().listen((event) {
+        controller.jumpToBottom();
+      });
     });
     Future.delayed(const Duration(seconds: 1)).then((value) {
       ZegoUIKit().useFrontFacingCamera(widget.isFrontCamera);
+    });
+    timeController.state.addListener(() {
+      if (timeController.state.value == CustomTimerState.finished) {
+        if (controller.coHostUser != null) {
+          controller.setCallType(widget.localUserID);
+        }
+        controller.setCallStatus();
+        timeController.reset();
+        controller.setBusyStatus(
+            widget.localUserID, 0,
+            customerId: "");
+        liveController.connect
+            .removeCoHost(controller.coHostUser!);
+        controller.removeFromWaitList();
+        controller.isCoHosting.value = false;
+      }
     });
   }
 
@@ -276,16 +300,20 @@ class LivePageState extends State<LivePage>
       builder: (context, snapshot) {
         final messages = snapshot.data ?? <ZegoInRoomMessage>[];
 
-        return SizedBox(
-          width: 220.w,
-          height: 200.h,
-          child: ListView.builder(
-            shrinkWrap: true,
-            padding: EdgeInsets.zero,
-            itemCount: messages.length,
-            itemBuilder: (context, index) {
-              return messageItem(messages[index]);
-            },
+        return Flexible(
+          child: Center(
+            child: SizedBox(
+              height: 200.h,
+              child: ListView.builder(
+                shrinkWrap: true,
+                padding: EdgeInsets.zero,
+                controller: controller.scrollController,
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  return messageItem(messages[index]);
+                },
+              ),
+            ),
           ),
         );
       },
@@ -294,91 +322,99 @@ class LivePageState extends State<LivePage>
 
   Widget messageItem(ZegoInRoomMessage message) {
     bool isOtherUser = widget.localUserID != message.user.id;
-    return InkWell(
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            if (controller.blockIds.contains(message.user.id)) {
-              return UnblockOrBlockUser(
-                name: message.user.name,
-                isForBlocUser: false,
-                blockUnblockTap: () {
-                  controller.unblockUser(
-                      customerId: message.user.id, name: message.user.name);
-                },
-              );
-            } else {
-              return UnblockOrBlockUser(
-                name: message.user.name,
-                isForBlocUser: true,
-                blockUnblockTap: () {
-                  controller.blockUser(
-                      customerId: message.user.id, name: message.user.name);
-                },
-              );
-            }
-          },
-        );
-      },
-      child: Container(
-        width: 220.w,
-        alignment: Alignment.centerLeft,
-        margin: EdgeInsets.symmetric(
-          vertical: 4.h,
-          horizontal: 2,
-        ),
-        padding: EdgeInsets.symmetric(
-          vertical: 4.h,
-          horizontal: 1.w,
-        ),
-        decoration: BoxDecoration(
-          border: Border.all(color: AppColors.white, width: .8),
-          color: Colors.black.withOpacity(0.05),
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            SizedBox(width: 4.w),
-            SizedBox(
-              width: 18,
-              child: Center(
-                child: ZegoAvatar(
-                  user: message.user,
-                  avatarSize: const Size(18, 18),
-                ),
-              ),
+    return Align(
+      alignment: Alignment.bottomLeft,
+      child: InkWell(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              if (controller.blockIds.contains(message.user.id)) {
+                return UnblockOrBlockUser(
+                  name: message.user.name,
+                  isForBlocUser: false,
+                  blockUnblockTap: () {
+                    controller.unblockUser(
+                        customerId: message.user.id, name: message.user.name);
+                  },
+                );
+              } else {
+                return UnblockOrBlockUser(
+                  name: message.user.name,
+                  isForBlocUser: true,
+                  blockUnblockTap: () {
+                    controller.blockUser(
+                        customerId: message.user.id, name: message.user.name);
+                  },
+                );
+              }
+            },
+          );
+        },
+        child: Container(
+          margin: EdgeInsets.symmetric(
+            vertical: 4.h,
+            horizontal: 2,
+          ),
+          padding: EdgeInsets.symmetric(
+            vertical: 4.h,
+            horizontal: 1.w,
+          ),
+          decoration: BoxDecoration(
+            border: Border.all(color: AppColors.white, width: .8),
+            color: Colors.black.withOpacity(0.05),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: RichText(
+            maxLines: 4,
+            text: TextSpan(
+              children: [
+                WidgetSpan(
+                    child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(width: 4.w),
+                    SizedBox(
+                      width: 18,
+                      child: Center(
+                        child: ZegoAvatar(
+                          user: message.user,
+                          avatarSize: const Size(18, 18),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 4.w),
+                    Text(
+                      '${message.user.name}: ',
+                      style: const TextStyle(
+                        color: AppColors.appYellowColour,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Flexible(
+                      child: Text(
+                        message.message,
+                        maxLines: 4,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    isOtherUser
+                        ? const Icon(
+                            Icons.more_vert,
+                            color: Colors.white,
+                          )
+                        : const SizedBox()
+                  ],
+                )),
+              ],
             ),
-            SizedBox(width: 4.w),
-            Text(
-              '${message.user.name}: ',
-              style: const TextStyle(
-                color: AppColors.appYellowColour,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(
-              width: 100.w,
-              child: Text(
-                message.message,
-                maxLines: 5,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                ),
-              ),
-            ),
-            const Spacer(),
-            isOtherUser
-                ? const Icon(
-                    Icons.more_vert,
-                    color: Colors.white,
-                  )
-                : const SizedBox(),
-          ],
+          ),
         ),
       ),
     );
@@ -496,7 +532,8 @@ class LivePageState extends State<LivePage>
         children: [
           SizedBox(width: 15.w),
           messageWidget(),
-          const Spacer(),
+          SizedBox(width: 120.w),
+          //const Spacer(),
           sideButtons(),
           SizedBox(width: 15.w)
         ],
@@ -594,9 +631,10 @@ class LivePageState extends State<LivePage>
                                             controller: controller.msg,
                                             keyboardType: TextInputType.text,
                                             suffixIconPadding: 8.w,
+                                            isDense: true,
                                             textInputFormatter: [
                                               FilteringTextInputFormatter(
-                                                  RegExp(r'[a-zA-Z]'),
+                                                  RegExp(r'^[a-zA-Z ]*$'),
                                                   allow: true)
                                             ],
                                             suffixIcon: InkWell(
@@ -607,10 +645,13 @@ class LivePageState extends State<LivePage>
                                                   liveController.message.send(
                                                       controller.msg.text);
                                                   controller.msg.text = "";
+                                                  controller.jumpToBottom();
                                                 }
                                               },
-                                              child:
-                                                  Assets.images.icSendMsg.svg(),
+                                              child: Assets.images.icSendMsg
+                                                  .svg(
+                                                      width: 40.w,
+                                                      height: 40.w),
                                             ),
                                             inputBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
@@ -730,7 +771,7 @@ class LivePageState extends State<LivePage>
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
+              padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 4.h),
               decoration: BoxDecoration(
                   color: AppColors.blackColor.withOpacity(.3),
                   borderRadius: BorderRadius.circular(40)),
@@ -738,28 +779,28 @@ class LivePageState extends State<LivePage>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width: 49.w,
-                    height: 49.h,
+                    width: 37.w,
+                    height: 37.h,
                     clipBehavior: Clip.antiAlias,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                     ),
                     child: circleAvatar(),
                   ),
-                  SizedBox(width: 10.w),
+                  SizedBox(width: 3.w),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomText(
-                        widget.astrologerName ?? "",
-                        fontSize: 16.sp,
+                        (widget.astrologerName ?? "") + "  ",
+                        fontSize: 12.sp,
                         fontColor: AppColors.white,
                         fontWeight: FontWeight.w500,
                       ),
                       CustomText(
                         "Toret",
-                        fontSize: 12.sp,
+                        fontSize: 10.sp,
                         fontColor: AppColors.white,
                       ),
                     ],
@@ -844,20 +885,22 @@ class LivePageState extends State<LivePage>
                                   if (controller.coHostUser != null) {
                                     controller.setCallType(widget.localUserID);
                                   }
+                                  controller.setCallStatus();
                                   timeController.reset();
                                   controller.setBusyStatus(
                                       widget.localUserID, 0,
                                       customerId: "");
                                   liveController.connect
                                       .removeCoHost(controller.coHostUser!);
+                                  controller.removeFromWaitList();
                                   controller.isCoHosting.value = false;
                                 });
                           },
                         );
                       },
                       child: Container(
-                        width: 50.w,
-                        height: 50.h,
+                        width: 46.w,
+                        height: 46.h,
                         clipBehavior: Clip.antiAlias,
                         decoration: const BoxDecoration(
                             shape: BoxShape.circle, color: AppColors.redColor),
@@ -891,8 +934,8 @@ class LivePageState extends State<LivePage>
                 );
               },
               child: Container(
-                width: 50.w,
-                height: 50.h,
+                width: 46.w,
+                height: 46.h,
                 clipBehavior: Clip.antiAlias,
                 decoration: const BoxDecoration(
                     shape: BoxShape.circle, color: AppColors.appRedColour),
@@ -915,8 +958,8 @@ class LivePageState extends State<LivePage>
                     });
               },
               child: Container(
-                width: 50.w,
-                height: 50.h,
+                width: 46.w,
+                height: 46.h,
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -939,8 +982,8 @@ class LivePageState extends State<LivePage>
                     });
               },
               child: Container(
-                width: 50.w,
-                height: 50.h,
+                width: 46.w,
+                height: 46.h,
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -967,8 +1010,8 @@ class LivePageState extends State<LivePage>
                     });
               },
               child: Container(
-                width: 50.w,
-                height: 50.h,
+                width: 46.w,
+                height: 46.h,
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -979,32 +1022,50 @@ class LivePageState extends State<LivePage>
           ),
         ),
         SizedBox(height: 12.h),
-        ClipOval(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
-            child: InkWell(
-              onTap: () {
-                showCupertinoModalPopup(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return WaitList(
-                        onAccept: () {},
-                        onReject: () {},
-                      );
-                    });
-              },
-              child: Container(
-                width: 50.w,
-                height: 50.h,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.white.withOpacity(.6)),
-                child: Center(child: Assets.images.waitlistLive.svg()),
-              ),
-            ),
-          ),
-        ),
+        StreamBuilder<DatabaseEvent>(
+            stream: controller.database
+                .ref()
+                .child("live/${widget.localUserID}/waitList")
+                .onValue,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const SizedBox();
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center();
+              } else if (!snapshot.hasData) {
+                return const SizedBox();
+              } else if (snapshot.data == null) {
+                return const SizedBox();
+              } else if (snapshot.data!.snapshot.children.isNotEmpty) {
+                return ClipOval(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
+                    child: InkWell(
+                      onTap: () {
+                        showCupertinoModalPopup(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return WaitList(
+                                astroId: widget.localUserID,
+                                onAccept: () {},
+                              );
+                            });
+                      },
+                      child: Container(
+                        width: 46.w,
+                        height: 46.h,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.white.withOpacity(.6)),
+                        child: Center(child: Assets.images.waitlistLive.svg()),
+                      ),
+                    ),
+                  ),
+                );
+              }
+              return const SizedBox();
+            }),
       ],
     );
   }

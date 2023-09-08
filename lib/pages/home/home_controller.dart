@@ -20,6 +20,7 @@ import '../../repository/user_repository.dart';
 class HomeController extends GetxController {
   RxBool chatSwitch = true.obs;
   RxBool callSwitch = false.obs;
+  RxBool videoSwitch = false.obs;
   RxBool consultantOfferSwitch = false.obs;
   RxBool promotionOfferSwitch = false.obs;
   RxString appbarTitle = "Astrologer Name  ".obs;

@@ -13,10 +13,11 @@ import '../../screens/side_menu/side_menu_ui.dart';
 import 'performance_controller.dart';
 
 class PerformanceUI extends GetView<PerformanceController> {
-  const PerformanceUI({Key? key}) : super(key: key);
+  PerformanceUI({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Get.put(PerformanceController());
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar:

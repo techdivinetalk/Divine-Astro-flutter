@@ -61,8 +61,10 @@ class CoHostRequest extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(width: 20.w),
+                   /* SizedBox(width: 20.w),
                     Expanded(
                       child: SizedBox(
                         height: 56.h,
@@ -82,14 +84,14 @@ class CoHostRequest extends StatelessWidget {
                             )),
                       ),
                     ),
-                    SizedBox(width: 10.w),
+                    SizedBox(width: 10.w),*/
                     Expanded(
                       child: SizedBox(
                         height: 56.h,
                         child: CustomButton(
                             onTap: () {
-                              onAccept!.call();
                               Get.back();
+                              onAccept!.call();
                             },
                             color: AppColors.appYellowColour,
                             radius: 28,

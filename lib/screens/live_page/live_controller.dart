@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:custom_timer/custom_timer.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
@@ -11,6 +12,8 @@ import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 import '../../common/app_exception.dart';
 import '../../common/block_success.dart';
+import '../../common/co-host_request.dart';
+import '../../common/waitlist_sheet.dart';
 import '../../di/shared_preference_service.dart';
 import '../../model/res_blocked_customers.dart';
 import '../../repository/user_repository.dart';
@@ -64,6 +67,7 @@ class LiveController extends GetxController {
   var isMicroPhoneOn = true.obs;
   var isCallOnOff = true.obs;
   var duration = "".obs;
+  var typeOfNextUserCall = "";
   var typeOfCall = "";
   var audioStream = false;
   int total = 0;
@@ -72,6 +76,17 @@ class LiveController extends GetxController {
   ResBlockedCustomers? blockedUserData;
   var blockCustomer = <AstroBlockCustomer>[].obs;
   String? astroId;
+  var nextPerson = {}.obs;
+  var nextuserid = "";
+  var scrollController = ScrollController();
+
+  jumpToBottom() {
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent + 50,
+      duration: const Duration(milliseconds: 10),
+      curve: Curves.linear,
+    );
+  }
 
   getBlockedCustomerList() async {
     Map<String, dynamic> params = {
@@ -154,6 +169,92 @@ class LiveController extends GetxController {
     }
   }
 
+  removeFromWaitList() async {
+    var data = await database.ref().child("live/$astroId/waitList").get();
+    var first = data.children.toList().first;
+    var value = first.value as Map;
+    database.ref().child("live/$astroId/waitList/${value["id"]}").remove();
+    nextuserid = value["id"];
+    typeOfNextUserCall = value["callType"];
+    database.ref().child("live/$astroId/").update({
+      "nextUser": {
+        value["id"]: {
+          "id": value["id"],
+          "name": value["name"],
+          "callType": value["callType"],
+          "duration": 9
+        }
+      }
+    });
+  }
+  bool dialogOpen = false;
+  bool dialogOpen2 = false;
+  listenWaitList(ZegoUIKitPrebuiltLiveStreamingController controller) {
+    database
+        .ref()
+        .child("live/$astroId/nextUser/$nextuserid")
+        .onValue
+        .listen((event) async {
+      var data = await database
+          .ref()
+          .child("live/$astroId/nextUser/$nextuserid")
+          .get();
+      if (data.value != null && !dialogOpen) {
+        var user = data.value as Map;
+        nextPerson.value = user;
+        var id = user["id"];
+        var name = user["name"];
+        if (nextPerson.isNotEmpty) {
+          showCupertinoModalPopup(
+              context: Get.context!,
+              builder: (BuildContext context) {
+                dialogOpen = true;
+                return WaitList(
+                  astroId: astroId,
+                  onAccept: () {
+                    dialogOpen = false;
+                    database
+                        .ref()
+                        .child("live/$astroId/")
+                        .update({"callStatus": 2,"userId":id,"userName":name});
+                  },
+                );
+              });
+        }
+      }
+    });
+  }
+
+  listenCallStatus() {
+    database
+        .ref()
+        .child("live/$astroId/callStatus/")
+        .onValue
+        .listen((event) async {
+      var data = await database.ref().child("live/$astroId/").get();
+      if (data.value != null) {
+        var userData = data.value as Map;
+        if (userData["callStatus"] == 1 && !dialogOpen2) {
+          typeOfCall = userData["callType"];
+          showCupertinoModalPopup(
+              context: Get.context!,
+              builder: (BuildContext context) {
+                dialogOpen2 = true;
+                return CoHostRequest(
+                    name: userData["userName"],
+                    onAccept: () {
+                      dialogOpen2 = false;
+                      database
+                          .ref()
+                          .child("live/$astroId/")
+                          .update({"callStatus": 2});
+                    });
+              });
+        }
+      }
+    });
+  }
+
   stopStream(String id) {
     Get.back();
     database.ref().child("live/$id").remove();
@@ -163,15 +264,38 @@ class LiveController extends GetxController {
     database.ref().child("live/$id").update({"callType": ""});
   }
 
+  var timeDuration = const Duration();
   setAvailibility(String id, bool available, CustomTimerController controller) {
     database.ref().child("live/$id").update({"isAvailable": available});
-    database.ref().child("live/$id/coHostUser").onValue.listen((event) {
+    database.ref().child("live/$id/coHostUser").onValue.listen((event) async {
       final user = event.snapshot.value as String? ?? "";
       if (user.isEmpty) {
         isCoHosting.value = false;
         controller.reset();
+      }else{
+        var coHost = await database.ref().child("live/$astroId/coHost").get();
+        if(coHost.value != null){
+          var user = coHost.value as Map;
+          coHostUser = ZegoUIKitUser(id: user["id"], name: user["name"]);
+        }
+        var data = await database.ref().child("live/$astroId/nextUser").get();
+        var type = data.value == null ? typeOfCall : typeOfNextUserCall;
+        print("calltype"+type);
+        setVisibilityCoHost(type);
+        var duration = await database.ref().child("live/$astroId/duration").get();
+        intToTimeLeft(duration.value as int ?? 0);
+        controller.begin = timeDuration;
+        isCoHosting.value = true;
+        controller.start();
       }
     });
+  }
+
+  setCallStatus(){
+    database
+        .ref()
+        .child("live/$astroId/")
+        .update({"callStatus": 0});
   }
 
   setBusyStatus(String id, int status, {customerId}) {
@@ -184,9 +308,13 @@ class LiveController extends GetxController {
     return (snapShot.value as Map)["callType"];
   }
 
-  setVisibilityCoHost(String isAudioCall) {
-    typeOfCall = isAudioCall;
-    if (typeOfCall == "video") {
+  Future<int> getDuration(String id) async {
+    var snapShot = await database.ref().child("live/$id").get();
+    return (snapShot.value as Map)["duration"];
+  }
+
+  setVisibilityCoHost(String type) {
+    if (type == "video") {
       hostConfig.audioVideoViewConfig.visible = (
         ZegoUIKitUser localUser,
         ZegoLiveStreamingRole localRole,
@@ -218,5 +346,30 @@ class LiveController extends GetxController {
         return targetUserRole == ZegoLiveStreamingRole.host;
       };
     }
+  }
+
+  void endCall(String orderId, bool isAccept) async {
+    Map<String, dynamic> json = {
+      "order_id": orderId,
+      "duration": "",
+      "amount": "walletBalance",
+      "offer_id": orderId,
+      "role_id": pref.getUserDetail()?.roleId ?? -1,
+    };
+    final response = await userRepository.endCall(json);
+  }
+
+  String intToTimeLeft(int value) {
+    int h, m, s;
+
+    h = value ~/ 3600;
+
+    m = ((value - h * 3600)) ~/ 60;
+
+    s = value - (h * 3600) - (m * 60);
+
+    String result = "$h:$m:$s";
+    timeDuration = Duration(hours: h,minutes: m,seconds: s);
+    return result;
   }
 }

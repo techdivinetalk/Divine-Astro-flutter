@@ -16,7 +16,6 @@ class OrderHistoryRepository extends ApiProvider {
   Future<AllOrderHistoryModelClass> getAllOrderHistory(Map<String, dynamic> param) async {
     try {
       final response = await post(getOrderHistoryUrl,
-          endPoint: baseUrlv7,
           body: jsonEncode(param),
           headers: await getJsonHeaderURL(version: 7));
 
@@ -45,7 +44,6 @@ class OrderHistoryRepository extends ApiProvider {
   Future<CallOrderHistoryModelClass> getCallOrderHistory(Map<String, dynamic> param) async {
     try {
       final response = await post(getOrderHistoryUrl,
-          endPoint: baseUrlv7,
           body: jsonEncode(param),
           headers: await getJsonHeaderURL(version: 7));
 
@@ -74,7 +72,6 @@ class OrderHistoryRepository extends ApiProvider {
   Future<ChatOrderHistoryModelClass> getChatOrderHistory(Map<String, dynamic> param) async {
     try {
       final response = await post(getOrderHistoryUrl,
-          endPoint: baseUrlv7,
           body: jsonEncode(param),
           headers: await getJsonHeaderURL(version: 7));
 
@@ -103,7 +100,6 @@ class OrderHistoryRepository extends ApiProvider {
   Future<GiftOrderHistoryModelClass> getGiftOrderHistory(Map<String, dynamic> param) async {
     try {
       final response = await post(getOrderHistoryUrl,
-          endPoint: baseUrlv7,
           body: jsonEncode(param),
           headers: await getJsonHeaderURL(version: 7));
 
@@ -134,7 +130,6 @@ class OrderHistoryRepository extends ApiProvider {
     //progressService.showProgressDialog(true);
     try {
       final response = await post(getOrderHistoryUrl,
-          endPoint: baseUrlv7,
           body: jsonEncode(param),
           headers: await getJsonHeaderURL(version: 7));
 

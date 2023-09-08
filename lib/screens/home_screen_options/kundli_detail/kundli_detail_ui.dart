@@ -7,7 +7,9 @@ import '../../../common/colors.dart';
 import '../../../gen/assets.gen.dart';
 import 'kundli_detail_controller.dart';
 import 'widgets/basic_panchang_ui.dart';
+import 'widgets/dasha_ui.dart';
 import 'widgets/dosha_ui.dart';
+import 'widgets/kp_ui.dart';
 import 'widgets/lagna_ui.dart';
 import 'widgets/moon_chart_ui.dart';
 import 'widgets/navamansha_ui.dart';
@@ -22,7 +24,7 @@ class KundliDetailUi extends GetView<KundliDetailController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: DefaultTabController(
-        length: 8,
+        length: 10,
         child: Builder(builder: (context) {
           var defaultController = DefaultTabController.of(context);
           defaultController.addListener(() {
@@ -32,7 +34,8 @@ class KundliDetailUi extends GetView<KundliDetailController> {
             headerSliverBuilder: (context, value) {
               return [
                 SliverOverlapAbsorber(
-                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                  handle:
+                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                   sliver: SliverAppBar(
                     leading: InkWell(
                       onTap: () {
@@ -50,7 +53,8 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                         background: Stack(
                           children: [
                             Center(
-                              child: Assets.images.bgKundliDetail.svg(width: 128.w, height: 128.h),
+                              child: Assets.images.bgKundliDetail
+                                  .svg(width: 128.w, height: 128.h),
                             ),
                             Obx(() => Center(
                                   child: controller.detailPageImage[controller.currentIndex.value],
@@ -62,13 +66,15 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                     pinned: true,
                     title: Text("kundliText".tr,
                         style: AppTextStyle.textStyle16(
-                            fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                            fontWeight: FontWeight.w400,
+                            fontColor: AppColors.darkBlue)),
                     bottom: PreferredSize(
                       preferredSize: const Size.fromHeight(kTextTabBarHeight),
                       child: Card(
                         surfaceTintColor: AppColors.white,
                         margin: EdgeInsets.zero,
-                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero),
                         child: Center(
                           child: TabBar(
                             indicatorSize: TabBarIndicatorSize.tab,
@@ -79,9 +85,11 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                             labelColor: AppColors.brownColour,
                             unselectedLabelColor: AppColors.blackColor,
                             splashBorderRadius: BorderRadius.circular(20),
-                            padding: EdgeInsets.symmetric(vertical: 6.w, horizontal: 24.w),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 6.w, horizontal: 24.w),
                             labelStyle: AppTextStyle.textStyle14(
-                                fontWeight: FontWeight.w500, fontColor: AppColors.brownColour),
+                                fontWeight: FontWeight.w500,
+                                fontColor: AppColors.brownColour),
                             indicator: BoxDecoration(
                               color: AppColors.lightYellow,
                               borderRadius: BorderRadius.circular(28),
@@ -92,7 +100,7 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                             tabs: [
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 30.w),
-                                child: Tab(text: "birthDetails".tr),
+                                child: Tab(text: "personalDetails".tr),
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 30.w),
@@ -113,6 +121,14 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 30.w),
                                 child: Tab(text: "dosha".tr),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 30.w),
+                                child: Tab(text: "kp".tr),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 30.w),
+                                child: Tab(text: "dasha".tr),
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 30.w),
@@ -139,6 +155,8 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                 SunChartUi(controller: controller),
                 NavamanshaUi(controller: controller),
                 DoshaUi(controller: controller),
+                const KpUI(),
+                const DashaUI(),
                 BasicPanchangUi(controller: controller),
                 PredictionUi(controller: controller),
               ],

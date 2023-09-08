@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'package:aws_s3_upload/aws_s3_upload.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/model/upload_image_model.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../common/app_exception.dart';
 import 'package:path/path.dart' as p;
@@ -16,11 +18,11 @@ import '../../../repository/user_repository.dart';
 
 class UploadYourPhotosController extends GetxController {
   final UserRepository userRepository = Get.find<UserRepository>();
-  List<File> selectedImages = [];
+  List<File> selectedImages = <File>[];
   final picker = ImagePicker();
-  RxBool isImageUpdate = true.obs;
   UserData? userData;
   var preference = Get.find<SharedPreferenceService>();
+
   @override
   void onInit() {
     super.onInit();
@@ -28,56 +30,72 @@ class UploadYourPhotosController extends GetxController {
   }
 
   Future getImages() async {
-    isImageUpdate.value = false;
-    final pickedFile = await picker.pickMultiImage(
-        imageQuality: 100, maxHeight: 1000, maxWidth: 1000);
-    List<XFile> xfilePick = pickedFile;
 
-    if (xfilePick.isNotEmpty) {
-      for (var i = 0; i < xfilePick.length; i++) {
-        selectedImages.add(File(xfilePick[i].path));
-        isImageUpdate.value = true;
+    final pickedFile = await picker.pickMultiImage(
+      imageQuality: 100,
+      maxHeight: 1000,
+      maxWidth: 1000,
+    );
+    List<XFile> xFilePick = pickedFile;
+
+    if (xFilePick.isNotEmpty) {
+      for (var i = 0; i < xFilePick.length; i++) {
+        selectedImages.add(File(xFilePick[i].path));
       }
+      update();
     } else {
-      ScaffoldMessenger.of(Get.context!)
-          .showSnackBar(const SnackBar(content: Text('Nothing is selected')));
+      ScaffoldMessenger.of(Get.context!).showSnackBar(
+        const SnackBar(content: Text('Nothing is selected')),
+      );
     }
   }
 
+  void removeImages(String value){
+    selectedImages.removeWhere((element) => element.path == value);
+    update();
+  }
+
   uploadImageToS3Bucket(List<File> selectedImages) async {
-    List<String> uploadedURLs = [];
+    List<Future> futures = <Future>[];
     var commonConstants = await userRepository.constantDetailsData();
     var dataString = commonConstants.data.awsCredentails.baseurl?.split(".");
     for (int i = 0; i < selectedImages.length; i++) {
       var extension = p.extension(selectedImages[i].path);
-
-      var response = await AwsS3.uploadFile(
-        accessKey: commonConstants.data.awsCredentails.accesskey!,
-        secretKey: commonConstants.data.awsCredentails.secretKey!,
-        file: selectedImages[i],
-        bucket: dataString![0].split("//")[1],
-        destDir: 'astrologer/${userData?.id}',
-        filename:
-            '${DateTime.now().millisecondsSinceEpoch.toString()}$extension',
-        region: dataString[2],
+      futures.add(
+        AwsS3.uploadFile(
+          accessKey: commonConstants.data.awsCredentails.accesskey!,
+          secretKey: commonConstants.data.awsCredentails.secretKey!,
+          file: selectedImages[i],
+          bucket: dataString![0].split("//")[1],
+          destDir: 'astrologer/${userData?.id}',
+          filename:
+              '${DateTime.now().millisecondsSinceEpoch.toString()}$extension',
+          region: dataString[2],
+        ),
       );
-      if (response != null) {
-        uploadedURLs.add(response);
-        Get.back();
-        Get.snackbar("Image uploaded successfully", "",
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: AppColors.white,
-            colorText: AppColors.blackColor,
-            duration: const Duration(seconds: 3));
-
-        debugPrint("Uploaded Url : $response");
-      } else {
-        CustomException("Something went wrong");
-      }
     }
-    if (uploadedURLs.length == selectedImages.length) {
-      Get.back();
-      CustomException("Images uploaded successfully");
+    List<dynamic> response = await Future.wait(futures);
+    if (response.isNotEmpty) {
+      try {
+        final pref = Get.find<SharedPreferenceService>();
+        UploadImageRequest request = UploadImageRequest(
+          images: response.map((e) => e.toString()).toList(),
+          astroId: "${pref.getUserDetail()?.id}",
+        );
+        final imageUpload =
+            await userRepository.uploadYourPhotoApi(request.toJson());
+        if (imageUpload.success && imageUpload.statusCode == 200) {
+          Get.back();
+          divineSnackBar(data: "Image uploaded successfully");
+          debugPrint("Uploaded Url : $response");
+        }
+      } catch (err) {
+        if (err is AppException) {
+          err.onException();
+        }
+      }
+    } else {
+      CustomException("Something went wrong");
     }
   }
 }

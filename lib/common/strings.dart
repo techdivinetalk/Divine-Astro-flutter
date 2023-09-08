@@ -232,6 +232,21 @@ class AppString {
   static String charan = "Charan";
   static String sunrise = "Sunrise";
   static String sunset = "Sunset";
+  static String kp = "KP";
+  static String cusps = "Cusps";
+  static String dasha = "Dasha";
+  static String planets = "Planets";
+  static String rulingPlanets = "Ruling Planets";
+  static String vimshottari = "Vimshottari";
+  static String yogini = "Yogini";
+  static String mahadasha = "Mahadasha";
+  static String mahadashNote = "The dates mentioned above are the ending dates.";
+  static String bhadrika = "Bhadrika";
+  static String rashiChart = "Rashi Chart";
+  static String levelUp = "Level Up";
+  static String antarDasha = "AntarDasha";
+
+  static String bhavChalitChart = "Bhav Chalit Chart";
   static String karana = "Karana";
   static String nakshatra = "Nakshatra";
   static String nakshatraLord = "Nakshatra Lord";

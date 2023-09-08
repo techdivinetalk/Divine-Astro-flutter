@@ -3,6 +3,7 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/switch_component.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/screens/video_call/video_call.dart';
+import 'package:divine_astrologer/screens/video_call_page/video_call_page.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
@@ -218,10 +219,7 @@ class HomeUI extends GetView<HomeController> {
                     imageName: Assets.images.icEcommerce.svg(),
                     btnTitle: "eCommerce".tr,
                     onbtnTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const VideoCallPage()));
+                      Get.toNamed(RouteName.videoCallPage);
                     }),
                 SizedBox(height: 10.h),
                 feedbackWidget(),
@@ -389,6 +387,19 @@ class HomeUI extends GetView<HomeController> {
                       fontColor: AppColors.darkBlue,
                       fontWeight: FontWeight.w400),
                 ),
+                SizedBox(height: 16.h),
+                Text(
+                  "Video".tr.toUpperCase(),
+                  style: AppTextStyle.textStyle12(
+                      fontColor: AppColors.darkBlue,
+                      fontWeight: FontWeight.w700),
+                ),
+                Text(
+                  "₹25/Min",
+                  style: AppTextStyle.textStyle10(
+                      fontColor: AppColors.darkBlue,
+                      fontWeight: FontWeight.w400),
+                ),
               ],
             ),
             Column(
@@ -411,6 +422,13 @@ class HomeUI extends GetView<HomeController> {
                   () => SwitchWidget(
                     onTap: () => controller.callSwitchFN(),
                     switchValue: controller.callSwitch.value,
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                Obx(
+                      () => SwitchWidget(
+                    onTap: () {},
+                    switchValue: controller.videoSwitch.value,
                   ),
                 ),
               ],

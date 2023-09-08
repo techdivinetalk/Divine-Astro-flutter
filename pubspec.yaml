@@ -38,8 +38,8 @@ dependencies:
   url_launcher: ^6.1.12
   zego_uikit: ^2.9.3
   zego_uikit_prebuilt_call: ^3.12.3
-  zego_uikit_prebuilt_live_streaming: ^2.15.3
-  zego_uikit_signaling_plugin: ^2.3.2
+  zego_uikit_prebuilt_live_streaming: ^2.18.0
+  zego_uikit_signaling_plugin: ^2.4.0
   svgaplayer_flutter: ^2.2.0
   permission_handler: ^10.4.3
   image_picker: ^1.0.2
@@ -58,6 +58,7 @@ dependencies:
   flutter_html: ^3.0.0-beta.2
   file_picker: ^5.5.0
   custom_timer: ^0.2.3
+  contacts_service: ^0.6.3
 
 dependency_overrides:
   intl: ^0.18.1

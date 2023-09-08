@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import 'app_theme.dart';
+import 'colors.dart';
+import 'custom_text.dart';
 
 class CustomProgressDialog extends StatelessWidget {
   final AppThemeState _appTheme = AppTheme.of(Get.context!);
@@ -27,6 +29,30 @@ class CustomProgressDialog extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class LoadingWidget extends StatelessWidget {
+  const LoadingWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return  const Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(width: double.maxFinite),
+        Center(
+          child: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: CircularProgressIndicator(
+              color: AppColors.lightYellow,
+            ),
+          ),
+        ),
+        SizedBox(height: 10),
+        CustomText('Getting data'),
+      ],
     );
   }
 }
