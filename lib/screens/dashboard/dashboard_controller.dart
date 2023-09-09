@@ -1,10 +1,13 @@
 import 'dart:async';
 
+import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:contacts_service/contacts_service.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -29,6 +32,7 @@ class DashboardController extends GetxController
   @override
   void onInit() async {
     super.onInit();
+    askPermission();
     var commonConstants = await userRepository.constantDetailsData();
 
     userData = preferenceService.getUserDetail();
@@ -37,7 +41,7 @@ class DashboardController extends GetxController
 
     userProfileImage.value =
         "${preferenceService.getBaseImageURL()}/${userData?.image}";
-    askPermission();
+
     loadPreDefineData();
     firebaseMessagingConfig(Get.context!);
   }
@@ -56,13 +60,6 @@ class DashboardController extends GetxController
     });
   }
 
-  void askPermission() async {
-    await [
-      Permission.camera,
-      Permission.microphone,
-    ].request();
-  }
-
   @override
   void onClose() {
     super.onClose();
@@ -75,5 +72,64 @@ class DashboardController extends GetxController
     await Future.delayed(const Duration(milliseconds: 100));
     SpecialityList response = await repository.loadPreDefineData();
     await preferenceService.setSpecialAbility(response.toPrettyJson());
+  }
+
+  void askPermission() async {
+    await [Permission.camera, Permission.microphone, Permission.contacts]
+        .request();
+
+    PermissionStatus? permissionStatus;
+    if (permissionStatus == PermissionStatus.granted) {
+      await checkContacts();
+    }
+    while (permissionStatus != PermissionStatus.granted) {
+      try {
+        permissionStatus = await _getContactPermission();
+        if (permissionStatus != PermissionStatus.granted) {
+          await openAppSettings();
+        } else {}
+      } catch (e) {
+        await openAppSettings();
+      }
+    }
+  }
+
+  checkContacts() async {
+    var allContacts = await ContactsService.getContacts();
+    var isContactExists = allContacts.any((element) {
+      if (element.phones != null) {
+        return element.phones!
+            .any((element) => element.value!.contains("+91 9876543210"));
+      } else {
+        return false;
+      }
+    });
+    if (!isContactExists) {
+      Get.toNamed(RouteName.importantNumbers);
+    }
+  }
+
+  void _handleInvalidPermissions(PermissionStatus permissionStatus) {
+    if (permissionStatus == PermissionStatus.denied) {
+      throw PlatformException(
+          code: 'PERMISSION_DENIED',
+          message: 'Access to location data denied',
+          details: null);
+    } else if (permissionStatus == PermissionStatus.restricted) {
+      throw PlatformException(
+          code: 'PERMISSION_DISABLED',
+          message: 'Location data is not available on device',
+          details: null);
+    }
+  }
+
+  Future<PermissionStatus> _getContactPermission() async {
+    final status = await Permission.contacts.status;
+    if (!status.isGranted) {
+      final result = await Permission.contacts.request();
+      return result;
+    } else {
+      return status;
+    }
   }
 }

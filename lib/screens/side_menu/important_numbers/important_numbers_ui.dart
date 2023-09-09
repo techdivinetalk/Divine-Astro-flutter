@@ -84,26 +84,32 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                                 ],
                               ),
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: AppColors.lightYellow),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 15.w, vertical: 10.h),
-                                child: Text(
-                                  "addContact".tr,
-                                  style: AppTextStyle.textStyle16(
-                                      fontWeight: FontWeight.w600,
-                                      fontColor: AppColors.brownColour),
+                            InkWell(
+                              onTap: () {
+                                controller.addContact(
+                                    contactNo: "9876543210",
+                                    givenName: "Astrologer",
+                                    middleName: "guide");
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: AppColors.lightYellow),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 15.w, vertical: 10.h),
+                                  child: Text(
+                                    "addContact".tr,
+                                    style: AppTextStyle.textStyle16(
+                                        fontWeight: FontWeight.w600,
+                                        fontColor: AppColors.brownColour),
+                                  ),
                                 ),
                               ),
                             )
                           ],
                         ),
-                        SizedBox(
-                          height: 25.h,
-                        ),
+                        SizedBox(height: 25.h),
                       ],
                     ),
                   );

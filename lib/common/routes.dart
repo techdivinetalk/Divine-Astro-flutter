@@ -28,6 +28,10 @@ import 'package:divine_astrologer/screens/suggest_remedies_flow/category_detail/
 import 'package:divine_astrologer/screens/side_menu/donation/donation_ui.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/suggest_remedies_sub/suggest_remedies_sub_binding.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/suggest_remedies_sub/suggest_remedies_sub_ui.dart';
+import 'package:divine_astrologer/screens/video_call/video_call.dart';
+import 'package:divine_astrologer/screens/video_call/video_call_binding.dart';
+import 'package:divine_astrologer/screens/video_call_page/video_call_page.dart';
+import 'package:divine_astrologer/screens/video_call_page/video_call_page_binding.dart';
 import 'package:get/get.dart';
 import '../screens/bank_details/bank_detail_binding.dart';
 import '../screens/bank_details/bank_details_ui.dart';
@@ -98,6 +102,8 @@ class RouteName {
   static const String walletScreenUI = "/walletScreenUI";
   static const String privacyPolicy = "/privacyPolicy";
   static const String termsCondition = "/termsCondition";
+  static const String videoCallPage = "/videoCallPage";
+  static const String videoCall = "/videoCall";
 }
 
 class Routes {
@@ -233,6 +239,16 @@ class Routes {
     GetPage(
       page: () => const TermsConditionUI(),
       name: RouteName.termsCondition,
+    ),
+    GetPage(
+      page: () => const VideoCallPage(),
+      name: RouteName.videoCallPage,
+      binding: VideoCallPageBinding(),
+    ),
+    GetPage(
+      page: () => const VideoCall(),
+      name: RouteName.videoCall,
+      binding: VideoCallBinding(),
     ),
   ];
 }

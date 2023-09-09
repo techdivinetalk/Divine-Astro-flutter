@@ -46,11 +46,11 @@ class SideMenuDrawer extends StatelessWidget {
               title: Text("orderHistory".tr),
               onTap: () => {Get.back(), Get.toNamed(RouteName.orderHistory)},
             ),
-            ListTile(
-              leading: Assets.images.icReport.svg(),
-              title: Text("reportAnAstrologer".tr),
-              onTap: () => {},
-            ),
+            // ListTile(
+            //   leading: Assets.images.icReport.svg(),
+            //   title: Text("reportAnAstrologer".tr),
+            //   onTap: () => {},
+            // ),
             ListTile(
               leading: Assets.images.icSetting.svg(),
               title: Text('settings'.tr),

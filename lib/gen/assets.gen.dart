@@ -38,6 +38,9 @@ class $AssetsImagesGen {
   AssetGenImage get bgChatWallpaper =>
       const AssetGenImage('assets/images/bg_chat_wallpaper.png');
 
+  /// File path: assets/images/bg_dasha.svg
+  SvgGenImage get bgDasha => const SvgGenImage('assets/images/bg_dasha.svg');
+
   /// File path: assets/images/bg_delete_account.svg
   SvgGenImage get bgDeleteAccount =>
       const SvgGenImage('assets/images/bg_delete_account.svg');
@@ -292,6 +295,10 @@ class $AssetsImagesGen {
   AssetGenImage get icKundliChart =>
       const AssetGenImage('assets/images/ic_kundli_chart.png');
 
+  /// File path: assets/images/ic_kundli_share.png
+  AssetGenImage get icKundliShare =>
+      const AssetGenImage('assets/images/ic_kundli_share.png');
+
   /// File path: assets/images/ic_language.svg
   SvgGenImage get icLanguage =>
       const SvgGenImage('assets/images/ic_language.svg');
@@ -519,6 +526,7 @@ class $AssetsImagesGen {
         bgMeterFinal,
         bgChatUserPro,
         bgChatWallpaper,
+        bgDasha,
         bgDeleteAccount,
         bgHeart,
         bgKundliDetail,
@@ -588,6 +596,7 @@ class $AssetsImagesGen {
         icKalashDetail,
         icKundli,
         icKundliChart,
+        icKundliShare,
         icLanguage,
         icLanguages,
         icLeftArrow,
@@ -679,12 +688,31 @@ class $AssetsSvgGen {
   /// File path: assets/svg/ic_add.svg
   SvgGenImage get icAdd => const SvgGenImage('assets/svg/ic_add.svg');
 
+  /// File path: assets/svg/mute.svg
+  SvgGenImage get mute => const SvgGenImage('assets/svg/mute.svg');
+
   /// File path: assets/svg/reply.svg
   SvgGenImage get reply => const SvgGenImage('assets/svg/reply.svg');
 
+  /// File path: assets/svg/switch_camera.svg
+  SvgGenImage get switchCamera =>
+      const SvgGenImage('assets/svg/switch_camera.svg');
+
+  /// File path: assets/svg/video_mute.svg
+  SvgGenImage get videoMute => const SvgGenImage('assets/svg/video_mute.svg');
+
   /// List of all assets
-  List<SvgGenImage> get values =>
-      [block, blockUser, disconnect, greyContainer, icAdd, reply];
+  List<SvgGenImage> get values => [
+        block,
+        blockUser,
+        disconnect,
+        greyContainer,
+        icAdd,
+        mute,
+        reply,
+        switchCamera,
+        videoMute
+      ];
 }
 
 class $AssetsSvgaGen {

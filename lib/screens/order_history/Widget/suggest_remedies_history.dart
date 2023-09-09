@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

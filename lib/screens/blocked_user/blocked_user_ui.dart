@@ -26,10 +26,12 @@ class BlockedUserUI extends GetView<BlockUserController> {
         child: Column(
           children: [
             WhiteTextField(
-                hintText: "searchBlockUserHint".tr,
-                inputAction: TextInputAction.done,
-                inputType: TextInputType.text,
-                icon: const Icon(Icons.search)),
+              isDense: true,
+              hintText: "searchBlockUserHint".tr,
+              inputAction: TextInputAction.done,
+              inputType: TextInputType.text,
+              icon: const Icon(Icons.search),
+            ),
             SizedBox(height: 15.h),
             Obx(() => controller.blockedUserDataSync.value
                 ? Expanded(
