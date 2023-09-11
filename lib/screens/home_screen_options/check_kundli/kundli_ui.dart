@@ -27,18 +27,22 @@ class KundliUi extends GetView<KundliController> {
             headerSliverBuilder: (context, value) {
               return [
                 SliverOverlapAbsorber(
-                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                  handle:
+                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                   sliver: SliverAppBar(
                     leading: IconButton(
                       onPressed: () {
-                        Get.back();
+                        Navigator.pop(context);
                       },
                       icon: const Icon(Icons.arrow_back_ios_new_rounded),
                     ),
                     flexibleSpace: FlexibleSpaceBar(
-                      stretchModes: const <StretchMode>[StretchMode.blurBackground],
+                      stretchModes: const <StretchMode>[
+                        StretchMode.blurBackground
+                      ],
                       background: Center(
-                        child: Assets.images.icKundli.svg(height: 180.h, width: 180.w),
+                        child: Assets.images.icKundli
+                            .svg(height: 180.h, width: 180.w),
                       ),
                     ),
                     backgroundColor: AppColors.white,
@@ -46,13 +50,15 @@ class KundliUi extends GetView<KundliController> {
                     expandedHeight: 300.h,
                     pinned: true,
                     title: Text("kundliText".tr,
-                        style: AppTextStyle.textStyle16(fontWeight: FontWeight.w400)),
+                        style: AppTextStyle.textStyle16(
+                            fontWeight: FontWeight.w400)),
                     bottom: PreferredSize(
                       preferredSize: const Size.fromHeight(kTextTabBarHeight),
                       child: Card(
                         surfaceTintColor: AppColors.white,
                         margin: EdgeInsets.symmetric(horizontal: 30.w),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(35)),
                         child: Center(
                           child: TabBar(
                             indicatorSize: TabBarIndicatorSize.label,
@@ -63,14 +69,16 @@ class KundliUi extends GetView<KundliController> {
                             dividerColor: Colors.transparent,
                             labelPadding: EdgeInsets.zero,
                             splashBorderRadius: BorderRadius.circular(20),
-                            padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 8.h),
-                            labelStyle: AppTextStyle.textStyle14(fontWeight: FontWeight.w500),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10.w, horizontal: 8.h),
+                            labelStyle: AppTextStyle.textStyle14(
+                                fontWeight: FontWeight.w500),
                             indicator: BoxDecoration(
                               color: AppColors.lightYellow,
                               borderRadius: BorderRadius.circular(28),
                             ),
-                            onTap: (value) =>
-                                SystemChannels.textInput.invokeMethod('TextInput.hide'),
+                            onTap: (value) => SystemChannels.textInput
+                                .invokeMethod('TextInput.hide'),
                             tabs: [
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 30.w),
@@ -152,7 +160,8 @@ class CheckYours extends GetView<KundliController> {
                           SizedBox(width: 16.w),
                           Text(
                             "male".tr,
-                            style: AppTextStyle.textStyle16(fontWeight: FontWeight.w600),
+                            style: AppTextStyle.textStyle16(
+                                fontWeight: FontWeight.w600),
                           ),
                         ],
                       ),
@@ -171,7 +180,8 @@ class CheckYours extends GetView<KundliController> {
                           SizedBox(width: 16.w),
                           Text(
                             "female".tr,
-                            style: AppTextStyle.textStyle16(fontWeight: FontWeight.w600),
+                            style: AppTextStyle.textStyle16(
+                                fontWeight: FontWeight.w600),
                           )
                         ],
                       ),
@@ -199,21 +209,25 @@ class CheckYours extends GetView<KundliController> {
                               looping: true,
                               onConfirm: (value) {
                                 if (value != "") {
-                                  DateTime data = DateFormat("dd MMMM yyyy").parse(value);
+                                  DateTime data =
+                                      DateFormat("dd MMMM yyyy").parse(value);
                                   controller.yourDateController.text =
                                       "${data.day.toString().padLeft(2, '0')}/${data.month.toString().padLeft(2, '0')}/${data.year.toString()}";
                                   controller.yourParams.value.day = data.day;
-                                  controller.yourParams.value.month = data.month;
+                                  controller.yourParams.value.month =
+                                      data.month;
                                   controller.yourParams.value.year = data.year;
                                 }
                               },
                               onChange: (value) {
                                 if (value != "") {
-                                  DateTime data = DateFormat("dd MMMM yyyy").parse(value);
+                                  DateTime data =
+                                      DateFormat("dd MMMM yyyy").parse(value);
                                   controller.yourDateController.text =
                                       "${data.day.toString().padLeft(2, '0')}/${data.month.toString().padLeft(2, '0')}/${data.year.toString()}";
                                   controller.yourParams.value.day = data.day;
-                                  controller.yourParams.value.month = data.month;
+                                  controller.yourParams.value.month =
+                                      data.month;
                                   controller.yourParams.value.year = data.year;
                                 }
                               },
@@ -243,7 +257,8 @@ class CheckYours extends GetView<KundliController> {
                               looping: true,
                               onConfirm: (value) {
                                 if (value != "") {
-                                  DateTime data = DateFormat("h:mm a").parse(value);
+                                  DateTime data =
+                                      DateFormat("h:mm a").parse(value);
                                   controller.yourTimeController.text = value;
                                   controller.yourParams.value.hour = data.hour;
                                   controller.yourParams.value.min = data.minute;
@@ -251,7 +266,8 @@ class CheckYours extends GetView<KundliController> {
                               },
                               onChange: (value) {
                                 if (value != "") {
-                                  DateTime data = DateFormat("h:mm a").parse(value);
+                                  DateTime data =
+                                      DateFormat("h:mm a").parse(value);
                                   controller.yourTimeController.text = value;
                                   controller.yourParams.value.hour = data.hour;
                                   controller.yourParams.value.min = data.minute;
@@ -280,8 +296,10 @@ class CheckYours extends GetView<KundliController> {
                     onTap: () {
                       selectPlaceOfBirth(context, (value) {
                         controller.yourPlaceController.text = value.name;
-                        controller.yourParams.value.lat = double.parse(value.latitude!);
-                        controller.yourParams.value.long = double.parse(value.longitude!);
+                        controller.yourParams.value.lat =
+                            double.parse(value.latitude!);
+                        controller.yourParams.value.long =
+                            double.parse(value.longitude!);
                         controller.yourParams.value.location = value.name;
                         Get.back();
                       });
@@ -297,19 +315,23 @@ class CheckYours extends GetView<KundliController> {
                               backgroundColor: AppColors.lightYellow,
                               padding: EdgeInsets.symmetric(vertical: 16.h),
                               shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(25.0)),
                               ),
                             ),
                             onPressed: () {
-                              if (controller.yourFormKey.currentState!.validate()) {
+                              if (controller.yourFormKey.currentState!
+                                  .validate()) {
                                 controller.submitDetails(
-                                    controller.yourParams.value, controller.yourGender.value);
+                                    controller.yourParams.value,
+                                    controller.yourGender.value);
                               }
                             },
                             child: Text(
                               "submit".tr,
                               style: AppTextStyle.textStyle20(
-                                  fontWeight: FontWeight.w600, fontColor: AppColors.brownColour),
+                                  fontWeight: FontWeight.w600,
+                                  fontColor: AppColors.brownColour),
                             )),
                       ),
                     ],
@@ -373,7 +395,8 @@ class CheckOther extends GetView<KundliController> {
                           SizedBox(width: 16.w),
                           Text(
                             "male".tr,
-                            style: AppTextStyle.textStyle16(fontWeight: FontWeight.w600),
+                            style: AppTextStyle.textStyle16(
+                                fontWeight: FontWeight.w600),
                           )
                         ],
                       ),
@@ -392,7 +415,8 @@ class CheckOther extends GetView<KundliController> {
                           SizedBox(width: 16.w),
                           Text(
                             "female".tr,
-                            style: AppTextStyle.textStyle16(fontWeight: FontWeight.w600),
+                            style: AppTextStyle.textStyle16(
+                                fontWeight: FontWeight.w600),
                           )
                         ],
                       ),
@@ -420,21 +444,25 @@ class CheckOther extends GetView<KundliController> {
                               looping: true,
                               onConfirm: (value) {
                                 if (value != "") {
-                                  DateTime data = DateFormat("dd MMMM yyyy").parse(value);
+                                  DateTime data =
+                                      DateFormat("dd MMMM yyyy").parse(value);
                                   controller.otherDateController.text =
                                       "${data.day.toString().padLeft(2, '0')}/${data.month.toString().padLeft(2, '0')}/${data.year.toString()}";
                                   controller.otherParams.value.day = data.day;
-                                  controller.otherParams.value.month = data.month;
+                                  controller.otherParams.value.month =
+                                      data.month;
                                   controller.otherParams.value.year = data.year;
                                 }
                               },
                               onChange: (value) {
                                 if (value != "") {
-                                  DateTime data = DateFormat("dd MMMM yyyy").parse(value);
+                                  DateTime data =
+                                      DateFormat("dd MMMM yyyy").parse(value);
                                   controller.otherDateController.text =
                                       "${data.day.toString().padLeft(2, '0')}/${data.month.toString().padLeft(2, '0')}/${data.year.toString()}";
                                   controller.otherParams.value.day = data.day;
-                                  controller.otherParams.value.month = data.month;
+                                  controller.otherParams.value.month =
+                                      data.month;
                                   controller.otherParams.value.year = data.year;
                                 }
                               },
@@ -464,18 +492,22 @@ class CheckOther extends GetView<KundliController> {
                               looping: true,
                               onConfirm: (value) {
                                 if (value != "") {
-                                  DateTime data = DateFormat("h:mm a").parse(value);
+                                  DateTime data =
+                                      DateFormat("h:mm a").parse(value);
                                   controller.otherTimeController.text = value;
                                   controller.otherParams.value.hour = data.hour;
-                                  controller.otherParams.value.min = data.minute;
+                                  controller.otherParams.value.min =
+                                      data.minute;
                                 }
                               },
                               onChange: (value) {
                                 if (value != "") {
-                                  DateTime data = DateFormat("h:mm a").parse(value);
+                                  DateTime data =
+                                      DateFormat("h:mm a").parse(value);
                                   controller.otherTimeController.text = value;
                                   controller.otherParams.value.hour = data.hour;
-                                  controller.otherParams.value.min = data.minute;
+                                  controller.otherParams.value.min =
+                                      data.minute;
                                 }
                               },
                             );
@@ -501,8 +533,10 @@ class CheckOther extends GetView<KundliController> {
                     onTap: () {
                       selectPlaceOfBirth(context, (value) {
                         controller.otherPlaceController.text = value.name;
-                        controller.otherParams.value.lat = double.parse(value.latitude!);
-                        controller.otherParams.value.long = double.parse(value.longitude!);
+                        controller.otherParams.value.lat =
+                            double.parse(value.latitude!);
+                        controller.otherParams.value.long =
+                            double.parse(value.longitude!);
                         controller.otherParams.value.location = value.name;
                         Navigator.pop(context);
                         // Get.back();
@@ -519,19 +553,23 @@ class CheckOther extends GetView<KundliController> {
                               backgroundColor: AppColors.lightYellow,
                               padding: EdgeInsets.symmetric(vertical: 16.h),
                               shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(25.0)),
                               ),
                             ),
                             onPressed: () {
-                              if (controller.otherFormKey.currentState!.validate()) {
+                              if (controller.otherFormKey.currentState!
+                                  .validate()) {
                                 controller.submitDetails(
-                                    controller.otherParams.value, controller.otherGender.value);
+                                    controller.otherParams.value,
+                                    controller.otherGender.value);
                               }
                             },
                             child: Text(
                               "submit".tr,
                               style: AppTextStyle.textStyle20(
-                                  fontWeight: FontWeight.w600, fontColor: AppColors.brownColour),
+                                  fontWeight: FontWeight.w600,
+                                  fontColor: AppColors.brownColour),
                             )),
                       ),
                     ],
@@ -592,7 +630,8 @@ class CheckOther extends GetView<KundliController> {
                       child: Text(
                         "okay".tr,
                         style: AppTextStyle.textStyle16(
-                            fontColor: AppColors.brownColour, fontWeight: FontWeight.w600),
+                            fontColor: AppColors.brownColour,
+                            fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),
