@@ -47,7 +47,7 @@ class LiveTipsController extends GetxController {
       astrologerImage: image,
       astrologerName: name,
       isFrontCamera: front,
-    ));
+    ),routeName: "livepage");
   }
 
   giftPopup(BuildContext context) async {
