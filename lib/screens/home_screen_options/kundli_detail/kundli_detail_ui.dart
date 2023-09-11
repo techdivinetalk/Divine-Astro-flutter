@@ -39,7 +39,7 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                   sliver: SliverAppBar(
                     leading: InkWell(
                       onTap: () {
-                        Get.back();
+                        Navigator.pop(context);
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8.0, right: 8),
@@ -57,7 +57,8 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                                   .svg(width: 128.w, height: 128.h),
                             ),
                             Obx(() => Center(
-                                  child: controller.detailPageImage[controller.currentIndex.value],
+                                  child: controller.detailPageImage[
+                                      controller.currentIndex.value],
                                 )),
                           ],
                         )),
@@ -155,8 +156,8 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                 SunChartUi(controller: controller),
                 NavamanshaUi(controller: controller),
                 DoshaUi(controller: controller),
-                const KpUI(),
-                const DashaUI(),
+                KpUI(controller: controller),
+                DashaUI(controller: controller),
                 BasicPanchangUi(controller: controller),
                 PredictionUi(controller: controller),
               ],
