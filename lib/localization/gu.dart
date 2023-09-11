@@ -273,6 +273,6 @@ Map<String, String> gu() {
     'education': 'શિક્ષણ',
     'family': 'કુટુંબ',
     'antarDasha': 'અંતર્દશા',
-
+    "jobTitle": "મહાન કામ! કોઈ રાહ યાદીમાં નથી.",
   };
 }

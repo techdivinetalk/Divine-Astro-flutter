@@ -41,6 +41,7 @@ Future<void> main() async {
     runApp(const MyApp());
   });
 }
+
 Future<bool> saveLanguage(String? lang) async {
   final box = GetStorage();
   await box.write('lang', lang);
@@ -83,7 +84,8 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               initialRoute: RouteName.initial,
               getPages: Routes.routes,
-              locale: getLanStrToLocale(GetStorages.get(GetStorageKeys.language) ?? ""),
+              locale: getLanStrToLocale(
+                  GetStorages.get(GetStorageKeys.language) ?? ""),
               fallbackLocale: AppTranslations.fallbackLocale,
               translations: AppTranslations(),
               theme: ThemeData(
@@ -104,15 +106,20 @@ class MyApp extends StatelessWidget {
                 return Stack(
                   children: <Widget>[
                     Obx(() => IgnorePointer(
-                        ignoring: Get.find<ProgressService>().showProgress.value, child: widget)),
+                        ignoring:
+                            Get.find<ProgressService>().showProgress.value,
+                        child: widget)),
                     StreamBuilder<bool?>(
                       initialData: true,
-                      stream: Get.find<FirebaseNetworkService>().databaseConnectionStream,
+                      stream: Get.find<FirebaseNetworkService>()
+                          .databaseConnectionStream,
                       builder: (context, snapshot) {
                         final appTheme = AppTheme.of(context);
                         return SafeArea(
                           child: AnimatedContainer(
-                            height: snapshot.data as bool ? 0 : appTheme.getHeight(36),
+                            height: snapshot.data as bool
+                                ? 0
+                                : appTheme.getHeight(36),
                             duration: Utils.animationDuration,
                             color: appTheme.redColor,
                             child: Material(

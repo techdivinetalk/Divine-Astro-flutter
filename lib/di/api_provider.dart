@@ -49,6 +49,8 @@ class ApiProvider {
   final String getKundliData = "getKundliData";
   final String getHomePageData = "astroDashboard";
   final String agoraEndCall = "agoraEndCall";
+  final String getWaitingListQueue="getWaitingListQueue";
+  final String getImportantNumber="getImportantNumber";
 
   //Astro Internal API
   final String horoChartImageInt = "getChartImage/";

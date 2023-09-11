@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
 import 'package:divine_astrologer/repository/notice_repository.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../common/app_exception.dart';
 import '../../di/shared_preference_service.dart';
 import '../../model/constant_details_model_class.dart';
@@ -21,9 +23,11 @@ class HomeController extends GetxController {
   RxBool chatSwitch = true.obs;
   RxBool callSwitch = false.obs;
   RxBool videoSwitch = false.obs;
+  RxString chatSchedule = "".obs, callSchedule = "".obs, videoSchedule = "".obs;
+
   RxBool consultantOfferSwitch = false.obs;
   RxBool promotionOfferSwitch = false.obs;
-  RxString appbarTitle = "Astrologer Name  ".obs;
+  RxString appbarTitle = "Astrologer Name ".obs;
   RxBool isShowTitle = true.obs;
   ExpandedTileController? expandedTileController = ExpandedTileController();
   ExpandedTileController? expandedTile2Controller = ExpandedTileController();
@@ -128,20 +132,24 @@ class HomeController extends GetxController {
 
   void chatSwitchFN() {
     chatSwitch.value = !chatSwitch.value;
-    if (chatSwitch.value) {
+    /*if (chatSwitch.value) {
       callSwitch.value = false;
     } else {
       callSwitch.value = true;
-    }
+    }*/
   }
 
   void callSwitchFN() {
     callSwitch.value = !callSwitch.value;
-    if (callSwitch.value) {
+    /*if (callSwitch.value) {
       chatSwitch.value = false;
     } else {
       chatSwitch.value = true;
-    }
+    }*/
+  }
+
+  void videoCallSwitchFN() {
+    videoSwitch.value = !videoSwitch.value;
   }
 
   final noticeRepository = Get.put(NoticeRepository());
