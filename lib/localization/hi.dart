@@ -272,6 +272,6 @@ Map<String, String> hi() {
     'education': 'शिक्षा',
     'family': 'परिवार',
     'antarDasha': 'अन्तर्दशा',
-
+    "jobTitle": "अच्छा काम! कोई भी प्रतीक्षा सूची में नहीं है.",
   };
 }

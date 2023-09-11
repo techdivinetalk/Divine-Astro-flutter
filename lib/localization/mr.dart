@@ -268,6 +268,6 @@ Map<String, String> mr() {
     'education': 'शिक्षण',
     'family': 'कुटुंब',
     'antarDasha': 'अंतरदशा',
-
+    "jobTitle": "चांगले काम! प्रतीक्षा यादीत कोणीही नाही.",
   };
 }
