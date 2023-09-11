@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:custom_timer/custom_timer.dart';
+import 'package:divine_astrologer/screens/live_page/live_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -79,6 +80,7 @@ class LiveController extends GetxController {
   var nextPerson = {}.obs;
   var nextuserid = "";
   var scrollController = ScrollController();
+  var removedWaitList = "0";
 
   jumpToBottom() {
     scrollController.animateTo(
@@ -173,57 +175,59 @@ class LiveController extends GetxController {
     var data = await database.ref().child("live/$astroId/waitList").get();
     var first = data.children.toList().first;
     var value = first.value as Map;
-    database.ref().child("live/$astroId/waitList/${value["id"]}").remove();
-    nextuserid = value["id"];
-    typeOfNextUserCall = value["callType"];
-    database.ref().child("live/$astroId/").update({
-      "nextUser": {
-        value["id"]: {
-          "id": value["id"],
-          "name": value["name"],
-          "callType": value["callType"],
-          "duration": 9
-        }
-      }
+    await Future.delayed(const Duration(seconds: 2));
+    showCupertinoModalPopup(
+        context: Get.context!,
+        builder: (BuildContext context) {
+          dialogOpen = true;
+          return WaitList(
+            astroId: astroId,
+            showNext: true,
+            onAccept: (String id, String name) {
+              dialogOpen = false;
+              database
+                  .ref()
+                  .child("live/$astroId/")
+                  .update({"callStatus": 2, "userId": id, "userName": name});
+              database
+                  .ref()
+                  .child("live/$astroId/waitList/${value["id"]}")
+                  .remove();
+              Get.until((route) => route.settings.name == "/livepage");
+            },
+          );
+        });
+  }
+
+  listenWaitlistRemove() async {
+    database.ref().child("live/$astroId/nextUser").onValue.listen((event) {
+      var data = event.snapshot.value as Map;
+      showCupertinoModalPopup(
+          context: Get.context!,
+          builder: (BuildContext context) {
+            dialogOpen = true;
+            return WaitList(
+              astroId: astroId,
+              showNext: true,
+              onAccept: (String id, String name) {
+                dialogOpen = false;
+                database
+                    .ref()
+                    .child("live/$astroId/")
+                    .update({"callStatus": 2, "userId": id, "userName": name});
+                database
+                    .ref()
+                    .child("live/$astroId/waitList/${data["id"]}")
+                    .remove();
+                Get.until((route) => route.settings.name == "/livepage");
+              },
+            );
+          });
     });
   }
+
   bool dialogOpen = false;
   bool dialogOpen2 = false;
-  listenWaitList(ZegoUIKitPrebuiltLiveStreamingController controller) {
-    database
-        .ref()
-        .child("live/$astroId/nextUser/$nextuserid")
-        .onValue
-        .listen((event) async {
-      var data = await database
-          .ref()
-          .child("live/$astroId/nextUser/$nextuserid")
-          .get();
-      if (data.value != null && !dialogOpen) {
-        var user = data.value as Map;
-        nextPerson.value = user;
-        var id = user["id"];
-        var name = user["name"];
-        if (nextPerson.isNotEmpty) {
-          showCupertinoModalPopup(
-              context: Get.context!,
-              builder: (BuildContext context) {
-                dialogOpen = true;
-                return WaitList(
-                  astroId: astroId,
-                  onAccept: () {
-                    dialogOpen = false;
-                    database
-                        .ref()
-                        .child("live/$astroId/")
-                        .update({"callStatus": 2,"userId":id,"userName":name});
-                  },
-                );
-              });
-        }
-      }
-    });
-  }
 
   listenCallStatus() {
     database
@@ -248,6 +252,7 @@ class LiveController extends GetxController {
                           .ref()
                           .child("live/$astroId/")
                           .update({"callStatus": 2});
+                      Get.until((route) => route.settings.name == "/livepage");
                     });
               });
         }
@@ -265,6 +270,7 @@ class LiveController extends GetxController {
   }
 
   var timeDuration = const Duration();
+
   setAvailibility(String id, bool available, CustomTimerController controller) {
     database.ref().child("live/$id").update({"isAvailable": available});
     database.ref().child("live/$id/coHostUser").onValue.listen((event) async {
@@ -272,30 +278,28 @@ class LiveController extends GetxController {
       if (user.isEmpty) {
         isCoHosting.value = false;
         controller.reset();
-      }else{
+      } else {
         var coHost = await database.ref().child("live/$astroId/coHost").get();
-        if(coHost.value != null){
+        if (coHost.value != null) {
           var user = coHost.value as Map;
           coHostUser = ZegoUIKitUser(id: user["id"], name: user["name"]);
         }
         var data = await database.ref().child("live/$astroId/nextUser").get();
         var type = data.value == null ? typeOfCall : typeOfNextUserCall;
-        print("calltype"+type);
-        setVisibilityCoHost(type);
-        var duration = await database.ref().child("live/$astroId/duration").get();
+        setVisibilityCoHostAudio(type);
+        setVisibilityCoHostVideo(type);
+        var duration =
+            await database.ref().child("live/$astroId/duration").get();
         intToTimeLeft(duration.value as int ?? 0);
-        controller.begin = timeDuration;
+        //controller.begin = timeDuration;
         isCoHosting.value = true;
         controller.start();
       }
     });
   }
 
-  setCallStatus(){
-    database
-        .ref()
-        .child("live/$astroId/")
-        .update({"callStatus": 0});
+  setCallStatus() {
+    database.ref().child("live/$astroId/").update({"callStatus": 0});
   }
 
   setBusyStatus(String id, int status, {customerId}) {
@@ -313,39 +317,41 @@ class LiveController extends GetxController {
     return (snapShot.value as Map)["duration"];
   }
 
-  setVisibilityCoHost(String type) {
-    if (type == "video") {
-      hostConfig.audioVideoViewConfig.visible = (
-        ZegoUIKitUser localUser,
-        ZegoLiveStreamingRole localRole,
-        ZegoUIKitUser targetUser,
-        ZegoLiveStreamingRole targetUserRole,
-      ) {
-        if (ZegoLiveStreamingRole.host == localRole) {
-          /// host can see all user's view
+  setVisibilityCoHostVideo(String type) {
+    hostConfig.audioVideoViewConfig.playCoHostVideo = (
+      ZegoUIKitUser localUser,
+      ZegoLiveStreamingRole localRole,
+      ZegoUIKitUser coHost,
+    ) {
+      if (type == "private" || type == "audio") {
+        /// private or audio call type, pure audio mode
+        return false;
+      }
+
+      /// call type is video
+      return true;
+    };
+  }
+
+  setVisibilityCoHostAudio(String type) {
+    hostConfig.audioVideoViewConfig.playCoHostAudio = (
+      ZegoUIKitUser localUser,
+      ZegoLiveStreamingRole localRole,
+      ZegoUIKitUser coHost,
+    ) {
+      if (type == "private") {
+        if (ZegoLiveStreamingRole.host == localRole ||
+            ZegoLiveStreamingRole.coHost == localRole) {
           return true;
         }
 
-        /// comment below if you want the co-host hide their own audio-video view.
-        if (localUser.id == targetUser.id) {
-          /// local view
-          return true;
-        }
+        /// audience
+        return false;
+      }
 
-        /// if user is a co-host, only show host's audio-video view
-        return targetUserRole == ZegoLiveStreamingRole.host;
-      };
-    } else {
-      hostConfig.audioVideoViewConfig.visible = (
-        ZegoUIKitUser localUser,
-        ZegoLiveStreamingRole localRole,
-        ZegoUIKitUser targetUser,
-        ZegoLiveStreamingRole targetUserRole,
-      ) {
-        /// if user is a co-host, only show host's audio-video view
-        return targetUserRole == ZegoLiveStreamingRole.host;
-      };
-    }
+      /// call type is video or audio
+      return true;
+    };
   }
 
   void endCall(String orderId, bool isAccept) async {
@@ -369,7 +375,7 @@ class LiveController extends GetxController {
     s = value - (h * 3600) - (m * 60);
 
     String result = "$h:$m:$s";
-    timeDuration = Duration(hours: h,minutes: m,seconds: s);
+    timeDuration = Duration(hours: h, minutes: m, seconds: s);
     return result;
   }
 }

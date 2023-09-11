@@ -80,8 +80,8 @@ class LivePageState extends State<LivePage>
     controller.astroId = widget.localUserID;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       controller.listenCallStatus();
+      controller.listenWaitlistRemove();
       controller.setAvailibility(widget.localUserID, true, timeController);
-      controller.listenWaitList(liveController);
       controller.getBlockedCustomerList();
       event.hostEvents.onCoHostRequestReceived = (user) async {
         controller.coHostUser = user;
@@ -133,11 +133,8 @@ class LivePageState extends State<LivePage>
         }
         controller.setCallStatus();
         timeController.reset();
-        controller.setBusyStatus(
-            widget.localUserID, 0,
-            customerId: "");
-        liveController.connect
-            .removeCoHost(controller.coHostUser!);
+        controller.setBusyStatus(widget.localUserID, 0, customerId: "");
+        liveController.connect.removeCoHost(controller.coHostUser!);
         controller.removeFromWaitList();
         controller.isCoHosting.value = false;
       }
@@ -233,41 +230,13 @@ class LivePageState extends State<LivePage>
                   height: 0,
                 )
 
-                ///  only the host can view the video of the co-host
-                ..audioVideoViewConfig.playCoHostVideo = (
-                  ZegoUIKitUser localUser,
-                  ZegoLiveStreamingRole localRole,
-                  ZegoUIKitUser coHost,
-                ) {
-                  /// only play co-host video by host,
-                  /// audience and other co-hosts can't play
-                  return true;
-                }
-
-                ///  only the host can hear the audio of the co-host
-                ..audioVideoViewConfig.playCoHostAudio = (
-                  ZegoUIKitUser localUser,
-                  ZegoLiveStreamingRole localRole,
-                  ZegoUIKitUser coHost,
-                ) {
-                  /// only play co-host audio by host,
-                  /// audience and other co-hosts can't play
-                  return ZegoLiveStreamingRole.host == localRole;
-                }
-
                 /// hide the co-host audio-video view to audience and other co-hosts
-                /*..audioVideoViewConfig.visible = (
+                ..audioVideoViewConfig.visible = (
                   ZegoUIKitUser localUser,
                   ZegoLiveStreamingRole localRole,
                   ZegoUIKitUser targetUser,
                   ZegoLiveStreamingRole targetUserRole,
                 ) {
-                  if (controller.typeOfCall == "audio" ||
-                      controller.typeOfCall == "private") {
-                    return false;
-                  } else {
-                    return true;
-                  }
                   if (ZegoLiveStreamingRole.host == localRole) {
                     /// host can see all user's view
                     return true;
@@ -281,7 +250,7 @@ class LivePageState extends State<LivePage>
 
                   /// if user is a co-host, only show host's audio-video view
                   return targetUserRole == ZegoLiveStreamingRole.host;
-                }*/
+                }
                 ..onLiveStreamingStateUpdate = (ZegoLiveStreamingState state) {
                   liveStateNotifier.value = state;
                 }
@@ -717,9 +686,9 @@ class LivePageState extends State<LivePage>
                 Obx(() => controller.isCoHosting.isFalse
                     ? const SizedBox()
                     : SizedBox(height: 20.h)),
-                Obx(() => controller.isCoHosting.isFalse
+                /*Obx(() => controller.isCoHosting.isFalse
                     ? buildAstrologerLiveStartWidget()
-                    : const SizedBox()),
+                    : const SizedBox()),*/
                 Obx(() => controller.isCoHosting.value
                     ? buildCallDurationWidget()
                     : const SizedBox())
@@ -811,42 +780,31 @@ class LivePageState extends State<LivePage>
           ),
         ),
         const Spacer(),
-        Obx(() => ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                child: FlutterSwitch(
-                  inactiveTextColor: AppColors.white,
-                  activeTextColor: AppColors.white,
-                  width: 100.0.w,
-                  height: 40.0.h,
-                  toggleSize: 32.0,
-                  value: controller.isCallOnOff.value,
-                  showOnOff: true,
-                  borderRadius: 30.0,
-                  padding: 4.0,
-                  activeText: "Call On",
-                  inactiveText: "Call Off",
-                  valueFontSize: 12.0,
-                  activeTextFontWeight: FontWeight.bold,
-                  inactiveTextFontWeight: FontWeight.bold,
-                  activeToggleColor: AppColors.appYellowColour,
-                  inactiveToggleColor: Colors.grey,
-                  toggleColor: AppColors.greyColour,
-                  switchBorder: Border.all(
-                    color: AppColors.appYellowColour,
-                    width: 2.0,
+        Assets.images.starLive.image(),
+        const Spacer(),
+        Obx(() => Column(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: Switch(
+                      value: controller.isCallOnOff.value,
+                      onChanged: (val) {
+                        controller.setAvailibility(widget.localUserID,
+                            !controller.isCallOnOff.value, timeController);
+                        controller.isCallOnOff.value =
+                            !controller.isCallOnOff.value;
+                      },
+                    ),
                   ),
-                  activeColor: Colors.black.withOpacity(.1),
-                  inactiveColor: Colors.black.withOpacity(.1),
-                  onToggle: (val) {
-                    controller.setAvailibility(widget.localUserID,
-                        !controller.isCallOnOff.value, timeController);
-                    controller.isCallOnOff.value =
-                        !controller.isCallOnOff.value;
-                  },
                 ),
-              ),
+                CustomText(
+                  controller.isCallOnOff.value ? "Call on" : "Call off",
+                  fontSize: 10.sp,
+                  fontColor: AppColors.blackColor,
+                ),
+              ],
             )),
         SizedBox(width: 20.w)
       ],
@@ -1046,8 +1004,9 @@ class LivePageState extends State<LivePage>
                             context: context,
                             builder: (BuildContext context) {
                               return WaitList(
+                                showNext: false,
                                 astroId: widget.localUserID,
-                                onAccept: () {},
+                                onAccept: (id,name) {},
                               );
                             });
                       },

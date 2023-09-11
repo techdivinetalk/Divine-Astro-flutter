@@ -90,7 +90,6 @@ class CoHostRequest extends StatelessWidget {
                         height: 56.h,
                         child: CustomButton(
                             onTap: () {
-                              Get.back();
                               onAccept!.call();
                             },
                             color: AppColors.appYellowColour,
