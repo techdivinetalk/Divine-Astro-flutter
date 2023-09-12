@@ -13,12 +13,14 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/app_exception.dart';
+import '../../di/api_provider.dart';
 import '../../di/shared_preference_service.dart';
 import '../../model/constant_details_model_class.dart';
 import '../../model/home_page_model_class.dart';
 import '../../model/res_login.dart';
 import '../../repository/home_page_repository.dart';
 import '../../repository/user_repository.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 class HomeController extends GetxController {
   RxBool chatSwitch = true.obs;
@@ -44,6 +46,8 @@ class HomeController extends GetxController {
     {"title": "Your Busy Hours", "score": "60"},
   ];
 
+  Socket? socket;
+
   onNextTap() {
     if (scoreIndex < yourScore.length - 1) {
       scoreIndex++;
@@ -61,11 +65,32 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
+    connectSocket();
     userData = preferenceService.getUserDetail();
     appbarTitle.value = userData?.name ?? "Astrologer Name";
     getConstantDetailsData();
     getDashboardDetail();
+  }
+
+
+  void connectSocket() {
+    socket = io(
+        ApiProvider.socketUrl,
+        OptionBuilder()
+            .enableAutoConnect()
+            .setTransports(['websocket']) // for Flutter or Dart VM
+            .build());
+    socket?.connect();
+    socket?.onConnect((_) {
+      log('Socket connected');
+    });
+    log("Socket--->${socket!.connected}");
+  }
+
+  @override
+  void onClose() {
+    socket?.dispose();
+    super.onClose();
   }
 
   ConstantDetailsModelClass? getConstantDetails;

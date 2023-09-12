@@ -16,6 +16,7 @@ import 'shared_preference_service.dart';
 
 class ApiProvider {
   static const String version = 'v7';
+  static const String socketUrl = "http://13.127.116.89:4000";
   final String baseUrl = "https://wakanda-api.divinetalk.live/admin/$version/";
 
   final String jsonHeaderName = "Content-Type";
@@ -49,8 +50,8 @@ class ApiProvider {
   final String getKundliData = "getKundliData";
   final String getHomePageData = "astroDashboard";
   final String agoraEndCall = "agoraEndCall";
-  final String getWaitingListQueue="getWaitingListQueue";
-  final String getImportantNumber="getImportantNumber";
+  final String getWaitingListQueue = "getWaitingListQueue";
+  final String getImportantNumber = "getImportantNumber";
 
   //Astro Internal API
   final String horoChartImageInt = "getChartImage/";
@@ -113,9 +114,8 @@ class ApiProvider {
     var header = <String, String>{};
     header[jsonHeaderName] = jsonHeaderValue;
     header[jsonAuthenticationName] = 'Bearer $_token';
-    header[jsonCookieName] = version == 6
-        ? 'XSRF-TOKEN=eyJpdiI6InVEYzJwOU0wQUlSMnNYZnk0L2krV3c9PSIsInZhbHVlIjoibk5TUjhIeFVpVzVoK0M4M3VCeWxoRDZvWjFQR1B2UzluT3RTRTJ1V3pTU0l2Zmx0M1o1bHJ0WlpXd1FmSlVVbEFXYVk1MmxTbHhHVjFTbnFBNFdnd2ErV242UkRNRFNqQXZ5NitBTU03WHlibi9Jam9Ubzg4U0dXRFVBZzhZMUUiLCJtYWMiOiI3OWM1MTI2YjkxMzNkZmExNTE0NTcyYmYzODBiODI4ZjI4NmI3MzVlYTYyZDM1MDZkZmYyNWJjODA0ODVlN2RkIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IkRIUnVYRVMvQUgvMmtRVG4yQkNFSGc9PSIsInZhbHVlIjoiQlpOSnd5VDZmdklxWWxFL0lNclNhaUVCT1ZXaG42WlZEWElQcmUrRnlOUGlZOVducXR6S004TStaVnY5VndCOEp4VVZ0Vk0xRFhqYmVhcVNBSlV6Rkp1a3k2UzFuRE4zRUhkNGhUYUhxSStKT2tnVWozdHdZTXcwUi94dGNaWEoiLCJtYWMiOiJjNGY4N2M4ZTJkYjc3ZDYwOWIwMGI1NmYzZTk1YTdjMmFiYjU0ZjAxZTc2MjhjNWEzYTM0ODdmMTZkNDAwNTYyIiwidGFnIjoiIn0%3D'
-        : "XSRF-TOKEN=eyJpdiI6InVEYzJwOU0wQUlSMnNYZnk0L2krV3c9PSIsInZhbHVlIjoibk5TUjhIeFVpVzVoK0M4M3VCeWxoRDZvWjFQR1B2UzluT3RTRTJ1V3pTU0l2Zmx0M1o1bHJ0WlpXd1FmSlVVbEFXYVk1MmxTbHhHVjFTbnFBNFdnd2ErV242UkRNRFNqQXZ5NitBTU03WHlibi9Jam9Ubzg4U0dXRFVBZzhZMUUiLCJtYWMiOiI3OWM1MTI2YjkxMzNkZmExNTE0NTcyYmYzODBiODI4ZjI4NmI3MzVlYTYyZDM1MDZkZmYyNWJjODA0ODVlN2RkIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IkRIUnVYRVMvQUgvMmtRVG4yQkNFSGc9PSIsInZhbHVlIjoiQlpOSnd5VDZmdklxWWxFL0lNclNhaUVCT1ZXaG42WlZEWElQcmUrRnlOUGlZOVducXR6S004TStaVnY5VndCOEp4VVZ0Vk0xRFhqYmVhcVNBSlV6Rkp1a3k2UzFuRE4zRUhkNGhUYUhxSStKT2tnVWozdHdZTXcwUi94dGNaWEoiLCJtYWMiOiJjNGY4N2M4ZTJkYjc3ZDYwOWIwMGI1NmYzZTk1YTdjMmFiYjU0ZjAxZTc2MjhjNWEzYTM0ODdmMTZkNDAwNTYyIiwidGFnIjoiIn0%3D";
+    header[jsonCookieName] =
+        'XSRF-TOKEN=eyJpdiI6IlNET0dYM1BJdVQySkw5bjhuWGw1RHc9PSIsInZhbHVlIjoiMDk0UTF1RGtsN3FzRXpzKzFBUGJhRWcyY0dES29qbTZ0VW5lRTBsRXY4VU8yeUVJVFcxSkFoTDc5aE5ZNFllYzNYRFFyM0tTRDVUWmRod0dUeUdjNTNmNkZWMjVCRjZvTkhHZU1SL1J2ZFVPb1hLWGNVSGdOZ3JqSHZSNC9zZ08iLCJtYWMiOiI0MTk2MTM5Y2ExZjZjZDZiY2NhMjVlMDVhNTQ0MTBkMzNmMDU5Y2Q4ZDg1NjY4ZDFkYzQ5ZmYwZmYxOTA5MDAzIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6InJ1WDBXU0wyT1RuWjA5UCt1eE9adXc9PSIsInZhbHVlIjoiMys2RUVXU3drVU8rTWMySGlHdmJkdFBTS25wRjRadzFZRmNVUGJ1SW9acTZCNFhVSlhmaERtOHhkOURVVzM5L0lqZTg5cnNtemQ2Y3hUWVR6T2FXZGxGVTY2MDNBQVdUeU42MWNlZDIvaXRsVWlDT2ptOHY0WnZMZXRPYjdvVUMiLCJtYWMiOiJhZWQ4YzRhODAwYzhlZGYzODBiOTU3ZGVjZDk3MDA1Y2UwYWI0OTUyMTcwMWE4ZGRkMmY4NGE3ZmUzYTBkNDY5IiwidGFnIjoiIn0%3D';
     return header;
   }
 
@@ -230,8 +230,8 @@ class ApiProvider {
     endPoint ??= baseUrl;
     headers ??= await getAuthorisedHeader();
     if (await networkManager.isConnected() ?? false) {
-       log('url: $endPoint$url');
-       log('body: $body');
+      log('url: $endPoint$url');
+      log('body: $body');
       // log("headers: $headers");
       var response = await http
           .post(Uri.parse(endPoint + url),
@@ -242,7 +242,7 @@ class ApiProvider {
         }
         throw CustomException(AppString.timeoutMessage);
       });
-       log('response: ${response.body}');
+      log('response: ${response.body}');
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);
