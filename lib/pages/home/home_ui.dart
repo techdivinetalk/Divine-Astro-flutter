@@ -2,16 +2,14 @@ import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/switch_component.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
-import 'package:divine_astrologer/screens/video_call/video_call.dart';
-import 'package:divine_astrologer/screens/video_call_page/video_call_page.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
+import 'package:divine_astrologer/utils/enum.dart';
+import 'package:divine_astrologer/utils/load_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
-
-import '../../../common/appbar.dart';
 import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
@@ -26,81 +24,158 @@ class HomeUI extends GetView<HomeController> {
     return Scaffold(
       backgroundColor: AppColors.white,
       drawer: const SideMenuDrawer(),
-      appBar: commonAppbar(
-          title: controller.appbarTitle.value,
-          trailingWidget: Obx(() => Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: InkWell(
-                    onTap: () {
-                      controller.isShowTitle.value =
-                          !controller.isShowTitle.value;
-                    },
-                    child: controller.isShowTitle.value
-                        ? Assets.images.icVisibility.svg()
-                        : Assets.images.icVisibilityOff.svg()),
-              ))),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Column(
+      appBar: AppBar(
+        titleSpacing: 0,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: AppColors.white,
+        elevation: 0,
+        title: Text(
+          controller.appbarTitle.value,
+          style: AppTextStyle.textStyle15(
+            fontWeight: FontWeight.w400,
+            fontColor: AppColors.darkBlue,
+          ),
+        ),
+        actions: [
+          Obx(
+            () => Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: InkWell(
+                onTap: () {
+                  controller.isShowTitle.value = !controller.isShowTitle.value;
+                },
+                child: controller.isShowTitle.value
+                    ? Assets.images.icVisibility.svg()
+                    : Assets.images.icVisibilityOff.svg(),
+              ),
+            ),
+          )
+        ],
+      ),
+      body: GetBuilder<HomeController>(
+        builder: (controller) {
+          if (controller.loading == Loading.loaded) {
+            return Stack(
               children: [
-                Obx(() => controller.isShowTitle.value
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                            InkWell(
-                              onTap: () {},
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "₹100000",
-                                    style: AppTextStyle.textStyle16(
-                                        fontColor: AppColors.appRedColour,
-                                        fontWeight: FontWeight.w700),
+                SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: Column(
+                    children: [
+                      Obx(
+                        () => Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            controller.isShowTitle.value
+                                ? InkWell(
+                                    onTap: () {},
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "₹${controller.homeData!.todaysEarning.toString()}",
+                                          style: AppTextStyle.textStyle16(
+                                              fontColor: AppColors.appRedColour,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        Text(
+                                          "today".tr,
+                                          style: AppTextStyle.textStyle16(
+                                              fontColor: AppColors.darkBlue,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : InkWell(
+                                    onTap: () {},
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "₹******",
+                                          style: AppTextStyle.textStyle16(
+                                              fontColor: AppColors.appRedColour,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        Text(
+                                          "today".tr,
+                                          style: AppTextStyle.textStyle16(
+                                              fontColor: AppColors.darkBlue,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  Text(
-                                    "today".tr,
-                                    style: AppTextStyle.textStyle16(
-                                        fontColor: AppColors.darkBlue,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ],
-                              ),
-                            ),
                             SizedBox(width: 15.w),
-                            InkWell(
-                              onTap: () {
-                                earningDetailPopup(Get.context!);
-                                // Get.toNamed(RouteName.yourEarning);
-                              },
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "₹100000",
-                                        style: AppTextStyle.textStyle16(
-                                            fontColor: AppColors.appRedColour,
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                      const Icon(
-                                        Icons.arrow_forward_ios,
-                                        size: 20,
-                                      )
-                                    ],
+                            controller.isShowTitle.value
+                                ? InkWell(
+                                    onTap: () {
+                                      earningDetailPopup(Get.context!);
+                                      // Get.toNamed(RouteName.yourEarning);
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "₹${controller.homeData!.totalEarning?.toStringAsFixed(2)}",
+                                              style: AppTextStyle.textStyle16(
+                                                  fontColor:
+                                                      AppColors.appRedColour,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                            const Icon(
+                                              Icons.arrow_forward_ios,
+                                              size: 20,
+                                            )
+                                          ],
+                                        ),
+                                        Text(
+                                          "total".tr,
+                                          style: AppTextStyle.textStyle16(
+                                              fontColor: AppColors.darkBlue,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : InkWell(
+                                    onTap: () {
+                                      earningDetailPopup(Get.context!);
+                                      // Get.toNamed(RouteName.yourEarning);
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "₹********",
+                                              style: AppTextStyle.textStyle16(
+                                                  fontColor:
+                                                      AppColors.appRedColour,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                            const Icon(
+                                              Icons.arrow_forward_ios,
+                                              size: 20,
+                                            )
+                                          ],
+                                        ),
+                                        Text(
+                                          "total".tr,
+                                          style: AppTextStyle.textStyle16(
+                                              fontColor: AppColors.darkBlue,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  Text(
-                                    "total".tr,
-                                    style: AppTextStyle.textStyle16(
-                                        fontColor: AppColors.darkBlue,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ],
-                              ),
-                            ),
                             SizedBox(width: 10.w),
                             InkWell(
                               onTap: () {
@@ -132,142 +207,151 @@ class HomeUI extends GetView<HomeController> {
                                 ),
                               ),
                             ),
-                          ])
-                    : Container()),
-                SizedBox(height: 10.h),
-                InkWell(
-                  onTap: () {
-                    Get.toNamed(RouteName.noticeBoard);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "noticeBoard".tr,
-                        style: AppTextStyle.textStyle16(
-                            fontColor: AppColors.darkBlue,
-                            fontWeight: FontWeight.w400),
+                          ],
+                        ),
                       ),
-                      Text(
-                        "viewAll".tr,
-                        style: AppTextStyle.textStyle12(
-                            fontColor: AppColors.darkBlue,
-                            fontWeight: FontWeight.w400),
-                      )
+                      SizedBox(height: 10.h),
+                      InkWell(
+                        onTap: () {
+                          Get.toNamed(RouteName.noticeBoard);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "noticeBoard".tr,
+                              style: AppTextStyle.textStyle16(
+                                  fontColor: AppColors.darkBlue,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            Text(
+                              "viewAll".tr,
+                              style: AppTextStyle.textStyle12(
+                                  fontColor: AppColors.darkBlue,
+                                  fontWeight: FontWeight.w400),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                      senderCategoryWidget(),
+                      SizedBox(height: 10.h),
+                      InkWell(
+                        onTap: () {
+                          Get.toNamed(RouteName.liveTipsUI);
+                        },
+                        child: Container(
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: AppColors.lightYellow,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 1.0,
+                                offset: const Offset(0.0, 3.0),
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(10.0),
+                            gradient: const LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [
+                                AppColors.appYellowColour,
+                                AppColors.gradientBottom
+                              ],
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Assets.images.icGoLive.svg(),
+                              const SizedBox(width: 15),
+                              Text(
+                                "goLive".tr,
+                                style: AppTextStyle.textStyle20(
+                                    fontWeight: FontWeight.w700,
+                                    fontColor: AppColors.brownColour),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                      Container(
+                          height: 1.h,
+                          color: AppColors.darkBlue.withOpacity(0.5)),
+                      SizedBox(height: 10.h),
+                      sessionTypeWidget(),
+                      SizedBox(height: 10.h),
+                      offerTypeWidget(),
+                      SizedBox(height: 10.h),
+                      fullScreenBtnWidget(
+                          imageName: Assets.images.icReferAFriend.svg(),
+                          btnTitle: "referAnAstrologer".tr,
+                          onbtnTap: () {
+                            Get.toNamed(RouteName.referAstrologer);
+                          }),
+                      SizedBox(height: 10.h),
+                      GetBuilder<HomeController>(
+                        builder: (controller) => trainingVideoWidget(),
+                      ),
+                      SizedBox(height: 10.h),
+                      fullScreenBtnWidget(
+                          imageName: Assets.images.icEcommerce.svg(),
+                          btnTitle: "eCommerce".tr,
+                          onbtnTap: () {
+                            Get.toNamed(RouteName.videoCallPage);
+                          }),
+                      SizedBox(height: 10.h),
+                      feedbackWidget(),
+                      SizedBox(height: 20.h),
                     ],
                   ),
                 ),
-                SizedBox(height: 10.h),
-                senderCategoryWidget(),
-                SizedBox(height: 10.h),
-                InkWell(
-                  onTap: () {
-                    Get.toNamed(RouteName.liveTipsUI);
-                  },
-                  child: Container(
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: AppColors.lightYellow,
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            blurRadius: 1.0,
-                            offset: const Offset(0.0, 3.0)),
-                      ],
-                      borderRadius: BorderRadius.circular(10.0),
-                      gradient: const LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                          AppColors.appYellowColour,
-                          AppColors.gradientBottom
-                        ],
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Assets.images.icGoLive.svg(),
-                        const SizedBox(width: 15),
-                        Text(
-                          "goLive".tr,
-                          style: AppTextStyle.textStyle20(
-                              fontWeight: FontWeight.w700,
-                              fontColor: AppColors.brownColour),
+                Positioned(
+                    right: 10.0,
+                    top: Get.height * 0.4,
+                    child: GestureDetector(
+                      onTap: () {
+                        // log("Number-->${controller.getConstantDetails!.data.whatsappNo}");
+                        controller.whatsapp();
+                      },
+                      child: Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: AppColors.lightYellow,
+                          borderRadius: BorderRadius.circular(25.0),
+                          gradient: const LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [
+                              AppColors.appYellowColour,
+                              AppColors.gradientBottom
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10.h),
-                Container(
-                    height: 1.h, color: AppColors.darkBlue.withOpacity(0.5)),
-                SizedBox(height: 10.h),
-                sessionTypeWidget(),
-                SizedBox(height: 10.h),
-                offerTypeWidget(),
-                SizedBox(height: 10.h),
-                fullScreenBtnWidget(
-                    imageName: Assets.images.icReferAFriend.svg(),
-                    btnTitle: "referAnAstrologer".tr,
-                    onbtnTap: () {
-                      Get.toNamed(RouteName.referAstrologer);
-                    }),
-                SizedBox(height: 10.h),
-                trainingVideoWidget(),
-                SizedBox(height: 10.h),
-                fullScreenBtnWidget(
-                    imageName: Assets.images.icEcommerce.svg(),
-                    btnTitle: "eCommerce".tr,
-                    onbtnTap: () {
-                      Get.toNamed(RouteName.videoCallPage);
-                    }),
-                SizedBox(height: 10.h),
-                feedbackWidget(),
-                SizedBox(height: 20.h),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Assets.images.icHelp.svg(),
+                              Text(
+                                "help".tr,
+                                style: AppTextStyle.textStyle10(
+                                    fontColor: AppColors.brownColour,
+                                    fontWeight: FontWeight.w700),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ))
               ],
-            ),
-          ),
-          Positioned(
-              right: 10.0,
-              top: Get.height * 0.4,
-              child: GestureDetector(
-                onTap: () {
-                  // log("Number-->${controller.getConstantDetails!.data.whatsappNo}");
-                  controller.whatsapp();
-                },
-                child: Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                    color: AppColors.lightYellow,
-                    borderRadius: BorderRadius.circular(25.0),
-                    gradient: const LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      colors: [
-                        AppColors.appYellowColour,
-                        AppColors.gradientBottom
-                      ],
-                    ),
-                  ),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Assets.images.icHelp.svg(),
-                        Text(
-                          "help".tr,
-                          style: AppTextStyle.textStyle10(
-                              fontColor: AppColors.brownColour,
-                              fontWeight: FontWeight.w700),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ))
-        ],
+            );
+          }
+          return const SizedBox.shrink();
+        },
       ),
     );
   }
@@ -370,7 +454,7 @@ class HomeUI extends GetView<HomeController> {
                       fontWeight: FontWeight.w700),
                 ),
                 Text(
-                  "₹25/Min",
+                  "₹${controller.homeData!.sessionType!.chatAmount}/Min",
                   style: AppTextStyle.textStyle10(
                       fontColor: AppColors.darkBlue,
                       fontWeight: FontWeight.w400),
@@ -383,7 +467,7 @@ class HomeUI extends GetView<HomeController> {
                       fontWeight: FontWeight.w700),
                 ),
                 Text(
-                  "₹25/Min",
+                  "₹${controller.homeData!.sessionType!.chatAmount}/Min",
                   style: AppTextStyle.textStyle10(
                       fontColor: AppColors.darkBlue,
                       fontWeight: FontWeight.w400),
@@ -396,7 +480,7 @@ class HomeUI extends GetView<HomeController> {
                       fontWeight: FontWeight.w700),
                 ),
                 Text(
-                  "₹25/Min",
+                  "₹${controller.homeData!.sessionType!.videoCallAmount}/Min",
                   style: AppTextStyle.textStyle10(
                       fontColor: AppColors.darkBlue,
                       fontWeight: FontWeight.w400),
@@ -442,57 +526,173 @@ class HomeUI extends GetView<HomeController> {
                       fontWeight: FontWeight.w500,
                       fontColor: AppColors.darkBlue),
                 ),
-                SizedBox(height: 18.h),
-                InkWell(
-                  onTap: () {
-                    selectDateOrTime(
-                      Get.context!,
-                      title: "Schedule Your Next Online Date",
-                      btnTitle: "Confirm Next Online Date",
-                      pickerStyle: "DateCalendar",
-                      looping: true,
-                      onConfirm: (value) {},
-                      onChange: (value) => controller.selectDate(value),
-                      onClickOkay: () {
-                        selectDateOrTime(
-                          Get.context!,
-                          title: "Schedule Your Next Online Time",
-                          btnTitle: "Confirm Next Online Time",
-                          pickerStyle: "TimeCalendar",
-                          looping: true,
-                          onConfirm: (value) {},
-                          onChange: (value) => controller.selectTime(value),
-                          onClickOkay: () => controller.scheduleCall(),
-                        );
-                      },
-                    );
-                  },
-                  child: Container(
-                    width: 128.w,
-                    height: 31.h,
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                          AppColors.appYellowColour,
-                          AppColors.gradientBottom
-                        ],
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "scheduleNow".tr,
-                        style: AppTextStyle.textStyle10(
-                            fontColor: AppColors.brownColour,
-                            fontWeight: FontWeight.w400),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20.h),
-                const SelectedTime(),
+                SizedBox(height: 15.h),
+                Obx(() => controller.selectedChatTime.value.isEmpty
+                    ? InkWell(
+                        onTap: () {
+                          selectDateOrTime(
+                            Get.context!,
+                            title: "Schedule Your Next Online Date",
+                            btnTitle: "Confirm Next Online Date",
+                            pickerStyle: "DateCalendar",
+                            looping: true,
+                            lastDate: DateTime(2050),
+                            onConfirm: (value) {},
+                            onChange: (value) =>
+                                controller.selectChatDate(value),
+                            onClickOkay: () {
+                              selectDateOrTime(
+                                Get.context!,
+                                title: "Schedule Your Next Online Time",
+                                btnTitle: "Confirm Next Online Time",
+                                pickerStyle: "TimeCalendar",
+                                looping: true,
+                                onConfirm: (value) {},
+                                onChange: (value) =>
+                                    controller.selectChatTime(value),
+                                onClickOkay: () =>
+                                    controller.scheduleCall("CHAT"),
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          width: 128.w,
+                          height: 31.h,
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [
+                                AppColors.appYellowColour,
+                                AppColors.gradientBottom
+                              ],
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "scheduleNow".tr,
+                              style: AppTextStyle.textStyle10(
+                                  fontColor: AppColors.brownColour,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                        ),
+                      )
+                    : const SelectedTimeForChat()),
+                SizedBox(height: 15.h),
+                //const SelectedTime(),
+                Obx(() => controller.selectedCallTime.value.isEmpty
+                    ? InkWell(
+                        onTap: () {
+                          selectDateOrTime(
+                            Get.context!,
+                            title: "Schedule Your Next Online Date",
+                            btnTitle: "Confirm Next Online Date",
+                            pickerStyle: "DateCalendar",
+                            looping: true,
+                            lastDate: DateTime(2050),
+                            onConfirm: (value) {},
+                            onChange: (value) =>
+                                controller.selectCallDate(value),
+                            onClickOkay: () {
+                              selectDateOrTime(
+                                Get.context!,
+                                title: "Schedule Your Next Online Time",
+                                btnTitle: "Confirm Next Online Time",
+                                pickerStyle: "TimeCalendar",
+                                looping: true,
+                                onConfirm: (value) {},
+                                onChange: (value) =>
+                                    controller.selectCallTime(value),
+                                onClickOkay: () =>
+                                    controller.scheduleCall("CALL"),
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          width: 128.w,
+                          height: 31.h,
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [
+                                AppColors.appYellowColour,
+                                AppColors.gradientBottom
+                              ],
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "scheduleNow".tr,
+                              style: AppTextStyle.textStyle10(
+                                  fontColor: AppColors.brownColour,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                        ),
+                      )
+                    : const SelectedTimeForCall()),
+                SizedBox(height: 15.h),
+                Obx(() => controller.selectedVideoTime.value.isEmpty
+                    ? InkWell(
+                        onTap: () {
+                          selectDateOrTime(
+                            Get.context!,
+                            title: "Schedule Your Next Online Date",
+                            btnTitle: "Confirm Next Online Date",
+                            pickerStyle: "DateCalendar",
+                            looping: true,
+                            lastDate: DateTime(2050),
+                            onConfirm: (value) {},
+                            onChange: (value) =>
+                                controller.selectVideoDate(value),
+                            onClickOkay: () {
+                              selectDateOrTime(
+                                Get.context!,
+                                title: "Schedule Your Next Online Time",
+                                btnTitle: "Confirm Next Online Time",
+                                pickerStyle: "TimeCalendar",
+                                looping: true,
+                                onConfirm: (value) {},
+                                onChange: (value) =>
+                                    controller.selectVideoTime(value),
+                                onClickOkay: () =>
+                                    controller.scheduleCall("VIDEO"),
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          width: 128.w,
+                          height: 31.h,
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [
+                                AppColors.appYellowColour,
+                                AppColors.gradientBottom
+                              ],
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "scheduleNow".tr,
+                              style: AppTextStyle.textStyle10(
+                                fontColor: AppColors.brownColour,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : const SelectedTimeForVideoCall()),
               ],
             ),
           ],
@@ -522,79 +722,100 @@ class HomeUI extends GetView<HomeController> {
               Text(
                 "offerType".tr,
                 style: AppTextStyle.textStyle12(
-                    fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                  fontWeight: FontWeight.w500,
+                  fontColor: AppColors.darkBlue,
+                ),
               ),
               Text(
                 "status".tr,
                 style: AppTextStyle.textStyle12(
-                    fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                  fontWeight: FontWeight.w500,
+                  fontColor: AppColors.darkBlue,
+                ),
               ),
             ],
           ),
           SizedBox(height: 10.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "firstFreeOffer".tr,
-                style: AppTextStyle.textStyle12(
-                    fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
-              ),
-              Obx(() => SwitchWidget(
-                    onTap: () {
-                      controller.consultantOfferSwitch.value =
-                          !controller.consultantOfferSwitch.value;
-                    },
-                    switchValue: controller.consultantOfferSwitch.value,
-                  )),
-            ],
-          ),
-          SizedBox(height: 10.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    "promotionOffer".tr,
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w700,
-                        fontColor: AppColors.darkBlue),
+          Column(
+            children: controller.homeData!.offerType!
+                .map(
+                  (e) => Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "${e.offerName}",
+                            style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w700,
+                              fontColor: AppColors.darkBlue,
+                            ),
+                          ),
+                          Obx(
+                            () => SwitchWidget(
+                              onTap: () {
+                                controller.consultantOfferSwitch.value =
+                                    !controller.consultantOfferSwitch.value;
+                              },
+                              switchValue:
+                                  controller.consultantOfferSwitch.value,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10.h),
+                    ],
                   ),
-                  Text(
-                    "  (₹5/Min)",
-                    style: AppTextStyle.textStyle10(
-                        fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue),
-                  ),
-                ],
-              ),
-              Obx(() => SwitchWidget(
-                    onTap: () {
-                      controller.promotionOfferSwitch.value =
-                          !controller.promotionOfferSwitch.value;
-                    },
-                    switchValue: controller.promotionOfferSwitch.value,
-                  )),
-            ],
+                )
+                .toList(),
           ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Row(
+          //       children: [
+          //         Text(
+          //           "promotionOffer".tr,
+          //           style: AppTextStyle.textStyle12(
+          //               fontWeight: FontWeight.w700,
+          //               fontColor: AppColors.darkBlue),
+          //         ),
+          //         Text(
+          //           "  (₹5/Min)",
+          //           style: AppTextStyle.textStyle10(
+          //               fontWeight: FontWeight.w400,
+          //               fontColor: AppColors.darkBlue),
+          //         ),
+          //       ],
+          //     ),
+          //     Obx(
+          //       () => SwitchWidget(
+          //         onTap: () => controller.promotionOfferSwitch.value =
+          //             !controller.promotionOfferSwitch.value,
+          //         switchValue: controller.promotionOfferSwitch.value,
+          //       ),
+          //     ),
+          //   ],
+          // ),
         ],
       ),
     );
   }
 
-  Widget fullScreenBtnWidget(
-      {required Widget imageName,
-      required String? btnTitle,
-      required VoidCallback? onbtnTap}) {
+  Widget fullScreenBtnWidget({
+    required Widget imageName,
+    required String? btnTitle,
+    required VoidCallback? onbtnTap,
+  }) {
     return Container(
         padding: EdgeInsets.all(16.h),
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 1.0,
-                offset: const Offset(0.0, 3.0)),
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 1.0,
+              offset: const Offset(0.0, 3.0),
+            ),
           ],
           color: AppColors.white,
           borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -617,6 +838,9 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget trainingVideoWidget() {
+    if (controller.homeData?.trainingVideo == null) {
+      return const SizedBox.shrink();
+    }
     return Container(
       width: double.infinity,
       height: 238.h,
@@ -626,9 +850,10 @@ class HomeUI extends GetView<HomeController> {
         border: Border.all(color: AppColors.appYellowColour, width: 1),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 1.0,
-              offset: const Offset(0.0, 3.0)),
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 1.0,
+            offset: const Offset(0.0, 3.0),
+          ),
         ],
       ),
       child: Column(
@@ -649,17 +874,34 @@ class HomeUI extends GetView<HomeController> {
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemCount: 5,
+              itemCount: controller.homeData!.trainingVideo!.length,
               separatorBuilder: (context, i) => SizedBox(width: 10.w),
               itemBuilder: (BuildContext context, int i) {
                 return Row(
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                          color: AppColors.extraLightGrey,
-                          borderRadius: BorderRadius.circular(10)),
+                        color: AppColors.extraLightGrey,
+                        borderRadius: BorderRadius.circular(10.sp),
+                      ),
                       height: 174.h,
                       width: 110.h,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.sp),
+                        child: LoadImage(
+                          boxFit: BoxFit.fitHeight,
+                          imageModel: ImageModel(
+                            imagePath: controller
+                                .homeData!.trainingVideo![i].youtubeThumbNail,
+                            loadingIndicator: const SizedBox(
+                              child: CircularProgressIndicator(
+                                color: Color(0XFFFDD48E),
+                                strokeWidth: 2,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 );
@@ -1452,31 +1694,102 @@ class HomeUI extends GetView<HomeController> {
   }
 }
 
-class SelectedTime extends GetView<HomeController> {
-  const SelectedTime({Key? key}) : super(key: key);
+class SelectedTimeForChat extends GetView<HomeController> {
+  const SelectedTimeForChat({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () {
-        if (controller.selectedTime.value.isNotEmpty) {
-          return Text(
-            "${controller.selectedDate.value.toCustomFormattedString()} ${controller.selectedTime.value}",
-            style: AppTextStyle.textStyle10(
-              fontColor: AppColors.darkBlue,
-              fontWeight: FontWeight.w400,
-            ),
-          );
-        } else {
-          return Text(
-            controller.selectedDate.value.toCustomFormattedString(),
-            style: AppTextStyle.textStyle10(
-              fontColor: AppColors.darkBlue,
-              fontWeight: FontWeight.w400,
-            ),
-          );
-        }
-      },
+    return Container(
+      alignment: Alignment.center,
+      height: 31.h,
+      child: Obx(
+        () {
+          if (controller.selectedChatTime.value.isNotEmpty) {
+            return Text(
+              "${controller.selectedChatDate.value.toCustomFormattedString()} ${controller.selectedChatTime.value}",
+              style: AppTextStyle.textStyle10(
+                fontColor: AppColors.darkBlue,
+                fontWeight: FontWeight.w400,
+              ),
+            );
+          } else {
+            return Text(
+              controller.selectedChatDate.value.toCustomFormattedString(),
+              style: AppTextStyle.textStyle10(
+                fontColor: AppColors.darkBlue,
+                fontWeight: FontWeight.w400,
+              ),
+            );
+          }
+        },
+      ),
+    );
+  }
+}
+
+class SelectedTimeForCall extends GetView<HomeController> {
+  const SelectedTimeForCall({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+
+      height: 31.h,
+      child: Obx(
+        () {
+          if (controller.selectedCallTime.value.isNotEmpty) {
+            return Text(
+              "${controller.selectedCallDate.value.toCustomFormattedString()} ${controller.selectedCallTime.value}",
+              style: AppTextStyle.textStyle10(
+                fontColor: AppColors.darkBlue,
+                fontWeight: FontWeight.w400,
+              ),
+            );
+          } else {
+            return Text(
+              controller.selectedCallDate.value.toCustomFormattedString(),
+              style: AppTextStyle.textStyle10(
+                fontColor: AppColors.darkBlue,
+                fontWeight: FontWeight.w400,
+              ),
+            );
+          }
+        },
+      ),
+    );
+  }
+}
+
+class SelectedTimeForVideoCall extends GetView<HomeController> {
+  const SelectedTimeForVideoCall({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      height: 31.h,
+      child: Obx(
+        () {
+          if (controller.selectedVideoTime.value.isNotEmpty) {
+            return Text(
+              "${controller.selectedVideoDate.value.toCustomFormattedString()} ${controller.selectedVideoTime.value}",
+              style: AppTextStyle.textStyle10(
+                fontColor: AppColors.darkBlue,
+                fontWeight: FontWeight.w400,
+              ),
+            );
+          } else {
+            return Text(
+              controller.selectedVideoDate.value.toCustomFormattedString(),
+              style: AppTextStyle.textStyle10(
+                fontColor: AppColors.darkBlue,
+                fontWeight: FontWeight.w400,
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 }

@@ -37,7 +37,23 @@ extension DateToString on DateTime {
   }
 
   String toCustomFormattedString({String locale = "en_US"}) {
-    final format = DateFormat("dd MMMM yyyy", locale);
+    final format = DateFormat("dd MMM yyyy", locale);
     return format.format(this);
   }
+}
+
+
+String? extractYoutubeVideoID(String videoUrl) {
+  RegExp regExp = RegExp(
+    r"(?:https?:\/\/(?:www\.)?youtube\.com\/watch\?v=|https?:\/\/youtu\.be\/)([\w-]{11})(?:&|\z|$)",
+    caseSensitive: false,
+    multiLine: false,
+  );
+
+  RegExpMatch? match = regExp.firstMatch(videoUrl);
+  if (match != null && match.groupCount >= 1) {
+    return match.group(1);
+  }
+
+  return null;
 }

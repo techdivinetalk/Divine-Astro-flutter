@@ -1,6 +1,7 @@
 import 'package:chips_choice/chips_choice.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../common/custom_light_yellow_btn.dart';
@@ -274,6 +275,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                 ),
                 SizedBox(height: 5.h),
                 ReferAstrologerField(
+                  inputFormatter: [FilteringTextInputFormatter.allow(RegExp('[0-9.,]')),],
                   validator: (value) {
                     if (value! == "") {
                       return "";

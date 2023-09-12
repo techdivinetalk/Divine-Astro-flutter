@@ -672,6 +672,9 @@ class $AssetsLottieGen {
 class $AssetsSvgGen {
   const $AssetsSvgGen();
 
+  /// File path: assets/svg/black_dot.svg
+  SvgGenImage get blackDot => const SvgGenImage('assets/svg/black_dot.svg');
+
   /// File path: assets/svg/block.svg
   SvgGenImage get block => const SvgGenImage('assets/svg/block.svg');
 
@@ -691,6 +694,17 @@ class $AssetsSvgGen {
   /// File path: assets/svg/mute.svg
   SvgGenImage get mute => const SvgGenImage('assets/svg/mute.svg');
 
+  /// File path: assets/svg/pink_slider.svg
+  SvgGenImage get pinkSlider => const SvgGenImage('assets/svg/pink_slider.svg');
+
+  /// File path: assets/svg/please_register_1.svg
+  SvgGenImage get pleaseRegister1 =>
+      const SvgGenImage('assets/svg/please_register_1.svg');
+
+  /// File path: assets/svg/please_register_2.svg
+  SvgGenImage get pleaseRegister2 =>
+      const SvgGenImage('assets/svg/please_register_2.svg');
+
   /// File path: assets/svg/reply.svg
   SvgGenImage get reply => const SvgGenImage('assets/svg/reply.svg');
 
@@ -703,12 +717,16 @@ class $AssetsSvgGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+        blackDot,
         block,
         blockUser,
         disconnect,
         greyContainer,
         icAdd,
         mute,
+        pinkSlider,
+        pleaseRegister1,
+        pleaseRegister2,
         reply,
         switchCamera,
         videoMute

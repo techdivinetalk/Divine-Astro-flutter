@@ -13,7 +13,7 @@ import '../../screens/side_menu/side_menu_ui.dart';
 import 'performance_controller.dart';
 
 class PerformanceUI extends GetView<PerformanceController> {
-  PerformanceUI({Key? key}) : super(key: key);
+  const PerformanceUI({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -540,48 +540,46 @@ class YourScoreWidget extends GetView<PerformanceController> {
                     child: Column(
                       children: [
                         Stack(
-                          children: [
-                            Center(
-                                child: Assets.images.bgMeterFinal
-                                    .svg(height: 135.h, width: 270.h)),
-                            Positioned(
-                              bottom: 0,
-                              left: 65.h,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 5.h,
-                                  ),
-                                  Text(
-                                    "Your Score",
-                                    style: AppTextStyle.textStyle10(
-                                        fontColor: AppColors.darkBlue),
-                                  ),
-                                  SizedBox(
-                                    height: 5.h,
-                                  ),
-                                  Text(
-                                    item?.performance?.isNotEmpty ?? false
-                                        ? '${item?.performance?[0].value ?? 0}'
-                                        : "0",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        color: AppColors.darkBlue,
-                                        fontSize: 20.sp),
-                                  ),
-                                  SizedBox(
-                                    height: 5.h,
-                                  ),
-                                  Text(
-                                    item?.performance?.isNotEmpty ?? false
-                                        ? 'Out of ${item?.performance?[0].valueOutOff ?? 0}'
-                                        : "Out of 0",
-                                    // "Out of 100",
-                                    style: AppTextStyle.textStyle10(
-                                        fontColor: AppColors.darkBlue),
-                                  ),
-                                ],
-                              ),
+                          alignment: Alignment.bottomCenter,
+                          children:  [
+                            Assets.images.bgMeterFinal.svg(
+                              height: 135.h,
+                              width: 270.h,
+                            ),
+                            Column(
+                              children: [
+                                SizedBox(
+                                  height: 5.h,
+                                ),
+                                Text(
+                                  "Your Score",
+                                  style: AppTextStyle.textStyle10(
+                                      fontColor: AppColors.darkBlue),
+                                ),
+                                SizedBox(
+                                  height: 5.h,
+                                ),
+                                Text(
+                                  item?.performance?.isNotEmpty ?? false
+                                      ? '${item?.performance?[0].value ?? 0}'
+                                      : "0",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.darkBlue,
+                                      fontSize: 20.sp),
+                                ),
+                                SizedBox(
+                                  height: 5.h,
+                                ),
+                                Text(
+                                  item?.performance?.isNotEmpty ?? false
+                                      ? 'Out of ${item?.performance?[0].valueOutOff ?? 0}'
+                                      : "Out of 0",
+                                  // "Out of 100",
+                                  style: AppTextStyle.textStyle10(
+                                      fontColor: AppColors.darkBlue),
+                                ),
+                              ],
                             ),
                             Center(
                               child: SizedBox(
@@ -1428,14 +1426,15 @@ class DurationUI extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(8.h),
       decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 3.0,
-                offset: const Offset(0.0, 3.0)),
-          ],
-          color: AppColors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(20))),
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 3.0,
+              offset: const Offset(0.0, 3.0)),
+        ],
+        color: AppColors.white,
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
+      ),
       child: GetBuilder<PerformanceController>(builder: (controller) {
         return Obx(
           () => DropdownButtonHideUnderline(
@@ -1485,7 +1484,7 @@ class DurationUI extends StatelessWidget {
                 iconEnabledColor: AppColors.blackColor,
               ),
               dropdownStyleData: DropdownStyleData(
-                width: ScreenUtil().screenWidth * 0.88,
+                width: ScreenUtil().screenWidth * 0.95,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(14),
                   color: AppColors.white,

@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
 import 'package:divine_astrologer/repository/notice_repository.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
+import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
@@ -31,8 +32,7 @@ class HomeController extends GetxController {
   ExpandedTileController? expandedTileController = ExpandedTileController();
   ExpandedTileController? expandedTile2Controller = ExpandedTileController();
   UserData? userData = UserData();
-  SharedPreferenceService preferenceService =
-      Get.find<SharedPreferenceService>();
+  final preferenceService = Get.find<SharedPreferenceService>();
   final UserRepository userRepository = Get.put(UserRepository());
   int scoreIndex = 0;
   List<Map<String, dynamic>> yourScore = [
@@ -72,9 +72,12 @@ class HomeController extends GetxController {
   RxBool profileDataSync = false.obs;
 
   HomeData? homeData;
+  Loading loading = Loading.initial;
   RxBool shopDataSync = false.obs;
 
   getDashboardDetail() async {
+    loading = Loading.initial;
+    update();
     Map<String, dynamic> params = {
       "role_id": userData?.roleId ?? 0,
       "device_token": userData?.deviceToken,
@@ -86,6 +89,8 @@ class HomeController extends GetxController {
       var response = await HomePageRepository().getDashboardData(params);
       homeData = response.data;
       shopDataSync.value = true;
+      loading = Loading.loaded;
+      update();
 
       log("DashboardData==>${jsonEncode(homeData)}");
     } catch (error) {
@@ -152,31 +157,67 @@ class HomeController extends GetxController {
   }
 
   final noticeRepository = Get.put(NoticeRepository());
-  Rx<DateTime> selectedDate = DateTime.now().obs;
-  Rx<String> selectedTime = ''.obs;
 
-  void selectDate(String value) {
-    selectedDate(value.toDate());
+  Rx<DateTime> selectedChatDate = DateTime.now().obs;
+  Rx<String> selectedChatTime = ''.obs;
+
+  Rx<DateTime> selectedCallDate = DateTime.now().obs;
+  Rx<String> selectedCallTime = ''.obs;
+
+  Rx<DateTime> selectedVideoDate = DateTime.now().obs;
+  Rx<String> selectedVideoTime = ''.obs;
+
+  void selectChatDate(String value) {
+    selectedChatDate(value.toDate());
   }
 
-  void selectTime(String value) {
-    selectedTime(value);
+  void selectChatTime(String value) {
+    selectedChatTime(value);
   }
 
-  void scheduleCall() async {
+  void selectCallDate(String value) {
+    selectedCallDate(value.toDate());
+  }
+
+  void selectCallTime(String value) {
+    selectedCallTime(value);
+  }
+
+  void selectVideoDate(String value) {
+    selectedVideoDate(value.toDate());
+  }
+
+  void selectVideoTime(String value) {
+    selectedVideoTime(value);
+  }
+
+  void scheduleCall(String value) async {
     try {
       ///Type 1: for call 2 for chat.
-
-      if (selectedTime.value.isEmpty) return;
       int type = 2;
-      if (callSwitch.value) type = 1;
-      if (chatSwitch.value) type = 2;
 
-      AstroScheduleRequest request = AstroScheduleRequest(
-        scheduleDate: selectedDate.value.toFormattedString(),
-        scheduleTime: selectedTime.value,
-        type: type,
-      );
+      late AstroScheduleRequest request;
+      if (value == "CHAT") {
+        request = AstroScheduleRequest(
+          scheduleDate: selectedChatDate.value.toFormattedString(),
+          scheduleTime: selectedChatTime.value,
+          type: type,
+        );
+      }
+      if (value == "CALL") {
+        request = AstroScheduleRequest(
+          scheduleDate: selectedCallDate.value.toFormattedString(),
+          scheduleTime: selectedCallTime.value,
+          type: type,
+        );
+      }
+      if (value == "VIDEO") {
+        request = AstroScheduleRequest(
+          scheduleDate: selectedVideoDate.value.toFormattedString(),
+          scheduleTime: selectedVideoTime.value,
+          type: type,
+        );
+      }
 
       final response = await noticeRepository.astroScheduleOnlineAPI(
         request.toJson(),
