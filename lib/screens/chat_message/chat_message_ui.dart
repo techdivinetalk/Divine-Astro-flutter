@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
@@ -29,21 +30,27 @@ class ChatMessageUI extends GetView<ChatMessageController> {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(50.r),
-                child: Assets.images.bgChatUserPro.image(
-                  fit: BoxFit.cover,
-                  height: 32.r,
-                  width: 32.r,
+                child: SizedBox(
+                  height: 32.w,
+                  width: 32.w,
+                  child: Obx(
+                    () => CachedNetworkPhoto(
+                      url: controller.profileImage.value,
+                    ),
+                  ),
                 ),
               ),
               SizedBox(
                 width: 15.w,
               ),
-              Text(
-                "Customer Name",
-                style: AppTextStyle.textStyle16(
-                    fontWeight: FontWeight.w500,
-                    fontColor: AppColors.brownColour),
-              ),
+              Obx(
+                () => Text(
+                  controller.customerName.value,
+                  style: AppTextStyle.textStyle16(
+                      fontWeight: FontWeight.w500,
+                      fontColor: AppColors.brownColour),
+                ),
+              )
             ],
           ),
         ),

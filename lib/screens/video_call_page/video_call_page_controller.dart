@@ -18,6 +18,8 @@ class VideoCallPageController extends GetxController {
   String featureText = "wants to do video call with you!";
   bool isForChat = false;
   ResAstroChatListener? data;
+  RxString btnTitle = "Accept".obs;
+  RxBool isWaiting = false.obs;
 
   @override
   void onInit() {
@@ -32,6 +34,9 @@ class VideoCallPageController extends GetxController {
       tob = data!.astroName ?? "";
       maritalStatus = data!.astroName ?? "";
       problemArea = data!.astroName ?? "";
+      isWaiting.value = data!.status == 1 ? true : false;
+      btnTitle.value =
+          data!.status == 1 ? "Waiting for user to connect ..." : "Accept";
       featureText = "wants to chat with you!";
     }
   }
@@ -47,7 +52,10 @@ class VideoCallPageController extends GetxController {
         queueId: data!.queueId,
       ).toJson());
       debugPrint("Request has been changed : $response");
-      Get.back();
+      isWaiting.value = true;
+      btnTitle.value = "Waiting for user to connect ...";
+
+      // Get.back();
     } else {
       Get.toNamed(RouteName.videoCall);
     }
