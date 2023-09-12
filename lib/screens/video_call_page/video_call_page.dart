@@ -26,8 +26,6 @@ class VideoCallPage extends GetView<VideoCallPageController> {
         child: SafeArea(
           child: Stack(
             children: [
-              // assistUI(),
-              // closeButton(),
               acceptUI(),
               if (!controller.isForChat) closeButton(color: AppColors.white),
             ],
@@ -60,6 +58,8 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                   CustomText(
                     controller.featureText,
                     fontSize: 20.sp,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.visible,
                     fontColor: controller.isForChat
                         ? AppColors.blackColor
                         : AppColors.white,
