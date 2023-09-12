@@ -24,7 +24,6 @@ class HomeController extends GetxController {
   RxBool callSwitch = false.obs;
   RxBool videoSwitch = false.obs;
   RxString chatSchedule = "".obs, callSchedule = "".obs, videoSchedule = "".obs;
-
   RxBool consultantOfferSwitch = false.obs;
   RxBool promotionOfferSwitch = false.obs;
   RxString appbarTitle = "Astrologer Name ".obs;
