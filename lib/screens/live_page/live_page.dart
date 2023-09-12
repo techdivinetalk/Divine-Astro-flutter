@@ -789,7 +789,7 @@ class LivePageState extends State<LivePage>
               },
               child: Assets.images.starLive.image()),
 
-          buildCallDurationWidget(),
+          Obx(()=>controller.isCoHosting.value ? buildCallDurationWidget() : SizedBox()),
           Spacer(),
           Obx(() => Column(
                 mainAxisSize: MainAxisSize.min,
