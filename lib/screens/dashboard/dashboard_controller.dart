@@ -77,32 +77,34 @@ class DashboardController extends GetxController
             DataSnapshot innerChild = dataSnapShot.children.first;
 
             final value = innerChild.value as Map;
-            if (value['status'] == 1) {
-              var astroChat = ResAstroChatListener(
-                astroId: value['astroId'],
-                astroImage: value['astroImage'],
-                astroName: value['astroName'],
-                chatMessage: value['chat_message'],
-                customeName: value['custome_name'],
-                customerImage: value['customer_image'],
-                extraTalktime: value['extra_talktime'],
-                isRechargeContinue: value['is_recharge_continue'],
-                isTimeout: value['is_timeout'],
-                ivrTime: value['ivr_time'],
-                notification: value['notification'],
-                orderId: value['orderId'],
-                orderType: value['orderType'],
-                queueId: value['queue_id'],
-                status: value['status'],
-              );
-              debugPrint("Updated chat -- $astroChat");
+            var astroChat = ResAstroChatListener(
+              customerId: int.parse(innerChild.key ?? "0"),
+              astroId: value['astroId'],
+              astroImage: value['astroImage'],
+              astroName: value['astroName'],
+              chatMessage: value['chat_message'],
+              customeName: value['custome_name'],
+              customerImage: value['customer_image'],
+              extraTalktime: value['extra_talktime'],
+              isRechargeContinue: value['is_recharge_continue'],
+              isTimeout: value['is_timeout'],
+              ivrTime: value['ivr_time'],
+              notification: value['notification'],
+              orderId: value['orderId'],
+              orderType: value['orderType'],
+              queueId: value['queue_id'],
+              status: value['status'],
+            );
+            if (value['status'] == 0 || value['status'] == 1) {
               Get.toNamed(RouteName.videoCallPage, arguments: astroChat);
+            } else if (value['status'] == 2) {
+              Get.toNamed(RouteName.chatMessageUI, arguments: astroChat);
             }
 
             return;
           }
         }
-      } else {}
+      }
     });
   }
 
@@ -132,10 +134,10 @@ class DashboardController extends GetxController
       try {
         permissionStatus = await _getContactPermission();
         if (permissionStatus != PermissionStatus.granted) {
-          // await openAppSettings();
+          await openAppSettings();
         } else {}
       } catch (e) {
-        // await openAppSettings();
+        await openAppSettings();
       }
     }
   }

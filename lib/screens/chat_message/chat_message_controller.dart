@@ -18,6 +18,7 @@ import '../../common/colors.dart';
 import '../../common/common_functions.dart';
 import '../../di/hive_services.dart';
 import '../../di/shared_preference_service.dart';
+import '../../model/chat/res_astro_chat_listener.dart';
 import '../../model/chat_offline_model.dart';
 import '../../model/get_kundli_data.dart';
 import '../../repository/chat_repository.dart';
@@ -54,6 +55,9 @@ class ChatMessageController extends GetxController {
   ChatMessageController(this.kundliRepository, this.chatRepository);
   final KundliRepository? kundliRepository;
   final ChatRepository chatRepository;
+  RxString customerName = "".obs;
+  RxString profileImage = "".obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -61,6 +65,15 @@ class ChatMessageController extends GetxController {
     if (Get.arguments != null) {
       if (Get.arguments is bool) {
         sendReadMessageStatus = true;
+      } else if (Get.arguments is ResAstroChatListener) {
+        var data = Get.arguments;
+        currentChatUserId.value = data!.customerId;
+        currentUserId.value = data!.customerId;
+        customerName.value = data!.customeName ?? "";
+        profileImage.value =
+            "${preference.getBaseImageURL()}/${data!.customerImage}";
+        debugPrint(
+            "YOUR CODE RESPONSE UPDATED $currentUserId && $currentChatUserId");
       }
     }
     userData = preferenceService.getUserDetail();
@@ -85,10 +98,12 @@ class ChatMessageController extends GetxController {
   }
 
   scrollToBottomFunc() {
-    messgeScrollController.animateTo(
-        messgeScrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 600),
-        curve: Curves.easeOut);
+    messgeScrollController.hasClients
+        ? messgeScrollController.animateTo(
+            messgeScrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 600),
+            curve: Curves.easeOut)
+        : null;
   }
 
   getChatList() async {
