@@ -244,6 +244,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_emoji.svg
   SvgGenImage get icEmoji => const SvgGenImage('assets/images/ic_emoji.svg');
 
+  /// File path: assets/images/ic_end_chat.svg
+  SvgGenImage get icEndChat =>
+      const SvgGenImage('assets/images/ic_end_chat.svg');
+
   /// File path: assets/images/ic_eye.svg
   SvgGenImage get icEye => const SvgGenImage('assets/images/ic_eye.svg');
 
@@ -581,6 +585,7 @@ class $AssetsImagesGen {
         icEcommerce,
         icEdit,
         icEmoji,
+        icEndChat,
         icEye,
         icFaqImg,
         icFeedBack,

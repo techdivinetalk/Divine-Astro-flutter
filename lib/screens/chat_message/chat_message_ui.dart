@@ -27,29 +27,42 @@ class ChatMessageUI extends GetView<ChatMessageController> {
           backgroundColor: AppColors.lightYellow,
           centerTitle: false,
           title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(50.r),
-                child: SizedBox(
-                  height: 32.w,
-                  width: 32.w,
-                  child: Obx(
-                    () => CachedNetworkPhoto(
-                      url: controller.profileImage.value,
+              Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50.r),
+                    child: SizedBox(
+                      height: 32.w,
+                      width: 32.w,
+                      child: Obx(
+                        () => CachedNetworkPhoto(
+                          url: controller.profileImage.value,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  SizedBox(width: 15.w),
+                  Obx(
+                    () => Text(
+                      controller.customerName.value,
+                      style: AppTextStyle.textStyle16(
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.brownColour),
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(
-                width: 15.w,
-              ),
-              Obx(
-                () => Text(
-                  controller.customerName.value,
-                  style: AppTextStyle.textStyle16(
-                      fontWeight: FontWeight.w500,
-                      fontColor: AppColors.brownColour),
-                ),
+              Row(
+                children: [
+                  InkWell(
+                      onTap: () {
+                        controller.onEndChat();
+                      },
+                      child: Assets.images.icEndChat.svg()),
+                  SizedBox(width: 10.w),
+                ],
               )
             ],
           ),

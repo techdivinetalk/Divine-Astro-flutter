@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:divine_astrologer/common/routes.dart';
+import 'package:divine_astrologer/model/chat/req_common_chat_model.dart';
 import 'package:divine_astrologer/model/res_login.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ import '../../common/common_functions.dart';
 import '../../di/hive_services.dart';
 import '../../di/shared_preference_service.dart';
 import '../../model/chat/res_astro_chat_listener.dart';
+import '../../model/chat/res_common_chat_success.dart';
 import '../../model/chat_offline_model.dart';
 import '../../model/get_kundli_data.dart';
 import '../../repository/chat_repository.dart';
@@ -57,6 +59,7 @@ class ChatMessageController extends GetxController {
   final ChatRepository chatRepository;
   RxString customerName = "".obs;
   RxString profileImage = "".obs;
+  RxBool isDataLoad = false.obs;
 
   @override
   void onInit() {
@@ -349,5 +352,20 @@ class ChatMessageController extends GetxController {
       }
     }
     update();
+  }
+
+//End Chat
+  onEndChat() async {
+    isDataLoad.value = false;
+
+    ResCommonChatStatus response = await ChatRepository().endChat(
+        ReqCommonChatParams(
+                orderId: astroChatWatcher.value.orderId,
+                queueId: astroChatWatcher.value.queueId)
+            .toJson());
+    if (response.statusCode == 200) {
+      divineSnackBar(data: "Chat ended.", color: AppColors.redColor);
+    }
+    isDataLoad.value = true;
   }
 }

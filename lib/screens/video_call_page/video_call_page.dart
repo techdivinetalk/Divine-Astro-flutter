@@ -9,6 +9,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
+import '../../common/custom_light_yellow_btn.dart';
+
 class VideoCallPage extends GetView<VideoCallPageController> {
   const VideoCallPage({Key? key}) : super(key: key);
 
@@ -79,28 +81,29 @@ class VideoCallPage extends GetView<VideoCallPageController> {
           ),
         ),
         Obx(() => controller.isWaiting.value
-            ? Container(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 32.h),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: FilledButton(
-                        onPressed: () {
-                          controller.onAccept();
-                        },
-                        style: FilledButton.styleFrom(
-                          backgroundColor: AppColors.white,
-                          padding: EdgeInsets.symmetric(vertical: 20.h),
-                        ),
-                        child: Obx(() => CustomText(
+            ? Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 20.h),
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 1),
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Obx(
+                          () => Center(
+                            child: CustomText(
                               controller.btnTitle.value,
                               fontSize: 20.sp,
                               fontColor: AppColors.brownColour,
                               fontWeight: FontWeight.w600,
-                            )),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               )
             : Container(

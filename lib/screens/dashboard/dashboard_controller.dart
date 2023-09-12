@@ -15,6 +15,7 @@ import '../../common/common_functions.dart';
 import '../../di/fcm_notification.dart';
 import '../../model/chat/res_astro_chat_listener.dart';
 import '../../model/res_login.dart';
+import '../live_page/constant.dart';
 
 class DashboardController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -70,6 +71,7 @@ class DashboardController extends GetxController
         .ref("astroChat")
         .onValue
         .listen((DatabaseEvent event) {
+      debugPrint("YOUR VALUE HAS BEEN UPDATED");
       if (event.snapshot.value is Map) {
         for (final dataSnapShot in event.snapshot.children) {
           if (int.tryParse(dataSnapShot.key!) == userData!.id &&
@@ -77,7 +79,7 @@ class DashboardController extends GetxController
             DataSnapshot innerChild = dataSnapShot.children.first;
 
             final value = innerChild.value as Map;
-            var astroChat = ResAstroChatListener(
+            astroChatWatcher.value = ResAstroChatListener(
               customerId: int.parse(innerChild.key ?? "0"),
               astroId: value['astroId'],
               astroImage: value['astroImage'],
@@ -96,9 +98,18 @@ class DashboardController extends GetxController
               status: value['status'],
             );
             if (value['status'] == 0 || value['status'] == 1) {
-              Get.toNamed(RouteName.videoCallPage, arguments: astroChat);
+              Get.toNamed(RouteName.videoCallPage,
+                  arguments: astroChatWatcher.value);
             } else if (value['status'] == 2) {
-              Get.toNamed(RouteName.chatMessageUI, arguments: astroChat);
+              if (Get.currentRoute != RouteName.chatMessageUI) {
+                if (Get.currentRoute == RouteName.videoCallPage) {
+                  Get.offNamed(RouteName.chatMessageUI,
+                      arguments: astroChatWatcher.value);
+                } else {
+                  Get.toNamed(RouteName.chatMessageUI,
+                      arguments: astroChatWatcher.value);
+                }
+              }
             }
 
             return;
