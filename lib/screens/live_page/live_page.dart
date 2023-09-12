@@ -391,7 +391,7 @@ class LivePageState extends State<LivePage>
   Container buildAstrologerLiveStartWidget() {
     return Container(
       height: 65.h,
-      margin: EdgeInsets.only(left: 22.w, top: 22.h),
+      margin: EdgeInsets.only(left: 22.w, top: 15.h),
       decoration: BoxDecoration(
           color: AppColors.lightBlack.withOpacity(.3),
           borderRadius: BorderRadius.circular(10)),
@@ -422,7 +422,7 @@ class LivePageState extends State<LivePage>
             ],
           ),
           SizedBox(width: 16.w),
-         // Assets.images.starLive.image(),
+          // Assets.images.starLive.image(),
           SizedBox(width: 16.w),
         ],
       ),
@@ -681,19 +681,12 @@ class LivePageState extends State<LivePage>
               mainAxisSize: MainAxisSize.min,
               children: [
                 buildTopMenu(),
-                //SizedBox(height: 5.h),
-                /*Obx(() => controller.isCoHosting.isFalse
-                    ? const SizedBox()
-                    : SizedBox(height: 20.h)),*/
-                Obx(() =>AnimatedOpacity(
-                    opacity: controller.isCoHosting.isFalse?1:0,
-                    duration: Duration(seconds: 1),
-                    child: /*controller.isCoHosting.isFalse
-                    ?*/ buildAstrologerLiveStartWidget()
-                    /*: const SizedBox())*
-                    )),
-                     */
-                ))
+                /*Obx(
+                  () => AnimatedOpacity(
+                      opacity: controller.isStarHide.isFalse ? 1 : 0,
+                      duration: Duration(seconds: 1),
+                      child: buildAstrologerLiveStartWidget()),
+                )*/
               ],
             ),
           ),
@@ -716,7 +709,7 @@ class LivePageState extends State<LivePage>
 
   Widget buildTopMenu() {
     return Padding(
-      padding:  EdgeInsets.only(top: 5.h),
+      padding: EdgeInsets.only(top: 5.h),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -785,11 +778,13 @@ class LivePageState extends State<LivePage>
           Spacer(),
           InkWell(
               onTap: () {
-                controller.isCoHosting.value = !controller.isCoHosting.value;
+                controller.isStarHide.value = !controller.isStarHide.value;
               },
               child: Assets.images.starLive.image()),
-
-          Obx(()=>controller.isCoHosting.value ? buildCallDurationWidget() : SizedBox()),
+          SizedBox(width: 1.w),
+          Obx(() => controller.isCoHosting.value
+              ? buildCallDurationWidget()
+              : SizedBox()),
           Spacer(),
           Obx(() => Column(
                 mainAxisSize: MainAxisSize.min,
@@ -833,7 +828,7 @@ class LivePageState extends State<LivePage>
                   ),*/
                 ],
               )),
-          SizedBox(width: 20.w)
+          SizedBox(width: 10.w)
         ],
       ),
     );

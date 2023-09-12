@@ -65,6 +65,7 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
   ZegoUIKitUser? coHostUser;
   var msg = TextEditingController();
   var isCoHosting = false.obs;
+  var isStarHide = false.obs;
   var isCameraOn = true.obs;
   var isMicroPhoneOn = true.obs;
   var isCallOnOff = true.obs;
