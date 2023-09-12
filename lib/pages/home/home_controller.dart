@@ -219,10 +219,11 @@ class HomeController extends GetxController {
   void scheduleCall(String value) async {
     try {
       ///Type 1: for call 2 for chat.
-      int type = 2;
+      int type = 0;
 
       late AstroScheduleRequest request;
       if (value == "CHAT") {
+        type = 2;
         request = AstroScheduleRequest(
           scheduleDate: selectedChatDate.value.toFormattedString(),
           scheduleTime: selectedChatTime.value,
@@ -230,6 +231,7 @@ class HomeController extends GetxController {
         );
       }
       if (value == "CALL") {
+        type = 1;
         request = AstroScheduleRequest(
           scheduleDate: selectedCallDate.value.toFormattedString(),
           scheduleTime: selectedCallTime.value,
