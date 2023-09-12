@@ -38,7 +38,8 @@ Future openBottomSheet(BuildContext context,
         const SizedBox(height: 10),
         Container(
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(50.0)),
+            borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(50.0)),
             border: Border.all(color: Colors.white, width: 2),
             color: Colors.white,
           ),
@@ -51,7 +52,8 @@ Future openBottomSheet(BuildContext context,
                   style: AppTextStyle.textStyle16(fontWeight: FontWeight.w700),
                 ),
               const SizedBox(height: 10),
-              SizedBox(width: ScreenUtil().screenWidth, child: functionalityWidget),
+              SizedBox(
+                  width: ScreenUtil().screenWidth, child: functionalityWidget),
               const SizedBox(height: 20),
               if (btnTitle != null)
                 MaterialButton(
@@ -82,14 +84,17 @@ String dateToString(DateTime now, {String format = 'dd MMMM yyyy'}) {
   return DateFormat(format).format(now);
 }
 
-selectDateOrTime(BuildContext context,
-    {required String title,
-    required String btnTitle,
-    required String pickerStyle,
-    required Function(String datetime) onChange,
-    required Function(String datetime) onConfirm,
-    Function()? onClickOkay,
-    required bool looping}) {
+selectDateOrTime(
+  BuildContext context, {
+  required String title,
+  required String btnTitle,
+  required String pickerStyle,
+  required Function(String datetime) onChange,
+  required Function(String datetime) onConfirm,
+  Function()? onClickOkay,
+  required bool looping,
+  DateTime? lastDate,
+}) {
   return showCupertinoModalPopup(
     context: context,
     builder: (context) => Column(
@@ -111,7 +116,8 @@ selectDateOrTime(BuildContext context,
         const SizedBox(height: 10),
         Container(
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(50.0)),
+            borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(50.0)),
             border: Border.all(color: AppColors.white, width: 2),
             color: AppColors.white,
           ),
@@ -132,16 +138,20 @@ selectDateOrTime(BuildContext context,
                 child: Text(
                   title,
                   style: const TextStyle(
-                      fontWeight: FontWeight.w700, color: AppColors.darkBlue, fontSize: 20.0),
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.darkBlue,
+                      fontSize: 20.0),
                 ),
               ),
               const SizedBox(height: 20),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: DatePickerWidget(
-                  lastDate: DateTime.now(),
+                  lastDate: lastDate ?? DateTime.now(),
                   firstDate: DateTime(DateTime.now().year - 100),
-                  dateFormat: pickerStyle == "DateCalendar" ? "MMM/dd/yyyy" : "MM/dd/yyyy",
+                  dateFormat: pickerStyle == "DateCalendar"
+                      ? "MMM/dd/yyyy"
+                      : "MM/dd/yyyy",
                   pickerType: pickerStyle,
                   looping: looping,
                   onConfirm: (DateTime newDate, _) {
@@ -166,7 +176,9 @@ selectDateOrTime(BuildContext context,
                     itemHeight: 44,
                     backgroundColor: AppColors.white,
                     itemTextStyle: const TextStyle(
-                        color: AppColors.darkBlue, fontSize: 20, fontWeight: FontWeight.w700),
+                        color: AppColors.darkBlue,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700),
                     dividerColor: Colors.black.withOpacity(0.5),
                   ),
                 ),
@@ -180,7 +192,7 @@ selectDateOrTime(BuildContext context,
                   ),
                   onPressed: () {
                     Navigator.pop(context);
-                    if(onClickOkay != null){
+                    if (onClickOkay != null) {
                       onClickOkay();
                     }
                     // Get.back();

@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:divine_astrologer/utils/custom_extension.dart';
+
 HomePageModelClass homePageModelClassFromJson(String str) => HomePageModelClass.fromJson(json.decode(str));
 
 String homePageModelClassToJson(HomePageModelClass data) => json.encode(data.toJson());
@@ -176,4 +178,7 @@ class TrainingVideo {
     "url": url,
     "days": days,
   };
+
+  String get youtubeThumbNail => "https://img.youtube.com/vi/${extractYoutubeVideoID(url.toString())}/0.jpg";
+
 }

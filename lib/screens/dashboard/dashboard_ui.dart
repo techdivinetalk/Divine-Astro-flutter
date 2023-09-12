@@ -135,7 +135,7 @@ class DashboardScreen extends GetView<DashboardController> {
 
   static List<Widget> widgetOptions = <Widget>[
     const HomeUI(),
-     PerformanceUI(),
+     const PerformanceUI(),
     const SuggestRemediesUI(),
     const ChatAssistancePage(),
     ProfileUI()

@@ -103,7 +103,6 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                                         .mobileNumber!
                                         .split(",")
                                         .toList();
-
                                     controller.addContact(
                                       contactNumbers: phoneNumbers,
                                       givenName: phoneNumber.title ?? "",

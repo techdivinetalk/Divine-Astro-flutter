@@ -28,20 +28,21 @@ class LoginUI extends GetView<LoginController> {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
+              padding: const EdgeInsets.only(
+                left: 20,
+                right: 20,
+              ),
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(top: 50.h, bottom: 50.h),
+                    padding: EdgeInsets.only(top: 30.h),
                     child: Assets.images.divineLogo
                         .image(width: ScreenUtil().screenWidth * 0.55),
                   ),
-                  GetBuilder<LoginController>(
-                    builder: (controller) => imageSlider(),
-                  ),
-                  SizedBox(height: 10.h),
+                  const ImageSliderWidget(),
+                  SizedBox(height: 5.h),
                   mobileField(),
-                  SizedBox(height: 10.h),
+                  SizedBox(height: 5.h),
                   Text(
                     "You will get a call on the number given above for verification",
                     style: AppTextStyle.textStyle12(
@@ -49,70 +50,41 @@ class LoginUI extends GetView<LoginController> {
                     ),
                   ),
                   SizedBox(height: 10.h),
-                  Obx(
-                    () => CustomLightYellowButton(
-                      name: "Verify",
-                      onTaped: controller.enable.value
-                          ? () {
-                              if (_formKey.currentState!.validate()) {
-                                controller.enable.value = false;
-                                controller.login();
-                              }
+                  GestureDetector(
+                    onTap: controller.enable.value
+                        ? () {
+                            if (_formKey.currentState!.validate()) {
+                              controller.enable.value = false;
+                              controller.login();
                             }
-                          : () {},
+                          }
+                        : () {},
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: AppColors.lightYellow,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Center(
+                          child: Text(
+                            "Verify",
+                            style: AppTextStyle.textStyle16(
+                              fontWeight: FontWeight.w600,
+                              fontColor: AppColors.brownColour,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Widget imageSlider() {
-    return CarouselSlider(
-      options: CarouselOptions(
-          height: ScreenUtil().screenHeight * 0.40,
-          viewportFraction: 1,
-          autoPlay: true),
-      items: controller.images
-          .asMap()
-          .entries
-          .map((item) => Column(
-                children: [
-                  //item.value,
-                  //SizedBox(height: 10.h),
-                  Container(
-                    margin: EdgeInsets.only(top: 10.h),
-                    child: LoadImage(
-                      boxFit: BoxFit.fitHeight,
-                      imageModel: ImageModel(
-                        placeHolderPath: Assets.images.defaultProfile.path,
-                        imagePath: item.value.getImageUrl(controller.amazonUrl),
-                        loadingIndicator: SizedBox(
-                          width: 25.w,
-                          height: 25.h,
-                          child: const CircularProgressIndicator(
-                            color: Color(0XFFFDD48E),
-                            strokeWidth: 2,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 20.w),
-                        child: Html(
-                          data: controller.images[item.key].descriptioin
-                              .toString(),
-                        )),
-                  ),
-                ],
-              ))
-          .toList(),
     );
   }
 
@@ -198,6 +170,67 @@ class LoginUI extends GetView<LoginController> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ImageSliderWidget extends StatefulWidget {
+  const ImageSliderWidget({Key? key}) : super(key: key);
+
+  @override
+  State<ImageSliderWidget> createState() => _ImageSliderWidgetState();
+}
+
+class _ImageSliderWidgetState extends State<ImageSliderWidget> {
+  final controller = Get.find<LoginController>();
+  int swipeIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CarouselSlider(
+          options: CarouselOptions(
+            onPageChanged: (index, reason) {
+              setState(() => swipeIndex = index);
+            },
+            height: ScreenUtil().screenHeight * 0.48,
+            viewportFraction: 1,
+            autoPlay: true,
+          ),
+          items: controller.staticImages
+              .asMap()
+              .entries
+              .map((item) => Column(
+                    children: [
+                      item.value,
+                      Center(
+                        child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: 20.w),
+                          child: Text(controller.imageDec[item.key]),
+                        ),
+                      ),
+                    ],
+                  ))
+              .toList(),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: controller.staticImages
+              .asMap()
+              .entries
+              .map(
+                (e) => Container(
+                  margin: EdgeInsets.symmetric(vertical: 20.h, horizontal: 2.w),
+                  child: e.key == swipeIndex
+                      ? Assets.svg.pinkSlider
+                          .svg(color: AppColors.appYellowColour)
+                      : Assets.svg.blackDot.svg(),
+                ),
+              )
+              .toList(),
+        )
+      ],
     );
   }
 }
