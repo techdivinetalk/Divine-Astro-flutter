@@ -13,3 +13,4 @@ const yourServerSecret = '89ceddc6c59909af326ddb7209cb1c16';
 
 const userChatData = "userChatData";
 RxInt currentChatUserId = 8693.obs;
+int roleId = 7;

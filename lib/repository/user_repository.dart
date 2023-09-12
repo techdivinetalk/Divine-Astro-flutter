@@ -463,7 +463,7 @@ class UserRepository extends ApiProvider {
 
   Future<String> endCall(Map<String, dynamic> param) async {
     try {
-      final response = await post(agoraEndCall);
+      final response = await post(agoraEndCall,body: jsonEncode(param));
       if (response.statusCode == 200) {
         final loginImagesResponse = loginImagesFromJson(response.body);
         if (loginImagesResponse.statusCode == successResponse &&

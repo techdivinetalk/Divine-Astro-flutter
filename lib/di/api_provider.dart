@@ -230,8 +230,8 @@ class ApiProvider {
     endPoint ??= baseUrl;
     headers ??= await getAuthorisedHeader();
     if (await networkManager.isConnected() ?? false) {
-      // log('url: $endPoint$url');
-      // log('body: $body');
+       log('url: $endPoint$url');
+       log('body: $body');
       // log("headers: $headers");
       var response = await http
           .post(Uri.parse(endPoint + url),
@@ -242,7 +242,7 @@ class ApiProvider {
         }
         throw CustomException(AppString.timeoutMessage);
       });
-      // log('response: ${response.body}');
+       log('response: ${response.body}');
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);
