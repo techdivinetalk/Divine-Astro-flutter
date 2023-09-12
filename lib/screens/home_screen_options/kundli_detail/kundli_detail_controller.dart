@@ -42,24 +42,24 @@ class KundliDetailController extends GetxController {
 
   late final KundliRepository kundliRepository;
 
-  Map<String, dynamic> params = {
-  };
+  Map<String, dynamic> params = {};
   RxString subDashaPlanetName = ''.obs;
 
   Rx<AstroDetailsModel> astroDetails = AstroDetailsModel().obs;
   Rx<BirthDetailsModel> birthDetails = BirthDetailsModel().obs;
-  Rx<HoroChartModel> lagnaChart = HoroChartModel().obs, moonChart = HoroChartModel().obs, sunChart = HoroChartModel().obs, navamashaChart = HoroChartModel().obs;
+  Rx<HoroChartModel> lagnaChart = HoroChartModel().obs,
+      moonChart = HoroChartModel().obs,
+      sunChart = HoroChartModel().obs,
+      navamashaChart = HoroChartModel().obs;
   Rx<ManglikDoshModel> manglikDosh = ManglikDoshModel().obs;
   Rx<HoroChartModel> chalitChart = HoroChartModel().obs;
   Rx<KpDataModel> kpTableData = KpDataModel().obs;
   Rx<PlanetlDetailModel> planetDataDetail = PlanetlDetailModel().obs;
   Rx<DashaChartDataModel> dashaTableData = DashaChartDataModel().obs;
 
-
   Rx<KundliPredictionModel> kundliPrediction = KundliPredictionModel().obs;
 
   KundliDetailController(this.kundliRepository);
-
 
   RxBool isVimshottari = RxBool(true);
   RxBool isYogini = RxBool(false);
@@ -85,7 +85,8 @@ class KundliDetailController extends GetxController {
   void onInit() {
     super.onInit();
     if (_kundliController.submittedGender != Gender.female) {
-      detailPageImage[0] = Assets.images.icBoyKundli.svg(width: 87.w, height: 87.h);
+      detailPageImage[0] =
+          Assets.images.icBoyKundli.svg(width: 87.w, height: 87.h);
     }
     params = {
       "day": kundliController.submittedParams.day,
@@ -101,6 +102,7 @@ class KundliDetailController extends GetxController {
   }
 
   Rx<Params> kundliParams = Params().obs;
+
   getApiData() async {
     await Future.wait([
       astroDetailsApi(),
@@ -117,12 +119,11 @@ class KundliDetailController extends GetxController {
     ]);
   }
 
-
   //Dasha table Data
   Future<void> getDashaTableDataListAPI() async {
     try {
       DashaChartDataModel response =
-      await kundliRepository.getDashaChart(params);
+          await kundliRepository.getDashaChart(params);
       dashaTableData.value = response;
       update();
       log("dashaTableData==>${jsonEncode(kpTableData.value)}");
@@ -137,11 +138,10 @@ class KundliDetailController extends GetxController {
     update();
   }
 
-
   Future<void> getPlanetDataApiList(String planetName) async {
     try {
       PlanetlDetailModel response =
-      await kundliRepository.getPlanetDetailsAPI(params, planetName);
+          await kundliRepository.getPlanetDetailsAPI(params, planetName);
       planetDataDetail.value = response;
       log("planetDataDetail-->${jsonEncode(planetDataDetail.value.data)}");
       update();
@@ -159,7 +159,7 @@ class KundliDetailController extends GetxController {
   Future<void> chalitChartApi() async {
     try {
       HoroChartModel response =
-      await kundliRepository.getHoroChart(params, 'CHALIT');
+          await kundliRepository.getHoroChart(params, 'CHALIT');
       chalitChart.value = response;
       // log("chalitChart==>${jsonEncode(chalitChart.value)}");
 
@@ -174,7 +174,6 @@ class KundliDetailController extends GetxController {
     }
     update();
   }
-
 
   //KP table Data
   Future<void> getKpTableDataListAPI() async {
@@ -197,7 +196,8 @@ class KundliDetailController extends GetxController {
 
   Future<void> astroDetailsApi() async {
     try {
-      AstroDetailsModel response = await kundliRepository.getAstroDetails(params);
+      AstroDetailsModel response =
+          await kundliRepository.getAstroDetails(params);
       astroDetails.value = response;
       log("Data====>${jsonEncode(astroDetails)}");
     } catch (error) {
@@ -213,7 +213,8 @@ class KundliDetailController extends GetxController {
 
   Future<void> birthDetailsApi() async {
     try {
-      BirthDetailsModel response = await kundliRepository.getBirthDetails(params);
+      BirthDetailsModel response =
+          await kundliRepository.getBirthDetails(params);
       birthDetails.value = response;
     } catch (error) {
       debugPrint("error $error");
@@ -226,11 +227,10 @@ class KundliDetailController extends GetxController {
     update();
   }
 
-
-
   Future<void> lagnaChartApi() async {
     try {
-      HoroChartModel response = await kundliRepository.getHoroChart(params, ':chartId');
+      HoroChartModel response =
+          await kundliRepository.getHoroChart(params, ':chartId');
       lagnaChart.value = response;
       update();
     } catch (error) {
@@ -246,7 +246,8 @@ class KundliDetailController extends GetxController {
 
   Future<void> moonChartApi() async {
     try {
-      HoroChartModel response = await kundliRepository.getHoroChart(params, 'MOON');
+      HoroChartModel response =
+          await kundliRepository.getHoroChart(params, 'MOON');
       moonChart.value = response;
       update();
     } catch (error) {
@@ -262,7 +263,8 @@ class KundliDetailController extends GetxController {
 
   Future<void> sunChartApi() async {
     try {
-      HoroChartModel response = await kundliRepository.getHoroChart(params, 'SUN');
+      HoroChartModel response =
+          await kundliRepository.getHoroChart(params, 'SUN');
       sunChart.value = response;
       update();
     } catch (error) {
@@ -278,7 +280,8 @@ class KundliDetailController extends GetxController {
 
   Future<void> navamashaChartApi() async {
     try {
-      HoroChartModel response = await kundliRepository.getHoroChart(params, 'D9');
+      HoroChartModel response =
+          await kundliRepository.getHoroChart(params, 'D9');
       navamashaChart.value = response;
       update();
     } catch (error) {
@@ -294,7 +297,8 @@ class KundliDetailController extends GetxController {
 
   Future<void> mangalikDoshApi() async {
     try {
-      ManglikDoshModel response = await kundliRepository.getManglikDoshDetails(params);
+      ManglikDoshModel response =
+          await kundliRepository.getManglikDoshDetails(params);
       manglikDosh.value = response;
       update();
     } catch (error) {
@@ -308,10 +312,10 @@ class KundliDetailController extends GetxController {
     update();
   }
 
-
   Future<void> kundliPredictionApi() async {
     try {
-      KundliPredictionModel response = await kundliRepository.getKundliPredictionDetails(params);
+      KundliPredictionModel response =
+          await kundliRepository.getKundliPredictionDetails(params);
       kundliPrediction.value = response;
       update();
     } catch (error) {
