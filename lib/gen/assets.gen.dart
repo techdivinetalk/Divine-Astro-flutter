@@ -691,6 +691,14 @@ class $AssetsSvgGen {
   /// File path: assets/svg/mute.svg
   SvgGenImage get mute => const SvgGenImage('assets/svg/mute.svg');
 
+  /// File path: assets/svg/please_register_1.svg
+  SvgGenImage get pleaseRegister1 =>
+      const SvgGenImage('assets/svg/please_register_1.svg');
+
+  /// File path: assets/svg/please_register_2.svg
+  SvgGenImage get pleaseRegister2 =>
+      const SvgGenImage('assets/svg/please_register_2.svg');
+
   /// File path: assets/svg/reply.svg
   SvgGenImage get reply => const SvgGenImage('assets/svg/reply.svg');
 
@@ -709,6 +717,8 @@ class $AssetsSvgGen {
         greyContainer,
         icAdd,
         mute,
+        pleaseRegister1,
+        pleaseRegister2,
         reply,
         switchCamera,
         videoMute

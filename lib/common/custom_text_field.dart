@@ -8,6 +8,7 @@ class CustomTextField extends StatelessWidget {
   const CustomTextField(
       {Key? key,
       this.controller,
+      this.onSubmit,
       this.validator,
       this.enabled = true,
       this.keyboardType = TextInputType.name,
@@ -24,7 +25,8 @@ class CustomTextField extends StatelessWidget {
       this.inputBorder,
       this.fillColor,
       this.suffixIconPadding,
-      this.textInputFormatter})
+      this.textInputFormatter,
+      this.inputAction})
       : super(key: key);
 
   final TextEditingController? controller;
@@ -33,6 +35,7 @@ class CustomTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final bool showCursor;
   final void Function()? onTap;
+  final void Function(String value)? onSubmit;
   final FocusNode? focusNode;
   final String? hintText;
   final Widget? prefixIcon;
@@ -45,6 +48,7 @@ class CustomTextField extends StatelessWidget {
   final Color? fillColor;
   final InputBorder? inputBorder;
   final List<TextInputFormatter>? textInputFormatter;
+  final TextInputAction? inputAction;
 
   OutlineInputBorder get border => OutlineInputBorder(
         borderSide: BorderSide(
@@ -60,6 +64,11 @@ class CustomTextField extends StatelessWidget {
       child: SizedBox(
         height: height,
         child: TextFormField(
+          onFieldSubmitted: (value) {
+            onSubmit!(value);
+          },
+          textAlignVertical: TextAlignVertical.bottom,
+          textInputAction: inputAction ?? TextInputAction.done,
           onTap: onTap,
           focusNode: focusNode,
           enabled: enabled,
@@ -93,7 +102,7 @@ class CustomTextField extends StatelessWidget {
             hintStyle: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w400,
-              color: AppColors.darkBlue.withOpacity(0.5),
+              color: AppColors.white.withOpacity(0.5),
             ),
             enabledBorder: inputBorder ?? border,
             focusedBorder: inputBorder ?? border,
