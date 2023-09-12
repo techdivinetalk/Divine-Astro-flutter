@@ -135,7 +135,7 @@ class LivePageState extends State<LivePage>
         timeController.reset();
         controller.setBusyStatus(widget.localUserID, 0, customerId: "");
         liveController.connect.removeCoHost(controller.coHostUser!);
-        controller.removeFromWaitList();
+        controller.endCall();
         controller.isCoHosting.value = false;
       }
     });
@@ -851,6 +851,7 @@ class LivePageState extends State<LivePage>
                                   liveController.connect
                                       .removeCoHost(controller.coHostUser!);
                                   controller.removeFromWaitList();
+                                  controller.endCall();
                                   controller.isCoHosting.value = false;
                                 });
                           },

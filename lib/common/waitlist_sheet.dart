@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import '../gen/assets.gen.dart';
 import '../screens/live_page/live_controller.dart';
 import 'colors.dart';
-import 'package:async/async.dart' show StreamGroup;
 import 'custom_widgets.dart';
 
 class WaitList extends StatelessWidget {
@@ -19,7 +18,6 @@ class WaitList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var ref = database.ref().child("live/$astroId/waitList");
     return Material(
       color: AppColors.transparent,
       child: Column(
@@ -157,6 +155,7 @@ class WaitList extends StatelessWidget {
                         var item = snapshot.data!.children.toList().first;
                         var data = item.value as Map;
                         return Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             SizedBox(height: 32.h),
                             Align(
@@ -202,30 +201,23 @@ class WaitList extends StatelessWidget {
                               ),
                             ),
                             SizedBox(height: 20.h),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(width: 20.w),
-                                Expanded(
-                                  child: SizedBox(
-                                    height: 56.h,
-                                    child: CustomButton(
-                                        onTap: () {
-                                          onAccept!(data["id"],data["name"]);
-                                        },
-                                        color: AppColors.appYellowColour,
-                                        radius: 28,
-                                        child: Center(
-                                          child: CustomText("Accept",
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.bold,
-                                              fontColor: AppColors.brownColour),
-                                        )),
-                                  ),
-                                ),
-                                SizedBox(width: 20.w),
-                              ],
-                            )
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 20.w),
+                              width: Get.width,
+                              height: 56.h,
+                              child: CustomButton(
+                                  onTap: () {
+                                    onAccept!(data["id"],data["name"]);
+                                  },
+                                  color: AppColors.appYellowColour,
+                                  radius: 28,
+                                  child: Center(
+                                    child: CustomText("Accept",
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.bold,
+                                        fontColor: AppColors.brownColour),
+                                  )),
+                            ),
                           ],
                         );
                       }

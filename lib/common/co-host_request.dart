@@ -9,8 +9,9 @@ import 'custom_widgets.dart';
 class CoHostRequest extends StatelessWidget {
   final VoidCallback? onReject, onAccept;
   final String? name;
+  final int? duration;
 
-  const CoHostRequest({Key? key, this.onReject, this.onAccept, this.name})
+  const CoHostRequest({Key? key, this.onReject, this.onAccept, this.name,this.duration})
       : super(key: key);
 
   @override
@@ -51,7 +52,7 @@ class CoHostRequest extends StatelessWidget {
                       const Icon(Icons.call,
                           color: AppColors.darkBlue, size: 16),
                       SizedBox(width: 10.w),
-                      CustomText("09 M 38 S",
+                      CustomText(intToTimeLeft(duration ?? 0),
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                           fontColor: AppColors.darkBlue),
@@ -64,27 +65,6 @@ class CoHostRequest extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(width: 20.w),
-                   /* SizedBox(width: 20.w),
-                    Expanded(
-                      child: SizedBox(
-                        height: 56.h,
-                        child: CustomButton(
-                            onTap: () {
-                              onReject!.call();
-                              Get.back();
-                            },
-                            color: AppColors.white,
-                            border: Border.all(color: AppColors.darkBlue),
-                            radius: 28,
-                            child: Center(
-                              child: CustomText("Reject",
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.bold,
-                                  fontColor: AppColors.darkBlue),
-                            )),
-                      ),
-                    ),
-                    SizedBox(width: 10.w),*/
                     Expanded(
                       child: SizedBox(
                         height: 56.h,
@@ -113,4 +93,16 @@ class CoHostRequest extends StatelessWidget {
       ),
     );
   }
+}
+String intToTimeLeft(int value) {
+  int h, m, s;
+
+  h = value ~/ 3600;
+
+  m = ((value - h * 3600)) ~/ 60;
+
+  s = value - (h * 3600) - (m * 60);
+
+  String result = "$h h $m m $s s";
+  return result;
 }
