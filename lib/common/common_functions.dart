@@ -49,14 +49,19 @@ Future<String> uploadImageToS3Bucket(
   }
 }
 
-void checkNotification() async {
-  final snapshot = await FirebaseDatabase.instance
-      .ref()
-      .child("astrologer/${userData?.id}/realTime/notification")
-      .get();
-  if (snapshot.value != null) {
-    var notificationList = snapshot.value as Map;
-
+void checkNotification(
+    {required bool isFromNotification, Map? updatedData}) async {
+  Map notificationList;
+  if (isFromNotification) {
+    final snapshot = await FirebaseDatabase.instance
+        .ref()
+        .child("astrologer/${userData?.id}/realTime/notification")
+        .get();
+    notificationList = snapshot.value as Map;
+  } else {
+    notificationList = updatedData!;
+  }
+  if (notificationList.isNotEmpty) {
     notificationList.forEach((key, value) async {
       var newMessage = ChatMessage(
           id: int.parse(key),
@@ -104,7 +109,7 @@ void checkNotification() async {
       }
     });
     removeNotificationNode();
-    debugPrint("$snapshot");
+    debugPrint("$notificationList");
   }
 }
 

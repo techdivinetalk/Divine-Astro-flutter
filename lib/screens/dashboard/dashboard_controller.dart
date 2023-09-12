@@ -13,6 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../common/common_functions.dart';
 import '../../di/fcm_notification.dart';
+import '../../model/chat/res_astro_chat_listener.dart';
 import '../../model/res_login.dart';
 
 class DashboardController extends GetxController
@@ -27,7 +28,8 @@ class DashboardController extends GetxController
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
   UserData? userData;
-  StreamSubscription<DatabaseEvent>? notiticationCheck;
+  StreamSubscription<DatabaseEvent>? realTimeListener;
+  StreamSubscription<DatabaseEvent>? astroChatListener;
 
   @override
   void onInit() async {
@@ -50,21 +52,65 @@ class DashboardController extends GetxController
   void onReady() {
     super.onReady();
     userData = preferenceService.getUserDetail();
-    notiticationCheck ??= FirebaseDatabase.instance
+    realTimeListener ??= FirebaseDatabase.instance
         .ref("astrologer/${userData?.id}/realTime/notification")
         .onValue
-        .listen((event) {
-      debugPrint("Your event $event");
-      checkNotification();
-      debugPrint("Value has been updated: ${event.snapshot.value}");
+        .listen((DatabaseEvent event) {
+      if (event.snapshot.value is Map) {
+        final data = event.snapshot.value as Map;
+        debugPrint("RealTime Lister value : $data");
+        // walletBalance.value = data["walletBalance"] as int;
+        if (data["notification"] != null) {
+          checkNotification(
+              isFromNotification: false, updatedData: data["notification"]);
+        }
+      }
+    });
+    astroChatListener ??= FirebaseDatabase.instance
+        .ref("astroChat")
+        .onValue
+        .listen((DatabaseEvent event) {
+      if (event.snapshot.value is Map) {
+        for (final dataSnapShot in event.snapshot.children) {
+          if (int.tryParse(dataSnapShot.key!) == userData!.id &&
+              dataSnapShot.value != null) {
+            DataSnapshot innerChild = dataSnapShot.children.first;
+
+            final value = innerChild.value as Map;
+            if (value['status'] == 1) {
+              var astroChat = ResAstroChatListener(
+                astroId: value['astroId'],
+                astroImage: value['astroImage'],
+                astroName: value['astroName'],
+                chatMessage: value['chat_message'],
+                customeName: value['custome_name'],
+                customerImage: value['customer_image'],
+                extraTalktime: value['extra_talktime'],
+                isRechargeContinue: value['is_recharge_continue'],
+                isTimeout: value['is_timeout'],
+                ivrTime: value['ivr_time'],
+                notification: value['notification'],
+                orderId: value['orderId'],
+                orderType: value['orderType'],
+                queueId: value['queue_id'],
+                status: value['status'],
+              );
+              debugPrint("Updated chat -- $astroChat");
+              Get.toNamed(RouteName.videoCallPage, arguments: astroChat);
+            }
+
+            return;
+          }
+        }
+      } else {}
     });
   }
 
   @override
   void onClose() {
     super.onClose();
-    if (notiticationCheck != null) {
-      notiticationCheck!.cancel();
+    if (realTimeListener != null) {
+      realTimeListener!.cancel();
     }
   }
 
@@ -86,10 +132,10 @@ class DashboardController extends GetxController
       try {
         permissionStatus = await _getContactPermission();
         if (permissionStatus != PermissionStatus.granted) {
-          await openAppSettings();
+          // await openAppSettings();
         } else {}
       } catch (e) {
-        await openAppSettings();
+        // await openAppSettings();
       }
     }
   }

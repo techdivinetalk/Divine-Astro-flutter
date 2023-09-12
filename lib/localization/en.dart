@@ -237,6 +237,7 @@ Map<String, String> en() {
     "confirmTimeBirth": "Confirm Time of Birth",
     "selectYourTimeBirth": "Select Your Time of Birth",
     "birthDate": "Birth Date",
+    "jobTitle": "Great Job! No one is in wait list.",
     "confirmDateBirth": "Confirm Date of Birth",
     "selectYourDateBirth": "Select Your Date of Birth",
     "scheduleNow": "Schedule Now",

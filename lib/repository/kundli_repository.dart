@@ -17,9 +17,12 @@ import '../common/routes.dart';
 import '../model/get_kundli_data.dart' as kundli_data;
 import '../model/internal/astro_details_model.dart';
 import '../model/internal/birth_details_model.dart';
+import '../model/internal/dasha_chart_data_model.dart';
 import '../model/internal/horo_chart_model_class.dart';
+import '../model/internal/kp_data_model.dart';
 import '../model/internal/kundli_prediction_model.dart';
 import '../model/internal/manglik_dosh_model.dart';
+import '../model/internal/planet_detail_model.dart';
 
 class KundliRepository extends ApiProvider {
   //done
@@ -63,27 +66,6 @@ class KundliRepository extends ApiProvider {
     }
   }
 
-//done
-  Future<ManglikDoshModel> getKalsarpaDoshDetails(
-      Map<String, dynamic> params) async {
-    try {
-      final response = await post(getManglikDetailsInt,
-
-          headers: await getJsonHeaderURL(version: 7),
-          body: jsonEncode(params));
-      if (response.statusCode == 200) {
-        final kalsarpaDoshDetails = manglikDoshModelFromJson(response.body);
-        return kalsarpaDoshDetails;
-      } else {
-        debugPrint('Json: ${jsonDecode(response.body)['error'][0]['message']}');
-        throw CustomException(
-            json.decode(response.body)["error"][0]['message']);
-      }
-    } catch (e, s) {
-      debugPrint("we got $e $s");
-      rethrow;
-    }
-  }
 
 //done
   Future<ManglikDoshModel> getManglikDoshDetails(
@@ -98,26 +80,6 @@ class KundliRepository extends ApiProvider {
         return manglikDosh;
       } else {
         debugPrint('Json: ${jsonDecode(response.body)['error']}');
-        throw CustomException(json.decode(response.body)["error"]);
-      }
-    } catch (e, s) {
-      debugPrint("we got $e $s");
-      rethrow;
-    }
-  }
-
-//done
-  Future<ManglikDoshModel> getPitraDoshDetails(
-      Map<String, dynamic> params) async {
-    try {
-      final response = await post(getManglikDetailsInt,
-
-          headers: await getJsonHeaderURL(version: 7),
-          body: jsonEncode(params));
-      if (response.statusCode == 200) {
-        final pitraDosh = manglikDoshModelFromJson(response.body);
-        return pitraDosh;
-      } else {
         throw CustomException(json.decode(response.body)["error"]);
       }
     } catch (e, s) {
@@ -148,27 +110,6 @@ class KundliRepository extends ApiProvider {
     }
   }
 
-  //done
-  Future<ManglikDoshModel> getSadesathiDoshDetails(
-      Map<String, dynamic> params) async {
-    try {
-      final response = await post(getManglikDetailsInt,
-
-          headers: await getJsonHeaderURL(version: 7),
-          body: jsonEncode(params));
-      if (response.statusCode == 200) {
-        final sadesathiDosh = manglikDoshModelFromJson(response.body);
-        return sadesathiDosh;
-      } else {
-        debugPrint('Json: ${jsonDecode(response.body)['error'][0]['message']}');
-        throw CustomException(
-            json.decode(response.body)["error"][0]['message']);
-      }
-    } catch (e, s) {
-      debugPrint("we got $e $s");
-      rethrow;
-    }
-  }
 
   //done
   Future<KundliPredictionModel> getKundliPredictionDetails(
@@ -219,4 +160,68 @@ class KundliRepository extends ApiProvider {
       rethrow;
     }
   }
+
+
+  //KP chart Data
+  Future<KpDataModel> getKpTableData(Map<String, dynamic> params) async {
+    try {
+      final response = await post(getKpDetails,
+          // endPoint: astrologyBaseUrl,
+          // headers: getAstrologyHeader(),
+          body: jsonEncode(params));
+      if (response.statusCode == 200) {
+        final kpData = kpDataModelFromJson(response.body);
+        return kpData;
+
+      } else {
+        debugPrint('Json: ${jsonDecode(response.body)['error']}');
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<PlanetlDetailModel> getPlanetDetailsAPI(
+      Map<String, dynamic> params, String planetId) async {
+    try {
+      final response = await post('$getPlanetlDetails$planetId',
+          // endPoint: astrologyBaseUrl,
+          // headers: getAstrologyHeader(),
+          body: jsonEncode(params));
+      if (response.statusCode == 200) {
+        final planetData = planetlDetailModelFromJson(response.body);
+        return planetData;
+      } else {
+        throw CustomException(
+            json.decode(response.body)["error"][0]["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  //dasha chart
+  Future<DashaChartDataModel> getDashaChart(Map<String, dynamic> params) async {
+    try {
+      final response = await post(getDasha,
+          // endPoint: astrologyBaseUrl,
+          // headers: getAstrologyHeader(),
+          body: jsonEncode(params));
+      if (response.statusCode == 200) {
+        final kpData = dashaDataModelFromJson(response.body);
+        return kpData;
+
+      } else {
+        debugPrint('Json: ${jsonDecode(response.body)['error']}');
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
 }

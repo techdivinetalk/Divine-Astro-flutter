@@ -42,9 +42,7 @@ class SwitchWidget extends StatelessWidget {
       ),
       activeColor: Colors.white,
       inactiveColor: Colors.white,
-      onToggle: (val) {
-        onTap!();
-      },
+      onToggle: (val) => onTap!(),
     );
   }
 }

@@ -87,7 +87,7 @@ class LoginController extends GetxController {
     FirebaseUserData firebaseUserData = FirebaseUserData(
       data.data!.name!,
       data.data!.deviceToken!,
-      data.data!.image!,
+      data.data!.image ?? "",
       RealTime(
           isEngagedStatus: 0,
           uniqueId: data.data!.deviceModel ?? "",

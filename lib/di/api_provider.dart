@@ -49,6 +49,8 @@ class ApiProvider {
   final String getKundliData = "getKundliData";
   final String getHomePageData = "astroDashboard";
   final String agoraEndCall = "agoraEndCall";
+  final String getWaitingListQueue="getWaitingListQueue";
+  final String getImportantNumber="getImportantNumber";
 
   //Astro Internal API
   final String horoChartImageInt = "getChartImage/";
@@ -56,6 +58,9 @@ class ApiProvider {
   final String getBirthDetailsInt = "getBirthDetails";
   final String getManglikDetailsInt = "getManglikDetails";
   final String getGeneralNakshatraReportInt = "getGeneralNakshatraReport";
+  final String getKpDetails = "getKpDetails";
+  final String getPlanetlDetails = "getPlanetlDetails/";
+  final String getDasha = "getDasha";
 
   //Kundli APIs
   final String astrologyBaseUrl = "https://json.astrologyapi.com/v1/";
@@ -109,8 +114,8 @@ class ApiProvider {
     header[jsonHeaderName] = jsonHeaderValue;
     header[jsonAuthenticationName] = 'Bearer $_token';
     header[jsonCookieName] = version == 6
-        ? 'XSRF-TOKEN=eyJpdiI6Ii9XZXZTMmtHdFZrRml3V0NENHNJQUE9PSIsInZhbHVlIjoibExkdm9ObFJNbG1QWlZMSDJ3cWxJRHFjbk1qUVJFOEZjc0M4K3Q2K2s3UVJsazhpQjZ2WmZYU3o5SjBGQ09LTTRjckk0TVEvVEEwcklDMHJqSjVRYTdjY3hsaktMVWxlSkV0UVhUd21GUmdNNDBlU3hROHpMOFhMK2VOREljbFIiLCJtYWMiOiI5YTM2NDA4NWIyZGNlZTNjZjRiOWFlMjFiZjE5NjYzMGEyZDM4YzE4ZGJlYmEzYWMzZWRiZjZjODhiYzI3YTNiIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6Ilo2T0FFd0dpeEgzcStDUkx6T2VoaUE9PSIsInZhbHVlIjoicHY1TDB1ZWVwK0ppemVvVzM2TDdDMklQNTBaTUV0dUtLQlhBY00vdVk2SzhDM0E1WWJQdmY2UWRLT21kbHVLUi9vbEFuVDJzUkJienZJeWFXSHZTcWEwZUJhSGhuSlhVSFZRTXM1alFXZnBHZlJGNTVCWVA3UzBqbDNadkw0UkciLCJtYWMiOiI4NDllOWQ4N2Y0ZjM5YjU0NDdiZWVkNWVkZGZiZjgxYWU2YzgzOGQ1ZmQ3NmIwZjViZjA4Mjc2MzhlMjQyNDAxIiwidGFnIjoiIn0%3D'
-        : "XSRF-TOKEN=eyJpdiI6IkFuR3pFWGFRaUxXYzI2Y3VHNjY0cXc9PSIsInZhbHVlIjoiWlFVNWMzbGF1R2k0ME1Qc0FUYXpQUU1VWjBnbUhoSCtjSDA2ZzQzS21qUGdRN3lqK1JXTEErM2dDa2VlNTAvYzRBNGRPeFNuVDFGUklDOFo4c1FnelBBVlBOZkhDNUs2Tk1kazVUT1d5SEVEbzh0Nnoyb0VXM2tOM1A5OUpQVDciLCJtYWMiOiI5MmJkNjg5YzEyNmVlNmZiMzcxZmExNTY0ODg0MDlkMDRjMzY3OGU0YzBmOTZjNjE3NTU1OGM4MjVkZDVkMDUzIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6ImJ4UE9WaUIwa3l2cXF5MjBWRkR2aHc9PSIsInZhbHVlIjoicU1ZNlAwT0RQWXR6UmFJeW95UkxKVzBoOUE3d3Vld2k4NVN4WmhMc2J4aE4ycGt6WXV2THVjL0hYamFJblUvTkV2MDNIU05pWWJnQnIyYlA3bEthUFZnTG04TFFPczZhZnlmU2hObVVXcVJHby83Ump2QTlnT2dESkczSnZFREwiLCJtYWMiOiJhMjYzOGJiMGUxZTM3NjcxYWZkZWFhMTU0MDEyNzZiYjQwNzdlOTU0YTcwNjUxYTJiMWE5NzY4NGQ3ZGE1Mjk2IiwidGFnIjoiIn0%3D";
+        ? 'XSRF-TOKEN=eyJpdiI6IjhaSkFBQklkdXowbGsvWWw2ODNRZ3c9PSIsInZhbHVlIjoiN3FndjFHVVRZU2JjeWQ0ekdrVDBHTEdXYTJ5Z1Z5T3d2ODJ5MmpWaFdwMi9QV0I3L0RUcGdHQStxRWxDLzBHVW4vL25yT1Y3Z3R0TExzek16dTRvb3BtelpnY2UrYitzbW9DL21lZ1U4eUJQRGpYZXp5YmRMR0Z6Z3JPYkNUQTIiLCJtYWMiOiIwMjE0MjgxMGJiZDM4NmVkYjg5YjVmYmYxNDhkY2NjNGEzNTE0ZjU2ZTc4ODQxMzk3YWU5MjQ5NjA3YzdmZWVhIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6InhIc2EyV2YveDkyT0ZNUjJ5T3pFTGc9PSIsInZhbHVlIjoiYnZ2SElvSnVyUHhVTWxOTHRTSzlQNDlFYUJxT1A1Nkx1SDByVkl4bU1oS29NQm4vT1JJNTV5TlZEcnl0M1F1WS8vZFQ1UzRFN3pCekRpQklMTE56Y2NadnQyamlVVDY1OU01dlU5czhUYUlPZDh5TTJ6cENzWmhWVitaUGtnVUQiLCJtYWMiOiI5ZmIyMmY4Zjc3ZDg5ZWE1ZmFlNTZlNzVkNjE1OGUxYmZjZGExNDNmYjg4ZTg4MTdlMTUyZDM2NjQzMTIyN2IzIiwidGFnIjoiIn0%3D'
+        : "XSRF-TOKEN=eyJpdiI6IjhaSkFBQklkdXowbGsvWWw2ODNRZ3c9PSIsInZhbHVlIjoiN3FndjFHVVRZU2JjeWQ0ekdrVDBHTEdXYTJ5Z1Z5T3d2ODJ5MmpWaFdwMi9QV0I3L0RUcGdHQStxRWxDLzBHVW4vL25yT1Y3Z3R0TExzek16dTRvb3BtelpnY2UrYitzbW9DL21lZ1U4eUJQRGpYZXp5YmRMR0Z6Z3JPYkNUQTIiLCJtYWMiOiIwMjE0MjgxMGJiZDM4NmVkYjg5YjVmYmYxNDhkY2NjNGEzNTE0ZjU2ZTc4ODQxMzk3YWU5MjQ5NjA3YzdmZWVhIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6InhIc2EyV2YveDkyT0ZNUjJ5T3pFTGc9PSIsInZhbHVlIjoiYnZ2SElvSnVyUHhVTWxOTHRTSzlQNDlFYUJxT1A1Nkx1SDByVkl4bU1oS29NQm4vT1JJNTV5TlZEcnl0M1F1WS8vZFQ1UzRFN3pCekRpQklMTE56Y2NadnQyamlVVDY1OU01dlU5czhUYUlPZDh5TTJ6cENzWmhWVitaUGtnVUQiLCJtYWMiOiI5ZmIyMmY4Zjc3ZDg5ZWE1ZmFlNTZlNzVkNjE1OGUxYmZjZGExNDNmYjg4ZTg4MTdlMTUyZDM2NjQzMTIyN2IzIiwidGFnIjoiIn0%3D";
     return header;
   }
 
@@ -225,9 +230,9 @@ class ApiProvider {
     endPoint ??= baseUrl;
     headers ??= await getAuthorisedHeader();
     if (await networkManager.isConnected() ?? false) {
-      log('url: $endPoint$url');
-      log('body: $body');
-      log("headers: $headers");
+      // log('url: $endPoint$url');
+      // log('body: $body');
+      // log("headers: $headers");
       var response = await http
           .post(Uri.parse(endPoint + url),
               headers: headers, body: body, encoding: encoding)
@@ -237,7 +242,7 @@ class ApiProvider {
         }
         throw CustomException(AppString.timeoutMessage);
       });
-      log('response: ${response.body}');
+      // log('response: ${response.body}');
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);

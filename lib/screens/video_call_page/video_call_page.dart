@@ -25,7 +25,7 @@ class VideoCallPage extends GetView<VideoCallPageController> {
               // assistUI(),
               // closeButton(),
               acceptUI(),
-              closeButton(color: AppColors.white),
+              if (!controller.isForChat) closeButton(color: AppColors.white),
             ],
           ),
         ),
@@ -47,14 +47,14 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                   Assets.images.icBoyKundli.svg(width: 128.w),
                   SizedBox(height: 20.h),
                   CustomText(
-                    'Customer Name',
+                    controller.name,
                     fontSize: 20.sp,
                     fontColor: AppColors.appYellowColour,
                     fontWeight: FontWeight.w600,
                   ),
                   SizedBox(height: 5.h),
                   CustomText(
-                    'wants to do video call with you!',
+                    controller.featureText,
                     fontSize: 20.sp,
                     fontColor: AppColors.white,
                     fontWeight: FontWeight.w600,
@@ -62,13 +62,13 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                   SizedBox(height: 24.h),
                   const Divider(color: AppColors.lightGrey),
                   SizedBox(height: 24.h),
-                  detailRow('Name', 'Vimal Gosain'),
-                  detailRow('Gender', 'Male'),
-                  detailRow('DOB', '16-April-1998'),
-                  detailRow('POB', 'New Delhi, New Delhi, Delhi, India'),
-                  detailRow('TOB', '9:30 PM'),
-                  detailRow('Marital Status', 'Single'),
-                  detailRow('Problem Area', 'Love and Relationship'),
+                  detailRow('Name', controller.name),
+                  detailRow('Gender', controller.gender),
+                  detailRow('DOB', controller.dob),
+                  detailRow('POB', controller.pob),
+                  detailRow('TOB', controller.tob),
+                  detailRow('Marital Status', controller.maritalStatus),
+                  detailRow('Problem Area', controller.problemArea),
                 ],
               ),
             ),
@@ -80,7 +80,9 @@ class VideoCallPage extends GetView<VideoCallPageController> {
             children: [
               Expanded(
                 child: FilledButton(
-                  onPressed: () => Get.toNamed(RouteName.videoCall),
+                  onPressed: () {
+                    controller.onAccept();
+                  },
                   style: FilledButton.styleFrom(
                     backgroundColor: AppColors.lightYellow,
                     padding: EdgeInsets.symmetric(vertical: 20.h),

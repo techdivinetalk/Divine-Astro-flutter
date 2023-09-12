@@ -10,6 +10,7 @@ import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
+
 import '../../../common/appbar.dart';
 import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';
@@ -426,8 +427,8 @@ class HomeUI extends GetView<HomeController> {
                 ),
                 SizedBox(height: 20.h),
                 Obx(
-                      () => SwitchWidget(
-                    onTap: () {},
+                  () => SwitchWidget(
+                    onTap: () => controller.videoCallSwitchFN(),
                     switchValue: controller.videoSwitch.value,
                   ),
                 ),
@@ -710,6 +711,7 @@ class HomeUI extends GetView<HomeController> {
                 // maxLength: 96,
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
+                onTapOutside: (value) => FocusScope.of(Get.context!).unfocus(),
                 decoration: InputDecoration(
                   hintText: "feedbackHintText".tr,
                   hintStyle: const TextStyle(

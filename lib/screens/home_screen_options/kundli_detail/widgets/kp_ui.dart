@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../../../../common/app_textstyle.dart';
 import '../../../../common/colors.dart';
-
+import '../../../../common/custom_progress_dialog.dart';
+import '../../../../model/internal/kp_data_model.dart';
+import '../kundli_detail_controller.dart';
 
 class KpUI extends StatelessWidget {
-  const KpUI({super.key});
+  final KundliDetailController controller;
+
+  const KpUI({Key? key, required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,31 +21,49 @@ class KpUI extends StatelessWidget {
         children: [
           SizedBox(height: kToolbarHeight.h * 2.5),
           SizedBox(height: 40.h),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                details(
-                    title: "bhavChalitChart".tr,
-                    details: "Chart"
-                    // details: controller.manglikDosh.value.manglikReport == null
-                    //     ? ""
-                    //     : controller.manglikDosh.value.manglikReport!
+          Obx(
+                ()=> AnimatedCrossFade(
+              duration: const Duration(milliseconds: 200),
+              crossFadeState: controller.chalitChart.value.data?.svg == null
+                  ? CrossFadeState.showSecond
+                  : CrossFadeState.showFirst,
+              secondChild: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  SizedBox(height: kToolbarHeight.h * 2.5),
+                  SizedBox(height: 50.h),
+                  const LoadingWidget(),
+                ],
+              ),
+              firstChild: Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("bhavChalitChart".tr,
+                        style: AppTextStyle.textStyle20(
+                            fontWeight: FontWeight.w500,
+                            fontColor: AppColors.appYellowColour)),
+                    SizedBox(height: 15.h),
+                    SvgPicture.string(
+                      controller.chalitChart.value.data?.svg ?? '',
                     ),
-                SizedBox(
-                  height: 20.h,
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    // rulingPlanetsWidget(),
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    planetsWidget(controller.kpTableData),
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    cuspsWidget(controller.kpTableData),
+                  ],
                 ),
-                rulingPlanetsWidget(),
-                SizedBox(
-                  height: 20.h,
-                ),
-                planetsWidget(),
-                SizedBox(
-                  height: 20.h,
-                ),
-                cuspsWidget(),
-              ],
+              ),
             ),
           ),
         ],
@@ -48,7 +71,7 @@ class KpUI extends StatelessWidget {
     );
   }
 
-  Widget cuspsWidget() {
+  Widget cuspsWidget(Rx<KpDataModel> kpTableData) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -60,82 +83,88 @@ class KpUI extends StatelessWidget {
           height: 20.h,
         ),
         Table(
-            // border: TableBorder.all(color: Colors.grey, width: 1.1),
             border: const TableBorder(
-                verticalInside: BorderSide(
-                    width: 1, color: Colors.grey, style: BorderStyle.solid),
-                horizontalInside: BorderSide(
-                    width: 1, color: Colors.grey, style: BorderStyle.solid)),
-            children: [
-              TableRow(
-                  // decoration: BoxDecoration(color: Colors.amber),
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12.h),
-                      child: Text(
-                        'Planet',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: Colors.brown),
+              verticalInside: BorderSide(
+                  width: 1, color: Colors.grey, style: BorderStyle.solid),
+            ),
+            children: List.generate(
+                kpTableData.value.data?.cusps?.length ?? 0 + 1, (index) {
+              if (index == 0) {
+                return TableRow(
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(width: 1, color: Colors.grey),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12.h),
-                      child: Text(
-                        'Cusp',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: Colors.brown),
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        child: Text(
+                          'Cusp',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w500,
+                              fontColor: Colors.brown),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12.h),
-                      child: Text(
-                        'Sign',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: Colors.brown),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        child: Text(
+                          'Degree',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w500,
+                              fontColor: Colors.brown),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12.h),
-                      child: Text(
-                        'Sign\nLord',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: Colors.brown),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        child: Text(
+                          'Sign',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w500,
+                              fontColor: Colors.brown),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12.h),
-                      child: Text(
-                        'Star\nLord',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: Colors.brown),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        child: Text(
+                          'Sign\nLord',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w500,
+                              fontColor: Colors.brown),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12.h),
-                      child: Text(
-                        'Sub\nLord',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: Colors.brown),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        child: Text(
+                          'Star\nLord',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w500,
+                              fontColor: Colors.brown),
+                        ),
                       ),
-                    ),
-                  ]),
-              TableRow(children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        child: Text(
+                          'Sub\nLord',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w500,
+                              fontColor: Colors.brown),
+                        ),
+                      ),
+                    ]);
+              }
+              Cusp? cupsData = kpTableData.value.data?.cusps?[index];
+              return TableRow(children: [
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 12.h),
                   child: Text(
-                    'Sun',
+                    "${cupsData?.houseId ?? ""}",
                     textAlign: TextAlign.center,
                     style: AppTextStyle.textStyle10(
                         fontColor: Colors.black, fontWeight: FontWeight.w400),
@@ -144,7 +173,7 @@ class KpUI extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 12.h),
                   child: Text(
-                    '1',
+                    cupsData?.cuspFullDegree.toString() ?? "",
                     textAlign: TextAlign.center,
                     style: AppTextStyle.textStyle10(
                         fontColor: Colors.black, fontWeight: FontWeight.w400),
@@ -153,7 +182,7 @@ class KpUI extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 12.h),
                   child: Text(
-                    'Aquarius',
+                    cupsData?.sign ?? "",
                     textAlign: TextAlign.center,
                     style: AppTextStyle.textStyle10(
                         fontColor: Colors.black, fontWeight: FontWeight.w400),
@@ -162,7 +191,7 @@ class KpUI extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 12.h),
                   child: Text(
-                    'Ma',
+                    cupsData?.signLord ?? "",
                     textAlign: TextAlign.center,
                     style: AppTextStyle.textStyle10(
                         fontColor: Colors.black, fontWeight: FontWeight.w400),
@@ -171,7 +200,7 @@ class KpUI extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 12.h),
                   child: Text(
-                    'Ke',
+                    cupsData?.nakshatraLord ?? "",
                     textAlign: TextAlign.center,
                     style: AppTextStyle.textStyle10(
                         fontColor: Colors.black, fontWeight: FontWeight.w400),
@@ -180,126 +209,14 @@ class KpUI extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 12.h),
                   child: Text(
-                    'Ve',
+                    cupsData?.subLord ?? "",
                     textAlign: TextAlign.center,
                     style: AppTextStyle.textStyle10(
                         fontColor: Colors.black, fontWeight: FontWeight.w400),
                   ),
                 ),
-              ]),
-              TableRow(children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Sun',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    '1',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Aquarius',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Ma',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Ke',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Ve',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-              ]),
-              TableRow(children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Sun',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    '1',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Aquarius',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Ma',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Ke',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Ve',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-              ]),
-            ]),
+              ]);
+            }).toList()),
         SizedBox(
           height: 30.h,
         ),
@@ -307,7 +224,7 @@ class KpUI extends StatelessWidget {
     );
   }
 
-  Widget planetsWidget() {
+  Widget planetsWidget(Rx<KpDataModel> kpTableData) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -319,82 +236,88 @@ class KpUI extends StatelessWidget {
           height: 20.h,
         ),
         Table(
-            // border: TableBorder.all(color: Colors.grey, width: 1.1),
             border: const TableBorder(
-                verticalInside: BorderSide(
-                    width: 1, color: Colors.grey, style: BorderStyle.solid),
-                horizontalInside: BorderSide(
-                    width: 1, color: Colors.grey, style: BorderStyle.solid)),
-            children: [
-              TableRow(
-                  // decoration: BoxDecoration(color: Colors.amber),
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12.h),
-                      child: Text(
-                        'Planet',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: Colors.brown),
+              verticalInside: BorderSide(
+                  width: 1, color: Colors.grey, style: BorderStyle.solid),
+            ),
+            children: List.generate(
+                kpTableData.value.data?.planets?.length ?? 0 + 1, (index) {
+              if (index == 0) {
+                return TableRow(
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(width: 1, color: Colors.grey),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12.h),
-                      child: Text(
-                        'Cusp',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: Colors.brown),
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        child: Text(
+                          'Planet',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w500,
+                              fontColor: Colors.brown),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12.h),
-                      child: Text(
-                        'Sign',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: Colors.brown),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        child: Text(
+                          'Cusp',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w500,
+                              fontColor: Colors.brown),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12.h),
-                      child: Text(
-                        'Sign\nLord',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: Colors.brown),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        child: Text(
+                          'Sign',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w500,
+                              fontColor: Colors.brown),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12.h),
-                      child: Text(
-                        'Star\nLord',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: Colors.brown),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        child: Text(
+                          'Sign\nLord',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w500,
+                              fontColor: Colors.brown),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12.h),
-                      child: Text(
-                        'Sub\nLord',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: Colors.brown),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        child: Text(
+                          'Star\nLord',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w500,
+                              fontColor: Colors.brown),
+                        ),
                       ),
-                    ),
-                  ]),
-              TableRow(children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        child: Text(
+                          'Sub\nLord',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w500,
+                              fontColor: Colors.brown),
+                        ),
+                      ),
+                    ]);
+              }
+              Planet? planetData = kpTableData.value.data?.planets?[index];
+              return TableRow(children: [
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 12.h),
                   child: Text(
-                    'Sun',
+                    "${planetData?.planetId ?? ""}",
                     textAlign: TextAlign.center,
                     style: AppTextStyle.textStyle10(
                         fontColor: Colors.black, fontWeight: FontWeight.w400),
@@ -403,7 +326,7 @@ class KpUI extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 12.h),
                   child: Text(
-                    '1',
+                    "${planetData?.charan ?? 0}",
                     textAlign: TextAlign.center,
                     style: AppTextStyle.textStyle10(
                         fontColor: Colors.black, fontWeight: FontWeight.w400),
@@ -412,7 +335,7 @@ class KpUI extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 12.h),
                   child: Text(
-                    'Aquarius',
+                    planetData?.sign ?? "",
                     textAlign: TextAlign.center,
                     style: AppTextStyle.textStyle10(
                         fontColor: Colors.black, fontWeight: FontWeight.w400),
@@ -421,7 +344,7 @@ class KpUI extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 12.h),
                   child: Text(
-                    'Ma',
+                    planetData?.signLord ?? "",
                     textAlign: TextAlign.center,
                     style: AppTextStyle.textStyle10(
                         fontColor: Colors.black, fontWeight: FontWeight.w400),
@@ -430,7 +353,7 @@ class KpUI extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 12.h),
                   child: Text(
-                    'Ke',
+                    planetData?.nakshatraLord ?? "",
                     textAlign: TextAlign.center,
                     style: AppTextStyle.textStyle10(
                         fontColor: Colors.black, fontWeight: FontWeight.w400),
@@ -439,126 +362,14 @@ class KpUI extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 12.h),
                   child: Text(
-                    'Ve',
+                    planetData?.subLord ?? "",
                     textAlign: TextAlign.center,
                     style: AppTextStyle.textStyle10(
                         fontColor: Colors.black, fontWeight: FontWeight.w400),
                   ),
                 ),
-              ]),
-              TableRow(children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Sun',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    '1',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Aquarius',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Ma',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Ke',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Ve',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-              ]),
-              TableRow(children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Sun',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    '1',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Aquarius',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Ma',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Ke',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Text(
-                    'Ve',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle10(
-                        fontColor: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
-              ]),
-            ]),
+              ]);
+            }).toList()),
         SizedBox(
           height: 30.h,
         ),
@@ -853,26 +664,6 @@ class KpUI extends StatelessWidget {
         ),
 
         const Divider(thickness: 0.9, color: Colors.grey),
-      ],
-    );
-  }
-
-  Widget details({required String title, required String details}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(title.tr,
-            style: AppTextStyle.textStyle20(
-                fontWeight: FontWeight.w500,
-                fontColor: AppColors.appYellowColour)),
-        SizedBox(height: 5.h),
-        Text(
-          details,
-          style: AppTextStyle.textStyle12(
-              fontWeight: FontWeight.w500,
-              fontColor: AppColors.blackColor.withOpacity(.5)),
-        ),
-        SizedBox(height: 16.h)
       ],
     );
   }

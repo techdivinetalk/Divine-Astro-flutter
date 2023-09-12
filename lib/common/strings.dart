@@ -110,6 +110,7 @@ class AppString {
   static String changeAppLanguage = "Change app language";
   static String astrologerRank = "Astrologer Rank";
   static String busy = "Busy";
+  static String jobTitle = "Great Job! No one is in wait list.";
   static String noteText = "Note : The data will undergo regular refresh cycles with a frequency of once every";
   static String deleteMyAccount = "Delete My Account";
   static String logoutMyAccount = "Logout My Account";

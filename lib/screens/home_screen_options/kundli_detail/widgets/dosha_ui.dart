@@ -24,10 +24,10 @@ class DoshaUi extends StatelessWidget {
               duration: const Duration(milliseconds: 200),
               crossFadeState: (controller.manglikDosh.value.data?.manglik
                   ?.manglikReport ==
-                  null && controller.kalsarpaDosh.value.data
+                  null && controller.manglikDosh.value.data
                   ?.kalsarpaDetails?.oneLine ==
-                  null && controller.sadesathiDosh.value.data?.sadhesatiCurrentStatus?.isUndergoingSadhesati ==
-                  null && controller.pitraDosh.value.data?.pitraDoshaReport?.conclusion == null)
+                  null && controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.isUndergoingSadhesati ==
+                  null && controller.manglikDosh.value.data?.pitraDoshaReport?.conclusion == null)
                   ? CrossFadeState.showSecond
                   : CrossFadeState.showFirst,
               secondChild: Column(
@@ -55,32 +55,32 @@ class DoshaUi extends StatelessWidget {
                                 ''),
                     details(
                         title: "Kalsarp Dosha",
-                        details: controller.kalsarpaDosh.value.data
+                        details: controller.manglikDosh.value.data
                                     ?.kalsarpaDetails?.oneLine ==
                                 null
                             ? ""
-                            : controller.kalsarpaDosh.value.data?.kalsarpaDetails
+                            : controller.manglikDosh.value.data?.kalsarpaDetails
                                     ?.oneLine ??
                                 ''),
                     details(
                       title: "Sadesathi Dosha",
                       details: controller
-                                  .sadesathiDosh
+                                  .manglikDosh
                                   .value
                                   .data
                                   ?.sadhesatiCurrentStatus
                                   ?.isUndergoingSadhesati ==
                               null
                           ? ""
-                          : "${controller.sadesathiDosh.value.data?.sadhesatiCurrentStatus?.isUndergoingSadhesati} ${(controller.sadesathiDosh.value.data?.sadhesatiCurrentStatus?.sadhesatiStatus ?? false) ? " ${controller.sadesathiDosh.value.data?.sadhesatiCurrentStatus?.sadhesatiPhase ?? ''} of Sadesathi from ${controller.sadesathiDosh.value.data?.sadhesatiCurrentStatus?.startDate ?? ''} to ${controller.sadesathiDosh.value.data?.sadhesatiCurrentStatus?.endDate ?? ''}." : ""}",
+                          : "${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.isUndergoingSadhesati} ${(controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.sadhesatiStatus ?? false) ? " ${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.sadhesatiPhase ?? ''} of Sadesathi from ${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.startDate ?? ''} to ${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.endDate ?? ''}." : ""}",
                     ),
                     details(
                       title: "Pitri Dosha",
-                      details: controller.pitraDosh.value.data?.pitraDoshaReport
+                      details: controller.manglikDosh.value.data?.pitraDoshaReport
                                   ?.conclusion ==
                               null
                           ? ""
-                          : controller.pitraDosh.value.data?.pitraDoshaReport
+                          : controller.manglikDosh.value.data?.pitraDoshaReport
                                   ?.conclusion ??
                               '',
                     ),
