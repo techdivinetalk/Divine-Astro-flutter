@@ -686,6 +686,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/block_user.svg
   SvgGenImage get blockUser => const SvgGenImage('assets/svg/block_user.svg');
 
+  /// File path: assets/svg/call_ic_1.svg
+  SvgGenImage get callIc1 => const SvgGenImage('assets/svg/call_ic_1.svg');
+
   /// File path: assets/svg/disconnect.svg
   SvgGenImage get disconnect => const SvgGenImage('assets/svg/disconnect.svg');
 
@@ -728,6 +731,7 @@ class $AssetsSvgGen {
         blackDot,
         block,
         blockUser,
+        callIc1,
         disconnect,
         greyContainer,
         icAdd,
