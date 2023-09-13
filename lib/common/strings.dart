@@ -133,6 +133,7 @@ class AppString {
   static String mandatoryFields = "*Marked fields are Mandatory.";
   static String submitForm = "Submit Form";
   static String waitlist = "Waitlist";
+  static String contactPermissionRequired = "contact permission is required";
   static String anotherPlatform =
       "Are they currently working on any other platform?";
   static String enterNameMsg = "Enter Astrologer’s Name";
