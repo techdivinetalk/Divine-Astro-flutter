@@ -69,27 +69,6 @@ class UnblockOrBlockUser extends StatelessWidget {
                     ],
                   ),
                 ),
-                /*SizedBox(height: 20.h),
-                Center(
-                    child: Divider(color: AppColors.darkBlue.withOpacity(.2))),
-                SizedBox(height: 20.h),
-                InkWell(
-                  onTap: (){
-                    onReplay!();
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Assets.svg.reply.svg(),
-                      SizedBox(width: 16.w),
-                      Text(
-                        "Reply",
-                        style:
-                            TextStyle(fontSize: 16.sp, color: AppColors.darkBlue),
-                      )
-                    ],
-                  ),
-                ),*/
               ],
             ),
           ),

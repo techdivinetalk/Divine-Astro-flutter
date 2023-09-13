@@ -66,12 +66,6 @@ class LivePageState extends State<LivePage>
   final controller = Get.put(LiveController(Get.put(UserRepository())));
   final liveStateNotifier =
       ValueNotifier<ZegoLiveStreamingState>(ZegoLiveStreamingState.idle);
-  late CustomTimerController timeController = CustomTimerController(
-      vsync: this,
-      begin: const Duration(minutes: 1),
-      end: Duration.zero,
-      initialState: CustomTimerState.reset,
-      interval: CustomTimerInterval.seconds);
 
   @override
   void initState() {
@@ -80,8 +74,8 @@ class LivePageState extends State<LivePage>
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       controller.listenCallStatus();
       controller.listenWaitlistRemove();
-      controller.setAvailibility(widget.localUserID, true, timeController);
-      controller.getBlockedCustomerList();
+      controller.setAvailibility(widget.localUserID, true,);
+      //controller.getBlockedCustomerList();
       event.hostEvents.onCoHostRequestReceived = (user) async {
         controller.coHostUser = user;
         String type = await controller.getCallType(widget.localUserID);
@@ -106,7 +100,7 @@ class LivePageState extends State<LivePage>
                           customerId: user.id);
                     });
                     controller.isCoHosting.value = true;
-                    timeController.start();
+                    //timeController.start();
                   });
             });
       };
@@ -124,19 +118,6 @@ class LivePageState extends State<LivePage>
     });
     Future.delayed(const Duration(seconds: 1)).then((value) {
       ZegoUIKit().useFrontFacingCamera(widget.isFrontCamera);
-    });
-    timeController.state.addListener(() {
-      if (timeController.state.value == CustomTimerState.finished) {
-        if (controller.coHostUser != null) {
-          controller.setCallType(widget.localUserID);
-        }
-        controller.setCallStatus();
-        timeController.reset();
-        controller.setBusyStatus(widget.localUserID, 0, customerId: "");
-        liveController.connect.removeCoHost(controller.coHostUser!);
-        controller.endCall();
-        controller.isCoHosting.value = false;
-      }
     });
   }
 
@@ -178,7 +159,7 @@ class LivePageState extends State<LivePage>
             return EndSession(
                 onNo: () {},
                 onYes: () {
-                  timeController.reset();
+                  controller.stopTimer();
                   controller.setBusyStatus(widget.localUserID, 0,
                       customerId: "");
                   GiftWidget.clear();
@@ -460,14 +441,7 @@ class LivePageState extends State<LivePage>
                 //SizedBox(width: 8.w),
                 //Lottie.asset('assets/lottie/sound_waves.json'),
                 SizedBox(width: 4.w),
-                CustomTimer(
-                    controller: timeController,
-                    builder: (state, remaining) {
-                      return CustomText(
-                          "${remaining.minutes}:${remaining.seconds}",
-                          fontSize: 14.sp,
-                          fontColor: AppColors.white);
-                    }),
+                buildCustomTimer(),
                 SizedBox(width: 16.w),
               ],
             ),
@@ -487,6 +461,19 @@ class LivePageState extends State<LivePage>
         ],
       ),
     );
+  }
+
+  CustomText buildCustomTimer() {
+    if(controller.hour.value == "00"){
+      return CustomText(
+          "${controller.min}:${controller.sec}",
+          fontSize: 14.sp,
+          fontColor: AppColors.white);
+    }
+    return CustomText(
+                  "${controller.hour}:${controller.min}:${controller.sec}",
+                  fontSize: 14.sp,
+                  fontColor: AppColors.white);
   }
 
   Widget foreground(BoxConstraints constraints) {
@@ -728,7 +715,7 @@ class LivePageState extends State<LivePage>
                           if (controller.coHostUser != null) {
                             controller.setCallType(widget.localUserID);
                           }
-                          timeController.reset();
+                          //controller.timeController.reset();
                           controller.stopStream(widget.localUserID);
                         });
                   },
@@ -807,7 +794,7 @@ class LivePageState extends State<LivePage>
                     value: controller.isCallOnOff.value,
                     onToggle: (val) {
                       controller.setAvailibility(widget.localUserID,
-                          !controller.isCallOnOff.value, timeController);
+                          !controller.isCallOnOff.value,);
                       controller.isCallOnOff.value =
                           !controller.isCallOnOff.value;
                     },
@@ -867,7 +854,7 @@ class LivePageState extends State<LivePage>
                                     controller.setCallType(widget.localUserID);
                                   }
                                   controller.setCallStatus();
-                                  timeController.reset();
+                                  controller.stopTimer();
                                   controller.setBusyStatus(
                                       widget.localUserID, 0,
                                       customerId: "");
@@ -960,7 +947,7 @@ class LivePageState extends State<LivePage>
                 showCupertinoModalPopup(
                     context: context,
                     builder: (BuildContext context) {
-                      return const BlockUserList();
+                      return BlockUserList(hostId: widget.localUserID,);
                     });
               },
               child: Container(
@@ -1029,6 +1016,7 @@ class LivePageState extends State<LivePage>
                             builder: (BuildContext context) {
                               return WaitList(
                                 showNext: false,
+                                data: snapshot.data!.snapshot.children,
                                 astroId: widget.localUserID,
                                 onAccept: (id, name) {},
                               );

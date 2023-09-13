@@ -83,7 +83,40 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
   var nextuserid = "";
   var scrollController = ScrollController();
   var removedWaitList = "0";
+  final liveController = ZegoUIKitPrebuiltLiveStreamingController();
+  Timer? countdownTimer;
 
+  stopTimer() {
+    if (countdownTimer != null) {
+      countdownTimer!.cancel();
+      countdownTimer = null;
+    }
+  }
+
+  String strDigits(int n) => n.toString().padLeft(2, '0');
+  RxString hour = "".obs, min = "".obs, sec = "".obs;
+  startTimer() {
+    countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      const reduceSecondsBy = 1;
+      final seconds = timeDuration.inSeconds - reduceSecondsBy;
+      if (seconds < 0) {
+        stopTimer();
+        if (coHostUser != null) {
+          setCallType(astroId!);
+        }
+        setCallStatus();
+        setBusyStatus(astroId!, 0, customerId: "");
+        liveController.connect.removeCoHost(coHostUser!);
+        endCall();
+        isCoHosting.value = false;
+      } else {
+        timeDuration = Duration(seconds: seconds);
+        hour.value = strDigits(timeDuration.inHours.remainder(24));
+        min.value = strDigits(timeDuration.inMinutes.remainder(60));
+        sec.value = strDigits(timeDuration.inSeconds.remainder(60));
+      }
+    });
+  }
   jumpToBottom() {
     scrollController.animateTo(
       scrollController.position.maxScrollExtent + 50,
@@ -92,7 +125,7 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
     );
   }
 
-  getBlockedCustomerList() async {
+  /*getBlockedCustomerList() async {
     Map<String, dynamic> params = {
       "role_id": pref.getUserDetail()?.roleId ?? 0
     };
@@ -106,14 +139,6 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
             data!.first.astroBlockCustomer!.isNotEmpty) {
           blockCustomer.addAll(
               data.first.astroBlockCustomer as Iterable<AstroBlockCustomer>);
-          for (var element in data.first.astroBlockCustomer!) {
-            blockIds.add(element.customerId.toString());
-            database.ref().child("live/$astroId/").update({
-              "blockUser": {
-                element.customerId: {"id": element.customerId}
-              }
-            });
-          }
         }
       }
     } catch (error) {
@@ -123,7 +148,7 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
         Get.snackbar("Error", error.toString()).show();
       }
     }
-  }
+  }*/
 
   unblockUser({required String customerId, required String name}) async {
     Map<String, dynamic> params = {
@@ -134,12 +159,13 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
     try {
       ResBlockedCustomers response =
           await userRepository.blockUnblockCustomer(params);
+      database.ref().child("live/$astroId/blockUser/$customerId/").remove();
       showDialog(
           context: Get.context!,
           builder: (builder) {
             return BlockSuccess(text: "$name has been Unblocked!");
           });
-      getBlockedCustomerList();
+      //getBlockedCustomerList();
     } catch (error) {
       if (error is AppException) {
         error.onException();
@@ -158,12 +184,17 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
     try {
       ResBlockedCustomers response =
           await userRepository.blockUnblockCustomer(params);
+      database.ref().child("live/$astroId").update({
+        "blockUser": {
+          customerId: {"id": customerId,"name":name}
+        }
+      });
+      //getBlockedCustomerList();
       showDialog(
           context: Get.context!,
           builder: (builder) {
             return BlockSuccess(text: "$name has been blocked!");
           });
-      getBlockedCustomerList();
     } catch (error) {
       if (error is AppException) {
         error.onException();
@@ -185,6 +216,7 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
         builder: (BuildContext context) {
           dialogOpen = true;
           return WaitList(
+            data: data.children,
             astroId: astroId,
             showNext: true,
             onAccept: (String id, String name) {
@@ -203,16 +235,18 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
   }
 
   listenWaitlistRemove() async {
-    database.ref().child("live/$astroId/nextUser").onValue.listen((event) {
+    database.ref().child("live/$astroId/nextUser").onValue.listen((event) async {
       if(event.snapshot.value != null){
         var data = event.snapshot.value as Map;
         typeOfNextUserCall = data["callType"];
         if(data.isNotEmpty){
+          var waitList = await database.ref().child("live/$astroId/waitList").get();
           showCupertinoModalPopup(
               context: Get.context!,
               barrierDismissible: false,
               builder: (BuildContext context) {
                 return WaitList(
+                  data: waitList.children,
                   astroId: astroId,
                   showNext: true,
                   onAccept: (String id, String name) {
@@ -280,13 +314,13 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
 
   var timeDuration = const Duration();
 
-  setAvailibility(String id, bool available, CustomTimerController controller) {
+  setAvailibility(String id, bool available) {
     database.ref().child("live/$id").update({"isAvailable": available});
     database.ref().child("live/$id/coHostUser").onValue.listen((event) async {
       final user = event.snapshot.value as String? ?? "";
       if (user.isEmpty) {
         isCoHosting.value = false;
-        controller.reset();
+        stopTimer();
       } else {
         var coHost = await database.ref().child("live/$astroId/coHost").get();
         if (coHost.value != null) {
@@ -298,10 +332,10 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
           typeOfCall = user["callType"];
           setVisibilityCoHostAudio(typeOfCall);
           setVisibilityCoHostVideo(typeOfCall);
+          intToTimeLeft(time);
         }
-        //controller.add(intToTimeLeft(time));
         isCoHosting.value = true;
-        controller.start();
+        startTimer();
       }
     });
   }
