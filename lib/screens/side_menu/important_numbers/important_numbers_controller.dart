@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:contacts_service/contacts_service.dart';
+import 'package:divine_astrologer/common/strings.dart';
 import 'package:divine_astrologer/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -12,6 +15,8 @@ class ImportantNumbersController extends GetxController {
 
   List<MobileNumber> importantNumbers = <MobileNumber>[];
   Loading loading = Loading.initial;
+  List<Contact> allContacts = <Contact>[].obs;
+  List<Map<String, bool>> allAdded = <Map<String, bool>>[];
 
   ImportantNumbersController(this.repository);
 
@@ -20,6 +25,40 @@ class ImportantNumbersController extends GetxController {
     super.onInit();
     loading = Loading.loading;
     fetchImportantNumbers();
+    getContactList();
+    update();
+  }
+
+  bool checkForContactExist(MobileNumber numbers) {
+    Item item =
+        Item(label: numbers.title ?? "", value: numbers.mobileNumber ?? "");
+    List<String> numberList = [];
+    if (item.value != null && item.value!.contains(",")) {
+      numberList = item.value!.split(",").toList();
+    }
+    bool isExist = false;
+    if (allContacts.isEmpty) return isExist;
+    for (Contact contact in allContacts) {
+      if (contact.phones != null) {
+        for (var element in contact.phones!) {
+        //  log(element.value!);
+          if (contact.displayName == item.label &&
+              numberList.every((el) => el.contains(element.value!))) {
+            return isExist = true;
+          }
+        }
+      }
+    }
+    return isExist;
+  }
+
+  getContactList() async {
+    PermissionStatus contact = await Permission.contacts.status;
+    if (contact.isGranted) {
+      allContacts = await ContactsService.getContacts();
+    } else {
+      divineSnackBar(data: AppString.contactPermissionRequired);
+    }
   }
 
   addContact({
@@ -36,6 +75,7 @@ class ImportantNumbersController extends GetxController {
           phones: phoneItems);
       await ContactsService.addContact(newContact);
       divineSnackBar(data: "Contact saved successfully");
+      fetchImportantNumbers();
     } else {
       openAppSettings();
     }

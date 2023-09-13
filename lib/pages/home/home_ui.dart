@@ -2,6 +2,7 @@ import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/switch_component.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/load_image.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
+
 import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
@@ -879,24 +881,31 @@ class HomeUI extends GetView<HomeController> {
               itemBuilder: (BuildContext context, int i) {
                 return Row(
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.extraLightGrey,
-                        borderRadius: BorderRadius.circular(10.sp),
-                      ),
-                      height: 174.h,
-                      width: 110.h,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.sp),
-                        child: LoadImage(
-                          boxFit: BoxFit.fitHeight,
-                          imageModel: ImageModel(
-                            imagePath: controller
-                                .homeData!.trainingVideo![i].youtubeThumbNail,
-                            loadingIndicator: const SizedBox(
-                              child: CircularProgressIndicator(
-                                color: Color(0XFFFDD48E),
-                                strokeWidth: 2,
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(TrainingVideoUI(
+                          video: controller.homeData!.trainingVideo![i],
+                        ));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.extraLightGrey,
+                          borderRadius: BorderRadius.circular(10.sp),
+                        ),
+                        height: 174.h,
+                        width: 110.h,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.sp),
+                          child: LoadImage(
+                            boxFit: BoxFit.fitHeight,
+                            imageModel: ImageModel(
+                              imagePath: controller
+                                  .homeData!.trainingVideo![i].youtubeThumbNail,
+                              loadingIndicator: const SizedBox(
+                                child: CircularProgressIndicator(
+                                  color: Color(0XFFFDD48E),
+                                  strokeWidth: 2,
+                                ),
                               ),
                             ),
                           ),
@@ -1734,7 +1743,6 @@ class SelectedTimeForCall extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-
       height: 31.h,
       child: Obx(
         () {

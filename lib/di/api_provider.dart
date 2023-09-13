@@ -52,6 +52,7 @@ class ApiProvider {
   final String agoraEndCall = "agoraEndCall";
   final String getWaitingListQueue = "getWaitingListQueue";
   final String getImportantNumber = "getImportantNumber";
+  final String getDonationList = "getDonationList";
 
   //Astro Internal API
   final String horoChartImageInt = "getChartImage/";
