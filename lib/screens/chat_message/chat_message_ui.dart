@@ -54,16 +54,17 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  InkWell(
-                      onTap: () {
-                        controller.onEndChat();
-                      },
-                      child: Assets.images.icEndChat.svg()),
-                  SizedBox(width: 10.w),
-                ],
-              )
+              if (controller.isOngoingChat.value)
+                Row(
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          controller.confirmChatEnd(Get.context!);
+                        },
+                        child: Assets.images.icEndChat.svg()),
+                    SizedBox(width: 10.w),
+                  ],
+                )
             ],
           ),
         ),

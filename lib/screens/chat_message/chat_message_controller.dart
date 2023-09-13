@@ -60,6 +60,7 @@ class ChatMessageController extends GetxController {
   RxString customerName = "".obs;
   RxString profileImage = "".obs;
   RxBool isDataLoad = false.obs;
+  RxBool isOngoingChat = false.obs;
 
   @override
   void onInit() {
@@ -69,14 +70,15 @@ class ChatMessageController extends GetxController {
       if (Get.arguments is bool) {
         sendReadMessageStatus = true;
       } else if (Get.arguments is ResAstroChatListener) {
+        isOngoingChat.value = true;
         var data = Get.arguments;
         currentChatUserId.value = data!.customerId;
         currentUserId.value = data!.customerId;
         customerName.value = data!.customeName ?? "";
         profileImage.value =
             "${preference.getBaseImageURL()}/${data!.customerImage}";
-        debugPrint(
-            "YOUR CODE RESPONSE UPDATED $currentUserId && $currentChatUserId");
+        timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0,
+            astroChatWatcher.value.orderId!);
       }
     }
     userData = preferenceService.getUserDetail();
@@ -355,9 +357,37 @@ class ChatMessageController extends GetxController {
   }
 
 //End Chat
+  confirmChatEnd(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Divine Astrologer"),
+          content: const Text("Are you sure you want to end this chat?"),
+          actions: [
+            TextButton(
+              child: const Text("Yes"),
+              onPressed: () async {
+                Get.back();
+                onEndChat();
+              },
+            ),
+            TextButton(
+              child: const Text("No"),
+              onPressed: () async {
+                Get.back();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   onEndChat() async {
     isDataLoad.value = false;
-
+    isOngoingChat.value = false;
+    timer.stopTimer();
     ResCommonChatStatus response = await ChatRepository().endChat(
         ReqCommonChatParams(
                 orderId: astroChatWatcher.value.orderId,

@@ -38,7 +38,6 @@ class DashboardController extends GetxController
     askPermission();
     var commonConstants = await userRepository.constantDetailsData();
 
-    userData = preferenceService.getUserDetail();
     preferenceService
         .setBaseImageURL(commonConstants.data.awsCredentails.baseurl!);
 
@@ -54,7 +53,7 @@ class DashboardController extends GetxController
     super.onReady();
     userData = preferenceService.getUserDetail();
     realTimeListener ??= FirebaseDatabase.instance
-        .ref("astrologer/${userData?.id}/realTime/notification")
+        .ref("astrologer/${userData?.id}/realTime")
         .onValue
         .listen((DatabaseEvent event) {
       if (event.snapshot.value is Map) {
