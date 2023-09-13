@@ -142,7 +142,7 @@ class ImageBasedOnResponse extends StatelessWidget {
       return Assets.images.icChating.svg();
     }
     if (customer.callType == 2) {
-      return Assets.svg.callIc1.svg();
+      return Assets.svg.icCall1.svg();
     }
     return const SizedBox.shrink();
   }

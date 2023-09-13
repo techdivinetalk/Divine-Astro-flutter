@@ -53,8 +53,8 @@ class UserData {
   int? chatMinimumTime;
   double? videoCallPayout;
   double? audioCallPayout;
-  String? anonymousCallPayout;
-  String? chatPayout;
+  // int? anonymousCallPayout;
+  // String? chatPayout;
   double? giftPayout;
   String? accountNumber;
   String? ifscCode;
@@ -120,8 +120,8 @@ class UserData {
     this.chatMinimumTime,
     this.videoCallPayout,
     this.audioCallPayout,
-    this.anonymousCallPayout,
-    this.chatPayout,
+    // this.anonymousCallPayout,
+    // this.chatPayout,
     this.giftPayout,
     this.accountNumber,
     this.ifscCode,
@@ -188,8 +188,8 @@ class UserData {
     chatMinimumTime = json['chat_minimum_time'];
     videoCallPayout = double.parse(json['video_call_payout'].toString());
     audioCallPayout = double.parse(json['audio_call_payout'].toString());
-    anonymousCallPayout = json['anonymous_call_payout'];
-    chatPayout = json['chat_payout'];
+    // anonymousCallPayout = json['anonymous_call_payout'];
+    // chatPayout = json['chat_payout'];
     giftPayout = double.parse(json['gift_payout'].toString());
     accountNumber = json['account_number'];
     ifscCode = json['ifsc_code'];
@@ -267,8 +267,8 @@ class UserData {
     data['chat_minimum_time'] = chatMinimumTime;
     data['video_call_payout'] = videoCallPayout;
     data['audio_call_payout'] = audioCallPayout;
-    data['anonymous_call_payout'] = anonymousCallPayout;
-    data['chat_payout'] = chatPayout;
+    // data['anonymous_call_payout'] = anonymousCallPayout;
+    // data['chat_payout'] = chatPayout;
     data['gift_payout'] = giftPayout;
     data['account_number'] = accountNumber;
     data['ifsc_code'] = ifscCode;

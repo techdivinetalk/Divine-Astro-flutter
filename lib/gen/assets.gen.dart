@@ -696,6 +696,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/ic_add.svg
   SvgGenImage get icAdd => const SvgGenImage('assets/svg/ic_add.svg');
 
+  /// File path: assets/svg/ic_call_1.svg
+  SvgGenImage get icCall1 => const SvgGenImage('assets/svg/ic_call_1.svg');
+
   /// File path: assets/svg/mute.svg
   SvgGenImage get mute => const SvgGenImage('assets/svg/mute.svg');
 
@@ -728,6 +731,7 @@ class $AssetsSvgGen {
         disconnect,
         greyContainer,
         icAdd,
+        icCall1,
         mute,
         pinkSlider,
         pleaseRegister1,
