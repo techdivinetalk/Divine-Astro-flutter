@@ -1,6 +1,5 @@
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/custom_button.dart';
-import 'package:divine_astrologer/common/custom_text.dart';
+import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/screens/video_call_page/video_call_page_controller.dart';
@@ -8,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
-
-import '../../common/custom_light_yellow_btn.dart';
 
 class VideoCallPage extends GetView<VideoCallPageController> {
   const VideoCallPage({Key? key}) : super(key: key);

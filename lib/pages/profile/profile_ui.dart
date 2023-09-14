@@ -14,7 +14,7 @@ import '../../../common/colors.dart';
 import '../../../common/routes.dart';
 import '../../../gen/assets.gen.dart';
 import '../../common/common_bottomsheet.dart';
-import '../../common/custom_text.dart';
+import '../../common/custom_widgets.dart';
 import '../../di/shared_preference_service.dart';
 import '../../repository/user_repository.dart';
 import '../../screens/side_menu/side_menu_ui.dart';

@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/custom_button.dart';
-import 'package:divine_astrologer/common/custom_text.dart';
+import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/screens/video_call/video_call_controller.dart';

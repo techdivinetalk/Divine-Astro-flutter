@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:divine_astrologer/model/log_out_response.dart';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/model/pivacy_policy_model.dart';
@@ -6,6 +7,7 @@ import 'package:divine_astrologer/model/res_reply_review.dart';
 import 'package:divine_astrologer/model/res_user_profile.dart';
 import 'package:divine_astrologer/model/terms_and_condition_model.dart';
 import 'package:divine_astrologer/model/update_bank_response.dart';
+import 'package:divine_astrologer/model/update_offer_response.dart';
 import 'package:divine_astrologer/model/update_profile_response.dart';
 import 'package:divine_astrologer/model/upload_image_model.dart';
 import 'package:divine_astrologer/model/upload_story_response.dart';
@@ -463,7 +465,7 @@ class UserRepository extends ApiProvider {
 
   Future<String> endCall(Map<String, dynamic> param) async {
     try {
-      final response = await post(agoraEndCall,body: jsonEncode(param));
+      final response = await post(agoraEndCall, body: jsonEncode(param));
       if (response.statusCode == 200) {
         final loginImagesResponse = loginImagesFromJson(response.body);
         if (loginImagesResponse.statusCode == successResponse &&
@@ -481,4 +483,33 @@ class UserRepository extends ApiProvider {
     }
   }
 
+  Future<UpdateOfferResponse> updateOfferApi(
+      Map<String, dynamic> params) async {
+    try {
+      final response = await post(updateOfferFlag,
+          body: jsonEncode(params), headers: await getJsonHeaderURL());
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          preferenceService.erase();
+          Get.offNamed(RouteName.login);
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final updateOfferResponse =
+              updateOfferResponseFromJson(response.body);
+          if (updateOfferResponse.statusCode == successResponse &&
+              (updateOfferResponse.success ?? false)) {
+            return updateOfferResponse;
+          } else {
+            throw CustomException(updateOfferResponse.message ?? '');
+          }
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
 }

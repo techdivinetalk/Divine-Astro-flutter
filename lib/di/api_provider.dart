@@ -53,6 +53,7 @@ class ApiProvider {
   final String getWaitingListQueue = "getWaitingListQueue";
   final String getImportantNumber = "getImportantNumber";
   final String getDonationList = "getDonationList";
+  final String updateOfferFlag = "updateOfferFlag";
 
   //Astro Internal API
   final String horoChartImageInt = "getChartImage/";
@@ -233,7 +234,7 @@ class ApiProvider {
     if (await networkManager.isConnected() ?? false) {
       log('url: $endPoint$url');
       log('body: $body');
-      // log("headers: $headers");
+      log("headers: $headers");
       var response = await http
           .post(Uri.parse(endPoint + url),
               headers: headers, body: body, encoding: encoding)

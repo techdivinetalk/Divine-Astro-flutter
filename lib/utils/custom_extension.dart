@@ -42,7 +42,6 @@ extension DateToString on DateTime {
   }
 }
 
-
 String? extractYoutubeVideoID(String videoUrl) {
   RegExp regExp = RegExp(
     r"(?:https?:\/\/(?:www\.)?youtube\.com\/watch\?v=|https?:\/\/youtu\.be\/)([\w-]{11})(?:&|\z|$)",
@@ -56,4 +55,8 @@ String? extractYoutubeVideoID(String videoUrl) {
   }
 
   return null;
+}
+
+String getYoutubeThumbnail(String url) {
+  return "https://img.youtube.com/vi/${extractYoutubeVideoID(url.toString())}/0.jpg";
 }

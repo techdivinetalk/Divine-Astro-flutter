@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../../model/home_page_model_class.dart';
@@ -47,9 +48,8 @@ class _TrainingVideoUIState extends State<TrainingVideoUI> {
     log("-------------");
     log("${widget.video.url}");
     log("${widget.video.id}");
-    log("${widget.video.youtubeThumbNail}");
+    log("${widget.video.url}");
 
-    //_controller.
     return Scaffold(
       body: SafeArea(
         child: Expanded(
