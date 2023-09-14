@@ -586,11 +586,16 @@ class LivePageState extends State<LivePage>
                                             height: 40.h,
                                             onSubmit: (value) {
                                               if (value.isNotEmpty) {
-                                                //liveController.message.send("${controller.msg.text}*${widget.astrologerName}");
-                                                liveController.message
-                                                    .send(value);
-                                                controller.msg.text = "";
-                                                controller.jumpToBottom();
+                                                if(controller.badWordsData!.contains(value)){
+                                                  controller.msg.text = "";
+                                                }else{
+                                                  liveController.message
+                                                      .send(value);
+                                                  controller.msg.text =
+                                                  "";
+                                                  controller
+                                                      .jumpToBottom();
+                                                }
                                               }
                                             },
                                             // height: ,

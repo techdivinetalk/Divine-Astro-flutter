@@ -7,6 +7,7 @@ import 'package:divine_astrologer/model/update_bank_response.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../model/constant_details_model_class.dart';
 import '../model/res_login.dart';
 
 class SharedPreferenceService extends GetxService {
@@ -18,6 +19,8 @@ class SharedPreferenceService extends GetxService {
   static const loginImages = "loginImages";
   static const updatedBankDetails = "updatedBankDetails";
   static const baseImageUrl = "baseImageUrl";
+  static const constantData = "constantData";
+
 
   Future<SharedPreferenceService> init() async {
     prefs = await SharedPreferences.getInstance();
@@ -100,4 +103,20 @@ class SharedPreferenceService extends GetxService {
   Future<bool> setBaseImageURL(String imageUrl) async {
     return await prefs!.setString(baseImageUrl, imageUrl);
   }
+
+  ConstantDetailsModelClass getConstantDetails() {
+    ConstantDetailsModelClass? constantDetails;
+    String constantDatas = prefs!.getString(constantData) ?? "";
+    if (constantDatas.isNotEmpty) {
+      var jsonDecoded = jsonDecode(constantDatas);
+      constantDetails = ConstantDetailsModelClass.fromJson(jsonDecoded);
+    }
+    return constantDetails!;
+  }
+
+  Future<bool> setConstantDetails(
+      ConstantDetailsModelClass constantDetails) async {
+    return await prefs!.setString(constantData, jsonEncode(constantDetails));
+  }
+
 }

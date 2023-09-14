@@ -37,7 +37,7 @@ class DashboardController extends GetxController
     super.onInit();
     askPermission();
     var commonConstants = await userRepository.constantDetailsData();
-
+    preferenceService.setConstantDetails(commonConstants);
     preferenceService
         .setBaseImageURL(commonConstants.data.awsCredentails.baseurl!);
 

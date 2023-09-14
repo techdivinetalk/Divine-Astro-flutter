@@ -131,6 +131,7 @@ class HomeController extends GetxController {
     try {
       var data = await userRepository.constantDetailsData();
       getConstantDetails = data;
+      preferenceService.setConstantDetails(data);
       // debugPrint("ConstantDetails Data==> $data");
       profileDataSync.value = true;
     } catch (error) {
