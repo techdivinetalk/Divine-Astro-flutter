@@ -20,7 +20,7 @@ import '../../model/res_blocked_customers.dart';
 import '../../repository/user_repository.dart';
 import 'constant.dart';
 
-class LiveController extends GetxController with GetSingleTickerProviderStateMixin {
+class LiveController extends GetxController {
   var pref = Get.find<SharedPreferenceService>();
 
   LiveController(this.userRepository);
@@ -47,6 +47,15 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
       _timer!.cancel();
     }
     super.dispose();
+  }
+  List<String>? badWordsData;
+
+  @override
+  void onReady() {
+    if(pref.getConstantDetails().data != null){
+      badWordsData = pref.getConstantDetails().data!.badWordsData;
+    }
+    super.onReady();
   }
 
   final hostConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host(
@@ -91,6 +100,10 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
       countdownTimer!.cancel();
       countdownTimer = null;
     }
+  }
+
+  getBadWords(){
+
   }
 
   String strDigits(int n) => n.toString().padLeft(2, '0');
