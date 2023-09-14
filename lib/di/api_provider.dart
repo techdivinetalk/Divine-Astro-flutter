@@ -19,6 +19,15 @@ class ApiProvider {
   static const String socketUrl = "http://13.127.116.89:4000";
   final String baseUrl = "https://wakanda-api.divinetalk.live/admin/$version/";
 
+
+  //Socket Event
+  final String deleteSession = "deleteSession";
+  final String deleteSessionResponse = "deleteSessionResponse";
+  final String initResponse = "initResponse";
+  final String initLeaderBoardSession = "initLeaderBoardSession";
+
+
+
   final String jsonHeaderName = "Content-Type";
   final String jsonCookieName = "Cookie";
   final String jsonHeaderValue = "application/json";
