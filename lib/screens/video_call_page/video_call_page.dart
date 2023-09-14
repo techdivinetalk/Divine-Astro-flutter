@@ -13,19 +13,22 @@ class VideoCallPage extends GetView<VideoCallPageController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          color: controller.isForChat
-              ? AppColors.white
-              : AppColors.blackColor.withOpacity(0.7),
-        ),
-        child: SafeArea(
-          child: Stack(
-            children: [
-              acceptUI(),
-              if (!controller.isForChat) closeButton(color: AppColors.white),
-            ],
+    return WillPopScope(
+      onWillPop: () async => controller.isForChat ? false : true,
+      child: Scaffold(
+        body: Container(
+          decoration: BoxDecoration(
+            color: controller.isForChat
+                ? AppColors.white
+                : AppColors.blackColor.withOpacity(0.7),
+          ),
+          child: SafeArea(
+            child: Stack(
+              children: [
+                acceptUI(),
+                if (!controller.isForChat) closeButton(color: AppColors.white),
+              ],
+            ),
           ),
         ),
       ),

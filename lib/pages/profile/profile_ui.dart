@@ -138,7 +138,6 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 ),
                                 SizedBox(height: 3.h),
                                 Row(children: [
-
                                   Text("${"astrologerId".tr}-",
                                       style: AppTextStyle.textStyle14(
                                           fontWeight: FontWeight.w400,
@@ -448,7 +447,6 @@ class ProfileUI extends GetView<ProfilePageController> {
                       }
                     },
                     child: Container(
-
                       padding: const EdgeInsets.all(10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -509,7 +507,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                         Padding(
                           padding: EdgeInsets.only(left: 20.h),
                           child: Text(
-                            "${controller.ratingsData?.data?.totalRating}",
+                            "${controller.ratingsData?.data?.totalReviews}",
                             style: TextStyle(
                                 fontSize: 17.sp, fontWeight: FontWeight.w400),
                           ),

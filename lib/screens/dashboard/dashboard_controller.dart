@@ -4,6 +4,7 @@ import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
+import 'package:divine_astrologer/screens/chat_message/chat_message_controller.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -71,7 +72,12 @@ class DashboardController extends GetxController
         .onValue
         .listen((DatabaseEvent event) {
       debugPrint("YOUR VALUE HAS BEEN UPDATED");
-      if (event.snapshot.value is Map) {
+      if (event.snapshot.children.isNotEmpty) {
+        List<int> keyArray = [];
+        if (!keyArray.contains(userData!.id)) {
+          onEndChat();
+          astroChatWatcher.value = ResAstroChatListener();
+        }
         for (final dataSnapShot in event.snapshot.children) {
           if (int.tryParse(dataSnapShot.key!) == userData!.id &&
               dataSnapShot.value != null) {

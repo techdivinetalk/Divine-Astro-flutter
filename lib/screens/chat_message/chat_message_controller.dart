@@ -45,11 +45,11 @@ class ChatMessageController extends GetxController {
   XFile? pickedFile;
   File? uploadFile;
   final preference = Get.find<SharedPreferenceService>();
-  RxInt currentUserId = 8693.obs;
+  RxInt currentUserId = 0.obs;
   String userDataKey = "userKey";
   bool sendReadMessageStatus = false;
-  RxBool emojiShowing = true.obs;
-  FocusNode msgFocus = FocusNode();
+  RxBool isEmojiShowing = false.obs;
+  // FocusNode msgFocus = FocusNode();
   RxInt unreadMessageIndex = 0.obs;
   RxBool scrollToBottom = false.obs;
   HiveServices hiveServices = HiveServices(boxName: userChatData);
@@ -87,11 +87,11 @@ class ChatMessageController extends GetxController {
     userDataKey = "userKey_${userData?.id}_${currentUserId.value}";
     getChatList();
 
-    msgFocus.addListener(() {
-      if (msgFocus.hasFocus) {
-        emojiShowing.value = true;
-      }
-    });
+    // msgFocus.addListener(() {
+    //   if (msgFocus.hasFocus) {
+    //     emojiShowing.value = true;
+    //   }
+    // });
   }
 
   @override
@@ -135,6 +135,7 @@ class ChatMessageController extends GetxController {
       // var response = await chatRepository.getChatListApi(params);
       // debugPrint("$response");
     }
+    isDataLoad.value = true;
   }
 
   updateReadMessageStatus() async {
@@ -181,6 +182,7 @@ class ChatMessageController extends GetxController {
         kundliId: kundliId,
         type: 0);
     updateChatMessages(newMessage, false);
+    isDataLoad.value = true;
 
     firebaseDatabase
         .ref("user/${currentChatUserId.value}/realTime/notification/$time")
@@ -269,7 +271,7 @@ class ChatMessageController extends GetxController {
 
     if (pickedFile != null) {
       image = File(pickedFile!.path);
-
+      isDataLoad.value = false;
       await cropImage();
     }
   }
@@ -311,6 +313,7 @@ class ChatMessageController extends GetxController {
         getBase64Image(File(result.path));
       }
     } else {
+      isDataLoad.value = true;
       debugPrint("Image is not cropped.");
     }
   }
@@ -368,8 +371,11 @@ class ChatMessageController extends GetxController {
             TextButton(
               child: const Text("Yes"),
               onPressed: () async {
+                isDataLoad.value = false;
+                isOngoingChat.value = false;
                 Get.back();
-                onEndChat();
+                await onEndChat();
+                isDataLoad.value = true;
               },
             ),
             TextButton(
@@ -383,11 +389,12 @@ class ChatMessageController extends GetxController {
       },
     );
   }
+}
 
-  onEndChat() async {
-    isDataLoad.value = false;
-    isOngoingChat.value = false;
-    timer.stopTimer();
+onEndChat() async {
+  timer.stopTimer();
+  if (astroChatWatcher.value.orderId != 0 &&
+      astroChatWatcher.value.orderId != null) {
     ResCommonChatStatus response = await ChatRepository().endChat(
         ReqCommonChatParams(
                 orderId: astroChatWatcher.value.orderId,
@@ -395,7 +402,8 @@ class ChatMessageController extends GetxController {
             .toJson());
     if (response.statusCode == 200) {
       divineSnackBar(data: "Chat ended.", color: AppColors.redColor);
+    } else {
+      divineSnackBar(data: "Chat has been ended.", color: AppColors.redColor);
     }
-    isDataLoad.value = true;
   }
 }

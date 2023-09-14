@@ -53,7 +53,7 @@ class ChatMessage {
       this.type});
 
   ChatMessage.fromOfflineJson(Map<String, dynamic> json) {
-    id = json['id'] ?? json['ChatMessage_id'];
+    id = json['id'];
     receiverId = json['receiver_id'];
     senderId = json['sender_id'];
     message = json['message'];
