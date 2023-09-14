@@ -1,11 +1,9 @@
 import 'dart:convert';
 
 import 'package:divine_astrologer/common/app_exception.dart';
-import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/astrologer_chat_list.dart';
-import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 

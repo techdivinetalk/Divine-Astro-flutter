@@ -35,6 +35,7 @@ class ChatMessage {
   String? kundliPlace;
   int? time;
   int? type;
+  int? orderId;
 
   ChatMessage(
       {this.id,
@@ -43,6 +44,7 @@ class ChatMessage {
       this.message,
       this.time,
       this.msgType,
+      this.orderId,
       this.awsUrl,
       this.base64Image,
       this.downloadedPath,
@@ -67,6 +69,7 @@ class ChatMessage {
     kundliDateTime = json['kundli_date_time'];
     kundliPlace = json['kundli_place'];
     downloadedPath = json['downloadedPath'];
+    orderId = json['order_id'];
   }
 
   Map<String, dynamic> toOfflineJson() {
@@ -85,6 +88,7 @@ class ChatMessage {
     data['kundli_date_time'] = kundliDateTime;
     data['kundli_place'] = kundliPlace;
     data['downloadedPath'] = downloadedPath;
+    data['order_id'] = orderId;
     return data;
   }
 }

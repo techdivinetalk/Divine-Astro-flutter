@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/model/chat/req_common_chat_model.dart';
 import 'package:divine_astrologer/model/res_login.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -14,7 +13,6 @@ import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import '../../common/app_exception.dart';
 import '../../common/colors.dart';
 import '../../common/common_functions.dart';
 import '../../di/hive_services.dart';
@@ -22,7 +20,6 @@ import '../../di/shared_preference_service.dart';
 import '../../model/chat/res_astro_chat_listener.dart';
 import '../../model/chat/res_common_chat_success.dart';
 import '../../model/chat_offline_model.dart';
-import '../../model/get_kundli_data.dart';
 import '../../repository/chat_repository.dart';
 import '../../repository/kundli_repository.dart';
 import '../../repository/user_repository.dart';
@@ -170,6 +167,7 @@ class ChatMessageController extends GetxController {
       String? downloadedPath,
       String? kundliId}) async {
     var newMessage = ChatMessage(
+        orderId: astroChatWatcher.value.orderId,
         id: int.parse(time),
         message: messageText,
         receiverId: currentUserId.value,
@@ -343,20 +341,21 @@ class ChatMessageController extends GetxController {
 
 // Show Kundli
   navigateToKundliDetail(String kundliId) async {
-    try {
-      Map<String, String> params = {"kundli_id": kundliId};
-      ResGetKundli response = await kundliRepository!.getKundliDetais(params);
-      debugPrint("Response $response");
-      Get.toNamed(RouteName.kundliDetail);
-    } catch (error) {
-      debugPrint("error $error");
-      if (error is AppException) {
-        error.onException();
-      } else {
-        Get.snackbar("Error", error.toString()).show();
-      }
-    }
-    update();
+    divineSnackBar(data: "No details available");
+    // try {
+    //   Map<String, String> params = {"kundli_id": kundliId};
+    //   ResGetKundli response = await kundliRepository!.getKundliDetais(params);
+    //   debugPrint("Response $response");
+    //   Get.toNamed(RouteName.kundliDetail);
+    // } catch (error) {
+    //   debugPrint("error $error");
+    //   if (error is AppException) {
+    //     error.onException();
+    //   } else {
+    //     Get.snackbar("Error", error.toString()).show();
+    //   }
+    // }
+    // update();
   }
 
 //End Chat

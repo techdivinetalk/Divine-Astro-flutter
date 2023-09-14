@@ -75,8 +75,8 @@ class DashboardController extends GetxController
       if (event.snapshot.children.isNotEmpty) {
         List<int> keyArray = [];
         if (!keyArray.contains(userData!.id)) {
-          onEndChat();
-          astroChatWatcher.value = ResAstroChatListener();
+          // onEndChat();
+          // astroChatWatcher.value = ResAstroChatListener();
         }
         for (final dataSnapShot in event.snapshot.children) {
           if (int.tryParse(dataSnapShot.key!) == userData!.id &&
