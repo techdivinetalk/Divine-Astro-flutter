@@ -5,7 +5,8 @@
 import 'dart:convert';
 
 import 'package:divine_astrologer/utils/custom_extension.dart';
-
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 HomePageModelClass homePageModelClassFromJson(String str) => HomePageModelClass.fromJson(json.decode(str));
 
 String homePageModelClassToJson(HomePageModelClass data) => json.encode(data.toJson());
@@ -79,8 +80,9 @@ class OfferType {
   String? offerName;
   int? callRate;
   String? isActive;
-
+  RxBool? isOfferActive;
   OfferType({
+    this.isOfferActive,
     this.id,
     this.offerName,
     this.callRate,
@@ -92,6 +94,7 @@ class OfferType {
     offerName: json["offer_name"],
     callRate: json["call_rate"],
     isActive: json["is_active"],
+    isOfferActive: json["is_active"]=="0"?false.obs:true.obs,
   );
 
   Map<String, dynamic> toJson() => {

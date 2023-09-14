@@ -1,5 +1,8 @@
 Map<String, String> en() {
   return {
+    "contactSaved":"Contact saved successfully",
+    "Saved":"Saved",
+    "contactPermissionRequired":"Contact permission is required",
     "noInternetConnection": "Please check your Internet connection",
     "timeoutMessage":
         "Something went wrong.\nPlease check you internet connection and please try again.",
@@ -43,7 +46,7 @@ Map<String, String> en() {
     "status": "Status",
     "nextOnlineTiming": "Next Online Timing",
     "follow": "Follow",
-    "customerId": "Customer Id",
+    "astrologerId": "Astrologer Id",
     "profileOptions": "Profile Options",
     "profile": "Profile",
     "editProfile": "Edit Profile",
@@ -242,6 +245,7 @@ Map<String, String> en() {
     "selectYourDateBirth": "Select Your Date of Birth",
     "scheduleNow": "Schedule Now",
     "trainingVideos": "Training Videos",
+    "videoCall":"Video Call",
     "feedbackHintText": "Type your feedback here!",
     "feedbacksText":
         "You are free to share your thoughts in order to help us improve.",
