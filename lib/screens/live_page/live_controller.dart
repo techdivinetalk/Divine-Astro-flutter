@@ -3,12 +3,11 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:custom_timer/custom_timer.dart';
-import 'package:divine_astrologer/screens/live_page/live_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
@@ -21,7 +20,6 @@ import '../../di/shared_preference_service.dart';
 import '../../model/res_blocked_customers.dart';
 import '../../repository/user_repository.dart';
 import 'constant.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 
 class LiveController extends GetxController {
   var pref = Get.find<SharedPreferenceService>();
@@ -58,6 +56,8 @@ class LiveController extends GetxController {
     if(pref.getConstantDetails().data != null){
       badWordsData = pref.getConstantDetails().data!.badWordsData;
     }
+    // initLeaderBoardSessionRequest();
+    // connectSocket();
     super.onReady();
   }
 
@@ -158,14 +158,6 @@ class LiveController extends GetxController {
     socket?.emit(ApiProvider().deleteSession, {
       "sessionId": "76387476842"
     });
-  }
-
-  @override
-  void onReady() {
-    super.onInit();
-    // initLeaderBoardSessionRequest();
-    // connectSocket();
-
   }
 
   void connectSocket() {
