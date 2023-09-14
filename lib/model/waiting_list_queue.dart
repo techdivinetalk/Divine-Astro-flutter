@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-WaitingListQueueModel waitingListQueueModelFromJson(String str) => WaitingListQueueModel.fromJson(json.decode(str));
+WaitingListQueueModel waitingListQueueModelFromJson(String str) =>
+    WaitingListQueueModel.fromJson(json.decode(str));
 
-String waitingListQueueModelToJson(WaitingListQueueModel data) => json.encode(data.toJson());
+String waitingListQueueModelToJson(WaitingListQueueModel data) =>
+    json.encode(data.toJson());
 
 class WaitingListQueueModel {
   List<WaitingPerson>? data;
@@ -21,19 +23,25 @@ class WaitingListQueueModel {
     this.message,
   });
 
-  factory WaitingListQueueModel.fromJson(Map<String, dynamic> json) => WaitingListQueueModel(
-    data: json["data"] == null ? [] : List<WaitingPerson>.from(json["data"]!.map((x) => WaitingPerson.fromJson(x))),
-    success: json["success"],
-    statusCode: json["status_code"],
-    message: json["message"],
-  );
+  factory WaitingListQueueModel.fromJson(Map<String, dynamic> json) =>
+      WaitingListQueueModel(
+        data: json["data"] == null
+            ? []
+            : List<WaitingPerson>.from(
+                json["data"]!.map((x) => WaitingPerson.fromJson(x))),
+        success: json["success"],
+        statusCode: json["status_code"],
+        message: json["message"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
-    "success": success,
-    "status_code": statusCode,
-    "message": message,
-  };
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "success": success,
+        "status_code": statusCode,
+        "message": message,
+      };
 }
 
 class WaitingPerson {
@@ -43,6 +51,7 @@ class WaitingPerson {
   int? talkMinute;
   String? status;
   int? waitTime;
+  int? callType;
   GetCustomers? getCustomers;
 
   WaitingPerson({
@@ -53,27 +62,32 @@ class WaitingPerson {
     this.status,
     this.waitTime,
     this.getCustomers,
+    this.callType,
   });
 
   factory WaitingPerson.fromJson(Map<String, dynamic> json) => WaitingPerson(
-    id: json["id"],
-    customerId: json["customer_id"],
-    sequence: json["sequence"],
-    talkMinute: json["talk_minute"],
-    status: json["status"],
-    waitTime: json["wait_time"],
-    getCustomers: json["get_customers"] == null ? null : GetCustomers.fromJson(json["get_customers"]),
-  );
+        id: json["id"],
+        customerId: json["customer_id"],
+        sequence: json["sequence"],
+        talkMinute: json["talk_minute"],
+        status: json["status"],
+        waitTime: json["wait_time"],
+        getCustomers: json["get_customers"] == null
+            ? null
+            : GetCustomers.fromJson(json["get_customers"]),
+        callType: json["is_call"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "customer_id": customerId,
-    "sequence": sequence,
-    "talk_minute": talkMinute,
-    "status": status,
-    "wait_time": waitTime,
-    "get_customers": getCustomers?.toJson(),
-  };
+        "id": id,
+        "customer_id": customerId,
+        "sequence": sequence,
+        "talk_minute": talkMinute,
+        "status": status,
+        "wait_time": waitTime,
+        "get_customers": getCustomers?.toJson(),
+        "is_call": callType,
+      };
 }
 
 class GetCustomers {
@@ -90,16 +104,16 @@ class GetCustomers {
   });
 
   factory GetCustomers.fromJson(Map<String, dynamic> json) => GetCustomers(
-    id: json["id"],
-    name: json["name"],
-    avatar: json["avatar"],
-    mobileNo: json["mobile_no"],
-  );
+        id: json["id"],
+        name: json["name"],
+        avatar: json["avatar"],
+        mobileNo: json["mobile_no"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "avatar": avatar,
-    "mobile_no": mobileNo,
-  };
+        "id": id,
+        "name": name,
+        "avatar": avatar,
+        "mobile_no": mobileNo,
+      };
 }

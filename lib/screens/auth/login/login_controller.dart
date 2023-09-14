@@ -5,6 +5,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../common/app_exception.dart';
@@ -119,9 +120,21 @@ class LoginController extends GetxController {
   List<LoginDatum> get images => loginImages?.data.data ?? <LoginDatum>[];
   String get amazonUrl => loginImages!.data.baseurl;
 
+  List<SvgPicture> staticImages = [
+    Assets.svg.pleaseRegister1.svg(),
+    Assets.svg.pleaseRegister2.svg(),
+
+  ];
+  List<String> imageDec = [
+    "Please Enter your Registered mobile number to proceed as an astrologer to the platform.",
+    "You will get a call on the registered mobile number for verification."
+  ];
+
+
   void getLoginImages() async {
     if (preferenceService.getLoginImages() != null) {
       loginImages = preferenceService.getLoginImages()!;
+      update();
     } else {
       loginImages = await getInitialLoginImages();
       update();

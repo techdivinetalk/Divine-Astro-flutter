@@ -4,6 +4,7 @@ import 'package:divine_astrologer/common/colors.dart';
 
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -249,6 +250,7 @@ class ReferAstrologerField extends StatelessWidget {
   final String? Function(String? value)? validator;
   final int? maxLine;
   final double? height;
+  final List<TextInputFormatter>? inputFormatter;
 
   const ReferAstrologerField({
     super.key,
@@ -262,6 +264,7 @@ class ReferAstrologerField extends StatelessWidget {
     this.validator,
     this.maxLine,
     this.height,
+    this.inputFormatter,
   });
 
   @override
@@ -283,6 +286,7 @@ class ReferAstrologerField extends StatelessWidget {
         keyboardType: inputType,
         validator: validator,
         maxLines: maxLine,
+        inputFormatters: inputFormatter,
         textInputAction: inputAction,
         decoration: InputDecoration(
           isDense: true,

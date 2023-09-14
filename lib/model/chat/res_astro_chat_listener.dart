@@ -1,4 +1,5 @@
 class ResAstroChatListener {
+  int? customerId;
   int? astroId;
   String? astroImage;
   String? astroName;
@@ -14,9 +15,11 @@ class ResAstroChatListener {
   String? orderType;
   int? queueId;
   int? status;
+  int? talktime;
 
   ResAstroChatListener(
-      {this.astroId,
+      {this.customerId,
+      this.astroId,
       this.astroImage,
       this.astroName,
       this.chatMessage,
@@ -30,9 +33,11 @@ class ResAstroChatListener {
       this.orderId,
       this.orderType,
       this.queueId,
+      this.talktime,
       this.status});
 
   ResAstroChatListener.fromJson(Map<String, dynamic> json) {
+    customerId = json['customer_id'];
     astroId = json['astroId'];
     astroImage = json['astroImage'];
     astroName = json['astroName'];
@@ -48,10 +53,12 @@ class ResAstroChatListener {
     orderType = json['orderType'];
     queueId = json['queue_id'];
     status = json['status'];
+    talktime = json['talktime'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['customer_id'] = customerId;
     data['astroId'] = astroId;
     data['astroImage'] = astroImage;
     data['astroName'] = astroName;
@@ -67,6 +74,7 @@ class ResAstroChatListener {
     data['orderType'] = orderType;
     data['queue_id'] = queueId;
     data['status'] = status;
+    data['talktime'] = talktime;
     return data;
   }
 }

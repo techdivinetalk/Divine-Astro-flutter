@@ -126,12 +126,15 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
                                 child: Column(
                                   children: [
                                     ClipRRect(
-                                        borderRadius: BorderRadius.circular(20),
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              "${controller.preferenceService.getBaseImageURL()}/${item?.shopImage}",
-                                          fit: BoxFit.fill,
-                                        )),
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            "${controller.preferenceService.getBaseImageURL()}/${item?.shopImage}",
+                                        fit: BoxFit.fill,
+                                        errorWidget:  (context, url, error) => Assets.images.defaultProfile.image(),
+                                      ),
+
+                                    ),
                                     SizedBox(height: 8.h),
                                     Text(item?.shopName ?? "",
                                         style: TextStyle(

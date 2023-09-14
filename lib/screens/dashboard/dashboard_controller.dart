@@ -15,6 +15,7 @@ import '../../common/common_functions.dart';
 import '../../di/fcm_notification.dart';
 import '../../model/chat/res_astro_chat_listener.dart';
 import '../../model/res_login.dart';
+import '../live_page/constant.dart';
 
 class DashboardController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -37,7 +38,6 @@ class DashboardController extends GetxController
     askPermission();
     var commonConstants = await userRepository.constantDetailsData();
 
-    userData = preferenceService.getUserDetail();
     preferenceService
         .setBaseImageURL(commonConstants.data.awsCredentails.baseurl!);
 
@@ -53,7 +53,7 @@ class DashboardController extends GetxController
     super.onReady();
     userData = preferenceService.getUserDetail();
     realTimeListener ??= FirebaseDatabase.instance
-        .ref("astrologer/${userData?.id}/realTime/notification")
+        .ref("astrologer/${userData?.id}/realTime")
         .onValue
         .listen((DatabaseEvent event) {
       if (event.snapshot.value is Map) {
@@ -70,6 +70,7 @@ class DashboardController extends GetxController
         .ref("astroChat")
         .onValue
         .listen((DatabaseEvent event) {
+      debugPrint("YOUR VALUE HAS BEEN UPDATED");
       if (event.snapshot.value is Map) {
         for (final dataSnapShot in event.snapshot.children) {
           if (int.tryParse(dataSnapShot.key!) == userData!.id &&
@@ -77,32 +78,43 @@ class DashboardController extends GetxController
             DataSnapshot innerChild = dataSnapShot.children.first;
 
             final value = innerChild.value as Map;
-            if (value['status'] == 1) {
-              var astroChat = ResAstroChatListener(
-                astroId: value['astroId'],
-                astroImage: value['astroImage'],
-                astroName: value['astroName'],
-                chatMessage: value['chat_message'],
-                customeName: value['custome_name'],
-                customerImage: value['customer_image'],
-                extraTalktime: value['extra_talktime'],
-                isRechargeContinue: value['is_recharge_continue'],
-                isTimeout: value['is_timeout'],
-                ivrTime: value['ivr_time'],
-                notification: value['notification'],
-                orderId: value['orderId'],
-                orderType: value['orderType'],
-                queueId: value['queue_id'],
-                status: value['status'],
-              );
-              debugPrint("Updated chat -- $astroChat");
-              Get.toNamed(RouteName.videoCallPage, arguments: astroChat);
+            astroChatWatcher.value = ResAstroChatListener(
+              customerId: int.parse(innerChild.key ?? "0"),
+              astroId: value['astroId'],
+              astroImage: value['astroImage'],
+              astroName: value['astroName'],
+              chatMessage: value['chat_message'],
+              customeName: value['custome_name'],
+              customerImage: value['customer_image'],
+              extraTalktime: value['extra_talktime'],
+              isRechargeContinue: value['is_recharge_continue'],
+              isTimeout: value['is_timeout'],
+              ivrTime: value['ivr_time'],
+              notification: value['notification'],
+              orderId: value['orderId'],
+              orderType: value['orderType'],
+              queueId: value['queue_id'],
+              status: value['status'],
+            );
+            if (value['status'] == 0 || value['status'] == 1) {
+              Get.toNamed(RouteName.videoCallPage,
+                  arguments: astroChatWatcher.value);
+            } else if (value['status'] == 2) {
+              if (Get.currentRoute != RouteName.chatMessageUI) {
+                if (Get.currentRoute == RouteName.videoCallPage) {
+                  Get.offNamed(RouteName.chatMessageUI,
+                      arguments: astroChatWatcher.value);
+                } else {
+                  Get.toNamed(RouteName.chatMessageUI,
+                      arguments: astroChatWatcher.value);
+                }
+              }
             }
 
             return;
           }
         }
-      } else {}
+      }
     });
   }
 
@@ -115,7 +127,6 @@ class DashboardController extends GetxController
   }
 
   void loadPreDefineData() async {
-    await Future.delayed(const Duration(milliseconds: 100));
     SpecialityList response = await repository.loadPreDefineData();
     await preferenceService.setSpecialAbility(response.toPrettyJson());
   }
@@ -132,10 +143,10 @@ class DashboardController extends GetxController
       try {
         permissionStatus = await _getContactPermission();
         if (permissionStatus != PermissionStatus.granted) {
-          // await openAppSettings();
+          await openAppSettings();
         } else {}
       } catch (e) {
-        // await openAppSettings();
+        await openAppSettings();
       }
     }
   }

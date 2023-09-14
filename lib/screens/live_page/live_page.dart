@@ -4,6 +4,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
+//
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_timer/custom_timer.dart';
 import 'package:divine_astrologer/common/block_user_list.dart';
 import 'package:divine_astrologer/common/co-host_request.dart';
@@ -15,19 +17,16 @@ import 'package:divine_astrologer/screens/live_page/live_controller.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-//
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
+import 'package:http/http.dart' as http;
 
 // Package imports:
 import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
-import 'package:http/http.dart' as http;
+
 import '../../common/cached_network_image.dart';
 import '../../common/colors.dart';
 import '../../common/custom_text.dart';
@@ -67,12 +66,6 @@ class LivePageState extends State<LivePage>
   final controller = Get.put(LiveController(Get.put(UserRepository())));
   final liveStateNotifier =
       ValueNotifier<ZegoLiveStreamingState>(ZegoLiveStreamingState.idle);
-  late CustomTimerController timeController = CustomTimerController(
-      vsync: this,
-      begin: const Duration(minutes: 1),
-      end: Duration.zero,
-      initialState: CustomTimerState.reset,
-      interval: CustomTimerInterval.seconds);
 
   @override
   void initState() {
@@ -81,8 +74,8 @@ class LivePageState extends State<LivePage>
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       controller.listenCallStatus();
       controller.listenWaitlistRemove();
-      controller.setAvailibility(widget.localUserID, true, timeController);
-      controller.getBlockedCustomerList();
+      controller.setAvailibility(widget.localUserID, true,);
+      //controller.getBlockedCustomerList();
       event.hostEvents.onCoHostRequestReceived = (user) async {
         controller.coHostUser = user;
         String type = await controller.getCallType(widget.localUserID);
@@ -107,7 +100,7 @@ class LivePageState extends State<LivePage>
                           customerId: user.id);
                     });
                     controller.isCoHosting.value = true;
-                    timeController.start();
+                    //timeController.start();
                   });
             });
       };
@@ -125,19 +118,6 @@ class LivePageState extends State<LivePage>
     });
     Future.delayed(const Duration(seconds: 1)).then((value) {
       ZegoUIKit().useFrontFacingCamera(widget.isFrontCamera);
-    });
-    timeController.state.addListener(() {
-      if (timeController.state.value == CustomTimerState.finished) {
-        if (controller.coHostUser != null) {
-          controller.setCallType(widget.localUserID);
-        }
-        controller.setCallStatus();
-        timeController.reset();
-        controller.setBusyStatus(widget.localUserID, 0, customerId: "");
-        liveController.connect.removeCoHost(controller.coHostUser!);
-        controller.removeFromWaitList();
-        controller.isCoHosting.value = false;
-      }
     });
   }
 
@@ -179,7 +159,7 @@ class LivePageState extends State<LivePage>
             return EndSession(
                 onNo: () {},
                 onYes: () {
-                  timeController.reset();
+                  controller.stopTimer();
                   controller.setBusyStatus(widget.localUserID, 0,
                       customerId: "");
                   GiftWidget.clear();
@@ -392,7 +372,7 @@ class LivePageState extends State<LivePage>
   Container buildAstrologerLiveStartWidget() {
     return Container(
       height: 65.h,
-      margin: EdgeInsets.only(left: 22.w, top: 22.h),
+      margin: EdgeInsets.only(left: 22.w, top: 15.h),
       decoration: BoxDecoration(
           color: AppColors.lightBlack.withOpacity(.3),
           borderRadius: BorderRadius.circular(10)),
@@ -423,7 +403,7 @@ class LivePageState extends State<LivePage>
             ],
           ),
           SizedBox(width: 16.w),
-          Assets.images.starLive.image(),
+          // Assets.images.starLive.image(),
           SizedBox(width: 16.w),
         ],
       ),
@@ -432,23 +412,23 @@ class LivePageState extends State<LivePage>
 
   Container buildCallDurationWidget() {
     return Container(
-      height: 73.h,
-      margin: EdgeInsets.only(left: 22.w),
+      height: 65.h,
+      margin: EdgeInsets.only(left: 12.w),
       decoration: BoxDecoration(
           color: AppColors.lightBlack.withOpacity(.3),
-          borderRadius: BorderRadius.circular(28)),
+          borderRadius: BorderRadius.circular(18)),
       child: Stack(
         alignment: Alignment.topCenter,
         children: [
           Container(
-            height: 48.h,
+            height: 40.h,
             decoration: BoxDecoration(
                 color: AppColors.darkBlue,
-                borderRadius: BorderRadius.circular(28)),
+                borderRadius: BorderRadius.circular(18)),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(width: 16.w),
+                SizedBox(width: 6.w),
                 Container(
                   width: 32.w,
                   height: 32.h,
@@ -458,17 +438,10 @@ class LivePageState extends State<LivePage>
                   ),
                   child: circleAvatar(),
                 ),
-                SizedBox(width: 8.w),
-                Lottie.asset('assets/lottie/sound_waves.json'),
-                SizedBox(width: 8.w),
-                CustomTimer(
-                    controller: timeController,
-                    builder: (state, remaining) {
-                      return CustomText(
-                          "${remaining.minutes} m ${remaining.seconds} s",
-                          fontSize: 16.sp,
-                          fontColor: AppColors.white);
-                    }),
+                //SizedBox(width: 8.w),
+                //Lottie.asset('assets/lottie/sound_waves.json'),
+                SizedBox(width: 4.w),
+                buildCustomTimer(),
                 SizedBox(width: 16.w),
               ],
             ),
@@ -478,14 +451,29 @@ class LivePageState extends State<LivePage>
             child: Center(
               child: Padding(
                 padding: EdgeInsets.only(bottom: 4.0.w),
-                child: CustomText("${controller.coHostUser!.name} is on call",
-                    fontSize: 12.sp, fontColor: AppColors.white),
+                child: CustomText(
+                    "${controller.coHostUser?.name ?? ""} is on call",
+                    fontSize: 12.sp,
+                    fontColor: AppColors.white),
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  CustomText buildCustomTimer() {
+    if(controller.hour.value == "00"){
+      return CustomText(
+          "${controller.min}:${controller.sec}",
+          fontSize: 14.sp,
+          fontColor: AppColors.white);
+    }
+    return CustomText(
+                  "${controller.hour}:${controller.min}:${controller.sec}",
+                  fontSize: 14.sp,
+                  fontColor: AppColors.white);
   }
 
   Widget foreground(BoxConstraints constraints) {
@@ -504,7 +492,7 @@ class LivePageState extends State<LivePage>
           SizedBox(width: 120.w),
           //const Spacer(),
           sideButtons(),
-          SizedBox(width: 15.w)
+          SizedBox(width: 10.w)
         ],
       ),
     );
@@ -579,7 +567,7 @@ class LivePageState extends State<LivePage>
                             const Spacer(),
                             messageView,
                             const SizedBox(
-                              height: 16,
+                              height: 4,
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -595,6 +583,18 @@ class LivePageState extends State<LivePage>
                                           filter: ImageFilter.blur(
                                               sigmaX: 5, sigmaY: 5),
                                           child: CustomTextField(
+                                            height: 40.h,
+                                            onSubmit: (value) {
+                                              if (value.isNotEmpty) {
+                                                //liveController.message.send("${controller.msg.text}*${widget.astrologerName}");
+                                                liveController.message
+                                                    .send(value);
+                                                controller.msg.text = "";
+                                                controller.jumpToBottom();
+                                              }
+                                            },
+                                            // height: ,
+                                            inputAction: TextInputAction.send,
                                             readOnly: false,
                                             hintText: 'Say Hi...',
                                             controller: controller.msg,
@@ -606,25 +606,10 @@ class LivePageState extends State<LivePage>
                                                   RegExp(r'^[a-zA-Z ]*$'),
                                                   allow: true)
                                             ],
-                                            suffixIcon: InkWell(
-                                              onTap: () {
-                                                if (controller
-                                                    .msg.text.isNotEmpty) {
-                                                  //liveController.message.send("${controller.msg.text}*${widget.astrologerName}");
-                                                  liveController.message.send(
-                                                      controller.msg.text);
-                                                  controller.msg.text = "";
-                                                  controller.jumpToBottom();
-                                                }
-                                              },
-                                              child: Assets.images.icSendMsg
-                                                  .svg(
-                                                      width: 40.w,
-                                                      height: 40.w),
-                                            ),
+
                                             inputBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
-                                                color: AppColors.darkBlue
+                                                color: AppColors.white
                                                     .withOpacity(0.15),
                                               ),
                                               borderRadius:
@@ -665,7 +650,7 @@ class LivePageState extends State<LivePage>
                               ),
                             ),
                             const SizedBox(
-                              height: 16,
+                              height: 12,
                             ),
                           ],
                         ),
@@ -675,7 +660,7 @@ class LivePageState extends State<LivePage>
           ),
         ),
         Positioned(
-          top: 20.h,
+          top: 10.h,
           child: SizedBox(
             width: Get.width,
             child: Column(
@@ -683,15 +668,12 @@ class LivePageState extends State<LivePage>
               mainAxisSize: MainAxisSize.min,
               children: [
                 buildTopMenu(),
-                Obx(() => controller.isCoHosting.isFalse
-                    ? const SizedBox()
-                    : SizedBox(height: 20.h)),
-                /*Obx(() => controller.isCoHosting.isFalse
-                    ? buildAstrologerLiveStartWidget()
-                    : const SizedBox()),*/
-                Obx(() => controller.isCoHosting.value
-                    ? buildCallDurationWidget()
-                    : const SizedBox())
+                /*Obx(
+                  () => AnimatedOpacity(
+                      opacity: controller.isStarHide.isFalse ? 1 : 0,
+                      duration: Duration(seconds: 1),
+                      child: buildAstrologerLiveStartWidget()),
+                )*/
               ],
             ),
           ),
@@ -704,7 +686,6 @@ class LivePageState extends State<LivePage>
     return InkWell(
         onTap: () {
           if (controller.msg.text.isNotEmpty) {
-            //liveController.message.send("${controller.msg.text}*${widget.astrologerName}");
             liveController.message.send(controller.msg.text);
             controller.msg.text = "";
             Get.back();
@@ -713,101 +694,130 @@ class LivePageState extends State<LivePage>
         child: Assets.images.icSendMsg.svg());
   }
 
-  Row buildTopMenu() {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return EndSession(
-                      onNo: () {},
-                      onYes: () {
-                        if (controller.coHostUser != null) {
-                          controller.setCallType(widget.localUserID);
-                        }
-                        timeController.reset();
-                        controller.stopStream(widget.localUserID);
-                      });
-                },
-              );
-            },
-            icon: Assets.images.leftArrow.svg()),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(40),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 4.h),
-              decoration: BoxDecoration(
-                  color: AppColors.blackColor.withOpacity(.3),
-                  borderRadius: BorderRadius.circular(40)),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 37.w,
-                    height: 37.h,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
+  Widget buildTopMenu() {
+    return Padding(
+      padding: EdgeInsets.only(top: 5.h),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          IconButton(
+              padding: EdgeInsets.only(top: 5.h),
+              alignment: Alignment.topCenter,
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return EndSession(
+                        onNo: () {},
+                        onYes: () {
+                          if (controller.coHostUser != null) {
+                            controller.setCallType(widget.localUserID);
+                          }
+                          //controller.timeController.reset();
+                          controller.stopStream(widget.localUserID);
+                        });
+                  },
+                );
+              },
+              icon: Assets.images.leftArrow.svg()),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(40),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 4.h),
+                decoration: BoxDecoration(
+                    color: AppColors.blackColor.withOpacity(.3),
+                    borderRadius: BorderRadius.circular(40)),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 30.w,
+                      height: 30.h,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      child: circleAvatar(),
                     ),
-                    child: circleAvatar(),
-                  ),
-                  SizedBox(width: 3.w),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomText(
-                        (widget.astrologerName ?? "") + "  ",
-                        fontSize: 12.sp,
-                        fontColor: AppColors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      CustomText(
-                        "Toret",
-                        fontSize: 10.sp,
-                        fontColor: AppColors.white,
-                      ),
-                    ],
-                  ),
-                ],
+                    SizedBox(width: 3.w),
+                    Text(
+                      widget.astrologerName != null
+                          ? widget.astrologerName!.isNotEmpty &&
+                                  widget.astrologerName!.length > 8
+                              ? "${widget.astrologerName!.substring(0, 8)}..."
+                              : widget.astrologerName ?? ""
+                          : "",
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 12.sp,
+                          color: AppColors.white,
+                          fontWeight: FontWeight.w500),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        const Spacer(),
-        Assets.images.starLive.image(),
-        const Spacer(),
-        Obx(() => Column(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                    child: Switch(
-                      value: controller.isCallOnOff.value,
-                      onChanged: (val) {
-                        controller.setAvailibility(widget.localUserID,
-                            !controller.isCallOnOff.value, timeController);
-                        controller.isCallOnOff.value =
-                            !controller.isCallOnOff.value;
-                      },
-                    ),
+          Spacer(),
+          InkWell(
+              onTap: () {
+                controller.isStarHide.value = !controller.isStarHide.value;
+              },
+              child: Assets.images.starLive.image()),
+          SizedBox(width: 1.w),
+          Obx(() => controller.isCoHosting.value
+              ? buildCallDurationWidget()
+              : SizedBox()),
+          Spacer(),
+          Obx(() => Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  FlutterSwitch(
+                    activeColor: AppColors.appYellowColour.withOpacity(0.7),
+                    inactiveColor: AppColors.grey.withOpacity(0.7),
+                    activeText: "Call",
+                    inactiveText: "Call",
+                    activeTextColor: AppColors.white,
+                    inactiveTextColor: AppColors.white,
+                    showOnOff: true,
+                    height: 28.h,
+                    padding: 2,
+                    width: 70.w,
+                    activeTextFontWeight: FontWeight.normal,
+                    inactiveTextFontWeight: FontWeight.normal,
+                    value: controller.isCallOnOff.value,
+                    onToggle: (val) {
+                      controller.setAvailibility(widget.localUserID,
+                          !controller.isCallOnOff.value,);
+                      controller.isCallOnOff.value =
+                          !controller.isCallOnOff.value;
+                    },
                   ),
-                ),
-                CustomText(
-                  controller.isCallOnOff.value ? "Call on" : "Call off",
-                  fontSize: 10.sp,
-                  fontColor: AppColors.blackColor,
-                ),
-              ],
-            )),
-        SizedBox(width: 20.w)
-      ],
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  /*Container(
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: AppColors.grey.withOpacity(0.5)),
+                    child: CustomText(
+                      controller.isCallOnOff.value ? "Call on" : "Call off",
+                      fontSize: 8.sp,
+                      fontColor: AppColors.white,
+                    ),
+                  ),*/
+                ],
+              )),
+          SizedBox(width: 10.w)
+        ],
+      ),
     );
   }
 
@@ -844,13 +854,14 @@ class LivePageState extends State<LivePage>
                                     controller.setCallType(widget.localUserID);
                                   }
                                   controller.setCallStatus();
-                                  timeController.reset();
+                                  controller.stopTimer();
                                   controller.setBusyStatus(
                                       widget.localUserID, 0,
                                       customerId: "");
                                   liveController.connect
                                       .removeCoHost(controller.coHostUser!);
                                   controller.removeFromWaitList();
+                                  controller.endCall();
                                   controller.isCoHosting.value = false;
                                 });
                           },
@@ -936,7 +947,7 @@ class LivePageState extends State<LivePage>
                 showCupertinoModalPopup(
                     context: context,
                     builder: (BuildContext context) {
-                      return const BlockUserList();
+                      return BlockUserList(hostId: widget.localUserID,);
                     });
               },
               child: Container(
@@ -1005,8 +1016,9 @@ class LivePageState extends State<LivePage>
                             builder: (BuildContext context) {
                               return WaitList(
                                 showNext: false,
+                                data: snapshot.data!.snapshot.children,
                                 astroId: widget.localUserID,
-                                onAccept: (id,name) {},
+                                onAccept: (id, name) {},
                               );
                             });
                       },

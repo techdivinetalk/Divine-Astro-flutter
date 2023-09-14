@@ -9,6 +9,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
+import '../../common/custom_light_yellow_btn.dart';
+
 class VideoCallPage extends GetView<VideoCallPageController> {
   const VideoCallPage({Key? key}) : super(key: key);
 
@@ -17,13 +19,13 @@ class VideoCallPage extends GetView<VideoCallPageController> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          color: AppColors.blackColor.withOpacity(0.7),
+          color: controller.isForChat
+              ? AppColors.white
+              : AppColors.blackColor.withOpacity(0.7),
         ),
         child: SafeArea(
           child: Stack(
             children: [
-              // assistUI(),
-              // closeButton(),
               acceptUI(),
               if (!controller.isForChat) closeButton(color: AppColors.white),
             ],
@@ -56,7 +58,11 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                   CustomText(
                     controller.featureText,
                     fontSize: 20.sp,
-                    fontColor: AppColors.white,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.visible,
+                    fontColor: controller.isForChat
+                        ? AppColors.blackColor
+                        : AppColors.white,
                     fontWeight: FontWeight.w600,
                   ),
                   SizedBox(height: 24.h),
@@ -74,30 +80,56 @@ class VideoCallPage extends GetView<VideoCallPageController> {
             ),
           ),
         ),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 32.h),
-          child: Row(
-            children: [
-              Expanded(
-                child: FilledButton(
-                  onPressed: () {
-                    controller.onAccept();
-                  },
-                  style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.lightYellow,
-                    padding: EdgeInsets.symmetric(vertical: 20.h),
-                  ),
-                  child: CustomText(
-                    'Accept',
-                    fontSize: 20.sp,
-                    fontColor: AppColors.brownColour,
-                    fontWeight: FontWeight.w600,
+        Obx(() => controller.isWaiting.value
+            ? Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 20.h),
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 1),
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Obx(
+                          () => Center(
+                            child: CustomText(
+                              controller.btnTitle.value,
+                              fontSize: 20.sp,
+                              fontColor: AppColors.brownColour,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
+              )
+            : Container(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 32.h),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: FilledButton(
+                        onPressed: () {
+                          controller.onAccept();
+                        },
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.lightYellow,
+                          padding: EdgeInsets.symmetric(vertical: 20.h),
+                        ),
+                        child: Obx(() => CustomText(
+                              controller.btnTitle.value,
+                              fontSize: 20.sp,
+                              fontColor: AppColors.brownColour,
+                              fontWeight: FontWeight.w600,
+                            )),
+                      ),
+                    ),
+                  ],
+                ),
+              )),
       ],
     );
   }
@@ -111,21 +143,26 @@ class VideoCallPage extends GetView<VideoCallPageController> {
               child: CustomText(
                 title,
                 fontSize: 16.sp,
-                fontColor: AppColors.white,
+                fontColor: controller.isForChat
+                    ? AppColors.blackColor
+                    : AppColors.white,
               ),
             ),
             SizedBox(width: 14.w),
             CustomText(
               '-',
               fontSize: 16.sp,
-              fontColor: AppColors.white,
+              fontColor:
+                  controller.isForChat ? AppColors.blackColor : AppColors.white,
             ),
             SizedBox(width: 14.w),
             Expanded(
               child: CustomText(
                 data,
                 fontSize: 16.sp,
-                fontColor: AppColors.white,
+                fontColor: controller.isForChat
+                    ? AppColors.blackColor
+                    : AppColors.white,
                 overflow: TextOverflow.visible,
                 textAlign: TextAlign.right,
               ),

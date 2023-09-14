@@ -16,7 +16,9 @@ PreferredSizeWidget commonAppbar(
         Text(
           title ?? "",
           style: AppTextStyle.textStyle16(
-              fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+            fontWeight: FontWeight.w400,
+            fontColor: AppColors.darkBlue,
+          ),
         ),
       ],
     ),
@@ -33,7 +35,7 @@ PreferredSizeWidget commonDetailAppbar(
     centerTitle: false,
     leading: InkWell(
         onTap: () {
-         Navigator.pop(Get.context!);
+          Navigator.pop(Get.context!);
         },
         child: const Icon(Icons.arrow_back_ios)),
     iconTheme: const IconThemeData(color: AppColors.blackColor),

@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:divine_astrologer/common/routes.dart';
+import 'package:divine_astrologer/model/chat/req_common_chat_model.dart';
 import 'package:divine_astrologer/model/res_login.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,8 @@ import '../../common/colors.dart';
 import '../../common/common_functions.dart';
 import '../../di/hive_services.dart';
 import '../../di/shared_preference_service.dart';
+import '../../model/chat/res_astro_chat_listener.dart';
+import '../../model/chat/res_common_chat_success.dart';
 import '../../model/chat_offline_model.dart';
 import '../../model/get_kundli_data.dart';
 import '../../repository/chat_repository.dart';
@@ -54,6 +57,11 @@ class ChatMessageController extends GetxController {
   ChatMessageController(this.kundliRepository, this.chatRepository);
   final KundliRepository? kundliRepository;
   final ChatRepository chatRepository;
+  RxString customerName = "".obs;
+  RxString profileImage = "".obs;
+  RxBool isDataLoad = false.obs;
+  RxBool isOngoingChat = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -61,6 +69,16 @@ class ChatMessageController extends GetxController {
     if (Get.arguments != null) {
       if (Get.arguments is bool) {
         sendReadMessageStatus = true;
+      } else if (Get.arguments is ResAstroChatListener) {
+        isOngoingChat.value = true;
+        var data = Get.arguments;
+        currentChatUserId.value = data!.customerId;
+        currentUserId.value = data!.customerId;
+        customerName.value = data!.customeName ?? "";
+        profileImage.value =
+            "${preference.getBaseImageURL()}/${data!.customerImage}";
+        timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0,
+            astroChatWatcher.value.orderId!);
       }
     }
     userData = preferenceService.getUserDetail();
@@ -85,10 +103,12 @@ class ChatMessageController extends GetxController {
   }
 
   scrollToBottomFunc() {
-    messgeScrollController.animateTo(
-        messgeScrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 600),
-        curve: Curves.easeOut);
+    messgeScrollController.hasClients
+        ? messgeScrollController.animateTo(
+            messgeScrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 600),
+            curve: Curves.easeOut)
+        : null;
   }
 
   getChatList() async {
@@ -334,5 +354,48 @@ class ChatMessageController extends GetxController {
       }
     }
     update();
+  }
+
+//End Chat
+  confirmChatEnd(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Divine Astrologer"),
+          content: const Text("Are you sure you want to end this chat?"),
+          actions: [
+            TextButton(
+              child: const Text("Yes"),
+              onPressed: () async {
+                Get.back();
+                onEndChat();
+              },
+            ),
+            TextButton(
+              child: const Text("No"),
+              onPressed: () async {
+                Get.back();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  onEndChat() async {
+    isDataLoad.value = false;
+    isOngoingChat.value = false;
+    timer.stopTimer();
+    ResCommonChatStatus response = await ChatRepository().endChat(
+        ReqCommonChatParams(
+                orderId: astroChatWatcher.value.orderId,
+                queueId: astroChatWatcher.value.queueId)
+            .toJson());
+    if (response.statusCode == 200) {
+      divineSnackBar(data: "Chat ended.", color: AppColors.redColor);
+    }
+    isDataLoad.value = true;
   }
 }

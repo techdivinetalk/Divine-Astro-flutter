@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_button.dart';
 import 'package:divine_astrologer/common/custom_text.dart';
@@ -28,29 +29,32 @@ class VideoCall extends GetView<VideoCallController> {
             callID: '1_2',
             controller: controller.callController,
             config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+              ..layout = ZegoLayout.pictureInPicture(
+                  switchLargeOrSmallViewByClick: true)
               ..durationConfig = ZegoCallDurationConfig(isVisible: false)
               ..bottomMenuBarConfig = ZegoBottomMenuBarConfig(
                   hideAutomatically: false, hideByClick: false, buttons: [])
               ..topMenuBarConfig = ZegoTopMenuBarConfig(
                 hideAutomatically: false,
                 hideByClick: false,
+                isVisible: false,
               )
               ..avatarBuilder = (BuildContext context, Size size,
                   ZegoUIKitUser? user, Map extraInfo) {
                 return user != null
-                    ? Container(
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          /*image: DecorationImage(
-                            image: NetworkImage(
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(100.r),
+                        child: CachedNetworkImage(
+                          imageUrl:
                               'https://your_server/app/avatar/${user.id}.png',
-                            ),
-                          ),*/
+                          errorWidget: (context, url, error) => Image.asset(
+                              Assets.images.defaultProfile.path,
+                              fit: BoxFit.cover),
                         ),
                       )
                     : const SizedBox();
               }
-              ..audioVideoViewConfig = ZegoPrebuiltAudioVideoViewConfig(
+              /*..audioVideoViewConfig = ZegoPrebuiltAudioVideoViewConfig(
                 foregroundBuilder: (BuildContext context, Size size,
                     ZegoUIKitUser? user, Map extraInfo) {
                   return user != null
@@ -62,19 +66,17 @@ class VideoCall extends GetView<VideoCallController> {
                             height: 30,
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
-                              /*image: DecorationImage(
+                              *//*image: DecorationImage(
                                 image: NetworkImage(
                                   'https://your_server/app/avatar/${user.id}.png',
                                 ),
-                              ),*/
+                              ),*//*
                             ),
                           ),
                         )
                       : const SizedBox();
                 },
-              )
-              ..layout = ZegoLayout.pictureInPicture(
-                  switchLargeOrSmallViewByClick: true)
+              )*/
               ..onOnlySelfInRoom = (context) => Navigator.of(context).pop(),
           ),
           customAppBar(),
@@ -188,22 +190,6 @@ class VideoCall extends GetView<VideoCallController> {
                     '${formattedTime()} Remaining',
                     fontSize: 16.sp,
                     fontColor: AppColors.white,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                SizedBox(width: 10.w),
-                FilledButton(
-                  onPressed: () {},
-                  style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.lightYellow,
-                    minimumSize: Size.zero,
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                  ),
-                  child: CustomText(
-                    'Recharge Now',
-                    fontColor: AppColors.brownColour,
-                    fontSize: 10.sp,
                     fontWeight: FontWeight.w700,
                   ),
                 ),

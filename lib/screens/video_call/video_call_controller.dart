@@ -8,7 +8,7 @@ class VideoCallController extends GetxController {
       videoValue = false.obs,
       frontCamValue = true.obs;
 
-  Rx<Duration> callDuration = const Duration(seconds: 0).obs;
+  Rx<Duration> callDuration = const Duration(minutes: 5).obs;
   final callController = ZegoUIKitPrebuiltCallController();
 
   Timer? timer;
@@ -17,8 +17,8 @@ class VideoCallController extends GetxController {
   void onReady() {
     super.onReady();
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      callDuration.value = Duration(seconds: callDuration.value.inSeconds + 1);
-      if (callDuration.value.inSeconds > (60 * 5)) {
+      callDuration.value = Duration(seconds: callDuration.value.inSeconds - 1);
+      if (callDuration.value.inSeconds <= 0) {
         onHangUp();
       }
     });

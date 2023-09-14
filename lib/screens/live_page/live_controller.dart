@@ -18,8 +18,9 @@ import '../../common/waitlist_sheet.dart';
 import '../../di/shared_preference_service.dart';
 import '../../model/res_blocked_customers.dart';
 import '../../repository/user_repository.dart';
+import 'constant.dart';
 
-class LiveController extends GetxController {
+class LiveController extends GetxController with GetSingleTickerProviderStateMixin {
   var pref = Get.find<SharedPreferenceService>();
 
   LiveController(this.userRepository);
@@ -64,6 +65,7 @@ class LiveController extends GetxController {
   ZegoUIKitUser? coHostUser;
   var msg = TextEditingController();
   var isCoHosting = false.obs;
+  var isStarHide = false.obs;
   var isCameraOn = true.obs;
   var isMicroPhoneOn = true.obs;
   var isCallOnOff = true.obs;
@@ -81,7 +83,40 @@ class LiveController extends GetxController {
   var nextuserid = "";
   var scrollController = ScrollController();
   var removedWaitList = "0";
+  final liveController = ZegoUIKitPrebuiltLiveStreamingController();
+  Timer? countdownTimer;
 
+  stopTimer() {
+    if (countdownTimer != null) {
+      countdownTimer!.cancel();
+      countdownTimer = null;
+    }
+  }
+
+  String strDigits(int n) => n.toString().padLeft(2, '0');
+  RxString hour = "".obs, min = "".obs, sec = "".obs;
+  startTimer() {
+    countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      const reduceSecondsBy = 1;
+      final seconds = timeDuration.inSeconds - reduceSecondsBy;
+      if (seconds < 0) {
+        stopTimer();
+        if (coHostUser != null) {
+          setCallType(astroId!);
+        }
+        setCallStatus();
+        setBusyStatus(astroId!, 0, customerId: "");
+        liveController.connect.removeCoHost(coHostUser!);
+        endCall();
+        isCoHosting.value = false;
+      } else {
+        timeDuration = Duration(seconds: seconds);
+        hour.value = strDigits(timeDuration.inHours.remainder(24));
+        min.value = strDigits(timeDuration.inMinutes.remainder(60));
+        sec.value = strDigits(timeDuration.inSeconds.remainder(60));
+      }
+    });
+  }
   jumpToBottom() {
     scrollController.animateTo(
       scrollController.position.maxScrollExtent + 50,
@@ -90,7 +125,7 @@ class LiveController extends GetxController {
     );
   }
 
-  getBlockedCustomerList() async {
+  /*getBlockedCustomerList() async {
     Map<String, dynamic> params = {
       "role_id": pref.getUserDetail()?.roleId ?? 0
     };
@@ -104,14 +139,6 @@ class LiveController extends GetxController {
             data!.first.astroBlockCustomer!.isNotEmpty) {
           blockCustomer.addAll(
               data.first.astroBlockCustomer as Iterable<AstroBlockCustomer>);
-          for (var element in data.first.astroBlockCustomer!) {
-            blockIds.add(element.customerId.toString());
-            database.ref().child("live/$astroId/").update({
-              "blockUser": {
-                element.customerId: {"id": element.customerId}
-              }
-            });
-          }
         }
       }
     } catch (error) {
@@ -121,7 +148,7 @@ class LiveController extends GetxController {
         Get.snackbar("Error", error.toString()).show();
       }
     }
-  }
+  }*/
 
   unblockUser({required String customerId, required String name}) async {
     Map<String, dynamic> params = {
@@ -132,12 +159,13 @@ class LiveController extends GetxController {
     try {
       ResBlockedCustomers response =
           await userRepository.blockUnblockCustomer(params);
+      database.ref().child("live/$astroId/blockUser/$customerId/").remove();
       showDialog(
           context: Get.context!,
           builder: (builder) {
             return BlockSuccess(text: "$name has been Unblocked!");
           });
-      getBlockedCustomerList();
+      //getBlockedCustomerList();
     } catch (error) {
       if (error is AppException) {
         error.onException();
@@ -156,12 +184,17 @@ class LiveController extends GetxController {
     try {
       ResBlockedCustomers response =
           await userRepository.blockUnblockCustomer(params);
+      database.ref().child("live/$astroId").update({
+        "blockUser": {
+          customerId: {"id": customerId,"name":name}
+        }
+      });
+      //getBlockedCustomerList();
       showDialog(
           context: Get.context!,
           builder: (builder) {
             return BlockSuccess(text: "$name has been blocked!");
           });
-      getBlockedCustomerList();
     } catch (error) {
       if (error is AppException) {
         error.onException();
@@ -175,16 +208,18 @@ class LiveController extends GetxController {
     var data = await database.ref().child("live/$astroId/waitList").get();
     var first = data.children.toList().first;
     var value = first.value as Map;
+    typeOfNextUserCall = value["callType"];
     await Future.delayed(const Duration(seconds: 2));
     showCupertinoModalPopup(
         context: Get.context!,
+        barrierDismissible: false,
         builder: (BuildContext context) {
           dialogOpen = true;
           return WaitList(
+            data: data.children,
             astroId: astroId,
             showNext: true,
             onAccept: (String id, String name) {
-              dialogOpen = false;
               database
                   .ref()
                   .child("live/$astroId/")
@@ -200,29 +235,35 @@ class LiveController extends GetxController {
   }
 
   listenWaitlistRemove() async {
-    database.ref().child("live/$astroId/nextUser").onValue.listen((event) {
-      var data = event.snapshot.value as Map;
-      showCupertinoModalPopup(
-          context: Get.context!,
-          builder: (BuildContext context) {
-            dialogOpen = true;
-            return WaitList(
-              astroId: astroId,
-              showNext: true,
-              onAccept: (String id, String name) {
-                dialogOpen = false;
-                database
-                    .ref()
-                    .child("live/$astroId/")
-                    .update({"callStatus": 2, "userId": id, "userName": name});
-                database
-                    .ref()
-                    .child("live/$astroId/waitList/${data["id"]}")
-                    .remove();
-                Get.until((route) => route.settings.name == "/livepage");
-              },
-            );
-          });
+    database.ref().child("live/$astroId/nextUser").onValue.listen((event) async {
+      if(event.snapshot.value != null){
+        var data = event.snapshot.value as Map;
+        typeOfNextUserCall = data["callType"];
+        if(data.isNotEmpty){
+          var waitList = await database.ref().child("live/$astroId/waitList").get();
+          showCupertinoModalPopup(
+              context: Get.context!,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return WaitList(
+                  data: waitList.children,
+                  astroId: astroId,
+                  showNext: true,
+                  onAccept: (String id, String name) {
+                    database
+                        .ref()
+                        .child("live/$astroId/")
+                        .update({"callStatus": 2, "userId": id, "userName": name});
+                    database
+                        .ref()
+                        .child("live/$astroId/waitList/${data["id"]}")
+                        .remove();
+                    Get.until((route) => route.settings.name == "/livepage");
+                  },
+                );
+              });
+        }
+      }
     });
   }
 
@@ -242,9 +283,11 @@ class LiveController extends GetxController {
           typeOfCall = userData["callType"];
           showCupertinoModalPopup(
               context: Get.context!,
+              barrierDismissible: false,
               builder: (BuildContext context) {
                 dialogOpen2 = true;
                 return CoHostRequest(
+                    duration: userData["duration"],
                     name: userData["userName"],
                     onAccept: () {
                       dialogOpen2 = false;
@@ -271,29 +314,28 @@ class LiveController extends GetxController {
 
   var timeDuration = const Duration();
 
-  setAvailibility(String id, bool available, CustomTimerController controller) {
+  setAvailibility(String id, bool available) {
     database.ref().child("live/$id").update({"isAvailable": available});
     database.ref().child("live/$id/coHostUser").onValue.listen((event) async {
       final user = event.snapshot.value as String? ?? "";
       if (user.isEmpty) {
         isCoHosting.value = false;
-        controller.reset();
+        stopTimer();
       } else {
         var coHost = await database.ref().child("live/$astroId/coHost").get();
         if (coHost.value != null) {
           var user = coHost.value as Map;
           coHostUser = ZegoUIKitUser(id: user["id"], name: user["name"]);
+          offerId = user["offer_id"];
+          time = user["duration"];
+          orderId = user["order_id"];
+          typeOfCall = user["callType"];
+          setVisibilityCoHostAudio(typeOfCall);
+          setVisibilityCoHostVideo(typeOfCall);
+          intToTimeLeft(time);
         }
-        var data = await database.ref().child("live/$astroId/nextUser").get();
-        var type = data.value == null ? typeOfCall : typeOfNextUserCall;
-        setVisibilityCoHostAudio(type);
-        setVisibilityCoHostVideo(type);
-        var duration =
-            await database.ref().child("live/$astroId/duration").get();
-        intToTimeLeft(duration.value as int ?? 0);
-        //controller.begin = timeDuration;
         isCoHosting.value = true;
-        controller.start();
+        startTimer();
       }
     });
   }
@@ -354,18 +396,21 @@ class LiveController extends GetxController {
     };
   }
 
-  void endCall(String orderId, bool isAccept) async {
+  int orderId = 0;
+  int time = 0;
+  int offerId = 0;
+  void endCall() async {
     Map<String, dynamic> json = {
       "order_id": orderId,
-      "duration": "",
-      "amount": "walletBalance",
-      "offer_id": orderId,
-      "role_id": pref.getUserDetail()?.roleId ?? -1,
+      "duration": time,
+      "amount": 0,
+      "offer_id": offerId,
+      "role_id": roleId,
     };
     final response = await userRepository.endCall(json);
   }
 
-  String intToTimeLeft(int value) {
+  Duration intToTimeLeft(int value) {
     int h, m, s;
 
     h = value ~/ 3600;
@@ -376,6 +421,6 @@ class LiveController extends GetxController {
 
     String result = "$h:$m:$s";
     timeDuration = Duration(hours: h, minutes: m, seconds: s);
-    return result;
+    return timeDuration;
   }
 }
