@@ -1,9 +1,7 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/switch_component.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
-import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
@@ -483,7 +481,7 @@ class HomeUI extends GetView<HomeController> {
                 ),
                 SizedBox(height: 16.h),
                 Text(
-                  "Video".tr.toUpperCase(),
+                  "videoCall".tr.toUpperCase(),
                   style: AppTextStyle.textStyle12(
                       fontColor: AppColors.darkBlue,
                       fontWeight: FontWeight.w700),
@@ -1742,7 +1740,7 @@ class SelectedTimeForChat extends GetView<HomeController> {
         () {
           if (controller.selectedChatTime.value.isNotEmpty) {
             return Text(
-              "${controller.selectedChatDate.value.toCustomFormattedString()} ${controller.selectedChatTime.value}",
+              "${controller.selectedChatDate.value.toCustomFormat()} ${controller.selectedChatTime.value}",
               style: AppTextStyle.textStyle10(
                 fontColor: AppColors.darkBlue,
                 fontWeight: FontWeight.w400,
@@ -1750,7 +1748,7 @@ class SelectedTimeForChat extends GetView<HomeController> {
             );
           } else {
             return Text(
-              controller.selectedChatDate.value.toCustomFormattedString(),
+              controller.selectedChatDate.value.toCustomFormat(),
               style: AppTextStyle.textStyle10(
                 fontColor: AppColors.darkBlue,
                 fontWeight: FontWeight.w400,
@@ -1775,7 +1773,7 @@ class SelectedTimeForCall extends GetView<HomeController> {
         () {
           if (controller.selectedCallTime.value.isNotEmpty) {
             return Text(
-              "${controller.selectedCallDate.value.toCustomFormattedString()} ${controller.selectedCallTime.value}",
+              "${controller.selectedCallDate.value.toCustomFormat()} ${controller.selectedCallTime.value}",
               style: AppTextStyle.textStyle10(
                 fontColor: AppColors.darkBlue,
                 fontWeight: FontWeight.w400,
@@ -1783,7 +1781,7 @@ class SelectedTimeForCall extends GetView<HomeController> {
             );
           } else {
             return Text(
-              controller.selectedCallDate.value.toCustomFormattedString(),
+              controller.selectedCallDate.value.toCustomFormat(),
               style: AppTextStyle.textStyle10(
                 fontColor: AppColors.darkBlue,
                 fontWeight: FontWeight.w400,
@@ -1808,7 +1806,7 @@ class SelectedTimeForVideoCall extends GetView<HomeController> {
         () {
           if (controller.selectedVideoTime.value.isNotEmpty) {
             return Text(
-              "${controller.selectedVideoDate.value.toCustomFormattedString()} ${controller.selectedVideoTime.value}",
+              "${controller.selectedVideoDate.value.toCustomFormat()} ${controller.selectedVideoTime.value}",
               style: AppTextStyle.textStyle10(
                 fontColor: AppColors.darkBlue,
                 fontWeight: FontWeight.w400,
@@ -1816,7 +1814,7 @@ class SelectedTimeForVideoCall extends GetView<HomeController> {
             );
           } else {
             return Text(
-              controller.selectedVideoDate.value.toCustomFormattedString(),
+              controller.selectedVideoDate.value.toCustomFormat(),
               style: AppTextStyle.textStyle10(
                 fontColor: AppColors.darkBlue,
                 fontWeight: FontWeight.w400,

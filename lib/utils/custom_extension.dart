@@ -37,10 +37,51 @@ extension DateToString on DateTime {
   }
 
   String toCustomFormattedString({String locale = "en_US"}) {
-    final format = DateFormat("dd MMM yyyy", locale);
+    final format = DateFormat("d\'\' MMM yyyy", locale);
     return format.format(this);
   }
+
+  String toCustomFormat() {
+    String day = this.day.toString();
+    String month = DateFormat.MMM().format(this);
+    String year = this.year.toString();
+    //String hour = DateFormat('hh').format(this);
+    // String minute = DateFormat('mm').format(this);
+    // String period = DateFormat('a').format(this).toUpperCase();
+
+    String daySuffix;
+    if (day.endsWith('1') && day != '11') {
+      daySuffix = 'st';
+    } else if (day.endsWith('2') && day != '12') {
+      daySuffix = 'nd';
+    } else if (day.endsWith('3') && day != '13') {
+      daySuffix = 'rd';
+    } else {
+      daySuffix = 'th';
+    }
+
+    return '$day$daySuffix $month $year';
+  }
 }
+
+/*String getOrdinalDate(DateTime dateTime){
+  return  DateFormat("dd${getDayOrdinal(dateTime.day)} MMM yyyy hh:mM aa").format(dateTime);
+}
+String getDayOrdinal(int day) {
+  if (day >= 11 && day <= 13) {
+    return 'th';
+  }
+  switch (day % 10) {
+    case 1:
+      return 'st';
+    case 2:
+      return 'nd';
+    case 3:
+      return 'rd';
+    default:
+      return 'th';
+  }
+}*/
 
 String? extractYoutubeVideoID(String videoUrl) {
   RegExp regExp = RegExp(

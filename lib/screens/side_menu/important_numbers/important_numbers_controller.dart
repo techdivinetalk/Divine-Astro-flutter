@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:contacts_service/contacts_service.dart';
 import 'package:divine_astrologer/common/strings.dart';
 import 'package:divine_astrologer/utils/utils.dart';
@@ -41,7 +39,7 @@ class ImportantNumbersController extends GetxController {
     for (Contact contact in allContacts) {
       if (contact.phones != null) {
         for (var element in contact.phones!) {
-        //  log(element.value!);
+          //  log(element.value!);
           if (contact.displayName == item.label &&
               numberList.every((el) => el.contains(element.value!))) {
             return isExist = true;
@@ -57,7 +55,7 @@ class ImportantNumbersController extends GetxController {
     if (contact.isGranted) {
       allContacts = await ContactsService.getContacts();
     } else {
-      divineSnackBar(data: AppString.contactPermissionRequired);
+      divineSnackBar(data: AppString.contactPermissionRequired.tr);
     }
   }
 
@@ -74,7 +72,7 @@ class ImportantNumbersController extends GetxController {
           givenName: givenName, //This fields are mandatory to save contact
           phones: phoneItems);
       await ContactsService.addContact(newContact);
-      divineSnackBar(data: "Contact saved successfully");
+      divineSnackBar(data: "contactSaved".tr);
       fetchImportantNumbers();
     } else {
       openAppSettings();

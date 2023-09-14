@@ -17,7 +17,7 @@ class TermsConditionUI extends GetView<SettingsController> {
       appBar: AppBar(
         backgroundColor: AppColors.white,
         surfaceTintColor: AppColors.white,
-        title: Text("Terms & Condition".tr,
+        title: Text("Terms And Condition".tr,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,

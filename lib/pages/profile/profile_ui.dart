@@ -138,7 +138,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 ),
                                 SizedBox(height: 3.h),
                                 Row(children: [
-                                  Text("${"customerId".tr}-",
+
+                                  Text("${"astrologerId".tr}-",
                                       style: AppTextStyle.textStyle14(
                                           fontWeight: FontWeight.w400,
                                           fontColor: AppColors.darkBlue)),
@@ -525,7 +526,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                             color: AppColors.appYellowColour),
                         SizedBox(width: 8.w),
                         Text(
-                          "${controller.ratingsData?.data?.totalRating ?? 0} ${"total".tr}",
+                          "${controller.ratingsData?.data?.totalReviews ?? 0} ${"total".tr}",
                           style: AppTextStyle.textStyle14(),
                         ),
                       ],
