@@ -33,6 +33,7 @@ class ChatMessage {
   String? kundliName;
   String? kundliDateTime;
   String? kundliPlace;
+  String? gender;
   int? time;
   int? type;
   int? orderId;
@@ -52,6 +53,7 @@ class ChatMessage {
       this.kundliName,
       this.kundliDateTime,
       this.kundliPlace,
+      this.gender,
       this.type});
 
   ChatMessage.fromOfflineJson(Map<String, dynamic> json) {
@@ -68,6 +70,7 @@ class ChatMessage {
     kundliName = json['kundli_name'];
     kundliDateTime = json['kundli_date_time'];
     kundliPlace = json['kundli_place'];
+    gender = json['gender'];
     downloadedPath = json['downloadedPath'];
     orderId = json['order_id'];
   }
@@ -87,6 +90,7 @@ class ChatMessage {
     data['kundli_name'] = kundliName;
     data['kundli_date_time'] = kundliDateTime;
     data['kundli_place'] = kundliPlace;
+    data['gender'] = gender;
     data['downloadedPath'] = downloadedPath;
     data['order_id'] = orderId;
     return data;

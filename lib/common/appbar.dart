@@ -9,18 +9,15 @@ PreferredSizeWidget commonAppbar(
     surfaceTintColor: Colors.transparent,
     backgroundColor: AppColors.white,
     elevation: 0,
+    centerTitle: false,
     iconTheme: const IconThemeData(color: AppColors.blackColor),
-    title: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title ?? "",
-          style: AppTextStyle.textStyle16(
-            fontWeight: FontWeight.w400,
-            fontColor: AppColors.darkBlue,
-          ),
-        ),
-      ],
+    titleSpacing: 0,
+    title: Text(
+      title ?? "",
+      style: AppTextStyle.textStyle16(
+        fontWeight: FontWeight.w400,
+        fontColor: AppColors.darkBlue,
+      ),
     ),
     actions: [trailingWidget!],
   );
@@ -33,6 +30,7 @@ PreferredSizeWidget commonDetailAppbar(
     backgroundColor: AppColors.white,
     elevation: 0,
     centerTitle: false,
+    titleSpacing: 0,
     leading: InkWell(
         onTap: () {
           Navigator.pop(Get.context!);

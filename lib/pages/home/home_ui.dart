@@ -33,6 +33,7 @@ class HomeUI extends GetView<HomeController> {
         surfaceTintColor: Colors.transparent,
         backgroundColor: AppColors.white,
         elevation: 0,
+        centerTitle: false,
         title: Text(
           controller.appbarTitle.value,
           style: AppTextStyle.textStyle15(
