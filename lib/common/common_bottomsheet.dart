@@ -94,6 +94,7 @@ selectDateOrTime(
   Function()? onClickOkay,
   required bool looping,
   DateTime? lastDate,
+  DateTime? initialDate,
 }) {
   return showCupertinoModalPopup(
     context: context,
@@ -148,7 +149,7 @@ selectDateOrTime(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: DatePickerWidget(
                   lastDate: lastDate ?? DateTime.now(),
-                  firstDate: DateTime(DateTime.now().year - 100),
+                  firstDate: initialDate ?? DateTime(DateTime.now().year - 100),
                   dateFormat: pickerStyle == "DateCalendar"
                       ? "MMM/dd/yyyy"
                       : "MM/dd/yyyy",

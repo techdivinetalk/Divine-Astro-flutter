@@ -553,6 +553,7 @@ class HomeUI extends GetView<HomeController> {
                             btnTitle: "Confirm Next Online Date",
                             pickerStyle: "DateCalendar",
                             looping: true,
+                            initialDate: DateTime.now(),
                             lastDate: DateTime(2050),
                             onConfirm: (value) {},
                             onChange: (value) =>
