@@ -4,7 +4,8 @@ import 'dart:io';
 
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
-import 'package:divine_astrologer/model/update_offer_response.dart';
+import 'package:divine_astrologer/model/update_offer_type_response.dart';
+import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/repository/notice_repository.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
@@ -47,6 +48,9 @@ class HomeController extends GetxController {
     {"title": "E-Commerce", "score": "80"},
     {"title": "Your Busy Hours", "score": "60"},
   ];
+
+  Rx<Loading> offerTypeLoading = Loading.initial.obs;
+  Rx<Loading> sessionTypeLoading = Loading.initial.obs;
 
   Socket? socket;
 
@@ -212,25 +216,15 @@ class HomeController extends GetxController {
   }
 
   void chatSwitchFN() {
-    chatSwitch.value = !chatSwitch.value;
-    /*if (chatSwitch.value) {
-      callSwitch.value = false;
-    } else {
-      callSwitch.value = true;
-    }*/
+    updateSessionType(!chatSwitch.value, chatSwitch, 1);
   }
 
   void callSwitchFN() {
-    callSwitch.value = !callSwitch.value;
-    /*if (callSwitch.value) {
-      chatSwitch.value = false;
-    } else {
-      chatSwitch.value = true;
-    }*/
+    updateSessionType(!callSwitch.value, callSwitch, 2);
   }
 
   void videoCallSwitchFN() {
-    videoSwitch.value = !videoSwitch.value;
+    updateSessionType(!videoSwitch.value, videoSwitch, 3);
   }
 
   final noticeRepository = Get.put(NoticeRepository());
@@ -243,8 +237,6 @@ class HomeController extends GetxController {
 
   Rx<DateTime> selectedVideoDate = DateTime.now().obs;
   Rx<String> selectedVideoTime = ''.obs;
-
-  Rx<Loading> offerTypeLoading = Loading.initial.obs;
 
   void selectChatDate(String value) {
     selectedChatDate(value.toDate());
@@ -270,15 +262,44 @@ class HomeController extends GetxController {
     selectedVideoTime(value);
   }
 
+  Future<void> updateSessionType(
+      bool value, RxBool switchType, int type) async {
+    //type: 1 - chat, 2 - call, 3 - videoCall
+    Map<String, dynamic> params = {
+      "is_chat": getBoolToString(type == 1 ? value : chatSwitch.value),
+      "is_call": getBoolToString(type == 2 ? value : callSwitch.value),
+      "is_video": getBoolToString(type == 3 ? value : videoSwitch.value)
+    };
+
+    sessionTypeLoading.value = Loading.loading;
+    try {
+      UpdateSessionTypeResponse response =
+          await userRepository.updateSessionTypeApi(params);
+      if (response.statusCode == 200) {
+        switchType.value = value;
+      }
+      update();
+    } catch (error) {
+      debugPrint("updateOfferType $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      }
+    }
+    sessionTypeLoading.value = Loading.loaded;
+    update();
+  }
+
   Future<void> updateOfferType(bool value, int offerId, int index) async {
     Map<String, dynamic> params = {
       "offer_id": offerId,
-      "is_active": value ? "1" : "0",
+      "is_active": getBoolToString(value),
     };
     offerTypeLoading.value = Loading.loading;
     try {
       UpdateOfferResponse response =
-          await userRepository.updateOfferApi(params);
+          await userRepository.updateOfferTypeApi(params);
       if (response.statusCode == 200) {
         promotionOfferSwitch[index] = value;
       }
@@ -336,5 +357,9 @@ class HomeController extends GetxController {
         err.onException();
       }
     }
+  }
+
+  getBoolToString(bool value) {
+    return value ? "1" : "0";
   }
 }

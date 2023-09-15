@@ -38,7 +38,7 @@ class HomePageModelClass {
 class HomeData {
   NoticeBoard? noticeBoard;
   double? totalEarning;
-  int? todaysEarning;
+  double? todaysEarning;
   OnGoingCall? onGoingCall;
   SessionType? sessionType;
   List<OfferType>? offerType;
@@ -59,7 +59,7 @@ class HomeData {
             ? null
             : NoticeBoard.fromJson(json["notice_board"]),
         totalEarning: json["total_earning"]?.toDouble(),
-        todaysEarning: json["todays_earning"],
+        todaysEarning: json["todays_earning"]?.toDouble(),
         onGoingCall: json["on_going_call"] == null
             ? null
             : OnGoingCall.fromJson(json["on_going_call"]),

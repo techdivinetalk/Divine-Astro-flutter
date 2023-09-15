@@ -77,7 +77,7 @@ class HomeUI extends GetView<HomeController> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "₹${controller.homeData!.todaysEarning.toString()}",
+                                          "₹${controller.homeData!.todaysEarning?.toStringAsFixed(2)}",
                                           style: AppTextStyle.textStyle16(
                                               fontColor: AppColors.appRedColour,
                                               fontWeight: FontWeight.w700),
@@ -545,6 +545,7 @@ class HomeUI extends GetView<HomeController> {
                             btnTitle: "Confirm Next Online Date",
                             pickerStyle: "DateCalendar",
                             looping: true,
+                            initialDate: DateTime.now(),
                             lastDate: DateTime(2050),
                             onConfirm: (value) {},
                             onChange: (value) =>
