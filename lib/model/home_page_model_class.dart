@@ -38,7 +38,7 @@ class HomePageModelClass {
 class HomeData {
   NoticeBoard? noticeBoard;
   double? totalEarning;
-  int? todaysEarning;
+  double? todaysEarning;
   OnGoingCall? onGoingCall;
   SessionType? sessionType;
   List<OfferType>? offerType;
