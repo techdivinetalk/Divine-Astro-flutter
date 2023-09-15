@@ -7,12 +7,70 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../common/app_exception.dart';
 import '../../../common/common_functions.dart';
+import '../../../common/getStorage/get_storage.dart';
+import '../../../common/getStorage/get_storage_key.dart';
 import '../../../di/shared_preference_service.dart';
 import '../../../model/delete_customer_model_class.dart';
+import '../../../pages/profile/profile_page_controller.dart';
 
 class SettingsController extends GetxController {
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
+  RxString currLanguage = "".obs;
+  var languageList = <ChangeLanguageModelClass>[
+    ChangeLanguageModelClass(
+        'English',
+        'Eng',
+        AppColors.darkBlue,
+        (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "en_US"
+            ? true
+            : false),
+    ChangeLanguageModelClass(
+        'Hindi',
+        'हिन्दी',
+        AppColors.teal,
+        (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "hi_IN"
+            ? true
+            : false),
+    ChangeLanguageModelClass(
+        'Marathi',
+        'मराठी',
+        AppColors.redColor,
+        (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "mr_IN"
+            ? true
+            : false),
+    ChangeLanguageModelClass(
+        'Gujarati',
+        'ગુજરાતી',
+        AppColors.redColor,
+        (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "gu_IN"
+            ? true
+            : false),
+  ].obs;
+
+  @override
+  void onReady() {
+    super.onReady();
+    setLocalLanguage();
+  }
+
+  setLocalLanguage() {
+    Locale locale = Get.locale!;
+
+    if (locale.languageCode == "en") {
+      currLanguage.value = "english".tr;
+    }
+    else if (locale.languageCode == "hi") {
+      currLanguage.value = "hindi".tr;
+    }
+    else if (locale.languageCode == "mr") {
+      currLanguage.value = "marathi".tr;
+    }
+    else if (locale.languageCode == "gu") {
+      currLanguage.value = "gujarati".tr;
+    }
+    update();
+  }
 
   deleteUserAccounts() async {
     Map<String, dynamic> params = {};

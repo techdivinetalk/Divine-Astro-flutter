@@ -1,13 +1,16 @@
+import 'package:divine_astrologer/repository/user_repository.dart';
+import 'package:divine_astrologer/screens/side_menu/settings/widget/change_lang_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
-
 import '../../../common/common_bottomsheet.dart';
 import '../../../common/routes.dart';
 import '../../../gen/assets.gen.dart';
+import '../../../pages/profile/profile_page_controller.dart';
 import 'settings_controller.dart';
 import 'widget/delete_account_popup.dart';
 
@@ -43,26 +46,36 @@ class SettingsUI extends GetView<SettingsController> {
               SizedBox(
                 height: 20.h,
               ),
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(width: 0.6, color: Colors.grey)),
-                child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "english".tr,
-                        style: AppTextStyle.textStyle16(
-                            fontColor: AppColors.darkBlue),
-                      ),
-                      Icon(
-                        Icons.keyboard_arrow_right,
-                        size: 30.sp,
-                      )
-                    ],
+              InkWell(
+                onTap: () {
+                  // Get.put(ProfilePageController(UserRepository()));
+                  // Get.put(ProfilePageController());
+                  openBottomSheet(context,
+                      functionalityWidget:  LanguageBottomSheetWidget(
+                      //  ontap: () => Get.back(),
+                      ));
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(width: 0.6, color: Colors.grey)),
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "english".tr,
+                          style: AppTextStyle.textStyle16(
+                              fontColor: AppColors.darkBlue),
+                        ),
+                        Icon(
+                          Icons.keyboard_arrow_right,
+                          size: 30.sp,
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -171,8 +184,7 @@ class SettingsUI extends GetView<SettingsController> {
                   // controller.deleteAccountPopup(Get.context!);
                   showCupertinoModalPopup(
                     context: context,
-                    barrierColor:
-                    AppColors.darkBlue.withOpacity(0.5),
+                    barrierColor: AppColors.darkBlue.withOpacity(0.5),
                     builder: (context) => const DeleteAccountPopup(),
                   );
                 },
@@ -249,7 +261,7 @@ class SettingsUI extends GetView<SettingsController> {
                 Text(
                   'logoutText'.tr,
                   style:
-                  AppTextStyle.textStyle16(fontColor: AppColors.darkBlue),
+                      AppTextStyle.textStyle16(fontColor: AppColors.darkBlue),
                 ),
                 SizedBox(height: 20.h),
                 Row(
