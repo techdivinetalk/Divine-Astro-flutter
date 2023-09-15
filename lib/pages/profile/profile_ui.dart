@@ -14,7 +14,7 @@ import '../../../common/colors.dart';
 import '../../../common/routes.dart';
 import '../../../gen/assets.gen.dart';
 import '../../common/common_bottomsheet.dart';
-import '../../common/custom_text.dart';
+import '../../common/custom_widgets.dart';
 import '../../di/shared_preference_service.dart';
 import '../../repository/user_repository.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
@@ -138,7 +138,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 ),
                                 SizedBox(height: 3.h),
                                 Row(children: [
-                                  Text("${"customerId".tr}-",
+                                  Text("${"astrologerId".tr}-",
                                       style: AppTextStyle.textStyle14(
                                           fontWeight: FontWeight.w400,
                                           fontColor: AppColors.darkBlue)),
@@ -447,7 +447,6 @@ class ProfileUI extends GetView<ProfilePageController> {
                       }
                     },
                     child: Container(
-
                       padding: const EdgeInsets.all(10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -508,7 +507,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                         Padding(
                           padding: EdgeInsets.only(left: 20.h),
                           child: Text(
-                            "${controller.ratingsData?.data?.totalRating}",
+                            "${controller.ratingsData?.data?.totalReviews}",
                             style: TextStyle(
                                 fontSize: 17.sp, fontWeight: FontWeight.w400),
                           ),
@@ -525,7 +524,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                             color: AppColors.appYellowColour),
                         SizedBox(width: 8.w),
                         Text(
-                          "${controller.ratingsData?.data?.totalRating ?? 0} ${"total".tr}",
+                          "${controller.ratingsData?.data?.totalReviews ?? 0} ${"total".tr}",
                           style: AppTextStyle.textStyle14(),
                         ),
                       ],

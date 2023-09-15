@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../common/colors.dart';
-import '../../../common/custom_text.dart';
+import '../../../common/custom_widgets.dart';
 import '../performance_controller.dart';
 
 class InformationUI extends GetView<PerformanceController> {

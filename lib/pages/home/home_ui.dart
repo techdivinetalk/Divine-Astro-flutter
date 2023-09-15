@@ -1,7 +1,9 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/switch_component.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
@@ -284,8 +286,9 @@ class HomeUI extends GetView<HomeController> {
                           color: AppColors.darkBlue.withOpacity(0.5)),
                       SizedBox(height: 10.h),
                       sessionTypeWidget(),
-                      SizedBox(height: 10.h),
-                      offerTypeWidget(),
+                      if (controller.homeData?.offerType != null &&
+                          controller.homeData?.offerType != [])
+                        offerTypeWidget(),
                       SizedBox(height: 10.h),
                       fullScreenBtnWidget(
                           imageName: Assets.images.icReferAFriend.svg(),
@@ -315,7 +318,6 @@ class HomeUI extends GetView<HomeController> {
                     top: Get.height * 0.4,
                     child: GestureDetector(
                       onTap: () {
-                        // log("Number-->${controller.getConstantDetails!.data.whatsappNo}");
                         controller.whatsapp();
                       },
                       child: Container(
@@ -359,63 +361,68 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget senderCategoryWidget() {
-    return InkWell(
-      onTap: () {
-        // Get.toNamed(RouteName.noticeDetail);
-      },
-      child: Container(
-        padding: EdgeInsets.all(16.h),
-        decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 3.0,
-                  offset: const Offset(0.0, 3.0)),
-            ],
-            color: Colors.white,
-            borderRadius: const BorderRadius.all(
-              Radius.circular(20),
-            ),
-            border: Border.all(color: AppColors.lightYellow)),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return ClipRRect(
+      borderRadius: BorderRadius.all(Radius.circular(20.r)),
+      child: Material(
+        color: AppColors.transparent,
+        child: InkWell(
+          onTap: () {
+            // Get.toNamed(RouteName.noticeDetail);
+          },
+          child: Ink(
+            padding: EdgeInsets.all(16.h),
+            decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 3.0,
+                      offset: const Offset(0.0, 3.0)),
+                ],
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(20.r)),
+                border: Border.all(color: AppColors.lightYellow)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Sender Category",
-                  style: AppTextStyle.textStyle16(
-                      fontWeight: FontWeight.w500,
-                      fontColor: AppColors.darkBlue),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      controller.homeData?.noticeBoard?.title ?? '',
+                      style: AppTextStyle.textStyle16(
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
+                    ),
+                    Text(
+                      '${formatDateTime(controller.homeData?.noticeBoard!.createdAt! ?? DateTime.now())} ${dateToString(controller.homeData?.noticeBoard!.createdAt ?? DateTime.now(), format: "h:mm a")}',
+                      style: AppTextStyle.textStyle10(
+                          fontWeight: FontWeight.w400,
+                          fontColor: AppColors.darkBlue),
+                    )
+                  ],
                 ),
-                Text(
-                  "07:16 pm  23/06/2023",
-                  style: AppTextStyle.textStyle10(
-                      fontWeight: FontWeight.w400,
-                      fontColor: AppColors.darkBlue),
-                )
+                const SizedBox(height: 10),
+                ReadMoreText(
+                  controller.homeData?.noticeBoard?.description ?? '',
+                  trimLines: 4,
+                  colorClickableText: AppColors.blackColor,
+                  trimMode: TrimMode.Line,
+                  trimCollapsedText: "readMore".tr,
+                  trimExpandedText: "showLess".tr,
+                  moreStyle: TextStyle(
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.blackColor,
+                  ),
+                  lessStyle: TextStyle(
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.blackColor,
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 10),
-            ReadMoreText(
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and",
-              trimLines: 4,
-              colorClickableText: AppColors.blackColor,
-              trimMode: TrimMode.Line,
-              trimCollapsedText: "readMore".tr,
-              trimExpandedText: "showLess".tr,
-              moreStyle: TextStyle(
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w700,
-                color: AppColors.blackColor,
-              ),
-              lessStyle: TextStyle(
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w700,
-                color: AppColors.blackColor,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -476,7 +483,7 @@ class HomeUI extends GetView<HomeController> {
                 ),
                 SizedBox(height: 16.h),
                 Text(
-                  "Video".tr.toUpperCase(),
+                  "videoCall".tr.toUpperCase(),
                   style: AppTextStyle.textStyle12(
                       fontColor: AppColors.darkBlue,
                       fontWeight: FontWeight.w700),
@@ -704,103 +711,124 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget offerTypeWidget() {
-    return Container(
-      padding: EdgeInsets.all(16.h),
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 1.0,
-              offset: const Offset(0.0, 3.0)),
-        ],
-        color: AppColors.white,
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "offerType".tr,
-                style: AppTextStyle.textStyle12(
-                  fontWeight: FontWeight.w500,
-                  fontColor: AppColors.darkBlue,
-                ),
-              ),
-              Text(
-                "status".tr,
-                style: AppTextStyle.textStyle12(
-                  fontWeight: FontWeight.w500,
-                  fontColor: AppColors.darkBlue,
-                ),
-              ),
+    return Stack(
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 10.h),
+          padding: EdgeInsets.all(16.h),
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 1.0,
+                  offset: const Offset(0.0, 3.0)),
             ],
+            color: AppColors.white,
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
           ),
-          SizedBox(height: 10.h),
-          Column(
-            children: controller.homeData!.offerType!
-                .map(
-                  (e) => Column(
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "offerType".tr,
+                    style: AppTextStyle.textStyle12(
+                      fontWeight: FontWeight.w500,
+                      fontColor: AppColors.darkBlue,
+                    ),
+                  ),
+                  Text(
+                    "status".tr,
+                    style: AppTextStyle.textStyle12(
+                      fontWeight: FontWeight.w500,
+                      fontColor: AppColors.darkBlue,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10.h),
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: controller.homeData?.offerType?.length ?? 0,
+                separatorBuilder: (context, _) => SizedBox(height: 10.h),
+                itemBuilder: (context, index) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           Text(
-                            "${e.offerName}",
+                            "${controller.homeData?.offerType?[index].offerName}"
+                                .toUpperCase(),
                             style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w700,
-                              fontColor: AppColors.darkBlue,
                             ),
                           ),
-                          Obx(
-                            () => SwitchWidget(
-                              onTap: () {
-                                controller.consultantOfferSwitch.value =
-                                    !controller.consultantOfferSwitch.value;
-                              },
-                              switchValue:
-                                  controller.consultantOfferSwitch.value,
+                          if ((controller
+                                      .homeData?.offerType?[index].callRate ??
+                                  0) >
+                              0)
+                            CustomText(
+                              " (₹${controller.homeData?.offerType?[index].callRate}/min)"
+                                  .toUpperCase(),
+                              fontSize: 10.sp,
                             ),
-                          ),
                         ],
                       ),
-                      SizedBox(height: 10.h),
+                      Obx(
+                        () => SwitchWidget(
+                          onTap: () {
+                            if (controller.offerTypeLoading.value !=
+                                Loading.loading) {
+                              controller.updateOfferType(
+                                  !controller.promotionOfferSwitch[index],
+                                  controller.homeData?.offerType?[index].id ??
+                                      0,
+                                  index);
+                            }
+                          },
+                          switchValue: controller.promotionOfferSwitch[index],
+                        ),
+                      ),
                     ],
-                  ),
-                )
-                .toList(),
+                  );
+                },
+              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     Row(
+              //       children: [
+              //         Text(
+              //           "promotionOffer".tr,
+              //           style: AppTextStyle.textStyle12(
+              //               fontWeight: FontWeight.w700,
+              //               fontColor: AppColors.darkBlue),
+              //         ),
+              //         Text(
+              //           "  (₹5/Min)",
+              //           style: AppTextStyle.textStyle10(
+              //               fontWeight: FontWeight.w400,
+              //               fontColor: AppColors.darkBlue),
+              //         ),
+              //       ],
+              //     ),
+              //     Obx(
+              //       () => SwitchWidget(
+              //         onTap: () => controller.promotionOfferSwitch.value =
+              //             !controller.promotionOfferSwitch.value,
+              //         switchValue: controller.promotionOfferSwitch.value,
+              //       ),
+              //     ),
+              //   ],
+              // ),
+            ],
           ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     Row(
-          //       children: [
-          //         Text(
-          //           "promotionOffer".tr,
-          //           style: AppTextStyle.textStyle12(
-          //               fontWeight: FontWeight.w700,
-          //               fontColor: AppColors.darkBlue),
-          //         ),
-          //         Text(
-          //           "  (₹5/Min)",
-          //           style: AppTextStyle.textStyle10(
-          //               fontWeight: FontWeight.w400,
-          //               fontColor: AppColors.darkBlue),
-          //         ),
-          //       ],
-          //     ),
-          //     Obx(
-          //       () => SwitchWidget(
-          //         onTap: () => controller.promotionOfferSwitch.value =
-          //             !controller.promotionOfferSwitch.value,
-          //         switchValue: controller.promotionOfferSwitch.value,
-          //       ),
-          //     ),
-          //   ],
-          // ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -868,9 +896,7 @@ class HomeUI extends GetView<HomeController> {
               style: AppTextStyle.textStyle16(fontWeight: FontWeight.w500),
             ),
           ),
-          SizedBox(
-            height: 10.h,
-          ),
+          SizedBox(height: 10.h),
           Expanded(
             child: ListView.separated(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -897,10 +923,11 @@ class HomeUI extends GetView<HomeController> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10.sp),
                           child: LoadImage(
-                            boxFit: BoxFit.fitHeight,
+                            boxFit: BoxFit.cover,
                             imageModel: ImageModel(
-                              imagePath: controller
-                                  .homeData!.trainingVideo![i].youtubeThumbNail,
+                              imagePath: getYoutubeThumbnail(
+                                  controller.homeData?.trainingVideo?[i].url ??
+                                      ''),
                               loadingIndicator: const SizedBox(
                                 child: CircularProgressIndicator(
                                   color: Color(0XFFFDD48E),
@@ -1715,7 +1742,7 @@ class SelectedTimeForChat extends GetView<HomeController> {
         () {
           if (controller.selectedChatTime.value.isNotEmpty) {
             return Text(
-              "${controller.selectedChatDate.value.toCustomFormattedString()} ${controller.selectedChatTime.value}",
+              "${controller.selectedChatDate.value.toCustomFormat()} ${controller.selectedChatTime.value}",
               style: AppTextStyle.textStyle10(
                 fontColor: AppColors.darkBlue,
                 fontWeight: FontWeight.w400,
@@ -1723,7 +1750,7 @@ class SelectedTimeForChat extends GetView<HomeController> {
             );
           } else {
             return Text(
-              controller.selectedChatDate.value.toCustomFormattedString(),
+              controller.selectedChatDate.value.toCustomFormat(),
               style: AppTextStyle.textStyle10(
                 fontColor: AppColors.darkBlue,
                 fontWeight: FontWeight.w400,
@@ -1748,7 +1775,7 @@ class SelectedTimeForCall extends GetView<HomeController> {
         () {
           if (controller.selectedCallTime.value.isNotEmpty) {
             return Text(
-              "${controller.selectedCallDate.value.toCustomFormattedString()} ${controller.selectedCallTime.value}",
+              "${controller.selectedCallDate.value.toCustomFormat()} ${controller.selectedCallTime.value}",
               style: AppTextStyle.textStyle10(
                 fontColor: AppColors.darkBlue,
                 fontWeight: FontWeight.w400,
@@ -1756,7 +1783,7 @@ class SelectedTimeForCall extends GetView<HomeController> {
             );
           } else {
             return Text(
-              controller.selectedCallDate.value.toCustomFormattedString(),
+              controller.selectedCallDate.value.toCustomFormat(),
               style: AppTextStyle.textStyle10(
                 fontColor: AppColors.darkBlue,
                 fontWeight: FontWeight.w400,
@@ -1781,7 +1808,7 @@ class SelectedTimeForVideoCall extends GetView<HomeController> {
         () {
           if (controller.selectedVideoTime.value.isNotEmpty) {
             return Text(
-              "${controller.selectedVideoDate.value.toCustomFormattedString()} ${controller.selectedVideoTime.value}",
+              "${controller.selectedVideoDate.value.toCustomFormat()} ${controller.selectedVideoTime.value}",
               style: AppTextStyle.textStyle10(
                 fontColor: AppColors.darkBlue,
                 fontWeight: FontWeight.w400,
@@ -1789,7 +1816,7 @@ class SelectedTimeForVideoCall extends GetView<HomeController> {
             );
           } else {
             return Text(
-              controller.selectedVideoDate.value.toCustomFormattedString(),
+              controller.selectedVideoDate.value.toCustomFormat(),
               style: AppTextStyle.textStyle10(
                 fontColor: AppColors.darkBlue,
                 fontWeight: FontWeight.w400,

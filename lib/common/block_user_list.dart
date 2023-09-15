@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:divine_astrologer/common/cached_network_image.dart';
-import 'package:divine_astrologer/common/custom_text.dart';
+import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/unblock_user.dart';
 import 'package:divine_astrologer/screens/live_page/live_controller.dart';
 import 'package:firebase_database/firebase_database.dart';

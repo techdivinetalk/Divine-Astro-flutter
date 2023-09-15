@@ -14,7 +14,6 @@ Map<String, String> gu() {
     'rulingPlanets': 'શાસક ગ્રહો',
     'vimshottari': 'વિમશોત્તરી',
     'vimshottari': 'Vimshottari',
-
     'bhavChalitChart': 'ભવ ચલિત ચાર્ટ',
     'cusps': 'કુસ્પ્સ',
     "senderCategory": "પ્રેષક શ્રેણી",
@@ -44,7 +43,7 @@ Map<String, String> gu() {
     "status": "સ્થિતિ",
     "nextOnlineTiming": "આગામી ઓનલાઇન સમય",
     "follow": "અનુસરો",
-    "customerId": "ગ્રાહક ઓળખાણ પત્ર",
+    "astrologerId": "જ્યોતિષ આઈડી",
     "profileOptions": "પ્રોફાઇલ વિકલ્પો",
     "profile": "પ્રોફાઇલ",
     "editProfile": "પ્રોફાઇલ સંપાદિત કરો",
@@ -240,6 +239,7 @@ Map<String, String> gu() {
     "selectYourDateBirth": "તમારી જન્મ તારીખ પસંદ કરો",
     "female": "સ્ત્રી",
     "trainingVideos": "તાલીમ વિડિઓઝ",
+    "VideoCall":"વીડિયો કૉલ",
     "checkKundli": "કુંડળી તપાસો",
     'deleteAccountMsg': 'શું તમે ખરેખર તમારું એકાઉન્ટ કાઢી નાખવા માંગો છો?',
     "suggestRemediesHome": "ઉપાયો\nસૂચવો",
@@ -274,5 +274,8 @@ Map<String, String> gu() {
     'family': 'કુટુંબ',
     'antarDasha': 'અંતર્દશા',
     "jobTitle": "મહાન કામ! કોઈ રાહ યાદીમાં નથી.",
+    "contactSaved": "સંપર્ક સફળતાપૂર્વક સાચવ્યો",
+    "contactPermissionRequired": "સંપર્ક પરવાનગી જરૂરી છે",
+    "Saved": "સાચવેલ",
   };
 }

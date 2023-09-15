@@ -1,13 +1,13 @@
 // ignore_for_file: unused_local_variable
 
 import 'dart:async';
+import 'dart:developer';
 
-import 'package:custom_timer/custom_timer.dart';
-import 'package:divine_astrologer/screens/live_page/live_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
@@ -15,18 +15,19 @@ import '../../common/app_exception.dart';
 import '../../common/block_success.dart';
 import '../../common/co-host_request.dart';
 import '../../common/waitlist_sheet.dart';
+import '../../di/api_provider.dart';
 import '../../di/shared_preference_service.dart';
 import '../../model/res_blocked_customers.dart';
 import '../../repository/user_repository.dart';
 import 'constant.dart';
 
-class LiveController extends GetxController with GetSingleTickerProviderStateMixin {
+class LiveController extends GetxController {
   var pref = Get.find<SharedPreferenceService>();
 
   LiveController(this.userRepository);
 
   final UserRepository userRepository;
-
+  Socket? socket;
   var svgaAnime = [
     "blue_lover.svga",
     "box_of_roses.svga",
@@ -47,6 +48,17 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
       _timer!.cancel();
     }
     super.dispose();
+  }
+  List<String>? badWordsData;
+
+  @override
+  void onReady() {
+    if(pref.getConstantDetails().data != null){
+      badWordsData = pref.getConstantDetails().data!.badWordsData;
+    }
+    // initLeaderBoardSessionRequest();
+    // connectSocket();
+    super.onReady();
   }
 
   final hostConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host(
@@ -93,8 +105,13 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
     }
   }
 
+  getBadWords(){
+
+  }
+
   String strDigits(int n) => n.toString().padLeft(2, '0');
   RxString hour = "".obs, min = "".obs, sec = "".obs;
+
   startTimer() {
     countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       const reduceSecondsBy = 1;
@@ -117,12 +134,64 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
       }
     });
   }
+
   jumpToBottom() {
     scrollController.animateTo(
       scrollController.position.maxScrollExtent + 50,
       duration: const Duration(milliseconds: 10),
       curve: Curves.linear,
     );
+  }
+
+  //Req event for init LeaderBoard
+  initLeaderBoardSessionRequest() {
+    log("--In--");
+    socket?.emit(ApiProvider().initLeaderBoardSession, {
+      "sessionId": "76387476842",
+      "astrologerId": pref.getUserDetail()?.id,
+      "astrologerSocketId": socket?.id
+    });
+  }
+
+  //Req event for delete Session
+  deleteSessionRequest() {
+    socket?.emit(ApiProvider().deleteSession, {
+      "sessionId": "76387476842"
+    });
+  }
+
+  void connectSocket() {
+    socket = io(
+        ApiProvider.socketUrl,
+        OptionBuilder()
+            .enableAutoConnect()
+            .setTransports(['websocket']).build());
+    socket?.connect();
+    socket?.onConnect((_) async {
+      log('Socket connected');
+      deleteSessionRequest();
+      socket?.on(ApiProvider().initResponse, (data) {
+        log("initResponse=> $data");
+      });
+
+      socket?.on(ApiProvider().deleteSessionResponse, (data) {
+        log("deleteSessionResponse=> $data");
+      });
+
+
+      //Response event for init deleteSessionResponse
+      socket?.on(ApiProvider().deleteSessionResponse, (data) {
+        log("deleteSessionResponse=> $data");
+      });
+    });
+    log("Socket--->${socket?.connected}");
+  }
+
+  @override
+  void onClose() {
+    socket?.dispose();
+
+    super.onClose();
   }
 
   /*getBlockedCustomerList() async {
@@ -186,7 +255,7 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
           await userRepository.blockUnblockCustomer(params);
       database.ref().child("live/$astroId").update({
         "blockUser": {
-          customerId: {"id": customerId,"name":name}
+          customerId: {"id": customerId, "name": name}
         }
       });
       //getBlockedCustomerList();
@@ -235,12 +304,17 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
   }
 
   listenWaitlistRemove() async {
-    database.ref().child("live/$astroId/nextUser").onValue.listen((event) async {
-      if(event.snapshot.value != null){
+    database
+        .ref()
+        .child("live/$astroId/nextUser")
+        .onValue
+        .listen((event) async {
+      if (event.snapshot.value != null) {
         var data = event.snapshot.value as Map;
         typeOfNextUserCall = data["callType"];
-        if(data.isNotEmpty){
-          var waitList = await database.ref().child("live/$astroId/waitList").get();
+        if (data.isNotEmpty) {
+          var waitList =
+              await database.ref().child("live/$astroId/waitList").get();
           showCupertinoModalPopup(
               context: Get.context!,
               barrierDismissible: false,
@@ -250,10 +324,8 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
                   astroId: astroId,
                   showNext: true,
                   onAccept: (String id, String name) {
-                    database
-                        .ref()
-                        .child("live/$astroId/")
-                        .update({"callStatus": 2, "userId": id, "userName": name});
+                    database.ref().child("live/$astroId/").update(
+                        {"callStatus": 2, "userId": id, "userName": name});
                     database
                         .ref()
                         .child("live/$astroId/waitList/${data["id"]}")
@@ -399,6 +471,7 @@ class LiveController extends GetxController with GetSingleTickerProviderStateMix
   int orderId = 0;
   int time = 0;
   int offerId = 0;
+
   void endCall() async {
     Map<String, dynamic> json = {
       "order_id": orderId,

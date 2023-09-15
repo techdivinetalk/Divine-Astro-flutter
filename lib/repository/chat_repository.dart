@@ -1,11 +1,9 @@
 import 'dart:convert';
 
 import 'package:divine_astrologer/common/app_exception.dart';
-import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/astrologer_chat_list.dart';
-import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
@@ -75,7 +73,7 @@ class ChatRepository extends ApiProvider {
     }
   }
 
-  Future<ResCommonChatStatus> endChat(Map<String, dynamic> param) async {
+  Future<dynamic> endChat(Map<String, dynamic> param) async {
     try {
       final response = await post(
         endChatAPI,
@@ -90,15 +88,14 @@ class ChatRepository extends ApiProvider {
         } else {
           final astrologerChatList =
               ResCommonChatStatus.fromJson(json.decode(response.body));
-          if (astrologerChatList.statusCode == successResponse &&
-              astrologerChatList.success!) {
-            return astrologerChatList;
-          } else {
-            divineSnackBar(
-                data: json.decode(response.body)["message"],
-                color: AppColors.redColor);
-            throw CustomException(json.decode(response.body)["message"]);
-          }
+          // if (astrologerChatList.statusCode == successResponse &&
+          //     astrologerChatList.success!) {
+          return astrologerChatList;
+          // } else {
+          //   divineSnackBar(
+          //       data: json.decode(response.body)["message"],
+          //       color: AppColors.redColor);
+          // }
         }
       } else {
         throw CustomException(json.decode(response.body)["message"]);

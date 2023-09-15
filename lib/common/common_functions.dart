@@ -78,7 +78,7 @@ void checkNotification(
           kundliPlace: value["kundli_place"],
           downloadedPath: "",
           msgType: value["msgType"]);
-
+      var senderId = value["sender_id"];
       if (Get.currentRoute == RouteName.chatMessageUI) {
         var chatController = Get.find<ChatMessageController>();
         if (chatController.currentUserId.value == value["sender_id"] ||
@@ -94,8 +94,7 @@ void checkNotification(
             updateMsgDelieveredStatus(newMessage, 1);
           }
 
-          setHiveDatabase(
-              "userKey_${userData?.id}_${currentChatUserId.value}", newMessage);
+          setHiveDatabase("userKey_${userData?.id}_$senderId", newMessage);
         }
       } else {
         if (value["type"] == 0) {
@@ -104,8 +103,7 @@ void checkNotification(
           updateMsgDelieveredStatus(newMessage, 1);
         }
 
-        setHiveDatabase(
-            "userKey_${userData?.id}_${currentChatUserId.value}", newMessage);
+        setHiveDatabase("userKey_${userData?.id}_$senderId", newMessage);
       }
     });
     removeNotificationNode();
@@ -143,6 +141,7 @@ void setHiveDatabase(String userDataKey, ChatMessage newMessage) async {
 void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   // type 1= New chat message, 2 = Delievered, 3= Msg read, 4= Other messages
   ChatMessage message = ChatMessage(
+    orderId: newMessage.orderId,
     message: newMessage.message ?? "",
     receiverId: newMessage.receiverId!,
     senderId: newMessage.senderId!,
@@ -151,6 +150,10 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
     msgType: newMessage.msgType,
     awsUrl: newMessage.awsUrl,
     base64Image: newMessage.base64Image,
+    kundliId: newMessage.kundliId,
+    kundliName: newMessage.kundliId,
+    kundliDateTime: newMessage.kundliDateTime,
+    kundliPlace: newMessage.kundliPlace,
   );
   FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
 

@@ -19,6 +19,15 @@ class ApiProvider {
   static const String socketUrl = "http://13.127.116.89:4000";
   final String baseUrl = "https://wakanda-api.divinetalk.live/admin/$version/";
 
+
+  //Socket Event
+  final String deleteSession = "deleteSession";
+  final String deleteSessionResponse = "deleteSessionResponse";
+  final String initResponse = "initResponse";
+  final String initLeaderBoardSession = "initLeaderBoardSession";
+
+
+
   final String jsonHeaderName = "Content-Type";
   final String jsonCookieName = "Cookie";
   final String jsonHeaderValue = "application/json";
@@ -53,6 +62,7 @@ class ApiProvider {
   final String getWaitingListQueue = "getWaitingListQueue";
   final String getImportantNumber = "getImportantNumber";
   final String getDonationList = "getDonationList";
+  final String updateOfferFlag = "updateOfferFlag";
 
   //Astro Internal API
   final String horoChartImageInt = "getChartImage/";
@@ -233,7 +243,7 @@ class ApiProvider {
     if (await networkManager.isConnected() ?? false) {
       log('url: $endPoint$url');
       log('body: $body');
-      // log("headers: $headers");
+      log("headers: $headers");
       var response = await http
           .post(Uri.parse(endPoint + url),
               headers: headers, body: body, encoding: encoding)

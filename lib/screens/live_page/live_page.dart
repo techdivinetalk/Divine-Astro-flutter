@@ -29,7 +29,7 @@ import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 import '../../common/cached_network_image.dart';
 import '../../common/colors.dart';
-import '../../common/custom_text.dart';
+import '../../common/custom_widgets.dart';
 import '../../common/custom_text_field.dart';
 import '../../common/leader_board_sheet.dart';
 import '../../common/waitlist_sheet.dart';
@@ -586,11 +586,16 @@ class LivePageState extends State<LivePage>
                                             height: 40.h,
                                             onSubmit: (value) {
                                               if (value.isNotEmpty) {
-                                                //liveController.message.send("${controller.msg.text}*${widget.astrologerName}");
-                                                liveController.message
-                                                    .send(value);
-                                                controller.msg.text = "";
-                                                controller.jumpToBottom();
+                                                if(controller.badWordsData!.contains(value)){
+                                                  controller.msg.text = "";
+                                                }else{
+                                                  liveController.message
+                                                      .send(value);
+                                                  controller.msg.text =
+                                                  "";
+                                                  controller
+                                                      .jumpToBottom();
+                                                }
                                               }
                                             },
                                             // height: ,

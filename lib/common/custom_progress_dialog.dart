@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 import 'app_theme.dart';
 import 'colors.dart';
-import 'custom_text.dart';
+import 'custom_widgets.dart';
 
 class CustomProgressDialog extends StatelessWidget {
   final AppThemeState _appTheme = AppTheme.of(Get.context!);

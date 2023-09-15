@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/model/chat/req_common_chat_model.dart';
 import 'package:divine_astrologer/model/res_login.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -14,7 +13,6 @@ import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import '../../common/app_exception.dart';
 import '../../common/colors.dart';
 import '../../common/common_functions.dart';
 import '../../di/hive_services.dart';
@@ -22,7 +20,6 @@ import '../../di/shared_preference_service.dart';
 import '../../model/chat/res_astro_chat_listener.dart';
 import '../../model/chat/res_common_chat_success.dart';
 import '../../model/chat_offline_model.dart';
-import '../../model/get_kundli_data.dart';
 import '../../repository/chat_repository.dart';
 import '../../repository/kundli_repository.dart';
 import '../../repository/user_repository.dart';
@@ -45,11 +42,11 @@ class ChatMessageController extends GetxController {
   XFile? pickedFile;
   File? uploadFile;
   final preference = Get.find<SharedPreferenceService>();
-  RxInt currentUserId = 8693.obs;
+  RxInt currentUserId = 0.obs;
   String userDataKey = "userKey";
   bool sendReadMessageStatus = false;
-  RxBool emojiShowing = true.obs;
-  FocusNode msgFocus = FocusNode();
+  RxBool isEmojiShowing = false.obs;
+  // FocusNode msgFocus = FocusNode();
   RxInt unreadMessageIndex = 0.obs;
   RxBool scrollToBottom = false.obs;
   HiveServices hiveServices = HiveServices(boxName: userChatData);
@@ -87,11 +84,11 @@ class ChatMessageController extends GetxController {
     userDataKey = "userKey_${userData?.id}_${currentUserId.value}";
     getChatList();
 
-    msgFocus.addListener(() {
-      if (msgFocus.hasFocus) {
-        emojiShowing.value = true;
-      }
-    });
+    // msgFocus.addListener(() {
+    //   if (msgFocus.hasFocus) {
+    //     emojiShowing.value = true;
+    //   }
+    // });
   }
 
   @override
@@ -135,6 +132,7 @@ class ChatMessageController extends GetxController {
       // var response = await chatRepository.getChatListApi(params);
       // debugPrint("$response");
     }
+    isDataLoad.value = true;
   }
 
   updateReadMessageStatus() async {
@@ -169,6 +167,7 @@ class ChatMessageController extends GetxController {
       String? downloadedPath,
       String? kundliId}) async {
     var newMessage = ChatMessage(
+        orderId: astroChatWatcher.value.orderId,
         id: int.parse(time),
         message: messageText,
         receiverId: currentUserId.value,
@@ -181,6 +180,7 @@ class ChatMessageController extends GetxController {
         kundliId: kundliId,
         type: 0);
     updateChatMessages(newMessage, false);
+    isDataLoad.value = true;
 
     firebaseDatabase
         .ref("user/${currentChatUserId.value}/realTime/notification/$time")
@@ -269,7 +269,7 @@ class ChatMessageController extends GetxController {
 
     if (pickedFile != null) {
       image = File(pickedFile!.path);
-
+      isDataLoad.value = false;
       await cropImage();
     }
   }
@@ -311,6 +311,7 @@ class ChatMessageController extends GetxController {
         getBase64Image(File(result.path));
       }
     } else {
+      isDataLoad.value = true;
       debugPrint("Image is not cropped.");
     }
   }
@@ -340,20 +341,21 @@ class ChatMessageController extends GetxController {
 
 // Show Kundli
   navigateToKundliDetail(String kundliId) async {
-    try {
-      Map<String, String> params = {"kundli_id": kundliId};
-      ResGetKundli response = await kundliRepository!.getKundliDetais(params);
-      debugPrint("Response $response");
-      Get.toNamed(RouteName.kundliDetail);
-    } catch (error) {
-      debugPrint("error $error");
-      if (error is AppException) {
-        error.onException();
-      } else {
-        Get.snackbar("Error", error.toString()).show();
-      }
-    }
-    update();
+    divineSnackBar(data: "No details available");
+    // try {
+    //   Map<String, String> params = {"kundli_id": kundliId};
+    //   ResGetKundli response = await kundliRepository!.getKundliDetais(params);
+    //   debugPrint("Response $response");
+    //   Get.toNamed(RouteName.kundliDetail);
+    // } catch (error) {
+    //   debugPrint("error $error");
+    //   if (error is AppException) {
+    //     error.onException();
+    //   } else {
+    //     Get.snackbar("Error", error.toString()).show();
+    //   }
+    // }
+    // update();
   }
 
 //End Chat
@@ -368,8 +370,11 @@ class ChatMessageController extends GetxController {
             TextButton(
               child: const Text("Yes"),
               onPressed: () async {
+                isDataLoad.value = false;
+                isOngoingChat.value = false;
                 Get.back();
-                onEndChat();
+                await onEndChat();
+                isDataLoad.value = true;
               },
             ),
             TextButton(
@@ -383,11 +388,12 @@ class ChatMessageController extends GetxController {
       },
     );
   }
+}
 
-  onEndChat() async {
-    isDataLoad.value = false;
-    isOngoingChat.value = false;
-    timer.stopTimer();
+onEndChat() async {
+  timer.stopTimer();
+  if (astroChatWatcher.value.orderId != 0 &&
+      astroChatWatcher.value.orderId != null) {
     ResCommonChatStatus response = await ChatRepository().endChat(
         ReqCommonChatParams(
                 orderId: astroChatWatcher.value.orderId,
@@ -395,7 +401,8 @@ class ChatMessageController extends GetxController {
             .toJson());
     if (response.statusCode == 200) {
       divineSnackBar(data: "Chat ended.", color: AppColors.redColor);
+    } else {
+      divineSnackBar(data: "Chat has been ended.", color: AppColors.redColor);
     }
-    isDataLoad.value = true;
   }
 }

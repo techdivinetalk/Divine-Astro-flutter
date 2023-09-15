@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 
 import '../../../common/colors.dart';
 import '../../../common/common_bottomsheet.dart';
-import '../../../common/custom_text.dart';
+import '../../../common/custom_widgets.dart';
 import '../performance_controller.dart';
 
 class DateSelection extends GetView<PerformanceController> {

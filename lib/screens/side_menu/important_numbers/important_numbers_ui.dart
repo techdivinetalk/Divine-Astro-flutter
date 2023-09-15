@@ -214,7 +214,7 @@ class _AddContactButtonState extends State<AddContactButton> {
                   padding:
                       EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
                   child: Text(
-                    isButtonTap ? "Saved" : "addContact".tr,
+                    isButtonTap ? "Saved".tr : "addContact".tr,
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w600,
                         fontColor: AppColors.brownColour),
