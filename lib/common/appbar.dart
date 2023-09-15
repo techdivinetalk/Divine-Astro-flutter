@@ -31,7 +31,6 @@ PreferredSizeWidget commonDetailAppbar(
     elevation: 0,
     titleSpacing: 0,
     centerTitle: false,
-    titleSpacing: 0,
     leading: InkWell(
         onTap: () {
           Navigator.pop(Get.context!);

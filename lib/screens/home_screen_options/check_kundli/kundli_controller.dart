@@ -10,7 +10,8 @@ enum Gender { none, male, female }
 
 class KundliController extends GetxController {
   TabController? tabController;
-  SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
+  SharedPreferenceService preferenceService =
+      Get.find<SharedPreferenceService>();
 
   final yourFormKey = GlobalKey<FormState>();
   Rx<Gender> yourGender = Gender.male.obs;
