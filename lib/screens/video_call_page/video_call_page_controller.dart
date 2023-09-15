@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../common/routes.dart';
+import '../../model/chat/res_common_chat_success.dart';
 
 class VideoCallPageController extends GetxController {
   RxBool muteValue = false.obs, videoValue = false.obs;
@@ -41,19 +42,24 @@ class VideoCallPageController extends GetxController {
     }
   }
 
-  onAccept() {
+  onAccept() async {
     if (isForChat) {
 // *accept_or_reject: 1 = accept, 3 = chat reject by timeout
 // * is_timeout: should be 1 when reject by timeout
-      var response = ChatRepository().chatAccept(ReqCommonChatParams(
+      var response = await ChatRepository().chatAccept(ReqCommonChatParams(
         acceptOrReject: 1,
         isTimeout: 0,
         orderId: data!.orderId,
         queueId: data!.queueId,
       ).toJson());
       debugPrint("Request has been changed : $response");
-      isWaiting.value = true;
-      btnTitle.value = "Waiting for user to connect ...";
+      // response = response as R/esCommonChatStatus;
+      if (response.statusCode == 200) {
+        isWaiting.value = true;
+        btnTitle.value = "Waiting for user to connect ...";
+      } else {
+        Get.back();
+      }
 
       // Get.back();
     } else {

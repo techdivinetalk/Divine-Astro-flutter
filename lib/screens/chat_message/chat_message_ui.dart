@@ -533,7 +533,13 @@ class ChatMessageUI extends GetView<ChatMessageController> {
   Widget kundliView({required ChatMessage chatDetail, required int index}) {
     return InkWell(
       onTap: () {
-        controller.navigateToKundliDetail(chatDetail.kundliId!);
+        Get.toNamed(RouteName.kundliDetail, arguments: {
+          "kundli_id": chatDetail.kundliId,
+          'from_kundli': true,
+          "birth_place": chatDetail.kundliPlace,
+          "gender": chatDetail.gender
+        });
+        debugPrint("KundliId : ${chatDetail.kundliId}");
       },
       child: Card(
         color: AppColors.white,

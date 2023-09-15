@@ -41,7 +41,7 @@ class ChatRepository extends ApiProvider {
     }
   }
 
-  Future<ResCommonChatStatus> chatAccept(Map<String, dynamic> param) async {
+  Future<dynamic> chatAccept(Map<String, dynamic> param) async {
     try {
       final response = await post(
         chatAcceptAPI,
@@ -57,12 +57,13 @@ class ChatRepository extends ApiProvider {
         } else {
           final astrologerChatList =
               ResCommonChatStatus.fromJson(jsonDecode(response.body));
-          if (astrologerChatList.statusCode == successResponse &&
-              astrologerChatList.success!) {
-            return astrologerChatList;
-          } else {
-            throw CustomException(json.decode(response.body)["message"]);
-          }
+          return astrologerChatList;
+          // if (astrologerChatList.statusCode == successResponse &&
+          //     astrologerChatList.success!) {
+          //   return astrologerChatList;
+          // } else {
+          //   throw CustomException(json.decode(response.body)["message"]);
+          // }
         }
       } else {
         throw CustomException(json.decode(response.body)["message"]);
