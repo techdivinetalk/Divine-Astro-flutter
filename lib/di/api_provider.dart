@@ -25,6 +25,12 @@ class ApiProvider {
   final String deleteSessionResponse = "deleteSessionResponse";
   final String initResponse = "initResponse";
   final String initLeaderBoardSession = "initLeaderBoardSession";
+  final String leaderBoardResponse = "leaderBoardResponse";
+  final String liveStarResponse = "liveStarResponse";
+  final String top5UsersResponse = "top5UsersResponse";
+  final String liveStarUser = "liveStarUser";
+  final String fetchTop5Users = "fetchTop5Users";
+  final String userGiftResponse = "userGiftResponse";
 
 
 
