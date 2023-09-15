@@ -42,7 +42,7 @@ class ChatMessageController extends GetxController {
   XFile? pickedFile;
   File? uploadFile;
   final preference = Get.find<SharedPreferenceService>();
-  RxInt currentUserId = 0.obs;
+  RxInt currentUserId = 8693.obs;
   String userDataKey = "userKey";
   bool sendReadMessageStatus = false;
   RxBool isEmojiShowing = false.obs;
