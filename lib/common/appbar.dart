@@ -32,6 +32,7 @@ PreferredSizeWidget commonDetailAppbar(
     surfaceTintColor: Colors.transparent,
     backgroundColor: AppColors.white,
     elevation: 0,
+    titleSpacing: 0,
     centerTitle: false,
     leading: InkWell(
         onTap: () {

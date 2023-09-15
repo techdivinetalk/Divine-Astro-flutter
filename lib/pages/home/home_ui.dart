@@ -26,9 +26,16 @@ class HomeUI extends GetView<HomeController> {
   Widget build(BuildContext context) {
     Get.put(HomeController());
     return Scaffold(
+      key: controller.homeScreenKey,
       backgroundColor: AppColors.white,
       drawer: const SideMenuDrawer(),
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => controller.homeScreenKey.currentState?.openDrawer(),
+          highlightColor: AppColors.transparent,
+          splashColor: AppColors.transparent,
+          icon: const Icon(Icons.menu),
+        ),
         titleSpacing: 0,
         surfaceTintColor: Colors.transparent,
         backgroundColor: AppColors.white,
@@ -77,7 +84,7 @@ class HomeUI extends GetView<HomeController> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "₹${controller.homeData!.todaysEarning.toString()}",
+                                          "₹${controller.homeData!.todaysEarning?.toStringAsFixed(2)}",
                                           style: AppTextStyle.textStyle16(
                                               fontColor: AppColors.appRedColour,
                                               fontWeight: FontWeight.w700),
@@ -215,7 +222,7 @@ class HomeUI extends GetView<HomeController> {
                         ),
                       ),
                       SizedBox(height: 10.h),
-                      InkWell(
+                      GestureDetector(
                         onTap: () {
                           Get.toNamed(RouteName.noticeBoard);
                         },

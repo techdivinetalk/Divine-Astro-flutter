@@ -177,7 +177,7 @@ Map<String, String> hi() {
     "logout": "लॉग आउट",
     "scheduleNow": "अभी शेड्यूल करें",
     "trainingVideos": "प्रशिक्षण वीडियो",
-    "VideoCall":"वीडियो कॉल",
+    "VideoCall": "वीडियो कॉल",
     "deleteAccount": "खाता हटा दो",
     "deleteText": "क्या आप इस खाते को हटाने के लिए सुनिश्चित हैं ?",
     "logoutText": "क्या आप लॉग आउट करना चाहते हैं ?",
@@ -276,6 +276,14 @@ Map<String, String> hi() {
     "jobTitle": "अच्छा काम! कोई भी प्रतीक्षा सूची में नहीं है.",
     "contactPermissionRequired": "संपर्क अनुमति आवश्यक है",
     "contactSaved": "संपर्क सफलतापूर्वक सहेजा गया",
-    "Saved": "बचाया"
+    "Saved": "बचाया",
+    'otpVerification': 'ओटीपी सत्यापन',
+    'otpTextMsg': 'हमारे द्वारा भेजे गए एसएमएस से कोड दर्ज करें',
+    'notReceiveOTP': "ओटीपी नहीं मिला?",
+    'resend': 'पुन: भेजें',
+    'noAttemptsLeft': 'कोई प्रयास नहीं बचा!',
+    'attemptsRemaining': 'प्रयास बाकी है',
+    'phoneNumberMustBe10Digit': 'फ़ोन नंबर 10 अंकों का होना चाहिए',
+    'specialityNotEmpty': "विशेषता खाली नहीं हो सकती",
   };
 }

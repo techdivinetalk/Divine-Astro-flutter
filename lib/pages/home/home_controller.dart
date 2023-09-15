@@ -38,6 +38,7 @@ class HomeController extends GetxController {
   UserData? userData = UserData();
   final preferenceService = Get.find<SharedPreferenceService>();
   final UserRepository userRepository = Get.put(UserRepository());
+  final homeScreenKey = GlobalKey<ScaffoldState>();
   int scoreIndex = 0;
   List<Map<String, dynamic>> yourScore = [
     {"title": "Your Conversion Rate", "score": "80"},

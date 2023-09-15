@@ -53,6 +53,7 @@ class UserData {
   int? chatMinimumTime;
   double? videoCallPayout;
   double? audioCallPayout;
+
   // int? anonymousCallPayout;
   // String? chatPayout;
   double? giftPayout;
@@ -62,6 +63,7 @@ class UserData {
   String? accountType;
   num? totalPayout;
   num? totalPayment;
+
   // Null? razorpayContactId;
   String? employmentType;
   String? bankName;
@@ -71,6 +73,7 @@ class UserData {
   int? audioDiscountedAmount;
   int? anonymousDiscountedAmount;
   int? chatDiscountedAmount;
+
   // Null? speciality;
   int? roleId;
   int? uniqueNo;
@@ -88,8 +91,11 @@ class UserData {
   int? chatPreviousStatus;
   double? retention;
   String? premium;
+  List<AstrologerSpeciality>? astrologerSpeciality;
+
   // Null? astroCat;
   List<AstroCatPivot>? astroCatPivot;
+
   // List<Null>? astroSpecialityPivot;
 
   UserData({
@@ -158,6 +164,7 @@ class UserData {
     // this.astroCat,
     this.astroCatPivot,
     // this.astroSpecialityPivot
+    this.astrologerSpeciality,
   });
 
   UserData.fromJson(Map<String, dynamic> json) {
@@ -228,6 +235,12 @@ class UserData {
       astroCatPivot = <AstroCatPivot>[];
       json['astro_cat_pivot'].forEach((v) {
         astroCatPivot!.add(AstroCatPivot.fromJson(v));
+      });
+    }
+    if (json['astro_speciality_pivot'] != null) {
+      astrologerSpeciality = <AstrologerSpeciality>[];
+      json['astro_speciality_pivot'].forEach((v) {
+        astrologerSpeciality?.add(AstrologerSpeciality.fromJson(v));
       });
     }
     // if (json['astro_speciality_pivot'] != null) {
@@ -306,6 +319,9 @@ class UserData {
     if (astroCatPivot != null) {
       data['astro_cat_pivot'] = astroCatPivot!.map((v) => v.toJson()).toList();
     }
+    if (astrologerSpeciality != null) {
+      data['astro_speciality_pivot'] = astrologerSpeciality!.map((v) => v.toJson()).toList();
+    }
     // if (astroSpecialityPivot != null) {
     //   data['astro_speciality_pivot'] =
     //       astroSpecialityPivot!.map((v) => v.toJson()).toList();
@@ -367,4 +383,76 @@ class CategoryDetails {
     data['status'] = status;
     return data;
   }
+}
+
+class AstrologerSpeciality {
+  int? id;
+  int? astrologerId;
+  int? astrologerSpecialityId;
+  SpecialityDetails? specialityDetails;
+
+  AstrologerSpeciality({
+    this.id,
+    this.astrologerId,
+    this.astrologerSpecialityId,
+    this.specialityDetails,
+  });
+
+  factory AstrologerSpeciality.fromJson(Map<String, dynamic> json) =>
+      AstrologerSpeciality(
+        id: json["id"],
+        astrologerId: json["astrologer_id"],
+        astrologerSpecialityId: json["astrologer_speciality_id"],
+        specialityDetails: json["speciality_details"] == null
+            ? null
+            : SpecialityDetails.fromJson(json["speciality_details"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "astrologer_id": astrologerId,
+        "astrologer_speciality_id": astrologerSpecialityId,
+        "speciality_details": specialityDetails?.toJson(),
+      };
+}
+
+class SpecialityDetails {
+  int? id;
+  String? name;
+  String? image;
+  String? type;
+  String? createdAt;
+  String? updatedAt;
+  int? status;
+
+  SpecialityDetails({
+    this.id,
+    this.name,
+    this.image,
+    this.type,
+    this.createdAt,
+    this.updatedAt,
+    this.status,
+  });
+
+  factory SpecialityDetails.fromJson(Map<String, dynamic> json) =>
+      SpecialityDetails(
+        id: json["id"],
+        name: json["name"],
+        image: json["image"],
+        type: json["type"],
+        createdAt: json["created_at"],
+        updatedAt: json["updated_at"],
+        status: json["status"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "image": image,
+        "type": type,
+        "created_at": createdAt,
+        "updated_at": updatedAt,
+        "status": status,
+      };
 }

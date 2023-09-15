@@ -66,6 +66,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                               child: InkWell(
                                 onTap: () {
                                   controller.updateProfileImage(context);
+
                                 },
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(80),

@@ -88,6 +88,8 @@ class MyApp extends StatelessWidget {
               fallbackLocale: AppTranslations.fallbackLocale,
               translations: AppTranslations(),
               theme: ThemeData(
+                splashColor: AppColors.transparent,
+                highlightColor: Colors.transparent,
                 colorScheme: ColorScheme.fromSeed(
                     seedColor: Colors.white,
                     background: AppColors.white,

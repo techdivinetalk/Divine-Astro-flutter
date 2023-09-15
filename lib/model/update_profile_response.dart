@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:divine_astrologer/model/res_login.dart';
+
 UpdateProfileResponse updateProfileResponseFromJson(String str) =>
     UpdateProfileResponse.fromJson(json.decode(str));
 
@@ -114,7 +116,7 @@ class Data {
   int? freeOrderCount;
   dynamic astroCat;
   List<AstroCatPivot> astroCatPivot;
-  List<AstroSpecialityPivot> astroSpecialityPivot;
+  List<AstrologerSpeciality> astroSpecialityPivot;
 
   Data({
     this.id,
@@ -251,7 +253,7 @@ class Data {
     int? freeOrderCount,
     dynamic astroCat,
     List<AstroCatPivot>? astroCatPivot,
-    List<AstroSpecialityPivot>? astroSpecialityPivot,
+    List<AstrologerSpeciality>? astroSpecialityPivot,
   }) =>
       Data(
         id: id ?? this.id,
@@ -396,8 +398,8 @@ class Data {
                 json["astro_cat_pivot"].map((x) => AstroCatPivot.fromJson(x)))
             : [],
         astroSpecialityPivot: json["astro_speciality_pivot"] != null
-            ? List<AstroSpecialityPivot>.from(json["astro_speciality_pivot"]
-                .map((x) => AstroSpecialityPivot.fromJson(x)))
+            ? List<AstrologerSpeciality>.from(json["astro_speciality_pivot"]
+                .map((x) => AstrologerSpeciality.fromJson(x)))
             : [],
       );
 
@@ -553,36 +555,5 @@ class CategoryDetails {
         "name": name,
         "image": image,
         "status": status,
-      };
-}
-
-class AstroSpecialityPivot {
-  int? id;
-  int? astrologerSpecialityId;
-
-  AstroSpecialityPivot({
-    this.id,
-    this.astrologerSpecialityId,
-  });
-
-  AstroSpecialityPivot copyWith({
-    int? id,
-    int? astrologerSpecialityId,
-  }) =>
-      AstroSpecialityPivot(
-        id: id ?? this.id,
-        astrologerSpecialityId:
-            astrologerSpecialityId ?? this.astrologerSpecialityId,
-      );
-
-  factory AstroSpecialityPivot.fromJson(Map<String, dynamic> json) =>
-      AstroSpecialityPivot(
-        id: json["id"],
-        astrologerSpecialityId: json["astrologer_speciality_id"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "astrologer_speciality_id": astrologerSpecialityId,
       };
 }

@@ -686,11 +686,14 @@ class $AssetsSvgGen {
   /// File path: assets/svg/block_user.svg
   SvgGenImage get blockUser => const SvgGenImage('assets/svg/block_user.svg');
 
-  /// File path: assets/svg/call_ic_1.svg
-  SvgGenImage get callIc1 => const SvgGenImage('assets/svg/call_ic_1.svg');
+  /// File path: assets/svg/camera.svg
+  SvgGenImage get camera => const SvgGenImage('assets/svg/camera.svg');
 
   /// File path: assets/svg/disconnect.svg
   SvgGenImage get disconnect => const SvgGenImage('assets/svg/disconnect.svg');
+
+  /// File path: assets/svg/gallery.svg
+  SvgGenImage get gallery => const SvgGenImage('assets/svg/gallery.svg');
 
   /// File path: assets/svg/grey_container.svg
   SvgGenImage get greyContainer =>
@@ -701,6 +704,9 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/ic_call_1.svg
   SvgGenImage get icCall1 => const SvgGenImage('assets/svg/ic_call_1.svg');
+
+  /// File path: assets/svg/login_logo.svg
+  SvgGenImage get loginLogo => const SvgGenImage('assets/svg/login_logo.svg');
 
   /// File path: assets/svg/mute.svg
   SvgGenImage get mute => const SvgGenImage('assets/svg/mute.svg');
@@ -731,11 +737,13 @@ class $AssetsSvgGen {
         blackDot,
         block,
         blockUser,
-        callIc1,
+        camera,
         disconnect,
+        gallery,
         greyContainer,
         icAdd,
         icCall1,
+        loginLogo,
         mute,
         pinkSlider,
         pleaseRegister1,

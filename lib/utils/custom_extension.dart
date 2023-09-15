@@ -1,4 +1,5 @@
 import 'package:country_state_city/country_state_city.dart';
+import 'package:divine_astrologer/model/res_blocked_customers.dart';
 import 'package:intl/intl.dart';
 
 extension SearchCity on List<City> {
@@ -100,4 +101,21 @@ String? extractYoutubeVideoID(String videoUrl) {
 
 String getYoutubeThumbnail(String url) {
   return "https://img.youtube.com/vi/${extractYoutubeVideoID(url.toString())}/0.jpg";
+}
+
+extension SearchBlockeUser on List<AstroBlockCustomer> {
+  List<AstroBlockCustomer> search(String? value) {
+    if (value == null) return this;
+    return where(
+      (element) =>
+          element.name
+              .toString()
+              .toLowerCase()
+              .startsWith(value.toLowerCase().trim()) ||
+          element.name
+              .toString()
+              .toLowerCase()
+              .contains(value.toLowerCase().trim()),
+    ).toList();
+  }
 }

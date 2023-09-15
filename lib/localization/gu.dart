@@ -277,5 +277,13 @@ Map<String, String> gu() {
     "contactSaved": "સંપર્ક સફળતાપૂર્વક સાચવ્યો",
     "contactPermissionRequired": "સંપર્ક પરવાનગી જરૂરી છે",
     "Saved": "સાચવેલ",
+    'otpVerification': 'OTP ચકાસણી',
+    'otpTextMsg': 'અમે મોકલેલ એસએમએસમાંથી કોડ દાખલ કરો',
+    'notReceiveOTP': "OTP પ્રાપ્ત થયો નથી?",
+    'resend': 'ફરી મોકલો',
+    'noAttemptsLeft': 'કોઈ પ્રયાસ બાકી નથી!',
+    'attemptsRemaining': 'પ્રયાસો બાકી છે',
+    'phoneNumberMustBe10Digit': 'ફોન નંબર 10 અંકનો હોવો જોઈએ',
+    'specialityNotEmpty': "વિશેષતા ખાલી ન હોઈ શકે",
   };
 }

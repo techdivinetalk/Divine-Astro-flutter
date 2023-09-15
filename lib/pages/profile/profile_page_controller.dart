@@ -18,6 +18,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../common/app_exception.dart';
 import '../../common/colors.dart';
+import '../../common/custom_widgets.dart';
 import '../../di/shared_preference_service.dart';
 import '../../gen/assets.gen.dart';
 import '../../model/res_login.dart';
@@ -290,29 +291,100 @@ class ProfilePageController extends GetxController {
   }
 
 //Update profile image
+
   updateProfileImage(BuildContext context) {
-    showDialog(
+    showCupertinoModalPopup(
       context: context,
+      barrierColor: AppColors.darkBlue.withOpacity(0.5),
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Divine Astrologer"),
-          content: const Text("Select media option"),
-          actions: [
-            TextButton(
-              child: const Text("Camera"),
-              onPressed: () async {
-                Get.back();
-                await getImage(true);
-              },
-            ),
-            TextButton(
-              child: const Text("Gallery"),
-              onPressed: () async {
-                Get.back();
-                await getImage(false);
-              },
-            ),
-          ],
+        return Material(
+          color: AppColors.transparent,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Get.back();
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.white, width: 1.5),
+                      borderRadius:
+                      const BorderRadius.all(Radius.circular(50.0)),
+                      color: AppColors.white.withOpacity(0.1)),
+                  child: const Icon(
+                    Icons.close,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20.h),
+              Container(
+                width: double.maxFinite,
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                decoration: BoxDecoration(
+                  borderRadius:
+                  BorderRadius.vertical(top: Radius.circular(20.r)),
+                  color: AppColors.white,
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(height: 16.h),
+                    CustomText(
+                      'chooseOptions'.tr,
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    CustomText(
+                      'shareOptions'.tr,
+                      fontSize: 16.sp,
+                      fontColor: AppColors.grey,
+                    ),
+                    const SizedBox(height: 32),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomButton(
+                          onTap: () async {
+                            Get.back();
+                            await getImage(true);
+                          },
+                          child: Column(
+                            children: [
+                              Assets.svg.camera.svg(),
+                              SizedBox(height: 8.h),
+                              CustomText(
+                                "camera".tr,
+                                fontSize: 16.sp,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 64.w),
+                        CustomButton(
+                          onTap: () async {
+                            Get.back();
+                            await getImage(false);
+                          },
+                          child: Column(
+                            children: [
+                              Assets.svg.gallery.svg(),
+                              SizedBox(height: 8.h),
+                              CustomText(
+                                "gallery".tr,
+                                fontSize: 16.sp,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
