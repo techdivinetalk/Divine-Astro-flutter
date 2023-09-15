@@ -60,7 +60,7 @@ class LivePage extends StatefulWidget {
 
 class LivePageState extends State<LivePage>
     with SingleTickerProviderStateMixin {
-  final liveController = ZegoUIKitPrebuiltLiveStreamingController();
+  //final liveController = ZegoUIKitPrebuiltLiveStreamingController();
   final event = ZegoUIKitPrebuiltLiveStreamingEvents();
   final List<StreamSubscription<dynamic>?> subscriptions = [];
   final controller = Get.put(LiveController(Get.put(UserRepository())));
@@ -74,7 +74,10 @@ class LivePageState extends State<LivePage>
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       controller.listenCallStatus();
       controller.listenWaitlistRemove();
-      controller.setAvailibility(widget.localUserID, true,);
+      controller.setAvailibility(
+        widget.localUserID,
+        true,
+      );
       //controller.getBlockedCustomerList();
       event.hostEvents.onCoHostRequestReceived = (user) async {
         controller.coHostUser = user;
@@ -87,13 +90,14 @@ class LivePageState extends State<LivePage>
               return CoHostRequest(
                   name: user.name,
                   onReject: () {
-                    liveController.connect.hostRejectCoHostRequest(user);
+                    controller.liveController.connect
+                        .hostRejectCoHostRequest(user);
                     controller.setBusyStatus(widget.localUserID, 0,
                         customerId: "");
                     controller.setCallType(widget.localUserID);
                   },
                   onAccept: () {
-                    liveController.connect
+                    controller.liveController.connect
                         .hostAgreeCoHostRequest(user)
                         .then((value) {
                       controller.setBusyStatus(widget.localUserID, 1,
@@ -112,7 +116,7 @@ class LivePageState extends State<LivePage>
           onInRoomCommandMessageReceived(event);
         }),
       ]);
-      liveController.message.stream().listen((event) {
+      controller.liveController.message.stream().listen((event) {
         controller.jumpToBottom();
       });
     });
@@ -180,10 +184,11 @@ class LivePageState extends State<LivePage>
               //userName: 'user_${widget.localUserID}',
               userName: widget.astrologerName ?? "user_${widget.localUserID}",
               liveID: widget.liveID,
-              controller: liveController,
+              controller: controller.liveController,
               config: (widget.isHost ? controller.hostConfig : audienceConfig)
                 ..avatarBuilder = customAvatarBuilder
                 ..memberButtonConfig.icon = const SizedBox()
+                ..stopCoHostingWhenMicCameraOff = false
                 ..confirmDialogInfo = null
                 ..markAsLargeRoom = false
                 ..bottomMenuBarConfig.hostButtons = const [
@@ -245,7 +250,7 @@ class LivePageState extends State<LivePage>
 
   Widget messageWidget() {
     return StreamBuilder<List<ZegoInRoomMessage>>(
-      stream: liveController.message.stream(),
+      stream: controller.liveController.message.stream(),
       builder: (context, snapshot) {
         final messages = snapshot.data ?? <ZegoInRoomMessage>[];
 
@@ -369,43 +374,45 @@ class LivePageState extends State<LivePage>
     );
   }
 
-  Container buildAstrologerLiveStartWidget() {
-    return Container(
-      height: 65.h,
-      margin: EdgeInsets.only(left: 22.w, top: 15.h),
-      decoration: BoxDecoration(
-          color: AppColors.lightBlack.withOpacity(.3),
-          borderRadius: BorderRadius.circular(10)),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(width: 16.w),
-          Container(
-            width: 32.w,
-            height: 32.h,
-            clipBehavior: Clip.antiAlias,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
+  Widget buildAstrologerLiveStartWidget() {
+    return Visibility(
+      visible: controller.showLiveStar.value,
+      child: Container(
+        height: 57.h,
+        margin: EdgeInsets.only(left: 22.w, top: 15.h),
+        decoration: BoxDecoration(
+            color: AppColors.lightBlack.withOpacity(.3),
+            borderRadius: BorderRadius.circular(10)),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(width: 10.w),
+            Container(
+              width: 32.w,
+              height: 32.h,
+              clipBehavior: Clip.antiAlias,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+              ),
+              child: circleAvatar(),
             ),
-            child: circleAvatar(),
-          ),
-          SizedBox(width: 8.w),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomText("Astrologers's Live Star",
-                  fontSize: 14.sp,
-                  fontColor: AppColors.white,
-                  fontWeight: FontWeight.bold),
-              CustomText("Cillian Murphy",
-                  fontSize: 10.sp, fontColor: AppColors.white),
-            ],
-          ),
-          SizedBox(width: 16.w),
-          // Assets.images.starLive.image(),
-          SizedBox(width: 16.w),
-        ],
+            SizedBox(width: 8.w),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomText("Astrologers's Live Star",
+                    fontSize: 14.sp,
+                    fontColor: AppColors.white,
+                    fontWeight: FontWeight.bold),
+                CustomText("${controller.liveStar["name"]}",
+                    fontSize: 10.sp, fontColor: AppColors.white),
+              ],
+            ),
+            // Assets.images.starLive.image(),
+            SizedBox(width: 10.w),
+          ],
+        ),
       ),
     );
   }
@@ -464,16 +471,12 @@ class LivePageState extends State<LivePage>
   }
 
   CustomText buildCustomTimer() {
-    if(controller.hour.value == "00"){
-      return CustomText(
-          "${controller.min}:${controller.sec}",
-          fontSize: 14.sp,
-          fontColor: AppColors.white);
+    if (controller.hour.value == "00") {
+      return CustomText("${controller.min}:${controller.sec}",
+          fontSize: 14.sp, fontColor: AppColors.white);
     }
-    return CustomText(
-                  "${controller.hour}:${controller.min}:${controller.sec}",
-                  fontSize: 14.sp,
-                  fontColor: AppColors.white);
+    return CustomText("${controller.hour}:${controller.min}:${controller.sec}",
+        fontSize: 14.sp, fontColor: AppColors.white);
   }
 
   Widget foreground(BoxConstraints constraints) {
@@ -523,7 +526,7 @@ class LivePageState extends State<LivePage>
             child: Center(
               child: GestureDetector(
                 onTap: () {
-                  liveController.message.send(shortMessages[index]);
+                  controller.liveController.message.send(shortMessages[index]);
                 },
                 child: Text(
                   shortMessages[index],
@@ -586,15 +589,15 @@ class LivePageState extends State<LivePage>
                                             height: 40.h,
                                             onSubmit: (value) {
                                               if (value.isNotEmpty) {
-                                                if(controller.badWordsData!.contains(value)){
+                                                if (controller.badWordsData!
+                                                    .contains(value)) {
                                                   controller.msg.text = "";
-                                                }else{
-                                                  liveController.message
-                                                      .send(value);
-                                                  controller.msg.text =
-                                                  "";
+                                                } else {
                                                   controller
-                                                      .jumpToBottom();
+                                                      .liveController.message
+                                                      .send(value);
+                                                  controller.msg.text = "";
+                                                  controller.jumpToBottom();
                                                 }
                                               }
                                             },
@@ -673,12 +676,17 @@ class LivePageState extends State<LivePage>
               mainAxisSize: MainAxisSize.min,
               children: [
                 buildTopMenu(),
-                /*Obx(
-                  () => AnimatedOpacity(
-                      opacity: controller.isStarHide.isFalse ? 1 : 0,
-                      duration: Duration(seconds: 1),
-                      child: buildAstrologerLiveStartWidget()),
-                )*/
+                Obx(() {
+                  if (controller.isCoHosting.isTrue) {
+                    return const SizedBox();
+                  } else {
+                    if (controller.liveStar.isNotEmpty) {
+                      return buildAstrologerLiveStartWidget();
+                    } else {
+                      return const SizedBox();
+                    }
+                  }
+                })
               ],
             ),
           ),
@@ -691,7 +699,7 @@ class LivePageState extends State<LivePage>
     return InkWell(
         onTap: () {
           if (controller.msg.text.isNotEmpty) {
-            liveController.message.send(controller.msg.text);
+            controller.liveController.message.send(controller.msg.text);
             controller.msg.text = "";
             Get.back();
           }
@@ -798,8 +806,10 @@ class LivePageState extends State<LivePage>
                     inactiveTextFontWeight: FontWeight.normal,
                     value: controller.isCallOnOff.value,
                     onToggle: (val) {
-                      controller.setAvailibility(widget.localUserID,
-                          !controller.isCallOnOff.value,);
+                      controller.setAvailibility(
+                        widget.localUserID,
+                        !controller.isCallOnOff.value,
+                      );
                       controller.isCallOnOff.value =
                           !controller.isCallOnOff.value;
                     },
@@ -863,7 +873,7 @@ class LivePageState extends State<LivePage>
                                   controller.setBusyStatus(
                                       widget.localUserID, 0,
                                       customerId: "");
-                                  liveController.connect
+                                  controller.liveController.connect
                                       .removeCoHost(controller.coHostUser!);
                                   controller.removeFromWaitList();
                                   controller.endCall();
@@ -920,30 +930,37 @@ class LivePageState extends State<LivePage>
           ),
         ),
         SizedBox(height: 12.h),
-        ClipOval(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
-            child: InkWell(
-              onTap: () {
-                showCupertinoModalPopup(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return const LeaderBoard();
-                    });
-              },
-              child: Container(
-                width: 46.w,
-                height: 46.h,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.white.withOpacity(.6)),
-                child: Center(child: Assets.images.leaderboardLive.svg()),
-              ),
-            ),
-          ),
+        Obx(
+          () => controller.leaderBoard.value.users?.isNotEmpty ?? false
+              ? ClipOval(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
+                    child: InkWell(
+                      onTap: () {
+                        showCupertinoModalPopup(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const LeaderBoard();
+                            });
+                      },
+                      child: Container(
+                        width: 46.w,
+                        height: 46.h,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.white.withOpacity(.6)),
+                        child:
+                            Center(child: Assets.images.leaderboardLive.svg()),
+                      ),
+                    ),
+                  ),
+                )
+              : SizedBox(),
         ),
-        SizedBox(height: 12.h),
+        Obx(() => controller.leaderBoard.value.users?.isNotEmpty ?? false
+            ? SizedBox(height: 12.h)
+            : SizedBox()),
         ClipOval(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
@@ -952,7 +969,9 @@ class LivePageState extends State<LivePage>
                 showCupertinoModalPopup(
                     context: context,
                     builder: (BuildContext context) {
-                      return BlockUserList(hostId: widget.localUserID,);
+                      return BlockUserList(
+                        hostId: widget.localUserID,
+                      );
                     });
               },
               child: Container(
@@ -1104,13 +1123,13 @@ class LivePageState extends State<LivePage>
     return CachedNetworkImage(
       imageUrl: 'https://robohash.org/${user?.id}.png',
       imageBuilder: (context, imageProvider) => Container(
-        width: 100.w,
-        height: 100.h,
         decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-                fit: BoxFit.fill,
-                image: AssetImage(Assets.images.bgChatWallpaper.path))),
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: imageProvider,
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
       progressIndicatorBuilder: (context, url, downloadProgress) =>
           CircularProgressIndicator(value: downloadProgress.progress),
