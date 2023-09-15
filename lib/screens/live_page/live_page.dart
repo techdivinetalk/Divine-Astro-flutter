@@ -259,6 +259,7 @@ class LivePageState extends State<LivePage>
             child: SizedBox(
               height: 200.h,
               child: ListView.builder(
+                reverse: true,
                 shrinkWrap: true,
                 padding: EdgeInsets.zero,
                 controller: controller.scrollController,
