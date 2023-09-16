@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:divine_astrologer/common/zego_services.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/login_images.dart';
@@ -15,17 +17,19 @@ import '../../../model/firebase_model.dart';
 import '../../../model/res_login.dart';
 import '../../../repository/user_repository.dart';
 
-class LoginController extends GetxController {
+class LoginController extends FullLifeCycleController with FullLifeCycleMixin {
   LoginController(this.userRepository);
+
   final UserRepository userRepository;
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
   late TextEditingController countryCodeController;
   late TextEditingController mobileNumberController;
+
   RxString get countryCode => countryCodeController.text.obs;
   var enable = true.obs;
   String? deviceToken;
-
+  FocusNode numberFocus = FocusNode();
   RxBool hasError = false.obs;
 
   final List<Widget> imgList = [
@@ -43,6 +47,7 @@ class LoginController extends GetxController {
     "Please Enter your Registered mobile number to proceed as an astrologer to the platform.",
     "You will get a call on the registered mobile number for verification.",
   ];
+
   void setCode(String value) {
     if (!value.contains("+")) value = "+$value";
     countryCodeController.text = value;
@@ -117,19 +122,19 @@ class LoginController extends GetxController {
   }
 
   LoginImages? loginImages;
+
   List<LoginDatum> get images => loginImages?.data.data ?? <LoginDatum>[];
+
   String get amazonUrl => loginImages!.data.baseurl;
 
   List<SvgPicture> staticImages = [
     Assets.svg.pleaseRegister1.svg(),
     Assets.svg.pleaseRegister2.svg(),
-
   ];
   List<String> imageDec = [
     "Please Enter your Registered mobile number to proceed as an astrologer to the platform.",
     "You will get a call on the registered mobile number for verification."
   ];
-
 
   void getLoginImages() async {
     if (preferenceService.getLoginImages() != null) {
@@ -144,5 +149,25 @@ class LoginController extends GetxController {
   Future<LoginImages> getInitialLoginImages() async {
     final response = await userRepository.getInitialLoginImages();
     return response;
+  }
+
+  @override
+  void onDetached() {
+    log('----> detached');
+  }
+
+  @override
+  void onInactive() {
+    numberFocus.unfocus();
+  }
+
+  @override
+  void onPaused() {
+    numberFocus.unfocus();
+  }
+
+  @override
+  void onResumed() {
+    numberFocus.requestFocus();
   }
 }

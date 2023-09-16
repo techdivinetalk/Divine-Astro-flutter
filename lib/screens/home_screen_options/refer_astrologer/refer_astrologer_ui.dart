@@ -57,7 +57,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  "mobileNumber".tr,
+                  "${"mobileNumber".tr}*",
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 5),
@@ -75,7 +75,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  "astrologySkill".tr,
+                  "${"astrologySkill".tr}*",
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 5),
@@ -118,7 +118,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                 yesNoOptionWiddet(),
                 const SizedBox(height: 20),
                 Text(
-                  "mandatoryFields".tr,
+                  "*${"mandatoryFields".tr}",
                   style: AppTextStyle.textStyle14(
                       fontWeight: FontWeight.w400,
                       fontColor: AppColors.darkBlue),

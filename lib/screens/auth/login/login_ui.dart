@@ -13,7 +13,7 @@ import '../../../common/colors.dart';
 import '../../../common/custom_light_yellow_btn.dart';
 import 'login_controller.dart';
 
-class LoginUI extends GetView<LoginController> {
+class LoginUI extends GetView<LoginController>  {
   LoginUI({Key? key}) : super(key: key);
   final _formKey = GlobalKey<FormState>();
 
@@ -104,6 +104,7 @@ class LoginUI extends GetView<LoginController> {
         ]),
         child: GetBuilder<LoginController>(
           builder: (controller) => TextFormField(
+            focusNode: controller.numberFocus,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please Enter Valid Phone Number';
