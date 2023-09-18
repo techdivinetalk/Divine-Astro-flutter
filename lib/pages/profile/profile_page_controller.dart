@@ -30,7 +30,9 @@ import '../../utils/utils.dart';
 
 class ProfilePageController extends GetxController {
   final UserRepository userRepository;
+
   ProfilePageController(this.userRepository);
+
   UserData? userData;
   GetUserProfile? userProfile;
   RxString userProfileImage = "".obs;
@@ -190,13 +192,21 @@ class ProfilePageController extends GetxController {
     update(['set_lang', 'profile_option']);
   }
 
+  String? baseAmazonUrl;
+
   @override
   void onInit() {
     super.onInit();
     userData = preference.getUserDetail();
-    userProfileImage.value = "${userData?.image}";
+    baseAmazonUrl = preference.getBaseImageURL();
+    userProfileImage.value = "$baseAmazonUrl/${userData?.image}";
     getUserProfileDetails();
     getReviewRating();
+  }
+
+  void setUserData(UserData? value) {
+    userData = value;
+    update();
   }
 
 //getPercentage
@@ -218,7 +228,7 @@ class ProfilePageController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        Get.snackbar("Error", error.toString()).show();
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
   }
@@ -235,7 +245,7 @@ class ProfilePageController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        Get.snackbar("Error", error.toString()).show();
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
     reviewDataSync.value = true;
@@ -284,7 +294,7 @@ class ProfilePageController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        Get.snackbar("Error", error.toString()).show();
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
     reviewDataSync.value = true;
@@ -311,7 +321,7 @@ class ProfilePageController extends GetxController {
                   decoration: BoxDecoration(
                       border: Border.all(color: AppColors.white, width: 1.5),
                       borderRadius:
-                      const BorderRadius.all(Radius.circular(50.0)),
+                          const BorderRadius.all(Radius.circular(50.0)),
                       color: AppColors.white.withOpacity(0.1)),
                   child: const Icon(
                     Icons.close,
@@ -325,7 +335,7 @@ class ProfilePageController extends GetxController {
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                 decoration: BoxDecoration(
                   borderRadius:
-                  BorderRadius.vertical(top: Radius.circular(20.r)),
+                      BorderRadius.vertical(top: Radius.circular(20.r)),
                   color: AppColors.white,
                 ),
                 child: Column(
@@ -467,11 +477,7 @@ class ProfilePageController extends GetxController {
       preference.setUserDetail(userData!);
       await ZegoServices()
           .initZegoInvitationServices("${userData?.id}", "${userData?.name}");
-      Get.snackbar("Profile image update successfully", "",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: AppColors.white,
-          colorText: AppColors.blackColor,
-          duration: const Duration(seconds: 3));
+      divineSnackBar(data: "Profile image update successfully");
       debugPrint("Uploaded Url : $response");
     } else {
       CustomException("Something went wrong");

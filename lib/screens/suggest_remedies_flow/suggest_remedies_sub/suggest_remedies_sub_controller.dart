@@ -1,3 +1,5 @@
+import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:get/get.dart';
 
 import '../../../common/app_exception.dart';
@@ -43,7 +45,7 @@ class SuggestRemediesSubController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        Get.snackbar("Error", error.toString()).show();
+        divineSnackBar(data: error.toString(),color: AppColors.redColor);
       }
     }
     productListSync.value = true;

@@ -21,7 +21,7 @@ class NoInternetException extends AppException {
     Function()? onDismissClick,
     String buttonText = "",
     String dismissButtonText = ""}) {
-    Get.snackbar(title, message).show();
+    divineSnackBar(data: message,color: AppColors.redColor);
   }
 }
 class CustomException extends AppException {

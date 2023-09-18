@@ -4,6 +4,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -279,7 +281,7 @@ class LiveController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        Get.snackbar("Error", error.toString()).show();
+        divineSnackBar(data: error.toString(),color: AppColors.redColor);
       }
     }
   }
@@ -308,7 +310,7 @@ class LiveController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        Get.snackbar("Error", error.toString()).show();
+        divineSnackBar(data: error.toString(),color: AppColors.redColor);
       }
     }
   }

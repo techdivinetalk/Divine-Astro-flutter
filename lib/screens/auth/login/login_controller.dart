@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/zego_services.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/login_images.dart';
@@ -71,7 +73,7 @@ class LoginController extends FullLifeCycleController with FullLifeCycleMixin {
       if (error is AppException) {
         error.onException();
       } else {
-        Get.snackbar("Error", error.toString()).show();
+        divineSnackBar(data: error.toString(),color: AppColors.redColor);
       }
     }
   }
