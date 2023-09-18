@@ -6,6 +6,7 @@ import 'dart:io';
 
 import 'package:divine_astrologer/model/chat/req_common_chat_model.dart';
 import 'package:divine_astrologer/model/res_login.dart';
+import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -15,8 +16,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import '../../common/colors.dart';
 import '../../common/common_functions.dart';
+import '../../di/api_provider.dart';
 import '../../di/hive_services.dart';
 import '../../di/shared_preference_service.dart';
+import '../../model/chat/chat_socket/chat_socket_init.dart';
 import '../../model/chat/res_astro_chat_listener.dart';
 import '../../model/chat/res_common_chat_success.dart';
 import '../../model/chat_offline_model.dart';
@@ -85,7 +88,7 @@ class ChatMessageController extends GetxController {
     currentChatUserId.value = 8693;
     userDataKey = "userKey_${userData?.id}_${currentUserId.value}";
     getChatList();
-
+    chatSocketInit();
     // msgFocus.addListener(() {
     //   if (msgFocus.hasFocus) {
     //     emojiShowing.value = true;
@@ -371,6 +374,20 @@ class ChatMessageController extends GetxController {
       },
     );
   }
+}
+
+chatSocketInit() {
+  DashboardController dashboardController = Get.find<DashboardController>();
+  dashboardController.socket?.emit(ApiProvider().initChat, {
+    "requestFrom": 'astrologer',
+    "userId": userData?.id.toString(),
+    "userSocketId": dashboardController.socket?.id ?? ''
+  });
+  dashboardController.socket?.on(ApiProvider().initChatResponse, (data) {
+    ResChatSocketInit.fromJson(data);
+    chatSession.value = ResChatSocketInit.fromJson(data);
+    debugPrint("Chat session ${chatSession.value}");
+  });
 }
 
 onEndChat() async {
