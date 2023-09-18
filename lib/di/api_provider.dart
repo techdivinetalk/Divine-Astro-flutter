@@ -25,6 +25,12 @@ class ApiProvider {
   final String deleteSessionResponse = "deleteSessionResponse";
   final String initResponse = "initResponse";
   final String initLeaderBoardSession = "initLeaderBoardSession";
+  final String leaderBoardResponse = "leaderBoardResponse";
+  final String liveStarResponse = "liveStarResponse";
+  final String top5UsersResponse = "top5UsersResponse";
+  final String liveStarUser = "liveStarUser";
+  final String fetchTop5Users = "fetchTop5Users";
+  final String userGiftResponse = "userGiftResponse";
 
 
 
@@ -62,6 +68,7 @@ class ApiProvider {
   final String getWaitingListQueue = "getWaitingListQueue";
   final String getImportantNumber = "getImportantNumber";
   final String getDonationList = "getDonationList";
+  final String updateSessionType = "updateSessionType";
   final String updateOfferFlag = "updateOfferFlag";
 
   //Astro Internal API
@@ -126,7 +133,7 @@ class ApiProvider {
     header[jsonHeaderName] = jsonHeaderValue;
     header[jsonAuthenticationName] = 'Bearer $_token';
     header[jsonCookieName] =
-        'XSRF-TOKEN=eyJpdiI6IlNET0dYM1BJdVQySkw5bjhuWGw1RHc9PSIsInZhbHVlIjoiMDk0UTF1RGtsN3FzRXpzKzFBUGJhRWcyY0dES29qbTZ0VW5lRTBsRXY4VU8yeUVJVFcxSkFoTDc5aE5ZNFllYzNYRFFyM0tTRDVUWmRod0dUeUdjNTNmNkZWMjVCRjZvTkhHZU1SL1J2ZFVPb1hLWGNVSGdOZ3JqSHZSNC9zZ08iLCJtYWMiOiI0MTk2MTM5Y2ExZjZjZDZiY2NhMjVlMDVhNTQ0MTBkMzNmMDU5Y2Q4ZDg1NjY4ZDFkYzQ5ZmYwZmYxOTA5MDAzIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6InJ1WDBXU0wyT1RuWjA5UCt1eE9adXc9PSIsInZhbHVlIjoiMys2RUVXU3drVU8rTWMySGlHdmJkdFBTS25wRjRadzFZRmNVUGJ1SW9acTZCNFhVSlhmaERtOHhkOURVVzM5L0lqZTg5cnNtemQ2Y3hUWVR6T2FXZGxGVTY2MDNBQVdUeU42MWNlZDIvaXRsVWlDT2ptOHY0WnZMZXRPYjdvVUMiLCJtYWMiOiJhZWQ4YzRhODAwYzhlZGYzODBiOTU3ZGVjZDk3MDA1Y2UwYWI0OTUyMTcwMWE4ZGRkMmY4NGE3ZmUzYTBkNDY5IiwidGFnIjoiIn0%3D';
+'XSRF-TOKEN=eyJpdiI6ImtleHdkdFJqMzRMVTJYaElPZk1Rc3c9PSIsInZhbHVlIjoiMEVJR01VVEdqbkRpd0FKT3lRMy9tTVdkRjFBSTlPT0ZXWHFlV3RHRVVFa2Zja2hsVHdwR2xRd0FHcVBzK2FJQjY3ODkxeHhWem1zeW4yQTlsY2M0RkQyRmo4Tk1hSUVnNi9LU2FSU2tpTnlnemR2ZTgxbTU1WUVpL3cvUlg2WFkiLCJtYWMiOiI1YWJlZDJmYjM4MmU0OGZmODMwODVmYzNjM2EwY2ZlNmQ1YzE5ZjY4ZTdmYmQ4Njg0Yzc4ZDU3YWQzNDM4NzhmIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6ImdSSnBXbHJjbUZhbXRQU3FoZXB2eHc9PSIsInZhbHVlIjoibitoYmNtVEVrTjNRTm4yR3hJbmY1S01SZVhqaEtjSW5xUXQ2T2k5L3hia3hWVW00U2pRMHhucGdDK084ZVdEYzk1bnJ6dE50ZXRyTi9aMlRzeDQyUG9pa3dQc2Z1QzJDaHI5ZE5UeTllaDlSTmllTVZaRFV1MkJ3c21GUEd4TzYiLCJtYWMiOiJmYWE1NWZkNDZiYzk0YmY0ZGQ1MWUxZWI0YTIyZjVkNzJkNDQyYTljYjY1ZDk0OTAzYTAxY2E2NWU5YWU1YmU0IiwidGFnIjoiIn0%3D';
     return header;
   }
 

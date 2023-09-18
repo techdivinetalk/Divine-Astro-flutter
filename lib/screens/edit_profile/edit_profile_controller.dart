@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/zego_services.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/res_login.dart';
@@ -13,6 +14,8 @@ class EditProfileController extends GetxController {
   final state = EditProfileState();
   final UserRepository repository;
 
+  final pref = Get.find<SharedPreferenceService>();
+
   EditProfileController(this.repository);
 
   GlobalKey<FormState> get formState => state.formKey;
@@ -23,10 +26,19 @@ class EditProfileController extends GetxController {
   RxList<SpecialityData> tags = <SpecialityData>[].obs;
   List<SpecialityData> options = <SpecialityData>[].obs;
 
+  UserData? userData;
+
   @override
   void onInit() {
     super.onInit();
     state.init();
+    userData = pref.getUserDetail();
+    if (userData != null) {
+      userData?.astrologerSpeciality?.forEach((element) {
+        tags.add(SpecialityData.fromAstrologerSpeciality(element));
+        options.add(SpecialityData.fromAstrologerSpeciality(element));
+      });
+    }
     options = state.specialityList.data;
   }
 
@@ -37,6 +49,10 @@ class EditProfileController extends GetxController {
   }
 
   void editProfile() async {
+    if (tags.isEmpty) {
+      divineSnackBar(data: "specialityNotEmpty".tr);
+      return;
+    }
     if (formState.currentState!.validate()) {
       formState.currentState!.save();
       Map<String, dynamic> param = {
@@ -49,9 +65,10 @@ class EditProfileController extends GetxController {
       if (response.statusCode == 200) {
         UserData data = UserData.fromJson(response.data!.toJson());
         state.preferenceService.setUserDetail(data);
-        await ZegoServices().initZegoInvitationServices("${data.id}", "${data.name}");
+        await ZegoServices()
+            .initZegoInvitationServices("${data.id}", "${data.name}");
         Get.back();
-        Get.snackbar("Success", response.message.toString());
+        divineSnackBar(data: response.message.toString());
       }
       if (response.statusCode == 400) {
         Fluttertoast.showToast(msg: response.statusCode.toString());

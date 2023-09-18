@@ -175,7 +175,7 @@ Map<String, String> mr() {
     "eCommerce": "ई-कॉमर्स",
     "scheduleNow": "आता शेड्यूल करा",
     "trainingVideos": "प्रशिक्षण व्हिडिओ",
-    "VideoCall":"व्हिडिओ कॉल",
+    "VideoCall": "व्हिडिओ कॉल",
     "logout": "बाहेर पडणे",
     "deleteAccount": "खाते हटवा",
     "deleteText": "तुमची खात्री आहे की तुम्ही तुमचे खाते हटवू इच्छिता?",
@@ -275,6 +275,14 @@ Map<String, String> mr() {
     "jobTitle": "चांगले काम! प्रतीक्षा यादीत कोणीही नाही.",
     "contactSaved": "संपर्क यशस्वीरित्या जतन केला",
     "contactPermissionRequired": "संपर्क परवानगी आवश्यक आहे",
-    "Saved": "जतन"
+    "Saved": "जतन",
+    'otpVerification': 'OTP पडताळणी',
+    'otpTextMsg': 'आम्ही पाठवलेल्या एसएमएसमधील कोड प्रविष्ट करा',
+    'notReceiveOTP': "OTP प्राप्त झाला नाही?",
+    'resend': 'पुन्हा पाठवा',
+    'noAttemptsLeft': 'प्रयत्न सोडले नाहीत!',
+    'attemptsRemaining': 'प्रयत्न बाकी',
+    'phoneNumberMustBe10Digit': 'फोन नंबर 10 अंकी असणे आवश्यक आहे',
+    'specialityNotEmpty': "स्पेशॅलिटी रिक्त असू शकत नाही",
   };
 }

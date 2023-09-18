@@ -533,7 +533,14 @@ class ChatMessageUI extends GetView<ChatMessageController> {
   Widget kundliView({required ChatMessage chatDetail, required int index}) {
     return InkWell(
       onTap: () {
-        controller.navigateToKundliDetail(chatDetail.kundliId!);
+        divineSnackBar(data: "No details available");
+        // Get.toNamed(RouteName.kundliDetail, arguments: {
+        //   "kundli_id": chatDetail.kundliId,
+        //   'from_kundli': true,
+        //   "birth_place": chatDetail.kundliPlace,
+        //   "gender": chatDetail.gender
+        // });
+        // debugPrint("KundliId : ${chatDetail.kundliId}");
       },
       child: Card(
         color: AppColors.white,
@@ -639,7 +646,7 @@ class AstrologerChatAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 90.h + Get.mediaQuery.viewPadding.top.h,
+      // height: 90.h + Get.mediaQuery.viewPadding.top.h,
       alignment: Alignment.center,
       margin: const EdgeInsets.only(top: 5.0),
       decoration: BoxDecoration(

@@ -1,6 +1,7 @@
 // ignore_for_file: unused_local_variable
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:firebase_database/firebase_database.dart';
@@ -17,6 +18,8 @@ import '../../common/co-host_request.dart';
 import '../../common/waitlist_sheet.dart';
 import '../../di/api_provider.dart';
 import '../../di/shared_preference_service.dart';
+import '../../model/leader_board/live_star_user_model.dart';
+import '../../model/leader_board/user_addition_leader_board_model.dart';
 import '../../model/res_blocked_customers.dart';
 import '../../repository/user_repository.dart';
 import 'constant.dart';
@@ -49,15 +52,15 @@ class LiveController extends GetxController {
     }
     super.dispose();
   }
+
   List<String>? badWordsData;
 
   @override
   void onReady() {
-    if(pref.getConstantDetails().data != null){
+    if (pref.getConstantDetails().data != null) {
       badWordsData = pref.getConstantDetails().data!.badWordsData;
     }
-    // initLeaderBoardSessionRequest();
-    // connectSocket();
+    connectSocket();
     super.onReady();
   }
 
@@ -105,10 +108,6 @@ class LiveController extends GetxController {
     }
   }
 
-  getBadWords(){
-
-  }
-
   String strDigits(int n) => n.toString().padLeft(2, '0');
   RxString hour = "".obs, min = "".obs, sec = "".obs;
 
@@ -147,18 +146,33 @@ class LiveController extends GetxController {
   initLeaderBoardSessionRequest() {
     log("--In--");
     socket?.emit(ApiProvider().initLeaderBoardSession, {
-      "sessionId": "76387476842",
+      "sessionId": astroId,
       "astrologerId": pref.getUserDetail()?.id,
-      "astrologerSocketId": socket?.id
+      "socketId": socket?.id
     });
   }
 
   //Req event for delete Session
   deleteSessionRequest() {
-    socket?.emit(ApiProvider().deleteSession, {
-      "sessionId": "76387476842"
-    });
+    socket?.emit(ApiProvider().deleteSession, {"sessionId": astroId});
   }
+
+  liveStarUserRequest() {
+    socket?.emit(ApiProvider().liveStarUser,
+        {"sessionId": astroId.toString(), "socketId": socket?.id ?? ''});
+  }
+
+  //Req event for fetch Top 5 Users
+  fetchTop5UsersRequest() {
+    log("--In--");
+    socket?.emit(ApiProvider().fetchTop5Users,
+        {"sessionId": astroId.toString(), "socketId": socket?.id ?? ''});
+  }
+
+  Rx<UserAdditionInLeaderboardModel> leaderBoard =
+      UserAdditionInLeaderboardModel().obs;
+  var liveStar = {}.obs;
+  var showLiveStar = true.obs;
 
   void connectSocket() {
     socket = io(
@@ -169,19 +183,44 @@ class LiveController extends GetxController {
     socket?.connect();
     socket?.onConnect((_) async {
       log('Socket connected');
-      deleteSessionRequest();
+      initLeaderBoardSessionRequest();
+      fetchTop5UsersRequest();
+      liveStarUserRequest();
       socket?.on(ApiProvider().initResponse, (data) {
         log("initResponse=> $data");
       });
 
-      socket?.on(ApiProvider().deleteSessionResponse, (data) {
-        log("deleteSessionResponse=> $data");
+      socket?.on(ApiProvider().userGiftResponse, (data) {
+        log("userGiftResponse=> $data");
+        fetchTop5UsersRequest();
+        liveStarUserRequest();
       });
-
 
       //Response event for init deleteSessionResponse
       socket?.on(ApiProvider().deleteSessionResponse, (data) {
         log("deleteSessionResponse=> $data");
+      });
+
+      socket?.on(ApiProvider().liveStarResponse, (data) {
+        log("liveStarResponse=> ${jsonEncode(data)}");
+        var value = liveStarUserModelFromJson(jsonEncode(data));
+        showLiveStar.value = true;
+        liveStar.value = {
+          "name": value.users?[0].userName,
+          "image": value.users?[0].avatar.toString()
+        };
+        Future.delayed(const Duration(seconds: 20)).then((value) {
+          showLiveStar.value = false;
+        });
+      });
+
+      //Response event for top 5 user
+      socket?.on(ApiProvider().top5UsersResponse, (data) {
+        log("top5UsersResponse=> $data");
+        liveStarUserRequest();
+        leaderBoard.value =
+            userAdditionInLeaderboardModelFromJson(jsonEncode(data));
+        // liveStar.value = liveStarUserModelFromJson(jsonEncode(data));
       });
     });
     log("Socket--->${socket?.connected}");
@@ -189,8 +228,9 @@ class LiveController extends GetxController {
 
   @override
   void onClose() {
+    stopTimer();
+    deleteSessionRequest();
     socket?.dispose();
-
     super.onClose();
   }
 

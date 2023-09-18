@@ -55,6 +55,8 @@ class WhiteTextField extends StatefulWidget {
   final TextEditingController? controller;
   final String? Function(String? value)? validator;
   final bool isDense;
+  final EdgeInsets? contentPadding;
+  final void Function(String? value)? onChanged;
 
   const WhiteTextField(
       {super.key,
@@ -67,6 +69,8 @@ class WhiteTextField extends StatefulWidget {
       this.icon,
       this.isDense = false,
       this.suffixIcon,
+      this.onChanged,
+      this.contentPadding,
       this.validator});
 
   @override
@@ -88,6 +92,7 @@ class _WhiteTextFieldState extends State<WhiteTextField> {
         ],
       ),
       child: TextFormField(
+        onChanged: widget.onChanged,
         validator: widget.validator,
         controller: widget.controller,
         maxLines: widget.maxLines,
@@ -96,6 +101,7 @@ class _WhiteTextFieldState extends State<WhiteTextField> {
         decoration: InputDecoration(
           hintText: widget.hintText,
           isDense: widget.isDense,
+          contentPadding: widget.contentPadding,
           helperStyle: AppTextStyle.textStyle16(),
           fillColor: AppColors.white,
           hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.greyColor),

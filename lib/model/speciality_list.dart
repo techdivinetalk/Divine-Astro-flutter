@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:divine_astrologer/model/res_login.dart';
+
 SpecialityList specialityListFromJson(String str) =>
     SpecialityList.fromJson(json.decode(str));
 
@@ -95,6 +97,16 @@ class SpecialityData {
         updatedAt: json["updated_at"],
         status: json["status"],
       );
+
+  factory SpecialityData.fromAstrologerSpeciality(AstrologerSpeciality json) => SpecialityData(
+    id: json.specialityDetails?.id,
+    name: json.specialityDetails?.name,
+    image: json.specialityDetails?.image,
+    type: json.specialityDetails?.type,
+    createdAt: json.specialityDetails?.createdAt,
+    updatedAt: json.specialityDetails?.updatedAt,
+    status: json.specialityDetails?.status,
+  );
 
   Map<String, dynamic> toJson() => {
         "id": id,

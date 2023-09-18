@@ -277,5 +277,13 @@ Map<String, String> en() {
     'family': 'Family',
     'education': 'Education',
     'mahadashNote': 'The dates mentioned above are the ending dates.',
+    'otpVerification': 'OTP Verification',
+    'otpTextMsg': 'Enter the code from the sms we sent to',
+    'notReceiveOTP': "Didn't receive OTP?",
+    'resend': 'Resend',
+    'noAttemptsLeft': 'No Attempts Left!',
+    'attemptsRemaining': 'Attempts Remaining',
+    'phoneNumberMustBe10Digit': 'Phone number must be 10 digit',
+    'specialityNotEmpty': "Speciality can't be empty",
   };
 }

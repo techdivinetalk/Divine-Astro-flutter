@@ -42,7 +42,7 @@ class ChatMessageController extends GetxController {
   XFile? pickedFile;
   File? uploadFile;
   final preference = Get.find<SharedPreferenceService>();
-  RxInt currentUserId = 0.obs;
+  RxInt currentUserId = 8693.obs;
   String userDataKey = "userKey";
   bool sendReadMessageStatus = false;
   RxBool isEmojiShowing = false.obs;
@@ -74,8 +74,10 @@ class ChatMessageController extends GetxController {
         customerName.value = data!.customeName ?? "";
         profileImage.value =
             "${preference.getBaseImageURL()}/${data!.customerImage}";
-        timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0,
-            astroChatWatcher.value.orderId!);
+        if (astroChatWatcher.value.orderId != null) {
+          timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0,
+              astroChatWatcher.value.orderId!);
+        }
       }
     }
     userData = preferenceService.getUserDetail();
@@ -337,25 +339,6 @@ class ChatMessageController extends GetxController {
           base64Image: base64Image,
           downloadedPath: outPath);
     }
-  }
-
-// Show Kundli
-  navigateToKundliDetail(String kundliId) async {
-    divineSnackBar(data: "No details available");
-    // try {
-    //   Map<String, String> params = {"kundli_id": kundliId};
-    //   ResGetKundli response = await kundliRepository!.getKundliDetais(params);
-    //   debugPrint("Response $response");
-    //   Get.toNamed(RouteName.kundliDetail);
-    // } catch (error) {
-    //   debugPrint("error $error");
-    //   if (error is AppException) {
-    //     error.onException();
-    //   } else {
-    //     Get.snackbar("Error", error.toString()).show();
-    //   }
-    // }
-    // update();
   }
 
 //End Chat

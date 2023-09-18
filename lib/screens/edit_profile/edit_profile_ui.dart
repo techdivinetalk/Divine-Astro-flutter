@@ -29,6 +29,12 @@ class EditProfileUI extends GetView<EditProfileController> {
         ],
       ),
       appBar: AppBar(
+        leading: IconButton(
+          highlightColor: AppColors.transparent,
+          splashColor: AppColors.transparent,
+          onPressed: () => Get.back(),
+          icon: const Icon(Icons.arrow_back_ios_new),
+        ),
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
         centerTitle: false,
@@ -92,173 +98,163 @@ class EditProfileUI extends GetView<EditProfileController> {
                         ]),
                     child: Wrap(
                       direction: Axis.horizontal,
-                      children: [
-                        ...List.generate(controller.tags.length + 1, (index) {
-                          if (index == controller.tags.length) {
-                            return InkWell(
-                              onTap: () {
-                                openBottomSheet(context, functionalityWidget:
-                                    StatefulBuilder(
-                                        builder: (context, setState) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(20),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        ChipsChoice<int>.multiple(
-                                          spacing: 10,
-                                          value: controller.tagIndexes,
-                                          onChanged: (val) {
-                                            controller.tagIndexes.clear();
-                                            controller.tags.clear();
-                                            debugPrint("$val");
-                                            for (var element in val) {
-                                              controller.tagIndexes
-                                                  .add(element);
-                                              controller.tags.add(
-                                                  controller.options[element]);
-                                            }
-                                            setState(() {});
-                                          },
-                                          choiceItems:
-                                              C2Choice.listFrom<int, String>(
-                                            source: controller.options
-                                                .map((e) => e.name.toString())
-                                                .toList(),
-                                            value: (i, v) => i,
-                                            label: (i, v) => v,
-                                            tooltip: (i, v) => v,
-                                            delete: (i, v) => () {
-                                              controller.options.removeAt(i);
-                                            },
-                                          ),
-                                          choiceStyle: C2ChipStyle.toned(
-                                            iconSize: 0,
-                                            backgroundColor: Colors.white,
-                                            selectedStyle: C2ChipStyle.filled(
-                                              selectedStyle: C2ChipStyle(
-                                                foregroundStyle:
-                                                    AppTextStyle.textStyle16(
-                                                        fontColor:
-                                                            AppColors.white),
-                                                borderWidth: 1,
-                                                backgroundColor:
-                                                    AppColors.darkBlue,
-                                                borderStyle: BorderStyle.solid,
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(25)),
-                                              ),
-                                            ),
+                      children: controller.tags
+                          .map<Widget>((element) => Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 4.w, vertical: 6.h),
+                                child: Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color:
+                                                  Colors.black.withOpacity(0.2),
+                                              blurRadius: 1.0,
+                                              offset: const Offset(0.0, 3.0)),
+                                        ],
+                                        gradient: const LinearGradient(
+                                          begin: Alignment.bottomCenter,
+                                          end: Alignment.topCenter,
+                                          colors: [
+                                            AppColors.appYellowColour,
+                                            AppColors.gradientBottom
+                                          ],
+                                        ),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(20)),
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15.w, vertical: 8.h),
+                                        child: Text(
+                                          element.name.toString(),
+                                          style: AppTextStyle.textStyle14(
+                                              fontColor: AppColors.darkBlue),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 8.w),
+                                    InkWell(
+                                      onTap: () {
+                                        // controller.tagIndexes.removeAt(
+                                        //     controller.tags.indexWhere(
+                                        //         (val) => val.id == element.id));
+                                        controller.tags.removeWhere(
+                                            (val) => val.id == element.id);
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border: Border.all()),
+                                        child: Icon(
+                                          Icons.close,
+                                          size: 18.sp,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ))
+                          .toList()
+                        ..add(InkWell(
+                          onTap: () {
+                            openBottomSheet(context, functionalityWidget:
+                                StatefulBuilder(builder: (context, state) {
+                              return Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ChipsChoice<int>.multiple(
+                                      spacing: 10,
+                                      value: controller.tagIndexes,
+                                      onChanged: (val) {
+                                        controller.tagIndexes.clear();
+                                        controller.tags.clear();
+                                        for (int element in val) {
+                                          controller.tagIndexes.add(element);
+                                          controller.tags
+                                              .add(controller.options[element]);
+                                        }
+                                        state(() {});
+                                      },
+                                      choiceItems:
+                                          C2Choice.listFrom<int, String>(
+                                        source: controller.options
+                                            .map((e) => e.name.toString())
+                                            .toList(),
+                                        value: (i, v) => i,
+                                        label: (i, v) => v,
+                                        tooltip: (i, v) => v,
+                                        delete: (i, v) => () {
+                                          controller.options.removeAt(i);
+                                        },
+                                      ),
+                                      choiceStyle: C2ChipStyle.toned(
+                                        iconSize: 0,
+                                        backgroundColor: Colors.white,
+                                        selectedStyle: C2ChipStyle.filled(
+                                          selectedStyle: C2ChipStyle(
+                                            foregroundStyle:
+                                                AppTextStyle.textStyle16(
+                                                    fontColor: AppColors.white),
                                             borderWidth: 1,
+                                            backgroundColor: AppColors.darkBlue,
                                             borderStyle: BorderStyle.solid,
-                                            borderColor: AppColors.darkBlue,
                                             borderRadius:
                                                 const BorderRadius.all(
-                                              Radius.circular(20),
-                                            ),
+                                                    Radius.circular(25)),
                                           ),
-                                          wrapped: true,
                                         ),
-                                      ],
+                                        borderWidth: 1,
+                                        borderStyle: BorderStyle.solid,
+                                        borderColor: AppColors.darkBlue,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(20),
+                                        ),
+                                      ),
+                                      wrapped: true,
                                     ),
-                                  );
-                                }));
-                              },
+                                  ],
+                                ),
+                              );
+                            }));
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 8.h, top: 4.h),
+                            child: Container(
+                              width: ScreenUtil().screenWidth / 2.8,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                      width: 1, color: AppColors.darkBlue)),
                               child: Padding(
-                                padding: EdgeInsets.only(left: 8.h, top: 4.h),
-                                child: Container(
-                                  width: ScreenUtil().screenWidth / 2.8,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(
-                                          width: 1, color: AppColors.darkBlue)),
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.only(top: 9.h, bottom: 9.h),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.add,
-                                          color: AppColors.darkBlue,
-                                          size: 19.sp,
-                                        ),
-                                        SizedBox(width: 5.w),
-                                        Text(
-                                          "Add Speciality",
-                                          style: AppTextStyle.textStyle12(
-                                              fontColor: AppColors.darkBlue,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                      ],
+                                padding: EdgeInsets.only(top: 9.h, bottom: 9.h),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.add,
+                                      color: AppColors.darkBlue,
+                                      size: 19.sp,
                                     ),
-                                  ),
+                                    SizedBox(width: 5.w),
+                                    Text(
+                                      "Add Speciality",
+                                      style: AppTextStyle.textStyle12(
+                                          fontColor: AppColors.darkBlue,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            );
-                          }
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 4.w, vertical: 6.h),
-                            child: Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.black.withOpacity(0.2),
-                                          blurRadius: 1.0,
-                                          offset: const Offset(0.0, 3.0)),
-                                    ],
-                                    gradient: const LinearGradient(
-                                      begin: Alignment.bottomCenter,
-                                      end: Alignment.topCenter,
-                                      colors: [
-                                        AppColors.appYellowColour,
-                                        AppColors.gradientBottom
-                                      ],
-                                    ),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(20)),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 15.w, vertical: 8.h),
-                                    child: Text(
-                                      controller.tags[index].name.toString(),
-                                      style: AppTextStyle.textStyle14(
-                                          fontColor: AppColors.darkBlue),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 8.w),
-                                InkWell(
-                                  onTap: () {
-                                    controller.tagIndexes.removeAt(index);
-                                    controller.tags.removeAt(index);
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all()),
-                                    child: Icon(
-                                      Icons.close,
-                                      size: 18.sp,
-                                    ),
-                                  ),
-                                ),
-                              ],
                             ),
-                          );
-                        }).toList(),
-                      ],
+                          ),
+                        )),
                     ),
                   ),
                 ),
@@ -275,7 +271,9 @@ class EditProfileUI extends GetView<EditProfileController> {
                 ),
                 SizedBox(height: 5.h),
                 ReferAstrologerField(
-                  inputFormatter: [FilteringTextInputFormatter.allow(RegExp('[0-9.,]')),],
+                  inputFormatter: [
+                    FilteringTextInputFormatter.allow(RegExp('[0-9.,]')),
+                  ],
                   validator: (value) {
                     if (value! == "") {
                       return "";
