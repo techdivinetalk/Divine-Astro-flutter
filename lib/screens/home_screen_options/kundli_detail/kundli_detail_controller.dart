@@ -18,6 +18,9 @@ import '../../../model/internal/kp_data_model.dart';
 import '../../../model/internal/kundli_prediction_model.dart';
 import '../../../model/internal/manglik_dosh_model.dart';
 import '../../../model/internal/planet_detail_model.dart';
+import '../../../model/internal/pran_dasha_model.dart';
+import '../../../model/internal/pratyantar_dasha_model.dart';
+import '../../../model/internal/sookshma_dasha_model.dart';
 
 class KundliDetailController extends GetxController {
   RxInt currentIndex = 0.obs;
@@ -56,7 +59,9 @@ class KundliDetailController extends GetxController {
   Rx<KpDataModel> kpTableData = KpDataModel().obs;
   Rx<PlanetlDetailModel> planetDataDetail = PlanetlDetailModel().obs;
   Rx<DashaChartDataModel> dashaTableData = DashaChartDataModel().obs;
-
+  Rx<PratyantarDashaModel> pratyantarDataDetail = PratyantarDashaModel().obs;
+  Rx<SookshmaDashaModel> sookshmaDataDetail = SookshmaDashaModel().obs;
+  Rx<PranDashaModel> pranDataDetail = PranDashaModel().obs;
   Rx<KundliPredictionModel> kundliPrediction = KundliPredictionModel().obs;
   Rx<ManglikDoshModel> manglikDoshData = ManglikDoshModel().obs;
 
@@ -64,7 +69,9 @@ class KundliDetailController extends GetxController {
 
   RxBool isVimshottari = RxBool(true);
   RxBool isYogini = RxBool(false);
-  RxBool isSubDasha = RxBool(false);
+  // RxBool isSubDasha = RxBool(false);
+  RxInt subDashaLevel = RxInt(0);
+
 
   Rx<Params> kundliParams = Params().obs;
   String? kundaliId;
@@ -90,11 +97,14 @@ class KundliDetailController extends GetxController {
   void onInit() {
     super.onInit();
     var args = Get.arguments;
+
     if (args != null) {
       if (args['from_kundli']) {
+        log("--IF--");
         //From Previous Kundlis
         getDataFromKundli(args);
       } else {
+        log("--Else--");
         //New Kundli
         getNewKundliData(args);
       }
@@ -151,10 +161,11 @@ class KundliDetailController extends GetxController {
       astroDetailsApi(fromKundali),
       birthDetailsApi(fromKundali),
       kundliPredictionApi(fromKundali),
-      // manglikDetails(fromKundali),
+      manglikDetails(fromKundali),
       lagnaChartApi(fromKundali),
       moonChartApi(fromKundali),
       sunChartApi(fromKundali),
+      mangalikDoshApi(fromKundali),
       navamashaChartApi(fromKundali),
       getKpTableDataListAPI(fromKundali),
       getDashaTableDataListAPI(fromKundali),
@@ -168,6 +179,7 @@ class KundliDetailController extends GetxController {
       DashaChartDataModel response = await kundliRepository
           .getDashaChart(fromKundali ? kundaliIdParms : params);
       dashaTableData.value = response;
+
       update();
       log("dashaTableData==>${jsonEncode(kpTableData.value)}");
     } catch (error) {
@@ -181,7 +193,7 @@ class KundliDetailController extends GetxController {
     update();
   }
 
-  Future<void> getPlanetDataApiList(String planetName) async {
+  Future<void> getAntraDataApiList(String planetName) async {
     try {
       PlanetlDetailModel response =
           await kundliRepository.getPlanetDetailsAPI(params, planetName);
@@ -242,7 +254,7 @@ class KundliDetailController extends GetxController {
           .getKpTableData(fromKundali ? kundaliIdParms : params);
 
       kpTableData.value = response;
-      update();
+
       log("kpTableData==>${jsonEncode(kpTableData.value)}");
     } catch (error) {
       debugPrint("kpTableDataError $error");
@@ -260,9 +272,9 @@ class KundliDetailController extends GetxController {
       AstroDetailsModel response = await kundliRepository
           .getAstroDetails(fromKundali ? kundaliIdParms : params);
       astroDetails.value = response;
-      log("Data====>${jsonEncode(astroDetails)}");
+      log("astroDetails====>${jsonEncode(astroDetails)}");
     } catch (error) {
-      debugPrint("error $error");
+      debugPrint("astroDetailsError $error");
       if (error is AppException) {
         error.onException();
       } else {
@@ -389,4 +401,67 @@ class KundliDetailController extends GetxController {
     }
     update();
   }
+
+  //Pratyantar dasha table
+  Future<void> getPratyantarDashaApiList(
+      String planetName, String atraName) async {
+    try {
+      PratyantarDashaModel response = await kundliRepository
+          .getPratyantarDashaDetailsAPI(params, planetName, atraName);
+      pratyantarDataDetail.value = response;
+      log("pratyantarDataDetail-->${jsonEncode(pratyantarDataDetail.value.data)}");
+      update();
+    } catch (error) {
+      debugPrint("pratyantarDataError $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      }
+    }
+    update();
+  }
+
+  //Sookshma dasha
+  Future<void> getSookshmaDashaApiList(
+      String planetName, String atraName, String pratyantarName) async {
+    try {
+      SookshmaDashaModel response =
+          await kundliRepository.getSookshmaDashaDetailsAPI(
+              params, planetName, atraName, pratyantarName);
+      sookshmaDataDetail.value = response;
+      log("sookshmaDataDetail-->${jsonEncode(sookshmaDataDetail.value.data)}");
+      update();
+    } catch (error) {
+      debugPrint("sookshmaDataDetailError $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      }
+    }
+    update();
+  }
+
+  //Pran dasha
+  Future<void> getPranDashaApiList(String planetName, String atraName,
+      String pratyantarName, String sookshmaName) async {
+    try {
+      PranDashaModel response = await kundliRepository.getPranDashaDetailsAPI(
+          params, planetName, atraName, pratyantarName, sookshmaName);
+      pranDataDetail.value = response;
+      log("pranDataDetail-->${jsonEncode(sookshmaDataDetail.value.data)}");
+      update();
+    } catch (error) {
+      debugPrint("pranDataDetailError $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      }
+    }
+    update();
+  }
+
+
 }

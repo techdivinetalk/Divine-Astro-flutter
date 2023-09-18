@@ -1,12 +1,12 @@
 // To parse this JSON data, do
 //
-//     final dashaDataModel = dashaDataModelFromJson(jsonString);
+//     final dashaChartDataModel = dashaChartDataModelFromJson(jsonString);
 
 import 'dart:convert';
 
-DashaChartDataModel dashaDataModelFromJson(String str) => DashaChartDataModel.fromJson(json.decode(str));
+DashaChartDataModel dashaChartDataModelFromJson(String str) => DashaChartDataModel.fromJson(json.decode(str));
 
-String dashaDataModelToJson(DashaChartDataModel data) => json.encode(data.toJson());
+String dashaChartDataModelToJson(DashaChartDataModel data) => json.encode(data.toJson());
 
 class DashaChartDataModel {
   Data? data;

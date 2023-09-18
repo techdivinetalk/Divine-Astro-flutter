@@ -77,6 +77,9 @@ class ApiProvider {
   final String getKpDetails = "getKpDetails";
   final String getPlanetlDetails = "getPlanetlDetails/";
   final String getDasha = "getDasha";
+  final String getPratyantarDasha = "getPratyantarDasha/";
+  final String getSookshmaDasha = "getSookshmaDasha/";
+  final String getPranDasha = "getPranDasha/";
 
   //Kundli APIs
   final String astrologyBaseUrl = "https://json.astrologyapi.com/v1/";

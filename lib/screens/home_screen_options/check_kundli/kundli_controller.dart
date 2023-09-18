@@ -43,7 +43,12 @@ class KundliController extends GetxController {
   submitDetails(Params params, Gender gender) {
     submittedParams = params;
     submittedGender = gender;
-    Get.toNamed(RouteName.kundliDetail);
+    Get.toNamed(RouteName.kundliDetail, arguments: {
+      "kundli_id": 0,
+      "from_kundli": false,
+      "params": params,
+      "gender": gender,
+    });
   }
 
   getUserData() async {
