@@ -80,6 +80,9 @@ class ApiProvider {
   final String getKpDetails = "getKpDetails";
   final String getPlanetlDetails = "getPlanetlDetails/";
   final String getDasha = "getDasha";
+  final String getPratyantarDasha = "getPratyantarDasha/";
+  final String getSookshmaDasha = "getSookshmaDasha/";
+  final String getPranDasha = "getPranDasha/";
 
   //Kundli APIs
   final String astrologyBaseUrl = "https://json.astrologyapi.com/v1/";
@@ -133,7 +136,7 @@ class ApiProvider {
     header[jsonHeaderName] = jsonHeaderValue;
     header[jsonAuthenticationName] = 'Bearer $_token';
     header[jsonCookieName] =
-'XSRF-TOKEN=eyJpdiI6ImtleHdkdFJqMzRMVTJYaElPZk1Rc3c9PSIsInZhbHVlIjoiMEVJR01VVEdqbkRpd0FKT3lRMy9tTVdkRjFBSTlPT0ZXWHFlV3RHRVVFa2Zja2hsVHdwR2xRd0FHcVBzK2FJQjY3ODkxeHhWem1zeW4yQTlsY2M0RkQyRmo4Tk1hSUVnNi9LU2FSU2tpTnlnemR2ZTgxbTU1WUVpL3cvUlg2WFkiLCJtYWMiOiI1YWJlZDJmYjM4MmU0OGZmODMwODVmYzNjM2EwY2ZlNmQ1YzE5ZjY4ZTdmYmQ4Njg0Yzc4ZDU3YWQzNDM4NzhmIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6ImdSSnBXbHJjbUZhbXRQU3FoZXB2eHc9PSIsInZhbHVlIjoibitoYmNtVEVrTjNRTm4yR3hJbmY1S01SZVhqaEtjSW5xUXQ2T2k5L3hia3hWVW00U2pRMHhucGdDK084ZVdEYzk1bnJ6dE50ZXRyTi9aMlRzeDQyUG9pa3dQc2Z1QzJDaHI5ZE5UeTllaDlSTmllTVZaRFV1MkJ3c21GUEd4TzYiLCJtYWMiOiJmYWE1NWZkNDZiYzk0YmY0ZGQ1MWUxZWI0YTIyZjVkNzJkNDQyYTljYjY1ZDk0OTAzYTAxY2E2NWU5YWU1YmU0IiwidGFnIjoiIn0%3D';
+'XSRF-TOKEN=eyJpdiI6ImRaV0ZaVk84NENZYnRHL2dlYUs0bEE9PSIsInZhbHVlIjoiZ1RPSlVqczBlekJQT1E4OVZONXZqQ2g3ZjJsR2tpRlNRNm1Zb01ram8xR0NSb2g4QmRoSDl1N3RyTTlyYVRWR1hNNExzVnNaeUV2Nm5MbDRxVHQ3a3lDa2NyMkgxQjdNRzdiWkwyQmNiR2g4bXJlN2F5K3N5N0lObXVCVlJ3N24iLCJtYWMiOiIxZWQ3MzUxMDczZWE1MDgwNmY5MTkxMDgzMDE1ZDM0MzY3YzFhYWJjOGM3MDg5MmUxNmE3ZjgyYzAzNDA5ZWEwIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IktYYmRvb2RpVkxIWUErM1ZtZDRoRGc9PSIsInZhbHVlIjoiK2NuUDFudmgyOE5zWS93UDkwSElrSENtNUV4d2VCNjlSQzU2NWw2cXE4amN6L1RNOWZYRk9RQzNtNEtiVlVZMVluOE5naFZEeTNWTXhPNXlqSnExekpPT2czSHNMSGhhNWdvTXg2VUVuNnN3cGZkYmF1OXpNSUlNZlBuTTBQMkQiLCJtYWMiOiI2MTU0ZGM2NTg4OTZmYTZiOTE5MWMwMWY1ZTA2ZTc4MWRjNzNlM2NhMmIyZWQ5ZTcwZmQ0ZGYzOTVlNzA0M2U5IiwidGFnIjoiIn0%3D';
     return header;
   }
 
