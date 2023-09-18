@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../../../common/custom_light_yellow_btn.dart';
+
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
-
+import '../../../common/custom_light_yellow_btn.dart';
 import 'price_change_req_controller.dart';
 
 class PriceChangeReqUI extends GetView<PriceChangeReqController> {
@@ -86,6 +86,14 @@ class PriceChangeReqUI extends GetView<PriceChangeReqController> {
                     var item = controller.priceList[index];
                     return Column(
                       children: [
+                        item.priceTag != null &&
+                            item.priceTag!
+                                .contains("Eligible for price change")
+                            ? Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10.h),
+                      child: const Divider(),
+                    )
+                            : SizedBox(),
                         Container(
                           padding: EdgeInsets.all(8.h),
                           decoration: BoxDecoration(
@@ -117,12 +125,14 @@ class PriceChangeReqUI extends GetView<PriceChangeReqController> {
                                     ),
                                   ),
                                   Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 0, horizontal: 18),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         color: item.amount == "Not Eligible"
                                             ? AppColors.appRedColour
-                                            : AppColors.lightGreen
-                                                .withOpacity(0.6)),
+                                            : AppColors.darkGreen
+                                                .withOpacity(0.5)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
@@ -149,7 +159,8 @@ class PriceChangeReqUI extends GetView<PriceChangeReqController> {
                         ),
                         SizedBox(
                           height: 15.h,
-                        )
+                        ),
+
                       ],
                     );
                   }),
