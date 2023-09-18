@@ -112,33 +112,40 @@ class LiveController extends GetxController {
 
   String strDigits(int n) => n.toString().padLeft(2, '0');
   RxString hour = "".obs, min = "".obs, sec = "".obs;
-
+  Duration duration1 = Duration.zero;
   startTimer() {
-    countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    countdownTimer?.cancel();
+    countdownTimer = null;
+    duration1 = intToTimeLeft(time);//time
+    countdownTimer ??= Timer.periodic(const Duration(seconds: 1), (timer) {
       const reduceSecondsBy = 1;
-      final seconds = timeDuration.inSeconds - reduceSecondsBy;
-      if (seconds < 0) {
-        stopTimer();
-        if (coHostUser != null) {
-          setCallType(astroId!);
+      if(duration1.inSeconds > 0){
+        duration1 = Duration(seconds: duration1.inSeconds - reduceSecondsBy);
+        if (duration1.inSeconds <= 0) {
+          duration1 = Duration.zero;
+          if (coHostUser != null) {
+            setCallType(astroId!);
+          }
+          setCallStatus();
+          setBusyStatus(astroId!, 0, customerId: "");
+          liveController.connect.removeCoHost(coHostUser!);
+          isCoHosting.value = false;
+        } else {
+          hour.value = strDigits(duration1.inHours.remainder(24));
+          min.value = strDigits(duration1.inMinutes.remainder(60));
+          sec.value = strDigits(duration1.inSeconds.remainder(60));
         }
-        setCallStatus();
-        setBusyStatus(astroId!, 0, customerId: "");
-        liveController.connect.removeCoHost(coHostUser!);
-        endCall();
-        isCoHosting.value = false;
-      } else {
-        timeDuration = Duration(seconds: seconds);
-        hour.value = strDigits(timeDuration.inHours.remainder(24));
-        min.value = strDigits(timeDuration.inMinutes.remainder(60));
-        sec.value = strDigits(timeDuration.inSeconds.remainder(60));
+      }else{
+        duration1 = Duration.zero;
+        countdownTimer?.cancel();
+        countdownTimer = null;
       }
     });
   }
 
   jumpToBottom() {
     scrollController.animateTo(
-      scrollController.position.maxScrollExtent + 50,
+      -(scrollController.position.maxScrollExtent + 50),
       duration: const Duration(milliseconds: 10),
       curve: Curves.linear,
     );
@@ -418,43 +425,49 @@ class LiveController extends GetxController {
   }
 
   stopStream(String id) {
-    Get.back();
+    endCall();
+    database.ref().child("live/$id/callType").remove();
+    database.ref().child("live/$id/callStatus").remove();
     database.ref().child("live/$id").remove();
+    Get.back();
   }
 
   setCallType(String id) {
     database.ref().child("live/$id").update({"callType": ""});
   }
 
-  var timeDuration = const Duration();
-
   setAvailibility(String id, bool available) {
     database.ref().child("live/$id").update({"isAvailable": available});
     database.ref().child("live/$id/coHostUser").onValue.listen((event) async {
-      final user = event.snapshot.value as String? ?? "";
-      if (user.isEmpty) {
-        isCoHosting.value = false;
-        stopTimer();
-      } else {
-        var coHost = await database.ref().child("live/$astroId/coHost").get();
-        if (coHost.value != null) {
-          var user = coHost.value as Map;
-          coHostUser = ZegoUIKitUser(id: user["id"], name: user["name"]);
-          offerId = user["offer_id"];
-          time = user["duration"];
-          orderId = user["order_id"];
-          typeOfCall = user["callType"];
-          setVisibilityCoHostAudio(typeOfCall);
-          setVisibilityCoHostVideo(typeOfCall);
-          intToTimeLeft(time);
+      if(event.snapshot.value != null){
+        final user = event.snapshot.value as String? ?? "";
+        if (user.isEmpty) {
+          if(isCoHosting.value){
+            isCoHosting.value = false;
+            countdownTimer?.cancel();
+            countdownTimer = null;
+            endCall();
+          }
+        } else {
+          var coHost = await database.ref().child("live/$astroId/coHost").get();
+          if (coHost.value != null) {
+            var user = coHost.value as Map;
+            coHostUser = ZegoUIKitUser(id: user["id"], name: user["name"]);
+            offerId = user["offer_id"];
+            time = user["duration"];
+            orderId = user["order_id"];
+            typeOfCall = user["callType"];
+            setVisibilityCoHostAudio(typeOfCall);
+            setVisibilityCoHostVideo(typeOfCall);
+          }
+          isCoHosting.value = true;
+          startTimer();
         }
-        isCoHosting.value = true;
-        startTimer();
       }
     });
   }
 
-  setCallStatus() {
+  setCallStatus({int value = 0}) {
     database.ref().child("live/$astroId/").update({"callStatus": 0});
   }
 
@@ -522,7 +535,10 @@ class LiveController extends GetxController {
       "offer_id": offerId,
       "role_id": roleId,
     };
-    final response = await userRepository.endCall(json);
+    Future.delayed(const Duration(seconds: 2)).then((value) async {
+      final response = await userRepository.endCall(json);
+    });
+
   }
 
   Duration intToTimeLeft(int value) {
@@ -535,7 +551,7 @@ class LiveController extends GetxController {
     s = value - (h * 3600) - (m * 60);
 
     String result = "$h:$m:$s";
-    timeDuration = Duration(hours: h, minutes: m, seconds: s);
-    return timeDuration;
+    return Duration(seconds: value);
+    return Duration(hours: h, minutes: m, seconds: s);
   }
 }

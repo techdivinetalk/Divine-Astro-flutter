@@ -37,9 +37,9 @@ dependencies:
   cached_network_image: ^3.2.3
   url_launcher: ^6.1.12
   zego_uikit: ^2.9.3
-  zego_uikit_prebuilt_call: ^3.12.3
-  zego_uikit_prebuilt_live_streaming: ^2.18.0
-  zego_uikit_signaling_plugin: ^2.4.0
+  zego_uikit_prebuilt_call: ^3.14.0
+  zego_uikit_prebuilt_live_streaming: ^2.19.0
+  zego_uikit_signaling_plugin: ^2.5.1
   svgaplayer_flutter: ^2.2.0
   permission_handler: ^10.4.3
   image_picker: ^1.0.2
