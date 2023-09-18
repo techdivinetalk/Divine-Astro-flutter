@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:aws_s3_upload/aws_s3_upload.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -85,11 +86,7 @@ class UploadStoryController extends GetxController {
       final response = await userRepository.uploadAstroStory(param);
       if (response.statusCode == 200 && response.success == true) {
         Get.back();
-        Get.snackbar("Story Uploaded Successfully", "",
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: AppColors.white,
-            colorText: AppColors.blackColor,
-            duration: const Duration(seconds: 3));
+        divineSnackBar(data: "Story Uploaded Successfully");
       }
     } catch (err) {
       Fluttertoast.showToast(msg: "Something went wrong");

@@ -46,6 +46,8 @@ class BackNavigationWidget extends StatelessWidget {
                       children: [
                         SizedBox(width: 16.w),
                         IconButton(
+                          splashColor: AppColors.transparent,
+                          highlightColor: AppColors.transparent,
                           onPressed: onPressedBack,
                           icon: const Icon(Icons.arrow_back_ios_new_rounded),
                         ),

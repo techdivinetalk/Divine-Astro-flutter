@@ -114,6 +114,10 @@ class ApiProvider {
 
   final referAnAstrologer = "testaddQuickLeadByApp";
 
+  ///This End point is for number change request not for login purpose.
+  final sendOtp = "sendOtp";
+  final verifyOtp = "verifyOtp";
+
   //
   final NetworkService networkManager = Get.find<NetworkService>();
   final ProgressService progressService = Get.find<ProgressService>();

@@ -1,3 +1,5 @@
+import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/repository/waiting_list_queue_repository.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,7 +33,7 @@ class WaitListUIController extends GetxController {
       loading = Loading.loaded;
       update();
     } catch (err) {
-      Get.snackbar("Error", err.toString()).show();
+      divineSnackBar(data: err.toString(),color: AppColors.redColor);
     }
   }
 }

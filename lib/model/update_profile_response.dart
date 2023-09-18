@@ -62,7 +62,7 @@ class Data {
   int? rating;
   dynamic balance;
   String? legalDocuments;
-  String? experiance;
+  dynamic experiance;
   String? description;
   int? isChat;
   int? isCall;
@@ -199,7 +199,7 @@ class Data {
     int? rating,
     dynamic balance,
     String? legalDocuments,
-    String? experiance,
+    dynamic experiance,
     String? description,
     int? isChat,
     int? isCall,

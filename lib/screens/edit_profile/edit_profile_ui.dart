@@ -1,4 +1,5 @@
 import 'package:chips_choice/chips_choice.dart';
+import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,6 +36,7 @@ class EditProfileUI extends GetView<EditProfileController> {
           onPressed: () => Get.back(),
           icon: const Icon(Icons.arrow_back_ios_new),
         ),
+        titleSpacing: 0,
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
         centerTitle: false,

@@ -1122,50 +1122,46 @@ class HomeUI extends GetView<HomeController> {
                                         height: 20.h,
                                       ),
                                       Stack(
+                                        alignment: Alignment.bottomCenter,
                                         children: [
                                           Center(
-                                              child: Assets.images.bgMeterFinal
-                                                  .svg(
-                                                      height: 135.h,
-                                                      width: 270.h)),
-                                          Positioned(
-                                            bottom: 0,
-                                            left: 115.h,
-                                            child: Column(
-                                              children: [
-                                                SizedBox(
-                                                  height: 5.h,
-                                                ),
-                                                Text(
-                                                  "Your Score",
-                                                  style:
-                                                      AppTextStyle.textStyle10(
-                                                          fontColor: AppColors
-                                                              .darkBlue),
-                                                ),
-                                                SizedBox(
-                                                  height: 5.h,
-                                                ),
-                                                Text(
-                                                  '80',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      color: AppColors.darkBlue,
-                                                      fontSize: 20.sp),
-                                                ),
-                                                SizedBox(
-                                                  height: 5.h,
-                                                ),
-                                                Text(
-                                                  "Out of 100",
-                                                  style:
-                                                      AppTextStyle.textStyle10(
-                                                          fontColor: AppColors
-                                                              .darkBlue),
-                                                ),
-                                              ],
+                                            child:
+                                                Assets.images.bgMeterFinal.svg(
+                                              height: 135.h,
+                                              width: 270.h,
                                             ),
+                                          ),
+                                          Column(
+                                            children: [
+                                              SizedBox(
+                                                height: 5.h,
+                                              ),
+                                              Text(
+                                                "Your Score",
+                                                style: AppTextStyle.textStyle10(
+                                                    fontColor:
+                                                        AppColors.darkBlue),
+                                              ),
+                                              SizedBox(
+                                                height: 5.h,
+                                              ),
+                                              Text(
+                                                '80',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    color: AppColors.darkBlue,
+                                                    fontSize: 20.sp),
+                                              ),
+                                              SizedBox(
+                                                height: 5.h,
+                                              ),
+                                              Text(
+                                                "Out of 100",
+                                                style: AppTextStyle.textStyle10(
+                                                    fontColor:
+                                                        AppColors.darkBlue),
+                                              ),
+                                            ],
                                           ),
                                           Center(
                                             child: SizedBox(

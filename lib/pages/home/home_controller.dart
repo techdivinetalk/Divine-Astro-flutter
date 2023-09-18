@@ -129,7 +129,7 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        Get.snackbar("Error", error.toString()).show();
+        divineSnackBar(data: error.toString(),color: AppColors.redColor);
       }
     }
   }
@@ -195,7 +195,7 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        Get.snackbar("Error", error.toString()).show();
+        divineSnackBar(data: error.toString(),color: AppColors.redColor);
       }
     }
   }

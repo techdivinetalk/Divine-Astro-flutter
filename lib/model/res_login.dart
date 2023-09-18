@@ -92,6 +92,7 @@ class UserData {
   double? retention;
   String? premium;
   List<AstrologerSpeciality>? astrologerSpeciality;
+  String? mobileNumber;
 
   // Null? astroCat;
   List<AstroCatPivot>? astroCatPivot;
@@ -165,6 +166,7 @@ class UserData {
     this.astroCatPivot,
     // this.astroSpecialityPivot
     this.astrologerSpeciality,
+    this.mobileNumber,
   });
 
   UserData.fromJson(Map<String, dynamic> json) {
@@ -230,6 +232,7 @@ class UserData {
     chatPreviousStatus = json['chat_previous_status'];
     retention = json['retention'];
     premium = json['premium'];
+    mobileNumber = json['mobile_no'];
     // astroCat = json['astro_cat'];
     if (json['astro_cat_pivot'] != null) {
       astroCatPivot = <AstroCatPivot>[];
@@ -315,6 +318,7 @@ class UserData {
     data['chat_previous_status'] = chatPreviousStatus;
     data['retention'] = retention;
     data['premium'] = premium;
+    data['mobile_no'] = mobileNumber;
     // data['astro_cat'] = astroCat;
     if (astroCatPivot != null) {
       data['astro_cat_pivot'] = astroCatPivot!.map((v) => v.toJson()).toList();

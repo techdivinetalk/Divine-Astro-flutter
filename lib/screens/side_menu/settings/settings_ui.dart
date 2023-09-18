@@ -22,6 +22,12 @@ class SettingsUI extends GetView<SettingsController> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
+        leading: IconButton(
+          highlightColor: AppColors.transparent,
+          splashColor: AppColors.transparent,
+          onPressed: () => Get.back(),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+        ),
         forceMaterialTransparency: true,
         backgroundColor: AppColors.white,
         title: Text("settings".tr,
