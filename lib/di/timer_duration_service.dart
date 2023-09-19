@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TimeDurationService extends GetxService {
@@ -15,7 +14,7 @@ class TimeDurationService extends GetxService {
       chatTimer ??= Timer.periodic(const Duration(seconds: 1), (timer) {
         chatDuration.value =
             Duration(seconds: chatDuration.value.inSeconds - 1);
-        debugPrint("timer ${chatDuration.value}");
+        // debugPrint("timer ${chatDuration.value}");
 
         if (chatDuration.value.inSeconds <= 0) {
           stopTimer();

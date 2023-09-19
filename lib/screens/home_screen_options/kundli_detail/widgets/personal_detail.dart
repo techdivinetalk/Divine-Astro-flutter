@@ -10,7 +10,8 @@ import '../../../../common/custom_progress_dialog.dart';
 class PersonalDetailUi extends StatelessWidget {
   final KundliDetailController controller;
 
-  const PersonalDetailUi({Key? key, required this.controller}) : super(key: key);
+  const PersonalDetailUi({Key? key, required this.controller})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class PersonalDetailUi extends StatelessWidget {
       child: Obx(
         () => AnimatedCrossFade(
           crossFadeState: (controller.birthDetails.value.data?.day == null &&
-              controller.astroDetails.value.data?.gan == null)
+                  controller.astroDetails.value.data?.gan == null)
               ? CrossFadeState.showSecond
               : CrossFadeState.showFirst,
           duration: const Duration(milliseconds: 200),
@@ -45,69 +46,79 @@ class PersonalDetailUi extends StatelessWidget {
                 "birthTime".tr,
                 controller.birthDetails.value.data?.hour == null
                     ? ""
-                    : "${((controller.birthDetails.value.data?.hour??0) > 12 ? (controller.birthDetails.value.data?.hour??0) - 12 : controller.birthDetails.value.data?.hour).toString().padLeft(2, "0")}:${controller.birthDetails.value.data?.minute.toString().padLeft(2, "0")} ${(controller.birthDetails.value.data?.hour??0) > 11 ? "PM" : "AM"}",
+                    : "${((controller.birthDetails.value.data?.hour ?? 0) > 12 ? (controller.birthDetails.value.data?.hour ?? 0) - 12 : controller.birthDetails.value.data?.hour).toString().padLeft(2, "0")}:${controller.birthDetails.value.data?.minute.toString().padLeft(2, "0")} ${(controller.birthDetails.value.data?.hour ?? 0) > 11 ? "PM" : "AM"}",
               ),
               detailTile(
                 "birthPlace".tr,
-                controller.kundliController.submittedParams.location!,
+                controller.kundliParams.value.location == null
+                    ? ""
+                    : controller.kundliParams.value.location ?? "",
               ),
               detailTile(
                 "gan".tr,
-                controller.astroDetails.value.data?.gan == null ? "" : controller.astroDetails.value.data?.gan??'',
+                controller.astroDetails.value.data?.gan == null
+                    ? ""
+                    : controller.astroDetails.value.data?.gan ?? '',
               ),
               detailTile(
                 "signLord".tr,
                 controller.astroDetails.value.data?.signLord == null
                     ? ""
-                    : controller.astroDetails.value.data?.signLord??'',
+                    : controller.astroDetails.value.data?.signLord ?? '',
               ),
               detailTile(
                 "sign".tr,
-                controller.astroDetails.value.data?.sign == null ? "" : controller.astroDetails.value.data?.sign??'',
+                controller.astroDetails.value.data?.sign == null
+                    ? ""
+                    : controller.astroDetails.value.data?.sign ?? '',
               ),
               detailTile(
                 "yoni".tr,
-                controller.astroDetails.value.data?.yoni == null ? "" : controller.astroDetails.value.data?.yoni??'',
+                controller.astroDetails.value.data?.yoni == null
+                    ? ""
+                    : controller.astroDetails.value.data?.yoni ?? '',
               ),
               detailTile(
                 "nakshatraLord".tr,
                 controller.astroDetails.value.data?.naksahtraLord == null
                     ? ""
-                    : controller.astroDetails.value.data?.naksahtraLord??'',
+                    : controller.astroDetails.value.data?.naksahtraLord ?? '',
               ),
               detailTile(
                 "nakshatra".tr,
                 controller.astroDetails.value.data?.naksahtra == null
                     ? ""
-                    : controller.astroDetails.value.data?.naksahtra??'',
+                    : controller.astroDetails.value.data?.naksahtra ?? '',
               ),
               detailTile(
                 "varna".tr,
                 controller.astroDetails.value.data?.varna == null
                     ? ""
-                    : controller.astroDetails.value.data?.varna??'',
+                    : controller.astroDetails.value.data?.varna ?? '',
               ),
               detailTile(
                 "vashya".tr,
                 controller.astroDetails.value.data?.vashya == null
                     ? ""
-                    : controller.astroDetails.value.data?.vashya??'',
+                    : controller.astroDetails.value.data?.vashya ?? '',
               ),
               detailTile(
                 "nadi".tr,
-                controller.astroDetails.value.data?.nadi == null ? "" : controller.astroDetails.value.data?.nadi??'',
+                controller.astroDetails.value.data?.nadi == null
+                    ? ""
+                    : controller.astroDetails.value.data?.nadi ?? '',
               ),
               detailTile(
                 "charan".tr,
                 controller.astroDetails.value.data?.charan == null
                     ? ""
-                    : "${controller.astroDetails.value.data?.charan??''}",
+                    : "${controller.astroDetails.value.data?.charan ?? ''}",
               ),
               detailTile(
                 "tatva".tr,
                 controller.astroDetails.value.data?.tatva == null
                     ? ""
-                    : controller.astroDetails.value.data?.tatva??'',
+                    : controller.astroDetails.value.data?.tatva ?? '',
               ),
             ],
           ),

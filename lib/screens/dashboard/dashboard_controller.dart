@@ -102,6 +102,7 @@ class DashboardController extends GetxController
               orderType: value['orderType'],
               queueId: value['queue_id'],
               status: value['status'],
+              talktime: value['talktime'],
             );
             if (value['status'] == 0 || value['status'] == 1) {
               Get.toNamed(RouteName.videoCallPage,

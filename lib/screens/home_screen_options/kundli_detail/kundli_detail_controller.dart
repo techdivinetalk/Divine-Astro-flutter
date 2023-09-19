@@ -72,7 +72,6 @@ class KundliDetailController extends GetxController {
   // RxBool isSubDasha = RxBool(false);
   RxInt subDashaLevel = RxInt(0);
 
-
   Rx<Params> kundliParams = Params().obs;
   String? kundaliId;
   Map<String, dynamic> kundaliIdParms = {};
@@ -118,6 +117,7 @@ class KundliDetailController extends GetxController {
       detailPageImage[0] =
           Assets.images.icBoyKundli.svg(width: 87.w, height: 87.h);
     }
+    kundaliIdParms.addAll({"kundli_id": kundaliId});
     kundliParams.value = Params(
       location: args["birth_place"].toString(),
     );
@@ -278,7 +278,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
     update();
@@ -294,7 +294,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
     update();
@@ -311,7 +311,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
     update();
@@ -328,7 +328,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
     update();
@@ -345,7 +345,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
     update();
@@ -362,7 +362,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
     update();
@@ -379,7 +379,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
     update();
@@ -396,7 +396,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
     update();
@@ -462,6 +462,4 @@ class KundliDetailController extends GetxController {
     }
     update();
   }
-
-
 }
