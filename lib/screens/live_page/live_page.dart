@@ -180,7 +180,6 @@ class LivePageState extends State<LivePage>
               appID: yourAppID,
               appSign: yourAppSign /*input your AppSign*/,
               userID: widget.localUserID,
-              //userName: 'user_${widget.localUserID}',
               userName: widget.astrologerName ?? "user_${widget.localUserID}",
               liveID: widget.liveID,
               controller: controller.liveController,
@@ -217,7 +216,7 @@ class LivePageState extends State<LivePage>
                 )
 
                 /// hide the co-host audio-video view to audience and other co-hosts
-                ..audioVideoViewConfig.visible = (
+                /*..audioVideoViewConfig.visible = (
                   ZegoUIKitUser localUser,
                   ZegoLiveStreamingRole localRole,
                   ZegoUIKitUser targetUser,
@@ -236,7 +235,7 @@ class LivePageState extends State<LivePage>
 
                   /// if user is a co-host, only show host's audio-video view
                   return targetUserRole == ZegoLiveStreamingRole.host;
-                }
+                }*/
                 ..onLiveStreamingStateUpdate = (ZegoLiveStreamingState state) {
                   liveStateNotifier.value = state;
                 }
