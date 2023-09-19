@@ -27,10 +27,10 @@ class ProfileUI extends GetView<ProfilePageController> {
   @override
   Widget build(BuildContext context) {
     Get.put(ProfilePageController(Get.put(UserRepository())));
-
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: commonAppbar(title: "profile".tr, trailingWidget: Container()),
+      appBar: commonAppbar(
+          title: "profile".tr, trailingWidget: const SizedBox.shrink()),
       drawer: const SideMenuDrawer(),
       body: SingleChildScrollView(
         child: Padding(
@@ -38,123 +38,126 @@ class ProfileUI extends GetView<ProfilePageController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Container(
-                  padding: EdgeInsets.all(12.h),
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 3.0,
-                          offset: const Offset(0.0, 3.0)),
-                    ],
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(20),
+              GetBuilder<ProfilePageController>(
+                builder: (controller) => Container(
+                    padding: EdgeInsets.all(12.h),
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 3.0,
+                            offset: const Offset(0.0, 3.0)),
+                      ],
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(20),
+                      ),
                     ),
-                  ),
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 6, color: AppColors.appYellowColour),
-                                borderRadius: BorderRadius.circular(80),
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  controller.updateProfileImage(context);
-
-                                },
-                                child: ClipRRect(
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 6,
+                                      color: AppColors.appYellowColour),
                                   borderRadius: BorderRadius.circular(80),
-                                  child: Obx(
-                                    () => CachedNetworkImage(
-                                      imageUrl:
-                                          controller.userProfileImage.value,
-                                      fit: BoxFit.cover,
-                                      height: 70.h,
-                                      width: 70.h,
-                                      placeholder: (context, url) =>
-                                          const CircularProgressIndicator(),
-                                      errorWidget: (context, url, error) =>
-                                          Image.asset(Assets
-                                              .images.defaultProfile.path),
+                                ),
+                                child: InkWell(
+                                  onTap: () {
+                                    controller.updateProfileImage(context);
+                                  },
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(80),
+                                    child: Obx(
+                                      () => CachedNetworkImage(
+                                        imageUrl:
+                                            controller.userProfileImage.value,
+                                        fit: BoxFit.cover,
+                                        height: 70.h,
+                                        width: 70.h,
+                                        placeholder: (context, url) =>
+                                            const CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) =>
+                                            Image.asset(Assets
+                                                .images.defaultProfile.path),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(width: 10.h),
-                        Expanded(
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Flexible(
-                                        child: Text(
-                                          controller.userData?.name ?? "",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          softWrap: true,
-                                          style: AppTextStyle.textStyle20(
-                                              fontWeight: FontWeight.w600,
-                                              fontColor: AppColors.darkBlue),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 5),
-                                      InkWell(
-                                        onTap: () {
-                                          Get.toNamed(RouteName.editProfileUI);
-                                        },
-                                        child: Row(children: [
-                                          Text(
-                                            'editProfile'.tr,
-                                            style: AppTextStyle.textStyle10(
-                                                fontWeight: FontWeight.w500,
-                                                fontColor:
-                                                    AppColors.appYellowColour),
+                            ],
+                          ),
+                          SizedBox(width: 10.h),
+                          Expanded(
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Flexible(
+                                          child: Text(
+                                            controller.userData?.name ?? "",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            softWrap: true,
+                                            style: AppTextStyle.textStyle20(
+                                                fontWeight: FontWeight.w600,
+                                                fontColor: AppColors.darkBlue),
                                           ),
-                                          Icon(
-                                            Icons.arrow_right,
-                                            size: 18.h,
-                                            color: AppColors.appYellowColour,
-                                          )
-                                        ]),
-                                      )
-                                    ]),
-                                SizedBox(height: 3.h),
-                                Text(
-                                  '+91- ${controller.userData?.phoneNo ?? ""}',
-                                  style: AppTextStyle.textStyle14(
-                                      fontWeight: FontWeight.w400,
-                                      fontColor: AppColors.darkBlue),
-                                ),
-                                SizedBox(height: 3.h),
-                                Row(children: [
-                                  Text("${"astrologerId".tr}-",
-                                      style: AppTextStyle.textStyle14(
-                                          fontWeight: FontWeight.w400,
-                                          fontColor: AppColors.darkBlue)),
-                                  SizedBox(width: 5.h),
-                                  Expanded(
-                                    child: Text(
-                                        "${controller.userData?.id ?? ""}",
+                                        ),
+                                        const SizedBox(width: 5),
+                                        InkWell(
+                                          onTap: () {
+                                            Get.toNamed(
+                                                RouteName.editProfileUI);
+                                          },
+                                          child: Row(children: [
+                                            Text(
+                                              'editProfile'.tr,
+                                              style: AppTextStyle.textStyle10(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontColor: AppColors
+                                                      .appYellowColour),
+                                            ),
+                                            Icon(
+                                              Icons.arrow_right,
+                                              size: 18.h,
+                                              color: AppColors.appYellowColour,
+                                            )
+                                          ]),
+                                        )
+                                      ]),
+                                  SizedBox(height: 3.h),
+                                  Text(
+                                    '+91- ${controller.userData?.phoneNo ?? ""}',
+                                    style: AppTextStyle.textStyle14(
+                                        fontWeight: FontWeight.w400,
+                                        fontColor: AppColors.darkBlue),
+                                  ),
+                                  SizedBox(height: 3.h),
+                                  Row(children: [
+                                    Text("${"astrologerId".tr}-",
                                         style: AppTextStyle.textStyle14(
                                             fontWeight: FontWeight.w400,
                                             fontColor: AppColors.darkBlue)),
-                                  ),
+                                    SizedBox(width: 5.h),
+                                    Expanded(
+                                      child: Text(
+                                          "${controller.userData?.id ?? ""}",
+                                          style: AppTextStyle.textStyle14(
+                                              fontWeight: FontWeight.w400,
+                                              fontColor: AppColors.darkBlue)),
+                                    ),
+                                  ]),
                                 ]),
-                              ]),
-                        )
-                      ])),
+                          )
+                        ])),
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.h),
                 child: Text(

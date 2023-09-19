@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/repository/notice_repository.dart';
 import 'package:divine_astrologer/utils/enum.dart';
@@ -76,7 +78,7 @@ class NoticeBoardController extends GetxController {
       loading = Loading.loaded;
       update();
     } catch (err) {
-      Get.snackbar("Error", err.toString()).show();
+      divineSnackBar(data: err.toString(),color: AppColors.redColor);
     }
   }
 }

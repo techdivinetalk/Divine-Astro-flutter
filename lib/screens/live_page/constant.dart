@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:get/get.dart';
 
 import '../../di/timer_duration_service.dart';
+import '../../model/chat/chat_socket/chat_socket_init.dart';
 import '../../model/chat/res_astro_chat_listener.dart';
 
 /// Note that the userID needs to be globally unique,
@@ -19,3 +20,4 @@ RxInt currentChatUserId = 8693.obs;
 int roleId = 7;
 var astroChatWatcher = ResAstroChatListener().obs;
 TimeDurationService timer = TimeDurationService();
+var chatSession = ResChatSocketInit().obs;

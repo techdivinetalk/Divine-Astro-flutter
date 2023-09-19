@@ -19,7 +19,6 @@ class ApiProvider {
   static const String socketUrl = "http://13.127.116.89:4000";
   final String baseUrl = "https://wakanda-api.divinetalk.live/admin/$version/";
 
-
   //Socket Event
   final String deleteSession = "deleteSession";
   final String deleteSessionResponse = "deleteSessionResponse";
@@ -31,8 +30,6 @@ class ApiProvider {
   final String liveStarUser = "liveStarUser";
   final String fetchTop5Users = "fetchTop5Users";
   final String userGiftResponse = "userGiftResponse";
-
-
 
   final String jsonHeaderName = "Content-Type";
   final String jsonCookieName = "Cookie";
@@ -80,6 +77,9 @@ class ApiProvider {
   final String getKpDetails = "getKpDetails";
   final String getPlanetlDetails = "getPlanetlDetails/";
   final String getDasha = "getDasha";
+  final String getPratyantarDasha = "getPratyantarDasha/";
+  final String getSookshmaDasha = "getSookshmaDasha/";
+  final String getPranDasha = "getPranDasha/";
 
   //Kundli APIs
   final String astrologyBaseUrl = "https://json.astrologyapi.com/v1/";
@@ -96,8 +96,15 @@ class ApiProvider {
   final String getChatList = "getChatList";
   final String chatAcceptAPI = "partner_chat_accept";
   final String endChatAPI = "end_chat";
-
   final String uploadAstrologerimage = "uploadAstrologerimage";
+
+  //Socket Events for Chat
+  final String initChat = "initChat";
+  final String initChatResponse = "initChatResponse";
+  final String chatType = "chatType";
+  final String chartTypeResponse = "chartTypeResponse";
+  final String deleteChatSession = "deleteChatSession";
+  final String deleteChatSessionResponse = "deleteChatSessionResponse";
 
   //privacy policy & terms
   final String termsAndCondition = "termsAndCondition";
@@ -113,6 +120,10 @@ class ApiProvider {
   final elasticDivineTalkBase = "https://crm-api.divinetalk.live/api/v1/";
 
   final referAnAstrologer = "testaddQuickLeadByApp";
+
+  ///This End point is for number change request not for login purpose.
+  final sendOtp = "sendOtp";
+  final verifyOtp = "verifyOtp";
 
   //
   final NetworkService networkManager = Get.find<NetworkService>();
@@ -133,7 +144,7 @@ class ApiProvider {
     header[jsonHeaderName] = jsonHeaderValue;
     header[jsonAuthenticationName] = 'Bearer $_token';
     header[jsonCookieName] =
-'XSRF-TOKEN=eyJpdiI6ImtleHdkdFJqMzRMVTJYaElPZk1Rc3c9PSIsInZhbHVlIjoiMEVJR01VVEdqbkRpd0FKT3lRMy9tTVdkRjFBSTlPT0ZXWHFlV3RHRVVFa2Zja2hsVHdwR2xRd0FHcVBzK2FJQjY3ODkxeHhWem1zeW4yQTlsY2M0RkQyRmo4Tk1hSUVnNi9LU2FSU2tpTnlnemR2ZTgxbTU1WUVpL3cvUlg2WFkiLCJtYWMiOiI1YWJlZDJmYjM4MmU0OGZmODMwODVmYzNjM2EwY2ZlNmQ1YzE5ZjY4ZTdmYmQ4Njg0Yzc4ZDU3YWQzNDM4NzhmIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6ImdSSnBXbHJjbUZhbXRQU3FoZXB2eHc9PSIsInZhbHVlIjoibitoYmNtVEVrTjNRTm4yR3hJbmY1S01SZVhqaEtjSW5xUXQ2T2k5L3hia3hWVW00U2pRMHhucGdDK084ZVdEYzk1bnJ6dE50ZXRyTi9aMlRzeDQyUG9pa3dQc2Z1QzJDaHI5ZE5UeTllaDlSTmllTVZaRFV1MkJ3c21GUEd4TzYiLCJtYWMiOiJmYWE1NWZkNDZiYzk0YmY0ZGQ1MWUxZWI0YTIyZjVkNzJkNDQyYTljYjY1ZDk0OTAzYTAxY2E2NWU5YWU1YmU0IiwidGFnIjoiIn0%3D';
+        'XSRF-TOKEN=eyJpdiI6ImtleHdkdFJqMzRMVTJYaElPZk1Rc3c9PSIsInZhbHVlIjoiMEVJR01VVEdqbkRpd0FKT3lRMy9tTVdkRjFBSTlPT0ZXWHFlV3RHRVVFa2Zja2hsVHdwR2xRd0FHcVBzK2FJQjY3ODkxeHhWem1zeW4yQTlsY2M0RkQyRmo4Tk1hSUVnNi9LU2FSU2tpTnlnemR2ZTgxbTU1WUVpL3cvUlg2WFkiLCJtYWMiOiI1YWJlZDJmYjM4MmU0OGZmODMwODVmYzNjM2EwY2ZlNmQ1YzE5ZjY4ZTdmYmQ4Njg0Yzc4ZDU3YWQzNDM4NzhmIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6ImdSSnBXbHJjbUZhbXRQU3FoZXB2eHc9PSIsInZhbHVlIjoibitoYmNtVEVrTjNRTm4yR3hJbmY1S01SZVhqaEtjSW5xUXQ2T2k5L3hia3hWVW00U2pRMHhucGdDK084ZVdEYzk1bnJ6dE50ZXRyTi9aMlRzeDQyUG9pa3dQc2Z1QzJDaHI5ZE5UeTllaDlSTmllTVZaRFV1MkJ3c21GUEd4TzYiLCJtYWMiOiJmYWE1NWZkNDZiYzk0YmY0ZGQ1MWUxZWI0YTIyZjVkNzJkNDQyYTljYjY1ZDk0OTAzYTAxY2E2NWU5YWU1YmU0IiwidGFnIjoiIn0%3D';
     return header;
   }
 
@@ -260,7 +271,9 @@ class ApiProvider {
         }
         throw CustomException(AppString.timeoutMessage);
       });
-      log('response: ${response.body}');
+      if (url != constantDetails) {
+        log('response: ${response.body}');
+      }
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);

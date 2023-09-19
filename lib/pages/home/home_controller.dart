@@ -14,11 +14,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/app_exception.dart';
-import '../../di/api_provider.dart';
 import '../../di/shared_preference_service.dart';
 import '../../model/constant_details_model_class.dart';
 import '../../model/home_page_model_class.dart';
@@ -53,8 +51,6 @@ class HomeController extends GetxController {
   Rx<Loading> offerTypeLoading = Loading.initial.obs;
   Rx<Loading> sessionTypeLoading = Loading.initial.obs;
 
-  Socket? socket;
-
   onNextTap() {
     if (scoreIndex < yourScore.length - 1) {
       scoreIndex++;
@@ -72,30 +68,14 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    connectSocket();
     userData = preferenceService.getUserDetail();
     appbarTitle.value = userData?.name ?? "Astrologer Name";
     getConstantDetailsData();
     getDashboardDetail();
   }
 
-  void connectSocket() {
-    socket = io(
-        ApiProvider.socketUrl,
-        OptionBuilder()
-            .enableAutoConnect()
-            .setTransports(['websocket']) // for Flutter or Dart VM
-            .build());
-    socket?.connect();
-    socket?.onConnect((_) {
-      log('Socket connected');
-    });
-    log("Socket--->${socket!.connected}");
-  }
-
   @override
   void onClose() {
-    socket?.dispose();
     super.onClose();
   }
 
@@ -129,7 +109,7 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        Get.snackbar("Error", error.toString()).show();
+        divineSnackBar(data: error.toString(),color: AppColors.redColor);
       }
     }
   }
@@ -195,7 +175,7 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        Get.snackbar("Error", error.toString()).show();
+        divineSnackBar(data: error.toString(),color: AppColors.redColor);
       }
     }
   }

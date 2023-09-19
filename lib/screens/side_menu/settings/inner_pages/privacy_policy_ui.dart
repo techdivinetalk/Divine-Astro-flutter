@@ -23,9 +23,9 @@ class PrivacyPolicyUI extends GetView<SettingsController> {
               color: AppColors.darkBlue,
             )),
         leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
+          highlightColor: AppColors.transparent,
+          splashColor: AppColors.transparent,
+          onPressed: () => Get.back(),
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
       ),

@@ -468,12 +468,10 @@ class UserRepository extends ApiProvider {
     try {
       final response = await post(agoraEndCall, body: jsonEncode(param));
       if (response.statusCode == 200) {
-        final loginImagesResponse = loginImagesFromJson(response.body);
-        if (loginImagesResponse.statusCode == successResponse &&
-            loginImagesResponse.success) {
-          return response.body;
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body)["error"]);
         } else {
-          throw CustomException(loginImagesResponse.message);
+          return response.body;
         }
       } else {
         throw CustomException(json.decode(response.body)["message"]);

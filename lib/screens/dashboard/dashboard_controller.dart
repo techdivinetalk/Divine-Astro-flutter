@@ -11,8 +11,10 @@ import 'package:flutter/services.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 import '../../common/common_functions.dart';
+import '../../di/api_provider.dart';
 import '../../di/fcm_notification.dart';
 import '../../model/chat/res_astro_chat_listener.dart';
 import '../../model/res_login.dart';
@@ -32,6 +34,7 @@ class DashboardController extends GetxController
   UserData? userData;
   StreamSubscription<DatabaseEvent>? realTimeListener;
   StreamSubscription<DatabaseEvent>? astroChatListener;
+  Socket? socket;
 
   @override
   void onInit() async {
@@ -44,7 +47,7 @@ class DashboardController extends GetxController
 
     userProfileImage.value =
         "${preferenceService.getBaseImageURL()}/${userData?.image}";
-
+    connectSocket();
     loadPreDefineData();
     firebaseMessagingConfig(Get.context!);
   }
@@ -74,11 +77,9 @@ class DashboardController extends GetxController
       debugPrint("YOUR VALUE HAS BEEN UPDATED");
       if (event.snapshot.children.isNotEmpty) {
         List<int> keyArray = [];
-        if (!keyArray.contains(userData!.id)) {
-          // onEndChat();
-          // astroChatWatcher.value = ResAstroChatListener();
-        }
+
         for (final dataSnapShot in event.snapshot.children) {
+          keyArray.add(int.parse(dataSnapShot.key ?? "0"));
           if (int.tryParse(dataSnapShot.key!) == userData!.id &&
               dataSnapShot.value != null) {
             DataSnapshot innerChild = dataSnapShot.children.first;
@@ -120,6 +121,13 @@ class DashboardController extends GetxController
             return;
           }
         }
+        if (!keyArray.contains(userData!.id)) {
+          onEndChat();
+          astroChatWatcher.value = ResAstroChatListener();
+          if (Get.currentRoute == RouteName.videoCallPage) {
+            Get.back();
+          }
+        }
       }
     });
   }
@@ -129,7 +137,22 @@ class DashboardController extends GetxController
     super.onClose();
     if (realTimeListener != null) {
       realTimeListener!.cancel();
+      socket?.dispose();
     }
+  }
+
+  void connectSocket() {
+    socket = io(
+        ApiProvider.socketUrl,
+        OptionBuilder()
+            .enableAutoConnect()
+            .setTransports(['websocket']) // for Flutter or Dart VM
+            .build());
+    socket?.connect();
+    socket?.onConnect((_) {
+      debugPrint('Socket connected');
+    });
+    debugPrint("Socket--->${socket!.connected}");
   }
 
   void loadPreDefineData() async {

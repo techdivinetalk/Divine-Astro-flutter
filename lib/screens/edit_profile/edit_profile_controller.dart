@@ -3,6 +3,7 @@ import 'package:divine_astrologer/common/zego_services.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/res_login.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
+import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -20,8 +21,8 @@ class EditProfileController extends GetxController {
 
   GlobalKey<FormState> get formState => state.formKey;
 
-  RxInt tag = 0.obs;
-  RxList<int> tagIndexes = [0].obs;
+  RxInt tag = (-0).obs;
+  RxList<int> tagIndexes = <int>[].obs;
 
   RxList<SpecialityData> tags = <SpecialityData>[].obs;
   List<SpecialityData> options = <SpecialityData>[].obs;
@@ -34,12 +35,12 @@ class EditProfileController extends GetxController {
     state.init();
     userData = pref.getUserDetail();
     if (userData != null) {
-      userData?.astrologerSpeciality?.forEach((element) {
-        tags.add(SpecialityData.fromAstrologerSpeciality(element));
-        options.add(SpecialityData.fromAstrologerSpeciality(element));
+      userData?.astrologerSpeciality?.asMap().entries.forEach((element) {
+        tagIndexes.add(element.key);
+        tags.add(SpecialityData.fromAstrologerSpeciality(element.value));
       });
     }
-    options = state.specialityList.data;
+    options = reorderList(state.specialityList.data, tags);
   }
 
   @override
@@ -59,7 +60,8 @@ class EditProfileController extends GetxController {
         "name": state.nameController.text.trim(),
         "experiance": state.experienceController.text.trim(),
         "description": state.descriptionController.text.trim(),
-        "astrologer_speciality_id": tags.map((element) => element.id).toList().join(",")
+        "astrologer_speciality_id":
+            tags.map((element) => element.id).toList().join(",")
       };
       final response = await repository.updateProfile(param);
       if (response.statusCode == 200) {
@@ -68,12 +70,34 @@ class EditProfileController extends GetxController {
         await ZegoServices()
             .initZegoInvitationServices("${data.id}", "${data.name}");
         Get.back();
+        Get.find<ProfilePageController>().setUserData(state.preferenceService.getUserDetail());
         divineSnackBar(data: response.message.toString());
       }
       if (response.statusCode == 400) {
         Fluttertoast.showToast(msg: response.statusCode.toString());
       }
     }
+  }
+
+
+  List<SpecialityData> reorderList(
+      List<SpecialityData> originalList,
+      List<SpecialityData> selectedItems,
+      ) {
+    // Create a copy of the original list
+    List<SpecialityData> resultList = List.from(originalList);
+
+    // Remove the selected items from the copy
+    for (SpecialityData item in selectedItems) {
+      resultList.removeWhere(
+            (element) => element.id == item.id,
+      );
+    }
+
+    // Insert the selected items at the beginning of the list
+    resultList.insertAll(0, selectedItems);
+
+    return resultList;
   }
 }
 

@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
+import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:divine_astrologer/screens/bank_details/widgets.dart';
@@ -21,37 +22,48 @@ class OtpVerificationForNumberChange
         statusBarIconBrightness: Brightness.dark,
         statusBarColor: AppColors.transparent,
       ),
-      child: Scaffold(
-        body: SafeArea(
-          child: Column(
-            children: [
-              BackNavigationWidget(
-                onPressedBack: () => Get.back(),
-                title: "otpVerification".tr,
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 20.w),
-                child: Column(
-                  children: [
-                    const OtpVerificationField(),
-                    OtpFieldView(
-                      controller: controller.pinController,
-                      focusNode: controller.focusNodeOtp,
-                    ),
-                    //const InCorrectOtpWidget(),
-                    SizedBox(height: 12.h),
-                    NotReceiveOtpText(
-                      onResend: () {},
-                    ),
-                    CustomMaterialButton(
-                      buttonName: "submit".tr,
-                      textColor: AppColors.brownColour,
-                      onPressed: () {},
-                    ),
-                  ],
+      child: WillPopScope(
+        onWillPop: () async {
+          controller.pinController.clear();
+          return true;
+        },
+        child: Scaffold(
+          body: SafeArea(
+            child: Column(
+              children: [
+                BackNavigationWidget(
+                  onPressedBack: () {
+                    controller.pinController.clear();
+                    Get.back();
+                  },
+                  title: "otpVerification".tr,
                 ),
-              ),
-            ],
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: Column(
+                    children: [
+                      const OtpVerificationField(),
+                      OtpFieldView(
+                        controller: controller.pinController,
+                        focusNode: controller.focusNodeOtp,
+                      ),
+                      const InCorrectOtpWidget(),
+                      SizedBox(height: 12.h),
+                      NotReceiveOtpText(
+                        onResend: () => controller.sendOtp(),
+                      ),
+                      CustomMaterialButton(
+                        buttonName: "submit".tr,
+                        textColor: AppColors.brownColour,
+                        onPressed: () {
+                          controller.verifyOtp();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -178,14 +190,17 @@ class OtpFieldView extends StatelessWidget {
   }
 }
 
-Future<void> showOtpSheet(BuildContext context) async =>
+Future<void> showOtpSheet(
+        {required BuildContext context, required String message}) async =>
     await showModalBottomSheet(
       context: context,
-      builder: (context) => const OtpSheet(),
+      builder: (context) => OtpSheet(message: message),
     );
 
 class OtpSheet extends StatelessWidget {
-  const OtpSheet({Key? key}) : super(key: key);
+  const OtpSheet({Key? key, required this.message}) : super(key: key);
+
+  final String message;
 
   TextStyle get textStyle => TextStyle(
         fontWeight: FontWeight.w600,
@@ -213,10 +228,24 @@ class OtpSheet extends StatelessWidget {
               "noAttemptsLeft".tr,
               style: textStyle,
             ),
+            const SizedBox(
+              height: 10,
+            ),
+            CustomText(
+              message,
+              overflow: TextOverflow.visible,
+              textAlign: TextAlign.center,
+            ),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-              child:
-                  CustomMaterialButton(buttonName: "okay".tr, onPressed: () {}),
+              child: CustomMaterialButton(
+                buttonName: "okay".tr,
+                onPressed: () {
+                  Navigator.of(context).popUntil(
+                    ModalRoute.withName(RouteName.dashboard),
+                  );
+                },
+              ),
             ),
             SizedBox(height: 12.h),
           ],
@@ -247,28 +276,40 @@ class InCorrectOtpWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          "THIS IS VALIDATION",
-          style: currentOtpStyle,
-        ),
-        Text.rich(
-          TextSpan(
-            text: "${"attemptsRemaining".tr} : ",
-            children: [
-              TextSpan(
-                text: "3ST",
-                style: currentOtpStyle.copyWith(
-                  fontWeight: FontWeight.w700,
+    return GetBuilder<NumberChangeReqController>(
+      builder: (controller) {
+        if (controller.errorMessage == null) {
+          return const SizedBox.shrink();
+        }
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (controller.errorMessage != null)
+              Expanded(
+                child: Text(
+                  "${controller.errorMessage}",
+                  style: currentOtpStyle,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-            ],
-          ),
-          style: attemptsStyle,
-        )
-      ],
+            if (controller.errorMessage == null) const SizedBox(),
+            Text.rich(
+              TextSpan(
+                text: "${"attemptsRemaining".tr} : ",
+                children: [
+                  TextSpan(
+                    text: "${controller.remainingCount}",
+                    style: currentOtpStyle.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+              style: attemptsStyle,
+            )
+          ],
+        );
+      },
     );
   }
 }

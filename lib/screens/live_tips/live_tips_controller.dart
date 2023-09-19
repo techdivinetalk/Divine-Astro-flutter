@@ -33,7 +33,6 @@ class LiveTipsController extends GetxController {
       "image": image,
       "isEngaged": 0,
       "isAvailable": true,
-      "coHostUser": "",
       "callType": "",
       "duration":0,
       "callStatus":0,
@@ -47,7 +46,11 @@ class LiveTipsController extends GetxController {
       astrologerImage: image,
       astrologerName: name,
       isFrontCamera: front,
-    ),routeName: "livepage");
+    ),routeName: "livepage")?.then((value){
+      Future.delayed(const Duration(seconds: 3)).then((value){
+        database.ref().child("live/$astroId").remove();
+      });
+    });
   }
 
   giftPopup(BuildContext context) async {

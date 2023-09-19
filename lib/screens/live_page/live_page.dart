@@ -164,8 +164,7 @@ class LivePageState extends State<LivePage>
                 onNo: () {},
                 onYes: () {
                   controller.stopTimer();
-                  controller.setBusyStatus(widget.localUserID, 0,
-                      customerId: "");
+                  //controller.setBusyStatus(widget.localUserID, 0, customerId: "");
                   GiftWidget.clear();
                   controller.stopStream(widget.localUserID);
                 });
@@ -207,12 +206,14 @@ class LivePageState extends State<LivePage>
                 ..bottomMenuBarConfig.showInRoomMessageButton = false
                 ..bottomMenuBarConfig.audienceButtons = []
                 ..audioVideoViewConfig.useVideoViewAspectFill = true
+                ..audioVideoViewConfig.showUserNameOnView = false
                 ..maxCoHostCount = 1
 
                 /// gallery-layout, show top and bottom if have two audio-video views
                 ..layout = ZegoLayout.gallery()
                 ..topMenuBarConfig = ZegoTopMenuBarConfig(
                   height: 0,
+                  showCloseButton: false
                 )
 
                 /// hide the co-host audio-video view to audience and other co-hosts
@@ -252,22 +253,21 @@ class LivePageState extends State<LivePage>
     return StreamBuilder<List<ZegoInRoomMessage>>(
       stream: controller.liveController.message.stream(),
       builder: (context, snapshot) {
-        final messages = snapshot.data ?? <ZegoInRoomMessage>[];
-
-        return Flexible(
-          child: Center(
-            child: SizedBox(
-              height: 200.h,
-              child: ListView.builder(
-                reverse: true,
-                shrinkWrap: true,
-                padding: EdgeInsets.zero,
-                controller: controller.scrollController,
-                itemCount: messages.length,
-                itemBuilder: (context, index) {
-                  return messageItem(messages[index]);
-                },
-              ),
+        var messages = snapshot.data ?? <ZegoInRoomMessage>[];
+        messages = messages.reversed.toList();
+        return Center(
+          child: SizedBox(
+            width: Get.width - 120.w,
+            height: 200.h,
+            child: ListView.builder(
+              reverse: true,
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              controller: controller.scrollController,
+              itemCount: messages.length,
+              itemBuilder: (context, index) {
+                return messageItem(messages[index]);
+              },
             ),
           ),
         );
@@ -316,7 +316,7 @@ class LivePageState extends State<LivePage>
             horizontal: 1.w,
           ),
           decoration: BoxDecoration(
-            border: Border.all(color: AppColors.white, width: .8),
+            //border: Border.all(color: AppColors.white, width: .8),
             color: Colors.black.withOpacity(0.05),
             borderRadius: BorderRadius.circular(5),
           ),
@@ -493,8 +493,7 @@ class LivePageState extends State<LivePage>
         children: [
           SizedBox(width: 15.w),
           messageWidget(),
-          SizedBox(width: 120.w),
-          //const Spacer(),
+          const Spacer(),
           sideButtons(),
           SizedBox(width: 10.w)
         ],
@@ -587,8 +586,10 @@ class LivePageState extends State<LivePage>
                                           filter: ImageFilter.blur(
                                               sigmaX: 5, sigmaY: 5),
                                           child: CustomTextField(
-                                            height: 40.h,
+                                            align: TextAlignVertical.center,
+                                            height: 50.h,
                                             onSubmit: (value) {
+                                              FocusScope.of(context).unfocus();
                                               if (value.isNotEmpty) {
                                                 if (controller.badWordsData!
                                                     .contains(value)) {
@@ -606,6 +607,7 @@ class LivePageState extends State<LivePage>
                                             inputAction: TextInputAction.send,
                                             readOnly: false,
                                             hintText: 'Say Hi...',
+                                            hintColor: AppColors.white,
                                             controller: controller.msg,
                                             keyboardType: TextInputType.text,
                                             suffixIconPadding: 8.w,
@@ -729,7 +731,6 @@ class LivePageState extends State<LivePage>
                           if (controller.coHostUser != null) {
                             controller.setCallType(widget.localUserID);
                           }
-                          //controller.timeController.reset();
                           controller.stopStream(widget.localUserID);
                         });
                   },
@@ -877,7 +878,6 @@ class LivePageState extends State<LivePage>
                                   controller.liveController.connect
                                       .removeCoHost(controller.coHostUser!);
                                   controller.removeFromWaitList();
-                                  controller.endCall();
                                   controller.isCoHosting.value = false;
                                 });
                           },
@@ -911,8 +911,7 @@ class LivePageState extends State<LivePage>
                           if (controller.coHostUser != null) {
                             controller.setCallType(widget.localUserID);
                           }
-                          controller.setBusyStatus(widget.localUserID, 0,
-                              customerId: "");
+                          //controller.setBusyStatus(widget.localUserID, 0, customerId: "");
                           controller.stopStream(widget.localUserID);
                         });
                   },
@@ -1031,30 +1030,36 @@ class LivePageState extends State<LivePage>
               } else if (snapshot.data == null) {
                 return const SizedBox();
               } else if (snapshot.data!.snapshot.children.isNotEmpty) {
-                return ClipOval(
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
-                    child: InkWell(
-                      onTap: () {
-                        showCupertinoModalPopup(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return WaitList(
-                                showNext: false,
-                                data: snapshot.data!.snapshot.children,
-                                astroId: widget.localUserID,
-                                onAccept: (id, name) {},
-                              );
-                            });
-                      },
-                      child: Container(
-                        width: 46.w,
-                        height: 46.h,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.white.withOpacity(.6)),
-                        child: Center(child: Assets.images.waitlistLive.svg()),
+                return Badge(
+                  backgroundColor: Colors.redAccent,
+                  isLabelVisible: true,
+                  padding: EdgeInsets.symmetric(horizontal: 6.w),
+                  label: Text(snapshot.data!.snapshot.children.length.toString()),
+                  child: ClipOval(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
+                      child: InkWell(
+                        onTap: () {
+                          showCupertinoModalPopup(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return WaitList(
+                                  showNext: false,
+                                  data: snapshot.data!.snapshot.children,
+                                  astroId: widget.localUserID,
+                                  onAccept: (id, name) {},
+                                );
+                              });
+                        },
+                        child: Container(
+                          width: 46.w,
+                          height: 46.h,
+                          clipBehavior: Clip.antiAlias,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.white.withOpacity(.6)),
+                          child: Center(child: Assets.images.waitlistLive.svg()),
+                        ),
                       ),
                     ),
                   ),

@@ -26,12 +26,14 @@ class CustomTextField extends StatelessWidget {
       this.fillColor,
       this.suffixIconPadding,
       this.textInputFormatter,
-      this.inputAction})
+        this.hintColor,
+      this.inputAction,this.align})
       : super(key: key);
 
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final bool enabled;
+  final TextAlignVertical? align;
   final TextInputType keyboardType;
   final bool showCursor;
   final void Function()? onTap;
@@ -44,6 +46,7 @@ class CustomTextField extends StatelessWidget {
   final double? height;
   final bool? readOnly;
   final bool? autoFocus;
+  final Color? hintColor;
   final double? suffixIconPadding;
   final Color? fillColor;
   final InputBorder? inputBorder;
@@ -67,8 +70,8 @@ class CustomTextField extends StatelessWidget {
           onFieldSubmitted: (value) {
             onSubmit!(value);
           },
-          textAlignVertical: TextAlignVertical.bottom,
           textInputAction: inputAction ?? TextInputAction.done,
+          textAlignVertical: align ?? TextAlignVertical.bottom,
           onTap: onTap,
           focusNode: focusNode,
           enabled: enabled,
@@ -102,7 +105,7 @@ class CustomTextField extends StatelessWidget {
             hintStyle: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w400,
-              color: AppColors.white.withOpacity(0.5),
+              color: hintColor ?? AppColors.white.withOpacity(0.5),
             ),
             enabledBorder: inputBorder ?? border,
             focusedBorder: inputBorder ?? border,
