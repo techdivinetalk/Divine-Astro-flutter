@@ -988,28 +988,33 @@ class LivePageState extends State<LivePage>
           ),
         ),
         SizedBox(height: 12.h),
-        ClipOval(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
-            child: InkWell(
-              onTap: () {
-                showCupertinoModalPopup(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return GiftSheet(
-                        url: widget.astrologerImage,
-                        name: widget.astrologerName,
-                      );
-                    });
-              },
-              child: Container(
-                width: 46.w,
-                height: 46.h,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.white.withOpacity(.6)),
-                child: Center(child: Assets.images.giftLive.svg()),
+        Obx(
+          ()=> Visibility(
+            visible: (controller.allGiftList.value.giftDetails?.isNotEmpty ?? false),
+            child: ClipOval(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
+                child: InkWell(
+                  onTap: () {
+                    showCupertinoModalPopup(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return GiftSheet(
+                            url: widget.astrologerImage,
+                            name: widget.astrologerName,
+                          );
+                        });
+                  },
+                  child: Container(
+                    width: 46.w,
+                    height: 46.h,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.white.withOpacity(.6)),
+                    child: Center(child: Assets.images.giftLive.svg()),
+                  ),
+                ),
               ),
             ),
           ),

@@ -20,6 +20,7 @@ import '../../common/co-host_request.dart';
 import '../../common/waitlist_sheet.dart';
 import '../../di/api_provider.dart';
 import '../../di/shared_preference_service.dart';
+import '../../model/leader_board/gift_list_model.dart';
 import '../../model/leader_board/live_star_user_model.dart';
 import '../../model/leader_board/user_addition_leader_board_model.dart';
 import '../../model/res_blocked_customers.dart';
@@ -178,10 +179,20 @@ class LiveController extends GetxController {
         {"sessionId": astroId.toString(), "socketId": socket?.id ?? ''});
   }
 
-  Rx<UserAdditionInLeaderboardModel> leaderBoard =
-      UserAdditionInLeaderboardModel().obs;
+  Rx<UserAdditionInLeaderboardModel> leaderBoard = UserAdditionInLeaderboardModel().obs;
+  Rx<GiftListModelClass> allGiftList = GiftListModelClass().obs;
   var liveStar = {}.obs;
   var showLiveStar = true.obs;
+  RxInt giftTotalPrice = RxInt(0);
+
+  getToatalGiftPrice(){
+    int localPrice = 0;
+    allGiftList.value.giftDetails?.forEach((element) {
+      localPrice += element.price??0;
+    });
+    giftTotalPrice.value= localPrice;
+    return localPrice;
+  }
 
   void connectSocket() {
     socket = io(
@@ -200,7 +211,8 @@ class LiveController extends GetxController {
       });
 
       socket?.on(ApiProvider().userGiftResponse, (data) {
-        log("userGiftResponse=> $data");
+        log("userGiftResponse=> ${jsonEncode(data)}");
+        allGiftList.value = giftListModelClassFromJson(jsonEncode(data));
         fetchTop5UsersRequest();
         liveStarUserRequest();
       });
@@ -215,8 +227,8 @@ class LiveController extends GetxController {
         var value = liveStarUserModelFromJson(jsonEncode(data));
         showLiveStar.value = true;
         liveStar.value = {
-          "name": value.users?[0].userName,
-          "image": value.users?[0].avatar.toString()
+          "name": value.users?.first.userName??'',
+          "image": value.users?.first.avatar.toString()??''
         };
         Future.delayed(const Duration(seconds: 20)).then((value) {
           showLiveStar.value = false;
@@ -227,8 +239,7 @@ class LiveController extends GetxController {
       socket?.on(ApiProvider().top5UsersResponse, (data) {
         log("top5UsersResponse=> $data");
         liveStarUserRequest();
-        leaderBoard.value =
-            userAdditionInLeaderboardModelFromJson(jsonEncode(data));
+        leaderBoard.value = userAdditionInLeaderboardModelFromJson(jsonEncode(data));
         // liveStar.value = liveStarUserModelFromJson(jsonEncode(data));
       });
     });
