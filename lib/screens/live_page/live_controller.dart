@@ -114,13 +114,17 @@ class LiveController extends GetxController {
   String strDigits(int n) => n.toString().padLeft(2, '0');
   RxString hour = "".obs, min = "".obs, sec = "".obs;
   Duration duration1 = Duration.zero;
+
   startTimer() {
     countdownTimer?.cancel();
     countdownTimer = null;
-    duration1 = intToTimeLeft(time);//time
+    duration1 = intToTimeLeft(time); //time
+    if (duration1.inHours > 3) {
+      duration1 = Duration(hours: 4);
+    }
     countdownTimer ??= Timer.periodic(const Duration(seconds: 1), (timer) {
       const reduceSecondsBy = 1;
-      if(duration1.inSeconds > 0){
+      if (duration1.inSeconds > 0) {
         duration1 = Duration(seconds: duration1.inSeconds - reduceSecondsBy);
         if (duration1.inSeconds <= 0) {
           duration1 = Duration.zero;
@@ -136,7 +140,7 @@ class LiveController extends GetxController {
           min.value = strDigits(duration1.inMinutes.remainder(60));
           sec.value = strDigits(duration1.inSeconds.remainder(60));
         }
-      }else{
+      } else {
         duration1 = Duration.zero;
         countdownTimer?.cancel();
         countdownTimer = null;
@@ -179,18 +183,19 @@ class LiveController extends GetxController {
         {"sessionId": astroId.toString(), "socketId": socket?.id ?? ''});
   }
 
-  Rx<UserAdditionInLeaderboardModel> leaderBoard = UserAdditionInLeaderboardModel().obs;
+  Rx<UserAdditionInLeaderboardModel> leaderBoard =
+      UserAdditionInLeaderboardModel().obs;
   Rx<GiftListModelClass> allGiftList = GiftListModelClass().obs;
   var liveStar = {}.obs;
   var showLiveStar = true.obs;
   RxInt giftTotalPrice = RxInt(0);
 
-  getToatalGiftPrice(){
+  getToatalGiftPrice() {
     int localPrice = 0;
     allGiftList.value.giftDetails?.forEach((element) {
-      localPrice += element.price??0;
+      localPrice += element.price ?? 0;
     });
-    giftTotalPrice.value= localPrice;
+    giftTotalPrice.value = localPrice;
     return localPrice;
   }
 
@@ -225,21 +230,24 @@ class LiveController extends GetxController {
       socket?.on(ApiProvider().liveStarResponse, (data) {
         log("liveStarResponse=> ${jsonEncode(data)}");
         var value = liveStarUserModelFromJson(jsonEncode(data));
-        showLiveStar.value = true;
-        liveStar.value = {
-          "name": value.users?.first.userName??'',
-          "image": value.users?.first.avatar.toString()??''
-        };
-        Future.delayed(const Duration(seconds: 20)).then((value) {
-          showLiveStar.value = false;
-        });
+        if (value.users != null && value.users!.isNotEmpty) {
+          showLiveStar.value = true;
+          liveStar.value = {
+            "name": value.users?[0].userName,
+            "image": value.users?[0].avatar.toString()
+          };
+          Future.delayed(const Duration(seconds: 20)).then((value) {
+            showLiveStar.value = false;
+          });
+        }
       });
 
       //Response event for top 5 user
       socket?.on(ApiProvider().top5UsersResponse, (data) {
         log("top5UsersResponse=> $data");
         liveStarUserRequest();
-        leaderBoard.value = userAdditionInLeaderboardModelFromJson(jsonEncode(data));
+        leaderBoard.value =
+            userAdditionInLeaderboardModelFromJson(jsonEncode(data));
         // liveStar.value = liveStarUserModelFromJson(jsonEncode(data));
       });
     });
@@ -299,7 +307,7 @@ class LiveController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
   }
@@ -328,7 +336,7 @@ class LiveController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
   }
@@ -450,10 +458,10 @@ class LiveController extends GetxController {
   setAvailibility(String id, bool available) {
     database.ref().child("live/$id").update({"isAvailable": available});
     database.ref().child("live/$id/coHostUser").onValue.listen((event) async {
-      if(event.snapshot.value != null){
+      if (event.snapshot.value != null) {
         final user = event.snapshot.value as String? ?? "";
         if (user.isEmpty) {
-          if(isCoHosting.value){
+          if (isCoHosting.value) {
             isCoHosting.value = false;
             countdownTimer?.cancel();
             countdownTimer = null;
@@ -468,6 +476,7 @@ class LiveController extends GetxController {
             time = user["duration"];
             orderId = user["order_id"];
             typeOfCall = user["callType"];
+            videoConfig(typeOfCall);
             setVisibilityCoHostAudio(typeOfCall);
             setVisibilityCoHostVideo(typeOfCall);
           }
@@ -513,6 +522,33 @@ class LiveController extends GetxController {
     };
   }
 
+  videoConfig(String type) {
+    hostConfig.audioVideoViewConfig.visible = (
+      ZegoUIKitUser localUser,
+      ZegoLiveStreamingRole localRole,
+      ZegoUIKitUser targetUser,
+      ZegoLiveStreamingRole targetUserRole,
+    ) {
+      if (type == "private" || type == "audio") {
+        /// private or audio call type, pure audio mode
+        return false;
+      }
+      if (ZegoLiveStreamingRole.host == localRole) {
+        /// host can see all user's view
+        return true;
+      }
+
+      /// comment below if you want the co-host hide their own audio-video view.
+      if (localUser.id == targetUser.id) {
+        /// local view
+        return true;
+      }
+
+      /// if user is a co-host, only show host's audio-video view
+      return targetUserRole == ZegoLiveStreamingRole.host;
+    };
+  }
+
   setVisibilityCoHostAudio(String type) {
     hostConfig.audioVideoViewConfig.playCoHostAudio = (
       ZegoUIKitUser localUser,
@@ -549,7 +585,6 @@ class LiveController extends GetxController {
     Future.delayed(const Duration(seconds: 2)).then((value) async {
       final response = await userRepository.endCall(json);
     });
-
   }
 
   Duration intToTimeLeft(int value) {
