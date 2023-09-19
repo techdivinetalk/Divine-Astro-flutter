@@ -12,6 +12,7 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../common/app_textstyle.dart';
 import '../../common/common_functions.dart';
@@ -142,6 +143,24 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                                                     chatMessage.senderId ==
                                                         controller
                                                             .userData?.id),
+                                        Obx(() => AnimatedContainer(
+                                              duration: const Duration(
+                                                  milliseconds: 200),
+                                              child: controller.isTyping.value
+                                                  ? SizedBox(
+                                                      child: Assets.lottie
+                                                          .typingIndicator
+                                                          .lottie(
+                                                        width: 100,
+                                                        height: 100,
+                                                        repeat: true,
+                                                        frameRate:
+                                                            FrameRate(60),
+                                                        animate: true,
+                                                      ),
+                                                    )
+                                                  : const SizedBox(),
+                                            )),
                                       ],
                                     ),
                                   );
@@ -181,7 +200,9 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                 ),
               ),
               SizedBox(height: 10.h),
-              chatBottomBar(),
+              Obx(() => controller.isOngoingChat.value
+                  ? chatBottomBar()
+                  : const SizedBox()),
               Obx(() => AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
                     height: controller.isEmojiShowing.value ? 300 : 0,
@@ -256,6 +277,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                       maxLines: 1,
                       // focusNode: controller.msgFocus,
                       onTap: () {
+                        chatSocketInit();
                         if (controller.isEmojiShowing.value) {
                           controller.isEmojiShowing.value = false;
                         }
@@ -703,7 +725,9 @@ class AstrologerChatAppBar extends StatelessWidget {
                                 ),
                               ),
                               Obx(() => Text(
-                                    "(${timer.formattedTime()} mins) ${'remaining'.tr}",
+                                    controller.chatStatus.value != ""
+                                        ? "(${timer.formattedTime()} mins) ${'remaining'.tr}"
+                                        : "",
                                     style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 13.sp,
@@ -711,7 +735,8 @@ class AstrologerChatAppBar extends StatelessWidget {
                                     ),
                                   )),
                               Text(
-                                "chatInProgress".tr,
+                                controller.chatStatus.value,
+                                // "chatInProgress".tr,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w400,
                                   fontSize: 13.sp,

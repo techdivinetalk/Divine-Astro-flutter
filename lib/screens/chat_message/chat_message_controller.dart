@@ -61,6 +61,9 @@ class ChatMessageController extends GetxController {
   RxString profileImage = "".obs;
   RxBool isDataLoad = false.obs;
   RxBool isOngoingChat = false.obs;
+  RxString chatStatus = "".obs;
+  DashboardController dashboardController = Get.find<DashboardController>();
+  RxBool isTyping = false.obs;
 
   @override
   void onInit() {
@@ -70,13 +73,15 @@ class ChatMessageController extends GetxController {
       if (Get.arguments is bool) {
         sendReadMessageStatus = true;
       } else if (Get.arguments is ResAstroChatListener) {
+        chatStatus.value = "Chat in progress";
         isOngoingChat.value = true;
         var data = Get.arguments;
         currentChatUserId.value = data!.customerId;
         currentUserId.value = data!.customerId;
         customerName.value = data!.customeName ?? "";
-        profileImage.value =
-            "${preference.getBaseImageURL()}/${data!.customerImage}";
+        profileImage.value = data!.customerImage != null
+            ? "${preference.getBaseImageURL()}/${data!.customerImage}"
+            : "";
         if (astroChatWatcher.value.orderId != null) {
           timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0,
               astroChatWatcher.value.orderId!);
@@ -111,6 +116,12 @@ class ChatMessageController extends GetxController {
             duration: const Duration(milliseconds: 600),
             curve: Curves.easeOut)
         : null;
+  }
+
+  userTypingSocket() {
+    dashboardController.socket?.emit(ApiProvider().chatType, {
+      "userId": userData?.id.toString(),
+    });
   }
 
   getChatList() async {
@@ -391,6 +402,7 @@ chatSocketInit() {
 }
 
 onEndChat() async {
+  ChatMessageController chatController = Get.find<ChatMessageController>();
   timer.stopTimer();
   if (astroChatWatcher.value.orderId != 0 &&
       astroChatWatcher.value.orderId != null) {
@@ -400,6 +412,7 @@ onEndChat() async {
                 queueId: astroChatWatcher.value.queueId)
             .toJson());
     if (response.statusCode == 200) {
+      chatController.chatStatus.value = "";
       divineSnackBar(data: "Chat ended.", color: AppColors.redColor);
     } else {
       divineSnackBar(data: "Chat has been ended.", color: AppColors.redColor);
