@@ -297,6 +297,7 @@ class LiveController extends GetxController {
       ResBlockedCustomers response =
           await userRepository.blockUnblockCustomer(params);
       database.ref().child("live/$astroId/blockUser/$customerId/").remove();
+      blockIds.remove(customerId);
       showDialog(
           context: Get.context!,
           builder: (builder) {
@@ -326,6 +327,7 @@ class LiveController extends GetxController {
           customerId: {"id": customerId, "name": name}
         }
       });
+      blockIds.add(customerId);
       //getBlockedCustomerList();
       showDialog(
           context: Get.context!,
@@ -354,6 +356,7 @@ class LiveController extends GetxController {
           dialogOpen = true;
           return WaitList(
             data: data.children,
+            shouldClose: true,
             astroId: astroId,
             showNext: true,
             onAccept: (String id, String name) {
@@ -389,6 +392,7 @@ class LiveController extends GetxController {
               builder: (BuildContext context) {
                 return WaitList(
                   data: waitList.children,
+                  shouldClose: false,
                   astroId: astroId,
                   showNext: true,
                   onAccept: (String id, String name) {
@@ -444,7 +448,9 @@ class LiveController extends GetxController {
   }
 
   stopStream(String id) {
-    endCall();
+    if(isCoHosting.value){
+      endCall();
+    }
     database.ref().child("live/$id/callType").remove();
     database.ref().child("live/$id/callStatus").remove();
     database.ref().child("live/$id").remove();
@@ -461,7 +467,7 @@ class LiveController extends GetxController {
       if (event.snapshot.value != null) {
         final user = event.snapshot.value as String? ?? "";
         if (user.isEmpty) {
-          if (isCoHosting.value) {
+          if (isCoHosting.value || countdownTimer != null) {
             isCoHosting.value = false;
             countdownTimer?.cancel();
             countdownTimer = null;
@@ -531,7 +537,8 @@ class LiveController extends GetxController {
     ) {
       if (type == "private" || type == "audio") {
         /// private or audio call type, pure audio mode
-        return false;
+        return ZegoLiveStreamingRole.host == targetUserRole;
+        //return false;
       }
       if (ZegoLiveStreamingRole.host == localRole) {
         /// host can see all user's view
@@ -598,6 +605,5 @@ class LiveController extends GetxController {
 
     String result = "$h:$m:$s";
     return Duration(seconds: value);
-    return Duration(hours: h, minutes: m, seconds: s);
   }
 }

@@ -280,30 +280,32 @@ class LivePageState extends State<LivePage>
       alignment: Alignment.bottomLeft,
       child: InkWell(
         onTap: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              if (controller.blockIds.contains(message.user.id)) {
-                return UnblockOrBlockUser(
-                  name: message.user.name,
-                  isForBlocUser: false,
-                  blockUnblockTap: () {
-                    controller.unblockUser(
-                        customerId: message.user.id, name: message.user.name);
-                  },
-                );
-              } else {
-                return UnblockOrBlockUser(
-                  name: message.user.name,
-                  isForBlocUser: true,
-                  blockUnblockTap: () {
-                    controller.blockUser(
-                        customerId: message.user.id, name: message.user.name);
-                  },
-                );
-              }
-            },
-          );
+          if(controller.isCoHosting.isFalse){
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                if (controller.blockIds.contains(message.user.id)) {
+                  return UnblockOrBlockUser(
+                    name: message.user.name,
+                    isForBlocUser: false,
+                    blockUnblockTap: () {
+                      controller.unblockUser(
+                          customerId: message.user.id, name: message.user.name);
+                    },
+                  );
+                } else {
+                  return UnblockOrBlockUser(
+                    name: message.user.name,
+                    isForBlocUser: true,
+                    blockUnblockTap: () {
+                      controller.blockUser(
+                          customerId: message.user.id, name: message.user.name);
+                    },
+                  );
+                }
+              },
+            );
+          }
         },
         child: Container(
           margin: EdgeInsets.symmetric(
@@ -632,7 +634,7 @@ class LivePageState extends State<LivePage>
                                     IconButton(
                                         onPressed: () {
                                           ZegoUIKit.instance.turnMicrophoneOn(
-                                              !controller.isMicroPhoneOn.value);
+                                              !controller.isMicroPhoneOn.value,muteMode: true);
                                           controller.isMicroPhoneOn.value =
                                               !controller.isMicroPhoneOn.value;
                                         },
@@ -877,7 +879,6 @@ class LivePageState extends State<LivePage>
                                   controller.liveController.connect
                                       .removeCoHost(controller.coHostUser!);
                                   controller.removeFromWaitList();
-                                  controller.isCoHosting.value = false;
                                 });
                           },
                         );
@@ -1018,7 +1019,9 @@ class LivePageState extends State<LivePage>
             ),
           ),
         ),
-        SizedBox(height: 12.h),
+        Visibility(
+          visible: (controller.allGiftList.value.giftDetails?.isNotEmpty ?? false),
+            child: SizedBox(height: 12.h)),
         StreamBuilder<DatabaseEvent>(
             stream: controller.database
                 .ref()
