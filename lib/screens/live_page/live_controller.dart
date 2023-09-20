@@ -183,19 +183,19 @@ class LiveController extends GetxController {
         {"sessionId": astroId.toString(), "socketId": socket?.id ?? ''});
   }
 
-  Rx<UserAdditionInLeaderboardModel> leaderBoard =
-      UserAdditionInLeaderboardModel().obs;
+  Rx<UserAdditionInLeaderboardModel> leaderBoard = UserAdditionInLeaderboardModel().obs;
   Rx<GiftListModelClass> allGiftList = GiftListModelClass().obs;
   var liveStar = {}.obs;
   var showLiveStar = true.obs;
   RxInt giftTotalPrice = RxInt(0);
 
-  getToatalGiftPrice() {
+  getTotalGiftPrice() {
     int localPrice = 0;
     allGiftList.value.giftDetails?.forEach((element) {
       localPrice += element.price ?? 0;
     });
     giftTotalPrice.value = localPrice;
+    print("LocalPrice--> ${localPrice.toString()}");
     return localPrice;
   }
 

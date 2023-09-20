@@ -51,59 +51,61 @@ class LeaderBoard extends StatelessWidget {
                     const BorderRadius.vertical(top: Radius.circular(50.0)),
                     color: AppColors.white.withOpacity(0.1),
                   ),
-                  child: ListView.separated(
-                    itemCount: controller.leaderBoard.value.users?.length ?? 0,
-                    shrinkWrap: true,
-                    padding:
-                    EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-                    itemBuilder: (context, index) {
-                      var model = controller.leaderBoard.value.users![index];
-                      return Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            border: Border.all(color: AppColors.appYellowColour),
-                            color: AppColors.white),
-                        height: 80.h,
-                        child: Row(
-                          children: [
-                            SizedBox(width: 20.w),
-                            buildMedal(index + 1),
-                            SizedBox(width: 8.w),
-                            Container(
-                              width: 48.w,
-                              height: 48.h,
-                              clipBehavior: Clip.antiAlias,
-                              decoration:
-                              const BoxDecoration(shape: BoxShape.circle),
-                              child: CachedNetworkPhoto(
-                                width: 48.h,
+                  child: Obx(
+                    ()=> ListView.separated(
+                      itemCount: controller.leaderBoard.value.users?.length ?? 0,
+                      shrinkWrap: true,
+                      padding:
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                      itemBuilder: (context, index) {
+                        var model = controller.leaderBoard.value.users![index];
+                        return Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(40),
+                              border: Border.all(color: AppColors.appYellowColour),
+                              color: AppColors.white),
+                          height: 80.h,
+                          child: Row(
+                            children: [
+                              SizedBox(width: 20.w),
+                              buildMedal(index + 1),
+                              SizedBox(width: 8.w),
+                              Container(
+                                width: 48.w,
                                 height: 48.h,
-                                url: (controller.pref.getBaseImageURL() ??
-                                    '') +
-                                    (model.avatar ?? ''),
+                                clipBehavior: Clip.antiAlias,
+                                decoration:
+                                const BoxDecoration(shape: BoxShape.circle),
+                                child: CachedNetworkPhoto(
+                                  width: 48.h,
+                                  height: 48.h,
+                                  url: (controller.pref.getBaseImageURL() ??
+                                      '') +
+                                      (model.avatar ?? ''),
+                                ),
                               ),
-                            ),
-                            SizedBox(width: 16.w),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CustomText('${model.userName}',
-                                    fontSize: 16.sp,
-                                    fontColor: AppColors.darkBlue,
-                                    fontWeight: FontWeight.bold),
-                                CustomText("₹ ${model.price}",
-                                    fontSize: 18.sp,
-                                    fontColor: AppColors.darkBlue),
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return SizedBox(height: 20.h);
-                    },
+                              SizedBox(width: 16.w),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CustomText('${model.userName}',
+                                      fontSize: 16.sp,
+                                      fontColor: AppColors.darkBlue,
+                                      fontWeight: FontWeight.bold),
+                                  CustomText("₹ ${model.price}",
+                                      fontSize: 18.sp,
+                                      fontColor: AppColors.darkBlue),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(height: 20.h);
+                      },
+                    ),
                   ),
                 ),
               ),

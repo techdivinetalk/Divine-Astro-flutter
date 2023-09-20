@@ -165,7 +165,6 @@ class KundliDetailController extends GetxController {
       lagnaChartApi(fromKundali),
       moonChartApi(fromKundali),
       sunChartApi(fromKundali),
-      mangalikDoshApi(fromKundali),
       navamashaChartApi(fromKundali),
       getKpTableDataListAPI(fromKundali),
       getDashaTableDataListAPI(fromKundali),
@@ -181,7 +180,7 @@ class KundliDetailController extends GetxController {
       dashaTableData.value = response;
 
       update();
-      log("dashaTableData==>${jsonEncode(kpTableData.value)}");
+      log("dashaTableData==>${jsonEncode(dashaTableData.value)}");
     } catch (error) {
       debugPrint("kpTableDataError $error");
       if (error is AppException) {
@@ -368,22 +367,6 @@ class KundliDetailController extends GetxController {
     update();
   }
 
-  Future<void> mangalikDoshApi(bool fromKundali) async {
-    try {
-      ManglikDoshModel response = await kundliRepository
-          .getManglikDoshDetails(fromKundali ? kundaliIdParms : params);
-      manglikDosh.value = response;
-      update();
-    } catch (error) {
-      debugPrint("error $error");
-      if (error is AppException) {
-        error.onException();
-      } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
-      }
-    }
-    update();
-  }
 
   Future<void> kundliPredictionApi(bool fromKundali) async {
     try {
