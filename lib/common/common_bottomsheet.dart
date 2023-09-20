@@ -15,6 +15,7 @@ Future openBottomSheet(BuildContext context,
   return showModalBottomSheet(
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
+    elevation: 0,
     context: context,
     builder: (context) => Column(
       mainAxisSize: MainAxisSize.min,
