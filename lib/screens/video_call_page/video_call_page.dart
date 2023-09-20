@@ -10,9 +10,10 @@ import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
 class VideoCallPage extends GetView<VideoCallPageController> {
   const VideoCallPage({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    Get.put(VideoCallPageController());
+
     return WillPopScope(
       onWillPop: () async => controller.isForChat ? false : true,
       child: Scaffold(
