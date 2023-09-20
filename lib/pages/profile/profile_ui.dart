@@ -3,12 +3,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/appbar.dart';
+import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
 import '../../../common/routes.dart';
@@ -18,7 +21,6 @@ import '../../common/custom_widgets.dart';
 import '../../di/shared_preference_service.dart';
 import '../../repository/user_repository.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
-import 'package:file_picker/file_picker.dart';
 
 class ProfileUI extends GetView<ProfilePageController> {
   ProfileUI({Key? key}) : super(key: key);
@@ -66,8 +68,11 @@ class ProfileUI extends GetView<ProfilePageController> {
                                   borderRadius: BorderRadius.circular(80),
                                 ),
                                 child: InkWell(
-                                  onTap: () {
-                                    controller.updateProfileImage(context);
+                                  onTap: () async {
+                                    if (await PermissionHelper()
+                                        .askMediaPermission()) {
+                                      controller.updateProfileImage();
+                                    }
                                   },
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(80),
@@ -447,7 +452,18 @@ class ProfileUI extends GetView<ProfilePageController> {
                               arguments: "${result.files.single.path}");
                         }
                       } else if (item.nav != "") {
-                        Get.toNamed(item.nav.toString());
+                        if (item.name == "bankDetails".tr ||
+                            item.name == "uploadYourPhoto".tr) {
+                          if (await PermissionHelper().askMediaPermission()) {
+                            Get.toNamed(item.nav.toString());
+                          }
+                        } else if (item.name == "uploadStory".tr) {
+                          if (await PermissionHelper().askStoragePermission()) {
+                            Get.toNamed(item.nav.toString());
+                          }
+                        } else {
+                          Get.toNamed(item.nav.toString());
+                        }
                       }
                     },
                     child: Container(

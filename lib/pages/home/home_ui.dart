@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
+import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/common/switch_component.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
@@ -249,8 +250,10 @@ class HomeUI extends GetView<HomeController> {
                       senderCategoryWidget(),
                       SizedBox(height: 10.h),
                       InkWell(
-                        onTap: () {
-                          Get.toNamed(RouteName.liveTipsUI);
+                        onTap: () async {
+                          if (await PermissionHelper().askPermissions()) {
+                            Get.toNamed(RouteName.liveTipsUI);
+                          }
                         },
                         child: Container(
                           height: 60,
@@ -312,8 +315,10 @@ class HomeUI extends GetView<HomeController> {
                       fullScreenBtnWidget(
                           imageName: Assets.images.icEcommerce.svg(),
                           btnTitle: "eCommerce".tr,
-                          onbtnTap: () {
-                            Get.toNamed(RouteName.videoCallPage);
+                          onbtnTap: () async {
+                            if (await PermissionHelper().askPermissions()) {
+                              Get.toNamed(RouteName.videoCallPage);
+                            }
                           }),
                       SizedBox(height: 10.h),
                       feedbackWidget(),

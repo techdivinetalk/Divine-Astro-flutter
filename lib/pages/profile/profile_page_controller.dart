@@ -302,9 +302,9 @@ class ProfilePageController extends GetxController {
 
 //Update profile image
 
-  updateProfileImage(BuildContext context) {
+  updateProfileImage() {
     showCupertinoModalPopup(
-      context: context,
+      context: Get.context!,
       barrierColor: AppColors.darkBlue.withOpacity(0.5),
       builder: (BuildContext context) {
         return Material(
