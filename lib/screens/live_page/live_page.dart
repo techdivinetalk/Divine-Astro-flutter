@@ -879,7 +879,6 @@ class LivePageState extends State<LivePage>
                                   controller.liveController.connect
                                       .removeCoHost(controller.coHostUser!);
                                   controller.removeFromWaitList();
-                                  controller.isCoHosting.value = false;
                                 });
                           },
                         );
@@ -1020,7 +1019,9 @@ class LivePageState extends State<LivePage>
             ),
           ),
         ),
-        SizedBox(height: 12.h),
+        Visibility(
+          visible: (controller.allGiftList.value.giftDetails?.isNotEmpty ?? false),
+            child: SizedBox(height: 12.h)),
         StreamBuilder<DatabaseEvent>(
             stream: controller.database
                 .ref()
