@@ -297,6 +297,7 @@ class LiveController extends GetxController {
       ResBlockedCustomers response =
           await userRepository.blockUnblockCustomer(params);
       database.ref().child("live/$astroId/blockUser/$customerId/").remove();
+      blockIds.remove(customerId);
       showDialog(
           context: Get.context!,
           builder: (builder) {
@@ -326,6 +327,7 @@ class LiveController extends GetxController {
           customerId: {"id": customerId, "name": name}
         }
       });
+      blockIds.add(customerId);
       //getBlockedCustomerList();
       showDialog(
           context: Get.context!,
