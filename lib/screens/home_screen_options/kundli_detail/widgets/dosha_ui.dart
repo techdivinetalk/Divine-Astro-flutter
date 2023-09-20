@@ -72,7 +72,8 @@ class DoshaUi extends StatelessWidget {
                                   ?.isUndergoingSadhesati ==
                               null
                           ? ""
-                          : "${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.isUndergoingSadhesati} ${(controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.sadhesatiStatus ?? false) ? " ${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.sadhesatiPhase ?? ''} of Sadesathi from ${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.startDate ?? ''} to ${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.endDate ?? ''}." : ""}",
+                          :
+                      "${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.isUndergoingSadhesati} ${(controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.sadhesatiStatus ?? false) ? " ${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.sadhesatiPhase ?? ''} of Sadesathi from ${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.startDate ?? ''} to ${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.endDate ?? ''}." : ""}",
                     ),
                     details(
                       title: "Pitri Dosha",
