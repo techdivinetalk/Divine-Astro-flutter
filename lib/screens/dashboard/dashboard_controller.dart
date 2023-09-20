@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
@@ -16,6 +17,7 @@ import 'package:socket_io_client/socket_io_client.dart';
 import '../../common/common_functions.dart';
 import '../../di/api_provider.dart';
 import '../../di/fcm_notification.dart';
+import '../../model/chat/chat_socket/chat_socket_init.dart';
 import '../../model/chat/res_astro_chat_listener.dart';
 import '../../model/res_login.dart';
 import '../live_page/constant.dart';
@@ -109,6 +111,13 @@ class DashboardController extends GetxController
                   arguments: astroChatWatcher.value);
             } else if (value['status'] == 2) {
               if (Get.currentRoute != RouteName.chatMessageUI) {
+                Future.delayed(const Duration(seconds: 10)).then((value) {
+                  socket?.emit(ApiProvider().initChat, {
+                    "requestFrom": 'astrologer',
+                    "userId": userData?.id.toString(),
+                    "userSocketId": socket?.id ?? ''
+                  });
+                });
                 if (Get.currentRoute == RouteName.videoCallPage) {
                   Get.offNamed(RouteName.chatMessageUI,
                       arguments: astroChatWatcher.value);
@@ -151,7 +160,20 @@ class DashboardController extends GetxController
             .build());
     socket?.connect();
     socket?.onConnect((_) {
-      debugPrint('Socket connected');
+      socket?.on(ApiProvider().initChatResponse, (data) {
+        ResChatSocketInit.fromJson(data);
+        chatSession.value = ResChatSocketInit.fromJson(data);
+      });
+      socket?.on(ApiProvider().chatTypeResponse, (data) {
+        debugPrint("Chat type => ${jsonEncode(data)}");
+
+        if (Get.isRegistered<ChatMessageController>()) {
+          var chatRes = data as Map<String, dynamic>;
+          var controller = Get.find<ChatMessageController>();
+          controller.isTyping.value =
+              int.parse(chatRes["userID"]) == controller.currentUserId.value;
+        }
+      });
     });
     debugPrint("Socket--->${socket!.connected}");
   }

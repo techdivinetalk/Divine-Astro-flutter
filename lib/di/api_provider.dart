@@ -102,7 +102,7 @@ class ApiProvider {
   final String initChat = "initChat";
   final String initChatResponse = "initChatResponse";
   final String chatType = "chatType";
-  final String chartTypeResponse = "chartTypeResponse";
+  final String chatTypeResponse = "chatTypeResponse";
   final String deleteChatSession = "deleteChatSession";
   final String deleteChatSessionResponse = "deleteChatSessionResponse";
 

@@ -114,55 +114,48 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                                   var chatMessage =
                                       controller.chatMessages[index];
 
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 4, horizontal: 12),
-                                    child: Column(
-                                      children: [
-                                        if (chatMessage.id ==
-                                            controller.unreadMessageIndex.value)
-                                          unreadMessageView(),
-                                        chatMessage.msgType == "kundli"
-                                            ? kundliView(
-                                                chatDetail: chatMessage,
-                                                index: index)
-                                            : chatMessage.msgType == "image"
-                                                ? imageMsgView(
-                                                    controller
-                                                            .chatMessages[index]
-                                                            .base64Image ??
-                                                        "",
-                                                    chatDetail: controller
-                                                        .chatMessages[index],
-                                                    index: index,
-                                                    chatMessage.senderId ==
-                                                        controller.userData?.id)
-                                                : textMsgView(
-                                                    context,
-                                                    chatMessage,
-                                                    chatMessage.senderId ==
+                                  return Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 4, horizontal: 12),
+                                        child: Column(
+                                          children: [
+                                            if (chatMessage.id ==
+                                                controller
+                                                    .unreadMessageIndex.value)
+                                              unreadMessageView(),
+                                            chatMessage.msgType == "kundli"
+                                                ? kundliView(
+                                                    chatDetail: chatMessage,
+                                                    index: index)
+                                                : chatMessage.msgType == "image"
+                                                    ? imageMsgView(
                                                         controller
-                                                            .userData?.id),
-                                        Obx(() => AnimatedContainer(
-                                              duration: const Duration(
-                                                  milliseconds: 200),
-                                              child: controller.isTyping.value
-                                                  ? SizedBox(
-                                                      child: Assets.lottie
-                                                          .typingIndicator
-                                                          .lottie(
-                                                        width: 100,
-                                                        height: 100,
-                                                        repeat: true,
-                                                        frameRate:
-                                                            FrameRate(60),
-                                                        animate: true,
-                                                      ),
-                                                    )
-                                                  : const SizedBox(),
-                                            )),
-                                      ],
-                                    ),
+                                                                .chatMessages[
+                                                                    index]
+                                                                .base64Image ??
+                                                            "",
+                                                        chatDetail: controller
+                                                                .chatMessages[
+                                                            index],
+                                                        index: index,
+                                                        chatMessage.senderId ==
+                                                            controller
+                                                                .userData?.id)
+                                                    : textMsgView(
+                                                        context,
+                                                        chatMessage,
+                                                        chatMessage.senderId ==
+                                                            controller
+                                                                .userData?.id),
+                                          ],
+                                        ),
+                                      ),
+                                      // if (index ==
+                                      //     (controller.chatMessages.length - 1))
+                                      //   typingWidget()
+                                    ],
                                   );
                                 },
                               ),
@@ -248,6 +241,41 @@ class ChatMessageUI extends GetView<ChatMessageController> {
     }));
   }
 
+  Widget typingWidget() {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Obx(() => AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            child: controller.isTyping.value
+                ? Container(
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 3.0,
+                            offset: const Offset(0.0, 3.0)),
+                      ],
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Assets.lottie.typingIndicator.lottie(
+                      width: 45,
+                      height: 30,
+                      repeat: true,
+                      frameRate: FrameRate(120),
+                      animate: true,
+                    ),
+                  )
+                : const SizedBox(),
+          )),
+    );
+  }
+
   Widget chatBottomBar() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12.h),
@@ -277,7 +305,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                       maxLines: 1,
                       // focusNode: controller.msgFocus,
                       onTap: () {
-                        chatSocketInit();
+                        controller.userTypingSocket();
                         if (controller.isEmojiShowing.value) {
                           controller.isEmojiShowing.value = false;
                         }
