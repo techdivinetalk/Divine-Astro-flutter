@@ -75,7 +75,7 @@ class ChatMessageController extends GetxController {
       } else if (Get.arguments is ResAstroChatListener) {
         var data = Get.arguments;
         if (data!.customerId != null) {
-          chatStatus.value = "Chat in progress";
+          chatStatus.value = "Chat in - progress";
           isOngoingChat.value = true;
           currentChatUserId.value = data!.customerId;
           currentUserId.value = data!.customerId;
