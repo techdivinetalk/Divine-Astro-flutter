@@ -72,7 +72,6 @@ class KundliDetailController extends GetxController {
   // RxBool isSubDasha = RxBool(false);
   RxInt subDashaLevel = RxInt(0);
 
-
   Rx<Params> kundliParams = Params().obs;
   String? kundaliId;
   Map<String, dynamic> kundaliIdParms = {};
@@ -118,6 +117,7 @@ class KundliDetailController extends GetxController {
       detailPageImage[0] =
           Assets.images.icBoyKundli.svg(width: 87.w, height: 87.h);
     }
+    kundaliIdParms.addAll({"kundli_id": kundaliId});
     kundliParams.value = Params(
       location: args["birth_place"].toString(),
     );
@@ -165,7 +165,6 @@ class KundliDetailController extends GetxController {
       lagnaChartApi(fromKundali),
       moonChartApi(fromKundali),
       sunChartApi(fromKundali),
-      mangalikDoshApi(fromKundali),
       navamashaChartApi(fromKundali),
       getKpTableDataListAPI(fromKundali),
       getDashaTableDataListAPI(fromKundali),
@@ -181,7 +180,7 @@ class KundliDetailController extends GetxController {
       dashaTableData.value = response;
 
       update();
-      log("dashaTableData==>${jsonEncode(kpTableData.value)}");
+      log("dashaTableData==>${jsonEncode(dashaTableData.value)}");
     } catch (error) {
       debugPrint("kpTableDataError $error");
       if (error is AppException) {
@@ -278,7 +277,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
     update();
@@ -294,7 +293,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
     update();
@@ -311,7 +310,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
     update();
@@ -328,7 +327,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
     update();
@@ -345,7 +344,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
     update();
@@ -362,28 +361,12 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
     update();
   }
 
-  Future<void> mangalikDoshApi(bool fromKundali) async {
-    try {
-      ManglikDoshModel response = await kundliRepository
-          .getManglikDoshDetails(fromKundali ? kundaliIdParms : params);
-      manglikDosh.value = response;
-      update();
-    } catch (error) {
-      debugPrint("error $error");
-      if (error is AppException) {
-        error.onException();
-      } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
-      }
-    }
-    update();
-  }
 
   Future<void> kundliPredictionApi(bool fromKundali) async {
     try {
@@ -396,7 +379,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
     update();
@@ -462,6 +445,4 @@ class KundliDetailController extends GetxController {
     }
     update();
   }
-
-
 }

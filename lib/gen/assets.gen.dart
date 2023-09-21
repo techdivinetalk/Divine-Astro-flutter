@@ -670,8 +670,12 @@ class $AssetsLottieGen {
   LottieGenImage get soundWaves =>
       const LottieGenImage('assets/lottie/sound_waves.json');
 
+  /// File path: assets/lottie/typing_indicator.json
+  LottieGenImage get typingIndicator =>
+      const LottieGenImage('assets/lottie/typing_indicator.json');
+
   /// List of all assets
-  List<LottieGenImage> get values => [soundWaves];
+  List<LottieGenImage> get values => [soundWaves, typingIndicator];
 }
 
 class $AssetsSvgGen {

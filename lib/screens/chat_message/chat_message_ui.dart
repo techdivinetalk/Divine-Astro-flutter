@@ -12,6 +12,7 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../common/app_textstyle.dart';
 import '../../common/common_functions.dart';
@@ -113,37 +114,48 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                                   var chatMessage =
                                       controller.chatMessages[index];
 
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 4, horizontal: 12),
-                                    child: Column(
-                                      children: [
-                                        if (chatMessage.id ==
-                                            controller.unreadMessageIndex.value)
-                                          unreadMessageView(),
-                                        chatMessage.msgType == "kundli"
-                                            ? kundliView(
-                                                chatDetail: chatMessage,
-                                                index: index)
-                                            : chatMessage.msgType == "image"
-                                                ? imageMsgView(
-                                                    controller
-                                                            .chatMessages[index]
-                                                            .base64Image ??
-                                                        "",
-                                                    chatDetail: controller
-                                                        .chatMessages[index],
-                                                    index: index,
-                                                    chatMessage.senderId ==
-                                                        controller.userData?.id)
-                                                : textMsgView(
-                                                    context,
-                                                    chatMessage,
-                                                    chatMessage.senderId ==
+                                  return Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 4, horizontal: 12),
+                                        child: Column(
+                                          children: [
+                                            if (chatMessage.id ==
+                                                controller
+                                                    .unreadMessageIndex.value)
+                                              unreadMessageView(),
+                                            chatMessage.msgType == "kundli"
+                                                ? kundliView(
+                                                    chatDetail: chatMessage,
+                                                    index: index)
+                                                : chatMessage.msgType == "image"
+                                                    ? imageMsgView(
                                                         controller
-                                                            .userData?.id),
-                                      ],
-                                    ),
+                                                                .chatMessages[
+                                                                    index]
+                                                                .base64Image ??
+                                                            "",
+                                                        chatDetail: controller
+                                                                .chatMessages[
+                                                            index],
+                                                        index: index,
+                                                        chatMessage.senderId ==
+                                                            controller
+                                                                .userData?.id)
+                                                    : textMsgView(
+                                                        context,
+                                                        chatMessage,
+                                                        chatMessage.senderId ==
+                                                            controller
+                                                                .userData?.id),
+                                          ],
+                                        ),
+                                      ),
+                                      // if (index ==
+                                      //     (controller.chatMessages.length - 1))
+                                      //   typingWidget()
+                                    ],
                                   );
                                 },
                               ),
@@ -181,7 +193,9 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                 ),
               ),
               SizedBox(height: 10.h),
-              chatBottomBar(),
+              Obx(() => controller.isOngoingChat.value
+                  ? chatBottomBar()
+                  : const SizedBox()),
               Obx(() => AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
                     height: controller.isEmojiShowing.value ? 300 : 0,
@@ -227,6 +241,41 @@ class ChatMessageUI extends GetView<ChatMessageController> {
     }));
   }
 
+  Widget typingWidget() {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Obx(() => AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            child: controller.isTyping.value
+                ? Container(
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 3.0,
+                            offset: const Offset(0.0, 3.0)),
+                      ],
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Assets.lottie.typingIndicator.lottie(
+                      width: 45,
+                      height: 30,
+                      repeat: true,
+                      frameRate: FrameRate(120),
+                      animate: true,
+                    ),
+                  )
+                : const SizedBox(),
+          )),
+    );
+  }
+
   Widget chatBottomBar() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12.h),
@@ -256,6 +305,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                       maxLines: 1,
                       // focusNode: controller.msgFocus,
                       onTap: () {
+                        controller.userTypingSocket();
                         if (controller.isEmojiShowing.value) {
                           controller.isEmojiShowing.value = false;
                         }
@@ -533,14 +583,14 @@ class ChatMessageUI extends GetView<ChatMessageController> {
   Widget kundliView({required ChatMessage chatDetail, required int index}) {
     return InkWell(
       onTap: () {
-        divineSnackBar(data: "No details available");
-        // Get.toNamed(RouteName.kundliDetail, arguments: {
-        //   "kundli_id": chatDetail.kundliId,
-        //   'from_kundli': true,
-        //   "birth_place": chatDetail.kundliPlace,
-        //   "gender": chatDetail.gender
-        // });
-        // debugPrint("KundliId : ${chatDetail.kundliId}");
+        // divineSnackBar(data: "No details available");
+        Get.toNamed(RouteName.kundliDetail, arguments: {
+          "kundli_id": chatDetail.kundliId,
+          'from_kundli': true,
+          "birth_place": chatDetail.kundliPlace,
+          "gender": chatDetail.gender
+        });
+        debugPrint("KundliId : ${chatDetail.kundliId}");
       },
       child: Card(
         color: AppColors.white,
@@ -703,7 +753,9 @@ class AstrologerChatAppBar extends StatelessWidget {
                                 ),
                               ),
                               Obx(() => Text(
-                                    "(${timer.formattedTime()} mins) ${'remaining'.tr}",
+                                    controller.chatStatus.value != ""
+                                        ? "(${timer.formattedTime()} mins) ${'remaining'.tr}"
+                                        : "",
                                     style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 13.sp,
@@ -711,7 +763,8 @@ class AstrologerChatAppBar extends StatelessWidget {
                                     ),
                                   )),
                               Text(
-                                "chatInProgress".tr,
+                                controller.chatStatus.value,
+                                // "chatInProgress".tr,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w400,
                                   fontSize: 13.sp,

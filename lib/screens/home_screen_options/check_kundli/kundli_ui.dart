@@ -196,7 +196,7 @@ class CheckYours extends GetView<KundliController> {
                           controller: controller.yourDateController,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "Date should not be empty";
+                              return "Select Birth Date";
                             }
                             return null;
                           },
@@ -244,7 +244,7 @@ class CheckYours extends GetView<KundliController> {
                           controller: controller.yourTimeController,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "Time should not be empty";
+                              return "Select Birth Time";
                             }
                             return null;
                           },
@@ -287,7 +287,7 @@ class CheckYours extends GetView<KundliController> {
                     controller: controller.yourPlaceController,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "Place should not be empty";
+                        return "Select Birth Place";
                       }
                       return null;
                     },

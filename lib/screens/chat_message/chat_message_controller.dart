@@ -19,7 +19,6 @@ import '../../common/common_functions.dart';
 import '../../di/api_provider.dart';
 import '../../di/hive_services.dart';
 import '../../di/shared_preference_service.dart';
-import '../../model/chat/chat_socket/chat_socket_init.dart';
 import '../../model/chat/res_astro_chat_listener.dart';
 import '../../model/chat/res_common_chat_success.dart';
 import '../../model/chat_offline_model.dart';
@@ -45,7 +44,7 @@ class ChatMessageController extends GetxController {
   XFile? pickedFile;
   File? uploadFile;
   final preference = Get.find<SharedPreferenceService>();
-  RxInt currentUserId = 8693.obs;
+  RxInt currentUserId = 0.obs;
   String userDataKey = "userKey";
   bool sendReadMessageStatus = false;
   RxBool isEmojiShowing = false.obs;
@@ -61,6 +60,9 @@ class ChatMessageController extends GetxController {
   RxString profileImage = "".obs;
   RxBool isDataLoad = false.obs;
   RxBool isOngoingChat = false.obs;
+  RxString chatStatus = "".obs;
+  DashboardController dashboardController = Get.find<DashboardController>();
+  RxBool isTyping = false.obs;
 
   @override
   void onInit() {
@@ -70,30 +72,27 @@ class ChatMessageController extends GetxController {
       if (Get.arguments is bool) {
         sendReadMessageStatus = true;
       } else if (Get.arguments is ResAstroChatListener) {
-        isOngoingChat.value = true;
         var data = Get.arguments;
-        currentChatUserId.value = data!.customerId;
-        currentUserId.value = data!.customerId;
-        customerName.value = data!.customeName ?? "";
-        profileImage.value =
-            "${preference.getBaseImageURL()}/${data!.customerImage}";
-        if (astroChatWatcher.value.orderId != null) {
-          timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0,
-              astroChatWatcher.value.orderId!);
+        if (data!.customerId != null) {
+          chatStatus.value = "Chat in progress";
+          isOngoingChat.value = true;
+          currentChatUserId.value = data!.customerId;
+          currentUserId.value = data!.customerId;
+          customerName.value = data!.customeName ?? "";
+          profileImage.value = data!.customerImage != null
+              ? "${preference.getBaseImageURL()}/${data!.customerImage}"
+              : "";
+          if (astroChatWatcher.value.orderId != null) {
+            timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0,
+                astroChatWatcher.value.orderId!);
+          }
         }
       }
     }
     userData = preferenceService.getUserDetail();
-    currentUserId.value = 8693;
-    currentChatUserId.value = 8693;
+
     userDataKey = "userKey_${userData?.id}_${currentUserId.value}";
     getChatList();
-    chatSocketInit();
-    // msgFocus.addListener(() {
-    //   if (msgFocus.hasFocus) {
-    //     emojiShowing.value = true;
-    //   }
-    // });
   }
 
   @override
@@ -104,6 +103,13 @@ class ChatMessageController extends GetxController {
     });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    messgeScrollController.dispose();
+    messageController.dispose();
+  }
+
   scrollToBottomFunc() {
     messgeScrollController.hasClients
         ? messgeScrollController.animateTo(
@@ -111,6 +117,12 @@ class ChatMessageController extends GetxController {
             duration: const Duration(milliseconds: 600),
             curve: Curves.easeOut)
         : null;
+  }
+
+  userTypingSocket() {
+    dashboardController.socket?.emit(ApiProvider().chatType, {
+      "userId": userData?.id.toString(),
+    });
   }
 
   getChatList() async {
@@ -149,17 +161,19 @@ class ChatMessageController extends GetxController {
     }
     databaseMessage.value.chatMessages = chatMessages;
     unreadMsgCount.value = 0;
+    chatMessages.refresh();
     await hiveServices.addData(
         key: userDataKey,
         data: jsonEncode(databaseMessage.value.toOfflineJson()));
-    Future.delayed(const Duration(seconds: 1))
-        .then((value) => unreadMessageIndex.value = -1);
+    // Future.delayed(const Duration(seconds: 1))
+    //     .then((value) => unreadMessageIndex.value = -1);
   }
 
   sendMsg() {
     if (messageController.text.trim().isNotEmpty) {
       var time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       // type 1= New chat message, 2 = Delievered, 3= Msg read, 4= Other messages
+      unreadMessageIndex.value = -1;
       addNewMessage(time, "text", messageText: messageController.text.trim());
       messageController.clear();
     }
@@ -199,18 +213,19 @@ class ChatMessageController extends GetxController {
       chatMessages[index].type = newMessage.type;
       chatMessages.refresh();
     } else {
-      if (isFromNotification &&
-          messgeScrollController.position.pixels >
-              messgeScrollController.position.maxScrollExtent - 100) {
-        newMessage.type = 2;
-        chatMessages.add(newMessage);
-        scrollToBottomFunc();
-        updateMsgDelieveredStatus(newMessage, 2);
-        if (messgeScrollController.position.pixels ==
-            messgeScrollController.position.maxScrollExtent) {
-          Future.delayed(const Duration(seconds: 1)).then((value) {
-            scrollToBottomFunc();
-          });
+      if (isFromNotification && messgeScrollController.hasClients) {
+        if (messgeScrollController.position.pixels >
+            messgeScrollController.position.maxScrollExtent - 100) {
+          newMessage.type = 2;
+          chatMessages.add(newMessage);
+          scrollToBottomFunc();
+          updateMsgDelieveredStatus(newMessage, 2);
+          if (messgeScrollController.position.pixels ==
+              messgeScrollController.position.maxScrollExtent) {
+            Future.delayed(const Duration(seconds: 1)).then((value) {
+              scrollToBottomFunc();
+            });
+          }
         }
       } else {
         newMessage.type = 1;
@@ -229,9 +244,10 @@ class ChatMessageController extends GetxController {
             )
             .id ??
         -1;
+    chatMessages.refresh();
     setHiveDatabase();
     if (!isFromNotification) {
-      // updateReadMessageStatus();
+      updateReadMessageStatus();
       Future.delayed(const Duration(milliseconds: 200)).then((value) {
         scrollToBottomFunc();
       });
@@ -376,22 +392,8 @@ class ChatMessageController extends GetxController {
   }
 }
 
-chatSocketInit() {
-  DashboardController dashboardController = Get.find<DashboardController>();
-  dashboardController.socket?.emit(ApiProvider().initChat, {
-    "requestFrom": 'astrologer',
-    "userId": userData?.id.toString(),
-    "userSocketId": dashboardController.socket?.id ?? ''
-  });
-  dashboardController.socket?.on(ApiProvider().initChatResponse, (data) {
-    ResChatSocketInit.fromJson(data);
-    chatSession.value = ResChatSocketInit.fromJson(data);
-    debugPrint("Chat session ${chatSession.value}");
-  });
-}
-
 onEndChat() async {
-  timer.stopTimer();
+  ChatMessageController chatController = Get.find<ChatMessageController>();
   if (astroChatWatcher.value.orderId != 0 &&
       astroChatWatcher.value.orderId != null) {
     ResCommonChatStatus response = await ChatRepository().endChat(
@@ -404,5 +406,15 @@ onEndChat() async {
     } else {
       divineSnackBar(data: "Chat has been ended.", color: AppColors.redColor);
     }
+    chatController.chatStatus.value = "";
+    chatController.isOngoingChat.value = false;
+    chatController.isDataLoad.value = true;
+    if (Get.isRegistered<DashboardController>()) {
+      DashboardController dashboardController = Get.find<DashboardController>();
+      dashboardController.socket?.emit(ApiProvider().deleteChatSession, {
+        "id": chatSession.value.id,
+      });
+    }
+    timer.stopTimer();
   }
 }

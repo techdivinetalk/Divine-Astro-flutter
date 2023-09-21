@@ -180,7 +180,6 @@ class LivePageState extends State<LivePage>
               appID: yourAppID,
               appSign: yourAppSign /*input your AppSign*/,
               userID: widget.localUserID,
-              //userName: 'user_${widget.localUserID}',
               userName: widget.astrologerName ?? "user_${widget.localUserID}",
               liveID: widget.liveID,
               controller: controller.liveController,
@@ -217,7 +216,7 @@ class LivePageState extends State<LivePage>
                 )
 
                 /// hide the co-host audio-video view to audience and other co-hosts
-                ..audioVideoViewConfig.visible = (
+                /*..audioVideoViewConfig.visible = (
                   ZegoUIKitUser localUser,
                   ZegoLiveStreamingRole localRole,
                   ZegoUIKitUser targetUser,
@@ -236,7 +235,7 @@ class LivePageState extends State<LivePage>
 
                   /// if user is a co-host, only show host's audio-video view
                   return targetUserRole == ZegoLiveStreamingRole.host;
-                }
+                }*/
                 ..onLiveStreamingStateUpdate = (ZegoLiveStreamingState state) {
                   liveStateNotifier.value = state;
                 }
@@ -281,30 +280,32 @@ class LivePageState extends State<LivePage>
       alignment: Alignment.bottomLeft,
       child: InkWell(
         onTap: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              if (controller.blockIds.contains(message.user.id)) {
-                return UnblockOrBlockUser(
-                  name: message.user.name,
-                  isForBlocUser: false,
-                  blockUnblockTap: () {
-                    controller.unblockUser(
-                        customerId: message.user.id, name: message.user.name);
-                  },
-                );
-              } else {
-                return UnblockOrBlockUser(
-                  name: message.user.name,
-                  isForBlocUser: true,
-                  blockUnblockTap: () {
-                    controller.blockUser(
-                        customerId: message.user.id, name: message.user.name);
-                  },
-                );
-              }
-            },
-          );
+          if(controller.isCoHosting.isFalse){
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                if (controller.blockIds.contains(message.user.id)) {
+                  return UnblockOrBlockUser(
+                    name: message.user.name,
+                    isForBlocUser: false,
+                    blockUnblockTap: () {
+                      controller.unblockUser(
+                          customerId: message.user.id, name: message.user.name);
+                    },
+                  );
+                } else {
+                  return UnblockOrBlockUser(
+                    name: message.user.name,
+                    isForBlocUser: true,
+                    blockUnblockTap: () {
+                      controller.blockUser(
+                          customerId: message.user.id, name: message.user.name);
+                    },
+                  );
+                }
+              },
+            );
+          }
         },
         child: Container(
           margin: EdgeInsets.symmetric(
@@ -633,7 +634,7 @@ class LivePageState extends State<LivePage>
                                     IconButton(
                                         onPressed: () {
                                           ZegoUIKit.instance.turnMicrophoneOn(
-                                              !controller.isMicroPhoneOn.value);
+                                              !controller.isMicroPhoneOn.value,muteMode: true);
                                           controller.isMicroPhoneOn.value =
                                               !controller.isMicroPhoneOn.value;
                                         },
@@ -878,7 +879,6 @@ class LivePageState extends State<LivePage>
                                   controller.liveController.connect
                                       .removeCoHost(controller.coHostUser!);
                                   controller.removeFromWaitList();
-                                  controller.isCoHosting.value = false;
                                 });
                           },
                         );
@@ -988,33 +988,40 @@ class LivePageState extends State<LivePage>
           ),
         ),
         SizedBox(height: 12.h),
-        ClipOval(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
-            child: InkWell(
-              onTap: () {
-                showCupertinoModalPopup(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return GiftSheet(
-                        url: widget.astrologerImage,
-                        name: widget.astrologerName,
-                      );
-                    });
-              },
-              child: Container(
-                width: 46.w,
-                height: 46.h,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.white.withOpacity(.6)),
-                child: Center(child: Assets.images.giftLive.svg()),
+        Obx(
+          ()=> Visibility(
+            visible: (controller.allGiftList.value.giftDetails?.isNotEmpty ?? false),
+            child: ClipOval(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
+                child: InkWell(
+                  onTap: () {
+                    showCupertinoModalPopup(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return GiftSheet(
+                            url: widget.astrologerImage,
+                            name: widget.astrologerName,
+                          );
+                        });
+                  },
+                  child: Container(
+                    width: 46.w,
+                    height: 46.h,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.white.withOpacity(.6)),
+                    child: Center(child: Assets.images.giftLive.svg()),
+                  ),
+                ),
               ),
             ),
           ),
         ),
-        SizedBox(height: 12.h),
+        Visibility(
+          visible: (controller.allGiftList.value.giftDetails?.isNotEmpty ?? false),
+            child: SizedBox(height: 12.h)),
         StreamBuilder<DatabaseEvent>(
             stream: controller.database
                 .ref()

@@ -17,6 +17,8 @@ class SharedPreferenceService extends GetxService {
   static const userKey = "user";
   static const specialAbility = "specialAbility";
   static const loginImages = "loginImages";
+  static const baseAmazonUrl = "baseAmazonUrl";
+
   static const updatedBankDetails = "updatedBankDetails";
   static const baseImageUrl = "baseImageUrl";
   static const constantData = "constantData";
@@ -41,6 +43,14 @@ class SharedPreferenceService extends GetxService {
 
   Future<bool> setUserDetail(UserData userData) async {
     return await prefs!.setString(userKey, jsonEncode(userData));
+  }
+
+  String? getAmazonUrl() {
+    return prefs!.getString(baseAmazonUrl);
+  }
+
+  Future<bool> setAmazonUrl(String url) async {
+    return await prefs!.setString(baseAmazonUrl, url);
   }
 
   String? getToken() {

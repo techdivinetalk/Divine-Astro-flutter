@@ -121,8 +121,8 @@ class Manglik {
   List<String>? manglikCancelRule;
   bool? isMarsManglikCancelled;
   String? manglikStatus;
-  String? percentageManglikPresent;
-  String? percentageManglikAfterCancellation;
+  int? percentageManglikPresent;
+  int? percentageManglikAfterCancellation;
   String? manglikReport;
   bool? isPresent;
 
@@ -142,8 +142,8 @@ class Manglik {
     manglikCancelRule: json["manglik_cancel_rule"] == null ? [] : List<String>.from(json["manglik_cancel_rule"]!.map((x) => x)),
     isMarsManglikCancelled: json["is_mars_manglik_cancelled"],
     manglikStatus: json["manglik_status"],
-    percentageManglikPresent: json["percentage_manglik_present"].toString(),
-    percentageManglikAfterCancellation: json["percentage_manglik_after_cancellation"].toString(),
+    percentageManglikPresent: json["percentage_manglik_present"],
+    percentageManglikAfterCancellation: json["percentage_manglik_after_cancellation"],
     manglikReport: json["manglik_report"],
     isPresent: json["is_present"],
   );

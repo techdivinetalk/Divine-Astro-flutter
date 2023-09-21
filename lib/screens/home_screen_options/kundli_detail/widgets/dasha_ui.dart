@@ -115,7 +115,7 @@ class _DashaUIState extends State<DashaUI> {
                           : (controller.subDashaLevel.value == 1)
                           ? antarDashaWidget()
                           : mahaDashaWidget())
-                          : yoginiWidget(controller.dashaTableData),
+                          : yoginiWidget(),
                     ),
                   ),
                   // Obx(
@@ -1355,13 +1355,13 @@ class _DashaUIState extends State<DashaUI> {
   }
 
   //yogini Data
-  Widget yoginiWidget(Rx<DashaChartDataModel> dashaTableData) {
+  Widget yoginiWidget() {
     return GetBuilder<KundliDetailController>(builder: (controller) {
       return AnimatedCrossFade(
         duration: const Duration(milliseconds: 200),
-        crossFadeState: controller.chalitChart.value.data?.svg == null
+        crossFadeState: controller.dashaTableData.value.data?.yogini == null
             ? CrossFadeState.showSecond
-            : CrossFadeState.showSecond,
+            : CrossFadeState.showFirst,
         secondChild: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
@@ -1387,7 +1387,7 @@ class _DashaUIState extends State<DashaUI> {
                       width: 1, color: Colors.grey, style: BorderStyle.solid),
                 ),
                 children: List.generate(
-                    dashaTableData.value.data?.yogini?.length ?? 0 + 1,
+                    controller.dashaTableData.value.data?.yogini?.length ?? 0 + 1,
                         (index) {
                       if (index == 0) {
                         return TableRow(children: [
@@ -1475,7 +1475,7 @@ class _DashaUIState extends State<DashaUI> {
                         ]);
                       }
                       Yogini? yoginiData =
-                      dashaTableData.value.data?.yogini?[index];
+                      controller.dashaTableData.value.data?.yogini?[index];
                       return TableRow(children: [
                         Padding(
                           padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
@@ -1526,20 +1526,20 @@ class _DashaUIState extends State<DashaUI> {
                         ),
                       ]);
                     }).toList()),
-            SizedBox(
-              height: 20.h,
-            ),
-            Text(
-              "rashiChart".tr,
-              style:
-              AppTextStyle.textStyle16(fontColor: AppColors.appYellowColour),
-            ),
-            SizedBox(
-              height: 15.h,
-            ),
-            SvgPicture.string(
-              controller.lagnaChart.value.data?.svg ?? '',
-            ),
+            // SizedBox(
+            //   height: 20.h,
+            // ),
+            // Text(
+            //   "rashiChart".tr,
+            //   style:
+            //   AppTextStyle.textStyle16(fontColor: AppColors.appYellowColour),
+            // ),
+            // SizedBox(
+            //   height: 15.h,
+            // ),
+            // SvgPicture.string(
+            //   controller.lagnaChart.value.data?.svg ?? '',
+            // ),
             SizedBox(
               height: 20.h,
             ),

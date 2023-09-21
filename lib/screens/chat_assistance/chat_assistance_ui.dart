@@ -9,6 +9,7 @@ import '../../common/appbar.dart';
 import '../../common/colors.dart';
 
 import '../../gen/assets.gen.dart';
+import '../live_page/constant.dart';
 import '../side_menu/side_menu_ui.dart';
 import 'chat_assistance_controller.dart';
 
@@ -46,7 +47,7 @@ class ChatAssistanceTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        Get.toNamed(RouteName.chatMessageUI, arguments: true);
+        Get.toNamed(RouteName.chatMessageUI, arguments: astroChatWatcher.value);
       },
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(50.r),

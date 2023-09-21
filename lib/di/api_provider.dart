@@ -18,6 +18,7 @@ class ApiProvider {
   static const String version = 'v7';
   static const String socketUrl = "http://13.127.116.89:4000";
   final String baseUrl = "https://wakanda-api.divinetalk.live/admin/$version/";
+  //final String baseUrl = "http://13.235.46.27/admin/$version/";
 
   //Socket Event
   final String deleteSession = "deleteSession";
@@ -102,7 +103,7 @@ class ApiProvider {
   final String initChat = "initChat";
   final String initChatResponse = "initChatResponse";
   final String chatType = "chatType";
-  final String chartTypeResponse = "chartTypeResponse";
+  final String chatTypeResponse = "chatTypeResponse";
   final String deleteChatSession = "deleteChatSession";
   final String deleteChatSessionResponse = "deleteChatSessionResponse";
 

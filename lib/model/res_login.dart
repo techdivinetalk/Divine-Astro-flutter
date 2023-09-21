@@ -89,7 +89,7 @@ class UserData {
   String? sessionId;
   int? callPreviousStatus;
   int? chatPreviousStatus;
-  double? retention;
+  num? retention;
   String? premium;
   List<AstrologerSpeciality>? astrologerSpeciality;
   String? mobileNumber;
@@ -324,7 +324,8 @@ class UserData {
       data['astro_cat_pivot'] = astroCatPivot!.map((v) => v.toJson()).toList();
     }
     if (astrologerSpeciality != null) {
-      data['astro_speciality_pivot'] = astrologerSpeciality!.map((v) => v.toJson()).toList();
+      data['astro_speciality_pivot'] =
+          astrologerSpeciality!.map((v) => v.toJson()).toList();
     }
     // if (astroSpecialityPivot != null) {
     //   data['astro_speciality_pivot'] =

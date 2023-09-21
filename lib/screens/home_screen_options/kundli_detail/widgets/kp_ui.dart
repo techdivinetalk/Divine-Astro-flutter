@@ -56,11 +56,16 @@ class KpUI extends StatelessWidget {
                     SizedBox(
                       height: 15.h,
                     ),
-                    planetsWidget(controller.kpTableData),
+
+                    Visibility(
+                        visible: (controller.kpTableData.value.data?.planets?.isNotEmpty ?? false),
+                        child: planetsWidget(controller.kpTableData)),
                     SizedBox(
                       height: 15.h,
                     ),
-                    cuspsWidget(controller.kpTableData),
+                    Visibility(
+                        visible: (controller.kpTableData.value.data?.cusps?.isNotEmpty ?? false),
+                        child: cuspsWidget(controller.kpTableData)),
                   ],
                 ),
               ),

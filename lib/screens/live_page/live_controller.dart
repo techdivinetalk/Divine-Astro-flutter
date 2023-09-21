@@ -20,6 +20,7 @@ import '../../common/co-host_request.dart';
 import '../../common/waitlist_sheet.dart';
 import '../../di/api_provider.dart';
 import '../../di/shared_preference_service.dart';
+import '../../model/leader_board/gift_list_model.dart';
 import '../../model/leader_board/live_star_user_model.dart';
 import '../../model/leader_board/user_addition_leader_board_model.dart';
 import '../../model/res_blocked_customers.dart';
@@ -113,13 +114,17 @@ class LiveController extends GetxController {
   String strDigits(int n) => n.toString().padLeft(2, '0');
   RxString hour = "".obs, min = "".obs, sec = "".obs;
   Duration duration1 = Duration.zero;
+
   startTimer() {
     countdownTimer?.cancel();
     countdownTimer = null;
-    duration1 = intToTimeLeft(time);//time
+    duration1 = intToTimeLeft(time); //time
+    if (duration1.inHours > 3) {
+      duration1 = Duration(hours: 4);
+    }
     countdownTimer ??= Timer.periodic(const Duration(seconds: 1), (timer) {
       const reduceSecondsBy = 1;
-      if(duration1.inSeconds > 0){
+      if (duration1.inSeconds > 0) {
         duration1 = Duration(seconds: duration1.inSeconds - reduceSecondsBy);
         if (duration1.inSeconds <= 0) {
           duration1 = Duration.zero;
@@ -135,7 +140,7 @@ class LiveController extends GetxController {
           min.value = strDigits(duration1.inMinutes.remainder(60));
           sec.value = strDigits(duration1.inSeconds.remainder(60));
         }
-      }else{
+      } else {
         duration1 = Duration.zero;
         countdownTimer?.cancel();
         countdownTimer = null;
@@ -178,10 +183,21 @@ class LiveController extends GetxController {
         {"sessionId": astroId.toString(), "socketId": socket?.id ?? ''});
   }
 
-  Rx<UserAdditionInLeaderboardModel> leaderBoard =
-      UserAdditionInLeaderboardModel().obs;
+  Rx<UserAdditionInLeaderboardModel> leaderBoard = UserAdditionInLeaderboardModel().obs;
+  Rx<GiftListModelClass> allGiftList = GiftListModelClass().obs;
   var liveStar = {}.obs;
   var showLiveStar = true.obs;
+  RxInt giftTotalPrice = RxInt(0);
+
+  getTotalGiftPrice() {
+    int localPrice = 0;
+    allGiftList.value.giftDetails?.forEach((element) {
+      localPrice += element.price ?? 0;
+    });
+    giftTotalPrice.value = localPrice;
+    print("LocalPrice--> ${localPrice.toString()}");
+    return localPrice;
+  }
 
   void connectSocket() {
     socket = io(
@@ -200,7 +216,8 @@ class LiveController extends GetxController {
       });
 
       socket?.on(ApiProvider().userGiftResponse, (data) {
-        log("userGiftResponse=> $data");
+        log("userGiftResponse=> ${jsonEncode(data)}");
+        allGiftList.value = giftListModelClassFromJson(jsonEncode(data));
         fetchTop5UsersRequest();
         liveStarUserRequest();
       });
@@ -213,14 +230,16 @@ class LiveController extends GetxController {
       socket?.on(ApiProvider().liveStarResponse, (data) {
         log("liveStarResponse=> ${jsonEncode(data)}");
         var value = liveStarUserModelFromJson(jsonEncode(data));
-        showLiveStar.value = true;
-        liveStar.value = {
-          "name": value.users?[0].userName,
-          "image": value.users?[0].avatar.toString()
-        };
-        Future.delayed(const Duration(seconds: 20)).then((value) {
-          showLiveStar.value = false;
-        });
+        if (value.users != null && value.users!.isNotEmpty) {
+          showLiveStar.value = true;
+          liveStar.value = {
+            "name": value.users?[0].userName,
+            "image": value.users?[0].avatar.toString()
+          };
+          Future.delayed(const Duration(seconds: 20)).then((value) {
+            showLiveStar.value = false;
+          });
+        }
       });
 
       //Response event for top 5 user
@@ -278,6 +297,7 @@ class LiveController extends GetxController {
       ResBlockedCustomers response =
           await userRepository.blockUnblockCustomer(params);
       database.ref().child("live/$astroId/blockUser/$customerId/").remove();
+      blockIds.remove(customerId);
       showDialog(
           context: Get.context!,
           builder: (builder) {
@@ -288,7 +308,7 @@ class LiveController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
   }
@@ -307,6 +327,7 @@ class LiveController extends GetxController {
           customerId: {"id": customerId, "name": name}
         }
       });
+      blockIds.add(customerId);
       //getBlockedCustomerList();
       showDialog(
           context: Get.context!,
@@ -317,7 +338,7 @@ class LiveController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
   }
@@ -335,6 +356,7 @@ class LiveController extends GetxController {
           dialogOpen = true;
           return WaitList(
             data: data.children,
+            shouldClose: true,
             astroId: astroId,
             showNext: true,
             onAccept: (String id, String name) {
@@ -370,6 +392,7 @@ class LiveController extends GetxController {
               builder: (BuildContext context) {
                 return WaitList(
                   data: waitList.children,
+                  shouldClose: false,
                   astroId: astroId,
                   showNext: true,
                   onAccept: (String id, String name) {
@@ -425,7 +448,9 @@ class LiveController extends GetxController {
   }
 
   stopStream(String id) {
-    endCall();
+    if(isCoHosting.value){
+      endCall();
+    }
     database.ref().child("live/$id/callType").remove();
     database.ref().child("live/$id/callStatus").remove();
     database.ref().child("live/$id").remove();
@@ -439,10 +464,10 @@ class LiveController extends GetxController {
   setAvailibility(String id, bool available) {
     database.ref().child("live/$id").update({"isAvailable": available});
     database.ref().child("live/$id/coHostUser").onValue.listen((event) async {
-      if(event.snapshot.value != null){
+      if (event.snapshot.value != null) {
         final user = event.snapshot.value as String? ?? "";
         if (user.isEmpty) {
-          if(isCoHosting.value){
+          if (isCoHosting.value || countdownTimer != null) {
             isCoHosting.value = false;
             countdownTimer?.cancel();
             countdownTimer = null;
@@ -457,6 +482,7 @@ class LiveController extends GetxController {
             time = user["duration"];
             orderId = user["order_id"];
             typeOfCall = user["callType"];
+            videoConfig(typeOfCall);
             setVisibilityCoHostAudio(typeOfCall);
             setVisibilityCoHostVideo(typeOfCall);
           }
@@ -502,6 +528,34 @@ class LiveController extends GetxController {
     };
   }
 
+  videoConfig(String type) {
+    hostConfig.audioVideoViewConfig.visible = (
+      ZegoUIKitUser localUser,
+      ZegoLiveStreamingRole localRole,
+      ZegoUIKitUser targetUser,
+      ZegoLiveStreamingRole targetUserRole,
+    ) {
+      if (type == "private" || type == "audio") {
+        /// private or audio call type, pure audio mode
+        return ZegoLiveStreamingRole.host == targetUserRole;
+        //return false;
+      }
+      if (ZegoLiveStreamingRole.host == localRole) {
+        /// host can see all user's view
+        return true;
+      }
+
+      /// comment below if you want the co-host hide their own audio-video view.
+      if (localUser.id == targetUser.id) {
+        /// local view
+        return true;
+      }
+
+      /// if user is a co-host, only show host's audio-video view
+      return targetUserRole == ZegoLiveStreamingRole.host;
+    };
+  }
+
   setVisibilityCoHostAudio(String type) {
     hostConfig.audioVideoViewConfig.playCoHostAudio = (
       ZegoUIKitUser localUser,
@@ -538,7 +592,6 @@ class LiveController extends GetxController {
     Future.delayed(const Duration(seconds: 2)).then((value) async {
       final response = await userRepository.endCall(json);
     });
-
   }
 
   Duration intToTimeLeft(int value) {
@@ -552,6 +605,5 @@ class LiveController extends GetxController {
 
     String result = "$h:$m:$s";
     return Duration(seconds: value);
-    return Duration(hours: h, minutes: m, seconds: s);
   }
 }
