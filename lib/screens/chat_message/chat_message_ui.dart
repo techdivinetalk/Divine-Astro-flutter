@@ -5,14 +5,12 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:badges/badges.dart' as badges;
 import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 
 import '../../common/app_textstyle.dart';
 import '../../common/common_functions.dart';
@@ -28,45 +26,16 @@ class ChatMessageUI extends GetView<ChatMessageController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // appBar: AppBar(
-        //   backgroundColor: AppColors.lightYellow,
-        //   centerTitle: false,
-        //   title: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: [
-        //       Row(
-        //         children: [
-        //           ClipRRect(
-        //             borderRadius: BorderRadius.circular(50.r),
-        //             child: SizedBox(
-        //               height: 32.w,
-        //               width: 32.w,
-        //               child: Obx(
-        //                 () => CachedNetworkPhoto(
-        //                   url: controller.profileImage.value,
-        //                 ),
-        //               ),
-        //             ),
-        //           ),
-        //           SizedBox(width: 15.w),
-        //           Obx(
-        //             () => Text(
-        //               controller.customerName.value,
-        //               style: AppTextStyle.textStyle16(
-        //                   fontWeight: FontWeight.w500,
-        //                   fontColor: AppColors.brownColour),
-        //             ),
-        //           ),
-        //         ],
-        //       ),
-        //     ],
-        //   ),
-        // ),
         body: GetBuilder<ChatMessageController>(builder: (controller) {
       return Stack(
         children: [
-          Assets.images.bgChatWallpaper.image(
-              width: MediaQuery.of(context).size.width, fit: BoxFit.fitWidth),
+          GestureDetector(
+            onTap: () {
+              controller.isEmojiShowing.value = false;
+            },
+            child: Assets.images.bgChatWallpaper.image(
+                width: MediaQuery.of(context).size.width, fit: BoxFit.fitWidth),
+          ),
           Column(
             children: [
               AstrologerChatAppBar(),
@@ -152,9 +121,9 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                                           ],
                                         ),
                                       ),
-                                      // if (index ==
-                                      //     (controller.chatMessages.length - 1))
-                                      //   typingWidget()
+                                      if (index ==
+                                          (controller.chatMessages.length - 1))
+                                        typingWidget()
                                     ],
                                   );
                                 },
@@ -171,20 +140,12 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                                 controller.scrollToBottomFunc();
                                 controller.updateReadMessageStatus();
                               },
-                              child: badges.Badge(
-                                showBadge: controller.unreadMsgCount.value > 0,
-                                badgeStyle: const badges.BadgeStyle(
-                                  badgeColor: AppColors.appYellowColour,
-                                ),
-                                badgeContent: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                      "${controller.unreadMsgCount.value}"),
-                                ),
-                                child: Icon(
-                                    Icons.arrow_drop_down_circle_outlined,
-                                    color: AppColors.appYellowColour,
-                                    size: 50.h),
+                              child: Badge(
+                                backgroundColor: AppColors.appYellowColour,
+                                isLabelVisible: true,
+                                padding: EdgeInsets.symmetric(horizontal: 6.w),
+                                child:
+                                    Text("${controller.unreadMsgCount.value}"),
                               ),
                             )
                           : const SizedBox()),
@@ -202,9 +163,15 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                     child: SizedBox(
                       height: 300,
                       child: EmojiPicker(
-                          // onEmojiSelected: (Category? category, Emoji emoji) {
-                          //   _onEmojiSelected(emoji);
-                          // },
+                          onEmojiSelected: (category, emoji) {
+                            controller.typingScrollController.hasClients
+                                ? controller.typingScrollController.animateTo(
+                                    controller.typingScrollController.position
+                                        .maxScrollExtent,
+                                    duration: const Duration(milliseconds: 100),
+                                    curve: Curves.easeOut)
+                                : null;
+                          },
                           onBackspacePressed: () {
                             _onBackspacePressed();
                           },
@@ -263,13 +230,17 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                       color: Colors.white,
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
-                    child: Assets.lottie.typingIndicator.lottie(
+                    child: Assets.images.icTyping.image(
                       width: 45,
                       height: 30,
-                      repeat: true,
-                      frameRate: FrameRate(120),
-                      animate: true,
                     ),
+                    // child: Assets.lottie.typingIndicator.lottie(
+                    //   width: 45,
+                    //   height: 30,
+                    //   repeat: true,
+                    //   frameRate: FrameRate(120),
+                    //   animate: true,
+                    // ),
                   )
                 : const SizedBox(),
           )),
@@ -301,17 +272,19 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                     child: TextFormField(
                       controller: controller.messageController,
                       keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.newline,
-                      maxLines: 1,
-                      // focusNode: controller.msgFocus,
+                      minLines: 1,
+                      maxLines: 3,
                       onTap: () {
-                        controller.userTypingSocket();
+                        controller.userTypingSocket(isTyping: true);
                         if (controller.isEmojiShowing.value) {
                           controller.isEmojiShowing.value = false;
                         }
                       },
-                      onTapOutside: (value) =>
-                          FocusScope.of(Get.context!).unfocus(),
+                      scrollController: controller.typingScrollController,
+                      onTapOutside: (value) {
+                        FocusScope.of(Get.context!).unfocus();
+                        controller.userTypingSocket(isTyping: false);
+                      },
                       decoration: InputDecoration(
                         hintText: "message".tr,
                         isDense: true,
@@ -322,9 +295,9 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                         hoverColor: AppColors.white,
                         prefixIcon: InkWell(
                           onTap: () async {
+                            FocusManager.instance.primaryFocus?.unfocus();
                             controller.isEmojiShowing.value =
                                 !controller.isEmojiShowing.value;
-                            FocusManager.instance.primaryFocus?.unfocus();
                           },
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(6.w, 5.h, 6.w, 8.h),
@@ -583,12 +556,12 @@ class ChatMessageUI extends GetView<ChatMessageController> {
   Widget kundliView({required ChatMessage chatDetail, required int index}) {
     return InkWell(
       onTap: () {
-        // divineSnackBar(data: "No details available");
         Get.toNamed(RouteName.kundliDetail, arguments: {
           "kundli_id": chatDetail.kundliId,
           'from_kundli': true,
           "birth_place": chatDetail.kundliPlace,
-          "gender": chatDetail.gender
+          "gender": chatDetail.gender,
+          "name": chatDetail.kundliName,
         });
         debugPrint("KundliId : ${chatDetail.kundliId}");
       },

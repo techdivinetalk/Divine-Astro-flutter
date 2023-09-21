@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../common/routes.dart';
-import '../../model/chat/res_common_chat_success.dart';
 
 class VideoCallPageController extends GetxController {
   RxBool muteValue = false.obs, videoValue = false.obs;

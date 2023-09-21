@@ -430,6 +430,10 @@ class $AssetsImagesGen {
   SvgGenImage get icTwoStar =>
       const SvgGenImage('assets/images/ic_twoStar.svg');
 
+  /// File path: assets/images/ic_typing.png
+  AssetGenImage get icTyping =>
+      const AssetGenImage('assets/images/ic_typing.png');
+
   /// File path: assets/images/ic_unlock.svg
   SvgGenImage get icUnlock => const SvgGenImage('assets/images/ic_unlock.svg');
 
@@ -636,6 +640,7 @@ class $AssetsImagesGen {
         icSwastika,
         icThreeStar,
         icTwoStar,
+        icTyping,
         icUnlock,
         icUnselectedPerfom,
         icUnselectedSuggest,

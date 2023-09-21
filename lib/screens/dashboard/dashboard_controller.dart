@@ -170,8 +170,13 @@ class DashboardController extends GetxController
         if (Get.isRegistered<ChatMessageController>()) {
           var chatRes = data as Map<String, dynamic>;
           var controller = Get.find<ChatMessageController>();
-          controller.isTyping.value =
-              int.parse(chatRes["userID"]) == controller.currentUserId.value;
+          if (int.parse(chatRes["userID"]) == controller.currentUserId.value) {
+            controller.isTyping.value =
+                chatRes["message"] == "Typing" ? true : false;
+          } else {
+            controller.isTyping.value = false;
+          }
+          debugPrint("Chat type => ${controller.isTyping.value}");
         }
       });
     });
