@@ -41,7 +41,6 @@ class DashboardController extends GetxController
   @override
   void onInit() async {
     super.onInit();
-    askPermission();
     var commonConstants = await userRepository.constantDetailsData();
     preferenceService.setConstantDetails(commonConstants);
     preferenceService

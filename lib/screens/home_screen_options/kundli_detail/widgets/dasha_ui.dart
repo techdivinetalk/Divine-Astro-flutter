@@ -1,7 +1,8 @@
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../common/app_textstyle.dart';
 import '../../../../common/colors.dart';
@@ -103,32 +104,21 @@ class _DashaUIState extends State<DashaUI> {
                     height: 30.h,
                   ),
                   Obx(
-                        () => AnimatedSwitcher(
+                    () => AnimatedSwitcher(
                       duration: const Duration(milliseconds: 200),
                       child: controller.isVimshottari.value == true
                           ? ((controller.subDashaLevel.value == 4)
-                          ? pranDashaWidget()
-                          : (controller.subDashaLevel.value == 3)
-                          ? sookshmaDashaWidget()
-                          : (controller.subDashaLevel.value == 2)
-                          ? pratyantarDashaWidget()
-                          : (controller.subDashaLevel.value == 1)
-                          ? antarDashaWidget()
-                          : mahaDashaWidget())
+                              ? pranDashaWidget()
+                              : (controller.subDashaLevel.value == 3)
+                                  ? sookshmaDashaWidget()
+                                  : (controller.subDashaLevel.value == 2)
+                                      ? pratyantarDashaWidget()
+                                      : (controller.subDashaLevel.value == 1)
+                                          ? antarDashaWidget()
+                                          : mahaDashaWidget())
                           : yoginiWidget(),
                     ),
                   ),
-                  // Obx(
-                  //       () => AnimatedSwitcher(
-                  //     duration: const Duration(milliseconds: 200),
-                  //     child: controller.isVimshottari.value == true
-                  //         ? controller.isSubDasha.value
-                  //         ? vimshottariSubWidget(
-                  //         controller.planetDataDetail)
-                  //         : vimshottariWidget(controller.dashaTableData)
-                  //         : yoginiWidget(controller.dashaTableData),
-                  //   ),
-                  // ),
                 ],
               ),
             )
@@ -138,8 +128,6 @@ class _DashaUIState extends State<DashaUI> {
     });
   }
 
-
-
   //maha Dasha Data
   Widget mahaDashaWidget() {
     // Rx<DashaChartDataModel> dashaTableData
@@ -147,13 +135,16 @@ class _DashaUIState extends State<DashaUI> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("mahadasha".tr,
-              style: AppTextStyle.textStyle16(
-                  fontWeight: FontWeight.w500,
-                  fontColor: AppColors.appYellowColour)),
-          SizedBox(
-            height: 15.h,
+          Row(
+            children: [
+              Text("mahadasha".tr,
+                  style: AppTextStyle.textStyle16(
+                      fontWeight: FontWeight.w500,
+                      fontColor: AppColors.appYellowColour)),
+              const SizedBox(height: 24),
+            ],
           ),
+          SizedBox(height: 15.h),
           Table(
               border: const TableBorder(
                 verticalInside: BorderSide(
@@ -165,7 +156,7 @@ class _DashaUIState extends State<DashaUI> {
                 if (index == 0) {
                   return TableRow(children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 19.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: Container(
                         height: 65.h,
                         width: 76.w,
@@ -248,7 +239,7 @@ class _DashaUIState extends State<DashaUI> {
                   ]);
                 }
                 Vimshottari? vimshottariData =
-                controller.dashaTableData.value.data?.vimshottari?[index];
+                    controller.dashaTableData.value.data?.vimshottari?[index];
                 return TableRow(children: [
                   GestureDetector(
                     onTap: () {
@@ -268,9 +259,7 @@ class _DashaUIState extends State<DashaUI> {
                       child: Text(
                         vimshottariData?.planet ?? "",
                         textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle10(
-                            fontColor: Colors.black,
-                            fontWeight: FontWeight.w400),
+                        style: AppTextStyle.textStyle12(),
                       ),
                     ),
                   ),
@@ -290,11 +279,9 @@ class _DashaUIState extends State<DashaUI> {
                     child: Padding(
                       padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
                       child: Text(
-                        "${vimshottariData?.start ?? 0}",
+                        getDashaFormattedDate(vimshottariData?.start),
                         textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle10(
-                            fontColor: Colors.black,
-                            fontWeight: FontWeight.w400),
+                        style: AppTextStyle.textStyle12(),
                       ),
                     ),
                   ),
@@ -320,9 +307,8 @@ class _DashaUIState extends State<DashaUI> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                vimshottariData?.end ?? "",
-                                style: AppTextStyle.textStyle12(
-                                    fontColor: Colors.black),
+                                getDashaFormattedDate(vimshottariData?.end),
+                                style: AppTextStyle.textStyle12(),
                               ),
                               const Icon(
                                 Icons.chevron_right,
@@ -357,8 +343,8 @@ class _DashaUIState extends State<DashaUI> {
           mainAxisSize: MainAxisSize.max,
           children: [
             SizedBox(height: kToolbarHeight.h * 2.5),
-            SizedBox(height: 10.h),
-            // const LoadingWidget(),
+            SizedBox(height: 10.h, width: double.maxFinite),
+            const LoadingWidget(),
           ],
         ),
         firstChild: Column(
@@ -372,14 +358,10 @@ class _DashaUIState extends State<DashaUI> {
                   },
                   child: Row(
                     children: [
-                      Text("Mahadasha",
+                      Text("mahadasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
                               fontColor: AppColors.appYellowColour)),
-                      // Text("(${controller?.planetDataDetail})",
-                      //     style: AppTextStyle.textStyle16(
-                      //         fontWeight: FontWeight.w500,
-                      //         fontColor: AppColors.appColorDark)),
                     ],
                   ),
                 ),
@@ -400,257 +382,7 @@ class _DashaUIState extends State<DashaUI> {
                 ),
                 children: List.generate(
                     controller.planetDataDetail.value.data?.length ?? 0 + 1,
-                        (index) {
-                      if (index == 0) {
-                        return TableRow(children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                            child: Container(
-                              height: 65.h,
-                              width: 76.w,
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black.withOpacity(0.2),
-                                      blurRadius: 3.0,
-                                      offset: const Offset(0.0, 3.0)),
-                                ],
-                                color: Colors.white,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "planet".tr,
-                                  style: AppTextStyle.textStyle14(
-                                      fontWeight: FontWeight.w500,
-                                      fontColor: AppColors.brownColour),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                            child: Container(
-                              height: 65.h,
-                              width: 76.w,
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black.withOpacity(0.2),
-                                      blurRadius: 3.0,
-                                      offset: const Offset(0.0, 3.0)),
-                                ],
-                                color: Colors.white,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "startDate".tr,
-                                  style: AppTextStyle.textStyle14(
-                                      fontWeight: FontWeight.w500,
-                                      fontColor: AppColors.brownColour),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                            child: Container(
-                              height: 65.h,
-                              width: 76.w,
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black.withOpacity(0.2),
-                                      blurRadius: 3.0,
-                                      offset: const Offset(0.0, 3.0)),
-                                ],
-                                color: Colors.white,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "endDate".tr,
-                                  style: AppTextStyle.textStyle14(
-                                      fontWeight: FontWeight.w500,
-                                      fontColor: AppColors.brownColour),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ]);
-                      }
-                      Vimshottari? vimshottariData = controller.dashaTableData.value.data?.vimshottari?[index];
-                      Datum? subModel = controller.planetDataDetail.value.data?[index];
-
-                      return TableRow(children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
-                          child: Text(
-                            subModel?.planet ?? "",
-                            textAlign: TextAlign.center,
-                            style: AppTextStyle.textStyle10(
-                                fontColor: Colors.black,
-                                fontWeight: FontWeight.w400),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
-                          child: Text(
-                            "${subModel?.start ?? 0}",
-                            textAlign: TextAlign.center,
-                            style: AppTextStyle.textStyle10(
-                                fontColor: Colors.black,
-                                fontWeight: FontWeight.w400),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  controller.subDashaLevel.value = 2;
-                                  controller.getPratyantarDashaApiList(
-                                    vimshottariData?.planet.toString() ?? '',
-                                    subModel?.planet.toString() ?? '',
-                                  );
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      subModel?.end ?? "",
-                                      style: AppTextStyle.textStyle12(
-                                          fontColor: Colors.black),
-                                    ),
-                                    const Icon(
-                                      Icons.chevron_right,
-                                      size: 12,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ]);
-                    }).toList()),
-            SizedBox(
-              height: 20.h,
-            ),
-            GestureDetector(
-              onTap: () {
-                controller.subDashaLevel.value = 0;
-              },
-              child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                      color: AppColors.lightYellow,
-                      borderRadius: BorderRadius.circular(30)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(14.0),
-                    child: Center(
-                        child: Text(
-                          "levelUp".tr,
-                          style: AppTextStyle.textStyle20(
-                              fontWeight: FontWeight.w600,
-                              fontColor: AppColors.brownColour),
-                        )),
-                  )),
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-          ],
-        ),
-      );
-    });
-  }
-
-  //Pratyantar Dasha  Data
-  Widget pratyantarDashaWidget() {
-    return GetBuilder<KundliDetailController>(builder: (controller) {
-      return AnimatedCrossFade(
-        duration: const Duration(milliseconds: 200),
-        crossFadeState: controller.pratyantarDataDetail.value.data == null
-            ? CrossFadeState.showSecond
-            : CrossFadeState.showFirst,
-        secondChild: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            SizedBox(height: kToolbarHeight.h * 2.5),
-            SizedBox(height: 10.h),
-            const LoadingWidget(),
-          ],
-        ),
-        firstChild: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Wrap(
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        controller.subDashaLevel.value = 0;
-                      },
-                      child: Row(
-                        children: [
-                          Text("Mahadasha",
-                              style: AppTextStyle.textStyle16(
-                                  fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.appYellowColour)),
-                          // Text("(${controller?.planetDataDetail})",
-                          //     style: AppTextStyle.textStyle16(
-                          //         fontWeight: FontWeight.w500,
-                          //         fontColor: AppColors.appColorDark)),
-                        ],
-                      ),
-                    ),
-                    const Icon(Icons.chevron_right),
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        controller.subDashaLevel.value = 1;
-                      },
-                      child: Text("antarDasha".tr,
-                          style: AppTextStyle.textStyle16(
-                              fontWeight: FontWeight.w500,
-                              fontColor: AppColors.appYellowColour)),
-                    ),
-                    const Icon(Icons.chevron_right),
-                  ],
-                ),
-                Text("PratyantarDasha",
-                    style: AppTextStyle.textStyle16(
-                        fontWeight: FontWeight.w500,
-                        fontColor: AppColors.appYellowColour)),
-              ],
-            ),
-            SizedBox(
-              height: 15.h,
-            ),
-            Table(
-                border: const TableBorder(
-                  verticalInside: BorderSide(
-                      width: 1, color: Colors.grey, style: BorderStyle.solid),
-                ),
-                children: List.generate(
-                    controller.pratyantarDataDetail.value.data?.length ?? 0 + 1, (index) {
+                    (index) {
                   if (index == 0) {
                     return TableRow(children: [
                       Padding(
@@ -736,28 +468,272 @@ class _DashaUIState extends State<DashaUI> {
                       ),
                     ]);
                   }
-                  Vimshottari? vimshottariData = controller.dashaTableData.value.data?.vimshottari?[index];
-                  Datum? subModel = controller.planetDataDetail.value.data?[index];
-                  pratyantarData? pratyantarModel = controller.pratyantarDataDetail.value.data?[index];
+                  Vimshottari? vimshottariData =
+                      controller.dashaTableData.value.data?.vimshottari?[index];
+                  Datum? subModel =
+                      controller.planetDataDetail.value.data?[index];
+
+                  return TableRow(children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+                      child: Text(
+                        subModel?.planet ?? "",
+                        textAlign: TextAlign.center,
+                        style: AppTextStyle.textStyle12(),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+                      child: Text(
+                        getDashaFormattedDate(subModel?.start),
+                        textAlign: TextAlign.center,
+                        style: AppTextStyle.textStyle12(),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              controller.subDashaLevel.value = 2;
+                              controller.getPratyantarDashaApiList(
+                                vimshottariData?.planet.toString() ?? '',
+                                subModel?.planet.toString() ?? '',
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    getDashaFormattedDate(subModel?.end),
+                                    style: AppTextStyle.textStyle12(),
+                                  ),
+                                  const Icon(
+                                    Icons.chevron_right,
+                                    size: 12,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]);
+                }).toList()),
+            SizedBox(
+              height: 20.h,
+            ),
+            GestureDetector(
+              onTap: () {
+                controller.subDashaLevel.value = 0;
+              },
+              child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      color: AppColors.lightYellow,
+                      borderRadius: BorderRadius.circular(30)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(14.0),
+                    child: Center(
+                        child: Text(
+                      "levelUp".tr,
+                      style: AppTextStyle.textStyle20(
+                          fontWeight: FontWeight.w600,
+                          fontColor: AppColors.brownColour),
+                    )),
+                  )),
+            ),
+            SizedBox(
+              height: 20.h,
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  //Pratyantar Dasha  Data
+  Widget pratyantarDashaWidget() {
+    return GetBuilder<KundliDetailController>(builder: (controller) {
+      return AnimatedCrossFade(
+        duration: const Duration(milliseconds: 200),
+        crossFadeState: controller.pratyantarDataDetail.value.data == null
+            ? CrossFadeState.showSecond
+            : CrossFadeState.showFirst,
+        secondChild: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            SizedBox(height: kToolbarHeight.h * 2.5),
+            SizedBox(height: 10.h, width: double.maxFinite),
+            const LoadingWidget(),
+          ],
+        ),
+        firstChild: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Wrap(
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        controller.subDashaLevel.value = 0;
+                      },
+                      child: Row(
+                        children: [
+                          Text("mahadasha".tr,
+                              style: AppTextStyle.textStyle16(
+                                  fontWeight: FontWeight.w500,
+                                  fontColor: AppColors.appYellowColour)),
+                        ],
+                      ),
+                    ),
+                    const Icon(Icons.chevron_right),
+                  ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        controller.subDashaLevel.value = 1;
+                      },
+                      child: Text("antarDasha".tr,
+                          style: AppTextStyle.textStyle16(
+                              fontWeight: FontWeight.w500,
+                              fontColor: AppColors.appYellowColour)),
+                    ),
+                    const Icon(Icons.chevron_right),
+                  ],
+                ),
+                Text("Pratyantar Dasha",
+                    style: AppTextStyle.textStyle16(
+                        fontWeight: FontWeight.w500,
+                        fontColor: AppColors.appYellowColour)),
+              ],
+            ),
+            SizedBox(height: 15.h),
+            Table(
+                border: const TableBorder(
+                  verticalInside: BorderSide(
+                      width: 1, color: Colors.grey, style: BorderStyle.solid),
+                ),
+                children: List.generate(
+                    controller.pratyantarDataDetail.value.data?.length ?? 0 + 1,
+                    (index) {
+                  if (index == 0) {
+                    return TableRow(children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Container(
+                          height: 65.h,
+                          width: 76.w,
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 3.0,
+                                  offset: const Offset(0.0, 3.0)),
+                            ],
+                            color: Colors.white,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "planet".tr,
+                              style: AppTextStyle.textStyle14(
+                                  fontWeight: FontWeight.w500,
+                                  fontColor: AppColors.brownColour),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Container(
+                          height: 65.h,
+                          width: 76.w,
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 3.0,
+                                  offset: const Offset(0.0, 3.0)),
+                            ],
+                            color: Colors.white,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "startDate".tr,
+                              style: AppTextStyle.textStyle14(
+                                  fontWeight: FontWeight.w500,
+                                  fontColor: AppColors.brownColour),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Container(
+                          height: 65.h,
+                          width: 76.w,
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 3.0,
+                                  offset: const Offset(0.0, 3.0)),
+                            ],
+                            color: Colors.white,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "endDate".tr,
+                              style: AppTextStyle.textStyle14(
+                                  fontWeight: FontWeight.w500,
+                                  fontColor: AppColors.brownColour),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]);
+                  }
+                  Vimshottari? vimshottariData =
+                      controller.dashaTableData.value.data?.vimshottari?[index];
+                  Datum? subModel =
+                      controller.planetDataDetail.value.data?[index];
+                  pratyantarData? pratyantarModel =
+                      controller.pratyantarDataDetail.value.data?[index];
                   return TableRow(children: [
                     Padding(
                       padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
                       child: Text(
                         pratyantarModel?.planet ?? "",
                         textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle10(
-                            fontColor: Colors.black,
-                            fontWeight: FontWeight.w400),
+                        style: AppTextStyle.textStyle12(),
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
                       child: Text(
-                        "${pratyantarModel?.start ?? 0}",
+                        getDashaFormattedDate(pratyantarModel?.start),
                         textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle10(
-                            fontColor: Colors.black,
-                            fontWeight: FontWeight.w400),
+                        style: AppTextStyle.textStyle12(),
                       ),
                     ),
                     Padding(
@@ -771,16 +747,14 @@ class _DashaUIState extends State<DashaUI> {
                               controller.getSookshmaDashaApiList(
                                   vimshottariData?.planet.toString() ?? '',
                                   subModel?.planet.toString() ?? '',
-                                  pratyantarModel?.planet.toString()??''
-                              );
+                                  pratyantarModel?.planet.toString() ?? '');
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  pratyantarModel?.end ?? "",
-                                  style: AppTextStyle.textStyle12(
-                                      fontColor: Colors.black),
+                                  getDashaFormattedDate(pratyantarModel?.end),
+                                  style: AppTextStyle.textStyle12(),
                                 ),
                                 const Icon(
                                   Icons.chevron_right,
@@ -810,16 +784,14 @@ class _DashaUIState extends State<DashaUI> {
                     padding: const EdgeInsets.all(14.0),
                     child: Center(
                         child: Text(
-                          "levelUp".tr,
-                          style: AppTextStyle.textStyle20(
-                              fontWeight: FontWeight.w600,
-                              fontColor: AppColors.brownColour),
-                        )),
+                      "levelUp".tr,
+                      style: AppTextStyle.textStyle20(
+                          fontWeight: FontWeight.w600,
+                          fontColor: AppColors.brownColour),
+                    )),
                   )),
             ),
-            SizedBox(
-              height: 20.h,
-            ),
+            SizedBox(height: 20.h),
           ],
         ),
       );
@@ -839,7 +811,7 @@ class _DashaUIState extends State<DashaUI> {
           mainAxisSize: MainAxisSize.max,
           children: [
             SizedBox(height: kToolbarHeight.h * 2.5),
-            SizedBox(height: 10.h),
+            SizedBox(height: 10.h, width: double.maxFinite),
             const LoadingWidget(),
           ],
         ),
@@ -857,14 +829,10 @@ class _DashaUIState extends State<DashaUI> {
                       },
                       child: Row(
                         children: [
-                          Text("Mahadasha",
+                          Text("mahadasha".tr,
                               style: AppTextStyle.textStyle16(
                                   fontWeight: FontWeight.w500,
                                   fontColor: AppColors.appYellowColour)),
-                          // Text("(${controller?.planetDataDetail})",
-                          //     style: AppTextStyle.textStyle16(
-                          //         fontWeight: FontWeight.w500,
-                          //         fontColor: AppColors.appColorDark)),
                         ],
                       ),
                     ),
@@ -893,7 +861,7 @@ class _DashaUIState extends State<DashaUI> {
                       onTap: () {
                         controller.subDashaLevel.value = 2;
                       },
-                      child: Text("PratyantarDasha".tr,
+                      child: Text("Pratyantar Dasha",
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
                               fontColor: AppColors.appYellowColour)),
@@ -901,7 +869,7 @@ class _DashaUIState extends State<DashaUI> {
                     const Icon(Icons.chevron_right),
                   ],
                 ),
-                Text("Sookshma",
+                Text("sookshmaDasha".tr,
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w500,
                         fontColor: AppColors.appYellowColour)),
@@ -916,7 +884,8 @@ class _DashaUIState extends State<DashaUI> {
                       width: 1, color: Colors.grey, style: BorderStyle.solid),
                 ),
                 children: List.generate(
-                    controller.sookshmaDataDetail.value.data?.length ?? 0 + 1, (index) {
+                    controller.sookshmaDataDetail.value.data?.length ?? 0 + 1,
+                    (index) {
                   if (index == 0) {
                     return TableRow(children: [
                       Padding(
@@ -1002,29 +971,29 @@ class _DashaUIState extends State<DashaUI> {
                       ),
                     ]);
                   }
-                  Vimshottari? vimshottariData = controller.dashaTableData.value.data?.vimshottari?[index];
-                  Datum? subModel = controller.planetDataDetail.value.data?[index];
-                  pratyantarData? pratyantarModel = controller.pratyantarDataDetail.value.data?[index];
-                  SookshmaData? sookshmaData = controller.sookshmaDataDetail.value.data?[index];
+                  Vimshottari? vimshottariData =
+                      controller.dashaTableData.value.data?.vimshottari?[index];
+                  Datum? subModel =
+                      controller.planetDataDetail.value.data?[index];
+                  pratyantarData? pratyantarModel =
+                      controller.pratyantarDataDetail.value.data?[index];
+                  SookshmaData? sookshmaData =
+                      controller.sookshmaDataDetail.value.data?[index];
                   return TableRow(children: [
                     Padding(
                       padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
                       child: Text(
                         sookshmaData?.planet ?? "",
                         textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle10(
-                            fontColor: Colors.black,
-                            fontWeight: FontWeight.w400),
+                        style: AppTextStyle.textStyle12(),
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
                       child: Text(
-                        "${sookshmaData?.start ?? 0}",
+                        getDashaFormattedDate(sookshmaData?.start),
                         textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle10(
-                            fontColor: Colors.black,
-                            fontWeight: FontWeight.w400),
+                        style: AppTextStyle.textStyle12(),
                       ),
                     ),
                     Padding(
@@ -1038,17 +1007,15 @@ class _DashaUIState extends State<DashaUI> {
                               controller.getPranDashaApiList(
                                   vimshottariData?.planet.toString() ?? '',
                                   subModel?.planet.toString() ?? '',
-                                  pratyantarModel?.planet.toString()??'',
-                                  sookshmaData?.planet.toString()??''
-                              );
+                                  pratyantarModel?.planet.toString() ?? '',
+                                  sookshmaData?.planet.toString() ?? '');
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  sookshmaData?.end ?? "",
-                                  style: AppTextStyle.textStyle12(
-                                      fontColor: Colors.black),
+                                  getDashaFormattedDate(sookshmaData?.end),
+                                  style: AppTextStyle.textStyle12(),
                                 ),
                                 const Icon(
                                   Icons.chevron_right,
@@ -1078,11 +1045,11 @@ class _DashaUIState extends State<DashaUI> {
                     padding: const EdgeInsets.all(14.0),
                     child: Center(
                         child: Text(
-                          "levelUp".tr,
-                          style: AppTextStyle.textStyle20(
-                              fontWeight: FontWeight.w600,
-                              fontColor: AppColors.brownColour),
-                        )),
+                      "levelUp".tr,
+                      style: AppTextStyle.textStyle20(
+                          fontWeight: FontWeight.w600,
+                          fontColor: AppColors.brownColour),
+                    )),
                   )),
             ),
             SizedBox(
@@ -1107,7 +1074,7 @@ class _DashaUIState extends State<DashaUI> {
           mainAxisSize: MainAxisSize.max,
           children: [
             SizedBox(height: kToolbarHeight.h * 2.5),
-            SizedBox(height: 10.h),
+            SizedBox(height: 10.h, width: double.maxFinite),
             const LoadingWidget(),
           ],
         ),
@@ -1125,14 +1092,10 @@ class _DashaUIState extends State<DashaUI> {
                       },
                       child: Row(
                         children: [
-                          Text("Mahadasha",
+                          Text("mahadasha".tr,
                               style: AppTextStyle.textStyle16(
                                   fontWeight: FontWeight.w500,
                                   fontColor: AppColors.appYellowColour)),
-                          // Text("(${controller?.planetDataDetail})",
-                          //     style: AppTextStyle.textStyle16(
-                          //         fontWeight: FontWeight.w500,
-                          //         fontColor: AppColors.appColorDark)),
                         ],
                       ),
                     ),
@@ -1161,7 +1124,7 @@ class _DashaUIState extends State<DashaUI> {
                       onTap: () {
                         controller.subDashaLevel.value = 2;
                       },
-                      child: Text("PratyantarDasha".tr,
+                      child: Text("Pratyantar Dasha",
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
                               fontColor: AppColors.appYellowColour)),
@@ -1176,7 +1139,7 @@ class _DashaUIState extends State<DashaUI> {
                       onTap: () {
                         controller.subDashaLevel.value = 3;
                       },
-                      child: Text("Sookshma",
+                      child: Text("sookshmaDasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
                               fontColor: AppColors.appYellowColour)),
@@ -1184,7 +1147,7 @@ class _DashaUIState extends State<DashaUI> {
                     const Icon(Icons.chevron_right),
                   ],
                 ),
-                Text("Pran Dasha",
+                Text("pranDasha".tr,
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w500,
                         fontColor: AppColors.appYellowColour)),
@@ -1199,7 +1162,8 @@ class _DashaUIState extends State<DashaUI> {
                       width: 1, color: Colors.grey, style: BorderStyle.solid),
                 ),
                 children: List.generate(
-                    controller.pranDataDetail.value.data?.length ?? 0 + 1, (index) {
+                    controller.pranDataDetail.value.data?.length ?? 0 + 1,
+                    (index) {
                   if (index == 0) {
                     return TableRow(children: [
                       Padding(
@@ -1285,7 +1249,8 @@ class _DashaUIState extends State<DashaUI> {
                       ),
                     ]);
                   }
-                  PranDashaData? pranDashaData = controller.pranDataDetail.value.data?[index];
+                  PranDashaData? pranDashaData =
+                      controller.pranDataDetail.value.data?[index];
                   return TableRow(children: [
                     Padding(
                       padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
@@ -1300,11 +1265,9 @@ class _DashaUIState extends State<DashaUI> {
                     Padding(
                       padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
                       child: Text(
-                        "${pranDashaData?.start ?? 0}",
+                        getDashaFormattedDate(pranDashaData?.start),
                         textAlign: TextAlign.center,
-                        style: AppTextStyle.textStyle10(
-                            fontColor: Colors.black,
-                            fontWeight: FontWeight.w400),
+                        style: AppTextStyle.textStyle12(),
                       ),
                     ),
                     Padding(
@@ -1313,7 +1276,7 @@ class _DashaUIState extends State<DashaUI> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            pranDashaData?.end ?? "",
+                            getDashaFormattedDate(pranDashaData?.end),
                             style: AppTextStyle.textStyle12(
                                 fontColor: Colors.black),
                           ),
@@ -1338,11 +1301,11 @@ class _DashaUIState extends State<DashaUI> {
                     padding: const EdgeInsets.all(14.0),
                     child: Center(
                         child: Text(
-                          "levelUp".tr,
-                          style: AppTextStyle.textStyle20(
-                              fontWeight: FontWeight.w600,
-                              fontColor: AppColors.brownColour),
-                        )),
+                      "levelUp".tr,
+                      style: AppTextStyle.textStyle20(
+                          fontWeight: FontWeight.w600,
+                          fontColor: AppColors.brownColour),
+                    )),
                   )),
             ),
             SizedBox(
@@ -1387,145 +1350,140 @@ class _DashaUIState extends State<DashaUI> {
                       width: 1, color: Colors.grey, style: BorderStyle.solid),
                 ),
                 children: List.generate(
-                    controller.dashaTableData.value.data?.yogini?.length ?? 0 + 1,
-                        (index) {
-                      if (index == 0) {
-                        return TableRow(children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                            child: Container(
-                              height: 65.h,
-                              width: 76.w,
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black.withOpacity(0.2),
-                                      blurRadius: 3.0,
-                                      offset: const Offset(0.0, 3.0)),
-                                ],
-                                color: Colors.white,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "planet".tr,
-                                  style: AppTextStyle.textStyle14(
-                                      fontWeight: FontWeight.w500,
-                                      fontColor: AppColors.brownColour),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                            child: Container(
-                              height: 65.h,
-                              width: 76.w,
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black.withOpacity(0.2),
-                                      blurRadius: 3.0,
-                                      offset: const Offset(0.0, 3.0)),
-                                ],
-                                color: Colors.white,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "startDate".tr,
-                                  style: AppTextStyle.textStyle14(
-                                      fontWeight: FontWeight.w500,
-                                      fontColor: AppColors.brownColour),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                            child: Container(
-                              height: 65.h,
-                              width: 76.w,
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black.withOpacity(0.2),
-                                      blurRadius: 3.0,
-                                      offset: const Offset(0.0, 3.0)),
-                                ],
-                                color: Colors.white,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "endDate".tr,
-                                  style: AppTextStyle.textStyle14(
-                                      fontWeight: FontWeight.w500,
-                                      fontColor: AppColors.brownColour),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ]);
-                      }
-                      Yogini? yoginiData =
-                      controller.dashaTableData.value.data?.yogini?[index];
-                      return TableRow(children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
-                          child: Text(
-                            yoginiData?.dashaName ?? "",
-                            textAlign: TextAlign.center,
-                            style: AppTextStyle.textStyle10(
-                                fontColor: Colors.black,
-                                fontWeight: FontWeight.w400),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
-                          child: Text(
-                            "${yoginiData?.startDate ?? 0}",
-                            textAlign: TextAlign.center,
-                            style: AppTextStyle.textStyle10(
-                                fontColor: Colors.black,
-                                fontWeight: FontWeight.w400),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  // controller.isSubDasha.value = true;
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      yoginiData?.endDate ?? "",
-                                      style: AppTextStyle.textStyle12(
-                                          fontColor: Colors.black),
-                                    ),
-                                    const Icon(
-                                      Icons.chevron_right,
-                                      size: 12,
-                                    )
-                                  ],
-                                ),
-                              ),
+                    controller.dashaTableData.value.data?.yogini?.length ??
+                        0 + 1, (index) {
+                  if (index == 0) {
+                    return TableRow(children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Container(
+                          height: 65.h,
+                          width: 76.w,
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 3.0,
+                                  offset: const Offset(0.0, 3.0)),
                             ],
+                            color: Colors.white,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "planet".tr,
+                              style: AppTextStyle.textStyle14(
+                                  fontWeight: FontWeight.w500,
+                                  fontColor: AppColors.brownColour),
+                            ),
                           ),
                         ),
-                      ]);
-                    }).toList()),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Container(
+                          height: 65.h,
+                          width: 76.w,
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 3.0,
+                                  offset: const Offset(0.0, 3.0)),
+                            ],
+                            color: Colors.white,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "startDate".tr,
+                              style: AppTextStyle.textStyle14(
+                                  fontWeight: FontWeight.w500,
+                                  fontColor: AppColors.brownColour),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Container(
+                          height: 65.h,
+                          width: 76.w,
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 3.0,
+                                  offset: const Offset(0.0, 3.0)),
+                            ],
+                            color: Colors.white,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "endDate".tr,
+                              style: AppTextStyle.textStyle14(
+                                  fontWeight: FontWeight.w500,
+                                  fontColor: AppColors.brownColour),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]);
+                  }
+                  Yogini? yoginiData =
+                      controller.dashaTableData.value.data?.yogini?[index];
+                  return TableRow(children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+                      child: Text(
+                        yoginiData?.dashaName ?? "",
+                        textAlign: TextAlign.center,
+                        style: AppTextStyle.textStyle12(),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+                      child: Text(
+                        getDashaFormattedDate(yoginiData?.startDate),
+                        textAlign: TextAlign.center,
+                        style: AppTextStyle.textStyle12(),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              // controller.isSubDasha.value = true;
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  getDashaFormattedDate(yoginiData?.endDate),
+                                  style: AppTextStyle.textStyle12(),
+                                ),
+                                const Icon(
+                                  Icons.chevron_right,
+                                  size: 12,
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]);
+                }).toList()),
             // SizedBox(
             //   height: 20.h,
             // ),
@@ -1549,5 +1507,10 @@ class _DashaUIState extends State<DashaUI> {
     });
   }
 
-
+  getDashaFormattedDate(String? date) {
+    return date != null
+        ? Utils.dateToString(DateFormat("dd-MM-yyyy").parse(date),
+            format: "dd-MMM-yyyy")
+        : '';
+  }
 }

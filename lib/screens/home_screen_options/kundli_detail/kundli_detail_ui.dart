@@ -38,9 +38,7 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                       NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                   sliver: SliverAppBar(
                     leading: InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
+                      onTap: () => Get.back(),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8.0, right: 8),
                         child: Center(child: Assets.images.icLeftArrow.svg()),
@@ -120,8 +118,7 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                                 child: Tab(text: "navamansha".tr),
                               ),
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 30.w),
-                                child: Tab(text: "dosha".tr),
+                                padding: EdgeInsets.symmetric(horizontal: 30.w), child: Tab(text: "dosha".tr),
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 30.w),

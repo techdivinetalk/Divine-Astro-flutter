@@ -56,7 +56,7 @@ class ImportantNumbersController extends GetxController {
     if (contact.isGranted) {
       allContacts = await ContactsService.getContacts();
     } else {
-      divineSnackBar(data: AppString.contactPermissionRequired.tr);
+      divineSnackBar(data: 'contactPermissionRequired'.tr);
     }
   }
 

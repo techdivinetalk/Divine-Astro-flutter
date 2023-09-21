@@ -22,9 +22,9 @@ class KpUI extends StatelessWidget {
           SizedBox(height: kToolbarHeight.h * 2.5),
           SizedBox(height: 40.h),
           Obx(
-                ()=> AnimatedCrossFade(
+            () => AnimatedCrossFade(
               duration: const Duration(milliseconds: 200),
-              crossFadeState: controller.chalitChart.value.data?.svg == null
+              crossFadeState: controller.kpTableData.value.data == null
                   ? CrossFadeState.showSecond
                   : CrossFadeState.showFirst,
               secondChild: Column(
@@ -41,6 +41,15 @@ class KpUI extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 200),
+                      crossFadeState: controller.chalitChart.value.data?.svg == null
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst,
+                      secondChild: const SizedBox.shrink(),
+                      firstChild: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text("bhavChalitChart".tr,
                         style: AppTextStyle.textStyle20(
                             fontWeight: FontWeight.w500,
@@ -49,14 +58,10 @@ class KpUI extends StatelessWidget {
                     SvgPicture.string(
                       controller.chalitChart.value.data?.svg ?? '',
                     ),
-                    SizedBox(
-                      height: 15.h,
+                          SizedBox(height: 15.h),
+                        ],
                     ),
-                    // rulingPlanetsWidget(),
-                    SizedBox(
-                      height: 15.h,
                     ),
-
                     Visibility(
                         visible: (controller.kpTableData.value.data?.planets?.isNotEmpty ?? false),
                         child: planetsWidget(controller.kpTableData)),

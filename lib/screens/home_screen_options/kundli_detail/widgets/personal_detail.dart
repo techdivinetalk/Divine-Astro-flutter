@@ -27,7 +27,7 @@ class PersonalDetailUi extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
-              SizedBox(height: kToolbarHeight.h * 2.5),
+              SizedBox(height: kToolbarHeight.h * 4.5),
               SizedBox(height: 110.h),
               const LoadingWidget(),
             ],
@@ -36,6 +36,12 @@ class PersonalDetailUi extends StatelessWidget {
             children: [
               SizedBox(height: kToolbarHeight.h * 2.5),
               SizedBox(height: 40.h),
+              detailTile(
+                "name".tr,
+                controller.kundliParams.value.name == null
+                    ? ""
+                    : "${controller.kundliParams.value.name}" ?? '',
+              ),
               detailTile(
                 "birthDate".tr,
                 controller.birthDetails.value.data?.day == null
@@ -52,7 +58,7 @@ class PersonalDetailUi extends StatelessWidget {
                 "birthPlace".tr,
                 controller.kundliParams.value.location == null
                     ? ""
-                    : controller.kundliParams.value.location ?? "",
+                    : (controller.kundliParams.value.location ?? ''),
               ),
               detailTile(
                 "gan".tr,
