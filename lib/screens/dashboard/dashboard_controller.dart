@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:contacts_service/contacts_service.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
@@ -9,7 +10,6 @@ import 'package:divine_astrologer/screens/chat_message/chat_message_controller.d
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:contacts_service/contacts_service.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -173,8 +173,17 @@ class DashboardController extends GetxController
           if (int.parse(chatRes["userID"]) == controller.currentUserId.value) {
             controller.isTyping.value =
                 chatRes["message"] == "Typing" ? true : false;
-          } else {
-            controller.isTyping.value = false;
+            if ((controller.messgeScrollController.position.pixels ==
+                    controller
+                        .messgeScrollController.position.maxScrollExtent) &&
+                chatRes["message"] == "Typing") {
+              Future.delayed(const Duration(milliseconds: 500), () {
+                controller.messgeScrollController.animateTo(
+                    controller.messgeScrollController.position.maxScrollExtent,
+                    duration: const Duration(milliseconds: 100),
+                    curve: Curves.easeIn);
+              });
+            }
           }
           debugPrint("Chat type => ${controller.isTyping.value}");
         }

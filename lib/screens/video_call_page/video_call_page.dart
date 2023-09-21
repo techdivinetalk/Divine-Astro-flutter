@@ -85,10 +85,10 @@ class VideoCallPage extends GetView<VideoCallPageController> {
             ? Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 20.h),
+                  padding: EdgeInsets.symmetric(vertical: 17.h),
                   decoration: BoxDecoration(
-                      border: Border.all(width: 1),
-                      borderRadius: BorderRadius.circular(20)),
+                      border: Border.all(width: 2, color: AppColors.brownColour),
+                      borderRadius: BorderRadius.circular(100.r)),
                   child: Row(
                     children: [
                       Expanded(
@@ -108,14 +108,12 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                 ),
               )
             : Container(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 32.h),
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                 child: Row(
                   children: [
                     Expanded(
                       child: FilledButton(
-                        onPressed: () {
-                          controller.onAccept();
-                        },
+                        onPressed: () => controller.onAccept(),
                         style: FilledButton.styleFrom(
                           backgroundColor: AppColors.lightYellow,
                           padding: EdgeInsets.symmetric(vertical: 20.h),
