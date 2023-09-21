@@ -119,6 +119,7 @@ class KundliDetailController extends GetxController {
     }
     kundaliIdParms.addAll({"kundli_id": kundaliId});
     kundliParams.value = Params(
+      name: args['name'].toString(),
       location: args["birth_place"].toString(),
     );
     log("Kundli===>$kundaliId");
@@ -131,6 +132,7 @@ class KundliDetailController extends GetxController {
           Assets.images.icBoyKundli.svg(width: 87.w, height: 87.h);
     }
     kundliParams.value = Params(
+      name: args['params'].name,
       day: args['params'].day,
       month: args['params'].month,
       year: args['params'].year,

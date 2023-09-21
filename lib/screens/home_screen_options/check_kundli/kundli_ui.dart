@@ -322,6 +322,7 @@ class CheckYours extends GetView<KundliController> {
                             onPressed: () {
                               if (controller.yourFormKey.currentState!
                                   .validate()) {
+                                controller.yourParams.value.name = controller.yourNameController.text.trim();
                                 controller.submitDetails(
                                     controller.yourParams.value,
                                     controller.yourGender.value);
@@ -560,6 +561,7 @@ class CheckOther extends GetView<KundliController> {
                             onPressed: () {
                               if (controller.otherFormKey.currentState!
                                   .validate()) {
+                                controller.otherParams.value.name = controller.otherNameController.text.trim();
                                 controller.submitDetails(
                                     controller.otherParams.value,
                                     controller.otherGender.value);

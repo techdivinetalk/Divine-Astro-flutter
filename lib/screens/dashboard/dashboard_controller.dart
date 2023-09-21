@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:contacts_service/contacts_service.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
@@ -9,7 +10,6 @@ import 'package:divine_astrologer/screens/chat_message/chat_message_controller.d
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:contacts_service/contacts_service.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -41,7 +41,6 @@ class DashboardController extends GetxController
   @override
   void onInit() async {
     super.onInit();
-    askPermission();
     var commonConstants = await userRepository.constantDetailsData();
     preferenceService.setConstantDetails(commonConstants);
     preferenceService
