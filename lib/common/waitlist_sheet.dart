@@ -13,7 +13,7 @@ class WaitList extends StatelessWidget {
   FirebaseDatabase database = FirebaseDatabase.instance;
   String? astroId;
   final controller = Get.find<LiveController>();
-  bool? showNext = false,shouldClose = false;
+  bool? showNext = false,shouldClose = false,fromNextUser = false;
   Iterable<DataSnapshot> data = Iterable.empty();
 
   WaitList(
@@ -22,6 +22,7 @@ class WaitList extends StatelessWidget {
       this.astroId,
       this.showNext,
         this.shouldClose,
+        this.fromNextUser,
       required this.data})
       : super(key: key);
 
@@ -34,7 +35,7 @@ class WaitList extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              if (shouldClose == true) {
+              if(shouldClose!){
                 Get.back();
               }
             },
@@ -96,7 +97,7 @@ class WaitList extends StatelessWidget {
         SizedBox(
           height: 100.h,
           child: ListView.separated(
-            itemCount: data.length,
+            itemCount: fromNextUser! ? data.length -1 : data.length,
             shrinkWrap: true,
             padding: EdgeInsets.zero,
             itemBuilder: (context, index) {
@@ -141,7 +142,7 @@ class WaitList extends StatelessWidget {
   }
 
   Widget nextInLine() {
-    var item = data.toList().first;
+    var item = data.toList().last;
     var value = item.value as Map;
     return Column(
       mainAxisSize: MainAxisSize.min,

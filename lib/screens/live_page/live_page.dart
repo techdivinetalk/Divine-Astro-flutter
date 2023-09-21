@@ -1052,6 +1052,8 @@ class LivePageState extends State<LivePage>
                               builder: (BuildContext context) {
                                 return WaitList(
                                   showNext: false,
+                                  fromNextUser: false,
+                                  shouldClose: true,
                                   data: snapshot.data!.snapshot.children,
                                   astroId: widget.localUserID,
                                   onAccept: (id, name) {},
