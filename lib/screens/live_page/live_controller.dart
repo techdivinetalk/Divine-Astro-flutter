@@ -183,7 +183,8 @@ class LiveController extends GetxController {
         {"sessionId": astroId.toString(), "socketId": socket?.id ?? ''});
   }
 
-  Rx<UserAdditionInLeaderboardModel> leaderBoard = UserAdditionInLeaderboardModel().obs;
+  Rx<UserAdditionInLeaderboardModel> leaderBoard =
+      UserAdditionInLeaderboardModel().obs;
   Rx<GiftListModelClass> allGiftList = GiftListModelClass().obs;
   var liveStar = {}.obs;
   var showLiveStar = true.obs;
@@ -322,10 +323,8 @@ class LiveController extends GetxController {
     try {
       ResBlockedCustomers response =
           await userRepository.blockUnblockCustomer(params);
-      database.ref().child("live/$astroId").update({
-        "blockUser": {
-          customerId: {"id": customerId, "name": name}
-        }
+      database.ref().child("live/$astroId/blockUser").update({
+        customerId: {"id": customerId, "name": name}
       });
       blockIds.add(customerId);
       //getBlockedCustomerList();
@@ -448,7 +447,7 @@ class LiveController extends GetxController {
   }
 
   stopStream(String id) {
-    if(isCoHosting.value){
+    if (isCoHosting.value) {
       endCall();
     }
     database.ref().child("live/$id/callType").remove();
