@@ -63,6 +63,12 @@ void checkNotification(
   }
   if (notificationList.isNotEmpty) {
     notificationList.forEach((key, value) async {
+      int senderId = 0;
+      if (value["sender_id"] is String) {
+        senderId = int.parse(value["sender_id"]);
+      } else {
+        senderId = value["sender_id"];
+      }
       var newMessage = ChatMessage(
           id: int.parse(key),
           message: value["message"],
@@ -78,7 +84,7 @@ void checkNotification(
           kundliPlace: value["kundli_place"],
           downloadedPath: "",
           msgType: value["msgType"]);
-      var senderId = value["sender_id"];
+
       if (Get.currentRoute == RouteName.chatMessageUI) {
         var chatController = Get.find<ChatMessageController>();
         if (chatController.currentUserId.value == value["sender_id"] ||
@@ -144,7 +150,7 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
     orderId: newMessage.orderId,
     message: newMessage.message ?? "",
     receiverId: newMessage.receiverId!,
-    senderId: newMessage.senderId!,
+    senderId: newMessage.senderId,
     time: newMessage.time,
     type: type,
     msgType: newMessage.msgType,
