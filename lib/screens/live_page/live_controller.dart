@@ -183,7 +183,8 @@ class LiveController extends GetxController {
         {"sessionId": astroId.toString(), "socketId": socket?.id ?? ''});
   }
 
-  Rx<UserAdditionInLeaderboardModel> leaderBoard = UserAdditionInLeaderboardModel().obs;
+  Rx<UserAdditionInLeaderboardModel> leaderBoard =
+      UserAdditionInLeaderboardModel().obs;
   Rx<GiftListModelClass> allGiftList = GiftListModelClass().obs;
   var liveStar = {}.obs;
   var showLiveStar = true.obs;
@@ -322,10 +323,8 @@ class LiveController extends GetxController {
     try {
       ResBlockedCustomers response =
           await userRepository.blockUnblockCustomer(params);
-      database.ref().child("live/$astroId").update({
-        "blockUser": {
-          customerId: {"id": customerId, "name": name}
-        }
+      database.ref().child("live/$astroId/blockUser").update({
+        customerId: {"id": customerId, "name": name}
       });
       blockIds.add(customerId);
       //getBlockedCustomerList();
@@ -345,7 +344,7 @@ class LiveController extends GetxController {
 
   removeFromWaitList() async {
     var data = await database.ref().child("live/$astroId/waitList").get();
-    var first = data.children.toList().first;
+    var first = data.children.toList().last;
     var value = first.value as Map;
     typeOfNextUserCall = value["callType"];
     await Future.delayed(const Duration(seconds: 2));
@@ -356,8 +355,9 @@ class LiveController extends GetxController {
           dialogOpen = true;
           return WaitList(
             data: data.children,
-            shouldClose: true,
+            shouldClose: false,
             astroId: astroId,
+            fromNextUser: true,
             showNext: true,
             onAccept: (String id, String name) {
               database
@@ -394,6 +394,7 @@ class LiveController extends GetxController {
                   data: waitList.children,
                   shouldClose: false,
                   astroId: astroId,
+                  fromNextUser: true,
                   showNext: true,
                   onAccept: (String id, String name) {
                     database.ref().child("live/$astroId/").update(
@@ -448,7 +449,7 @@ class LiveController extends GetxController {
   }
 
   stopStream(String id) {
-    if(isCoHosting.value){
+    if (isCoHosting.value) {
       endCall();
     }
     database.ref().child("live/$id/callType").remove();

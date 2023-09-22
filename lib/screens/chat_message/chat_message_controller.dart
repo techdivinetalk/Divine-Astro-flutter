@@ -39,6 +39,7 @@ class ChatMessageController extends GetxController {
   var chatMessages = <ChatMessage>[].obs;
   var databaseMessage = ChatMessagesOffline().obs;
   ScrollController messgeScrollController = ScrollController();
+  ScrollController typingScrollController = ScrollController();
   File? image;
   final picker = ImagePicker();
   XFile? pickedFile;
@@ -74,7 +75,7 @@ class ChatMessageController extends GetxController {
       } else if (Get.arguments is ResAstroChatListener) {
         var data = Get.arguments;
         if (data!.customerId != null) {
-          chatStatus.value = "Chat in progress";
+          chatStatus.value = "Chat in - progress";
           isOngoingChat.value = true;
           currentChatUserId.value = data!.customerId;
           currentUserId.value = data!.customerId;
@@ -119,9 +120,10 @@ class ChatMessageController extends GetxController {
         : null;
   }
 
-  userTypingSocket() {
+  userTypingSocket({required bool isTyping}) {
     dashboardController.socket?.emit(ApiProvider().chatType, {
       "userId": userData?.id.toString(),
+      "isTyping": isTyping,
     });
   }
 

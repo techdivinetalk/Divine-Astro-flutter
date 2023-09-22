@@ -72,7 +72,7 @@ class KundliController extends GetxController {
 class Params {
   int? day, month, year, hour, min;
   double? lat, long, tzone;
-  String? location;
+  String? name, location;
 
   Params({
     this.day,
@@ -84,5 +84,6 @@ class Params {
     this.long,
     this.tzone,
     this.location,
+    this.name,
   });
 }

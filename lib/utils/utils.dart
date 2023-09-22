@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../common/colors.dart';
 
 class Utils {
   static const animationDuration = Duration(milliseconds: 200);
+
+  static String dateToString(DateTime now, {String format = 'dd MMMM yyyy'}) {
+    return DateFormat(format).format(now);
+  }
 }
 
 void divineSnackBar({required String data, Color? color}) {
