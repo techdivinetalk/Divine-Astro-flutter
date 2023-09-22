@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -155,11 +157,10 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                                       EdgeInsets.symmetric(horizontal: 6.w),
                                   smallSize: 14.sp,
                                   largeSize: 20.sp,
-                                  child:
-                                      Icon(
-                                          Icons.arrow_drop_down_circle_outlined,
-                                          color: AppColors.appYellowColour,
-                                          size: 40.h),
+                                  child: Icon(
+                                      Icons.arrow_drop_down_circle_outlined,
+                                      color: AppColors.appYellowColour,
+                                      size: 40.h),
                                 ),
                               )
                             : const SizedBox()),
@@ -706,6 +707,7 @@ class AstrologerChatAppBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SafeArea(
+            bottom: false,
             child: Container(
               alignment: Alignment.center,
               child: Row(
@@ -754,7 +756,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                                       children: [
                                         Text(
                                           controller.chatStatus.value != ""
-                                              ? "(${timer.formattedTime()} mins) ${'remaining'.tr}"
+                                              ? "(${timer.formattedTime()} mins) Remaining"
                                               : "",
                                           style: TextStyle(
                                             fontWeight: FontWeight.w500,
@@ -786,7 +788,24 @@ class AstrologerChatAppBar extends StatelessWidget {
                         children: [
                           InkWell(
                               onTap: () {
-                                controller.confirmChatEnd(Get.context!);
+                                Duration initalTime = Duration(
+                                    seconds:
+                                        astroChatWatcher.value.talktime ?? 0);
+                                var initalDateTime = DateTime(2001)
+                                    .copyWith(second: initalTime.inSeconds);
+                                var currentTime = timer.chatDuration.value;
+                                var currentDateTime = DateTime(2001)
+                                    .copyWith(second: currentTime.inSeconds);
+                                int difference = initalDateTime
+                                    .difference(currentDateTime)
+                                    .inSeconds;
+                                debugPrint(
+                                    " 123 initialTime $initalTime \n 123 CurrentTime = $currentTime \n 123 InitialDateTime = $initalDateTime \n 123 CurrentDateTime = $currentDateTime \n 123 Difference = $difference");
+                                if (difference < 60) {
+                                  controller.cannotEndChat(Get.context!);
+                                } else {
+                                  controller.confirmChatEnd(Get.context!);
+                                }
                               },
                               child: Assets.images.icEndChat.svg()),
                           SizedBox(width: 16.w),
