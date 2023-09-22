@@ -40,6 +40,7 @@ class ApiProvider {
   String _token = "";
 
   final String loginUrl = "astroLogin";
+  final String viewTrainingVideo = "viewTrainingVideo";
   final String getProfileUrl = "getAstrologerProfile";
   final String getReviewRatingUrl = "getReviewRating";
   final String blockCustomerlistUrl = "blockCustomerlist";

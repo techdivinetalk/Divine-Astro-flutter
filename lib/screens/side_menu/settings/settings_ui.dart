@@ -57,7 +57,7 @@ class SettingsUI extends GetView<SettingsController> {
                   // Get.put(ProfilePageController(UserRepository()));
                   // Get.put(ProfilePageController());
                   openBottomSheet(context,
-                      functionalityWidget:  LanguageBottomSheetWidget(
+                      functionalityWidget:  const LanguageBottomSheetWidget(
                       //  ontap: () => Get.back(),
                       ));
                 },

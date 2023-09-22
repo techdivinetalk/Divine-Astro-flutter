@@ -97,7 +97,7 @@ class RankSystemUI extends GetView<RankSystemController> {
                                       item?.percentageRange ?? "",
                                       textAlign: TextAlign.center,
                                       style: AppTextStyle.textStyle12(
-                                          fontWeight: FontWeight.w700,
+                                          fontWeight: FontWeight.w400,
                                           fontColor: AppColors.darkBlue),
                                     ),
                                     SizedBox(
@@ -124,7 +124,7 @@ class RankSystemUI extends GetView<RankSystemController> {
                                           item?.rank ??'',
                                           textAlign: TextAlign.center,
                                           style: AppTextStyle.textStyle12(
-                                              fontWeight: FontWeight.w700,
+                                              fontWeight: FontWeight.w400,
                                               fontColor: AppColors.darkBlue),
                                         ),
                                       ],

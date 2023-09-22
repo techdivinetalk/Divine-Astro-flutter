@@ -882,7 +882,8 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget trainingVideoWidget() {
-    if (controller.homeData?.trainingVideo == null) {
+    if (controller.homeData?.trainingVideo == null ||
+        (controller.homeData?.trainingVideo ?? []).isEmpty) {
       return const SizedBox.shrink();
     }
     return Container(
@@ -916,16 +917,18 @@ class HomeUI extends GetView<HomeController> {
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemCount: controller.homeData!.trainingVideo!.length,
+              itemCount: controller.homeData?.trainingVideo?.length ?? 0,
               separatorBuilder: (context, i) => SizedBox(width: 10.w),
-              itemBuilder: (BuildContext context, int i) {
+              itemBuilder: (BuildContext context, int index) {
                 return Row(
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Get.to(TrainingVideoUI(
-                          video: controller.homeData!.trainingVideo![i],
-                        ));
+                        Get.to(() {
+                          return TrainingVideoUI(
+                            video: controller.homeData?.trainingVideo?[index],
+                          );
+                        });
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -939,9 +942,9 @@ class HomeUI extends GetView<HomeController> {
                           child: LoadImage(
                             boxFit: BoxFit.cover,
                             imageModel: ImageModel(
-                              imagePath: getYoutubeThumbnail(
-                                  controller.homeData?.trainingVideo?[i].url ??
-                                      ''),
+                              imagePath: getYoutubeThumbnail(controller
+                                      .homeData?.trainingVideo?[index].url ??
+                                  ''),
                               loadingIndicator: const SizedBox(
                                 child: CircularProgressIndicator(
                                   color: Color(0XFFFDD48E),

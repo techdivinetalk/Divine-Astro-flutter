@@ -142,6 +142,7 @@ Map<String, String> en() {
     "shareFeedback": "Share Feedback",
     "importantNumbers": "Important numbers",
     "donation": "Donation",
+    "customerCare": "Customer Care",
     "addContact": "Add Contact",
     "mobileNumber": "Mobile Number",
     "astrologySkill": "Astrology Skill",

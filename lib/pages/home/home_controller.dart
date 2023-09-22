@@ -21,6 +21,7 @@ import '../../di/shared_preference_service.dart';
 import '../../model/constant_details_model_class.dart';
 import '../../model/home_page_model_class.dart';
 import '../../model/res_login.dart';
+import '../../model/view_training_video_model.dart';
 import '../../repository/home_page_repository.dart';
 import '../../repository/user_repository.dart';
 
@@ -85,6 +86,28 @@ class HomeController extends GetxController {
   HomeData? homeData;
   Loading loading = Loading.initial;
   RxBool shopDataSync = false.obs;
+  ViewTrainingVideoModelClass? viewTrainingVideoModelClass;
+
+  trainingVideoViewData(int videoId) async {
+    Map<String, dynamic> params = {"training_video_id": videoId};
+    try {
+      var data = await userRepository.viewTrainingVideoApi(params);
+      viewTrainingVideoModelClass = data;
+
+      profileDataSync.value = true;
+      await getDashboardDetail();
+      Get.back();
+      update();
+      log("DoneVideo-->${viewTrainingVideoModelClass!.message}");
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      }
+    }
+  }
 
   getDashboardDetail() async {
     loading = Loading.initial;
@@ -109,7 +132,7 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
   }
@@ -175,7 +198,7 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
   }
@@ -192,6 +215,7 @@ class HomeController extends GetxController {
         await launchUrl(Uri.parse(androidUrl));
       }
     } on Exception {
+      divineSnackBar(data: 'WhatsApp is not installed.');
       log('WhatsApp is not installed.');
     }
   }

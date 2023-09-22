@@ -27,12 +27,13 @@ import '../../model/res_user_profile.dart';
 import '../../repository/user_repository.dart';
 import '../../screens/dashboard/dashboard_controller.dart';
 import '../../utils/utils.dart';
+import '../home/home_controller.dart';
 
 class ProfilePageController extends GetxController {
   final UserRepository userRepository;
 
   ProfilePageController(this.userRepository);
-
+  var homeController = Get.find<HomeController>();
   UserData? userData;
   GetUserProfile? userProfile;
   RxString userProfileImage = "".obs;

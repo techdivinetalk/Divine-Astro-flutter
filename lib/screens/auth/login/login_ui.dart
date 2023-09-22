@@ -2,15 +2,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/screens/auth/login/widget/country_picker.dart';
-import 'package:divine_astrologer/utils/load_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../common/colors.dart';
-import '../../../common/custom_light_yellow_btn.dart';
 import 'login_controller.dart';
 
 class LoginUI extends GetView<LoginController>  {

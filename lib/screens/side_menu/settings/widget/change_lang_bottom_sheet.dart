@@ -103,7 +103,7 @@ class LanguageBottomSheetWidget extends StatelessWidget {
                                             Text(
                                               item.languagesMain.toString(),
                                               style: AppTextStyle.textStyle20(
-                                                  fontWeight: FontWeight.w700),
+                                                  fontWeight: FontWeight.w600),
                                             ),
                                             SizedBox(height: 10.h),
                                             Text(
