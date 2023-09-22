@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
 import '../../../common/colors.dart';
 import '../../../gen/assets.gen.dart';
 import '../../pages/home/home_ui.dart';
@@ -26,10 +27,8 @@ class DashboardScreen extends GetView<DashboardController> {
         bottomNavigationBar: Obx(() => SafeArea(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const SizedBox(height: 1),
                   Container(
                     width: ScreenUtil().screenWidth * 0.9,
                     height: 1,
@@ -41,7 +40,6 @@ class DashboardScreen extends GetView<DashboardController> {
                     type: BottomNavigationBarType.fixed,
                     selectedFontSize: 10,
                     unselectedFontSize: 10,
-
                     selectedItemColor: AppColors.darkBlue,
                     unselectedItemColor: AppColors.lightGrey,
                     items: <BottomNavigationBarItem>[
@@ -109,7 +107,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                 fit: BoxFit.cover,
                                 height: 30,
                                 width: 30,
-                                errorWidget: (context, url, error) => Image.asset(Assets.images.defaultProfile.path),
+                                errorWidget: (context, url, error) =>
+                                    Image.asset(
+                                        Assets.images.defaultProfile.path),
                               ),
                             ),
                             const SizedBox(height: 5),
@@ -135,7 +135,7 @@ class DashboardScreen extends GetView<DashboardController> {
 
   static List<Widget> widgetOptions = <Widget>[
     const HomeUI(),
-     const PerformanceUI(),
+    const PerformanceUI(),
     const SuggestRemediesUI(),
     const ChatAssistancePage(),
     ProfileUI()

@@ -19,7 +19,7 @@ import '../../../model/firebase_model.dart';
 import '../../../model/res_login.dart';
 import '../../../repository/user_repository.dart';
 
-class LoginController extends FullLifeCycleController with FullLifeCycleMixin {
+class LoginController extends GetxController {
   LoginController(this.userRepository);
 
   final UserRepository userRepository;
@@ -153,7 +153,7 @@ class LoginController extends FullLifeCycleController with FullLifeCycleMixin {
     return response;
   }
 
-  @override
+  /*@override
   void onDetached() {
     log('----> detached');
   }
@@ -171,5 +171,5 @@ class LoginController extends FullLifeCycleController with FullLifeCycleMixin {
   @override
   void onResumed() {
     numberFocus.requestFocus();
-  }
+  }*/
 }
