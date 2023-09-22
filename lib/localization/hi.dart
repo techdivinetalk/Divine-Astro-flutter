@@ -294,5 +294,6 @@ Map<String, String> hi() {
     'attemptsRemaining': 'प्रयास बाकी है',
     'phoneNumberMustBe10Digit': 'फ़ोन नंबर 10 अंकों का होना चाहिए',
     'specialityNotEmpty': "विशेषता खाली नहीं हो सकती",
+    "customerCare": "ग्राहक देखभाल",
   };
 }

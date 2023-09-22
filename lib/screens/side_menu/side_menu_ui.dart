@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../common/routes.dart';
+import '../../pages/home/home_controller.dart';
 
-class SideMenuDrawer extends StatelessWidget {
+class SideMenuDrawer extends GetView<HomeController> {
   const SideMenuDrawer({super.key});
 
   @override
@@ -27,7 +28,7 @@ class SideMenuDrawer extends StatelessWidget {
                 ),
                 InkWell(
                     onTap: () {
-                     Navigator.pop(context);
+                      Navigator.pop(context);
                     },
                     child: const Icon(Icons.close))
               ],
@@ -60,15 +61,20 @@ class SideMenuDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Assets.images.icContactUs1.svg(),
-              title: Text('contactUs'.tr),
-              onTap: () => {Navigator.of(context).pop()},
+              leading: Assets.images.icCustomerCare.svg(),
+              title: Text('customerCare'.tr),
+              onTap: () => {Navigator.of(context).pop(), controller.whatsapp()},
             ),
-            ListTile(
-              leading: Assets.images.icFeedBack.svg(),
-              title: Text('shareFeedback'.tr),
-              onTap: () => {Navigator.of(context).pop()},
-            ),
+            // ListTile(
+            //   leading: Assets.images.icContactUs1.svg(),
+            //   title: Text('contactUs'.tr),
+            //   onTap: () => {Navigator.of(context).pop()},
+            // ),
+            // ListTile(
+            //   leading: Assets.images.icFeedBack.svg(),
+            //   title: Text('shareFeedback'.tr),
+            //   onTap: () => {Navigator.of(context).pop()},
+            // ),
             ListTile(
               leading: Assets.images.icImportContact.svg(),
               title: Text('importantNumbers'.tr),

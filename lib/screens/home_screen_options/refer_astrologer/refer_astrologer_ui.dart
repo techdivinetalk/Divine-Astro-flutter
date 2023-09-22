@@ -42,7 +42,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 5),
-                ReferAstrologerField(
+                WhiteTextField(
                   validator: (value) {
                     if (value! == "") {
                       return "";
@@ -61,7 +61,24 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 5),
-                ReferAstrologerField(
+                WhiteTextField(
+                  maxCount: 10,
+                  inputFormatter: [
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  validator: (value) {
+                    if (value! == "") {
+                      return "";
+                    }
+                    return null;
+                  },
+                  
+                  controller: controller.state.mobileNumber,
+                  inputType: TextInputType.number,
+                  inputAction: TextInputAction.next,
+                  hintText: "enterNumberMsg".tr,
+                ),
+                WhiteTextField(
                   validator: (value) {
                     if (value! == "") {
                       return "";
@@ -79,7 +96,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 5),
-                ReferAstrologerField(
+                WhiteTextField(
                   validator: (value) {
                     if (value! == "") {
                       return "";
@@ -97,7 +114,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 5),
-                ReferAstrologerField(
+                WhiteTextField(
                   validator: (value) {
                     if (value! == "") {
                       return "";
@@ -217,7 +234,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                           AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                     ),
                     const SizedBox(height: 5),
-                    ReferAstrologerField(
+                    WhiteTextField(
                       validator: (value) {
                         if (controller.isYes) {
                           if (value! == "") {
@@ -238,6 +255,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
     );
   }
 }
+
 
 class ReferAstrologerField extends StatelessWidget {
   final String hintText;
@@ -323,6 +341,106 @@ class ReferAstrologerField extends StatelessWidget {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: const BorderSide(
+              color: AppColors.lightYellow,
+              width: 1.0,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+class WhiteTextField extends StatelessWidget {
+  final String hintText;
+  final TextInputType inputType;
+  final TextInputAction inputAction;
+  final Icon? icon;
+  final Widget? suffixIcon;
+  final Color? errorBorder;
+  final TextEditingController? controller;
+  final String? Function(String? value)? validator;
+  final void Function(String? val)? onChanged;
+  final List<TextInputFormatter>? inputFormatter;
+  final int? maxCount;
+
+  const WhiteTextField({
+    super.key,
+    required this.hintText,
+    required this.inputType,
+    required this.inputAction,
+    this.errorBorder,
+    this.icon,
+    this.suffixIcon,
+    this.controller,
+    this.validator,
+    this.onChanged,
+    this.inputFormatter,
+    this.maxCount,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 55.h,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 1.0,
+            offset: const Offset(0.1, 1.0),
+          ),
+        ],
+      ),
+      child: TextFormField(
+        maxLength: maxCount,
+        inputFormatters: inputFormatter,
+        controller: controller,
+        keyboardType: inputType,
+        validator: validator,
+        textInputAction: inputAction,
+        onTapOutside: (event) {
+          FocusScope.of(context).unfocus();
+        },
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          isDense: true,
+          counterText: '',
+          errorStyle: const TextStyle(height: 0),
+          hintText: hintText,
+          helperStyle: AppTextStyle.textStyle16(),
+          fillColor: AppColors.white,
+          hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.grey),
+          hoverColor: AppColors.white,
+          prefixIcon: icon,
+          suffixIcon: suffixIcon,
+          filled: true,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: BorderSide(
+              color: errorBorder ?? AppColors.white,
+              width: 1.0,
+            ),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: BorderSide(
+              color: errorBorder ?? AppColors.white,
+              width: 1.0,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide:  const BorderSide(
+              color: AppColors.redColor,
+              width: 1.0,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide:  const BorderSide(
               color: AppColors.lightYellow,
               width: 1.0,
             ),

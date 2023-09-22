@@ -288,6 +288,7 @@ Map<String, String> gu() {
     'otpTextMsg': 'અમે મોકલેલ એસએમએસમાંથી કોડ દાખલ કરો',
     'notReceiveOTP': "OTP પ્રાપ્ત થયો નથી?",
     'resend': 'ફરી મોકલો',
+    "customerCare": "ગ્રાહક સંભાળ",
     'noAttemptsLeft': 'કોઈ પ્રયાસ બાકી નથી!',
     'attemptsRemaining': 'પ્રયાસો બાકી છે',
     'phoneNumberMustBe10Digit': 'ફોન નંબર 10 અંકનો હોવો જોઈએ',

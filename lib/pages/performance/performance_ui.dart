@@ -146,8 +146,8 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                 child: Stack(
                                   children: [
                                     Positioned(
-                                      bottom: 8,
-                                      left: 10.w,
+                                      bottom: 7.h,
+                                      left: 11.h,
                                       child: Row(
                                         children: [
                                           Text(
@@ -173,8 +173,8 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                       ),
                                     ),
                                     Positioned(
-                                      top: 28.h,
-                                      left: 40.w,
+                                      top: 31.h,
+                                      left: 40.h,
                                       child: Row(
                                         children: [
                                           Text(
@@ -289,16 +289,11 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                       children: [
                                                         Text(
                                                           "Marks",
-                                                          textAlign:
-                                                              TextAlign.center,
+                                                          textAlign: TextAlign.center,
                                                           style: AppTextStyle
                                                               .textStyle12(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  fontColor:
-                                                                      AppColors
-                                                                          .darkBlue),
+                                                                  fontWeight: FontWeight.w700,
+                                                                  fontColor: AppColors.darkBlue),
                                                         ),
                                                         SizedBox(
                                                           height: 5.h,
@@ -312,35 +307,24 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                 height: 10.h,
                                               ),
                                               ListView.builder(
-                                                  physics:
-                                                      const NeverScrollableScrollPhysics(),
+                                                  physics: const NeverScrollableScrollPhysics(),
                                                   itemCount:
                                                       item?.detail?.length ?? 0,
                                                   shrinkWrap: true,
                                                   primary: false,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    Detail? model =
-                                                        item?.detail?[index];
+                                                  itemBuilder: (context, index) {
+                                                    Detail? model = item?.detail?[index];
                                                     return Row(
                                                       children: [
                                                         Expanded(
                                                           child: Column(
                                                             children: [
                                                               Text(
-                                                                (model?.percentage ??
-                                                                        '-')
-                                                                    .toString(),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
+                                                                (model?.percentage ?? '-').toString(),
+                                                                textAlign: TextAlign.center,
                                                                 style: AppTextStyle.textStyle12(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w400,
-                                                                    fontColor:
-                                                                        AppColors
-                                                                            .darkBlue),
+                                                                    fontWeight: FontWeight.w400,
+                                                                    fontColor: AppColors.darkBlue),
                                                               ),
                                                               SizedBox(
                                                                 height: 10.h,
@@ -352,19 +336,11 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                           child: Column(
                                                             children: [
                                                               Text(
-                                                                (model?.marks ??
-                                                                        '-')
-                                                                    .toString(),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
+                                                                (model?.marks ?? '-').toString(),
+                                                                textAlign: TextAlign.center,
                                                                 style: AppTextStyle.textStyle12(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w700,
-                                                                    fontColor:
-                                                                        AppColors
-                                                                            .darkBlue),
+                                                                    fontWeight: FontWeight.w700,
+                                                                    fontColor: AppColors.darkBlue),
                                                               ),
                                                               SizedBox(
                                                                 height: 10.h,
@@ -384,8 +360,8 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                 ));
                           },
                           child: Container(
-                              // height: 40.h,
-                              // width: 120.h,
+                              // height: 40,
+                              // width: 160,
                               padding: EdgeInsets.all(12.h),
                               decoration: BoxDecoration(
                                   boxShadow: [
@@ -407,109 +383,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                 ],
                               )),
                         ),
-                        // SizedBox(
-                        //     height: 170.h,
-                        //     child: SfRadialGauge(
-                        //         backgroundColor: Colors.white,
-                        //         animationDuration: 4500,
-                        //         title: GaugeTitle(text: "22"),
-                        //         axes: <RadialAxis>[
-                        //           RadialAxis(
-                        //               radiusFactor: 0.9,
-                        //               canScaleToFit: true,
-                        //               axisLabelStyle: const GaugeTextStyle(
-                        //                   color: Colors.white),
-                        //               showLastLabel: false,
-                        //               // maximum: 50,
-                        //               maximum: 150,
-                        //               ranges: <GaugeRange>[
-                        //                 GaugeRange(
-                        //                   label: "First",
-                        //                   labelStyle: const GaugeTextStyle(color: Colors.black),
-                        //                   color: Colors.red,
-                        //                   endWidth: 15,
-                        //                   startWidth: 15,
-                        //                   startValue: 0,
-                        //                   endValue: 50,
-                        //                 ),
-                        //                 GaugeRange(
-                        //                   color: Colors.green,
-                        //                   endWidth: 15,
-                        //                   startWidth: 15,
-                        //                   startValue: 50,
-                        //                   endValue: 100,
-                        //                 ),
-                        //                 GaugeRange(
-                        //                   color: Colors.amber,
-                        //                   startValue: 100,
-                        //                   endWidth: 15,
-                        //                   startWidth: 15,
-                        //                   endValue: 150,
-                        //                 )
-                        //               ],
-                        //               pointers: const <GaugePointer>[
-                        //                 MarkerPointer(
-                        //                   animationDuration: 5000,
-                        //                   value: 40,
-                        //                   enableAnimation: true,
-                        //                   borderColor: AppColors.markerColor,
-                        //                   borderWidth: 9,
-                        //                   markerWidth: 9,
-                        //                   markerHeight: 9,
-                        //                   // overlayRadius: 800,
-                        //                   markerType:
-                        //                       MarkerType.invertedTriangle,
-                        //                   animationType:
-                        //                       AnimationType.elasticOut,
-                        //                   markerOffset: -6,
-                        //                 )
-                        //               ],
-                        //               annotations: <GaugeAnnotation>[
-                        //                 GaugeAnnotation(
-                        //                     widget: Column(
-                        //                       children: [
-                        //                         SizedBox(
-                        //                           height: 20.h,
-                        //                         ),
-                        //                         Text(
-                        //                           "Your Score",
-                        //                           style:
-                        //                               AppTextStyle.textStyle12(
-                        //                                   fontColor: AppColors
-                        //                                       .darkBlue),
-                        //                         ),
-                        //                         SizedBox(
-                        //                           height: 10.h,
-                        //                         ),
-                        //                         Text(
-                        //                           '90.0',
-                        //                           style: TextStyle(
-                        //                               fontWeight:
-                        //                                   FontWeight.w700,
-                        //                               color: AppColors.darkBlue,
-                        //                               fontSize: 25.sp),
-                        //                         ),
-                        //                         SizedBox(
-                        //                           height: 10.h,
-                        //                         ),
-                        //                         Text(
-                        //                           "Out of 100",
-                        //                           style:
-                        //                               AppTextStyle.textStyle12(
-                        //                                   fontColor: AppColors
-                        //                                       .darkBlue),
-                        //                         ),
-                        //                       ],
-                        //                     ),
-                        //                     angle: 90,
-                        //                     horizontalAlignment:
-                        //                         GaugeAlignment.center,
-                        //                     verticalAlignment:
-                        //                         GaugeAlignment.center,
-                        //                     axisValue: 10,
-                        //                     positionFactor: 0.5)
-                        //               ])
-                        //         ])),
+
                       ],
                     ), //just for testing, will fill with image later
                   );

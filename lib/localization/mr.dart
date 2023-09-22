@@ -292,5 +292,6 @@ Map<String, String> mr() {
     'attemptsRemaining': 'प्रयत्न बाकी',
     'phoneNumberMustBe10Digit': 'फोन नंबर 10 अंकी असणे आवश्यक आहे',
     'specialityNotEmpty': "स्पेशॅलिटी रिक्त असू शकत नाही",
+    "customerCare": "ग्राहक सेवा",
   };
 }

@@ -56,7 +56,6 @@ class LoginController extends GetxController {
     update();
   }
 
-  // 97 62 93 49 35
   login() async {
     deviceToken = await FirebaseMessaging.instance.getToken();
     Map<String, dynamic> params = {

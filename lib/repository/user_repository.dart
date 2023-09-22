@@ -24,8 +24,35 @@ import '../model/report_review_model_class.dart';
 import '../model/res_blocked_customers.dart';
 import '../model/res_login.dart';
 import '../model/res_review_ratings.dart';
+import '../model/view_training_video_model.dart';
 
 class UserRepository extends ApiProvider {
+  Future<ViewTrainingVideoModelClass> viewTrainingVideoApi(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await post(viewTrainingVideo,
+          body: jsonEncode(param).toString(),
+          headers: await getJsonHeaderURL());
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final blockedCustomerList =
+          ViewTrainingVideoModelClass.fromJson(json.decode(response.body));
+          return blockedCustomerList;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+
+
   Future<ResLogin> userLogin(Map<String, dynamic> param) async {
     try {
       final response = await post(loginUrl, body: jsonEncode(param).toString());

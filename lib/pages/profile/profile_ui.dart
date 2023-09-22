@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
+import 'package:divine_astrologer/pages/home/home_controller.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,6 +26,7 @@ import '../../screens/side_menu/side_menu_ui.dart';
 class ProfileUI extends GetView<ProfilePageController> {
   ProfileUI({Key? key}) : super(key: key);
   var preference = Get.find<SharedPreferenceService>();
+  // var homeController = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -319,34 +321,20 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                 builder: (controller) {
                                                   return GestureDetector(
                                                     onTap: () {
-                                                      controller
-                                                          .selectedLanguageData(
-                                                              item);
+                                                      controller.selectedLanguageData(item);
                                                     },
                                                     child: Container(
                                                       decoration: BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          border: item
-                                                                  .isSelected
-                                                              ? Border.all(
-                                                                  width: 1,
-                                                                  color: Colors
-                                                                      .grey)
-                                                              : Border.all(
-                                                                  width: 0,
-                                                                  color: Colors
-                                                                      .white)),
+                                                      shape: BoxShape.circle,
+                                                      border: item.isSelected
+                                                      ? Border.all(width: 1,color: Colors.grey)
+                                                      : Border.all(width: 0, color: Colors.white)),
                                                       child: Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          gradient:
-                                                              LinearGradient(
+                                                        decoration: BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                          gradient: LinearGradient(
                                                             colors: [
-                                                              item.colors!
-                                                                  .withOpacity(
+                                                              item.colors!.withOpacity(
                                                                       0),
                                                               item.colors!
                                                                   .withOpacity(
@@ -360,24 +348,15 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                         ),
                                                         child: ClipRRect(
                                                           borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10.r),
+                                                              BorderRadius.circular(10.r),
                                                           child: Material(
-                                                            color: Colors
-                                                                .transparent,
+                                                            color: Colors.transparent,
                                                             child: Column(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
+                                                              mainAxisAlignment: MainAxisAlignment.center,
                                                               children: [
                                                                 Text(
-                                                                  item.languagesMain
-                                                                      .toString(),
-                                                                  style: AppTextStyle.textStyle20(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700),
+                                                                  item.languagesMain.toString(),
+                                                                  style: AppTextStyle.textStyle20(fontWeight: FontWeight.w600),
                                                                 ),
                                                                 SizedBox(
                                                                     height:
@@ -441,7 +420,9 @@ class ProfileUI extends GetView<ProfilePageController> {
                             ],
                           ),
                         );
-                      } else if (index == 1) {
+                      }
+                      else if (index == 1)
+                      {
                         FilePickerResult? result =
                             await FilePicker.platform.pickFiles(
                           type: FileType.video,
@@ -451,7 +432,12 @@ class ProfileUI extends GetView<ProfilePageController> {
                           Get.toNamed(RouteName.uploadStoryUi,
                               arguments: "${result.files.single.path}");
                         }
-                      } else if (item.nav != "") {
+                      }
+                      else if(index == 3){
+                        controller.homeController.whatsapp();
+                      }
+                      else if
+                      (item.nav != "") {
                         if (item.name == "bankDetails".tr ||
                             item.name == "uploadYourPhoto".tr) {
                           if (await PermissionHelper().askMediaPermission()) {

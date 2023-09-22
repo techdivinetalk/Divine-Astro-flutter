@@ -210,6 +210,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_cow.png
   AssetGenImage get icCow => const AssetGenImage('assets/images/ic_cow.png');
 
+  /// File path: assets/images/ic_customer_care.svg
+  SvgGenImage get icCustomerCare =>
+      const SvgGenImage('assets/images/ic_customer_care.svg');
+
   /// File path: assets/images/ic_diamond.png
   AssetGenImage get icDiamond =>
       const AssetGenImage('assets/images/ic_diamond.png');
@@ -580,6 +584,7 @@ class $AssetsImagesGen {
         icClock,
         icClose,
         icCow,
+        icCustomerCare,
         icDiamond,
         icDonationDetailCow,
         icDonations,
