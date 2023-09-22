@@ -6,6 +6,7 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
 import 'package:divine_astrologer/model/update_offer_type_response.dart';
 import 'package:divine_astrologer/model/update_session_type_response.dart';
+import 'package:divine_astrologer/pages/home/home_ui.dart';
 import 'package:divine_astrologer/repository/notice_repository.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
@@ -102,6 +103,8 @@ class HomeController extends GetxController {
       updateCurrentData();
       shopDataSync.value = true;
       loading = Loading.loaded;
+
+      showOnceInDay();
       update();
 
       log("DashboardData==>${jsonEncode(homeData)}");
@@ -109,7 +112,7 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
   }
@@ -175,7 +178,7 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
   }
@@ -342,5 +345,40 @@ class HomeController extends GetxController {
 
   getBoolToString(bool value) {
     return value ? "1" : "0";
+  }
+
+  showOnceInDay() async {
+    int timestamp = await preferenceService
+        .getIntPrefs(SharedPreferenceService.performanceDialog);
+
+    if (timestamp == 0 ||
+        (DateTime.now()
+                .difference(DateTime.fromMillisecondsSinceEpoch(timestamp))
+                .inDays >
+            0) ||
+        getDateDifference(timestamp)) {
+      await preferenceService.setIntPrefs(
+          SharedPreferenceService.performanceDialog,
+          DateTime.now().millisecondsSinceEpoch);
+      showDialog(
+        context: Get.context!,
+        barrierColor: AppColors.darkBlue.withOpacity(0.5),
+        builder: (_) => PerformanceDialog(),
+      );
+    }
+  }
+
+  getDateDifference(int timestamp) {
+    DateTime dtTimestamp = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    DateTime now = DateTime.now();
+
+    if (now.day != dtTimestamp.day ||
+        now.month != dtTimestamp.month ||
+        now.year != dtTimestamp.year) {
+      print('DateChanged: ${now.difference(dtTimestamp).inHours}');
+      return true;
+    } else {
+      return false;
+    }
   }
 }

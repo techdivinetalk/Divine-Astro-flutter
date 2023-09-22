@@ -22,7 +22,7 @@ class SharedPreferenceService extends GetxService {
   static const updatedBankDetails = "updatedBankDetails";
   static const baseImageUrl = "baseImageUrl";
   static const constantData = "constantData";
-
+  static const performanceDialog = "performanceDialog";
 
   Future<SharedPreferenceService> init() async {
     prefs = await SharedPreferences.getInstance();
@@ -53,6 +53,14 @@ class SharedPreferenceService extends GetxService {
     return await prefs!.setString(baseAmazonUrl, url);
   }
 
+  Future<int> getIntPrefs(String key) async {
+    return prefs!.getInt(key) ?? 0;
+  }
+
+  Future<bool> setIntPrefs(String key, int value) async {
+    return prefs!.setInt(key, value);
+  }
+
   String? getToken() {
     return prefs!.getString(tokenKey);
   }
@@ -74,7 +82,7 @@ class SharedPreferenceService extends GetxService {
   }
 
   Future erase() async {
-    await ZegoServices().unInitZegoInvitationServices();
+    // await ZegoServices().unInitZegoInvitationServices();
     return prefs!.clear();
   }
 

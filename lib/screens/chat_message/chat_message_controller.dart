@@ -200,12 +200,12 @@ class ChatMessageController extends GetxController {
         msgType: msgType,
         kundliId: kundliId,
         type: 0);
-    updateChatMessages(newMessage, false);
-    isDataLoad.value = true;
 
+    isDataLoad.value = true;
     firebaseDatabase
-        .ref("user/${currentChatUserId.value}/realTime/notification/$time")
+        .ref("astrologer/${userData?.id}/realTime/engagement")
         .set(newMessage.toOfflineJson());
+    updateChatMessages(newMessage, false);
   }
 
   updateChatMessages(ChatMessage newMessage, bool isFromNotification) async {
@@ -238,6 +238,7 @@ class ChatMessageController extends GetxController {
         updateMsgDelieveredStatus(newMessage, 1);
       }
     }
+    print('NewMessageUpdate: ${newMessage.type}');
     unreadMessageIndex.value = chatMessages
             .firstWhere(
               (element) =>
