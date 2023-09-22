@@ -157,11 +157,6 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   );
   FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
 
-  // final DatabaseReference messagesRef = firebaseDatabase
-  //     .ref()
-  //     .child("astrologer/${newMessage.receiverId}/engagement");
-
-  // messagesRef.set(message.toOfflineJson());
   firebaseDatabase
       .ref(
           "user/${currentChatUserId.value}/realTime/notification/${newMessage.time}")

@@ -75,7 +75,7 @@ class ChatMessageController extends GetxController {
       } else if (Get.arguments is ResAstroChatListener) {
         var data = Get.arguments;
         if (data!.customerId != null) {
-          chatStatus.value = "Chat in - progress";
+          chatStatus.value = "Chat in - Progress";
           isOngoingChat.value = true;
           currentChatUserId.value = data!.customerId;
           currentUserId.value = data!.customerId;
@@ -202,10 +202,14 @@ class ChatMessageController extends GetxController {
         type: 0);
 
     isDataLoad.value = true;
+
     firebaseDatabase
         .ref("astrologer/${userData?.id}/realTime/engagement")
         .set(newMessage.toOfflineJson());
     updateChatMessages(newMessage, false);
+    //   firebaseDatabase
+    // .ref("user/${currentChatUserId.value}/realTime/notification/$time")
+    // .set(newMessage.toOfflineJson());
   }
 
   updateChatMessages(ChatMessage newMessage, bool isFromNotification) async {
@@ -238,7 +242,6 @@ class ChatMessageController extends GetxController {
         updateMsgDelieveredStatus(newMessage, 1);
       }
     }
-    print('NewMessageUpdate: ${newMessage.type}');
     unreadMessageIndex.value = chatMessages
             .firstWhere(
               (element) =>
@@ -363,6 +366,27 @@ class ChatMessageController extends GetxController {
     }
   }
 
+//Cannot end chat
+  cannotEndChat(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Divine Customer"),
+          content: const Text("You cannot end chat before 1 min."),
+          actions: [
+            TextButton(
+              child: const Text("Ok"),
+              onPressed: () async {
+                Get.back();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 //End Chat
   confirmChatEnd(BuildContext context) {
     showDialog(
@@ -375,11 +399,8 @@ class ChatMessageController extends GetxController {
             TextButton(
               child: const Text("Yes"),
               onPressed: () async {
-                isDataLoad.value = false;
-                isOngoingChat.value = false;
                 Get.back();
                 await onEndChat();
-                isDataLoad.value = true;
               },
             ),
             TextButton(
@@ -404,11 +425,6 @@ onEndChat() async {
                 orderId: astroChatWatcher.value.orderId,
                 queueId: astroChatWatcher.value.queueId)
             .toJson());
-    if (response.statusCode == 200) {
-      divineSnackBar(data: "Chat ended.", color: AppColors.redColor);
-    } else {
-      divineSnackBar(data: "Chat has been ended.", color: AppColors.redColor);
-    }
     chatController.chatStatus.value = "";
     chatController.isOngoingChat.value = false;
     chatController.isDataLoad.value = true;
@@ -419,5 +435,12 @@ onEndChat() async {
       });
     }
     timer.stopTimer();
+
+    if (response.statusCode == 200 &&
+        (response.statusCode == 400 &&
+            (response.message!.contains("Cannot")))) {
+      divineSnackBar(
+          data: response.message ?? "", color: AppColors.appYellowColour);
+    }
   }
 }
