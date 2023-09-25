@@ -22,8 +22,14 @@ class DashboardScreen extends GetView<DashboardController> {
     return Scaffold(
         backgroundColor: AppColors.white,
         key: controller.scaffoldkey,
-        body:
-            Obx(() => widgetOptions.elementAt(controller.selectedIndex.value)),
+        body: Obx(
+          () => AnimatedSwitcher(
+            duration: const Duration(milliseconds: 250),
+            child: widgetOptions.elementAt(controller.selectedIndex.value),
+            transitionBuilder: (child, anim) =>
+                FadeTransition(opacity: anim, child: child),
+          ),
+        ),
         bottomNavigationBar: Obx(() => SafeArea(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

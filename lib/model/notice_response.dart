@@ -105,13 +105,14 @@ class NoticeDatum {
   String getTimeAndDate() => "${formatTime(scheduleTime!)} ${formatDateTime(scheduleDate!)}";
 }
 
-String formatDateTime(DateTime dateTime) {
-  final dateFormat = DateFormat('dd/MM/yyyy');
+String formatDateTime(DateTime dateTime, {String format = "dd/MM/yyyy"}) {
+  final dateFormat = DateFormat(format);
   String date = dateFormat.format(dateTime);
   return date;
 }
 
 String formatTime(String dateTime) {
+  print("Time: ${dateTime}");
   final inputFormat = DateFormat('HH:mm:ss');
   final outputFormat = DateFormat('hh:mm a');
 

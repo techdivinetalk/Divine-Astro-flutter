@@ -10,9 +10,10 @@ import '../../../../repository/user_repository.dart';
 class LanguageBottomSheetWidget extends StatelessWidget {
   const LanguageBottomSheetWidget({
     Key? key,
+    this.onChangedLanguage,
   }) : super(key: key);
 
-  // final void Function()? ontap;
+  final void Function()? onChangedLanguage;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class LanguageBottomSheetWidget extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-       /* GestureDetector(
+        GestureDetector(
           onTap: () {
             Get.back();
           },
@@ -35,7 +36,7 @@ class LanguageBottomSheetWidget extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-        ),*/
+        ),
         Container(
           width: double.maxFinite,
           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 0.h),
@@ -128,6 +129,7 @@ class LanguageBottomSheetWidget extends StatelessWidget {
                     return InkWell(
                       onTap: () {
                         controller1.getSelectedLanguage();
+                        onChangedLanguage!();
                         Get.back();
                       },
                       child: Container(
