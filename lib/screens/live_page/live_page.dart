@@ -353,7 +353,6 @@ class LivePageState extends State<LivePage>
                     Flexible(
                       child: Text(
                         message.message,
-                        maxLines: 4,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 12,
@@ -589,8 +588,14 @@ class LivePageState extends State<LivePage>
                                           child: CustomTextField(
                                             align: TextAlignVertical.center,
                                             height: 50.h,
+                                            style: TextStyle(
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.w400,
+                                              color: AppColors.white,
+                                            ),
+                                            focusNode: controller.myFocus,
                                             onSubmit: (value) {
-                                              FocusScope.of(context).unfocus();
+                                              controller.myFocus.unfocus();
                                               if (value.isNotEmpty) {
                                                 if (controller.badWordsData!
                                                     .contains(value)) {
@@ -615,10 +620,10 @@ class LivePageState extends State<LivePage>
                                             isDense: true,
                                             textInputFormatter: [
                                               FilteringTextInputFormatter(
-                                                  RegExp(r'^[a-zA-Z ]*$'),
+                                                  RegExp(
+                                                      r'^[a-zA-Z _,@./#&+-]*$'),
                                                   allow: true)
                                             ],
-
                                             inputBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
                                                 color: AppColors.white
@@ -1096,7 +1101,7 @@ class LivePageState extends State<LivePage>
         for (var i = 0; i < data["gift_count"]; i++) {
           await Future.delayed(const Duration(seconds: 1));
           GiftWidget.show(context,
-              "assets/svga/${controller.svgaAnime[data["gift_type"]]}");
+              "assets/svga/${controller.svgaAnime[data["gift_type"] - 1]}");
         }
       }
     }
