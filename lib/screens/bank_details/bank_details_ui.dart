@@ -31,7 +31,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
           margin: EdgeInsets.symmetric(horizontal: 12.w),
           child: CustomMaterialButton(
             height: 50.h,
-            buttonName: "Submit",
+            buttonName: "submit".tr,
             textColor: AppColors.brownColour,
             onPressed: () => controller.submit(),
           ),
@@ -114,7 +114,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
                           builder: (controller) => Row(
                             children: [
                               ImagePickerButton(
-                                title: "Passbook",
+                                title: "passBook".tr,
                                 file: controller.passBook,
                                 onTap: () {
                                   controller.pickFile().then((value) {
@@ -127,7 +127,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
                               SizedBox(width: 12.w),
                               ImagePickerButton(
                                 file: controller.cancelledCheque,
-                                title: "Cancelled Cheque",
+                                title: "cancelledCheque".tr,
                                 onTap: () {
                                   controller.pickFile().then((value) {
                                     if (value != null) {

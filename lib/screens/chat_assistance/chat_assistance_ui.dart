@@ -58,10 +58,10 @@ class ChatAssistanceTile extends StatelessWidget {
         ),
       ),
       title: Text(
-        'Astrologer ${index + 1}',
+        "${'astrologer'.tr} ${index + 1}",
       ),
       subtitle: Text(
-        'Thank you for your help!',
+        "${'thankYouHelp'.tr}!",
         style: TextStyle(
           color: (index == 0) ? AppColors.blackColor : AppColors.greyColor,
           fontSize: 12.sp,

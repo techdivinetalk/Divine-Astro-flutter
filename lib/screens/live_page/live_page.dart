@@ -403,7 +403,7 @@ class LivePageState extends State<LivePage>
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CustomText("Astrologers's Live Star",
+                CustomText("astrologersLiveStar".tr,
                     fontSize: 14.sp,
                     fontColor: AppColors.white,
                     fontWeight: FontWeight.bold),
@@ -506,7 +506,7 @@ class LivePageState extends State<LivePage>
       'Namastey 🙏🏻',
       'Hello ❤️',
       'Hey 🔥',
-      'Buy 👋🏻',
+      'Bye 👋🏻',
       'Morning ☀️',
       'Night 🌛'
     ];
@@ -607,7 +607,7 @@ class LivePageState extends State<LivePage>
                                             // height: ,
                                             inputAction: TextInputAction.send,
                                             readOnly: false,
-                                            hintText: 'Say Hi...',
+                                            hintText: "${'sayHi'.tr}...",
                                             hintColor: AppColors.white,
                                             controller: controller.msg,
                                             keyboardType: TextInputType.text,
@@ -787,8 +787,8 @@ class LivePageState extends State<LivePage>
           SizedBox(width: 1.w),
           Obx(() => controller.isCoHosting.value
               ? buildCallDurationWidget()
-              : SizedBox()),
-          Spacer(),
+              : const SizedBox()),
+          const Spacer(),
           Obx(() => Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -797,8 +797,8 @@ class LivePageState extends State<LivePage>
                   FlutterSwitch(
                     activeColor: AppColors.appYellowColour.withOpacity(0.7),
                     inactiveColor: AppColors.grey.withOpacity(0.7),
-                    activeText: "Call",
-                    inactiveText: "Call",
+                    activeText: "call".tr,
+                    inactiveText: "call".tr,
                     activeTextColor: AppColors.white,
                     inactiveTextColor: AppColors.white,
                     showOnOff: true,
@@ -810,8 +810,7 @@ class LivePageState extends State<LivePage>
                     value: controller.isCallOnOff.value,
                     onToggle: (val) {
                       controller.setAvailibility(
-                        widget.localUserID,
-                        !controller.isCallOnOff.value,
+                        widget.localUserID, !controller.isCallOnOff.value,
                       );
                       controller.isCallOnOff.value =
                           !controller.isCallOnOff.value;
@@ -865,7 +864,7 @@ class LivePageState extends State<LivePage>
                           context: context,
                           builder: (BuildContext context) {
                             return EndCoHost(
-                                name: controller.coHostUser!.name,
+                                name: controller.coHostUser?.name,
                                 onNo: () {},
                                 onYes: () {
                                   if (controller.coHostUser != null) {
@@ -956,11 +955,11 @@ class LivePageState extends State<LivePage>
                     ),
                   ),
                 )
-              : SizedBox(),
+              : const SizedBox(),
         ),
         Obx(() => controller.leaderBoard.value.users?.isNotEmpty ?? false
             ? SizedBox(height: 12.h)
-            : SizedBox()),
+            : const SizedBox()),
         ClipOval(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
@@ -1041,7 +1040,7 @@ class LivePageState extends State<LivePage>
                   backgroundColor: Colors.redAccent,
                   isLabelVisible: true,
                   padding: EdgeInsets.symmetric(horizontal: 6.w),
-                  label: Text(snapshot.data!.snapshot.children.length.toString()),
+                  label: Text(snapshot.data?.snapshot.children.length.toString()??''),
                   child: ClipOval(
                     child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),

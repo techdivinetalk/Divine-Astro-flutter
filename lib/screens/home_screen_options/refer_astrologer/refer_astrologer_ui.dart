@@ -1,13 +1,11 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/colors.dart';
-
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
 import '../../../common/custom_light_yellow_btn.dart';
 
 class ReferAnAstrologer extends GetView<ReferAstrologerController> {
@@ -78,18 +76,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   inputAction: TextInputAction.next,
                   hintText: "enterNumberMsg".tr,
                 ),
-                WhiteTextField(
-                  validator: (value) {
-                    if (value! == "") {
-                      return "";
-                    }
-                    return null;
-                  },
-                  controller: controller.state.mobileNumber,
-                  inputType: TextInputType.text,
-                  inputAction: TextInputAction.next,
-                  hintText: "enterNumberMsg".tr,
-                ),
+
                 const SizedBox(height: 20),
                 Text(
                   "${"astrologySkill".tr}*",

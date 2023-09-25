@@ -19,12 +19,12 @@ class UploadStoryUi extends GetView<UploadStoryController> {
     return Scaffold(
       backgroundColor: AppColors.blackColor,
       appBar: commonDetailAppbar(
-          title: "Upload Story",
+          title: "uploadStory".tr,
           trailingWidget: Padding(
             padding: const EdgeInsets.only(right: 8),
             child: InkWell(
               onTap: () {
-                Fluttertoast.showToast(msg: "Uploading Story..");
+                Fluttertoast.showToast(msg: "${'uploadStory'.tr}..");
                 controller.saveVideo();
               },
               child: const Text("Upload"),
@@ -37,7 +37,7 @@ class UploadStoryUi extends GetView<UploadStoryController> {
                   height: 200,
                   width: 200,
                   child: ElevatedButton(
-                    child: const Text("Select Video"),
+                    child:  Text("selectVideo".tr),
                     onPressed: () async {
                       FilePickerResult? result =
                           await FilePicker.platform.pickFiles(
@@ -46,7 +46,7 @@ class UploadStoryUi extends GetView<UploadStoryController> {
                       );
                       if (result != null) {
                         controller.trimmer.loadVideo(
-                            videoFile: File(result.files.single.path!));
+                            videoFile: File(result.files.single.path??''));
                         controller.selectedFile?.value = true;
                       }
                     },

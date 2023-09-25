@@ -109,7 +109,7 @@ class AllTabInfo extends GetView<AllOptionController> {
               ],
             ),
             Text(
-              "with $customerName ($customerId) for ${controller.getDuration(duration: duration!)}",
+              "with $customerName ($customerId) for ${controller.getDuration(duration: duration??'')}",
               textAlign: TextAlign.start,
               style: AppTextStyle.textStyle12(
                   fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),

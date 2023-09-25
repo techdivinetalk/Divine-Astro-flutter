@@ -22,9 +22,9 @@ class SideMenuDrawer extends GetView<HomeController> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                const Text(
-                  "Version 0.0.0.0.0",
-                  style: TextStyle(fontSize: 16),
+                 Text(
+                  "${'version'.tr} 0.0.0.0.0",
+                  style: const TextStyle(fontSize: 16),
                 ),
                 InkWell(
                     onTap: () {

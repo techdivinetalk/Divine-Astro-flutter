@@ -26,6 +26,7 @@ import '../../screens/side_menu/side_menu_ui.dart';
 class ProfileUI extends GetView<ProfilePageController> {
   ProfileUI({Key? key}) : super(key: key);
   var preference = Get.find<SharedPreferenceService>();
+
   // var homeController = Get.find<HomeController>();
 
   @override
@@ -141,7 +142,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                       ]),
                                   SizedBox(height: 3.h),
                                   Text(
-                                    '+91- ${controller.userData?.phoneNo ?? ""}',
+                                    '+91- ${controller.userData?.mobileNumber ?? ""}',
                                     style: AppTextStyle.textStyle14(
                                         fontWeight: FontWeight.w400,
                                         fontColor: AppColors.darkBlue),
@@ -321,20 +322,34 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                 builder: (controller) {
                                                   return GestureDetector(
                                                     onTap: () {
-                                                      controller.selectedLanguageData(item);
+                                                      controller
+                                                          .selectedLanguageData(
+                                                              item);
                                                     },
                                                     child: Container(
                                                       decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      border: item.isSelected
-                                                      ? Border.all(width: 1,color: Colors.grey)
-                                                      : Border.all(width: 0, color: Colors.white)),
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          border: item
+                                                                  .isSelected
+                                                              ? Border.all(
+                                                                  width: 1,
+                                                                  color: Colors
+                                                                      .grey)
+                                                              : Border.all(
+                                                                  width: 0,
+                                                                  color: Colors
+                                                                      .white)),
                                                       child: Container(
-                                                        decoration: BoxDecoration(
-                                                          shape: BoxShape.circle,
-                                                          gradient: LinearGradient(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          gradient:
+                                                              LinearGradient(
                                                             colors: [
-                                                              item.colors!.withOpacity(
+                                                              item.colors!
+                                                                  .withOpacity(
                                                                       0),
                                                               item.colors!
                                                                   .withOpacity(
@@ -348,15 +363,24 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                         ),
                                                         child: ClipRRect(
                                                           borderRadius:
-                                                              BorderRadius.circular(10.r),
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.r),
                                                           child: Material(
-                                                            color: Colors.transparent,
+                                                            color: Colors
+                                                                .transparent,
                                                             child: Column(
-                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
                                                               children: [
                                                                 Text(
-                                                                  item.languagesMain.toString(),
-                                                                  style: AppTextStyle.textStyle20(fontWeight: FontWeight.w600),
+                                                                  item.languagesMain
+                                                                      .toString(),
+                                                                  style: AppTextStyle.textStyle20(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600),
                                                                 ),
                                                                 SizedBox(
                                                                     height:
@@ -420,9 +444,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                             ],
                           ),
                         );
-                      }
-                      else if (index == 1)
-                      {
+                      } else if (index == 1) {
                         FilePickerResult? result =
                             await FilePicker.platform.pickFiles(
                           type: FileType.video,
@@ -432,12 +454,9 @@ class ProfileUI extends GetView<ProfilePageController> {
                           Get.toNamed(RouteName.uploadStoryUi,
                               arguments: "${result.files.single.path}");
                         }
-                      }
-                      else if(index == 3){
+                      } else if (index == 3) {
                         controller.homeController.whatsapp();
-                      }
-                      else if
-                      (item.nav != "") {
+                      } else if (item.nav != "") {
                         if (item.name == "bankDetails".tr ||
                             item.name == "uploadYourPhoto".tr) {
                           if (await PermissionHelper().askMediaPermission()) {
@@ -740,7 +759,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                             AppColors.darkBlue.withOpacity(0.5),
                                         context: context,
                                         builder: (context) => ReportPostReasons(
-                                            reviewData!.id.toString()),
+                                            reviewData?.id.toString() ?? ''),
 
                                         // builder: (context) => ReportPostReasons(reviewData?.id.),
                                       );
@@ -844,9 +863,9 @@ class ProfileUI extends GetView<ProfilePageController> {
         onFieldSubmitted: (text) {
           controller.getReplyOnReview(reviewId: reviewId, textMsg: text.trim());
         },
-        decoration: const InputDecoration(
-            hintText: "Reply here...",
-            hintStyle: TextStyle(color: AppColors.greyColor),
+        decoration: InputDecoration(
+            hintText: "${'replyHere'.tr}...",
+            hintStyle: const TextStyle(color: AppColors.greyColor),
             border: InputBorder.none),
       ),
     );
@@ -899,7 +918,7 @@ class _ReportPostReasonsState extends State<ReportPostReasons> {
                 children: [
                   Assets.images.report.svg(),
                   SizedBox(height: 20.h),
-                  CustomText("reportingQue".tr,
+                  CustomText("${'reportingQue'.tr}?",
                       fontSize: 20.sp,
                       fontWeight: FontWeight.w700,
                       fontColor: AppColors.darkBlue),
@@ -928,7 +947,8 @@ class _ReportPostReasonsState extends State<ReportPostReasons> {
                                   },
                                   child: Text(
                                     report.first.tr,
-                                    style: AppTextStyle.textStyle16(
+                                    textAlign: TextAlign.center,
+                                    style: AppTextStyle.textStyle15(
                                         fontColor: AppColors.darkBlue,
                                         fontWeight: FontWeight.w400),
                                   )),

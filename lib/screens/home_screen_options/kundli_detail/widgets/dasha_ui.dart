@@ -613,7 +613,7 @@ class _DashaUIState extends State<DashaUI> {
                     const Icon(Icons.chevron_right),
                   ],
                 ),
-                Text("Pratyantar Dasha",
+                Text("pratyantarDasha".tr,
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w500,
                         fontColor: AppColors.appYellowColour)),
@@ -861,7 +861,7 @@ class _DashaUIState extends State<DashaUI> {
                       onTap: () {
                         controller.subDashaLevel.value = 2;
                       },
-                      child: Text("Pratyantar Dasha",
+                      child: Text("pratyantarDasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
                               fontColor: AppColors.appYellowColour)),
@@ -1124,7 +1124,7 @@ class _DashaUIState extends State<DashaUI> {
                       onTap: () {
                         controller.subDashaLevel.value = 2;
                       },
-                      child: Text("Pratyantar Dasha",
+                      child: Text("pratyantarDasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
                               fontColor: AppColors.appYellowColour)),

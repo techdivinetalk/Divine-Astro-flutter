@@ -10,9 +10,12 @@ import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/load_image.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
 
@@ -321,7 +324,7 @@ class HomeUI extends GetView<HomeController> {
                               Get.toNamed(RouteName.videoCallPage);
                             }
                           }),
-                      SizedBox(height: 10.h),
+                      SizedBox(height: 20.h),
                       feedbackWidget(),
                       SizedBox(height: 20.h),
                     ],
@@ -407,12 +410,25 @@ class HomeUI extends GetView<HomeController> {
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
                     ),
-                    Text(
-                      '${formatDateTime(controller.homeData?.noticeBoard!.createdAt! ?? DateTime.now())} ${dateToString(controller.homeData?.noticeBoard!.createdAt ?? DateTime.now(), format: "h:mm a")}',
-                      style: AppTextStyle.textStyle10(
-                          fontWeight: FontWeight.w400,
-                          fontColor: AppColors.darkBlue),
-                    )
+                    Row(
+                      children: [
+                        Text(
+                          '${dateToString(controller.homeData?.noticeBoard?.createdAt ?? DateTime.now(), format: "h:mm a")}  '
+                          '${formatDateTime(controller.homeData?.noticeBoard?.createdAt! ?? DateTime.now())} ',
+                          style: AppTextStyle.textStyle10(
+                              fontWeight: FontWeight.w400,
+                              fontColor: AppColors.darkBlue),
+                        ),
+                        SizedBox(
+                          width: 30.w,
+                        ),
+                        GestureDetector(
+                            onTap: (){
+                              Fluttertoast.showToast(msg: "No info for now!");
+                            },
+                            child: Assets.images.icInfo.svg(height: 18.h, width: 18.h)),
+                      ],
+                    ),
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -477,7 +493,7 @@ class HomeUI extends GetView<HomeController> {
                       fontWeight: FontWeight.w700),
                 ),
                 Text(
-                  "₹${controller.homeData!.sessionType!.chatAmount}/Min",
+                  "₹${controller.homeData?.sessionType?.chatAmount}/Min",
                   style: AppTextStyle.textStyle10(
                       fontColor: AppColors.darkBlue,
                       fontWeight: FontWeight.w400),
@@ -490,7 +506,7 @@ class HomeUI extends GetView<HomeController> {
                       fontWeight: FontWeight.w700),
                 ),
                 Text(
-                  "₹${controller.homeData!.sessionType!.chatAmount}/Min",
+                  "₹${controller.homeData?.sessionType?.chatAmount}/Min",
                   style: AppTextStyle.textStyle10(
                       fontColor: AppColors.darkBlue,
                       fontWeight: FontWeight.w400),
@@ -503,7 +519,7 @@ class HomeUI extends GetView<HomeController> {
                       fontWeight: FontWeight.w700),
                 ),
                 Text(
-                  "₹${controller.homeData!.sessionType!.videoCallAmount}/Min",
+                  "₹${controller.homeData?.sessionType?.videoCallAmount}/Min",
                   style: AppTextStyle.textStyle10(
                       fontColor: AppColors.darkBlue,
                       fontWeight: FontWeight.w400),
@@ -543,11 +559,23 @@ class HomeUI extends GetView<HomeController> {
             ),
             Column(
               children: [
-                Text(
-                  "nextOnlineTiming".tr,
-                  style: AppTextStyle.textStyle12(
-                      fontWeight: FontWeight.w500,
-                      fontColor: AppColors.darkBlue),
+                Row(
+                  children: [
+                    Text(
+                      "nextOnlineTiming".tr,
+                      style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
+                    ),
+                    SizedBox(
+                      width: 8.w,
+                    ),
+                    GestureDetector(
+                        onTap: (){
+                          Fluttertoast.showToast(msg: "No info for now!");
+                        },
+                        child: Assets.images.icInfo.svg(height: 16.h, width: 16.h)),
+                  ],
                 ),
                 SizedBox(height: 15.h),
                 Obx(() => controller.selectedChatTime.value.isEmpty
@@ -555,8 +583,8 @@ class HomeUI extends GetView<HomeController> {
                         onTap: () {
                           selectDateOrTime(
                             Get.context!,
-                            title: "Schedule Your Next Online Date",
-                            btnTitle: "Confirm Next Online Date",
+                            title: "ScheduleOnlineDate".tr,
+                            btnTitle: "confirmNextDate".tr,
                             pickerStyle: "DateCalendar",
                             looping: true,
                             initialDate: DateTime.now(),
@@ -567,8 +595,8 @@ class HomeUI extends GetView<HomeController> {
                             onClickOkay: () {
                               selectDateOrTime(
                                 Get.context!,
-                                title: "Schedule Your Next Online Time",
-                                btnTitle: "Confirm Next Online Time",
+                                title: "scheduleOnlineTime".tr,
+                                btnTitle: "confirmOnlineTime".tr,
                                 pickerStyle: "TimeCalendar",
                                 looping: true,
                                 onConfirm: (value) {},
@@ -612,8 +640,8 @@ class HomeUI extends GetView<HomeController> {
                         onTap: () {
                           selectDateOrTime(
                             Get.context!,
-                            title: "Schedule Your Next Online Date",
-                            btnTitle: "Confirm Next Online Date",
+                            title: "ScheduleOnlineDate".tr,
+                            btnTitle: "confirmNextDate".tr,
                             pickerStyle: "DateCalendar",
                             looping: true,
                             lastDate: DateTime(2050),
@@ -623,8 +651,8 @@ class HomeUI extends GetView<HomeController> {
                             onClickOkay: () {
                               selectDateOrTime(
                                 Get.context!,
-                                title: "Schedule Your Next Online Time",
-                                btnTitle: "Confirm Next Online Time",
+                                title: "scheduleOnlineTime".tr,
+                                btnTitle: "confirmOnlineTime".tr,
                                 pickerStyle: "TimeCalendar",
                                 looping: true,
                                 onConfirm: (value) {},
@@ -667,8 +695,8 @@ class HomeUI extends GetView<HomeController> {
                         onTap: () {
                           selectDateOrTime(
                             Get.context!,
-                            title: "Schedule Your Next Online Date",
-                            btnTitle: "Confirm Next Online Date",
+                            title: "ScheduleOnlineDate".tr,
+                            btnTitle: "confirmNextDate".tr,
                             pickerStyle: "DateCalendar",
                             looping: true,
                             lastDate: DateTime(2050),
@@ -678,8 +706,8 @@ class HomeUI extends GetView<HomeController> {
                             onClickOkay: () {
                               selectDateOrTime(
                                 Get.context!,
-                                title: "Schedule Your Next Online Time",
-                                btnTitle: "Confirm Next Online Time",
+                                title: "scheduleOnlineTime".tr,
+                                btnTitle: "confirmOnlineTime".tr,
                                 pickerStyle: "TimeCalendar",
                                 looping: true,
                                 onConfirm: (value) {},
@@ -753,12 +781,24 @@ class HomeUI extends GetView<HomeController> {
                       fontColor: AppColors.darkBlue,
                     ),
                   ),
-                  Text(
-                    "status".tr,
-                    style: AppTextStyle.textStyle12(
-                      fontWeight: FontWeight.w500,
-                      fontColor: AppColors.darkBlue,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        "status".tr,
+                        style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 8.w,
+                      ),
+                      GestureDetector(
+                          onTap: (){
+                            Fluttertoast.showToast(msg: "No info for now!");
+                          },
+                          child: Assets.images.icInfo.svg(height: 16.h, width: 16.h)),
+                    ],
                   ),
                 ],
               ),
@@ -905,11 +945,23 @@ class HomeUI extends GetView<HomeController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          Padding(
             padding: EdgeInsets.all(16.h),
-            child: Text(
-              "trainingVideos".tr,
-              style: AppTextStyle.textStyle16(fontWeight: FontWeight.w500),
+            child: Row(
+              children: [
+                Text(
+                  "trainingVideos".tr,
+                  style: AppTextStyle.textStyle16(fontWeight: FontWeight.w500),
+                ),
+                const Expanded(
+                  child: SizedBox(),
+                ),
+                GestureDetector(
+                    onTap: (){
+                      Fluttertoast.showToast(msg: "No info for now!");
+                    },
+                    child: Assets.images.icInfo.svg(height: 16.h, width: 16.h)),
+              ],
             ),
           ),
           SizedBox(height: 10.h),
@@ -1004,8 +1056,9 @@ class HomeUI extends GetView<HomeController> {
                   BoxDecoration(borderRadius: BorderRadius.circular(10)),
               child: TextFormField(
                 maxLines: 6,
-                // maxLength: 96,
+                maxLength: 96,
                 keyboardType: TextInputType.text,
+                controller: controller.feedBackText,
                 textInputAction: TextInputAction.done,
                 onTapOutside: (value) => FocusScope.of(Get.context!).unfocus(),
                 decoration: InputDecoration(
@@ -1035,7 +1088,15 @@ class HomeUI extends GetView<HomeController> {
             ),
             SizedBox(height: 20.h),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                if (controller.feedBackText.text.isEmpty) {
+                  divineSnackBar(
+                      data: "${'feedbackValidation'.tr}.",
+                      color: AppColors.redColor);
+                } else {
+                  controller.sendFeedbackAPI(controller.feedBackText.text);
+                }
+              },
               child: Center(
                 child: Container(
                     width: ScreenUtil().screenWidth / 1.5,
@@ -1097,7 +1158,7 @@ class HomeUI extends GetView<HomeController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Actual Payment:",
+                    "${'actualPayment'.tr}:",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w500,
                         fontColor: AppColors.darkBlue),
@@ -1116,7 +1177,7 @@ class HomeUI extends GetView<HomeController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "-Amount:",
+                        '-${'amount'.tr}:',
                         style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w500,
                             fontColor: AppColors.darkBlue.withOpacity(0.5)),
@@ -1134,7 +1195,7 @@ class HomeUI extends GetView<HomeController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "-Last Billing Cycle",
+                        "-${'lastBillingCycle'.tr}",
                         style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w500,
                             fontColor: AppColors.darkBlue.withOpacity(0.5)),
@@ -1149,7 +1210,7 @@ class HomeUI extends GetView<HomeController> {
                         children: [
                           SizedBox(width: 12.h),
                           Text(
-                            "Refund:",
+                            "${'refund'.tr}:",
                             style: AppTextStyle.textStyle12(
                                 fontWeight: FontWeight.w500,
                                 fontColor: AppColors.darkBlue.withOpacity(0.5)),
@@ -1206,7 +1267,7 @@ class HomeUI extends GetView<HomeController> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Total Tax:",
+                      "${'totalTax'.tr}:",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
@@ -1246,7 +1307,7 @@ class HomeUI extends GetView<HomeController> {
                       children: [
                         Expanded(
                           child: Text(
-                            "-Payment Gateway:",
+                            "-${'paymentGateway'.tr}:",
                             style: AppTextStyle.textStyle12(
                                 fontWeight: FontWeight.w500,
                                 fontColor: AppColors.darkBlue.withOpacity(0.5)),
@@ -1270,14 +1331,14 @@ class HomeUI extends GetView<HomeController> {
                 children: [
                   Expanded(
                     child: Text(
-                      "Status:",
+                      "${'status'.tr}:",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
                     ),
                   ),
                   Text(
-                    "to be settled",
+                    "toBeSettled".tr,
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w500,
                         fontColor: AppColors.darkBlue),
@@ -1293,7 +1354,7 @@ class HomeUI extends GetView<HomeController> {
                 children: [
                   Expanded(
                     child: Text(
-                      "Time Period",
+                      "timePeriod".tr,
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
@@ -1425,7 +1486,8 @@ class PerformanceDialog extends StatelessWidget {
                                         ),
                                         SizedBox(height: 5.h),
                                         Text(
-                                          controller.yourScore[controller.scoreIndex]['score'],
+                                          controller.yourScore[
+                                              controller.scoreIndex]['score'],
                                           style: TextStyle(
                                               fontWeight: FontWeight.w700,
                                               color: AppColors.darkBlue,
@@ -1513,120 +1575,6 @@ class PerformanceDialog extends StatelessWidget {
                                             ),*/
                                   ],
                                 ),
-                                // SizedBox(
-                                //     height: 170.h,
-                                //     child: SfRadialGauge(
-                                //         backgroundColor: Colors.white,
-                                //         animationDuration: 4500,
-                                //         axes: <RadialAxis>[
-                                //           RadialAxis(
-                                //               radiusFactor: 0.9,
-                                //               canScaleToFit: true,
-                                //               axisLabelStyle:
-                                //                   const GaugeTextStyle(color: Colors.white),
-                                //               showLastLabel: false,
-                                //               maximum: 50,
-                                //               // maximum: 150,
-                                //               ranges: <GaugeRange>[
-                                //                 GaugeRange(
-                                //                   gradient: const SweepGradient(
-                                //                     colors: <Color>[
-                                //                       Color(0xFFfb481f),
-                                //                       Color(0xFFfb8304),
-                                //                       Color(0xFFe5c310),
-                                //                       Color(0xFF93da3c),
-                                //                       Color(0xFF70c441),
-                                //                       Color(0xFF38a84f)
-                                //                     ],
-                                //                   ),
-                                //                   // gradient: Gradient.,
-                                //                   endWidth: 15,
-                                //                   startWidth: 15,
-                                //                   startValue: 0,
-                                //                   endValue: 50,
-                                //                 ),
-                                //                 // GaugeRange(
-                                //                 //
-                                //                 //     gradient: const SweepGradient(
-                                //                 //       colors: <Color>[
-                                //                 //         Color(0xFFe5c310),
-                                //                 //         Color(0xFF93da3c)
-                                //                 //       ],
-                                //                 //     ),
-                                //                 //     endWidth: 15,
-                                //                 //     startWidth: 15,
-                                //                 //     startValue: 50,
-                                //                 //     endValue: 100,
-                                //                 //     ),
-                                //                 // GaugeRange(
-                                //                 //     gradient: const SweepGradient(
-                                //                 //       colors: <Color>[
-                                //                 //         Color(0xFF70c441),
-                                //                 //         Color(0xFF38a84f)
-                                //                 //       ],
-                                //                 //     ),
-                                //                 //     startValue: 100,
-                                //                 //     endWidth: 15,
-                                //                 //     startWidth: 15,
-                                //                 //     endValue: 150,
-                                //                 //     )
-                                //               ],
-                                //               pointers: const <GaugePointer>[
-                                //                 MarkerPointer(
-                                //                   animationDuration: 5000,
-                                //                   value: 40,
-                                //                   enableAnimation: true,
-                                //                   borderColor: AppColors.markerColor,
-                                //                   borderWidth: 9,
-                                //                   markerWidth: 9,
-                                //                   markerHeight: 9,
-                                //                   // overlayRadius: 800,
-                                //                   markerType: MarkerType.invertedTriangle,
-                                //                   animationType: AnimationType.elasticOut,
-                                //                   markerOffset: -6,
-                                //                 )
-                                //               ],
-                                //               annotations: <GaugeAnnotation>[
-                                //                 GaugeAnnotation(
-                                //                     widget: Column(
-                                //                       children: [
-                                //                         SizedBox(
-                                //                           height: 20.h,
-                                //                         ),
-                                //                         Text(
-                                //                           "yourScore".tr,
-                                //                           style: AppTextStyle.textStyle12(
-                                //                               fontColor: AppColors.darkBlue),
-                                //                         ),
-                                //                         SizedBox(
-                                //                           height: 10.h,
-                                //                         ),
-                                //                         Text(
-                                //                           controller.yourScore[
-                                //                               controller.scoreIndex]['score'],
-                                //                           style: TextStyle(
-                                //                               fontWeight: FontWeight.w700,
-                                //                               color: AppColors.darkBlue,
-                                //                               fontSize: 25.sp),
-                                //                         ),
-                                //                         SizedBox(
-                                //                           height: 10.h,
-                                //                         ),
-                                //                         Text(
-                                //                           "Out of 100",
-                                //                           style: AppTextStyle.textStyle12(
-                                //                               fontColor: AppColors.darkBlue),
-                                //                         ),
-                                //                       ],
-                                //                     ),
-                                //                     angle: 90,
-                                //                     horizontalAlignment:
-                                //                         GaugeAlignment.center,
-                                //                     verticalAlignment: GaugeAlignment.center,
-                                //                     axisValue: 10,
-                                //                     positionFactor: 0.5)
-                                //               ])
-                                //         ])),
                                 SizedBox(height: 20.h),
                               ],
                             ),

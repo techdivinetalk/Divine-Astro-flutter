@@ -1,4 +1,3 @@
-import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/side_menu/settings/widget/change_lang_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import '../../../common/colors.dart';
 import '../../../common/common_bottomsheet.dart';
 import '../../../common/routes.dart';
 import '../../../gen/assets.gen.dart';
-import '../../../pages/profile/profile_page_controller.dart';
 import 'settings_controller.dart';
 import 'widget/delete_account_popup.dart';
 

@@ -16,7 +16,7 @@ class PrivacyPolicyUI extends GetView<SettingsController> {
       appBar: AppBar(
         backgroundColor: AppColors.white,
         surfaceTintColor: AppColors.white,
-        title: Text("Privacy Policy".tr,
+        title: Text("privacyPolicy".tr,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
@@ -49,7 +49,7 @@ class PrivacyPolicyUI extends GetView<SettingsController> {
           }
           if (snapshot.hasError) {
             return Center(
-              child: CustomText("Something went wrong", fontSize: 20.sp),
+              child: CustomText("somethingWentWrong".tr, fontSize: 20.sp),
             );
           }
           return const SizedBox.shrink();

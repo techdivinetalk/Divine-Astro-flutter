@@ -59,7 +59,7 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Text(
-                            "You will get call and chat alerts from these numbers. Save these numbers to avoid any confusion.",
+                            "importNumText".tr,
                             style: TextStyle(
                               color: AppColors.redColor,
                               fontWeight: FontWeight.w400,

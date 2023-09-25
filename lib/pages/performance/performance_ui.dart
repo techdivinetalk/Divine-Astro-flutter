@@ -3,6 +3,7 @@ import 'package:divine_astrologer/model/performance_model_class.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import '../../common/app_textstyle.dart';
 import '../../common/appbar.dart';
@@ -64,7 +65,6 @@ class PerformanceUI extends GetView<PerformanceController> {
       }),
     );
   }
-
 }
 
 class YourScoreWidget extends GetView<PerformanceController> {
@@ -99,7 +99,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                       children: [
                         Stack(
                           alignment: Alignment.bottomCenter,
-                          children:  [
+                          children: [
                             Assets.images.bgMeterFinal.svg(
                               height: 135.h,
                               width: 270.h,
@@ -110,7 +110,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                   height: 5.h,
                                 ),
                                 Text(
-                                  "Your Score",
+                                  "yourScore".tr,
                                   style: AppTextStyle.textStyle10(
                                       fontColor: AppColors.darkBlue),
                                 ),
@@ -266,7 +266,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                     child: Column(
                                                       children: [
                                                         Text(
-                                                          "Percentage",
+                                                          "percentage".tr,
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: AppTextStyle
@@ -288,12 +288,17 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                     child: Column(
                                                       children: [
                                                         Text(
-                                                          "Marks",
-                                                          textAlign: TextAlign.center,
+                                                          "marks".tr,
+                                                          textAlign:
+                                                              TextAlign.center,
                                                           style: AppTextStyle
                                                               .textStyle12(
-                                                                  fontWeight: FontWeight.w700,
-                                                                  fontColor: AppColors.darkBlue),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  fontColor:
+                                                                      AppColors
+                                                                          .darkBlue),
                                                         ),
                                                         SizedBox(
                                                           height: 5.h,
@@ -307,24 +312,35 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                 height: 10.h,
                                               ),
                                               ListView.builder(
-                                                  physics: const NeverScrollableScrollPhysics(),
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
                                                   itemCount:
                                                       item?.detail?.length ?? 0,
                                                   shrinkWrap: true,
                                                   primary: false,
-                                                  itemBuilder: (context, index) {
-                                                    Detail? model = item?.detail?[index];
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    Detail? model =
+                                                        item?.detail?[index];
                                                     return Row(
                                                       children: [
                                                         Expanded(
                                                           child: Column(
                                                             children: [
                                                               Text(
-                                                                (model?.percentage ?? '-').toString(),
-                                                                textAlign: TextAlign.center,
+                                                                (model?.percentage ??
+                                                                        '-')
+                                                                    .toString(),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
                                                                 style: AppTextStyle.textStyle12(
-                                                                    fontWeight: FontWeight.w400,
-                                                                    fontColor: AppColors.darkBlue),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontColor:
+                                                                        AppColors
+                                                                            .darkBlue),
                                                               ),
                                                               SizedBox(
                                                                 height: 10.h,
@@ -336,11 +352,19 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                           child: Column(
                                                             children: [
                                                               Text(
-                                                                (model?.marks ?? '-').toString(),
-                                                                textAlign: TextAlign.center,
+                                                                (model?.marks ??
+                                                                        '-')
+                                                                    .toString(),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
                                                                 style: AppTextStyle.textStyle12(
-                                                                    fontWeight: FontWeight.w700,
-                                                                    fontColor: AppColors.darkBlue),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                    fontColor:
+                                                                        AppColors
+                                                                            .darkBlue),
                                                               ),
                                                               SizedBox(
                                                                 height: 10.h,
@@ -383,7 +407,6 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                 ],
                               )),
                         ),
-
                       ],
                     ), //just for testing, will fill with image later
                   );
@@ -421,10 +444,20 @@ class LastAvailabilityWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Last 30 Days Availability (in mins)",
-            style: AppTextStyle.textStyle12(
-                fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+          Row(
+            children: [
+              Text(
+                "${'last30DaysAvailability'.tr} (${'inMins'.tr})",
+                style: AppTextStyle.textStyle12(
+                    fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+              ),
+              const Expanded(child: SizedBox()),
+              GestureDetector(
+                  onTap: () {
+                    Fluttertoast.showToast(msg: "No info for now!");
+                  },
+                  child: Assets.images.icInfo.svg(height: 17.h, width: 17.h)),
+            ],
           ),
           SizedBox(
             height: 20.h,
@@ -602,10 +635,20 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "availabilityTitle".tr,
-            style: AppTextStyle.textStyle12(
-                fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+          Row(
+            children: [
+              Text(
+                "availabilityTitle".tr,
+                style: AppTextStyle.textStyle12(
+                    fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+              ),
+              const Expanded(child: SizedBox()),
+              GestureDetector(
+                  onTap: () {
+                    Fluttertoast.showToast(msg: "No info for now!");
+                  },
+                  child: Assets.images.icInfo.svg(height: 17.h, width: 17.h)),
+            ],
           ),
           SizedBox(
             height: 20.h,
@@ -835,7 +878,12 @@ class OverAllScoreData extends GetView<PerformanceController> {
                                 fontColor: AppColors.darkBlue),
                           ),
                           const Expanded(child: SizedBox()),
-                          Assets.images.icInfo.svg(height: 21.h, width: 21.h),
+                          GestureDetector(
+                              onTap: () {
+                                Fluttertoast.showToast(msg: "No info for now!");
+                              },
+                              child: Assets.images.icInfo
+                                  .svg(height: 17.h, width: 17.h)),
                         ],
                       ),
                     ],
@@ -873,7 +921,7 @@ class DurationUI extends StatelessWidget {
             child: DropdownButton2<String>(
               isExpanded: true,
               hint: Text(
-                "Select",
+                "select".tr,
                 style: AppTextStyle.textStyle16(
                     fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
               ),
