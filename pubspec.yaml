@@ -62,6 +62,7 @@ dependencies:
   socket_io_client: ^2.0.3+1
   youtube_player_flutter: ^8.1.2
   pin_input_text_field: ^4.5.1
+  device_info_plus: ^9.0.3
 
 dependency_overrides:
   intl: ^0.18.1

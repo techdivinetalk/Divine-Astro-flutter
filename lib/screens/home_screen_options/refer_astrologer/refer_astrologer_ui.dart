@@ -72,21 +72,8 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                     }
                     return null;
                   },
-                  
                   controller: controller.state.mobileNumber,
                   inputType: TextInputType.number,
-                  inputAction: TextInputAction.next,
-                  hintText: "enterNumberMsg".tr,
-                ),
-                WhiteTextField(
-                  validator: (value) {
-                    if (value! == "") {
-                      return "";
-                    }
-                    return null;
-                  },
-                  controller: controller.state.mobileNumber,
-                  inputType: TextInputType.text,
                   inputAction: TextInputAction.next,
                   hintText: "enterNumberMsg".tr,
                 ),
