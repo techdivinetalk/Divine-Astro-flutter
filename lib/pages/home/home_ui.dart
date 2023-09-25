@@ -308,7 +308,6 @@ class HomeUI extends GetView<HomeController> {
                           onbtnTap: () {
                             Get.toNamed(RouteName.referAstrologer);
                           }),
-                      SizedBox(height: 10.h),
                       GetBuilder<HomeController>(
                         builder: (controller) => trainingVideoWidget(),
                       ),
@@ -377,65 +376,64 @@ class HomeUI extends GetView<HomeController> {
   Widget senderCategoryWidget() {
     return ClipRRect(
       borderRadius: BorderRadius.all(Radius.circular(20.r)),
-      child: Material(
-        color: AppColors.transparent,
-        child: InkWell(
-          onTap: () {
-            // Get.toNamed(RouteName.noticeDetail);
-          },
-          child: Ink(
-            padding: EdgeInsets.all(16.h),
-            decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 3.0,
-                      offset: const Offset(0.0, 3.0)),
-                ],
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(20.r)),
-                border: Border.all(color: AppColors.lightYellow)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      controller.homeData?.noticeBoard?.title ?? '',
-                      style: AppTextStyle.textStyle16(
-                          fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
-                    ),
-                    Text(
-                      '${formatDateTime(controller.homeData?.noticeBoard!.createdAt! ?? DateTime.now())} ${dateToString(controller.homeData?.noticeBoard!.createdAt ?? DateTime.now(), format: "h:mm a")}',
-                      style: AppTextStyle.textStyle10(
-                          fontWeight: FontWeight.w400,
-                          fontColor: AppColors.darkBlue),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 10),
-                ReadMoreText(
-                  controller.homeData?.noticeBoard?.description ?? '',
-                  trimLines: 4,
-                  colorClickableText: AppColors.blackColor,
-                  trimMode: TrimMode.Line,
-                  trimCollapsedText: "readMore".tr,
-                  trimExpandedText: "showLess".tr,
-                  moreStyle: TextStyle(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.blackColor,
-                  ),
-                  lessStyle: TextStyle(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.blackColor,
-                  ),
-                ),
+      child: InkWell(
+        onTap: () {
+          Get.toNamed(RouteName.noticeDetail,
+              arguments: controller.homeData?.noticeBoard,
+              parameters: {"from_list": "0"});
+        },
+        child: Ink(
+          padding: EdgeInsets.all(16.h),
+          decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 3.0,
+                    offset: const Offset(0.0, 3.0)),
               ],
-            ),
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(20.r)),
+              border: Border.all(color: AppColors.lightYellow)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    controller.homeData?.noticeBoard?.title ?? '',
+                    style: AppTextStyle.textStyle16(
+                        fontWeight: FontWeight.w500,
+                        fontColor: AppColors.darkBlue),
+                  ),
+                  Text(
+                    '${dateToString(controller.homeData?.noticeBoard!.createdAt ?? DateTime.now(), format: "hh:mm a")} ${formatDateTime(controller.homeData?.noticeBoard!.createdAt! ?? DateTime.now())}',
+                    style: AppTextStyle.textStyle10(
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue),
+                  )
+                ],
+              ),
+              const SizedBox(height: 10),
+              ReadMoreText(
+                controller.homeData?.noticeBoard?.description ?? '',
+                trimLines: 4,
+                colorClickableText: AppColors.blackColor,
+                trimMode: TrimMode.Line,
+                trimCollapsedText: "readMore".tr,
+                trimExpandedText: "showLess".tr,
+                moreStyle: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.blackColor,
+                ),
+                lessStyle: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.blackColor,
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -889,6 +887,7 @@ class HomeUI extends GetView<HomeController> {
     }
     return Container(
       width: double.infinity,
+      margin: EdgeInsets.only(top: 10.h),
       height: 238.h,
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -1425,7 +1424,8 @@ class PerformanceDialog extends StatelessWidget {
                                         ),
                                         SizedBox(height: 5.h),
                                         Text(
-                                          controller.yourScore[controller.scoreIndex]['score'],
+                                          controller.yourScore[
+                                              controller.scoreIndex]['score'],
                                           style: TextStyle(
                                               fontWeight: FontWeight.w700,
                                               color: AppColors.darkBlue,

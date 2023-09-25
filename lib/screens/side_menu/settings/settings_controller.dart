@@ -17,36 +17,6 @@ class SettingsController extends GetxController {
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
   RxString currLanguage = "".obs;
-  var languageList = <ChangeLanguageModelClass>[
-    ChangeLanguageModelClass(
-        'English',
-        'Eng',
-        AppColors.darkBlue,
-        (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "en_US"
-            ? true
-            : false),
-    ChangeLanguageModelClass(
-        'Hindi',
-        'हिन्दी',
-        AppColors.teal,
-        (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "hi_IN"
-            ? true
-            : false),
-    ChangeLanguageModelClass(
-        'Marathi',
-        'मराठी',
-        AppColors.redColor,
-        (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "mr_IN"
-            ? true
-            : false),
-    ChangeLanguageModelClass(
-        'Gujarati',
-        'ગુજરાતી',
-        AppColors.redColor,
-        (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "gu_IN"
-            ? true
-            : false),
-  ].obs;
 
   @override
   void onReady() {

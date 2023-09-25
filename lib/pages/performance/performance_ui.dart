@@ -1,9 +1,11 @@
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/model/performance_model_class.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
 import '../../common/app_textstyle.dart';
 import '../../common/appbar.dart';
 import '../../common/common_bottomsheet.dart';
@@ -26,7 +28,7 @@ class PerformanceUI extends GetView<PerformanceController> {
       body: GetBuilder<PerformanceController>(builder: (controller) {
         return SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(12.h),
+            padding: EdgeInsets.all(20.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -64,7 +66,6 @@ class PerformanceUI extends GetView<PerformanceController> {
       }),
     );
   }
-
 }
 
 class YourScoreWidget extends GetView<PerformanceController> {
@@ -85,12 +86,14 @@ class YourScoreWidget extends GetView<PerformanceController> {
               removeRight: true,
               child: GridView.builder(
                 shrinkWrap: true,
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
                 primary: false,
                 itemCount: controller.overAllScoreList.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 0.8,
-                    crossAxisSpacing: 15),
+                    mainAxisSpacing: 10.h,
+                    crossAxisSpacing: 20.h,
+                    childAspectRatio: 0.78),
                 itemBuilder: (BuildContext context, int index) {
                   BusyHours? item = controller.overAllScoreList[index];
                   ScoreModelClass model = controller.percentageSubTitle[index];
@@ -98,236 +101,160 @@ class YourScoreWidget extends GetView<PerformanceController> {
                     child: Column(
                       children: [
                         Stack(
-                          alignment: Alignment.bottomCenter,
-                          children:  [
+                          children: [
                             Assets.images.bgMeterFinal.svg(
                               height: 135.h,
                               width: 270.h,
                             ),
-                            Column(
-                              children: [
-                                SizedBox(
-                                  height: 5.h,
-                                ),
-                                Text(
-                                  "Your Score",
-                                  style: AppTextStyle.textStyle10(
-                                      fontColor: AppColors.darkBlue),
-                                ),
-                                SizedBox(
-                                  height: 5.h,
-                                ),
-                                Text(
-                                  item?.performance?.isNotEmpty ?? false
-                                      ? '${item?.performance?[0].value ?? 0}'
-                                      : "0",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      color: AppColors.darkBlue,
-                                      fontSize: 20.sp),
-                                ),
-                                SizedBox(
-                                  height: 5.h,
-                                ),
-                                Text(
-                                  item?.performance?.isNotEmpty ?? false
-                                      ? 'Out of ${item?.performance?[0].valueOutOff ?? 0}'
-                                      : "Out of 0",
-                                  // "Out of 100",
-                                  style: AppTextStyle.textStyle10(
-                                      fontColor: AppColors.darkBlue),
-                                ),
-                              ],
+                            Positioned(
+                              left: 32.h,
+                              top: 40.h,
+                              child: CustomText(
+                                // "25",
+                                '${item?.rankDetail?[0].max ?? 0}',
+                                fontSize: 8.sp,
+                              ),
                             ),
-                            Center(
-                              child: SizedBox(
-                                height: 140.h,
-                                width: 280.h,
-                                child: Stack(
-                                  children: [
-                                    Positioned(
-                                      bottom: 7.h,
-                                      left: 11.h,
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            // "0",
-                                            '${item?.rankDetail?[0].min ?? 0}',
-                                            style: TextStyle(
-                                                fontSize: 11.sp,
-                                                fontWeight: FontWeight.w400,
-                                                color: Colors.black),
-                                          ),
-                                          SizedBox(
-                                            width: 140.w,
-                                          ),
-                                          Text(
-                                            // "100",
-                                            '${item?.rankDetail?[2].max ?? 0}',
-                                            style: TextStyle(
-                                                fontSize: 11.sp,
-                                                fontWeight: FontWeight.w400,
-                                                color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 31.h,
-                                      left: 40.h,
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            // "25",
-                                            '${item?.rankDetail?[0].max ?? 0}',
-                                            style: TextStyle(
-                                                fontSize: 11.sp,
-                                                fontWeight: FontWeight.w400,
-                                                color: Colors.black),
-                                          ),
-                                          SizedBox(
-                                            width: 75.w,
-                                          ),
-                                          Text(
-                                            '${item?.rankDetail?[1].max ?? 0}',
-                                            // "50",
-                                            style: TextStyle(
-                                                fontSize: 11.sp,
-                                                fontWeight: FontWeight.w400,
-                                                color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                            Positioned(
+                              right: 38.h,
+                              top: 40.h,
+                              child: CustomText(
+                                // "50",
+                                '${item?.rankDetail?[1].max ?? 0}',
+                                fontSize: 8.sp,
+                              ),
+                            ),
+                            Positioned(
+                              left: 5.h,
+                              top: 105.h,
+                              child: CustomText(
+                                //0
+                                '${item?.rankDetail?[0].min ?? 0}',
+                                fontSize: 8.sp,
+                              ),
+                            ),
+                            Positioned(
+                              right: 05.h,
+                              top: 105.h,
+                              child: CustomText(
+                                //100
+                                '${item?.rankDetail?[2].max ?? 0}',
+                                fontSize: 8.sp,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 135.h,
+                              width: 270.h,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  SizedBox(height: 25.h),
+                                  Text(
+                                    "Your Score",
+                                    style: AppTextStyle.textStyle10(
+                                        fontColor: AppColors.darkBlue),
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  Text(
+                                    item?.performance?.isNotEmpty ?? false
+                                        ? '${item?.performance?[0].value ?? 0}'
+                                        : "0",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.darkBlue,
+                                        fontSize: 20.sp),
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  Text(
+                                    item?.performance?.isNotEmpty ?? false
+                                        ? 'Out of ${item?.performance?[0].valueOutOff ?? 0}'
+                                        : "Out of 0",
+                                    // "Out of 100",
+                                    style: AppTextStyle.textStyle10(
+                                        fontColor: AppColors.darkBlue),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            openBottomSheet(context,
-                                functionalityWidget: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 20, right: 20, top: 20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "${item?.label} ( Percentage vs Marks )",
-                                        style: AppTextStyle.textStyle16(
-                                            fontColor: AppColors.darkBlue,
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                      SizedBox(
-                                        height: 15.h,
-                                      ),
-                                      Text(
-                                        model.scoreName.toString(),
-                                        style: AppTextStyle.textStyle14(
-                                            fontColor: AppColors.darkBlue,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                      SizedBox(
-                                        height: 25.h,
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.all(12.h),
-                                        decoration: BoxDecoration(
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.2),
-                                                blurRadius: 1.0,
-                                                offset: const Offset(0.0, 3.0)),
-                                          ],
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(20.h),
-                                          ),
-                                        ),
-                                        child: MediaQuery.removePadding(
-                                          context: context,
-                                          removeTop: true,
-                                          removeBottom: true,
-                                          child: Column(
-                                            children: [
-                                              SizedBox(
-                                                height: 10.h,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: Column(
-                                                      children: [
-                                                        Text(
-                                                          "Percentage",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: AppTextStyle
-                                                              .textStyle12(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  fontColor:
-                                                                      AppColors
-                                                                          .darkBlue),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5.h,
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    child: Column(
-                                                      children: [
-                                                        Text(
-                                                          "Marks",
-                                                          textAlign: TextAlign.center,
-                                                          style: AppTextStyle
-                                                              .textStyle12(
-                                                                  fontWeight: FontWeight.w700,
-                                                                  fontColor: AppColors.darkBlue),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5.h,
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
+                        SizedBox(height: 8.h),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  openBottomSheet(context,
+                                      functionalityWidget: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20, right: 20, top: 20),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "${item?.label} ( Percentage vs Marks )",
+                                              style: AppTextStyle.textStyle16(
+                                                  fontColor: AppColors.darkBlue,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                            SizedBox(
+                                              height: 15.h,
+                                            ),
+                                            Text(
+                                              model.scoreName.toString(),
+                                              style: AppTextStyle.textStyle14(
+                                                  fontColor: AppColors.darkBlue,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
+                                            SizedBox(
+                                              height: 25.h,
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.all(12.h),
+                                              decoration: BoxDecoration(
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Colors.black
+                                                          .withOpacity(0.2),
+                                                      blurRadius: 1.0,
+                                                      offset: const Offset(
+                                                          0.0, 3.0)),
                                                 ],
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(20.h),
+                                                ),
                                               ),
-                                              SizedBox(
-                                                height: 10.h,
-                                              ),
-                                              ListView.builder(
-                                                  physics: const NeverScrollableScrollPhysics(),
-                                                  itemCount:
-                                                      item?.detail?.length ?? 0,
-                                                  shrinkWrap: true,
-                                                  primary: false,
-                                                  itemBuilder: (context, index) {
-                                                    Detail? model = item?.detail?[index];
-                                                    return Row(
+                                              child: MediaQuery.removePadding(
+                                                context: context,
+                                                removeTop: true,
+                                                removeBottom: true,
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 10.h,
+                                                    ),
+                                                    Row(
                                                       children: [
                                                         Expanded(
                                                           child: Column(
                                                             children: [
                                                               Text(
-                                                                (model?.percentage ?? '-').toString(),
-                                                                textAlign: TextAlign.center,
+                                                                "Percentage",
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
                                                                 style: AppTextStyle.textStyle12(
-                                                                    fontWeight: FontWeight.w400,
-                                                                    fontColor: AppColors.darkBlue),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                    fontColor:
+                                                                        AppColors
+                                                                            .darkBlue),
                                                               ),
                                                               SizedBox(
-                                                                height: 10.h,
+                                                                height: 5.h,
                                                               )
                                                             ],
                                                           ),
@@ -336,54 +263,126 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                           child: Column(
                                                             children: [
                                                               Text(
-                                                                (model?.marks ?? '-').toString(),
-                                                                textAlign: TextAlign.center,
+                                                                "Marks",
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
                                                                 style: AppTextStyle.textStyle12(
-                                                                    fontWeight: FontWeight.w700,
-                                                                    fontColor: AppColors.darkBlue),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                    fontColor:
+                                                                        AppColors
+                                                                            .darkBlue),
                                                               ),
                                                               SizedBox(
-                                                                height: 10.h,
+                                                                height: 5.h,
                                                               )
                                                             ],
                                                           ),
                                                         ),
                                                       ],
-                                                    );
-                                                  }),
-                                            ],
-                                          ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10.h,
+                                                    ),
+                                                    ListView.builder(
+                                                        physics:
+                                                            const NeverScrollableScrollPhysics(),
+                                                        itemCount: item?.detail
+                                                                ?.length ??
+                                                            0,
+                                                        shrinkWrap: true,
+                                                        primary: false,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          Detail? model = item
+                                                              ?.detail?[index];
+                                                          return Row(
+                                                            children: [
+                                                              Expanded(
+                                                                child: Column(
+                                                                  children: [
+                                                                    Text(
+                                                                      (model?.percentage ??
+                                                                              '-')
+                                                                          .toString(),
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: AppTextStyle.textStyle12(
+                                                                          fontWeight: FontWeight
+                                                                              .w400,
+                                                                          fontColor:
+                                                                              AppColors.darkBlue),
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          10.h,
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                child: Column(
+                                                                  children: [
+                                                                    Text(
+                                                                      (model?.marks ??
+                                                                              '-')
+                                                                          .toString(),
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: AppTextStyle.textStyle12(
+                                                                          fontWeight: FontWeight
+                                                                              .w700,
+                                                                          fontColor:
+                                                                              AppColors.darkBlue),
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          10.h,
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        }),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ));
-                          },
-                          child: Container(
-                              // height: 40,
-                              // width: 160,
-                              padding: EdgeInsets.all(12.h),
-                              decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.black.withOpacity(0.2),
-                                        blurRadius: 3.0,
-                                        offset: const Offset(0.0, 3.0)),
-                                  ],
-                                  color: AppColors.white,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10))),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    item?.label ?? '',
-                                    style: AppTextStyle.textStyle12(
-                                        fontColor: AppColors.darkBlue),
-                                  ),
-                                ],
-                              )),
+                                      ));
+                                },
+                                child: Container(
+                                    padding: EdgeInsets.all(12.h),
+                                    decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color:
+                                                  Colors.black.withOpacity(0.2),
+                                              blurRadius: 3.0,
+                                              offset: const Offset(0.0, 3.0)),
+                                        ],
+                                        color: AppColors.white,
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10))),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          item?.label ?? '',
+                                          style: AppTextStyle.textStyle12(
+                                              fontColor: AppColors.darkBlue),
+                                        ),
+                                      ],
+                                    )),
+                              ),
+                            ),
+                          ],
                         ),
-
                       ],
                     ), //just for testing, will fill with image later
                   );

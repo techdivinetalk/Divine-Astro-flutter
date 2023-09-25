@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
-enum WorkingForPlatform { initial, yes, no }
+enum WorkingForPlatform { yes, no }
 
 class ReferAstrologerController extends GetxController {
   final ReferAstrologerRepository repository;
@@ -46,13 +46,13 @@ class ReferAstrologerController extends GetxController {
 
   @override
   void dispose() {
-    super.dispose();
     state.dispose();
+    super.dispose();
   }
 }
 
 class ReferAstrologerState {
-  WorkingForPlatform platform = WorkingForPlatform.initial;
+  WorkingForPlatform platform = WorkingForPlatform.no;
   late final GlobalKey<FormState> formKey;
 
   bool get isYes => platform == WorkingForPlatform.yes;
