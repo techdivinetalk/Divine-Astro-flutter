@@ -17,7 +17,7 @@ import '../di/hive_services.dart';
 import '../di/shared_preference_service.dart';
 import '../model/chat/res_common_chat_success.dart';
 import '../model/chat_offline_model.dart';
-import '../repository/user_repository.dart';
+import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:path/path.dart' as p;
 
 import '../screens/chat_message/chat_message_controller.dart';
@@ -113,7 +113,6 @@ void checkNotification(
       }
     });
     removeNotificationNode();
-    debugPrint("$notificationList");
   }
 }
 

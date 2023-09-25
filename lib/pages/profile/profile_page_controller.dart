@@ -479,7 +479,6 @@ class ProfilePageController extends GetxController {
       await ZegoServices()
           .initZegoInvitationServices("${userData?.id}", "${userData?.name}");
       divineSnackBar(data: "Profile image update successfully");
-      debugPrint("Uploaded Url : $response");
     } else {
       CustomException("Something went wrong");
     }
