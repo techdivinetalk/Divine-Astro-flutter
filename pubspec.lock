@@ -1766,10 +1766,10 @@ packages:
     dependency: "direct main"
     description:
       name: zego_uikit_prebuilt_live_streaming
-      sha256: "98d1359a4f69853b5962fd89d36d2ad05f3fff46c18759c55b0b8d3be4671788"
+      sha256: ef47bc967aad1d3659c0d7013b308237e8879cd62e7c4caab4f2fb82505fee83
       url: "https://pub.dev"
     source: hosted
-    version: "2.19.1"
+    version: "2.20.1"
   zego_uikit_signaling_plugin:
     dependency: "direct main"
     description:

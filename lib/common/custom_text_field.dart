@@ -26,7 +26,7 @@ class CustomTextField extends StatelessWidget {
       this.fillColor,
       this.suffixIconPadding,
       this.textInputFormatter,
-        this.hintColor,
+        this.hintColor,this.style,
       this.inputAction,this.align})
       : super(key: key);
 
@@ -49,6 +49,7 @@ class CustomTextField extends StatelessWidget {
   final Color? hintColor;
   final double? suffixIconPadding;
   final Color? fillColor;
+  final TextStyle? style;
   final InputBorder? inputBorder;
   final List<TextInputFormatter>? textInputFormatter;
   final TextInputAction? inputAction;
@@ -76,6 +77,7 @@ class CustomTextField extends StatelessWidget {
           focusNode: focusNode,
           enabled: enabled,
           showCursor: showCursor,
+          style: style,
           keyboardType: keyboardType,
           controller: controller,
           validator: validator,

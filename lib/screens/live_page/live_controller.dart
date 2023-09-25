@@ -103,6 +103,7 @@ class LiveController extends GetxController {
   var removedWaitList = "0";
   final liveController = ZegoUIKitPrebuiltLiveStreamingController();
   Timer? countdownTimer;
+  FocusNode myFocus = FocusNode();
 
   stopTimer() {
     if (countdownTimer != null) {
