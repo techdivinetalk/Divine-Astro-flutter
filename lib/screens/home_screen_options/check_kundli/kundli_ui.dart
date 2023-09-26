@@ -203,6 +203,11 @@ class CheckYours extends GetView<KundliController> {
                           onTap: () {
                             selectDateOrTime(
                               Get.context!,
+                              initialDate: controller
+                                      .yourDateController.text.isNotEmpty
+                                  ? DateFormat("dd/MM/yyyy")
+                                      .parse(controller.yourDateController.text)
+                                  : DateTime.now(),
                               title: "selectYourDateBirth".tr,
                               btnTitle: "confirmDateBirth".tr,
                               pickerStyle: "DateCalendar",
@@ -250,6 +255,12 @@ class CheckYours extends GetView<KundliController> {
                           },
                           onTap: () {
                             selectDateOrTime(
+                              initialDate: controller.yourTimeController.text
+                                      .trim()
+                                      .isNotEmpty
+                                  ? DateFormat("hh:mm a").parse(
+                                      controller.yourTimeController.text.trim())
+                                  : DateTime.now(),
                               Get.context!,
                               title: "selectYourTimeBirth".tr,
                               btnTitle: "confirmTimeBirth".tr,
@@ -322,7 +333,8 @@ class CheckYours extends GetView<KundliController> {
                             onPressed: () {
                               if (controller.yourFormKey.currentState!
                                   .validate()) {
-                                controller.yourParams.value.name = controller.yourNameController.text.trim();
+                                controller.yourParams.value.name =
+                                    controller.yourNameController.text.trim();
                                 controller.submitDetails(
                                     controller.yourParams.value,
                                     controller.yourGender.value);
@@ -438,6 +450,11 @@ class CheckOther extends GetView<KundliController> {
                           },
                           onTap: () {
                             selectDateOrTime(
+                              initialDate:
+                                  controller.otherDateController.text.isNotEmpty
+                                      ? DateFormat("dd/MM/yyyy").parse(
+                                          controller.otherDateController.text)
+                                      : DateTime.now(),
                               Get.context!,
                               title: "selectYourDateBirth".tr,
                               btnTitle: "confirmDateBirth".tr,
@@ -487,6 +504,11 @@ class CheckOther extends GetView<KundliController> {
                           onTap: () {
                             selectDateOrTime(
                               Get.context!,
+                              initialDate:
+                                  controller.otherTimeController.text.isNotEmpty
+                                      ? DateFormat("h:mm a").parse(
+                                          controller.otherTimeController.text)
+                                      : DateTime.now(),
                               title: "selectYourTimeBirth".tr,
                               btnTitle: "confirmTimeBirth".tr,
                               pickerStyle: "TimeCalendar",
@@ -561,7 +583,8 @@ class CheckOther extends GetView<KundliController> {
                             onPressed: () {
                               if (controller.otherFormKey.currentState!
                                   .validate()) {
-                                controller.otherParams.value.name = controller.otherNameController.text.trim();
+                                controller.otherParams.value.name =
+                                    controller.otherNameController.text.trim();
                                 controller.submitDetails(
                                     controller.otherParams.value,
                                     controller.otherGender.value);

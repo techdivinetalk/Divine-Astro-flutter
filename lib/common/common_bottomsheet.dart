@@ -97,6 +97,7 @@ selectDateOrTime(
   DateTime? lastDate,
   DateTime? initialDate,
 }) {
+  DateTime updateDateTime = DateTime.now();
   return showCupertinoModalPopup(
     context: context,
     builder: (context) => Column(
@@ -149,14 +150,16 @@ selectDateOrTime(
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: DatePickerWidget(
+                  initialDate: initialDate ?? DateTime.now(),
                   lastDate: lastDate ?? DateTime.now(),
-                  firstDate: initialDate ?? DateTime(DateTime.now().year - 100),
+                  firstDate: DateTime(DateTime.now().year - 100),
                   dateFormat: pickerStyle == "DateCalendar"
                       ? "MMM/dd/yyyy"
                       : "MM/dd/yyyy",
                   pickerType: pickerStyle,
                   looping: looping,
                   onConfirm: (DateTime newDate, _) {
+                    updateDateTime = newDate;
                     if (pickerStyle == "DateCalendar") {
                       onConfirm(dateToString(newDate));
                       // debugPrint(Utils.dateToString(newDate));
@@ -166,11 +169,13 @@ selectDateOrTime(
                     }
                   },
                   onChange: (DateTime newDate, _) {
+                    updateDateTime = newDate;
                     if (pickerStyle == "DateCalendar") {
                       onChange(dateToString(newDate));
                     } else {
                       onChange(dateToString(newDate, format: "h:mm a"));
                     }
+
                     // debugPrint("$newDate");
                   },
                   pickerTheme: DateTimePickerTheme(
