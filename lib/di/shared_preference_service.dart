@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:divine_astrologer/common/zego_services.dart';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/model/update_bank_response.dart';
 import 'package:get/get.dart';
@@ -82,7 +81,6 @@ class SharedPreferenceService extends GetxService {
   }
 
   Future erase() async {
-    // await ZegoServices().unInitZegoInvitationServices();
     return prefs!.clear();
   }
 
@@ -136,5 +134,4 @@ class SharedPreferenceService extends GetxService {
       ConstantDetailsModelClass constantDetails) async {
     return await prefs!.setString(constantData, jsonEncode(constantDetails));
   }
-
 }
