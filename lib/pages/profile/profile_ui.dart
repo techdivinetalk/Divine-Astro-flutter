@@ -142,7 +142,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                       ]),
                                   SizedBox(height: 3.h),
                                   Text(
-                                    '+91- ${controller.userData?.mobileNumber ?? ""}',
+                                    '+91- ${controller.userData?.phoneNo ?? ""}',
                                     style: AppTextStyle.textStyle14(
                                         fontWeight: FontWeight.w400,
                                         fontColor: AppColors.darkBlue),

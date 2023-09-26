@@ -18,17 +18,21 @@ class TrainingVideoUI extends StatefulWidget {
 
 class _TrainingVideoUIState extends State<TrainingVideoUI> {
   late YoutubePlayerController _controller;
+  var shouldCall = true;
 
-  Widget player() {
+ /* Widget player() {
     return YoutubePlayer(
       controller: _controller,
       showVideoProgressIndicator: true,
+      bottomActions: [
+        RemainingDuration()
+      ],
       progressColors: const ProgressBarColors(
         playedColor: Colors.amber,
         handleColor: Colors.amberAccent,
       ),
     );
-  }
+  }*/
 
   @override
   void initState() {
@@ -39,6 +43,18 @@ class _TrainingVideoUIState extends State<TrainingVideoUI> {
         mute: true,
       ),
     );
+    _controller.addListener(() {
+      var time = durationFormatter((_controller.metadata.duration.inMilliseconds) -
+          (_controller.value.position.inMilliseconds));
+      time = time.substring(time.length - 5);
+      if(time == "00:30"){
+        if(shouldCall){
+          shouldCall = false;
+          var controller = Get.find<HomeController>();
+          controller.trainingVideoViewData(widget.video?.id ?? 0);
+        }
+      }
+    });
     super.initState();
   }
 
@@ -50,9 +66,6 @@ class _TrainingVideoUIState extends State<TrainingVideoUI> {
         return YoutubePlayer(
           progressIndicatorColor: Colors.red,
           onReady: () {},
-          onEnded: (val) {
-            controller.trainingVideoViewData(widget.video?.id ?? 0);
-          },
           controller: _controller,
           topActions: const [
             SizedBox(),
@@ -83,4 +96,30 @@ class _TrainingVideoUIState extends State<TrainingVideoUI> {
       }),
     );
   }
+}
+
+String durationFormatter(int milliSeconds) {
+  var seconds = milliSeconds ~/ 1000;
+  final hours = seconds ~/ 3600;
+  seconds = seconds % 3600;
+  var minutes = seconds ~/ 60;
+  seconds = seconds % 60;
+  final hoursString = hours >= 10
+      ? '$hours'
+      : hours == 0
+      ? '00'
+      : '0$hours';
+  final minutesString = minutes >= 10
+      ? '$minutes'
+      : minutes == 0
+      ? '00'
+      : '0$minutes';
+  final secondsString = seconds >= 10
+      ? '$seconds'
+      : seconds == 0
+      ? '00'
+      : '0$seconds';
+  final formattedTime =
+      '${hoursString == '00' ? '' : '$hoursString:'}$minutesString:$secondsString';
+  return formattedTime;
 }

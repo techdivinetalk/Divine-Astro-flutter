@@ -591,22 +591,22 @@ class HomeUI extends GetView<HomeController> {
                             looping: true,
                             initialDate: DateTime.now(),
                             lastDate: DateTime(2050),
-                            onConfirm: (value) {},
+                            onConfirm: (value) =>controller.selectChatDate(value),
                             onChange: (value) =>
                                 controller.selectChatDate(value),
                             onClickOkay: () {
-                              selectDateOrTime(
-                                Get.context!,
-                                title: "scheduleOnlineTime".tr,
-                                btnTitle: "confirmOnlineTime".tr,
-                                pickerStyle: "TimeCalendar",
-                                looping: true,
-                                onConfirm: (value) {},
-                                onChange: (value) =>
-                                    controller.selectChatTime(value),
-                                onClickOkay: () =>
-                                    controller.scheduleCall("CHAT"),
-                              );
+                                selectDateOrTime(
+                                  Get.context!,
+                                  title: "scheduleOnlineTime".tr,
+                                  btnTitle: "confirmOnlineTime".tr,
+                                  pickerStyle: "TimeCalendar",
+                                  looping: true,
+                                  onConfirm: (value) =>controller.selectChatTime(value),
+                                  onChange: (value) =>
+                                      controller.selectChatTime(value),
+                                  onClickOkay: () =>
+                                      controller.scheduleCall("CHAT"),
+                                );
                             },
                           );
                         },
@@ -647,7 +647,7 @@ class HomeUI extends GetView<HomeController> {
                             pickerStyle: "DateCalendar",
                             looping: true,
                             lastDate: DateTime(2050),
-                            onConfirm: (value) {},
+                            onConfirm: (value) =>controller.selectCallDate(value),
                             onChange: (value) =>
                                 controller.selectCallDate(value),
                             onClickOkay: () {
@@ -657,7 +657,7 @@ class HomeUI extends GetView<HomeController> {
                                 btnTitle: "confirmOnlineTime".tr,
                                 pickerStyle: "TimeCalendar",
                                 looping: true,
-                                onConfirm: (value) {},
+                                onConfirm: (value)=>controller.selectCallTime(value),
                                 onChange: (value) =>
                                     controller.selectCallTime(value),
                                 onClickOkay: () =>
@@ -702,7 +702,7 @@ class HomeUI extends GetView<HomeController> {
                             pickerStyle: "DateCalendar",
                             looping: true,
                             lastDate: DateTime(2050),
-                            onConfirm: (value) {},
+                            onConfirm: (value) =>controller.selectVideoDate(value),
                             onChange: (value) =>
                                 controller.selectVideoDate(value),
                             onClickOkay: () {
@@ -712,7 +712,7 @@ class HomeUI extends GetView<HomeController> {
                                 btnTitle: "confirmOnlineTime".tr,
                                 pickerStyle: "TimeCalendar",
                                 looping: true,
-                                onConfirm: (value) {},
+                                onConfirm: (value) =>controller.selectVideoTime(value),
                                 onChange: (value) =>
                                     controller.selectVideoTime(value),
                                 onClickOkay: () =>
