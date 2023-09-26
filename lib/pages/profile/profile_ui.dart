@@ -341,53 +341,32 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                                   color: Colors
                                                                       .white)),
                                                       child: Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          gradient:
-                                                              LinearGradient(
+                                                        decoration: BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                          gradient: LinearGradient(
                                                             colors: [
-                                                              item.colors!
-                                                                  .withOpacity(
-                                                                      0),
-                                                              item.colors!
-                                                                  .withOpacity(
-                                                                      0.2),
+                                                              item.colors!.withOpacity(0),
+                                                              item.colors!.withOpacity(0.2),
                                                             ],
-                                                            begin: Alignment
-                                                                .topLeft,
-                                                            end: Alignment
-                                                                .bottomRight,
+                                                            begin: Alignment.topLeft,
+                                                            end: Alignment.bottomRight,
                                                           ),
                                                         ),
                                                         child: ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10.r),
+                                                          borderRadius: BorderRadius.circular(10.r),
                                                           child: Material(
-                                                            color: Colors
-                                                                .transparent,
+                                                            color: Colors.transparent,
                                                             child: Column(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
+                                                              mainAxisAlignment: MainAxisAlignment.center,
                                                               children: [
-                                                                Text(
-                                                                  item.languagesMain
-                                                                      .toString(),
-                                                                  style: AppTextStyle.textStyle20(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600),
+                                                                CustomText(
+                                                                  item.languagesMain.toString(),
+                                                                  fontSize: 18.5.sp,
+                                                                  fontWeight: FontWeight.w600,
                                                                 ),
-                                                                SizedBox(
-                                                                    height:
-                                                                        10.h),
+                                                                SizedBox(height: 10.h),
                                                                 Text(
-                                                                  item.languages
-                                                                      .toString(),
+                                                                  item.languages.toString(),
                                                                   style: AppTextStyle
                                                                       .textStyle16(),
                                                                 ),

@@ -43,7 +43,7 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 2,
                                       crossAxisSpacing: 25.h,
-                                      childAspectRatio: 0.68,
+                                      childAspectRatio: 0.70,
                                       mainAxisSpacing: 30.h),
                               itemBuilder: (BuildContext context, int index) {
                                 var item =
@@ -53,7 +53,7 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
                                     Get.toNamed(RouteName.finalRemediesSubUI);
                                   },
                                   child: Container(
-                                    width: 300,
+                                    // width: 300,
                                     decoration: BoxDecoration(
                                       boxShadow: [
                                         BoxShadow(
@@ -80,7 +80,7 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
                                           padding: const EdgeInsets.only(
                                               left: 8.0, right: 8.0),
                                           child: Text(item?.prodName ?? "",
-                                              maxLines: 2,
+                                              maxLines: 1,
                                               softWrap: true,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
@@ -91,6 +91,7 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
                                         ),
                                         SizedBox(height: 8.h),
                                         Text("₹ ${item?.productPriceInr}",
+
                                             style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               fontSize: 12.sp,

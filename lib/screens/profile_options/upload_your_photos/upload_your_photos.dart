@@ -18,7 +18,7 @@ class UploadYourPhotosUi extends GetView<UploadYourPhotosController> {
   Widget build(BuildContext context) {
     Get.put(UploadYourPhotosController());
     return Scaffold(
-      appBar: commonDetailAppbar(title: "Upload your photos"),
+      appBar: commonDetailAppbar(title: "uploadYourPhotos".tr),
       //  getImages();
       body: Center(
         child: Column(
@@ -66,15 +66,22 @@ class UploadYourPhotosUi extends GetView<UploadYourPhotosController> {
                                   ),
                                 ),
                               ),
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.close,
-                                    color: AppColors.white,
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Align(
+                                  alignment: Alignment.topRight,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: AppColors.blackColor),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(3.0),
+                                      child: Icon(
+                                        Icons.close,
+                                        color: AppColors.white,
+                                      ),
+                                    ),
                                   ),
-                                  onPressed: () =>
-                                      controller.removeImages(element.path),
                                 ),
                               ),
                             ],
@@ -112,12 +119,12 @@ class UploadYourPhotosUi extends GetView<UploadYourPhotosController> {
             ),
             GetBuilder<UploadYourPhotosController>(
               builder: (controller) => CustomLightYellowButton(
-                name: "Upload Images",
+                name: "uploadImages".tr,
                 onTaped: () {
                   if (controller.selectedImages.length <= 5) {
                     controller.uploadImageToS3Bucket(controller.selectedImages);
                   } else {
-                    divineSnackBar(data: "Image Can not be more than 5");
+                    divineSnackBar(data: "imageValidationMsg".tr);
                   }
                 },
               ),

@@ -51,8 +51,8 @@ class UserData {
   int? anonymousCallMinimumTime;
   int? chatAmount;
   int? chatMinimumTime;
-  double? videoCallPayout;
-  double? audioCallPayout;
+  num? videoCallPayout;
+  num? audioCallPayout;
 
   // int? anonymousCallPayout;
   // String? chatPayout;
@@ -195,8 +195,8 @@ class UserData {
     anonymousCallMinimumTime = json['anonymous_call_minimum_time'];
     chatAmount = json['chat_amount'];
     chatMinimumTime = json['chat_minimum_time'];
-    videoCallPayout = double.parse(json['video_call_payout'].toString());
-    audioCallPayout = double.parse(json['audio_call_payout'].toString());
+    videoCallPayout = json['video_call_payout'];
+    audioCallPayout = json['audio_call_payout'];
     // anonymousCallPayout = json['anonymous_call_payout'];
     // chatPayout = json['chat_payout'];
     giftPayout = double.parse(json['gift_payout'].toString());

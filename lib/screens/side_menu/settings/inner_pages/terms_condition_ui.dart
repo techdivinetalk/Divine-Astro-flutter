@@ -26,7 +26,9 @@ class TermsConditionUI extends GetView<SettingsController> {
         leading: IconButton(
           highlightColor: AppColors.transparent,
           splashColor: AppColors.transparent,
-          onPressed: () => Get.back(),
+          onPressed: () {
+            Get.back();
+          },
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
       ),

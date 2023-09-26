@@ -501,6 +501,8 @@ class _DashaUIState extends State<DashaUI> {
                               controller.getPratyantarDashaApiList(
                                 vimshottariData?.planet.toString() ?? '',
                                 subModel?.planet.toString() ?? '',
+
+
                               );
                             },
                             child: Container(

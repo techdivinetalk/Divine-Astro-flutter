@@ -11,7 +11,7 @@ String performanceModelClassToJson(PerformanceModelClass data) => json.encode(da
 class PerformanceModelClass {
   Data? data;
   bool? success;
-  int? statusCode;
+  String? statusCode;
   String? message;
 
   PerformanceModelClass({
@@ -24,7 +24,7 @@ class PerformanceModelClass {
   factory PerformanceModelClass.fromJson(Map<String, dynamic> json) => PerformanceModelClass(
     data: json["data"] == null ? null : Data.fromJson(json["data"]),
     success: json["success"],
-    statusCode: json["status_code"],
+    statusCode: json["status_code"].toString(),
     message: json["message"],
   );
 

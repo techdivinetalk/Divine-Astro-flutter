@@ -326,8 +326,8 @@ Map<String, String> hi() {
     "searchCountry": "एक देश खोजें",
     "verificationHintText": "सत्यापन के लिए आपको ऊपर दिए गए नंबर पर कॉल आएगी",
     "verify": "सत्यापित करें",
-    "validPhoneNumber": "कृपया एक वैध नंबर डालें",
-    "mobileNumber10Digits": "मोबाइल नंबर 10 अंकों का होना चाहिए",
+    "validPhoneNumber": "कृपया एक वैध नंबर डालें.",
+    "mobileNumber10Digits": "मोबाइल नंबर 10 अंकों का होना चाहिए.",
     "enterRegisteredNumber": "पंजीकृत संख्या दर्ज करें",
     "passBook": "पासवृक",
     "cancelledCheque": "रद्द किया गया चेक",
@@ -354,6 +354,7 @@ Map<String, String> hi() {
     'sayHi': 'नमस्ते कहे',
     "dateTime": "दिनांक समय",
     "giftName": "उपहार का नाम",
+
     "giftPrice": "उपहार मूल्य",
     "quantity": "मात्रा",
     "selectVideo": "वीडियो चुनें",
@@ -365,6 +366,10 @@ Map<String, String> hi() {
     "version": "संस्करण",
     "feedbackValidation": "कृपया अपनी प्रतिक्रिया दर्ज करें",
     "reportingQue": "आप इसकी सूचना क्यों दे रहे हैं",
-
+    "mobileNumberEmptyMsg": "कृपया मोबाइल नंबर दर्ज करें.",
+    "uploadYourPhotos": "अपनी तस्वीरें अपलोड करें",
+    "uploadImages": "तश्वीरें अपलोड करो",
+    "imageValidationMsg": "छवि 5 से अधिक नहीं हो सकती",
+    "profileUpdatedSuccessfully": "प्रोफाइल को सफलतापूर्वक अपडेट किया गया",
   };
 }

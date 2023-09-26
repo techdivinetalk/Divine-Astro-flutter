@@ -324,8 +324,8 @@ Map<String, String> gu() {
     "searchCountry": "દેશ શોધો",
     "verificationHintText": "તમને વેરિફિકેશન માટે ઉપર આપેલા નંબર પર કોલ આવશે",
     "verify": "ચકાસો",
-    "validPhoneNumber": "કૃપા કરીને માન્ય ફોન નંબર દાખલ કરો",
-    "mobileNumber10Digits": "મોબાઈલ નંબર 10 અંકનો હોવો જોઈએ",
+    "validPhoneNumber": "કૃપા કરીને માન્ય ફોન નંબર દાખલ કરો.",
+    "mobileNumber10Digits": "મોબાઈલ નંબર 10 અંકનો હોવો જોઈએ.",
     "enterRegisteredNumber": "નોંધાયેલ નંબર દાખલ કરો",
     "passBook": "પાસબુક",
     "cancelledCheque": "રદ કરેલ ચેક",
@@ -363,6 +363,10 @@ Map<String, String> gu() {
     "version": "સંસ્કરણ",
     "feedbackValidation": "કૃપા કરીને તમારો પ્રતિસાદ દાખલ કરો",
     "reportingQue": "તમે આની જાણ કેમ કરી રહ્યા છો",
-
+    "mobileNumberEmptyMsg": "કૃપા કરીને મોબાઇલ નંબર દાખલ કરો.",
+    "uploadYourPhotos": "તમારા ફોટા અપલોડ કરો",
+    "uploadImages": "છબીઓ અપલોડ કરો",
+    "imageValidationMsg": "છબી 5 થી વધુ ન હોઈ શકે",
+    "profileUpdatedSuccessfully": "પ્રોફાઇલ સફળતાપૂર્વક અપડેટ થઈ",
   };
 }

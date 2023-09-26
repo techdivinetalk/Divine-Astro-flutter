@@ -37,7 +37,6 @@ class LoginUI extends GetView<LoginController> {
                         .image(width: ScreenUtil().screenWidth * 0.55),
                   ),
                   SizedBox(height: 20.h),
-
                   const ImageSliderWidget(),
                   SizedBox(height: 5.h),
                   mobileField(),
@@ -105,10 +104,14 @@ class LoginUI extends GetView<LoginController> {
           builder: (controller) => TextFormField(
             focusNode: controller.numberFocus,
             validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'validPhoneNumber'.tr;
+              String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+              RegExp regExp = RegExp(pattern);
+              if (value!.isEmpty) {
+                return 'mobileNumberEmptyMsg'.tr;
               } else if (value.length != 10) {
                 return 'mobileNumber10Digits'.tr;
+              } else if (!regExp.hasMatch(value)) {
+                return 'validPhoneNumber'.tr;
               }
               return null;
             },
