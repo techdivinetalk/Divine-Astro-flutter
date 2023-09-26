@@ -71,7 +71,7 @@ class CountryPickerSheetWidget extends StatelessWidget {
                 Material(
                   color: Colors.transparent,
                   child: Text(
-                    "Select a Country",
+                    "selectCountry".tr,
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       color: AppColors.darkBlue,
@@ -159,7 +159,7 @@ class _AllCountryListState extends State<AllCountryList> {
                   fontWeight: FontWeight.w400,
                   fontSize: 16.sp,
                 ),
-                hintText: "Search a Country",
+                hintText: "searchCountry".tr,
                 border: InputBorder.none,
               ),
             ),

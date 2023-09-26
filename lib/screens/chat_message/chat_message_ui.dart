@@ -330,7 +330,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                               controller.getImage(false);
                             } else {
                               divineSnackBar(
-                                  data: "This chat has been ended.",
+                                  data: "${'chatEnded'.tr}.",
                                   color: AppColors.appYellowColour);
                             }
                           },
@@ -363,7 +363,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                         controller.sendMsg();
                       } else {
                         divineSnackBar(
-                            data: "This chat has been ended.",
+                            data: "${'chatEnded'.tr}.",
                             color: AppColors.appYellowColour);
                       }
                     },
@@ -490,7 +490,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8.0.r),
                           child: Image.file(
-                            File(chatDetail.downloadedPath!),
+                            File(chatDetail.downloadedPath??''),
                             fit: BoxFit.cover,
                             height: 200.h,
                           ),
@@ -711,7 +711,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
           color: AppColors.white,
           borderRadius: const BorderRadius.all(Radius.circular(20)),
         ),
-        child: const Text("Unread Messages"),
+        child:  Text("unreadMessages".tr),
       ),
     );
   }

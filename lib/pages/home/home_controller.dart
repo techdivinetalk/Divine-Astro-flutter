@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
 import 'package:divine_astrologer/model/update_offer_type_response.dart';
@@ -16,12 +15,12 @@ import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../common/app_exception.dart';
 import '../../di/shared_preference_service.dart';
 import '../../model/constant_details_model_class.dart';
 import '../../model/home_page_model_class.dart';
 import '../../model/res_login.dart';
+import '../../model/send_feed_back_model.dart';
 import '../../model/view_training_video_model.dart';
 import '../../repository/home_page_repository.dart';
 import '../../repository/user_repository.dart';
@@ -34,6 +33,8 @@ class HomeController extends GetxController {
   RxList<bool> promotionOfferSwitch = RxList([]);
   RxString appbarTitle = "Astrologer Name ".obs;
   RxBool isShowTitle = true.obs;
+  TextEditingController feedBackText = TextEditingController();
+
   ExpandedTileController? expandedTileController = ExpandedTileController();
   ExpandedTileController? expandedTile2Controller = ExpandedTileController();
   UserData? userData = UserData();
@@ -88,6 +89,27 @@ class HomeController extends GetxController {
   Loading loading = Loading.initial;
   RxBool shopDataSync = false.obs;
   ViewTrainingVideoModelClass? viewTrainingVideoModelClass;
+  SendFeedBackModel? sendFeedBackModel;
+
+  sendFeedbackAPI(String text) async {
+    Map<String, dynamic> params = {"comment": text.toString()};
+    try {
+      var data = await userRepository.sendFeedBack(params);
+      sendFeedBackModel = data;
+      feedBackText.clear();
+      divineSnackBar(data: sendFeedBackModel?.message.toString() ?? '');
+      profileDataSync.value = true;
+      log("send FeedBack-->${sendFeedBackModel?.message}");
+      log("params Body-->$text");
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      }
+    }
+  }
 
   trainingVideoViewData(int videoId) async {
     Map<String, dynamic> params = {"training_video_id": videoId};

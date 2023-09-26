@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../common/appbar.dart';
 import '../../../common/colors.dart';
+import '../../../common/routes.dart';
 import '../../../common/text_field_custom.dart';
 import '../../../gen/assets.gen.dart';
 import 'donation_detail_controller.dart';
@@ -28,7 +29,7 @@ class DonationDetailUi extends GetView<DonationDetailController> {
               onPressed: () {},
               color: AppColors.lightYellow,
               child: Text(
-                "Donate Now",
+                "donateNow".tr,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 20.sp,
@@ -39,20 +40,25 @@ class DonationDetailUi extends GetView<DonationDetailController> {
       ),
       appBar: commonDetailAppbar(
           title: "Donation For Cow",
-          trailingWidget: Container(
-            margin: EdgeInsets.only(right: 16.w),
-            width: 47.w,
-            height: 26.h,
-            decoration: BoxDecoration(
-                border: Border.all(color: AppColors.darkBlue, width: 1),
-                borderRadius: BorderRadius.circular(10)),
-            child: Center(
-              child: Text("₹500",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 12.sp,
-                    color: AppColors.darkBlue,
-                  )),
+          trailingWidget: GestureDetector(
+            onTap: () {
+              Get.toNamed(RouteName.walletScreenUI);
+            },
+            child: Container(
+              margin: EdgeInsets.only(right: 16.w),
+              width: 47.w,
+              height: 26.h,
+              decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.darkBlue, width: 1),
+                  borderRadius: BorderRadius.circular(10)),
+              child: Center(
+                child: Text("₹500",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12.sp,
+                      color: AppColors.darkBlue,
+                    )),
+              ),
             ),
           )),
       body: SingleChildScrollView(
@@ -72,7 +78,7 @@ class DonationDetailUi extends GetView<DonationDetailController> {
                   )),
               SizedBox(height: 20.h),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   MaterialButton(
                       height: 68,
@@ -155,7 +161,7 @@ class DonationDetailUi extends GetView<DonationDetailController> {
                 ],
               ),
               SizedBox(height: 20.h),
-              Text("Enter Custom Amount",
+              Text("enterCustomAmount".tr,
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 20.sp,
@@ -164,7 +170,7 @@ class DonationDetailUi extends GetView<DonationDetailController> {
               SizedBox(height: 20.h),
               AppTextField(
                 textInputType: TextInputType.number,
-                hintText: "Enter Amount",
+                hintText: "enterAmount".tr,
                 prefixIcon: Text("₹",
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
@@ -175,7 +181,7 @@ class DonationDetailUi extends GetView<DonationDetailController> {
               ),
               SizedBox(height: 20.h),
               Text(
-                  "orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
+                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 14.sp,

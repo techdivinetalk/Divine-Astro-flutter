@@ -133,7 +133,7 @@ class CheckYours extends GetView<KundliController> {
                     controller: controller.yourNameController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your name';
+                        return 'pleaseEnterYourName'.tr;
                       }
                       return null;
                     },
@@ -196,7 +196,7 @@ class CheckYours extends GetView<KundliController> {
                           controller: controller.yourDateController,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "Select Birth Date";
+                              return "selectBirthDate".tr;
                             }
                             return null;
                           },
@@ -244,7 +244,7 @@ class CheckYours extends GetView<KundliController> {
                           controller: controller.yourTimeController,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "Select Birth Time";
+                              return "selectBirthTime".tr;
                             }
                             return null;
                           },
@@ -287,7 +287,7 @@ class CheckYours extends GetView<KundliController> {
                     controller: controller.yourPlaceController,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "Select Birth Place";
+                        return "selectBirthPlace".tr;
                       }
                       return null;
                     },
@@ -369,7 +369,7 @@ class CheckOther extends GetView<KundliController> {
                     controller: controller.otherNameController,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "Name should not be empty";
+                        return "nameEmptyValidation".tr;
                       }
                       return null;
                     },
@@ -432,7 +432,7 @@ class CheckOther extends GetView<KundliController> {
                           controller: controller.otherDateController,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "Date should not be empty";
+                              return "dateEmptyValidation".tr;
                             }
                             return null;
                           },
@@ -480,7 +480,7 @@ class CheckOther extends GetView<KundliController> {
                           controller: controller.otherTimeController,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "Time should not be empty";
+                              return "timeEmptyValidation".tr;
                             }
                             return null;
                           },
@@ -525,7 +525,7 @@ class CheckOther extends GetView<KundliController> {
                     controller: controller.otherPlaceController,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "Place should not be empty";
+                        return "PlaceEmptyValidation".tr;
                       }
                       return null;
                     },

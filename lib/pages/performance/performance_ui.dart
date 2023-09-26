@@ -4,6 +4,7 @@ import 'package:divine_astrologer/model/performance_model_class.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../common/app_textstyle.dart';
@@ -420,10 +421,20 @@ class LastAvailabilityWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Last 30 Days Availability (in mins)",
-            style: AppTextStyle.textStyle12(
-                fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+          Row(
+            children: [
+              Text(
+                "${'last30DaysAvailability'.tr} (${'inMins'.tr})",
+                style: AppTextStyle.textStyle12(
+                    fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+              ),
+              const Expanded(child: SizedBox()),
+              GestureDetector(
+                  onTap: () {
+                    Fluttertoast.showToast(msg: "No info for now!");
+                  },
+                  child: Assets.images.icInfo.svg(height: 17.h, width: 17.h)),
+            ],
           ),
           SizedBox(
             height: 20.h,
@@ -601,10 +612,20 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "availabilityTitle".tr,
-            style: AppTextStyle.textStyle12(
-                fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+          Row(
+            children: [
+              Text(
+                "availabilityTitle".tr,
+                style: AppTextStyle.textStyle12(
+                    fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+              ),
+              const Expanded(child: SizedBox()),
+              GestureDetector(
+                  onTap: () {
+                    Fluttertoast.showToast(msg: "No info for now!");
+                  },
+                  child: Assets.images.icInfo.svg(height: 17.h, width: 17.h)),
+            ],
           ),
           SizedBox(
             height: 20.h,
@@ -834,7 +855,12 @@ class OverAllScoreData extends GetView<PerformanceController> {
                                 fontColor: AppColors.darkBlue),
                           ),
                           const Expanded(child: SizedBox()),
-                          Assets.images.icInfo.svg(height: 21.h, width: 21.h),
+                          GestureDetector(
+                              onTap: () {
+                                Fluttertoast.showToast(msg: "No info for now!");
+                              },
+                              child: Assets.images.icInfo
+                                  .svg(height: 17.h, width: 17.h)),
                         ],
                       ),
                     ],
@@ -872,7 +898,7 @@ class DurationUI extends StatelessWidget {
             child: DropdownButton2<String>(
               isExpanded: true,
               hint: Text(
-                "Select",
+                "select".tr,
                 style: AppTextStyle.textStyle16(
                     fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
               ),

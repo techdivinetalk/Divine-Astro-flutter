@@ -36,12 +36,14 @@ class LoginUI extends GetView<LoginController> {
                     child: Assets.images.divineLogo
                         .image(width: ScreenUtil().screenWidth * 0.55),
                   ),
+                  SizedBox(height: 20.h),
+
                   const ImageSliderWidget(),
                   SizedBox(height: 5.h),
                   mobileField(),
                   SizedBox(height: 5.h),
                   Text(
-                    "You will get a call on the number given above for verification",
+                    "verificationHintText".tr,
                     style: AppTextStyle.textStyle12(
                       fontWeight: FontWeight.w400,
                     ),
@@ -66,7 +68,7 @@ class LoginUI extends GetView<LoginController> {
                         padding: const EdgeInsets.all(15.0),
                         child: Center(
                           child: Text(
-                            "Verify",
+                            "verify".tr,
                             style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w600,
                               fontColor: AppColors.brownColour,
@@ -104,9 +106,9 @@ class LoginUI extends GetView<LoginController> {
             focusNode: controller.numberFocus,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please Enter Valid Phone Number';
+                return 'validPhoneNumber'.tr;
               } else if (value.length != 10) {
-                return 'Mobile number should be 10 digits';
+                return 'mobileNumber10Digits'.tr;
               }
               return null;
             },
@@ -121,7 +123,7 @@ class LoginUI extends GetView<LoginController> {
             ],
             decoration: InputDecoration(
               counterText: '',
-              hintText: "Enter Registered Number",
+              hintText: "enterRegisteredNumber".tr,
               fillColor: AppColors.white,
               hintStyle:
                   AppTextStyle.textStyle16(fontColor: AppColors.greyColor),
@@ -193,7 +195,7 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
             onPageChanged: (index, reason) {
               setState(() => swipeIndex = index);
             },
-            height: ScreenUtil().screenHeight * 0.48,
+            height: ScreenUtil().screenHeight * 0.45,
             viewportFraction: 1,
             autoPlay: true,
           ),

@@ -15,7 +15,7 @@ class DonationUi extends GetView<DonationController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: commonDetailAppbar(
-          title: "Donation",
+          title: "donation".tr,
           trailingWidget: GestureDetector(
             onTap: () {
               Get.toNamed(RouteName.walletScreenUI);
@@ -97,7 +97,7 @@ class DonationUi extends GetView<DonationController> {
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     )
-                                  : SizedBox.shrink(),
+                                  : const SizedBox.shrink(),
                             ],
                           ),
                         ),

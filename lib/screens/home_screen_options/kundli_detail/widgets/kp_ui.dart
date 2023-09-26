@@ -120,7 +120,7 @@ class KpUI extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         child: Text(
-                          'Degree',
+                          'degree'.tr,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,
@@ -130,7 +130,7 @@ class KpUI extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         child: Text(
-                          'Sign',
+                          'sign'.tr,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,
@@ -140,7 +140,7 @@ class KpUI extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         child: Text(
-                          'Sign\nLord',
+                          'signLord'.tr,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,
@@ -283,7 +283,7 @@ class KpUI extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         child: Text(
-                          'Sign',
+                          'sign'.tr,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,

@@ -1,5 +1,4 @@
 import 'package:chips_choice/chips_choice.dart';
-import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,7 +7,6 @@ import 'package:get/get.dart';
 import '../../../common/custom_light_yellow_btn.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
-
 import '../../../gen/assets.gen.dart';
 import '../../common/common_bottomsheet.dart';
 import 'edit_profile_controller.dart';
@@ -246,7 +244,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                                     ),
                                     SizedBox(width: 5.w),
                                     Text(
-                                      "Add Speciality",
+                                      "addSpeciality".tr,
                                       style: AppTextStyle.textStyle12(
                                           fontColor: AppColors.darkBlue,
                                           fontWeight: FontWeight.w400),

@@ -2,7 +2,6 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/load_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -58,7 +57,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                                 height: 200.h,
                                 alignment: Alignment.center,
                                 child: CustomText(
-                                  "No Result Found".tr,
+                                  "noResultFound".tr,
                                   fontWeight: FontWeight.w500,
                                   fontColor: AppColors.blackColor,
                                 ),
@@ -108,7 +107,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                                                     height: 64.h, width: 64.h),
                                                 SizedBox(height: 15.h),
                                                 Text(
-                                                  "Unblock ${e.name}?",
+                                                  "${'unblock'.tr} ${e.name}?",
                                                   style:
                                                       AppTextStyle.textStyle20(
                                                           fontWeight:

@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
+import 'package:divine_astrologer/pages/home/home_controller.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -141,7 +142,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                       ]),
                                   SizedBox(height: 3.h),
                                   Text(
-                                    '+91- ${controller.userData?.phoneNo ?? ""}',
+                                    '+91- ${controller.userData?.mobileNumber ?? ""}',
                                     style: AppTextStyle.textStyle14(
                                         fontWeight: FontWeight.w400,
                                         fontColor: AppColors.darkBlue),
@@ -756,7 +757,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                             AppColors.darkBlue.withOpacity(0.5),
                                         context: context,
                                         builder: (context) => ReportPostReasons(
-                                            reviewData!.id.toString()),
+                                            reviewData?.id.toString() ?? ''),
 
                                         // builder: (context) => ReportPostReasons(reviewData?.id.),
                                       );
@@ -860,9 +861,9 @@ class ProfileUI extends GetView<ProfilePageController> {
         onFieldSubmitted: (text) {
           controller.getReplyOnReview(reviewId: reviewId, textMsg: text.trim());
         },
-        decoration: const InputDecoration(
-            hintText: "Reply here...",
-            hintStyle: TextStyle(color: AppColors.greyColor),
+        decoration: InputDecoration(
+            hintText: "${'replyHere'.tr}...",
+            hintStyle: const TextStyle(color: AppColors.greyColor),
             border: InputBorder.none),
       ),
     );
@@ -915,7 +916,7 @@ class _ReportPostReasonsState extends State<ReportPostReasons> {
                 children: [
                   Assets.images.report.svg(),
                   SizedBox(height: 20.h),
-                  CustomText("reportingQue".tr,
+                  CustomText("${'reportingQue'.tr}?",
                       fontSize: 20.sp,
                       fontWeight: FontWeight.w700,
                       fontColor: AppColors.darkBlue),
@@ -944,7 +945,8 @@ class _ReportPostReasonsState extends State<ReportPostReasons> {
                                   },
                                   child: Text(
                                     report.first.tr,
-                                    style: AppTextStyle.textStyle16(
+                                    textAlign: TextAlign.center,
+                                    style: AppTextStyle.textStyle15(
                                         fontColor: AppColors.darkBlue,
                                         fontWeight: FontWeight.w400),
                                   )),

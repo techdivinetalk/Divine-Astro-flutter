@@ -46,7 +46,7 @@ class InformationUI extends GetView<PerformanceController> {
               children: [
                 SizedBox(height: 10.h),
                 CustomText(
-                  'Title',
+                  'title'.tr,
                   fontWeight: FontWeight.w700,
                   fontSize: 20.sp,
                 ),
