@@ -53,6 +53,7 @@ class PerformanceController extends GetxController {
     selectedOption.value = val;
     int index = durationOptions.indexOf(val);
     selectedValue.value = durationValue[index];
+    getPerformanceList();
   }
 
   PerformanceModelClass? performanceData;
@@ -71,8 +72,8 @@ class PerformanceController extends GetxController {
 
   getPerformanceList() async {
     try {
-      // Map<String, dynamic> params = {"filter": selectedOption.value};
-      Map<String, dynamic> params = {"filter": 'last_month'};
+      Map<String, dynamic> params = {"filter": selectedValue.value};
+      // Map<String, dynamic> params = {"filter": 'last_month'};
       var response = await PerformanceRepository().getPerformance(params);
       log("Res-->${jsonEncode(response.data)}");
       performanceData = response;
@@ -86,7 +87,8 @@ class PerformanceController extends GetxController {
       ];
 
       update();
-      RankSystemController rankSystemController = Get.put(RankSystemController());
+      RankSystemController rankSystemController =
+          Get.put(RankSystemController());
       rankSystemController.rankSystemList = performanceData?.data?.rankSystem;
 
       log("performanceData==>${jsonEncode(performanceData!.data)}");
@@ -95,7 +97,7 @@ class PerformanceController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
   }

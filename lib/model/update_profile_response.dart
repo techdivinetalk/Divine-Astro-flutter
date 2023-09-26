@@ -101,7 +101,7 @@ class Data {
   int? uniqueNo;
   int? isBusy;
   String? deviceToken;
-  double? appVersion;
+  num? appVersion;
   String? deviceBrand;
   String? deviceModel;
   String? deviceManufacture;
@@ -379,7 +379,7 @@ class Data {
         uniqueNo: json["unique_no"],
         isBusy: json["is_busy"],
         deviceToken: json["device_token"],
-        appVersion: json["appVersion"].toDouble(),
+        appVersion: json["appVersion"],
         deviceBrand: json["device_brand"],
         deviceModel: json["device_model"],
         deviceManufacture: json["device_manufacture"],

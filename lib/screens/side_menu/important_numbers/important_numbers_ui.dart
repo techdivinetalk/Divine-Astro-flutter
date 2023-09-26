@@ -40,8 +40,7 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
           } else {
             return SingleChildScrollView(
               child: Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+                padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -58,8 +57,7 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                           borderRadius: BorderRadius.circular(12)),
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
-                        child: Text(
-                            "importNumText".tr,
+                        child: Text("importNumText".tr,
                             style: TextStyle(
                               color: AppColors.redColor,
                               fontWeight: FontWeight.w400,
@@ -104,6 +102,7 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                                       ],
                                     ),
                                   ),
+                                  SizedBox(width: 10.w),
                                   AddContactButton(
                                       exist: exist, phoneNumber: phoneNumber)
                                   /* GestureDetector(
@@ -179,14 +178,13 @@ class _AddContactButtonState extends State<AddContactButton> {
 
   @override
   Widget build(BuildContext context) {
-
     return GetBuilder<ImportantNumbersController>(
         builder: (controller) => GestureDetector(
               onTap: () {
-
                 if (!isButtonTap) {
                   List<String> phoneNumbers =
-                      widget.phoneNumber.mobileNumber!.split(",").toList();
+                      widget.phoneNumber.mobileNumber?.split(",").toList() ??
+                          [];
                   controller.addContact(
                     contactNumbers: phoneNumbers,
                     givenName: widget.phoneNumber.title ?? "",
@@ -208,8 +206,9 @@ class _AddContactButtonState extends State<AddContactButton> {
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color:
-                        isButtonTap ? AppColors.grey : AppColors.lightYellow),
+                    color: isButtonTap
+                        ? AppColors.grey.withOpacity(0.2)
+                        : AppColors.lightYellow),
                 child: Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
@@ -217,7 +216,9 @@ class _AddContactButtonState extends State<AddContactButton> {
                     isButtonTap ? "Saved".tr : "addContact".tr,
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w600,
-                        fontColor: AppColors.brownColour),
+                        fontColor: isButtonTap
+                            ? AppColors.grey
+                            : AppColors.brownColour),
                   ),
                 ),
               ),

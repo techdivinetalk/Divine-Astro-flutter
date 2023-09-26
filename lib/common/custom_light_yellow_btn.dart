@@ -24,7 +24,7 @@ class CustomLightYellowButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12)),
             child: Center(
                 child: Padding(
-              padding: EdgeInsets.all(10.h),
+              padding: EdgeInsets.all(18.h),
               child: Text(
                 name,
                 style: AppTextStyle.textStyle16(

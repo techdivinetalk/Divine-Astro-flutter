@@ -12,13 +12,11 @@ import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/load_image.dart';
 import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
-
 import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../screens/side_menu/side_menu_ui.dart';

@@ -46,7 +46,6 @@ class _TrainingVideoUIState extends State<TrainingVideoUI> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: GetBuilder<HomeController>(builder: (controller) {
-        // print("Data-->${_controller.value.position}");
         return YoutubePlayer(
           progressIndicatorColor: Colors.red,
           onReady: () {},

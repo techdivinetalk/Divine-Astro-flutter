@@ -68,7 +68,8 @@ class DeleteAccountPopup extends GetView<SettingsController> {
                     Expanded(
                       child: FilledButton(
                         onPressed: () {
-                          deleteAccountAlert(context);
+                          // deleteAccountAlert(context);
+                          controller.deleteUserAccounts();
                         },
                         style: FilledButton.styleFrom(
                           backgroundColor: AppColors.lightYellow,

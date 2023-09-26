@@ -324,8 +324,8 @@ Map<String, String> mr() {
     "searchCountry": "देश शोधा",
     "verificationHintText": "पडताळणीसाठी तुम्हाला वर दिलेल्या नंबरवर कॉल येईल",
     "verify": "सत्यापित करा",
-    "validPhoneNumber": "कृपया वैध फोन नंबर प्रविष्ट करा",
-    "mobileNumber10Digits": "मोबाईल नंबर 10 अंकी असावा",
+    "validPhoneNumber": "कृपया वैध फोन नंबर प्रविष्ट करा.",
+    "mobileNumber10Digits": "मोबाईल नंबर 10 अंकी असावा.",
     "enterRegisteredNumber": "नोंदणीकृत क्रमांक प्रविष्ट करा",
     "passBook": "पासबुक",
     "cancelledCheque": "चेक रद्द केला",
@@ -363,5 +363,10 @@ Map<String, String> mr() {
     "version": "आवृत्ती",
     "feedbackValidation": "कृपया तुमचा अभिप्राय प्रविष्ट करा",
     "reportingQue": "तुम्ही याची तक्रार का करत आहात",
+    "mobileNumberEmptyMsg": "कृपया मोबाईल नंबर टाका.",
+    "uploadYourPhotos": "तुमचे फोटो अपलोड करा",
+    "uploadImages": "प्रतिमा अपलोड करा",
+    "imageValidationMsg": "प्रतिमा 5 पेक्षा जास्त असू शकत नाही",
+    "profileUpdatedSuccessfully": "प्रोफाइल यशस्वीरित्या अपडेट केले",
   };
 }
