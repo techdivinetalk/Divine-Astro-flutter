@@ -700,6 +700,10 @@ class $AssetsSvgGen {
   /// File path: assets/svg/block_user.svg
   SvgGenImage get blockUser => const SvgGenImage('assets/svg/block_user.svg');
 
+  /// File path: assets/svg/call_earning.svg
+  SvgGenImage get callEarning =>
+      const SvgGenImage('assets/svg/call_earning.svg');
+
   /// File path: assets/svg/camera.svg
   SvgGenImage get camera => const SvgGenImage('assets/svg/camera.svg');
 
@@ -708,6 +712,10 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/gallery.svg
   SvgGenImage get gallery => const SvgGenImage('assets/svg/gallery.svg');
+
+  /// File path: assets/svg/gift_earning.svg
+  SvgGenImage get giftEarning =>
+      const SvgGenImage('assets/svg/gift_earning.svg');
 
   /// File path: assets/svg/grey_container.svg
   SvgGenImage get greyContainer =>
@@ -736,12 +744,20 @@ class $AssetsSvgGen {
   SvgGenImage get pleaseRegister2 =>
       const SvgGenImage('assets/svg/please_register_2.svg');
 
+  /// File path: assets/svg/private_call_earning.svg
+  SvgGenImage get privateCallEarning =>
+      const SvgGenImage('assets/svg/private_call_earning.svg');
+
   /// File path: assets/svg/reply.svg
   SvgGenImage get reply => const SvgGenImage('assets/svg/reply.svg');
 
   /// File path: assets/svg/switch_camera.svg
   SvgGenImage get switchCamera =>
       const SvgGenImage('assets/svg/switch_camera.svg');
+
+  /// File path: assets/svg/video_call_earning.svg
+  SvgGenImage get videoCallEarning =>
+      const SvgGenImage('assets/svg/video_call_earning.svg');
 
   /// File path: assets/svg/video_mute.svg
   SvgGenImage get videoMute => const SvgGenImage('assets/svg/video_mute.svg');
@@ -751,9 +767,11 @@ class $AssetsSvgGen {
         blackDot,
         block,
         blockUser,
+        callEarning,
         camera,
         disconnect,
         gallery,
+        giftEarning,
         greyContainer,
         icAdd,
         icCall1,
@@ -762,8 +780,10 @@ class $AssetsSvgGen {
         pinkSlider,
         pleaseRegister1,
         pleaseRegister2,
+        privateCallEarning,
         reply,
         switchCamera,
+        videoCallEarning,
         videoMute
       ];
 }
