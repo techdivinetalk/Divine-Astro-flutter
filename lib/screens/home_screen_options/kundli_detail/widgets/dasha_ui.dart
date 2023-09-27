@@ -501,8 +501,6 @@ class _DashaUIState extends State<DashaUI> {
                               controller.getPratyantarDashaApiList(
                                 vimshottariData?.planet.toString() ?? '',
                                 subModel?.planet.toString() ?? '',
-
-
                               );
                             },
                             child: Container(
@@ -1474,10 +1472,10 @@ class _DashaUIState extends State<DashaUI> {
                                   getDashaFormattedDate(yoginiData?.endDate),
                                   style: AppTextStyle.textStyle12(),
                                 ),
-                                const Icon(
+                                /* const Icon(
                                   Icons.chevron_right,
                                   size: 12,
-                                )
+                                ) */
                               ],
                             ),
                           ),

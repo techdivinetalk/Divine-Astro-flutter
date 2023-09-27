@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/common/switch_component.dart';
@@ -10,7 +11,6 @@ import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/load_image.dart';
-import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -423,10 +423,11 @@ class HomeUI extends GetView<HomeController> {
                           width: 30.w,
                         ),
                         GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               Fluttertoast.showToast(msg: "No info for now!");
                             },
-                            child: Assets.images.icInfo.svg(height: 18.h, width: 18.h)),
+                            child: Assets.images.icInfo
+                                .svg(height: 18.h, width: 18.h)),
                       ],
                     ),
                   ],
@@ -571,10 +572,11 @@ class HomeUI extends GetView<HomeController> {
                       width: 8.w,
                     ),
                     GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Fluttertoast.showToast(msg: "No info for now!");
                         },
-                        child: Assets.images.icInfo.svg(height: 16.h, width: 16.h)),
+                        child: Assets.images.icInfo
+                            .svg(height: 16.h, width: 16.h)),
                   ],
                 ),
                 SizedBox(height: 15.h),
@@ -589,22 +591,24 @@ class HomeUI extends GetView<HomeController> {
                             looping: true,
                             initialDate: DateTime.now(),
                             lastDate: DateTime(2050),
-                            onConfirm: (value) =>controller.selectChatDate(value),
+                            onConfirm: (value) =>
+                                controller.selectChatDate(value),
                             onChange: (value) =>
                                 controller.selectChatDate(value),
                             onClickOkay: () {
-                                selectDateOrTime(
-                                  Get.context!,
-                                  title: "scheduleOnlineTime".tr,
-                                  btnTitle: "confirmOnlineTime".tr,
-                                  pickerStyle: "TimeCalendar",
-                                  looping: true,
-                                  onConfirm: (value) =>controller.selectChatTime(value),
-                                  onChange: (value) =>
-                                      controller.selectChatTime(value),
-                                  onClickOkay: () =>
-                                      controller.scheduleCall("CHAT"),
-                                );
+                              selectDateOrTime(
+                                Get.context!,
+                                title: "scheduleOnlineTime".tr,
+                                btnTitle: "confirmOnlineTime".tr,
+                                pickerStyle: "TimeCalendar",
+                                looping: true,
+                                onConfirm: (value) =>
+                                    controller.selectChatTime(value),
+                                onChange: (value) =>
+                                    controller.selectChatTime(value),
+                                onClickOkay: () =>
+                                    controller.scheduleCall("CHAT"),
+                              );
                             },
                           );
                         },
@@ -645,7 +649,8 @@ class HomeUI extends GetView<HomeController> {
                             pickerStyle: "DateCalendar",
                             looping: true,
                             lastDate: DateTime(2050),
-                            onConfirm: (value) =>controller.selectCallDate(value),
+                            onConfirm: (value) =>
+                                controller.selectCallDate(value),
                             onChange: (value) =>
                                 controller.selectCallDate(value),
                             onClickOkay: () {
@@ -655,7 +660,8 @@ class HomeUI extends GetView<HomeController> {
                                 btnTitle: "confirmOnlineTime".tr,
                                 pickerStyle: "TimeCalendar",
                                 looping: true,
-                                onConfirm: (value)=>controller.selectCallTime(value),
+                                onConfirm: (value) =>
+                                    controller.selectCallTime(value),
                                 onChange: (value) =>
                                     controller.selectCallTime(value),
                                 onClickOkay: () =>
@@ -700,7 +706,8 @@ class HomeUI extends GetView<HomeController> {
                             pickerStyle: "DateCalendar",
                             looping: true,
                             lastDate: DateTime(2050),
-                            onConfirm: (value) =>controller.selectVideoDate(value),
+                            onConfirm: (value) =>
+                                controller.selectVideoDate(value),
                             onChange: (value) =>
                                 controller.selectVideoDate(value),
                             onClickOkay: () {
@@ -710,7 +717,8 @@ class HomeUI extends GetView<HomeController> {
                                 btnTitle: "confirmOnlineTime".tr,
                                 pickerStyle: "TimeCalendar",
                                 looping: true,
-                                onConfirm: (value) =>controller.selectVideoTime(value),
+                                onConfirm: (value) =>
+                                    controller.selectVideoTime(value),
                                 onChange: (value) =>
                                     controller.selectVideoTime(value),
                                 onClickOkay: () =>
@@ -794,10 +802,11 @@ class HomeUI extends GetView<HomeController> {
                         width: 8.w,
                       ),
                       GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             Fluttertoast.showToast(msg: "No info for now!");
                           },
-                          child: Assets.images.icInfo.svg(height: 16.h, width: 16.h)),
+                          child: Assets.images.icInfo
+                              .svg(height: 16.h, width: 16.h)),
                     ],
                   ),
                 ],
@@ -958,7 +967,7 @@ class HomeUI extends GetView<HomeController> {
                   child: SizedBox(),
                 ),
                 GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Fluttertoast.showToast(msg: "No info for now!");
                     },
                     child: Assets.images.icInfo.svg(height: 16.h, width: 16.h)),

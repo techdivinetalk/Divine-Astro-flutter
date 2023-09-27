@@ -26,10 +26,10 @@ class PermissionHelper {
     return result;
   }
 
-  askCameraPermission() async {
-    var result = await Permission.camera
+  askCustomPermission(Permission permission) async {
+    var result = await permission
         .request()
-        .then((value) => getPermissionStatus(Permission.camera));
+        .then((value) => getPermissionStatus(permission));
     return result;
   }
 
@@ -39,13 +39,6 @@ class PermissionHelper {
     var result = await permission
         .request()
         .then((value) => getPermissionStatus(permission));
-    return result;
-  }
-
-  askMicPermission() async {
-    var result = await Permission.microphone
-        .request()
-        .then((value) => getPermissionStatus(Permission.microphone));
     return result;
   }
 
@@ -148,6 +141,8 @@ class PermissionHelper {
       return 'storage';
     } else if (permission == Permission.videos) {
       return 'videos';
+    } else if (permission == Permission.contacts) {
+      return 'contacts';
     }
   }
 }

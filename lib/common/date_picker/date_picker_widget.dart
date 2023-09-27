@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_holo_date_picker/date_picker_constants.dart';
 import 'package:flutter_holo_date_picker/date_picker_theme.dart';
 import 'package:flutter_holo_date_picker/i18n/date_picker_i18n.dart';
-import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 
 import 'date_time_formatter.dart';

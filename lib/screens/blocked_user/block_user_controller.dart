@@ -1,7 +1,5 @@
-import 'dart:convert';
-
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/utils/utils.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -74,7 +72,7 @@ class BlockUserController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
     blockedUserDataSync.value = true;

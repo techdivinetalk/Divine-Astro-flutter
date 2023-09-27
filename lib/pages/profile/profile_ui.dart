@@ -1,10 +1,7 @@
-// ignore_for_file: must_be_immutable, deprecated_member_use, deprecated_member_use_from_same_package
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
-import 'package:divine_astrologer/pages/home/home_controller.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,8 +22,8 @@ import '../../screens/side_menu/side_menu_ui.dart';
 
 class ProfileUI extends GetView<ProfilePageController> {
   ProfileUI({Key? key}) : super(key: key);
-  var preference = Get.find<SharedPreferenceService>();
 
+  final preference = Get.find<SharedPreferenceService>();
   // var homeController = Get.find<HomeController>();
 
   @override
@@ -188,8 +185,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                           false)
                       ? Container(
                           width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 12),
+                          padding: EdgeInsets.all(16.w),
                           decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
@@ -341,32 +337,54 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                                   color: Colors
                                                                       .white)),
                                                       child: Container(
-                                                        decoration: BoxDecoration(
-                                                          shape: BoxShape.circle,
-                                                          gradient: LinearGradient(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          gradient:
+                                                              LinearGradient(
                                                             colors: [
-                                                              item.colors!.withOpacity(0),
-                                                              item.colors!.withOpacity(0.2),
+                                                              item.colors!
+                                                                  .withOpacity(
+                                                                      0),
+                                                              item.colors!
+                                                                  .withOpacity(
+                                                                      0.2),
                                                             ],
-                                                            begin: Alignment.topLeft,
-                                                            end: Alignment.bottomRight,
+                                                            begin: Alignment
+                                                                .topLeft,
+                                                            end: Alignment
+                                                                .bottomRight,
                                                           ),
                                                         ),
                                                         child: ClipRRect(
-                                                          borderRadius: BorderRadius.circular(10.r),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.r),
                                                           child: Material(
-                                                            color: Colors.transparent,
+                                                            color: Colors
+                                                                .transparent,
                                                             child: Column(
-                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
                                                               children: [
                                                                 CustomText(
-                                                                  item.languagesMain.toString(),
-                                                                  fontSize: 18.5.sp,
-                                                                  fontWeight: FontWeight.w600,
+                                                                  item.languagesMain
+                                                                      .toString(),
+                                                                  fontSize:
+                                                                      18.5.sp,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
                                                                 ),
-                                                                SizedBox(height: 10.h),
+                                                                SizedBox(
+                                                                    height:
+                                                                        10.h),
                                                                 Text(
-                                                                  item.languages.toString(),
+                                                                  item.languages
+                                                                      .toString(),
                                                                   style: AppTextStyle
                                                                       .textStyle16(),
                                                                 ),
@@ -850,9 +868,9 @@ class ProfileUI extends GetView<ProfilePageController> {
 }
 
 class ReportPostReasons extends StatefulWidget {
-  String reviewID;
+  final String reviewID;
 
-  ReportPostReasons(this.reviewID, {super.key});
+  const ReportPostReasons(this.reviewID, {super.key});
 
   @override
   State<ReportPostReasons> createState() => _ReportPostReasonsState();
