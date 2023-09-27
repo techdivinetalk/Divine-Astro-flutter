@@ -1,4 +1,5 @@
 import 'package:divine_astrologer/common/app_exception.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/number_change_request_model/number_change_response_model.dart';
@@ -6,7 +7,7 @@ import 'package:divine_astrologer/model/number_change_request_model/verify_otp_r
 import 'package:divine_astrologer/model/res_login.dart';
 import 'package:divine_astrologer/repository/number_change_req_repository.dart';
 import 'package:divine_astrologer/screens/number_change/sub_screen/otp_screen_for_update_mobile_number.dart';
-import 'package:divine_astrologer/utils/utils.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -87,6 +88,8 @@ class NumberChangeReqController extends GetxController {
       if (response.statusCode == 200 && response.success!) {
         divineSnackBar(data: response.message.toString());
         Get.back();
+        await preferenceService.erase();
+        Get.offNamed(RouteName.login);
       }
     } catch (err) {
       if (err is CustomException) {

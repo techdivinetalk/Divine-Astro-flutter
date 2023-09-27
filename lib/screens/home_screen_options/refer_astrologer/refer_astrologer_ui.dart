@@ -61,11 +61,11 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                 const SizedBox(height: 5),
                 WhiteTextField(
                   maxCount: 10,
-                  inputFormatter: [
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
+                  inputFormatter: [FilteringTextInputFormatter.digitsOnly],
                   validator: (value) {
                     if (value! == "") {
+                      return "";
+                    } else if (value.length != 10) {
                       return "";
                     }
                     return null;
@@ -100,6 +100,8 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                 ),
                 const SizedBox(height: 5),
                 WhiteTextField(
+                  maxCount: 2,
+                  inputFormatter: [FilteringTextInputFormatter.digitsOnly],
                   validator: (value) {
                     if (value! == "") {
                       return "";
@@ -116,16 +118,18 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   "anotherPlatform".tr,
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
-                const SizedBox(height: 5),
+                SizedBox(height: 10.h),
                 yesNoOptionWiddet(),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 Text(
                   "*${"mandatoryFields".tr}",
                   style: AppTextStyle.textStyle14(
                       fontWeight: FontWeight.w400,
-                      fontColor: AppColors.darkBlue),
+                      fontColor: controller.formValidateVal.value
+                          ? AppColors.darkBlue
+                          : AppColors.redColor),
                 ),
-                const SizedBox(height: 5),
+                SizedBox(height: 5.h),
               ],
             ),
           ),
@@ -172,38 +176,35 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                     )),
               ),
             ),
-            const SizedBox(width: 25),
-            GetBuilder<ReferAstrologerController>(
-              builder: (controller) => InkWell(
-                onTap: () {
-                  controller.workingForPlatForm(value: WorkingForPlatform.no);
-                },
-                child: Container(
-                    height: 35.h,
-                    width: 60.w,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            blurRadius: 3.0,
-                            offset: const Offset(0.0, 3.0)),
-                      ],
-                      color: controller.isNo
-                          ? AppColors.darkBlue
-                          : AppColors.white,
-                      borderRadius: const BorderRadius.all(Radius.circular(15)),
-                    ),
-                    child: Text(
-                      "no".tr,
-                      textAlign: TextAlign.center,
-                      style: AppTextStyle.textStyle14(
-                          fontWeight: FontWeight.w600,
-                          fontColor: controller.isNo
-                              ? AppColors.white
-                              : AppColors.darkBlue),
-                    )),
-              ),
+            SizedBox(width: 25.w),
+            InkWell(
+              onTap: () {
+                controller.workingForPlatForm(value: WorkingForPlatform.no);
+              },
+              child: Container(
+                  height: 35.h,
+                  width: 60.w,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 3.0,
+                          offset: const Offset(0.0, 3.0)),
+                    ],
+                    color:
+                        controller.isNo ? AppColors.darkBlue : AppColors.white,
+                    borderRadius: const BorderRadius.all(Radius.circular(15)),
+                  ),
+                  child: Text(
+                    "no".tr,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyle.textStyle14(
+                        fontWeight: FontWeight.w600,
+                        fontColor: controller.isNo
+                            ? AppColors.white
+                            : AppColors.darkBlue),
+                  )),
             ),
           ],
         ),
@@ -234,13 +235,12 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                     ),
                   ],
                 )
-              : Container(),
+              : const SizedBox(),
         )
       ],
     );
   }
 }
-
 
 class ReferAstrologerField extends StatelessWidget {
   final String hintText;
@@ -336,7 +336,6 @@ class ReferAstrologerField extends StatelessWidget {
   }
 }
 
-
 class WhiteTextField extends StatelessWidget {
   final String hintText;
   final TextInputType inputType;
@@ -418,14 +417,14 @@ class WhiteTextField extends StatelessWidget {
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide:  const BorderSide(
+            borderSide: const BorderSide(
               color: AppColors.redColor,
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide:  const BorderSide(
+            borderSide: const BorderSide(
               color: AppColors.lightYellow,
               width: 1.0,
             ),

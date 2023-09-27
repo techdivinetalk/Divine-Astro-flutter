@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -25,7 +26,6 @@ import '../../model/res_review_ratings.dart';
 import '../../model/res_user_profile.dart';
 import '../../repository/user_repository.dart';
 import '../../screens/dashboard/dashboard_controller.dart';
-import '../../utils/utils.dart';
 import '../home/home_controller.dart';
 
 class ProfilePageController extends GetxController {

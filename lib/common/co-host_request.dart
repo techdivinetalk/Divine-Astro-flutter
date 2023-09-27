@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 import '../gen/assets.gen.dart';
 import 'colors.dart';
@@ -11,7 +10,8 @@ class CoHostRequest extends StatelessWidget {
   final String? name;
   final int? duration;
 
-  const CoHostRequest({Key? key, this.onReject, this.onAccept, this.name,this.duration})
+  const CoHostRequest(
+      {Key? key, this.onReject, this.onAccept, this.name, this.duration})
       : super(key: key);
 
   @override
@@ -94,6 +94,7 @@ class CoHostRequest extends StatelessWidget {
     );
   }
 }
+
 String intToTimeLeft(int value) {
   int h, m, s;
 

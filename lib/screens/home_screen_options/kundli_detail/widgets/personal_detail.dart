@@ -40,7 +40,7 @@ class PersonalDetailUi extends StatelessWidget {
                 "name".tr,
                 controller.kundliParams.value.name == null
                     ? ""
-                    : "${controller.kundliParams.value.name}" ?? '',
+                    : "${controller.kundliParams.value.name}",
               ),
               detailTile(
                 "birthDate".tr,

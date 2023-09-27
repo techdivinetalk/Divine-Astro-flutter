@@ -18,6 +18,7 @@ class ReferAstrologerController extends GetxController {
   bool get isNo => state.isNo;
 
   GlobalKey<FormState> get formState => state.formKey;
+  RxBool formValidateVal = true.obs;
 
   void workingForPlatForm({required WorkingForPlatform value}) {
     state.platform = value;
@@ -26,6 +27,7 @@ class ReferAstrologerController extends GetxController {
 
   void submitForm() async {
     if (formState.currentState!.validate()) {
+      formValidateVal.value = true;
       formState.currentState!.save();
       ReferAstrologerResponse response = await repository
           .referAstrologer(state.referAstrologerRequestString());
@@ -35,7 +37,18 @@ class ReferAstrologerController extends GetxController {
       if (response.status!.code == 400) {
         Fluttertoast.showToast(msg: response.status!.message.toString());
       }
+    } else {
+      formValidateVal.value = false;
     }
+  }
+
+  checkFormValidation() {
+    if (formState.currentState!.validate()) {
+      formValidateVal.value = true;
+    } else {
+      formValidateVal.value = false;
+    }
+    update();
   }
 
   @override

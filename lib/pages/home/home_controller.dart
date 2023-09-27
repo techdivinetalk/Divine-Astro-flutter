@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
 import 'package:divine_astrologer/model/update_offer_type_response.dart';
 import 'package:divine_astrologer/model/update_session_type_response.dart';
@@ -9,7 +10,6 @@ import 'package:divine_astrologer/pages/home/home_ui.dart';
 import 'package:divine_astrologer/repository/notice_repository.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
-import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:get/get.dart';
@@ -75,11 +75,6 @@ class HomeController extends GetxController {
     appbarTitle.value = userData?.name ?? "Astrologer Name";
     getConstantDetailsData();
     getDashboardDetail();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   ConstantDetailsModelClass? getConstantDetails;
