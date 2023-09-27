@@ -423,10 +423,11 @@ class HomeUI extends GetView<HomeController> {
                           width: 30.w,
                         ),
                         GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               Fluttertoast.showToast(msg: "No info for now!");
                             },
-                            child: Assets.images.icInfo.svg(height: 18.h, width: 18.h)),
+                            child: Assets.images.icInfo
+                                .svg(height: 18.h, width: 18.h)),
                       ],
                     ),
                   ],
@@ -571,10 +572,11 @@ class HomeUI extends GetView<HomeController> {
                       width: 8.w,
                     ),
                     GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Fluttertoast.showToast(msg: "No info for now!");
                         },
-                        child: Assets.images.icInfo.svg(height: 16.h, width: 16.h)),
+                        child: Assets.images.icInfo
+                            .svg(height: 16.h, width: 16.h)),
                   ],
                 ),
                 SizedBox(height: 15.h),
@@ -583,28 +585,43 @@ class HomeUI extends GetView<HomeController> {
                         onTap: () {
                           selectDateOrTime(
                             Get.context!,
+                            futureDate: true,
                             title: "ScheduleOnlineDate".tr,
                             btnTitle: "confirmNextDate".tr,
                             pickerStyle: "DateCalendar",
                             looping: true,
                             initialDate: DateTime.now(),
                             lastDate: DateTime(2050),
-                            onConfirm: (value) =>controller.selectChatDate(value),
+                            onConfirm: (value) =>
+                                controller.selectChatDate(value),
                             onChange: (value) =>
                                 controller.selectChatDate(value),
-                            onClickOkay: () {
-                                selectDateOrTime(
-                                  Get.context!,
-                                  title: "scheduleOnlineTime".tr,
-                                  btnTitle: "confirmOnlineTime".tr,
-                                  pickerStyle: "TimeCalendar",
-                                  looping: true,
-                                  onConfirm: (value) =>controller.selectChatTime(value),
-                                  onChange: (value) =>
-                                      controller.selectChatTime(value),
-                                  onClickOkay: () =>
-                                      controller.scheduleCall("CHAT"),
-                                );
+                            onClickOkay: (value) {
+                              Get.back();
+                              selectDateOrTime(
+                                Get.context!,
+                                title: "scheduleOnlineTime".tr,
+                                btnTitle: "confirmOnlineTime".tr,
+                                pickerStyle: "TimeCalendar",
+                                looping: true,
+                                onConfirm: (value) {
+                                  // controller.selectChatTime(value),
+                                },
+                                onChange: (value) {
+                                  // controller.selectChatTime(value),
+                                },
+                                onClickOkay: (timeValue) {
+                                  if (controller.isValidDate(
+                                      "CHAT", timeValue)) {
+                                    controller.selectChatTime(timeValue);
+                                    controller.scheduleCall("CHAT");
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg:
+                                            "Please select future date and time");
+                                  }
+                                },
+                              );
                             },
                           );
                         },
@@ -639,28 +656,37 @@ class HomeUI extends GetView<HomeController> {
                     ? InkWell(
                         onTap: () {
                           selectDateOrTime(
+                            futureDate: true,
                             Get.context!,
                             title: "ScheduleOnlineDate".tr,
                             btnTitle: "confirmNextDate".tr,
                             pickerStyle: "DateCalendar",
                             looping: true,
                             lastDate: DateTime(2050),
-                            onConfirm: (value) =>controller.selectCallDate(value),
+                            onConfirm: (value) =>
+                                controller.selectCallDate(value),
                             onChange: (value) =>
                                 controller.selectCallDate(value),
-                            onClickOkay: () {
-                              selectDateOrTime(
-                                Get.context!,
-                                title: "scheduleOnlineTime".tr,
-                                btnTitle: "confirmOnlineTime".tr,
-                                pickerStyle: "TimeCalendar",
-                                looping: true,
-                                onConfirm: (value)=>controller.selectCallTime(value),
-                                onChange: (value) =>
-                                    controller.selectCallTime(value),
-                                onClickOkay: () =>
-                                    controller.scheduleCall("CALL"),
-                              );
+                            onClickOkay: (value) {
+                              Get.back();
+                              selectDateOrTime(Get.context!,
+                                  title: "scheduleOnlineTime".tr,
+                                  btnTitle: "confirmOnlineTime".tr,
+                                  pickerStyle: "TimeCalendar",
+                                  looping: true, onConfirm: (value) {
+                                // controller.selectCallTime(value),
+                              }, onChange: (value1) {
+                                // controller.selectCallTime(value),
+                              }, onClickOkay: (value1) {
+                                if (controller.isValidDate("CALL", value1)) {
+                                  controller.selectCallTime(value1);
+                                  controller.scheduleCall("CALL");
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg:
+                                          "Please select future date and time");
+                                }
+                              });
                             },
                           );
                         },
@@ -694,28 +720,37 @@ class HomeUI extends GetView<HomeController> {
                     ? InkWell(
                         onTap: () {
                           selectDateOrTime(
+                            futureDate: true,
                             Get.context!,
                             title: "ScheduleOnlineDate".tr,
                             btnTitle: "confirmNextDate".tr,
                             pickerStyle: "DateCalendar",
                             looping: true,
                             lastDate: DateTime(2050),
-                            onConfirm: (value) =>controller.selectVideoDate(value),
+                            onConfirm: (value) =>
+                                controller.selectVideoDate(value),
                             onChange: (value) =>
                                 controller.selectVideoDate(value),
-                            onClickOkay: () {
-                              selectDateOrTime(
-                                Get.context!,
-                                title: "scheduleOnlineTime".tr,
-                                btnTitle: "confirmOnlineTime".tr,
-                                pickerStyle: "TimeCalendar",
-                                looping: true,
-                                onConfirm: (value) =>controller.selectVideoTime(value),
-                                onChange: (value) =>
-                                    controller.selectVideoTime(value),
-                                onClickOkay: () =>
-                                    controller.scheduleCall("VIDEO"),
-                              );
+                            onClickOkay: (value) {
+                              Get.back();
+                              selectDateOrTime(Get.context!,
+                                  title: "scheduleOnlineTime".tr,
+                                  btnTitle: "confirmOnlineTime".tr,
+                                  pickerStyle: "TimeCalendar",
+                                  looping: true, onConfirm: (value) {
+                                // controller.selectVideoTime(value),
+                              }, onChange: (value) {
+                                // controller.selectVideoTime(value);
+                              }, onClickOkay: (value) {
+                                if (controller.isValidDate("VIDEO", value)) {
+                                  controller.selectVideoTime(value);
+                                  controller.scheduleCall("VIDEO");
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg:
+                                          "Please select future date and time");
+                                }
+                              });
                             },
                           );
                         },
@@ -794,10 +829,11 @@ class HomeUI extends GetView<HomeController> {
                         width: 8.w,
                       ),
                       GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             Fluttertoast.showToast(msg: "No info for now!");
                           },
-                          child: Assets.images.icInfo.svg(height: 16.h, width: 16.h)),
+                          child: Assets.images.icInfo
+                              .svg(height: 16.h, width: 16.h)),
                     ],
                   ),
                 ],
@@ -958,7 +994,7 @@ class HomeUI extends GetView<HomeController> {
                   child: SizedBox(),
                 ),
                 GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Fluttertoast.showToast(msg: "No info for now!");
                     },
                     child: Assets.images.icInfo.svg(height: 16.h, width: 16.h)),

@@ -401,7 +401,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
             ),
             constraints: BoxConstraints(
                 maxWidth: ScreenUtil().screenWidth * 0.7,
-                minWidth: ScreenUtil().screenWidth * 0.25),
+                minWidth: ScreenUtil().screenWidth * 0.27),
             child: Stack(
               alignment:
                   yourMessage ? Alignment.centerRight : Alignment.centerLeft,
@@ -478,7 +478,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
             ),
             constraints: BoxConstraints(
                 maxWidth: ScreenUtil().screenWidth * 0.7,
-                minWidth: ScreenUtil().screenWidth * 0.25),
+                minWidth: ScreenUtil().screenWidth * 0.27),
             child: chatDetail.downloadedPath != ""
                 ? InkWell(
                     onTap: () {
@@ -490,7 +490,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8.0.r),
                           child: Image.file(
-                            File(chatDetail.downloadedPath??''),
+                            File(chatDetail.downloadedPath ?? ''),
                             fit: BoxFit.cover,
                             height: 200.h,
                           ),
@@ -711,7 +711,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
           color: AppColors.white,
           borderRadius: const BorderRadius.all(Radius.circular(20)),
         ),
-        child:  Text("unreadMessages".tr),
+        child: Text("unreadMessages".tr),
       ),
     );
   }

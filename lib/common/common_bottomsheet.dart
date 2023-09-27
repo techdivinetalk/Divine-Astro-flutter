@@ -92,10 +92,11 @@ selectDateOrTime(
   required String pickerStyle,
   required Function(String datetime) onChange,
   required Function(String datetime) onConfirm,
-  Function()? onClickOkay,
+  Function(String datetime)? onClickOkay,
   required bool looping,
   DateTime? lastDate,
   DateTime? initialDate,
+  bool? futureDate,
 }) {
   DateTime updateDateTime = DateTime.now();
   return showCupertinoModalPopup(
@@ -152,7 +153,9 @@ selectDateOrTime(
                 child: DatePickerWidget(
                   initialDate: initialDate ?? DateTime.now(),
                   lastDate: lastDate ?? DateTime.now(),
-                  firstDate: DateTime(DateTime.now().year - 100),
+                  firstDate: (futureDate ?? false)
+                      ? DateTime.now()
+                      : DateTime(DateTime.now().year - 100),
                   dateFormat: pickerStyle == "DateCalendar"
                       ? "MMM/dd/yyyy"
                       : "MM/dd/yyyy",
@@ -198,9 +201,16 @@ selectDateOrTime(
                     borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   ),
                   onPressed: () {
-                    Navigator.pop(context);
+                    if (!(futureDate ?? false)) {
+                      Navigator.pop(context);
+                    }
                     if (onClickOkay != null) {
-                      onClickOkay();
+                      if (pickerStyle == "DateCalendar") {
+                        onClickOkay(dateToString(updateDateTime));
+                      } else {
+                        onClickOkay(
+                            dateToString(updateDateTime, format: "h:mm a"));
+                      }
                     }
                     // Get.back();
                   },

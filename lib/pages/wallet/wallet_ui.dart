@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_controller.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -21,6 +22,9 @@ class WalletUI extends GetView<WalletController> {
       appBar: commonAppbar(
           title: "wallet".tr,
           trailingWidget: InkWell(
+            onTap: () {
+              Get.toNamed(RouteName.orderHistory);
+            },
             child: Padding(
                 padding: EdgeInsets.only(right: 20.w),
                 child: Assets.images.icOrderHistory.svg()),

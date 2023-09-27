@@ -346,45 +346,78 @@ class HomeController extends GetxController {
     update();
   }
 
+  bool isValidDate(String value, String timeVal) {
+    var selectedTime = timeVal;
+    var selectedDate = value == "CHAT"
+        ? selectedChatDate.value
+        : value == "CALL"
+            ? selectedCallDate.value
+            : selectedVideoDate.value;
+    DateTime parseDate = DateFormat("hh:mm a").parse(selectedTime);
+    var formattedTime = (DateTime(selectedDate.year, selectedDate.month,
+        selectedDate.day, parseDate.hour, parseDate.minute, 0));
+
+    bool difference = DateTime.now().isBefore(formattedTime);
+    return difference;
+  }
+
   void scheduleCall(String value) async {
-    try {
-      ///Type 1: for call 2 for chat.
-      int type = 0;
+    var selectedTime = value == "CHAT"
+        ? selectedChatTime.value
+        : value == "CALL"
+            ? selectedCallTime.value
+            : selectedVideoTime.value;
+    var selectedDate = value == "CHAT"
+        ? selectedChatDate.value
+        : value == "CALL"
+            ? selectedCallDate.value
+            : selectedVideoDate.value;
+    DateTime parseDate = DateFormat("hh:mm a").parse(selectedTime);
+    var formattedTime = (DateTime(selectedDate.year, selectedDate.month,
+        selectedDate.day, parseDate.hour, parseDate.minute, 0));
 
-      late AstroScheduleRequest request;
-      if (value == "CHAT") {
-        type = 2;
-        request = AstroScheduleRequest(
-          scheduleDate: selectedChatDate.value.toFormattedString(),
-          scheduleTime: selectedChatTime.value,
-          type: type,
-        );
-      }
-      if (value == "CALL") {
-        type = 1;
-        request = AstroScheduleRequest(
-          scheduleDate: selectedCallDate.value.toFormattedString(),
-          scheduleTime: selectedCallTime.value,
-          type: type,
-        );
-      }
-      if (value == "VIDEO") {
-        request = AstroScheduleRequest(
-          scheduleDate: selectedVideoDate.value.toFormattedString(),
-          scheduleTime: selectedVideoTime.value,
-          type: type,
-        );
-      }
+    bool difference = DateTime.now().isBefore(formattedTime);
 
-      final response = await noticeRepository.astroScheduleOnlineAPI(
-        request.toJson(),
-      );
-      if (response.statusCode == 200 && response.success) {
-        divineSnackBar(data: response.message);
-      }
-    } catch (err) {
-      if (err is AppException) {
-        err.onException();
+    if (difference) {
+      try {
+        ///Type 1: for call 2 for chat.
+        int type = 0;
+
+        late AstroScheduleRequest request;
+        if (value == "CHAT") {
+          type = 2;
+          request = AstroScheduleRequest(
+            scheduleDate: selectedChatDate.value.toFormattedString(),
+            scheduleTime: selectedChatTime.value,
+            type: type,
+          );
+        }
+        if (value == "CALL") {
+          type = 1;
+          request = AstroScheduleRequest(
+            scheduleDate: selectedCallDate.value.toFormattedString(),
+            scheduleTime: selectedCallTime.value,
+            type: type,
+          );
+        }
+        if (value == "VIDEO") {
+          request = AstroScheduleRequest(
+            scheduleDate: selectedVideoDate.value.toFormattedString(),
+            scheduleTime: selectedVideoTime.value,
+            type: type,
+          );
+        }
+
+        final response = await noticeRepository.astroScheduleOnlineAPI(
+          request.toJson(),
+        );
+        if (response.statusCode == 200 && response.success) {
+          divineSnackBar(data: response.message);
+        }
+      } catch (err) {
+        if (err is AppException) {
+          err.onException();
+        }
       }
     }
   }
