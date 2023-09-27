@@ -36,7 +36,7 @@ class LoginUI extends GetView<LoginController> {
                     child: Assets.images.divineLogo
                         .image(width: ScreenUtil().screenWidth * 0.55),
                   ),
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 10.h),
                   const ImageSliderWidget(),
                   SizedBox(height: 5.h),
                   mobileField(),
@@ -198,7 +198,7 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
             onPageChanged: (index, reason) {
               setState(() => swipeIndex = index);
             },
-            height: ScreenUtil().screenHeight * 0.45,
+            height: ScreenUtil().screenHeight * 0.464,
             viewportFraction: 1,
             autoPlay: true,
           ),

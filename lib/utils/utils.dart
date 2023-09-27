@@ -14,6 +14,9 @@ class Utils {
 
 void divineSnackBar({required String data, Color? color}) {
   BuildContext? context = navigator?.context;
+  if(data[data.length - 1] != "."){
+    data = "$data.";
+  }
   if (context != null) {
     final snackBar = SnackBar(
       content: Text(

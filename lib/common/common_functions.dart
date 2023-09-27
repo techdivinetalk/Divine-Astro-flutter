@@ -195,6 +195,9 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void divineSnackBar({required String data, Color? color, Duration? duration}) {
   BuildContext? context = navigator?.context;
+  if(data[data.length - 1] != "."){
+    data = "$data.";
+  }
   if (context != null) {
     final snackBar = SnackBar(
       duration: duration ?? const Duration(milliseconds: 4000),
