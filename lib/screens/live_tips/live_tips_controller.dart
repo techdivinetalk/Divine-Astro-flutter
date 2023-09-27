@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,8 @@ import '../../common/app_textstyle.dart';
 import '../../common/colors.dart';
 import '../../common/common_bottomsheet.dart';
 
+import '../../common/gift_sheet.dart';
+import '../../common/total_earning.dart';
 import '../../gen/assets.gen.dart';
 import '../live_page/live_page.dart';
 
@@ -38,17 +41,18 @@ class LiveTipsController extends GetxController {
       "callStatus":0,
       "userId":0,
       "userName":""
-    });
-    Get.to(LivePage(
-      liveID: astroId.toString(),
-      isHost: true,
-      localUserID: astroId,
-      astrologerImage: image,
-      astrologerName: name,
-      isFrontCamera: front,
-    ),routeName: "livepage")?.then((value){
-      Future.delayed(const Duration(seconds: 3)).then((value){
-        database.ref().child("live/$astroId").remove();
+    }).then((value){
+      Get.to(LivePage(
+        liveID: astroId.toString(),
+        isHost: true,
+        localUserID: astroId,
+        astrologerImage: image,
+        astrologerName: name,
+        isFrontCamera: front,
+      ),routeName: "livepage")?.then((value){
+        Future.delayed(const Duration(milliseconds: 300)).then((value){
+          database.ref().child("live/$astroId").remove();
+        });
       });
     });
   }
