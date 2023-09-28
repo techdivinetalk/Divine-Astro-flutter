@@ -38,7 +38,12 @@ class UploadYourPhotosController extends GetxController {
 
     if (xFilePick.isNotEmpty) {
       for (var i = 0; i < xFilePick.length; i++) {
-        selectedImages.add(File(xFilePick[i].path));
+        if (selectedImages
+            .any((element) => element.path != xFilePick[i].path)) {
+          selectedImages.add(File(xFilePick[i].path));
+        } else {
+          divineSnackBar(data: "This image already selected.");
+        }
       }
       update();
     } else {

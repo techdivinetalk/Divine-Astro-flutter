@@ -705,7 +705,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                   borderRadius: BorderRadius.circular(40),
                   child: CachedNetworkImage(
                     imageUrl:
-                        "${controller.preference.getBaseImageURL()}${reviewData?.customerImage}",
+                        "${controller.preference.getBaseImageURL()}/${reviewData?.customerImage}",
                     height: 40,
                     width: 40,
                     fit: BoxFit.cover,

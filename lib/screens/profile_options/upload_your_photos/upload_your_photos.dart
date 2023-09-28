@@ -29,91 +29,97 @@ class UploadYourPhotosUi extends GetView<UploadYourPhotosController> {
               builder: (controller) => Expanded(
                 child: SizedBox(
                   width: 300.0,
-                  child: GridView(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 15,
-                      mainAxisSpacing: 15,
-                    ),
-                    children: controller.selectedImages
-                        .map<Widget>(
-                          (element) => Stack(
-                            children: [
-                              ClipRRect(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(20),
-                                ),
+                  child: GridView.builder(
+                      itemCount: controller.selectedImages.length + 1 < 6
+                          ? controller.selectedImages.length + 1
+                          : controller.selectedImages.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 15,
+                        mainAxisSpacing: 15,
+                      ),
+                      itemBuilder: (BuildContext context, int index) {
+                        return index == controller.selectedImages.length
+                            ? InkWell(
+                                onTap: () => controller.getImages(),
                                 child: Container(
+                                  width: ScreenUtil().screenWidth * 0.35,
+                                  height: ScreenUtil().screenWidth * 0.35,
                                   decoration: BoxDecoration(
                                     boxShadow: [
                                       BoxShadow(
-                                          color: Colors.black.withOpacity(0.2),
-                                          blurRadius: 1.0,
-                                          offset: const Offset(0.0, 3.0)),
+                                        color: Colors.black.withOpacity(0.2),
+                                        blurRadius: 1.0,
+                                        offset: const Offset(0.0, 3.0),
+                                      ),
                                     ],
                                     color: AppColors.white,
                                     borderRadius: const BorderRadius.all(
-                                      Radius.circular(20),
-                                    ),
+                                        Radius.circular(20)),
                                   ),
-                                  width: ScreenUtil().screenWidth * 0.35,
-                                  height: ScreenUtil().screenWidth * 0.35,
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Image.file(
-                                    element,
-                                    fit: BoxFit.cover,
+                                  child: Center(
+                                    child: Assets.images.icUploadStory
+                                        .svg(width: 30.h, height: 30.h),
                                   ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Align(
-                                  alignment: Alignment.topRight,
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: AppColors.blackColor),
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(3.0),
-                                      child: Icon(
-                                        Icons.close,
+                              )
+                            : Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(20),
+                                    ),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color:
+                                                  Colors.black.withOpacity(0.2),
+                                              blurRadius: 1.0,
+                                              offset: const Offset(0.0, 3.0)),
+                                        ],
                                         color: AppColors.white,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(20),
+                                        ),
+                                      ),
+                                      width: ScreenUtil().screenWidth * 0.35,
+                                      height: ScreenUtil().screenWidth * 0.35,
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Image.file(
+                                        controller.selectedImages[index],
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                        .toList()
-                      ..add(
-                        InkWell(
-                          onTap: () => controller.getImages(),
-                          child: Container(
-                            width: ScreenUtil().screenWidth * 0.35,
-                            height: ScreenUtil().screenWidth * 0.35,
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  blurRadius: 1.0,
-                                  offset: const Offset(0.0, 3.0),
-                                ),
-                              ],
-                              color: AppColors.white,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(20)),
-                            ),
-                            child: Center(
-                              child: Assets.images.icUploadStory
-                                  .svg(width: 30.h, height: 30.h),
-                            ),
-                          ),
-                        ),
-                      ),
-                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      controller.removeImages(controller
+                                          .selectedImages[index].path);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Align(
+                                        alignment: Alignment.topRight,
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: AppColors.blackColor),
+                                          child: const Padding(
+                                            padding: EdgeInsets.all(3.0),
+                                            child: Icon(
+                                              Icons.close,
+                                              color: AppColors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                      }),
                 ),
               ),
             ),
