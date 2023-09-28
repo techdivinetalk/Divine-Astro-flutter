@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
@@ -150,11 +151,14 @@ class LiveController extends GetxController {
   }
 
   jumpToBottom() {
-    scrollController.animateTo(
-      -(scrollController.position.maxScrollExtent + 50),
-      duration: const Duration(milliseconds: 10),
-      curve: Curves.linear,
-    );
+    if(scrollController.hasClients){
+      int offset = Platform.isIOS ? 10 : 50;
+      scrollController.animateTo(
+        -(scrollController.position.maxScrollExtent + 50),
+        duration: const Duration(milliseconds: 10),
+        curve: Curves.linear,
+      );
+    }
   }
 
   //Req event for init LeaderBoard
@@ -344,8 +348,8 @@ class LiveController extends GetxController {
   }
 
   removeFromWaitList() async {
-    var data = await database.ref().child("live/$astroId/waitList").get();
-    var first = data.children.toList().last;
+    var data = await database.ref().child("live/$astroId/waitList").once();
+    var first = data.snapshot.children.toList().last;
     var value = first.value as Map;
     typeOfNextUserCall = value["callType"];
     await Future.delayed(const Duration(seconds: 2));
@@ -355,7 +359,7 @@ class LiveController extends GetxController {
         builder: (BuildContext context) {
           dialogOpen = true;
           return WaitList(
-            data: data.children,
+            data: data.snapshot.children,
             shouldClose: false,
             astroId: astroId,
             fromNextUser: true,
@@ -386,13 +390,13 @@ class LiveController extends GetxController {
         typeOfNextUserCall = data["callType"];
         if (data.isNotEmpty) {
           var waitList =
-              await database.ref().child("live/$astroId/waitList").get();
+              await database.ref().child("live/$astroId/waitList").once();
           showCupertinoModalPopup(
               context: Get.context!,
               barrierDismissible: false,
               builder: (BuildContext context) {
                 return WaitList(
-                  data: waitList.children,
+                  data: waitList.snapshot.children,
                   shouldClose: false,
                   astroId: astroId,
                   fromNextUser: true,
@@ -422,21 +426,19 @@ class LiveController extends GetxController {
         .child("live/$astroId/callStatus/")
         .onValue
         .listen((event) async {
-      var data = await database.ref().child("live/$astroId/").get();
-      if (data.value != null) {
-        var userData = data.value as Map;
-        if (userData["callStatus"] == 1 && !dialogOpen2) {
+      var data = await database.ref().child("live/$astroId/").once();
+      if (data.snapshot.value != null) {
+        var userData = data.snapshot.value as Map;
+        if (userData["callStatus"] == 1) {
           typeOfCall = userData["callType"];
           showCupertinoModalPopup(
               context: Get.context!,
               barrierDismissible: false,
               builder: (BuildContext context) {
-                dialogOpen2 = true;
                 return CoHostRequest(
                     duration: userData["duration"],
                     name: userData["userName"],
                     onAccept: () {
-                      dialogOpen2 = false;
                       database
                           .ref()
                           .child("live/$astroId/")
@@ -476,9 +478,9 @@ class LiveController extends GetxController {
             endCall();
           }
         } else {
-          var coHost = await database.ref().child("live/$astroId/coHost").get();
-          if (coHost.value != null) {
-            var user = coHost.value as Map;
+          var coHost = await database.ref().child("live/$astroId/coHost").once();
+          if (coHost.snapshot.value != null) {
+            var user = coHost.snapshot.value as Map;
             coHostUser = ZegoUIKitUser(id: user["id"], name: user["name"]);
             offerId = user["offer_id"];
             time = user["duration"];
@@ -505,13 +507,13 @@ class LiveController extends GetxController {
   }
 
   Future<String> getCallType(String id) async {
-    var snapShot = await database.ref().child("live/$id").get();
-    return (snapShot.value as Map)["callType"];
+    var snapShot = await database.ref().child("live/$id").once();
+    return (snapShot.snapshot.value as Map)["callType"];
   }
 
   Future<int> getDuration(String id) async {
-    var snapShot = await database.ref().child("live/$id").get();
-    return (snapShot.value as Map)["duration"];
+    var snapShot = await database.ref().child("live/$id").once();
+    return (snapShot.snapshot.value as Map)["duration"];
   }
 
   setVisibilityCoHostVideo(String type) {
@@ -537,24 +539,20 @@ class LiveController extends GetxController {
       ZegoUIKitUser targetUser,
       ZegoLiveStreamingRole targetUserRole,
     ) {
-      if (type == "private" || type == "audio") {
+      if (type == "private" ||
+          type == "audio") {
         /// private or audio call type, pure audio mode
-        return ZegoLiveStreamingRole.host == targetUserRole;
-        //return false;
-      }
-      if (ZegoLiveStreamingRole.host == localRole) {
+        if (ZegoLiveStreamingRole.host == targetUserRole) {
+          return true;
+        } else {
+          return false;
+        }
+      } else if (type == "video") {
         /// host can see all user's view
         return true;
-      }
-
-      /// comment below if you want the co-host hide their own audio-video view.
-      if (localUser.id == targetUser.id) {
-        /// local view
+      } else {
         return true;
       }
-
-      /// if user is a co-host, only show host's audio-video view
-      return targetUserRole == ZegoLiveStreamingRole.host;
     };
   }
 
