@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/permission_handler.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -69,11 +70,14 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                       padding: EdgeInsets.only(top: 20.h),
                       child: InkWell(
                         onTap: () {
-                          controller.isFrontCamera.value = !controller.isFrontCamera.value;
+                          controller.isFrontCamera.value =
+                              !controller.isFrontCamera.value;
                         },
-                        child: Obx(()=>
-                          Icon(
-                            controller.isFrontCamera.value ? Icons.camera_front : Icons.camera_alt,
+                        child: Obx(
+                          () => Icon(
+                            controller.isFrontCamera.value
+                                ? Icons.camera_front
+                                : Icons.camera_alt,
                             color: AppColors.white,
                             size: 28.sp,
                           ),
@@ -122,14 +126,16 @@ class LiveTipsUI extends GetView<LiveTipsController> {
               Expanded(
                 flex: 0,
                 child: InkWell(
-                  onTap: () {
+                  onTap: () async {
                     // showCupertinoModalPopup(
                     //   context: context,
                     //   barrierColor: AppColors.darkBlue.withOpacity(0.5),
                     //   builder: (context) => const GiftPopup(),
                     // );
                     //controller.giftPopup(Get.context!);
-                    controller.jumpToLivePage(controller.isFrontCamera.value);
+                    if (await PermissionHelper().askPermissions()) {
+                      controller.jumpToLivePage(controller.isFrontCamera.value);
+                    }
                   },
                   child: Container(
                     width: double.infinity,

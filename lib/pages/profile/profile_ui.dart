@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
@@ -442,7 +443,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                           ),
                         );
                       } else if (index == 1) {
-                        if (await PermissionHelper().askVideoPermission()) {
+                        if (await PermissionHelper()
+                            .askStoragePermission(Permission.videos)) {
                           FilePickerResult? result =
                               await FilePicker.platform.pickFiles(
                             type: FileType.video,
@@ -458,7 +460,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                       } else if (item.nav != "") {
                         if (item.name == "bankDetails".tr ||
                             item.name == "uploadYourPhoto".tr) {
-                          if (await PermissionHelper().askMediaPermission()) {
+                          if (await PermissionHelper()
+                              .askStoragePermission(Permission.photos)) {
                             Get.toNamed(item.nav.toString());
                           }
                         } else {
