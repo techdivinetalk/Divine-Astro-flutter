@@ -7,10 +7,12 @@ import 'dart:ui';
 
 import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../common/app_textstyle.dart';
 import '../../common/common_functions.dart';
@@ -325,9 +327,12 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                           ),
                         ),
                         suffixIcon: InkWell(
-                          onTap: () {
+                          onTap: () async {
                             if (controller.isOngoingChat.value) {
-                              controller.getImage(false);
+                              if (await PermissionHelper()
+                                  .askStoragePermission(Permission.photos)) {
+                                controller.getImage(false);
+                              }
                             } else {
                               divineSnackBar(
                                   data: "${'chatEnded'.tr}.",

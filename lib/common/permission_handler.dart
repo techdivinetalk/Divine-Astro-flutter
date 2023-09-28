@@ -26,16 +26,15 @@ class PermissionHelper {
     return result;
   }
 
-  askCustomPermission(Permission permission) async {
-    var result = await permission
+  askStoragePermission(Permission permission) async {
+    Permission askPermission = await getPermissionFromAPILevel(permission);
+    var result = await askPermission
         .request()
-        .then((value) => getPermissionStatus(permission));
+        .then((value) => getPermissionStatus(askPermission));
     return result;
   }
 
-  askVideoPermission() async {
-    //Camera, Gallery (32 > videos : storage)
-    Permission permission = await getPermissionFromAPILevel(Permission.videos);
+  askCustomPermission(Permission permission) async {
     var result = await permission
         .request()
         .then((value) => getPermissionStatus(permission));
@@ -100,17 +99,6 @@ class PermissionHelper {
     var deviceInfo = await DeviceInfoPlugin().androidInfo;
     int sdkInt = deviceInfo.version.sdkInt;
     return sdkInt > 32 ? (permission) : Permission.storage;
-  }
-
-  askPermission(Permission permission, String permissionName) async {
-    PermissionStatus request = await permission.request();
-    if (request.isGranted) {
-      return;
-    } else if (request.isDenied) {
-      askPermissionDialog(permission, permissionName);
-    } else if (request.isPermanentlyDenied) {
-      showPermissionDialog(permissionName);
-    }
   }
 
   askPermissionDialog(Permission permission, String permissionName) {

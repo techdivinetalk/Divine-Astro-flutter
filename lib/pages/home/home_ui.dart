@@ -253,9 +253,7 @@ class HomeUI extends GetView<HomeController> {
                       SizedBox(height: 10.h),
                       InkWell(
                         onTap: () async {
-                          if (await PermissionHelper().askPermissions()) {
-                            Get.toNamed(RouteName.liveTipsUI);
-                          }
+                          Get.toNamed(RouteName.liveTipsUI);
                         },
                         child: Container(
                           height: 60,
