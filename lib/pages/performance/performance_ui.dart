@@ -1,6 +1,8 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
+import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/model/performance_model_class.dart';
+import 'package:divine_astrologer/utils/enum.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,40 +29,47 @@ class PerformanceUI extends GetView<PerformanceController> {
           commonAppbar(title: "performance".tr, trailingWidget: Container()),
       drawer: const SideMenuDrawer(),
       body: GetBuilder<PerformanceController>(builder: (controller) {
-        return SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(20.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TodayAvailabilityWidget(
-                    daysAvailiblity:
-                        controller.performanceData?.data?.todaysAvailiblity),
-                SizedBox(
-                  height: 20.h,
-                ),
-                LastAvailabilityWidget(
-                    last30DaysAvailiblity: controller
-                        .performanceData?.data?.last30DaysAvailiblity),
-                SizedBox(
-                  height: 20.h,
-                ),
-                // durationWidget(),
-                const DurationUI(),
-                SizedBox(
-                  height: 20.h,
-                ),
-                OverAllScoreData(
-                    score: controller.performanceData?.data?.score),
-                SizedBox(
-                  height: 30.h,
-                ),
-                const YourScoreWidget(),
-                // yourScore(),
-                SizedBox(
-                  height: 20.h,
-                ),
-              ],
+        return AnimatedCrossFade(
+          duration: const Duration(milliseconds: 200),
+          crossFadeState: controller.loading.value == Loading.loading
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
+          firstChild: const GenericLoadingWidget(),
+          secondChild: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(20.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TodayAvailabilityWidget(
+                      daysAvailiblity:
+                          controller.performanceData?.data?.todaysAvailiblity),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  LastAvailabilityWidget(
+                      last30DaysAvailiblity: controller
+                          .performanceData?.data?.last30DaysAvailiblity),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  // durationWidget(),
+                  const DurationUI(),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  OverAllScoreData(
+                      score: controller.performanceData?.data?.score),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  const YourScoreWidget(),
+                  // yourScore(),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                ],
+              ),
             ),
           ),
         );

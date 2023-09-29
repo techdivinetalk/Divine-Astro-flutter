@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
@@ -96,9 +98,13 @@ class PermissionHelper {
   }
 
   Future<Permission> getPermissionFromAPILevel(Permission permission) async {
-    var deviceInfo = await DeviceInfoPlugin().androidInfo;
-    int sdkInt = deviceInfo.version.sdkInt;
-    return sdkInt > 32 ? (permission) : Permission.storage;
+    if (Platform.isAndroid) {
+      var deviceInfo = await DeviceInfoPlugin().androidInfo;
+      int sdkInt = deviceInfo.version.sdkInt;
+      return sdkInt > 32 ? (permission) : Permission.storage;
+    } else {
+      return permission;
+    }
   }
 
   askPermissionDialog(Permission permission, String permissionName) {

@@ -373,5 +373,6 @@ Map<String, String> gu() {
     "uploadImages": "છબીઓ અપલોડ કરો",
     "imageValidationMsg": "છબી 5 થી વધુ ન હોઈ શકે",
     "profileUpdatedSuccessfully": "પ્રોફાઇલ સફળતાપૂર્વક અપડેટ થઈ",
+    'pleaseWait': 'મહેરબાની કરી રાહ જુવો...',
   };
 }

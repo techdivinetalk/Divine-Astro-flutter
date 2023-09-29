@@ -374,5 +374,6 @@ Map<String, String> en() {
     'attemptsRemaining': 'Attempts Remaining',
     'phoneNumberMustBe10Digit': 'Phone number must be 10 digit',
     'specialityNotEmpty': "Speciality can't be empty",
+    'pleaseWait': 'Please wait...',
   };
 }

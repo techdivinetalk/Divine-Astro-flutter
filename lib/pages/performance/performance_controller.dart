@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/screens/rank_system/rank_system_controller.dart';
+import 'package:divine_astrologer/utils/enum.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../common/app_exception.dart';
@@ -21,6 +22,7 @@ class PerformanceController extends GetxController {
         "Total busy hours out of online hours when busy over consultation."),
   ].obs;
 
+  Rx<Loading> loading = Loading.initial.obs;
   var txt =
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It ";
 
@@ -50,10 +52,12 @@ class PerformanceController extends GetxController {
   RxString selectedOption = "Today".obs;
 
   updateDurationValue(String val) {
-    selectedOption.value = val;
-    int index = durationOptions.indexOf(val);
-    selectedValue.value = durationValue[index];
-    getPerformanceList();
+    if (selectedOption.value != val) {
+      selectedOption.value = val;
+      int index = durationOptions.indexOf(val);
+      selectedValue.value = durationValue[index];
+      getPerformanceList();
+    }
   }
 
   PerformanceModelClass? performanceData;
@@ -71,6 +75,8 @@ class PerformanceController extends GetxController {
   RxList<BusyHours?> overAllScoreList = <BusyHours?>[].obs;
 
   getPerformanceList() async {
+    loading.value = Loading.loading;
+    update();
     try {
       Map<String, dynamic> params = {"filter": selectedValue.value};
       // Map<String, dynamic> params = {"filter": 'last_month'};
@@ -86,11 +92,11 @@ class PerformanceController extends GetxController {
         response.data?.response?.busyHours,
       ];
 
-      update();
       RankSystemController rankSystemController =
           Get.put(RankSystemController());
       rankSystemController.rankSystemList = performanceData?.data?.rankSystem;
 
+      update();
       log("performanceData==>${jsonEncode(performanceData!.data)}");
     } catch (error) {
       debugPrint("error $error");
@@ -100,6 +106,7 @@ class PerformanceController extends GetxController {
         divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
+    loading.value = Loading.loaded;
   }
 }
 

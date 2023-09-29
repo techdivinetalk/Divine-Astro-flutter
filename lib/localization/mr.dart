@@ -373,5 +373,6 @@ Map<String, String> mr() {
     "uploadImages": "प्रतिमा अपलोड करा",
     "imageValidationMsg": "प्रतिमा 5 पेक्षा जास्त असू शकत नाही",
     "profileUpdatedSuccessfully": "प्रोफाइल यशस्वीरित्या अपडेट केले",
+    'pleaseWait': 'कृपया थांबा...',
   };
 }

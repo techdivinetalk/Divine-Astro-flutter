@@ -375,5 +375,6 @@ Map<String, String> hi() {
     "uploadImages": "तश्वीरें अपलोड करो",
     "imageValidationMsg": "छवि 5 से अधिक नहीं हो सकती",
     "profileUpdatedSuccessfully": "प्रोफाइल को सफलतापूर्वक अपडेट किया गया",
+    'pleaseWait': 'कृपया प्रतीक्षा करें...',
   };
 }
