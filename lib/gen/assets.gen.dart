@@ -76,10 +76,6 @@ class $AssetsImagesGen {
   SvgGenImage get bgTmpUser =>
       const SvgGenImage('assets/images/bg_tmpUser.svg');
 
-  /// File path: assets/images/bg_userProfile.svg
-  SvgGenImage get bgUserProfile =>
-      const SvgGenImage('assets/images/bg_userProfile.svg');
-
   /// File path: assets/images/bg_userTmpPro.png
   AssetGenImage get bgUserTmpPro =>
       const AssetGenImage('assets/images/bg_userTmpPro.png');
@@ -119,10 +115,6 @@ class $AssetsImagesGen {
   SvgGenImage get icBankDetail =>
       const SvgGenImage('assets/images/ic-bankDetail.svg');
 
-  /// File path: assets/images/ic_ContactUs1.svg
-  SvgGenImage get icContactUs1 =>
-      const SvgGenImage('assets/images/ic_ContactUs1.svg');
-
   /// File path: assets/images/ic_ImportContact.svg
   SvgGenImage get icImportContact =>
       const SvgGenImage('assets/images/ic_ImportContact.svg');
@@ -134,10 +126,6 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_SelectedHome.svg
   SvgGenImage get icSelectedHome =>
       const SvgGenImage('assets/images/ic_SelectedHome.svg');
-
-  /// File path: assets/images/ic_UnselectedHome.svg
-  SvgGenImage get icUnselectedHome =>
-      const SvgGenImage('assets/images/ic_UnselectedHome.svg');
 
   /// File path: assets/images/ic_attechment.svg
   SvgGenImage get icAttechment =>
@@ -158,9 +146,6 @@ class $AssetsImagesGen {
   SvgGenImage get icBlockUserNew =>
       const SvgGenImage('assets/images/ic_blockUserNew.svg');
 
-  /// File path: assets/images/ic_book.svg
-  SvgGenImage get icBook => const SvgGenImage('assets/images/ic_book.svg');
-
   /// File path: assets/images/ic_boy_kundli.svg
   SvgGenImage get icBoyKundli =>
       const SvgGenImage('assets/images/ic_boy_kundli.svg');
@@ -176,19 +161,8 @@ class $AssetsImagesGen {
   SvgGenImage get icCalendar =>
       const SvgGenImage('assets/images/ic_calendar.svg');
 
-  /// File path: assets/images/ic_calender.svg
-  SvgGenImage get icCalender =>
-      const SvgGenImage('assets/images/ic_calender.svg');
-
   /// File path: assets/images/ic_call.svg
   SvgGenImage get icCall => const SvgGenImage('assets/images/ic_call.svg');
-
-  /// File path: assets/images/ic_calling.svg
-  SvgGenImage get icCalling =>
-      const SvgGenImage('assets/images/ic_calling.svg');
-
-  /// File path: assets/images/ic_cart.svg
-  SvgGenImage get icCart => const SvgGenImage('assets/images/ic_cart.svg');
 
   /// File path: assets/images/ic_chat.svg
   SvgGenImage get icChat => const SvgGenImage('assets/images/ic_chat.svg');
@@ -234,10 +208,6 @@ class $AssetsImagesGen {
   SvgGenImage get icDownArrow =>
       const SvgGenImage('assets/images/ic_down_arrow.svg');
 
-  /// File path: assets/images/ic_drop_down.svg
-  SvgGenImage get icDropDown =>
-      const SvgGenImage('assets/images/ic_drop_down.svg');
-
   /// File path: assets/images/ic_ecommerce.svg
   SvgGenImage get icEcommerce =>
       const SvgGenImage('assets/images/ic_ecommerce.svg');
@@ -257,10 +227,6 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/ic_faqImg.svg
   SvgGenImage get icFaqImg => const SvgGenImage('assets/images/ic_faqImg.svg');
-
-  /// File path: assets/images/ic_feedBack.svg
-  SvgGenImage get icFeedBack =>
-      const SvgGenImage('assets/images/ic_feedBack.svg');
 
   /// File path: assets/images/ic_fiveStar.svg
   SvgGenImage get icFiveStar =>
@@ -299,17 +265,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_kundli.svg
   SvgGenImage get icKundli => const SvgGenImage('assets/images/ic_kundli.svg');
 
-  /// File path: assets/images/ic_kundli_chart.png
-  AssetGenImage get icKundliChart =>
-      const AssetGenImage('assets/images/ic_kundli_chart.png');
-
   /// File path: assets/images/ic_kundli_share.png
   AssetGenImage get icKundliShare =>
       const AssetGenImage('assets/images/ic_kundli_share.png');
-
-  /// File path: assets/images/ic_language.svg
-  SvgGenImage get icLanguage =>
-      const SvgGenImage('assets/images/ic_language.svg');
 
   /// File path: assets/images/ic_languages.svg
   SvgGenImage get icLanguages =>
@@ -332,10 +290,6 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_moon.svg
   SvgGenImage get icMoon => const SvgGenImage('assets/images/ic_moon.svg');
 
-  /// File path: assets/images/ic_offline.svg
-  SvgGenImage get icOffline =>
-      const SvgGenImage('assets/images/ic_offline.svg');
-
   /// File path: assets/images/ic_oneStar.svg
   SvgGenImage get icOneStar =>
       const SvgGenImage('assets/images/ic_oneStar.svg');
@@ -351,9 +305,6 @@ class $AssetsImagesGen {
   AssetGenImage get icPlatinum =>
       const AssetGenImage('assets/images/ic_platinum.png');
 
-  /// File path: assets/images/ic_price.svg
-  SvgGenImage get icPrice => const SvgGenImage('assets/images/ic_price.svg');
-
   /// File path: assets/images/ic_priceChange.svg
   SvgGenImage get icPriceChange =>
       const SvgGenImage('assets/images/ic_priceChange.svg');
@@ -361,10 +312,6 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_priceChangeNew.svg
   SvgGenImage get icPriceChangeNew =>
       const SvgGenImage('assets/images/ic_priceChangeNew.svg');
-
-  /// File path: assets/images/ic_profilePhoto.svg
-  SvgGenImage get icProfilePhoto =>
-      const SvgGenImage('assets/images/ic_profilePhoto.svg');
 
   /// File path: assets/images/ic_rate.svg
   SvgGenImage get icRate => const SvgGenImage('assets/images/ic_rate.svg');
@@ -391,10 +338,6 @@ class $AssetsImagesGen {
   SvgGenImage get icSelectedSuggest =>
       const SvgGenImage('assets/images/ic_selectedSuggest.svg');
 
-  /// File path: assets/images/ic_selectedWallet.svg
-  SvgGenImage get icSelectedWallet =>
-      const SvgGenImage('assets/images/ic_selectedWallet.svg');
-
   /// File path: assets/images/ic_sendMsg.svg
   SvgGenImage get icSendMsg =>
       const SvgGenImage('assets/images/ic_sendMsg.svg');
@@ -410,10 +353,6 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_singleTick.svg
   SvgGenImage get icSingleTick =>
       const SvgGenImage('assets/images/ic_singleTick.svg');
-
-  /// File path: assets/images/ic_suitcase.svg
-  SvgGenImage get icSuitcase =>
-      const SvgGenImage('assets/images/ic_suitcase.svg');
 
   /// File path: assets/images/ic_sun.svg
   SvgGenImage get icSun => const SvgGenImage('assets/images/ic_sun.svg');
@@ -440,18 +379,6 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/ic_unlock.svg
   SvgGenImage get icUnlock => const SvgGenImage('assets/images/ic_unlock.svg');
-
-  /// File path: assets/images/ic_unselectedPerfom.svg
-  SvgGenImage get icUnselectedPerfom =>
-      const SvgGenImage('assets/images/ic_unselectedPerfom.svg');
-
-  /// File path: assets/images/ic_unselectedSuggest.svg
-  SvgGenImage get icUnselectedSuggest =>
-      const SvgGenImage('assets/images/ic_unselectedSuggest.svg');
-
-  /// File path: assets/images/ic_unselectedWallet.svg
-  SvgGenImage get icUnselectedWallet =>
-      const SvgGenImage('assets/images/ic_unselectedWallet.svg');
 
   /// File path: assets/images/ic_uploadPhoto.svg
   SvgGenImage get icUploadPhoto =>
@@ -548,7 +475,6 @@ class $AssetsImagesGen {
         bgServiceLogo,
         bgSuggestedRemedy,
         bgTmpUser,
-        bgUserProfile,
         bgUserTmpPro,
         championLive,
         createAccLocation,
@@ -559,25 +485,19 @@ class $AssetsImagesGen {
         giftLive,
         giftTotal,
         icBankDetail,
-        icContactUs1,
         icImportContact,
         icNumChanges,
         icSelectedHome,
-        icUnselectedHome,
         icAttechment,
         icBankDetailNew,
         icBirthTIme,
         icBlock,
         icBlockUserNew,
-        icBook,
         icBoyKundli,
         icBronze,
         icCalc,
         icCalendar,
-        icCalender,
         icCall,
-        icCalling,
-        icCart,
         icChat,
         icChatBottom,
         icChating,
@@ -590,14 +510,12 @@ class $AssetsImagesGen {
         icDonations,
         icDoubleTick,
         icDownArrow,
-        icDropDown,
         icEcommerce,
         icEdit,
         icEmoji,
         icEndChat,
         icEye,
         icFaqImg,
-        icFeedBack,
         icFiveStar,
         icFourStar,
         icGanesh,
@@ -609,24 +527,19 @@ class $AssetsImagesGen {
         icInfo,
         icKalashDetail,
         icKundli,
-        icKundliChart,
         icKundliShare,
-        icLanguage,
         icLanguages,
         icLeftArrow,
         icLocation,
         icLogout,
         icMars,
         icMoon,
-        icOffline,
         icOneStar,
         icOrder,
         icOrderHistory,
         icPlatinum,
-        icPrice,
         icPriceChange,
         icPriceChangeNew,
-        icProfilePhoto,
         icRate,
         icReferAFriend,
         icRemediesLeft,
@@ -634,12 +547,10 @@ class $AssetsImagesGen {
         icSearch,
         icSelectedPerfom,
         icSelectedSuggest,
-        icSelectedWallet,
         icSendMsg,
         icSetting,
         icSilver,
         icSingleTick,
-        icSuitcase,
         icSun,
         icSupportTeam,
         icSwastika,
@@ -647,9 +558,6 @@ class $AssetsImagesGen {
         icTwoStar,
         icTyping,
         icUnlock,
-        icUnselectedPerfom,
-        icUnselectedSuggest,
-        icUnselectedWallet,
         icUploadPhoto,
         icUploadStory,
         icUser,
@@ -753,9 +661,6 @@ class $AssetsSvgGen {
   SvgGenImage get privateCallEarning =>
       const SvgGenImage('assets/svg/private_call_earning.svg');
 
-  /// File path: assets/svg/reply.svg
-  SvgGenImage get reply => const SvgGenImage('assets/svg/reply.svg');
-
   /// File path: assets/svg/switch_camera.svg
   SvgGenImage get switchCamera =>
       const SvgGenImage('assets/svg/switch_camera.svg');
@@ -786,7 +691,6 @@ class $AssetsSvgGen {
         pleaseRegister1,
         pleaseRegister2,
         privateCallEarning,
-        reply,
         switchCamera,
         videoCallEarning,
         videoMute

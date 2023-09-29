@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
+import 'package:divine_astrologer/gen/assets.gen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,15 +27,15 @@ class LiveTipsUI extends GetView<LiveTipsController> {
           },
           blendMode: BlendMode.darken,
           child: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
                   colors: [Colors.transparent, Colors.black],
                   begin: FractionalOffset(0, 0),
                   end: FractionalOffset(0, 1),
                   stops: [0.0, 2.0],
                   tileMode: TileMode.clamp),
               image: DecorationImage(
-                image: ExactAssetImage('assets/images/bg_liveTemp.png'),
+                image: ExactAssetImage(Assets.images.bgLiveTemp.path),
                 fit: BoxFit.cover,
               ),
             ),
