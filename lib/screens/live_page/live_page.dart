@@ -60,7 +60,6 @@ class LivePage extends StatefulWidget {
 
 class LivePageState extends State<LivePage>
     with SingleTickerProviderStateMixin {
-  //final liveController = ZegoUIKitPrebuiltLiveStreamingController();
   final event = ZegoUIKitPrebuiltLiveStreamingEvents();
   final List<StreamSubscription<dynamic>?> subscriptions = [];
   final controller = Get.put(LiveController(Get.put(UserRepository())));
@@ -78,12 +77,10 @@ class LivePageState extends State<LivePage>
         widget.localUserID,
         true,
       );
-      //controller.getBlockedCustomerList();
       event.hostEvents.onCoHostRequestReceived = (user) async {
         controller.coHostUser = user;
         String type = await controller.getCallType(widget.localUserID);
         int duration = await controller.getDuration(widget.localUserID);
-        //controller.setVisibilityCoHost(type);
         showCupertinoModalPopup(
             context: Get.context!,
             builder: (BuildContext context) {
@@ -104,7 +101,6 @@ class LivePageState extends State<LivePage>
                           customerId: user.id);
                     });
                     controller.isCoHosting.value = true;
-                    //timeController.start();
                   });
             });
       };
@@ -135,25 +131,9 @@ class LivePageState extends State<LivePage>
 
   @override
   Widget build(BuildContext context) {
-    final hostConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host(
-      plugins: [ZegoUIKitSignalingPlugin()],
-    );
-
-    final giftButton = ZegoMenuBarExtendButton(
-      index: 0,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(shape: const CircleBorder()),
-        onPressed: () {
-          sendGift();
-        },
-        child: const Icon(Icons.blender),
-      ),
-    );
-
     final audienceConfig = ZegoUIKitPrebuiltLiveStreamingConfig.audience(
       plugins: [ZegoUIKitSignalingPlugin()],
-    )..bottomMenuBarConfig.coHostExtendButtons = [giftButton];
-    //..bottomMenuBarConfig.audienceExtendButtons = [giftButton];
+    )..bottomMenuBarConfig.coHostExtendButtons = [];
 
     return WillPopScope(
       onWillPop: () async {
@@ -178,7 +158,7 @@ class LivePageState extends State<LivePage>
           body: LayoutBuilder(builder: (context, constraints) {
             return ZegoUIKitPrebuiltLiveStreaming(
               appID: yourAppID,
-              appSign: yourAppSign /*input your AppSign*/,
+              appSign: yourAppSign,
               userID: widget.localUserID,
               userName: widget.astrologerName ?? "user_${widget.localUserID}",
               liveID: widget.liveID,
@@ -189,12 +169,7 @@ class LivePageState extends State<LivePage>
                 ..stopCoHostingWhenMicCameraOff = false
                 ..confirmDialogInfo = null
                 ..markAsLargeRoom = false
-                ..bottomMenuBarConfig.hostButtons = const [
-                  //ZegoMenuBarButtonName.soundEffectButton,
-                  //ZegoMenuBarButtonName.switchCameraButton,
-                  //ZegoMenuBarButtonName.toggleCameraButton,
-                  //ZegoMenuBarButtonName.toggleMicrophoneButton,
-                ]
+                ..bottomMenuBarConfig.hostButtons = const []
                 ..bottomMenuBarConfig.coHostButtons = [
                   ZegoMenuBarButtonName.toggleCameraButton,
                   ZegoMenuBarButtonName.toggleMicrophoneButton,
@@ -212,28 +187,6 @@ class LivePageState extends State<LivePage>
                 ..layout = ZegoLayout.gallery()
                 ..topMenuBarConfig =
                     ZegoTopMenuBarConfig(height: 0, showCloseButton: false)
-
-                /// hide the co-host audio-video view to audience and other co-hosts
-                /*..audioVideoViewConfig.visible = (
-                  ZegoUIKitUser localUser,
-                  ZegoLiveStreamingRole localRole,
-                  ZegoUIKitUser targetUser,
-                  ZegoLiveStreamingRole targetUserRole,
-                ) {
-                  if (ZegoLiveStreamingRole.host == localRole) {
-                    /// host can see all user's view
-                    return true;
-                  }
-
-                  /// comment below if you want the co-host hide their own audio-video view.
-                  if (localUser.id == targetUser.id) {
-                    /// local view
-                    return true;
-                  }
-
-                  /// if user is a co-host, only show host's audio-video view
-                  return targetUserRole == ZegoLiveStreamingRole.host;
-                }*/
                 ..onLiveStreamingStateUpdate = (ZegoLiveStreamingState state) {
                   liveStateNotifier.value = state;
                 }
@@ -315,7 +268,6 @@ class LivePageState extends State<LivePage>
             horizontal: 1.w,
           ),
           decoration: BoxDecoration(
-            //border: Border.all(color: AppColors.white, width: .8),
             color: Colors.black.withOpacity(0.05),
             borderRadius: BorderRadius.circular(5),
           ),
@@ -324,47 +276,48 @@ class LivePageState extends State<LivePage>
             text: TextSpan(
               children: [
                 WidgetSpan(
-                    child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(width: 4.w),
-                    SizedBox(
-                      width: 18,
-                      child: Center(
-                        child: ZegoAvatar(
-                          user: message.user,
-                          avatarSize: const Size(18, 18),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(width: 4.w),
+                      SizedBox(
+                        width: 18,
+                        child: Center(
+                          child: ZegoAvatar(
+                            user: message.user,
+                            avatarSize: const Size(18, 18),
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(width: 4.w),
-                    Text(
-                      '${message.user.name}: ',
-                      style: const TextStyle(
-                        color: AppColors.appYellowColour,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Flexible(
-                      child: Text(
-                        message.message,
+                      SizedBox(width: 4.w),
+                      Text(
+                        '${message.user.name}: ',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.appYellowColour,
                           fontSize: 12,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ),
-                    isOtherUser
-                        ? const Icon(
-                            Icons.more_vert,
+                      Flexible(
+                        child: Text(
+                          message.message,
+                          style: const TextStyle(
                             color: Colors.white,
-                          )
-                        : const SizedBox()
-                  ],
-                )),
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      isOtherUser
+                          ? const Icon(
+                              Icons.more_vert,
+                              color: Colors.white,
+                            )
+                          : const SizedBox()
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -408,7 +361,6 @@ class LivePageState extends State<LivePage>
                     fontSize: 10.sp, fontColor: AppColors.white),
               ],
             ),
-            // Assets.images.starLive.image(),
             SizedBox(width: 10.w),
           ],
         ),
@@ -444,8 +396,6 @@ class LivePageState extends State<LivePage>
                   ),
                   child: circleAvatar(),
                 ),
-                //SizedBox(width: 8.w),
-                //Lottie.asset('assets/lottie/sound_waves.json'),
                 SizedBox(width: 4.w),
                 buildCustomTimer(),
                 SizedBox(width: 16.w),
@@ -558,126 +508,121 @@ class LivePageState extends State<LivePage>
               return ZegoLiveStreamingState.idle == liveState
                   ? Container()
                   : SizedBox(
-                    height: Get.height - 22.h,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const Spacer(),
-                        messageView,
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        SafeArea(
-                          top: false,
-                          bottom: false,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 12.w),
-                            child: SizedBox(
-                              width: Get.width,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Expanded(
-                                    child: ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.circular(40),
-                                      child: BackdropFilter(
-                                        filter: ImageFilter.blur(
-                                            sigmaX: 5, sigmaY: 5),
-                                        child: CustomTextField(
-                                          align: TextAlignVertical.center,
-                                          height: 50.h,
-                                          style: TextStyle(
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.w400,
-                                            color: AppColors.white,
-                                          ),
-                                          focusNode: controller.myFocus,
-                                          onSubmit: (value) {
-                                            controller.myFocus.unfocus();
-                                            if (value.isNotEmpty) {
-                                              if (controller.badWordsData!
-                                                  .contains(value)) {
-                                                controller.msg.text = "";
-                                              } else {
-                                                controller
-                                                    .liveController.message
-                                                    .send(value);
-                                                controller.msg.text = "";
-                                                controller.jumpToBottom();
-                                              }
-                                            }
-                                          },
-                                          // height: ,
-                                          inputAction: TextInputAction.send,
-                                          readOnly: false,
-                                          hintText: "${'sayHi'.tr}...",
-                                          hintColor: AppColors.white,
-                                          controller: controller.msg,
-                                          keyboardType: TextInputType.text,
-                                          suffixIconPadding: 8.w,
-                                          isDense: true,
-                                          textInputFormatter: [
-                                            FilteringTextInputFormatter(
-                                                RegExp(
-                                                    r'^[a-zA-Z _,@./#&+-]*$'),
-                                                allow: true)
-                                          ],
-                                          inputBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: AppColors.white
-                                                  .withOpacity(0.15),
+                      height: Get.height - 22.h,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          const Spacer(),
+                          messageView,
+                          const SizedBox(
+                            height: 4,
+                          ),
+                          SafeArea(
+                            top: false,
+                            bottom: false,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12.w),
+                              child: SizedBox(
+                                width: Get.width,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Expanded(
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(40),
+                                        child: BackdropFilter(
+                                          filter: ImageFilter.blur(
+                                              sigmaX: 5, sigmaY: 5),
+                                          child: CustomTextField(
+                                            align: TextAlignVertical.center,
+                                            height: 50.h,
+                                            style: TextStyle(
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.w400,
+                                              color: AppColors.white,
                                             ),
-                                            borderRadius:
-                                                BorderRadius.circular(
-                                                    40.sp),
+                                            focusNode: controller.myFocus,
+                                            onSubmit: (value) {
+                                              controller.myFocus.unfocus();
+                                              if (value.isNotEmpty) {
+                                                if (controller.badWordsData!
+                                                    .contains(value)) {
+                                                  controller.msg.text = "";
+                                                } else {
+                                                  controller
+                                                      .liveController.message
+                                                      .send(value);
+                                                  controller.msg.text = "";
+                                                  controller.jumpToBottom();
+                                                }
+                                              }
+                                            },
+                                            inputAction: TextInputAction.send,
+                                            readOnly: false,
+                                            hintText: "${'sayHi'.tr}...",
+                                            hintColor: AppColors.white,
+                                            controller: controller.msg,
+                                            keyboardType: TextInputType.text,
+                                            suffixIconPadding: 8.w,
+                                            isDense: true,
+                                            textInputFormatter: [
+                                              FilteringTextInputFormatter(
+                                                  RegExp(
+                                                      r'^[a-zA-Z _,@./#&+-]*$'),
+                                                  allow: true)
+                                            ],
+                                            inputBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: AppColors.white
+                                                    .withOpacity(0.15),
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(40.sp),
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  IconButton(
-                                      onPressed: () {
-                                        ZegoUIKit.instance.turnMicrophoneOn(
-                                            !controller
-                                                .isMicroPhoneOn.value,
-                                            muteMode: true);
-                                        controller.isMicroPhoneOn.value =
-                                            !controller
-                                                .isMicroPhoneOn.value;
-                                      },
-                                      icon: Obx(() => controller
-                                              .isMicroPhoneOn.value
-                                          ? Assets.images.audioEnableLive
-                                              .svg()
-                                          : Assets.images.audioDisableLive
-                                              .svg())),
-                                  IconButton(
-                                      onPressed: () {
-                                        ZegoUIKit.instance.turnCameraOn(
-                                            !controller.isCameraOn.value);
-                                        controller.isCameraOn.value =
-                                            !controller.isCameraOn.value;
-                                      },
-                                      icon: Obx(() => controller
-                                              .isCameraOn.value
-                                          ? Assets.images.vidioEnableLive
-                                              .svg()
-                                          : Assets.images.videoDisableLive
-                                              .svg()))
-                                ],
+                                    IconButton(
+                                        onPressed: () {
+                                          ZegoUIKit.instance.turnMicrophoneOn(
+                                              !controller.isMicroPhoneOn.value,
+                                              muteMode: true);
+                                          controller.isMicroPhoneOn.value =
+                                              !controller.isMicroPhoneOn.value;
+                                        },
+                                        icon: Obx(() =>
+                                            controller.isMicroPhoneOn.value
+                                                ? Assets.images.audioEnableLive
+                                                    .svg()
+                                                : Assets.images.audioDisableLive
+                                                    .svg())),
+                                    IconButton(
+                                        onPressed: () {
+                                          ZegoUIKit.instance.turnCameraOn(
+                                              !controller.isCameraOn.value);
+                                          controller.isCameraOn.value =
+                                              !controller.isCameraOn.value;
+                                        },
+                                        icon: Obx(() =>
+                                            controller.isCameraOn.value
+                                                ? Assets.images.vidioEnableLive
+                                                    .svg()
+                                                : Assets.images.videoDisableLive
+                                                    .svg()))
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                      ],
-                    ),
-                  );
+                          const SizedBox(
+                            height: 12,
+                          ),
+                        ],
+                      ),
+                    );
             },
           ),
         ),
@@ -788,7 +733,7 @@ class LivePageState extends State<LivePage>
               ),
             ),
           ),
-          Spacer(),
+          const Spacer(),
           InkWell(
               onTap: () {
                 controller.isStarHide.value = !controller.isStarHide.value;
@@ -827,20 +772,7 @@ class LivePageState extends State<LivePage>
                           !controller.isCallOnOff.value;
                     },
                   ),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  /*Container(
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: AppColors.grey.withOpacity(0.5)),
-                    child: CustomText(
-                      controller.isCallOnOff.value ? "Call on" : "Call off",
-                      fontSize: 8.sp,
-                      fontColor: AppColors.white,
-                    ),
-                  ),*/
+                  SizedBox(height: 2.h),
                 ],
               )),
           SizedBox(width: 10.w)
@@ -1113,33 +1045,6 @@ class LivePageState extends State<LivePage>
               "assets/svga/${controller.svgaAnime[data["gift_type"] - 1]}");
         }
       }
-    }
-  }
-
-  void sendGift() async {
-    final data = json.encode({
-      'app_id': yourAppID,
-      'server_secret': yourServerSecret,
-      'room_id': widget.liveID,
-      'user_id': widget.localUserID,
-      'user_name': 'user_${widget.localUserID}',
-      'gift_type': 1001,
-      'gift_count': 1,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
-
-    try {
-      // const url = 'http://localhost:3000/api/send_gift';
-      const url = 'https://zego-virtual-gift.vercel.app/api/send_gift';
-      final response = await http.post(Uri.parse(url),
-          headers: {'Content-Type': 'application/json'}, body: data);
-      if (response.statusCode == 200) {
-        GiftWidget.show(context, "assets/sports-car.svga");
-      } else {
-        debugPrint('[ERROR], Send Gift Fail: ${response.statusCode}');
-      }
-    } on Exception catch (error) {
-      debugPrint("[ERROR], Send Gift Fail, ${error.toString()}");
     }
   }
 

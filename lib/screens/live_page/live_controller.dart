@@ -122,7 +122,7 @@ class LiveController extends GetxController {
     countdownTimer = null;
     duration1 = intToTimeLeft(time); //time
     if (duration1.inHours > 3) {
-      duration1 = Duration(hours: 4);
+      duration1 = const Duration(hours: 4);
     }
     countdownTimer ??= Timer.periodic(const Duration(seconds: 1), (timer) {
       const reduceSecondsBy = 1;
@@ -152,9 +152,9 @@ class LiveController extends GetxController {
 
   jumpToBottom() {
     if(scrollController.hasClients){
-      int offset = Platform.isIOS ? 10 : 50;
+      int offset = Platform.isIOS ? 0 : 50;
       scrollController.animateTo(
-        -(scrollController.position.maxScrollExtent + 50),
+        -(scrollController.position.maxScrollExtent + offset),
         duration: const Duration(milliseconds: 10),
         curve: Curves.linear,
       );
@@ -418,7 +418,6 @@ class LiveController extends GetxController {
   }
 
   bool dialogOpen = false;
-  bool dialogOpen2 = false;
 
   listenCallStatus() {
     database
