@@ -376,5 +376,16 @@ Map<String, String> hi() {
     "imageValidationMsg": "छवि 5 से अधिक नहीं हो सकती",
     "profileUpdatedSuccessfully": "प्रोफाइल को सफलतापूर्वक अपडेट किया गया",
     'pleaseWait': 'कृपया प्रतीक्षा करें...',
+    'fromCalls': 'कॉल से',
+    'fromVideoCalls': 'वीडियो कॉल से',
+    'fromPrivateCalls': 'निजी कॉल से',
+    'fromLiveGifts': 'लाइव उपहारों से',
+    "YouHaveEarnedFromYourLastSession":
+        "आपने अपने पिछले सत्र से ₹@price कमाए हैं",
+    "YouHaveReceivedCalls": "आपको @count कॉलें प्राप्त हुई हैं.",
+    "YouHaveReceivedVideoCalls": "आपको @count वीडियो कॉल प्राप्त हुई हैं.",
+    "YouHaveReceivedPrivateCalls": "आपको @count निजी कॉल प्राप्त हुई हैं.",
+    "YouHaveReceivedLiveGifts": "आपको @count लाइव उपहार प्राप्त हुए हैं.",
+    "isOnCall":"कॉल पर है"
   };
 }

@@ -408,7 +408,7 @@ class LivePageState extends State<LivePage>
             child: Container(
               padding: EdgeInsets.only(bottom: 4.0.w, left: 4.w),
               child: CustomText(
-                  " ${controller.coHostUser?.name ?? ""} is on call",
+                  " ${controller.coHostUser?.name ?? ""} ${"isOnCall".tr}",
                   overflow: TextOverflow.ellipsis,
                   fontSize: 12.sp,
                   fontColor: AppColors.white),
@@ -519,104 +519,7 @@ class LivePageState extends State<LivePage>
                           const SizedBox(
                             height: 4,
                           ),
-                          SafeArea(
-                            top: false,
-                            bottom: false,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 12.w),
-                              child: SizedBox(
-                                width: Get.width,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Expanded(
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(40),
-                                        child: BackdropFilter(
-                                          filter: ImageFilter.blur(
-                                              sigmaX: 5, sigmaY: 5),
-                                          child: CustomTextField(
-                                            align: TextAlignVertical.center,
-                                            height: 50.h,
-                                            style: TextStyle(
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.w400,
-                                              color: AppColors.white,
-                                            ),
-                                            focusNode: controller.myFocus,
-                                            onSubmit: (value) {
-                                              controller.myFocus.unfocus();
-                                              if (value.isNotEmpty) {
-                                                if (controller.badWordsData!
-                                                    .contains(value)) {
-                                                  controller.msg.text = "";
-                                                } else {
-                                                  controller
-                                                      .liveController.message
-                                                      .send(value);
-                                                  controller.msg.text = "";
-                                                  controller.jumpToBottom();
-                                                }
-                                              }
-                                            },
-                                            inputAction: TextInputAction.send,
-                                            readOnly: false,
-                                            hintText: "${'sayHi'.tr}...",
-                                            hintColor: AppColors.white,
-                                            controller: controller.msg,
-                                            keyboardType: TextInputType.text,
-                                            suffixIconPadding: 8.w,
-                                            isDense: true,
-                                            textInputFormatter: [
-                                              FilteringTextInputFormatter(
-                                                  RegExp(
-                                                      r'^[a-zA-Z _,@./#&+-]*$'),
-                                                  allow: true)
-                                            ],
-                                            inputBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: AppColors.white
-                                                    .withOpacity(0.15),
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(40.sp),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    IconButton(
-                                        onPressed: () {
-                                          ZegoUIKit.instance.turnMicrophoneOn(
-                                              !controller.isMicroPhoneOn.value,
-                                              muteMode: true);
-                                          controller.isMicroPhoneOn.value =
-                                              !controller.isMicroPhoneOn.value;
-                                        },
-                                        icon: Obx(() =>
-                                            controller.isMicroPhoneOn.value
-                                                ? Assets.images.audioEnableLive
-                                                    .svg()
-                                                : Assets.images.audioDisableLive
-                                                    .svg())),
-                                    IconButton(
-                                        onPressed: () {
-                                          ZegoUIKit.instance.turnCameraOn(
-                                              !controller.isCameraOn.value);
-                                          controller.isCameraOn.value =
-                                              !controller.isCameraOn.value;
-                                        },
-                                        icon: Obx(() =>
-                                            controller.isCameraOn.value
-                                                ? Assets.images.vidioEnableLive
-                                                    .svg()
-                                                : Assets.images.videoDisableLive
-                                                    .svg()))
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+                          buildTextField(),
                           const SizedBox(
                             height: 12,
                           ),
@@ -651,6 +554,93 @@ class LivePageState extends State<LivePage>
           ),
         ),
       ],
+    );
+  }
+
+  SafeArea buildTextField() {
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12.w),
+        child: SizedBox(
+          width: Get.width,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(40),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                    child: CustomTextField(
+                      align: TextAlignVertical.center,
+                      height: 50.h,
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.white,
+                      ),
+                      focusNode: controller.myFocus,
+                      onSubmit: (value) {
+                        controller.myFocus.unfocus();
+                        if (value.isNotEmpty) {
+                          if (controller.badWordsData!.contains(value)) {
+                            controller.msg.text = "";
+                          } else {
+                            controller.liveController.message.send(value);
+                            controller.msg.text = "";
+                            controller.jumpToBottom();
+                          }
+                        }
+                      },
+                      inputAction: TextInputAction.send,
+                      readOnly: false,
+                      hintText: "${'sayHi'.tr}...",
+                      hintColor: AppColors.white,
+                      controller: controller.msg,
+                      keyboardType: TextInputType.text,
+                      suffixIconPadding: 8.w,
+                      isDense: true,
+                      textInputFormatter: [
+                        FilteringTextInputFormatter(
+                            RegExp(r'^[a-zA-Z _,@./#&+-]*$'),
+                            allow: true)
+                      ],
+                      inputBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: AppColors.white.withOpacity(0.15),
+                        ),
+                        borderRadius: BorderRadius.circular(40.sp),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              IconButton(
+                  onPressed: () {
+                    ZegoUIKit.instance.turnMicrophoneOn(
+                        !controller.isMicroPhoneOn.value,
+                        muteMode: true);
+                    controller.isMicroPhoneOn.value =
+                        !controller.isMicroPhoneOn.value;
+                  },
+                  icon: Obx(() => controller.isMicroPhoneOn.value
+                      ? Assets.images.audioEnableLive.svg()
+                      : Assets.images.audioDisableLive.svg())),
+              IconButton(
+                  onPressed: () {
+                    ZegoUIKit.instance
+                        .turnCameraOn(!controller.isCameraOn.value);
+                    controller.isCameraOn.value = !controller.isCameraOn.value;
+                  },
+                  icon: Obx(() => controller.isCameraOn.value
+                      ? Assets.images.vidioEnableLive.svg()
+                      : Assets.images.videoDisableLive.svg()))
+            ],
+          ),
+        ),
+      ),
     );
   }
 

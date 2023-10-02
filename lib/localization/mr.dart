@@ -374,5 +374,15 @@ Map<String, String> mr() {
     "imageValidationMsg": "प्रतिमा 5 पेक्षा जास्त असू शकत नाही",
     "profileUpdatedSuccessfully": "प्रोफाइल यशस्वीरित्या अपडेट केले",
     'pleaseWait': 'कृपया थांबा...',
+    'fromCalls': 'कॉल्सवरून',
+    'fromVideoCalls': 'व्हिडिओ कॉल्सवरून',
+    'fromPrivateCalls': 'खाजगी कॉल्सवरून',
+    'fromLiveGifts': 'थेट भेटवस्तू पासून',
+    "YouHaveEarnedFromYourLastSession":"तुम्ही तुमच्या शेवटच्या सत्रातून ₹@price कमावले आहेत",
+    "YouHaveReceivedCalls":"तुम्हाला @count कॉल प्राप्त झाले आहेत.",
+    "YouHaveReceivedVideoCalls":"तुम्हाला @count व्हिडिओ कॉल प्राप्त झाले आहेत.",
+    "YouHaveReceivedPrivateCalls":"तुम्हाला @count खाजगी कॉल प्राप्त झाले आहेत.",
+    "YouHaveReceivedLiveGifts":"तुम्हाला @count थेट भेटवस्तू मिळाल्या आहेत.",
+    "isOnCall":"कॉलवर आहे"
   };
 }

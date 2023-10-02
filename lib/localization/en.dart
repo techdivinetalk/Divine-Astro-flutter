@@ -375,5 +375,15 @@ Map<String, String> en() {
     'phoneNumberMustBe10Digit': 'Phone number must be 10 digit',
     'specialityNotEmpty': "Speciality can't be empty",
     'pleaseWait': 'Please wait...',
+    'fromCalls': 'From Calls',
+    'fromVideoCalls': 'From Video Calls',
+    'fromPrivateCalls': 'From Private Calls',
+    'fromLiveGifts': 'From Live Gifts',
+    "YouHaveEarnedFromYourLastSession":"You've earned ₹@price from your last session",
+    "YouHaveReceivedCalls":"You've received @count calls.",
+    "YouHaveReceivedVideoCalls":"You've received @count video calls.",
+    "YouHaveReceivedPrivateCalls":"You've received @count private calls.",
+    "YouHaveReceivedLiveGifts":"You've received @count live gifts.",
+    "isOnCall":"is on call"
   };
 }

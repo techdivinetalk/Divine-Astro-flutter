@@ -68,13 +68,13 @@ class TotalEarning extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 10.h),
-                  Text("Congratulations!",
+                  Text("${"congratulations".tr}!",
                       style: TextStyle(
                           fontSize: 24.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.appYellowColour)),
                   Text(
-                      "You've earned ₹2115 from your last session",
+                      "YouHaveEarnedFromYourLastSession".trParams({"price":"2115"}),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontWeight: FontWeight.w500,
@@ -82,20 +82,20 @@ class TotalEarning extends StatelessWidget {
                   SizedBox(height: 18.h),
                   Divider(height: 1.h, endIndent: 20.w, indent: 20.w),
                   SizedBox(height: 18.h),
-                  priceWidget(Assets.svg.callEarning.svg(),"From Calls","10 calls","15"),
+                  priceWidget(Assets.svg.callEarning.svg(),"fromCalls".tr,"YouHaveReceivedCalls".trParams({"count":"10"}),"15"),
                   SizedBox(height: 18.h),
-                  priceWidget(Assets.svg.videoCallEarning.svg(),"From Video Calls","2 video calls","1115"),
+                  priceWidget(Assets.svg.videoCallEarning.svg(),"fromVideoCalls".tr,"YouHaveReceivedVideoCalls".trParams({"count":"2"}),"1115"),
                   SizedBox(height: 18.h),
-                  priceWidget(Assets.svg.privateCallEarning.svg(),"From Private Calls","3 private calls","1115"),
+                  priceWidget(Assets.svg.privateCallEarning.svg(),"fromPrivateCalls".tr,"YouHaveReceivedPrivateCalls".trParams({"count":"3"}),"1115"),
                   SizedBox(height: 18.h),
-                  priceWidget(Assets.svg.giftEarning.svg(),"From Live Gifts","40 live gifts","1115"),
+                  priceWidget(Assets.svg.giftEarning.svg(),"fromLiveGifts".tr,"YouHaveReceivedLiveGifts".trParams({"count":"40"}),"1115"),
                   SizedBox(height: 18.h),
                   Divider(height: 1.h, endIndent: 20.w, indent: 20.w),
                   SizedBox(height: 18.h),
                   Row(
                     children: [
                       SizedBox(width: 20.w),
-                      Text("Total Earning",
+                      Text("totalEarning".tr,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                               fontSize: 16.sp, color: AppColors.darkBlue)),
@@ -122,7 +122,7 @@ class TotalEarning extends StatelessWidget {
                         },
                         color: AppColors.lightYellow,
                         child: Text(
-                          "Order History",
+                          "orderHistory".tr,
                           style: TextStyle(color: AppColors.brownColour,fontWeight: FontWeight.w600,fontSize: 20.sp),
                         )),
                   ),
@@ -155,13 +155,13 @@ class TotalEarning extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-                "$title",
+                title,
                 style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w400,
                     color: AppColors.darkBlue)),
             Text(
-                "You've received ${discription}",
+                discription,
                 style: TextStyle(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w400,

@@ -374,5 +374,15 @@ Map<String, String> gu() {
     "imageValidationMsg": "છબી 5 થી વધુ ન હોઈ શકે",
     "profileUpdatedSuccessfully": "પ્રોફાઇલ સફળતાપૂર્વક અપડેટ થઈ",
     'pleaseWait': 'મહેરબાની કરી રાહ જુવો...',
+    'fromCalls': 'કૉલ્સમાંથી',
+    'fromVideoCalls': 'વિડિઓ કૉલ્સમાંથી',
+    'fromPrivateCalls': 'ખાનગી કૉલ્સમાંથી',
+    'fromLiveGifts': 'લાઇવ ભેટોમાંથી',
+    "YouHaveEarnedFromYourLastSession":"તમે તમારા છેલ્લા સત્રમાંથી ₹@price ની કમાણી કરી છે",
+    "YouHaveReceivedCalls":"તમને @count કોલ્સ પ્રાપ્ત થયા છે.",
+    "YouHaveReceivedVideoCalls":"તમને @count વિડિઓ કૉલ્સ પ્રાપ્ત થયા છે.",
+    "YouHaveReceivedPrivateCalls":"તમને @count ખાનગી કૉલ્સ પ્રાપ્ત થયા છે.",
+    "YouHaveReceivedLiveGifts":"તમને @count લાઇવ ભેટો પ્રાપ્ત થઈ છે.",
+    "isOnCall":"કોલ પર છે"
   };
 }
