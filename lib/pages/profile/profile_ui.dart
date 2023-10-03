@@ -1,6 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/appbar.dart';
+import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
 import 'package:file_picker/file_picker.dart';
@@ -78,17 +78,11 @@ class ProfileUI extends GetView<ProfilePageController> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(80),
                                     child: Obx(
-                                      () => CachedNetworkImage(
-                                        imageUrl:
-                                            controller.userProfileImage.value,
+                                      () => CachedNetworkPhoto(
+                                        url: controller.userProfileImage.value,
                                         fit: BoxFit.cover,
                                         height: 70.h,
                                         width: 70.h,
-                                        placeholder: (context, url) =>
-                                            const CircularProgressIndicator(),
-                                        errorWidget: (context, url, error) =>
-                                            Image.asset(Assets
-                                                .images.defaultProfile.path),
                                       ),
                                     ),
                                   ),
@@ -541,12 +535,17 @@ class ProfileUI extends GetView<ProfilePageController> {
                     Row(
                       children: [
                         Assets.images.icUser.svg(
-                            height: 20.h,
-                            width: 20.h,
-                            color: AppColors.appYellowColour),
+                          height: 20.h,
+                          width: 20.h,
+                          colorFilter: const ColorFilter.mode(
+                              AppColors.appYellowColour, BlendMode.srcIn),
+                        ),
                         SizedBox(width: 8.w),
                         Text(
-                          "${controller.ratingsData?.data?.totalReviews ?? 0} ${"total".tr}",
+                          "total".trParams({
+                            "count":
+                                "${controller.ratingsData?.data?.totalReviews}"
+                          }),
                           style: AppTextStyle.textStyle14(),
                         ),
                       ],
@@ -698,14 +697,13 @@ class ProfileUI extends GetView<ProfilePageController> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(40),
-              child: CachedNetworkImage(
-                imageUrl:
-                    "${controller.preference.getBaseImageURL()}/${reviewData?.customerImage}",
+              child: CachedNetworkPhoto(
+                url: reviewData?.customerImage != null
+                    ? "${controller.preference.getBaseImageURL()}/${reviewData?.customerImage}"
+                    : "",
                 height: 40,
                 width: 40,
                 fit: BoxFit.cover,
-                errorWidget: (context, url, error) =>
-                    Image.asset(Assets.images.defaultProfile.path),
               ),
             ),
             SizedBox(width: 10.h),
@@ -717,7 +715,9 @@ class ProfileUI extends GetView<ProfilePageController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "${reviewData?.customerName}",
+                        reviewData?.customerName != null
+                            ? "${reviewData?.customerName}"
+                            : "",
                         style: AppTextStyle.textStyle14(),
                       ),
                       Row(
@@ -789,8 +789,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(40),
-                          child: CachedNetworkImage(
-                            imageUrl:
+                          child: CachedNetworkPhoto(
+                            url:
                                 "${controller.preference.getBaseImageURL()}/${reviewData?.replyData?.astrologerImage}",
                             height: 40,
                             width: 40,
@@ -803,7 +803,9 @@ class ProfileUI extends GetView<ProfilePageController> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                controller.userData?.name ?? "",
+                                controller.userData?.name != null
+                                    ? (controller.userData?.name ?? "")
+                                    : "",
                                 style: AppTextStyle.textStyle14(
                                     fontWeight: FontWeight.w700),
                               ),

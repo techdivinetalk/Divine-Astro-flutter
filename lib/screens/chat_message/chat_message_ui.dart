@@ -1,5 +1,3 @@
-// ignore_for_file: must_be_immutable
-
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -731,7 +729,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
 
 class AstrologerChatAppBar extends StatelessWidget {
   AstrologerChatAppBar({Key? key}) : super(key: key);
-  ChatMessageController controller = Get.find<ChatMessageController>();
+  final ChatMessageController controller = Get.find<ChatMessageController>();
 
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,5 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/routes.dart';
-import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -25,7 +22,9 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
             trailingWidget: InkWell(
               child: Padding(
                   padding: EdgeInsets.only(right: 20.w),
-                  child: Assets.images.icSearch.svg(color: AppColors.darkBlue)),
+                  child: Assets.images.icSearch.svg(
+                      colorFilter: const ColorFilter.mode(
+                          AppColors.darkBlue, BlendMode.srcIn))),
             )),
         body: Column(
           children: [
@@ -91,7 +90,6 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
                                         ),
                                         SizedBox(height: 8.h),
                                         Text("₹ ${item?.productPriceInr}",
-
                                             style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               fontSize: 12.sp,

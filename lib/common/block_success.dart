@@ -40,7 +40,7 @@ class BlockSuccess extends StatelessWidget {
             backgroundColor: AppColors.white,
             surfaceTintColor: AppColors.white,
             shape: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.white),
+              borderSide: const BorderSide(color: AppColors.white),
               borderRadius: BorderRadius.circular(20),
             ),
             title: Row(
@@ -49,7 +49,7 @@ class BlockSuccess extends StatelessWidget {
                 Container(
                   width: 32.w,
                   height: 32.h,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                   ),
                   child: CachedNetworkPhoto(

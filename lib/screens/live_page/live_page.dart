@@ -1,14 +1,12 @@
-// ignore_for_file: depend_on_referenced_packages, unused_local_variable, use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
-//
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:custom_timer/custom_timer.dart';
 import 'package:divine_astrologer/common/block_user_list.dart';
-import 'package:divine_astrologer/common/co-host_request.dart';
+import 'package:divine_astrologer/common/co_host_request.dart';
 import 'package:divine_astrologer/common/end_cohost.dart';
 import 'package:divine_astrologer/common/end_session_dialog.dart';
 import 'package:divine_astrologer/common/gift_sheet.dart';
@@ -21,7 +19,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 
 // Package imports:
 import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
@@ -79,8 +76,7 @@ class LivePageState extends State<LivePage>
       );
       event.hostEvents.onCoHostRequestReceived = (user) async {
         controller.coHostUser = user;
-        String type = await controller.getCallType(widget.localUserID);
-        int duration = await controller.getDuration(widget.localUserID);
+
         showCupertinoModalPopup(
             context: Get.context!,
             builder: (BuildContext context) {
@@ -457,7 +453,7 @@ class LivePageState extends State<LivePage>
       'Morning ☀️',
       'Night 🌛'
     ];
-    final shortMessageView = SizedBox(
+    SizedBox(
       width: constraints.maxWidth - padding * 5,
       height: shortMessageHeight,
       child: ListView.separated(

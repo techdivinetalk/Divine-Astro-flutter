@@ -1,10 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/model/waiting_list_queue.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../common/app_textstyle.dart';
+import '../../../common/cached_network_image.dart';
 import '../../../common/colors.dart';
 
 import '../../../gen/assets.gen.dart';
@@ -96,14 +96,9 @@ class WaitListUI extends GetView<WaitListUIController> {
       margin: EdgeInsets.symmetric(vertical: 10.h),
       child: Row(
         children: [
-          CachedNetworkImage(
-            imageUrl:
+          CachedNetworkPhoto(
+            url:
                 "${controller.preference.getBaseImageURL()}/${waitingCustomer.avatar ?? ""}",
-            placeholder: (context, url) =>
-                const Center(child: CircularProgressIndicator()),
-            errorWidget: (context, url, error) => CircleAvatar(
-                radius: 30,
-                backgroundImage: AssetImage(Assets.images.defaultProfile.path)),
           ),
           SizedBox(width: 10.w),
           Expanded(

@@ -1,4 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages
 import 'dart:io';
 
 import 'package:divine_astrologer/common/appbar.dart';
@@ -37,7 +36,7 @@ class UploadStoryUi extends GetView<UploadStoryController> {
                   height: 200,
                   width: 200,
                   child: ElevatedButton(
-                    child:  Text("selectVideo".tr),
+                    child: Text("selectVideo".tr),
                     onPressed: () async {
                       FilePickerResult? result =
                           await FilePicker.platform.pickFiles(
@@ -46,7 +45,7 @@ class UploadStoryUi extends GetView<UploadStoryController> {
                       );
                       if (result != null) {
                         controller.trimmer.loadVideo(
-                            videoFile: File(result.files.single.path??''));
+                            videoFile: File(result.files.single.path ?? ''));
                         controller.selectedFile?.value = true;
                       }
                     },

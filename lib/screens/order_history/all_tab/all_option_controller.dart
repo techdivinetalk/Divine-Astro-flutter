@@ -21,12 +21,6 @@ class AllOptionController extends GetxController {
   List<OrderData>? orderHistoryData;
   RxBool allOrderHistorySync = false.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    // getOrderHistory();
-  }
-
   showDetails({required int index}) {
     openBottomSheet(Get.context!,
         functionalityWidget: Padding(

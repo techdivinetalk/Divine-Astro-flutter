@@ -8,7 +8,6 @@ import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/screens/chat_message/chat_message_controller.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -224,20 +223,6 @@ class DashboardController extends GetxController
     });
     if (!isContactExists) {
       Get.toNamed(RouteName.importantNumbers);
-    }
-  }
-
-  void _handleInvalidPermissions(PermissionStatus permissionStatus) {
-    if (permissionStatus == PermissionStatus.denied) {
-      throw PlatformException(
-          code: 'PERMISSION_DENIED',
-          message: 'Access to location data denied',
-          details: null);
-    } else if (permissionStatus == PermissionStatus.restricted) {
-      throw PlatformException(
-          code: 'PERMISSION_DISABLED',
-          message: 'Location data is not available on device',
-          details: null);
     }
   }
 

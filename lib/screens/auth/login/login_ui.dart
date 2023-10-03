@@ -227,8 +227,9 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
                 (e) => Container(
                   margin: EdgeInsets.symmetric(vertical: 20.h, horizontal: 2.w),
                   child: e.key == swipeIndex
-                      ? Assets.svg.pinkSlider
-                          .svg(color: AppColors.appYellowColour)
+                      ? Assets.svg.pinkSlider.svg(
+                          colorFilter: const ColorFilter.mode(
+                              AppColors.appYellowColour, BlendMode.srcIn))
                       : Assets.svg.blackDot.svg(),
                 ),
               )

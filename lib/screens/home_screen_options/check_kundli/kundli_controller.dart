@@ -52,10 +52,9 @@ class KundliController extends GetxController {
   }
 
   getUserData() async {
-    var _userData = preferenceService.getUserDetail();
-    userData = _userData;
+    userData = preferenceService.getUserDetail();
     if (userData!.name != null) {
-      yourNameController.text = userData?.name??'';
+      yourNameController.text = userData?.name ?? '';
     }
     /*if (userData!.dateOfBirth != null) {
       DateTime data = DateFormat("dd MMMM yyyy").parse(_userData!.dateOfBirth);

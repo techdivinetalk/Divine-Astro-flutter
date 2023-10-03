@@ -1,5 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -195,7 +193,7 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void divineSnackBar({required String data, Color? color, Duration? duration}) {
   BuildContext? context = navigator?.context;
-  if(data[data.length - 1] != "."){
+  if (data[data.length - 1] != ".") {
     data = "$data.";
   }
   if (context != null) {

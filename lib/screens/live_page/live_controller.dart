@@ -17,7 +17,7 @@ import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 import '../../common/app_exception.dart';
 import '../../common/block_success.dart';
-import '../../common/co-host_request.dart';
+import '../../common/co_host_request.dart';
 import '../../common/waitlist_sheet.dart';
 import '../../di/api_provider.dart';
 import '../../di/shared_preference_service.dart';
@@ -61,9 +61,7 @@ class LiveController extends GetxController {
 
   @override
   void onReady() {
-    if (pref.getConstantDetails().data != null) {
-      badWordsData = pref.getConstantDetails().data!.badWordsData;
-    }
+    badWordsData = pref.getConstantDetails().data.badWordsData;
     connectSocket();
     super.onReady();
   }
@@ -151,7 +149,7 @@ class LiveController extends GetxController {
   }
 
   jumpToBottom() {
-    if(scrollController.hasClients){
+    if (scrollController.hasClients) {
       int offset = Platform.isIOS ? 0 : 50;
       scrollController.animateTo(
         -(scrollController.position.maxScrollExtent + offset),
@@ -201,7 +199,7 @@ class LiveController extends GetxController {
       localPrice += element.price ?? 0;
     });
     giftTotalPrice.value = localPrice;
-    print("LocalPrice--> ${localPrice.toString()}");
+    debugPrint("LocalPrice--> ${localPrice.toString()}");
     return localPrice;
   }
 
@@ -477,7 +475,8 @@ class LiveController extends GetxController {
             endCall();
           }
         } else {
-          var coHost = await database.ref().child("live/$astroId/coHost").once();
+          var coHost =
+              await database.ref().child("live/$astroId/coHost").once();
           if (coHost.snapshot.value != null) {
             var user = coHost.snapshot.value as Map;
             coHostUser = ZegoUIKitUser(id: user["id"], name: user["name"]);
@@ -538,8 +537,7 @@ class LiveController extends GetxController {
       ZegoUIKitUser targetUser,
       ZegoLiveStreamingRole targetUserRole,
     ) {
-      if (type == "private" ||
-          type == "audio") {
+      if (type == "private" || type == "audio") {
         /// private or audio call type, pure audio mode
         if (ZegoLiveStreamingRole.host == targetUserRole) {
           return true;

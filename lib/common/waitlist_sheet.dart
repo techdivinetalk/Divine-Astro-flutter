@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,19 +12,19 @@ import 'custom_widgets.dart';
 
 class WaitList extends StatelessWidget {
   final Function(String id, String name)? onAccept;
-  FirebaseDatabase database = FirebaseDatabase.instance;
+  // FirebaseDatabase database = FirebaseDatabase.instance;
   String? astroId;
   final controller = Get.find<LiveController>();
-  bool? showNext = false,shouldClose = false,fromNextUser = false;
-  Iterable<DataSnapshot> data = Iterable.empty();
+  bool? showNext = false, shouldClose = false, fromNextUser = false;
+  Iterable<DataSnapshot> data = const Iterable.empty();
 
   WaitList(
       {Key? key,
       this.onAccept,
       this.astroId,
       this.showNext,
-        this.shouldClose,
-        this.fromNextUser,
+      this.shouldClose,
+      this.fromNextUser,
       required this.data})
       : super(key: key);
 
@@ -35,7 +37,7 @@ class WaitList extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              if(shouldClose!){
+              if (shouldClose!) {
                 Get.back();
               }
             },
@@ -100,57 +102,57 @@ class WaitList extends StatelessWidget {
   }
 
   SizedBox buildListview() {
-    int length = fromNextUser! ? data.length -1 : data.length;
-    if(length <= 0){
+    int length = fromNextUser! ? data.length - 1 : data.length;
+    if (length <= 0) {
       return const SizedBox();
     }
     return SizedBox(
-        height: 100.h,
-        child: ListView.separated(
-          itemCount: fromNextUser! ? data.length -1 : data.length,
-          shrinkWrap: true,
-          padding: EdgeInsets.zero,
-          itemBuilder: (context, index) {
-            var item = data.toList()[index];
-            var value = item.value as Map;
-            return Container(
-              decoration: const BoxDecoration(color: AppColors.white),
-              child: Row(
-                children: [
-                  SizedBox(width: 32.w),
-                  Container(
-                    width: 34.w,
-                    height: 34.h,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: const BoxDecoration(shape: BoxShape.circle),
-                    child: Assets.images.avatar.svg(),
-                  ),
-                  SizedBox(width: 10.w),
-                  CustomText(value["name"],
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w500,
-                      fontColor: AppColors.darkBlue),
-                  const Spacer(),
-                  const Icon(Icons.call, color: AppColors.darkBlue, size: 16),
-                  SizedBox(width: 10.w),
-                  CustomText(intToTimeLeft(value["duration"]),
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                      fontColor: AppColors.darkBlue),
-                  SizedBox(width: 32.w),
-                ],
-              ),
-            );
-          },
-          separatorBuilder: (context, index) {
-            return SizedBox(height: 20.h);
-          },
-        ),
-      );
+      height: 100.h,
+      child: ListView.separated(
+        itemCount: fromNextUser! ? data.length - 1 : data.length,
+        shrinkWrap: true,
+        padding: EdgeInsets.zero,
+        itemBuilder: (context, index) {
+          var item = data.toList()[index];
+          var value = item.value as Map;
+          return Container(
+            decoration: const BoxDecoration(color: AppColors.white),
+            child: Row(
+              children: [
+                SizedBox(width: 32.w),
+                Container(
+                  width: 34.w,
+                  height: 34.h,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: const BoxDecoration(shape: BoxShape.circle),
+                  child: Assets.images.avatar.svg(),
+                ),
+                SizedBox(width: 10.w),
+                CustomText(value["name"],
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w500,
+                    fontColor: AppColors.darkBlue),
+                const Spacer(),
+                const Icon(Icons.call, color: AppColors.darkBlue, size: 16),
+                SizedBox(width: 10.w),
+                CustomText(intToTimeLeft(value["duration"]),
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    fontColor: AppColors.darkBlue),
+                SizedBox(width: 32.w),
+              ],
+            ),
+          );
+        },
+        separatorBuilder: (context, index) {
+          return SizedBox(height: 20.h);
+        },
+      ),
+    );
   }
 
   Widget nextInLine() {
-    if(data.toList().isEmpty){
+    if (data.toList().isEmpty) {
       return const SizedBox();
     }
     var item = data.toList().last;

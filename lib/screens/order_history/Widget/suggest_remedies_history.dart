@@ -1,12 +1,12 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../common/app_textstyle.dart';
+import '../../../common/cached_network_image.dart';
 import '../../../common/colors.dart';
 import '../../../di/shared_preference_service.dart';
 import '../../../model/order_history_model/remedy_suggested_order_history.dart';
@@ -65,11 +65,9 @@ class SuggestRemedies extends StatelessWidget {
                             child: SizedBox(
                               height: 65,
                               width: 65,
-                              child: CachedNetworkImage(
-                                imageUrl:
+                              child: CachedNetworkPhoto(
+                                url:
                                     "${preferenceService.getBaseImageURL()}/${data[index].getCustomers!.avatar!}",
-                                errorWidget: (context, s, d) =>
-                                    Assets.images.bgTmpUser.svg(),
                                 fit: BoxFit.cover,
                               ),
                             ),

@@ -19,7 +19,7 @@ class CachedNetworkPhoto extends StatelessWidget {
       width: width?.w,
       height: height?.h,
       fit: fit ?? BoxFit.contain,
-      imageUrl: url ?? "",
+      imageUrl: url!,
       placeholder: (context, url) =>
           const Center(child: CircularProgressIndicator()),
       errorWidget: (context, url, error) =>

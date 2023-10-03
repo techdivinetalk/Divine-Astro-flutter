@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:divine_astrologer/model/waiting_list_queue.dart';
 import 'package:flutter/material.dart';
@@ -14,12 +13,12 @@ class WaitingListQueueRepo extends ApiProvider {
     try {
       final response = await post(getWaitingListQueue,
           headers: await getJsonHeaderURL(version: 7));
-      log("data------->${response.body.toString()}");
+
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
           preferenceService.erase();
           Get.offNamed(RouteName.login);
-         throw CustomException(json.decode(response.body)["error"]);
+          throw CustomException(json.decode(response.body)["error"]);
         } else {
           final waitingListQueueModel =
               WaitingListQueueModel.fromJson(json.decode(response.body));

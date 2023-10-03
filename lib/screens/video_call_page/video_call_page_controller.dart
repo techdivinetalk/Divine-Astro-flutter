@@ -1,7 +1,6 @@
 import 'package:divine_astrologer/model/chat/req_common_chat_model.dart';
 import 'package:divine_astrologer/model/chat/res_astro_chat_listener.dart';
 import 'package:divine_astrologer/repository/chat_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../common/routes.dart';

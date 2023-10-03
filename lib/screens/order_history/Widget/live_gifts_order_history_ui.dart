@@ -95,7 +95,7 @@ class LiveGiftsHistory extends StatelessWidget {
                               width: 65,
                               child: CachedNetworkImage(
                                 imageUrl:
-                                    "${preferenceService.getBaseImageURL()}/${data[index].getGift?.giftImage??''}",
+                                    "${preferenceService.getBaseImageURL()}/${data[index].getGift?.giftImage ?? ''}",
                                 errorWidget: (context, s, d) =>
                                     Assets.images.bgTmpUser.svg(),
                                 fit: BoxFit.cover,

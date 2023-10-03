@@ -17,7 +17,8 @@ class OrderHistoryController extends GetxController {
   ScrollController orderAllScrollController = ScrollController();
   TabController? tabbarController;
 
-  var durationOptions = ['daily'.tr, 'weekly'.tr, 'monthly'.tr, 'custom'.tr].obs;
+  var durationOptions =
+      ['daily'.tr, 'weekly'.tr, 'monthly'.tr, 'custom'.tr].obs;
   RxString selectedValue = "daily".tr.obs;
 
   var apiCalling = false.obs;
@@ -27,7 +28,8 @@ class OrderHistoryController extends GetxController {
   RxList<CallHistoryData> callHistoryList = <CallHistoryData>[].obs;
   RxList<ChatDataList> chatHistoryList = <ChatDataList>[].obs;
   RxList<GiftDataList> giftHistoryList = <GiftDataList>[].obs;
-  RxList<RemedySuggestedDataList> remedySuggestedHistoryList = <RemedySuggestedDataList>[].obs;
+  RxList<RemedySuggestedDataList> remedySuggestedHistoryList =
+      <RemedySuggestedDataList>[].obs;
 
   var allPageCount = 1;
   var chatPageCount = 1;
@@ -55,8 +57,7 @@ class OrderHistoryController extends GetxController {
   var preferences = Get.find<SharedPreferenceService>();
 
   Future<dynamic> getOrderHistory(int type, int page) async {
-    var userData = preferences.getUserDetail();
-    // print("token-->${userData!.deviceToken}");
+    // var userData = preferences.getUserDetail();
 
     /* Map<String, dynamic> params = {
       "role_id": 7,
@@ -93,7 +94,8 @@ class OrderHistoryController extends GetxController {
     try {
       apiCalling.value = true;
       if (type == 0) {
-        AllOrderHistoryModelClass data = await OrderHistoryRepository().getAllOrderHistory(params);
+        AllOrderHistoryModelClass data =
+            await OrderHistoryRepository().getAllOrderHistory(params);
         apiCalling.value = false;
         var history = data.data;
 
@@ -120,7 +122,8 @@ class OrderHistoryController extends GetxController {
           emptyMsg.value = data.message ?? "No data found!";
         }
       } else if (type == 2) {
-        ChatOrderHistoryModelClass data = await OrderHistoryRepository().getChatOrderHistory(params);
+        ChatOrderHistoryModelClass data =
+            await OrderHistoryRepository().getChatOrderHistory(params);
         apiCalling.value = false;
         var history = data.data;
 
@@ -148,7 +151,8 @@ class OrderHistoryController extends GetxController {
         }
       } else if (type == 4) {
         RemedySuggestedOrderHistoryModelClass data =
-            await OrderHistoryRepository().getRemedySuggestedOrderHistory(params);
+            await OrderHistoryRepository()
+                .getRemedySuggestedOrderHistory(params);
         apiCalling.value = false;
         var history = data.data;
 
@@ -167,7 +171,7 @@ class OrderHistoryController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
   }

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/colors.dart';
@@ -16,7 +18,7 @@ class NoticeDetailUi extends GetView<NoticeDetailController> {
   @override
   Widget build(BuildContext context) {
     var data;
-    print('Params: ${Get.parameters}');
+
     if (Get.parameters["from_list"] == "0") {
       data = Get.arguments as NoticeBoard;
     } else if (Get.parameters["from_list"] == "1") {

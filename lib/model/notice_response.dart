@@ -102,7 +102,8 @@ class NoticeDatum {
         "status": status,
       };
 
-  String getTimeAndDate() => "${formatTime(scheduleTime!)} ${formatDateTime(scheduleDate!)}";
+  String getTimeAndDate() =>
+      "${formatTime(scheduleTime!)} ${formatDateTime(scheduleDate!)}";
 }
 
 String formatDateTime(DateTime dateTime, {String format = "dd/MM/yyyy"}) {
@@ -112,7 +113,6 @@ String formatDateTime(DateTime dateTime, {String format = "dd/MM/yyyy"}) {
 }
 
 String formatTime(String dateTime) {
-  print("Time: ${dateTime}");
   final inputFormat = DateFormat('HH:mm:ss');
   final outputFormat = DateFormat('hh:mm a');
 

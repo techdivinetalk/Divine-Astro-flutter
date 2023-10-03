@@ -158,13 +158,10 @@ class HomeController extends GetxController {
   }
 
   updateCurrentData() {
-    ///Session Type data
     chatSwitch.value = homeData?.sessionType?.chat == 1;
     callSwitch.value = homeData?.sessionType?.call == 1;
     videoSwitch.value = homeData?.sessionType?.video == 1;
-    print("Chat::time:: ${homeData?.sessionType?.chatSchedualAt ?? ''}");
-    print("Call::time:: ${homeData?.sessionType?.callSchedualAt ?? ''}");
-    print("VideoCall::time:: ${homeData?.sessionType?.videoSchedualAt ?? ''}");
+
     if (homeData?.sessionType?.chatSchedualAt != null &&
         homeData?.sessionType?.chatSchedualAt != '') {
       DateTime formattedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
@@ -197,11 +194,10 @@ class HomeController extends GetxController {
     if (homeData?.offerType != null && homeData?.offerType != []) {
       for (int i = 0; i < homeData!.offerType!.length; i++) {
         bool value = homeData?.offerType![i].isActive == "1";
-        print("Value: ${homeData?.offerType![i].isActive} $i, $value");
+
         promotionOfferSwitch.add(value);
       }
     }
-    print('PremotionOfferSwitch: ${promotionOfferSwitch}');
 
     update();
   }
@@ -449,7 +445,6 @@ class HomeController extends GetxController {
     if (now.day != dtTimestamp.day ||
         now.month != dtTimestamp.month ||
         now.year != dtTimestamp.year) {
-      print('DateChanged: ${now.difference(dtTimestamp).inHours}');
       return true;
     } else {
       return false;

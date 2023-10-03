@@ -717,7 +717,7 @@ class _DashaUIState extends State<DashaUI> {
                       controller.dashaTableData.value.data?.vimshottari?[index];
                   Datum? subModel =
                       controller.planetDataDetail.value.data?[index];
-                  pratyantarData? pratyantarModel =
+                  PratyantarData? pratyantarModel =
                       controller.pratyantarDataDetail.value.data?[index];
                   return TableRow(children: [
                     Padding(
@@ -975,7 +975,7 @@ class _DashaUIState extends State<DashaUI> {
                       controller.dashaTableData.value.data?.vimshottari?[index];
                   Datum? subModel =
                       controller.planetDataDetail.value.data?[index];
-                  pratyantarData? pratyantarModel =
+                  PratyantarData? pratyantarModel =
                       controller.pratyantarDataDetail.value.data?[index];
                   SookshmaData? sookshmaData =
                       controller.sookshmaDataDetail.value.data?[index];

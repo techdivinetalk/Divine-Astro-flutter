@@ -150,7 +150,7 @@ class HomeUI extends GetView<HomeController> {
                                           ],
                                         ),
                                         Text(
-                                          "total".tr,
+                                          "total".trParams({"count": ""}),
                                           style: AppTextStyle.textStyle16(
                                               fontColor: AppColors.darkBlue,
                                               fontWeight: FontWeight.w400),
@@ -183,7 +183,7 @@ class HomeUI extends GetView<HomeController> {
                                           ],
                                         ),
                                         Text(
-                                          "total".tr,
+                                          "total".trParams({"count": ""}),
                                           style: AppTextStyle.textStyle16(
                                               fontColor: AppColors.darkBlue,
                                               fontWeight: FontWeight.w400),

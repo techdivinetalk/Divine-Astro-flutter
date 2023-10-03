@@ -71,7 +71,6 @@ class ImportantNumbersController extends GetxController {
       Contact newContact = Contact(
           givenName: givenName, //This fields are mandatory to save contact
           phones: phoneItems);
-      print("newContact==> ${newContact.toMap()} $phoneItems");
       await ContactsService.addContact(newContact);
       divineSnackBar(data: "contactSaved".tr);
       fetchImportantNumbers();

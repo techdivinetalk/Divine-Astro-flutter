@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final waitingListQueueModel = waitingListQueueModelFromJson(jsonString);
-
 import 'dart:convert';
 
 WaitingListQueueModel waitingListQueueModelFromJson(String str) =>

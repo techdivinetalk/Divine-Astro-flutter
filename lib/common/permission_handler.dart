@@ -58,7 +58,6 @@ class PermissionHelper {
     int micResult = await checkPermission(Permission.microphone);
 
     ///0 - granted, 1 - permanentlyDenied
-    print("results: cameraResult: $cameraResult, micResult: $micResult");
     if (cameraResult == 0 && micResult == 0) {
       return true;
     } else if (cameraResult == 1) {
@@ -75,8 +74,6 @@ class PermissionHelper {
     int storageResult = await checkPermission(permission);
 
     ///0 - granted, 1 - permanentlyDenied
-    print(
-        "results: cameraResult: $cameraResult, storageResult: $storageResult");
     if (cameraResult == 0 && storageResult == 0) {
       return true;
     } else if (cameraResult == 1) {

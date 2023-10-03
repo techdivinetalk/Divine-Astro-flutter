@@ -11,7 +11,7 @@ Map<String, String> en() {
     "dasha": "Dasha",
     "version": "Version",
     "somethingWentWrong": "Something went wrong",
-    "total": "Total",
+    "total": "@count Total",
     'bhavChalitChart': 'Bhav Chalit Chart',
     "noticeBoard": "Notice board",
     'cusps': 'Cusps',
@@ -379,11 +379,12 @@ Map<String, String> en() {
     'fromVideoCalls': 'From Video Calls',
     'fromPrivateCalls': 'From Private Calls',
     'fromLiveGifts': 'From Live Gifts',
-    "YouHaveEarnedFromYourLastSession":"You've earned ₹@price from your last session",
-    "YouHaveReceivedCalls":"You've received @count calls.",
-    "YouHaveReceivedVideoCalls":"You've received @count video calls.",
-    "YouHaveReceivedPrivateCalls":"You've received @count private calls.",
-    "YouHaveReceivedLiveGifts":"You've received @count live gifts.",
-    "isOnCall":"is on call"
+    "YouHaveEarnedFromYourLastSession":
+        "You've earned ₹@price from your last session",
+    "YouHaveReceivedCalls": "You've received @count calls.",
+    "YouHaveReceivedVideoCalls": "You've received @count video calls.",
+    "YouHaveReceivedPrivateCalls": "You've received @count private calls.",
+    "YouHaveReceivedLiveGifts": "You've received @count live gifts.",
+    "isOnCall": "is on call"
   };
 }

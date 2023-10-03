@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -153,8 +152,6 @@ class DeleteAccountPopup extends GetView<SettingsController> {
                                   onTap: () {
                                     // controller.deleteUserAccounts();
                                     Get.back();
-
-
                                   },
                                   child: Text(
                                     "yes".tr.toUpperCase(),

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:ui';
 
 import 'package:divine_astrologer/common/cached_network_image.dart';

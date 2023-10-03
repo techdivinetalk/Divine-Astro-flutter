@@ -99,7 +99,7 @@ class KundliUi extends GetView<KundliController> {
                 ),
               ];
             },
-            body: TabBarView(
+            body: const TabBarView(
               children: [
                 CheckYours(),
                 CheckOther(),
@@ -113,7 +113,7 @@ class KundliUi extends GetView<KundliController> {
 }
 
 class CheckYours extends GetView<KundliController> {
-  CheckYours({Key? key}) : super(key: key);
+  const CheckYours({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -361,7 +361,7 @@ class CheckYours extends GetView<KundliController> {
 }
 
 class CheckOther extends GetView<KundliController> {
-  CheckOther({Key? key}) : super(key: key);
+  const CheckOther({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

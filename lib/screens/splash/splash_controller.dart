@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:get/get.dart';
@@ -20,19 +19,18 @@ class SplashController extends GetxController {
 
   final repository = Get.put(UserRepository());
 
-
   void navigation() async {
     if (preferenceService.getToken() == null ||
         preferenceService.getToken() == "") {
       await getInitialLoginImages().then(
-            (value) async => await preferenceService
+        (value) async => await preferenceService
             .saveLoginImages(jsonEncode(value.toJson()))
             .then((value) => Get.offAllNamed(RouteName.login)),
       );
     } else {
       Future.delayed(
         const Duration(seconds: 1),
-            () => Get.offAllNamed(RouteName.dashboard),
+        () => Get.offAllNamed(RouteName.dashboard),
       );
     }
   }

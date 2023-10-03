@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +25,9 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
           trailingWidget: InkWell(
             child: Padding(
                 padding: EdgeInsets.only(right: 20.w),
-                child: Assets.images.icSearch.svg(color: AppColors.darkBlue)),
+                child: Assets.images.icSearch.svg(
+                    colorFilter: const ColorFilter.mode(
+                        AppColors.darkBlue, BlendMode.srcIn))),
           )),
       body: ListView.builder(
         padding: EdgeInsets.symmetric(vertical: 10.h),

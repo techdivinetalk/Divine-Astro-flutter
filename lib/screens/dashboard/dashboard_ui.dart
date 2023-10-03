@@ -1,6 +1,4 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -54,9 +52,11 @@ class DashboardScreen extends GetView<DashboardController> {
                           children: [
                             Assets.images.icSelectedHome.svg(
                                 height: 22.h,
-                                color: controller.selectedIndex.value == 0
-                                    ? AppColors.darkBlue
-                                    : AppColors.lightGrey),
+                                colorFilter: ColorFilter.mode(
+                                    controller.selectedIndex.value == 0
+                                        ? AppColors.darkBlue
+                                        : AppColors.lightGrey,
+                                    BlendMode.srcIn)),
                             const SizedBox(height: 5),
                           ],
                         ),
@@ -67,9 +67,11 @@ class DashboardScreen extends GetView<DashboardController> {
                           children: [
                             Assets.images.icSelectedPerfom.svg(
                                 height: 22.h,
-                                color: controller.selectedIndex.value == 1
-                                    ? AppColors.darkBlue
-                                    : AppColors.lightGrey),
+                                colorFilter: ColorFilter.mode(
+                                    controller.selectedIndex.value == 1
+                                        ? AppColors.darkBlue
+                                        : AppColors.lightGrey,
+                                    BlendMode.srcIn)),
                             const SizedBox(height: 5),
                           ],
                         ),
@@ -80,9 +82,11 @@ class DashboardScreen extends GetView<DashboardController> {
                           children: [
                             Assets.images.icSelectedSuggest.svg(
                                 height: 22.h,
-                                color: controller.selectedIndex.value == 2
-                                    ? AppColors.darkBlue
-                                    : AppColors.lightGrey),
+                                colorFilter: ColorFilter.mode(
+                                    controller.selectedIndex.value == 2
+                                        ? AppColors.darkBlue
+                                        : AppColors.lightGrey,
+                                    BlendMode.srcIn)),
                             const SizedBox(height: 5),
                           ],
                         ),
@@ -95,9 +99,11 @@ class DashboardScreen extends GetView<DashboardController> {
                           children: [
                             Assets.images.icChatBottom.svg(
                                 height: 22.h,
-                                color: controller.selectedIndex.value == 3
-                                    ? AppColors.darkBlue
-                                    : AppColors.lightGrey),
+                                colorFilter: ColorFilter.mode(
+                                    controller.selectedIndex.value == 3
+                                        ? AppColors.darkBlue
+                                        : AppColors.lightGrey,
+                                    BlendMode.srcIn)),
                             const SizedBox(height: 5),
                           ],
                         ),
@@ -108,14 +114,11 @@ class DashboardScreen extends GetView<DashboardController> {
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(22),
-                              child: CachedNetworkImage(
-                                imageUrl: "${controller.userProfileImage}",
+                              child: CachedNetworkPhoto(
+                                url: "${controller.userProfileImage}",
                                 fit: BoxFit.cover,
                                 height: 30,
                                 width: 30,
-                                errorWidget: (context, url, error) =>
-                                    Image.asset(
-                                        Assets.images.defaultProfile.path),
                               ),
                             ),
                             const SizedBox(height: 5),

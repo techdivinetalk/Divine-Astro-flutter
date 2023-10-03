@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_colon_for_default_value, no_logic_in_create_state, avoid_function_literals_in_foreach_calls, no_leading_underscores_for_local_identifiers, depend_on_referenced_packages
+// ignore_for_file:  no_logic_in_create_state, avoid_function_literals_in_foreach_calls, no_leading_underscores_for_local_identifiers, depend_on_referenced_packages
 
 import 'dart:math';
 

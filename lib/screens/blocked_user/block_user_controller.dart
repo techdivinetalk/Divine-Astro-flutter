@@ -36,8 +36,8 @@ class BlockUserController extends GetxController {
   }
 
   void getBlockedCustomerList() async {
-    Map<String, dynamic> params = {"role_id": userData?.roleId};
     try {
+      // Map<String, dynamic> params = {"role_id": userData?.roleId};
       //blockedUserData = await userRepository.getBlockedCustomerList(params);
       blockedUserData = resBlockedCustomersFromJson(staticBlockedUser);
 
