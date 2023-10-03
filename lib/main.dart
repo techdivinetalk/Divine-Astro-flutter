@@ -79,6 +79,7 @@ class MyApp extends StatelessWidget {
           designSize: Size(Get.width, Get.height),
           builder: (context, child) {
             return GetMaterialApp(
+              defaultTransition: Transition.fadeIn,
               navigatorKey: navigatorKey,
               color: AppColors.white,
               debugShowCheckedModeBanner: false,
