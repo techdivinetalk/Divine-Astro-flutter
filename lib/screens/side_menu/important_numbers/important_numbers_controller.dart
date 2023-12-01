@@ -1,7 +1,6 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/strings.dart';
-import 'package:divine_astrologer/utils/utils.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -89,7 +88,7 @@ class ImportantNumbersController extends GetxController {
       loading = Loading.loaded;
       update();
     } catch (error) {
-      divineSnackBar(data: error.toString(),color: AppColors.redColor);
+      divineSnackBar(data: error.toString(), color: AppColors.redColor);
     }
   }
 }

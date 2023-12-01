@@ -1,9 +1,8 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
 import '../../../common/colors.dart';
 import '../../../gen/assets.gen.dart';
 import '../../pages/home/home_ui.dart';
@@ -21,15 +20,19 @@ class DashboardScreen extends GetView<DashboardController> {
     return Scaffold(
         backgroundColor: AppColors.white,
         key: controller.scaffoldkey,
-        body:
-            Obx(() => widgetOptions.elementAt(controller.selectedIndex.value)),
+        body: Obx(
+          () => AnimatedSwitcher(
+            duration: const Duration(milliseconds: 250),
+            child: widgetOptions.elementAt(controller.selectedIndex.value),
+            transitionBuilder: (child, anim) =>
+                FadeTransition(opacity: anim, child: child),
+          ),
+        ),
         bottomNavigationBar: Obx(() => SafeArea(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const SizedBox(height: 1),
                   Container(
                     width: ScreenUtil().screenWidth * 0.9,
                     height: 1,
@@ -41,7 +44,6 @@ class DashboardScreen extends GetView<DashboardController> {
                     type: BottomNavigationBarType.fixed,
                     selectedFontSize: 10,
                     unselectedFontSize: 10,
-
                     selectedItemColor: AppColors.darkBlue,
                     unselectedItemColor: AppColors.lightGrey,
                     items: <BottomNavigationBarItem>[
@@ -50,9 +52,11 @@ class DashboardScreen extends GetView<DashboardController> {
                           children: [
                             Assets.images.icSelectedHome.svg(
                                 height: 22.h,
-                                color: controller.selectedIndex.value == 0
-                                    ? AppColors.darkBlue
-                                    : AppColors.lightGrey),
+                                colorFilter: ColorFilter.mode(
+                                    controller.selectedIndex.value == 0
+                                        ? AppColors.darkBlue
+                                        : AppColors.lightGrey,
+                                    BlendMode.srcIn)),
                             const SizedBox(height: 5),
                           ],
                         ),
@@ -63,9 +67,11 @@ class DashboardScreen extends GetView<DashboardController> {
                           children: [
                             Assets.images.icSelectedPerfom.svg(
                                 height: 22.h,
-                                color: controller.selectedIndex.value == 1
-                                    ? AppColors.darkBlue
-                                    : AppColors.lightGrey),
+                                colorFilter: ColorFilter.mode(
+                                    controller.selectedIndex.value == 1
+                                        ? AppColors.darkBlue
+                                        : AppColors.lightGrey,
+                                    BlendMode.srcIn)),
                             const SizedBox(height: 5),
                           ],
                         ),
@@ -76,9 +82,11 @@ class DashboardScreen extends GetView<DashboardController> {
                           children: [
                             Assets.images.icSelectedSuggest.svg(
                                 height: 22.h,
-                                color: controller.selectedIndex.value == 2
-                                    ? AppColors.darkBlue
-                                    : AppColors.lightGrey),
+                                colorFilter: ColorFilter.mode(
+                                    controller.selectedIndex.value == 2
+                                        ? AppColors.darkBlue
+                                        : AppColors.lightGrey,
+                                    BlendMode.srcIn)),
                             const SizedBox(height: 5),
                           ],
                         ),
@@ -91,9 +99,11 @@ class DashboardScreen extends GetView<DashboardController> {
                           children: [
                             Assets.images.icChatBottom.svg(
                                 height: 22.h,
-                                color: controller.selectedIndex.value == 3
-                                    ? AppColors.darkBlue
-                                    : AppColors.lightGrey),
+                                colorFilter: ColorFilter.mode(
+                                    controller.selectedIndex.value == 3
+                                        ? AppColors.darkBlue
+                                        : AppColors.lightGrey,
+                                    BlendMode.srcIn)),
                             const SizedBox(height: 5),
                           ],
                         ),
@@ -104,12 +114,11 @@ class DashboardScreen extends GetView<DashboardController> {
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(22),
-                              child: CachedNetworkImage(
-                                imageUrl: "${controller.userProfileImage}",
+                              child: CachedNetworkPhoto(
+                                url: "${controller.userProfileImage}",
                                 fit: BoxFit.cover,
                                 height: 30,
                                 width: 30,
-                                errorWidget: (context, url, error) => Image.asset(Assets.images.defaultProfile.path),
                               ),
                             ),
                             const SizedBox(height: 5),
@@ -135,7 +144,7 @@ class DashboardScreen extends GetView<DashboardController> {
 
   static List<Widget> widgetOptions = <Widget>[
     const HomeUI(),
-     const PerformanceUI(),
+    const PerformanceUI(),
     const SuggestRemediesUI(),
     const ChatAssistancePage(),
     ProfileUI()

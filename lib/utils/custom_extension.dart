@@ -38,7 +38,7 @@ extension DateToString on DateTime {
   }
 
   String toCustomFormattedString({String locale = "en_US"}) {
-    final format = DateFormat("d\'\' MMM yyyy", locale);
+    final format = DateFormat("d'' MMM yyyy", locale);
     return format.format(this);
   }
 

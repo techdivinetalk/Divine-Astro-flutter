@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:divine_astrologer/common/app_textstyle.dart';
-import 'package:divine_astrologer/utils/utils.dart';
+import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../common/colors.dart';
 import '../../../model/important_numbers.dart';
@@ -40,8 +39,7 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
           } else {
             return SingleChildScrollView(
               child: Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+                padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -58,8 +56,7 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                           borderRadius: BorderRadius.circular(12)),
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
-                        child: Text(
-                            "You will get call and chat alerts from these numbers. Save these numbers to avoid any confusion.",
+                        child: Text("importNumText".tr,
                             style: TextStyle(
                               color: AppColors.redColor,
                               fontWeight: FontWeight.w400,
@@ -67,9 +64,7 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                             )),
                       ),
                     ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
+                    SizedBox(height: 20.h),
                     ListView.builder(
                       itemCount: controller.importantNumbers.length,
                       primary: false,
@@ -104,6 +99,7 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                                       ],
                                     ),
                                   ),
+                                  SizedBox(width: 10.w),
                                   AddContactButton(
                                       exist: exist, phoneNumber: phoneNumber)
                                   /* GestureDetector(
@@ -179,19 +175,20 @@ class _AddContactButtonState extends State<AddContactButton> {
 
   @override
   Widget build(BuildContext context) {
-
     return GetBuilder<ImportantNumbersController>(
         builder: (controller) => GestureDetector(
-              onTap: () {
-
-                if (!isButtonTap) {
-                  List<String> phoneNumbers =
-                      widget.phoneNumber.mobileNumber!.split(",").toList();
-                  controller.addContact(
-                    contactNumbers: phoneNumbers,
-                    givenName: widget.phoneNumber.title ?? "",
-                  );
-                  /*Map<String, bool> value = {
+              onTap: () async {
+                if (await PermissionHelper()
+                    .askCustomPermission(Permission.contacts)) {
+                  if (!isButtonTap) {
+                    List<String> phoneNumbers =
+                        widget.phoneNumber.mobileNumber?.split(",").toList() ??
+                            [];
+                    controller.addContact(
+                      contactNumbers: phoneNumbers,
+                      givenName: widget.phoneNumber.title ?? "",
+                    );
+                    /*Map<String, bool> value = {
                     widget.phoneNumber.mobileNumber ?? "": isButtonTap
                   };
                   if (controller.allAdded.contains(value)) {
@@ -200,16 +197,18 @@ class _AddContactButtonState extends State<AddContactButton> {
                   }else{
                     controller.allAdded.add(value);
                   }*/
-                  setState(() {
-                    isButtonTap = !isButtonTap;
-                  });
+                    setState(() {
+                      isButtonTap = !isButtonTap;
+                    });
+                  }
                 }
               },
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color:
-                        isButtonTap ? AppColors.grey : AppColors.lightYellow),
+                    color: isButtonTap
+                        ? AppColors.grey.withOpacity(0.2)
+                        : AppColors.lightYellow),
                 child: Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
@@ -217,7 +216,9 @@ class _AddContactButtonState extends State<AddContactButton> {
                     isButtonTap ? "Saved".tr : "addContact".tr,
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w600,
-                        fontColor: AppColors.brownColour),
+                        fontColor: isButtonTap
+                            ? AppColors.grey
+                            : AppColors.brownColour),
                   ),
                 ),
               ),

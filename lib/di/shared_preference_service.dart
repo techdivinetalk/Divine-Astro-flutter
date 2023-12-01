@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:divine_astrologer/common/zego_services.dart';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/model/update_bank_response.dart';
 import 'package:get/get.dart';
@@ -22,7 +21,7 @@ class SharedPreferenceService extends GetxService {
   static const updatedBankDetails = "updatedBankDetails";
   static const baseImageUrl = "baseImageUrl";
   static const constantData = "constantData";
-
+  static const performanceDialog = "performanceDialog";
 
   Future<SharedPreferenceService> init() async {
     prefs = await SharedPreferences.getInstance();
@@ -53,6 +52,14 @@ class SharedPreferenceService extends GetxService {
     return await prefs!.setString(baseAmazonUrl, url);
   }
 
+  Future<int> getIntPrefs(String key) async {
+    return prefs!.getInt(key) ?? 0;
+  }
+
+  Future<bool> setIntPrefs(String key, int value) async {
+    return prefs!.setInt(key, value);
+  }
+
   String? getToken() {
     return prefs!.getString(tokenKey);
   }
@@ -74,7 +81,6 @@ class SharedPreferenceService extends GetxService {
   }
 
   Future erase() async {
-    await ZegoServices().unInitZegoInvitationServices();
     return prefs!.clear();
   }
 
@@ -128,5 +134,4 @@ class SharedPreferenceService extends GetxService {
       ConstantDetailsModelClass constantDetails) async {
     return await prefs!.setString(constantData, jsonEncode(constantDetails));
   }
-
 }

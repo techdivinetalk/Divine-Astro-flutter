@@ -16,18 +16,17 @@ class CallOrderHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<OrderHistoryController>(
-      builder: (controller) {
-        return ListView.separated(
-          // controller: controller,
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: controller.callHistoryList.length,
-          padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(top: 30),
-          separatorBuilder: (context, index) => const SizedBox(height: 20),
-          itemBuilder: (context, index) {
-            return orderDetailView(index, controller.callHistoryList);
-            /*return Column(
+    return GetBuilder<OrderHistoryController>(builder: (controller) {
+      return ListView.separated(
+        // controller: controller,
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: controller.callHistoryList.length,
+        padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(top: 30),
+        separatorBuilder: (context, index) => const SizedBox(height: 20),
+        itemBuilder: (context, index) {
+          return orderDetailView(index, controller.callHistoryList);
+          /*return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (index == 2)
@@ -56,10 +55,9 @@ class CallOrderHistory extends StatelessWidget {
                 separator,
               ],
             );*/
-          },
-        );
-      }
-    );
+        },
+      );
+    });
   }
 
   Widget orderDetailView(int index, List<CallHistoryData> data) {
@@ -101,10 +99,11 @@ class CallOrderHistory extends StatelessWidget {
                   // "chat".tr,
                   "${data[index].productType}",
                   style: AppTextStyle.textStyle12(
-                      fontWeight: FontWeight.w400,
-                      /*fontColor: "$type" == "PENALTY"
+                    fontWeight: FontWeight.w400,
+                    /*fontColor: "$type" == "PENALTY"
                           ? AppColors.appRedColour
-                          : AppColors.darkBlue*/),
+                          : AppColors.darkBlue*/
+                  ),
                 ),
                 Text(
                   // "- ₹100000",

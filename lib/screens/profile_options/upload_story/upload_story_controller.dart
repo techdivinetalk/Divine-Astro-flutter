@@ -1,11 +1,8 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:aws_s3_upload/aws_s3_upload.dart';
-import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/utils/utils.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';

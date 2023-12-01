@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +20,10 @@ class ImportantNumberRepo extends ApiProvider {
           Get.offNamed(RouteName.login);
           throw CustomException(json.decode(response.body)["error"]);
         } else {
-           final importantNumbers = ImportantNumberModel.fromJson(json.decode(response.body));
-          if (importantNumbers.statusCode == successResponse && importantNumbers.success!) {
+          final importantNumbers =
+              ImportantNumberModel.fromJson(json.decode(response.body));
+          if (importantNumbers.statusCode == successResponse &&
+              importantNumbers.success!) {
             return importantNumbers;
           } else {
             throw CustomException(json.decode(response.body)["message"]);

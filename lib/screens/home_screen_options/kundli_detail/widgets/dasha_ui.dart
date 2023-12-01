@@ -613,7 +613,7 @@ class _DashaUIState extends State<DashaUI> {
                     const Icon(Icons.chevron_right),
                   ],
                 ),
-                Text("Pratyantar Dasha",
+                Text("pratyantarDasha".tr,
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w500,
                         fontColor: AppColors.appYellowColour)),
@@ -717,7 +717,7 @@ class _DashaUIState extends State<DashaUI> {
                       controller.dashaTableData.value.data?.vimshottari?[index];
                   Datum? subModel =
                       controller.planetDataDetail.value.data?[index];
-                  pratyantarData? pratyantarModel =
+                  PratyantarData? pratyantarModel =
                       controller.pratyantarDataDetail.value.data?[index];
                   return TableRow(children: [
                     Padding(
@@ -861,7 +861,7 @@ class _DashaUIState extends State<DashaUI> {
                       onTap: () {
                         controller.subDashaLevel.value = 2;
                       },
-                      child: Text("Pratyantar Dasha",
+                      child: Text("pratyantarDasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
                               fontColor: AppColors.appYellowColour)),
@@ -975,7 +975,7 @@ class _DashaUIState extends State<DashaUI> {
                       controller.dashaTableData.value.data?.vimshottari?[index];
                   Datum? subModel =
                       controller.planetDataDetail.value.data?[index];
-                  pratyantarData? pratyantarModel =
+                  PratyantarData? pratyantarModel =
                       controller.pratyantarDataDetail.value.data?[index];
                   SookshmaData? sookshmaData =
                       controller.sookshmaDataDetail.value.data?[index];
@@ -1124,7 +1124,7 @@ class _DashaUIState extends State<DashaUI> {
                       onTap: () {
                         controller.subDashaLevel.value = 2;
                       },
-                      child: Text("Pratyantar Dasha",
+                      child: Text("pratyantarDasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
                               fontColor: AppColors.appYellowColour)),
@@ -1472,10 +1472,10 @@ class _DashaUIState extends State<DashaUI> {
                                   getDashaFormattedDate(yoginiData?.endDate),
                                   style: AppTextStyle.textStyle12(),
                                 ),
-                                const Icon(
+                                /* const Icon(
                                   Icons.chevron_right,
                                   size: 12,
-                                )
+                                ) */
                               ],
                             ),
                           ),

@@ -48,7 +48,7 @@ class DateSelection extends GetView<PerformanceController> {
               children: [
                 SizedBox(height: 10.h),
                 CustomText(
-                  'Select Custom Date',
+                  'selectCustomDate'.tr,
                   fontWeight: FontWeight.w700,
                   fontSize: 20.sp,
                 ),
@@ -59,7 +59,7 @@ class DateSelection extends GetView<PerformanceController> {
                       child: GestureDetector(
                         onTap: () {
                           selectDateOrTime(Get.context!,
-                              title: "Select Start Date",
+                              title: "selectStartDate".tr,
                               btnTitle: "Confirm",
                               pickerStyle: "DateCalendar",
                               looping: true,
@@ -82,7 +82,7 @@ class DateSelection extends GetView<PerformanceController> {
                                   width: 10.w,
                                 ),
                                 Text(
-                                  "Start Date",
+                                  "startDate".tr,
                                   style: AppTextStyle.textStyle16(
                                       fontColor: Colors.black),
                                 ),
@@ -99,8 +99,8 @@ class DateSelection extends GetView<PerformanceController> {
                       child: GestureDetector(
                         onTap: () {
                           selectDateOrTime(Get.context!,
-                              title: "Select End Date",
-                              btnTitle: "Confirm",
+                              title: "selectEndDate".tr,
+                              btnTitle: "confirm".tr,
                               pickerStyle: "DateCalendar",
                               looping: true,
                               onConfirm: (value) {},
@@ -122,7 +122,7 @@ class DateSelection extends GetView<PerformanceController> {
                                   width: 10.w,
                                 ),
                                 Text(
-                                  "End Date",
+                                  "endDate".tr,
                                   style: AppTextStyle.textStyle16(
                                       fontColor: Colors.black),
                                 ),

@@ -1,8 +1,6 @@
-// ignore_for_file: must_be_immutable, deprecated_member_use, deprecated_member_use_from_same_package
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/appbar.dart';
+import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
 import 'package:file_picker/file_picker.dart';
@@ -11,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
@@ -24,7 +23,9 @@ import '../../screens/side_menu/side_menu_ui.dart';
 
 class ProfileUI extends GetView<ProfilePageController> {
   ProfileUI({Key? key}) : super(key: key);
-  var preference = Get.find<SharedPreferenceService>();
+
+  final preference = Get.find<SharedPreferenceService>();
+  // var homeController = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -77,17 +78,11 @@ class ProfileUI extends GetView<ProfilePageController> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(80),
                                     child: Obx(
-                                      () => CachedNetworkImage(
-                                        imageUrl:
-                                            controller.userProfileImage.value,
+                                      () => CachedNetworkPhoto(
+                                        url: controller.userProfileImage.value,
                                         fit: BoxFit.cover,
                                         height: 70.h,
                                         width: 70.h,
-                                        placeholder: (context, url) =>
-                                            const CircularProgressIndicator(),
-                                        errorWidget: (context, url, error) =>
-                                            Image.asset(Assets
-                                                .images.defaultProfile.path),
                                       ),
                                     ),
                                   ),
@@ -185,8 +180,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                           false)
                       ? Container(
                           width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 12),
+                          padding: EdgeInsets.all(16.w),
                           decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
@@ -371,13 +365,14 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                                   MainAxisAlignment
                                                                       .center,
                                                               children: [
-                                                                Text(
+                                                                CustomText(
                                                                   item.languagesMain
                                                                       .toString(),
-                                                                  style: AppTextStyle.textStyle20(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700),
+                                                                  fontSize:
+                                                                      18.5.sp,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
                                                                 ),
                                                                 SizedBox(
                                                                     height:
@@ -442,23 +437,25 @@ class ProfileUI extends GetView<ProfilePageController> {
                           ),
                         );
                       } else if (index == 1) {
-                        FilePickerResult? result =
-                            await FilePicker.platform.pickFiles(
-                          type: FileType.video,
-                          allowCompression: false,
-                        );
-                        if (result != null) {
-                          Get.toNamed(RouteName.uploadStoryUi,
-                              arguments: "${result.files.single.path}");
+                        if (await PermissionHelper()
+                            .askStoragePermission(Permission.videos)) {
+                          FilePickerResult? result =
+                              await FilePicker.platform.pickFiles(
+                            type: FileType.video,
+                            allowCompression: false,
+                          );
+                          if (result != null) {
+                            Get.toNamed(RouteName.uploadStoryUi,
+                                arguments: "${result.files.single.path}");
+                          }
                         }
+                      } else if (index == 3) {
+                        controller.homeController.whatsapp();
                       } else if (item.nav != "") {
                         if (item.name == "bankDetails".tr ||
                             item.name == "uploadYourPhoto".tr) {
-                          if (await PermissionHelper().askMediaPermission()) {
-                            Get.toNamed(item.nav.toString());
-                          }
-                        } else if (item.name == "uploadStory".tr) {
-                          if (await PermissionHelper().askStoragePermission()) {
+                          if (await PermissionHelper()
+                              .askStoragePermission(Permission.photos)) {
                             Get.toNamed(item.nav.toString());
                           }
                         } else {
@@ -498,7 +495,7 @@ class ProfileUI extends GetView<ProfilePageController> {
 
   ratingsView() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -517,7 +514,6 @@ class ProfileUI extends GetView<ProfilePageController> {
           ),
           const SizedBox(height: 20),
           Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Column(
@@ -539,12 +535,17 @@ class ProfileUI extends GetView<ProfilePageController> {
                     Row(
                       children: [
                         Assets.images.icUser.svg(
-                            height: 20.h,
-                            width: 20.h,
-                            color: AppColors.appYellowColour),
+                          height: 20.h,
+                          width: 20.h,
+                          colorFilter: const ColorFilter.mode(
+                              AppColors.appYellowColour, BlendMode.srcIn),
+                        ),
                         SizedBox(width: 8.w),
                         Text(
-                          "${controller.ratingsData?.data?.totalReviews ?? 0} ${"total".tr}",
+                          "total".trParams({
+                            "count":
+                                "${controller.ratingsData?.data?.totalReviews}"
+                          }),
                           style: AppTextStyle.textStyle14(),
                         ),
                       ],
@@ -561,9 +562,9 @@ class ProfileUI extends GetView<ProfilePageController> {
                       Assets.images.icFiveStar.svg(width: 80.w),
                       LinearPercentIndicator(
                         width: 100.w,
-                        barRadius: const Radius.circular(10),
+                        barRadius: const Radius.circular(50),
                         animation: true,
-                        lineHeight: 10.0,
+                        lineHeight: 6.h,
                         animationDuration: 2000,
                         percent: controller.getReviewPercentage(
                             ratingNumbers:
@@ -572,7 +573,6 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 ((controller.ratingsData?.data?.totalReviews ??
                                         0)
                                     .toDouble())),
-                        linearStrokeCap: LinearStrokeCap.round,
                         backgroundColor: AppColors.lightYellow.withOpacity(0.4),
                         progressColor: AppColors.lightYellow,
                       ),
@@ -585,9 +585,9 @@ class ProfileUI extends GetView<ProfilePageController> {
                       Assets.images.icFourStar.svg(width: 70.w),
                       LinearPercentIndicator(
                         width: 100.w,
-                        barRadius: const Radius.circular(10),
+                        barRadius: const Radius.circular(50),
                         animation: true,
-                        lineHeight: 10.0,
+                        lineHeight: 6.h,
                         animationDuration: 2000,
                         percent: controller.getReviewPercentage(
                             ratingNumbers:
@@ -596,7 +596,6 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 (controller.ratingsData?.data?.totalReviews ??
                                         0)
                                     .toDouble()),
-                        linearStrokeCap: LinearStrokeCap.round,
                         backgroundColor: AppColors.lightYellow.withOpacity(0.4),
                         progressColor: AppColors.lightYellow,
                       ),
@@ -609,9 +608,9 @@ class ProfileUI extends GetView<ProfilePageController> {
                       Assets.images.icThreeStar.svg(width: 55.w),
                       LinearPercentIndicator(
                         width: 100.w,
-                        barRadius: const Radius.circular(10),
+                        barRadius: const Radius.circular(50),
                         animation: true,
-                        lineHeight: 10.0,
+                        lineHeight: 6.h,
                         animationDuration: 2000,
                         percent: controller.getReviewPercentage(
                             ratingNumbers:
@@ -620,7 +619,6 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 (controller.ratingsData?.data?.totalReviews ??
                                         0)
                                     .toDouble()),
-                        linearStrokeCap: LinearStrokeCap.round,
                         backgroundColor: AppColors.lightYellow.withOpacity(0.4),
                         progressColor: AppColors.lightYellow,
                       ),
@@ -630,14 +628,12 @@ class ProfileUI extends GetView<ProfilePageController> {
                   //2
                   Row(
                     children: [
-                      Assets.images.icTwoStar.svg(
-                        width: 35.w,
-                      ),
+                      Assets.images.icTwoStar.svg(width: 35.w),
                       LinearPercentIndicator(
                         width: 100.w,
-                        barRadius: const Radius.circular(10),
+                        barRadius: const Radius.circular(50),
                         animation: true,
-                        lineHeight: 10.0,
+                        lineHeight: 6.h,
                         animationDuration: 2000,
                         percent: controller.getReviewPercentage(
                             ratingNumbers:
@@ -646,7 +642,6 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 (controller.ratingsData?.data?.totalReviews ??
                                         0)
                                     .toDouble()),
-                        linearStrokeCap: LinearStrokeCap.round,
                         backgroundColor: AppColors.lightYellow.withOpacity(0.4),
                         progressColor: AppColors.lightYellow,
                       ),
@@ -656,14 +651,12 @@ class ProfileUI extends GetView<ProfilePageController> {
                   //1
                   Row(
                     children: [
-                      Assets.images.icOneStar.svg(
-                        width: 15.w,
-                      ),
+                      Assets.images.icOneStar.svg(width: 15.w),
                       LinearPercentIndicator(
                         width: 100.w,
-                        barRadius: const Radius.circular(10),
+                        barRadius: const Radius.circular(50),
                         animation: true,
-                        lineHeight: 10.0,
+                        lineHeight: 6.h,
                         animationDuration: 2000,
                         percent: controller.getReviewPercentage(
                             ratingNumbers:
@@ -672,7 +665,6 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 (controller.ratingsData?.data?.totalReviews ??
                                         0)
                                     .toDouble()),
-                        linearStrokeCap: LinearStrokeCap.round,
                         backgroundColor: AppColors.lightYellow.withOpacity(0.4),
                         progressColor: AppColors.lightYellow,
                       ),
@@ -688,156 +680,152 @@ class ProfileUI extends GetView<ProfilePageController> {
   }
 
   listOfReviews() {
-    return ListView.builder(
+    return ListView.separated(
       itemCount: controller.ratingsData?.data?.allReviews?.length ?? 0,
       primary: false,
       shrinkWrap: true,
+      separatorBuilder: (context, index) => Padding(
+        padding: EdgeInsets.all(8.h),
+        child: const Divider(color: AppColors.extraLightGrey),
+      ),
       itemBuilder: (context, index) {
         TextEditingController replyController = TextEditingController();
         var reviewData = controller.ratingsData?.data?.allReviews?[index];
 
-        return Column(
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(40),
-                  child: CachedNetworkImage(
-                    imageUrl:
-                        "${controller.preference.getBaseImageURL()}${reviewData?.customerImage}",
-                    height: 40,
-                    width: 40,
-                    fit: BoxFit.cover,
-                    errorWidget: (context, url, error) =>
-                        Image.asset(Assets.images.defaultProfile.path),
-                  ),
-                ),
-                SizedBox(width: 10.h),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(40),
+              child: CachedNetworkPhoto(
+                url: reviewData?.customerImage != null
+                    ? "${controller.preference.getBaseImageURL()}/${reviewData?.customerImage}"
+                    : "",
+                height: 40,
+                width: 40,
+                fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(width: 10.h),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Text(
+                        reviewData?.customerName != null
+                            ? "${reviewData?.customerName}"
+                            : "",
+                        style: AppTextStyle.textStyle14(),
+                      ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "${reviewData?.customerName}",
-                            style: AppTextStyle.textStyle14(),
+                          RatingBar.readOnly(
+                            filledIcon: Icons.star,
+                            emptyIcon: Icons.star,
+                            emptyColor:
+                                AppColors.appYellowColour.withOpacity(0.3),
+                            filledColor: AppColors.appYellowColour,
+                            initialRating:
+                                double.tryParse("${reviewData?.rating}") ?? 0,
+                            size: 15.h,
+                            maxRating: 5,
                           ),
-                          Row(
-                            children: [
-                              RatingBar.readOnly(
-                                filledIcon: Icons.star,
-                                emptyIcon: Icons.star,
-                                emptyColor:
-                                    AppColors.appYellowColour.withOpacity(0.3),
-                                filledColor: AppColors.appYellowColour,
-                                initialRating:
-                                    double.tryParse("${reviewData?.rating}") ??
-                                        0,
-                                size: 15.h,
-                                maxRating: 5,
-                              ),
-                              const SizedBox(width: 10),
-                              PopupMenuButton(
-                                surfaceTintColor: Colors.transparent,
-                                color: Colors.white,
-                                itemBuilder: (context) => [
-                                  PopupMenuItem(
-                                      child: InkWell(
-                                    onTap: () {
-                                      Navigator.pop(context);
+                          const SizedBox(width: 10),
+                          PopupMenuButton(
+                            surfaceTintColor: Colors.transparent,
+                            color: Colors.white,
+                            itemBuilder: (context) => [
+                              PopupMenuItem(
+                                  child: InkWell(
+                                onTap: () {
+                                  Navigator.pop(context);
 
-                                      showCupertinoModalPopup(
-                                        barrierColor:
-                                            AppColors.darkBlue.withOpacity(0.5),
-                                        context: context,
-                                        builder: (context) => ReportPostReasons(
-                                            reviewData!.id.toString()),
+                                  showCupertinoModalPopup(
+                                    barrierColor:
+                                        AppColors.darkBlue.withOpacity(0.5),
+                                    context: context,
+                                    builder: (context) => ReportPostReasons(
+                                        reviewData?.id.toString() ?? ''),
 
-                                        // builder: (context) => ReportPostReasons(reviewData?.id.),
-                                      );
-                                    },
-                                    child: Text(
-                                      "reportComment".tr,
-                                      style: AppTextStyle.textStyle13(),
-                                    ),
-                                  )),
-                                ],
-                                child: const Icon(Icons.more_vert_rounded),
-                              )
+                                    // builder: (context) => ReportPostReasons(reviewData?.id.),
+                                  );
+                                },
+                                child: Text(
+                                  "reportComment".tr,
+                                  style: AppTextStyle.textStyle13(),
+                                ),
+                              )),
                             ],
-                          ),
+                            child: const Icon(Icons.more_vert_rounded),
+                          )
                         ],
                       ),
-                      SizedBox(height: 3.h),
-                      Text(
-                        "${reviewData?.reviewDate}",
-                        style: AppTextStyle.textStyle12(),
-                      ),
-                      if (reviewData?.comment != null)
-                        const SizedBox(height: 5),
-                      if (reviewData?.comment != null)
-                        Text(
-                          "${reviewData?.comment}",
-                          style: AppTextStyle.textStyle12(),
-                        ),
-                      SizedBox(height: 15.h),
-                      if (reviewData?.replyData == null &&
-                          reviewData?.comment != null)
-                        replyTextView(
-                            textController: replyController,
-                            reviewId: reviewData?.id ?? 0),
-                      if (reviewData?.replyData != null)
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(40),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    "${controller.preference.getBaseImageURL()}/${reviewData?.replyData?.astrologerImage}",
-                                height: 40,
-                                width: 40,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            SizedBox(width: 10.h),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    controller.userData?.name ?? "",
-                                    style: AppTextStyle.textStyle14(
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                  Text(
-                                    "${reviewData?.replyData?.replyDate}",
-                                    style: AppTextStyle.textStyle12(),
-                                  ),
-                                  SizedBox(
-                                    height: 8.h,
-                                  ),
-                                  Text(
-                                    "${reviewData?.replyData?.reply}",
-                                    style: AppTextStyle.textStyle12(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        )
                     ],
                   ),
-                ),
-              ],
+                  SizedBox(height: 3.h),
+                  Text(
+                    "${reviewData?.reviewDate}",
+                    style:
+                        AppTextStyle.textStyle12(fontWeight: FontWeight.w500),
+                  ),
+                  if (reviewData?.comment != null) const SizedBox(height: 5),
+                  if (reviewData?.comment != null)
+                    Text(
+                      "${reviewData?.comment}",
+                      style: AppTextStyle.textStyle12(),
+                    ),
+                  SizedBox(height: 15.h),
+                  if (reviewData?.replyData == null &&
+                      reviewData?.comment != null)
+                    replyTextView(
+                        textController: replyController,
+                        reviewId: reviewData?.id ?? 0),
+                  if (reviewData?.replyData != null)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(40),
+                          child: CachedNetworkPhoto(
+                            url:
+                                "${controller.preference.getBaseImageURL()}/${reviewData?.replyData?.astrologerImage}",
+                            height: 40,
+                            width: 40,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        SizedBox(width: 10.h),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                controller.userData?.name != null
+                                    ? (controller.userData?.name ?? "")
+                                    : "",
+                                style: AppTextStyle.textStyle14(
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              Text(
+                                "${reviewData?.replyData?.replyDate}",
+                                style: AppTextStyle.textStyle12(),
+                              ),
+                              SizedBox(height: 8.h),
+                              Text(
+                                "${reviewData?.replyData?.reply}",
+                                style: AppTextStyle.textStyle12(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                ],
+              ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.sp),
-              child: const Divider(),
-            )
           ],
         );
       },
@@ -858,9 +846,11 @@ class ProfileUI extends GetView<ProfilePageController> {
         onFieldSubmitted: (text) {
           controller.getReplyOnReview(reviewId: reviewId, textMsg: text.trim());
         },
-        decoration: const InputDecoration(
-            hintText: "Reply here...",
-            hintStyle: TextStyle(color: AppColors.greyColor),
+        onTapOutside: (event) => FocusScope.of(Get.context!).unfocus(),
+        decoration: InputDecoration(
+            hintText: "${'replyHere'.tr}...",
+            isDense: true,
+            hintStyle: TextStyle(color: AppColors.greyColor, fontSize: 12.sp),
             border: InputBorder.none),
       ),
     );
@@ -868,9 +858,9 @@ class ProfileUI extends GetView<ProfilePageController> {
 }
 
 class ReportPostReasons extends StatefulWidget {
-  String reviewID;
+  final String reviewID;
 
-  ReportPostReasons(this.reviewID, {super.key});
+  const ReportPostReasons(this.reviewID, {super.key});
 
   @override
   State<ReportPostReasons> createState() => _ReportPostReasonsState();
@@ -913,7 +903,7 @@ class _ReportPostReasonsState extends State<ReportPostReasons> {
                 children: [
                   Assets.images.report.svg(),
                   SizedBox(height: 20.h),
-                  CustomText("reportingQue".tr,
+                  CustomText("${'reportingQue'.tr}?",
                       fontSize: 20.sp,
                       fontWeight: FontWeight.w700,
                       fontColor: AppColors.darkBlue),
@@ -942,7 +932,8 @@ class _ReportPostReasonsState extends State<ReportPostReasons> {
                                   },
                                   child: Text(
                                     report.first.tr,
-                                    style: AppTextStyle.textStyle16(
+                                    textAlign: TextAlign.center,
+                                    style: AppTextStyle.textStyle15(
                                         fontColor: AppColors.darkBlue,
                                         fontWeight: FontWeight.w400),
                                   )),

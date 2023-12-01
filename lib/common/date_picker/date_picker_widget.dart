@@ -1,13 +1,15 @@
-// ignore_for_file: depend_on_referenced_packages, no_logic_in_create_state, no_leading_underscores_for_local_identifiers, avoid_function_literals_in_foreach_calls
+// ignore_for_file:  no_logic_in_create_state, avoid_function_literals_in_foreach_calls, no_leading_underscores_for_local_identifiers, depend_on_referenced_packages
 
 import 'dart:math';
+
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_holo_date_picker/date_picker_constants.dart';
 import 'package:flutter_holo_date_picker/date_picker_theme.dart';
 import 'package:flutter_holo_date_picker/i18n/date_picker_i18n.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:intl/intl.dart';
+
 import 'date_time_formatter.dart';
 
 /// Solar months of 31 days.
@@ -60,17 +62,28 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
   late Map<String, List<int>?> _valueRangeMap;
 
   bool _isChangeDateRange = false;
+
   // whene change year the returned month is incorrect with the shown one
   // So _lock make sure that month doesn't change from cupertino widget
   // we will handle it manually
   bool _lock = false;
+
   _DatePickerWidgetState(DateTime? minDateTime, DateTime? maxDateTime,
       DateTime? initialDateTime, String? pickerType) {
     // handle current selected year、month、day
     DateTime initDateTime = initialDateTime ?? DateTime.now();
-    _currYear = initDateTime.year;
-    _currMonth = initDateTime.month;
-    _currDay = initDateTime.day;
+
+    if (pickerType == "DateCalendar") {
+      _currYear = initDateTime.year;
+      _currMonth = initDateTime.month;
+      _currDay = initDateTime.day;
+    } else {
+      _currYear = initDateTime.hour < 12 ? 1 : 2;
+      _currMonth = initDateTime.hour > 12
+          ? (initDateTime.hour - 12)
+          : (initDateTime.hour);
+      _currDay = initDateTime.minute;
+    }
 
     // handle DateTime range
     _minDateTime = minDateTime ?? DateTime.parse(DATE_PICKER_MIN_DATETIME);
@@ -81,7 +94,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     _yearRange = pickerType == "DateCalendar" ? _calcYearRange() : [1, 2];
     _currYear = pickerType == "DateCalendar"
         ? min(max(_minDateTime.year, _currYear!), _maxDateTime.year)
-        : DateTime.now().hour < 12
+        : initDateTime.hour < 12
             ? 1
             : 2;
 
@@ -90,11 +103,8 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
         ? _calcMonthRange()
         : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-    _currMonth = pickerType == "DateCalendar"
-        ? _calcCurrentMonth()
-        : DateTime.now().hour > 12
-            ? DateTime.now().hour - 12
-            : DateTime.now().hour;
+    _currMonth =
+        pickerType == "DateCalendar" ? _calcCurrentMonth() : initDateTime.hour;
 
     // limit the range of day
     _dayRange = pickerType == "DateCalendar"
@@ -163,7 +173,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
           ];
     _currDay = pickerType == "DateCalendar"
         ? min(max(_dayRange!.first, _currDay!), _dayRange!.last)
-        : DateTime.now().minute;
+        : initDateTime.minute;
 
     // create scroll controller
     _yearScrollCtrl = FixedExtentScrollController(
@@ -183,7 +193,10 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _onConfirm();
+    WidgetsBinding.instance.addPostFrameCallback((value) {
+      _onConfirm();
+    });
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
       child: GestureDetector(
@@ -207,9 +220,14 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
         DateTime dateTime = DateTime(_currYear!, _currMonth!, _currDay!);
         widget.onChange!(dateTime, _calcSelectIndexList());
       } else {
-        var dayTime = _currYear == 1 ? "AM" : "PM";
-        DateTime parseDate =
-            DateFormat("h:mm a").parse("$_currMonth:$_currDay $dayTime");
+        var newMonth = _currYear == 1
+            ? (_currMonth! >= 12 ? (_currMonth! - 12) : _currMonth)
+            : (_currMonth! > 12 ? (_currMonth!) : (_currMonth! + 12));
+
+        var formattedTime = DateFormat("hh:mm a")
+            .format(DateTime(2021, 1, 1, newMonth!, _currDay!, 0));
+
+        DateTime parseDate = DateFormat("hh:mm a").parse(formattedTime);
 
         widget.onChange!(parseDate, _calcSelectIndexList());
       }
@@ -224,7 +242,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       } else {
         var dayTime = _currYear == 1 ? "AM" : "PM";
         DateTime parseDate =
-        DateFormat("h:mm a").parse("$_currMonth:$_currDay $dayTime");
+            DateFormat("hh:mm").parse("$_currMonth:$_currDay $dayTime");
 
         widget.onConfirm!(parseDate, _calcSelectIndexList());
       }
@@ -437,6 +455,9 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     int dayOfMonth = _dayRange!.first + index;
     if (_currDay != dayOfMonth) {
       _currDay = dayOfMonth;
+      if (widget.pickerType == "DateCalendar") {
+        _changeDateRange();
+      }
       _onSelectedChange();
     }
   }

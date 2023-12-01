@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:divine_astrologer/model/number_change_request_model/verify_otp_response.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,7 @@ class NumberChangeReqRepository extends ApiProvider {
         headers: await getJsonHeaderURL(version: 7),
         body: jsonEncode(param),
       );
-      log("data------->${response.body.toString()}");
+
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
           preferenceService.erase();
@@ -49,7 +48,7 @@ class NumberChangeReqRepository extends ApiProvider {
         headers: await getJsonHeaderURL(version: 7),
         body: jsonEncode(param),
       );
-      log("data------->${response.body.toString()}");
+
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
           preferenceService.erase();

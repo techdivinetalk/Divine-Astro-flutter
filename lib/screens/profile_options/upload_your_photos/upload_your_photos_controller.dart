@@ -1,11 +1,8 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'dart:io';
 
 import 'package:aws_s3_upload/aws_s3_upload.dart';
-import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/upload_image_model.dart';
-import 'package:divine_astrologer/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../common/app_exception.dart';
 import 'package:path/path.dart' as p;
@@ -30,7 +27,6 @@ class UploadYourPhotosController extends GetxController {
   }
 
   Future getImages() async {
-
     final pickedFile = await picker.pickMultiImage(
       imageQuality: 100,
       maxHeight: 1000,
@@ -40,7 +36,12 @@ class UploadYourPhotosController extends GetxController {
 
     if (xFilePick.isNotEmpty) {
       for (var i = 0; i < xFilePick.length; i++) {
-        selectedImages.add(File(xFilePick[i].path));
+        if (selectedImages
+            .any((element) => element.path != xFilePick[i].path)) {
+          selectedImages.add(File(xFilePick[i].path));
+        } else {
+          divineSnackBar(data: "This image already selected.");
+        }
       }
       update();
     } else {
@@ -50,7 +51,7 @@ class UploadYourPhotosController extends GetxController {
     }
   }
 
-  void removeImages(String value){
+  void removeImages(String value) {
     selectedImages.removeWhere((element) => element.path == value);
     update();
   }

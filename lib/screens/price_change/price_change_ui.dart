@@ -87,13 +87,15 @@ class PriceChangeReqUI extends GetView<PriceChangeReqController> {
                     return Column(
                       children: [
                         item.priceTag != null &&
-                            item.priceTag!
-                                .contains("Eligible for price change")
+                                item.priceTag!
+                                    .contains("Eligible for price change")
                             ? Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10.h),
-                      child: const Divider(),
-                    )
-                            : SizedBox(),
+                                padding: EdgeInsets.symmetric(vertical: 10.h),
+                                child: const Divider(
+                                  thickness: 1.5,
+                                ),
+                              )
+                            : const SizedBox(),
                         Container(
                           padding: EdgeInsets.all(8.h),
                           decoration: BoxDecoration(
@@ -160,7 +162,6 @@ class PriceChangeReqUI extends GetView<PriceChangeReqController> {
                         SizedBox(
                           height: 15.h,
                         ),
-
                       ],
                     );
                   }),

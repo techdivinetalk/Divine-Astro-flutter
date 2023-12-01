@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -23,7 +21,10 @@ class FinalRemediesSubUI extends GetView<FinalRemediesSubController> {
             trailingWidget: InkWell(
               child: Padding(
                   padding: EdgeInsets.only(right: 20.w),
-                  child: Assets.images.icSearch.svg(color: AppColors.darkBlue)),
+                  child: Assets.images.icSearch.svg(
+                    colorFilter: const ColorFilter.mode(
+                        AppColors.darkBlue, BlendMode.srcIn),
+                  )),
             )),
         body: Column(
           children: [

@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_controller.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -21,6 +22,9 @@ class WalletUI extends GetView<WalletController> {
       appBar: commonAppbar(
           title: "wallet".tr,
           trailingWidget: InkWell(
+            onTap: () {
+              Get.toNamed(RouteName.orderHistory);
+            },
             child: Padding(
                 padding: EdgeInsets.only(right: 20.w),
                 child: Assets.images.icOrderHistory.svg()),
@@ -108,6 +112,7 @@ class WalletUI extends GetView<WalletController> {
         itemCount: controller.amountTypeList.length,
         itemBuilder: (context, index) {
           return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SizedBox(
                 width: 60.w,
@@ -123,7 +128,7 @@ class WalletUI extends GetView<WalletController> {
                             ? true
                             : false),
               ),
-              const SizedBox(width: 7)
+              const SizedBox(width: 10)
             ],
           );
         },
@@ -140,7 +145,7 @@ class WalletUI extends GetView<WalletController> {
     return Column(
       children: [
         if (is2linesRequired)
-          Text(amountType,
+          Text("$amountType:",
               textAlign: TextAlign.center,
               maxLines: 2,
               style: AppTextStyle.textStyle12(
@@ -150,7 +155,7 @@ class WalletUI extends GetView<WalletController> {
         if (!is2linesRequired)
           Padding(
             padding: const EdgeInsets.only(top: 10, bottom: 9),
-            child: Text("${"tds".tr}  ",
+            child: Text("${"tds".tr}:",
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 style: AppTextStyle.textStyle12(

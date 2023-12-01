@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
-import 'package:divine_astrologer/common/zego_services.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -19,7 +16,7 @@ import '../../../model/firebase_model.dart';
 import '../../../model/res_login.dart';
 import '../../../repository/user_repository.dart';
 
-class LoginController extends FullLifeCycleController with FullLifeCycleMixin {
+class LoginController extends GetxController {
   LoginController(this.userRepository);
 
   final UserRepository userRepository;
@@ -56,7 +53,6 @@ class LoginController extends FullLifeCycleController with FullLifeCycleMixin {
     update();
   }
 
-  // 97 62 93 49 35
   login() async {
     deviceToken = await FirebaseMessaging.instance.getToken();
     Map<String, dynamic> params = {
@@ -73,15 +69,14 @@ class LoginController extends FullLifeCycleController with FullLifeCycleMixin {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
   }
 
   navigateToDashboard(ResLogin data) async {
     preferenceService.erase();
-    await ZegoServices()
-        .initZegoInvitationServices("${data.data?.id}", "${data.data?.name}");
+
     preferenceService.setUserDetail(data.data!);
     preferenceService.setToken(data.token!);
     mobileNumberController.clear();
@@ -153,7 +148,7 @@ class LoginController extends FullLifeCycleController with FullLifeCycleMixin {
     return response;
   }
 
-  @override
+  /*@override
   void onDetached() {
     log('----> detached');
   }
@@ -171,5 +166,5 @@ class LoginController extends FullLifeCycleController with FullLifeCycleMixin {
   @override
   void onResumed() {
     numberFocus.requestFocus();
-  }
+  }*/
 }

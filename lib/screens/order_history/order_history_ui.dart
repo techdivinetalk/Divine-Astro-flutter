@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:divine_astrologer/screens/order_history/Widget/live_gifts_order_history_ui.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +10,8 @@ import '../../common/appbar.dart';
 import '../../common/colors.dart';
 import '../../gen/assets.gen.dart';
 import '../side_menu/side_menu_ui.dart';
-import 'Widget/call_order_history_ui..dart';
-import 'Widget/chat_order_history_ui..dart';
+import 'Widget/call_order_history_ui.dart';
+import 'Widget/chat_order_history_ui.dart';
 import 'Widget/suggest_remedies_history.dart';
 import 'all_tab/all_option_ui.dart';
 import 'order_history_controller.dart';
@@ -31,7 +29,8 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
             title: "orderHistory".tr,
             trailingWidget: InkWell(
               child: Padding(
-                  padding: EdgeInsets.only(right: 20.w), child: Assets.images.icOrderHistory.svg()),
+                  padding: EdgeInsets.only(right: 20.w),
+                  child: Assets.images.icOrderHistory.svg()),
             )),
         body: Container(
           color: AppColors.white,
@@ -53,7 +52,7 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
                 child: durationOptions(),
               ),
               const SizedBox(height: 20),
-              OrderTab(),
+              const OrderTab(),
             ],
           ),
         ),
@@ -78,7 +77,8 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
                         child: Text(
                           item.tr,
                           style: AppTextStyle.textStyle16(
-                              fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                              fontWeight: FontWeight.w400,
+                              fontColor: AppColors.darkBlue),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -159,7 +159,8 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
               indicatorColor: AppColors.blackColor,
               indicatorWeight: 4,
               dividerColor: AppColors.blackColor,
-              unselectedLabelStyle: AppTextStyle.textStyle16(fontWeight: FontWeight.w400),
+              unselectedLabelStyle:
+                  AppTextStyle.textStyle16(fontWeight: FontWeight.w400),
               tabs: [
                 ("all".tr),
                 "chat".tr,
@@ -173,9 +174,9 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
             child: TabBarView(
               controller: controller.tabbarController,
               children: [
-                AllTabInfo(), //done
-                ChatOrderHistory(), //done
-                CallOrderHistory(), //done
+                const AllTabInfo(), //done
+                const ChatOrderHistory(), //done
+                const CallOrderHistory(), //done
                 LiveGiftsHistory(),
                 SuggestRemedies(), //done
               ],

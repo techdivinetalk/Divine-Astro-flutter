@@ -5,10 +5,12 @@ import 'dart:ui';
 
 import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../common/app_textstyle.dart';
 import '../../common/common_functions.dart';
@@ -49,7 +51,8 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                           child: Obx(
                             () => AnimatedCrossFade(
                               duration: const Duration(milliseconds: 200),
-                              crossFadeState: controller.chatMessages.isEmpty
+                              crossFadeState: controller.chatMessages.isEmpty ||
+                                      controller.isDataLoad.value == false
                                   ? CrossFadeState.showSecond
                                   : CrossFadeState.showFirst,
                               secondChild: Container(),
@@ -78,6 +81,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                                   itemCount: controller.chatMessages.length,
                                   shrinkWrap: true,
                                   reverse: false,
+                                  padding: EdgeInsets.only(bottom: 10.h),
                                   itemBuilder: (context, index) {
                                     var chatMessage =
                                         controller.chatMessages[index];
@@ -85,8 +89,8 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                                     return Column(
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 4, horizontal: 12),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 4.h, horizontal: 12.w),
                                           child: Column(
                                             children: [
                                               if (chatMessage.id ==
@@ -155,11 +159,10 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                                       EdgeInsets.symmetric(horizontal: 6.w),
                                   smallSize: 14.sp,
                                   largeSize: 20.sp,
-                                  child:
-                                      Icon(
-                                          Icons.arrow_drop_down_circle_outlined,
-                                          color: AppColors.appYellowColour,
-                                          size: 40.h),
+                                  child: Icon(
+                                      Icons.arrow_drop_down_circle_outlined,
+                                      color: AppColors.appYellowColour,
+                                      size: 40.h),
                                 ),
                               )
                             : const SizedBox()),
@@ -292,6 +295,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                       maxLines: 3,
                       onTap: () {
                         controller.userTypingSocket(isTyping: true);
+                        controller.scrollToBottomFunc();
                         if (controller.isEmojiShowing.value) {
                           controller.isEmojiShowing.value = false;
                         }
@@ -321,12 +325,15 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                           ),
                         ),
                         suffixIcon: InkWell(
-                          onTap: () {
+                          onTap: () async {
                             if (controller.isOngoingChat.value) {
-                              controller.getImage(false);
+                              if (await PermissionHelper()
+                                  .askStoragePermission(Permission.photos)) {
+                                controller.getImage(false);
+                              }
                             } else {
                               divineSnackBar(
-                                  data: "This chat has been ended.",
+                                  data: "${'chatEnded'.tr}.",
                                   color: AppColors.appYellowColour);
                             }
                           },
@@ -359,7 +366,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                         controller.sendMsg();
                       } else {
                         divineSnackBar(
-                            data: "This chat has been ended.",
+                            data: "${'chatEnded'.tr}.",
                             color: AppColors.appYellowColour);
                       }
                     },
@@ -397,7 +404,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
             ),
             constraints: BoxConstraints(
                 maxWidth: ScreenUtil().screenWidth * 0.7,
-                minWidth: ScreenUtil().screenWidth * 0.25),
+                minWidth: ScreenUtil().screenWidth * 0.27),
             child: Stack(
               alignment:
                   yourMessage ? Alignment.centerRight : Alignment.centerLeft,
@@ -432,10 +439,11 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                         Obx(() => msgType.value == 0
                             ? Assets.images.icSingleTick.svg()
                             : msgType.value == 1
-                                ? Assets.images.icDoubleTick
-                                    .image(color: AppColors.greyColor)
+                                ? Assets.images.icDoubleTick.svg(
+                                    colorFilter: const ColorFilter.mode(
+                                        AppColors.greyColor, BlendMode.srcIn))
                                 : msgType.value == 2
-                                    ? Assets.images.icDoubleTick.image()
+                                    ? Assets.images.icDoubleTick.svg()
                                     : Assets.images.icSingleTick.svg())
                     ],
                   ),
@@ -473,7 +481,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
             ),
             constraints: BoxConstraints(
                 maxWidth: ScreenUtil().screenWidth * 0.7,
-                minWidth: ScreenUtil().screenWidth * 0.25),
+                minWidth: ScreenUtil().screenWidth * 0.27),
             child: chatDetail.downloadedPath != ""
                 ? InkWell(
                     onTap: () {
@@ -485,34 +493,53 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8.0.r),
                           child: Image.file(
-                            File(chatDetail.downloadedPath!),
+                            File(chatDetail.downloadedPath ?? ''),
                             fit: BoxFit.cover,
                             height: 200.h,
                           ),
                         ),
                         Positioned(
-                          bottom: 4,
-                          right: 10,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                messageDateTime(chatDetail.time ?? 0),
-                                style: AppTextStyle.textStyle10(
-                                  fontColor: AppColors.darkBlue,
-                                ),
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6)
+                                .copyWith(left: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(10.r)),
+                              gradient: LinearGradient(
+                                colors: [
+                                  AppColors.darkBlue.withOpacity(0.0),
+                                  AppColors.darkBlue.withOpacity(0.0),
+                                  AppColors.darkBlue.withOpacity(0.5),
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomCenter,
                               ),
-                              SizedBox(width: 8.w),
-                              if (yourMessage)
-                                Obx(() => msgType.value == 0
-                                    ? Assets.images.icSingleTick.svg()
-                                    : msgType.value == 1
-                                        ? Assets.images.icDoubleTick
-                                            .image(color: AppColors.greyColor)
-                                        : msgType.value == 2
-                                            ? Assets.images.icDoubleTick.image()
-                                            : Assets.images.icSingleTick.svg())
-                            ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  messageDateTime(chatDetail.time ?? 0),
+                                  style: AppTextStyle.textStyle10(
+                                      fontColor: AppColors.white),
+                                ),
+                                if (yourMessage) SizedBox(width: 8.w),
+                                if (yourMessage)
+                                  msgType.value == 0
+                                      ? Assets.images.icSingleTick.svg()
+                                      : msgType.value == 1
+                                          ? Assets.images.icDoubleTick.svg(
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                      AppColors.greyColor,
+                                                      BlendMode.srcIn))
+                                          : msgType.value == 2
+                                              ? Assets.images.icDoubleTick.svg()
+                                              : Assets.images.icSingleTick.svg()
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -540,7 +567,15 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                               chatDetail: chatDetail,
                               index: index);
                         },
-                        child: const Icon(Icons.download),
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: AppColors.darkBlue.withOpacity(0.3),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.download_rounded,
+                              color: AppColors.white),
+                        ),
                       ),
                       Positioned(
                         bottom: 0,
@@ -548,10 +583,26 @@ class ChatMessageUI extends GetView<ChatMessageController> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(
-                              messageDateTime(chatDetail.time ?? 0),
-                              style: AppTextStyle.textStyle10(
-                                fontColor: AppColors.darkBlue,
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6)
+                                  .copyWith(left: 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    bottomRight: Radius.circular(10.r)),
+                                gradient: LinearGradient(
+                                  colors: [
+                                    AppColors.darkBlue.withOpacity(0.0),
+                                    AppColors.darkBlue.withOpacity(0.0),
+                                    AppColors.darkBlue.withOpacity(0.5),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomCenter,
+                                ),
+                              ),
+                              child: Text(
+                                messageDateTime(chatDetail.time ?? 0),
+                                style: AppTextStyle.textStyle10(
+                                    fontColor: AppColors.white),
                               ),
                             ),
                             SizedBox(width: 8.w),
@@ -663,7 +714,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
           color: AppColors.white,
           borderRadius: const BorderRadius.all(Radius.circular(20)),
         ),
-        child: const Text("Unread Messages"),
+        child: Text("unreadMessages".tr),
       ),
     );
   }
@@ -678,7 +729,7 @@ class ChatMessageUI extends GetView<ChatMessageController> {
 
 class AstrologerChatAppBar extends StatelessWidget {
   AstrologerChatAppBar({Key? key}) : super(key: key);
-  ChatMessageController controller = Get.find<ChatMessageController>();
+  final ChatMessageController controller = Get.find<ChatMessageController>();
 
   @override
   Widget build(BuildContext context) {
@@ -706,6 +757,7 @@ class AstrologerChatAppBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SafeArea(
+            bottom: false,
             child: Container(
               alignment: Alignment.center,
               child: Row(
@@ -754,7 +806,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                                       children: [
                                         Text(
                                           controller.chatStatus.value != ""
-                                              ? "(${timer.formattedTime()} mins) ${'remaining'.tr}"
+                                              ? "(${timer.formattedTime()} mins) Remaining"
                                               : "",
                                           style: TextStyle(
                                             fontWeight: FontWeight.w500,
@@ -786,7 +838,23 @@ class AstrologerChatAppBar extends StatelessWidget {
                         children: [
                           InkWell(
                               onTap: () {
-                                controller.confirmChatEnd(Get.context!);
+                                Duration initalTime = Duration(
+                                    seconds:
+                                        astroChatWatcher.value.talktime ?? 0);
+                                var initalDateTime = DateTime(2001)
+                                    .copyWith(second: initalTime.inSeconds);
+                                var currentTime = timer.chatDuration.value;
+                                var currentDateTime = DateTime(2001)
+                                    .copyWith(second: currentTime.inSeconds);
+                                int difference = initalDateTime
+                                    .difference(currentDateTime)
+                                    .inSeconds;
+
+                                if (difference < 60) {
+                                  controller.cannotEndChat(Get.context!);
+                                } else {
+                                  controller.confirmChatEnd(Get.context!);
+                                }
                               },
                               child: Assets.images.icEndChat.svg()),
                           SizedBox(width: 16.w),

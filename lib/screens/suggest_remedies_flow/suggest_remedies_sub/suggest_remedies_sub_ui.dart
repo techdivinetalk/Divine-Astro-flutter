@@ -1,8 +1,5 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/routes.dart';
-import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -25,7 +22,9 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
             trailingWidget: InkWell(
               child: Padding(
                   padding: EdgeInsets.only(right: 20.w),
-                  child: Assets.images.icSearch.svg(color: AppColors.darkBlue)),
+                  child: Assets.images.icSearch.svg(
+                      colorFilter: const ColorFilter.mode(
+                          AppColors.darkBlue, BlendMode.srcIn))),
             )),
         body: Column(
           children: [
@@ -43,7 +42,7 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 2,
                                       crossAxisSpacing: 25.h,
-                                      childAspectRatio: 0.68,
+                                      childAspectRatio: 0.70,
                                       mainAxisSpacing: 30.h),
                               itemBuilder: (BuildContext context, int index) {
                                 var item =
@@ -53,7 +52,7 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
                                     Get.toNamed(RouteName.finalRemediesSubUI);
                                   },
                                   child: Container(
-                                    width: 300,
+                                    // width: 300,
                                     decoration: BoxDecoration(
                                       boxShadow: [
                                         BoxShadow(
@@ -80,7 +79,7 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
                                           padding: const EdgeInsets.only(
                                               left: 8.0, right: 8.0),
                                           child: Text(item?.prodName ?? "",
-                                              maxLines: 2,
+                                              maxLines: 1,
                                               softWrap: true,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(

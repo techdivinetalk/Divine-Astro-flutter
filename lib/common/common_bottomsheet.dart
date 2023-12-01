@@ -92,11 +92,13 @@ selectDateOrTime(
   required String pickerStyle,
   required Function(String datetime) onChange,
   required Function(String datetime) onConfirm,
-  Function()? onClickOkay,
+  Function(String datetime)? onClickOkay,
   required bool looping,
   DateTime? lastDate,
   DateTime? initialDate,
+  bool? futureDate,
 }) {
+  DateTime updateDateTime = DateTime.now();
   return showCupertinoModalPopup(
     context: context,
     builder: (context) => Column(
@@ -149,14 +151,18 @@ selectDateOrTime(
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: DatePickerWidget(
+                  initialDate: initialDate ?? DateTime.now(),
                   lastDate: lastDate ?? DateTime.now(),
-                  firstDate: initialDate ?? DateTime(DateTime.now().year - 100),
+                  firstDate: (futureDate ?? false)
+                      ? DateTime.now()
+                      : DateTime(DateTime.now().year - 100),
                   dateFormat: pickerStyle == "DateCalendar"
                       ? "MMM/dd/yyyy"
                       : "MM/dd/yyyy",
                   pickerType: pickerStyle,
                   looping: looping,
                   onConfirm: (DateTime newDate, _) {
+                    updateDateTime = newDate;
                     if (pickerStyle == "DateCalendar") {
                       onConfirm(dateToString(newDate));
                       // debugPrint(Utils.dateToString(newDate));
@@ -166,11 +172,13 @@ selectDateOrTime(
                     }
                   },
                   onChange: (DateTime newDate, _) {
+                    updateDateTime = newDate;
                     if (pickerStyle == "DateCalendar") {
                       onChange(dateToString(newDate));
                     } else {
                       onChange(dateToString(newDate, format: "h:mm a"));
                     }
+
                     // debugPrint("$newDate");
                   },
                   pickerTheme: DateTimePickerTheme(
@@ -193,9 +201,16 @@ selectDateOrTime(
                     borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   ),
                   onPressed: () {
-                    Navigator.pop(context);
+                    if (!(futureDate ?? false)) {
+                      Navigator.pop(context);
+                    }
                     if (onClickOkay != null) {
-                      onClickOkay();
+                      if (pickerStyle == "DateCalendar") {
+                        onClickOkay(dateToString(updateDateTime));
+                      } else {
+                        onClickOkay(
+                            dateToString(updateDateTime, format: "h:mm a"));
+                      }
                     }
                     // Get.back();
                   },

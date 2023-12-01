@@ -34,21 +34,25 @@ class LiveTipsController extends GetxController {
       "isEngaged": 0,
       "isAvailable": true,
       "callType": "",
-      "duration":0,
-      "callStatus":0,
-      "userId":0,
-      "userName":""
-    });
-    Get.to(LivePage(
-      liveID: astroId.toString(),
-      isHost: true,
-      localUserID: astroId,
-      astrologerImage: image,
-      astrologerName: name,
-      isFrontCamera: front,
-    ),routeName: "livepage")?.then((value){
-      Future.delayed(const Duration(seconds: 3)).then((value){
-        database.ref().child("live/$astroId").remove();
+      "duration": 0,
+      "callStatus": 0,
+      "userId": 0,
+      "userName": ""
+    }).then((value) {
+      Get.to(
+              LivePage(
+                liveID: astroId.toString(),
+                isHost: true,
+                localUserID: astroId,
+                astrologerImage: image,
+                astrologerName: name,
+                isFrontCamera: front,
+              ),
+              routeName: "livepage")
+          ?.then((value) {
+        Future.delayed(const Duration(milliseconds: 300)).then((value) {
+          database.ref().child("live/$astroId").remove();
+        });
       });
     });
   }

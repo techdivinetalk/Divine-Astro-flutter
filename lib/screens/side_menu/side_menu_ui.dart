@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../common/routes.dart';
+import '../../pages/home/home_controller.dart';
 
-class SideMenuDrawer extends StatelessWidget {
+class SideMenuDrawer extends GetView<HomeController> {
   const SideMenuDrawer({super.key});
 
   @override
@@ -13,6 +14,7 @@ class SideMenuDrawer extends StatelessWidget {
     return Drawer(
       backgroundColor: AppColors.white,
       surfaceTintColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       child: SafeArea(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -21,15 +23,14 @@ class SideMenuDrawer extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                const Text(
-                  "Version 0.0.0.0.0",
-                  style: TextStyle(fontSize: 16),
+                Text(
+                  "${'version'.tr} 0.0.0.0.0",
+                  style: const TextStyle(fontSize: 16, color: AppColors.grey),
                 ),
                 InkWell(
-                    onTap: () {
-                     Navigator.pop(context);
-                    },
-                    child: const Icon(Icons.close))
+                  onTap: () => Navigator.pop(context),
+                  child: const Icon(Icons.close),
+                ),
               ],
             ),
             const SizedBox(height: 10),
@@ -46,11 +47,6 @@ class SideMenuDrawer extends StatelessWidget {
               title: Text("orderHistory".tr),
               onTap: () => {Get.back(), Get.toNamed(RouteName.orderHistory)},
             ),
-            // ListTile(
-            //   leading: Assets.images.icReport.svg(),
-            //   title: Text("reportAnAstrologer".tr),
-            //   onTap: () => {},
-            // ),
             ListTile(
               leading: Assets.images.icSetting.svg(),
               title: Text('settings'.tr),
@@ -60,14 +56,9 @@ class SideMenuDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Assets.images.icContactUs1.svg(),
-              title: Text('contactUs'.tr),
-              onTap: () => {Navigator.of(context).pop()},
-            ),
-            ListTile(
-              leading: Assets.images.icFeedBack.svg(),
-              title: Text('shareFeedback'.tr),
-              onTap: () => {Navigator.of(context).pop()},
+              leading: Assets.images.icCustomerCare.svg(),
+              title: Text('customerCare'.tr),
+              onTap: () => {Navigator.of(context).pop(), controller.whatsapp()},
             ),
             ListTile(
               leading: Assets.images.icImportContact.svg(),

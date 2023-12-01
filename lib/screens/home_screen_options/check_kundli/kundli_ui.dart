@@ -99,7 +99,7 @@ class KundliUi extends GetView<KundliController> {
                 ),
               ];
             },
-            body: TabBarView(
+            body: const TabBarView(
               children: [
                 CheckYours(),
                 CheckOther(),
@@ -113,7 +113,7 @@ class KundliUi extends GetView<KundliController> {
 }
 
 class CheckYours extends GetView<KundliController> {
-  CheckYours({Key? key}) : super(key: key);
+  const CheckYours({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +133,7 @@ class CheckYours extends GetView<KundliController> {
                     controller: controller.yourNameController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your name';
+                        return 'pleaseEnterYourName'.tr;
                       }
                       return null;
                     },
@@ -196,13 +196,18 @@ class CheckYours extends GetView<KundliController> {
                           controller: controller.yourDateController,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "Select Birth Date";
+                              return "selectBirthDate".tr;
                             }
                             return null;
                           },
                           onTap: () {
                             selectDateOrTime(
                               Get.context!,
+                              initialDate: controller
+                                      .yourDateController.text.isNotEmpty
+                                  ? DateFormat("dd/MM/yyyy")
+                                      .parse(controller.yourDateController.text)
+                                  : DateTime.now(),
                               title: "selectYourDateBirth".tr,
                               btnTitle: "confirmDateBirth".tr,
                               pickerStyle: "DateCalendar",
@@ -244,12 +249,18 @@ class CheckYours extends GetView<KundliController> {
                           controller: controller.yourTimeController,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "Select Birth Time";
+                              return "selectBirthTime".tr;
                             }
                             return null;
                           },
                           onTap: () {
                             selectDateOrTime(
+                              initialDate: controller.yourTimeController.text
+                                      .trim()
+                                      .isNotEmpty
+                                  ? DateFormat("hh:mm a").parse(
+                                      controller.yourTimeController.text.trim())
+                                  : DateTime.now(),
                               Get.context!,
                               title: "selectYourTimeBirth".tr,
                               btnTitle: "confirmTimeBirth".tr,
@@ -287,7 +298,7 @@ class CheckYours extends GetView<KundliController> {
                     controller: controller.yourPlaceController,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "Select Birth Place";
+                        return "selectBirthPlace".tr;
                       }
                       return null;
                     },
@@ -322,7 +333,8 @@ class CheckYours extends GetView<KundliController> {
                             onPressed: () {
                               if (controller.yourFormKey.currentState!
                                   .validate()) {
-                                controller.yourParams.value.name = controller.yourNameController.text.trim();
+                                controller.yourParams.value.name =
+                                    controller.yourNameController.text.trim();
                                 controller.submitDetails(
                                     controller.yourParams.value,
                                     controller.yourGender.value);
@@ -349,7 +361,7 @@ class CheckYours extends GetView<KundliController> {
 }
 
 class CheckOther extends GetView<KundliController> {
-  CheckOther({Key? key}) : super(key: key);
+  const CheckOther({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -369,7 +381,7 @@ class CheckOther extends GetView<KundliController> {
                     controller: controller.otherNameController,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "Name should not be empty";
+                        return "nameEmptyValidation".tr;
                       }
                       return null;
                     },
@@ -432,12 +444,17 @@ class CheckOther extends GetView<KundliController> {
                           controller: controller.otherDateController,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "Date should not be empty";
+                              return "dateEmptyValidation".tr;
                             }
                             return null;
                           },
                           onTap: () {
                             selectDateOrTime(
+                              initialDate:
+                                  controller.otherDateController.text.isNotEmpty
+                                      ? DateFormat("dd/MM/yyyy").parse(
+                                          controller.otherDateController.text)
+                                      : DateTime.now(),
                               Get.context!,
                               title: "selectYourDateBirth".tr,
                               btnTitle: "confirmDateBirth".tr,
@@ -480,13 +497,18 @@ class CheckOther extends GetView<KundliController> {
                           controller: controller.otherTimeController,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "Time should not be empty";
+                              return "timeEmptyValidation".tr;
                             }
                             return null;
                           },
                           onTap: () {
                             selectDateOrTime(
                               Get.context!,
+                              initialDate:
+                                  controller.otherTimeController.text.isNotEmpty
+                                      ? DateFormat("h:mm a").parse(
+                                          controller.otherTimeController.text)
+                                      : DateTime.now(),
                               title: "selectYourTimeBirth".tr,
                               btnTitle: "confirmTimeBirth".tr,
                               pickerStyle: "TimeCalendar",
@@ -525,7 +547,7 @@ class CheckOther extends GetView<KundliController> {
                     controller: controller.otherPlaceController,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "Place should not be empty";
+                        return "PlaceEmptyValidation".tr;
                       }
                       return null;
                     },
@@ -561,7 +583,8 @@ class CheckOther extends GetView<KundliController> {
                             onPressed: () {
                               if (controller.otherFormKey.currentState!
                                   .validate()) {
-                                controller.otherParams.value.name = controller.otherNameController.text.trim();
+                                controller.otherParams.value.name =
+                                    controller.otherNameController.text.trim();
                                 controller.submitDetails(
                                     controller.otherParams.value,
                                     controller.otherGender.value);

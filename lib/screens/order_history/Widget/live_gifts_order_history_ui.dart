@@ -95,7 +95,7 @@ class LiveGiftsHistory extends StatelessWidget {
                               width: 65,
                               child: CachedNetworkImage(
                                 imageUrl:
-                                    "${preferenceService.getBaseImageURL()}/${data[index].getGift!.giftImage!}",
+                                    "${preferenceService.getBaseImageURL()}/${data[index].getGift?.giftImage ?? ''}",
                                 errorWidget: (context, s, d) =>
                                     Assets.images.bgTmpUser.svg(),
                                 fit: BoxFit.cover,
@@ -107,7 +107,7 @@ class LiveGiftsHistory extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Order Id : ${data[index].orderId}",
+                        Text("${'orderId'.tr} : ${data[index].orderId}",
                             style: AppTextStyle.textStyle12(
                                 fontWeight: FontWeight.w400,
                                 fontColor: AppColors.darkBlue)),
@@ -149,7 +149,7 @@ class LiveGiftsHistory extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Date Time :",
+                Text("${'dateTime'.tr} :",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: AppColors.darkBlue)),
@@ -165,7 +165,7 @@ class LiveGiftsHistory extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Gift Name :",
+                Text("${'giftName'.tr} :",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: AppColors.darkBlue)),
@@ -179,7 +179,7 @@ class LiveGiftsHistory extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Gift Price :",
+                Text("${'giftPrice'.tr} :",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: AppColors.darkBlue)),
@@ -193,7 +193,7 @@ class LiveGiftsHistory extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Quantity :",
+                Text("${'quantity'.tr} :",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: AppColors.darkBlue)),
@@ -210,7 +210,7 @@ class LiveGiftsHistory extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Total Earning",
+                  "totalEarning".tr,
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600),
                 ),
                 Text("₹300",

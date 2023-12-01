@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,101 +19,73 @@ class PermissionHelper {
   }
 
   askMediaPermission() async {
+    //Camera, Gallery (32 > photos : storage)
+    Permission permission = await getPermissionFromAPILevel(Permission.photos);
     var result = await [
       Permission.camera,
-      Permission.storage,
-    ].request().then((value) => getMediaPermissionStatus());
+      permission,
+    ].request().then((value) => getMediaPermissionStatus(permission));
     return result;
   }
 
-  askCameraPermission() async {
-    var result = await Permission.camera
+  askStoragePermission(Permission permission) async {
+    Permission askPermission = await getPermissionFromAPILevel(permission);
+    var result = await askPermission
         .request()
-        .then((value) => getCameraPermissionStatus());
+        .then((value) => getPermissionStatus(askPermission));
     return result;
   }
 
-  askStoragePermission() async {
-    var result = await Permission.storage
+  askCustomPermission(Permission permission) async {
+    var result = await permission
         .request()
-        .then((value) => getStoragePermissionStatus());
+        .then((value) => getPermissionStatus(permission));
     return result;
   }
 
-  askMicPermission() async {
-    var result = await Permission.microphone
-        .request()
-        .then((value) => getMicrophonePermissionStatus());
-    return result;
-  }
+  getPermissionStatus(Permission permission) async {
+    int result = await checkPermission(permission);
 
-  getCameraPermissionStatus() async {
-    int cameraResult = await checkCameraPermission();
-
-    if (cameraResult == 0) {
+    if (result == 0) {
       return true;
     } else {
-      showPermissionDialog('camera');
-    }
-  }
-
-  getStoragePermissionStatus() async {
-    int storageResult = await checkStoragePermission();
-
-    if (storageResult == 0) {
-      return true;
-    } else {
-      showPermissionDialog('storage');
-    }
-  }
-
-  getMicrophonePermissionStatus() async {
-    int micResult = await checkMicrophonePermission();
-
-    if (micResult == 0) {
-      return true;
-    } else {
-      showPermissionDialog('microphone');
+      showPermissionDialog(getPermissionNameString(permission));
     }
   }
 
   getBothPermissionStatus() async {
-    int cameraResult = await checkCameraPermission();
-    int micResult = await checkMicrophonePermission();
+    int cameraResult = await checkPermission(Permission.camera);
+    int micResult = await checkPermission(Permission.microphone);
 
-    ///0 - granted, 1 - denied (ask again), 2 - permanentlyDenied
-    print("results: cameraResult: $cameraResult, micResult: $micResult");
+    ///0 - granted, 1 - permanentlyDenied
     if (cameraResult == 0 && micResult == 0) {
       return true;
     } else if (cameraResult == 1) {
-      showPermissionDialog('camera');
+      showPermissionDialog(getPermissionNameString(Permission.camera));
       return false;
     } else if (micResult == 1) {
-      showPermissionDialog('microphone');
+      showPermissionDialog(getPermissionNameString(Permission.microphone));
       return false;
     }
   }
 
-  getMediaPermissionStatus() async {
-    int cameraResult = await checkCameraPermission();
-    int storageResult = await checkStoragePermission();
+  getMediaPermissionStatus(Permission permission) async {
+    int cameraResult = await checkPermission(Permission.camera);
+    int storageResult = await checkPermission(permission);
 
-    ///0 - granted, 1 - denied (ask again), 2 - permanentlyDenied
-    print("results: cameraResult: $cameraResult, storageResult: $storageResult");
+    ///0 - granted, 1 - permanentlyDenied
     if (cameraResult == 0 && storageResult == 0) {
       return true;
     } else if (cameraResult == 1) {
-      showPermissionDialog('camera');
+      showPermissionDialog(getPermissionNameString(Permission.camera));
       return false;
     } else if (storageResult == 1) {
-      showPermissionDialog('storage');
+      showPermissionDialog(getPermissionNameString(permission));
       return false;
     }
   }
 
-  checkCameraPermission() async {
-    Permission permission = Permission.camera;
-
+  checkPermission(Permission permission) async {
     if (await permission.isGranted) {
       return 0;
     } else if (await permission.isDenied ||
@@ -119,36 +94,13 @@ class PermissionHelper {
     }
   }
 
-  checkStoragePermission() async {
-    Permission permission = Permission.storage;
-
-    if (await permission.isGranted) {
-      return 0;
-    } else if (await permission.isDenied ||
-        await permission.isPermanentlyDenied) {
-      return 1;
-    }
-  }
-
-  checkMicrophonePermission() async {
-    Permission permission = Permission.microphone;
-
-    if (await permission.isGranted) {
-      return 0;
-    } else if (await permission.isDenied ||
-        await permission.isPermanentlyDenied) {
-      return 1;
-    }
-  }
-
-  askPermission(Permission permission, String permissionName) async {
-    PermissionStatus request = await permission.request();
-    if (request.isGranted) {
-      return;
-    } else if (request.isDenied) {
-      askPermissionDialog(permission, permissionName);
-    } else if (request.isPermanentlyDenied) {
-      showPermissionDialog(permissionName);
+  Future<Permission> getPermissionFromAPILevel(Permission permission) async {
+    if (Platform.isAndroid) {
+      var deviceInfo = await DeviceInfoPlugin().androidInfo;
+      int sdkInt = deviceInfo.version.sdkInt;
+      return sdkInt > 32 ? (permission) : Permission.storage;
+    } else {
+      return permission;
     }
   }
 
@@ -167,6 +119,22 @@ class PermissionHelper {
       barrierColor: AppColors.darkBlue.withOpacity(0.5),
       builder: (context) => PermissionDialog(permissionName: permissionName),
     );
+  }
+
+  getPermissionNameString(Permission permission) {
+    if (permission == Permission.camera) {
+      return 'camera';
+    } else if (permission == Permission.microphone) {
+      return 'microphone';
+    } else if (permission == Permission.photos) {
+      return 'photos';
+    } else if (permission == Permission.storage) {
+      return 'storage';
+    } else if (permission == Permission.videos) {
+      return 'videos';
+    } else if (permission == Permission.contacts) {
+      return 'contacts';
+    }
   }
 }
 

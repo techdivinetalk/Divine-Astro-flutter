@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:contacts_service/contacts_service.dart';
 import 'package:divine_astrologer/common/routes.dart';
@@ -9,7 +8,6 @@ import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/screens/chat_message/chat_message_controller.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -46,8 +44,9 @@ class DashboardController extends GetxController
     preferenceService
         .setBaseImageURL(commonConstants.data.awsCredentails.baseurl!);
 
-    userProfileImage.value =
-        "${preferenceService.getBaseImageURL()}/${userData?.image}";
+    userProfileImage.value = userData?.image != null
+        ? "${preferenceService.getBaseImageURL()}/${userData?.image}"
+        : "";
     connectSocket();
     loadPreDefineData();
     firebaseMessagingConfig(Get.context!);
@@ -63,7 +62,7 @@ class DashboardController extends GetxController
         .listen((DatabaseEvent event) {
       if (event.snapshot.value is Map) {
         final data = event.snapshot.value as Map;
-        debugPrint("RealTime Lister value : $data");
+
         // walletBalance.value = data["walletBalance"] as int;
         if (data["notification"] != null) {
           checkNotification(
@@ -75,7 +74,6 @@ class DashboardController extends GetxController
         .ref("astroChat")
         .onValue
         .listen((DatabaseEvent event) {
-      debugPrint("YOUR VALUE HAS BEEN UPDATED");
       if (event.snapshot.children.isNotEmpty) {
         List<int> keyArray = [];
 
@@ -164,11 +162,10 @@ class DashboardController extends GetxController
         chatSession.value = ResChatSocketInit.fromJson(data);
       });
       socket?.on(ApiProvider().chatTypeResponse, (data) {
-        debugPrint("Chat type => ${jsonEncode(data)}");
-
         if (Get.isRegistered<ChatMessageController>()) {
           var chatRes = data as Map<String, dynamic>;
           var controller = Get.find<ChatMessageController>();
+          debugPrint("Chat typing :: $data");
           if (int.parse(chatRes["userID"]) == controller.currentUserId.value) {
             controller.isTyping.value =
                 chatRes["message"] == "Typing" ? true : false;
@@ -184,11 +181,9 @@ class DashboardController extends GetxController
               });
             }
           }
-          debugPrint("Chat type => ${controller.isTyping.value}");
         }
       });
     });
-    debugPrint("Socket--->${socket!.connected}");
   }
 
   void loadPreDefineData() async {
@@ -228,20 +223,6 @@ class DashboardController extends GetxController
     });
     if (!isContactExists) {
       Get.toNamed(RouteName.importantNumbers);
-    }
-  }
-
-  void _handleInvalidPermissions(PermissionStatus permissionStatus) {
-    if (permissionStatus == PermissionStatus.denied) {
-      throw PlatformException(
-          code: 'PERMISSION_DENIED',
-          message: 'Access to location data denied',
-          details: null);
-    } else if (permissionStatus == PermissionStatus.restricted) {
-      throw PlatformException(
-          code: 'PERMISSION_DISABLED',
-          message: 'Location data is not available on device',
-          details: null);
     }
   }
 

@@ -13,11 +13,11 @@ import '../model/order_history_model/gift_order_history.dart';
 import '../model/order_history_model/remedy_suggested_order_history.dart';
 
 class OrderHistoryRepository extends ApiProvider {
-  Future<AllOrderHistoryModelClass> getAllOrderHistory(Map<String, dynamic> param) async {
+  Future<AllOrderHistoryModelClass> getAllOrderHistory(
+      Map<String, dynamic> param) async {
     try {
       final response = await post(getOrderHistoryUrl,
-          body: jsonEncode(param),
-          headers: await getJsonHeaderURL(version: 7));
+          body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
@@ -25,8 +25,10 @@ class OrderHistoryRepository extends ApiProvider {
           Get.offNamed(RouteName.login);
           throw CustomException(json.decode(response.body)["error"]);
         } else {
-          final orderHistoryModel = AllOrderHistoryModelClass.fromJson(json.decode(response.body));
-          if (orderHistoryModel.statusCode == successResponse && orderHistoryModel.success!) {
+          final orderHistoryModel =
+              AllOrderHistoryModelClass.fromJson(json.decode(response.body));
+          if (orderHistoryModel.statusCode == successResponse &&
+              orderHistoryModel.success!) {
             return orderHistoryModel;
           } else {
             throw CustomException(json.decode(response.body)["message"]);
@@ -41,11 +43,11 @@ class OrderHistoryRepository extends ApiProvider {
     }
   }
 
-  Future<CallOrderHistoryModelClass> getCallOrderHistory(Map<String, dynamic> param) async {
+  Future<CallOrderHistoryModelClass> getCallOrderHistory(
+      Map<String, dynamic> param) async {
     try {
       final response = await post(getOrderHistoryUrl,
-          body: jsonEncode(param),
-          headers: await getJsonHeaderURL(version: 7));
+          body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
@@ -53,8 +55,10 @@ class OrderHistoryRepository extends ApiProvider {
           Get.offNamed(RouteName.login);
           throw CustomException(json.decode(response.body)["error"]);
         } else {
-          final orderHistoryModel = CallOrderHistoryModelClass.fromJson(json.decode(response.body));
-          if (orderHistoryModel.statusCode == successResponse && orderHistoryModel.success!) {
+          final orderHistoryModel =
+              CallOrderHistoryModelClass.fromJson(json.decode(response.body));
+          if (orderHistoryModel.statusCode == successResponse &&
+              orderHistoryModel.success!) {
             return orderHistoryModel;
           } else {
             throw CustomException(json.decode(response.body)["message"]);
@@ -69,11 +73,11 @@ class OrderHistoryRepository extends ApiProvider {
     }
   }
 
-  Future<ChatOrderHistoryModelClass> getChatOrderHistory(Map<String, dynamic> param) async {
+  Future<ChatOrderHistoryModelClass> getChatOrderHistory(
+      Map<String, dynamic> param) async {
     try {
       final response = await post(getOrderHistoryUrl,
-          body: jsonEncode(param),
-          headers: await getJsonHeaderURL(version: 7));
+          body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
@@ -81,8 +85,10 @@ class OrderHistoryRepository extends ApiProvider {
           Get.offNamed(RouteName.login);
           throw CustomException(json.decode(response.body)["error"]);
         } else {
-          final orderHistoryModel = ChatOrderHistoryModelClass.fromJson(json.decode(response.body));
-          if (orderHistoryModel.statusCode == successResponse && orderHistoryModel.success!) {
+          final orderHistoryModel =
+              ChatOrderHistoryModelClass.fromJson(json.decode(response.body));
+          if (orderHistoryModel.statusCode == successResponse &&
+              orderHistoryModel.success!) {
             return orderHistoryModel;
           } else {
             throw CustomException(json.decode(response.body)["message"]);
@@ -97,11 +103,11 @@ class OrderHistoryRepository extends ApiProvider {
     }
   }
 
-  Future<GiftOrderHistoryModelClass> getGiftOrderHistory(Map<String, dynamic> param) async {
+  Future<GiftOrderHistoryModelClass> getGiftOrderHistory(
+      Map<String, dynamic> param) async {
     try {
       final response = await post(getOrderHistoryUrl,
-          body: jsonEncode(param),
-          headers: await getJsonHeaderURL(version: 7));
+          body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
@@ -109,8 +115,10 @@ class OrderHistoryRepository extends ApiProvider {
           Get.offNamed(RouteName.login);
           throw CustomException(json.decode(response.body)["error"]);
         } else {
-          final orderHistoryModel = GiftOrderHistoryModelClass.fromJson(json.decode(response.body));
-          if (orderHistoryModel.statusCode == successResponse && orderHistoryModel.success!) {
+          final orderHistoryModel =
+              GiftOrderHistoryModelClass.fromJson(json.decode(response.body));
+          if (orderHistoryModel.statusCode == successResponse &&
+              orderHistoryModel.success!) {
             return orderHistoryModel;
           } else {
             throw CustomException(json.decode(response.body)["message"]);
@@ -130,25 +138,22 @@ class OrderHistoryRepository extends ApiProvider {
     //progressService.showProgressDialog(true);
     try {
       final response = await post(getOrderHistoryUrl,
-          body: jsonEncode(param),
-          headers: await getJsonHeaderURL(version: 7));
+          body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
 
-      print('Response: ${response.request}');
-      //progressService.showProgressDialog(false);
+      debugPrint('Response: ${response.request}');
       if (response.statusCode == 200) {
-        final orderHistoryShop = remedySuggestedOrderHistoryModelClassFromJson(response.body);
-        if (orderHistoryShop.statusCode == successResponse && orderHistoryShop.success!) {
+        final orderHistoryShop =
+            remedySuggestedOrderHistoryModelClassFromJson(response.body);
+        if (orderHistoryShop.statusCode == successResponse &&
+            orderHistoryShop.success!) {
           return orderHistoryShop;
         } else {
-          print("Error-=-=->${orderHistoryShop.message!}");
           throw CustomException(orderHistoryShop.message!);
         }
       } else {
-        print("ErrorData-->" + json.decode(response.body)["message"]);
         throw CustomException(json.decode(response.body)["message"]);
       }
     } catch (e, s) {
-      //progressService.showProgressDialog(false);
       debugPrint("we got $e $s");
       rethrow;
     }

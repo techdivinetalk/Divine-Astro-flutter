@@ -1,5 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -68,14 +66,13 @@ class ChatMessageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
+    isDataLoad.value = false;
     if (Get.arguments != null) {
-      if (Get.arguments is bool) {
+      if (Get.arguments is ResAstroChatListener) {
         sendReadMessageStatus = true;
-      } else if (Get.arguments is ResAstroChatListener) {
         var data = Get.arguments;
         if (data!.customerId != null) {
-          chatStatus.value = "Chat in - progress";
+          chatStatus.value = "Chat in - Progress";
           isOngoingChat.value = true;
           currentChatUserId.value = data!.customerId;
           currentUserId.value = data!.customerId;
@@ -144,7 +141,7 @@ class ChatMessageController extends GetxController {
             -1;
         if (unreadMessageIndex.value != -1) {
           updateReadMessageStatus();
-        } else {}
+        }
       }
     } else {
       // Map<String, int> params = {"customer_id": currentUserId.value};
@@ -156,7 +153,8 @@ class ChatMessageController extends GetxController {
 
   updateReadMessageStatus() async {
     for (int i = 0; i < chatMessages.length; i++) {
-      if (chatMessages[i].type != 2) {
+      if (chatMessages[i].type != 2 &&
+          chatMessages[i].senderId != userData?.id) {
         updateMsgDelieveredStatus(chatMessages[i], 2);
         chatMessages[i].type = 2;
       }
@@ -167,8 +165,8 @@ class ChatMessageController extends GetxController {
     await hiveServices.addData(
         key: userDataKey,
         data: jsonEncode(databaseMessage.value.toOfflineJson()));
-    // Future.delayed(const Duration(seconds: 1))
-    //     .then((value) => unreadMessageIndex.value = -1);
+    Future.delayed(const Duration(seconds: 1))
+        .then((value) => unreadMessageIndex.value = -1);
   }
 
   sendMsg() {
@@ -199,16 +197,23 @@ class ChatMessageController extends GetxController {
         downloadedPath: downloadedPath,
         msgType: msgType,
         kundliId: kundliId,
+        title: "${userData?.name} sent you message.",
         type: 0);
-    updateChatMessages(newMessage, false);
+
     isDataLoad.value = true;
 
+    firebaseDatabase
+        .ref("astrologer/${userData?.id}/realTime/engagement")
+        .set(newMessage.toOfflineJson());
+    updateChatMessages(newMessage, false, isSendMessage: true);
+    //Firebase node is not working.
     firebaseDatabase
         .ref("user/${currentChatUserId.value}/realTime/notification/$time")
         .set(newMessage.toOfflineJson());
   }
 
-  updateChatMessages(ChatMessage newMessage, bool isFromNotification) async {
+  updateChatMessages(ChatMessage newMessage, bool isFromNotification,
+      {bool isSendMessage = false}) async {
     var index =
         chatMessages.indexWhere((element) => newMessage.id == element.id);
     if (index >= 0) {
@@ -228,14 +233,25 @@ class ChatMessageController extends GetxController {
               scrollToBottomFunc();
             });
           }
+        } else {
+          newMessage.type = isSendMessage ? 0 : 1;
+          chatMessages.add(newMessage);
+          unreadMsgCount.value = chatMessages
+              .where((e) => e.type != 2 && e.senderId != userData?.id)
+              .length;
+          if (!isSendMessage) {
+            updateMsgDelieveredStatus(newMessage, 1);
+          }
         }
       } else {
-        newMessage.type = 1;
+        newMessage.type = isSendMessage ? 0 : 1;
         chatMessages.add(newMessage);
         unreadMsgCount.value = chatMessages
             .where((e) => e.type != 2 && e.senderId != userData?.id)
             .length;
-        updateMsgDelieveredStatus(newMessage, 1);
+        if (!isSendMessage) {
+          updateMsgDelieveredStatus(newMessage, 1);
+        }
       }
     }
     unreadMessageIndex.value = chatMessages
@@ -362,6 +378,27 @@ class ChatMessageController extends GetxController {
     }
   }
 
+//Cannot end chat
+  cannotEndChat(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Divine Customer"),
+          content: const Text("You cannot end chat before 1 min."),
+          actions: [
+            TextButton(
+              child: const Text("Ok"),
+              onPressed: () async {
+                Get.back();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 //End Chat
   confirmChatEnd(BuildContext context) {
     showDialog(
@@ -374,11 +411,8 @@ class ChatMessageController extends GetxController {
             TextButton(
               child: const Text("Yes"),
               onPressed: () async {
-                isDataLoad.value = false;
-                isOngoingChat.value = false;
                 Get.back();
                 await onEndChat();
-                isDataLoad.value = true;
               },
             ),
             TextButton(
@@ -395,28 +429,33 @@ class ChatMessageController extends GetxController {
 }
 
 onEndChat() async {
-  ChatMessageController chatController = Get.find<ChatMessageController>();
-  if (astroChatWatcher.value.orderId != 0 &&
-      astroChatWatcher.value.orderId != null) {
-    ResCommonChatStatus response = await ChatRepository().endChat(
-        ReqCommonChatParams(
-                orderId: astroChatWatcher.value.orderId,
-                queueId: astroChatWatcher.value.queueId)
-            .toJson());
-    if (response.statusCode == 200) {
-      divineSnackBar(data: "Chat ended.", color: AppColors.redColor);
-    } else {
-      divineSnackBar(data: "Chat has been ended.", color: AppColors.redColor);
+  if (Get.isRegistered<ChatMessageController>()) {
+    ChatMessageController chatController = Get.find<ChatMessageController>();
+    if (astroChatWatcher.value.orderId != 0 &&
+        astroChatWatcher.value.orderId != null) {
+      ResCommonChatStatus response = await ChatRepository().endChat(
+          ReqCommonChatParams(
+                  orderId: astroChatWatcher.value.orderId,
+                  queueId: astroChatWatcher.value.queueId)
+              .toJson());
+      chatController.chatStatus.value = "";
+      chatController.isOngoingChat.value = false;
+      chatController.isDataLoad.value = true;
+      if (Get.isRegistered<DashboardController>()) {
+        DashboardController dashboardController =
+            Get.find<DashboardController>();
+        dashboardController.socket?.emit(ApiProvider().deleteChatSession, {
+          "id": chatSession.value.id,
+        });
+      }
+      timer.stopTimer();
+
+      if (response.statusCode == 200 &&
+          (response.statusCode == 400 &&
+              (response.message!.contains("Cannot")))) {
+        divineSnackBar(
+            data: response.message ?? "", color: AppColors.appYellowColour);
+      }
     }
-    chatController.chatStatus.value = "";
-    chatController.isOngoingChat.value = false;
-    chatController.isDataLoad.value = true;
-    if (Get.isRegistered<DashboardController>()) {
-      DashboardController dashboardController = Get.find<DashboardController>();
-      dashboardController.socket?.emit(ApiProvider().deleteChatSession, {
-        "id": chatSession.value.id,
-      });
-    }
-    timer.stopTimer();
   }
 }

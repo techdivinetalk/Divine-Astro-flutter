@@ -7,10 +7,17 @@ import 'package:flutter_switch/flutter_switch.dart';
 class SwitchWidget extends StatelessWidget {
   bool? switchValue;
   Function? onTap;
-  String? onText,offText;
+  String? onText, offText;
   double? width;
   double? height;
-  SwitchWidget({super.key, this.switchValue, this.onTap,this.onText,this.offText,this.width,this.height});
+  SwitchWidget(
+      {super.key,
+      this.switchValue,
+      this.onTap,
+      this.onText,
+      this.offText,
+      this.width,
+      this.height});
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -40,6 +38,8 @@ class ApiProvider {
   String _token = "";
 
   final String loginUrl = "astroLogin";
+  final String viewTrainingVideo = "viewTrainingVideo";
+  final String saveAstrologerExperience = "saveAstrologerExperience";
   final String getProfileUrl = "getAstrologerProfile";
   final String getReviewRatingUrl = "getReviewRating";
   final String blockCustomerlistUrl = "blockCustomerlist";
@@ -145,7 +145,7 @@ class ApiProvider {
     header[jsonHeaderName] = jsonHeaderValue;
     header[jsonAuthenticationName] = 'Bearer $_token';
     header[jsonCookieName] =
-        'XSRF-TOKEN=eyJpdiI6ImtleHdkdFJqMzRMVTJYaElPZk1Rc3c9PSIsInZhbHVlIjoiMEVJR01VVEdqbkRpd0FKT3lRMy9tTVdkRjFBSTlPT0ZXWHFlV3RHRVVFa2Zja2hsVHdwR2xRd0FHcVBzK2FJQjY3ODkxeHhWem1zeW4yQTlsY2M0RkQyRmo4Tk1hSUVnNi9LU2FSU2tpTnlnemR2ZTgxbTU1WUVpL3cvUlg2WFkiLCJtYWMiOiI1YWJlZDJmYjM4MmU0OGZmODMwODVmYzNjM2EwY2ZlNmQ1YzE5ZjY4ZTdmYmQ4Njg0Yzc4ZDU3YWQzNDM4NzhmIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6ImdSSnBXbHJjbUZhbXRQU3FoZXB2eHc9PSIsInZhbHVlIjoibitoYmNtVEVrTjNRTm4yR3hJbmY1S01SZVhqaEtjSW5xUXQ2T2k5L3hia3hWVW00U2pRMHhucGdDK084ZVdEYzk1bnJ6dE50ZXRyTi9aMlRzeDQyUG9pa3dQc2Z1QzJDaHI5ZE5UeTllaDlSTmllTVZaRFV1MkJ3c21GUEd4TzYiLCJtYWMiOiJmYWE1NWZkNDZiYzk0YmY0ZGQ1MWUxZWI0YTIyZjVkNzJkNDQyYTljYjY1ZDk0OTAzYTAxY2E2NWU5YWU1YmU0IiwidGFnIjoiIn0%3D';
+        'XSRF-TOKEN=eyJpdiI6ImdlSWE2a2I0M2FIbHk0VGRHd3RubGc9PSIsInZhbHVlIjoiY1FwMjJYVUh1VnE5SHl4eDR1ZFhXWkFTTWlsMDU3S1Urcm9YWVRVeDBHQzc0OG42ZVMvbUNWZVBzNGZFOTVLOXQzYlk0bGdNNDNmRzJ0b0tJWU5SaU50Z2ZrWkpCbjFXc1plWHl1NFF4R1d0dGJDUnU2STNPVjltNTF6NXN3UVkiLCJtYWMiOiJmODY5MmE4MjI4ZWEyYTFhNzk3MmNiYzZmODkyNDJlYTUyZGE5MDNiN2EzNjA5MTY0NzMzZDc3MjMyNGEzODJmIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6Ikx4WGlYUVlPMWtXM2p6aVh3TEdtWkE9PSIsInZhbHVlIjoieThMZldWYUw3YzVBRGk4dDJNdGptOTAvRmkvS1hDM0NvL1YxZm1ZOVdPdEszTzhEU043aHRXLy9lWUE4d1ZSeE9meUtWUmhnVm0vZ2x2S21kNUw5R1NvWnBOc0g5UmFJTFg5TksyTXV1REoyQXluOEZsdFJSZGk3ZXkwOFdjSk0iLCJtYWMiOiI1YWRjYWRjOTAzMDNjNWEyZmQ4NTY4OWU5ZjI2YzFhODE4ZmQ1MjQzN2E3ZWZjMjEwODlhMThjYzdlZTg1MGMwIiwidGFnIjoiIn0%3D';
     return header;
   }
 

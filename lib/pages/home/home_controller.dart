@@ -1,26 +1,27 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
 import 'package:divine_astrologer/model/update_offer_type_response.dart';
 import 'package:divine_astrologer/model/update_session_type_response.dart';
+import 'package:divine_astrologer/pages/home/home_ui.dart';
 import 'package:divine_astrologer/repository/notice_repository.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
-import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../common/app_exception.dart';
 import '../../di/shared_preference_service.dart';
 import '../../model/constant_details_model_class.dart';
 import '../../model/home_page_model_class.dart';
 import '../../model/res_login.dart';
+import '../../model/send_feed_back_model.dart';
+import '../../model/view_training_video_model.dart';
 import '../../repository/home_page_repository.dart';
 import '../../repository/user_repository.dart';
 
@@ -32,6 +33,8 @@ class HomeController extends GetxController {
   RxList<bool> promotionOfferSwitch = RxList([]);
   RxString appbarTitle = "Astrologer Name ".obs;
   RxBool isShowTitle = true.obs;
+  TextEditingController feedBackText = TextEditingController();
+
   ExpandedTileController? expandedTileController = ExpandedTileController();
   ExpandedTileController? expandedTile2Controller = ExpandedTileController();
   UserData? userData = UserData();
@@ -74,17 +77,55 @@ class HomeController extends GetxController {
     getDashboardDetail();
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
   ConstantDetailsModelClass? getConstantDetails;
   RxBool profileDataSync = false.obs;
 
   HomeData? homeData;
   Loading loading = Loading.initial;
   RxBool shopDataSync = false.obs;
+  ViewTrainingVideoModelClass? viewTrainingVideoModelClass;
+  SendFeedBackModel? sendFeedBackModel;
+
+  sendFeedbackAPI(String text) async {
+    Map<String, dynamic> params = {"comment": text.toString()};
+    try {
+      var data = await userRepository.sendFeedBack(params);
+      sendFeedBackModel = data;
+      feedBackText.clear();
+      divineSnackBar(data: sendFeedBackModel?.message.toString() ?? '');
+      profileDataSync.value = true;
+      log("send FeedBack-->${sendFeedBackModel?.message}");
+      log("params Body-->$text");
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      }
+    }
+  }
+
+  trainingVideoViewData(int videoId) async {
+    Map<String, dynamic> params = {"training_video_id": videoId};
+    try {
+      var data = await userRepository.viewTrainingVideoApi(params);
+      viewTrainingVideoModelClass = data;
+
+      profileDataSync.value = true;
+      await getDashboardDetail();
+      Get.back();
+      update();
+      log("DoneVideo-->${viewTrainingVideoModelClass!.message}");
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      }
+    }
+  }
 
   getDashboardDetail() async {
     loading = Loading.initial;
@@ -102,6 +143,8 @@ class HomeController extends GetxController {
       updateCurrentData();
       shopDataSync.value = true;
       loading = Loading.loaded;
+
+      showOnceInDay();
       update();
 
       log("DashboardData==>${jsonEncode(homeData)}");
@@ -109,19 +152,16 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
   }
 
   updateCurrentData() {
-    ///Session Type data
     chatSwitch.value = homeData?.sessionType?.chat == 1;
     callSwitch.value = homeData?.sessionType?.call == 1;
     videoSwitch.value = homeData?.sessionType?.video == 1;
-    print("Chat::time:: ${homeData?.sessionType?.chatSchedualAt ?? ''}");
-    print("Call::time:: ${homeData?.sessionType?.callSchedualAt ?? ''}");
-    print("VideoCall::time:: ${homeData?.sessionType?.videoSchedualAt ?? ''}");
+
     if (homeData?.sessionType?.chatSchedualAt != null &&
         homeData?.sessionType?.chatSchedualAt != '') {
       DateTime formattedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
@@ -154,11 +194,10 @@ class HomeController extends GetxController {
     if (homeData?.offerType != null && homeData?.offerType != []) {
       for (int i = 0; i < homeData!.offerType!.length; i++) {
         bool value = homeData?.offerType![i].isActive == "1";
-        print("Value: ${homeData?.offerType![i].isActive} $i, $value");
+
         promotionOfferSwitch.add(value);
       }
     }
-    print('PremotionOfferSwitch: ${promotionOfferSwitch}');
 
     update();
   }
@@ -175,7 +214,7 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
   }
@@ -192,6 +231,7 @@ class HomeController extends GetxController {
         await launchUrl(Uri.parse(androidUrl));
       }
     } on Exception {
+      divineSnackBar(data: 'WhatsApp is not installed.');
       log('WhatsApp is not installed.');
     }
   }
@@ -297,50 +337,117 @@ class HomeController extends GetxController {
     update();
   }
 
+  bool isValidDate(String value, String timeVal) {
+    var selectedTime = timeVal;
+    var selectedDate = value == "CHAT"
+        ? selectedChatDate.value
+        : value == "CALL"
+            ? selectedCallDate.value
+            : selectedVideoDate.value;
+    DateTime parseDate = DateFormat("hh:mm a").parse(selectedTime);
+    var formattedTime = (DateTime(selectedDate.year, selectedDate.month,
+        selectedDate.day, parseDate.hour, parseDate.minute, 0));
+
+    bool difference = DateTime.now().isBefore(formattedTime);
+    return difference;
+  }
+
   void scheduleCall(String value) async {
-    try {
-      ///Type 1: for call 2 for chat.
-      int type = 0;
+    var selectedTime = value == "CHAT"
+        ? selectedChatTime.value
+        : value == "CALL"
+            ? selectedCallTime.value
+            : selectedVideoTime.value;
+    var selectedDate = value == "CHAT"
+        ? selectedChatDate.value
+        : value == "CALL"
+            ? selectedCallDate.value
+            : selectedVideoDate.value;
+    DateTime parseDate = DateFormat("hh:mm a").parse(selectedTime);
+    var formattedTime = (DateTime(selectedDate.year, selectedDate.month,
+        selectedDate.day, parseDate.hour, parseDate.minute, 0));
 
-      late AstroScheduleRequest request;
-      if (value == "CHAT") {
-        type = 2;
-        request = AstroScheduleRequest(
-          scheduleDate: selectedChatDate.value.toFormattedString(),
-          scheduleTime: selectedChatTime.value,
-          type: type,
-        );
-      }
-      if (value == "CALL") {
-        type = 1;
-        request = AstroScheduleRequest(
-          scheduleDate: selectedCallDate.value.toFormattedString(),
-          scheduleTime: selectedCallTime.value,
-          type: type,
-        );
-      }
-      if (value == "VIDEO") {
-        request = AstroScheduleRequest(
-          scheduleDate: selectedVideoDate.value.toFormattedString(),
-          scheduleTime: selectedVideoTime.value,
-          type: type,
-        );
-      }
+    bool difference = DateTime.now().isBefore(formattedTime);
 
-      final response = await noticeRepository.astroScheduleOnlineAPI(
-        request.toJson(),
-      );
-      if (response.statusCode == 200 && response.success) {
-        divineSnackBar(data: response.message);
-      }
-    } catch (err) {
-      if (err is AppException) {
-        err.onException();
+    if (difference) {
+      try {
+        ///Type 1: for call 2 for chat.
+        int type = 0;
+
+        late AstroScheduleRequest request;
+        if (value == "CHAT") {
+          type = 2;
+          request = AstroScheduleRequest(
+            scheduleDate: selectedChatDate.value.toFormattedString(),
+            scheduleTime: selectedChatTime.value,
+            type: type,
+          );
+        }
+        if (value == "CALL") {
+          type = 1;
+          request = AstroScheduleRequest(
+            scheduleDate: selectedCallDate.value.toFormattedString(),
+            scheduleTime: selectedCallTime.value,
+            type: type,
+          );
+        }
+        if (value == "VIDEO") {
+          request = AstroScheduleRequest(
+            scheduleDate: selectedVideoDate.value.toFormattedString(),
+            scheduleTime: selectedVideoTime.value,
+            type: type,
+          );
+        }
+
+        final response = await noticeRepository.astroScheduleOnlineAPI(
+          request.toJson(),
+        );
+        if (response.statusCode == 200 && response.success) {
+          divineSnackBar(data: response.message);
+        }
+      } catch (err) {
+        if (err is AppException) {
+          err.onException();
+        }
       }
     }
   }
 
   getBoolToString(bool value) {
     return value ? "1" : "0";
+  }
+
+  showOnceInDay() async {
+    int timestamp = await preferenceService
+        .getIntPrefs(SharedPreferenceService.performanceDialog);
+
+    if (timestamp == 0 ||
+        (DateTime.now()
+                .difference(DateTime.fromMillisecondsSinceEpoch(timestamp))
+                .inDays >
+            0) ||
+        getDateDifference(timestamp)) {
+      await preferenceService.setIntPrefs(
+          SharedPreferenceService.performanceDialog,
+          DateTime.now().millisecondsSinceEpoch);
+      showDialog(
+        context: Get.context!,
+        barrierColor: AppColors.darkBlue.withOpacity(0.5),
+        builder: (_) => PerformanceDialog(),
+      );
+    }
+  }
+
+  getDateDifference(int timestamp) {
+    DateTime dtTimestamp = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    DateTime now = DateTime.now();
+
+    if (now.day != dtTimestamp.day ||
+        now.month != dtTimestamp.month ||
+        now.year != dtTimestamp.year) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

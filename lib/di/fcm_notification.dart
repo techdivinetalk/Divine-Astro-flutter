@@ -7,6 +7,7 @@ import 'dart:math' as math;
 
 import '../common/common_functions.dart';
 import '../common/routes.dart';
+import '../screens/live_page/constant.dart';
 
 const channel = AndroidNotificationChannel(
   "DivineAstrologer",
@@ -123,7 +124,8 @@ void onDidReceiveNotificationResponse(
   }
   if (Get.currentRoute == RouteName.chatMessageUI) {
   } else {
-    await Get.toNamed(RouteName.chatMessageUI, arguments: true);
+    await Get.toNamed(RouteName.chatMessageUI,
+        arguments: astroChatWatcher.value);
   }
 }
 

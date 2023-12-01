@@ -1,4 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/repository/shop_repository.dart';
@@ -30,16 +29,18 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
                 trailingWidget: InkWell(
                   child: Padding(
                       padding: EdgeInsets.only(right: 20.w),
-                      child: Assets.images.icSearch
-                          .svg(color: AppColors.darkBlue)),
+                      child: Assets.images.icSearch.svg(
+                          colorFilter: const ColorFilter.mode(
+                              AppColors.darkBlue, BlendMode.srcIn))),
                 ))
             : commonDetailAppbar(
                 title: "suggestRemedy".tr,
                 trailingWidget: InkWell(
                     child: Padding(
                         padding: EdgeInsets.only(right: 20.w),
-                        child: Assets.images.icSearch
-                            .svg(color: AppColors.darkBlue)))),
+                        child: Assets.images.icSearch.svg(
+                            colorFilter: const ColorFilter.mode(
+                                AppColors.darkBlue, BlendMode.srcIn))))),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 5.h),
           child: Column(
@@ -131,9 +132,10 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
                                         imageUrl:
                                             "${controller.preferenceService.getBaseImageURL()}/${item?.shopImage}",
                                         fit: BoxFit.fill,
-                                        errorWidget:  (context, url, error) => Assets.images.defaultProfile.image(),
+                                        errorWidget: (context, url, error) =>
+                                            Assets.images.defaultProfile
+                                                .image(),
                                       ),
-
                                     ),
                                     SizedBox(height: 8.h),
                                     Text(item?.shopName ?? "",

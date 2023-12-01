@@ -1,10 +1,9 @@
-// ignore_for_file: depend_on_referenced_packages
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:divine_astrologer/common/zego_services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path/path.dart' as p;
 import 'package:aws_s3_upload/aws_s3_upload.dart';
@@ -26,13 +25,13 @@ import '../../model/res_review_ratings.dart';
 import '../../model/res_user_profile.dart';
 import '../../repository/user_repository.dart';
 import '../../screens/dashboard/dashboard_controller.dart';
-import '../../utils/utils.dart';
+import '../home/home_controller.dart';
 
 class ProfilePageController extends GetxController {
   final UserRepository userRepository;
 
   ProfilePageController(this.userRepository);
-
+  var homeController = Get.find<HomeController>();
   UserData? userData;
   GetUserProfile? userProfile;
   RxString userProfileImage = "".obs;
@@ -475,10 +474,7 @@ class ProfilePageController extends GetxController {
       userProfileImage.value = response;
       userData?.image = response;
       preference.setUserDetail(userData!);
-      await ZegoServices()
-          .initZegoInvitationServices("${userData?.id}", "${userData?.name}");
       divineSnackBar(data: "Profile image update successfully");
-      debugPrint("Uploaded Url : $response");
     } else {
       CustomException("Something went wrong");
     }

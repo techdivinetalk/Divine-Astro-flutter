@@ -41,6 +41,7 @@ Future<void> main() async {
     runApp(const MyApp());
   });
 }
+
 Future<bool> saveLanguage(String? lang) async {
   final box = GetStorage();
   await box.write('lang', lang);
@@ -78,6 +79,7 @@ class MyApp extends StatelessWidget {
           designSize: Size(Get.width, Get.height),
           builder: (context, child) {
             return GetMaterialApp(
+              defaultTransition: Transition.fadeIn,
               navigatorKey: navigatorKey,
               color: AppColors.white,
               debugShowCheckedModeBanner: false,

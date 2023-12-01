@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
-enum WorkingForPlatform { initial, yes, no }
+enum WorkingForPlatform { yes, no }
 
 class ReferAstrologerController extends GetxController {
   final ReferAstrologerRepository repository;
@@ -18,6 +18,7 @@ class ReferAstrologerController extends GetxController {
   bool get isNo => state.isNo;
 
   GlobalKey<FormState> get formState => state.formKey;
+  RxBool formValidateVal = true.obs;
 
   void workingForPlatForm({required WorkingForPlatform value}) {
     state.platform = value;
@@ -26,6 +27,7 @@ class ReferAstrologerController extends GetxController {
 
   void submitForm() async {
     if (formState.currentState!.validate()) {
+      formValidateVal.value = true;
       formState.currentState!.save();
       ReferAstrologerResponse response = await repository
           .referAstrologer(state.referAstrologerRequestString());
@@ -35,7 +37,18 @@ class ReferAstrologerController extends GetxController {
       if (response.status!.code == 400) {
         Fluttertoast.showToast(msg: response.status!.message.toString());
       }
+    } else {
+      formValidateVal.value = false;
     }
+  }
+
+  checkFormValidation() {
+    if (formState.currentState!.validate()) {
+      formValidateVal.value = true;
+    } else {
+      formValidateVal.value = false;
+    }
+    update();
   }
 
   @override
@@ -46,13 +59,13 @@ class ReferAstrologerController extends GetxController {
 
   @override
   void dispose() {
-    super.dispose();
     state.dispose();
+    super.dispose();
   }
 }
 
 class ReferAstrologerState {
-  WorkingForPlatform platform = WorkingForPlatform.initial;
+  WorkingForPlatform platform = WorkingForPlatform.no;
   late final GlobalKey<FormState> formKey;
 
   bool get isYes => platform == WorkingForPlatform.yes;

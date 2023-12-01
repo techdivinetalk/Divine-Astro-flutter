@@ -3,7 +3,6 @@ import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/utils/enum.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -48,7 +47,8 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
                     children: [
                       noticeBoardDetail(
                         onTap: () {
-                          Get.toNamed(RouteName.noticeDetail, arguments: data);
+                          Get.toNamed(RouteName.noticeDetail,
+                              arguments: data, parameters: {"from_list": "1"});
                         },
                         title: data.title.toString(),
                         date: data.getTimeAndDate(),
@@ -77,7 +77,7 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
       InkWell(
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.all(10.h),
+          padding: EdgeInsets.all(16.h),
           decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
@@ -86,9 +86,7 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
                     offset: const Offset(0.0, 3.0)),
               ],
               color: Colors.white,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(20),
-              ),
+              borderRadius: BorderRadius.all(Radius.circular(20.r)),
               border: Border.all(color: AppColors.lightYellow)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

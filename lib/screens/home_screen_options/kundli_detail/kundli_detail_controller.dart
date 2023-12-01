@@ -196,9 +196,13 @@ class KundliDetailController extends GetxController {
 
   Future<void> getAntraDataApiList(String planetName) async {
     try {
-      PlanetlDetailModel response =
-          await kundliRepository.getPlanetDetailsAPI(params, planetName);
-      planetDataDetail.value = response;
+      PlanetlDetailModel response = await kundliRepository.getPlanetDetailsAPI(params, planetName);
+      if ((response.data ?? []).isNotEmpty) {
+        planetDataDetail.value = response;
+      } else {
+        subDashaLevel.value = 0;
+        divineSnackBar(data: "noDataAntarDasha".tr);
+      }
       log("planetDataDetail-->${jsonEncode(planetDataDetail.value.data)}");
       update();
     } catch (error) {
@@ -393,7 +397,12 @@ class KundliDetailController extends GetxController {
     try {
       PratyantarDashaModel response = await kundliRepository
           .getPratyantarDashaDetailsAPI(params, planetName, atraName);
-      pratyantarDataDetail.value = response;
+      if ((response.data ?? []).isNotEmpty) {
+        pratyantarDataDetail.value = response;
+      } else {
+        subDashaLevel.value = 1;
+        divineSnackBar(data: "noDataPratyantarDasha".tr);
+      }
       log("pratyantarDataDetail-->${jsonEncode(pratyantarDataDetail.value.data)}");
       update();
     } catch (error) {
@@ -414,7 +423,12 @@ class KundliDetailController extends GetxController {
       SookshmaDashaModel response =
           await kundliRepository.getSookshmaDashaDetailsAPI(
               params, planetName, atraName, pratyantarName);
-      sookshmaDataDetail.value = response;
+      if ((response.data ?? []).isNotEmpty) {
+        sookshmaDataDetail.value = response;
+      } else {
+        subDashaLevel.value = 2;
+        divineSnackBar(data: "noDataSookshmaDasha".tr);
+      }
       log("sookshmaDataDetail-->${jsonEncode(sookshmaDataDetail.value.data)}");
       update();
     } catch (error) {
@@ -434,7 +448,12 @@ class KundliDetailController extends GetxController {
     try {
       PranDashaModel response = await kundliRepository.getPranDashaDetailsAPI(
           params, planetName, atraName, pratyantarName, sookshmaName);
-      pranDataDetail.value = response;
+      if ((response.data ?? []).isNotEmpty) {
+        pranDataDetail.value = response;
+      } else {
+        subDashaLevel.value = 3;
+        divineSnackBar(data: "noDataPranDasha".tr);
+      }
       log("pranDataDetail-->${jsonEncode(sookshmaDataDetail.value.data)}");
       update();
     } catch (error) {

@@ -1,5 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -17,7 +15,7 @@ import '../di/hive_services.dart';
 import '../di/shared_preference_service.dart';
 import '../model/chat/res_common_chat_success.dart';
 import '../model/chat_offline_model.dart';
-import '../repository/user_repository.dart';
+import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:path/path.dart' as p;
 
 import '../screens/chat_message/chat_message_controller.dart';
@@ -63,6 +61,12 @@ void checkNotification(
   }
   if (notificationList.isNotEmpty) {
     notificationList.forEach((key, value) async {
+      int senderId = 0;
+      if (value["sender_id"] is String) {
+        senderId = int.parse(value["sender_id"]);
+      } else {
+        senderId = value["sender_id"];
+      }
       var newMessage = ChatMessage(
           id: int.parse(key),
           message: value["message"],
@@ -78,7 +82,7 @@ void checkNotification(
           kundliPlace: value["kundli_place"],
           downloadedPath: "",
           msgType: value["msgType"]);
-      var senderId = value["sender_id"];
+
       if (Get.currentRoute == RouteName.chatMessageUI) {
         var chatController = Get.find<ChatMessageController>();
         if (chatController.currentUserId.value == value["sender_id"] ||
@@ -107,7 +111,6 @@ void checkNotification(
       }
     });
     removeNotificationNode();
-    debugPrint("$notificationList");
   }
 }
 
@@ -144,7 +147,7 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
     orderId: newMessage.orderId,
     message: newMessage.message ?? "",
     receiverId: newMessage.receiverId!,
-    senderId: newMessage.senderId!,
+    senderId: newMessage.senderId,
     time: newMessage.time,
     type: type,
     msgType: newMessage.msgType,
@@ -157,11 +160,6 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   );
   FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
 
-  // final DatabaseReference messagesRef = firebaseDatabase
-  //     .ref()
-  //     .child("astrologer/${newMessage.receiverId}/engagement");
-
-  // messagesRef.set(message.toOfflineJson());
   firebaseDatabase
       .ref(
           "user/${currentChatUserId.value}/realTime/notification/${newMessage.time}")
@@ -195,6 +193,9 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void divineSnackBar({required String data, Color? color, Duration? duration}) {
   BuildContext? context = navigator?.context;
+  if (data[data.length - 1] != ".") {
+    data = "$data.";
+  }
   if (context != null) {
     final snackBar = SnackBar(
       duration: duration ?? const Duration(milliseconds: 4000),
