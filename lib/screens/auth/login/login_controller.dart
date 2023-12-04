@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
@@ -81,6 +82,8 @@ class LoginController extends GetxController {
     preferenceService.setToken(data.token!);
     mobileNumberController.clear();
     preferenceService.setDeviceToken(deviceToken ?? "");
+    final socket = AppSocket();
+    socket.socketConnect();
     Get.offAllNamed(RouteName.dashboard,
         arguments: [data.data!.phoneNo, data.data!.sessionId]);
     enable.value = true;

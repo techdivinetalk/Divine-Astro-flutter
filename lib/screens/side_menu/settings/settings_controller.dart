@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/model/pivacy_policy_model.dart';
@@ -11,8 +12,7 @@ import '../../../di/shared_preference_service.dart';
 import '../../../model/delete_customer_model_class.dart';
 
 class SettingsController extends GetxController {
-  SharedPreferenceService preferenceService =
-      Get.find<SharedPreferenceService>();
+  SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
   RxString currLanguage = "".obs;
 
   @override
@@ -39,8 +39,7 @@ class SettingsController extends GetxController {
   deleteUserAccounts() async {
     Map<String, dynamic> params = {};
     try {
-      DeleteAccountModelClass data =
-          await userRepository.deleteUserAccount(params);
+      DeleteAccountModelClass data = await userRepository.deleteUserAccount(params);
       var userData = data;
       log("DeleteUser==>${userData.message}");
       Get.offAllNamed(RouteName.login);
@@ -58,6 +57,8 @@ class SettingsController extends GetxController {
     userRepository.logOut().then(
       (value) async {
         if (value.statusCode == 200 && value.success == true) {
+          final socket = AppSocket();
+          socket.socketDisconnect();
           preferenceService.erase().whenComplete(
                 () => Get.offAllNamed(RouteName.login),
               );

@@ -8,6 +8,50 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:764246952124:android:521db0a4cbae2caf6fe8b9",
+        "android_client_info": {
+          "package_name": "app.divine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764246952124-ebi5t6dvglnm5picb03732ufvar0ekjm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.divine",
+            "certificate_hash": "a77d323925651d2516d49165e66167dd3466bfac"
+          }
+        },
+        {
+          "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6TwQ1az8IU6mmhKZoeLa4kfdQa0BrbQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "764246952124-aobrfi6j154g9t30d9hgjii1th45tm55.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.divine"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:764246952124:android:3f4a894f37aa04856fe8b9",
         "android_client_info": {
           "package_name": "com.divine"
@@ -30,6 +74,13 @@
             {
               "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "764246952124-aobrfi6j154g9t30d9hgjii1th45tm55.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.divine"
+              }
             }
           ]
         }
@@ -59,6 +110,13 @@
             {
               "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "764246952124-aobrfi6j154g9t30d9hgjii1th45tm55.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.divine"
+              }
             }
           ]
         }

@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
+import 'package:divine_astrologer/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -29,7 +30,7 @@ import 'utils/utils.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await GetStorage.init();
   await initServices();
   final navigatorKey = GlobalKey<NavigatorState>();
@@ -76,7 +77,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppTheme(
       child: ScreenUtilInit(
-          designSize: Size(Get.width, Get.height),
+          designSize: Size(MediaQuery.sizeOf(context).width, MediaQuery.sizeOf(context).height),
           builder: (context, child) {
             return GetMaterialApp(
               defaultTransition: Transition.fadeIn,

@@ -14,7 +14,7 @@ dependencies:
   get: ^4.6.5
   shared_preferences: ^2.2.0
   flutter_screenutil: ^5.8.4
-  connectivity_plus: ^4.0.1
+  connectivity_plus: ^5.0.2
   #http: ^1.1.0
   readmore: ^2.2.0
   percent_indicator: ^4.2.3
@@ -24,7 +24,7 @@ dependencies:
   flutter_svg: ^2.0.7
   dropdown_button2: ^2.3.7
   intl: ^0.18.0
-  syncfusion_flutter_gauges: ^22.2.7
+  syncfusion_flutter_gauges: ^23.2.6
   flutter_expanded_tile: ^0.3.7
   chips_choice: ^3.0.0
   carousel_slider: ^4.2.1
@@ -41,22 +41,22 @@ dependencies:
   zego_uikit_prebuilt_live_streaming: ^2.20.0
   zego_uikit_signaling_plugin: ^2.5.2
   svgaplayer_flutter: ^2.2.0
-  permission_handler: ^10.4.3
+  permission_handler: ^11.1.0
   image_picker: ^1.0.2
   image_cropper:
   aws_s3_upload: ^1.5.0
   compress_images_flutter: ^0.0.3+5
   fluttertoast: ^8.2.2
-  video_trimmer: ^2.1.0
+  video_trimmer: ^3.0.1
   flutter_image_compress: ^2.0.4
   lottie: ^2.6.0
-  flutter_local_notifications: ^15.1.0+1
+  flutter_local_notifications: ^16.2.0
   photo_view: ^0.14.0
   hive_flutter: ^1.1.0
   emoji_picker_flutter: ^1.6.1
   badges: ^3.1.2
   flutter_html: ^3.0.0-beta.2
-  file_picker: ^5.5.0
+  file_picker: ^6.1.1
   custom_timer: ^0.2.3
   contacts_service: ^0.6.3
   socket_io_client: ^2.0.3+1
@@ -70,7 +70,7 @@ dependency_overrides:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
   flutter_gen: ^5.3.1
 
 flutter_gen:
