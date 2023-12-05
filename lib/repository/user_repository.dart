@@ -25,9 +25,77 @@ import '../model/res_blocked_customers.dart';
 import '../model/res_login.dart';
 import '../model/res_review_ratings.dart';
 import '../model/send_feed_back_model.dart';
+import '../model/send_otp.dart';
+import '../model/verify_otp.dart';
 import '../model/view_training_video_model.dart';
 
 class UserRepository extends ApiProvider {
+
+  Future sentOtp(Map<String, dynamic> param) async {
+    //progressService.showProgressDialog(true);
+    try {
+      final response =
+      await post(sendOtp, body: jsonEncode(param).toString());
+      //progressService.showProgressDialog(false);
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          preferenceService.erase();
+          Get.offNamed(RouteName.login);
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final sendOtpModel = sendOtpModelFromJson(response.body);
+          if (sendOtpModel.statusCode == successResponse &&
+              sendOtpModel.success) {
+            return sendOtpModel;
+          } else {
+            throw CustomException(sendOtpModel.message);
+          }
+        }
+      } else {
+        final errorMessage = json.decode(response.body)["message"];
+        if (errorMessage
+            .contains("Too many requests. Please try again after")) {
+          throw OtpInvalidTimerException(json.decode(response.body)["message"]);
+        } else {
+          throw CustomException(json.decode(response.body)["message"]);
+        }
+      }
+    } catch (e, s) {
+      //progressService.showProgressDialog(false);
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<VerifyOtpModel> verifyOtp(Map<String, dynamic> param) async {
+    //progressService.showProgressDialog(true);
+    try {
+      final response =
+      await post(verifyOtpUrl, body: jsonEncode(param).toString());
+      //progressService.showProgressDialog(false);
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          preferenceService.erase();
+          Get.offNamed(RouteName.login);
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final verifyOtpModel = verifyOtpModelFromJson(response.body);
+          if (verifyOtpModel.statusCode == successResponse &&
+              verifyOtpModel.success) {
+            return verifyOtpModel;
+          } else {
+            throw CustomException(verifyOtpModel.message);
+          }
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      //progressService.showProgressDialog(false);
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
 
 
   Future<ViewTrainingVideoModelClass> viewTrainingVideoApi(

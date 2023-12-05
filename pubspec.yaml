@@ -8,61 +8,61 @@ environment:
   sdk: '>=3.0.5 <4.0.0'
 
 dependencies:
-  flutter:
-    sdk: flutter
-  cupertino_icons: ^1.0.2
-  get: ^4.6.5
-  shared_preferences: ^2.2.0
-  flutter_screenutil: ^5.8.4
-  connectivity_plus: ^5.0.2
-  #http: ^1.1.0
-  readmore: ^2.2.0
-  percent_indicator: ^4.2.3
-  custom_rating_bar: ^2.0.5
-  flutter_switch: ^0.3.2
-  flutter_holo_date_picker: ^1.1.0
-  flutter_svg: ^2.0.7
-  dropdown_button2: ^2.3.7
-  intl: ^0.18.0
-  syncfusion_flutter_gauges: ^23.2.6
-  flutter_expanded_tile: ^0.3.7
-  chips_choice: ^3.0.0
+  aws_s3_upload: ^1.5.0
+  badges: ^3.1.2
+  cached_network_image: ^3.2.3
   carousel_slider: ^4.2.1
+  chips_choice: ^3.0.0
+  compress_images_flutter: ^0.0.3+5
+  connectivity_plus: ^4.0.1
+  contacts_service: ^0.6.3
   country_state_city: ^0.1.6
+  cupertino_icons: ^1.0.2
+  custom_rating_bar: ^2.0.5
+  custom_timer: ^0.2.3
+  device_info_plus: ^9.0.3
+  dropdown_button2: ^2.3.7
+  emoji_picker_flutter: ^1.6.1
+  file_picker: ^6.1.1
   firebase_core: ^2.15.0
   firebase_database: ^10.2.3
   firebase_messaging: ^14.6.5
-  get_storage: ^2.1.1
-  html: ^0.15.4
-  cached_network_image: ^3.2.3
-  url_launcher: ^6.1.12
-  zego_uikit: ^2.9.3
-  zego_uikit_prebuilt_call: ^3.14.0
-  zego_uikit_prebuilt_live_streaming: ^2.20.0
-  zego_uikit_signaling_plugin: ^2.5.2
-  svgaplayer_flutter: ^2.2.0
-  permission_handler: ^11.1.0
-  image_picker: ^1.0.2
-  image_cropper:
-  aws_s3_upload: ^1.5.0
-  compress_images_flutter: ^0.0.3+5
-  fluttertoast: ^8.2.2
-  video_trimmer: ^3.0.1
-  flutter_image_compress: ^2.0.4
-  lottie: ^2.6.0
-  flutter_local_notifications: ^16.2.0
-  photo_view: ^0.14.0
-  hive_flutter: ^1.1.0
-  emoji_picker_flutter: ^1.6.1
-  badges: ^3.1.2
+  flutter:
+    sdk: flutter
+  flutter_expanded_tile: ^0.3.7
+  flutter_holo_date_picker: ^1.1.0
   flutter_html: ^3.0.0-beta.2
-  file_picker: ^6.1.1
-  custom_timer: ^0.2.3
-  contacts_service: ^0.6.3
-  socket_io_client: ^2.0.3+1
-  youtube_player_flutter: ^8.1.2
+  flutter_image_compress: ^2.0.4
+  flutter_local_notifications: ^15.1.0+1
+  flutter_screenutil: ^5.8.4
+  flutter_svg: ^2.0.7
+  flutter_switch: ^0.3.2
+  fluttertoast: ^8.2.2
+  get: ^4.6.5
+  get_storage: ^2.1.1
+  hive_flutter: ^1.1.0
+  html: ^0.15.4
+  image_cropper: null
+  image_picker: ^1.0.2
+  intl: ^0.18.0
+  lottie: ^2.6.0
+  percent_indicator: ^4.2.3
+  permission_handler: any
+  photo_view: ^0.14.0
   pin_input_text_field: ^4.5.1
-  device_info_plus: ^9.0.3
+  readmore: ^2.2.0
+  shared_preferences: ^2.2.0
+  socket_io_client: ^2.0.3+1
+  svgaplayer_flutter: ^2.2.0
+  syncfusion_flutter_gauges: ^22.2.7
+  url_launcher: ^6.1.12
+  video_trimmer: ^2.1.0
+  youtube_player_flutter: ^8.1.2
+  zego_uikit: ^2.14.9
+  zego_uikit_prebuilt_call: ^3.17.9
+  zego_uikit_prebuilt_live_streaming: ^2.22.4
+  zego_uikit_signaling_plugin: ^2.6.7
+  pinput: ^3.0.1
 
 dependency_overrides:
   intl: ^0.18.1
@@ -72,6 +72,9 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^3.0.1
   flutter_gen: ^5.3.1
+  build_runner: any
+  flutter_gen_runner: any
+
 
 flutter_gen:
   output: lib/gen/ # Optional (default: lib/gen/)
@@ -110,3 +113,21 @@ flutter:
           weight: 700
         - asset: assets/fonts/Poppins-ExtraBold.ttf
           weight: 800
+    - family: NotoSans
+      fonts:
+        - asset: assets/fonts/noto_sans/NotoSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/noto_sans/NotoSans-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/noto_sans/NotoSans-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/noto_sans/NotoSans-Light.ttf
+          weight: 300
+        - asset: assets/fonts/noto_sans/NotoSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/noto_sans/NotoSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/noto_sans/NotoSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/noto_sans/NotoSans-Thin.ttf
+          weight: 100

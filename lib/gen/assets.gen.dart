@@ -430,6 +430,9 @@ class $AssetsImagesGen {
   AssetGenImage get medalTwo =>
       const AssetGenImage('assets/images/medal_two.png');
 
+  /// File path: assets/images/otp_image.svg
+  SvgGenImage get otpImage => const SvgGenImage('assets/images/otp_image.svg');
+
   /// File path: assets/images/planet_star_live.png
   AssetGenImage get planetStarLive =>
       const AssetGenImage('assets/images/planet_star_live.png');
@@ -571,6 +574,7 @@ class $AssetsImagesGen {
         medalOne,
         medalThree,
         medalTwo,
+        otpImage,
         planetStarLive,
         report,
         starLive,
@@ -583,6 +587,10 @@ class $AssetsImagesGen {
 
 class $AssetsLottieGen {
   const $AssetsLottieGen();
+
+  /// File path: assets/lottie/exclamation _mark.json
+  LottieGenImage get exclamationMark =>
+      const LottieGenImage('assets/lottie/exclamation _mark.json');
 
   /// File path: assets/lottie/generic loading .json
   LottieGenImage get genericLoading =>
@@ -598,7 +606,7 @@ class $AssetsLottieGen {
 
   /// List of all assets
   List<LottieGenImage> get values =>
-      [genericLoading, soundWaves, typingIndicator];
+      [exclamationMark, genericLoading, soundWaves, typingIndicator];
 }
 
 class $AssetsSvgGen {
@@ -619,6 +627,9 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/camera.svg
   SvgGenImage get camera => const SvgGenImage('assets/svg/camera.svg');
+
+  /// File path: assets/svg/caution.svg
+  SvgGenImage get caution => const SvgGenImage('assets/svg/caution.svg');
 
   /// File path: assets/svg/disconnect.svg
   SvgGenImage get disconnect => const SvgGenImage('assets/svg/disconnect.svg');
@@ -679,6 +690,7 @@ class $AssetsSvgGen {
         blockUser,
         callEarning,
         camera,
+        caution,
         disconnect,
         gallery,
         giftEarning,
