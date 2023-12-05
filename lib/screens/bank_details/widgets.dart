@@ -89,32 +89,40 @@ class CustomMaterialButton extends StatelessWidget {
     this.onPressed,
     this.height,
     this.color,
+    this.disabledColor,
     this.textColor,
+    this.fontSize,
+    this.radius,
     this.fontWeight,
     this.style,
+    this.margin,
   }) : super(key: key);
 
   final String buttonName;
   final void Function()? onPressed;
   final double? height;
-  final Color? color;
+  final Color? color, disabledColor;
   final Color? textColor;
   final FontWeight? fontWeight;
   final TextStyle? style;
+  final double? fontSize;
+  final double? radius;
+  final EdgeInsets? margin;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 15.sp),
+      margin: margin ?? EdgeInsets.symmetric(vertical: 15.sp),
       child: Row(
         children: [
           Expanded(
             child: MaterialButton(
               height: height ?? 55.h,
-              color: color ?? AppColors.lightYellow,
+              color: color ?? AppColors.yellow,
+              disabledColor: disabledColor,
               highlightElevation: 0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(79.sp),
+                borderRadius: BorderRadius.circular(radius ?? 79.sp),
               ),
               elevation: 0.0,
               onPressed: onPressed,
@@ -122,8 +130,8 @@ class CustomMaterialButton extends StatelessWidget {
                 buttonName,
                 style: style ??
                     TextStyle(
-                      fontSize: 20.sp,
-                      color: textColor ?? AppColors.blackColor,
+                      fontSize: fontSize ?? 20.sp,
+                      color: textColor ?? AppColors.black,
                       fontWeight: fontWeight ?? FontWeight.w500,
                     ),
               ),

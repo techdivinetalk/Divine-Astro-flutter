@@ -46,3 +46,14 @@ class CustomException extends AppException {
     }
   }
 }
+
+class OtpInvalidTimerException implements Exception {
+  final String message;
+
+  OtpInvalidTimerException(this.message);
+
+  @override
+  String toString() {
+    return 'MyCustomException: $message';
+  }
+}

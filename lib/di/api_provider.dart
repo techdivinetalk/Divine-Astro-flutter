@@ -124,7 +124,7 @@ class ApiProvider {
 
   ///This End point is for number change request not for login purpose.
   final sendOtp = "sendOtp";
-  final verifyOtp = "verifyOtp";
+  final verifyOtpUrl = "verifyOtp";
 
   //
   final NetworkService networkManager = Get.find<NetworkService>();

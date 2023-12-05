@@ -14,6 +14,7 @@ import '../../../common/routes.dart';
 import '../../../di/shared_preference_service.dart';
 import '../../../model/firebase_model.dart';
 import '../../../model/res_login.dart';
+import '../../../model/send_otp.dart';
 import '../../../repository/user_repository.dart';
 
 class LoginController extends GetxController {
@@ -54,15 +55,17 @@ class LoginController extends GetxController {
   }
 
   login() async {
-    deviceToken = await FirebaseMessaging.instance.getToken();
+    //deviceToken = await FirebaseMessaging.instance.getToken();
     Map<String, dynamic> params = {
       "mobile_no": mobileNumberController.text,
-      "device_token": await FirebaseMessaging.instance.getToken()
+      "country_code": countryCodeController.text,
+      //"device_token": await FirebaseMessaging.instance.getToken()
     };
     try {
-      ResLogin data = await userRepository.userLogin(params);
-      updateLoginDatainFirebase(data);
-      navigateToDashboard(data);
+      SendOtpModel data = await userRepository.sentOtp(params);
+      navigateToOtpPage(data);
+      //updateLoginDatainFirebase(data);
+      //navigateToDashboard(data);
     } catch (error) {
       enable.value = true;
       debugPrint("error $error");
@@ -72,6 +75,13 @@ class LoginController extends GetxController {
         divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
+  }
+
+  void navigateToOtpPage(SendOtpModel data) {
+    Get.toNamed(RouteName.otpVerificationPage,
+        arguments: [data.data.mobileNo, data.data.sessionId, countryCodeController.text]);
+    mobileNumberController.clear();
+    enable.value = true;
   }
 
   navigateToDashboard(ResLogin data) async {

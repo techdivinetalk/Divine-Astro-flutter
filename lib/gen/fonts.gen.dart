@@ -10,6 +10,9 @@
 class FontFamily {
   FontFamily._();
 
+  /// Font family: NotoSans
+  static const String notoSans = 'NotoSans';
+
   /// Font family: Poppins
   static const String poppins = 'Poppins';
 }

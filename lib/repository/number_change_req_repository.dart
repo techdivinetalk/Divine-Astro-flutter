@@ -44,7 +44,7 @@ class NumberChangeReqRepository extends ApiProvider {
   Future<VerifyOtpResponse> verifyOtpAPi(Map<String, dynamic> param) async {
     try {
       final response = await post(
-        verifyOtp,
+        verifyOtpUrl,
         headers: await getJsonHeaderURL(version: 7),
         body: jsonEncode(param),
       );
