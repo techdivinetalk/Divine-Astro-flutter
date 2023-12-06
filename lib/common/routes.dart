@@ -198,6 +198,11 @@ class Routes {
         name: RouteName.chatMessageUI,
         binding: ChatMessageBinding()),
     GetPage(
+        page: () => const ChatMessageWithSocketUI(),
+        name: RouteName.chatMessageWithSocketUI,
+        binding: ChatMessageWithSocketBinding()),
+
+    GetPage(
         page: () => const SuggestRemediesView(),
         name: RouteName.suggestRemediesView),
     GetPage(
