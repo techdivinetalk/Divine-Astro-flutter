@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +9,6 @@ import 'package:get/get.dart';
 import '../../common/app_textstyle.dart';
 import '../../common/colors.dart';
 import '../../common/common_bottomsheet.dart';
-
 import '../../gen/assets.gen.dart';
 import '../live_page/live_page.dart';
 
@@ -37,7 +38,8 @@ class LiveTipsController extends GetxController {
       "duration": 0,
       "callStatus": 0,
       "userId": 0,
-      "userName": ""
+      "userName": "",
+      "speciality": getSpecialAbilityInString(),
     }).then((value) {
       Get.to(
               LivePage(
@@ -55,6 +57,17 @@ class LiveTipsController extends GetxController {
         });
       });
     });
+  }
+
+  String getSpecialAbilityInString() {
+    String allData = pref.getSpecialAbility() ?? "";
+    Map m = jsonDecode(allData);
+    List data = m["data"];
+    List nameList = [];
+    for (var element in data) {
+      nameList.add(element["name"]);
+    }
+    return nameList.join(", ");
   }
 
   giftPopup(BuildContext context) async {
