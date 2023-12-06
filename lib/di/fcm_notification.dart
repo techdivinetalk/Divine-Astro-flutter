@@ -1,13 +1,17 @@
+import 'dart:convert';
+import 'dart:math' as math;
+
+import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
+import 'package:divine_astrologer/common/routes.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-import 'dart:math' as math;
 
 import '../common/common_functions.dart';
-import '../common/routes.dart';
-import '../screens/live_page/constant.dart';
 
 const channel = AndroidNotificationChannel(
   "DivineAstrologer",
@@ -79,18 +83,15 @@ void initMessaging() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings("@mipmap/ic_launcher");
   const DarwinInitializationSettings initializationSettingsDarwin =
-      DarwinInitializationSettings(
-          onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+      DarwinInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
-  const InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsDarwin);
+  const InitializationSettings initializationSettings =
+      InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsDarwin);
   flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
 }
 
-void onDidReceiveLocalNotification(
-    int id, String? title, String? body, String? payload) async {
+void onDidReceiveLocalNotification(int id, String? title, String? body, String? payload) async {
   // display a dialog with the notification details, tap ok to go to another page
   showDialog(
     context: Get.context!,
@@ -116,29 +117,73 @@ void onDidReceiveLocalNotification(
   );
 }
 
-void onDidReceiveNotificationResponse(
-    NotificationResponse notificationResponse) async {
+void onDidReceiveNotificationResponse(NotificationResponse notificationResponse) async {
+  debugPrint('notification payload: $notificationResponse');
   final String? payload = notificationResponse.payload;
   if (notificationResponse.payload != null) {
+    ///// redirect to bottom sheet of accept the request
+
     debugPrint('notification payload: $payload');
+    final Map<String, dynamic> payloadMap = jsonDecode(notificationResponse.payload!);
+
+    // Accessing individual values
+    String timeStamp = payloadMap['timeStamp'].toString();
+    String requestId = payloadMap['receiver_id'].toString();
+    String orderId = payloadMap['order_id'].toString();
+
+    if (payloadMap['msgType'] == 'request') {
+      await AppFirebaseService().writeData('order/${payloadMap['order_id'].toString()}', {'status': '1'});
+    }
+
+    final notificationPath = 'astrologer/${preferenceService.getUserDetail()!.id}/realTime';
+    final orderData = {'order_id': orderId};
+    await AppFirebaseService().writeData(notificationPath, orderData);
+    chatInit(requestId);
+
+    acceptChatRequestBottomSheet(Get.context!, onPressed: () async {
+      await Get.toNamed(RouteName.chatMessageWithSocketUI);
+    }, orderId: orderId);
   }
-  if (Get.currentRoute == RouteName.chatMessageUI) {
-  } else {
-    await Get.toNamed(RouteName.chatMessageUI,
-        arguments: astroChatWatcher.value);
+  // if (Get.currentRoute == RouteName.chatMessageUI) {
+  // } else {
+  //   await Get.toNamed(RouteName.chatMessageUI, arguments: astroChatWatcher.value);
+  // }
+}
+
+Future<void> chatInit(String requestId) async {
+  try {
+    final userDetail = preferenceService.getUserDetail();
+    if (userDetail != null) {
+      final notificationPath = 'user/$requestId/realTime/notification';
+      final int timestamp = DateTime.now().millisecondsSinceEpoch;
+      final notificationData = {
+        '$timestamp': {
+          'isActive': 1,
+          'message': '${userDetail.name} wants to chat with you',
+          'value': 'Click to chat',
+          'requestId': userDetail.id
+        },
+      };
+
+      final appFirebaseService = AppFirebaseService();
+      await appFirebaseService.writeData(notificationPath, notificationData);
+      debugPrint('Notification data written to the database');
+    } else {
+      debugPrint('Error: User details not available');
+    }
+  } catch (e) {
+    debugPrint('Error writing notification data to the database: $e');
   }
 }
 
 Future<void> showNotificationWithActions(
-    {required String title, required String message}) async {
-  const AndroidNotificationDetails androidNotificationDetails =
-      AndroidNotificationDetails(
+    {required String title, required String message, String? payload}) async {
+  const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
     "DivineAstrologer",
     "AstrologerNotification",
     importance: Importance.high,
   );
-  const NotificationDetails notificationDetails =
-      NotificationDetails(android: androidNotificationDetails);
-  await flutterLocalNotificationsPlugin.show(
-      math.Random().nextInt(10000), title, message, notificationDetails);
+  const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
+  await flutterLocalNotificationsPlugin
+      .show(math.Random().nextInt(10000), title, message, notificationDetails, payload: payload);
 }

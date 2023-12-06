@@ -109,6 +109,9 @@ class ApiProvider {
   final String deleteChatSessionResponse = "deleteChatSessionResponse";
 
   final String  joinRoomSocket = "join-room";
+  final String  startAstroCustPrivateChat = "start-astro-cust-private-chat";
+  final String  astrologerJoinedPrivateChat = "astrologer-joined-private-chat";
+
 
   //privacy policy & terms
   final String termsAndCondition = "termsAndCondition";

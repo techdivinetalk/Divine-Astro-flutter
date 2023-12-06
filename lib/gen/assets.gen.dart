@@ -654,8 +654,16 @@ class $AssetsSvgGen {
   /// File path: assets/svg/login_logo.svg
   SvgGenImage get loginLogo => const SvgGenImage('assets/svg/login_logo.svg');
 
+  /// File path: assets/svg/maximum_order_time_icon.svg
+  SvgGenImage get maximumOrderTimeIcon =>
+      const SvgGenImage('assets/svg/maximum_order_time_icon.svg');
+
   /// File path: assets/svg/mute.svg
   SvgGenImage get mute => const SvgGenImage('assets/svg/mute.svg');
+
+  /// File path: assets/svg/order_type_icon.svg
+  SvgGenImage get orderTypeIcon =>
+      const SvgGenImage('assets/svg/order_type_icon.svg');
 
   /// File path: assets/svg/pink_slider.svg
   SvgGenImage get pinkSlider => const SvgGenImage('assets/svg/pink_slider.svg');
@@ -672,6 +680,9 @@ class $AssetsSvgGen {
   SvgGenImage get privateCallEarning =>
       const SvgGenImage('assets/svg/private_call_earning.svg');
 
+  /// File path: assets/svg/pubspec.yaml
+  String get pubspec => 'assets/svg/pubspec.yaml';
+
   /// File path: assets/svg/switch_camera.svg
   SvgGenImage get switchCamera =>
       const SvgGenImage('assets/svg/switch_camera.svg');
@@ -683,8 +694,12 @@ class $AssetsSvgGen {
   /// File path: assets/svg/video_mute.svg
   SvgGenImage get videoMute => const SvgGenImage('assets/svg/video_mute.svg');
 
+  /// File path: assets/svg/wallet_balance_icon.svg
+  SvgGenImage get walletBalanceIcon =>
+      const SvgGenImage('assets/svg/wallet_balance_icon.svg');
+
   /// List of all assets
-  List<SvgGenImage> get values => [
+  List<dynamic> get values => [
         blackDot,
         block,
         blockUser,
@@ -698,14 +713,18 @@ class $AssetsSvgGen {
         icAdd,
         icCall1,
         loginLogo,
+        maximumOrderTimeIcon,
         mute,
+        orderTypeIcon,
         pinkSlider,
         pleaseRegister1,
         pleaseRegister2,
         privateCallEarning,
+        pubspec,
         switchCamera,
         videoCallEarning,
-        videoMute
+        videoMute,
+        walletBalanceIcon
       ];
 }
 

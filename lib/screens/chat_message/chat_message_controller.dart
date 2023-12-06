@@ -118,10 +118,10 @@ class ChatMessageController extends GetxController {
   }
 
   userTypingSocket({required bool isTyping}) {
-    dashboardController.socket?.emit(ApiProvider().chatType, {
-      "userId": userData?.id.toString(),
-      "isTyping": isTyping,
-    });
+    // dashboardController.socket?.emit(ApiProvider().chatType, {
+    //   "userId": userData?.id.toString(),
+    //   "isTyping": isTyping,
+    // });
   }
 
   getChatList() async {
@@ -444,9 +444,9 @@ onEndChat() async {
       if (Get.isRegistered<DashboardController>()) {
         DashboardController dashboardController =
             Get.find<DashboardController>();
-        dashboardController.socket?.emit(ApiProvider().deleteChatSession, {
-          "id": chatSession.value.id,
-        });
+        // dashboardController.socket?.emit(ApiProvider().deleteChatSession, {
+        //   "id": chatSession.value.id,
+        // });
       }
       timer.stopTimer();
 

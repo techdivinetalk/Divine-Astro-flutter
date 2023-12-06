@@ -2,8 +2,10 @@ import 'dart:developer';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/routes.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/pivacy_policy_model.dart';
 import 'package:divine_astrologer/model/terms_and_condition_model.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../common/app_exception.dart';
@@ -57,11 +59,7 @@ class SettingsController extends GetxController {
     userRepository.logOut().then(
       (value) async {
         if (value.statusCode == 200 && value.success == true) {
-          final socket = AppSocket();
-          socket.socketDisconnect();
-          preferenceService.erase().whenComplete(
-                () => Get.offAllNamed(RouteName.login),
-              );
+          preferenceService.erase().whenComplete(() => Get.offAllNamed(RouteName.login));
         }
       },
     ).onError((error, stackTrace) {
