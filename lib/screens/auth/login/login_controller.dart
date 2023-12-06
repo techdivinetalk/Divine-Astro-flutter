@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -21,8 +22,7 @@ class LoginController extends GetxController {
   LoginController(this.userRepository);
 
   final UserRepository userRepository;
-  SharedPreferenceService preferenceService =
-      Get.find<SharedPreferenceService>();
+  SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
   late TextEditingController countryCodeController;
   late TextEditingController mobileNumberController;
 
@@ -34,13 +34,9 @@ class LoginController extends GetxController {
 
   final List<Widget> imgList = [
     Assets.images.bgRegisterLogo.image(
-        width: ScreenUtil().screenWidth * 0.9,
-        height: ScreenUtil().screenHeight * 0.25,
-        fit: BoxFit.contain),
+        width: ScreenUtil().screenWidth * 0.9, height: ScreenUtil().screenHeight * 0.25, fit: BoxFit.contain),
     Assets.images.bgServiceLogo.image(
-        width: ScreenUtil().screenWidth * 0.9,
-        height: ScreenUtil().screenHeight * 0.25,
-        fit: BoxFit.contain),
+        width: ScreenUtil().screenWidth * 0.9, height: ScreenUtil().screenHeight * 0.25, fit: BoxFit.contain),
   ];
 
   final List<String> infoList = [
@@ -77,33 +73,31 @@ class LoginController extends GetxController {
 
   navigateToDashboard(ResLogin data) async {
     preferenceService.erase();
-
     preferenceService.setUserDetail(data.data!);
     preferenceService.setToken(data.token!);
     mobileNumberController.clear();
     preferenceService.setDeviceToken(deviceToken ?? "");
     final socket = AppSocket();
     socket.socketConnect();
-    Get.offAllNamed(RouteName.dashboard,
-        arguments: [data.data!.phoneNo, data.data!.sessionId]);
+    Get.offAllNamed(RouteName.dashboard, arguments: [data.data!.phoneNo, data.data!.sessionId]);
     enable.value = true;
   }
 
-  void updateLoginDatainFirebase(ResLogin data) {
+  Future<void> updateLoginDatainFirebase(ResLogin data) async {
+    String uniqueId = await getDeviceId() ?? '';
     FirebaseUserData firebaseUserData = FirebaseUserData(
       data.data!.name!,
       data.data!.deviceToken!,
       data.data!.image ?? "",
-      RealTime(
-          isEngagedStatus: 0,
-          uniqueId: data.data!.deviceModel ?? "",
-          walletBalance: 0),
+      RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0),
     );
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
 
-    final DatabaseReference databaseRef =
-        firebaseDatabase.ref().child("astrologer/${data.data?.id}");
+    final DatabaseReference databaseRef = firebaseDatabase.ref().child("astrologer/${data.data?.id}");
     databaseRef.set(firebaseUserData.toJson());
+    final appFirebaseService = AppFirebaseService();
+    debugPrint('preferenceService.getUserDetail()!.id ${preferenceService.getUserDetail()!.id}');
+    appFirebaseService.readData('astrologer/${preferenceService.getUserDetail()!.id}/realTime');
   }
 
   @override
@@ -151,7 +145,7 @@ class LoginController extends GetxController {
     return response;
   }
 
-  /*@override
+/*@override
   void onDetached() {
     log('----> detached');
   }

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:divine_astrologer/common/common_functions.dart';
@@ -37,6 +36,20 @@ class AppSocket {
       "call": call,
       "video": video
     });
+  }
+
+  void startAstroCustumerSocketEvent({required String orderId}) {
+    debugPrint('enter startAstroCustPrivateChat');
+    _socket?.emit(ApiProvider().startAstroCustPrivateChat, {
+      "userId": '8726',
+      "astroId": preferenceService.getUserDetail()!.id.toString(),
+      "userType": 'astrologer',
+      "orderId": orderId
+    });
+  }
+
+  void isAstroJoinedChat(void Function(dynamic) callback) {
+    _socket?.on(ApiProvider().astrologerJoinedPrivateChat, callback);
   }
 
   void socketDisconnect() {

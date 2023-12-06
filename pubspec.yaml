@@ -63,6 +63,7 @@ dependencies:
   youtube_player_flutter: ^8.1.2
   pin_input_text_field: ^4.5.1
   device_info_plus: ^9.0.3
+  rxdart: ^0.27.7
 
 dependency_overrides:
   intl: ^0.18.1
@@ -72,6 +73,8 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^3.0.1
   flutter_gen: ^5.3.1
+  build_runner: any
+  flutter_gen_runner: any
 
 flutter_gen:
   output: lib/gen/ # Optional (default: lib/gen/)
@@ -110,3 +113,22 @@ flutter:
           weight: 700
         - asset: assets/fonts/Poppins-ExtraBold.ttf
           weight: 800
+
+    - family: Metropolis
+      fonts:
+        - asset: assets/fonts/metropolis/Metropolis-Bold.otf
+          weight: 700
+        - asset: assets/fonts/metropolis/Metropolis-ExtraBold.otf
+          weight: 800
+        - asset: assets/fonts/metropolis/Metropolis-ExtraLight.otf
+          weight: 200
+        - asset: assets/fonts/metropolis/Metropolis-Light.otf
+          weight: 300
+        - asset: assets/fonts/metropolis/Metropolis-Medium.otf
+          weight: 500
+        - asset: assets/fonts/metropolis/Metropolis-Regular.otf
+          weight: 400
+        - asset: assets/fonts/metropolis/Metropolis-SemiBold.otf
+          weight: 600
+        - asset: assets/fonts/metropolis/Metropolis-Thin.otf
+          weight: 100

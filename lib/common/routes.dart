@@ -5,28 +5,30 @@ import 'package:divine_astrologer/screens/auth/login/login_ui.dart';
 import 'package:divine_astrologer/screens/blocked_user/blocked_user_bindings.dart';
 import 'package:divine_astrologer/screens/chat_message/chat_message_binding.dart';
 import 'package:divine_astrologer/screens/chat_message/chat_message_ui.dart';
-import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_bindings.dart';
-import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_ui.dart';
-import 'package:divine_astrologer/screens/home_screen_options/notice_board_detail/notice_detail_ui.dart';
-import 'package:divine_astrologer/screens/live_tips/live_tips_binding.dart';
-import 'package:divine_astrologer/screens/live_tips/live_tips_ui.dart';
-import 'package:divine_astrologer/screens/number_change/sub_screen/otp_screen_for_update_mobile_number.dart';
-import 'package:divine_astrologer/screens/side_menu/settings/inner_pages/privacy_policy_ui.dart';
-import 'package:divine_astrologer/screens/side_menu/settings/inner_pages/terms_condition_ui.dart';
-import 'package:divine_astrologer/screens/side_menu/settings/settings_ui.dart';
-import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy/final_remedies_sub_binding.dart';
-import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy/final_remedies_sub_ui.dart';
+import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_binding.dart';
+import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_binding.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/earning/earning_bindings.dart';
 import 'package:divine_astrologer/screens/home_screen_options/earning/earning_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/kundli_detail/kundli_detail.binding.dart';
 import 'package:divine_astrologer/screens/home_screen_options/kundli_detail/kundli_detail_ui.dart';
+import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_bindings.dart';
+import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_ui.dart';
+import 'package:divine_astrologer/screens/home_screen_options/notice_board_detail/notice_detail_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_bindings.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_ui.dart';
+import 'package:divine_astrologer/screens/live_tips/live_tips_binding.dart';
+import 'package:divine_astrologer/screens/live_tips/live_tips_ui.dart';
+import 'package:divine_astrologer/screens/number_change/sub_screen/otp_screen_for_update_mobile_number.dart';
+import 'package:divine_astrologer/screens/side_menu/donation/donation_ui.dart';
+import 'package:divine_astrologer/screens/side_menu/settings/inner_pages/privacy_policy_ui.dart';
+import 'package:divine_astrologer/screens/side_menu/settings/inner_pages/terms_condition_ui.dart';
+import 'package:divine_astrologer/screens/side_menu/settings/settings_ui.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/category_detail/category_detail_binding.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/category_detail/category_detail_ui.dart';
-import 'package:divine_astrologer/screens/side_menu/donation/donation_ui.dart';
+import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy/final_remedies_sub_binding.dart';
+import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy/final_remedies_sub_ui.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/suggest_remedies_sub/suggest_remedies_sub_binding.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/suggest_remedies_sub/suggest_remedies_sub_ui.dart';
 import 'package:divine_astrologer/screens/video_call/video_call.dart';
@@ -34,30 +36,31 @@ import 'package:divine_astrologer/screens/video_call/video_call_binding.dart';
 import 'package:divine_astrologer/screens/video_call_page/video_call_page.dart';
 import 'package:divine_astrologer/screens/video_call_page/video_call_page_binding.dart';
 import 'package:get/get.dart';
+
 import '../screens/bank_details/bank_detail_binding.dart';
 import '../screens/bank_details/bank_details_ui.dart';
 import '../screens/blocked_user/blocked_user_ui.dart';
 import '../screens/chat_message/widgets/image_preview.dart';
 import '../screens/dashboard/dashboard_bindings.dart';
 import '../screens/dashboard/dashboard_ui.dart';
-import '../screens/edit_profile/edit_profile_ui.dart';
 import '../screens/edit_profile/edit_profile_binding.dart';
+import '../screens/edit_profile/edit_profile_ui.dart';
 import '../screens/home_screen_options/notice_board_detail/notice_detail_bindings.dart';
 import '../screens/number_change/number_change_binding.dart';
 import '../screens/number_change/number_change_ui.dart';
 import '../screens/order_history/all_tab/suggest_remedies_view.dart';
-import '../screens/order_history/order_history_ui.dart';
 import '../screens/order_history/order_history_binding.dart';
+import '../screens/order_history/order_history_ui.dart';
 import '../screens/price_change/price_change_binding.dart';
 import '../screens/price_change/price_change_ui.dart';
 import '../screens/price_history/price_history_binding.dart';
 import '../screens/price_history/price_history_ui.dart';
 import '../screens/profile_options/upload_story/upload_story_ui.dart';
 import '../screens/profile_options/upload_your_photos/upload_your_photos.dart';
-import '../screens/side_menu/donation/donation_binding.dart';
-import '../screens/side_menu/donation_detail/donation_detail_ui.dart';
 import '../screens/rank_system/rank_system_binding.dart';
 import '../screens/rank_system/rank_system_ui.dart';
+import '../screens/side_menu/donation/donation_binding.dart';
+import '../screens/side_menu/donation_detail/donation_detail_ui.dart';
 import '../screens/side_menu/important_numbers/important_numbers_binding.dart';
 import '../screens/side_menu/important_numbers/important_numbers_ui.dart';
 import '../screens/side_menu/settings/settings_binding.dart';
@@ -87,6 +90,7 @@ class RouteName {
   static const String donationUi = "/donationUi";
   static const String donationDetailPage = "/donationDetailPage";
   static const String chatMessageUI = "/chatMessageUI";
+  static const String chatMessageWithSocketUI = "/chatMessageWithSocketUI";
   static const String suggestRemediesSubUI = "/suggestRemediesSubUI";
   static const String finalRemediesSubUI = "/finalRemediesSubUI";
   static const String categoryDetail = "/categoryDetail";
@@ -108,45 +112,27 @@ class RouteName {
   static const String numberChangeOtpScreen = "/numberChangeOtpScreen";
 }
 
+final Set<String> validRoutes = {RouteName.chatMessageUI};
+
 class Routes {
   static final routes = <GetPage>[
-    GetPage(
-        page: () => const SplashUI(),
-        name: RouteName.root,
-        binding: SplashBinding()),
+    GetPage(page: () => const SplashUI(), name: RouteName.root, binding: SplashBinding()),
     GetPage(
       page: () => LoginUI(),
       name: RouteName.login,
       binding: LoginBinding(),
     ),
-    GetPage(
-        page: () => const DashboardScreen(),
-        name: RouteName.dashboard,
-        binding: DashboardBinding()),
-    GetPage(
-        page: () => const BlockedUserUI(),
-        name: RouteName.blockedUser,
-        binding: BlockedUserBinding()),
-    GetPage(
-        page: () => const EditProfileUI(),
-        name: RouteName.editProfileUI,
-        binding: EditProfileBinding()),
-    GetPage(
-        page: () => const OrderHistoryUI(),
-        name: RouteName.orderHistory,
-        binding: OrderHistoryBinding()),
+    GetPage(page: () => const DashboardScreen(), name: RouteName.dashboard, binding: DashboardBinding()),
+    GetPage(page: () => const BlockedUserUI(), name: RouteName.blockedUser, binding: BlockedUserBinding()),
+    GetPage(page: () => const EditProfileUI(), name: RouteName.editProfileUI, binding: EditProfileBinding()),
+    GetPage(page: () => const OrderHistoryUI(), name: RouteName.orderHistory, binding: OrderHistoryBinding()),
     GetPage(
         page: () => const ReferAnAstrologer(),
         name: RouteName.referAstrologer,
         binding: ReferAstrologerBinding()),
+    GetPage(page: () => const YourEarning(), name: RouteName.yourEarning, binding: YourEarningBinding()),
     GetPage(
-        page: () => const YourEarning(),
-        name: RouteName.yourEarning,
-        binding: YourEarningBinding()),
-    GetPage(
-        page: () => const PriceHistoryUI(),
-        name: RouteName.priceHistoryUI,
-        binding: PriceHistoryBinding()),
+        page: () => const PriceHistoryUI(), name: RouteName.priceHistoryUI, binding: PriceHistoryBinding()),
     GetPage(
         page: () => const PriceChangeReqUI(),
         name: RouteName.priceChangeReqUI,
@@ -155,37 +141,16 @@ class Routes {
         page: () => const NumberChangeReqUI(),
         name: RouteName.numberChangeReqUI,
         binding: NumberChangeReqBinding()),
+    GetPage(page: () => const BankDetailsUI(), name: RouteName.bankDetailsUI, binding: BankDetailBinding()),
+    GetPage(page: () => const KundliUi(), name: RouteName.checkKundli, binding: KundliBinding()),
+    GetPage(page: () => const RankSystemUI(), name: RouteName.rankSystemUI, binding: RankSystemBinding()),
+    GetPage(page: () => const KundliDetailUi(), name: RouteName.kundliDetail, binding: KundliDetailBinding()),
+    GetPage(page: () => const DonationUi(), name: RouteName.donationUi, binding: DonationBinding()),
     GetPage(
-        page: () => const BankDetailsUI(),
-        name: RouteName.bankDetailsUI,
-        binding: BankDetailBinding()),
-    GetPage(
-        page: () => const KundliUi(),
-        name: RouteName.checkKundli,
-        binding: KundliBinding()),
-    GetPage(
-        page: () => const RankSystemUI(),
-        name: RouteName.rankSystemUI,
-        binding: RankSystemBinding()),
-    GetPage(
-        page: () => const KundliDetailUi(),
-        name: RouteName.kundliDetail,
-        binding: KundliDetailBinding()),
-    GetPage(
-        page: () => const DonationUi(),
-        name: RouteName.donationUi,
-        binding: DonationBinding()),
-    GetPage(
-        page: () => const DonationDetailUi(),
-        name: RouteName.donationDetailPage,
-        binding: DonationBinding()),
-    GetPage(
-        page: () => const ChatMessageUI(),
-        name: RouteName.chatMessageUI,
-        binding: ChatMessageBinding()),
-    GetPage(
-        page: () => const SuggestRemediesView(),
-        name: RouteName.suggestRemediesView),
+        page: () => const DonationDetailUi(), name: RouteName.donationDetailPage, binding: DonationBinding()),
+    GetPage(page: () => const ChatMessageUI(), name: RouteName.chatMessageUI, binding: ChatMessageBinding()),
+    GetPage(page: () => const ChatMessageWithSocketUI(), name: RouteName.chatMessageWithSocketUI, binding: ChatMessageWithSocketBinding()),
+    GetPage(page: () => const SuggestRemediesView(), name: RouteName.suggestRemediesView),
     GetPage(
         page: () => const SuggestRemediesSubUI(),
         name: RouteName.suggestRemediesSubUI,
@@ -198,42 +163,22 @@ class Routes {
         page: () => const CategoryDetailUi(),
         name: RouteName.categoryDetail,
         binding: CategoryDetailBinding()),
-    GetPage(
-        page: () => const NoticeBoardUi(),
-        name: RouteName.noticeBoard,
-        binding: NoticeBoardBinding()),
-    GetPage(
-        page: () => const NoticeDetailUi(),
-        name: RouteName.noticeDetail,
-        binding: NoticeDetailBinding()),
+    GetPage(page: () => const NoticeBoardUi(), name: RouteName.noticeBoard, binding: NoticeBoardBinding()),
+    GetPage(page: () => const NoticeDetailUi(), name: RouteName.noticeDetail, binding: NoticeDetailBinding()),
     GetPage(
         page: () => const ImportantNumbersUI(),
         name: RouteName.importantNumbers,
         binding: ImportantNumbersBinding()),
-    GetPage(
-        page: () => const WaitListUI(),
-        name: RouteName.waitList,
-        binding: WaitListBinding()),
-    GetPage(
-        page: () => const SettingsUI(),
-        name: RouteName.settingsUI,
-        binding: SettingsBinding()),
-    GetPage(
-        page: () => const LiveTipsUI(),
-        name: RouteName.liveTipsUI,
-        binding: LiveTipsBinding()),
-    GetPage(
-        page: () => const UploadYourPhotosUi(),
-        name: RouteName.uploadYourPhotosUi),
+    GetPage(page: () => const WaitListUI(), name: RouteName.waitList, binding: WaitListBinding()),
+    GetPage(page: () => const SettingsUI(), name: RouteName.settingsUI, binding: SettingsBinding()),
+    GetPage(page: () => const LiveTipsUI(), name: RouteName.liveTipsUI, binding: LiveTipsBinding()),
+    GetPage(page: () => const UploadYourPhotosUi(), name: RouteName.uploadYourPhotosUi),
     GetPage(page: () => const UploadStoryUi(), name: RouteName.uploadStoryUi),
     GetPage(
       page: () => const ImagePreviewUi(),
       name: RouteName.imagePreviewUi,
     ),
-    GetPage(
-        page: () => const WalletUI(),
-        name: RouteName.walletScreenUI,
-        binding: WalletBinding()),
+    GetPage(page: () => const WalletUI(), name: RouteName.walletScreenUI, binding: WalletBinding()),
     GetPage(
       page: () => const PrivacyPolicyUI(),
       name: RouteName.privacyPolicy,

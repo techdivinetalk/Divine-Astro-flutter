@@ -35,7 +35,8 @@ class SplashController extends GetxController {
       final appFirebaseService = AppFirebaseService();
       socket.socketConnect();
       debugPrint('preferenceService.getUserDetail()!.id ${preferenceService.getUserDetail()!.id}');
-      appFirebaseService.readData('AstrologerList/AstroUser/${preferenceService.getUserDetail()!.id}/');
+      appFirebaseService.firebaseConnect();
+      appFirebaseService.readData('astrologer/${preferenceService.getUserDetail()!.id}/realTime');
       Future.delayed(
         const Duration(seconds: 1),
         () => Get.offAllNamed(RouteName.dashboard),

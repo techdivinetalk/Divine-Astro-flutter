@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:aws_s3_upload/aws_s3_upload.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/model/chat/req_common_chat_model.dart';
 import 'package:divine_astrologer/repository/chat_repository.dart';
@@ -26,8 +27,7 @@ final UserRepository userRepository = Get.find<UserRepository>();
 SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
 var userData = preferenceService.getUserDetail();
 
-Future<String> uploadImageToS3Bucket(
-    File? selectedFile, String fileName) async {
+Future<String> uploadImageToS3Bucket(File? selectedFile, String fileName) async {
   var commonConstants = await userRepository.constantDetailsData();
   var dataString = commonConstants.data.awsCredentails.baseurl?.split(".");
   var extension = p.extension(selectedFile!.path);
@@ -47,14 +47,11 @@ Future<String> uploadImageToS3Bucket(
   }
 }
 
-void checkNotification(
-    {required bool isFromNotification, Map? updatedData}) async {
+void checkNotification({required bool isFromNotification, Map? updatedData}) async {
   Map notificationList;
   if (isFromNotification) {
-    final snapshot = await FirebaseDatabase.instance
-        .ref()
-        .child("astrologer/${userData?.id}/realTime/notification")
-        .get();
+    final snapshot =
+        await FirebaseDatabase.instance.ref().child("astrologer/${userData?.id}/realTime/notification").get();
     notificationList = snapshot.value as Map;
   } else {
     notificationList = updatedData!;
@@ -93,8 +90,7 @@ void checkNotification(
           }
         } else {
           if (value["type"] == 0) {
-            showNotificationWithActions(
-                message: "${value["message"]}", title: "${value["title"]}");
+            showNotificationWithActions(message: "${value["message"]}", title: "${value["title"]}");
             updateMsgDelieveredStatus(newMessage, 1);
           }
 
@@ -102,8 +98,7 @@ void checkNotification(
         }
       } else {
         if (value["type"] == 0) {
-          showNotificationWithActions(
-              message: "${value["message"]}", title: "${value["title"]}");
+          showNotificationWithActions(message: "${value["message"]}", title: "${value["title"]}");
           updateMsgDelieveredStatus(newMessage, 1);
         }
 
@@ -134,8 +129,7 @@ void setHiveDatabase(String userDataKey, ChatMessage newMessage) async {
   }
   databaseMessage.chatMessages = chatMessages;
 
-  await hiveServices.addData(
-      key: userDataKey, data: jsonEncode(databaseMessage.toOfflineJson()));
+  await hiveServices.addData(key: userDataKey, data: jsonEncode(databaseMessage.toOfflineJson()));
   Future.delayed(const Duration(seconds: 5)).then((value) async {
     await hiveServices.close();
   });
@@ -161,8 +155,7 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
 
   firebaseDatabase
-      .ref(
-          "user/${currentChatUserId.value}/realTime/notification/${newMessage.time}")
+      .ref("user/${currentChatUserId.value}/realTime/notification/${newMessage.time}")
       .set(message.toOfflineJson());
 
   removeNotificationNode(nodeId: "/${newMessage.time}");
@@ -171,15 +164,9 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
 removeNotificationNode({String? nodeId}) {
   var userData = preferenceService.getUserDetail();
   if (nodeId == null) {
-    FirebaseDatabase.instance
-        .ref()
-        .child("astrologer/${userData?.id}/realTime/notification")
-        .remove();
+    FirebaseDatabase.instance.ref().child("astrologer/${userData?.id}/realTime/notification").remove();
   } else {
-    FirebaseDatabase.instance
-        .ref()
-        .child("astrologer/${userData?.id}/realTime/notification$nodeId")
-        .remove();
+    FirebaseDatabase.instance.ref().child("astrologer/${userData?.id}/realTime/notification$nodeId").remove();
   }
 }
 
@@ -201,8 +188,7 @@ void divineSnackBar({required String data, Color? color, Duration? duration}) {
       duration: duration ?? const Duration(milliseconds: 4000),
       content: Text(
         data,
-        style: TextStyle(
-            color: color != null ? AppColors.white : AppColors.blackColor),
+        style: TextStyle(color: color != null ? AppColors.white : AppColors.blackColor),
       ),
       backgroundColor: color ?? AppColors.lightYellow,
       showCloseIcon: true,
@@ -217,15 +203,28 @@ acceptOrRejectChat({required int? orderId, required int? queueId}) async {
 // * is_timeout: should be 1 when reject by timeout"
 
   ResCommonChatStatus response = await ChatRepository().chatAccept(
-      ReqCommonChatParams(
-              queueId: queueId,
-              orderId: orderId,
-              isTimeout: 0,
-              acceptOrReject: 1)
-          .toJson());
+      ReqCommonChatParams(queueId: queueId, orderId: orderId, isTimeout: 0, acceptOrReject: 1).toJson());
   if (response.statusCode == 200) {
     return true;
   } else {
     return false;
   }
+}
+
+Future<String?> getDeviceId() async {
+  final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+  try {
+    if (Theme.of(Get.context!).platform == TargetPlatform.iOS) {
+      var iosDeviceInfo = await deviceInfoPlugin.iosInfo;
+      debugPrint('iOs Device token - ${iosDeviceInfo.identifierForVendor}');
+      return iosDeviceInfo.identifierForVendor;
+    } else {
+      var androidDeviceInfo = await deviceInfoPlugin.androidInfo;
+      debugPrint('androidDevice token - ${androidDeviceInfo.id}');
+      return androidDeviceInfo.id;
+    }
+  } catch (e) {
+    debugPrint('Failed to get device ID: $e');
+  }
+  return '';
 }
