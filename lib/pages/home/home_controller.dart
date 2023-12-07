@@ -2,9 +2,12 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
+import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_bottomsheet.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
+import 'package:divine_astrologer/model/feedback_response.dart';
 import 'package:divine_astrologer/model/update_offer_type_response.dart';
 import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/pages/home/home_ui.dart';
@@ -41,6 +44,7 @@ class HomeController extends GetxController {
   UserData? userData = UserData();
   final preferenceService = Get.find<SharedPreferenceService>();
   final UserRepository userRepository = Get.put(UserRepository());
+  final HomePageRepository homePageRepository = Get.put(HomePageRepository());
   final homeScreenKey = GlobalKey<ScaffoldState>();
   int scoreIndex = 0;
   List<Map<String, dynamic>> yourScore = [
@@ -76,12 +80,17 @@ class HomeController extends GetxController {
     appbarTitle.value = userData?.name ?? "Astrologer Name";
     getConstantDetailsData();
     getDashboardDetail();
+    getFeedbackData();
   }
 
   ConstantDetailsModelClass? getConstantDetails;
   RxBool profileDataSync = false.obs;
 
   HomeData? homeData;
+  RxBool isFeedbackAvailable = false.obs;
+  FeedbackData? feedbackResponse;
+
+  List<FeedbackData>? feedbacksList;
   Loading loading = Loading.initial;
   RxBool shopDataSync = false.obs;
   ViewTrainingVideoModelClass? viewTrainingVideoModelClass;
@@ -128,6 +137,28 @@ class HomeController extends GetxController {
     }
   }
 
+  getFeedbackData() async {
+    loading = Loading.initial;
+    update();
+    try {
+      var response = await homePageRepository.getFeedbackData();
+      isFeedbackAvailable.value = response.success ?? false;
+      debugPrint('val: $isFeedbackAvailable');
+      if (isFeedbackAvailable.value) {
+        feedbackResponse = response.data?[0];
+        feedbacksList = response.data;
+        showFeedbackBottomSheet();
+        debugPrint('feed id: ${feedbackResponse?.id}');
+      }
+    } catch (error) {
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      }
+    }
+  }
+
   getDashboardDetail() async {
     loading = Loading.initial;
     update();
@@ -163,25 +194,28 @@ class HomeController extends GetxController {
     callSwitch.value = homeData?.sessionType?.call == 1;
     videoSwitch.value = homeData?.sessionType?.video == 1;
 
-    if (homeData?.sessionType?.chatSchedualAt != null && homeData?.sessionType?.chatSchedualAt != '') {
-      DateTime formattedDate =
-          DateFormat("yyyy-MM-dd hh:mm:ss").parse(homeData!.sessionType!.chatSchedualAt!);
+    if (homeData?.sessionType?.chatSchedualAt != null &&
+        homeData?.sessionType?.chatSchedualAt != '') {
+      DateTime formattedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
+          .parse(homeData!.sessionType!.chatSchedualAt!);
       String formattedTime = DateFormat("hh:mm a").format(formattedDate);
 
       selectedChatDate.value = formattedDate;
       selectedChatTime.value = formattedTime;
     }
-    if (homeData?.sessionType?.callSchedualAt != null && homeData?.sessionType?.callSchedualAt != '') {
-      DateTime formattedDate =
-          DateFormat("yyyy-MM-dd hh:mm:ss").parse(homeData!.sessionType!.callSchedualAt!);
+    if (homeData?.sessionType?.callSchedualAt != null &&
+        homeData?.sessionType?.callSchedualAt != '') {
+      DateTime formattedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
+          .parse(homeData!.sessionType!.callSchedualAt!);
       String formattedTime = DateFormat("hh:mm a").format(formattedDate);
 
       selectedCallDate.value = formattedDate;
       selectedCallTime.value = formattedTime;
     }
-    if (homeData?.sessionType?.videoSchedualAt != null && homeData?.sessionType?.videoSchedualAt != '') {
-      DateTime formattedDate =
-          DateFormat("yyyy-MM-dd hh:mm:ss").parse(homeData!.sessionType!.videoSchedualAt!);
+    if (homeData?.sessionType?.videoSchedualAt != null &&
+        homeData?.sessionType?.videoSchedualAt != '') {
+      DateTime formattedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
+          .parse(homeData!.sessionType!.videoSchedualAt!);
       String formattedTime = DateFormat("hh:mm a").format(formattedDate);
 
       selectedVideoDate.value = formattedDate;
@@ -281,7 +315,8 @@ class HomeController extends GetxController {
     selectedVideoTime(value);
   }
 
-  Future<void> updateSessionType(bool value, RxBool switchType, int type) async {
+  Future<void> updateSessionType(
+      bool value, RxBool switchType, int type) async {
     //type: 1 - chat, 2 - call, 3 - videoCall
     Map<String, dynamic> params = {
       "is_chat": getBoolToString(type == 1 ? value : chatSwitch.value),
@@ -291,7 +326,8 @@ class HomeController extends GetxController {
 
     sessionTypeLoading.value = Loading.loading;
     try {
-      UpdateSessionTypeResponse response = await userRepository.updateSessionTypeApi(params);
+      UpdateSessionTypeResponse response =
+          await userRepository.updateSessionTypeApi(params);
       if (response.statusCode == 200) {
         switchType.value = value;
         socket.updateChatCallSocketEvent(
@@ -319,7 +355,8 @@ class HomeController extends GetxController {
     };
     offerTypeLoading.value = Loading.loading;
     try {
-      UpdateOfferResponse response = await userRepository.updateOfferTypeApi(params);
+      UpdateOfferResponse response =
+          await userRepository.updateOfferTypeApi(params);
       if (response.statusCode == 200) {
         promotionOfferSwitch[index] = value;
       }
@@ -344,8 +381,8 @@ class HomeController extends GetxController {
             ? selectedCallDate.value
             : selectedVideoDate.value;
     DateTime parseDate = DateFormat("hh:mm a").parse(selectedTime);
-    var formattedTime = (DateTime(
-        selectedDate.year, selectedDate.month, selectedDate.day, parseDate.hour, parseDate.minute, 0));
+    var formattedTime = (DateTime(selectedDate.year, selectedDate.month,
+        selectedDate.day, parseDate.hour, parseDate.minute, 0));
 
     bool difference = DateTime.now().isBefore(formattedTime);
     return difference;
@@ -363,8 +400,8 @@ class HomeController extends GetxController {
             ? selectedCallDate.value
             : selectedVideoDate.value;
     DateTime parseDate = DateFormat("hh:mm a").parse(selectedTime);
-    var formattedTime = (DateTime(
-        selectedDate.year, selectedDate.month, selectedDate.day, parseDate.hour, parseDate.minute, 0));
+    var formattedTime = (DateTime(selectedDate.year, selectedDate.month,
+        selectedDate.day, parseDate.hour, parseDate.minute, 0));
 
     bool difference = DateTime.now().isBefore(formattedTime);
 
@@ -417,13 +454,18 @@ class HomeController extends GetxController {
   }
 
   showOnceInDay() async {
-    int timestamp = await preferenceService.getIntPrefs(SharedPreferenceService.performanceDialog);
+    int timestamp = await preferenceService
+        .getIntPrefs(SharedPreferenceService.performanceDialog);
 
     if (timestamp == 0 ||
-        (DateTime.now().difference(DateTime.fromMillisecondsSinceEpoch(timestamp)).inDays > 0) ||
+        (DateTime.now()
+                .difference(DateTime.fromMillisecondsSinceEpoch(timestamp))
+                .inDays >
+            0) ||
         getDateDifference(timestamp)) {
       await preferenceService.setIntPrefs(
-          SharedPreferenceService.performanceDialog, DateTime.now().millisecondsSinceEpoch);
+          SharedPreferenceService.performanceDialog,
+          DateTime.now().millisecondsSinceEpoch);
       showDialog(
         context: Get.context!,
         barrierColor: AppColors.darkBlue.withOpacity(0.5),
@@ -432,11 +474,26 @@ class HomeController extends GetxController {
     }
   }
 
+  showFeedbackBottomSheet() async {
+    await openBottomSheet(
+      Get.context!,
+      title: "Feedback Available!!!",
+      btnTitle: "Check Report",
+      functionalityWidget: Text(
+        feedbackResponse?.remark ?? '',
+        textAlign: TextAlign.center,
+        style: AppTextStyle.textStyle16(),
+      ),
+    );
+  }
+
   getDateDifference(int timestamp) {
     DateTime dtTimestamp = DateTime.fromMillisecondsSinceEpoch(timestamp);
     DateTime now = DateTime.now();
 
-    if (now.day != dtTimestamp.day || now.month != dtTimestamp.month || now.year != dtTimestamp.year) {
+    if (now.day != dtTimestamp.day ||
+        now.month != dtTimestamp.month ||
+        now.year != dtTimestamp.year) {
       return true;
     } else {
       return false;
