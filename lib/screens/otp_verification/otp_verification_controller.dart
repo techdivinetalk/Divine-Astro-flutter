@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/screens/otp_verification/timer_controller.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -122,22 +123,43 @@ class OtpVerificationController extends GetxController {
     }
   }
 
-  void updateLoginDatainFirebase(ResLogin data) {
+  // Future<void> updateLoginDatainFirebase(ResLogin data) async {
+  //   String uniqueId = await getDeviceId() ?? '';
+  //   FirebaseUserData firebaseUserData = FirebaseUserData(
+  //     data.data!.name!,
+  //     data.data!.deviceToken!,
+  //     data.data!.image ?? "",
+  //     RealTime(
+  //         isEngagedStatus: 0,
+  //         uniqueId: uniqueId,
+  //         walletBalance: 0),
+  //   );
+  //   FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
+  //
+  //   final DatabaseReference databaseRef =
+  //   firebaseDatabase.ref().child("astrologer/${data.data?.id}");
+  //   databaseRef.set(firebaseUserData.toJson());
+  // }
+
+
+  Future<void> updateLoginDatainFirebase(ResLogin data) async {
+    String uniqueId = await getDeviceId() ?? '';
     FirebaseUserData firebaseUserData = FirebaseUserData(
       data.data!.name!,
       data.data!.deviceToken!,
       data.data!.image ?? "",
-      RealTime(
-          isEngagedStatus: 0,
-          uniqueId: data.data!.deviceModel ?? "",
-          walletBalance: 0),
+      RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0),
     );
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
 
-    final DatabaseReference databaseRef =
-    firebaseDatabase.ref().child("astrologer/${data.data?.id}");
+    final DatabaseReference databaseRef = firebaseDatabase.ref().child("astrologer/${data.data?.id}");
     databaseRef.set(firebaseUserData.toJson());
+    final appFirebaseService = AppFirebaseService();
+    debugPrint('preferenceService.getUserDetail()!.id ${preferenceService.getUserDetail()!.id}');
+    appFirebaseService.readData('astrologer/${preferenceService.getUserDetail()!.id}/realTime');
   }
+
+
 
   navigateToDashboard(ResLogin data) async {
     preferenceService.erase();
