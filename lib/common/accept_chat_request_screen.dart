@@ -5,9 +5,17 @@ import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 acceptChatRequestBottomSheet(BuildContext context,
-    {required void Function() onPressed, required String orderId}) {
+    {required void Function() onPressed,
+    required orderStatus,
+    required customerName,
+    required dob,
+    required placeOfBirth,
+    required timeOfBirth,
+    required maritalStatus,
+    required problemArea}) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
       context: context,
@@ -21,15 +29,39 @@ acceptChatRequestBottomSheet(BuildContext context,
         return FractionallySizedBox(
             widthFactor: 1.0,
             heightFactor: 1.0,
-            child: AcceptChatRequestScreen(onPressed: onPressed, orderId: orderId));
+            child: AcceptChatRequestScreen(
+              onPressed: onPressed,
+              orderStatus: orderStatus,
+              customerName: customerName,
+              dob: dob,
+              placeOfBirth: placeOfBirth,
+              timeOfBirth: timeOfBirth,
+              maritalStatus: maritalStatus,
+              problemArea: problemArea,
+            ));
       });
 }
 
 class AcceptChatRequestScreen extends StatelessWidget {
   final void Function() onPressed;
-  final String orderId;
+  final String orderStatus;
+  final String customerName;
+  final String dob;
+  final String placeOfBirth;
+  final String timeOfBirth;
+  final String maritalStatus;
+  final String problemArea;
 
-  const AcceptChatRequestScreen({super.key, required this.onPressed, required this.orderId});
+  const AcceptChatRequestScreen(
+      {super.key,
+      required this.onPressed,
+      required this.orderStatus,
+      required this.customerName,
+      required this.dob,
+      required this.placeOfBirth,
+      required this.timeOfBirth,
+      required this.maritalStatus,
+      required this.problemArea});
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +91,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                           width: 90.w,
                           child: CircleAvatar(child: Assets.images.avatar.svg(height: 60.w, width: 60.w))),
                       SizedBox(height: 10.w),
-                      Text('Astrologer Name',
+                      Text(customerName,
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontFamily: FontFamily.metropolis,
@@ -99,7 +131,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                                   flex: 4,
                                   child: Align(
                                     alignment: Alignment.topRight,
-                                    child: Text('Vimal Gosain'.tr,
+                                    child: Text(customerName,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontFamily: FontFamily.metropolis,
@@ -113,7 +145,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                               children: [
                                 Expanded(
                                   flex: 6,
-                                  child: Text('specialty'.tr,
+                                  child: Text('Date of Birth',
                                       style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontFamily: FontFamily.metropolis,
@@ -130,7 +162,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                                   flex: 4,
                                   child: Align(
                                     alignment: Alignment.topRight,
-                                    child: Text('Vedic'.tr,
+                                    child: Text(dob,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontFamily: FontFamily.metropolis,
@@ -144,7 +176,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                               children: [
                                 Expanded(
                                   flex: 6,
-                                  child: Text('languageProficiency'.tr,
+                                  child: Text('Place of Birth',
                                       style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontFamily: FontFamily.metropolis,
@@ -161,7 +193,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                                   flex: 4,
                                   child: Align(
                                     alignment: Alignment.topRight,
-                                    child: Text('English and Hindi',
+                                    child: Text(placeOfBirth,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontFamily: FontFamily.metropolis,
@@ -175,7 +207,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                               children: [
                                 Expanded(
                                   flex: 6,
-                                  child: Text('experience'.tr,
+                                  child: Text('Time of Birth',
                                       style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontFamily: FontFamily.metropolis,
@@ -192,7 +224,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                                   flex: 4,
                                   child: Align(
                                     alignment: Alignment.topRight,
-                                    child: Text('10 years',
+                                    child: Text(timeOfBirth,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontFamily: FontFamily.metropolis,
@@ -206,7 +238,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                               children: [
                                 Expanded(
                                   flex: 6,
-                                  child: Text('amount'.tr,
+                                  child: Text('Marital Status',
                                       style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontFamily: FontFamily.metropolis,
@@ -223,7 +255,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                                   flex: 4,
                                   child: Align(
                                     alignment: Alignment.topRight,
-                                    child: Text('₹100/ Min',
+                                    child: Text(maritalStatus,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontFamily: FontFamily.metropolis,
@@ -237,7 +269,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                               children: [
                                 Expanded(
                                   flex: 6,
-                                  child: Text('astrologerRating'.tr,
+                                  child: Text('Problem Area',
                                       style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontFamily: FontFamily.metropolis,
@@ -256,7 +288,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                                     flex: 3,
                                     child: Align(
                                         alignment: Alignment.topRight,
-                                        child: Text('4.5',
+                                        child: Text(problemArea,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400,
                                                 fontFamily: FontFamily.metropolis,
@@ -360,13 +392,36 @@ class AcceptChatRequestScreen extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 25.w),
-                      CommonElevatedButton(
-                          showBorder: false,
-                          width: double.infinity,
-                          borderRadius: 5.r,
-                          backgroundColor: AppColors.brownColour,
-                          text: 'acceptChatRequest'.tr,
-                          onPressed: onPressed)
+                      orderStatus == '1'
+                          ? Container(
+                              height: kToolbarHeight,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: AppColors.brown),
+                                  borderRadius: BorderRadius.circular(5.r)),
+                              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                Text('Waiting for user to connect',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: FontFamily.metropolis,
+                                        fontSize: 16.sp,
+                                        color: AppColors.brownColour)),
+                                Assets.lottie.loadingDots.lottie(
+                                    width: 45,
+                                    height: 30,
+                                    repeat: true,
+                                    frameRate: FrameRate(120),
+                                    animate: true)
+                              ]))
+                          : orderStatus == '0'
+                              ? CommonElevatedButton(
+                                  showBorder: false,
+                                  width: double.infinity,
+                                  borderRadius: 5.r,
+                                  backgroundColor: AppColors.brownColour,
+                                  text: 'acceptChatRequest'.tr,
+                                  onPressed: onPressed)
+                              : const SizedBox()
                     ],
                   ),
                 ),

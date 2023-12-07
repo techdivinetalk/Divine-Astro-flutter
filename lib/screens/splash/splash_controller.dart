@@ -32,11 +32,10 @@ class SplashController extends GetxController {
       );
     } else {
       final socket = AppSocket();
-      final appFirebaseService = AppFirebaseService();
+    //  final appFirebaseService = AppFirebaseService();
       socket.socketConnect();
-      debugPrint('preferenceService.getUserDetail()!.id ${preferenceService.getUserDetail()!.id}');
-      appFirebaseService.firebaseConnect();
-      appFirebaseService.readData('astrologer/${preferenceService.getUserDetail()!.id}/realTime');
+    //  debugPrint('preferenceService.getUserDetail()!.id ${preferenceService.getUserDetail()!.id}');
+     // appFirebaseService.readData('astrologer/${preferenceService.getUserDetail()!.id}/realTime');
       Future.delayed(
         const Duration(seconds: 1),
         () => Get.offAllNamed(RouteName.dashboard),

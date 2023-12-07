@@ -386,6 +386,13 @@ Map<String, String> mr() {
     "YouHaveReceivedPrivateCalls":
         "तुम्हाला @count खाजगी कॉल प्राप्त झाले आहेत.",
     "YouHaveReceivedLiveGifts": "तुम्हाला @count थेट भेटवस्तू मिळाल्या आहेत.",
-    "isOnCall": "कॉलवर आहे"
+    "isOnCall": "कॉलवर आहे",
+    'orderDetails':'ऑर्डर तपशील',
+    'orderType':'ऑर्डर प्रकार',
+    'walletBalance':'वॉलेट बॅलन्स',
+    'maximumOrderTime':'जास्तीत जास्त ऑर्डर वेळ',
+    'specialty':'स्पेशालिटी',
+    'languageProficiency':'भाषा प्रवीणता',
+    'astrologerRating':'ज्योतिषी रेटिंग'
   };
 }

@@ -384,6 +384,13 @@ Map<String, String> gu() {
     "YouHaveReceivedVideoCalls": "તમને @count વિડિઓ કૉલ્સ પ્રાપ્ત થયા છે.",
     "YouHaveReceivedPrivateCalls": "તમને @count ખાનગી કૉલ્સ પ્રાપ્ત થયા છે.",
     "YouHaveReceivedLiveGifts": "તમને @count લાઇવ ભેટો પ્રાપ્ત થઈ છે.",
-    "isOnCall": "કોલ પર છે"
+    "isOnCall": "કોલ પર છે",
+    'orderDetails':'ક્રમ વિગતો',
+    'orderType':'ક્રમ પ્રકાર',
+    'walletBalance':'વોલેટ સંતુલન',
+    'maximumOrderTime':'મહત્તમ ક્રમ સમય',
+    'specialty':'વિશેષતા',
+    'languageProficiency':'ભાષા નિપુણતા',
+    'astrologerRating':'જ્યોતિષીય રેટિંગ'
   };
 }

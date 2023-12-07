@@ -385,6 +385,15 @@ Map<String, String> en() {
     "YouHaveReceivedVideoCalls": "You've received @count video calls.",
     "YouHaveReceivedPrivateCalls": "You've received @count private calls.",
     "YouHaveReceivedLiveGifts": "You've received @count live gifts.",
-    "isOnCall": "is on call"
+    "isOnCall": "is on call",
+    'orderDetails':'Order Details',
+    'orderType':'Order Type',
+    'walletBalance':'Wallet Balance',
+    'maximumOrderTime':'Maximum Order Time',
+    'specialty':'Specialty',
+    'languageProficiency':'Language Proficiency',
+    'astrologerRating':'Astrologer Rating',
+    'acceptChatRequest':'Accept Chat Request'
+
   };
 }

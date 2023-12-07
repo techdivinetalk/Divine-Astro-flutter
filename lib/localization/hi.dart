@@ -386,6 +386,13 @@ Map<String, String> hi() {
     "YouHaveReceivedVideoCalls": "आपको @count वीडियो कॉल प्राप्त हुई हैं.",
     "YouHaveReceivedPrivateCalls": "आपको @count निजी कॉल प्राप्त हुई हैं.",
     "YouHaveReceivedLiveGifts": "आपको @count लाइव उपहार प्राप्त हुए हैं.",
-    "isOnCall": "कॉल पर है"
+    "isOnCall": "कॉल पर है",
+    'orderDetails':'आदेश का विवरण',
+    'orderType':'ऑर्डर का प्रकार',
+    'walletBalance':'वॉलेट बैलेंस',
+    'maximumOrderTime':'अधिकतम आदेश समय',
+    'specialty':'विशेषता',
+    'languageProficiency':'भाषा प्रवीणता',
+    'astrologerRating':'ज्योतिषी रेटिंग'
   };
 }

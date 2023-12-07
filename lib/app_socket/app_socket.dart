@@ -55,4 +55,34 @@ class AppSocket {
   void socketDisconnect() {
     _socket?.disconnect();
   }
+
+  void isCustomerJoinedChat(void Function(dynamic) callback) {
+    _socket?.on(ApiProvider().userJoinedPrivateChat, callback);
+  }
+
+  void typingSocket({required String orderId, required userId}) {
+    _socket?.emit(ApiProvider().userTyping,
+        {"typist": preferenceService.getUserDetail()!.id.toString(), "listener": userId, "orderId": orderId});
+  }
+
+  void typingListenerSocket(void Function(dynamic) callback) {
+    _socket?.on(ApiProvider().userTyping, callback);
+  }
+
+  void sendMessageSocket(
+      {required String astroId, required String message, required String messageType, required orderId}) {
+    _socket?.emit(ApiProvider().sendMessage, {
+      "astroId": astroId,
+      "custId": preferenceService.getUserDetail()!.id.toString(),
+      "message": message,
+      "messageTime": DateTime.now().toString(),
+      "messageType": messageType,
+      "userType": 'astrologer',
+      "orderId": orderId.toString()
+    });
+  }
+
+  void sendMessageListenerSocket(void Function(dynamic) callback) {
+    _socket?.on(ApiProvider().messageSent, callback);
+  }
 }

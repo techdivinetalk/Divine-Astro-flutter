@@ -163,7 +163,6 @@ class OtpVerificationController extends GetxController {
 
   navigateToDashboard(ResLogin data) async {
     preferenceService.erase();
-
     preferenceService.setUserDetail(data.data!);
     preferenceService.setToken(data.token!);
     preferenceService.setDeviceToken(deviceToken ?? "");

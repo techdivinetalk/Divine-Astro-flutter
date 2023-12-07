@@ -112,6 +112,10 @@ class ApiProvider {
   final String  joinRoomSocket = "join-room";
   final String  startAstroCustPrivateChat = "start-astro-cust-private-chat";
   final String  astrologerJoinedPrivateChat = "astrologer-joined-private-chat";
+  final String  userJoinedPrivateChat = "user-joined-private-chat";
+  final String  userTyping = "user-typing";
+  final String  sendMessage = "send-message";
+  final String  messageSent = "message-sent";
 
 
   //privacy policy & terms
