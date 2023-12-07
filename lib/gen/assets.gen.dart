@@ -658,6 +658,9 @@ class $AssetsSvgGen {
   SvgGenImage get maximumOrderTimeIcon =>
       const SvgGenImage('assets/svg/maximum_order_time_icon.svg');
 
+  /// File path: assets/svg/message.svg
+  SvgGenImage get message => const SvgGenImage('assets/svg/message.svg');
+
   /// File path: assets/svg/mute.svg
   SvgGenImage get mute => const SvgGenImage('assets/svg/mute.svg');
 
@@ -714,6 +717,7 @@ class $AssetsSvgGen {
         icCall1,
         loginLogo,
         maximumOrderTimeIcon,
+        message,
         mute,
         orderTypeIcon,
         pinkSlider,
