@@ -8,6 +8,7 @@ import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
 import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
+import 'package:divine_astrologer/screens/order_feedback/widget/feedback_card_widget.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/load_image.dart';
@@ -19,6 +20,7 @@ import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
 import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';
+import '../../model/feedback_response.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'home_controller.dart';
 
@@ -226,6 +228,41 @@ class HomeUI extends GetView<HomeController> {
                         ),
                       ),
                       SizedBox(height: 10.h),
+                      Obx( () => controller.isFeedbackAvailable.value ?
+                         Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Get.toNamed(RouteName.orderFeedback, arguments: [controller.feedbacksList]);
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Order Feedback',
+                                    style: AppTextStyle.textStyle16(
+                                        fontColor: AppColors.darkBlue,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  Text(
+                                    "viewAll".tr,
+                                    style: AppTextStyle.textStyle12(
+                                        fontColor: AppColors.darkBlue,
+                                        fontWeight: FontWeight.w400),
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 10.h),
+                            FeedbackCardWidget(feedback: controller.feedbackResponse ?? FeedbackData(createdAt: "2023-11-30T07:39:12.000000Z", id: 9, orderId: 2739782, remark: "add review")),
+                            SizedBox(height: 10.h),
+                          ],
+                        )
+              : const SizedBox(),
+                      ),
+                      // SizedBox(height: 10.h),
+                      // availableFeedbackWidget(controller.feedbackResponse ?? FeedbackData()),
+                      // SizedBox(height: 10.h),
                       GestureDetector(
                         onTap: () {
                           Get.toNamed(RouteName.noticeBoard);

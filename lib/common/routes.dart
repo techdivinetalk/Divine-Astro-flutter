@@ -11,6 +11,8 @@ import 'package:divine_astrologer/screens/home_screen_options/notice_board_detai
 import 'package:divine_astrologer/screens/live_tips/live_tips_binding.dart';
 import 'package:divine_astrologer/screens/live_tips/live_tips_ui.dart';
 import 'package:divine_astrologer/screens/number_change/sub_screen/otp_screen_for_update_mobile_number.dart';
+import 'package:divine_astrologer/screens/order_feedback/order_feedback_binding.dart';
+import 'package:divine_astrologer/screens/order_feedback/order_feedback_ui.dart';
 import 'package:divine_astrologer/screens/otp_verification/otp_verification_binding.dart';
 import 'package:divine_astrologer/screens/otp_verification/otp_verification_ui.dart';
 import 'package:divine_astrologer/screens/side_menu/settings/inner_pages/privacy_policy_ui.dart';
@@ -109,6 +111,7 @@ class RouteName {
   static const String videoCallPage = "/videoCallPage";
   static const String videoCall = "/videoCall";
   static const String numberChangeOtpScreen = "/numberChangeOtpScreen";
+  static const String orderFeedback = "/orderFeedback";
 }
 
 class Routes {
@@ -263,6 +266,11 @@ class Routes {
     GetPage(
       page: () => const OtpVerificationForNumberChange(),
       name: RouteName.numberChangeOtpScreen,
+    ),
+    GetPage(
+      page: () => const OrderFeedbackUI(),
+      name: RouteName.orderFeedback,
+      binding: OrderFeedbackBinding()
     ),
   ];
 }

@@ -63,6 +63,7 @@ class ApiProvider {
   final String updateBankDetails = "updateBankDetails";
   final String getKundliData = "getKundliData";
   final String getHomePageData = "astroDashboard";
+  final String getFeedback = "getNotSeenFeedback";
   final String agoraEndCall = "agoraEndCall";
   final String getWaitingListQueue = "getWaitingListQueue";
   final String getImportantNumber = "getImportantNumber";
