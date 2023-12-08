@@ -98,7 +98,7 @@ class WaitListUI extends GetView<WaitListUIController> {
         children: [
           CachedNetworkPhoto(
             url:
-                "${controller.preference.getBaseImageURL()}/${waitingCustomer.avatar ?? ""}",
+                "${controller.preference.getBaseImageURL()}/${waitingCustomer.avatar ?? ""}",height: 50,width: 50,
           ),
           SizedBox(width: 10.w),
           Expanded(
