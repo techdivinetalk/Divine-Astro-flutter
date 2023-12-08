@@ -9,7 +9,6 @@ import '../../common/app_exception.dart';
 import '../../common/colors.dart';
 import '../../common/common_functions.dart';
 import '../../common/routes.dart';
-import '../../model/customer_login.dart';
 import '../../model/firebase_model.dart';
 import '../../model/res_login.dart';
 import '../../model/send_otp.dart';
@@ -17,7 +16,6 @@ import '../../model/verify_otp.dart';
 import '../../repository/user_repository.dart';
 
 class OtpVerificationController extends GetxController {
-
   OtpVerificationController(this.userRepository);
 
   final UserRepository userRepository;
@@ -47,7 +45,6 @@ class OtpVerificationController extends GetxController {
     }
     super.onReady();
   }
-
 
   resendOtp() async {
     Map<String, dynamic> params = {"mobile_no": number.value};
@@ -109,7 +106,7 @@ class OtpVerificationController extends GetxController {
       "mobile_no": number.value,
       "device_token": await FirebaseMessaging.instance.getToken()
     };
-    try{
+    try {
       ResLogin data = await userRepository.userLogin(params);
       updateLoginDatainFirebase(data);
       navigateToDashboard(data);
@@ -141,7 +138,6 @@ class OtpVerificationController extends GetxController {
   //   databaseRef.set(firebaseUserData.toJson());
   // }
 
-
   Future<void> updateLoginDatainFirebase(ResLogin data) async {
     String uniqueId = await getDeviceId() ?? '';
     FirebaseUserData firebaseUserData = FirebaseUserData(
@@ -152,17 +148,19 @@ class OtpVerificationController extends GetxController {
     );
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
 
-    final DatabaseReference databaseRef = firebaseDatabase.ref().child("astrologer/${data.data?.id}");
+    final DatabaseReference databaseRef =
+        firebaseDatabase.ref().child("astrologer/${data.data?.id}");
     databaseRef.set(firebaseUserData.toJson());
     final appFirebaseService = AppFirebaseService();
-    debugPrint('preferenceService.getUserDetail()!.id ${preferenceService.getUserDetail()!.id}');
-    appFirebaseService.readData('astrologer/${preferenceService.getUserDetail()!.id}/realTime');
+    debugPrint(
+        'preferenceService.getUserDetail()!.id ${preferenceService.getUserDetail()!.id}');
+    appFirebaseService.readData(
+        'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
   }
-
-
 
   navigateToDashboard(ResLogin data) async {
     preferenceService.erase();
+
     preferenceService.setUserDetail(data.data!);
     preferenceService.setToken(data.token!);
     preferenceService.setDeviceToken(deviceToken ?? "");

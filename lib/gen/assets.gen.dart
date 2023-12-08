@@ -415,6 +415,26 @@ class $AssetsImagesGen {
   SvgGenImage get leftArrow =>
       const SvgGenImage('assets/images/left_arrow.svg');
 
+  /// File path: assets/images/live_first_medal.png
+  AssetGenImage get liveFirstMedal =>
+      const AssetGenImage('assets/images/live_first_medal.png');
+
+  /// File path: assets/images/live_leaderboard.png
+  AssetGenImage get liveLeaderboard =>
+      const AssetGenImage('assets/images/live_leaderboard.png');
+
+  /// File path: assets/images/live_second_medal.png
+  AssetGenImage get liveSecondMedal =>
+      const AssetGenImage('assets/images/live_second_medal.png');
+
+  /// File path: assets/images/live_star.png
+  AssetGenImage get liveStar =>
+      const AssetGenImage('assets/images/live_star.png');
+
+  /// File path: assets/images/live_third_medal.png
+  AssetGenImage get liveThirdMedal =>
+      const AssetGenImage('assets/images/live_third_medal.png');
+
   /// File path: assets/images/logo.svg
   SvgGenImage get logo => const SvgGenImage('assets/images/logo.svg');
 
@@ -570,6 +590,11 @@ class $AssetsImagesGen {
         icWedding,
         leaderboardLive,
         leftArrow,
+        liveFirstMedal,
+        liveLeaderboard,
+        liveSecondMedal,
+        liveStar,
+        liveThirdMedal,
         logo,
         medalOne,
         medalThree,
@@ -620,6 +645,13 @@ class $AssetsLottieGen {
 
 class $AssetsSvgGen {
   const $AssetsSvgGen();
+
+  /// File path: assets/svg/.flutter-plugins
+  String get flutterPlugins => 'assets/svg/.flutter-plugins';
+
+  /// File path: assets/svg/.flutter-plugins-dependencies
+  String get flutterPluginsDependencies =>
+      'assets/svg/.flutter-plugins-dependencies';
 
   /// File path: assets/svg/black_dot.svg
   SvgGenImage get blackDot => const SvgGenImage('assets/svg/black_dot.svg');
@@ -692,8 +724,11 @@ class $AssetsSvgGen {
   SvgGenImage get privateCallEarning =>
       const SvgGenImage('assets/svg/private_call_earning.svg');
 
+  /// File path: assets/svg/pubspec.lock
+  String get pubspecLock => 'assets/svg/pubspec.lock';
+
   /// File path: assets/svg/pubspec.yaml
-  String get pubspec => 'assets/svg/pubspec.yaml';
+  String get pubspecYaml => 'assets/svg/pubspec.yaml';
 
   /// File path: assets/svg/switch_camera.svg
   SvgGenImage get switchCamera =>
@@ -712,6 +747,8 @@ class $AssetsSvgGen {
 
   /// List of all assets
   List<dynamic> get values => [
+        flutterPlugins,
+        flutterPluginsDependencies,
         blackDot,
         block,
         blockUser,
@@ -733,7 +770,8 @@ class $AssetsSvgGen {
         pleaseRegister1,
         pleaseRegister2,
         privateCallEarning,
-        pubspec,
+        pubspecLock,
+        pubspecYaml,
         switchCamera,
         videoCallEarning,
         videoMute,
