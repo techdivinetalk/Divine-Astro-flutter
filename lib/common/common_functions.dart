@@ -140,7 +140,7 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   ChatMessage message = ChatMessage(
     orderId: newMessage.orderId,
     message: newMessage.message ?? "",
-    receiverId: newMessage.receiverId!,
+    receiverId: newMessage.receiverId,
     senderId: newMessage.senderId,
     time: newMessage.time,
     type: type,
