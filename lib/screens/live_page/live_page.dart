@@ -40,11 +40,13 @@ class LivePage extends StatefulWidget {
   final bool isHost, isFrontCamera;
   final String localUserID;
   final String? astrologerName, astrologerImage;
+  final String astrologerSpeciality;
 
   const LivePage({
     Key? key,
     required this.liveID,
     required this.localUserID,
+    required this.astrologerSpeciality,
     this.astrologerImage,
     this.astrologerName,
     this.isHost = false,
@@ -115,7 +117,32 @@ class LivePageState extends State<LivePage>
     Future.delayed(const Duration(seconds: 1)).then((value) {
       ZegoUIKit().useFrontFacingCamera(widget.isFrontCamera);
     });
+
+    controller.database
+        .ref()
+        .child("live/${controller.astroId}/leaderboard")
+        .onValue
+        .listen(
+      (event) {
+        if (event.snapshot.value == null) {
+          sortedList = [];
+        } else {
+          Map<dynamic, dynamic> data =
+              event.snapshot.value as Map<dynamic, dynamic>;
+
+          sortedList = data.values.toList()
+            ..sort(
+              (a, b) => b['amount'].compareTo(
+                a['amount'],
+              ),
+            );
+        }
+        setState(() {});
+      },
+    );
   }
+
+  var sortedList = [];
 
   @override
   void dispose() {
@@ -534,6 +561,15 @@ class LivePageState extends State<LivePage>
               mainAxisSize: MainAxisSize.min,
               children: [
                 buildTopMenu(),
+                Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: sortedList.isEmpty
+                        ? const SizedBox()
+                        : SizedBox(
+                            height: 100,
+                            width: 300,
+                            child: leaderboardWidgetSingle(),
+                          )),
                 Obx(() {
                   if (controller.isCoHosting.isTrue) {
                     return const SizedBox();
@@ -652,6 +688,98 @@ class LivePageState extends State<LivePage>
         child: Assets.images.icSendMsg.svg());
   }
 
+  // Widget buildTopMenu() {
+  //   return Padding(
+  //     padding: EdgeInsets.only(top: 5.h),
+  //     child: Row(
+  //       mainAxisSize: MainAxisSize.max,
+  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         IconButton(
+  //             padding: EdgeInsets.only(top: 5.h),
+  //             alignment: Alignment.topCenter,
+  //             onPressed: () {
+  //               showDialog(
+  //                 context: context,
+  //                 builder: (BuildContext context) {
+  //                   return EndSession(
+  //                       onNo: () {},
+  //                       onYes: () {
+  //                         if (controller.coHostUser != null) {
+  //                           controller.setCallType(widget.localUserID);
+  //                         }
+  //                         controller.stopStream(widget.localUserID);
+  //                       });
+  //                 },
+  //               );
+  //             },
+  //             icon: Assets.images.leftArrow.svg()),
+
+  //         Expanded(child:
+  //         Row(
+  //            mainAxisSize: MainAxisSize.max,
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+
+  //           ],
+  //         )
+  //         ),
+
+  //         ClipRRect(
+  //           borderRadius: BorderRadius.circular(40),
+  //           child: BackdropFilter(
+  //             filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
+  //             child: Container(
+  //               padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 4.h),
+  //               decoration: BoxDecoration(
+  //                   color: AppColors.blackColor.withOpacity(.3),
+  //                   borderRadius: BorderRadius.circular(40)),
+  //               child: Row(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   Container(
+  //                     width: 30.w,
+  //                     height: 30.h,
+  //                     clipBehavior: Clip.antiAlias,
+  //                     decoration: const BoxDecoration(
+  //                       shape: BoxShape.circle,
+  //                     ),
+  //                     child: circleAvatar(),
+  //                   ),
+  //                   SizedBox(width: 3.w),
+  //                   Text(
+  //                     widget.astrologerName != null
+  //                         ? widget.astrologerName!.isNotEmpty &&
+  //                                 widget.astrologerName!.length > 8
+  //                             ? "${widget.astrologerName!.substring(0, 8)}..."
+  //                             : widget.astrologerName ?? ""
+  //                         : "",
+  //                     overflow: TextOverflow.ellipsis,
+  //                     style: TextStyle(
+  //                         fontSize: 12.sp,
+  //                         color: AppColors.white,
+  //                         fontWeight: FontWeight.w500),
+  //                   )
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //         const Spacer(),
+
+  //         SizedBox(width: 1.w),
+  //         Obx(() => controller.isCoHosting.value
+  //             ? buildCallDurationWidget()
+  //             : const SizedBox()),
+  //         const Spacer(),
+  //        SizedBox(width: 10.w)
+  //       ],
+  //     ),
+  //   );
+  // }
+
   Widget buildTopMenu() {
     return Padding(
       padding: EdgeInsets.only(top: 5.h),
@@ -661,7 +789,7 @@ class LivePageState extends State<LivePage>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           IconButton(
-              padding: EdgeInsets.only(top: 5.h),
+               padding: EdgeInsets.all(16.h),
               alignment: Alignment.topCenter,
               onPressed: () {
                 showDialog(
@@ -679,89 +807,173 @@ class LivePageState extends State<LivePage>
                 );
               },
               icon: Assets.images.leftArrow.svg()),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(40),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 4.h),
-                decoration: BoxDecoration(
-                    color: AppColors.blackColor.withOpacity(.3),
-                    borderRadius: BorderRadius.circular(40)),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 30.w,
-                      height: 30.h,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                      child: circleAvatar(),
+          Expanded(
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+               
+                 Flexible(
+                  child: Material(
+                    elevation: 10,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(50.0),
                     ),
-                    SizedBox(width: 3.w),
-                    Text(
-                      widget.astrologerName != null
-                          ? widget.astrologerName!.isNotEmpty &&
-                                  widget.astrologerName!.length > 8
-                              ? "${widget.astrologerName!.substring(0, 8)}..."
-                              : widget.astrologerName ?? ""
-                          : "",
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 12.sp,
-                          color: AppColors.white,
-                          fontWeight: FontWeight.w500),
-                    )
-                  ],
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(50.0),
+                      ),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
+                        child: InkWell(
+                          onTap: () {
+                            // if (controller.isCoHostingStarted.isFalse) {
+                            //   Get.toNamed(RouteName.astrologerProfile,
+                            //       arguments: {"astrologer_id": widget.hostId});
+                            //   var userData =
+                            //       controller.preference.getUserDetail();
+                            //   controller.firebaseEvent.astroProfileEvent({
+                            //     "Astrologer_id": '',
+                            //     "Time": "",
+                            //     "Astrologer_name": '',
+                            //     "Astrologer_type": "",
+                            //     "Specialization": "",
+                            //     "User_id": userData?.id.toString(),
+                            //     "Platform_name":
+                            //         Platform.isAndroid ? "Android" : "ios",
+                            //     "Mobile_number":
+                            //         userData?.mobileNumber.toString(),
+                            //     "Total_experience": '',
+                            //     "Language_known": "",
+                            //     "Rating": "",
+                            //     "Astrologer_fee": "",
+                            //     "Screen_name": "Astro_Profile",
+                            //   });
+                            // }
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 5.w, vertical: 4.h),
+                            decoration: BoxDecoration(
+                                color: AppColors.black.withOpacity(.3),
+                                borderRadius: BorderRadius.circular(40)),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(50.0),
+                                  ),
+                                  child: CachedNetworkPhoto(
+                                    width: 48.h,
+                                    height: 48.h,
+                                    url: widget.astrologerImage,
+                                  ),
+                                ),
+                                // Container(
+                                //   width: 50.w,
+                                //   height: 50.h,
+                                //   clipBehavior: Clip.antiAlias,
+                                //   decoration: const BoxDecoration(
+                                //     shape: BoxShape.circle,
+                                //   ),
+                                //   child: circleAvatar(),
+                                // ),
+                                // SizedBox(width: 3.w),
+                                SizedBox(
+                                  width: 10.w,
+                                ),
+                                Flexible(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        // widget.astrologerName != null
+                                        //     ? widget.astrologerName!.length < 8
+                                        //         ? "${widget.astrologerName!.substring(0, 8)}..."
+                                        //         : widget.astrologerName ?? ""
+                                        //     : "",
+                                        widget.astrologerName ?? "",
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontSize: 16.sp,
+                                            color: AppColors.white,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      Text(
+                                        // widget.astrologerName != null
+                                        //     ? widget.astrologerName!.length < 8
+                                        //         ? "${widget.astrologerName!.substring(0, 8)}..."
+                                        //         : widget.astrologerName ?? ""
+                                        //     : "",
+                                       widget.astrologerSpeciality ?? "",
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontSize: 12.sp,
+                                            color: AppColors.white,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10.w,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              
+                SizedBox(
+                  width: 5.w,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Obx(
+                    () => Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        FlutterSwitch(
+                          activeColor: AppColors.appYellowColour.withOpacity(0.7),
+                          inactiveColor: AppColors.grey.withOpacity(0.7),
+                          activeText: "call".tr,
+                          inactiveText: "call".tr,
+                          activeTextColor: AppColors.white,
+                          inactiveTextColor: AppColors.white,
+                          showOnOff: true,
+                          height: 28.h,
+                          padding: 2,
+                          width: 70.w,
+                          activeTextFontWeight: FontWeight.normal,
+                          inactiveTextFontWeight: FontWeight.normal,
+                          value: controller.isCallOnOff.value,
+                          onToggle: (val) {
+                            controller.setAvailibility(
+                              widget.localUserID,
+                              !controller.isCallOnOff.value,
+                            );
+                            controller.isCallOnOff.value =
+                                !controller.isCallOnOff.value;
+                          },
+                        ),
+                        SizedBox(height: 2.h),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          const Spacer(),
-          InkWell(
-              onTap: () {
-                controller.isStarHide.value = !controller.isStarHide.value;
-              },
-              child: Assets.images.starLive.image()),
-          SizedBox(width: 1.w),
-          Obx(() => controller.isCoHosting.value
-              ? buildCallDurationWidget()
-              : const SizedBox()),
-          const Spacer(),
-          Obx(() => Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  FlutterSwitch(
-                    activeColor: AppColors.appYellowColour.withOpacity(0.7),
-                    inactiveColor: AppColors.grey.withOpacity(0.7),
-                    activeText: "call".tr,
-                    inactiveText: "call".tr,
-                    activeTextColor: AppColors.white,
-                    inactiveTextColor: AppColors.white,
-                    showOnOff: true,
-                    height: 28.h,
-                    padding: 2,
-                    width: 70.w,
-                    activeTextFontWeight: FontWeight.normal,
-                    inactiveTextFontWeight: FontWeight.normal,
-                    value: controller.isCallOnOff.value,
-                    onToggle: (val) {
-                      controller.setAvailibility(
-                        widget.localUserID,
-                        !controller.isCallOnOff.value,
-                      );
-                      controller.isCallOnOff.value =
-                          !controller.isCallOnOff.value;
-                    },
-                  ),
-                  SizedBox(height: 2.h),
-                ],
-              )),
-          SizedBox(width: 10.w)
         ],
       ),
     );
@@ -782,6 +994,16 @@ class LivePageState extends State<LivePage>
   Widget sideButtons() {
     return Column(
       children: [
+        sortedList.isEmpty
+            ? const SizedBox()
+            : GestureDetector(
+                onTap: leaderBoardPopup,
+                child: Image.asset(
+                  height: 100,
+                  width: 80,
+                  Assets.images.liveLeaderboard.path,
+                ),
+              ),
         Obx(
           () => controller.isCoHosting.value
               ? ClipOval(
@@ -1010,6 +1232,236 @@ class LivePageState extends State<LivePage>
             }),
       ],
     );
+  }
+
+  leaderBoardPopup() {
+    return showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return Material(
+          color: AppColors.transparent,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Get.back();
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.white),
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(50.0),
+                    ),
+                    color: AppColors.white.withOpacity(0.2),
+                  ),
+                  child: const Icon(
+                    Icons.close,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 15),
+              Column(
+                children: [
+                  ClipRRect(
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(50.0),
+                      topRight: Radius.circular(50.0),
+                    ),
+                    child: Container(
+                      height: Get.height / 2,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.white),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(50.0),
+                          topRight: Radius.circular(50.0),
+                        ),
+                        color: AppColors.white.withOpacity(0.2),
+                      ),
+                      child: leaderboardWidget(),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  leaderboardWidget() {
+    return sortedList.isEmpty
+        ? Container(
+            height: 80,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: AppColors.yellow,
+                width: 2,
+              ),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(50.0),
+                topRight: Radius.circular(50.0),
+              ),
+              color: AppColors.white,
+            ),
+            child: const Center(
+              child: ListTile(
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('No data'),
+                  ],
+                ),
+              ),
+            ),
+          )
+        : ListView.builder(
+            shrinkWrap: true,
+            itemCount: sortedList.length,
+            padding: const EdgeInsets.all(8),
+            itemBuilder: (context, index) {
+              var item = sortedList[index];
+              return Container(
+                height: 80,
+                margin: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 8,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: AppColors.yellow,
+                    width: 2,
+                  ),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(50.0),
+                  ),
+                  color: AppColors.white,
+                ),
+                child: Center(
+                  child: ListTile(
+                    dense: true,
+                    leading: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        index == 0
+                            ? Image.asset(
+                                height: 50,
+                                width: 50,
+                                Assets.images.liveFirstMedal.path,
+                              )
+                            : index == 1
+                                ? Image.asset(
+                                    height: 50,
+                                    width: 50,
+                                    Assets.images.liveSecondMedal.path,
+                                  )
+                                : index == 2
+                                    ? Image.asset(
+                                        height: 50,
+                                        width: 50,
+                                        Assets.images.liveThirdMedal.path,
+                                      )
+                                    : CircleAvatar(
+                                        backgroundColor: Colors.transparent,
+                                        child: Text(
+                                          "${index + 1}",
+                                        ),
+                                      ),
+                        const SizedBox(width: 16),
+                        CachedNetworkImage(
+                          imageUrl: (controller.pref.getAmazonUrl() ?? "") +
+                              (item["pro_pic"] ?? ""),
+                          height: 64,
+                          width: 64,
+                          errorWidget: (context, string, child) =>
+                              const CircleAvatar(
+                            child: Icon(Icons.error_outline_rounded),
+                          ),
+                        ),
+                      ],
+                    ),
+                    title: Text(item["name"]),
+                    subtitle: Text("₹${item["amount"]}"),
+                  ),
+                ),
+              );
+            },
+          );
+  }
+
+  leaderboardWidgetSingle() {
+    return sortedList.isEmpty
+        ? Container(
+            height: 80,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: AppColors.yellow,
+                width: 2,
+              ),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(50.0),
+                topRight: Radius.circular(50.0),
+              ),
+              color: AppColors.white,
+            ),
+            child: const Center(
+              child: ListTile(
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('No data'),
+                  ],
+                ),
+              ),
+            ),
+          )
+        : Container(
+            height: 80,
+            margin: const EdgeInsets.symmetric(
+              vertical: 16,
+              // horizontal: 16,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(
+                Radius.circular(10.0),
+              ),
+              color: AppColors.darkBlue.withOpacity(.5),
+            ),
+            child: Center(
+              child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                dense: true,
+                title: const Text(
+                  "Astrologer's Live Star",
+                  style: TextStyle(color: AppColors.white),
+                ),
+                subtitle: Text(
+                  sortedList[0]["name"],
+                  style: const TextStyle(color: AppColors.white),
+                ),
+                leading: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: CachedNetworkImage(
+                    imageUrl: (controller.pref.getAmazonUrl() ?? "") +
+                        (sortedList[0]["pro_pic"] ?? ""),
+                    height: 64,
+                    width: 64,
+                    errorWidget: (context, string, child) => const CircleAvatar(
+                      child: Icon(Icons.error_outline_rounded),
+                    ),
+                  ),
+                ),
+                trailing: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Image.asset(Assets.images.liveStar.path),
+                ),
+              ),
+            ),
+          );
   }
 
   /// if you use unreliable message channel, you need subscription this method.

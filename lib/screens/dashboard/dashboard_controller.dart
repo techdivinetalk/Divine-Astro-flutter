@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/screens/chat_message/chat_message_controller.dart';
@@ -32,6 +33,7 @@ class DashboardController extends GetxController
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
   UserData? userData;
+  final appFirebaseService = AppFirebaseService();
   // StreamSubscription<DatabaseEvent>? realTimeListener;
   // StreamSubscription<DatabaseEvent>? astroChatListener;
   // Socket? socket;
@@ -39,6 +41,11 @@ class DashboardController extends GetxController
   @override
   void onInit() async {
     super.onInit();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(seconds: 5), () {
+        appFirebaseService.readData('astrologer/${preferenceService.getUserDetail()!.id}/realTime');
+      });
+    });
     var commonConstants = await userRepository.constantDetailsData();
     preferenceService.setConstantDetails(commonConstants);
     preferenceService

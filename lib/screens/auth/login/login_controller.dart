@@ -81,34 +81,17 @@ class LoginController extends GetxController {
     enable.value = true;
   }
 
-  navigateToDashboard(ResLogin data) async {
-    preferenceService.erase();
-    preferenceService.setUserDetail(data.data!);
-    preferenceService.setToken(data.token!);
-    mobileNumberController.clear();
-    preferenceService.setDeviceToken(deviceToken ?? "");
-    final socket = AppSocket();
-    socket.socketConnect();
-    Get.offAllNamed(RouteName.dashboard, arguments: [data.data!.phoneNo, data.data!.sessionId]);
-    enable.value = true;
-  }
-
-  Future<void> updateLoginDatainFirebase(ResLogin data) async {
-    String uniqueId = await getDeviceId() ?? '';
-    FirebaseUserData firebaseUserData = FirebaseUserData(
-      data.data!.name!,
-      data.data!.deviceToken!,
-      data.data!.image ?? "",
-      RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0),
-    );
-    FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
-
-    final DatabaseReference databaseRef = firebaseDatabase.ref().child("astrologer/${data.data?.id}");
-    databaseRef.set(firebaseUserData.toJson());
-    final appFirebaseService = AppFirebaseService();
-    debugPrint('preferenceService.getUserDetail()!.id ${preferenceService.getUserDetail()!.id}');
-    appFirebaseService.readData('astrologer/${preferenceService.getUserDetail()!.id}/realTime');
-  }
+  // navigateToDashboard(ResLogin data) async {
+  //   preferenceService.erase();
+  //   preferenceService.setUserDetail(data.data!);
+  //   preferenceService.setToken(data.token!);
+  //   mobileNumberController.clear();
+  //   preferenceService.setDeviceToken(deviceToken ?? "");
+  //   final socket = AppSocket();
+  //   socket.socketConnect();
+  //   Get.offAllNamed(RouteName.dashboard, arguments: [data.data!.phoneNo, data.data!.sessionId]);
+  //   enable.value = true;
+  // }
 
   @override
   void onInit() {

@@ -49,6 +49,7 @@ class LiveTipsController extends GetxController {
                 astrologerImage: image,
                 astrologerName: name,
                 isFrontCamera: front,
+                astrologerSpeciality: getSpecialAbilityInString(),
               ),
               routeName: "livepage")
           ?.then((value) {

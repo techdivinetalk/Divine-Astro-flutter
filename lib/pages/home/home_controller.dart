@@ -2,9 +2,13 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
+import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_bottomsheet.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
+import 'package:divine_astrologer/model/feedback_response.dart';
 import 'package:divine_astrologer/model/update_offer_type_response.dart';
 import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/pages/home/home_ui.dart';
@@ -41,6 +45,7 @@ class HomeController extends GetxController {
   UserData? userData = UserData();
   final preferenceService = Get.find<SharedPreferenceService>();
   final UserRepository userRepository = Get.put(UserRepository());
+  final HomePageRepository homePageRepository = Get.put(HomePageRepository());
   final homeScreenKey = GlobalKey<ScaffoldState>();
   int scoreIndex = 0;
   List<Map<String, dynamic>> yourScore = [
@@ -54,7 +59,6 @@ class HomeController extends GetxController {
 
   Rx<Loading> offerTypeLoading = Loading.initial.obs;
   Rx<Loading> sessionTypeLoading = Loading.initial.obs;
-
   onNextTap() {
     if (scoreIndex < yourScore.length - 1) {
       scoreIndex++;
@@ -76,12 +80,16 @@ class HomeController extends GetxController {
     appbarTitle.value = userData?.name ?? "Astrologer Name";
     getConstantDetailsData();
     getDashboardDetail();
+    getFeedbackData();
   }
-
   ConstantDetailsModelClass? getConstantDetails;
   RxBool profileDataSync = false.obs;
 
   HomeData? homeData;
+  RxBool isFeedbackAvailable = false.obs;
+  FeedbackData? feedbackResponse;
+
+  List<FeedbackData>? feedbacksList;
   Loading loading = Loading.initial;
   RxBool shopDataSync = false.obs;
   ViewTrainingVideoModelClass? viewTrainingVideoModelClass;
@@ -120,6 +128,28 @@ class HomeController extends GetxController {
       log("DoneVideo-->${viewTrainingVideoModelClass!.message}");
     } catch (error) {
       debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      }
+    }
+  }
+
+  getFeedbackData() async {
+    loading = Loading.initial;
+    update();
+    try {
+      var response = await homePageRepository.getFeedbackData();
+      isFeedbackAvailable.value = response.success ?? false;
+      debugPrint('val: $isFeedbackAvailable');
+      if (isFeedbackAvailable.value) {
+        feedbackResponse = response.data?[0];
+        feedbacksList = response.data;
+        showFeedbackBottomSheet();
+        debugPrint('feed id: ${feedbackResponse?.id}');
+      }
+    } catch (error) {
       if (error is AppException) {
         error.onException();
       } else {
@@ -430,6 +460,19 @@ class HomeController extends GetxController {
         builder: (_) => PerformanceDialog(),
       );
     }
+  }
+
+  showFeedbackBottomSheet() async {
+    await openBottomSheet(
+      Get.context!,
+      title: "Feedback Available!!!",
+      btnTitle: "Check Report",
+      functionalityWidget: Text(
+        feedbackResponse?.remark ?? '',
+        textAlign: TextAlign.center,
+        style: AppTextStyle.textStyle16(),
+      ),
+    );
   }
 
   getDateDifference(int timestamp) {

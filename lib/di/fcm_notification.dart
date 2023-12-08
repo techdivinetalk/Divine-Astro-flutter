@@ -127,12 +127,11 @@ void onDidReceiveNotificationResponse(NotificationResponse notificationResponse)
     final Map<String, dynamic> payloadMap = jsonDecode(notificationResponse.payload!);
 
     // Accessing individual values
-    String timeStamp = payloadMap['timeStamp'].toString();
     String requestId = payloadMap['receiver_id'].toString();
     String orderId = payloadMap['order_id'].toString();
 
     if (payloadMap['msgType'] == 'request') {
-      await AppFirebaseService().writeData('order/${payloadMap['order_id'].toString()}', {'status': '1'});
+      await AppFirebaseService().writeData('order/$orderId', {'status': '1'});
     }
 
     final notificationPath = 'astrologer/${preferenceService.getUserDetail()!.id}/realTime';
@@ -140,9 +139,10 @@ void onDidReceiveNotificationResponse(NotificationResponse notificationResponse)
     await AppFirebaseService().writeData(notificationPath, orderData);
     chatInit(requestId);
 
-    acceptChatRequestBottomSheet(Get.context!, onPressed: () async {
-      await Get.toNamed(RouteName.chatMessageWithSocketUI);
-    }, orderId: orderId);
+    // acceptChatRequestBottomSheet(Get.context!, onPressed: () async {
+    //
+    //   // await Get.toNamed(RouteName.chatMessageWithSocketUI);
+    // }, orderId: orderId);
   }
   // if (Get.currentRoute == RouteName.chatMessageUI) {
   // } else {
