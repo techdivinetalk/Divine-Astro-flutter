@@ -2,6 +2,7 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/model/performance_model_class.dart';
+import 'package:divine_astrologer/model/performance_response.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import '../../common/appbar.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../common/routes.dart';
 import '../../gen/assets.gen.dart';
+import '../../model/filter_performance_response.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'performance_controller.dart';
 
@@ -42,7 +44,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TodayAvailabilityWidget(
-                      daysAvailiblity:
+                      todaysAvailiblity:
                           controller.performanceData?.data?.todaysAvailiblity),
                   SizedBox(
                     height: 20.h,
@@ -59,7 +61,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                     height: 20.h,
                   ),
                   OverAllScoreData(
-                      score: controller.performanceData?.data?.score),
+                      performanceFilterResponse: controller.performanceFilterResponse),
                   SizedBox(
                     height: 30.h,
                   ),
@@ -407,7 +409,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
 }
 
 class LastAvailabilityWidget extends StatelessWidget {
-  final DaysAvailiblity? last30DaysAvailiblity;
+  final Last30DaysAvailiblity? last30DaysAvailiblity;
 
   const LastAvailabilityWidget({super.key, this.last30DaysAvailiblity});
 
@@ -598,9 +600,9 @@ class LastAvailabilityWidget extends StatelessWidget {
 }
 
 class TodayAvailabilityWidget extends GetView<PerformanceController> {
-  final DaysAvailiblity? daysAvailiblity;
+  final TodaysAvailiblity? todaysAvailiblity;
 
-  const TodayAvailabilityWidget({super.key, this.daysAvailiblity});
+  const TodayAvailabilityWidget({super.key, this.todaysAvailiblity});
 
   @override
   Widget build(BuildContext context) {
@@ -701,8 +703,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                       height: 10.h,
                     ),
                     Text(
-                      // "128 mins",
-                      "${daysAvailiblity?.availableChat ?? "0"} mins",
+                      "${todaysAvailiblity?.availableChat ?? "0"} mins",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue),
@@ -711,7 +712,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                       height: 10.h,
                     ),
                     Text(
-                      "${daysAvailiblity?.availableCall ?? "0"} mins",
+                      "${todaysAvailiblity?.availableCall ?? "0"} mins",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue),
@@ -720,7 +721,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                       height: 10.h,
                     ),
                     Text(
-                      "${daysAvailiblity?.availableLive ?? "0"} mins",
+                      "${todaysAvailiblity?.availableLive ?? "0"} mins",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue),
@@ -748,7 +749,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                     ),
                     Text(
                       // "19 mins",
-                      "${daysAvailiblity?.busyChat ?? "0"} mins",
+                      "${todaysAvailiblity?.busyChat ?? "0"} mins",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue),
@@ -757,7 +758,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                       height: 10.h,
                     ),
                     Text(
-                      "${daysAvailiblity?.busyCall ?? "0"} mins",
+                      "${todaysAvailiblity?.busyCall ?? "0"} mins",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue),
@@ -766,7 +767,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                       height: 10.h,
                     ),
                     Text(
-                      "${daysAvailiblity?.busyLive ?? "0"} mins",
+                      "${todaysAvailiblity?.busyLive} mins",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue),
@@ -783,9 +784,9 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
 }
 
 class OverAllScoreData extends GetView<PerformanceController> {
-  final Score? score;
+  final PerformanceFilterResponse? performanceFilterResponse;
 
-  const OverAllScoreData({super.key, this.score});
+  const OverAllScoreData({super.key, this.performanceFilterResponse});
 
   @override
   Widget build(BuildContext context) {
@@ -829,7 +830,7 @@ class OverAllScoreData extends GetView<PerformanceController> {
                       ),
                       Text(
                         // "540/600 (90%)",
-                        "${score?.marks ?? '-'}/${score?.obtainMarks ?? '-'} (${score?.percentage ?? 0}%)",
+                        "${performanceFilterResponse?.data?.score ?? '-'}/${performanceFilterResponse?.data?.totalScore ?? '-'} (${performanceFilterResponse?.data?.scorePrecentage ?? 0}%)",
                         style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w400,
                             fontColor: AppColors.darkBlue),
@@ -858,7 +859,7 @@ class OverAllScoreData extends GetView<PerformanceController> {
                             width: 10.w,
                           ),
                           Text(
-                            score?.rank ?? '-',
+                            performanceFilterResponse?.data?.rank ?? '-',
                             style: AppTextStyle.textStyle12(
                                 fontWeight: FontWeight.w400,
                                 fontColor: AppColors.darkBlue),
