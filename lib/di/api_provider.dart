@@ -58,6 +58,7 @@ class ApiProvider {
   final String deleteAccount = "deleteAccount";
   final String reportUserReview = "reportReview";
   final String getPerformanceData = "performance";
+  final String getFilteredPerformace = "performanceFilter";
   final String getIntroPageDesc = "getIntroPageDesc";
   final String logout = "Logout";
   final String updateBankDetails = "updateBankDetails";
