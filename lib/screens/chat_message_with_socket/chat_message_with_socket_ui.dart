@@ -18,6 +18,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:social_media_recorder/audio_encoder_type.dart';
+import 'package:social_media_recorder/screen/social_media_recorder.dart';
+import 'package:voice_message_package/voice_message_package.dart';
 
 import 'chat_message_with_socket_controller.dart';
 
@@ -92,9 +95,18 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                           controller.chatMessages[index].base64Image ?? "",
                                                           chatDetail: controller.chatMessages[index],
                                                           index: index,
-                                                          chatMessage.senderId == preferenceService.getUserDetail()!.id)
-                                                      : textMsgView(context, chatMessage,
-                                                          chatMessage.senderId == preferenceService.getUserDetail()!.id),
+                                                          chatMessage.senderId ==
+                                                              preferenceService.getUserDetail()!.id)
+                                                      : chatMessage.msgType == 'audio'
+                                                          ? audioView(context,
+                                                              chatDetail: controller.chatMessages[index],
+                                                              yourMessage: chatMessage.senderId ==
+                                                                  preferenceService.getUserDetail()!.id)
+                                                          : textMsgView(
+                                                              context,
+                                                              chatMessage,
+                                                              chatMessage.senderId ==
+                                                                  preferenceService.getUserDetail()!.id),
                                             ],
                                           ),
                                         ),
@@ -225,95 +237,131 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Flexible(
-            child: Row(
-              children: [
-                Flexible(
-                  child: Container(
-                    // height: 50.h,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          blurRadius: 3.0,
-                          offset: const Offset(0.3, 3.0)),
-                    ]),
-                    child: TextFormField(
-                      controller: controller.messageController,
-                      keyboardType: TextInputType.text,
-                      minLines: 1,
-                      maxLines: 3,
-                      onTap: () {
-                        //  controller.userTypingSocket(isTyping: true);
-                        controller.scrollToBottomFunc();
-                        if (controller.isEmojiShowing.value) {
-                          controller.isEmojiShowing.value = false;
-                        }
-                      },
-                      onChanged: (value) {
-                        controller.tyingSocket();
-                      },
-                      scrollController: controller.typingScrollController,
-                      onTapOutside: (value) {
-                        FocusScope.of(Get.context!).unfocus();
-                        //   controller.userTypingSocket(isTyping: false);
-                      },
-                      decoration: InputDecoration(
-                        hintText: "message".tr,
-                        isDense: true,
-                        helperStyle: AppTextStyle.textStyle16(),
-                        fillColor: AppColors.white,
-                        hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.grey),
-                        hoverColor: AppColors.white,
-                        prefixIcon: InkWell(
-                          onTap: () async {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            controller.isEmojiShowing.value = !controller.isEmojiShowing.value;
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 11.h),
-                            child: Assets.images.icEmoji.svg(),
-                          ),
-                        ),
-                        suffixIcon: InkWell(
-                          onTap: () async {
-                            if (controller.isOngoingChat.value) {
-                              if (await PermissionHelper().askStoragePermission(Permission.photos)) {
-                                controller.getImage(false);
-                              }
-                            } else {
-                              divineSnackBar(data: "${'chatEnded'.tr}.", color: AppColors.appYellowColour);
+          Stack(
+            children: [
+              Visibility(
+                visible: !controller.isRecording.value,
+                maintainAnimation: true,
+                maintainSize: true,
+                maintainState: true,
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Container(
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 3.0,
+                              offset: const Offset(0.3, 3.0)),
+                        ]),
+                        child: TextFormField(
+                          controller: controller.messageController,
+                          keyboardType: TextInputType.text,
+                          minLines: 1,
+                          maxLines: 3,
+                          onTap: () {
+                            //  controller.userTypingSocket(isTyping: true);
+                            controller.scrollToBottomFunc();
+                            if (controller.isEmojiShowing.value) {
+                              controller.isEmojiShowing.value = false;
                             }
                           },
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(0.w, 9.h, 10.w, 10.h),
-                            child: Assets.images.icAttechment.svg(),
+                          onChanged: (value) {
+                            controller.tyingSocket();
+                          },
+                          scrollController: controller.typingScrollController,
+                          onTapOutside: (value) {
+                            FocusScope.of(Get.context!).unfocus();
+                            //   controller.userTypingSocket(isTyping: false);
+                          },
+                          decoration: InputDecoration(
+                            hintText: "message".tr,
+                            isDense: true,
+                            helperStyle: AppTextStyle.textStyle16(),
+                            fillColor: AppColors.white,
+                            hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.grey),
+                            hoverColor: AppColors.white,
+                            prefixIcon: InkWell(
+                              onTap: () async {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                controller.isEmojiShowing.value = !controller.isEmojiShowing.value;
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 11.h),
+                                child: Assets.images.icEmoji.svg(),
+                              ),
+                            ),
+                            suffixIcon: InkWell(
+                              onTap: () async {
+                                if (controller.isOngoingChat.value) {
+                                  if (await PermissionHelper().askStoragePermission(Permission.photos)) {
+                                    controller.getImage(false);
+                                  }
+                                } else {
+                                  divineSnackBar(
+                                      data: "${'chatEnded'.tr}.", color: AppColors.appYellowColour);
+                                }
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(0.w, 9.h, 10.w, 10.h),
+                                child: Assets.images.icAttechment.svg(),
+                              ),
+                            ),
+                            filled: true,
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30.0.sp),
+                                borderSide: const BorderSide(
+                                  color: AppColors.white,
+                                  width: 1.0,
+                                )),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30.0.sp),
+                                borderSide: const BorderSide(
+                                  color: AppColors.appYellowColour,
+                                  width: 1.0,
+                                )),
                           ),
                         ),
-                        filled: true,
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0.sp),
-                            borderSide: const BorderSide(
-                              color: AppColors.white,
-                              width: 1.0,
-                            )),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0.sp),
-                            borderSide: const BorderSide(
-                              color: AppColors.appYellowColour,
-                              width: 1.0,
-                            )),
                       ),
                     ),
-                  ),
+                    Obx(() => SizedBox(width: !controller.hasMessage.value ? 25.w : 15.w)),
+                    Visibility(
+                      visible: controller.hasMessage.value,
+                      maintainAnimation: true,
+                      maintainSize: true,
+                      maintainState: true,
+                      child: InkWell(
+                          onTap: () => controller.sendMsg(),
+                          child: Assets.images.icSendMsg.svg(height: 48.h)),
+                    )
+                  ],
                 ),
-                SizedBox(width: 15.w),
-                InkWell(
-                    onTap: () {
-                      controller.sendMsg();
+              ),
+              if (!controller.hasMessage.value)
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: SocialMediaRecorder(
+                    backGroundColor: AppColors.yellow,
+                    cancelTextBackGroundColor: Colors.white,
+                    recordIconBackGroundColor: AppColors.yellow,
+                    radius: BorderRadius.circular(30),
+                    initRecordPackageWidth: kToolbarHeight - Get.width * 0.010,
+                    recordIconWhenLockBackGroundColor: AppColors.yellow,
+                    startRecording: () {
+                      controller.isRecording.value = true;
                     },
-                    child: Assets.images.icSendMsg.svg(height: 48.h))
-              ],
-            ),
+                    stopRecording: (time) {
+                      controller.isRecording.value = false;
+                    },
+                    sendRequestFunction: (soundFile, time) {
+                      debugPrint('soundFile ${soundFile.path}');
+                      controller.uploadAudioFile(soundFile);
+                    },
+                    encode: AudioEncoderType.AAC,
+                  ),
+                )
+            ],
           ),
           SizedBox(height: 20.h),
         ],
@@ -379,6 +427,67 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 : msgType.value == 2
                                     ? Assets.images.icDoubleTick.svg()
                                     : Assets.images.icSingleTick.svg())
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget audioView(BuildContext context, {required ChatMessage chatDetail, required bool yourMessage}) {
+    RxInt msgType = (chatDetail.type ?? 0).obs;
+    return SizedBox(
+      width: double.maxFinite,
+      child: Column(
+        crossAxisAlignment: yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8.0),
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.2), blurRadius: 3.0, offset: const Offset(0.0, 3.0))
+              ],
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(8.r)),
+            ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                VoiceMessageView(
+                    controller: VoiceController(
+                        audioSrc: chatDetail.awsUrl!,
+                        maxDuration: const Duration(seconds: 120),
+                        isFile: false,
+                        onComplete: () => debugPrint('onComplete'),
+                        onPause: () => debugPrint('onPause'),
+                        onPlaying: () => debugPrint('onPlaying')),
+                    innerPadding: 0,
+                    cornerRadius: 20),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Row(
+                    children: [
+                      Text(
+                        messageDateTime(chatDetail.time ?? 0),
+                        style: AppTextStyle.textStyle10(fontColor: AppColors.black),
+                      ),
+                      if (yourMessage) SizedBox(width: 8.w),
+                      if (yourMessage)
+                        msgType.value == 0
+                            ? Assets.images.icSingleTick.svg()
+                            : msgType.value == 1
+                                ? Assets.images.icDoubleTick.svg(
+                                    colorFilter: const ColorFilter.mode(AppColors.lightGrey, BlendMode.srcIn))
+                                : msgType.value == 2
+                                    ? Assets.images.icDoubleTick.svg()
+                                    : Assets.images.icSingleTick.svg()
                     ],
                   ),
                 ),

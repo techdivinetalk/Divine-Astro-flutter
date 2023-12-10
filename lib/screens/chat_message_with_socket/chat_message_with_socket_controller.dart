@@ -21,7 +21,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../common/common_functions.dart';
 
-class ChatMessageWithSocketController extends GetxController {
+class ChatMessageWithSocketController extends GetxController with WidgetsBindingObserver{
   final userRepository = Get.find<UserRepository>();
   SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
   TextEditingController messageController = TextEditingController();
@@ -62,6 +62,9 @@ class ChatMessageWithSocketController extends GetxController {
 
   Timer? _timer;
 
+  Rx<bool> isRecording = false.obs;
+  Rx<bool> hasMessage = false.obs;
+
   void startTimer() {
     int _start = 5;
     if (_timer != null) {
@@ -82,11 +85,44 @@ class ChatMessageWithSocketController extends GetxController {
     );
   }
 
+  _onMessageChanged() {
+    hasMessage.value = messageController.text.isNotEmpty;
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        socket.socketConnect();
+        break;
+      case AppLifecycleState.inactive:
+        debugPrint("App Inactive");
+        break;
+      case AppLifecycleState.paused:
+        debugPrint("App Paused");
+        break;
+      case AppLifecycleState.detached:
+        debugPrint("App Detached");
+        break;
+      case AppLifecycleState.hidden:
+        break;
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
+  void onClose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.onClose();
+  }
+
   @override
   void onInit() {
     super.onInit();
     arguments = Get.arguments;
+    debugPrint('arguments of socket $arguments');
     socket.startAstroCustumerSocketEvent(orderId: arguments['orderId'],userId:arguments['userId']);
+    messageController.addListener(_onMessageChanged);
     isAstroJoinedChat();
     checkIsCustomerJoinedPrivateChat();
     typingListenerSocket();
@@ -434,5 +470,13 @@ class ChatMessageWithSocketController extends GetxController {
       // debugPrint("$response");
     }
     isDataLoad.value = true;
+  }
+
+  uploadAudioFile(File soundFile) async {
+    String time = ("${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
+    var uploadFile = await uploadImageToS3Bucket(soundFile, time);
+    if (uploadFile != '') {
+      addNewMessage(time, "audio", awsUrl: uploadFile);
+    }
   }
 }
