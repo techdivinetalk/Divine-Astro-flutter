@@ -1536,8 +1536,9 @@ class PerformanceDialog extends StatelessWidget {
                                 SizedBox(height: 16.h),
                                 Center(
                                   child: Text(
-                                    controller.yourScore[controller.scoreIndex]
-                                        ['title'],
+                                    controller.performanceScoreList[controller.scoreIndex]?.label ?? '',
+                                    // controller.yourScore[controller.scoreIndex]
+                                    //     ['title'],
                                     style: AppTextStyle.textStyle14(
                                         fontColor: AppColors.blackColor,
                                         fontWeight: FontWeight.w400),
@@ -1559,8 +1560,8 @@ class PerformanceDialog extends StatelessWidget {
                                         ),
                                         SizedBox(height: 5.h),
                                         Text(
-                                          controller.yourScore[
-                                              controller.scoreIndex]['score'],
+                                          controller.performanceScoreList[
+                                              controller.scoreIndex]?.performance?.marksObtains.toString() ?? '',
                                           style: TextStyle(
                                               fontWeight: FontWeight.w700,
                                               color: AppColors.darkBlue,
@@ -1568,7 +1569,7 @@ class PerformanceDialog extends StatelessWidget {
                                         ),
                                         SizedBox(height: 5.h),
                                         Text(
-                                          "Out of 100",
+                                          'Out of ${controller.performanceScoreList[controller.scoreIndex]?.performance?.totalMarks ?? 0}',
                                           style: AppTextStyle.textStyle10(
                                               fontColor: AppColors.darkBlue),
                                         ),
@@ -1654,7 +1655,7 @@ class PerformanceDialog extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 20.h),
-                        Row(
+                        controller.performanceScoreList.length == 1 ? const SizedBox() : Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -1707,7 +1708,7 @@ class PerformanceDialog extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(height: 15.h),
+                        controller.performanceScoreList.length == 1 ? const SizedBox() : SizedBox(height: 15.h),
                         controller.scoreIndex == controller.yourScore.length - 1
                             ? GestureDetector(
                                 onTap: () => Navigator.pop(context),
