@@ -6,11 +6,12 @@ import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
 
 import '../../common/appbar.dart';
-import '../../model/performance_model_class.dart';
+import '../../model/filter_performance_response.dart';
 import 'rank_system_controller.dart';
 
 class RankSystemUI extends GetView<RankSystemController> {
-  const RankSystemUI({super.key});
+  const RankSystemUI({super.key,});
+
 
   @override
   Widget build(BuildContext context) {
@@ -83,18 +84,32 @@ class RankSystemUI extends GetView<RankSystemController> {
                       ],
                     ),
                     ListView.builder(
-                        itemCount: controller.rankSystemList?.length,
+                        itemCount: controller.rankSystem?.length,
                         shrinkWrap: true,
                         primary: false,
+                        reverse: true,
                         itemBuilder: (context, index) {
-                          RankSystem? item = controller.rankSystemList?[index];
+                          RankSystem? item = controller.rankSystem?[index];
                           return Row(
                             children: [
                               Expanded(
                                 child: Column(
                                   children: [
+                                    item?.min == '0' || item?.min == null ?
+                                    Text('Less than ${item?.max}${item?.text}',
+                                      textAlign: TextAlign.center,
+                                      style: AppTextStyle.textStyle12(
+                                          fontWeight: FontWeight.w400,
+                                          fontColor: AppColors.darkBlue),
+                                    ) : item?.max == '0' || item?.max == null ?
+                                        Text('${item?.min}${item?.text}+',
+                                          textAlign: TextAlign.center,
+                                          style: AppTextStyle.textStyle12(
+                                              fontWeight: FontWeight.w400,
+                                              fontColor: AppColors.darkBlue),
+                                        ):
                                     Text(
-                                      item?.percentageRange ?? "",
+                                      '${item?.max}-${item?.min}${item?.text}',
                                       textAlign: TextAlign.center,
                                       style: AppTextStyle.textStyle12(
                                           fontWeight: FontWeight.w400,
@@ -111,9 +126,9 @@ class RankSystemUI extends GetView<RankSystemController> {
                                   children: [
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      MainAxisAlignment.center,
                                       children: [
-                                        setImage(item?.rank ?? "") ??
+                                        setImage(item?.value ?? "") ??
                                             SizedBox(
                                               width: 10.w,
                                             ),
@@ -121,7 +136,7 @@ class RankSystemUI extends GetView<RankSystemController> {
                                           width: 10.w,
                                         ),
                                         Text(
-                                          item?.rank ??'',
+                                          item?.value ?? '',
                                           textAlign: TextAlign.center,
                                           style: AppTextStyle.textStyle12(
                                               fontWeight: FontWeight.w400,
@@ -166,20 +181,21 @@ class RankSystemUI extends GetView<RankSystemController> {
       ),
     );
   }
-  setImage(String rank){
-    if(rank == "Diamond"){
+
+  setImage(String rank) {
+    if (rank == "Diamond") {
       return Assets.images.icDiamond.image(height: 21.h, width: 21.h);
-    }else if(rank == "Platinum"){
+    } else if (rank == "Platinum") {
       return Assets.images.icPlatinum.image(height: 21.h, width: 21.h);
-    }else if(rank == "Gold"){
+    } else if (rank == "Gold") {
       return Assets.images.icGold.image(height: 21.h, width: 21.h);
-    }else if(rank == "Silver"){
+    } else if (rank == "Silver") {
       return Assets.images.icSilver.image(height: 21.h, width: 21.h);
-    }else if(rank == "Bronze"){
+    } else if (rank == "Bronze") {
       return Assets.images.icBronze.image(height: 21.h, width: 21.h);
     }
-    else{
-      return SizedBox(  width: 10.w,);
+    else {
+      return SizedBox(width: 10.w,);
     }
   }
 }

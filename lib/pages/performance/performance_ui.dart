@@ -1,7 +1,6 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/generic_loading_widget.dart';
-import 'package:divine_astrologer/model/performance_model_class.dart';
 import 'package:divine_astrologer/model/performance_response.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -107,7 +106,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                     crossAxisSpacing: 20.h,
                     childAspectRatio: 0.78),
                 itemBuilder: (BuildContext context, int index) {
-                  BusyHours? item = controller.overAllScoreList[index];
+                  Conversion? item = controller.overAllScoreList[index];
                   ScoreModelClass model = controller.percentageSubTitle[index];
                   return GridTile(
                     child: Column(
@@ -123,7 +122,8 @@ class YourScoreWidget extends GetView<PerformanceController> {
                               top: 40.h,
                               child: CustomText(
                                 // "25",
-                                '${item?.rankDetail?[0].max ?? 0}',
+                                '${item?.performance?.marks?[1].min ?? 0}',
+                                //'${item?.rankDetail?[0].max ?? 0}',
                                 fontSize: 8.sp,
                               ),
                             ),
@@ -132,7 +132,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                               top: 40.h,
                               child: CustomText(
                                 // "50",
-                                '${item?.rankDetail?[1].max ?? 0}',
+                                '${item?.performance?.marks?[1].max ?? 0}',
                                 fontSize: 8.sp,
                               ),
                             ),
@@ -141,16 +141,16 @@ class YourScoreWidget extends GetView<PerformanceController> {
                               top: 105.h,
                               child: CustomText(
                                 //0
-                                '${item?.rankDetail?[0].min ?? 0}',
+                                '${item?.performance?.marks?[0].min ?? 0}',
                                 fontSize: 8.sp,
                               ),
                             ),
                             Positioned(
-                              right: 05.h,
+                              right: 0.h,
                               top: 105.h,
                               child: CustomText(
                                 //100
-                                '${item?.rankDetail?[2].max ?? 0}',
+                                '${item?.performance?.marks?[2].max ?? 0}',
                                 fontSize: 8.sp,
                               ),
                             ),
@@ -168,9 +168,10 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                   ),
                                   SizedBox(height: 5.h),
                                   Text(
-                                    item?.performance?.isNotEmpty ?? false
-                                        ? '${item?.performance?[0].value ?? 0}'
-                                        : "0",
+                                    '${item?.performance?.marksObtains ?? 0}',
+                                    // item?.performance?.isNotEmpty ?? false
+                                    //     ? '${item?.performance?[0].value ?? 0}'
+                                    //     : "0",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w700,
                                         color: AppColors.darkBlue,
@@ -178,9 +179,10 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                   ),
                                   SizedBox(height: 5.h),
                                   Text(
-                                    item?.performance?.isNotEmpty ?? false
-                                        ? 'Out of ${item?.performance?[0].valueOutOff ?? 0}'
-                                        : "Out of 0",
+                                    'Out of ${item?.performance?.totalMarks ?? 0}',
+                                    // item?.performance?.isNotEmpty ?? false
+                                    //     ? 'Out of ${item?.performance?[0].valueOutOff ?? 0}'
+                                    //     : "Out of 0",
                                     // "Out of 100",
                                     style: AppTextStyle.textStyle10(
                                         fontColor: AppColors.darkBlue),
@@ -301,24 +303,46 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                     ListView.builder(
                                                         physics:
                                                             const NeverScrollableScrollPhysics(),
-                                                        itemCount: item?.detail
+                                                        itemCount: item?.rankDetail
                                                                 ?.length ??
                                                             0,
                                                         shrinkWrap: true,
                                                         primary: false,
                                                         itemBuilder:
                                                             (context, index) {
-                                                          Detail? model = item
-                                                              ?.detail?[index];
+                                                          RankDetail? model = item
+                                                              ?.rankDetail?[index];
                                                           return Row(
                                                             children: [
                                                               Expanded(
                                                                 child: Column(
                                                                   children: [
+                                                                    model?.min == '0' || model?.min == null ?
+                                                                        Text(
+                                                                          'Less than ${model?.max}${model?.text}',
+                                                                          textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                          style: AppTextStyle.textStyle12(
+                                                                              fontWeight: FontWeight
+                                                                                  .w400,
+                                                                              fontColor:
+                                                                              AppColors.darkBlue),
+                                                                        ) :
+                                                                    model?.max == '0' || model?.max == null ?
+                                                                        Text(
+                                                                          '${model?.min}${model?.text}+',
+                                                                          textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                          style: AppTextStyle.textStyle12(
+                                                                              fontWeight: FontWeight
+                                                                                  .w400,
+                                                                              fontColor:
+                                                                              AppColors.darkBlue),
+                                                                        ) :
                                                                     Text(
-                                                                      (model?.percentage ??
-                                                                              '-')
-                                                                          .toString(),
+                                                                      '${model?.min}${model?.text}-${model?.max}${model?.text}',
                                                                       textAlign:
                                                                           TextAlign
                                                                               .center,
@@ -339,7 +363,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                                 child: Column(
                                                                   children: [
                                                                     Text(
-                                                                      (model?.marks ??
+                                                                      (model?.value ??
                                                                               '-')
                                                                           .toString(),
                                                                       textAlign:
@@ -386,6 +410,8 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                       children: [
                                         Text(
                                           item?.label ?? '',
+                                          textAlign: TextAlign
+                                              .center,
                                           style: AppTextStyle.textStyle12(
                                               fontColor: AppColors.darkBlue),
                                         ),
@@ -792,7 +818,7 @@ class OverAllScoreData extends GetView<PerformanceController> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.toNamed(RouteName.rankSystemUI);
+        Get.toNamed(RouteName.rankSystemUI, arguments: [controller.performanceFilterResponse?.data?.rankSystem]);
       },
       child: Container(
         padding: EdgeInsets.all(12.h),

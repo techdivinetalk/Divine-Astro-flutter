@@ -14,6 +14,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 import '../../common/common_functions.dart';
+import '../../common/permission_handler.dart';
 import '../../di/api_provider.dart';
 import '../../di/fcm_notification.dart';
 import '../../model/chat/chat_socket/chat_socket_init.dart';
@@ -57,6 +58,12 @@ class DashboardController extends GetxController
   //  connectSocket();
     loadPreDefineData();
     firebaseMessagingConfig(Get.context!);
+    notificationPermission();
+  }
+
+  notificationPermission() async {
+    await PermissionHelper()
+    .askNotificationPermission();
   }
 
   // @override

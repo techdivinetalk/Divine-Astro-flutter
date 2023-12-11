@@ -58,7 +58,7 @@ class PerformanceController extends GetxController {
       selectedOption.value = val;
       int index = durationOptions.indexOf(val);
       selectedValue.value = durationValue[index];
-      getPerformance();
+      getFilteredPerformance();
     }
   }
 
@@ -76,29 +76,15 @@ class PerformanceController extends GetxController {
     await getFilteredPerformance();
   }
 
-  RxList<BusyHours?> overAllScoreList = <BusyHours?>[].obs;
+  RxList<Conversion?> overAllScoreList = <Conversion?>[].obs;
 
   getPerformance() async {
     loading.value = Loading.loading;
     update();
     try {
-      //Map<String, dynamic> params = {"filter": selectedValue.value};
-      // Map<String, dynamic> params = {"filter": 'last_month'};
       var response = await PerformanceRepository().getPerformance();
       log("Res-->${jsonEncode(response.data)}");
       performanceData = response;
-      // overAllScoreList.value = [
-      //   response.data?.response?.conversionRate,
-      //   response.data?.response?.repurchaseRate,
-      //   response.data?.response?.onlineHours,
-      //   response.data?.response?.liveHours,
-      //   response.data?.response?.eCommerce,
-      //   response.data?.response?.busyHours,
-      // ];
-
-      // RankSystemController rankSystemController =
-      //     Get.put(RankSystemController());
-      // rankSystemController.rankSystemList = performanceData?.data?.rankSystem;
 
       update();
       log("performanceData==>${jsonEncode(performanceData!.data)}");
@@ -122,18 +108,14 @@ class PerformanceController extends GetxController {
       var response = await PerformanceRepository().getFilteredPerformance(params);
       log("Res-->${jsonEncode(response.data)}");
       performanceFilterResponse = response;
-      // overAllScoreList.value = [
-      //   response.data?.response?.conversionRate,
-      //   response.data?.response?.repurchaseRate,
-      //   response.data?.response?.onlineHours,
-      //   response.data?.response?.liveHours,
-      //   response.data?.response?.eCommerce,
-      //   response.data?.response?.busyHours,
-      // ];
-
-      // RankSystemController rankSystemController =
-      //     Get.put(RankSystemController());
-      // rankSystemController.rankSystemList = performanceData?.data?.rankSystem;
+      overAllScoreList.value = [
+        response.data?.response?.conversion,
+        response.data?.response?.repurchaseRate,
+        response.data?.response?.onlineHours,
+        response.data?.response?.liveOnline,
+        response.data?.response?.averageServiceTime,
+        response.data?.response?.customerSatisfactionRatings,
+      ];
 
       update();
       log("performanceData==>${jsonEncode(performanceData!.data)}");

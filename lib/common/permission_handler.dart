@@ -36,6 +36,14 @@ class PermissionHelper {
     return result;
   }
 
+  askNotificationPermission() async {
+    //Permission askPermission = await getPermissionFromAPILevel(Permission.notification);
+    var result = await [Permission.notification]
+        .request()
+        .then((value) => getPermissionStatus(Permission.notification));
+    return result;
+  }
+
   askCustomPermission(Permission permission) async {
     var result = await permission
         .request()
@@ -134,6 +142,8 @@ class PermissionHelper {
       return 'videos';
     } else if (permission == Permission.contacts) {
       return 'contacts';
+    } else if(permission == Permission.notification) {
+      return 'notification';
     }
   }
 }
