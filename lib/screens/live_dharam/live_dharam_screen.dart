@@ -23,17 +23,29 @@ class _LivePage extends State<LiveDharamScreen> {
       _zegoUIKitPrebuiltLiveStreamingController =
       ZegoUIKitPrebuiltLiveStreamingController();
 
+  Map<String, dynamic> data = <String, dynamic>{};
+
   @override
   void initState() {
     super.initState();
     // FirebaseDatabase.instance.ref().child("live").onValue.listen(
-    //   (event) {
-    //     Map<dynamic, dynamic> data = {};
-    //     data = event.snapshot.value as Map<dynamic, dynamic>;
-    //     if (data.isEmpty) {
-    //     } else if (data.isNotEmpty) {
-    //       _controller.liveId = data.keys.elementAt(0);
-    //     } else {}
+    //   (DatabaseEvent event) {
+    //     if (event.snapshot.value == null) {
+    //       data = <String, dynamic>{};
+    //     } else {
+    //       data = event.snapshot.value as Map<String, dynamic>;
+    //       if (data.isEmpty) {
+    //       } else if (data.isNotEmpty) {
+    //         _controller.liveId = data.keys.elementAt(0);
+    //       } else {}
+    //     }
+
+    //     final int index = data.keys.toList().indexWhere(
+    //       (element) {
+    //         return element == _controller.liveId;
+    //       },
+    //     );
+    //     print("index: $index");
     //   },
     // );
   }
@@ -58,6 +70,7 @@ class _LivePage extends State<LiveDharamScreen> {
             config: streamingConfig
               ..innerText = textConfig
               ..layout = galleryLayout
+              ..swipingConfig = swipingConfig
               ..avatarBuilder = (
                 BuildContext context,
                 Size size,
@@ -96,5 +109,18 @@ class _LivePage extends State<LiveDharamScreen> {
             ),
           )
         : const SizedBox();
+  }
+
+  ZegoLiveStreamingSwipingConfig? get swipingConfig {
+    return _controller.isHost
+        ? null
+        : ZegoLiveStreamingSwipingConfig(
+            requirePreviousLiveID: () {
+              return "";
+            },
+            requireNextLiveID: () {
+              return "";
+            },
+          );
   }
 }

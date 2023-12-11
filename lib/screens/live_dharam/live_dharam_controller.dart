@@ -7,7 +7,8 @@ class LiveDharamController extends GetxController {
   final RxString _userId = "".obs;
   final RxString _userName = "".obs;
   final RxString _liveId = "".obs;
-  final RxBool _isHost = false.obs;
+  final RxBool _isHost = true.obs;
+  final RxInt _currentIndex = 0.obs;
 
   @override
   void onInit() {
@@ -17,6 +18,7 @@ class LiveDharamController extends GetxController {
     userName = (_pref.getUserDetail()?.name ?? "").toString();
     liveId = (Get.arguments ?? "").toString();
     isHost = true;
+    currentIndex = 0;
   }
 
   @override
@@ -40,4 +42,7 @@ class LiveDharamController extends GetxController {
 
   bool get isHost => _isHost.value;
   set isHost(bool value) => _isHost(value);
+
+  int get currentIndex => _currentIndex.value;
+  set currentIndex(int value) => _currentIndex(value);
 }
