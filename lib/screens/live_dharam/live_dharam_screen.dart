@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:get/get.dart";
 import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
+// import 'package:firebase_database/firebase_database.dart';
 
 const int appID = 696414715;
 const String appSign =
@@ -22,13 +23,19 @@ class _LivePage extends State<LiveDharamScreen> {
       _zegoUIKitPrebuiltLiveStreamingController =
       ZegoUIKitPrebuiltLiveStreamingController();
 
-  final List<IZegoUIKitPlugin> plug = <IZegoUIKitPlugin>[
-    ZegoUIKitSignalingPlugin()
-  ];
-
   @override
   void initState() {
     super.initState();
+    // FirebaseDatabase.instance.ref().child("live").onValue.listen(
+    //   (event) {
+    //     Map<dynamic, dynamic> data = {};
+    //     data = event.snapshot.value as Map<dynamic, dynamic>;
+    //     if (data.isEmpty) {
+    //     } else if (data.isNotEmpty) {
+    //       _controller.liveId = data.keys.elementAt(0);
+    //     } else {}
+    //   },
+    // );
   }
 
   @override
@@ -48,30 +55,46 @@ class _LivePage extends State<LiveDharamScreen> {
             userID: _controller.userId,
             userName: _controller.userName,
             liveID: _controller.liveId,
-            config: _controller.isHost
-                ? ZegoUIKitPrebuiltLiveStreamingConfig.host(plugins: plug)
-                : ZegoUIKitPrebuiltLiveStreamingConfig.audience(plugins: plug)
-              ..innerText = _controller.isHost
-                  ? ZegoInnerText()
-                  : ZegoInnerText(requestCoHostButton: "Co-host")
-              ..layout = ZegoLayout.gallery()
+            config: streamingConfig
+              ..innerText = textConfig
+              ..layout = galleryLayout
               ..avatarBuilder = (
                 BuildContext context,
                 Size size,
                 ZegoUIKitUser? user,
                 Map<String, dynamic> extraInfo,
               ) {
-                return user != null
-                    ? CircleAvatar(
-                        foregroundImage: NetworkImage(
-                          "https://robohash.org/${user.id}.png",
-                        ),
-                      )
-                    : const SizedBox();
+                return avatarWidget(user: user);
               },
           );
         },
       ),
     );
+  }
+
+  ZegoUIKitPrebuiltLiveStreamingConfig get streamingConfig {
+    final ZegoUIKitSignalingPlugin plugin = ZegoUIKitSignalingPlugin();
+    final List<IZegoUIKitPlugin> pluginsList = <IZegoUIKitPlugin>[plugin];
+    return _controller.isHost
+        ? ZegoUIKitPrebuiltLiveStreamingConfig.host(plugins: pluginsList)
+        : ZegoUIKitPrebuiltLiveStreamingConfig.audience(plugins: pluginsList);
+  }
+
+  ZegoInnerText get textConfig {
+    return _controller.isHost ? ZegoInnerText() : ZegoInnerText();
+  }
+
+  ZegoLayout get galleryLayout {
+    return _controller.isHost ? ZegoLayout.gallery() : ZegoLayout.gallery();
+  }
+
+  Widget avatarWidget({required ZegoUIKitUser? user}) {
+    return user != null
+        ? CircleAvatar(
+            foregroundImage: NetworkImage(
+              "https://robohash.org/${user.id}.png",
+            ),
+          )
+        : const SizedBox();
   }
 }
