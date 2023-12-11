@@ -32,8 +32,10 @@ Future<String> uploadImageToS3Bucket(File? selectedFile, String fileName) async 
   var dataString = commonConstants.data.awsCredentails.baseurl?.split(".");
   var extension = p.extension(selectedFile!.path);
   var response = await AwsS3.uploadFile(
-    accessKey: commonConstants.data.awsCredentails.accesskey!,
-    secretKey: commonConstants.data.awsCredentails.secretKey!,
+    // accessKey: commonConstants.data.awsCredentails.accesskey!,
+    // secretKey: commonConstants.data.awsCredentails.secretKey!,
+    accessKey: 'AKIAXAGRISMJ5CDGY5OM',
+    secretKey: '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',
     file: selectedFile,
     bucket: dataString![0].split("//")[1],
     destDir: 'astrologer/${userData?.id}',
@@ -140,7 +142,7 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   ChatMessage message = ChatMessage(
     orderId: newMessage.orderId,
     message: newMessage.message ?? "",
-    receiverId: newMessage.receiverId!,
+    receiverId: newMessage.receiverId,
     senderId: newMessage.senderId,
     time: newMessage.time,
     type: type,

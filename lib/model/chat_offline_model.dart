@@ -1,14 +1,16 @@
 class ChatMessagesOffline {
   List<ChatMessage>? chatMessages;
+
   ChatMessagesOffline({
     this.chatMessages,
   });
+
   factory ChatMessagesOffline.fromOfflineJson(Map<String, dynamic> json) =>
       ChatMessagesOffline(
           chatMessages: json['data'] == null
               ? []
               : List<ChatMessage>.from(
-                  json["data"].map((x) => ChatMessage.fromOfflineJson(x))));
+              json["data"].map((x) => ChatMessage.fromOfflineJson(x))));
 
   Map<String, dynamic> toOfflineJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -24,6 +26,7 @@ class ChatMessage {
   int? id;
   int? receiverId;
   int? senderId;
+  int? orderId;
   String? message;
   String? msgType;
   String? awsUrl;
@@ -37,66 +40,70 @@ class ChatMessage {
   String? title;
   int? time;
   int? type;
-  int? orderId;
+  String? userType;
 
   ChatMessage(
       {this.id,
-      this.receiverId,
-      this.senderId,
-      this.message,
-      this.time,
-      this.msgType,
-      this.orderId,
-      this.awsUrl,
-      this.base64Image,
-      this.downloadedPath,
-      this.kundliId,
-      this.kundliName,
-      this.kundliDateTime,
-      this.kundliPlace,
-      this.gender,
-      this.title,
-      this.type});
+        this.receiverId,
+        this.senderId,
+        this.orderId,
+        this.message,
+        this.time,
+        this.msgType,
+        this.awsUrl,
+        this.base64Image,
+        this.downloadedPath,
+        this.kundliId,
+        this.kundliName,
+        this.kundliDateTime,
+        this.kundliPlace,
+        this.gender,
+        this.title,
+        this.type,
+        this.userType,
+      });
 
   ChatMessage.fromOfflineJson(Map<String, dynamic> json) {
-    id = json['id'];
-    receiverId = json['receiver_id'];
-    senderId = json['sender_id'];
+    id = json['chatMessageId'];
+    receiverId = json['receiverId'];
+    senderId = json['senderId'];
+    orderId = json['orderId'];
     message = json['message'];
     time = json['time'];
     type = json['type'];
     msgType = json['msgType'];
     awsUrl = json['awsUrl'];
     base64Image = json['base64Image'];
-    kundliId = json['kundli_id'];
-    kundliName = json['kundli_name'];
-    kundliDateTime = json['kundli_date_time'];
-    kundliPlace = json['kundli_place'];
+    downloadedPath = json['kundliId'];
+    kundliName = json['kundliName'];
+    kundliDateTime = json['kundliDateTime'];
+    kundliPlace = json['kundliPlace'];
+    kundliId = json['kundliId'];
     gender = json['gender'];
-    downloadedPath = json['downloadedPath'];
-    orderId = json['order_id'];
     title = json['title'];
+    userType = json['userType'];
   }
 
   Map<String, dynamic> toOfflineJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['receiver_id'] = receiverId;
-    data['sender_id'] = senderId;
+    data['chatMessageId'] = id;
+    data['receiverId'] = receiverId;
+    data['senderId'] = senderId;
+    data['orderId'] = orderId;
     data['message'] = message;
     data['time'] = time;
     data['type'] = type;
     data['msgType'] = msgType;
     data['awsUrl'] = awsUrl;
     data['base64Image'] = base64Image;
-    data['kundli_id'] = kundliId;
-    data['kundli_name'] = kundliName;
-    data['kundli_date_time'] = kundliDateTime;
-    data['kundli_place'] = kundliPlace;
-    data['gender'] = gender;
     data['downloadedPath'] = downloadedPath;
-    data['order_id'] = orderId;
+    data['kundliId'] = kundliId;
+    data['kundliName'] = kundliName;
+    data['kundliDateTime'] = kundliDateTime;
+    data['kundliPlace'] = kundliPlace;
+    data['gender'] = gender;
     data['title'] = title;
+    data['userType'] = userType;
     return data;
   }
 }
