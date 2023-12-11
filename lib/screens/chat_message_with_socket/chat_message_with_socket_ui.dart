@@ -18,6 +18,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:social_media_recorder/audio_encoder_type.dart';
+import 'package:social_media_recorder/screen/social_media_recorder.dart';
+import 'package:voice_message_package/voice_message_package.dart';
 
 import 'chat_message_with_socket_controller.dart';
 
@@ -48,71 +51,73 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           context: context,
                           removeBottom: true,
                           removeTop: true,
-                          child:
-                          // Obx(
-                          //   () =>
-                                typingWidget()
-                            //     AnimatedCrossFade(
-                            //   duration: const Duration(milliseconds: 200),
-                            //   crossFadeState:
-                            //       controller.chatMessages.isEmpty || controller.isDataLoad.value == false
-                            //           ? CrossFadeState.showSecond
-                            //           : CrossFadeState.showFirst,
-                            //   secondChild: Container(),
-                            //   firstChild: NotificationListener(
-                            //     onNotification: (t) {
-                            //       if (t is ScrollEndNotification) {
-                            //         bool atScrollViewBottom =
-                            //             controller.messgeScrollController.position.pixels <
-                            //                 controller.messgeScrollController.position.maxScrollExtent - 100;
-                            //         controller.scrollToBottom.value = atScrollViewBottom;
-                            //         if (atScrollViewBottom == false && controller.unreadMsgCount.value > 0) {
-                            //           //  controller.updateReadMessageStatus();
-                            //         }
-                            //       }
-                            //
-                            //       return true;
-                            //     },
-                            //     child: ListView.builder(
-                            //       controller: controller.messgeScrollController,
-                            //       itemCount: controller.chatMessages.length,
-                            //       shrinkWrap: true,
-                            //       reverse: false,
-                            //       padding: EdgeInsets.only(bottom: 10.h),
-                            //       itemBuilder: (context, index) {
-                            //         var chatMessage = controller.chatMessages[index];
-                            //
-                            //         return Column(
-                            //           children: [
-                            //             Padding(
-                            //               padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 12.w),
-                            //               child: Column(
-                            //                 children: [
-                            //                   if (chatMessage.id == controller.unreadMessageIndex.value)
-                            //                     unreadMessageView(),
-                            //                   chatMessage.msgType == "kundli"
-                            //                       ? kundliView(chatDetail: chatMessage, index: index)
-                            //                       : chatMessage.msgType == "image"
-                            //                           ? imageMsgView(
-                            //                               controller.chatMessages[index].base64Image ?? "",
-                            //                               chatDetail: controller.chatMessages[index],
-                            //                               index: index,
-                            //                               chatMessage.senderId == controller.userData?.id)
-                            //                           : textMsgView(context, chatMessage,
-                            //                               chatMessage.senderId == controller.userData?.id),
-                            //                 ],
-                            //               ),
-                            //             ),
-                            //            // if (index == (controller.chatMessages.length - 1))
-                            //               typingWidget()
-                            //           ],
-                            //         );
-                            //       },
-                            //     ),
-                            //   ),
-                            // ),
-                        //  )
-                      ),
+                          child: Obx(
+                            () => AnimatedCrossFade(
+                              duration: const Duration(milliseconds: 200),
+                              crossFadeState:
+                                  controller.chatMessages.isEmpty || controller.isDataLoad.value == false
+                                      ? CrossFadeState.showSecond
+                                      : CrossFadeState.showFirst,
+                              secondChild: Container(),
+                              firstChild: NotificationListener(
+                                onNotification: (t) {
+                                  if (t is ScrollEndNotification) {
+                                    bool atScrollViewBottom =
+                                        controller.messgeScrollController.position.pixels <
+                                            controller.messgeScrollController.position.maxScrollExtent - 100;
+                                    controller.scrollToBottom.value = atScrollViewBottom;
+                                    if (atScrollViewBottom == false && controller.unreadMsgCount.value > 0) {
+                                      controller.updateReadMessageStatus();
+                                    }
+                                  }
+                                  return true;
+                                },
+                                child: ListView.builder(
+                                  controller: controller.messgeScrollController,
+                                  itemCount: controller.chatMessages.length,
+                                  shrinkWrap: true,
+                                  reverse: false,
+                                  padding: EdgeInsets.only(bottom: 10.h),
+                                  itemBuilder: (context, index) {
+                                    var chatMessage = controller.chatMessages[index];
+                                    return Column(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 12.w),
+                                          child: Column(
+                                            children: [
+                                              if (chatMessage.id == controller.unreadMessageIndex.value)
+                                                unreadMessageView(),
+                                              chatMessage.msgType == "kundli"
+                                                  ? kundliView(chatDetail: chatMessage, index: index)
+                                                  : chatMessage.msgType == "image"
+                                                      ? imageMsgView(
+                                                          controller.chatMessages[index].base64Image ?? "",
+                                                          chatDetail: controller.chatMessages[index],
+                                                          index: index,
+                                                          chatMessage.senderId ==
+                                                              preferenceService.getUserDetail()!.id)
+                                                      : chatMessage.msgType == 'audio'
+                                                          ? audioView(context,
+                                                              chatDetail: controller.chatMessages[index],
+                                                              yourMessage: chatMessage.senderId ==
+                                                                  preferenceService.getUserDetail()!.id)
+                                                          : textMsgView(
+                                                              context,
+                                                              chatMessage,
+                                                              chatMessage.senderId ==
+                                                                  preferenceService.getUserDetail()!.id),
+                                            ],
+                                          ),
+                                        ),
+                                        if (index == (controller.chatMessages.length - 1)) typingWidget()
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          )),
                       Positioned(
                         bottom: 4.h,
                         right: 25.w,
@@ -140,9 +145,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   ),
                 ),
                 SizedBox(height: 10.h),
-                //  Obx(() => controller.isOngoingChat.value ?
                 chatBottomBar(),
-                //   : const SizedBox()),
                 Obx(() => AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       height: controller.isEmojiShowing.value ? 300 : 0,
@@ -234,99 +237,131 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Flexible(
-            child: Row(
-              children: [
-                Flexible(
-                  child: Container(
-                    // height: 50.h,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          blurRadius: 3.0,
-                          offset: const Offset(0.3, 3.0)),
-                    ]),
-                    child: TextFormField(
-                      controller: controller.messageController,
-                      keyboardType: TextInputType.text,
-                      minLines: 1,
-                      maxLines: 3,
-                      onTap: () {
-                        //  controller.userTypingSocket(isTyping: true);
-                        //  controller.scrollToBottomFunc();
-                        if (controller.isEmojiShowing.value) {
-                          controller.isEmojiShowing.value = false;
-                        }
-                      },
-                      onChanged: (value) {
-                        controller.tyingSocket();
-                      },
-                      scrollController: controller.typingScrollController,
-                      onTapOutside: (value) {
-                        FocusScope.of(Get.context!).unfocus();
-                        //   controller.userTypingSocket(isTyping: false);
-                      },
-                      decoration: InputDecoration(
-                        hintText: "message".tr,
-                        isDense: true,
-                        helperStyle: AppTextStyle.textStyle16(),
-                        fillColor: AppColors.white,
-                        hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.grey),
-                        hoverColor: AppColors.white,
-                        prefixIcon: InkWell(
-                          onTap: () async {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            controller.isEmojiShowing.value = !controller.isEmojiShowing.value;
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 11.h),
-                            child: Assets.images.icEmoji.svg(),
-                          ),
-                        ),
-                        suffixIcon: InkWell(
-                          onTap: () async {
-                            if (controller.isOngoingChat.value) {
-                              if (await PermissionHelper().askStoragePermission(Permission.photos)) {
-                                controller.getImage(false);
-                              }
-                            } else {
-                              divineSnackBar(data: "${'chatEnded'.tr}.", color: AppColors.appYellowColour);
+          Stack(
+            children: [
+              Visibility(
+                visible: !controller.isRecording.value,
+                maintainAnimation: true,
+                maintainSize: true,
+                maintainState: true,
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Container(
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 3.0,
+                              offset: const Offset(0.3, 3.0)),
+                        ]),
+                        child: TextFormField(
+                          controller: controller.messageController,
+                          keyboardType: TextInputType.text,
+                          minLines: 1,
+                          maxLines: 3,
+                          onTap: () {
+                            //  controller.userTypingSocket(isTyping: true);
+                            controller.scrollToBottomFunc();
+                            if (controller.isEmojiShowing.value) {
+                              controller.isEmojiShowing.value = false;
                             }
                           },
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(0.w, 9.h, 10.w, 10.h),
-                            child: Assets.images.icAttechment.svg(),
+                          onChanged: (value) {
+                            controller.tyingSocket();
+                          },
+                          scrollController: controller.typingScrollController,
+                          onTapOutside: (value) {
+                            FocusScope.of(Get.context!).unfocus();
+                            //   controller.userTypingSocket(isTyping: false);
+                          },
+                          decoration: InputDecoration(
+                            hintText: "message".tr,
+                            isDense: true,
+                            helperStyle: AppTextStyle.textStyle16(),
+                            fillColor: AppColors.white,
+                            hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.grey),
+                            hoverColor: AppColors.white,
+                            prefixIcon: InkWell(
+                              onTap: () async {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                controller.isEmojiShowing.value = !controller.isEmojiShowing.value;
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 11.h),
+                                child: Assets.images.icEmoji.svg(),
+                              ),
+                            ),
+                            suffixIcon: InkWell(
+                              onTap: () async {
+                                if (controller.isOngoingChat.value) {
+                                  if (await PermissionHelper().askStoragePermission(Permission.photos)) {
+                                    controller.getImage(false);
+                                  }
+                                } else {
+                                  divineSnackBar(
+                                      data: "${'chatEnded'.tr}.", color: AppColors.appYellowColour);
+                                }
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(0.w, 9.h, 10.w, 10.h),
+                                child: Assets.images.icAttechment.svg(),
+                              ),
+                            ),
+                            filled: true,
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30.0.sp),
+                                borderSide: const BorderSide(
+                                  color: AppColors.white,
+                                  width: 1.0,
+                                )),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30.0.sp),
+                                borderSide: const BorderSide(
+                                  color: AppColors.appYellowColour,
+                                  width: 1.0,
+                                )),
                           ),
                         ),
-                        filled: true,
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0.sp),
-                            borderSide: const BorderSide(
-                              color: AppColors.white,
-                              width: 1.0,
-                            )),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0.sp),
-                            borderSide: const BorderSide(
-                              color: AppColors.appYellowColour,
-                              width: 1.0,
-                            )),
                       ),
                     ),
-                  ),
+                    Obx(() => SizedBox(width: !controller.hasMessage.value ? 25.w : 15.w)),
+                    Visibility(
+                      visible: controller.hasMessage.value,
+                      maintainAnimation: true,
+                      maintainSize: true,
+                      maintainState: true,
+                      child: InkWell(
+                          onTap: () => controller.sendMsg(),
+                          child: Assets.images.icSendMsg.svg(height: 48.h)),
+                    )
+                  ],
                 ),
-                SizedBox(width: 15.w),
-                InkWell(
-                    onTap: () {
-                      if (controller.isOngoingChat.value) {
-                        //    controller.sendMsg();
-                      } else {
-                        divineSnackBar(data: "${'chatEnded'.tr}.", color: AppColors.appYellowColour);
-                      }
+              ),
+              if (!controller.hasMessage.value)
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: SocialMediaRecorder(
+                    backGroundColor: AppColors.yellow,
+                    cancelTextBackGroundColor: Colors.white,
+                    recordIconBackGroundColor: AppColors.yellow,
+                    radius: BorderRadius.circular(30),
+                    initRecordPackageWidth: kToolbarHeight - Get.width * 0.010,
+                    recordIconWhenLockBackGroundColor: AppColors.yellow,
+                    startRecording: () {
+                      controller.isRecording.value = true;
                     },
-                    child: Assets.images.icSendMsg.svg(height: 48.h))
-              ],
-            ),
+                    stopRecording: (time) {
+                      controller.isRecording.value = false;
+                    },
+                    sendRequestFunction: (soundFile, time) {
+                      debugPrint('soundFile ${soundFile.path}');
+                      controller.uploadAudioFile(soundFile);
+                    },
+                    encode: AudioEncoderType.AAC,
+                  ),
+                )
+            ],
           ),
           SizedBox(height: 20.h),
         ],
@@ -392,6 +427,67 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 : msgType.value == 2
                                     ? Assets.images.icDoubleTick.svg()
                                     : Assets.images.icSingleTick.svg())
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget audioView(BuildContext context, {required ChatMessage chatDetail, required bool yourMessage}) {
+    RxInt msgType = (chatDetail.type ?? 0).obs;
+    return SizedBox(
+      width: double.maxFinite,
+      child: Column(
+        crossAxisAlignment: yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8.0),
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.2), blurRadius: 3.0, offset: const Offset(0.0, 3.0))
+              ],
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(8.r)),
+            ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                VoiceMessageView(
+                    controller: VoiceController(
+                        audioSrc: chatDetail.awsUrl!,
+                        maxDuration: const Duration(seconds: 120),
+                        isFile: false,
+                        onComplete: () => debugPrint('onComplete'),
+                        onPause: () => debugPrint('onPause'),
+                        onPlaying: () => debugPrint('onPlaying')),
+                    innerPadding: 0,
+                    cornerRadius: 20),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Row(
+                    children: [
+                      Text(
+                        messageDateTime(chatDetail.time ?? 0),
+                        style: AppTextStyle.textStyle10(fontColor: AppColors.black),
+                      ),
+                      if (yourMessage) SizedBox(width: 8.w),
+                      if (yourMessage)
+                        msgType.value == 0
+                            ? Assets.images.icSingleTick.svg()
+                            : msgType.value == 1
+                                ? Assets.images.icDoubleTick.svg(
+                                    colorFilter: const ColorFilter.mode(AppColors.lightGrey, BlendMode.srcIn))
+                                : msgType.value == 2
+                                    ? Assets.images.icDoubleTick.svg()
+                                    : Assets.images.icSingleTick.svg()
                     ],
                   ),
                 ),
@@ -653,7 +749,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 }
 
 class AstrologerChatAppBar extends StatelessWidget {
-  AstrologerChatAppBar({Key? key}) : super(key: key);
+  AstrologerChatAppBar({super.key});
+
   final ChatMessageWithSocketController controller = Get.find<ChatMessageWithSocketController>();
 
   @override
@@ -671,10 +768,7 @@ class AstrologerChatAppBar extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFFFFEFDA),
-            Color(0xFFFFD196),
-          ],
+          colors: [Color(0xFFFFEFDA), Color(0xFFFFD196)],
         ),
       ),
       child: Column(
@@ -698,11 +792,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                       SizedBox(width: 8.w),
                       Row(
                         children: [
-                          CachedNetworkPhoto(
-                            height: 48.h,
-                            width: 48.w,
-                            url: controller.profileImage.value,
-                          ),
+                          CachedNetworkPhoto(height: 48.h, width: 48.w, url: controller.profileImage.value),
                           SizedBox(width: 12.w),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -712,10 +802,9 @@ class AstrologerChatAppBar extends StatelessWidget {
                                 () => Text(
                                   controller.customerName.value,
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16.sp,
-                                    color: AppColors.darkBlue,
-                                  ),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16.sp,
+                                      color: AppColors.darkBlue),
                                 ),
                               ),
                               Obx(() => AnimatedCrossFade(
@@ -732,19 +821,17 @@ class AstrologerChatAppBar extends StatelessWidget {
                                               ? "(${timer.formattedTime()} mins) Remaining"
                                               : "",
                                           style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 13.sp,
-                                            color: AppColors.brownColour,
-                                          ),
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 13.sp,
+                                              color: AppColors.brownColour),
                                         ),
                                         Text(
                                           controller.chatStatus.value,
                                           // "chatInProgress".tr,
                                           style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 13.sp,
-                                            color: AppColors.redColor,
-                                          ),
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 13.sp,
+                                              color: AppColors.redColor),
                                         ),
                                       ],
                                     ),

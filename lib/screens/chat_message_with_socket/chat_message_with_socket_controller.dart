@@ -4,9 +4,9 @@ import 'dart:io';
 
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/di/hive_services.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
+import 'package:divine_astrologer/model/chat/res_astro_chat_listener.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/model/res_login.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
@@ -19,7 +19,9 @@ import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ChatMessageWithSocketController extends GetxController {
+import '../../common/common_functions.dart';
+
+class ChatMessageWithSocketController extends GetxController with WidgetsBindingObserver{
   final userRepository = Get.find<UserRepository>();
   SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
   TextEditingController messageController = TextEditingController();
@@ -60,6 +62,9 @@ class ChatMessageWithSocketController extends GetxController {
 
   Timer? _timer;
 
+  Rx<bool> isRecording = false.obs;
+  Rx<bool> hasMessage = false.obs;
+
   void startTimer() {
     int _start = 5;
     if (_timer != null) {
@@ -80,15 +85,80 @@ class ChatMessageWithSocketController extends GetxController {
     );
   }
 
+  _onMessageChanged() {
+    hasMessage.value = messageController.text.isNotEmpty;
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        socket.socketConnect();
+        break;
+      case AppLifecycleState.inactive:
+        debugPrint("App Inactive");
+        break;
+      case AppLifecycleState.paused:
+        debugPrint("App Paused");
+        break;
+      case AppLifecycleState.detached:
+        debugPrint("App Detached");
+        break;
+      case AppLifecycleState.hidden:
+        break;
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
+  void onClose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.onClose();
+  }
+
   @override
   void onInit() {
     super.onInit();
     arguments = Get.arguments;
-    socket.startAstroCustumerSocketEvent(orderId: arguments['orderId']);
+    debugPrint('arguments of socket $arguments');
+    socket.startAstroCustumerSocketEvent(orderId: arguments['orderId'],userId:arguments['userId']);
+    messageController.addListener(_onMessageChanged);
     isAstroJoinedChat();
     checkIsCustomerJoinedPrivateChat();
     typingListenerSocket();
+    sendMessageSocketListenerSocket();
     sendMessageListenerSocket();
+
+    if (Get.arguments != null) {
+      if (Get.arguments is ResAstroChatListener) {
+        sendReadMessageStatus = true;
+        var data = Get.arguments;
+        if (data!.customerId != null) {
+          chatStatus.value = "Chat in - Progress";
+          isOngoingChat.value = true;
+          currentChatUserId.value = data!.customerId;
+          currentUserId.value = data!.customerId;
+          customerName.value = data!.customeName ?? "";
+          profileImage.value =
+              data!.customerImage != null ? "${preference.getBaseImageURL()}/${data!.customerImage}" : "";
+          if (astroChatWatcher.value.orderId != null) {
+            timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0, astroChatWatcher.value.orderId!);
+          }
+        }
+      }
+    }
+    userData = preferenceService.getUserDetail();
+
+    userDataKey = "userKey_${userData?.id}_${currentUserId.value}";
+    getChatList();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    Future.delayed(const Duration(milliseconds: 600)).then((value) {
+      scrollToBottomFunc();
+    });
   }
 
   void isAstroJoinedChat() {
@@ -110,25 +180,30 @@ class ChatMessageWithSocketController extends GetxController {
 
   void typingListenerSocket() {
     socket.typingListenerSocket((data) {
-      isTyping.value = true;
-      update();
-      startTimer();
-      debugPrint('typingListenerSocket $data');
+      if (data['typist'].toString() != userData!.id.toString()) {
+        isTyping.value = true;
+        update();
+        startTimer();
+        debugPrint('typingListenerSocket $data');
+      }
     });
   }
 
-  void sendMessageSocket({required String messageType, required String message}) {
-    debugPrint('sendMessageSocket $messageType $message');
-    socket.sendMessageSocket(
-        astroId: arguments['userId'].toString(),
-        message: message,
-        messageType: messageType,
-        orderId: arguments['orderId']);
+  void sendMessageSocketListenerSocket(){
+    socket.sendMessageSocketListenerSocket((data) {
+      debugPrint('sendMessageSocketListenerSocket $data');
+    });
   }
 
   void sendMessageListenerSocket() {
     socket.sendMessageListenerSocket((data) {
       debugPrint('sendMessageListenerSocket $data');
+      if (data is Map<String, dynamic>) {
+        isTyping.value = false;
+        var chatMessage = ChatMessage.fromOfflineJson(data['data']);
+        updateChatMessages(chatMessage, false, isSendMessage: false);
+      }
+      debugPrint('chatMessage.value.length ${chatMessages.length}');
     });
   }
 
@@ -260,11 +335,11 @@ class ChatMessageWithSocketController extends GetxController {
       String? downloadedPath,
       String? kundliId}) async {
     var newMessage = ChatMessage(
-        orderId: astroChatWatcher.value.orderId,
+        orderId: int.parse(arguments['orderId'].toString()),
         id: int.parse(time),
         message: messageText,
-        receiverId: currentUserId.value,
-        senderId: userData?.id,
+        receiverId: int.parse(arguments['userId'].toString()),
+        senderId: preference.getUserDetail()!.id,
         time: int.parse(time),
         awsUrl: awsUrl,
         base64Image: base64Image,
@@ -272,16 +347,12 @@ class ChatMessageWithSocketController extends GetxController {
         msgType: msgType,
         kundliId: kundliId,
         title: "${userData?.name} sent you message.",
-        type: 0);
-
+        type: 0,
+        userType:"astrologer"
+      );
+    socket.sendMessageSocket(newMessage);
+    updateChatMessages(newMessage,false,isSendMessage: true);
     isDataLoad.value = true;
-
-    firebaseDatabase.ref("astrologer/${userData?.id}/realTime/engagement").set(newMessage.toOfflineJson());
-    updateChatMessages(newMessage, false, isSendMessage: true);
-    //Firebase node is not working.
-    firebaseDatabase
-        .ref("user/${currentChatUserId.value}/realTime/notification/$time")
-        .set(newMessage.toOfflineJson());
   }
 
   updateChatMessages(ChatMessage newMessage, bool isFromNotification, {bool isSendMessage = false}) async {
@@ -294,17 +365,18 @@ class ChatMessageWithSocketController extends GetxController {
         if (messgeScrollController.position.pixels > messgeScrollController.position.maxScrollExtent - 100) {
           newMessage.type = 2;
           chatMessages.add(newMessage);
-          //  scrollToBottomFunc();
+          scrollToBottomFunc();
           updateMsgDelieveredStatus(newMessage, 2);
           if (messgeScrollController.position.pixels == messgeScrollController.position.maxScrollExtent) {
             Future.delayed(const Duration(seconds: 1)).then((value) {
-              //   scrollToBottomFunc();
+              scrollToBottomFunc();
             });
           }
         } else {
           newMessage.type = isSendMessage ? 0 : 1;
           chatMessages.add(newMessage);
-          unreadMsgCount.value = chatMessages.where((e) => e.type != 2 && e.senderId != userData?.id).length;
+          unreadMsgCount.value =
+              chatMessages.where((e) => e.type != 2 && e.senderId != preference.getUserDetail()!.id).length;
           if (!isSendMessage) {
             updateMsgDelieveredStatus(newMessage, 1);
           }
@@ -312,7 +384,8 @@ class ChatMessageWithSocketController extends GetxController {
       } else {
         newMessage.type = isSendMessage ? 0 : 1;
         chatMessages.add(newMessage);
-        unreadMsgCount.value = chatMessages.where((e) => e.type != 2 && e.senderId != userData?.id).length;
+        unreadMsgCount.value =
+            chatMessages.where((e) => e.type != 2 && e.senderId != preference.getUserDetail()!.id).length;
         if (!isSendMessage) {
           updateMsgDelieveredStatus(newMessage, 1);
         }
@@ -320,18 +393,90 @@ class ChatMessageWithSocketController extends GetxController {
     }
     unreadMessageIndex.value = chatMessages
             .firstWhere(
-              (element) => element.type != 2 && element.senderId != userData?.id,
+              (element) => element.type != 2 && element.senderId != preference.getUserDetail()!.id,
               orElse: () => ChatMessage(),
             )
             .id ??
         -1;
     chatMessages.refresh();
-    //setHiveDatabase();
+    setHiveDataDatabase();
     if (!isFromNotification) {
-      //  updateReadMessageStatus();
+      updateReadMessageStatus();
       Future.delayed(const Duration(milliseconds: 200)).then((value) {
-        //    scrollToBottomFunc();
+        scrollToBottomFunc();
       });
+    }
+  }
+
+  void setHiveDataDatabase() async {
+    var userDataKey = "userKey_${userData?.id}_${currentUserId.value}";
+    HiveServices hiveServices = HiveServices(boxName: userChatData);
+    await hiveServices.initialize();
+    databaseMessage.value.chatMessages = chatMessages;
+    await hiveServices.addData(key: userDataKey, data: jsonEncode(databaseMessage.value.toOfflineJson()));
+  }
+
+  scrollToBottomFunc() {
+    messgeScrollController.hasClients
+        ? messgeScrollController.animateTo(messgeScrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 600), curve: Curves.easeOut)
+        : null;
+  }
+
+  updateReadMessageStatus() async {
+    for (int i = 0; i < chatMessages.length; i++) {
+      if (chatMessages[i].type != 2 && chatMessages[i].senderId != preference.getUserDetail()!.id) {
+        updateMsgDelieveredStatus(chatMessages[i], 2);
+        chatMessages[i].type = 2;
+      }
+    }
+    databaseMessage.value.chatMessages = chatMessages;
+    unreadMsgCount.value = 0;
+    chatMessages.refresh();
+    await hiveServices.addData(key: userDataKey, data: jsonEncode(databaseMessage.value.toOfflineJson()));
+    Future.delayed(const Duration(seconds: 1)).then((value) => unreadMessageIndex.value = -1);
+  }
+
+  sendMsg() {
+    if (messageController.text.trim().isNotEmpty) {
+      var time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+      // type 1= New chat message, 2 = Delievered, 3= Msg read, 4= Other messages
+      unreadMessageIndex.value = -1;
+      addNewMessage(time, "text", messageText: messageController.text.trim());
+      messageController.clear();
+    }
+  }
+
+  getChatList() async {
+    chatMessages.clear();
+    await hiveServices.initialize();
+    var res = await hiveServices.getData(key: userDataKey);
+    if (res != null) {
+      var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
+      chatMessages.value = msg.chatMessages ?? [];
+      if (sendReadMessageStatus) {
+        unreadMessageIndex.value = chatMessages
+                .firstWhere((element) => element.type != 2 && element.senderId != userData?.id,
+                    orElse: () => ChatMessage())
+                .id ??
+            -1;
+        if (unreadMessageIndex.value != -1) {
+          updateReadMessageStatus();
+        }
+      }
+    } else {
+      // Map<String, int> params = {"customer_id": currentUserId.value};
+      // var response = await chatRepository.getChatListApi(params);
+      // debugPrint("$response");
+    }
+    isDataLoad.value = true;
+  }
+
+  uploadAudioFile(File soundFile) async {
+    String time = ("${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
+    var uploadFile = await uploadImageToS3Bucket(soundFile, time);
+    if (uploadFile != '') {
+      addNewMessage(time, "audio", awsUrl: uploadFile);
     }
   }
 }
