@@ -18,6 +18,8 @@ import 'package:divine_astrologer/screens/home_screen_options/notice_board/notic
 import 'package:divine_astrologer/screens/home_screen_options/notice_board_detail/notice_detail_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_bindings.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_ui.dart';
+import 'package:divine_astrologer/screens/live_dharam/live_dharam_binding.dart';
+import 'package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart';
 import 'package:divine_astrologer/screens/live_tips/live_tips_binding.dart';
 import 'package:divine_astrologer/screens/live_tips/live_tips_ui.dart';
 import 'package:divine_astrologer/screens/number_change/sub_screen/otp_screen_for_update_mobile_number.dart';
@@ -116,6 +118,7 @@ class RouteName {
   static const String videoCall = "/videoCall";
   static const String numberChangeOtpScreen = "/numberChangeOtpScreen";
   static const String orderFeedback = "/orderFeedback";
+  static const String liveDharamScreen = "/liveDharamScreen";
 }
 
 final Set<String> validRoutes = {RouteName.chatMessageUI};
@@ -204,7 +207,6 @@ class Routes {
         page: () => const ChatMessageWithSocketUI(),
         name: RouteName.chatMessageWithSocketUI,
         binding: ChatMessageWithSocketBinding()),
-
     GetPage(
         page: () => const SuggestRemediesView(),
         name: RouteName.suggestRemediesView),
@@ -279,9 +281,13 @@ class Routes {
       name: RouteName.numberChangeOtpScreen,
     ),
     GetPage(
-      page: () => const OrderFeedbackUI(),
-      name: RouteName.orderFeedback,
-      binding: OrderFeedbackBinding()
-    ),
+        page: () => const OrderFeedbackUI(),
+        name: RouteName.orderFeedback,
+        binding: OrderFeedbackBinding()),
+    GetPage<dynamic>(
+      name: RouteName.liveDharamScreen,
+      page: LiveDharamScreen.new,
+      binding: LiveDharamBinding(),
+    )
   ];
 }

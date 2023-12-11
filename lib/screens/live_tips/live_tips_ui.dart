@@ -135,7 +135,8 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                     // );
                     //controller.giftPopup(Get.context!);
                     if (await PermissionHelper().askPermissions()) {
-                      controller.jumpToLivePage(controller.isFrontCamera.value);
+                      // controller.jumpToLivePage(controller.isFrontCamera.value);
+                      await controller.myFun();
                     }
                   },
                   child: Container(

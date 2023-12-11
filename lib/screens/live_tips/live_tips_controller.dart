@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -27,38 +28,59 @@ class LiveTipsController extends GetxController {
     super.onReady();
   }
 
-  jumpToLivePage(bool front) {
-    database.ref().child("live/$astroId").update({
-      "id": astroId,
-      "name": name,
-      "image": image,
-      "isEngaged": 0,
-      "isAvailable": true,
-      "callType": "",
-      "duration": 0,
-      "callStatus": 0,
-      "userId": 0,
-      "userName": "",
-      "speciality": getSpecialAbilityInString(),
-    }).then((value) {
-      Get.to(
-              LivePage(
-                liveID: astroId.toString(),
-                isHost: true,
-                localUserID: astroId,
-                astrologerImage: image,
-                astrologerName: name,
-                isFrontCamera: front,
-                astrologerSpeciality: getSpecialAbilityInString(),
-              ),
-              routeName: "livepage")
-          ?.then((value) {
-        Future.delayed(const Duration(milliseconds: 300)).then((value) {
-          database.ref().child("live/$astroId").remove();
-        });
-      });
-    });
+  Future<void> myFun() async {
+    await database.ref().child("live/$astroId").update(
+      {
+        "id": astroId,
+        "name": name,
+        "image": image,
+        "isEngaged": 0,
+        "isAvailable": true,
+        "callType": "",
+        "duration": 0,
+        "callStatus": 0,
+        "userId": 0,
+        "userName": "",
+        "speciality": getSpecialAbilityInString(),
+      },
+    );
+    await Get.toNamed(RouteName.liveDharamScreen, arguments: astroId);
+    await database.ref().child("live/$astroId").remove();
+    return Future<void>.value();
   }
+
+  // jumpToLivePage(bool front) {
+  //   database.ref().child("live/$astroId").update({
+  //     "id": astroId,
+  //     "name": name,
+  //     "image": image,
+  //     "isEngaged": 0,
+  //     "isAvailable": true,
+  //     "callType": "",
+  //     "duration": 0,
+  //     "callStatus": 0,
+  //     "userId": 0,
+  //     "userName": "",
+  //     "speciality": getSpecialAbilityInString(),
+  //   }).then((value) {
+  //     Get.to(
+  //             LivePage(
+  //               liveID: astroId.toString(),
+  //               isHost: true,
+  //               localUserID: astroId,
+  //               astrologerImage: image,
+  //               astrologerName: name,
+  //               isFrontCamera: front,
+  //               astrologerSpeciality: getSpecialAbilityInString(),
+  //             ),
+  //             routeName: "livepage")
+  //         ?.then((value) {
+  //       Future.delayed(const Duration(milliseconds: 300)).then((value) {
+  //         database.ref().child("live/$astroId").remove();
+  //       });
+  //     });
+  //   });
+  // }
 
   String getSpecialAbilityInString() {
     String allData = pref.getSpecialAbility() ?? "";
