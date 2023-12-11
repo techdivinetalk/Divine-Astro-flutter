@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../gen/assets.gen.dart';
-import '../../model/performance_model_class.dart';
+import '../../model/filter_performance_response.dart';
 
 class RankSystemController extends GetxController {
 
@@ -44,6 +44,18 @@ class RankSystemController extends GetxController {
       null,
     ),
   ].obs;
+
+  List<RankSystem>? rankSystem;
+
+  @override
+  void onInit() {
+    var arguments = Get.arguments;
+    if (arguments != null) {
+      var args = arguments as List;
+      rankSystem = args.first;
+    }
+    super.onInit();
+  }
 }
 
 class SystemRankModelClass {

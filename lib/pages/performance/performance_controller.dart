@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/model/performance_response.dart';
 import 'package:divine_astrologer/screens/rank_system/rank_system_controller.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../common/app_exception.dart';
+import '../../model/filter_performance_response.dart';
 import '../../model/performance_model_class.dart';
 import '../../repository/performance_repository.dart';
 
@@ -56,11 +58,12 @@ class PerformanceController extends GetxController {
       selectedOption.value = val;
       int index = durationOptions.indexOf(val);
       selectedValue.value = durationValue[index];
-      getPerformanceList();
+      getFilteredPerformance();
     }
   }
 
-  PerformanceModelClass? performanceData;
+  PerformanceResponse? performanceData;
+  PerformanceFilterResponse? performanceFilterResponse;
 
   @override
   void onInit() {
@@ -69,32 +72,50 @@ class PerformanceController extends GetxController {
   }
 
   init() async {
-    await getPerformanceList();
+    await getPerformance();
+    await getFilteredPerformance();
   }
 
-  RxList<BusyHours?> overAllScoreList = <BusyHours?>[].obs;
+  RxList<Conversion?> overAllScoreList = <Conversion?>[].obs;
 
-  getPerformanceList() async {
+  getPerformance() async {
+    loading.value = Loading.loading;
+    update();
+    try {
+      var response = await PerformanceRepository().getPerformance();
+      log("Res-->${jsonEncode(response.data)}");
+      performanceData = response;
+
+      update();
+      log("performanceData==>${jsonEncode(performanceData!.data)}");
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      }
+    }
+    loading.value = Loading.loaded;
+  }
+
+  getFilteredPerformance() async {
     loading.value = Loading.loading;
     update();
     try {
       Map<String, dynamic> params = {"filter": selectedValue.value};
       // Map<String, dynamic> params = {"filter": 'last_month'};
-      var response = await PerformanceRepository().getPerformance(params);
+      var response = await PerformanceRepository().getFilteredPerformance(params);
       log("Res-->${jsonEncode(response.data)}");
-      performanceData = response;
+      performanceFilterResponse = response;
       overAllScoreList.value = [
-        response.data?.response?.conversionRate,
+        response.data?.response?.conversion,
         response.data?.response?.repurchaseRate,
         response.data?.response?.onlineHours,
-        response.data?.response?.liveHours,
-        response.data?.response?.eCommerce,
-        response.data?.response?.busyHours,
+        response.data?.response?.liveOnline,
+        response.data?.response?.averageServiceTime,
+        response.data?.response?.customerSatisfactionRatings,
       ];
-
-      RankSystemController rankSystemController =
-          Get.put(RankSystemController());
-      rankSystemController.rankSystemList = performanceData?.data?.rankSystem;
 
       update();
       log("performanceData==>${jsonEncode(performanceData!.data)}");

@@ -21,6 +21,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../common/app_exception.dart';
+import '../../common/feedback_bottomsheet.dart';
 import '../../di/shared_preference_service.dart';
 import '../../model/constant_details_model_class.dart';
 import '../../model/home_page_model_class.dart';
@@ -463,7 +464,7 @@ class HomeController extends GetxController {
   }
 
   showFeedbackBottomSheet() async {
-    await openBottomSheet(
+    await feedbackBottomSheet(
       Get.context!,
       title: "Feedback Available!!!",
       btnTitle: "Check Report",
