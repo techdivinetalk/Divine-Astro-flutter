@@ -4,15 +4,12 @@ import 'dart:io';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/common_bottomsheet.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
-import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
 import 'package:divine_astrologer/model/feedback_response.dart';
 import 'package:divine_astrologer/model/update_offer_type_response.dart';
 import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/pages/home/home_ui.dart';
-import 'package:divine_astrologer/repository/notice_repository.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:flutter/material.dart';
@@ -24,11 +21,14 @@ import '../../common/app_exception.dart';
 import '../../common/feedback_bottomsheet.dart';
 import '../../di/shared_preference_service.dart';
 import '../../model/constant_details_model_class.dart';
+import '../../model/filter_performance_response.dart';
 import '../../model/home_page_model_class.dart';
 import '../../model/res_login.dart';
 import '../../model/send_feed_back_model.dart';
 import '../../model/view_training_video_model.dart';
 import '../../repository/home_page_repository.dart';
+import '../../repository/notice_repository.dart';
+import '../../repository/performance_repository.dart';
 import '../../repository/user_repository.dart';
 
 class HomeController extends GetxController {
@@ -61,7 +61,7 @@ class HomeController extends GetxController {
   Rx<Loading> offerTypeLoading = Loading.initial.obs;
   Rx<Loading> sessionTypeLoading = Loading.initial.obs;
   onNextTap() {
-    if (scoreIndex < yourScore.length - 1) {
+    if (scoreIndex < performanceScoreList.length - 1) {
       scoreIndex++;
       update(['score_update']);
     }
@@ -75,10 +75,11 @@ class HomeController extends GetxController {
   }
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     userData = preferenceService.getUserDetail();
     appbarTitle.value = userData?.name ?? "Astrologer Name";
+    await getFilteredPerformance();
     getConstantDetailsData();
     getDashboardDetail();
     getFeedbackData();
@@ -95,6 +96,43 @@ class HomeController extends GetxController {
   RxBool shopDataSync = false.obs;
   ViewTrainingVideoModelClass? viewTrainingVideoModelClass;
   SendFeedBackModel? sendFeedBackModel;
+
+  PerformanceFilterResponse? performanceFilterResponse;
+  RxList<Conversion?> overAllScoreList = <Conversion?>[].obs;
+  RxList<Conversion?> performanceScoreList = <Conversion?>[].obs;
+
+  getFilteredPerformance() async {
+    try {
+      Map<String, dynamic> params = {"filter": 'today'};
+      var response = await PerformanceRepository().getFilteredPerformance(params);
+      log("Res-->${jsonEncode(response.data)}");
+      performanceFilterResponse = response;
+      overAllScoreList.value = [
+        response.data?.response?.conversion,
+        response.data?.response?.repurchaseRate,
+        response.data?.response?.onlineHours,
+        response.data?.response?.liveOnline,
+        response.data?.response?.averageServiceTime,
+        response.data?.response?.customerSatisfactionRatings,
+      ];
+
+      for(int i=0; i<overAllScoreList.length; i++) {
+        int averageScore = int.parse(overAllScoreList[i]?.performance?.marks?[1].max ?? '0');
+        int yourMarks = overAllScoreList[i]?.performance?.marksObtains ?? 0;
+        if(averageScore > yourMarks) {
+          performanceScoreList.add(overAllScoreList[i]);
+        }
+      }
+
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      }
+    }
+  }
 
   sendFeedbackAPI(String text) async {
     Map<String, dynamic> params = {"comment": text.toString()};
