@@ -42,6 +42,10 @@ class UserRepository extends ApiProvider {
           preferenceService.erase();
           Get.offNamed(RouteName.login);
           throw CustomException(json.decode(response.body)["error"]);
+        } else if(json.decode(response.body)["status_code"] == 400) {
+          preferenceService.erase();
+          Get.offNamed(RouteName.login);
+          throw CustomException(json.decode(response.body)["message"]);
         } else {
           final sendOtpModel = sendOtpModelFromJson(response.body);
           if (sendOtpModel.statusCode == successResponse &&

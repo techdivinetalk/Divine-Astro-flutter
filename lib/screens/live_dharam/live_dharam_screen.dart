@@ -1,12 +1,21 @@
+// ignore_for_file: lines_longer_than_80_chars
+
+import "dart:async";
+import "dart:convert";
+import "dart:developer";
+
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
+import "package:divine_astrologer/screens/live_dharam/live_gift.dart";
+import "package:firebase_database/firebase_database.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
-import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
+import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
 
 const int appID = 696414715;
 const String appSign =
     "bf7174a98b7d6fb6e2dc7ae60f6ed932d6a9794dad8a5cae22e29ad8abfac1aa";
+const String serverSecret = "89ceddc6c59909af326ddb7209cb1c16";
 
 class LiveDharamScreen extends StatefulWidget {
   const LiveDharamScreen({super.key});
@@ -18,21 +27,36 @@ class LiveDharamScreen extends StatefulWidget {
 class _LivePage extends State<LiveDharamScreen> {
   final LiveDharamController _controller = Get.find();
 
-  final ZegoUIKitPrebuiltLiveStreamingController
-      _zegoUIKitPrebuiltLiveStreamingController =
+  final ZegoUIKitPrebuiltLiveStreamingController _streamingController =
       ZegoUIKitPrebuiltLiveStreamingController();
 
-  final List<IZegoUIKitPlugin> plug = <IZegoUIKitPlugin>[
-    ZegoUIKitSignalingPlugin()
-  ];
+  late StreamSubscription<ZegoSignalingPluginInRoomCommandMessageReceivedEvent>
+      _zegocloudSubscription;
+
+  // late StreamSubscription<DatabaseEvent> _firebaseSubscription;
 
   @override
   void initState() {
     super.initState();
+
+    _zegocloudSubscription = ZegoUIKit()
+        .getSignalingPlugin()
+        .getInRoomCommandMessageReceivedEventStream()
+        .listen(onInRoomCommandMessageReceived);
+
+    // _firebaseSubscription = FirebaseDatabase.instance
+    //     .ref()
+    //     .child("live")
+    //     .onValue
+    //     .listen(_controller.eventListner);
   }
 
   @override
   void dispose() {
+    unawaited(_zegocloudSubscription.cancel());
+
+    // unawaited(_firebaseSubscription.cancel());
+
     super.dispose();
   }
 
@@ -41,37 +65,135 @@ class _LivePage extends State<LiveDharamScreen> {
     return Scaffold(
       body: Obx(
         () {
-          return ZegoUIKitPrebuiltLiveStreaming(
-            appID: appID,
-            appSign: appSign,
-            controller: _zegoUIKitPrebuiltLiveStreamingController,
-            userID: _controller.userId,
-            userName: _controller.userName,
-            liveID: _controller.liveId,
-            config: _controller.isHost
-                ? ZegoUIKitPrebuiltLiveStreamingConfig.host(plugins: plug)
-                : ZegoUIKitPrebuiltLiveStreamingConfig.audience(plugins: plug)
-              ..innerText = _controller.isHost
-                  ? ZegoInnerText()
-                  : ZegoInnerText(requestCoHostButton: "Co-host")
-              ..layout = ZegoLayout.gallery()
-              ..avatarBuilder = (
-                BuildContext context,
-                Size size,
-                ZegoUIKitUser? user,
-                Map<String, dynamic> extraInfo,
-              ) {
-                return user != null
-                    ? CircleAvatar(
-                        foregroundImage: NetworkImage(
-                          "https://robohash.org/${user.id}.png",
-                        ),
-                      )
-                    : const SizedBox();
-              },
-          );
+          return _controller.liveId == ""
+              ? const Center(child: CircularProgressIndicator())
+              : ZegoUIKitPrebuiltLiveStreaming(
+                  appID: appID,
+                  appSign: appSign,
+                  userID: _controller.userId,
+                  userName: _controller.userName,
+                  liveID: _controller.liveId,
+                  config: streamingConfig
+                    ..innerText = textConfig
+                    ..layout = galleryLayout
+                    ..swipingConfig = swipingConfig
+                    ..onLiveStreamingStateUpdate = onLiveStreamingStateUpdate
+                    ..avatarBuilder = avatarWidget,
+                    // ..bottomMenuBarConfig.coHostExtendButtons = extendButton
+                    // ..bottomMenuBarConfig.audienceExtendButtons = extendButton,
+                  controller: _streamingController,
+                );
         },
       ),
     );
+  }
+
+  ZegoUIKitPrebuiltLiveStreamingConfig get streamingConfig {
+    final ZegoUIKitSignalingPlugin plugin = ZegoUIKitSignalingPlugin();
+    final List<IZegoUIKitPlugin> pluginsList = <IZegoUIKitPlugin>[plugin];
+    return _controller.isHost
+        ? ZegoUIKitPrebuiltLiveStreamingConfig.host(plugins: pluginsList)
+        : ZegoUIKitPrebuiltLiveStreamingConfig.audience(plugins: pluginsList);
+  }
+
+  ZegoInnerText get textConfig {
+    return _controller.isHost ? ZegoInnerText() : ZegoInnerText();
+  }
+
+  ZegoLayout get galleryLayout {
+    return _controller.isHost ? ZegoLayout.gallery() : ZegoLayout.gallery();
+  }
+
+  Widget avatarWidget(
+    BuildContext context,
+    Size size,
+    ZegoUIKitUser? user,
+    Map<String, dynamic> extraInfo,
+  ) {
+    final String zegoUser = user?.id ?? "";
+    final String mineUser = _controller.userId;
+    return CircleAvatar(
+      foregroundImage: NetworkImage(
+        zegoUser == mineUser
+            ? _controller.avatar
+            : "https://images.hindustantimes.com/rf/image_size_640x362/HT/p1/2011/12/31/Incoming/Pictures/789560_Wallpaper2.jpg",
+      ),
+    );
+  }
+
+  ZegoLiveStreamingSwipingConfig? get swipingConfig {
+    return _controller.isHost
+        ? null
+        : ZegoLiveStreamingSwipingConfig(
+            requirePreviousLiveID: _controller.requirePreviousLiveID,
+            requireNextLiveID: _controller.requireNextLiveID,
+          );
+  }
+
+  Future<void> onLiveStreamingStateUpdate(ZegoLiveStreamingState state) async {
+    if (state == ZegoLiveStreamingState.ended) {
+      await showAstrologerLeftDialog();
+    } else {}
+    return Future<void>.value();
+  }
+
+  Future<void> showAstrologerLeftDialog() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            "Astrologer left",
+          ),
+          content: const Text(
+            "This astrologer left this live session. You can wait here for this astrologer if you wish to, or you can explore another astrologer by swiping up or down.",
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: Get.back,
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+    return Future<void>.value();
+  }
+
+  // ZegoMenuBarExtendButton get giftButton {
+  //   return ZegoMenuBarExtendButton(
+  //     index: 0,
+  //     child: ElevatedButton(
+  //       style: ElevatedButton.styleFrom(shape: const CircleBorder()),
+  //       onPressed: () async {
+  //         await _controller.sendGiftAPI(
+  //           successCallback: (String message) {
+  //             LiveGiftWidget.show(context, "assets/svga/sports_car.svga");
+  //           },
+  //           failureCallback: log,
+  //         );
+  //       },
+  //       child: const Icon(Icons.blender),
+  //     ),
+  //   );
+  // }
+
+  // List<ZegoMenuBarExtendButton> get extendButton {
+  //   return <ZegoMenuBarExtendButton>[giftButton];
+  // }
+
+  void onInRoomCommandMessageReceived(
+    ZegoSignalingPluginInRoomCommandMessageReceivedEvent event,
+  ) {
+    final List<ZegoSignalingPluginInRoomCommandMessage> msgs = event.messages;
+    for (final ZegoSignalingPluginInRoomCommandMessage commandMessage in msgs) {
+      final String senderUserID = commandMessage.senderUserID;
+      final String message = utf8.decode(commandMessage.message);
+      log("onInRoomCommandMessageReceived: $message");
+      if (senderUserID != _controller.userId) {
+        LiveGiftWidget.show(context, "assets/svga/sports_car.svga");
+      } else {}
+    }
+    return;
   }
 }

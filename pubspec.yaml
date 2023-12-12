@@ -54,17 +54,17 @@ dependencies:
   readmore: ^2.2.0
   rxdart: ^0.27.7
   shared_preferences: ^2.2.0
+  social_media_recorder: ^1.1.12
   socket_io_client: ^2.0.3+1
   svgaplayer_flutter: ^2.2.0
   syncfusion_flutter_gauges: ^23.2.7
   url_launcher: ^6.1.12
   video_trimmer: ^2.1.0
+  voice_message_package: ^2.1.2
   youtube_player_flutter: ^8.1.2
   zego_uikit_prebuilt_call: ^3.17.11
   zego_uikit_prebuilt_live_streaming: ^2.23.0
   zego_uikit_signaling_plugin: ^2.7.1
-  social_media_recorder: ^1.1.12
-  voice_message_package: ^2.1.2
 
 dependency_overrides:
   intl: ^0.18.1
