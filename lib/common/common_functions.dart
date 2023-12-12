@@ -107,7 +107,7 @@ void checkNotification({required bool isFromNotification, Map? updatedData}) asy
         setHiveDatabase("userKey_${userData?.id}_$senderId", newMessage);
       }
     });
-    removeNotificationNode();
+  //  removeNotificationNode();
   }
 }
 
@@ -154,23 +154,23 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
     kundliDateTime: newMessage.kundliDateTime,
     kundliPlace: newMessage.kundliPlace,
   );
-  FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
-
-  firebaseDatabase
-      .ref("user/${currentChatUserId.value}/realTime/notification/${newMessage.time}")
-      .set(message.toOfflineJson());
-
-  removeNotificationNode(nodeId: "/${newMessage.time}");
+  // FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
+  //
+  // firebaseDatabase
+  //     .ref("user/${currentChatUserId.value}/realTime/notification/${newMessage.time}")
+  //     .set(message.toOfflineJson());
+  //
+  // removeNotificationNode(nodeId: "/${newMessage.time}");
 }
 
-removeNotificationNode({String? nodeId}) {
-  var userData = preferenceService.getUserDetail();
-  if (nodeId == null) {
-    FirebaseDatabase.instance.ref().child("astrologer/${userData?.id}/realTime/notification").remove();
-  } else {
-    FirebaseDatabase.instance.ref().child("astrologer/${userData?.id}/realTime/notification$nodeId").remove();
-  }
-}
+// removeNotificationNode({String? nodeId}) {
+//   var userData = preferenceService.getUserDetail();
+//   if (nodeId == null) {
+//     FirebaseDatabase.instance.ref().child("astrologer/${userData?.id}/realTime/notification").remove();
+//   } else {
+//     FirebaseDatabase.instance.ref().child("astrologer/${userData?.id}/realTime/notification$nodeId").remove();
+//   }
+// }
 
 String messageDateTime(int datetime) {
   var millis = datetime;

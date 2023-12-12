@@ -21,8 +21,10 @@ class AppSocket {
     _socket =
         io(ApiProvider.socketUrl, OptionBuilder().enableAutoConnect().setTransports(['websocket']).build());
     _socket!.connect();
-    if(_socket!.disconnected){
-      _socket?..disconnect()..connect();
+    if (_socket!.disconnected) {
+      _socket
+        ?..disconnect()
+        ..connect();
     }
     _socket?.onConnect((_) {
       log('Socket connected successfully');
@@ -84,5 +86,25 @@ class AppSocket {
 
   void sendMessageListenerSocket(void Function(dynamic) callback) {
     _socket?.on(ApiProvider().messageSent, callback);
+  }
+
+  void listenerMessageStatusSocket(void Function(dynamic) callback) {
+    _socket?.on(ApiProvider().msgStatusChanged, callback);
+  }
+
+  void messageReceivedStatusUpdate(
+      {required String receiverId,
+      required String chatMessageId,
+      required String chatStatus,
+      required String time,
+      required String orderId}) {
+    debugPrint('messageReceivedStatusUpdate socket called');
+    _socket?.emit(ApiProvider().changeMsgStatus, {
+      'receiverId': receiverId,
+      'chatMessageId': chatMessageId,
+      'chatStatus': chatStatus,
+      'time': time,
+      'orderId': orderId
+    });
   }
 }

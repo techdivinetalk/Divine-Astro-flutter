@@ -371,6 +371,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
   Widget textMsgView(BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     RxInt msgType = (chatMessage.type ?? 0).obs;
+    debugPrint('check status --- ${chatMessage.id} status ----> ${chatMessage.type}');
     return SizedBox(
       width: double.maxFinite,
       child: Column(
@@ -422,9 +423,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         Obx(() => msgType.value == 0
                             ? Assets.images.icSingleTick.svg()
                             : msgType.value == 1
-                                ? Assets.images.icDoubleTick.svg(
-                                    colorFilter: const ColorFilter.mode(AppColors.greyColor, BlendMode.srcIn))
-                                : msgType.value == 2
+                                ? Assets.images.icDoubleTick.svg(colorFilter: const ColorFilter.mode(AppColors.greyColor, BlendMode.srcIn))
+                                : msgType.value == 3
                                     ? Assets.images.icDoubleTick.svg()
                                     : Assets.images.icSingleTick.svg())
                     ],
