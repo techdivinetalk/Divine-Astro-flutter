@@ -67,7 +67,7 @@ class LiveGiftWidgetState extends State<LiveGiftWidget>
   @override
   void initState() {
     super.initState();
-    movieEntity = SVGAParser.shared.decodeFromAssets(widget.giftPath);
+    movieEntity = SVGAParser.shared.decodeFromURL(widget.giftPath);
   }
 
   @override
@@ -91,7 +91,7 @@ class LiveGiftWidgetState extends State<LiveGiftWidget>
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         } else {
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );

@@ -4,9 +4,13 @@ import "dart:async";
 import "dart:convert";
 import "dart:developer";
 
+import "package:after_layout/after_layout.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/live_gift.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/gift_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
 import "package:firebase_database/firebase_database.dart";
+import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
@@ -24,7 +28,8 @@ class LiveDharamScreen extends StatefulWidget {
   State<LiveDharamScreen> createState() => _LivePage();
 }
 
-class _LivePage extends State<LiveDharamScreen> {
+class _LivePage extends State<LiveDharamScreen>
+    with AfterLayoutMixin<LiveDharamScreen> {
   final LiveDharamController _controller = Get.find();
 
   final ZegoUIKitPrebuiltLiveStreamingController _streamingController =
@@ -66,7 +71,9 @@ class _LivePage extends State<LiveDharamScreen> {
       body: Obx(
         () {
           return _controller.liveId == ""
-              ? const Center(child: CircularProgressIndicator())
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
               : ZegoUIKitPrebuiltLiveStreaming(
                   appID: appID,
                   appSign: appSign,
@@ -77,10 +84,10 @@ class _LivePage extends State<LiveDharamScreen> {
                     ..innerText = textConfig
                     ..layout = galleryLayout
                     ..swipingConfig = swipingConfig
-                    ..onLiveStreamingStateUpdate = onLiveStreamingStateUpdate
-                    ..avatarBuilder = avatarWidget,
-                    // ..bottomMenuBarConfig.coHostExtendButtons = extendButton
-                    // ..bottomMenuBarConfig.audienceExtendButtons = extendButton,
+                    // ..onLiveStreamingStateUpdate = onLiveStreamingStateUpdate
+                    ..avatarBuilder = avatarWidget
+                    ..bottomMenuBarConfig.coHostExtendButtons = extendButton
+                    ..bottomMenuBarConfig.audienceExtendButtons = extendButton,
                   controller: _streamingController,
                 );
         },
@@ -130,57 +137,122 @@ class _LivePage extends State<LiveDharamScreen> {
           );
   }
 
-  Future<void> onLiveStreamingStateUpdate(ZegoLiveStreamingState state) async {
-    if (state == ZegoLiveStreamingState.ended) {
-      await showAstrologerLeftDialog();
-    } else {}
-    return Future<void>.value();
+  // Future<void> onLiveStreamingStateUpdate(ZegoLiveStreamingState state) async {
+  //   if (state == ZegoLiveStreamingState.ended) {
+  //     await showAstrologerLeftDialog();
+  //   } else {}
+  //   return Future<void>.value();
+  // }
+
+  // Future<void> showAstrologerLeftDialog() async {
+  //   await showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: const Text(
+  //           "Astrologer left",
+  //         ),
+  //         content: const Text(
+  //           "This astrologer left this live session. You can wait here for this astrologer if you wish to, or you can explore another astrologer by swiping up or down.",
+  //         ),
+  //         actions: <Widget>[
+  //           ElevatedButton(
+  //             onPressed: Get.back,
+  //             child: const Text("OK"),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  //   return Future<void>.value();
+  // }
+
+  // ZegoMenuBarExtendButton get newGiftButton0 {
+  //   return ZegoMenuBarExtendButton(
+  //     index: 0,
+  //     child: ElevatedButton(
+  //       style: ElevatedButton.styleFrom(
+  //         shape: const CircleBorder(),
+  //       ),
+  //       onPressed: giftPopup,
+  //       child: const Icon(Icons.abc),
+  //     ),
+  //   );
+  // }
+
+  ZegoMenuBarExtendButton get newGiftButton1 {
+    return ZegoMenuBarExtendButton(
+      index: 1,
+      child: StreamBuilder<DatabaseEvent>(
+        stream: FirebaseDatabase.instance
+            .ref()
+            .child("live/${_controller.liveId}/leaderboard")
+            .onValue,
+        builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
+          _controller.getLatestLeaderboard(snapshot.data?.snapshot);
+          return _controller.leaderboardModel.isEmpty
+              ? const SizedBox()
+              : ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(),
+                  ),
+                  onPressed: leaderboardPopup,
+                  child: const Icon(Icons.abc),
+                );
+        },
+      ),
+    );
   }
 
-  Future<void> showAstrologerLeftDialog() async {
-    await showDialog(
+  // Future<void> giftPopup() async {
+  //   await showCupertinoModalPopup(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return GiftWidget(
+  //         onClose: Get.back,
+  //         list: _controller.customGiftModel,
+  //         onSelect: (CustomGiftModel item, num quantity, num amount) async {
+  //           Get.back();
+  //           final bool hasBalance = _controller.hasBalance(
+  //             quantity: quantity,
+  //             amount: amount,
+  //           );
+  //           if (hasBalance) {
+  //             LiveGiftWidget.show(context, item.giftSvga);
+  //             await _controller.sendGiftAPI(
+  //               count: quantity,
+  //               svga: item.giftSvga,
+  //               successCallback: log,
+  //               failureCallback: log,
+  //             );
+  //             await _controller.addUpdateLeaderboard(
+  //               quantity: quantity,
+  //               amount: amount,
+  //             );
+  //           } else {}
+  //         },
+  //       );
+  //     },
+  //   );
+  //   return Future<void>.value();
+  // }
+
+  Future<void> leaderboardPopup() async {
+    await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            "Astrologer left",
-          ),
-          content: const Text(
-            "This astrologer left this live session. You can wait here for this astrologer if you wish to, or you can explore another astrologer by swiping up or down.",
-          ),
-          actions: <Widget>[
-            ElevatedButton(
-              onPressed: Get.back,
-              child: const Text("OK"),
-            ),
-          ],
+        return LeaderboardWidget(
+          onClose: Get.back,
+          list: _controller.leaderboardModel,
         );
       },
     );
     return Future<void>.value();
   }
 
-  // ZegoMenuBarExtendButton get giftButton {
-  //   return ZegoMenuBarExtendButton(
-  //     index: 0,
-  //     child: ElevatedButton(
-  //       style: ElevatedButton.styleFrom(shape: const CircleBorder()),
-  //       onPressed: () async {
-  //         await _controller.sendGiftAPI(
-  //           successCallback: (String message) {
-  //             LiveGiftWidget.show(context, "assets/svga/sports_car.svga");
-  //           },
-  //           failureCallback: log,
-  //         );
-  //       },
-  //       child: const Icon(Icons.blender),
-  //     ),
-  //   );
-  // }
-
-  // List<ZegoMenuBarExtendButton> get extendButton {
-  //   return <ZegoMenuBarExtendButton>[giftButton];
-  // }
+  List<ZegoMenuBarExtendButton> get extendButton {
+    return <ZegoMenuBarExtendButton>[/*newGiftButton0,*/ newGiftButton1];
+  }
 
   void onInRoomCommandMessageReceived(
     ZegoSignalingPluginInRoomCommandMessageReceivedEvent event,
@@ -189,11 +261,19 @@ class _LivePage extends State<LiveDharamScreen> {
     for (final ZegoSignalingPluginInRoomCommandMessage commandMessage in msgs) {
       final String senderUserID = commandMessage.senderUserID;
       final String message = utf8.decode(commandMessage.message);
-      log("onInRoomCommandMessageReceived: $message");
+      final Map<String, dynamic> decodedMessage = jsonDecode(message);
+      final String svga = decodedMessage["gift_type"];
       if (senderUserID != _controller.userId) {
-        LiveGiftWidget.show(context, "assets/svga/sports_car.svga");
+        LiveGiftWidget.show(context, svga);
       } else {}
     }
     return;
+  }
+
+  @override
+  FutureOr<void> afterFirstLayout(BuildContext context) async {
+    // await _controller.getAllGifts();
+    // _controller.mapAndMergeGiftsWithConstant();
+    return Future<void>.value();
   }
 }
