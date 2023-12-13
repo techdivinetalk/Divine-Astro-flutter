@@ -21,7 +21,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../common/common_functions.dart';
 
-class ChatMessageWithSocketController extends GetxController with WidgetsBindingObserver{
+class ChatMessageWithSocketController extends GetxController with WidgetsBindingObserver {
   final userRepository = Get.find<UserRepository>();
   SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
   TextEditingController messageController = TextEditingController();
@@ -121,12 +121,13 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     super.onInit();
     arguments = Get.arguments;
     debugPrint('arguments of socket $arguments');
-    socket.startAstroCustumerSocketEvent(orderId: arguments['orderId'],userId:arguments['userId']);
+    socket.startAstroCustumerSocketEvent(orderId: arguments['orderId'], userId: arguments['userId']);
     messageController.addListener(_onMessageChanged);
     isAstroJoinedChat();
     checkIsCustomerJoinedPrivateChat();
     typingListenerSocket();
     sendMessageSocketListenerSocket();
+    listenerMessageStatusSocket();
     sendMessageListenerSocket();
 
     if (Get.arguments != null) {
@@ -136,11 +137,11 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
         if (data!.customerId != null) {
           chatStatus.value = "Chat in - Progress";
           isOngoingChat.value = true;
-          currentChatUserId.value = data!.customerId;
-          currentUserId.value = data!.customerId;
-          customerName.value = data!.customeName ?? "";
+          currentChatUserId.value = data['userId'];
+          currentUserId.value = data['userId'];
+          customerName.value = data['customerName'] ?? "";
           profileImage.value =
-              data!.customerImage != null ? "${preference.getBaseImageURL()}/${data!.customerImage}" : "";
+              data['customerImage'] != null ? "${preference.getBaseImageURL()}/${data['customerImage']}" : "";
           if (astroChatWatcher.value.orderId != null) {
             timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0, astroChatWatcher.value.orderId!);
           }
@@ -189,9 +190,29 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     });
   }
 
-  void sendMessageSocketListenerSocket(){
+  void sendMessageSocketListenerSocket() {
     socket.sendMessageSocketListenerSocket((data) {
       debugPrint('sendMessageSocketListenerSocket $data');
+    });
+  }
+
+  void listenerMessageStatusSocket() {
+    socket.listenerMessageStatusSocket((data) {
+      debugPrint("listenerMessageStatusSocket $data");
+
+      var index = chatMessages.indexWhere((element) {
+        debugPrint('check id ${element.id} ${data['chatMessageId']}');
+        return element.id.toString() == data['chatMessageId'].toString();
+      });
+
+      if (index != -1) {
+        chatMessages[index].type = 3;
+        chatMessages.refresh();
+        debugPrint(
+            "listenerMessageStatusSocket ${chatMessages[index].id} type---->  ${chatMessages[index].type}");
+      } else {
+        debugPrint("listenerMessageStatusSocket: Element not found in chatMessages");
+      }
     });
   }
 
@@ -201,6 +222,13 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
       if (data is Map<String, dynamic>) {
         isTyping.value = false;
         var chatMessage = ChatMessage.fromOfflineJson(data['data']);
+        String time = ("${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
+        socket.messageReceivedStatusUpdate(
+            receiverId: preferenceService.getUserDetail()!.id.toString(),
+            chatMessageId: chatMessage.id.toString(),
+            chatStatus: "read",
+            time: time,
+            orderId: arguments['orderId']);
         updateChatMessages(chatMessage, false, isSendMessage: false);
       }
       debugPrint('chatMessage.value.length ${chatMessages.length}');
@@ -348,10 +376,9 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
         kundliId: kundliId,
         title: "${userData?.name} sent you message.",
         type: 0,
-        userType:"astrologer"
-      );
+        userType: "astrologer");
     socket.sendMessageSocket(newMessage);
-    updateChatMessages(newMessage,false,isSendMessage: true);
+    updateChatMessages(newMessage, false, isSendMessage: true);
     isDataLoad.value = true;
   }
 

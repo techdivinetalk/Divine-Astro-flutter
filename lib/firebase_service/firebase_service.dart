@@ -103,7 +103,10 @@ class AppFirebaseService {
                     problemArea: orderData['problemArea'].toString());
               } else if (orderData['status'] == '3') {
                 Get.toNamed(RouteName.chatMessageWithSocketUI,
-                    arguments: {'orderId': value, 'userId': orderData['userId']});
+                    arguments: {'orderId': value, 'userId': orderData['userId'],
+                      'customerName': orderData['customerName']
+
+                    });
               }
             }
           }

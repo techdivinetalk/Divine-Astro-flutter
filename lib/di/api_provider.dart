@@ -117,6 +117,8 @@ class ApiProvider {
   final String  userTyping = "user-typing";
   final String  sendMessage = "send-message";
   final String  messageSent = "message-sent";
+  final String  changeMsgStatus = "change-msg-status";
+  final String  msgStatusChanged = "msg-status-changed";
 
 
   //privacy policy & terms
