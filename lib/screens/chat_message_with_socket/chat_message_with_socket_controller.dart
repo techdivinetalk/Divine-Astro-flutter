@@ -131,22 +131,22 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     sendMessageListenerSocket();
 
     if (Get.arguments != null) {
-      if (Get.arguments is ResAstroChatListener) {
+    //  if (Get.arguments is ResAstroChatListener) {
         sendReadMessageStatus = true;
         var data = Get.arguments;
-        if (data!.customerId != null) {
+      // if (data!.customerId != null) {
           chatStatus.value = "Chat in - Progress";
           isOngoingChat.value = true;
-          currentChatUserId.value = data['userId'];
-          currentUserId.value = data['userId'];
-          customerName.value = data['customerName'] ?? "";
+        //  currentChatUserId.value = data['userId'];
+        //  currentUserId.value = data['userId'];
+         customerName.value = data['customerName'] ?? "";
           profileImage.value =
               data['customerImage'] != null ? "${preference.getBaseImageURL()}/${data['customerImage']}" : "";
           if (astroChatWatcher.value.orderId != null) {
             timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0, astroChatWatcher.value.orderId!);
           }
-        }
-      }
+      //  }
+     // }
     }
     userData = preferenceService.getUserDetail();
 
@@ -184,6 +184,7 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
       if (data['typist'].toString() != userData!.id.toString()) {
         isTyping.value = true;
         update();
+        scrollToBottomFunc();
         startTimer();
         debugPrint('typingListenerSocket $data');
       }
