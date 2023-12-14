@@ -104,11 +104,11 @@ class AppFirebaseService {
               } else if (orderData['status'] == '3') {
                 sendBroadcast(
                     BroadcastMessage(name: "ReJoinChat", data: {'orderId': value, 'orderData': orderData}));
-                Get.toNamed(RouteName.chatMessageWithSocketUI,
-                    arguments: {'orderId': value, 'userId': orderData['userId'],
-                      'customerName': orderData['customerName'],
-                      'customerImage': orderData['customerImage']
-                    });
+                // Get.toNamed(RouteName.chatMessageWithSocketUI,
+                //     arguments: {'orderId': value, 'userId': orderData['userId'],
+                //       'customerName': orderData['customerName'],
+                //       'customerImage': orderData['customerImage']
+                //     });
               }
             }
           }
