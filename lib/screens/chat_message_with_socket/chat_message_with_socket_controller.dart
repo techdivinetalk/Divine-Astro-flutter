@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:divine_astrologer/app_socket/app_socket.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 import '../../common/common_functions.dart';
 
@@ -152,6 +154,19 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
 
     userDataKey = "userKey_${userData?.id}_${currentUserId.value}";
     getChatList();
+    socketReconnect();
+  }
+
+  socketReconnect(){
+    if (socket.socket!.disconnected) {
+      socket.socket
+        ?..disconnect()
+        ..connect();
+    }
+    socket.socket!.onConnect((_) {
+      socket.startAstroCustumerSocketEvent(orderId: arguments['orderId'], userId: arguments['userId']);
+      log('Socket startAstroCustumerSocketEvent connected successfully');
+    });
   }
 
   @override
@@ -186,7 +201,6 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
         update();
         scrollToBottomFunc();
         startTimer();
-        debugPrint('typingListenerSocket $data');
       }
     });
   }

@@ -230,148 +230,149 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   }
 
   Widget chatBottomBar() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12.h),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Stack(
-            children: [
-              Visibility(
-                visible: !controller.isRecording.value,
-                maintainAnimation: true,
-                maintainSize: true,
-                maintainState: true,
-                child: Row(
-                  children: [
-                    Flexible(
-                      child: Container(
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
-                              blurRadius: 3.0,
-                              offset: const Offset(0.3, 3.0)),
-                        ]),
-                        child: TextFormField(
-                          controller: controller.messageController,
-                          keyboardType: TextInputType.text,
-                          minLines: 1,
-                          maxLines: 3,
-                          onTap: () {
-                            //  controller.userTypingSocket(isTyping: true);
-                            controller.scrollToBottomFunc();
-                            if (controller.isEmojiShowing.value) {
-                              controller.isEmojiShowing.value = false;
-                            }
-                          },
-                          onChanged: (value) {
-                            controller.tyingSocket();
-                          },
-                          scrollController: controller.typingScrollController,
-                          onTapOutside: (value) {
-                            FocusScope.of(Get.context!).unfocus();
-                            //   controller.userTypingSocket(isTyping: false);
-                          },
-                          decoration: InputDecoration(
-                            hintText: "message".tr,
-                            isDense: true,
-                            helperStyle: AppTextStyle.textStyle16(),
-                            fillColor: AppColors.white,
-                            hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.grey),
-                            hoverColor: AppColors.white,
-                            prefixIcon: InkWell(
-                              onTap: () async {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                controller.isEmojiShowing.value = !controller.isEmojiShowing.value;
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 11.h),
-                                child: Assets.images.icEmoji.svg(),
+    return Obx(
+          () => Padding(
+        padding: EdgeInsets.symmetric(horizontal: controller.isRecording.value ? 0 : 12.h),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Stack(
+              children: [
+                Visibility(
+                  visible: !controller.isRecording.value,
+                  maintainAnimation: true,
+                  maintainSize: true,
+                  maintainState: true,
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: Container(
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), boxShadow: [
+                            BoxShadow(
+                                color: Colors.black.withOpacity(0.3),
+                                blurRadius: 3.0,
+                                offset: const Offset(0.3, 3.0)),
+                          ]),
+                          child: TextFormField(
+                            controller: controller.messageController,
+                            keyboardType: TextInputType.text,
+                            minLines: 1,
+                            maxLines: 3,
+                            onTap: () {
+                              //  controller.userTypingSocket(isTyping: true);
+                              controller.scrollToBottomFunc();
+                              if (controller.isEmojiShowing.value) {
+                                controller.isEmojiShowing.value = false;
+                              }
+                            },
+                            onChanged: (value) {
+                              controller.tyingSocket();
+                            },
+                            scrollController: controller.typingScrollController,
+                            onTapOutside: (value) {
+                              FocusScope.of(Get.context!).unfocus();
+                              //   controller.userTypingSocket(isTyping: false);
+                            },
+                            decoration: InputDecoration(
+                              hintText: "message".tr,
+                              isDense: true,
+                              helperStyle: AppTextStyle.textStyle16(),
+                              fillColor: AppColors.white,
+                              hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.grey),
+                              hoverColor: AppColors.white,
+                              prefixIcon: InkWell(
+                                onTap: () async {
+                                  FocusManager.instance.primaryFocus?.unfocus();
+                                  controller.isEmojiShowing.value = !controller.isEmojiShowing.value;
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 11.h),
+                                  child: Assets.images.icEmoji.svg(),
+                                ),
                               ),
-                            ),
-                            suffixIcon: InkWell(
-                              onTap: () async {
-                                if (controller.isOngoingChat.value) {
-                                  if (await PermissionHelper().askStoragePermission(Permission.photos)) {
-                                    controller.getImage(false);
-                                  }
-                                } else {
-                                  divineSnackBar(
-                                      data: "${'chatEnded'.tr}.", color: AppColors.appYellowColour);
-                                }
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(0.w, 9.h, 10.w, 10.h),
-                                child: Assets.images.icAttechment.svg(),
+                              suffixIcon: InkWell(
+                                onTap: () async {
+                                 // if (controller.isOngoingChat.value) {
+                                    if (await PermissionHelper().askStoragePermission(Permission.photos)) {
+                                      controller.getImage(false);
+                                    }
+                               //   } else {
+                               //     divineSnackBar(
+                               //         data: "${'chatEnded'.tr}.", color: AppColors.appYellowColour);
+                               //   }
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.fromLTRB(0.w, 9.h, 10.w, 10.h),
+                                  child: Assets.images.icAttechment.svg(),
+                                ),
                               ),
+                              filled: true,
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(30.0.sp),
+                                  borderSide: const BorderSide(
+                                    color: AppColors.white,
+                                    width: 1.0,
+                                  )),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(30.0.sp),
+                                  borderSide: const BorderSide(
+                                    color: AppColors.appYellowColour,
+                                    width: 1.0,
+                                  )),
                             ),
-                            filled: true,
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30.0.sp),
-                                borderSide: const BorderSide(
-                                  color: AppColors.white,
-                                  width: 1.0,
-                                )),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30.0.sp),
-                                borderSide: const BorderSide(
-                                  color: AppColors.appYellowColour,
-                                  width: 1.0,
-                                )),
                           ),
                         ),
                       ),
-                    ),
-                    Obx(() => SizedBox(width: !controller.hasMessage.value ? 25.w : 15.w)),
-                    Visibility(
-                      visible: controller.hasMessage.value,
-                      maintainAnimation: true,
-                      maintainSize: true,
-                      maintainState: true,
-                      child: InkWell(
-                          onTap: () => controller.sendMsg(),
-                          child: Assets.images.icSendMsg.svg(height: 48.h)),
-                    )
-                  ],
-                ),
-              ),
-              if (!controller.hasMessage.value)
-                Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child: SocialMediaRecorder(
-                    backGroundColor: AppColors.yellow,
-                    cancelTextBackGroundColor: Colors.white,
-                    recordIconBackGroundColor: AppColors.yellow,
-                    radius: BorderRadius.circular(30),
-                    initRecordPackageWidth: kToolbarHeight - Get.width * 0.010,
-                    recordIconWhenLockBackGroundColor: AppColors.yellow,
-                    startRecording: () {
-                      controller.isRecording.value = true;
-                    },
-                    stopRecording: (time) {
-                      controller.isRecording.value = false;
-                    },
-                    sendRequestFunction: (soundFile, time) {
-                      debugPrint('soundFile ${soundFile.path}');
-                      controller.uploadAudioFile(soundFile);
-                    },
-                    encode: AudioEncoderType.AAC,
+                      Obx(() => SizedBox(width: !controller.hasMessage.value ? 25.w : 15.w)),
+                      Visibility(
+                        visible: controller.hasMessage.value,
+                        maintainAnimation: true,
+                        maintainSize: true,
+                        maintainState: true,
+                        child: InkWell(
+                            onTap: () => controller.sendMsg(),
+                            child: Assets.images.icSendMsg.svg(height: 48.h)),
+                      )
+                    ],
                   ),
-                )
-            ],
-          ),
-          SizedBox(height: 20.h),
-        ],
+                ),
+                if (!controller.hasMessage.value)
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: SocialMediaRecorder(
+                      backGroundColor: AppColors.yellow,
+                      cancelTextBackGroundColor: Colors.white,
+                      recordIconBackGroundColor: AppColors.yellow,
+                      radius: BorderRadius.circular(30),
+                      initRecordPackageWidth: kToolbarHeight - Get.width * 0.010,
+                      recordIconWhenLockBackGroundColor: AppColors.yellow,
+                      startRecording: () {
+                        controller.isRecording.value = true;
+                      },
+                      stopRecording: (time) {
+                        controller.isRecording.value = false;
+                      },
+                      sendRequestFunction: (soundFile, time) {
+                        debugPrint('soundFile ${soundFile.path}');
+                        controller.uploadAudioFile(soundFile);
+                      },
+                      encode: AudioEncoderType.AAC,
+                    ),
+                  )
+              ],
+            ),
+            SizedBox(height: 20.h),
+          ],
+        ),
       ),
     );
   }
 
   Widget textMsgView(BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     RxInt msgType = (chatMessage.type ?? 0).obs;
-    debugPrint('check status --- ${chatMessage.id} status ----> ${chatMessage.type}');
     return SizedBox(
       width: double.maxFinite,
       child: Column(
@@ -423,7 +424,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         Obx(() => msgType.value == 0
                             ? Assets.images.icSingleTick.svg()
                             : msgType.value == 1
-                                ? Assets.images.icDoubleTick.svg(colorFilter: const ColorFilter.mode(AppColors.greyColor, BlendMode.srcIn))
+                                ? Assets.images.icDoubleTick.svg(
+                                    colorFilter: const ColorFilter.mode(AppColors.greyColor, BlendMode.srcIn))
                                 : msgType.value == 3
                                     ? Assets.images.icDoubleTick.svg()
                                     : Assets.images.icSingleTick.svg())
