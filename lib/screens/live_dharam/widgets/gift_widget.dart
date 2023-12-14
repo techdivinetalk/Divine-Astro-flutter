@@ -1,5 +1,8 @@
+import "dart:ui";
+
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:dynamic_height_grid_view/dynamic_height_grid_view.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
@@ -14,7 +17,7 @@ class GiftWidget extends StatefulWidget {
 
   final void Function() onClose;
   final List<CustomGiftModel> list;
-  final void Function(CustomGiftModel item, num quantity, num amount) onSelect;
+  final void Function(CustomGiftModel item, num quantity) onSelect;
 
   @override
   State<GiftWidget> createState() => _GiftWidgetState();
@@ -39,15 +42,18 @@ class _GiftWidgetState extends State<GiftWidget> {
     return InkWell(
       onTap: widget.onClose,
       borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-      child: Container(
-        height: 48,
-        width: 48,
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-          border: Border.all(color: AppColors.white),
-          color: AppColors.white.withOpacity(0.2),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+        child: Container(
+          height: 48,
+          width: 48,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+            border: Border.all(color: AppColors.white),
+            color: AppColors.white.withOpacity(0.2),
+          ),
+          child: const Icon(Icons.close, color: AppColors.white),
         ),
-        child: const Icon(Icons.close, color: AppColors.white),
       ),
     );
   }
@@ -58,31 +64,36 @@ class _GiftWidgetState extends State<GiftWidget> {
         topLeft: Radius.circular(50.0),
         topRight: Radius.circular(50.0),
       ),
-      child: Container(
-        height: Get.height / 1.50,
-        width: Get.width,
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(50.0),
-            topRight: Radius.circular(50.0),
-          ),
-          border: Border.all(color: AppColors.white),
-          color: AppColors.white.withOpacity(0.2),
-        ),
-        child: Column(
-          children: <Widget>[
-            const SizedBox(height: 16),
-            Obx(
-              () {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[quantityWidget(), amountWidget()],
-                );
-              },
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+        child: Container(
+          height: Get.height / 1.50,
+          width: Get.width,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(50.0),
+              topRight: Radius.circular(50.0),
             ),
-            const SizedBox(height: 16),
-            Expanded(child: grid()),
-          ],
+            border: Border.all(color: AppColors.appYellowColour),
+            color: AppColors.white.withOpacity(0.2),
+          ),
+          child: Column(
+            children: <Widget>[
+              const SizedBox(height: 16),
+              Obx(
+                () {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[quantityWidget(), amountWidget()],
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: grid(),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -101,16 +112,18 @@ class _GiftWidgetState extends State<GiftWidget> {
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-            border: Border.all(color: AppColors.white),
+            border: Border.all(color: AppColors.appYellowColour),
             color: AppColors.white.withOpacity(0.2),
           ),
           child: Row(
             children: <Widget>[
               button(
                 onTap: () {
-                  quantity(quantity.value + 1);
+                  if (quantity.value > 1) {
+                    quantity(quantity.value - 1);
+                  } else {}
                 },
-                iconData: Icons.add,
+                iconData: Icons.remove,
               ),
               const SizedBox(width: 8),
               Text(
@@ -120,11 +133,9 @@ class _GiftWidgetState extends State<GiftWidget> {
               const SizedBox(width: 8),
               button(
                 onTap: () {
-                  if (quantity.value > 1) {
-                    quantity(quantity.value - 1);
-                  } else {}
+                  quantity(quantity.value + 1);
                 },
-                iconData: Icons.remove,
+                iconData: Icons.add,
               ),
             ],
           ),
@@ -171,22 +182,21 @@ class _GiftWidgetState extends State<GiftWidget> {
       itemCount: widget.list.length,
       crossAxisCount: 4,
       builder: (BuildContext context, int index) {
+        final CustomGiftModel item = widget.list[index];
         return InkWell(
           onTap: () {
-            final CustomGiftModel returnItem = widget.list[index];
-            final num returnQuantity = quantity.value;
-            final num returnAmount = returnItem.giftPrice;
-            widget.onSelect(returnItem, returnQuantity, returnAmount);
+            final CustomGiftModel returnItem = item;
+            widget.onSelect(returnItem, quantity.value);
           },
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Image.network(widget.list[index].giftImage),
+                CustomImageWidget(imageUrl: item.giftImage),
                 const SizedBox(height: 8),
                 Text(
-                  "₹${widget.list[index].giftPrice}",
+                  "₹${item.giftPrice}",
                   style: const TextStyle(color: AppColors.white),
                 ),
               ],
