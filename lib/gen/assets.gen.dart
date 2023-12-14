@@ -646,13 +646,6 @@ class $AssetsLottieGen {
 class $AssetsSvgGen {
   const $AssetsSvgGen();
 
-  /// File path: assets/svg/.flutter-plugins
-  String get flutterPlugins => 'assets/svg/.flutter-plugins';
-
-  /// File path: assets/svg/.flutter-plugins-dependencies
-  String get flutterPluginsDependencies =>
-      'assets/svg/.flutter-plugins-dependencies';
-
   /// File path: assets/svg/black_dot.svg
   SvgGenImage get blackDot => const SvgGenImage('assets/svg/black_dot.svg');
 
@@ -674,6 +667,10 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/disconnect.svg
   SvgGenImage get disconnect => const SvgGenImage('assets/svg/disconnect.svg');
+
+  /// File path: assets/svg/forward_icon.svg
+  SvgGenImage get forwardIcon =>
+      const SvgGenImage('assets/svg/forward_icon.svg');
 
   /// File path: assets/svg/gallery.svg
   SvgGenImage get gallery => const SvgGenImage('assets/svg/gallery.svg');
@@ -730,6 +727,10 @@ class $AssetsSvgGen {
   /// File path: assets/svg/pubspec.yaml
   String get pubspecYaml => 'assets/svg/pubspec.yaml';
 
+  /// File path: assets/svg/rejoin_chat_icon.svg
+  SvgGenImage get rejoinChatIcon =>
+      const SvgGenImage('assets/svg/rejoin_chat_icon.svg');
+
   /// File path: assets/svg/switch_camera.svg
   SvgGenImage get switchCamera =>
       const SvgGenImage('assets/svg/switch_camera.svg');
@@ -747,8 +748,6 @@ class $AssetsSvgGen {
 
   /// List of all assets
   List<dynamic> get values => [
-        flutterPlugins,
-        flutterPluginsDependencies,
         blackDot,
         block,
         blockUser,
@@ -756,6 +755,7 @@ class $AssetsSvgGen {
         camera,
         caution,
         disconnect,
+        forwardIcon,
         gallery,
         giftEarning,
         greyContainer,
@@ -772,6 +772,7 @@ class $AssetsSvgGen {
         privateCallEarning,
         pubspecLock,
         pubspecYaml,
+        rejoinChatIcon,
         switchCamera,
         videoCallEarning,
         videoMute,

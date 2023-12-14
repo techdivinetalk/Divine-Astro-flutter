@@ -140,11 +140,12 @@ class OtpVerificationController extends GetxController {
 
   Future<void> updateLoginDatainFirebase(ResLogin data) async {
     String uniqueId = await getDeviceId() ?? '';
+    var watcher = {"deviceToken": data.data!.deviceToken ?? ""};
     FirebaseUserData firebaseUserData = FirebaseUserData(
       data.data!.name!,
-      data.data!.deviceToken!,
+      watcher,
       data.data!.image ?? "",
-      RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0),
+      RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0)
     );
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
 

@@ -8,6 +8,7 @@ import 'package:divine_astrologer/screens/side_menu/settings/settings_controller
 import 'package:divine_astrologer/watcher/real_time_watcher.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:get/get.dart';
 
 class AppFirebaseService {
@@ -75,10 +76,10 @@ class AppFirebaseService {
                 Map<String, dynamic>.from(event.snapshot.value! as Map<Object?, Object?>);
             if (orderData['status'] != null) {
               if (orderData['status'] == '0') {
-                debugPrint(
-                    'ModalRoute.of(Get.context!)?.settings.name----- ${ModalRoute.of(Get.context!)?.settings.name}');
+                sendBroadcast(BroadcastMessage(name: "AcceptChat", data: {'orderId': value, 'orderData': orderData}));
                 acceptChatRequestBottomSheet(Get.context!, onPressed: () {
                   writeData('order/$value', {'status': '1'});
+                  isBottomSheetOpen.value = true;
                 },
                     orderStatus: orderData['status'],
                     customerName: orderData['customerName'].toString(),
@@ -88,25 +89,25 @@ class AppFirebaseService {
                     maritalStatus: orderData['maritalStatus'].toString(),
                     problemArea: orderData['problemArea'].toString());
               } else if (orderData['status'] == '1') {
-                debugPrint(
-                    'ModalRoute.of(Get.context!)?.settings.name----- ${ModalRoute.of(Get.context!)?.settings.name}');
-                if ((ModalRoute.of(Get.context!)?.settings.name ?? '') == "") {}
-
-                acceptChatRequestBottomSheet(Get.context!,
-                    onPressed: () {},
-                    orderStatus: orderData['status'],
-                    customerName: orderData['customerName'].toString(),
-                    dob: orderData['dob'].toString(),
-                    placeOfBirth: orderData['placeOfBirth'].toString(),
-                    timeOfBirth: orderData['timeOfBirth'].toString(),
-                    maritalStatus: orderData['maritalStatus'].toString(),
-                    problemArea: orderData['problemArea'].toString());
+                if (!isBottomSheetOpen.value) {
+                  isBottomSheetOpen.value = true;
+                  acceptChatRequestBottomSheet(Get.context!,
+                      onPressed: () {},
+                      orderStatus: orderData['status'],
+                      customerName: orderData['customerName'].toString(),
+                      dob: orderData['dob'].toString(),
+                      placeOfBirth: orderData['placeOfBirth'].toString(),
+                      timeOfBirth: orderData['timeOfBirth'].toString(),
+                      maritalStatus: orderData['maritalStatus'].toString(),
+                      problemArea: orderData['problemArea'].toString());
+                }
               } else if (orderData['status'] == '3') {
+                sendBroadcast(
+                    BroadcastMessage(name: "ReJoinChat", data: {'orderId': value, 'orderData': orderData}));
                 Get.toNamed(RouteName.chatMessageWithSocketUI,
                     arguments: {'orderId': value, 'userId': orderData['userId'],
                       'customerName': orderData['customerName'],
                       'customerImage': orderData['customerImage']
-
                     });
               }
             }

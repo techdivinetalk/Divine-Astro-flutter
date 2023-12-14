@@ -7,6 +7,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
+
+Rx<bool> isBottomSheetOpen = false.obs;
+
 acceptChatRequestBottomSheet(BuildContext context,
     {required void Function() onPressed,
     required orderStatus,
@@ -392,7 +395,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 25.w),
-                      orderStatus == '1'
+                    isBottomSheetOpen.value
                           ? Container(
                               height: kToolbarHeight,
                               width: double.infinity,
@@ -413,7 +416,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                                     frameRate: FrameRate(120),
                                     animate: true)
                               ]))
-                          : orderStatus == '0'
+                          :  !isBottomSheetOpen.value
                               ? CommonElevatedButton(
                                   showBorder: false,
                                   width: double.infinity,
