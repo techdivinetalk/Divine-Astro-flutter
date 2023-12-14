@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/di/hive_services.dart';
@@ -521,4 +522,23 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
       addNewMessage(time, "audio", awsUrl: uploadFile);
     }
   }
+
+  downloadImage(
+      {required String fileName,
+        required ChatMessage chatDetail,
+        required int index}) async {
+    var response = await http.get(Uri.parse(chatDetail.awsUrl!));
+    var documentDirectory = await getApplicationDocumentsDirectory();
+    var firstPath = "${documentDirectory.path}/images";
+    var filePathAndName =
+        '${documentDirectory.path}/images/${chatDetail.id}.jpg';
+
+    await Directory(firstPath).create(recursive: true);
+    File file2 = File(filePathAndName);
+    file2.writeAsBytesSync(response.bodyBytes);
+    chatMessages[index].downloadedPath = filePathAndName;
+    chatMessages.refresh();
+    setHiveDataDatabase();
+  }
+
 }

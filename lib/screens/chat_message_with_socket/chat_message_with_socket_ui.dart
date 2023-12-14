@@ -349,6 +349,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       radius: BorderRadius.circular(30),
                       initRecordPackageWidth: kToolbarHeight - Get.width * 0.010,
                       recordIconWhenLockBackGroundColor: AppColors.yellow,
+                      maxRecordTimeInSecond: 30,
                       startRecording: () {
                         controller.isRecording.value = true;
                       },
@@ -595,10 +596,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       ),
                       InkWell(
                         onTap: () {
-                          // controller.downloadImage(
-                          //     fileName: image,
-                          //     chatDetail: chatDetail,
-                          //     index: index);
+                          controller.downloadImage(
+                              fileName: image,
+                              chatDetail: chatDetail,
+                              index: index);
                         },
                         child: Container(
                           padding: const EdgeInsets.all(10),
