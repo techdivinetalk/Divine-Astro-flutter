@@ -1,17 +1,20 @@
 // ignore_for_file: invalid_use_of_protected_member, unnecessary_null_comparison
 
 import "dart:async";
-// import "dart:convert";
+import "dart:convert";
 
 import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/di/shared_preference_service.dart";
+// import "package:divine_astrologer/model/astrologer_following_response.dart";
 // import "package:divine_astrologer/model/astrologer_profile/astrologer_gift_response.dart";
 // import "package:divine_astrologer/model/live/get_astrologer_details_response.dart";
 // import "package:divine_astrologer/repository/astrologer_profile_repository.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart";
+import "package:divine_astrologer/screens/live_page/constant.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:get/get.dart";
-// import "package:http/http.dart" as http;
+import "package:get/get_connect/http/src/status/http_status.dart";
+import "package:http/http.dart" as http;
 
 class LiveDharamController extends GetxController {
   final SharedPreferenceService _pref = Get.put(SharedPreferenceService());
@@ -24,6 +27,7 @@ class LiveDharamController extends GetxController {
   final RxString _avatar = "".obs;
   final RxString _liveId = "".obs;
   final RxBool _isHost = true.obs;
+  final RxBool _isHostAvailable = true.obs;
   final RxInt _currentIndex = 0.obs;
   final RxBool _isInitialSetup = true.obs;
   final RxMap<dynamic, dynamic> _data = <dynamic, dynamic>{}.obs;
@@ -31,6 +35,8 @@ class LiveDharamController extends GetxController {
   // final Rx<GiftResponse> _gifts = GiftResponse().obs;
   final RxList<CustomGiftModel> _customGiftModel = <CustomGiftModel>[].obs;
   final RxList<LeaderboardModel> _leaderboardModel = <LeaderboardModel>[].obs;
+  // final Rx<AstrologerFollowingResponse> _followRes =
+  //     AstrologerFollowingResponse().obs;
 
   @override
   void onInit() {
@@ -38,9 +44,14 @@ class LiveDharamController extends GetxController {
 
     userId = (_pref.getUserDetail()?.id ?? "").toString();
     userName = _pref.getUserDetail()?.name ?? "";
-    avatar = _pref.getUserDetail()?.image ?? "";
+
+    // avatar = _pref.getUserDetail()?.avatar ?? "";
+    avatar = isValidImageURL(imageURL: _pref.getUserDetail()?.image ?? "");
+    //
+
     liveId = (Get.arguments ?? "").toString();
     isHost = true;
+    isHostAvailable = true;
     currentIndex = 0;
     isInitialSetup = true;
     data = <dynamic, dynamic>{};
@@ -48,6 +59,7 @@ class LiveDharamController extends GetxController {
     // gifts = GiftResponse();
     customGiftModel = <CustomGiftModel>[];
     leaderboardModel = <LeaderboardModel>[];
+    // followRes = AstrologerFollowingResponse();
   }
 
   @override
@@ -57,6 +69,7 @@ class LiveDharamController extends GetxController {
     _avatar.close();
     _liveId.close();
     _isHost.close();
+    _isHostAvailable.close();
     _currentIndex.close();
     _isInitialSetup.close();
     _data.close();
@@ -64,6 +77,7 @@ class LiveDharamController extends GetxController {
     // _gifts.close();
     _customGiftModel.close();
     _leaderboardModel.close();
+    // _followRes.close();
 
     super.onClose();
   }
@@ -82,6 +96,9 @@ class LiveDharamController extends GetxController {
 
   bool get isHost => _isHost.value;
   set isHost(bool value) => _isHost(value);
+
+  bool get isHostAvailable => _isHostAvailable.value;
+  set isHostAvailable(bool value) => _isHostAvailable(value);
 
   int get currentIndex => _currentIndex.value;
   set currentIndex(int value) => _currentIndex(value);
@@ -104,6 +121,9 @@ class LiveDharamController extends GetxController {
   List<LeaderboardModel> get leaderboardModel => _leaderboardModel.value;
   set leaderboardModel(List<LeaderboardModel> value) =>
       _leaderboardModel(value);
+
+  // AstrologerFollowingResponse get followRes => _followRes.value;
+  // set followRes(AstrologerFollowingResponse value) => _followRes(value);
 
   // Future<void> eventListner(DatabaseEvent event) async {
   //   final DataSnapshot dataSnapshot = event.snapshot;
@@ -132,42 +152,40 @@ class LiveDharamController extends GetxController {
   //   return Future<void>.value();
   // }
 
-  String requirePreviousLiveID() {
-    // currentIndex = currentIndex - 1;
-    // if (currentIndex < 0) {
-    //   currentIndex = data.keys.toList().length - 1;
-    // } else {}
-    // liveId = data.keys.toList()[currentIndex];
-    // unawaited(getAstrologerDetails());
-    // return liveId;
-    return "";
-  }
+  // String requirePreviousLiveID() {
+  //   currentIndex = currentIndex - 1;
+  //   if (currentIndex < 0) {
+  //     currentIndex = data.keys.toList().length - 1;
+  //   } else {}
+  //   liveId = data.keys.toList()[currentIndex];
+  //   unawaited(getAstrologerDetails());
+  //   return liveId;
+  // }
 
-  String requireNextLiveID() {
-    // currentIndex = currentIndex + 1;
-    // if (currentIndex > data.keys.toList().length - 1) {
-    //   currentIndex = 0;
-    // } else {}
-    // liveId = data.keys.toList()[currentIndex];
-    // unawaited(getAstrologerDetails());
-    // return liveId;
-    return "";
-  }
+  // String requireNextLiveID() {
+  //   currentIndex = currentIndex + 1;
+  //   if (currentIndex > data.keys.toList().length - 1) {
+  //     currentIndex = 0;
+  //   } else {}
+  //   liveId = data.keys.toList()[currentIndex];
+  //   unawaited(getAstrologerDetails());
+  //   return liveId;
+  // }
 
-  Map<String, dynamic> createGift({required num count, required String svga}) {
-    final String accessToken = preferenceService.getToken() ?? "";
-    return <String, dynamic>{
-      "app_id": appID,
-      "server_secret": serverSecret,
-      "room_id": liveId,
-      "user_id": userId,
-      "user_name": userName,
-      "gift_type": svga,
-      "gift_count": count,
-      "access_token": accessToken,
-      "timestamp": DateTime.now().millisecondsSinceEpoch,
-    };
-  }
+  // Map<String, dynamic> createGift({required num count, required String svga}) {
+  //   final String accessToken = preferenceService.getToken() ?? "";
+  //   return <String, dynamic>{
+  //     "app_id": appID,
+  //     "server_secret": serverSecret,
+  //     "room_id": liveId,
+  //     "user_id": userId,
+  //     "user_name": userName,
+  //     "gift_type": svga,
+  //     "gift_count": count,
+  //     "access_token": accessToken,
+  //     "timestamp": DateTime.now().millisecondsSinceEpoch,
+  //   };
+  // }
 
   // Future<void> sendGiftAPI({
   //   required num count,
@@ -201,6 +219,8 @@ class LiveDharamController extends GetxController {
   //   details = getAstroDetailsRes.statusCode == HttpStatus.ok
   //       ? GetAstroDetailsRes.fromJson(getAstroDetailsRes.toJson())
   //       : GetAstroDetailsRes.fromJson(GetAstroDetailsRes().toJson());
+
+  //   details.data?.image = isValidImageURL(imageURL: details.data?.image ?? "");
   //   return Future<void>.value();
   // }
 
@@ -210,6 +230,26 @@ class LiveDharamController extends GetxController {
   //   gifts = giftResponse.statusCode == HttpStatus.ok
   //       ? GiftResponse.fromJson(giftResponse.toJson())
   //       : GiftResponse.fromJson(GiftResponse().toJson());
+
+  //   for (int i = 0; i < (gifts.data?.length ?? 0); i++) {
+  //     gifts.data?[i].giftImage =
+  //         isValidImageURL(imageURL: gifts.data?[i].giftImage ?? "");
+  //   }
+  //   return Future<void>.value();
+  // }
+
+  // Future<void> followOrUnfollowAstrologer() async {
+  //   Map<String, dynamic> param = <String, dynamic>{};
+  //   param = <String, dynamic>{
+  //     "astrologer_id": liveId,
+  //     "is_follow": details.data?.isFollow == 1 ? 0 : 1,
+  //     "role_id": _pref.getUserDetail()?.roleId ?? "",
+  //   };
+  //   AstrologerFollowingResponse followUnfollow = AstrologerFollowingResponse();
+  //   followUnfollow = await liveRepository.astrologerFollowApi(params: param);
+  //   followRes = followUnfollow.statusCode == HttpStatus.ok
+  //       ? AstrologerFollowingResponse.fromJson(followUnfollow.toJson())
+  //       : AstrologerFollowingResponse.fromJson(GetAstroDetailsRes().toJson());
   //   return Future<void>.value();
   // }
 
@@ -226,7 +266,7 @@ class LiveDharamController extends GetxController {
   //       final CustomGiftModel customGiftModel = CustomGiftModel(
   //         giftId: element.id,
   //         giftName: element.giftName,
-  //         giftImage: "${_pref.getAmazonUrl()}${element.giftImage}",
+  //         giftImage: element.giftImage,
   //         giftPrice: element.giftPrice,
   //         giftSvga: giftSvga,
   //       );
@@ -237,50 +277,51 @@ class LiveDharamController extends GetxController {
   //   return;
   // }
 
-  String giftImageURL(String giftImage) {
-    return "${_pref.getAmazonUrl()}$giftImage";
-  }
-
   // bool hasBalance({required num quantity, required num amount}) {
   //   final num myCurrentBalance = num.parse(walletBalance.value.toString());
   //   final num myPurchasedOrder = quantity * amount;
   //   return myCurrentBalance >= myPurchasedOrder;
   // }
 
-  Future<void> addUpdateLeaderboard({
-    required num quantity,
-    required num amount,
-  }) async {
-    num currentAmount = amount;
-    final DataSnapshot dataSnapshot = await FirebaseDatabase.instance
-        .ref()
-        .child("live/$liveId/leaderboard/$userId")
-        .get();
-    if (dataSnapshot != null) {
-      if (dataSnapshot.exists) {
-        if (dataSnapshot.value is Map<dynamic, dynamic>) {
-          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
-          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-              as Map<dynamic, dynamic>;
-          final num previousAmount = map["amount"];
-          currentAmount = currentAmount + previousAmount;
-        } else {}
-      } else {}
-    } else {}
-    await FirebaseDatabase.instance
-        .ref()
-        .child("live/$liveId/leaderboard/$userId")
-        .update(
-      <String, dynamic>{
-        "amount": currentAmount,
-        "userName": userName,
-        "avatar": avatar,
-      },
-    );
-    return Future<void>.value();
-  }
+  // Future<void> addUpdateLeaderboard({
+  //   required num quantity,
+  //   required num amount,
+  // }) async {
+  //   num currentAmount = amount;
+  //   final DataSnapshot dataSnapshot = await FirebaseDatabase.instance
+  //       .ref()
+  //       .child("live/$liveId/leaderboard/$userId")
+  //       .get();
+  //   if (dataSnapshot != null) {
+  //     if (dataSnapshot.exists) {
+  //       if (dataSnapshot.value is Map<dynamic, dynamic>) {
+  //         Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+  //         map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+  //             as Map<dynamic, dynamic>;
+  //         final num previousAmount = map["amount"];
+  //         currentAmount = currentAmount + previousAmount;
+  //       } else {}
+  //     } else {}
+  //   } else {}
+  //   await FirebaseDatabase.instance
+  //       .ref()
+  //       .child("live/$liveId/leaderboard/$userId")
+  //       .update(
+  //     <String, dynamic>{
+  //       "amount": currentAmount,
+  //       "userName": userName,
+  //       "avatar": avatar,
+  //       "id": userId,
+  //     },
+  //   );
+  //   return Future<void>.value();
+  // }
 
-  void getLatestLeaderboard(DataSnapshot? dataSnapshot) {
+  void getLatestLeaderboard(
+    DataSnapshot? dataSnapshot,
+    Function() youAreOnTop,
+    Function() youAreNotOnTop,
+  ) {
     if (dataSnapshot != null) {
       if (dataSnapshot.exists) {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
@@ -294,16 +335,26 @@ class LiveDharamController extends GetxController {
               tempList.add(
                 LeaderboardModel(
                   // ignore:  avoid_dynamic_calls
-                  amount: value["amount"],
+                  amount: value["amount"] ?? 0,
                   // ignore:  avoid_dynamic_calls
-                  avatar: "${_pref.getAmazonUrl()}${value['avatar']}",
+                  avatar: value["avatar"] ?? "",
                   // ignore:  avoid_dynamic_calls
-                  userName: value["userName"],
+                  userName: value["userName"] ?? "",
+                  // ignore:  avoid_dynamic_calls
+                  id: value["id"] ?? "",
                 ),
               );
             },
           );
           leaderboardModel = tempList;
+          leaderboardModel.sort(
+            (LeaderboardModel a, LeaderboardModel b) {
+              return b.amount.compareTo(a.amount);
+            },
+          );
+          leaderboardModel.first.id == userId
+              ? youAreOnTop()
+              : youAreNotOnTop();
         } else {}
       } else {
         leaderboardModel.clear();
@@ -312,6 +363,38 @@ class LiveDharamController extends GetxController {
       leaderboardModel.clear();
     }
     return;
+  }
+
+  String isValidImageURL({required String imageURL}) {
+    if (GetUtils.isURL(imageURL)) {
+      return imageURL;
+    } else {
+      imageURL = "${_pref.getAmazonUrl()}$imageURL";
+      if (GetUtils.isURL(imageURL)) {
+        return imageURL;
+      } else {
+        return "https://robohash.org/details";
+      }
+    }
+  }
+
+  Future<void> updateHostAvailability() async {
+    Map<String, dynamic> temp = <String, dynamic>{};
+    final DataSnapshot dataSnapshot =
+        await FirebaseDatabase.instance.ref().child("live/$liveId").get();
+    if (dataSnapshot != null) {
+      if (dataSnapshot.exists) {
+        if (dataSnapshot.value is Map<dynamic, dynamic>) {
+          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+              as Map<dynamic, dynamic>;
+          temp = Map<String, dynamic>.from(map);
+        } else {}
+      } else {}
+    } else {}
+    temp["isAvailable"] = isHostAvailable;
+    await FirebaseDatabase.instance.ref().child("live/$liveId").update(temp);
+    return Future<void>.value();
   }
 }
 
@@ -336,9 +419,11 @@ class LeaderboardModel {
     required this.amount,
     required this.avatar,
     required this.userName,
+    required this.id,
   });
 
   final int amount;
   final String avatar;
   final String userName;
+  final String id;
 }

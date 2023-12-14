@@ -2,12 +2,12 @@
 
 import "dart:async";
 import "dart:convert";
-import "dart:developer";
 
 import "package:after_layout/after_layout.dart";
+import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/live_gift.dart";
-import "package:divine_astrologer/screens/live_dharam/widgets/gift_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
@@ -35,14 +35,25 @@ class _LivePage extends State<LiveDharamScreen>
   final ZegoUIKitPrebuiltLiveStreamingController _streamingController =
       ZegoUIKitPrebuiltLiveStreamingController();
 
+  final StreamController<List<ZegoInRoomMessage>> _zegoMessageStreamController =
+      StreamController<List<ZegoInRoomMessage>>.broadcast();
+
   late StreamSubscription<ZegoSignalingPluginInRoomCommandMessageReceivedEvent>
       _zegocloudSubscription;
 
   // late StreamSubscription<DatabaseEvent> _firebaseSubscription;
 
+  final TextEditingController _editingController = TextEditingController();
+
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
+
+    _streamingController.message
+        .stream()
+        .listen(_zegoMessageStreamController.sink.add);
 
     _zegocloudSubscription = ZegoUIKit()
         .getSignalingPlugin()
@@ -58,9 +69,11 @@ class _LivePage extends State<LiveDharamScreen>
 
   @override
   void dispose() {
+    unawaited(_zegoMessageStreamController.close());
     unawaited(_zegocloudSubscription.cancel());
-
     // unawaited(_firebaseSubscription.cancel());
+    _editingController.dispose();
+    _scrollController.dispose();
 
     super.dispose();
   }
@@ -81,13 +94,47 @@ class _LivePage extends State<LiveDharamScreen>
                   userName: _controller.userName,
                   liveID: _controller.liveId,
                   config: streamingConfig
-                    ..innerText = textConfig
+                    ..previewConfig.showPreviewForHost = false
+                    ..maxCoHostCount = 1
+                    ..audioVideoViewConfig = ZegoPrebuiltAudioVideoViewConfig(
+                      showUserNameOnView: false,
+                    )
+                    ..bottomMenuBarConfig = ZegoBottomMenuBarConfig(
+                      hostButtons: _controller.isHost
+                          ? <ZegoMenuBarButtonName>[
+                              ZegoMenuBarButtonName.toggleCameraButton,
+                              ZegoMenuBarButtonName.toggleMicrophoneButton,
+                            ]
+                          : <ZegoMenuBarButtonName>[],
+                    )
                     ..layout = galleryLayout
                     ..swipingConfig = swipingConfig
-                    // ..onLiveStreamingStateUpdate = onLiveStreamingStateUpdate
+                    ..onLiveStreamingStateUpdate = onLiveStreamingStateUpdate
                     ..avatarBuilder = avatarWidget
-                    ..bottomMenuBarConfig.coHostExtendButtons = extendButton
-                    ..bottomMenuBarConfig.audienceExtendButtons = extendButton,
+                    ..topMenuBarConfig = ZegoTopMenuBarConfig(
+                      hostAvatarBuilder: (ZegoUIKitUser host) {
+                        return const SizedBox();
+                      },
+                      showCloseButton: false,
+                    )
+                    ..memberButtonConfig = ZegoMemberButtonConfig(
+                      builder: (int memberCount) {
+                        return const SizedBox();
+                      },
+                    )
+                    ..bottomMenuBarConfig = ZegoBottomMenuBarConfig(
+                      showInRoomMessageButton: false,
+                    )
+                    ..foreground = foregroundWidget()
+                    ..inRoomMessageConfig = ZegoInRoomMessageConfig(
+                      itemBuilder: (
+                        BuildContext context,
+                        ZegoInRoomMessage message,
+                        Map<String, dynamic> extraInfo,
+                      ) {
+                        return const SizedBox();
+                      },
+                    ),
                   controller: _streamingController,
                 );
         },
@@ -103,10 +150,6 @@ class _LivePage extends State<LiveDharamScreen>
         : ZegoUIKitPrebuiltLiveStreamingConfig.audience(plugins: pluginsList);
   }
 
-  ZegoInnerText get textConfig {
-    return _controller.isHost ? ZegoInnerText() : ZegoInnerText();
-  }
-
   ZegoLayout get galleryLayout {
     return _controller.isHost ? ZegoLayout.gallery() : ZegoLayout.gallery();
   }
@@ -119,12 +162,13 @@ class _LivePage extends State<LiveDharamScreen>
   ) {
     final String zegoUser = user?.id ?? "";
     final String mineUser = _controller.userId;
-    return CircleAvatar(
-      foregroundImage: NetworkImage(
-        zegoUser == mineUser
-            ? _controller.avatar
-            : "https://images.hindustantimes.com/rf/image_size_640x362/HT/p1/2011/12/31/Incoming/Pictures/789560_Wallpaper2.jpg",
-      ),
+    // final String astroUser = (_controller.details.data?.id ?? 0).toString();
+    return CustomImageWidget(
+      imageUrl: zegoUser == mineUser
+          ? _controller.avatar
+          // : zegoUser == astroUser
+          //     ? (_controller.details.data?.image ?? "")
+          : "https://robohash.org/avatarWidget",
     );
   }
 
@@ -132,17 +176,504 @@ class _LivePage extends State<LiveDharamScreen>
     return _controller.isHost
         ? null
         : ZegoLiveStreamingSwipingConfig(
-            requirePreviousLiveID: _controller.requirePreviousLiveID,
-            requireNextLiveID: _controller.requireNextLiveID,
+            requirePreviousLiveID: () => "",
+            requireNextLiveID: () => "",
           );
   }
 
-  // Future<void> onLiveStreamingStateUpdate(ZegoLiveStreamingState state) async {
-  //   if (state == ZegoLiveStreamingState.ended) {
-  //     await showAstrologerLeftDialog();
-  //   } else {}
-  //   return Future<void>.value();
+  Widget foregroundWidget() {
+    return Padding(
+      padding: const EdgeInsets.only(top: kToolbarHeight - 16.0),
+      child: Column(
+        children: <Widget>[
+          appBarWidget(),
+          const SizedBox(height: 16),
+          astrologerLiveStar(),
+          const SizedBox(height: 16),
+          Expanded(
+            child: Row(
+              children: <Widget>[
+                const SizedBox(width: 16),
+                Expanded(child: liveZegoMsg()),
+                const SizedBox(width: 16),
+                verticleLiveFeatures(),
+                const SizedBox(width: 16),
+              ],
+            ),
+          ),
+          // const SizedBox(height: 16),
+          // horizontalGiftBar(),
+          const SizedBox(height: 16),
+          bottomBarWidget(),
+          const SizedBox(height: 16),
+        ],
+      ),
+    );
+  }
+
+  Widget appBarWidget() {
+    return SizedBox(
+      height: 50,
+      child: Row(
+        children: <Widget>[
+          const SizedBox(width: 16),
+          IconButton(
+            onPressed: () async {
+              await _streamingController.leave(context, showConfirmation: true);
+            },
+            icon: const Icon(Icons.arrow_back_ios, color: AppColors.white),
+          ),
+          Flexible(
+            flex: 3,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+                border: Border.all(color: AppColors.black.withOpacity(0.2)),
+                color: AppColors.black.withOpacity(0.2),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Row(
+                  children: <Widget>[
+                    const SizedBox(width: 4),
+                    CircleAvatar(
+                      child: CustomImageWidget(
+                        imageUrl: _controller.avatar,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            _controller.userName,
+                            style: const TextStyle(color: AppColors.white),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(width: 4),
+                          const Text(
+                            "<<Speciality>>",
+                            style: TextStyle(color: AppColors.white),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const Spacer(),
+          const SizedBox(width: 16),
+          if (_controller.isHost)
+            Switch(
+              value: _controller.isHostAvailable,
+              onChanged: (bool value) async {
+                _controller.isHostAvailable = value;
+                await _controller.updateHostAvailability();
+              },
+            )
+          else
+            const SizedBox(),
+          // DecoratedBox(
+          //   decoration: BoxDecoration(
+          //     borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+          //     border: Border.all(color: AppColors.black.withOpacity(0.2)),
+          //     color: AppColors.black.withOpacity(0.2),
+          //   ),
+          //   child: Padding(
+          //     padding: EdgeInsets.zero,
+          //     child: Row(
+          //       children: <Widget>[
+          //         InkWell(
+          //           onTap: () async {
+          //             await _controller.followOrUnfollowAstrologer();
+          //             await _controller.getAstrologerDetails();
+          //           },
+          //           child: Image.asset(
+          //             _controller.details.data?.isFollow == 1
+          //                 ? "assets/images/live_new_unfollow.png"
+          //                 : "assets/images/live_new_follow.png",
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          const SizedBox(width: 16),
+        ],
+      ),
+    );
+  }
+
+  Widget astrologerLiveStar() {
+    return StreamBuilder<DatabaseEvent>(
+      stream: FirebaseDatabase.instance
+          .ref()
+          .child("live/${_controller.liveId}/leaderboard")
+          .onValue
+          .asBroadcastStream(),
+      builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
+        _controller.getLatestLeaderboard(
+          snapshot.data?.snapshot,
+          () {},
+          () {},
+        );
+        return AnimatedOpacity(
+          opacity: _controller.leaderboardModel.isEmpty ? 0.0 : 1.0,
+          duration: const Duration(seconds: 1),
+          child: _controller.leaderboardModel.isEmpty
+              ? const SizedBox()
+              : SizedBox(
+                  height: 50,
+                  child: Row(
+                    children: <Widget>[
+                      const SizedBox(width: 16),
+                      Flexible(
+                        flex: 3,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10.0)),
+                            border: Border.all(
+                              color: AppColors.black.withOpacity(0.2),
+                            ),
+                            color: AppColors.black.withOpacity(0.2),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Row(
+                              children: <Widget>[
+                                const SizedBox(width: 4),
+                                CircleAvatar(
+                                  child: CustomImageWidget(
+                                    imageUrl: _controller
+                                        .leaderboardModel.first.avatar,
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      const Text(
+                                        "Astrologer's Live Star",
+                                        style:
+                                            TextStyle(color: AppColors.white),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        _controller
+                                            .leaderboardModel.first.userName,
+                                        style: const TextStyle(
+                                          color: AppColors.white,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                const CircleAvatar(
+                                  backgroundColor: AppColors.transparent,
+                                  foregroundImage: AssetImage(
+                                    "assets/images/live_star.png",
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      const SizedBox(width: 16),
+                    ],
+                  ),
+                ),
+        );
+      },
+    );
+  }
+
+  // Widget horizontalGiftBar() {
+  //   return SizedBox(
+  //     height: 50 + 28,
+  //     child: ListView.builder(
+  //       itemCount: _controller.customGiftModel.length,
+  //       scrollDirection: Axis.horizontal,
+  //       itemBuilder: (BuildContext context, int index) {
+  //         final CustomGiftModel item = _controller.customGiftModel[index];
+  //         return InkWell(
+  //           onTap: () async {
+  //             final bool hasBalance = _controller.hasBalance(
+  //               quantity: 1,
+  //               amount: item.giftPrice,
+  //             );
+  //             if (hasBalance) {
+  //               LiveGiftWidget.show(context, item.giftSvga);
+  //               await _controller.sendGiftAPI(
+  //                 count: 1,
+  //                 svga: item.giftSvga,
+  //                 successCallback: log,
+  //                 failureCallback: log,
+  //               );
+  //               await _controller.addUpdateLeaderboard(
+  //                 quantity: 1,
+  //                 amount: item.giftPrice,
+  //               );
+  //             } else {
+  //               await lowBalancePopup();
+  //             }
+  //           },
+  //           child: Padding(
+  //             padding: const EdgeInsets.symmetric(horizontal: 16.0),
+  //             child: Column(
+  //               mainAxisSize: MainAxisSize.min,
+  //               children: <Widget>[
+  //                 SizedBox(
+  //                   height: 50,
+  //                   width: 50,
+  //                   child: CustomImageWidget(imageUrl: item.giftImage),
+  //                 ),
+  //                 const SizedBox(height: 8),
+  //                 Text(
+  //                   "₹${item.giftPrice}",
+  //                   style: const TextStyle(color: AppColors.white),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         );
+  //       },
+  //     ),
+  //   );
   // }
+
+  Widget bottomBarWidget() {
+    return Row(
+      children: <Widget>[
+        const SizedBox(width: 16),
+        Expanded(
+          child: TextField(
+            controller: _editingController,
+            onSubmitted: (String value) async {
+              final String msg = _editingController.value.text;
+              await _streamingController.message.send(msg);
+              _editingController.clear();
+              FocusManager.instance.primaryFocus?.unfocus();
+              scrollDown();
+            },
+            cursorColor: Colors.white,
+            style: const TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+              suffixIcon: IconButton(
+                onPressed: () async {
+                  final String msg = _editingController.value.text;
+                  await _streamingController.message.send(msg);
+                  _editingController.clear();
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  scrollDown();
+                },
+                icon: const Icon(Icons.send, color: Colors.white),
+              ),
+              floatingLabelBehavior: FloatingLabelBehavior.never,
+              filled: true,
+              fillColor: AppColors.white.withOpacity(0.2),
+              hintText: "Say Hi",
+              hintStyle: const TextStyle(color: AppColors.white),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(width: 2, color: Colors.white),
+                borderRadius: BorderRadius.circular(50.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(width: 2, color: Colors.white),
+                borderRadius: BorderRadius.circular(50.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(width: 2, color: Colors.white),
+                borderRadius: BorderRadius.circular(50.0),
+              ),
+            ),
+          ),
+        ),
+        // const SizedBox(width: 16),
+        // Align(
+        //   alignment: Alignment.centerRight,
+        //   child: InkWell(
+        //     onTap: giftPopup,
+        //     child: SizedBox(
+        //       height: 50,
+        //       width: 50,
+        //       child: CustomLottieWidget(
+        //         path: "assets/lottie/gift.json",
+        //         fit: BoxFit.cover,
+        //         height: 50,
+        //         width: 50,
+        //         repeat: true,
+        //         onLoaded: (LottieComposition comp) {},
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        const SizedBox(width: 16),
+        const SizedBox(width: 16),
+        const SizedBox(width: 16),
+        const SizedBox(width: 16),
+        const SizedBox(width: 16),
+        const SizedBox(width: 16),
+        const SizedBox(width: 16),
+        const SizedBox(width: 16),
+      ],
+    );
+  }
+
+  Widget liveZegoMsg() {
+    return MediaQuery.of(context).viewInsets.bottom != 0
+        ? const SizedBox()
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              SizedBox(height: Get.height / 3.5),
+              Expanded(child: inRoomMessage()),
+            ],
+          );
+  }
+
+  Widget inRoomMessage() {
+    return StreamBuilder<List<ZegoInRoomMessage>>(
+      stream: _zegoMessageStreamController.stream.asBroadcastStream(),
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,
+      ) {
+        final List<ZegoInRoomMessage> messages =
+            snapshot.data ?? <ZegoInRoomMessage>[];
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: messages.length,
+          controller: _scrollController,
+          itemBuilder: (BuildContext context, int index) {
+            final ZegoInRoomMessage message = messages[index];
+            final String zegoUser = message.user.id;
+            final String mineUser = _controller.userId;
+            // final String astroUser =
+            //     (_controller.details.data?.id ?? 0).toString();
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+                  border: Border.all(color: AppColors.black.withOpacity(0.2)),
+                  color: AppColors.black.withOpacity(0.2),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Row(
+                    children: <Widget>[
+                      const SizedBox(width: 4),
+                      CircleAvatar(
+                        child: CustomImageWidget(
+                          imageUrl: zegoUser == mineUser
+                              ? _controller.avatar
+                              // : zegoUser == astroUser
+                              //     ? (_controller.details.data?.image ?? "")
+                              : "https://robohash.org/sa",
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              message.user.name,
+                              style: const TextStyle(color: AppColors.white),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              message.message,
+                              style: const TextStyle(color: AppColors.white),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget verticleLiveFeatures() {
+    return MediaQuery.of(context).viewInsets.bottom != 0
+        ? const SizedBox()
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: Image.asset("assets/images/live_new_hourglass.png"),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: leaderboardPopup,
+                  child: SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: Image.asset("assets/images/live_new_podium.png"),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: Image.asset("assets/images/live_call_btn.png"),
+                  ),
+                ),
+              ),
+            ],
+          );
+  }
+
+  Future<void> onLiveStreamingStateUpdate(ZegoLiveStreamingState state) async {
+    // final bool condition1 = _controller.isHost == false;
+    // final bool condition2 = state == ZegoLiveStreamingState.ended;
+    // if (condition1 == false && condition2) {
+    //   await showAstrologerLeftDialog();
+    // } else {}
+    return Future<void>.value();
+  }
 
   // Future<void> showAstrologerLeftDialog() async {
   //   await showDialog(
@@ -167,43 +698,6 @@ class _LivePage extends State<LiveDharamScreen>
   //   return Future<void>.value();
   // }
 
-  // ZegoMenuBarExtendButton get newGiftButton0 {
-  //   return ZegoMenuBarExtendButton(
-  //     index: 0,
-  //     child: ElevatedButton(
-  //       style: ElevatedButton.styleFrom(
-  //         shape: const CircleBorder(),
-  //       ),
-  //       onPressed: giftPopup,
-  //       child: const Icon(Icons.abc),
-  //     ),
-  //   );
-  // }
-
-  ZegoMenuBarExtendButton get newGiftButton1 {
-    return ZegoMenuBarExtendButton(
-      index: 1,
-      child: StreamBuilder<DatabaseEvent>(
-        stream: FirebaseDatabase.instance
-            .ref()
-            .child("live/${_controller.liveId}/leaderboard")
-            .onValue,
-        builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
-          _controller.getLatestLeaderboard(snapshot.data?.snapshot);
-          return _controller.leaderboardModel.isEmpty
-              ? const SizedBox()
-              : ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: const CircleBorder(),
-                  ),
-                  onPressed: leaderboardPopup,
-                  child: const Icon(Icons.abc),
-                );
-        },
-      ),
-    );
-  }
-
   // Future<void> giftPopup() async {
   //   await showCupertinoModalPopup(
   //     context: context,
@@ -211,11 +705,11 @@ class _LivePage extends State<LiveDharamScreen>
   //       return GiftWidget(
   //         onClose: Get.back,
   //         list: _controller.customGiftModel,
-  //         onSelect: (CustomGiftModel item, num quantity, num amount) async {
+  //         onSelect: (CustomGiftModel item, num quantity) async {
   //           Get.back();
   //           final bool hasBalance = _controller.hasBalance(
   //             quantity: quantity,
-  //             amount: amount,
+  //             amount: item.giftPrice,
   //           );
   //           if (hasBalance) {
   //             LiveGiftWidget.show(context, item.giftSvga);
@@ -227,7 +721,7 @@ class _LivePage extends State<LiveDharamScreen>
   //             );
   //             await _controller.addUpdateLeaderboard(
   //               quantity: quantity,
-  //               amount: amount,
+  //               amount: item.giftPrice,
   //             );
   //           } else {}
   //         },
@@ -250,9 +744,53 @@ class _LivePage extends State<LiveDharamScreen>
     return Future<void>.value();
   }
 
-  List<ZegoMenuBarExtendButton> get extendButton {
-    return <ZegoMenuBarExtendButton>[/*newGiftButton0,*/ newGiftButton1];
-  }
+  // Future<void> congratulationsPopup() async {
+  //   await showCupertinoModalPopup(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return CongratulationsWidget(
+  //         onClose: Get.back,
+  //         imageURL: _controller.avatar,
+  //       );
+  //     },
+  //   );
+  //   return Future<void>.value();
+  // }
+
+  // Future<void> lowBalancePopup() async {
+  //   await showCupertinoModalPopup(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return LowBalanceWidget(
+  //         onClose: Get.back,
+  //       );
+  //     },
+  //   );
+  //   return Future<void>.value();
+  // }
+
+  // Future<void> callAstrologerPopup() async {
+  //   await showCupertinoModalPopup(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return CallAstrologerWidget(
+  //         onClose: Get.back,
+  //         details: _controller.details,
+  //         onSelect: (String type, int amount) async {
+  //           final bool hasBalance = _controller.hasBalance(
+  //             quantity: 1,
+  //             amount: amount,
+  //           );
+  //           if (hasBalance) {
+  //           } else {
+  //             await lowBalancePopup();
+  //           }
+  //         },
+  //       );
+  //     },
+  //   );
+  //   return Future<void>.value();
+  // }
 
   void onInRoomCommandMessageReceived(
     ZegoSignalingPluginInRoomCommandMessageReceivedEvent event,
@@ -270,10 +808,17 @@ class _LivePage extends State<LiveDharamScreen>
     return;
   }
 
+  void scrollDown() {
+    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    return;
+  }
+
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) async {
     // await _controller.getAllGifts();
     // _controller.mapAndMergeGiftsWithConstant();
     return Future<void>.value();
   }
+  /*
+  */
 }

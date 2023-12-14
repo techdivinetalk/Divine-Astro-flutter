@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
+import "package:cached_network_image/cached_network_image.dart";
+import "package:flutter/material.dart";
 
 class CustomImageWidget extends StatelessWidget {
   const CustomImageWidget({
@@ -13,10 +13,10 @@ class CustomImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: imageUrl,
-      placeholder: (context, url) {
+      placeholder: (BuildContext context, String url) {
         return const CircularProgressIndicator();
       },
-      errorWidget: (context, url, error) {
+      errorWidget: (BuildContext context, String url, Object error) {
         return const Icon(Icons.error);
       },
     );

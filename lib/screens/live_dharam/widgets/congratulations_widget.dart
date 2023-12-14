@@ -79,10 +79,10 @@ class _CongratulationsWidgetState extends State<CongratulationsWidget> {
   Widget grid() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
+      children: <Widget>[
         Stack(
           clipBehavior: Clip.none,
-          children: [
+          children: <Widget>[
             CircleAvatar(
               radius: 50,
               child: CustomImageWidget(imageUrl: widget.imageURL),
@@ -94,13 +94,14 @@ class _CongratulationsWidgetState extends State<CongratulationsWidget> {
             ),
           ],
         ),
-        const SizedBox(height: 32),
+        const SizedBox(height: 16),
         const Text("Congratulations!!"),
-        const SizedBox(height: 32),
+        const SizedBox(height: 16),
         const Text("You are now Astrologer's Live Star"),
-        const SizedBox(height: 32),
+        const SizedBox(height: 16),
+        const SizedBox(height: 16),
         Row(
-          children: [
+          children: <Widget>[
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -112,7 +113,6 @@ class _CongratulationsWidgetState extends State<CongratulationsWidget> {
                       ),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         const RoundedRectangleBorder(
-                          side: BorderSide.none,
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                         ),
                       ),
@@ -127,7 +127,7 @@ class _CongratulationsWidgetState extends State<CongratulationsWidget> {
               ),
             ),
           ],
-        )
+        ),
       ],
     );
   }

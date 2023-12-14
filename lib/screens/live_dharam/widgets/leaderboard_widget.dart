@@ -1,6 +1,9 @@
+import "dart:ui";
+
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/gen/assets.gen.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
 
@@ -34,15 +37,18 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
     return InkWell(
       onTap: widget.onClose,
       borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-      child: Container(
-        height: 48,
-        width: 48,
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-          border: Border.all(color: AppColors.white),
-          color: AppColors.white.withOpacity(0.2),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+        child: Container(
+          height: 48,
+          width: 48,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+            border: Border.all(color: AppColors.white),
+            color: AppColors.white.withOpacity(0.2),
+          ),
+          child: const Icon(Icons.close, color: AppColors.white),
         ),
-        child: const Icon(Icons.close, color: AppColors.white),
       ),
     );
   }
@@ -53,21 +59,20 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
         topLeft: Radius.circular(50.0),
         topRight: Radius.circular(50.0),
       ),
-      child: Container(
-        height: Get.height / 1.50,
-        width: Get.width,
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(50.0),
-            topRight: Radius.circular(50.0),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+        child: Container(
+          height: Get.height / 1.50,
+          width: Get.width,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(50.0),
+              topRight: Radius.circular(50.0),
+            ),
+            border: Border.all(color: AppColors.appYellowColour),
+            color: AppColors.white.withOpacity(0.2),
           ),
-          border: Border.all(color: AppColors.white),
-          color: AppColors.white.withOpacity(0.2),
-        ),
-        child: Column(
-          children: <Widget>[
-            Expanded(child: grid()),
-          ],
+          child: grid(),
         ),
       ),
     );
@@ -78,14 +83,16 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
       itemCount: widget.list.length,
       padding: EdgeInsets.zero,
       itemBuilder: (BuildContext context, int index) {
+        final LeaderboardModel item = widget.list[index];
         return Container(
           margin: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-            border: Border.all(color: AppColors.white),
+            border: Border.all(color: AppColors.appYellowColour),
             color: AppColors.white,
           ),
           child: ListTile(
+            dense: true,
             leading: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -108,14 +115,12 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
                 ),
                 const SizedBox(width: 16),
                 CircleAvatar(
-                  foregroundImage: NetworkImage(
-                    widget.list[index].avatar,
-                  ),
+                  child: CustomImageWidget(imageUrl: item.avatar),
                 ),
               ],
             ),
-            title: Text(widget.list[index].userName),
-            subtitle: Text("₹ ${widget.list[index].amount}"),
+            title: Text(item.userName),
+            subtitle: Text("₹ ${item.amount}"),
           ),
         );
       },
