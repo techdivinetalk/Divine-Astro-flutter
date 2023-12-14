@@ -231,6 +231,10 @@ class HomeController extends GetxController {
     chatSwitch.value = homeData?.sessionType?.chat == 1;
     callSwitch.value = homeData?.sessionType?.call == 1;
     videoSwitch.value = homeData?.sessionType?.video == 1;
+    socket.updateChatCallSocketEvent(
+        call: callSwitch.value ? "1" : "0",
+        chat: chatSwitch.value ? "1" : "0",
+        video: videoSwitch.value ? "1" : "0");
 
     if (homeData?.sessionType?.chatSchedualAt != null && homeData?.sessionType?.chatSchedualAt != '') {
       DateTime formattedDate =

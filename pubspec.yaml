@@ -65,6 +65,7 @@ dependencies:
   zego_uikit_prebuilt_call: ^3.17.11
   zego_uikit_prebuilt_live_streaming: ^2.23.0
   zego_uikit_signaling_plugin: ^2.7.1
+  flutter_broadcasts: ^0.4.0
 
 dependency_overrides:
   intl: ^0.18.1

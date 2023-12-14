@@ -6,24 +6,17 @@ import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
-import 'package:divine_astrologer/screens/chat_message/chat_message_controller.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 
 import '../../common/common_functions.dart';
 import '../../common/permission_handler.dart';
-import '../../di/api_provider.dart';
 import '../../di/fcm_notification.dart';
-import '../../model/chat/chat_socket/chat_socket_init.dart';
-import '../../model/chat/res_astro_chat_listener.dart';
 import '../../model/res_login.dart';
-import '../live_page/constant.dart';
 
-class DashboardController extends GetxController
-    with GetSingleTickerProviderStateMixin {
+class DashboardController extends GetxController with GetSingleTickerProviderStateMixin {
   final PreDefineRepository repository;
 
   DashboardController(this.repository);
@@ -31,10 +24,11 @@ class DashboardController extends GetxController
   RxInt selectedIndex = 0.obs;
   RxString userProfileImage = " ".obs;
   final GlobalKey<ScaffoldState> scaffoldkey = GlobalKey();
-  SharedPreferenceService preferenceService =
-      Get.find<SharedPreferenceService>();
+  SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
   UserData? userData;
   final appFirebaseService = AppFirebaseService();
+  BroadcastReceiver broadcastReceiver = BroadcastReceiver(names: <String>["AcceptChat", "ReJoinChat"]);
+
   // StreamSubscription<DatabaseEvent>? realTimeListener;
   // StreamSubscription<DatabaseEvent>? astroChatListener;
   // Socket? socket;
@@ -42,6 +36,10 @@ class DashboardController extends GetxController
   @override
   void onInit() async {
     super.onInit();
+    broadcastReceiver.start();
+    broadcastReceiver.messages.listen((event) {
+      debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(const Duration(seconds: 5), () {
         appFirebaseService.readData('astrologer/${preferenceService.getUserDetail()!.id}/realTime');
@@ -49,21 +47,18 @@ class DashboardController extends GetxController
     });
     var commonConstants = await userRepository.constantDetailsData();
     preferenceService.setConstantDetails(commonConstants);
-    preferenceService
-        .setBaseImageURL(commonConstants.data.awsCredentails.baseurl!);
+    preferenceService.setBaseImageURL(commonConstants.data.awsCredentails.baseurl!);
 
-    userProfileImage.value = userData?.image != null
-        ? "${preferenceService.getBaseImageURL()}/${userData?.image}"
-        : "";
-  //  connectSocket();
+    userProfileImage.value =
+        userData?.image != null ? "${preferenceService.getBaseImageURL()}/${userData?.image}" : "";
+    //  connectSocket();
     loadPreDefineData();
     firebaseMessagingConfig(Get.context!);
     notificationPermission();
   }
 
   notificationPermission() async {
-    await PermissionHelper()
-    .askNotificationPermission();
+    await PermissionHelper().askNotificationPermission();
   }
 
   // @override
@@ -206,8 +201,7 @@ class DashboardController extends GetxController
   }
 
   void askPermission() async {
-    await [Permission.camera, Permission.microphone, Permission.contacts]
-        .request();
+    await [Permission.camera, Permission.microphone, Permission.contacts].request();
 
     PermissionStatus? permissionStatus;
     if (permissionStatus == PermissionStatus.granted) {
@@ -229,8 +223,7 @@ class DashboardController extends GetxController
     var allContacts = await ContactsService.getContacts();
     var isContactExists = allContacts.any((element) {
       if (element.phones != null) {
-        return element.phones!
-            .any((element) => element.value!.contains("+91 9876543210"));
+        return element.phones!.any((element) => element.value!.contains("+91 9876543210"));
       } else {
         return false;
       }
