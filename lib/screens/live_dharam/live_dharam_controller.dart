@@ -1,20 +1,20 @@
 // ignore_for_file: invalid_use_of_protected_member, unnecessary_null_comparison
 
 import "dart:async";
-import "dart:convert";
 
-import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/di/shared_preference_service.dart";
-// import "package:divine_astrologer/model/astrologer_following_response.dart";
-// import "package:divine_astrologer/model/astrologer_profile/astrologer_gift_response.dart";
-// import "package:divine_astrologer/model/live/get_astrologer_details_response.dart";
-// import "package:divine_astrologer/repository/astrologer_profile_repository.dart";
-import "package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart";
-import "package:divine_astrologer/screens/live_page/constant.dart";
+import "package:divine_astrologer/model/res_login.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:get/get.dart";
-import "package:get/get_connect/http/src/status/http_status.dart";
-import "package:http/http.dart" as http;
+
+//
+//
+//
+//
+//
+//
+//
+//
 
 class LiveDharamController extends GetxController {
   final SharedPreferenceService _pref = Get.put(SharedPreferenceService());
@@ -28,13 +28,14 @@ class LiveDharamController extends GetxController {
   final RxString _liveId = "".obs;
   final RxBool _isHost = true.obs;
   final RxBool _isHostAvailable = true.obs;
+  final RxString _hostSpeciality = "".obs;
   final RxInt _currentIndex = 0.obs;
-  final RxBool _isInitialSetup = true.obs;
   final RxMap<dynamic, dynamic> _data = <dynamic, dynamic>{}.obs;
   // final Rx<GetAstroDetailsRes> _details = GetAstroDetailsRes().obs;
   // final Rx<GiftResponse> _gifts = GiftResponse().obs;
   final RxList<CustomGiftModel> _customGiftModel = <CustomGiftModel>[].obs;
   final RxList<LeaderboardModel> _leaderboardModel = <LeaderboardModel>[].obs;
+  final RxList<WaitListModel> _waitListModel = <WaitListModel>[].obs;
   // final Rx<AstrologerFollowingResponse> _followRes =
   //     AstrologerFollowingResponse().obs;
 
@@ -44,21 +45,20 @@ class LiveDharamController extends GetxController {
 
     userId = (_pref.getUserDetail()?.id ?? "").toString();
     userName = _pref.getUserDetail()?.name ?? "";
-
     // avatar = _pref.getUserDetail()?.avatar ?? "";
     avatar = isValidImageURL(imageURL: _pref.getUserDetail()?.image ?? "");
     //
-
     liveId = (Get.arguments ?? "").toString();
     isHost = true;
     isHostAvailable = true;
+    hostSpeciality = getSpeciality();
     currentIndex = 0;
-    isInitialSetup = true;
     data = <dynamic, dynamic>{};
     // details = GetAstroDetailsRes();
     // gifts = GiftResponse();
     customGiftModel = <CustomGiftModel>[];
     leaderboardModel = <LeaderboardModel>[];
+    waitListModel = <WaitListModel>[];
     // followRes = AstrologerFollowingResponse();
   }
 
@@ -70,13 +70,14 @@ class LiveDharamController extends GetxController {
     _liveId.close();
     _isHost.close();
     _isHostAvailable.close();
+    _hostSpeciality.close();
     _currentIndex.close();
-    _isInitialSetup.close();
     _data.close();
     // _details.close();
     // _gifts.close();
     _customGiftModel.close();
     _leaderboardModel.close();
+    _waitListModel.close();
     // _followRes.close();
 
     super.onClose();
@@ -100,11 +101,11 @@ class LiveDharamController extends GetxController {
   bool get isHostAvailable => _isHostAvailable.value;
   set isHostAvailable(bool value) => _isHostAvailable(value);
 
+  String get hostSpeciality => _hostSpeciality.value;
+  set hostSpeciality(String value) => _hostSpeciality(value);
+
   int get currentIndex => _currentIndex.value;
   set currentIndex(int value) => _currentIndex(value);
-
-  bool get isInitialSetup => _isInitialSetup.value;
-  set isInitialSetup(bool value) => _isInitialSetup(value);
 
   Map<dynamic, dynamic> get data => _data.value;
   set data(Map<dynamic, dynamic> value) => _data(value);
@@ -122,6 +123,9 @@ class LiveDharamController extends GetxController {
   set leaderboardModel(List<LeaderboardModel> value) =>
       _leaderboardModel(value);
 
+  List<WaitListModel> get waitListModel => _waitListModel.value;
+  set waitListModel(List<WaitListModel> value) => _waitListModel(value);
+
   // AstrologerFollowingResponse get followRes => _followRes.value;
   // set followRes(AstrologerFollowingResponse value) => _followRes(value);
 
@@ -136,11 +140,9 @@ class LiveDharamController extends GetxController {
   //         data.addAll(map);
   //         if (data.isEmpty) {
   //         } else if (data.isNotEmpty) {
-  //           if (isInitialSetup) {
-  //             liveId = data.keys.toList()[currentIndex];
-  //             await getAstrologerDetails();
-  //             isInitialSetup = false;
-  //           } else {}
+  //           liveId = data.keys.toList()[currentIndex];
+  //           isHostAvailable = checkIfAstrologerAvailable(map);
+  //           await getAstrologerDetails();
   //         } else {}
   //       } else {}
   //     } else {
@@ -150,6 +152,12 @@ class LiveDharamController extends GetxController {
   //     data.clear();
   //   }
   //   return Future<void>.value();
+  // }
+
+  // bool checkIfAstrologerAvailable(Map<dynamic, dynamic> map) {
+  //   final currentHostId = map[liveId];
+  //   final isAvailable = currentHostId["isAvailable"] ?? false;
+  //   return isAvailable;
   // }
 
   // String requirePreviousLiveID() {
@@ -221,8 +229,18 @@ class LiveDharamController extends GetxController {
   //       : GetAstroDetailsRes.fromJson(GetAstroDetailsRes().toJson());
 
   //   details.data?.image = isValidImageURL(imageURL: details.data?.image ?? "");
+  //   details.data?.speciality = getSpeciality();
+
   //   return Future<void>.value();
   // }
+
+  String getSpeciality() {
+    final List<String> pivotList = <String>[];
+    _pref.getUserDetail()?.astroCatPivot?.forEach(
+          (AstroCatPivot e) => pivotList.add(e.categoryDetails?.name ?? ""),
+        );
+    return pivotList.join(", ");
+  }
 
   // Future<void> getAllGifts() async {
   //   GiftResponse giftResponse = GiftResponse();
@@ -317,11 +335,7 @@ class LiveDharamController extends GetxController {
   //   return Future<void>.value();
   // }
 
-  void getLatestLeaderboard(
-    DataSnapshot? dataSnapshot,
-    Function() youAreOnTop,
-    Function() youAreNotOnTop,
-  ) {
+  void getLatestLeaderboard(DataSnapshot? dataSnapshot) {
     if (dataSnapshot != null) {
       if (dataSnapshot.exists) {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
@@ -352,9 +366,6 @@ class LiveDharamController extends GetxController {
               return b.amount.compareTo(a.amount);
             },
           );
-          leaderboardModel.first.id == userId
-              ? youAreOnTop()
-              : youAreNotOnTop();
         } else {}
       } else {
         leaderboardModel.clear();
@@ -364,6 +375,72 @@ class LiveDharamController extends GetxController {
     }
     return;
   }
+
+  // Future<void> addUpdateToWaitList({
+  //   required String callType,
+  // }) async {
+  //   await FirebaseDatabase.instance
+  //       .ref()
+  //       .child("live/$liveId/waitList/$userId")
+  //       .update(
+  //     <String, dynamic>{
+  //       "callType": callType.toLowerCase(),
+  //       "totalTime": intToTimeLeft(walletBalance.value),
+  //       "userName": userName,
+  //       "avatar": avatar,
+  //       "id": userId,
+  //     },
+  //   );
+  //   return Future<void>.value();
+  // }
+
+  void getLatestWaitList(
+    DataSnapshot? dataSnapshot,
+  ) {
+    if (dataSnapshot != null) {
+      if (dataSnapshot.exists) {
+        if (dataSnapshot.value is Map<dynamic, dynamic>) {
+          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+              as Map<dynamic, dynamic>;
+          final List<WaitListModel> tempList = <WaitListModel>[];
+          map.forEach(
+            // ignore: always_specify_types
+            (key, value) {
+              tempList.add(
+                WaitListModel(
+                  // ignore:  avoid_dynamic_calls
+                  callType: value["callType"] ?? "",
+                  // ignore:  avoid_dynamic_calls
+                  totalTime: value["totalTime"] ?? "",
+                  // ignore:  avoid_dynamic_calls
+                  avatar: value["avatar"] ?? "",
+                  // ignore:  avoid_dynamic_calls
+                  userName: value["userName"] ?? "",
+                  // ignore:  avoid_dynamic_calls
+                  id: value["id"] ?? "",
+                ),
+              );
+            },
+          );
+          waitListModel = tempList;
+        } else {}
+      } else {
+        waitListModel.clear();
+      }
+    } else {
+      waitListModel.clear();
+    }
+    return;
+  }
+
+  // Future<void> removeFromWaitList() async {
+  //   await FirebaseDatabase.instance
+  //       .ref()
+  //       .child("live/$liveId/waitList/$userId")
+  //       .remove();
+  //   return Future<void>.value();
+  // }
 
   String isValidImageURL({required String imageURL}) {
     if (GetUtils.isURL(imageURL)) {
@@ -396,6 +473,48 @@ class LiveDharamController extends GetxController {
     await FirebaseDatabase.instance.ref().child("live/$liveId").update(temp);
     return Future<void>.value();
   }
+
+  // bool hasMyIdInWaitList() {
+  //   List<WaitListModel> tempList = <WaitListModel>[];
+  //   tempList = waitListModel.where((element) => element.id == userId).toList();
+  //   return tempList.isNotEmpty;
+  // }
+
+  // String intToTimeLeft(int value) {
+  //   int h, m, s;
+  //   h = value ~/ 3600;
+  //   m = ((value - h * 3600)) ~/ 60;
+  //   s = value - (h * 3600) - (m * 60);
+  //   String hourLeft = h.toString().length < 2 ? "0$h" : h.toString();
+  //   String minuteLeft = m.toString().length < 2 ? "0$m" : m.toString();
+  //   String secondsLeft = s.toString().length < 2 ? "0$s" : s.toString();
+  //   String result = "$hourLeft:$minuteLeft:$secondsLeft";
+  //   return result;
+  // }
+
+  String getTotalWaitTime() {
+    String time = "";
+    List<String> tempList = <String>[];
+    for (var element in waitListModel) {
+      tempList.add(element.totalTime);
+    }
+    if (tempList.isEmpty) {
+      time = "Wait time: 00:00:00";
+    } else {
+      List<Duration> durations = tempList.map((t) => parseTime(t)).toList();
+      Duration totalTime = durations.reduce((a, b) => a + b);
+      final String hh = "${totalTime.inHours}";
+      final String mm = (totalTime.inMinutes % 60).toString().padLeft(2, '0');
+      final String ss = (totalTime.inSeconds % 60).toString().padLeft(2, '0');
+      time = "Wait time: $hh:$mm:$ss";
+    }
+    return time;
+  }
+
+  Duration parseTime(String timeString) {
+    List<int> parts = timeString.split(':').map(int.parse).toList();
+    return Duration(hours: parts[0], minutes: parts[1], seconds: parts[2]);
+  }
 }
 
 class CustomGiftModel {
@@ -423,6 +542,22 @@ class LeaderboardModel {
   });
 
   final int amount;
+  final String avatar;
+  final String userName;
+  final String id;
+}
+
+class WaitListModel {
+  WaitListModel({
+    required this.callType,
+    required this.totalTime,
+    required this.avatar,
+    required this.userName,
+    required this.id,
+  });
+
+  final String callType;
+  final String totalTime;
   final String avatar;
   final String userName;
   final String id;

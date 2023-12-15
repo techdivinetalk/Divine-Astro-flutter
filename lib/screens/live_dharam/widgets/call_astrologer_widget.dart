@@ -9,12 +9,14 @@
 // class CallAstrologerWidget extends StatefulWidget {
 //   const CallAstrologerWidget({
 //     required this.onClose,
+//     required this.waitTime,
 //     required this.details,
 //     required this.onSelect,
 //     super.key,
 //   });
 
 //   final void Function() onClose;
+//   final String waitTime;
 //   final GetAstroDetailsRes details;
 //   final void Function(String type, int amount) onSelect;
 
@@ -100,10 +102,8 @@
 
 //     final int videoDiscount = data.videoDiscountedAmount ?? 0;
 //     final int videoOriginal = data.videoCallAmount ?? 0;
-
 //     final int audioDiscount = data.audioDiscountedAmount ?? 0;
 //     final int audioOriginal = data.audioCallAmount ?? 0;
-
 //     final int privateDiscount = data.anonymousDiscountedAmount ?? 0;
 //     final int privateOriginal = data.anonymousCallAmount ?? 0;
 
@@ -115,9 +115,9 @@
 //             const SizedBox(height: 64 - 16),
 //             Text(data.name ?? ""),
 //             const SizedBox(height: 8),
-//             Text(data.name ?? ""),
+//             Text(data.speciality ?? ""),
 //             const SizedBox(height: 8),
-//             const Text("Wait Time ~ 50 Minutes"),
+//             Text(widget.waitTime),
 //             const SizedBox(height: 8),
 //             const Divider(),
 //             listTile(

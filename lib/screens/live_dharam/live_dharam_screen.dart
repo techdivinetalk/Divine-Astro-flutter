@@ -7,14 +7,23 @@ import "package:after_layout/after_layout.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/live_gift.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/call_accept_or_reject_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/wait_list_widget.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
+//
+//
+//
+//
+//
+//
+//
 
 const int appID = 696414715;
 const String appSign =
@@ -136,6 +145,7 @@ class _LivePage extends State<LiveDharamScreen>
                       },
                     ),
                   controller: _streamingController,
+                  events: events,
                 );
         },
       ),
@@ -253,9 +263,9 @@ class _LivePage extends State<LiveDharamScreen>
                             overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(width: 4),
-                          const Text(
-                            "<<Speciality>>",
-                            style: TextStyle(color: AppColors.white),
+                          Text(
+                            _controller.hostSpeciality,
+                            style: const TextStyle(color: AppColors.white),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ],
@@ -318,11 +328,7 @@ class _LivePage extends State<LiveDharamScreen>
           .onValue
           .asBroadcastStream(),
       builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
-        _controller.getLatestLeaderboard(
-          snapshot.data?.snapshot,
-          () {},
-          () {},
-        );
+        _controller.getLatestLeaderboard(snapshot.data?.snapshot);
         return AnimatedOpacity(
           opacity: _controller.leaderboardModel.isEmpty ? 0.0 : 1.0,
           duration: const Duration(seconds: 1),
@@ -627,41 +633,90 @@ class _LivePage extends State<LiveDharamScreen>
         : Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              Align(
-                alignment: Alignment.centerRight,
-                child: InkWell(
-                  onTap: () {},
-                  child: SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: Image.asset("assets/images/live_new_hourglass.png"),
-                  ),
-                ),
+              StreamBuilder<DatabaseEvent>(
+                stream: FirebaseDatabase.instance
+                    .ref()
+                    .child("live/${_controller.liveId}/waitList")
+                    .onValue
+                    .asBroadcastStream(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<DatabaseEvent> snapshot) {
+                  _controller.getLatestWaitList(snapshot.data?.snapshot);
+                  return AnimatedOpacity(
+                    opacity: _controller.waitListModel.isEmpty ? 0.0 : 1.0,
+                    duration: const Duration(seconds: 1),
+                    child: _controller.waitListModel.isEmpty
+                        ? const SizedBox()
+                        : Align(
+                            alignment: Alignment.centerRight,
+                            child: InkWell(
+                              onTap: waitListPopup,
+                              child: SizedBox(
+                                height: 50,
+                                width: 50,
+                                child: Image.asset(
+                                  "assets/images/live_new_hourglass.png",
+                                ),
+                              ),
+                            ),
+                          ),
+                  );
+                },
               ),
               const SizedBox(height: 16),
-              Align(
-                alignment: Alignment.centerRight,
-                child: InkWell(
-                  onTap: leaderboardPopup,
-                  child: SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: Image.asset("assets/images/live_new_podium.png"),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Align(
-                alignment: Alignment.centerRight,
-                child: InkWell(
-                  onTap: () {},
-                  child: SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: Image.asset("assets/images/live_call_btn.png"),
-                  ),
-                ),
-              ),
+              StreamBuilder<DatabaseEvent>(
+                  stream: FirebaseDatabase.instance
+                      .ref()
+                      .child("live/${_controller.liveId}/leaderboard")
+                      .onValue
+                      .asBroadcastStream(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<DatabaseEvent> snapshot) {
+                    _controller.getLatestLeaderboard(snapshot.data?.snapshot);
+                    return AnimatedOpacity(
+                      opacity: _controller.leaderboardModel.isEmpty ? 0.0 : 1.0,
+                      duration: const Duration(seconds: 1),
+                      child: _controller.leaderboardModel.isEmpty
+                          ? const SizedBox()
+                          : Align(
+                              alignment: Alignment.centerRight,
+                              child: InkWell(
+                                onTap: leaderboardPopup,
+                                child: SizedBox(
+                                  height: 50,
+                                  width: 50,
+                                  child: Image.asset(
+                                    "assets/images/live_new_podium.png",
+                                  ),
+                                ),
+                              ),
+                            ),
+                    );
+                  }),
+              // const SizedBox(height: 16),
+              // AnimatedOpacity(
+              //   opacity: !_controller.isHostAvailable ? 0.0 : 1.0,
+              //   duration: const Duration(seconds: 1),
+              //   child: !_controller.isHostAvailable
+              //       ? const SizedBox()
+              //       : Align(
+              //           alignment: Alignment.centerRight,
+              //           child: InkWell(
+              //             onTap: () async {
+              //               // _controller.hasMyIdInWaitList()
+              //               //     ? await alreadyInTheWaitListDialog()
+              //               //     : await callAstrologerPopup();
+              //             },
+              //             child: SizedBox(
+              //               height: 50,
+              //               width: 50,
+              //               child: Image.asset(
+              //                 "assets/images/live_call_btn.png",
+              //               ),
+              //             ),
+              //           ),
+              //         ),
+              // ),
             ],
           );
   }
@@ -698,6 +753,29 @@ class _LivePage extends State<LiveDharamScreen>
   //   return Future<void>.value();
   // }
 
+  Future<void> alreadyInTheWaitListDialog() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            "Already in the Wait List",
+          ),
+          content: const Text(
+            "You're already in the Astrologer's Wait List. Tap on hourglass to see your waiting time.",
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: Get.back,
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+    return Future<void>.value();
+  }
+
   // Future<void> giftPopup() async {
   //   await showCupertinoModalPopup(
   //     context: context,
@@ -723,7 +801,9 @@ class _LivePage extends State<LiveDharamScreen>
   //               quantity: quantity,
   //               amount: item.giftPrice,
   //             );
-  //           } else {}
+  //           } else {
+  //             await lowBalancePopup();
+  //           }
   //         },
   //       );
   //     },
@@ -738,6 +818,30 @@ class _LivePage extends State<LiveDharamScreen>
         return LeaderboardWidget(
           onClose: Get.back,
           list: _controller.leaderboardModel,
+        );
+      },
+    );
+    return Future<void>.value();
+  }
+
+  Future<void> waitListPopup() async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return WaitListWidget(
+          onClose: Get.back,
+          waitTime: _controller.getTotalWaitTime(),
+          // details: _controller.details,
+          myUserId: _controller.userId,
+          list: _controller.waitListModel,
+          hasMyIdInWaitList: false,
+          onExitWaitList: () async {
+            Get.back();
+            // await _controller.removeFromWaitList();
+          },
+          astologerName: _controller.userName,
+          astologerImage: _controller.avatar,
+          astologerSpeciality: _controller.hostSpeciality,
         );
       },
     );
@@ -775,13 +879,18 @@ class _LivePage extends State<LiveDharamScreen>
   //     builder: (BuildContext context) {
   //       return CallAstrologerWidget(
   //         onClose: Get.back,
+  //         waitTime: _controller.getTotalWaitTime(),
   //         details: _controller.details,
   //         onSelect: (String type, int amount) async {
+  //           Get.back();
   //           final bool hasBalance = _controller.hasBalance(
   //             quantity: 1,
   //             amount: amount,
   //           );
   //           if (hasBalance) {
+  //             await _controller.addUpdateToWaitList(
+  //               callType: type,
+  //             );
   //           } else {
   //             await lowBalancePopup();
   //           }
@@ -813,12 +922,103 @@ class _LivePage extends State<LiveDharamScreen>
     return;
   }
 
+  ZegoUIKitPrebuiltLiveStreamingEvents get events {
+    return ZegoUIKitPrebuiltLiveStreamingEvents(
+      hostEvents: ZegoUIKitPrebuiltLiveStreamingHostEvents(
+        onCoHostRequestReceived: (audience) async {
+          await onCoHostRequestReceived(audience);
+        },
+        onCoHostRequestCanceled: (v) => print("on:: onCoHostRequestCanceled"),
+        onCoHostRequestTimeout: (v) => print("on:: onCoHostRequestTimeout"),
+        onActionAcceptCoHostRequest: () =>
+            print("on:: onActionAcceptCoHostRequest"),
+        onActionRefuseCoHostRequest: () =>
+            print("on:: onActionRefuseCoHostRequest"),
+        onCoHostInvitationSent: (v) => print("on:: onCoHostInvitationSent"),
+        onCoHostInvitationTimeout: (v) =>
+            print("on:: onCoHostInvitationTimeout"),
+        onCoHostInvitationAccepted: (v) =>
+            print("on:: onCoHostInvitationAccepted"),
+        onCoHostInvitationRefused: (v) =>
+            print("on:: onCoHostInvitationRefused"),
+      ),
+      audienceEvents: ZegoUIKitPrebuiltLiveStreamingAudienceEvents(
+        onCoHostRequestSent: () => print("on:: onCoHostRequestSent"),
+        onActionCancelCoHostRequest: () =>
+            print("on:: onActionCancelCoHostRequest"),
+        onCoHostRequestTimeout: () => print("on:: onCoHostRequestTimeout"),
+        onCoHostRequestAccepted: () => print("on:: onCoHostRequestAccepted"),
+        onCoHostRequestRefused: () => print("on:: onCoHostRequestRefused"),
+        onCoHostInvitationReceived: (v) =>
+            print("on:: onCoHostInvitationReceived"),
+        onCoHostInvitationTimeout: () =>
+            print("on:: onCoHostInvitationTimeout"),
+        onActionAcceptCoHostInvitation: () =>
+            print("on:: onActionAcceptCoHostInvitation"),
+        onActionRefuseCoHostInvitation: () =>
+            print("on:: onActionRefuseCoHostInvitation"),
+      ),
+    );
+  }
+
+  Future<void> onCoHostRequestReceived(audience) async {
+    await hostingAndCoHostingPopup(
+      onClose: Get.back,
+      needAcceptButton: true,
+      needDeclinetButton: false,
+      onAcceptButton: () async {
+        //
+        //
+        //
+        await _streamingController.connect.hostRejectCoHostRequest(
+          audience,
+        );
+        //
+        //
+        //
+        await _streamingController.connectInvite
+            .hostSendCoHostInvitationToAudience(
+          audience,
+          withToast: false,
+        );
+      },
+      onDeclineButton: () {},
+    );
+    return Future<void>.value();
+  }
+
+  Future<void> hostingAndCoHostingPopup({
+    required Function() onClose,
+    required bool needAcceptButton,
+    required bool needDeclinetButton,
+    required Function() onAcceptButton,
+    required Function() onDeclineButton,
+  }) async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return CallAcceptOrRejectWidget(
+          onClose: onClose,
+          needAcceptButton: needAcceptButton,
+          needDeclinetButton: needDeclinetButton,
+          onAcceptButton: () {
+            Get.back();
+            onAcceptButton();
+          },
+          onDeclineButton: () {
+            Get.back();
+            onDeclineButton();
+          },
+        );
+      },
+    );
+    return Future<void>.value();
+  }
+
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) async {
     // await _controller.getAllGifts();
     // _controller.mapAndMergeGiftsWithConstant();
     return Future<void>.value();
   }
-  /*
-  */
 }
