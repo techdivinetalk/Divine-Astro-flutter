@@ -14,6 +14,7 @@ import '../../pages/performance/performance_ui.dart';
 import '../../pages/profile/profile_ui.dart';
 import '../../pages/suggest_remedies/suggest_remedies_ui.dart';
 import '../chat_assistance/chat_assistance_ui.dart';
+import '../live_page/constant.dart';
 import 'dashboard_controller.dart';
 
 class DashboardScreen extends GetView<DashboardController> {
@@ -149,7 +150,7 @@ class DashboardScreen extends GetView<DashboardController> {
                 if (broadcastSnapshot.data!.name == 'ReJoinChat' &&
                     broadcastSnapshot.data!.data!['orderData']['status'] == '3')
                   Positioned(
-                      bottom: kToolbarHeight,
+                      bottom: kToolbarHeight+20.w,
                       left: 0,
                       right: 0,
                       child: RejoinWidget(data: broadcastSnapshot.data!.data!)),
@@ -165,7 +166,7 @@ class DashboardScreen extends GetView<DashboardController> {
                           debugPrint('AcceptChatWidget onTap');
                           controller.appFirebaseService.writeData(
                               'order/${broadcastSnapshot.data!.data!['orderId']}', {'status': '1'});
-                          isBottomSheetOpen.value = true;
+                          controller.appFirebaseService.acceptBottomWatcher.strValue = '1';
                         },
                       ))
               ],
