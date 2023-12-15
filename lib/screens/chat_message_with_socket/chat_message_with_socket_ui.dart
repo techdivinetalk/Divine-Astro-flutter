@@ -820,9 +820,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          controller.chatStatus.value != ""
-                                              ? "(${timer.formattedTime()} mins) Remaining"
-                                              : "",
+                                          controller.showTalkTime.value,
                                           style: TextStyle(
                                               fontWeight: FontWeight.w500,
                                               fontSize: 13.sp,

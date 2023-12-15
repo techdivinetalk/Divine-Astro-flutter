@@ -30,6 +30,7 @@ class AppSocket {
         ..connect();
     }
     socket?.onConnect((_) {
+      Get.put(HomeController());
       socket?.emit(ApiProvider().joinRoomSocket, {
         "userId": preferenceService.getUserDetail()!.id.toString(),
         "userType": 'astrologer',
@@ -116,5 +117,9 @@ class AppSocket {
       'time': time,
       'orderId': orderId
     });
+  }
+
+  void userLeavePrivateChat(void Function(dynamic) callback) {
+    socket?.on(ApiProvider().leavePrivateChat, callback);
   }
 }

@@ -8,7 +8,6 @@ import '../../../common/cached_network_image.dart';
 import '../../../common/colors.dart';
 import '../../../common/common_functions.dart';
 import '../../../common/custom_widgets.dart';
-import '../../live_page/constant.dart';
 
 class RejoinWidget extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -24,6 +23,12 @@ class RejoinWidget extends StatelessWidget {
         padding: EdgeInsets.all(16.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 3.0,
+                offset: const Offset(3, 0)),
+          ],
           gradient: const LinearGradient(
               colors: [AppColors.white, AppColors.yellow],
               begin: Alignment.topCenter,
@@ -42,14 +47,7 @@ class RejoinWidget extends StatelessWidget {
               ]),
             ),
             CustomButton(
-              onTap: () async {
-                Get.toNamed(RouteName.chatMessageWithSocketUI, arguments: {
-                  'orderId': data['orderId'],
-                  'userId': data['orderData']['userId'],
-                  'customerName': data['orderData']['customerName'],
-                  'customerImage': data['orderData']['customerImage']
-                });
-              },
+              onTap: () => Get.toNamed(RouteName.chatMessageWithSocketUI, arguments: data),
               color: AppColors.appYellowColour,
               radius: 10.r,
               child: Assets.svg.rejoinChatIcon.svg(),
