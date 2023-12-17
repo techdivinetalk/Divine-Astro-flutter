@@ -1,7 +1,6 @@
 import "dart:ui";
 
 import "package:divine_astrologer/common/colors.dart";
-import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
 
@@ -90,26 +89,28 @@ class _CallAcceptOrRejectWidgetState extends State<CallAcceptOrRejectWidget> {
         Row(
           children: <Widget>[
             const SizedBox(width: 16),
-            widget.needAcceptButton
-                ? Expanded(
-                    child: commonButton(
-                      buttonText: "Accept",
-                      onPressed: widget.onAcceptButton,
-                    ),
-                  )
-                : const SizedBox(),
+            if (widget.needAcceptButton)
+              Expanded(
+                child: commonButton(
+                  buttonText: "Accept",
+                  onPressed: widget.onAcceptButton,
+                ),
+              )
+            else
+              const SizedBox(),
             SizedBox(
               width:
                   widget.needAcceptButton && widget.needDeclinetButton ? 16 : 0,
             ),
-            widget.needDeclinetButton
-                ? Expanded(
-                    child: commonButton(
-                      buttonText: "Decline",
-                      onPressed: widget.onDeclineButton,
-                    ),
-                  )
-                : const SizedBox(),
+            if (widget.needDeclinetButton)
+              Expanded(
+                child: commonButton(
+                  buttonText: "Decline",
+                  onPressed: widget.onDeclineButton,
+                ),
+              )
+            else
+              const SizedBox(),
             const SizedBox(width: 16),
           ],
         ),

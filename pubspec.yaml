@@ -70,7 +70,8 @@ dependencies:
   after_layout: ^1.2.0
   flutter_broadcasts: ^0.4.0
   animated_toggle_switch: ^0.8.0
-
+  overlay_support: ^2.1.0
+  
 dependency_overrides:
   intl: ^0.18.1
 

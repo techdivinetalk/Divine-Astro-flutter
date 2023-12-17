@@ -127,7 +127,7 @@ class _WaitListWidgetState extends State<WaitListWidget> {
               height: Get.height / 3,
               child: ListView.builder(
                 itemCount: widget.list.length,
-                itemBuilder: (context, index) {
+                itemBuilder: (BuildContext context, int index) {
                   final WaitListModel item = widget.list[index];
                   return listTile(item: item);
                 },
@@ -149,10 +149,9 @@ class _WaitListWidgetState extends State<WaitListWidget> {
         child: CustomImageWidget(imageUrl: item.avatar),
       ),
       title: Text(item.userName),
-      subtitle: null,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
-        children: [
+        children: <Widget>[
           callTypeIcon(callType: item.callType),
           const SizedBox(width: 16),
           Text(item.totalTime),
