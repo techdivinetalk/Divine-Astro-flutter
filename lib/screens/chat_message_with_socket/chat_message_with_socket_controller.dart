@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import "package:divine_astrologer/common/routes.dart";
 import 'package:divine_astrologer/di/hive_services.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
-import 'package:divine_astrologer/model/chat/res_astro_chat_listener.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/model/res_login.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
@@ -14,10 +15,14 @@ import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 import '../../common/common_functions.dart';
 
@@ -40,6 +45,7 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
   String userDataKey = "userKey";
   bool sendReadMessageStatus = false;
   RxBool isEmojiShowing = false.obs;
+  Rx<String> showTalkTime = ''.obs;
 
   // FocusNode msgFocus = FocusNode();
   RxInt unreadMessageIndex = 0.obs;
@@ -56,6 +62,7 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
   RxString chatStatus = "".obs;
   DashboardController dashboardController = Get.find<DashboardController>();
   RxBool isTyping = false.obs;
+  BroadcastReceiver broadcastReceiver = BroadcastReceiver(names: <String>["EndChat"]);
 
   final socket = AppSocket();
   var arguments;
@@ -120,8 +127,14 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
   void onInit() {
     super.onInit();
     arguments = Get.arguments;
+    broadcastReceiver.start();
+    broadcastReceiver.messages.listen((event) {
+      if (event.name == "EndChat") {
+        Get.offAllNamed(RouteName.dashboard);
+        broadcastReceiver.stop();
+      }
+    });
     debugPrint('arguments of socket $arguments');
-    socket.startAstroCustumerSocketEvent(orderId: arguments['orderId'], userId: arguments['userId']);
     messageController.addListener(_onMessageChanged);
     isAstroJoinedChat();
     checkIsCustomerJoinedPrivateChat();
@@ -129,29 +142,88 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     sendMessageSocketListenerSocket();
     listenerMessageStatusSocket();
     sendMessageListenerSocket();
+    userLeavePrivateChatListenerSocket();
 
     if (Get.arguments != null) {
-    //  if (Get.arguments is ResAstroChatListener) {
-        sendReadMessageStatus = true;
-        var data = Get.arguments;
+      var data = Get.arguments;
+      debugPrint('data------> ${data.toString()}');
+      socket.startAstroCustumerSocketEvent(
+          orderId: data['orderData']['orderId'].toString(), userId: data['orderData']['userId']);
+      //  if (Get.arguments is ResAstroChatListener) {
+      sendReadMessageStatus = true;
       // if (data!.customerId != null) {
-          chatStatus.value = "Chat in - Progress";
-          isOngoingChat.value = true;
-        //  currentChatUserId.value = data['userId'];
-        //  currentUserId.value = data['userId'];
-         customerName.value = data['customerName'] ?? "";
-          profileImage.value =
-              data['customerImage'] != null ? "${preference.getBaseImageURL()}/${data['customerImage']}" : "";
-          if (astroChatWatcher.value.orderId != null) {
-            timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0, astroChatWatcher.value.orderId!);
-          }
+      chatStatus.value = "Chat in - Progress";
+      isOngoingChat.value = true;
+      //  currentChatUserId.value = data['userId'];
+      //  currentUserId.value = data['userId'];
+      customerName.value = data['orderData']['customerName'] ?? "";
+      profileImage.value = data['orderData']['customerImage'] != null
+          ? "${preference.getBaseImageURL()}/${data['orderData']['customerImage']}"
+          : "";
+      if (astroChatWatcher.value.orderId != null) {
+        timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0, astroChatWatcher.value.orderId!);
+      }
       //  }
-     // }
+      // }
+
+      if (data['orderData']["talktime"] != null) {
+        if (preferenceService.getTalkTime() == 0) {
+          var talkTime = int.parse((data['orderData']['talktime'] ?? 0).toString()) +
+              (DateTime.now().millisecondsSinceEpoch ~/ 1000).toInt();
+          debugPrint('millisecondsSinceEpoch ----> ${DateTime.now().millisecondsSinceEpoch ~/ 1000}');
+          preferenceService.setTalkTime(talkTime);
+        } else {
+          debugPrint('else part - ${preferenceService.getTalkTime() ?? 0}');
+        }
+        //   FirebaseDatabase.instance.ref('order/$orderId/talktime').remove();
+      }
+
+      if (preferenceService.getTalkTime() != null) {
+        talkTimeStartTimer(preferenceService.getTalkTime() ?? 0);
+      }
     }
     userData = preferenceService.getUserDetail();
 
     userDataKey = "userKey_${userData?.id}_${currentUserId.value}";
     getChatList();
+    socketReconnect();
+  }
+
+  void talkTimeStartTimer(int talkTime) {
+    const oneSecond = Duration(seconds: 1);
+    DateTime futureTime = DateTime.fromMillisecondsSinceEpoch(talkTime * 1000);
+    _timer = Timer.periodic(oneSecond, (timer) {
+      DateTime now = DateTime.now();
+      Duration difference = futureTime.difference(now);
+
+      if (difference.isNegative) {
+        timer.cancel();
+        showTalkTime.value = '000:00 min Remaining';
+      } else {
+        int remainingHours = difference.inHours;
+        int remainingMinutes = difference.inMinutes.remainder(60);
+        int remainingSeconds = difference.inSeconds.remainder(60);
+
+        String hoursString = remainingHours.toString().padLeft(2, '0');
+        String minutesString = remainingMinutes.toString().padLeft(2, '0');
+        String secondsString = remainingSeconds.toString().padLeft(2, '0');
+
+        showTalkTime.value = '$hoursString:$minutesString:$secondsString Remaining';
+      }
+    });
+  }
+
+  socketReconnect() {
+    if (socket.socket!.disconnected) {
+      socket.socket
+        ?..disconnect()
+        ..connect();
+    }
+    socket.socket!.onConnect((_) {
+      socket.startAstroCustumerSocketEvent(
+          orderId: arguments['orderData']['orderId'], userId: arguments['orderData']['userId']);
+      log('Socket startAstroCustumerSocketEvent connected successfully');
+    });
   }
 
   @override
@@ -169,8 +241,11 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
   }
 
   void tyingSocket() {
-    debugPrint('tyingSocket orderId:${arguments['orderId']}, userId: ${arguments['userId']}');
-    socket.typingSocket(orderId: arguments['orderId'].toString(), userId: arguments['userId'].toString());
+    debugPrint(
+        'tyingSocket orderId:${arguments['orderData']['orderId'].toString()}, userId: ${arguments['orderData']['userId']}');
+    socket.typingSocket(
+        orderId: arguments['orderData']['orderId'].toString(),
+        userId: arguments['orderData']['userId'].toString());
   }
 
   void checkIsCustomerJoinedPrivateChat() {
@@ -186,7 +261,6 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
         update();
         scrollToBottomFunc();
         startTimer();
-        debugPrint('typingListenerSocket $data');
       }
     });
   }
@@ -229,7 +303,7 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
             chatMessageId: chatMessage.id.toString(),
             chatStatus: "read",
             time: time,
-            orderId: arguments['orderId']);
+            orderId: arguments['orderData']['orderId'].toString());
         updateChatMessages(chatMessage, false, isSendMessage: false);
       }
       debugPrint('chatMessage.value.length ${chatMessages.length}');
@@ -364,10 +438,10 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
       String? downloadedPath,
       String? kundliId}) async {
     var newMessage = ChatMessage(
-        orderId: int.parse(arguments['orderId'].toString()),
+        orderId: int.parse(arguments['orderData']['orderId'].toString()),
         id: int.parse(time),
         message: messageText,
-        receiverId: int.parse(arguments['userId'].toString()),
+        receiverId: int.parse(arguments['orderData']['userId'].toString()),
         senderId: preference.getUserDetail()!.id,
         time: int.parse(time),
         awsUrl: awsUrl,
@@ -506,5 +580,26 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     if (uploadFile != '') {
       addNewMessage(time, "audio", awsUrl: uploadFile);
     }
+  }
+
+  downloadImage({required String fileName, required ChatMessage chatDetail, required int index}) async {
+    var response = await http.get(Uri.parse(chatDetail.awsUrl!));
+    var documentDirectory = await getApplicationDocumentsDirectory();
+    var firstPath = "${documentDirectory.path}/images";
+    var filePathAndName = '${documentDirectory.path}/images/${chatDetail.id}.jpg';
+
+    await Directory(firstPath).create(recursive: true);
+    File file2 = File(filePathAndName);
+    file2.writeAsBytesSync(response.bodyBytes);
+    chatMessages[index].downloadedPath = filePathAndName;
+    chatMessages.refresh();
+    setHiveDataDatabase();
+  }
+
+  void userLeavePrivateChatListenerSocket() {
+    socket.userLeavePrivateChat((data) {
+      debugPrint('userLeavePrivateChatListenerSocket $data');
+      // if(data['data'].a)
+    });
   }
 }

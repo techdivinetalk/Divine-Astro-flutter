@@ -4,12 +4,15 @@ import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/fcm_notification.dart';
+import "package:divine_astrologer/di/shared_preference_service.dart";
 import 'package:divine_astrologer/screens/side_menu/settings/settings_controller.dart';
 import 'package:divine_astrologer/watcher/real_time_watcher.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:get/get.dart';
+
+import '../screens/live_page/constant.dart';
 
 class AppFirebaseService {
   AppFirebaseService._privateConstructor();
@@ -21,6 +24,7 @@ class AppFirebaseService {
   }
 
   var watcher = RealTimeWatcher();
+  var acceptBottomWatcher = RealTimeWatcher();
 
   final DatabaseReference _database = FirebaseDatabase.instance.ref();
 
@@ -28,7 +32,7 @@ class AppFirebaseService {
     try {
       await _database.child(path).update(data);
     } catch (e) {
-      debugPrint('Error writing data to the database: $e');
+      debugPrint("Error writing data to the database: $e");
     }
   }
 
@@ -76,10 +80,14 @@ class AppFirebaseService {
                 Map<String, dynamic>.from(event.snapshot.value! as Map<Object?, Object?>);
             if (orderData['status'] != null) {
               if (orderData['status'] == '0') {
-                sendBroadcast(BroadcastMessage(name: "AcceptChat", data: {'orderId': value, 'orderData': orderData}));
-                acceptChatRequestBottomSheet(Get.context!, onPressed: () {
-                  writeData('order/$value', {'status': '1'});
-                  isBottomSheetOpen.value = true;
+                sendBroadcast(
+                    BroadcastMessage(name: "AcceptChat", data: {'orderId': value, 'orderData': orderData}));
+                acceptChatRequestBottomSheet(Get.context!, onPressed: () async {
+                  if (await acceptOrRejectChat(
+                      orderId: int.parse(value.toString()), queueId: orderData['queue_id'])) {
+                    acceptBottomWatcher.strValue = '1';
+                    writeData('order/$value', {'status': '1'});
+                  }
                 },
                     orderStatus: orderData['status'],
                     customerName: orderData['customerName'].toString(),
@@ -89,8 +97,8 @@ class AppFirebaseService {
                     maritalStatus: orderData['maritalStatus'].toString(),
                     problemArea: orderData['problemArea'].toString());
               } else if (orderData['status'] == '1') {
-                if (!isBottomSheetOpen.value) {
-                  isBottomSheetOpen.value = true;
+                if (acceptBottomWatcher.currentName != '1') {
+                  acceptBottomWatcher.strValue = '1';
                   acceptChatRequestBottomSheet(Get.context!,
                       onPressed: () {},
                       orderStatus: orderData['status'],
@@ -104,18 +112,18 @@ class AppFirebaseService {
               } else if (orderData['status'] == '3') {
                 sendBroadcast(
                     BroadcastMessage(name: "ReJoinChat", data: {'orderId': value, 'orderData': orderData}));
-                Get.toNamed(RouteName.chatMessageWithSocketUI,
-                    arguments: {'orderId': value, 'userId': orderData['userId'],
-                      'customerName': orderData['customerName'],
-                      'customerImage': orderData['customerImage']
-                    });
+                Get.toNamed(RouteName.chatMessageWithSocketUI, arguments: {'orderData': orderData});
               }
             }
+          } else {
+            preferenceService.remove(SharedPreferenceService.talkTime);
+            debugPrint("remove method called");
+            sendBroadcast(BroadcastMessage(name: "EndChat"));
           }
         });
       }
 
-      debugPrint('value changed to: $value');
+      debugPrint("value changed to: $value");
     });
   }
 

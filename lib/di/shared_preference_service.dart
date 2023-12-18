@@ -22,6 +22,7 @@ class SharedPreferenceService extends GetxService {
   static const baseImageUrl = "baseImageUrl";
   static const constantData = "constantData";
   static const performanceDialog = "performanceDialog";
+  static const talkTime = "talkTime";
 
   Future<SharedPreferenceService> init() async {
     prefs = await SharedPreferences.getInstance();
@@ -134,4 +135,13 @@ class SharedPreferenceService extends GetxService {
       ConstantDetailsModelClass constantDetails) async {
     return await prefs!.setString(constantData, jsonEncode(constantDetails));
   }
+
+  int? getTalkTime() {
+    return prefs!.getInt(talkTime) ?? 0;
+  }
+
+  Future<bool> setTalkTime(int talkTimeValue) async {
+    return await prefs!.setInt(talkTime, talkTimeValue);
+  }
+
 }

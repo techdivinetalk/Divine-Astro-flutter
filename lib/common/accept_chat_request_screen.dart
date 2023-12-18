@@ -1,14 +1,16 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_elevated_button.dart';
+import "package:divine_astrologer/common/routes.dart";
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
-
-Rx<bool> isBottomSheetOpen = false.obs;
+import '../screens/live_page/constant.dart';
 
 acceptChatRequestBottomSheet(BuildContext context,
     {required void Function() onPressed,
@@ -45,7 +47,7 @@ acceptChatRequestBottomSheet(BuildContext context,
       });
 }
 
-class AcceptChatRequestScreen extends StatelessWidget {
+class AcceptChatRequestScreen extends StatefulWidget {
   final void Function() onPressed;
   final String orderStatus;
   final String customerName;
@@ -65,6 +67,33 @@ class AcceptChatRequestScreen extends StatelessWidget {
       required this.timeOfBirth,
       required this.maritalStatus,
       required this.problemArea});
+
+  @override
+  State<AcceptChatRequestScreen> createState() => _AcceptChatRequestScreenState();
+}
+
+class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
+  final appFirebaseService = AppFirebaseService();
+  bool isBottomSheetOpen = false;
+  BroadcastReceiver broadcastReceiver = BroadcastReceiver(names: <String>["EndChat"]);
+
+
+  @override
+  void initState() {
+    broadcastReceiver.start();
+    broadcastReceiver.messages.listen((event) {
+      if (event.name == "EndChat") {
+        Get.offAllNamed(RouteName.dashboard);
+        broadcastReceiver.stop();
+      }
+    });
+
+    appFirebaseService.acceptBottomWatcher.nameStream.listen((event) {
+      isBottomSheetOpen = event == '1';
+      setState(() {});
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +123,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                           width: 90.w,
                           child: CircleAvatar(child: Assets.images.avatar.svg(height: 60.w, width: 60.w))),
                       SizedBox(height: 10.w),
-                      Text(customerName,
+                      Text(widget.customerName,
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontFamily: FontFamily.metropolis,
@@ -134,7 +163,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                                   flex: 4,
                                   child: Align(
                                     alignment: Alignment.topRight,
-                                    child: Text(customerName,
+                                    child: Text(widget.customerName,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontFamily: FontFamily.metropolis,
@@ -165,7 +194,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                                   flex: 4,
                                   child: Align(
                                     alignment: Alignment.topRight,
-                                    child: Text(dob,
+                                    child: Text(widget.dob,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontFamily: FontFamily.metropolis,
@@ -196,7 +225,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                                   flex: 4,
                                   child: Align(
                                     alignment: Alignment.topRight,
-                                    child: Text(placeOfBirth,
+                                    child: Text(widget.placeOfBirth,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontFamily: FontFamily.metropolis,
@@ -227,7 +256,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                                   flex: 4,
                                   child: Align(
                                     alignment: Alignment.topRight,
-                                    child: Text(timeOfBirth,
+                                    child: Text(widget.timeOfBirth,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontFamily: FontFamily.metropolis,
@@ -258,7 +287,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                                   flex: 4,
                                   child: Align(
                                     alignment: Alignment.topRight,
-                                    child: Text(maritalStatus,
+                                    child: Text(widget.maritalStatus,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontFamily: FontFamily.metropolis,
@@ -291,7 +320,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                                     flex: 3,
                                     child: Align(
                                         alignment: Alignment.topRight,
-                                        child: Text(problemArea,
+                                        child: Text(widget.problemArea,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400,
                                                 fontFamily: FontFamily.metropolis,
@@ -395,7 +424,7 @@ class AcceptChatRequestScreen extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 25.w),
-                    isBottomSheetOpen.value
+                      isBottomSheetOpen
                           ? Container(
                               height: kToolbarHeight,
                               width: double.infinity,
@@ -416,14 +445,14 @@ class AcceptChatRequestScreen extends StatelessWidget {
                                     frameRate: FrameRate(120),
                                     animate: true)
                               ]))
-                          :  !isBottomSheetOpen.value
+                          : !isBottomSheetOpen
                               ? CommonElevatedButton(
                                   showBorder: false,
                                   width: double.infinity,
                                   borderRadius: 5.r,
                                   backgroundColor: AppColors.brownColour,
                                   text: 'acceptChatRequest'.tr,
-                                  onPressed: onPressed)
+                                  onPressed: widget.onPressed)
                               : const SizedBox()
                     ],
                   ),

@@ -73,7 +73,13 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
                                                 BorderRadius.circular(20),
                                             child: CachedNetworkImage(
                                                 imageUrl:
-                                                    "${controller.preferenceService.getBaseImageURL()}/${item?.prodImage}")),
+                                                    "${controller.preferenceService.getBaseImageURL()}/${item?.prodImage}",
+                                              fit: BoxFit.fill,
+                                              errorWidget: (context, url, error) =>
+                                                  Assets.images.defaultProfile
+                                                      .image(),
+                                            ),
+                                        ),
                                         SizedBox(height: 12.h),
                                         Padding(
                                           padding: const EdgeInsets.only(

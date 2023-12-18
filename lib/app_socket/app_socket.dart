@@ -3,12 +3,15 @@ import 'dart:developer';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
+import 'package:divine_astrologer/pages/home/home_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class AppSocket {
   static final AppSocket _singleton = AppSocket._internal();
-  Socket? _socket;
+  Socket? socket;
 
   factory AppSocket() {
     return _singleton;
@@ -18,15 +21,23 @@ class AppSocket {
 
   void socketConnect() {
     debugPrint('socketConnect ');
-    _socket =
+    socket =
         io(ApiProvider.socketUrl, OptionBuilder().enableAutoConnect().setTransports(['websocket']).build());
-    _socket!.connect();
-    if (_socket!.disconnected) {
-      _socket
+    socket!.connect();
+    if (socket!.disconnected) {
+      socket
         ?..disconnect()
         ..connect();
     }
-    _socket?.onConnect((_) {
+    socket?.onConnect((_) {
+      Get.put(HomeController());
+      socket?.emit(ApiProvider().joinRoomSocket, {
+        "userId": preferenceService.getUserDetail()!.id.toString(),
+        "userType": 'astrologer',
+        "chat": Get.find<HomeController>().chatSwitch.value ? "1" : "0",
+        "call": Get.find<HomeController>().callSwitch.value ? "1" : "0",
+        "video": Get.find<HomeController>().videoSwitch.value ? "1" : "0"
+      });
       log('Socket connected successfully');
     });
   }
@@ -35,7 +46,7 @@ class AppSocket {
     debugPrint(
         'data ${preferenceService.getUserDetail()!.id.toString()} chat: $chat "call": $call,"video": $video');
     debugPrint('enter updateChatCallSocketEvent');
-    _socket?.emit(ApiProvider().joinRoomSocket, {
+    socket?.emit(ApiProvider().joinRoomSocket, {
       "userId": preferenceService.getUserDetail()!.id.toString(),
       "userType": 'astrologer',
       "chat": chat,
@@ -46,7 +57,7 @@ class AppSocket {
 
   void startAstroCustumerSocketEvent({required String orderId, required userId}) {
     debugPrint('enter startAstroCustPrivateChat');
-    _socket?.emit(ApiProvider().startAstroCustPrivateChat, {
+    socket?.emit(ApiProvider().startAstroCustPrivateChat, {
       "userId": userId,
       "astroId": preferenceService.getUserDetail()!.id.toString(),
       "userType": 'astrologer',
@@ -55,41 +66,41 @@ class AppSocket {
   }
 
   void isAstroJoinedChat(void Function(dynamic) callback) {
-    _socket?.on(ApiProvider().astrologerJoinedPrivateChat, callback);
+    socket?.on(ApiProvider().astrologerJoinedPrivateChat, callback);
   }
 
   void socketDisconnect() {
-    _socket?.disconnect();
+    socket?.disconnect();
   }
 
   void isCustomerJoinedChat(void Function(dynamic) callback) {
-    _socket?.on(ApiProvider().userJoinedPrivateChat, callback);
+    socket?.on(ApiProvider().userJoinedPrivateChat, callback);
   }
 
   void typingSocket({required String orderId, required userId}) {
-    _socket?.emit(ApiProvider().userTyping,
+    socket?.emit(ApiProvider().userTyping,
         {"typist": preferenceService.getUserDetail()!.id.toString(), "listener": userId, "orderId": orderId});
   }
 
   void typingListenerSocket(void Function(dynamic) callback) {
-    _socket?.on(ApiProvider().userTyping, callback);
+    socket?.on(ApiProvider().userTyping, callback);
   }
 
   void sendMessageSocket(ChatMessage newMessage) {
     debugPrint('newMessage.toOfflineJson() ${newMessage.toOfflineJson()}');
-    _socket?.emit(ApiProvider().sendMessage, newMessage.toOfflineJson());
+    socket?.emit(ApiProvider().sendMessage, newMessage.toOfflineJson());
   }
 
   void sendMessageSocketListenerSocket(void Function(dynamic) callback) {
-    _socket?.on(ApiProvider().sendMessage, callback);
+    socket?.on(ApiProvider().sendMessage, callback);
   }
 
   void sendMessageListenerSocket(void Function(dynamic) callback) {
-    _socket?.on(ApiProvider().messageSent, callback);
+    socket?.on(ApiProvider().messageSent, callback);
   }
 
   void listenerMessageStatusSocket(void Function(dynamic) callback) {
-    _socket?.on(ApiProvider().msgStatusChanged, callback);
+    socket?.on(ApiProvider().msgStatusChanged, callback);
   }
 
   void messageReceivedStatusUpdate(
@@ -99,12 +110,16 @@ class AppSocket {
       required String time,
       required String orderId}) {
     debugPrint('messageReceivedStatusUpdate socket called');
-    _socket?.emit(ApiProvider().changeMsgStatus, {
+    socket?.emit(ApiProvider().changeMsgStatus, {
       'receiverId': receiverId,
       'chatMessageId': chatMessageId,
       'chatStatus': chatStatus,
       'time': time,
       'orderId': orderId
     });
+  }
+
+  void userLeavePrivateChat(void Function(dynamic) callback) {
+    socket?.on(ApiProvider().leavePrivateChat, callback);
   }
 }
