@@ -105,7 +105,10 @@ class _GiftWidgetState extends State<GiftWidget> {
       children: <Widget>[
         const Text(
           "Quantity:",
-          style: TextStyle(color: AppColors.white),
+          style: TextStyle(
+            fontSize: 16,
+            color: AppColors.white,
+          ),
         ),
         const SizedBox(width: 8),
         Container(
@@ -128,7 +131,10 @@ class _GiftWidgetState extends State<GiftWidget> {
               const SizedBox(width: 8),
               Text(
                 quantity.toString(),
-                style: const TextStyle(color: AppColors.white),
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: AppColors.white,
+                ),
               ),
               const SizedBox(width: 8),
               button(
@@ -150,12 +156,18 @@ class _GiftWidgetState extends State<GiftWidget> {
       children: <Widget>[
         const Text(
           "Amount:",
-          style: TextStyle(color: AppColors.white),
+          style: TextStyle(
+            fontSize: 16,
+            color: AppColors.white,
+          ),
         ),
         const SizedBox(width: 8),
         Text(
           "₹ $amount",
-          style: const TextStyle(color: AppColors.appYellowColour),
+          style: const TextStyle(
+            fontSize: 16,
+            color: AppColors.appYellowColour,
+          ),
         ),
       ],
     );
@@ -197,7 +209,10 @@ class _GiftWidgetState extends State<GiftWidget> {
                 const SizedBox(height: 8),
                 Text(
                   "₹${item.giftPrice}",
-                  style: const TextStyle(color: AppColors.white),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: AppColors.white,
+                  ),
                 ),
               ],
             ),

@@ -1,6 +1,8 @@
 import "dart:ui";
 
 import "package:divine_astrologer/common/colors.dart";
+import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
 
@@ -11,6 +13,8 @@ class CallAcceptOrRejectWidget extends StatefulWidget {
     required this.needDeclinetButton,
     required this.onAcceptButton,
     required this.onDeclineButton,
+    required this.avatar,
+    required this.userName,
     super.key,
   });
 
@@ -19,6 +23,9 @@ class CallAcceptOrRejectWidget extends StatefulWidget {
   final bool needDeclinetButton;
   final Function() onAcceptButton;
   final Function() onDeclineButton;
+
+  final String avatar;
+  final String userName;
 
   @override
   State<CallAcceptOrRejectWidget> createState() =>
@@ -66,7 +73,7 @@ class _CallAcceptOrRejectWidgetState extends State<CallAcceptOrRejectWidget> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
-          height: Get.height / 1.50,
+          height: Get.height / 3.00,
           width: Get.width,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
@@ -86,6 +93,13 @@ class _CallAcceptOrRejectWidgetState extends State<CallAcceptOrRejectWidget> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
+        CircleAvatar(
+          radius: 50,
+          child: CustomImageWidget(imageUrl: widget.avatar),
+        ),
+        const SizedBox(height: 16),
+        Text("${widget.userName} wants to start the call"),
+        const SizedBox(height: 16),
         Row(
           children: <Widget>[
             const SizedBox(width: 16),

@@ -47,6 +47,7 @@ class LiveDharamController extends GetxController {
   final RxBool _isCamOn = true.obs;
   final RxBool _isMicOn = true.obs;
   final Rx<ZegoUIKitUser> _zegoUIKitUser = ZegoUIKitUser(id: "", name: "").obs;
+  final RxBool _amIBlocked = false.obs;
 
   @override
   void onInit() {
@@ -74,6 +75,7 @@ class LiveDharamController extends GetxController {
     isCamOn = true;
     isMicOn = true;
     zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
+    amIBlocked = false;
   }
 
   @override
@@ -99,6 +101,7 @@ class LiveDharamController extends GetxController {
     _isCamOn.close();
     _isMicOn.close();
     _zegoUIKitUser.close();
+    _amIBlocked.close();
 
     super.onClose();
   }
@@ -167,6 +170,9 @@ class LiveDharamController extends GetxController {
   ZegoUIKitUser get zegoUIKitUser => _zegoUIKitUser.value;
   set zegoUIKitUser(ZegoUIKitUser value) => _zegoUIKitUser(value);
 
+  bool get amIBlocked => _amIBlocked.value;
+  set amIBlocked(bool value) => _amIBlocked(value);
+
   Future<void> eventListner(DatabaseEvent event) async {
     final DataSnapshot dataSnapshot = event.snapshot;
     if (dataSnapshot != null) {
@@ -180,6 +186,8 @@ class LiveDharamController extends GetxController {
           } else if (data.isNotEmpty) {
             liveId = data.keys.toList()[currentIndex];
             isHostAvailable = checkIfAstrologerAvailable(map);
+            amIBlocked = checkIfAstrologerBlockedMe(map);
+            print("amIBlocked: $amIBlocked");
             // await getAstrologerDetails();
           } else {}
         } else {}
@@ -719,7 +727,7 @@ class LiveDharamController extends GetxController {
       tempList.add(element.totalTime);
     }
     if (tempList.isEmpty) {
-      time = "Wait time: 00:00:00";
+      time = "00:00:00";
     } else {
       final List<Duration> durations = tempList.map(parseTime).toList();
       final Duration totalTime = durations.reduce(
@@ -730,7 +738,7 @@ class LiveDharamController extends GetxController {
       final String hh = "${totalTime.inHours}";
       final String mm = (totalTime.inMinutes % 60).toString().padLeft(2, "0");
       final String ss = (totalTime.inSeconds % 60).toString().padLeft(2, "0");
-      time = "Wait time: $hh:$mm:$ss";
+      time = "$hh:$mm:$ss";
     }
     return time;
   }
@@ -768,6 +776,100 @@ class LiveDharamController extends GetxController {
     } else {}
     return (returnValueBool, returnValueString);
   }
+
+  Future<void> addUpdateToBlockList({required String userId}) async {
+    List<dynamic> blockList = <dynamic>[];
+    final DataSnapshot dataSnapshot = await FirebaseDatabase.instance
+        .ref()
+        .child("live/$liveId/blockList")
+        .get();
+    if (dataSnapshot != null) {
+      if (dataSnapshot.exists) {
+        if (dataSnapshot.value is List<dynamic>) {
+          List<dynamic> list = <dynamic>[];
+          list = (dataSnapshot.value ?? <dynamic, dynamic>{}) as List<dynamic>;
+          if (list.contains(userId)) {
+          } else {
+            list = <dynamic>[
+              ...list,
+              ...<dynamic>[userId],
+            ];
+          }
+          blockList = list;
+          await FirebaseDatabase.instance.ref().child("live/$liveId").update(
+            <String, Object?>{"blockList": blockList},
+          );
+        } else {}
+      } else {
+        await FirebaseDatabase.instance.ref().child("live/$liveId").update(
+          <String, Object?>{
+            "blockList": <dynamic>[userId],
+          },
+        );
+      }
+    } else {}
+    return Future<void>.value();
+  }
+
+  Future<void> deleteFromBlockList({required String userId}) async {
+    List<dynamic> blockList = <dynamic>[];
+    final DataSnapshot dataSnapshot = await FirebaseDatabase.instance
+        .ref()
+        .child("live/$liveId/blockList")
+        .get();
+    if (dataSnapshot != null) {
+      if (dataSnapshot.exists) {
+        if (dataSnapshot.value is List<dynamic>) {
+          List<dynamic> list = <dynamic>[];
+          list = (dataSnapshot.value ?? <dynamic, dynamic>{}) as List<dynamic>;
+          if (list.contains(userId)) {
+            list = list.where((dynamic element) => element != userId).toList();
+          } else {}
+          blockList = list;
+          await FirebaseDatabase.instance.ref().child("live/$liveId").update(
+            <String, Object?>{"blockList": blockList},
+          );
+        } else {}
+      } else {
+        await FirebaseDatabase.instance.ref().child("live/$liveId").update(
+          <String, Object?>{
+            "blockList": <dynamic>[],
+          },
+        );
+      }
+    } else {}
+    return Future<void>.value();
+  }
+
+  bool checkIfAstrologerBlockedMe(map) {
+    final Map<dynamic, dynamic> currentHostId = map[liveId];
+    final List<dynamic> list =
+        (currentHostId["blockList"] ?? <dynamic>[]) ?? <dynamic>[];
+    return list.contains(userId);
+  }
+
+  // Future<void> makeAPICallForStartCall({required bool hasAccepted}) async {
+  //   Map<String, dynamic> param = <String, dynamic>{};
+  //   param = <String, dynamic>{
+  //     "order_id": (orderGenerate.data?.generatedOrderId ?? 0).toString(),
+  //     "type": hasAccepted ? 1 : 0, //0 reject, 1 accept
+  //   };
+  //   await liveRepository.startLiveApi(params: param);
+  //   return Future<void>.value();
+  // }
+
+  // Future<void> makeAPICallForEndCall() async {
+  //   Map<String, dynamic> param = <String, dynamic>{};
+  //   param = <String, dynamic>{
+  //     "order_id": (orderGenerate.data?.generatedOrderId ?? 0).toString(),
+  //     "duration": "0",
+  //     "amount": "0.0",
+  //     "offer_id": "0",
+  //     "role_id": "7",
+  //   };
+  //   await liveRepository.endLiveApi(params: param);
+  //   return Future<void>.value();
+  // }
 }
 
 class CustomGiftModel {

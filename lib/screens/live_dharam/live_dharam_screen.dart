@@ -9,7 +9,10 @@ import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dar
 import "package:divine_astrologer/screens/live_dharam/live_gift.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/call_accept_or_reject_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/disconnect_call_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/exit_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/wait_list_widget.dart";
 import "package:firebase_database/firebase_database.dart";
@@ -18,6 +21,7 @@ import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
+//
 //
 //
 //
@@ -110,6 +114,8 @@ class _LivePage extends State<LiveDharamScreen>
                     ..maxCoHostCount = 1
                     ..confirmDialogInfo = null
                     ..disableCoHostInvitationReceivedDialog = true
+                    // ..turnOnCameraWhenJoining = _controller.isCamOn
+                    // ..turnOnMicrophoneWhenJoining = _controller.isMicOn
                     ..audioVideoViewConfig = ZegoPrebuiltAudioVideoViewConfig(
                       showUserNameOnView: false,
                     )
@@ -210,12 +216,10 @@ class _LivePage extends State<LiveDharamScreen>
               ],
             ),
           ),
-          // const SizedBox(height: 16),
+          const SizedBox(height: 16),
           // horizontalGiftBar(),
-          const SizedBox(height: 16),
+          // const SizedBox(height: 16),
           bottomBarWidget(),
-          const SizedBox(height: 16),
-          bottomControls(),
           const SizedBox(height: 16),
         ],
       ),
@@ -231,6 +235,7 @@ class _LivePage extends State<LiveDharamScreen>
           IconButton(
             onPressed: () async {
               await _zegoController.leave(context, showConfirmation: true);
+              // await exitPopup(isFromFunc: false);
             },
             icon: const Icon(Icons.arrow_back_ios, color: AppColors.white),
           ),
@@ -300,31 +305,6 @@ class _LivePage extends State<LiveDharamScreen>
             )
           else
             const SizedBox(),
-          // DecoratedBox(
-          //   decoration: BoxDecoration(
-          //     borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-          //     border: Border.all(color: AppColors.black.withOpacity(0.2)),
-          //     color: AppColors.black.withOpacity(0.2),
-          //   ),
-          //   child: Padding(
-          //     padding: EdgeInsets.zero,
-          //     child: Row(
-          //       children: <Widget>[
-          //         InkWell(
-          //           onTap: () async {
-          //             await _controller.followOrUnfollowAstrologer();
-          //             await _controller.getAstrologerDetails();
-          //           },
-          //           child: Image.asset(
-          //             _controller.details.data?.isFollow == 1
-          //                 ? "assets/images/live_new_unfollow.png"
-          //                 : "assets/images/live_new_follow.png",
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
           const SizedBox(width: 16),
         ],
       ),
@@ -422,7 +402,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   // Widget horizontalGiftBar() {
   //   return SizedBox(
-  //     height: 50 + 28,
+  //     height: 50 + 32,
   //     child: ListView.builder(
   //       itemCount: _controller.customGiftModel.length,
   //       scrollDirection: Axis.horizontal,
@@ -430,29 +410,33 @@ class _LivePage extends State<LiveDharamScreen>
   //         final CustomGiftModel item = _controller.customGiftModel[index];
   //         return InkWell(
   //           onTap: () async {
-  //             final bool hasBalance =
-  //                 await _controller.hasBalanceForSendingGift(
-  //               giftId: item.giftId,
-  //               giftName: item.giftName,
-  //               giftQuantity: 1,
-  //               giftAmount: item.giftPrice,
-  //             );
-  //             if (hasBalance) {
-  //               if (mounted) {
-  //                 LiveGiftWidget.show(context, item.giftSvga);
-  //               } else {}
-  //               await _controller.sendGiftAPI(
-  //                 count: 1,
-  //                 svga: item.giftSvga,
-  //                 successCallback: log,
-  //                 failureCallback: log,
-  //               );
-  //               await _controller.addUpdateLeaderboard(
-  //                 quantity: 1,
-  //                 amount: item.giftPrice,
-  //               );
+  //             final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
+  //             if (hasMyIdInWaitList) {
+  //               await alreadyInTheWaitListDialog();
   //             } else {
-  //               await lowBalancePopup();
+  //               final bool hasBal = await _controller.hasBalanceForSendingGift(
+  //                 giftId: item.giftId,
+  //                 giftName: item.giftName,
+  //                 giftQuantity: 1,
+  //                 giftAmount: item.giftPrice,
+  //               );
+  //               if (hasBal) {
+  //                 if (mounted) {
+  //                   LiveGiftWidget.show(context, item.giftSvga);
+  //                 } else {}
+  //                 await _controller.sendGiftAPI(
+  //                   count: 1,
+  //                   svga: item.giftSvga,
+  //                   successCallback: log,
+  //                   failureCallback: log,
+  //                 );
+  //                 await _controller.addUpdateLeaderboard(
+  //                   quantity: 1,
+  //                   amount: item.giftPrice,
+  //                 );
+  //               } else {
+  //                 await lowBalancePopup();
+  //               }
   //             }
   //           },
   //           child: Padding(
@@ -468,7 +452,10 @@ class _LivePage extends State<LiveDharamScreen>
   //                 const SizedBox(height: 8),
   //                 Text(
   //                   "₹${item.giftPrice}",
-  //                   style: const TextStyle(color: AppColors.white),
+  //                   style: const TextStyle(
+  //                     fontSize: 16,
+  //                     color: AppColors.white,
+  //                   ),
   //                 ),
   //               ],
   //             ),
@@ -527,40 +514,72 @@ class _LivePage extends State<LiveDharamScreen>
             ),
           ),
         ),
-        // const SizedBox(width: 16),
-        // Align(
-        //   alignment: Alignment.centerRight,
-        //   child: InkWell(
-        //     onTap: giftPopup,
-        //     child: SizedBox(
-        //       height: 50,
-        //       width: 50,
-        //       child: CustomLottieWidget(
-        //         path: "assets/lottie/gift.json",
-        //         fit: BoxFit.cover,
-        //         height: 50,
-        //         width: 50,
-        //         repeat: true,
-        //         onLoaded: (LottieComposition comp) {},
-        //       ),
-        //     ),
-        //   ),
-        // ),
         const SizedBox(width: 16),
+        IconButton(
+          onPressed: () {
+            final ZegoUIKit instance = ZegoUIKit.instance;
+            _controller.isCamOn = !_controller.isCamOn;
+            instance.turnCameraOn(_controller.isCamOn);
+          },
+          icon: Image.asset(
+            !_controller.isCamOn
+                ? "assets/images/live_cam_on.png"
+                : "assets/images/live_cam_off.png",
+          ),
+        ),
+        const SizedBox(width: 16),
+        IconButton(
+          onPressed: () {
+            final ZegoUIKit instance = ZegoUIKit.instance;
+            _controller.isMicOn = !_controller.isMicOn;
+            instance.turnMicrophoneOn(_controller.isMicOn);
+          },
+          icon: Image.asset(
+            !_controller.isMicOn
+                ? "assets/images/live_mic_on.png"
+                : "assets/images/live_mic_off.png",
+          ),
+        ),
+        const SizedBox(width: 16),
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
       ],
     );
   }
 
   Widget liveZegoMsg() {
-    return MediaQuery.of(context).viewInsets.bottom != 0
-        ? const SizedBox()
-        : Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              SizedBox(height: Get.height / 3.5),
-              Expanded(child: inRoomMessage()),
-            ],
-          );
+    // return MediaQuery.of(context).viewInsets.bottom != 0
+    //     ? const SizedBox()
+    //     : Column(
+    //         mainAxisAlignment: MainAxisAlignment.end,
+    //         children: <Widget>[
+    //           SizedBox(height: Get.height / 3.5),
+    //           Expanded(child: inRoomMessage()),
+    //         ],
+    //       );
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        Expanded(child: inRoomMessage()),
+      ],
+    );
   }
 
   Widget inRoomMessage() {
@@ -625,6 +644,13 @@ class _LivePage extends State<LiveDharamScreen>
                         ),
                       ),
                       const SizedBox(width: 4),
+                      IconButton(
+                        onPressed: () async {
+                          await moreOptionsPopup(userId: message.user.id);
+                        },
+                        icon: const Icon(Icons.more_vert),
+                      ),
+                      const SizedBox(width: 4),
                     ],
                   ),
                 ),
@@ -642,6 +668,35 @@ class _LivePage extends State<LiveDharamScreen>
         : Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
+              StreamBuilder<DatabaseEvent>(
+                stream: FirebaseDatabase.instance
+                    .ref()
+                    .child("live/${_controller.liveId}/waitList")
+                    .onValue
+                    .asBroadcastStream(),
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<DatabaseEvent> snapshot,
+                ) {
+                  (
+                    bool returnValueBool,
+                    String returnValueString
+                  ) multipleReturns;
+                  multipleReturns = _controller.isEngaded(
+                    snapshot.data?.snapshot,
+                    isForMe: true,
+                  );
+                  final bool isEngaded = multipleReturns.$1;
+                  final String type = multipleReturns.$2;
+                  return IconButton(
+                    onPressed: () async {
+                      await exitFunc(isEngaded: isEngaded);
+                    },
+                    icon: Image.asset("assets/images/live_exit_red.png"),
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
               StreamBuilder<DatabaseEvent>(
                 stream: FirebaseDatabase.instance
                     .ref()
@@ -716,11 +771,7 @@ class _LivePage extends State<LiveDharamScreen>
               //       : Align(
               //           alignment: Alignment.centerRight,
               //           child: InkWell(
-              //             onTap: () async {
-              //               // _controller.hasMyIdInWaitList()
-              //               //     ? await alreadyInTheWaitListDialog()
-              //               //     : await callAstrologerPopup();
-              //             },
+              //             onTap: callAstrologerPopup,
               //             child: SizedBox(
               //               height: 50,
               //               width: 50,
@@ -731,9 +782,61 @@ class _LivePage extends State<LiveDharamScreen>
               //           ),
               //         ),
               // ),
+
+              //
+              //
+              //
+              //
+              //
+              //
+              //
+              //
+              //
+              //
+              //
+              //
+              //
             ],
           );
   }
+
+  // Widget callStack() {
+  //   final Data data = _controller.details.data ?? Data();
+  //   final int videoDiscount = data.videoDiscountedAmount ?? 0;
+  //   final int videoOriginal = data.videoCallAmount ?? 0;
+  //   return (videoDiscount == 0)
+  //       ? Column(
+  //           children: <Widget>[
+  //             Text(
+  //               "$videoOriginal",
+  //               style: const TextStyle(
+  //                 fontSize: 16,
+  //                 fontWeight: FontWeight.bold,
+  //               ),
+  //             ),
+  //           ],
+  //         )
+  //       : Column(
+  //           children: <Widget>[
+  //             Text(
+  //               "₹$videoDiscount/Min",
+  //               style: const TextStyle(
+  //                 fontSize: 16,
+  //                 fontWeight: FontWeight.bold,
+  //               ),
+  //             ),
+  //             const SizedBox(width: 4.0),
+  //             Text(
+  //               "₹$videoOriginal/Min",
+  //               style: const TextStyle(
+  //                 fontSize: 10,
+  //                 decoration: TextDecoration.lineThrough,
+  //                 decorationColor: Colors.red,
+  //               ),
+  //             ),
+  //           ],
+  //         );
+  // }
 
   Future<void> onLiveStreamingStateUpdate(ZegoLiveStreamingState state) async {
     // final bool condition1 = _controller.isHost == false;
@@ -799,28 +902,33 @@ class _LivePage extends State<LiveDharamScreen>
   //         list: _controller.customGiftModel,
   //         onSelect: (CustomGiftModel item, num quantity) async {
   //           Get.back();
-  //           final bool hasBalance = await _controller.hasBalanceForSendingGift(
-  //             giftId: item.giftId,
-  //             giftName: item.giftName,
-  //             giftQuantity: int.parse(quantity.toString()),
-  //             giftAmount: item.giftPrice,
-  //           );
-  //           if (hasBalance) {
-  //             if (mounted) {
-  //               LiveGiftWidget.show(context, item.giftSvga);
-  //             } else {}
-  //             await _controller.sendGiftAPI(
-  //               count: quantity,
-  //               svga: item.giftSvga,
-  //               successCallback: log,
-  //               failureCallback: log,
-  //             );
-  //             await _controller.addUpdateLeaderboard(
-  //               quantity: quantity,
-  //               amount: item.giftPrice,
-  //             );
+  //           final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
+  //           if (hasMyIdInWaitList) {
+  //             await alreadyInTheWaitListDialog();
   //           } else {
-  //             await lowBalancePopup();
+  //             final bool hasBal = await _controller.hasBalanceForSendingGift(
+  //               giftId: item.giftId,
+  //               giftName: item.giftName,
+  //               giftQuantity: int.parse(quantity.toString()),
+  //               giftAmount: item.giftPrice,
+  //             );
+  //             if (hasBal) {
+  //               if (mounted) {
+  //                 LiveGiftWidget.show(context, item.giftSvga);
+  //               } else {}
+  //               await _controller.sendGiftAPI(
+  //                 count: quantity,
+  //                 svga: item.giftSvga,
+  //                 successCallback: log,
+  //                 failureCallback: log,
+  //               );
+  //               await _controller.addUpdateLeaderboard(
+  //                 quantity: quantity,
+  //                 amount: item.giftPrice,
+  //               );
+  //             } else {
+  //               await lowBalancePopup();
+  //             }
   //           }
   //         },
   //       );
@@ -865,6 +973,34 @@ class _LivePage extends State<LiveDharamScreen>
     return Future<void>.value();
   }
 
+  Future<void> disconnectPopup({
+    required Function() noDisconnect,
+    required Function() yesDisconnect,
+  }) async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return DisconnectWidget(
+          onClose: Get.back,
+          noDisconnect: () {
+            Get.back();
+            noDisconnect();
+          },
+          yesDisconnect: () {
+            Get.back();
+            yesDisconnect();
+          },
+          isAstro: _controller.isHost,
+          astroAvatar: _controller.avatar,
+          astroUserName: _controller.userName,
+          custoAvatar: _controller.waitListModel.first.avatar,
+          custoUserName: _controller.waitListModel.first.userName,
+        );
+      },
+    );
+    return Future<void>.value();
+  }
+
   // Future<void> congratulationsPopup() async {
   //   await showCupertinoModalPopup(
   //     context: context,
@@ -872,6 +1008,41 @@ class _LivePage extends State<LiveDharamScreen>
   //       return CongratulationsWidget(
   //         onClose: Get.back,
   //         imageURL: _controller.avatar,
+  //       );
+  //     },
+  //   );
+  //   return Future<void>.value();
+  // }
+
+  // Future<void> exitPopup({required bool isFromFunc}) async {
+  //   await showCupertinoModalPopup(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return ExitWidget(
+  //         onClose: Get.back,
+  //         astrologerAvatar: _controller.details.data?.image ?? "",
+  //         astrologerUserName: _controller.details.data?.name ?? "",
+  //         onFollow: () async {
+  //           Get.back();
+  //           final int isFollow = _controller.details.data?.isFollow ?? 0;
+  //           if (isFollow == 1) {
+  //           } else {
+  //             await _controller.followOrUnfollowAstrologer();
+  //           }
+  //           if (mounted) {
+  //             if (isFromFunc) {
+  //               final bool removed = await _zegoController.leave(
+  //                 context,
+  //                 showConfirmation: false,
+  //               );
+  //               if (removed) {
+  //                 _controller.zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
+  //               } else {}
+  //             } else {
+  //               await _zegoController.leave(context, showConfirmation: false);
+  //             }
+  //           } else {}
+  //         },
   //       );
   //     },
   //   );
@@ -900,18 +1071,23 @@ class _LivePage extends State<LiveDharamScreen>
   //         details: _controller.details,
   //         onSelect: (String type, int amount) async {
   //           Get.back();
-  //           final bool canPlaceLiveOrder = await _controller.canPlaceLiveOrder(
-  //             talkType: type,
-  //             talkAmount: amount,
-  //           );
-  //           if (canPlaceLiveOrder) {
-  //             await _controller.addUpdateToWaitList(
-  //               callType: type,
-  //               isEngaded: false,
-  //             );
-  //             await onCoHostRequestSent();
+  //           final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
+  //           if (hasMyIdInWaitList) {
+  //             await alreadyInTheWaitListDialog();
   //           } else {
-  //             await lowBalancePopup();
+  //             final bool canOrder = await _controller.canPlaceLiveOrder(
+  //               talkType: type,
+  //               talkAmount: amount,
+  //             );
+  //             if (canOrder) {
+  //               await _controller.addUpdateToWaitList(
+  //                 callType: type,
+  //                 isEngaded: false,
+  //               );
+  //               await onCoHostRequestSent();
+  //             } else {
+  //               await lowBalancePopup();
+  //             }
   //           }
   //         },
   //       );
@@ -919,6 +1095,25 @@ class _LivePage extends State<LiveDharamScreen>
   //   );
   //   return Future<void>.value();
   // }
+
+  Future<void> moreOptionsPopup({required String userId}) async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return MoreOptionsWidget(
+          onClose: Get.back,
+          isHost: _controller.isHost,
+          onTapOnBlockUser: () async {
+            Get.back();
+            await _controller.addUpdateToBlockList(userId: userId);
+          },
+          onTapOnReportUser: Get.back,
+          onTapOnRequestGift: Get.back,
+        );
+      },
+    );
+    return Future<void>.value();
+  }
 
   void onInRoomCommandMessageReceived(
     ZegoSignalingPluginInRoomCommandMessageReceivedEvent event,
@@ -941,97 +1136,28 @@ class _LivePage extends State<LiveDharamScreen>
     return;
   }
 
-  Widget bottomControlsWidgets({
-    required bool isEngaded,
-    required String type,
-  }) {
-    final ZegoUIKit instance = ZegoUIKit.instance;
-    final List<Widget> widgets = <Widget>[
-      Expanded(
-        child: CircleAvatar(
-          backgroundColor: _controller.isFront ? Colors.green : Colors.red,
-          child: IconButton(
-            onPressed: () {
-              instance.useFrontFacingCamera(_controller.isFront);
-              _controller.isFront = !_controller.isFront;
-            },
-            icon: const Icon(Icons.camera_front),
-          ),
-        ),
-      ),
-      Expanded(
-        child: CircleAvatar(
-          backgroundColor: _controller.isCamOn ? Colors.green : Colors.red,
-          child: IconButton(
-            onPressed: () {
-              instance.turnCameraOn(_controller.isCamOn);
-              _controller.isCamOn = !_controller.isCamOn;
-            },
-            icon: const Icon(Icons.camera),
-          ),
-        ),
-      ),
-      Expanded(
-        child: CircleAvatar(
-          backgroundColor: _controller.isMicOn ? Colors.green : Colors.red,
-          child: IconButton(
-            onPressed: () {
-              instance.turnMicrophoneOn(_controller.isMicOn);
-              _controller.isMicOn = !_controller.isMicOn;
-            },
-            icon: const Icon(Icons.mic),
-          ),
-        ),
-      ),
-      Expanded(
-        child: CircleAvatar(
-          child: IconButton(
-            onPressed: () async {
-              final bool removed = await _zegoController.leave(
-                context,
-                showConfirmation: true,
-              );
-              if (removed) {
-                _controller.zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
-              } else {}
-            },
-            icon: const Icon(Icons.exit_to_app),
-          ),
-        ),
-      ),
-      if (isEngaded)
-        Expanded(
-          child: CircleAvatar(
-            child: IconButton(
-              onPressed: removeCoHostOrStopCoHost,
-              icon: const Icon(Icons.exit_to_app),
-            ),
-          ),
-        )
-      else
-        const SizedBox(),
-    ];
-    return Row(children: widgets);
-  }
+  //
 
-  Widget bottomControls() {
-    return StreamBuilder<DatabaseEvent>(
-      stream: FirebaseDatabase.instance
-          .ref()
-          .child("live/${_controller.liveId}/waitList")
-          .onValue
-          .asBroadcastStream(),
-      builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
-        (bool returnValueBool, String returnValueString) multipleReturns;
-        multipleReturns = _controller.isEngaded(
-          snapshot.data?.snapshot,
-          isForMe: false,
-        );
-        final bool isEngaded = multipleReturns.$1;
-        final String type = multipleReturns.$2;
-        return bottomControlsWidgets(isEngaded: isEngaded, type: type);
-      },
-    );
+  Future<void> exitFunc({required bool isEngaded}) async {
+    if (isEngaded) {
+      await disconnectPopup(
+        noDisconnect: () {},
+        yesDisconnect: () async {
+          // await _controller.makeAPICallForEndCall();
+          await removeCoHostOrStopCoHost();
+        },
+      );
+    } else {
+      final bool removed = await _zegoController.leave(
+        context,
+        showConfirmation: true,
+      );
+      if (removed) {
+        _controller.zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
+      } else {}
+      // await exitPopup(isFromFunc: true);
+    }
+    return Future<void>.value();
   }
 
   ZegoUIKitPrebuiltLiveStreamingEvents get events {
@@ -1127,6 +1253,9 @@ class _LivePage extends State<LiveDharamScreen>
           ? await _controller.removeFromWaitListWhereEngadedIsTrue()
           : await _controller.removeFromWaitList();
     } else {}
+    if (removed && !_controller.isHost) {
+      // await _controller.makeAPICallForEndCall();
+    } else {}
     return Future<void>.value();
   }
 
@@ -1152,6 +1281,8 @@ class _LivePage extends State<LiveDharamScreen>
             Get.back();
             onDeclineButton();
           },
+          avatar: _controller.waitListModel.first.avatar,
+          userName: _controller.waitListModel.first.userName,
         );
       },
     );

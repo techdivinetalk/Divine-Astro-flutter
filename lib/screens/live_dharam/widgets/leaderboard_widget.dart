@@ -92,7 +92,7 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
             color: AppColors.white,
           ),
           child: ListTile(
-            dense: true,
+            // dense: true,
             leading: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -119,8 +119,20 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
                 ),
               ],
             ),
-            title: Text(item.userName),
-            subtitle: Text("₹ ${item.amount}"),
+            title: Text(
+              item.userName,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            subtitle: Text(
+              "₹ ${item.amount}",
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         );
       },

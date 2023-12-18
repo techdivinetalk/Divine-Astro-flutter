@@ -1,8 +1,8 @@
 // import "dart:ui";
 
-// import "package:divine_astrologer/common/colors.dart";
-// import "package:divine_astrologer/model/live/get_astrologer_details_response.dart";
-// import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
+// import "package:divine_app/common/colors.dart";
+// import "package:divine_app/model/live/get_astrologer_details_response.dart";
+// import "package:divine_app/screens/live_dharam/widgets/custom_image_widget.dart";
 // import "package:flutter/material.dart";
 // import "package:get/get.dart";
 
@@ -113,11 +113,31 @@
 //         child: Column(
 //           children: <Widget>[
 //             const SizedBox(height: 64 - 16),
-//             Text(data.name ?? ""),
+//             Text(
+//               data.name ?? "",
+//               style: const TextStyle(
+//                 fontSize: 20,
+//                 fontWeight: FontWeight.bold,
+//               ),
+//             ),
 //             const SizedBox(height: 8),
-//             Text(data.speciality ?? ""),
+//             Text(
+//               data.speciality ?? "",
+//               style: const TextStyle(
+//                 fontSize: 12,
+//               ),
+//             ),
 //             const SizedBox(height: 8),
-//             Text(widget.waitTime),
+//             Row(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               children: <Widget>[
+//                 Image.asset("assets/images/live_mini_hourglass.png"),
+//                 const SizedBox(width: 4),
+//                 const Text("Wait Time - "),
+//                 const SizedBox(width: 4),
+//                 Text(widget.waitTime),
+//               ],
+//             ),
 //             const SizedBox(height: 8),
 //             const Divider(),
 //             listTile(
@@ -218,14 +238,22 @@
 //             children: <Widget>[
 //               Expanded(
 //                 flex: 2,
-//                 child: Text("Video Call @ ₹$discountAmount/Min"),
+//                 child: Text(
+//                   "Video Call @ ₹$discountAmount/Min",
+//                   style: const TextStyle(
+//                     fontWeight: FontWeight.bold,
+//                   ),
+//                 ),
 //               ),
 //               const SizedBox(width: 4.0),
 //               Expanded(
 //                 child: Text(
 //                   "₹$originalAmount/Min",
-//                   style:
-//                       const TextStyle(decoration: TextDecoration.lineThrough),
+//                   style: const TextStyle(
+//                     fontSize: 10,
+//                     decoration: TextDecoration.lineThrough,
+//                     decorationColor: Colors.red,
+//                   ),
 //                 ),
 //               ),
 //             ],

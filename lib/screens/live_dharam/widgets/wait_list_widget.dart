@@ -115,16 +115,45 @@ class _WaitListWidgetState extends State<WaitListWidget> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
+            // const SizedBox(height: 64 - 16),
+            // Text(widget.astologerName),
+            // const SizedBox(height: 8),
+            // Text(widget.astologerSpeciality),
+            // const SizedBox(height: 8),
+            // Text(widget.waitTime),
+            // const SizedBox(height: 8),
+            // const Divider(),
             const SizedBox(height: 64 - 16),
-            Text(widget.astologerName),
+            Text(
+              widget.astologerName,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 8),
-            Text(widget.astologerSpeciality),
+            Text(
+              widget.astologerSpeciality,
+              style: const TextStyle(
+                fontSize: 12,
+              ),
+            ),
             const SizedBox(height: 8),
-            Text(widget.waitTime),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset("assets/images/live_mini_hourglass.png"),
+                const SizedBox(width: 4),
+                const Text("Wait Time - "),
+                const SizedBox(width: 4),
+                Text(widget.waitTime),
+              ],
+            ),
             const SizedBox(height: 8),
             const Divider(),
+
             SizedBox(
-              height: Get.height / 3,
+              height: Get.height / 3.0,
               child: ListView.builder(
                 itemCount: widget.list.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -133,7 +162,7 @@ class _WaitListWidgetState extends State<WaitListWidget> {
                 },
               ),
             ),
-            const Divider(),
+
             exitWidget(),
           ],
         ),
@@ -162,7 +191,7 @@ class _WaitListWidgetState extends State<WaitListWidget> {
 
   Widget callTypeIcon({required String callType}) {
     String returnString = "assets/images/live_call_video.png";
-    
+
     switch (callType) {
       case "video":
         returnString = "assets/images/live_call_video.png";
@@ -188,7 +217,14 @@ class _WaitListWidgetState extends State<WaitListWidget> {
               const SizedBox(height: 8),
               TextButton(
                 onPressed: widget.onExitWaitList,
-                child: const Text("Exit Waitlist"),
+                child: const Text(
+                  "Exit Waitlist",
+                  style: TextStyle(
+                    color: Colors.red,
+                    decoration: TextDecoration.underline,
+                    decorationColor: Colors.red,
+                  ),
+                ),
               ),
               const SizedBox(height: 8),
             ],
