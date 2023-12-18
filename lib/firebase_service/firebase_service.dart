@@ -4,6 +4,7 @@ import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/fcm_notification.dart';
+import "package:divine_astrologer/di/shared_preference_service.dart";
 import 'package:divine_astrologer/screens/side_menu/settings/settings_controller.dart';
 import 'package:divine_astrologer/watcher/real_time_watcher.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -31,7 +32,7 @@ class AppFirebaseService {
     try {
       await _database.child(path).update(data);
     } catch (e) {
-      debugPrint('Error writing data to the database: $e');
+      debugPrint("Error writing data to the database: $e");
     }
   }
 
@@ -114,11 +115,15 @@ class AppFirebaseService {
                 Get.toNamed(RouteName.chatMessageWithSocketUI, arguments: {'orderData': orderData});
               }
             }
+          } else {
+            preferenceService.remove(SharedPreferenceService.talkTime);
+            debugPrint("remove method called");
+            sendBroadcast(BroadcastMessage(name: "EndChat"));
           }
         });
       }
 
-      debugPrint('value changed to: $value');
+      debugPrint("value changed to: $value");
     });
   }
 
