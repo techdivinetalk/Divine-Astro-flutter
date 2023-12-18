@@ -1,9 +1,11 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_elevated_button.dart';
+import "package:divine_astrologer/common/routes.dart";
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -73,9 +75,19 @@ class AcceptChatRequestScreen extends StatefulWidget {
 class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
   final appFirebaseService = AppFirebaseService();
   bool isBottomSheetOpen = false;
+  BroadcastReceiver broadcastReceiver = BroadcastReceiver(names: <String>["EndChat"]);
+
 
   @override
   void initState() {
+    broadcastReceiver.start();
+    broadcastReceiver.messages.listen((event) {
+      if (event.name == "EndChat") {
+        Get.offAllNamed(RouteName.dashboard);
+        broadcastReceiver.stop();
+      }
+    });
+
     appFirebaseService.acceptBottomWatcher.nameStream.listen((event) {
       isBottomSheetOpen = event == '1';
       setState(() {});
