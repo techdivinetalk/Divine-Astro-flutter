@@ -1,4 +1,5 @@
 import 'package:divine_astrologer/common/cached_network_image.dart';
+import 'package:divine_astrologer/screens/order_history/order_history_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -145,7 +146,7 @@ class DashboardScreen extends GetView<DashboardController> {
   static List<Widget> widgetOptions = <Widget>[
     const HomeUI(),
     const PerformanceUI(),
-    const SuggestRemediesUI(),
+    const OrderHistoryUI(),
     const ChatAssistancePage(),
     ProfileUI()
   ];

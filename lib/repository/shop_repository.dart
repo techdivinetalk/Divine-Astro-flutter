@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:divine_astrologer/common/routes.dart';
+import 'package:divine_astrologer/model/save_remedies_response.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../common/app_exception.dart';
@@ -117,4 +118,31 @@ class ShopRepository extends ApiProvider {
       rethrow;
     }
   }
+
+  Future<SaveRemediesResponse> saveRemedies(Map<String, dynamic> param) async {
+    try {
+      final response = await post(saveRemediesUrl,
+          body: jsonEncode(param).toString(),
+          headers: await getJsonHeaderURL());
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final responseModel =
+          SaveRemediesResponse.fromJson(json.decode(response.body));
+          if (responseModel.statusCode == successResponse && responseModel.success!) {
+            return responseModel;
+          } else {
+            throw CustomException("Unknown Error");
+          }
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
 }

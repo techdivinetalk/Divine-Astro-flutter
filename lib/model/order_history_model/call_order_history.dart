@@ -39,7 +39,7 @@ class CallOrderHistoryModelClass {
 class CallHistoryData {
   int? id;
   int? amount;
-  int? orderId;
+  String? orderId;
   String? status;
   int? transactionId;
   DateTime? createdAt;

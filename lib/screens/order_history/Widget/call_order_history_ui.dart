@@ -141,7 +141,7 @@ class CallOrderHistory extends StatelessWidget {
               leftBtnTitle: "refund".tr,
               onLeftTap: () {},
               onRightTap: () {
-                Get.toNamed(RouteName.categoryDetail);
+                Get.toNamed(RouteName.suggestRemediesView, arguments: data[index].id);
               },
               rightBtnTitle: "suggestedRemediesEarning".tr,
             ),

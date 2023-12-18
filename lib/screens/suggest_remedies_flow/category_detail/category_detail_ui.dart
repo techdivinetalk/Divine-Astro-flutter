@@ -11,6 +11,7 @@ import 'package:readmore/readmore.dart';
 import '../../../../common/colors.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../common/custom_light_yellow_btn.dart';
+import '../../../utils/load_image.dart';
 
 class CategoryDetailUi extends GetView<CategoryDetailController> {
   const CategoryDetailUi({Key? key}) : super(key: key);
@@ -40,63 +41,77 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Assets.images.icKalashDetail.image(
-                  width: double.infinity, height: 224.h, fit: BoxFit.fill),
-              SizedBox(height: 20.h),
-              Text("Icchapurti Group Puja - By Pushpak",
-                  style: AppTextStyle.textStyle20(fontWeight: FontWeight.w400)),
-              SizedBox(height: 20.h),
-              Row(
-                children: [
-                  Text("₹15000", style: AppTextStyle.textStyle20lineThrough()),
-                  const SizedBox(width: 15),
-                  Text(
-                    "₹1500",
-                    style: AppTextStyle.textStyle20(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20.h),
-              Container(
-                padding: EdgeInsets.all(10.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: Obx( () => controller.shopDataSync.value ?
+             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                    child: LoadImage(
+                      boxFit: BoxFit.fill,
+                      imageModel: ImageModel(
+                          imagePath:
+                          '${controller.preferenceService.getBaseImageURL()}/${controller.productDetail?.products?[0].prodImage}',
+                          loadingIndicator: const SizedBox(
+                              child:
+                              CircularProgressIndicator(color: Color(0XFFFDD48E), strokeWidth: 2))),
+                    )),
+                // Assets.images.icKalashDetail.image(
+                //     width: double.infinity, height: 224.h, fit: BoxFit.fill),
+                SizedBox(height: 20.h),
+                Text("${controller.productDetail?.products?[0].prodName}",
+                    style: AppTextStyle.textStyle20(fontWeight: FontWeight.w400)),
+                SizedBox(height: 20.h),
+                Row(
                   children: [
+                    // Text("₹15000", style: AppTextStyle.textStyle20lineThrough()),
+                    // const SizedBox(width: 15),
                     Text(
-                      "aboutPooja".tr,
-                      style: AppTextStyle.textStyle16(
-                          fontWeight: FontWeight.w500,
-                          fontColor: AppColors.appYellowColour),
-                    ),
-                    const SizedBox(height: 10),
-                    ReadMoreText(
-                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and",
-                      trimLines: 4,
-                      colorClickableText: AppColors.blackColor,
-                      trimMode: TrimMode.Line,
-                      trimCollapsedText: "readMore".tr,
-                      trimExpandedText: "showLess".tr,
-                      moreStyle: TextStyle(
-                        fontSize: 14.sp,
+                      "₹ ${controller.productDetail?.products?[0].productPriceInr}",
+                      style: AppTextStyle.textStyle20(
                         fontWeight: FontWeight.w600,
-                        color: AppColors.appYellowColour,
-                      ),
-                      lessStyle: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.appYellowColour,
                       ),
                     ),
                   ],
                 ),
-              ),
-              SizedBox(height: 10.h),
-            ],
+                SizedBox(height: 20.h),
+                Container(
+                  padding: EdgeInsets.all(10.h),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "About Product",
+                        style: AppTextStyle.textStyle16(
+                            fontWeight: FontWeight.w500,
+                            fontColor: AppColors.appYellowColour),
+                      ),
+                      const SizedBox(height: 10),
+                      ReadMoreText(
+                        "${controller.productDetail?.products?[0].prodDesc}",
+                        trimLines: 4,
+                        colorClickableText: AppColors.blackColor,
+                        trimMode: TrimMode.Line,
+                        trimCollapsedText: "readMore".tr,
+                        trimExpandedText: "showLess".tr,
+                        moreStyle: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.appYellowColour,
+                        ),
+                        lessStyle: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.appYellowColour,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10.h),
+              ],
+            ) : const SizedBox(),
           ),
         ),
       ),
@@ -120,7 +135,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                     child: Column(
                       children: [
                         Text(
-                          "Are You Sure You Want To Suggest 'Product Name' To User?",
+                          "Are You Sure You Want To Suggest ${controller.productDetail?.products?[0].prodName} To User?",
                           style: AppTextStyle.textStyle20(
                             fontWeight: FontWeight.w600,
                           ),
@@ -135,8 +150,9 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                         CustomLightYellowCurveButton(
                           name: "suggestNow".tr,
                           onTaped: () {
-                            Get.offNamedUntil(RouteName.orderHistory,
-                                ModalRoute.withName(RouteName.dashboard));
+                            controller.suggestRemedy();
+                            // Get.offNamedUntil(RouteName.orderHistory,
+                            //     ModalRoute.withName(RouteName.dashboard));
                           },
                         )
                       ],

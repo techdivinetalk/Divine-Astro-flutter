@@ -47,7 +47,7 @@ class ChatOrderHistoryModelClass {
 class ChatDataList {
   int? id;
   int? amount;
-  int? orderId;
+  String? orderId;
   String? status;
   int? transactionId;
   DateTime? createdAt;
