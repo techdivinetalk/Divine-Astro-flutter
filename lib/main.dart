@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
@@ -79,72 +80,74 @@ class MyApp extends StatelessWidget {
       child: ScreenUtilInit(
           designSize: Size(MediaQuery.sizeOf(context).width, MediaQuery.sizeOf(context).height),
           builder: (context, child) {
-            return GetMaterialApp(
-              defaultTransition: Transition.fadeIn,
-              navigatorKey: navigatorKey,
-              color: AppColors.white,
-              debugShowCheckedModeBanner: false,
-              initialRoute: RouteName.initial,
-              getPages: Routes.routes,
-              locale: getLanStrToLocale(
-                  GetStorages.get(GetStorageKeys.language) ?? ""),
-              fallbackLocale: AppTranslations.fallbackLocale,
-              translations: AppTranslations(),
-              theme: ThemeData(
-                splashColor: AppColors.transparent,
-                highlightColor: Colors.transparent,
-                colorScheme: ColorScheme.fromSeed(
-                    seedColor: Colors.white,
-                    background: AppColors.white,
-                    surfaceTint: AppColors.white),
-                useMaterial3: true,
-                fontFamily: FontFamily.poppins,
-                // cardTheme: const CardTheme(
-                //     color: AppColors.white, surfaceTintColor: AppColors.white),
-              ),
-              localizationsDelegates: const [
-                DefaultMaterialLocalizations.delegate,
-                DefaultWidgetsLocalizations.delegate,
-              ],
-              builder: (context, widget) {
-                return Stack(
-                  children: <Widget>[
-                    Obx(() => IgnorePointer(
-                        ignoring:
-                            Get.find<ProgressService>().showProgress.value,
-                        child: widget)),
-                    StreamBuilder<bool?>(
-                      initialData: true,
-                      stream: Get.find<FirebaseNetworkService>()
-                          .databaseConnectionStream,
-                      builder: (context, snapshot) {
-                        final appTheme = AppTheme.of(context);
-                        return SafeArea(
-                          child: AnimatedContainer(
-                            height: snapshot.data as bool
-                                ? 0
-                                : appTheme.getHeight(36),
-                            duration: Utils.animationDuration,
-                            color: appTheme.redColor,
-                            child: Material(
-                              type: MaterialType.transparency,
-                              child: Center(
-                                  child: Text(AppString.noInternetConnection,
-                                      style: appTheme.customTextStyle(
-                                        fontSize: 16.sp,
-                                        color: appTheme.whiteColor,
-                                      ))),
+            return OverlaySupport.global(
+              child: GetMaterialApp(
+                defaultTransition: Transition.fadeIn,
+                navigatorKey: navigatorKey,
+                color: AppColors.white,
+                debugShowCheckedModeBanner: false,
+                initialRoute: RouteName.initial,
+                getPages: Routes.routes,
+                locale: getLanStrToLocale(
+                    GetStorages.get(GetStorageKeys.language) ?? ""),
+                fallbackLocale: AppTranslations.fallbackLocale,
+                translations: AppTranslations(),
+                theme: ThemeData(
+                  splashColor: AppColors.transparent,
+                  highlightColor: Colors.transparent,
+                  colorScheme: ColorScheme.fromSeed(
+                      seedColor: Colors.white,
+                      background: AppColors.white,
+                      surfaceTint: AppColors.white),
+                  useMaterial3: true,
+                  fontFamily: FontFamily.poppins,
+                  // cardTheme: const CardTheme(
+                  //     color: AppColors.white, surfaceTintColor: AppColors.white),
+                ),
+                localizationsDelegates: const [
+                  DefaultMaterialLocalizations.delegate,
+                  DefaultWidgetsLocalizations.delegate,
+                ],
+                builder: (context, widget) {
+                  return Stack(
+                    children: <Widget>[
+                      Obx(() => IgnorePointer(
+                          ignoring:
+                              Get.find<ProgressService>().showProgress.value,
+                          child: widget)),
+                      StreamBuilder<bool?>(
+                        initialData: true,
+                        stream: Get.find<FirebaseNetworkService>()
+                            .databaseConnectionStream,
+                        builder: (context, snapshot) {
+                          final appTheme = AppTheme.of(context);
+                          return SafeArea(
+                            child: AnimatedContainer(
+                              height: snapshot.data as bool
+                                  ? 0
+                                  : appTheme.getHeight(36),
+                              duration: Utils.animationDuration,
+                              color: appTheme.redColor,
+                              child: Material(
+                                type: MaterialType.transparency,
+                                child: Center(
+                                    child: Text(AppString.noInternetConnection,
+                                        style: appTheme.customTextStyle(
+                                          fontSize: 16.sp,
+                                          color: appTheme.whiteColor,
+                                        ))),
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                    Obx(() => Get.find<ProgressService>().showProgress.isTrue
-                        ? Center(child: CustomProgressDialog())
-                        : const Offstage())
-                  ],
-                );
-              },
+                          );
+                        },
+                      ),
+                      Obx(() => Get.find<ProgressService>().showProgress.isTrue
+                          ? Center(child: CustomProgressDialog())
+                          : const Offstage())
+                    ],
+                  );
+                },
+              ),
             );
           }),
     );

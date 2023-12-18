@@ -10,6 +10,7 @@ import "package:divine_astrologer/screens/live_dharam/live_gift.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/call_accept_or_reject_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/wait_list_widget.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
@@ -17,6 +18,8 @@ import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
+//
+//
 //
 //
 //
@@ -41,7 +44,7 @@ class _LivePage extends State<LiveDharamScreen>
     with AfterLayoutMixin<LiveDharamScreen> {
   final LiveDharamController _controller = Get.find();
 
-  final ZegoUIKitPrebuiltLiveStreamingController _streamingController =
+  final ZegoUIKitPrebuiltLiveStreamingController _zegoController =
       ZegoUIKitPrebuiltLiveStreamingController();
 
   final StreamController<List<ZegoInRoomMessage>> _zegoMessageStreamController =
@@ -60,7 +63,7 @@ class _LivePage extends State<LiveDharamScreen>
   void initState() {
     super.initState();
 
-    _streamingController.message
+    _zegoController.message
         .stream()
         .listen(_zegoMessageStreamController.sink.add);
 
@@ -105,16 +108,15 @@ class _LivePage extends State<LiveDharamScreen>
                   config: streamingConfig
                     ..previewConfig.showPreviewForHost = false
                     ..maxCoHostCount = 1
+                    ..confirmDialogInfo = null
+                    ..disableCoHostInvitationReceivedDialog = true
                     ..audioVideoViewConfig = ZegoPrebuiltAudioVideoViewConfig(
                       showUserNameOnView: false,
                     )
                     ..bottomMenuBarConfig = ZegoBottomMenuBarConfig(
-                      hostButtons: _controller.isHost
-                          ? <ZegoMenuBarButtonName>[
-                              ZegoMenuBarButtonName.toggleCameraButton,
-                              ZegoMenuBarButtonName.toggleMicrophoneButton,
-                            ]
-                          : <ZegoMenuBarButtonName>[],
+                      showInRoomMessageButton: false,
+                      hostButtons: <ZegoMenuBarButtonName>[],
+                      coHostButtons: <ZegoMenuBarButtonName>[],
                     )
                     ..layout = galleryLayout
                     ..swipingConfig = swipingConfig
@@ -131,9 +133,6 @@ class _LivePage extends State<LiveDharamScreen>
                         return const SizedBox();
                       },
                     )
-                    ..bottomMenuBarConfig = ZegoBottomMenuBarConfig(
-                      showInRoomMessageButton: false,
-                    )
                     ..foreground = foregroundWidget()
                     ..inRoomMessageConfig = ZegoInRoomMessageConfig(
                       itemBuilder: (
@@ -144,7 +143,7 @@ class _LivePage extends State<LiveDharamScreen>
                         return const SizedBox();
                       },
                     ),
-                  controller: _streamingController,
+                  controller: _zegoController,
                   events: events,
                 );
         },
@@ -216,6 +215,8 @@ class _LivePage extends State<LiveDharamScreen>
           const SizedBox(height: 16),
           bottomBarWidget(),
           const SizedBox(height: 16),
+          bottomControls(),
+          const SizedBox(height: 16),
         ],
       ),
     );
@@ -229,50 +230,60 @@ class _LivePage extends State<LiveDharamScreen>
           const SizedBox(width: 16),
           IconButton(
             onPressed: () async {
-              await _streamingController.leave(context, showConfirmation: true);
+              await _zegoController.leave(context, showConfirmation: true);
             },
             icon: const Icon(Icons.arrow_back_ios, color: AppColors.white),
           ),
           Flexible(
             flex: 3,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                border: Border.all(color: AppColors.black.withOpacity(0.2)),
-                color: AppColors.black.withOpacity(0.2),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Row(
-                  children: <Widget>[
-                    const SizedBox(width: 4),
-                    CircleAvatar(
-                      child: CustomImageWidget(
-                        imageUrl: _controller.avatar,
+            child: InkWell(
+              onTap: () async {
+                //
+                //
+                // No need to
+                // navigate anywhere
+                //
+                //
+              },
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+                  border: Border.all(color: AppColors.black.withOpacity(0.2)),
+                  color: AppColors.black.withOpacity(0.2),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Row(
+                    children: <Widget>[
+                      const SizedBox(width: 4),
+                      CircleAvatar(
+                        child: CustomImageWidget(
+                          imageUrl: _controller.avatar,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            _controller.userName,
-                            style: const TextStyle(color: AppColors.white),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            _controller.hostSpeciality,
-                            style: const TextStyle(color: AppColors.white),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              _controller.userName,
+                              style: const TextStyle(color: AppColors.white),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              _controller.hostSpeciality,
+                              style: const TextStyle(color: AppColors.white),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 4),
-                  ],
+                      const SizedBox(width: 4),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -419,12 +430,17 @@ class _LivePage extends State<LiveDharamScreen>
   //         final CustomGiftModel item = _controller.customGiftModel[index];
   //         return InkWell(
   //           onTap: () async {
-  //             final bool hasBalance = _controller.hasBalance(
-  //               quantity: 1,
-  //               amount: item.giftPrice,
+  //             final bool hasBalance =
+  //                 await _controller.hasBalanceForSendingGift(
+  //               giftId: item.giftId,
+  //               giftName: item.giftName,
+  //               giftQuantity: 1,
+  //               giftAmount: item.giftPrice,
   //             );
   //             if (hasBalance) {
-  //               LiveGiftWidget.show(context, item.giftSvga);
+  //               if (mounted) {
+  //                 LiveGiftWidget.show(context, item.giftSvga);
+  //               } else {}
   //               await _controller.sendGiftAPI(
   //                 count: 1,
   //                 svga: item.giftSvga,
@@ -472,7 +488,7 @@ class _LivePage extends State<LiveDharamScreen>
             controller: _editingController,
             onSubmitted: (String value) async {
               final String msg = _editingController.value.text;
-              await _streamingController.message.send(msg);
+              await _zegoController.message.send(msg);
               _editingController.clear();
               FocusManager.instance.primaryFocus?.unfocus();
               scrollDown();
@@ -484,7 +500,7 @@ class _LivePage extends State<LiveDharamScreen>
               suffixIcon: IconButton(
                 onPressed: () async {
                   final String msg = _editingController.value.text;
-                  await _streamingController.message.send(msg);
+                  await _zegoController.message.send(msg);
                   _editingController.clear();
                   FocusManager.instance.primaryFocus?.unfocus();
                   scrollDown();
@@ -530,13 +546,6 @@ class _LivePage extends State<LiveDharamScreen>
         //     ),
         //   ),
         // ),
-        const SizedBox(width: 16),
-        const SizedBox(width: 16),
-        const SizedBox(width: 16),
-        const SizedBox(width: 16),
-        const SizedBox(width: 16),
-        const SizedBox(width: 16),
-        const SizedBox(width: 16),
         const SizedBox(width: 16),
       ],
     );
@@ -639,8 +648,10 @@ class _LivePage extends State<LiveDharamScreen>
                     .child("live/${_controller.liveId}/waitList")
                     .onValue
                     .asBroadcastStream(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<DatabaseEvent> snapshot) {
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<DatabaseEvent> snapshot,
+                ) {
                   _controller.getLatestWaitList(snapshot.data?.snapshot);
                   return AnimatedOpacity(
                     opacity: _controller.waitListModel.isEmpty ? 0.0 : 1.0,
@@ -665,34 +676,37 @@ class _LivePage extends State<LiveDharamScreen>
               ),
               const SizedBox(height: 16),
               StreamBuilder<DatabaseEvent>(
-                  stream: FirebaseDatabase.instance
-                      .ref()
-                      .child("live/${_controller.liveId}/leaderboard")
-                      .onValue
-                      .asBroadcastStream(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<DatabaseEvent> snapshot) {
-                    _controller.getLatestLeaderboard(snapshot.data?.snapshot);
-                    return AnimatedOpacity(
-                      opacity: _controller.leaderboardModel.isEmpty ? 0.0 : 1.0,
-                      duration: const Duration(seconds: 1),
-                      child: _controller.leaderboardModel.isEmpty
-                          ? const SizedBox()
-                          : Align(
-                              alignment: Alignment.centerRight,
-                              child: InkWell(
-                                onTap: leaderboardPopup,
-                                child: SizedBox(
-                                  height: 50,
-                                  width: 50,
-                                  child: Image.asset(
-                                    "assets/images/live_new_podium.png",
-                                  ),
+                stream: FirebaseDatabase.instance
+                    .ref()
+                    .child("live/${_controller.liveId}/leaderboard")
+                    .onValue
+                    .asBroadcastStream(),
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<DatabaseEvent> snapshot,
+                ) {
+                  _controller.getLatestLeaderboard(snapshot.data?.snapshot);
+                  return AnimatedOpacity(
+                    opacity: _controller.leaderboardModel.isEmpty ? 0.0 : 1.0,
+                    duration: const Duration(seconds: 1),
+                    child: _controller.leaderboardModel.isEmpty
+                        ? const SizedBox()
+                        : Align(
+                            alignment: Alignment.centerRight,
+                            child: InkWell(
+                              onTap: leaderboardPopup,
+                              child: SizedBox(
+                                height: 50,
+                                width: 50,
+                                child: Image.asset(
+                                  "assets/images/live_new_podium.png",
                                 ),
                               ),
                             ),
-                    );
-                  }),
+                          ),
+                  );
+                },
+              ),
               // const SizedBox(height: 16),
               // AnimatedOpacity(
               //   opacity: !_controller.isHostAvailable ? 0.0 : 1.0,
@@ -785,12 +799,16 @@ class _LivePage extends State<LiveDharamScreen>
   //         list: _controller.customGiftModel,
   //         onSelect: (CustomGiftModel item, num quantity) async {
   //           Get.back();
-  //           final bool hasBalance = _controller.hasBalance(
-  //             quantity: quantity,
-  //             amount: item.giftPrice,
+  //           final bool hasBalance = await _controller.hasBalanceForSendingGift(
+  //             giftId: item.giftId,
+  //             giftName: item.giftName,
+  //             giftQuantity: int.parse(quantity.toString()),
+  //             giftAmount: item.giftPrice,
   //           );
   //           if (hasBalance) {
-  //             LiveGiftWidget.show(context, item.giftSvga);
+  //             if (mounted) {
+  //               LiveGiftWidget.show(context, item.giftSvga);
+  //             } else {}
   //             await _controller.sendGiftAPI(
   //               count: quantity,
   //               svga: item.giftSvga,
@@ -831,7 +849,6 @@ class _LivePage extends State<LiveDharamScreen>
         return WaitListWidget(
           onClose: Get.back,
           waitTime: _controller.getTotalWaitTime(),
-          // details: _controller.details,
           myUserId: _controller.userId,
           list: _controller.waitListModel,
           hasMyIdInWaitList: false,
@@ -883,14 +900,16 @@ class _LivePage extends State<LiveDharamScreen>
   //         details: _controller.details,
   //         onSelect: (String type, int amount) async {
   //           Get.back();
-  //           final bool hasBalance = _controller.hasBalance(
-  //             quantity: 1,
-  //             amount: amount,
+  //           final bool canPlaceLiveOrder = await _controller.canPlaceLiveOrder(
+  //             talkType: type,
+  //             talkAmount: amount,
   //           );
-  //           if (hasBalance) {
+  //           if (canPlaceLiveOrder) {
   //             await _controller.addUpdateToWaitList(
   //               callType: type,
+  //               isEngaded: false,
   //             );
+  //             await onCoHostRequestSent();
   //           } else {
   //             await lowBalancePopup();
   //           }
@@ -922,68 +941,192 @@ class _LivePage extends State<LiveDharamScreen>
     return;
   }
 
+  Widget bottomControlsWidgets({
+    required bool isEngaded,
+    required String type,
+  }) {
+    final ZegoUIKit instance = ZegoUIKit.instance;
+    final List<Widget> widgets = <Widget>[
+      Expanded(
+        child: CircleAvatar(
+          backgroundColor: _controller.isFront ? Colors.green : Colors.red,
+          child: IconButton(
+            onPressed: () {
+              instance.useFrontFacingCamera(_controller.isFront);
+              _controller.isFront = !_controller.isFront;
+            },
+            icon: const Icon(Icons.camera_front),
+          ),
+        ),
+      ),
+      Expanded(
+        child: CircleAvatar(
+          backgroundColor: _controller.isCamOn ? Colors.green : Colors.red,
+          child: IconButton(
+            onPressed: () {
+              instance.turnCameraOn(_controller.isCamOn);
+              _controller.isCamOn = !_controller.isCamOn;
+            },
+            icon: const Icon(Icons.camera),
+          ),
+        ),
+      ),
+      Expanded(
+        child: CircleAvatar(
+          backgroundColor: _controller.isMicOn ? Colors.green : Colors.red,
+          child: IconButton(
+            onPressed: () {
+              instance.turnMicrophoneOn(_controller.isMicOn);
+              _controller.isMicOn = !_controller.isMicOn;
+            },
+            icon: const Icon(Icons.mic),
+          ),
+        ),
+      ),
+      Expanded(
+        child: CircleAvatar(
+          child: IconButton(
+            onPressed: () async {
+              final bool removed = await _zegoController.leave(
+                context,
+                showConfirmation: true,
+              );
+              if (removed) {
+                _controller.zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
+              } else {}
+            },
+            icon: const Icon(Icons.exit_to_app),
+          ),
+        ),
+      ),
+      if (isEngaded)
+        Expanded(
+          child: CircleAvatar(
+            child: IconButton(
+              onPressed: removeCoHostOrStopCoHost,
+              icon: const Icon(Icons.exit_to_app),
+            ),
+          ),
+        )
+      else
+        const SizedBox(),
+    ];
+    return Row(children: widgets);
+  }
+
+  Widget bottomControls() {
+    return StreamBuilder<DatabaseEvent>(
+      stream: FirebaseDatabase.instance
+          .ref()
+          .child("live/${_controller.liveId}/waitList")
+          .onValue
+          .asBroadcastStream(),
+      builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
+        (bool returnValueBool, String returnValueString) multipleReturns;
+        multipleReturns = _controller.isEngaded(
+          snapshot.data?.snapshot,
+          isForMe: false,
+        );
+        final bool isEngaded = multipleReturns.$1;
+        final String type = multipleReturns.$2;
+        return bottomControlsWidgets(isEngaded: isEngaded, type: type);
+      },
+    );
+  }
+
   ZegoUIKitPrebuiltLiveStreamingEvents get events {
     return ZegoUIKitPrebuiltLiveStreamingEvents(
       hostEvents: ZegoUIKitPrebuiltLiveStreamingHostEvents(
-        onCoHostRequestReceived: (audience) async {
-          await onCoHostRequestReceived(audience);
+        onCoHostRequestReceived: (ZegoUIKitUser user) {
+          showNotifOverlay(user: user, msg: "onCoHostRequestReceived");
         },
-        onCoHostRequestCanceled: (v) => print("on:: onCoHostRequestCanceled"),
-        onCoHostRequestTimeout: (v) => print("on:: onCoHostRequestTimeout"),
-        onActionAcceptCoHostRequest: () =>
-            print("on:: onActionAcceptCoHostRequest"),
-        onActionRefuseCoHostRequest: () =>
-            print("on:: onActionRefuseCoHostRequest"),
-        onCoHostInvitationSent: (v) => print("on:: onCoHostInvitationSent"),
-        onCoHostInvitationTimeout: (v) =>
-            print("on:: onCoHostInvitationTimeout"),
-        onCoHostInvitationAccepted: (v) =>
-            print("on:: onCoHostInvitationAccepted"),
-        onCoHostInvitationRefused: (v) =>
-            print("on:: onCoHostInvitationRefused"),
+        onCoHostRequestCanceled: (ZegoUIKitUser user) async {
+          showNotifOverlay(user: user, msg: "onCoHostRequestCanceled");
+          await onCoHostRequestCanceled(user);
+        },
+        onCoHostRequestTimeout: (ZegoUIKitUser user) {
+          showNotifOverlay(user: user, msg: "onCoHostRequestTimeout");
+        },
+        onActionAcceptCoHostRequest: () {
+          showNotifOverlay(user: null, msg: "onActionAcceptCoHostRequest");
+        },
+        onActionRefuseCoHostRequest: () {
+          showNotifOverlay(user: null, msg: "onActionRefuseCoHostRequest");
+        },
+        onCoHostInvitationSent: (ZegoUIKitUser user) {
+          showNotifOverlay(user: user, msg: "onCoHostInvitationSent");
+        },
+        onCoHostInvitationTimeout: (ZegoUIKitUser user) {
+          showNotifOverlay(user: user, msg: "onCoHostInvitationTimeout");
+        },
+        onCoHostInvitationAccepted: (ZegoUIKitUser user) {
+          showNotifOverlay(user: user, msg: "onCoHostInvitationAccepted");
+        },
+        onCoHostInvitationRefused: (ZegoUIKitUser user) {
+          showNotifOverlay(user: user, msg: "onCoHostInvitationRefused");
+        },
       ),
       audienceEvents: ZegoUIKitPrebuiltLiveStreamingAudienceEvents(
-        onCoHostRequestSent: () => print("on:: onCoHostRequestSent"),
-        onActionCancelCoHostRequest: () =>
-            print("on:: onActionCancelCoHostRequest"),
-        onCoHostRequestTimeout: () => print("on:: onCoHostRequestTimeout"),
-        onCoHostRequestAccepted: () => print("on:: onCoHostRequestAccepted"),
-        onCoHostRequestRefused: () => print("on:: onCoHostRequestRefused"),
-        onCoHostInvitationReceived: (v) =>
-            print("on:: onCoHostInvitationReceived"),
-        onCoHostInvitationTimeout: () =>
-            print("on:: onCoHostInvitationTimeout"),
-        onActionAcceptCoHostInvitation: () =>
-            print("on:: onActionAcceptCoHostInvitation"),
-        onActionRefuseCoHostInvitation: () =>
-            print("on:: onActionRefuseCoHostInvitation"),
+        onCoHostRequestSent: () {
+          showNotifOverlay(user: null, msg: "onCoHostRequestSent");
+        },
+        onActionCancelCoHostRequest: () {
+          showNotifOverlay(user: null, msg: "onActionCancelCoHostRequest");
+        },
+        onCoHostRequestTimeout: () {
+          showNotifOverlay(user: null, msg: "onCoHostRequestTimeout");
+        },
+        onCoHostRequestAccepted: () {
+          showNotifOverlay(user: null, msg: "onCoHostRequestAccepted");
+        },
+        onCoHostRequestRefused: () {
+          showNotifOverlay(user: null, msg: "onCoHostRequestRefused");
+        },
+        onCoHostInvitationReceived: (ZegoUIKitUser user) {
+          showNotifOverlay(user: user, msg: "onCoHostInvitationReceived");
+        },
+        onCoHostInvitationTimeout: () {
+          showNotifOverlay(user: null, msg: "onCoHostInvitationTimeout");
+        },
+        onActionAcceptCoHostInvitation: () {
+          showNotifOverlay(user: null, msg: "onActionAcceptCoHostInvitation");
+        },
+        onActionRefuseCoHostInvitation: () {
+          showNotifOverlay(user: null, msg: "onActionRefuseCoHostInvitation");
+        },
       ),
     );
   }
 
-  Future<void> onCoHostRequestReceived(audience) async {
+  Future<void> onCoHostRequestCanceled(ZegoUIKitUser user) async {
     await hostingAndCoHostingPopup(
       onClose: Get.back,
       needAcceptButton: true,
       needDeclinetButton: false,
       onAcceptButton: () async {
-        //
-        //
-        //
-        await _streamingController.connect.hostRejectCoHostRequest(
-          audience,
-        );
-        //
-        //
-        //
-        await _streamingController.connectInvite
-            .hostSendCoHostInvitationToAudience(
-          audience,
-          withToast: false,
+        final ZegoLiveStreamingConnectInviteController connectInvite =
+            _zegoController.connectInvite;
+        _controller.zegoUIKitUser = user;
+        await connectInvite.hostSendCoHostInvitationToAudience(
+          user,
         );
       },
       onDeclineButton: () {},
     );
+    return Future<void>.value();
+  }
+
+  Future<void> removeCoHostOrStopCoHost() async {
+    final ZegoLiveStreamingConnectController connect = _zegoController.connect;
+    final bool removed = _controller.isHost
+        ? await connect.removeCoHost(_controller.zegoUIKitUser)
+        : await connect.stopCoHost();
+    if (removed) {
+      _controller.zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
+      _controller.isHost
+          ? await _controller.removeFromWaitListWhereEngadedIsTrue()
+          : await _controller.removeFromWaitList();
+    } else {}
     return Future<void>.value();
   }
 
