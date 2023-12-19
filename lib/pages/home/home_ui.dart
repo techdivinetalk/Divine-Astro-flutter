@@ -13,6 +13,7 @@ import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/load_image.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -426,125 +427,132 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget viewKundliWidget() {
-    return Container(
-      width: ScreenUtil().screenWidth,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: AppColors.white,
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              blurRadius: 3.0,
-              offset: const Offset(0, 3.0)),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return StreamBuilder<BroadcastMessage>(
+      initialData: BroadcastMessage(name: '', data: {}),
+      stream: controller.broadcastReceiver.messages,
+      builder: (context, broadcastSnapshot) {
+        Map<String, dynamic>? data = broadcastSnapshot.data?.data;
+        return Container(
+          width: ScreenUtil().screenWidth,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: AppColors.white,
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 3.0,
+                  offset: const Offset(0, 3.0)),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Order Id : 1234567890',
-                  style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Order Id : ${data?["orderId"]}',
+                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500),
+                    ),
+                    Text(
+                      '23 June 23, 02:46 PM',
+                      style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue.withOpacity(.5),
+                      ),
+                    ),
+                  ],
                 ),
+                const SizedBox(height: 8),
                 Text(
-                  '23 June 23, 02:46 PM',
+                  'On-Going CALL',
+                  style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'with ${data?["username"]}(user id) for 00:04:32 ',
                   style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w400,
                     fontColor: AppColors.darkBlue.withOpacity(.5),
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'On-Going CALL',
-              style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'with Username(user id) for 00:04:32 ',
-              style: AppTextStyle.textStyle12(
-                fontWeight: FontWeight.w400,
-                fontColor: AppColors.darkBlue.withOpacity(.5),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Gender: Male',
-              style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'DOB: 16-April-1998',
-              style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'TOB: 9:30 PM',
-              style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'POB: New Delhi, Delhi, India',
-              style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                const SizedBox(height: 8),
+                Text(
+                  'Gender: ${data?["gender"]}',
+                  style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'DOB: ${data?["dob"]}',
+                  style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'TOB: ${data?["tob"]}',
+                  style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'POB: ${data?["pob"]}',
+                  style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Marital Status: Single',
-                      style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Marital Status: ${data?["marital"]}',
+                          style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Problem Area: ${data?["problem"]}',
+                          style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Problem Area: Love and Relationship',
-                      style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
+                    InkWell(
+                      onTap: () {
+
+                      },
+                      child: Container(
+                        height: 54.h,
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [
+                              AppColors.appYellowColour,
+                              AppColors.gradientBottom
+                            ],
+                          ),
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(30)),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                        // alignment: Alignment.center,
+                        child: Center(
+                          child: Text(
+                            "View Kundali",
+                            style: AppTextStyle.textStyle14(
+                                fontColor: AppColors.brownColour,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
-                ),
-                InkWell(
-                  onTap: () {
-
-                  },
-                  child: Container(
-                    height: 54.h,
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                          AppColors.appYellowColour,
-                          AppColors.gradientBottom
-                        ],
-                      ),
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(30)),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    // alignment: Alignment.center,
-                    child: Center(
-                      child: Text(
-                        "View Kundali",
-                        style: AppTextStyle.textStyle14(
-                            fontColor: AppColors.brownColour,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ),
+                )
               ],
-            )
-          ],
-        ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 

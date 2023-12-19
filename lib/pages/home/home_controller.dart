@@ -13,6 +13,7 @@ import 'package:divine_astrologer/pages/home/home_ui.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -74,9 +75,15 @@ class HomeController extends GetxController {
     }
   }
 
+  BroadcastReceiver broadcastReceiver = BroadcastReceiver(names: <String>["callKundli"]);
+
   @override
   void onInit() async {
     super.onInit();
+    broadcastReceiver.start();
+    broadcastReceiver.messages.listen((event) {
+      debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
+    });
     userData = preferenceService.getUserDetail();
     appbarTitle.value = userData?.name ?? "Astrologer Name";
     await getFilteredPerformance();

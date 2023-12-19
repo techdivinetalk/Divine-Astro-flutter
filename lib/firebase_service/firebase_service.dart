@@ -50,7 +50,8 @@ class AppFirebaseService {
           if (realTimeData['callKundli'] != null) {
             Map<String, dynamic>? callKundli =
             Map<String, dynamic>.from(realTimeData['callKundli'] as Map<Object?, Object?>);
-
+            sendBroadcast(
+                BroadcastMessage(name: "callKundli", data: callKundli));
           }
           if (realTimeData['notification'] != null) {
             realTimeData['notification'].forEach((key, value) {
