@@ -200,7 +200,7 @@ void divineSnackBar({required String data, Color? color, Duration? duration}) {
   }
 }
 
-acceptOrRejectChat({required int? orderId, required int? queueId}) async {
+Future<bool> acceptOrRejectChat({required int? orderId, required int? queueId}) async {
 // *accept_or_reject: 1 = accept, 3 = chat reject by timeout
 // * is_timeout: should be 1 when reject by timeout"
 

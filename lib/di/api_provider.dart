@@ -120,6 +120,8 @@ class ApiProvider {
   final String  messageSent = "message-sent";
   final String  changeMsgStatus = "change-msg-status";
   final String  msgStatusChanged = "msg-status-changed";
+  final String  leavePrivateChat = "leave-private-chat";
+  final String  userDisconnected = "user-disconnected";
 
 
   //privacy policy & terms

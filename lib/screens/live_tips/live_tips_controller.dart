@@ -34,14 +34,15 @@ class LiveTipsController extends GetxController {
         "id": astroId,
         "name": name,
         "image": image,
-        "isEngaged": 0,
         "isAvailable": true,
-        "callType": "",
-        "duration": 0,
-        "callStatus": 0,
-        "userId": 0,
-        "userName": "",
-        "speciality": getSpecialAbilityInString(),
+        "isEngaged": 0,
+        // "blockList": <dynamic>[""],
+        // "callType": "",
+        // "duration": 0,
+        // "callStatus": 0,
+        // "userId": 0,
+        // "userName": "",
+        // "speciality": getSpecialAbilityInString(),
       },
     );
     await Get.toNamed(RouteName.liveDharamScreen, arguments: astroId);
@@ -82,16 +83,16 @@ class LiveTipsController extends GetxController {
   //   });
   // }
 
-  String getSpecialAbilityInString() {
-    String allData = pref.getSpecialAbility() ?? "";
-    Map m = jsonDecode(allData);
-    List data = m["data"];
-    List nameList = [];
-    for (var element in data) {
-      nameList.add(element["name"]);
-    }
-    return nameList.join(", ");
-  }
+  // String getSpecialAbilityInString() {
+  //   String allData = pref.getSpecialAbility() ?? "";
+  //   Map m = jsonDecode(allData);
+  //   List data = m["data"];
+  //   List nameList = [];
+  //   for (var element in data) {
+  //     nameList.add(element["name"]);
+  //   }
+  //   return nameList.join(", ");
+  // }
 
   giftPopup(BuildContext context) async {
     await openBottomSheet(

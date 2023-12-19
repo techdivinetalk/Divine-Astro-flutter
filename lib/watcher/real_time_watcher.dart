@@ -15,10 +15,7 @@ class RealTimeWatcher {
     }
   }
 
-
-
   void dispose() {
     _nameSubject.close();
   }
 }
-

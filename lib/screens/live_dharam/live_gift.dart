@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:svgaplayer_flutter/parser.dart';
-import 'package:svgaplayer_flutter/player.dart';
-import 'package:svgaplayer_flutter/proto/svga.pb.dart';
+import "package:flutter/material.dart";
+import "package:svgaplayer_flutter/parser.dart";
+import "package:svgaplayer_flutter/player.dart";
+import "package:svgaplayer_flutter/proto/svga.pb.dart";
 
 class LiveGiftWidget extends StatefulWidget {
   static OverlayEntry? currentGiftEntries;
@@ -67,7 +67,7 @@ class LiveGiftWidgetState extends State<LiveGiftWidget>
   @override
   void initState() {
     super.initState();
-    movieEntity = SVGAParser.shared.decodeFromAssets(widget.giftPath);
+    movieEntity = SVGAParser.shared.decodeFromURL(widget.giftPath);
   }
 
   @override
@@ -89,9 +89,9 @@ class LiveGiftWidgetState extends State<LiveGiftWidget>
             }));
           return SVGAImage(animationController!);
         } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
+          return Text("${snapshot.error}");
         } else {
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );
