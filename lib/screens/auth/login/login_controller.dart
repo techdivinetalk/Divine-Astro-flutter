@@ -135,6 +135,11 @@ class LoginController extends GetxController {
 
   Future<LoginImages> getInitialLoginImages() async {
     final response = await userRepository.getInitialLoginImages();
+    
+    //added by: dev-dharam
+    Get.find<SharedPreferenceService>().setAmazonUrl(response.data.baseurl);
+    //
+    
     return response;
   }
 

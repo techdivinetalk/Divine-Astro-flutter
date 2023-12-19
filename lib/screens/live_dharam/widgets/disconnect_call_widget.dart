@@ -102,10 +102,7 @@ class _DisconnectWidgetState extends State<DisconnectWidget> {
             children: <Widget>[
               const SizedBox(height: 16),
               const SizedBox(height: 16),
-              CircleAvatar(
-                radius: 24,
-                child: CustomImageWidget(imageUrl: widget.astroAvatar),
-              ),
+              CustomImageWidget(imageUrl: widget.custoAvatar, rounded: true),
               const SizedBox(width: 16),
               Image.asset(
                 "assets/images/live_dashes.png",
@@ -113,10 +110,7 @@ class _DisconnectWidgetState extends State<DisconnectWidget> {
                 width: 150,
               ),
               const SizedBox(width: 16),
-              CircleAvatar(
-                radius: 24,
-                child: CustomImageWidget(imageUrl: widget.custoAvatar),
-              ),
+              CustomImageWidget(imageUrl: widget.astroAvatar, rounded: true),
               const SizedBox(height: 16),
               const SizedBox(height: 16),
             ],

@@ -97,10 +97,12 @@ class _WaitListWidgetState extends State<WaitListWidget> {
           top: -50,
           left: 0,
           right: 0,
-          child: CircleAvatar(
-            radius: 50,
+          child: SizedBox(
+            height: 100,
+            width: 100,
             child: CustomImageWidget(
               imageUrl: widget.astologerImage,
+              rounded: true,
             ),
           ),
         ),
@@ -109,20 +111,11 @@ class _WaitListWidgetState extends State<WaitListWidget> {
   }
 
   Widget grid() {
-    // final Data data = widget.details.data ?? Data();
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
-            // const SizedBox(height: 64 - 16),
-            // Text(widget.astologerName),
-            // const SizedBox(height: 8),
-            // Text(widget.astologerSpeciality),
-            // const SizedBox(height: 8),
-            // Text(widget.waitTime),
-            // const SizedBox(height: 8),
-            // const Divider(),
             const SizedBox(height: 64 - 16),
             Text(
               widget.astologerName,
@@ -151,7 +144,6 @@ class _WaitListWidgetState extends State<WaitListWidget> {
             ),
             const SizedBox(height: 8),
             const Divider(),
-
             SizedBox(
               height: Get.height / 3.0,
               child: ListView.builder(
@@ -162,7 +154,6 @@ class _WaitListWidgetState extends State<WaitListWidget> {
                 },
               ),
             ),
-
             exitWidget(),
           ],
         ),
@@ -174,9 +165,7 @@ class _WaitListWidgetState extends State<WaitListWidget> {
     return ListTile(
       dense: true,
       contentPadding: EdgeInsets.zero,
-      leading: CircleAvatar(
-        child: CustomImageWidget(imageUrl: item.avatar),
-      ),
+      leading: CustomImageWidget(imageUrl: item.avatar, rounded: true),
       title: Text(item.userName),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
@@ -204,10 +193,7 @@ class _WaitListWidgetState extends State<WaitListWidget> {
         break;
     }
 
-    return CircleAvatar(
-      backgroundColor: AppColors.white,
-      child: Image.asset(returnString),
-    );
+    return Image.asset(returnString);
   }
 
   Widget exitWidget() {

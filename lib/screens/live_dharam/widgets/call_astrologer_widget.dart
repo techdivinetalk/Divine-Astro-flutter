@@ -1,8 +1,8 @@
 // import "dart:ui";
 
-// import "package:divine_app/common/colors.dart";
-// import "package:divine_app/model/live/get_astrologer_details_response.dart";
-// import "package:divine_app/screens/live_dharam/widgets/custom_image_widget.dart";
+// import "package:divine_astrologer/common/colors.dart";
+// import "package:divine_astrologer/model/live/get_astrologer_details_response.dart";
+// import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 // import "package:flutter/material.dart";
 // import "package:get/get.dart";
 
@@ -86,10 +86,12 @@
 //           top: -50,
 //           left: 0,
 //           right: 0,
-//           child: CircleAvatar(
-//             radius: 50,
+//           child: SizedBox(
+//             height: 100,
+//             width: 100,
 //             child: CustomImageWidget(
 //               imageUrl: widget.details.data?.image ?? "",
+//               rounded: true,
 //             ),
 //           ),
 //         ),
@@ -99,7 +101,6 @@
 
 //   Widget grid() {
 //     final Data data = widget.details.data ?? Data();
-
 //     final int videoDiscount = data.videoDiscountedAmount ?? 0;
 //     final int videoOriginal = data.videoCallAmount ?? 0;
 //     final int audioDiscount = data.audioDiscountedAmount ?? 0;
@@ -185,10 +186,7 @@
 //     return ListTile(
 //       dense: true,
 //       contentPadding: EdgeInsets.zero,
-//       leading: CircleAvatar(
-//         backgroundColor: AppColors.white,
-//         child: Image.asset(asset),
-//       ),
+//       leading: Image.asset(asset),
 //       title: textWidget(
 //         type: type,
 //         discountAmount: discountAmount,
@@ -230,16 +228,16 @@
 //             children: <Widget>[
 //               Expanded(
 //                 flex: 2,
-//                 child: Text("Video Call @ ₹$originalAmount/Min"),
+//                 child: Text("$type Call @ ₹$originalAmount/Min"),
 //               ),
 //             ],
 //           )
 //         : Row(
 //             children: <Widget>[
 //               Expanded(
-//                 flex: 2,
+//                 flex: 3,
 //                 child: Text(
-//                   "Video Call @ ₹$discountAmount/Min",
+//                   "$type Call @ ₹$discountAmount/Min",
 //                   style: const TextStyle(
 //                     fontWeight: FontWeight.bold,
 //                   ),

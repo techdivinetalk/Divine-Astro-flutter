@@ -184,6 +184,7 @@ class _LivePage extends State<LiveDharamScreen>
           // : zegoUser == astroUser
           //     ? (_controller.details.data?.image ?? "")
           : "https://robohash.org/avatarWidget",
+      rounded: true,
     );
   }
 
@@ -218,7 +219,7 @@ class _LivePage extends State<LiveDharamScreen>
           ),
           const SizedBox(height: 16),
           // horizontalGiftBar(),
-          // const SizedBox(height: 16),
+          const SizedBox(height: 16),
           bottomBarWidget(),
           const SizedBox(height: 16),
         ],
@@ -234,8 +235,7 @@ class _LivePage extends State<LiveDharamScreen>
           const SizedBox(width: 16),
           IconButton(
             onPressed: () async {
-              await _zegoController.leave(context, showConfirmation: true);
-              // await exitPopup(isFromFunc: false);
+              await _zegoController.leave(context);
             },
             icon: const Icon(Icons.arrow_back_ios, color: AppColors.white),
           ),
@@ -261,10 +261,9 @@ class _LivePage extends State<LiveDharamScreen>
                   child: Row(
                     children: <Widget>[
                       const SizedBox(width: 4),
-                      CircleAvatar(
-                        child: CustomImageWidget(
-                          imageUrl: _controller.avatar,
-                        ),
+                      CustomImageWidget(
+                        imageUrl: _controller.avatar,
+                        rounded: true,
                       ),
                       const SizedBox(width: 4),
                       Expanded(
@@ -346,11 +345,10 @@ class _LivePage extends State<LiveDharamScreen>
                             child: Row(
                               children: <Widget>[
                                 const SizedBox(width: 4),
-                                CircleAvatar(
-                                  child: CustomImageWidget(
-                                    imageUrl: _controller
-                                        .leaderboardModel.first.avatar,
-                                  ),
+                                CustomImageWidget(
+                                  imageUrl:
+                                      _controller.leaderboardModel.first.avatar,
+                                  rounded: true,
                                 ),
                                 const SizedBox(width: 4),
                                 Expanded(
@@ -447,7 +445,10 @@ class _LivePage extends State<LiveDharamScreen>
   //                 SizedBox(
   //                   height: 50,
   //                   width: 50,
-  //                   child: CustomImageWidget(imageUrl: item.giftImage),
+  //                   child: CustomImageWidget(
+  //                     imageUrl: item.giftImage,
+  //                     rounded: false,
+  //                   ),
   //                 ),
   //                 const SizedBox(height: 8),
   //                 Text(
@@ -468,97 +469,87 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget bottomBarWidget() {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         const SizedBox(width: 16),
         Expanded(
-          child: TextField(
-            controller: _editingController,
-            onSubmitted: (String value) async {
-              final String msg = _editingController.value.text;
-              await _zegoController.message.send(msg);
-              _editingController.clear();
-              FocusManager.instance.primaryFocus?.unfocus();
-              scrollDown();
-            },
-            cursorColor: Colors.white,
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-              suffixIcon: IconButton(
-                onPressed: () async {
-                  final String msg = _editingController.value.text;
-                  await _zegoController.message.send(msg);
-                  _editingController.clear();
-                  FocusManager.instance.primaryFocus?.unfocus();
-                  scrollDown();
-                },
-                icon: const Icon(Icons.send, color: Colors.white),
-              ),
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-              filled: true,
-              fillColor: AppColors.white.withOpacity(0.2),
-              hintText: "Say Hi",
-              hintStyle: const TextStyle(color: AppColors.white),
-              border: OutlineInputBorder(
-                borderSide: const BorderSide(width: 2, color: Colors.white),
-                borderRadius: BorderRadius.circular(50.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 2, color: Colors.white),
-                borderRadius: BorderRadius.circular(50.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 2, color: Colors.white),
-                borderRadius: BorderRadius.circular(50.0),
+          child: SizedBox(
+            height: 40,
+            child: TextField(
+              controller: _editingController,
+              onSubmitted: (String value) async {
+                final String msg = _editingController.value.text;
+                await _zegoController.message.send(msg);
+                _editingController.clear();
+                FocusManager.instance.primaryFocus?.unfocus();
+                scrollDown();
+              },
+              cursorColor: Colors.white,
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+                suffixIcon: IconButton(
+                  onPressed: () async {
+                    final String msg = _editingController.value.text;
+                    await _zegoController.message.send(msg);
+                    _editingController.clear();
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    scrollDown();
+                  },
+                  icon: const Icon(Icons.send, color: Colors.white),
+                ),
+                floatingLabelBehavior: FloatingLabelBehavior.never,
+                filled: true,
+                fillColor: AppColors.white.withOpacity(0.2),
+                hintText: "Say Hi",
+                hintStyle: const TextStyle(color: AppColors.white),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(width: 2, color: Colors.white),
+                  borderRadius: BorderRadius.circular(50.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(width: 2, color: Colors.white),
+                  borderRadius: BorderRadius.circular(50.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(width: 2, color: Colors.white),
+                  borderRadius: BorderRadius.circular(50.0),
+                ),
               ),
             ),
           ),
         ),
         const SizedBox(width: 16),
-        IconButton(
-          onPressed: () {
+        InkWell(
+          onTap: () async {
             final ZegoUIKit instance = ZegoUIKit.instance;
             _controller.isCamOn = !_controller.isCamOn;
             instance.turnCameraOn(_controller.isCamOn);
           },
-          icon: Image.asset(
+          child: Image.asset(
+            height: 40,
+            fit: BoxFit.cover,
             !_controller.isCamOn
                 ? "assets/images/live_cam_on.png"
                 : "assets/images/live_cam_off.png",
           ),
         ),
         const SizedBox(width: 16),
-        IconButton(
-          onPressed: () {
+        InkWell(
+          onTap: () {
             final ZegoUIKit instance = ZegoUIKit.instance;
             _controller.isMicOn = !_controller.isMicOn;
             instance.turnMicrophoneOn(_controller.isMicOn);
           },
-          icon: Image.asset(
+          child: Image.asset(
+            height: 40,
+            fit: BoxFit.cover,
             !_controller.isMicOn
                 ? "assets/images/live_mic_on.png"
                 : "assets/images/live_mic_off.png",
           ),
         ),
         const SizedBox(width: 16),
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
       ],
     );
   }
@@ -589,9 +580,11 @@ class _LivePage extends State<LiveDharamScreen>
         BuildContext context,
         AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,
       ) {
-        final List<ZegoInRoomMessage> messages =
+        List<ZegoInRoomMessage> messages =
             snapshot.data ?? <ZegoInRoomMessage>[];
+        messages = messages.reversed.toList();
         return ListView.builder(
+          reverse: true,
           shrinkWrap: true,
           itemCount: messages.length,
           controller: _scrollController,
@@ -603,56 +596,48 @@ class _LivePage extends State<LiveDharamScreen>
             //     (_controller.details.data?.id ?? 0).toString();
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                  border: Border.all(color: AppColors.black.withOpacity(0.2)),
-                  color: AppColors.black.withOpacity(0.2),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Row(
-                    children: <Widget>[
-                      const SizedBox(width: 4),
-                      CircleAvatar(
-                        child: CustomImageWidget(
-                          imageUrl: zegoUser == mineUser
-                              ? _controller.avatar
-                              // : zegoUser == astroUser
-                              //     ? (_controller.details.data?.image ?? "")
-                              : "https://robohash.org/sa",
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Row(
+                  children: <Widget>[
+                    const SizedBox(width: 4),
+                    CircleAvatar(
+                      child: CustomImageWidget(
+                        imageUrl: zegoUser == mineUser
+                            ? _controller.avatar
+                            // : zegoUser == astroUser
+                            //     ? (_controller.details.data?.image ?? "")
+                            : "https://robohash.org/sa",
+                            rounded: true,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          message.user.name,
+                          style: const TextStyle(color: AppColors.white),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              message.user.name,
-                              style: const TextStyle(color: AppColors.white),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              message.message,
-                              style: const TextStyle(color: AppColors.white),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
+                        const SizedBox(width: 4),
+                        Text(
+                          message.message,
+                          style: const TextStyle(color: AppColors.white),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      const SizedBox(width: 4),
-                      IconButton(
-                        onPressed: () async {
-                          await moreOptionsPopup(userId: message.user.id);
-                        },
-                        icon: const Icon(Icons.more_vert),
-                      ),
-                      const SizedBox(width: 4),
-                    ],
-                  ),
+                      ],
+                    ),
+                    const SizedBox(width: 4),
+                    IconButton(
+                      onPressed: () async {
+                        await moreOptionsPopup(userId: message.user.id);
+                      },
+                      icon: const Icon(Icons.more_vert),
+                    ),
+                    const SizedBox(width: 4),
+                  ],
                 ),
               ),
             );
@@ -684,7 +669,7 @@ class _LivePage extends State<LiveDharamScreen>
                   ) multipleReturns;
                   multipleReturns = _controller.isEngaded(
                     snapshot.data?.snapshot,
-                    isForMe: true,
+                    isForMe: false,
                   );
                   final bool isEngaded = multipleReturns.$1;
                   final String type = multipleReturns.$2;
@@ -1014,7 +999,7 @@ class _LivePage extends State<LiveDharamScreen>
   //   return Future<void>.value();
   // }
 
-  // Future<void> exitPopup({required bool isFromFunc}) async {
+  // Future<void> exitPopup() async {
   //   await showCupertinoModalPopup(
   //     context: context,
   //     builder: (BuildContext context) {
@@ -1029,19 +1014,6 @@ class _LivePage extends State<LiveDharamScreen>
   //           } else {
   //             await _controller.followOrUnfollowAstrologer();
   //           }
-  //           if (mounted) {
-  //             if (isFromFunc) {
-  //               final bool removed = await _zegoController.leave(
-  //                 context,
-  //                 showConfirmation: false,
-  //               );
-  //               if (removed) {
-  //                 _controller.zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
-  //               } else {}
-  //             } else {
-  //               await _zegoController.leave(context, showConfirmation: false);
-  //             }
-  //           } else {}
   //         },
   //       );
   //     },
@@ -1136,26 +1108,19 @@ class _LivePage extends State<LiveDharamScreen>
     return;
   }
 
-  //
+  // dharam
 
   Future<void> exitFunc({required bool isEngaded}) async {
     if (isEngaded) {
       await disconnectPopup(
         noDisconnect: () {},
-        yesDisconnect: () async {
-          // await _controller.makeAPICallForEndCall();
-          await removeCoHostOrStopCoHost();
-        },
+        yesDisconnect: removeCoHostOrStopCoHost,
       );
     } else {
-      final bool removed = await _zegoController.leave(
-        context,
-        showConfirmation: true,
-      );
-      if (removed) {
+      if (mounted) {
+        await _zegoController.leave(context);
         _controller.zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
       } else {}
-      // await exitPopup(isFromFunc: true);
     }
     return Future<void>.value();
   }
@@ -1281,8 +1246,9 @@ class _LivePage extends State<LiveDharamScreen>
             Get.back();
             onDeclineButton();
           },
-          avatar: _controller.waitListModel.first.avatar,
-          userName: _controller.waitListModel.first.userName,
+          avatar:
+              "https://divinenew-prod.s3.ap-south-1.amazonaws.com/customer/8790/profile_image1702965912.jpg",
+          userName: 'Dharam',
         );
       },
     );

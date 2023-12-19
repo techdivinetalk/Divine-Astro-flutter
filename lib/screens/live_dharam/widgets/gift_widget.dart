@@ -205,7 +205,7 @@ class _GiftWidgetState extends State<GiftWidget> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                CustomImageWidget(imageUrl: item.giftImage),
+                CustomImageWidget(imageUrl: item.giftImage, rounded: false),
                 const SizedBox(height: 8),
                 Text(
                   "₹${item.giftPrice}",

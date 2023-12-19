@@ -56,7 +56,11 @@ class LiveDharamController extends GetxController {
     userId = (_pref.getUserDetail()?.id ?? "").toString();
     userName = _pref.getUserDetail()?.name ?? "";
     // avatar = _pref.getUserDetail()?.avatar ?? "";
-    avatar = isValidImageURL(imageURL: _pref.getUserDetail()?.image ?? "");
+
+    final String awsURL = _pref.getAmazonUrl() ?? "";
+    final String image = _pref.getUserDetail()?.image ?? "";
+    avatar = isValidImageURL(imageURL: "$awsURL/$image");
+
     liveId = (Get.arguments ?? "").toString();
     isHost = true;
     isHostAvailable = true;

@@ -29,25 +29,36 @@ class LiveTipsController extends GetxController {
   }
 
   Future<void> myFun() async {
-    await database.ref().child("live/$astroId").update(
+    final String userId = (pref.getUserDetail()?.id ?? "").toString();
+    final String userName = pref.getUserDetail()?.name ?? "";
+    final String awsURL = pref.getAmazonUrl() ?? "";
+    final String image = pref.getUserDetail()?.image ?? "";
+    final String avatar = isValidImageURL(imageURL: "$awsURL/$image");
+    await database.ref().child("live/$userId").update(
       {
-        "id": astroId,
-        "name": name,
-        "image": image,
+        "id": userId,
+        "name": userName,
+        "image": avatar,
         "isAvailable": true,
         "isEngaged": 0,
-        // "blockList": <dynamic>[""],
-        // "callType": "",
-        // "duration": 0,
-        // "callStatus": 0,
-        // "userId": 0,
-        // "userName": "",
-        // "speciality": getSpecialAbilityInString(),
       },
     );
-    await Get.toNamed(RouteName.liveDharamScreen, arguments: astroId);
-    await database.ref().child("live/$astroId").remove();
+    await Get.toNamed(RouteName.liveDharamScreen, arguments: userId);
+    await database.ref().child("live/$userId").remove();
     return Future<void>.value();
+  }
+
+  String isValidImageURL({required String imageURL}) {
+    if (GetUtils.isURL(imageURL)) {
+      return imageURL;
+    } else {
+      imageURL = "${pref.getAmazonUrl()}$imageURL";
+      if (GetUtils.isURL(imageURL)) {
+        return imageURL;
+      } else {
+        return "https://robohash.org/details";
+      }
+    }
   }
 
   // jumpToLivePage(bool front) {

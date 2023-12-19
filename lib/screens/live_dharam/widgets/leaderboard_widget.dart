@@ -114,9 +114,7 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
                       : null,
                 ),
                 const SizedBox(width: 16),
-                CircleAvatar(
-                  child: CustomImageWidget(imageUrl: item.avatar),
-                ),
+                CustomImageWidget(imageUrl: item.avatar, rounded: true),
               ],
             ),
             title: Text(

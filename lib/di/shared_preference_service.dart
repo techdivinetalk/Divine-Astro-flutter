@@ -50,6 +50,9 @@ class SharedPreferenceService extends GetxService {
   }
 
   Future<bool> setAmazonUrl(String url) async {
+    //added by: dev-dharam
+    print("setAmazonUrl:: $url");
+    //
     return await prefs!.setString(baseAmazonUrl, url);
   }
 
@@ -143,5 +146,4 @@ class SharedPreferenceService extends GetxService {
   Future<bool> setTalkTime(int talkTimeValue) async {
     return await prefs!.setInt(talkTime, talkTimeValue);
   }
-
 }

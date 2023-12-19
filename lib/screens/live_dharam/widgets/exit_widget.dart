@@ -2,7 +2,6 @@ import "dart:ui";
 
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
-import "package:divine_astrologer/common/colors.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
 
@@ -65,7 +64,7 @@ class _ExitWidgetState extends State<ExitWidget> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
-          height: Get.height / 1.50,
+          height: Get.height / 2.00,
           width: Get.width,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
@@ -85,9 +84,10 @@ class _ExitWidgetState extends State<ExitWidget> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CircleAvatar(
-          radius: 50,
-          child: CustomImageWidget(imageUrl: widget.astrologerAvatar),
+        SizedBox(
+          height: 100,
+          width: 100,
+          child: CustomImageWidget(imageUrl: widget.astrologerAvatar, rounded: true),
         ),
         const SizedBox(height: 16),
         const Text("Would you like to follow"),
@@ -96,8 +96,6 @@ class _ExitWidgetState extends State<ExitWidget> {
           widget.astrologerUserName,
           style: const TextStyle(
             fontSize: 20,
-            decoration: TextDecoration.lineThrough,
-            decorationColor: Colors.red,
           ),
         ),
         const SizedBox(height: 16),

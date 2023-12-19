@@ -60,7 +60,7 @@ class _CongratulationsWidgetState extends State<CongratulationsWidget> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
-          height: Get.height / 1.50,
+          height: Get.height / 2.00,
           width: Get.width,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
@@ -83,9 +83,10 @@ class _CongratulationsWidgetState extends State<CongratulationsWidget> {
         Stack(
           clipBehavior: Clip.none,
           children: <Widget>[
-            CircleAvatar(
-              radius: 50,
-              child: CustomImageWidget(imageUrl: widget.imageURL),
+            SizedBox(
+              height: 100,
+              width: 100,
+              child: CustomImageWidget(imageUrl: widget.imageURL, rounded: true),
             ),
             Positioned(
               bottom: -10,
@@ -98,7 +99,6 @@ class _CongratulationsWidgetState extends State<CongratulationsWidget> {
         const Text("Congratulations!!"),
         const SizedBox(height: 16),
         const Text("You are now Astrologer's Live Star"),
-        const SizedBox(height: 16),
         const SizedBox(height: 16),
         Row(
           children: <Widget>[

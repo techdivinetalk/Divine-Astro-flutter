@@ -1,7 +1,6 @@
 import "dart:ui";
 
 import "package:divine_astrologer/common/colors.dart";
-import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
@@ -93,9 +92,10 @@ class _CallAcceptOrRejectWidgetState extends State<CallAcceptOrRejectWidget> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CircleAvatar(
-          radius: 50,
-          child: CustomImageWidget(imageUrl: widget.avatar),
+        SizedBox(
+          height: 100,
+          width: 100,
+          child: CustomImageWidget(imageUrl: widget.avatar, rounded: true),
         ),
         const SizedBox(height: 16),
         Text("${widget.userName} wants to start the call"),

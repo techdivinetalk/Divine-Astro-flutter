@@ -48,6 +48,11 @@ class DashboardController extends GetxController with GetSingleTickerProviderSta
     var commonConstants = await userRepository.constantDetailsData();
     preferenceService.setConstantDetails(commonConstants);
     preferenceService.setBaseImageURL(commonConstants.data.awsCredentails.baseurl!);
+    
+    //added by: dev-dharam
+    Get.find<SharedPreferenceService>().setAmazonUrl(commonConstants.data.awsCredentails.baseurl!);
+    //
+
 
     userProfileImage.value =
         userData?.image != null ? "${preferenceService.getBaseImageURL()}/${userData?.image}" : "";

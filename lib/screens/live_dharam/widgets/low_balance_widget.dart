@@ -69,7 +69,7 @@ class _LowBalanceWidgetState extends State<LowBalanceWidget> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
-          height: Get.height / 1.50,
+          height: Get.height / 1.50 + 16,
           width: Get.width,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
@@ -91,15 +91,10 @@ class _LowBalanceWidgetState extends State<LowBalanceWidget> {
       child: Column(
         children: <Widget>[
           const SizedBox(height: 16),
-          CircleAvatar(
-            radius: 50,
-            child: Image.asset("assets/images/live_new_wallet.png"),
-          ),
-          const SizedBox(height: 8),
-          const SizedBox(height: 8),
+          Image.asset("assets/images/live_new_wallet.png"),
+          const SizedBox(height: 16),
           const Text("Low Balance!"),
-          const SizedBox(height: 8),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           const Text(
             // ignore: lines_longer_than_80_chars
             "A minimum balance of 5 minutes (₹125) is required to start the consultation with this astrologer.",
