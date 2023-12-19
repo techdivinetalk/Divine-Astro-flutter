@@ -48,6 +48,7 @@ class ApiProvider {
   final String getShopUrl = "getShop";
   final String getProductListUrl = "getProductList";
   final String getProductDetailsUrl = "getProductDetails";
+  final String saveRemediesUrl = "saveRemedies";
   final String constantDetails = "constantDetails";
   final String getOrderHistoryUrl = "getOrderHistory";
   final String reviewReplyUrl = "reviewReply";

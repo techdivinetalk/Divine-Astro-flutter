@@ -20,7 +20,7 @@ class SuggestRemediesController extends GetxController {
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
   RxBool shopDataSync = false.obs;
-  int orderId = 100;
+  int? orderId;
 
   ShopData? shopData;
   var item = [
@@ -129,9 +129,7 @@ class SuggestRemediesController extends GetxController {
     super.onInit();
 
     if (Get.arguments != null) {
-      if (Get.arguments is int) {
         orderId = Get.arguments;
-      }
     }
     userData = preferenceService.getUserDetail();
     getShopData();

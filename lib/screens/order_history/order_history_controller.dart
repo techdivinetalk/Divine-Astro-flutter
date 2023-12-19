@@ -30,6 +30,7 @@ class OrderHistoryController extends GetxController {
   RxList<GiftDataList> giftHistoryList = <GiftDataList>[].obs;
   RxList<RemedySuggestedDataList> remedySuggestedHistoryList =
       <RemedySuggestedDataList>[].obs;
+  final preferenceService = Get.find<SharedPreferenceService>();
 
   var allPageCount = 1;
   var chatPageCount = 1;
@@ -69,10 +70,12 @@ class OrderHistoryController extends GetxController {
     };*/
 
     Map<String, dynamic> params = {
+      /// role id should be 7 in whole project
       "role_id": 7,
-      "type": 4,
-      "page": 1,
-      "device_token": "asdasdsadasdsa12313",
+      /// type 4 means suggest remedies
+      "type": type,
+      "page": page,
+      "device_token": "flK0vjuwShCgrDVctAlgYb:APA91bHGpnRlw04TwyHThWnR0c7LFQYV5CfqVFQDsHhVZVyuKazeLwxxjwxcfRcicIKvrr2ZaQnLkXQvoFomKuS-TZ7n7sKfVyfJiT3Cv4MTSaKO-LCYMWvoVHY_txFAFWFmy7NEn4mf",
       "start_date": "2023-02-06",
       "end_date": "2023-08-06"
     };

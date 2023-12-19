@@ -49,7 +49,7 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
                                     controller.productList?.products?[index];
                                 return InkWell(
                                   onTap: () {
-                                    Get.toNamed(RouteName.finalRemediesSubUI);
+                                    Get.toNamed(RouteName.categoryDetail, arguments: {"productId": item?.id, "orderId": controller.orderId});
                                   },
                                   child: Container(
                                     // width: 300,

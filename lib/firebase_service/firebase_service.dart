@@ -47,6 +47,12 @@ class AppFirebaseService {
           Map<String, dynamic>? realTimeData =
               Map<String, dynamic>.from(event.snapshot.value! as Map<Object?, Object?>);
 
+          if (realTimeData['callKundli'] != null) {
+            Map<String, dynamic>? callKundli =
+            Map<String, dynamic>.from(realTimeData['callKundli'] as Map<Object?, Object?>);
+            sendBroadcast(
+                BroadcastMessage(name: "callKundli", data: callKundli));
+          }
           if (realTimeData['notification'] != null) {
             realTimeData['notification'].forEach((key, value) {
               debugPrint('local notification $value');

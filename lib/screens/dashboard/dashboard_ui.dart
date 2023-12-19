@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
 import 'package:divine_astrologer/common/cached_network_image.dart';
+import 'package:divine_astrologer/screens/order_history/order_history_ui.dart';
 import 'package:divine_astrologer/screens/dashboard/widgets/accept_chat_widget.dart';
 import 'package:divine_astrologer/screens/dashboard/widgets/rejoin_widget.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:get/get.dart';
 
 import '../../../common/colors.dart';
 import '../../../gen/assets.gen.dart';
+import "../../common/routes.dart";
 import '../../pages/home/home_ui.dart';
 import '../../pages/performance/performance_ui.dart';
 import '../../pages/profile/profile_ui.dart';
@@ -176,7 +178,11 @@ class DashboardScreen extends GetView<DashboardController> {
   }
 
   void _onItemTapped(int index) async {
-    controller.selectedIndex.value = index;
+    if(index == 2) {
+      Get.toNamed(RouteName.orderHistory);
+    } else {
+      controller.selectedIndex.value = index;
+    }
   }
 
   static List<Widget> widgetOptions = <Widget>[
