@@ -1,51 +1,51 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
-import 'dart:io';
+import "dart:async";
+import "dart:convert";
+import "dart:developer";
+import "dart:io";
 
-import 'package:divine_astrologer/app_socket/app_socket.dart';
-import 'package:divine_astrologer/common/colors.dart';
+import "package:divine_astrologer/app_socket/app_socket.dart";
+import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/routes.dart";
-import 'package:divine_astrologer/di/hive_services.dart';
-import 'package:divine_astrologer/di/shared_preference_service.dart';
-import 'package:divine_astrologer/model/chat_offline_model.dart';
-import 'package:divine_astrologer/model/res_login.dart';
-import 'package:divine_astrologer/repository/user_repository.dart';
-import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
-import 'package:divine_astrologer/screens/live_page/constant.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
+import "package:divine_astrologer/di/hive_services.dart";
+import "package:divine_astrologer/di/shared_preference_service.dart";
+import "package:divine_astrologer/model/chat_offline_model.dart";
+import "package:divine_astrologer/model/res_login.dart";
+import "package:divine_astrologer/repository/user_repository.dart";
+import "package:divine_astrologer/screens/dashboard/dashboard_controller.dart";
+import "package:divine_astrologer/screens/live_page/constant.dart";
+import "package:firebase_database/firebase_database.dart";
+import "package:flutter/material.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
-import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:socket_io_client/socket_io_client.dart';
+import "package:flutter_image_compress/flutter_image_compress.dart";
+import "package:get/get.dart";
+import "package:http/http.dart" as http;
+import "package:image_cropper/image_cropper.dart";
+import "package:image_picker/image_picker.dart";
+import "package:path_provider/path_provider.dart";
+import "package:socket_io_client/socket_io_client.dart";
 
-import '../../common/common_functions.dart';
+import "../../common/common_functions.dart";
 
 class ChatMessageWithSocketController extends GetxController with WidgetsBindingObserver {
-  final userRepository = Get.find<UserRepository>();
+  final UserRepository userRepository = Get.find<UserRepository>();
   SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
   TextEditingController messageController = TextEditingController();
   UserData? userData = UserData();
   FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
-  var chatMessages = <ChatMessage>[].obs;
-  var databaseMessage = ChatMessagesOffline().obs;
+  RxList<ChatMessage> chatMessages = <ChatMessage>[].obs;
+  Rx<ChatMessagesOffline> databaseMessage = ChatMessagesOffline().obs;
   ScrollController messgeScrollController = ScrollController();
   ScrollController typingScrollController = ScrollController();
   File? image;
-  final picker = ImagePicker();
+  final ImagePicker picker = ImagePicker();
   XFile? pickedFile;
   File? uploadFile;
-  final preference = Get.find<SharedPreferenceService>();
+  final SharedPreferenceService preference = Get.find<SharedPreferenceService>();
   RxInt currentUserId = 0.obs;
-  String userDataKey = "userKey";
+  String userDataKey = "";
   bool sendReadMessageStatus = false;
   RxBool isEmojiShowing = false.obs;
-  Rx<String> showTalkTime = ''.obs;
+  Rx<String> showTalkTime = "".obs;
 
   // FocusNode msgFocus = FocusNode();
   RxInt unreadMessageIndex = 0.obs;
@@ -59,12 +59,12 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
   RxString profileImage = "".obs;
   RxBool isDataLoad = false.obs;
   RxBool isOngoingChat = false.obs;
-  RxString chatStatus = "".obs;
+  RxString chatStatus = "Offline".obs;
   DashboardController dashboardController = Get.find<DashboardController>();
   RxBool isTyping = false.obs;
   BroadcastReceiver broadcastReceiver = BroadcastReceiver(names: <String>["EndChat"]);
 
-  final socket = AppSocket();
+  final AppSocket socket = AppSocket();
   var arguments;
 
   Timer? _timer;
@@ -77,7 +77,7 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     if (_timer != null) {
       _timer!.cancel();
     }
-    const oneSec = Duration(seconds: 1);
+    const Duration oneSec = Duration(seconds: 1);
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
@@ -128,13 +128,13 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     super.onInit();
     arguments = Get.arguments;
     broadcastReceiver.start();
-    broadcastReceiver.messages.listen((event) {
+    broadcastReceiver.messages.listen((BroadcastMessage event) {
       if (event.name == "EndChat") {
         Get.offAllNamed(RouteName.dashboard);
         broadcastReceiver.stop();
       }
     });
-    debugPrint('arguments of socket $arguments');
+    debugPrint("arguments of socket $arguments");
     messageController.addListener(_onMessageChanged);
     isAstroJoinedChat();
     checkIsCustomerJoinedPrivateChat();
@@ -143,21 +143,24 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     listenerMessageStatusSocket();
     sendMessageListenerSocket();
     userLeavePrivateChatListenerSocket();
+    customerLeavedPrivateChatListenerSocket();
 
     if (Get.arguments != null) {
-      var data = Get.arguments;
-      debugPrint('data------> ${data.toString()}');
+      final data = Get.arguments;
+      debugPrint("data------> ${data.toString()}");
       socket.startAstroCustumerSocketEvent(
-          orderId: data['orderData']['orderId'].toString(), userId: data['orderData']['userId']);
+        orderId: data["orderData"]["orderId"].toString(),
+        userId: data["orderData"]["userId"],
+      );
       //  if (Get.arguments is ResAstroChatListener) {
       sendReadMessageStatus = true;
       // if (data!.customerId != null) {
       chatStatus.value = "Chat in - Progress";
       isOngoingChat.value = true;
       //  currentChatUserId.value = data['userId'];
-      //  currentUserId.value = data['userId'];
-      customerName.value = data['orderData']['customerName'] ?? "";
-      profileImage.value = data['orderData']['customerImage'] != null
+      currentUserId.value = int.parse(data["orderData"]['userId'].toString());
+      customerName.value = data["orderData"]["customerName"] ?? "";
+      profileImage.value = data["orderData"]["customerImage"] != null
           ? "${preference.getBaseImageURL()}/${data['orderData']['customerImage']}"
           : "";
       if (astroChatWatcher.value.orderId != null) {
@@ -166,14 +169,14 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
       //  }
       // }
 
-      if (data['orderData']["talktime"] != null) {
+      if (data["orderData"]["talktime"] != null) {
         if (preferenceService.getTalkTime() == 0) {
-          var talkTime = int.parse((data['orderData']['talktime'] ?? 0).toString()) +
+          final int talkTime = int.parse((data["orderData"]["talktime"] ?? 0).toString()) +
               (DateTime.now().millisecondsSinceEpoch ~/ 1000).toInt();
-          debugPrint('millisecondsSinceEpoch ----> ${DateTime.now().millisecondsSinceEpoch ~/ 1000}');
+          debugPrint("millisecondsSinceEpoch ----> ${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
           preferenceService.setTalkTime(talkTime);
         } else {
-          debugPrint('else part - ${preferenceService.getTalkTime() ?? 0}');
+          debugPrint("else part - ${preferenceService.getTalkTime() ?? 0}");
         }
         //   FirebaseDatabase.instance.ref('order/$orderId/talktime').remove();
       }
@@ -184,31 +187,31 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     }
     userData = preferenceService.getUserDetail();
 
-    userDataKey = "userKey_${userData?.id}_${currentUserId.value}";
+    userDataKey = "chat_${currentUserId.value}";
     getChatList();
     socketReconnect();
   }
 
   void talkTimeStartTimer(int talkTime) {
-    const oneSecond = Duration(seconds: 1);
-    DateTime futureTime = DateTime.fromMillisecondsSinceEpoch(talkTime * 1000);
-    _timer = Timer.periodic(oneSecond, (timer) {
-      DateTime now = DateTime.now();
-      Duration difference = futureTime.difference(now);
+    const Duration oneSecond = Duration(seconds: 1);
+    final DateTime futureTime = DateTime.fromMillisecondsSinceEpoch(talkTime * 1000);
+    _timer = Timer.periodic(oneSecond, (Timer timer) {
+      final DateTime now = DateTime.now();
+      final Duration difference = futureTime.difference(now);
 
       if (difference.isNegative) {
         timer.cancel();
-        showTalkTime.value = '000:00 min Remaining';
+        showTalkTime.value = "000:00 min Remaining";
       } else {
-        int remainingHours = difference.inHours;
-        int remainingMinutes = difference.inMinutes.remainder(60);
-        int remainingSeconds = difference.inSeconds.remainder(60);
+        final int remainingHours = difference.inHours;
+        final int remainingMinutes = difference.inMinutes.remainder(60);
+        final int remainingSeconds = difference.inSeconds.remainder(60);
 
-        String hoursString = remainingHours.toString().padLeft(2, '0');
-        String minutesString = remainingMinutes.toString().padLeft(2, '0');
-        String secondsString = remainingSeconds.toString().padLeft(2, '0');
+        final String hoursString = remainingHours.toString().padLeft(2, "0");
+        final String minutesString = remainingMinutes.toString().padLeft(2, "0");
+        final String secondsString = remainingSeconds.toString().padLeft(2, "0");
 
-        showTalkTime.value = '$hoursString:$minutesString:$secondsString Remaining';
+        showTalkTime.value = "$hoursString:$minutesString:$secondsString Remaining";
       }
     });
   }
@@ -221,8 +224,10 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     }
     socket.socket!.onConnect((_) {
       socket.startAstroCustumerSocketEvent(
-          orderId: arguments['orderData']['orderId'], userId: arguments['orderData']['userId']);
-      log('Socket startAstroCustumerSocketEvent connected successfully');
+        orderId: arguments["orderData"]["orderId"].toString(),
+        userId: arguments["orderData"]["userId"],
+      );
+      log("Socket startAstroCustumerSocketEvent connected successfully");
     });
   }
 
@@ -236,38 +241,42 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
 
   void isAstroJoinedChat() {
     socket.isAstroJoinedChat((data) {
-      debugPrint('private chat Joined event $data');
+      debugPrint("private chat Joined event $data");
     });
   }
 
   void tyingSocket() {
     debugPrint(
-        'tyingSocket orderId:${arguments['orderData']['orderId'].toString()}, userId: ${arguments['orderData']['userId']}');
+      'tyingSocket orderId:${arguments['orderData']['orderId'].toString()}, userId: ${arguments['orderData']['userId']}',
+    );
     socket.typingSocket(
-        orderId: arguments['orderData']['orderId'].toString(),
-        userId: arguments['orderData']['userId'].toString());
+      orderId: arguments["orderData"]["orderId"].toString(),
+      userId: arguments["orderData"]["userId"].toString(),
+    );
   }
 
   void checkIsCustomerJoinedPrivateChat() {
     socket.isCustomerJoinedChat((data) {
-      debugPrint('Yes astro joined chat successfully $data');
+      debugPrint("Yes astro joined chat successfully $data");
+      chatStatus.value = "Chat in - Progress";
     });
   }
 
   void typingListenerSocket() {
     socket.typingListenerSocket((data) {
-      if (data['typist'].toString() != userData!.id.toString()) {
+      if (data["typist"].toString() != userData!.id.toString()) {
         isTyping.value = true;
+        chatStatus.value = "Typing";
         update();
         scrollToBottomFunc();
-        startTimer();
+        // startTimer();
       }
     });
   }
 
   void sendMessageSocketListenerSocket() {
     socket.sendMessageSocketListenerSocket((data) {
-      debugPrint('sendMessageSocketListenerSocket $data');
+      debugPrint("sendMessageSocketListenerSocket $data");
     });
   }
 
@@ -275,16 +284,17 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     socket.listenerMessageStatusSocket((data) {
       debugPrint("listenerMessageStatusSocket $data");
 
-      var index = chatMessages.indexWhere((element) {
+      final int index = chatMessages.indexWhere((ChatMessage element) {
         debugPrint('check id ${element.id} ${data['chatMessageId']}');
-        return element.id.toString() == data['chatMessageId'].toString();
+        return element.id.toString() == data["chatMessageId"].toString();
       });
 
       if (index != -1) {
         chatMessages[index].type = 3;
         chatMessages.refresh();
         debugPrint(
-            "listenerMessageStatusSocket ${chatMessages[index].id} type---->  ${chatMessages[index].type}");
+          "listenerMessageStatusSocket ${chatMessages[index].id} type---->  ${chatMessages[index].type}",
+        );
       } else {
         debugPrint("listenerMessageStatusSocket: Element not found in chatMessages");
       }
@@ -293,20 +303,22 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
 
   void sendMessageListenerSocket() {
     socket.sendMessageListenerSocket((data) {
-      debugPrint('sendMessageListenerSocket $data');
+      debugPrint("sendMessageListenerSocket $data");
       if (data is Map<String, dynamic>) {
         isTyping.value = false;
-        var chatMessage = ChatMessage.fromOfflineJson(data['data']);
-        String time = ("${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
+        chatStatus.value = "Chat in - Progress";
+        final ChatMessage chatMessage = ChatMessage.fromOfflineJson(data["data"]);
+        final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
         socket.messageReceivedStatusUpdate(
-            receiverId: preferenceService.getUserDetail()!.id.toString(),
-            chatMessageId: chatMessage.id.toString(),
-            chatStatus: "read",
-            time: time,
-            orderId: arguments['orderData']['orderId'].toString());
+          receiverId: preferenceService.getUserDetail()!.id.toString(),
+          chatMessageId: chatMessage.id.toString(),
+          chatStatus: "read",
+          time: time,
+          orderId: arguments["orderData"]["orderId"].toString(),
+        );
         updateChatMessages(chatMessage, false, isSendMessage: false);
       }
-      debugPrint('chatMessage.value.length ${chatMessages.length}');
+      debugPrint("chatMessage.value.length ${chatMessages.length}");
     });
   }
 
@@ -320,41 +332,40 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     }
   }
 
-  cropImage() async {
-    CroppedFile? croppedFile = await ImageCropper().cropImage(
+  Future<void> cropImage() async {
+    final CroppedFile? croppedFile = await ImageCropper().cropImage(
       sourcePath: image!.path,
-      aspectRatioPresets: [
+      aspectRatioPresets: <CropAspectRatioPreset>[
         CropAspectRatioPreset.square,
         CropAspectRatioPreset.ratio3x2,
         CropAspectRatioPreset.original,
         CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9
+        CropAspectRatioPreset.ratio16x9,
       ],
-      uiSettings: [
+      uiSettings: <PlatformUiSettings>[
         AndroidUiSettings(
-            toolbarTitle: 'Update image',
-            toolbarColor: AppColors.white,
-            toolbarWidgetColor: AppColors.blackColor,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
-        IOSUiSettings(
-          title: 'Update image',
+          toolbarTitle: "Update image",
+          toolbarColor: AppColors.white,
+          toolbarWidgetColor: AppColors.blackColor,
+          initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: false,
         ),
+        IOSUiSettings(title: "Update image"),
       ],
     );
     if (croppedFile != null) {
       uploadFile = File(croppedFile.path);
-      final filePath = uploadFile!.absolute.path;
-      final lastIndex = filePath.lastIndexOf(RegExp(r'.png|.jp'));
-      final splitted = filePath.substring(0, (lastIndex));
-      final outPath = "${splitted}_out${filePath.substring(lastIndex)}";
-      var result = await FlutterImageCompress.compressAndGetFile(
+      final String filePath = uploadFile!.absolute.path;
+      final int lastIndex = filePath.lastIndexOf(RegExp(r".png|.jp"));
+      final String splitted = filePath.substring(0, lastIndex);
+      final String outPath = "${splitted}_out${filePath.substring(lastIndex)}";
+      final XFile? result = await FlutterImageCompress.compressAndGetFile(
         filePath,
         outPath,
         minWidth: 500,
       );
       if (result != null) {
-        getBase64Image(File(result.path));
+        await getBase64Image(File(result.path));
       }
     } else {
       isDataLoad.value = true;
@@ -362,35 +373,35 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     }
   }
 
-  getBase64Image(File fileData) async {
-    final filePath = fileData.absolute.path;
-    final lastIndex = filePath.lastIndexOf(RegExp(r'.png|.jp'));
-    final splitted = filePath.substring(0, (lastIndex));
-    final outPath = "${splitted}_out${filePath.substring(lastIndex)}";
-    var result = await FlutterImageCompress.compressAndGetFile(
+  Future<void> getBase64Image(File fileData) async {
+    final String filePath = fileData.absolute.path;
+    final int lastIndex = filePath.lastIndexOf(RegExp(r".png|.jp"));
+    final String splitted = filePath.substring(0, lastIndex);
+    final String outPath = "${splitted}_out${filePath.substring(lastIndex)}";
+    final XFile? result = await FlutterImageCompress.compressAndGetFile(
       filePath,
       outPath,
       minWidth: 20,
     );
-    List<int> imageBytes = File(result!.path).readAsBytesSync();
-    String base64Image = base64Encode(imageBytes);
-    String time = ("${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
+    final List<int> imageBytes = File(result!.path).readAsBytesSync();
+    final String base64Image = base64Encode(imageBytes);
+    final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
 
-    var uploadFile = await uploadImageToS3Bucket(File(fileData.path), time);
+    final String uploadFile = await uploadImageToS3Bucket(File(fileData.path), time);
     if (uploadFile != "") {
       addNewMessage(time, "image", awsUrl: uploadFile, base64Image: base64Image, downloadedPath: outPath);
     }
   }
 
 //Cannot end chat
-  cannotEndChat(BuildContext context) {
+  cannotEndChat(BuildContext context) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Divine Customer"),
           content: const Text("You cannot end chat before 1 min."),
-          actions: [
+          actions: <Widget>[
             TextButton(
               child: const Text("Ok"),
               onPressed: () async {
@@ -411,7 +422,7 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
         return AlertDialog(
           title: const Text("Divine Astrologer"),
           content: const Text("Are you sure you want to end this chat?"),
-          actions: [
+          actions: <Widget>[
             TextButton(
               child: const Text("Yes"),
               onPressed: () async {
@@ -431,34 +442,38 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     );
   }
 
-  addNewMessage(String time, String? msgType,
-      {String? messageText,
-      String? awsUrl,
-      String? base64Image,
-      String? downloadedPath,
-      String? kundliId}) async {
-    var newMessage = ChatMessage(
-        orderId: int.parse(arguments['orderData']['orderId'].toString()),
-        id: int.parse(time),
-        message: messageText,
-        receiverId: int.parse(arguments['orderData']['userId'].toString()),
-        senderId: preference.getUserDetail()!.id,
-        time: int.parse(time),
-        awsUrl: awsUrl,
-        base64Image: base64Image,
-        downloadedPath: downloadedPath,
-        msgType: msgType,
-        kundliId: kundliId,
-        title: "${userData?.name} sent you message.",
-        type: 0,
-        userType: "astrologer");
+  addNewMessage(
+    String time,
+    String? msgType, {
+    String? messageText,
+    String? awsUrl,
+    String? base64Image,
+    String? downloadedPath,
+    String? kundliId,
+  }) async {
+    final ChatMessage newMessage = ChatMessage(
+      orderId: int.parse(arguments["orderData"]["orderId"].toString()),
+      id: int.parse(time),
+      message: messageText,
+      receiverId: int.parse(arguments["orderData"]["userId"].toString()),
+      senderId: preference.getUserDetail()!.id,
+      time: int.parse(time),
+      awsUrl: awsUrl,
+      base64Image: base64Image,
+      downloadedPath: downloadedPath,
+      msgType: msgType,
+      kundliId: kundliId,
+      title: "${userData?.name} sent you message.",
+      type: 0,
+      userType: "astrologer",
+    );
     socket.sendMessageSocket(newMessage);
     updateChatMessages(newMessage, false, isSendMessage: true);
     isDataLoad.value = true;
   }
 
   updateChatMessages(ChatMessage newMessage, bool isFromNotification, {bool isSendMessage = false}) async {
-    var index = chatMessages.indexWhere((element) => newMessage.id == element.id);
+    final int index = chatMessages.indexWhere((ChatMessage element) => newMessage.id == element.id);
     if (index >= 0) {
       chatMessages[index].type = newMessage.type;
       chatMessages.refresh();
@@ -477,8 +492,9 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
         } else {
           newMessage.type = isSendMessage ? 0 : 1;
           chatMessages.add(newMessage);
-          unreadMsgCount.value =
-              chatMessages.where((e) => e.type != 2 && e.senderId != preference.getUserDetail()!.id).length;
+          unreadMsgCount.value = chatMessages
+              .where((ChatMessage e) => e.type != 2 && e.senderId != preference.getUserDetail()!.id)
+              .length;
           if (!isSendMessage) {
             updateMsgDelieveredStatus(newMessage, 1);
           }
@@ -486,8 +502,9 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
       } else {
         newMessage.type = isSendMessage ? 0 : 1;
         chatMessages.add(newMessage);
-        unreadMsgCount.value =
-            chatMessages.where((e) => e.type != 2 && e.senderId != preference.getUserDetail()!.id).length;
+        unreadMsgCount.value = chatMessages
+            .where((ChatMessage e) => e.type != 2 && e.senderId != preference.getUserDetail()!.id)
+            .length;
         if (!isSendMessage) {
           updateMsgDelieveredStatus(newMessage, 1);
         }
@@ -495,7 +512,8 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     }
     unreadMessageIndex.value = chatMessages
             .firstWhere(
-              (element) => element.type != 2 && element.senderId != preference.getUserDetail()!.id,
+              (ChatMessage element) =>
+                  element.type != 2 && element.senderId != preference.getUserDetail()!.id,
               orElse: () => ChatMessage(),
             )
             .id ??
@@ -510,9 +528,8 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     }
   }
 
-  void setHiveDataDatabase() async {
-    var userDataKey = "userKey_${userData?.id}_${currentUserId.value}";
-    HiveServices hiveServices = HiveServices(boxName: userChatData);
+  Future<void> setHiveDataDatabase() async {
+    final HiveServices hiveServices = HiveServices(boxName: userChatData);
     await hiveServices.initialize();
     databaseMessage.value.chatMessages = chatMessages;
     await hiveServices.addData(key: userDataKey, data: jsonEncode(databaseMessage.value.toOfflineJson()));
@@ -520,8 +537,11 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
 
   scrollToBottomFunc() {
     messgeScrollController.hasClients
-        ? messgeScrollController.animateTo(messgeScrollController.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 600), curve: Curves.easeOut)
+        ? messgeScrollController.animateTo(
+            messgeScrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 600),
+            curve: Curves.easeOut,
+          )
         : null;
   }
 
@@ -541,7 +561,7 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
 
   sendMsg() {
     if (messageController.text.trim().isNotEmpty) {
-      var time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+      final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       // type 1= New chat message, 2 = Delievered, 3= Msg read, 4= Other messages
       unreadMessageIndex.value = -1;
       addNewMessage(time, "text", messageText: messageController.text.trim());
@@ -552,14 +572,16 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
   getChatList() async {
     chatMessages.clear();
     await hiveServices.initialize();
-    var res = await hiveServices.getData(key: userDataKey);
+    final res = await hiveServices.getData(key: userDataKey);
     if (res != null) {
-      var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
-      chatMessages.value = msg.chatMessages ?? [];
+      final ChatMessagesOffline msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
+      chatMessages.value = msg.chatMessages ?? <ChatMessage>[];
       if (sendReadMessageStatus) {
         unreadMessageIndex.value = chatMessages
-                .firstWhere((element) => element.type != 2 && element.senderId != userData?.id,
-                    orElse: () => ChatMessage())
+                .firstWhere(
+                  (ChatMessage element) => element.type != 2 && element.senderId != userData?.id,
+                  orElse: () => ChatMessage(),
+                )
                 .id ??
             -1;
         if (unreadMessageIndex.value != -1) {
@@ -575,21 +597,21 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
   }
 
   uploadAudioFile(File soundFile) async {
-    String time = ("${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
-    var uploadFile = await uploadImageToS3Bucket(soundFile, time);
-    if (uploadFile != '') {
+    final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+    final String uploadFile = await uploadImageToS3Bucket(soundFile, time);
+    if (uploadFile != "") {
       addNewMessage(time, "audio", awsUrl: uploadFile);
     }
   }
 
   downloadImage({required String fileName, required ChatMessage chatDetail, required int index}) async {
-    var response = await http.get(Uri.parse(chatDetail.awsUrl!));
-    var documentDirectory = await getApplicationDocumentsDirectory();
-    var firstPath = "${documentDirectory.path}/images";
-    var filePathAndName = '${documentDirectory.path}/images/${chatDetail.id}.jpg';
+    final http.Response response = await http.get(Uri.parse(chatDetail.awsUrl!));
+    final Directory documentDirectory = await getApplicationDocumentsDirectory();
+    final String firstPath = "${documentDirectory.path}/images";
+    final String filePathAndName = "${documentDirectory.path}/images/${chatDetail.id}.jpg";
 
     await Directory(firstPath).create(recursive: true);
-    File file2 = File(filePathAndName);
+    final File file2 = File(filePathAndName);
     file2.writeAsBytesSync(response.bodyBytes);
     chatMessages[index].downloadedPath = filePathAndName;
     chatMessages.refresh();
@@ -598,8 +620,14 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
 
   void userLeavePrivateChatListenerSocket() {
     socket.userLeavePrivateChat((data) {
-      debugPrint('userLeavePrivateChatListenerSocket $data');
-      // if(data['data'].a)
+      debugPrint("userLeavePrivateChatListenerSocket $data");
+    });
+  }
+
+  void customerLeavedPrivateChatListenerSocket() {
+    socket.customerLeavedPrivateChatListenerSocket((data) {
+      debugPrint("customerLeavedPrivateChatListenerSocket $data");
+      chatStatus.value = "Offline";
     });
   }
 }
