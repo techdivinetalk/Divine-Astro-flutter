@@ -45,53 +45,53 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
           padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 5.h),
           child: Column(
             children: [
-              InkWell(
-                onTap: () {
-                  controller.remediesLeftPopup(Get.context!);
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(12.h),
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 3.0,
-                          offset: const Offset(0.0, 3.0)),
-                    ],
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text.rich(
-                        TextSpan(
-                          children: [
-                            TextSpan(
-                                text: '10  ',
-                                style: AppTextStyle.textStyle16(
-                                    fontColor: AppColors.redColor,
-                                    fontWeight: FontWeight.w400)),
-                            TextSpan(
-                                text: "remediesLeft".tr,
-                                style: AppTextStyle.textStyle16(
-                                    fontColor: AppColors.darkBlue,
-                                    fontWeight: FontWeight.w400)),
-                          ],
-                        ),
-                      ),
-                      Icon(
-                        Icons.help_outline,
-                        size: 20.sp,
-                        color: AppColors.greyColor,
-                      )
-                    ],
-                  ),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () {
+              //     controller.remediesLeftPopup(Get.context!);
+              //   },
+              //   child: Container(
+              //     width: double.infinity,
+              //     padding: EdgeInsets.all(12.h),
+              //     decoration: BoxDecoration(
+              //       boxShadow: [
+              //         BoxShadow(
+              //             color: Colors.black.withOpacity(0.2),
+              //             blurRadius: 3.0,
+              //             offset: const Offset(0.0, 3.0)),
+              //       ],
+              //       color: Colors.white,
+              //       borderRadius: const BorderRadius.all(
+              //         Radius.circular(10),
+              //       ),
+              //     ),
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //       children: [
+              //         Text.rich(
+              //           TextSpan(
+              //             children: [
+              //               TextSpan(
+              //                   text: '10  ',
+              //                   style: AppTextStyle.textStyle16(
+              //                       fontColor: AppColors.redColor,
+              //                       fontWeight: FontWeight.w400)),
+              //               TextSpan(
+              //                   text: "remediesLeft".tr,
+              //                   style: AppTextStyle.textStyle16(
+              //                       fontColor: AppColors.darkBlue,
+              //                       fontWeight: FontWeight.w400)),
+              //             ],
+              //           ),
+              //         ),
+              //         Icon(
+              //           Icons.help_outline,
+              //           size: 20.sp,
+              //           color: AppColors.greyColor,
+              //         )
+              //       ],
+              //     ),
+              //   ),
+              // ),
               SizedBox(height: 25.h),
               Obx(() => controller.shopDataSync.value == true
                   ? Expanded(
@@ -108,7 +108,7 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
                             return InkWell(
                               onTap: () {
                                 Get.toNamed(RouteName.suggestRemediesSubUI,
-                                    arguments: item?.id);
+                                    arguments: {"shodId":item?.id, "orderId": controller.orderId});
                               },
                               child: Container(
                                 width: 300,

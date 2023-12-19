@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
 import 'package:divine_astrologer/common/cached_network_image.dart';
+import 'package:divine_astrologer/screens/order_history/order_history_ui.dart';
 import 'package:divine_astrologer/screens/dashboard/widgets/accept_chat_widget.dart';
 import 'package:divine_astrologer/screens/dashboard/widgets/rejoin_widget.dart';
 import 'package:flutter/material.dart';
@@ -182,7 +183,7 @@ class DashboardScreen extends GetView<DashboardController> {
   static List<Widget> widgetOptions = <Widget>[
     const HomeUI(),
     const PerformanceUI(),
-    const SuggestRemediesUI(),
+    const OrderHistoryUI(),
     const ChatAssistancePage(),
     ProfileUI()
   ];

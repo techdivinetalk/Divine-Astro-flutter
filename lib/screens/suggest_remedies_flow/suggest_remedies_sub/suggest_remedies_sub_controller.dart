@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../../common/app_exception.dart';
@@ -18,6 +19,7 @@ class SuggestRemediesSubController extends GetxController {
   ProductData? productList;
   RxBool productListSync = false.obs;
   int shopId = 10;
+  int? orderId;
 
   var item = [
     ['Navgrah Shanti Pooja', "Starting from ₹15000"],
@@ -30,7 +32,8 @@ class SuggestRemediesSubController extends GetxController {
   void onInit() {
     super.onInit();
     if (Get.arguments != null) {
-      shopId = Get.arguments;
+      shopId = Get.arguments["shodId"];
+      orderId = Get.arguments["orderId"];
       userData = preferenceService.getUserDetail();
       getProductList();
     }

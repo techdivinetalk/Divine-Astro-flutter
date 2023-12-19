@@ -21,6 +21,7 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(OrderHistoryController());
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
       child: Scaffold(
