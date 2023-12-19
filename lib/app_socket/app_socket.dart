@@ -122,4 +122,8 @@ class AppSocket {
   void userLeavePrivateChat(void Function(dynamic) callback) {
     socket?.on(ApiProvider().leavePrivateChat, callback);
   }
+
+  void customerLeavedPrivateChatListenerSocket(void Function(dynamic) callback) {
+    socket?.on(ApiProvider().userDisconnected, callback);
+  }
 }
