@@ -85,7 +85,6 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        const SizedBox(height: 16),
         ListTile(
           dense: true,
           leading: const Icon(Icons.block),
@@ -109,7 +108,6 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
           )
         else
           const SizedBox(),
-        const SizedBox(height: 16),
       ],
     );
   }

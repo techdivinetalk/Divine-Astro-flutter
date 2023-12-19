@@ -89,8 +89,7 @@ class _DisconnectWidgetState extends State<DisconnectWidget> {
   }
 
   Widget grid() {
-    final String userName =
-        !widget.isAstro ? widget.astroUserName : widget.custoUserName;
+    final String userName =!widget.isAstro ? widget.astroUserName : widget.custoUserName;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
@@ -98,11 +97,15 @@ class _DisconnectWidgetState extends State<DisconnectWidget> {
         children: <Widget>[
           const SizedBox(height: 16),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               const SizedBox(height: 16),
               const SizedBox(height: 16),
-              CustomImageWidget(imageUrl: widget.custoAvatar, rounded: true),
+              SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: CustomImageWidget(
+                      imageUrl: widget.custoAvatar, rounded: true)),
               const SizedBox(width: 16),
               Image.asset(
                 "assets/images/live_dashes.png",
@@ -110,7 +113,11 @@ class _DisconnectWidgetState extends State<DisconnectWidget> {
                 width: 150,
               ),
               const SizedBox(width: 16),
-              CustomImageWidget(imageUrl: widget.astroAvatar, rounded: true),
+              SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: CustomImageWidget(
+                      imageUrl: widget.astroAvatar, rounded: true)),
               const SizedBox(height: 16),
               const SizedBox(height: 16),
             ],
@@ -154,7 +161,6 @@ class _DisconnectWidgetState extends State<DisconnectWidget> {
     required Function() onPressed,
   }) {
     return SizedBox(
-      height: 60,
       width: double.infinity,
       child: ElevatedButton(
         style: ButtonStyle(

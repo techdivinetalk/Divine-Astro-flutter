@@ -14,19 +14,31 @@ class CustomImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(
-        rounded ? 50.0 : 0.0,
-      ),
-      child: CachedNetworkImage(
-        imageUrl: imageUrl,
-        placeholder: (BuildContext context, String url) {
-          return const CupertinoActivityIndicator();
-        },
-        errorWidget: (BuildContext context, String url, Object error) {
-          return const Icon(Icons.error);
-        },
-      ),
+    return rounded
+        ? CircleAvatar(
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.white,
+            radius: 50,
+            child: ClipOval(
+              child: SizedBox.fromSize(
+                size: const Size.fromRadius(50),
+                child: cachedNetworkImage(),
+              ),
+            ),
+          )
+        : cachedNetworkImage();
+  }
+
+  Widget cachedNetworkImage() {
+    return CachedNetworkImage(
+      imageUrl: imageUrl,
+      fit: BoxFit.fill,
+      placeholder: (BuildContext context, String url) {
+        return const CupertinoActivityIndicator();
+      },
+      errorWidget: (BuildContext context, String url, Object error) {
+        return const Icon(Icons.error);
+      },
     );
   }
 }

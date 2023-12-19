@@ -165,7 +165,11 @@ class _WaitListWidgetState extends State<WaitListWidget> {
     return ListTile(
       dense: true,
       contentPadding: EdgeInsets.zero,
-      leading: CustomImageWidget(imageUrl: item.avatar, rounded: true),
+      leading: SizedBox(
+        height: 50,
+        width: 50,
+        child: CustomImageWidget(imageUrl: item.avatar, rounded: true),
+      ),
       title: Text(item.userName),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

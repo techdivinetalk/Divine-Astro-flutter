@@ -10,7 +10,6 @@ import "package:divine_astrologer/screens/live_dharam/live_gift.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/call_accept_or_reject_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/disconnect_call_widget.dart";
-import "package:divine_astrologer/screens/live_dharam/widgets/exit_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
@@ -261,9 +260,13 @@ class _LivePage extends State<LiveDharamScreen>
                   child: Row(
                     children: <Widget>[
                       const SizedBox(width: 4),
-                      CustomImageWidget(
-                        imageUrl: _controller.avatar,
-                        rounded: true,
+                      SizedBox(
+                        height: 40,
+                        width: 40,
+                        child: CustomImageWidget(
+                          imageUrl: _controller.avatar,
+                          rounded: true,
+                        ),
                       ),
                       const SizedBox(width: 4),
                       Expanded(
@@ -345,10 +348,14 @@ class _LivePage extends State<LiveDharamScreen>
                             child: Row(
                               children: <Widget>[
                                 const SizedBox(width: 4),
-                                CustomImageWidget(
-                                  imageUrl:
-                                      _controller.leaderboardModel.first.avatar,
-                                  rounded: true,
+                                SizedBox(
+                                  height: 40,
+                                  width: 40,
+                                  child: CustomImageWidget(
+                                    imageUrl: _controller
+                                        .leaderboardModel.first.avatar,
+                                    rounded: true,
+                                  ),
                                 ),
                                 const SizedBox(width: 4),
                                 Expanded(
@@ -376,11 +383,10 @@ class _LivePage extends State<LiveDharamScreen>
                                   ),
                                 ),
                                 const SizedBox(width: 4),
-                                const CircleAvatar(
-                                  backgroundColor: AppColors.transparent,
-                                  foregroundImage: AssetImage(
-                                    "assets/images/live_star.png",
-                                  ),
+                                Image.asset(
+                                  "assets/images/live_star.png",
+                                  height: 40,
+                                  width: 40,
                                 ),
                                 const SizedBox(width: 4),
                               ],
@@ -420,7 +426,12 @@ class _LivePage extends State<LiveDharamScreen>
   //               );
   //               if (hasBal) {
   //                 if (mounted) {
-  //                   LiveGiftWidget.show(context, item.giftSvga);
+  //                   // LiveGiftWidget.show(context, item.giftSvga);
+  //                   if (item.bytes.isEmpty) {
+  //                     LiveGiftWidget.show(context, item.giftSvga);
+  //                   } else {
+  //                     LiveGiftCacheWidget.show(context, item.bytes);
+  //                   }
   //                 } else {}
   //                 await _controller.sendGiftAPI(
   //                   count: 1,
@@ -608,7 +619,7 @@ class _LivePage extends State<LiveDharamScreen>
                             // : zegoUser == astroUser
                             //     ? (_controller.details.data?.image ?? "")
                             : "https://robohash.org/sa",
-                            rounded: true,
+                        rounded: true,
                       ),
                     ),
                     const SizedBox(width: 4),
@@ -899,7 +910,12 @@ class _LivePage extends State<LiveDharamScreen>
   //             );
   //             if (hasBal) {
   //               if (mounted) {
-  //                 LiveGiftWidget.show(context, item.giftSvga);
+  //                 // LiveGiftWidget.show(context, item.giftSvga);
+  //                 if (item.bytes.isEmpty) {
+  //                   LiveGiftWidget.show(context, item.giftSvga);
+  //                 } else {
+  //                   LiveGiftCacheWidget.show(context, item.bytes);
+  //                 }
   //               } else {}
   //               await _controller.sendGiftAPI(
   //                 count: quantity,
@@ -1259,6 +1275,14 @@ class _LivePage extends State<LiveDharamScreen>
   FutureOr<void> afterFirstLayout(BuildContext context) async {
     // await _controller.getAllGifts();
     // _controller.mapAndMergeGiftsWithConstant();
+    // await _controller.concurrentDownload(
+    //   downloadStarted: () {
+    //     print("concurrentDownload: downloadStarted");
+    //   },
+    //   downloadEnded: () {
+    //     print("concurrentDownload: downloadEnded");
+    //   },
+    // );
     return Future<void>.value();
   }
 }

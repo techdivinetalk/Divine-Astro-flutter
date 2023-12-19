@@ -4,6 +4,7 @@ import "dart:async";
 
 import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/model/res_login.dart";
+import 'package:divine_astrologer/screens/live_dharam/widgets/gift_cache.dart';
 import "package:firebase_database/firebase_database.dart";
 import "package:get/get.dart";
 import "package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart";
@@ -56,7 +57,6 @@ class LiveDharamController extends GetxController {
     userId = (_pref.getUserDetail()?.id ?? "").toString();
     userName = _pref.getUserDetail()?.name ?? "";
     // avatar = _pref.getUserDetail()?.avatar ?? "";
-
     final String awsURL = _pref.getAmazonUrl() ?? "";
     final String image = _pref.getUserDetail()?.image ?? "";
     avatar = isValidImageURL(imageURL: "$awsURL/$image");
@@ -339,6 +339,7 @@ class LiveDharamController extends GetxController {
   //         giftImage: element.giftImage,
   //         giftPrice: element.giftPrice,
   //         giftSvga: giftSvga,
+  //         bytes: <int>[],
   //       );
   //       temp.add(customGiftModel);
   //     },
@@ -874,6 +875,32 @@ class LiveDharamController extends GetxController {
   //   await liveRepository.endLiveApi(params: param);
   //   return Future<void>.value();
   // }
+
+  Future<void> concurrentDownload({
+    required downloadStarted,
+    required downloadEnded,
+  }) async {
+    downloadStarted();
+    List<CustomGiftModel> temp = <CustomGiftModel>[];
+    await Future.forEach<CustomGiftModel>(
+      customGiftModel,
+      (element) async {
+        temp.add(
+          CustomGiftModel(
+            giftId: element.giftId,
+            giftName: element.giftName,
+            giftImage: element.giftImage,
+            giftPrice: element.giftPrice,
+            giftSvga: element.giftSvga,
+            bytes: await GiftCache().downloadFile(url: element.giftSvga),
+          ),
+        );
+      },
+    );
+    customGiftModel = temp;
+    downloadEnded();
+    return Future<void>.value();
+  }
 }
 
 class CustomGiftModel {
@@ -883,6 +910,7 @@ class CustomGiftModel {
     required this.giftImage,
     required this.giftPrice,
     required this.giftSvga,
+    required this.bytes,
   });
 
   final int giftId;
@@ -890,6 +918,7 @@ class CustomGiftModel {
   final String giftImage;
   final int giftPrice;
   final String giftSvga;
+  final List<int> bytes;
 }
 
 class LeaderboardModel {
