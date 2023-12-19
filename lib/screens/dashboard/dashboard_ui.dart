@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 
 import '../../../common/colors.dart';
 import '../../../gen/assets.gen.dart';
+import "../../common/routes.dart";
 import '../../pages/home/home_ui.dart';
 import '../../pages/performance/performance_ui.dart';
 import '../../pages/profile/profile_ui.dart';
@@ -177,13 +178,17 @@ class DashboardScreen extends GetView<DashboardController> {
   }
 
   void _onItemTapped(int index) async {
-    controller.selectedIndex.value = index;
+    if(index == 2) {
+      Get.toNamed(RouteName.orderHistory);
+    } else {
+      controller.selectedIndex.value = index;
+    }
   }
 
   static List<Widget> widgetOptions = <Widget>[
     const HomeUI(),
     const PerformanceUI(),
-    const OrderHistoryUI(),
+    const SuggestRemediesUI(),
     const ChatAssistancePage(),
     ProfileUI()
   ];
