@@ -141,7 +141,7 @@ class ChatOrderHistory extends StatelessWidget {
               leftBtnTitle: "refund".tr,
               onLeftTap: () {},
               onRightTap: () {
-                Get.toNamed(RouteName.suggestRemediesView, arguments: data[index].orderId);
+                Get.toNamed(RouteName.suggestRemediesView, arguments: data[index].id);
               },
               rightBtnTitle: "suggestedRemediesEarning".tr,
             ),
