@@ -92,6 +92,9 @@ class $AssetsImagesGen {
   SvgGenImage get createAccSearch =>
       const SvgGenImage('assets/images/create_acc_search.svg');
 
+  /// File path: assets/images/date.svg
+  SvgGenImage get date => const SvgGenImage('assets/images/date.svg');
+
   /// File path: assets/images/default_profile.png
   AssetGenImage get defaultProfile =>
       const AssetGenImage('assets/images/default_profile.png');
@@ -468,6 +471,9 @@ class $AssetsImagesGen {
   AssetGenImage get starLiveBig =>
       const AssetGenImage('assets/images/star_live_big.png');
 
+  /// File path: assets/images/time.svg
+  SvgGenImage get time => const SvgGenImage('assets/images/time.svg');
+
   /// File path: assets/images/video_disable_live.svg
   SvgGenImage get videoDisableLive =>
       const SvgGenImage('assets/images/video_disable_live.svg');
@@ -502,6 +508,7 @@ class $AssetsImagesGen {
         championLive,
         createAccLocation,
         createAccSearch,
+        date,
         defaultProfile,
         deleteAccout,
         divineLogo,
@@ -604,6 +611,7 @@ class $AssetsImagesGen {
         report,
         starLive,
         starLiveBig,
+        time,
         videoDisableLive,
         vidioEnableLive,
         waitlistLive
@@ -646,13 +654,6 @@ class $AssetsLottieGen {
 class $AssetsSvgGen {
   const $AssetsSvgGen();
 
-  /// File path: assets/svg/.flutter-plugins
-  String get flutterPlugins => 'assets/svg/.flutter-plugins';
-
-  /// File path: assets/svg/.flutter-plugins-dependencies
-  String get flutterPluginsDependencies =>
-      'assets/svg/.flutter-plugins-dependencies';
-
   /// File path: assets/svg/black_dot.svg
   SvgGenImage get blackDot => const SvgGenImage('assets/svg/black_dot.svg');
 
@@ -691,6 +692,10 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/ic_call_1.svg
   SvgGenImage get icCall1 => const SvgGenImage('assets/svg/ic_call_1.svg');
+
+  /// File path: assets/svg/kundali_header.svg
+  SvgGenImage get kundaliHeader =>
+      const SvgGenImage('assets/svg/kundali_header.svg');
 
   /// File path: assets/svg/login_logo.svg
   SvgGenImage get loginLogo => const SvgGenImage('assets/svg/login_logo.svg');
@@ -747,8 +752,6 @@ class $AssetsSvgGen {
 
   /// List of all assets
   List<dynamic> get values => [
-        flutterPlugins,
-        flutterPluginsDependencies,
         blackDot,
         block,
         blockUser,
@@ -761,6 +764,7 @@ class $AssetsSvgGen {
         greyContainer,
         icAdd,
         icCall1,
+        kundaliHeader,
         loginLogo,
         maximumOrderTimeIcon,
         message,
