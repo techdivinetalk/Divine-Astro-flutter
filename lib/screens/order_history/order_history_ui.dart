@@ -10,6 +10,7 @@ import '../../common/appbar.dart';
 import '../../common/colors.dart';
 import '../../gen/assets.gen.dart';
 import '../side_menu/side_menu_ui.dart';
+import 'Widget/all_order_history_ui.dart';
 import 'Widget/call_order_history_ui.dart';
 import 'Widget/chat_order_history_ui.dart';
 import 'Widget/suggest_remedies_history.dart';
@@ -175,7 +176,7 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
             child: TabBarView(
               controller: controller.tabbarController,
               children: [
-                const AllTabInfo(), //done
+                const AllOrderHistoryUi(), //done
                 const ChatOrderHistory(), //done
                 const CallOrderHistory(), //done
                 LiveGiftsHistory(),

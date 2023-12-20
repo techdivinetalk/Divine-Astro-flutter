@@ -110,6 +110,7 @@ class OrderHistoryController extends GetxController {
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
+        update(['allOrders']);
       } else if (type == 1) {
         CallOrderHistoryModelClass data =
             await OrderHistoryRepository().getCallOrderHistory(params);
