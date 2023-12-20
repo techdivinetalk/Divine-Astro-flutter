@@ -507,7 +507,7 @@ class LiveDharamController extends GetxController {
   //   required num quantity,
   //   required num amount,
   // }) async {
-  //   num currentAmount = amount;
+  //   num currentAmount = quantity * amount;
   //   final DataSnapshot dataSnapshot = await FirebaseDatabase.instance
   //       .ref()
   //       .child("live/$liveId/leaderboard/$userId")
@@ -917,6 +917,51 @@ class LiveDharamController extends GetxController {
     customGiftModel = temp;
     downloadEnded();
     return Future<void>.value();
+  }
+
+  Future<void> leaderboardChallengeCallback({
+    required Function(LeaderboardModel leader) onLeaderUpdated,
+  }) async {
+    final DataSnapshot dataSnapshot = await FirebaseDatabase.instance
+        .ref()
+        .child("live/$liveId/leaderboard")
+        .get();
+    if (dataSnapshot != null) {
+      if (dataSnapshot.exists) {
+        if (dataSnapshot.value is Map<dynamic, dynamic>) {
+          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+              as Map<dynamic, dynamic>;
+          final List<LeaderboardModel> tempList = <LeaderboardModel>[];
+          map.forEach(
+            // ignore: always_specify_types
+            (key, value) {
+              tempList.add(
+                LeaderboardModel(
+                  // ignore:  avoid_dynamic_calls
+                  amount: value["amount"] ?? 0,
+                  // ignore:  avoid_dynamic_calls
+                  avatar: value["avatar"] ?? "",
+                  // ignore:  avoid_dynamic_calls
+                  userName: value["userName"] ?? "",
+                  // ignore:  avoid_dynamic_calls
+                  id: value["id"] ?? "",
+                ),
+              );
+            },
+          );
+          tempList.sort(
+            (LeaderboardModel a, LeaderboardModel b) {
+              return b.amount.compareTo(a.amount);
+            },
+          );
+          if (tempList.isEmpty) {
+          } else {
+            onLeaderUpdated(tempList.first);
+          }
+        } else {}
+      } else {}
+    } else {}
   }
 }
 

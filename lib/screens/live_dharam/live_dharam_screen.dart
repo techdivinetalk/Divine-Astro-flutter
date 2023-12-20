@@ -8,8 +8,11 @@ import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/live_gift.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/call_accept_or_reject_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/congratulations_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/disconnect_call_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/end_session_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/exit_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
@@ -20,8 +23,6 @@ import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
-//
-//
 //
 //
 //
@@ -96,65 +97,71 @@ class _LivePage extends State<LiveDharamScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Obx(
-        () {
-          return _controller.liveId == ""
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : ZegoUIKitPrebuiltLiveStreaming(
-                  appID: appID,
-                  appSign: appSign,
-                  userID: _controller.userId,
-                  userName: _controller.userName,
-                  liveID: _controller.liveId,
-                  config: streamingConfig
-                    ..previewConfig.showPreviewForHost = false
-                    ..maxCoHostCount = 1
-                    ..confirmDialogInfo = null
-                    ..disableCoHostInvitationReceivedDialog = true
-                    // ..turnOnCameraWhenJoining = _controller.isCamOn
-                    // ..turnOnMicrophoneWhenJoining = _controller.isMicOn
-                    ..audioVideoViewConfig = ZegoPrebuiltAudioVideoViewConfig(
-                      showUserNameOnView: false,
-                      showAvatarInAudioMode: true,
-                      useVideoViewAspectFill: true,
-                      showSoundWavesInAudioMode: true,
-                    )
-                    ..bottomMenuBarConfig = ZegoBottomMenuBarConfig(
-                      showInRoomMessageButton: false,
-                      hostButtons: <ZegoMenuBarButtonName>[],
-                      coHostButtons: <ZegoMenuBarButtonName>[],
-                    )
-                    ..layout = galleryLayout
-                    ..swipingConfig = swipingConfig
-                    ..onLiveStreamingStateUpdate = onLiveStreamingStateUpdate
-                    ..avatarBuilder = avatarWidget
-                    ..topMenuBarConfig = ZegoTopMenuBarConfig(
-                      hostAvatarBuilder: (ZegoUIKitUser host) {
-                        return const SizedBox();
-                      },
-                      showCloseButton: false,
-                    )
-                    ..memberButtonConfig = ZegoMemberButtonConfig(
-                      builder: (int memberCount) {
-                        return const SizedBox();
-                      },
-                    )
-                    ..foreground = foregroundWidget()
-                    ..inRoomMessageConfig = ZegoInRoomMessageConfig(
-                      itemBuilder: (
-                        BuildContext context,
-                        ZegoInRoomMessage message,
-                        Map<String, dynamic> extraInfo,
-                      ) {
-                        return const SizedBox();
-                      },
-                    ),
-                  controller: _zegoController,
-                  events: events,
-                );
+      body: PopScope(
+        canPop: false,
+        onPopInvoked: (pop) async {
+          await exitFunc(isEngaded: _controller.isEngaged);
         },
+        child: Obx(
+          () {
+            return _controller.liveId == ""
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ZegoUIKitPrebuiltLiveStreaming(
+                    appID: appID,
+                    appSign: appSign,
+                    userID: _controller.userId,
+                    userName: _controller.userName,
+                    liveID: _controller.liveId,
+                    config: streamingConfig
+                      ..previewConfig.showPreviewForHost = false
+                      ..maxCoHostCount = 1
+                      ..confirmDialogInfo = null
+                      ..disableCoHostInvitationReceivedDialog = true
+                      // ..turnOnCameraWhenJoining = _controller.isCamOn
+                      // ..turnOnMicrophoneWhenJoining = _controller.isMicOn
+                      ..audioVideoViewConfig = ZegoPrebuiltAudioVideoViewConfig(
+                        showUserNameOnView: false,
+                        showAvatarInAudioMode: true,
+                        useVideoViewAspectFill: true,
+                        showSoundWavesInAudioMode: true,
+                      )
+                      ..bottomMenuBarConfig = ZegoBottomMenuBarConfig(
+                        showInRoomMessageButton: false,
+                        hostButtons: <ZegoMenuBarButtonName>[],
+                        coHostButtons: <ZegoMenuBarButtonName>[],
+                      )
+                      ..layout = galleryLayout
+                      ..swipingConfig = swipingConfig
+                      ..onLiveStreamingStateUpdate = onLiveStreamingStateUpdate
+                      ..avatarBuilder = avatarWidget
+                      ..topMenuBarConfig = ZegoTopMenuBarConfig(
+                        hostAvatarBuilder: (ZegoUIKitUser host) {
+                          return const SizedBox();
+                        },
+                        showCloseButton: false,
+                      )
+                      ..memberButtonConfig = ZegoMemberButtonConfig(
+                        builder: (int memberCount) {
+                          return const SizedBox();
+                        },
+                      )
+                      ..foreground = foregroundWidget()
+                      ..inRoomMessageConfig = ZegoInRoomMessageConfig(
+                        itemBuilder: (
+                          BuildContext context,
+                          ZegoInRoomMessage message,
+                          Map<String, dynamic> extraInfo,
+                        ) {
+                          return const SizedBox();
+                        },
+                      ),
+                    controller: _zegoController,
+                    events: events,
+                  );
+          },
+        ),
       ),
     );
   }
@@ -237,7 +244,7 @@ class _LivePage extends State<LiveDharamScreen>
           const SizedBox(width: 16),
           IconButton(
             onPressed: () async {
-              await _zegoController.leave(context);
+              await exitFunc(isEngaded: _controller.isEngaged);
             },
             icon: const Icon(Icons.arrow_back_ios, color: AppColors.white),
           ),
@@ -353,72 +360,73 @@ class _LivePage extends State<LiveDharamScreen>
   //         _controller.isMicOn = true;
   //         instance.turnMicrophoneOn(true);
   //       } else {}
-  //       return 
-  //       !isEngaded ? const SizedBox() :
-  //       Obx(
-  //         () {
-  //           return Row(
-  //             children: [
-  //               AnimatedOpacity(
-  //                 opacity: !condForVideoCall ? 0.0 : 1.0,
-  //                 duration: const Duration(seconds: 1),
-  //                 child: InkWell(
-  //                   onTap: () async {
-  //                     final ZegoUIKit instance = ZegoUIKit.instance;
-  //                     _controller.isFront = !_controller.isFront;
-  //                     instance.useFrontFacingCamera(_controller.isFront);
-  //                   },
-  //                   child: Image.asset(
-  //                     height: 40,
-  //                     fit: BoxFit.cover,
-  //                     !_controller.isFront
-  //                         ? "assets/images/live_switch_cam_new.png"
-  //                         : "assets/images/live_switch_cam_new.png",
-  //                   ),
-  //                 ),
-  //               ),
-  //               const SizedBox(width: 16),
-  //               AnimatedOpacity(
-  //                 opacity: !condForVideoCall ? 0.0 : 1.0,
-  //                 duration: const Duration(seconds: 1),
-  //                 child: InkWell(
-  //                   onTap: () async {
-  //                     final ZegoUIKit instance = ZegoUIKit.instance;
-  //                     _controller.isCamOn = !_controller.isCamOn;
-  //                     instance.turnCameraOn(_controller.isCamOn);
-  //                   },
-  //                   child: Image.asset(
-  //                     height: 40,
-  //                     fit: BoxFit.cover,
-  //                     !_controller.isCamOn
-  //                         ? "assets/images/live_cam_on.png"
-  //                         : "assets/images/live_cam_off.png",
-  //                   ),
-  //                 ),
-  //               ),
-  //               const SizedBox(width: 16),
-  //               AnimatedOpacity(
-  //                 opacity: !(condForVideoCall || condForAudioCall) ? 0.0 : 1.0,
-  //                 duration: const Duration(seconds: 1),
-  //                 child: InkWell(
-  //                   onTap: () {
-  //                     final ZegoUIKit instance = ZegoUIKit.instance;
-  //                     _controller.isMicOn = !_controller.isMicOn;
-  //                     instance.turnMicrophoneOn(_controller.isMicOn);
-  //                   },
-  //                   child: Image.asset(
-  //                     height: 40,
-  //                     fit: BoxFit.cover,
-  //                     !_controller.isMicOn
-  //                         ? "assets/images/live_mic_on.png"
-  //                         : "assets/images/live_mic_off.png",
-  //                   ),
-  //                 ),
-  //               ),
-  //             ],
-  //           );
-  //         },
-  //       );
+  //       return !isEngaded
+  //           ? const SizedBox()
+  //           : Obx(
+  //               () {
+  //                 return Row(
+  //                   children: [
+  //                     AnimatedOpacity(
+  //                       opacity: !condForVideoCall ? 0.0 : 1.0,
+  //                       duration: const Duration(seconds: 1),
+  //                       child: InkWell(
+  //                         onTap: () async {
+  //                           final ZegoUIKit instance = ZegoUIKit.instance;
+  //                           _controller.isFront = !_controller.isFront;
+  //                           instance.useFrontFacingCamera(_controller.isFront);
+  //                         },
+  //                         child: Image.asset(
+  //                           height: 40,
+  //                           fit: BoxFit.cover,
+  //                           !_controller.isFront
+  //                               ? "assets/images/live_switch_cam_new.png"
+  //                               : "assets/images/live_switch_cam_new.png",
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     const SizedBox(width: 16),
+  //                     AnimatedOpacity(
+  //                       opacity: !condForVideoCall ? 0.0 : 1.0,
+  //                       duration: const Duration(seconds: 1),
+  //                       child: InkWell(
+  //                         onTap: () async {
+  //                           final ZegoUIKit instance = ZegoUIKit.instance;
+  //                           _controller.isCamOn = !_controller.isCamOn;
+  //                           instance.turnCameraOn(_controller.isCamOn);
+  //                         },
+  //                         child: Image.asset(
+  //                           height: 40,
+  //                           fit: BoxFit.cover,
+  //                           !_controller.isCamOn
+  //                               ? "assets/images/live_cam_on.png"
+  //                               : "assets/images/live_cam_off.png",
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     const SizedBox(width: 16),
+  //                     AnimatedOpacity(
+  //                       opacity:
+  //                           !(condForVideoCall || condForAudioCall) ? 0.0 : 1.0,
+  //                       duration: const Duration(seconds: 1),
+  //                       child: InkWell(
+  //                         onTap: () {
+  //                           final ZegoUIKit instance = ZegoUIKit.instance;
+  //                           _controller.isMicOn = !_controller.isMicOn;
+  //                           instance.turnMicrophoneOn(_controller.isMicOn);
+  //                         },
+  //                         child: Image.asset(
+  //                           height: 40,
+  //                           fit: BoxFit.cover,
+  //                           !_controller.isMicOn
+  //                               ? "assets/images/live_mic_on.png"
+  //                               : "assets/images/live_mic_off.png",
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 );
+  //               },
+  //             );
   //     },
   //   );
   // }
@@ -553,6 +561,7 @@ class _LivePage extends State<LiveDharamScreen>
   //                   quantity: 1,
   //                   amount: item.giftPrice,
   //                 );
+  //                 await leaderboardChallengeCallback();
   //               } else {
   //                 await lowBalancePopup();
   //               }
@@ -903,7 +912,7 @@ class _LivePage extends State<LiveDharamScreen>
               //           ),
               //         ),
               // ),
-
+              //
               //
               //
               //
@@ -1052,6 +1061,7 @@ class _LivePage extends State<LiveDharamScreen>
   //                 quantity: quantity,
   //                 amount: item.giftPrice,
   //               );
+  //               await leaderboardChallengeCallback();
   //             } else {
   //               await lowBalancePopup();
   //             }
@@ -1127,20 +1137,21 @@ class _LivePage extends State<LiveDharamScreen>
     return Future<void>.value();
   }
 
-  // Future<void> congratulationsPopup() async {
-  //   await showCupertinoModalPopup(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return CongratulationsWidget(
-  //         onClose: Get.back,
-  //         imageURL: _controller.avatar,
-  //       );
-  //     },
-  //   );
-  //   return Future<void>.value();
-  // }
+  Future<void> congratulationsPopup({required LeaderboardModel leader}) async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return CongratulationsWidget(
+          onClose: Get.back,
+          leader: leader,
+          isHost: _controller.isHost,
+        );
+      },
+    );
+    return Future<void>.value();
+  }
 
-  // Future<void> exitPopup() async {
+  // Future<void> exitPopup({required void Function() exitLive}) async {
   //   await showCupertinoModalPopup(
   //     context: context,
   //     builder: (BuildContext context) {
@@ -1155,12 +1166,30 @@ class _LivePage extends State<LiveDharamScreen>
   //           } else {
   //             await _controller.followOrUnfollowAstrologer();
   //           }
+  //           exitLive();
   //         },
   //       );
   //     },
   //   );
   //   return Future<void>.value();
   // }
+
+  Future<void> endLiveSession({required void Function() endLive}) async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return EndSessionWidget(
+          onClose: Get.back,
+          continueLive: Get.back,
+          endLive: () {
+            Get.back();
+            endLive();
+          },
+        );
+      },
+    );
+    return Future<void>.value();
+  }
 
   // Future<void> lowBalancePopup() async {
   //   await showCupertinoModalPopup(
@@ -1228,9 +1257,9 @@ class _LivePage extends State<LiveDharamScreen>
     return Future<void>.value();
   }
 
-  void onInRoomCommandMessageReceived(
+  Future<void> onInRoomCommandMessageReceived(
     ZegoSignalingPluginInRoomCommandMessageReceivedEvent event,
-  ) {
+  ) async {
     final List<ZegoSignalingPluginInRoomCommandMessage> msgs = event.messages;
     for (final ZegoSignalingPluginInRoomCommandMessage commandMessage in msgs) {
       final String senderUserID = commandMessage.senderUserID;
@@ -1241,12 +1270,28 @@ class _LivePage extends State<LiveDharamScreen>
         LiveGiftWidget.show(context, svga);
       } else {}
     }
-    return;
+    await leaderboardChallengeCallback();
+    return Future<void>.value();
   }
 
   void scrollDown() {
     _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     return;
+  }
+
+  Future<void> leaderboardChallengeCallback() async {
+    await _controller.leaderboardChallengeCallback(
+      onLeaderUpdated: (leader) async {
+        if (_controller.isHost) {
+          await congratulationsPopup(leader: leader);
+        } else {
+          if (leader.id == _controller.userId) {
+            await congratulationsPopup(leader: leader);
+          } else {}
+        }
+      },
+    );
+    return Future<void>.value();
   }
 
   // dharam
@@ -1258,10 +1303,24 @@ class _LivePage extends State<LiveDharamScreen>
         yesDisconnect: removeCoHostOrStopCoHost,
       );
     } else {
-      if (mounted) {
-        await _zegoController.leave(context);
-        _controller.zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
-      } else {}
+      if (_controller.isHost) {
+        await endLiveSession(
+          endLive: () async {
+            if (mounted) {
+              await _zegoController.leave(context);
+              _controller.zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
+            } else {}
+          },
+        );
+      } else {
+        // await exitPopup(
+        //   exitLive: () async {},
+        // );
+        // if (mounted) {
+        //   await _zegoController.leave(context);
+        //   _controller.zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
+        // } else {}
+      }
     }
     return Future<void>.value();
   }
