@@ -1,9 +1,12 @@
+import "package:divine_astrologer/di/shared_preference_service.dart";
 import 'package:divine_astrologer/model/refer_astrologer/refer_astrologer_request.dart';
 import 'package:divine_astrologer/model/refer_astrologer/refer_astrologer_response.dart';
 import 'package:divine_astrologer/repository/refer_astrologer_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+
+import "../../../model/res_login.dart";
 
 enum WorkingForPlatform { yes, no }
 
@@ -68,6 +71,8 @@ class ReferAstrologerState {
   WorkingForPlatform platform = WorkingForPlatform.no;
   late final GlobalKey<FormState> formKey;
 
+  SharedPreferenceService pref = Get.find<SharedPreferenceService>();
+
   bool get isYes => platform == WorkingForPlatform.yes;
 
   bool get isNo => platform == WorkingForPlatform.no;
@@ -77,6 +82,7 @@ class ReferAstrologerState {
   late final TextEditingController astrologySkills;
   late final TextEditingController astrologerExperience;
   late final TextEditingController otherPlatform;
+  UserData? user;
 
   void init() {
     formKey = GlobalKey<FormState>();
@@ -85,6 +91,7 @@ class ReferAstrologerState {
     astrologySkills = TextEditingController();
     astrologerExperience = TextEditingController();
     otherPlatform = TextEditingController();
+    user = pref.getUserDetail();
   }
 
   void dispose() {
@@ -98,12 +105,12 @@ class ReferAstrologerState {
   ReferAstrologerRequest referAstrologerRequest() {
     return ReferAstrologerRequest(
       firstName: astrologerName.text.trim(),
+      email: "",
       contactNumber: mobileNumber.text.trim(),
-      skills: astrologySkills.text.trim(),
+      segment: astrologySkills.text.trim(),
+      notes: "came from ${otherPlatform.text.trim()}",
       experience: astrologerExperience.text.trim(),
-      isCustApp: "0",
-      userId: "31",
-      email: "test12Or289@gmail.com",
+      referBy: user?.id,
     );
   }
 
