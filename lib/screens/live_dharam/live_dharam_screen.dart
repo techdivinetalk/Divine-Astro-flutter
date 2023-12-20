@@ -298,20 +298,125 @@ class _LivePage extends State<LiveDharamScreen>
           const Spacer(),
           const SizedBox(width: 16),
           if (_controller.isHost)
-            Switch(
-              value: _controller.isHostAvailable,
-              onChanged: (bool value) async {
-                _controller.isHostAvailable = value;
+            GestureDetector(
+              onTap: () async {
+                _controller.isHostAvailable = !_controller.isHostAvailable;
                 await _controller.updateHostAvailability();
               },
+              child: _controller.isHostAvailable
+                  ? Image.asset("assets/images/live_calls_on_new.png")
+                  : Image.asset("assets/images/live_calls_off_new.png"),
             )
           else
             const SizedBox(),
+          // liveCamMicButtons(),
           const SizedBox(width: 16),
         ],
       ),
     );
   }
+
+  // Widget liveCamMicButtons() {
+  //   return StreamBuilder<DatabaseEvent>(
+  //     stream: FirebaseDatabase.instance
+  //         .ref()
+  //         .child("live/${_controller.liveId}/waitList")
+  //         .onValue
+  //         .asBroadcastStream(),
+  //     builder: (context, snapshot) {
+  //       (bool returnValueBool, String returnValueString) multipleReturns;
+  //       multipleReturns = _controller.isEngaded(
+  //         snapshot.data?.snapshot,
+  //         isForMe: true,
+  //       );
+  //       final bool isEngaded = multipleReturns.$1;
+  //       final String type = multipleReturns.$2;
+  //       final bool condForVideoCall = isEngaded && type == "video";
+  //       final bool condForAudioCall = isEngaded && type == "audio";
+  //       if (condForVideoCall) {
+  //         final ZegoUIKit instance = ZegoUIKit.instance;
+  //         _controller.isFront = true;
+  //         instance.useFrontFacingCamera(true);
+  //         _controller.isCamOn = true;
+  //         instance.turnCameraOn(true);
+  //         _controller.isMicOn = true;
+  //         instance.turnMicrophoneOn(true);
+  //       } else if (condForAudioCall) {
+  //         final ZegoUIKit instance = ZegoUIKit.instance;
+  //         _controller.isFront = false;
+  //         instance.useFrontFacingCamera(false);
+  //         _controller.isCamOn = false;
+  //         instance.turnCameraOn(false);
+  //         _controller.isMicOn = true;
+  //         instance.turnMicrophoneOn(true);
+  //       } else {}
+  //       return Obx(
+  //         () {
+  //           return Row(
+  //             children: [
+  //               AnimatedOpacity(
+  //                 opacity: !condForVideoCall ? 0.0 : 1.0,
+  //                 duration: const Duration(seconds: 1),
+  //                 child: InkWell(
+  //                   onTap: () async {
+  //                     final ZegoUIKit instance = ZegoUIKit.instance;
+  //                     _controller.isFront = !_controller.isFront;
+  //                     instance.useFrontFacingCamera(_controller.isFront);
+  //                   },
+  //                   child: Image.asset(
+  //                     height: 40,
+  //                     fit: BoxFit.cover,
+  //                     !_controller.isFront
+  //                         ? "assets/images/live_switch_cam_new.png"
+  //                         : "assets/images/live_switch_cam_new.png",
+  //                   ),
+  //                 ),
+  //               ),
+  //               const SizedBox(width: 16),
+  //               AnimatedOpacity(
+  //                 opacity: !condForVideoCall ? 0.0 : 1.0,
+  //                 duration: const Duration(seconds: 1),
+  //                 child: InkWell(
+  //                   onTap: () async {
+  //                     final ZegoUIKit instance = ZegoUIKit.instance;
+  //                     _controller.isCamOn = !_controller.isCamOn;
+  //                     instance.turnCameraOn(_controller.isCamOn);
+  //                   },
+  //                   child: Image.asset(
+  //                     height: 40,
+  //                     fit: BoxFit.cover,
+  //                     !_controller.isCamOn
+  //                         ? "assets/images/live_cam_on.png"
+  //                         : "assets/images/live_cam_off.png",
+  //                   ),
+  //                 ),
+  //               ),
+  //               const SizedBox(width: 16),
+  //               AnimatedOpacity(
+  //                 opacity: !(condForVideoCall || condForAudioCall) ? 0.0 : 1.0,
+  //                 duration: const Duration(seconds: 1),
+  //                 child: InkWell(
+  //                   onTap: () {
+  //                     final ZegoUIKit instance = ZegoUIKit.instance;
+  //                     _controller.isMicOn = !_controller.isMicOn;
+  //                     instance.turnMicrophoneOn(_controller.isMicOn);
+  //                   },
+  //                   child: Image.asset(
+  //                     height: 40,
+  //                     fit: BoxFit.cover,
+  //                     !_controller.isMicOn
+  //                         ? "assets/images/live_mic_on.png"
+  //                         : "assets/images/live_mic_off.png",
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           );
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
 
   Widget astrologerLiveStar() {
     return StreamBuilder<DatabaseEvent>(
@@ -507,7 +612,7 @@ class _LivePage extends State<LiveDharamScreen>
                     FocusManager.instance.primaryFocus?.unfocus();
                     scrollDown();
                   },
-                  icon: const Icon(Icons.send, color: Colors.white),
+                  icon: Image.asset("assets/images/live_send_message_new.png"),
                 ),
                 floatingLabelBehavior: FloatingLabelBehavior.never,
                 filled: true,
@@ -528,6 +633,21 @@ class _LivePage extends State<LiveDharamScreen>
                 ),
               ),
             ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        InkWell(
+          onTap: () async {
+            final ZegoUIKit instance = ZegoUIKit.instance;
+            _controller.isFront = !_controller.isFront;
+            instance.useFrontFacingCamera(_controller.isFront);
+          },
+          child: Image.asset(
+            height: 40,
+            fit: BoxFit.cover,
+            !_controller.isFront
+                ? "assets/images/live_switch_cam_new.png"
+                : "assets/images/live_switch_cam_new.png",
           ),
         ),
         const SizedBox(width: 16),
@@ -683,7 +803,7 @@ class _LivePage extends State<LiveDharamScreen>
                     isForMe: false,
                   );
                   final bool isEngaded = multipleReturns.$1;
-                  final String type = multipleReturns.$2;
+                  // final String type = multipleReturns.$2;
                   return IconButton(
                     onPressed: () async {
                       await exitFunc(isEngaded: isEngaded);

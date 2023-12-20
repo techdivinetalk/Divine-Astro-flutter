@@ -1,13 +1,9 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:async';
 
-import 'package:dio/dio.dart';
-import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
-import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
-import 'package:get/get_connect/http/src/status/http_status.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:http/http.dart' as http;
 
 class GiftCache {
   static final GiftCache _singleton = GiftCache._internal();
@@ -18,42 +14,31 @@ class GiftCache {
 
   GiftCache._internal();
 
-  int i = 0;
+  int count = 1;
 
-  Future<List<int>> downloadFile({required String url}) async {
+  Future<List<int>> downloadFile({required String url, required int ln}) async {
     List<int> result = kTransparentImage.toList();
-
-    final Directory cacheDir = await getTemporaryDirectory();
-
-    final HiveCacheStore cacheStore = HiveCacheStore(
-      cacheDir.path,
-      hiveBoxName: "hive_box_divine_astrologer",
+    final FileInfo? info = await DefaultCacheManager().getFileFromCache(
+      url,
+      ignoreMemCache: true,
     );
-
-    final CacheOptions customCacheOptions = CacheOptions(
-      store: cacheStore,
-      policy: CachePolicy.forceCache,
-      priority: CachePriority.high,
-      maxStale: const Duration(minutes: 5),
-      hitCacheOnErrorExcept: [401, 404],
-      keyBuilder: (request) => request.uri.toString(),
-      allowPostMethod: false,
-    );
-
-    final Dio customDio = Dio()
-      ..interceptors.add(
-        DioCacheInterceptor(options: customCacheOptions),
-      );
-
-    Options options = Options(responseType: ResponseType.bytes);
-
-    Response res = await customDio.get(url, options: options);
-
-    if (res.statusCode == HttpStatus.ok) {
-      final List<int> listOfInt = res.data;
-      result = listOfInt;
-    } else {}
-
+    if (info == null) {
+      try {
+        final Uri uri = Uri.parse(url);
+        final http.Response response = await http.get(uri);
+        if (response.statusCode == HttpStatus.ok) {
+          result = response.bodyBytes.toList();
+          print("concurrentDownload downloadFile result: $count/$ln: $result");
+          await DefaultCacheManager().putFile(url, response.bodyBytes);
+          print("concurrentDownload downloadFile cache: $count/$ln: cached");
+        } else {}
+      } on Exception catch (e, s) {
+        print("concurrentDownload downloadFile Exception: $count/$ln: $e $s");
+      }
+    } else {
+      result = info.file.readAsBytesSync().toList();
+    }
+    count++;
     return Future<List<int>>.value(result);
   }
 }
