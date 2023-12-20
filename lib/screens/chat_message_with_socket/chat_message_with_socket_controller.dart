@@ -101,6 +101,7 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     switch (state) {
       case AppLifecycleState.resumed:
         socket.socketConnect();
+
         break;
       case AppLifecycleState.inactive:
         debugPrint("App Inactive");
@@ -264,7 +265,9 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
 
   void typingListenerSocket() {
     socket.typingListenerSocket((data) {
-      if (data["typist"].toString() != userData!.id.toString()) {
+      debugPrint('data ........ ${data}');
+      debugPrint('${data['data']["typist"].toString()}  ${arguments["orderData"]["userId"].toString()}');
+      if (data['data']["typist"].toString() == arguments["orderData"]["userId"].toString()) {
         isTyping.value = true;
         chatStatus.value = "Typing";
         update();

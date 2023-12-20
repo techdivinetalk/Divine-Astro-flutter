@@ -1,26 +1,25 @@
 class FirebaseUserData {
   final String name;
-  final Map<String,dynamic> watcher;
+  final String deviceToken;
   final String profileImage;
-
   RealTime realTime;
 
   FirebaseUserData(
     this.name,
-    this.watcher,
+    this.deviceToken,
     this.profileImage,
     this.realTime,
   );
 
   FirebaseUserData.fromJson(Map<dynamic, dynamic> json)
       : name = json['name'] as String,
-        watcher = json['watcher'],
+        deviceToken = json['deviceToken'],
         profileImage = json['profileImage'] as String,
         realTime = RealTime.fromJson(json["realTime"]);
 
   Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
         'name': name.toString(),
-        'watcher': watcher,
+        'deviceToken': deviceToken,
         'profileImage': profileImage,
         "realTime": realTime.toJson(),
       };

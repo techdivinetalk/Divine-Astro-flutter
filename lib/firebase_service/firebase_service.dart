@@ -1,9 +1,11 @@
 import "dart:convert";
 
+import "package:divine_astrologer/app_socket/app_socket.dart";
 import "package:divine_astrologer/common/accept_chat_request_screen.dart";
 import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/di/fcm_notification.dart";
+import "package:divine_astrologer/di/hive_services.dart";
 import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/screens/side_menu/settings/settings_controller.dart";
 import "package:divine_astrologer/watcher/real_time_watcher.dart";
@@ -25,6 +27,7 @@ class AppFirebaseService {
 
   var watcher = RealTimeWatcher();
   var acceptBottomWatcher = RealTimeWatcher();
+  final appSocket = AppSocket();
 
   final DatabaseReference _database = FirebaseDatabase.instance.ref();
 
@@ -55,16 +58,18 @@ class AppFirebaseService {
           }
 
           if (realTimeData["notification"] != null) {
+            final HiveServices hiveServices = HiveServices(boxName: userChatData);
+            await hiveServices.initialize();
             realTimeData["notification"].forEach((key, notificationData) {
               debugPrint("local notification $notificationData");
               if (notificationData != null) {
                 showNotificationWithActions(
                     title: notificationData["value"] ?? "",
                     message: notificationData["message"] ?? "",
-                    payload: notificationData);
+                    payload: notificationData,hiveServices: hiveServices);
               }
             });
-            FirebaseDatabase.instance.ref("$path/notification").remove();
+           // FirebaseDatabase.instance.ref("$path/notification").remove();
           }
 
           if (realTimeData["uniqueId"] != null) {
@@ -99,6 +104,7 @@ class AppFirebaseService {
                       orderId: int.parse(value.toString()), queueId: orderData["queue_id"])) {
                     acceptBottomWatcher.strValue = "1";
                     writeData("order/$value", {"status": "1"});
+                    appSocket.sendConnectRequest(astroId: orderData["astroId"],custId: orderData["userId"]);
                   }
                 },
                     orderStatus: orderData["status"],
