@@ -117,6 +117,9 @@ class _LivePage extends State<LiveDharamScreen>
                     // ..turnOnMicrophoneWhenJoining = _controller.isMicOn
                     ..audioVideoViewConfig = ZegoPrebuiltAudioVideoViewConfig(
                       showUserNameOnView: false,
+                      showAvatarInAudioMode: true,
+                      useVideoViewAspectFill: true,
+                      showSoundWavesInAudioMode: true,
                     )
                     ..bottomMenuBarConfig = ZegoBottomMenuBarConfig(
                       showInRoomMessageButton: false,
@@ -350,7 +353,9 @@ class _LivePage extends State<LiveDharamScreen>
   //         _controller.isMicOn = true;
   //         instance.turnMicrophoneOn(true);
   //       } else {}
-  //       return Obx(
+  //       return 
+  //       !isEngaded ? const SizedBox() :
+  //       Obx(
   //         () {
   //           return Row(
   //             children: [

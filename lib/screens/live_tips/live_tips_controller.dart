@@ -43,8 +43,14 @@ class LiveTipsController extends GetxController {
         "isEngaged": 0,
       },
     );
+    await database.ref().child("astro-live-list/$userId").update(
+      {
+        "isActive": 1,
+      },
+    );
     await Get.toNamed(RouteName.liveDharamScreen, arguments: userId);
     await database.ref().child("live/$userId").remove();
+    await database.ref().child("astro-live-list/$userId").remove();
     return Future<void>.value();
   }
 
