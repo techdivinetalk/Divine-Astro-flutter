@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import "../../../model/res_login.dart";
+
 enum WorkingForPlatform { yes, no }
 
 class ReferAstrologerController extends GetxController {
@@ -69,7 +71,7 @@ class ReferAstrologerState {
   WorkingForPlatform platform = WorkingForPlatform.no;
   late final GlobalKey<FormState> formKey;
 
-  SharedPreferenceService pref = SharedPreferenceService();
+  SharedPreferenceService pref = Get.find<SharedPreferenceService>();
 
   bool get isYes => platform == WorkingForPlatform.yes;
 
@@ -80,6 +82,7 @@ class ReferAstrologerState {
   late final TextEditingController astrologySkills;
   late final TextEditingController astrologerExperience;
   late final TextEditingController otherPlatform;
+  UserData? user;
 
   void init() {
     formKey = GlobalKey<FormState>();
@@ -88,6 +91,7 @@ class ReferAstrologerState {
     astrologySkills = TextEditingController();
     astrologerExperience = TextEditingController();
     otherPlatform = TextEditingController();
+    user = pref.getUserDetail();
   }
 
   void dispose() {
@@ -106,7 +110,7 @@ class ReferAstrologerState {
       segment: astrologySkills.text.trim(),
       notes: "came from ${otherPlatform.text.trim()}",
       experience: astrologerExperience.text.trim(),
-      referBy: pref.getUserDetail()?.id,
+      referBy: user?.id,
     );
   }
 
