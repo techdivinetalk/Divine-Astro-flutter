@@ -1,28 +1,28 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:ui';
+import "dart:convert";
+import "dart:io";
+import "dart:ui";
 
-import 'package:divine_astrologer/common/app_textstyle.dart';
-import 'package:divine_astrologer/common/cached_network_image.dart';
-import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/common_functions.dart';
-import 'package:divine_astrologer/common/permission_handler.dart';
-import 'package:divine_astrologer/common/routes.dart';
-import 'package:divine_astrologer/gen/assets.gen.dart';
-import 'package:divine_astrologer/model/chat_offline_model.dart';
-import 'package:divine_astrologer/screens/live_page/constant.dart';
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:social_media_recorder/audio_encoder_type.dart';
-import 'package:social_media_recorder/screen/social_media_recorder.dart';
-import 'package:voice_message_package/voice_message_package.dart';
+import "package:divine_astrologer/common/app_textstyle.dart";
+import "package:divine_astrologer/common/cached_network_image.dart";
+import "package:divine_astrologer/common/colors.dart";
+import "package:divine_astrologer/common/common_functions.dart";
+import "package:divine_astrologer/common/permission_handler.dart";
+import "package:divine_astrologer/common/routes.dart";
+import "package:divine_astrologer/gen/assets.gen.dart";
+import "package:divine_astrologer/model/chat_offline_model.dart";
+import "package:divine_astrologer/screens/live_page/constant.dart";
+import "package:emoji_picker_flutter/emoji_picker_flutter.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:get/get.dart";
+import "package:lottie/lottie.dart";
+import "package:permission_handler/permission_handler.dart";
+import "package:social_media_recorder/audio_encoder_type.dart";
+import "package:social_media_recorder/screen/social_media_recorder.dart";
+import "package:voice_message_package/voice_message_package.dart";
 
-import 'chat_message_with_socket_controller.dart';
+import "chat_message_with_socket_controller.dart";
 
 class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   const ChatMessageWithSocketUI({super.key});
@@ -97,7 +97,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                           index: index,
                                                           chatMessage.senderId ==
                                                               preferenceService.getUserDetail()!.id)
-                                                      : chatMessage.msgType == 'audio'
+                                                      : chatMessage.msgType == "audio"
                                                           ? audioView(context,
                                                               chatDetail: controller.chatMessages[index],
                                                               yourMessage: chatMessage.senderId ==
@@ -231,7 +231,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
   Widget chatBottomBar() {
     return Obx(
-          () => Padding(
+      () => Padding(
         padding: EdgeInsets.symmetric(horizontal: controller.isRecording.value ? 0 : 12.h),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -294,14 +294,14 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               ),
                               suffixIcon: InkWell(
                                 onTap: () async {
-                                 // if (controller.isOngoingChat.value) {
-                                    if (await PermissionHelper().askStoragePermission(Permission.photos)) {
-                                      controller.getImage(false);
-                                    }
-                               //   } else {
-                               //     divineSnackBar(
-                               //         data: "${'chatEnded'.tr}.", color: AppColors.appYellowColour);
-                               //   }
+                                  // if (controller.isOngoingChat.value) {
+                                  if (await PermissionHelper().askStoragePermission(Permission.photos)) {
+                                    controller.getImage(false);
+                                  }
+                                  //   } else {
+                                  //     divineSnackBar(
+                                  //         data: "${'chatEnded'.tr}.", color: AppColors.appYellowColour);
+                                  //   }
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.fromLTRB(0.w, 9.h, 10.w, 10.h),
@@ -357,7 +357,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         controller.isRecording.value = false;
                       },
                       sendRequestFunction: (soundFile, time) {
-                        debugPrint('soundFile ${soundFile.path}');
+                        debugPrint("soundFile ${soundFile.path}");
                         controller.uploadAudioFile(soundFile);
                       },
                       encode: AudioEncoderType.AAC,
@@ -467,9 +467,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         audioSrc: chatDetail.awsUrl!,
                         maxDuration: const Duration(seconds: 120),
                         isFile: false,
-                        onComplete: () => debugPrint('onComplete'),
-                        onPause: () => debugPrint('onPause'),
-                        onPlaying: () => debugPrint('onPlaying')),
+                        onComplete: () => debugPrint("onComplete"),
+                        onPause: () => debugPrint("onPause"),
+                        onPlaying: () => debugPrint("onPlaying")),
                     innerPadding: 0,
                     cornerRadius: 20),
                 Positioned(
@@ -533,7 +533,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8.0.r),
                           child: Image.file(
-                            File(chatDetail.downloadedPath ?? ''),
+                            File(chatDetail.downloadedPath ?? ""),
                             fit: BoxFit.cover,
                             height: 200.h,
                           ),
@@ -596,10 +596,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       ),
                       InkWell(
                         onTap: () {
-                          controller.downloadImage(
-                              fileName: image,
-                              chatDetail: chatDetail,
-                              index: index);
+                          controller.downloadImage(fileName: image, chatDetail: chatDetail, index: index);
                         },
                         child: Container(
                           padding: const EdgeInsets.all(10),
@@ -652,7 +649,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       onTap: () {
         Get.toNamed(RouteName.kundliDetail, arguments: {
           "kundli_id": chatDetail.kundliId,
-          'from_kundli': true,
+          "from_kundli": true,
           "birth_place": chatDetail.kundliPlace,
           "gender": chatDetail.gender,
           "name": chatDetail.kundliName,
@@ -828,11 +825,12 @@ class AstrologerChatAppBar extends StatelessWidget {
                                         ),
                                         Text(
                                           controller.chatStatus.value,
-                                          // "chatInProgress".tr,
                                           style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               fontSize: 13.sp,
-                                              color: AppColors.redColor),
+                                              color: controller.chatStatus.value != "Offline"
+                                                  ? AppColors.darkGreen
+                                                  : AppColors.redColor),
                                         ),
                                       ],
                                     ),

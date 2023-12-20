@@ -1,16 +1,16 @@
-import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/common_elevated_button.dart';
+import "package:divine_astrologer/common/colors.dart";
+import "package:divine_astrologer/common/common_elevated_button.dart";
 import "package:divine_astrologer/common/routes.dart";
-import 'package:divine_astrologer/firebase_service/firebase_service.dart';
-import 'package:divine_astrologer/gen/assets.gen.dart';
-import 'package:divine_astrologer/gen/fonts.gen.dart';
-import 'package:flutter/material.dart';
+import "package:divine_astrologer/firebase_service/firebase_service.dart";
+import "package:divine_astrologer/gen/assets.gen.dart";
+import "package:divine_astrologer/gen/fonts.gen.dart";
+import "package:flutter/material.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
+import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:get/get.dart";
+import "package:lottie/lottie.dart";
 
-import '../screens/live_page/constant.dart';
+import "../screens/live_page/constant.dart";
 
 acceptChatRequestBottomSheet(BuildContext context,
     {required void Function() onPressed,
@@ -20,7 +20,8 @@ acceptChatRequestBottomSheet(BuildContext context,
     required placeOfBirth,
     required timeOfBirth,
     required maritalStatus,
-    required problemArea}) {
+    required problemArea,
+    required walletBalance}) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
       context: context,
@@ -35,15 +36,15 @@ acceptChatRequestBottomSheet(BuildContext context,
             widthFactor: 1.0,
             heightFactor: 1.0,
             child: AcceptChatRequestScreen(
-              onPressed: onPressed,
-              orderStatus: orderStatus,
-              customerName: customerName,
-              dob: dob,
-              placeOfBirth: placeOfBirth,
-              timeOfBirth: timeOfBirth,
-              maritalStatus: maritalStatus,
-              problemArea: problemArea,
-            ));
+                onPressed: onPressed,
+                orderStatus: orderStatus,
+                customerName: customerName,
+                dob: dob,
+                placeOfBirth: placeOfBirth,
+                timeOfBirth: timeOfBirth,
+                maritalStatus: maritalStatus,
+                problemArea: problemArea,
+                walletBalance: walletBalance));
       });
 }
 
@@ -56,6 +57,7 @@ class AcceptChatRequestScreen extends StatefulWidget {
   final String timeOfBirth;
   final String maritalStatus;
   final String problemArea;
+  final String walletBalance;
 
   const AcceptChatRequestScreen(
       {super.key,
@@ -66,7 +68,8 @@ class AcceptChatRequestScreen extends StatefulWidget {
       required this.placeOfBirth,
       required this.timeOfBirth,
       required this.maritalStatus,
-      required this.problemArea});
+      required this.problemArea,
+      required this.walletBalance});
 
   @override
   State<AcceptChatRequestScreen> createState() => _AcceptChatRequestScreenState();
@@ -76,7 +79,6 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
   final appFirebaseService = AppFirebaseService();
   bool isBottomSheetOpen = false;
   BroadcastReceiver broadcastReceiver = BroadcastReceiver(names: <String>["EndChat"]);
-
 
   @override
   void initState() {
@@ -89,7 +91,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
     });
 
     appFirebaseService.acceptBottomWatcher.nameStream.listen((event) {
-      isBottomSheetOpen = event == '1';
+      isBottomSheetOpen = event == "1";
       setState(() {});
     });
     super.initState();
@@ -129,7 +131,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                               fontFamily: FontFamily.metropolis,
                               fontSize: 20.sp,
                               color: AppColors.appYellowColour)),
-                      Text('Ready to assist you!',
+                      Text("Ready to assist you!",
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontFamily: FontFamily.metropolis,
@@ -146,14 +148,14 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                               children: [
                                 Expanded(
                                   flex: 6,
-                                  child: Text('name'.tr,
+                                  child: Text("name".tr,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontFamily: FontFamily.metropolis,
                                           fontSize: 16.sp,
                                           color: AppColors.darkBlue)),
                                 ),
-                                Text('-'.tr,
+                                Text("-".tr,
                                     style: TextStyle(
                                         fontWeight: FontWeight.w400,
                                         fontFamily: FontFamily.metropolis,
@@ -177,14 +179,14 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                               children: [
                                 Expanded(
                                   flex: 6,
-                                  child: Text('Date of Birth',
+                                  child: Text("Date of Birth",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontFamily: FontFamily.metropolis,
                                           fontSize: 16.sp,
                                           color: AppColors.darkBlue)),
                                 ),
-                                Text('-'.tr,
+                                Text("-".tr,
                                     style: TextStyle(
                                         fontWeight: FontWeight.w400,
                                         fontFamily: FontFamily.metropolis,
@@ -208,14 +210,14 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                               children: [
                                 Expanded(
                                   flex: 6,
-                                  child: Text('Place of Birth',
+                                  child: Text("Place of Birth",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontFamily: FontFamily.metropolis,
                                           fontSize: 16.sp,
                                           color: AppColors.darkBlue)),
                                 ),
-                                Text('-',
+                                Text("-",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w400,
                                         fontFamily: FontFamily.metropolis,
@@ -239,14 +241,14 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                               children: [
                                 Expanded(
                                   flex: 6,
-                                  child: Text('Time of Birth',
+                                  child: Text("Time of Birth",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontFamily: FontFamily.metropolis,
                                           fontSize: 16.sp,
                                           color: AppColors.darkBlue)),
                                 ),
-                                Text('-',
+                                Text("-",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w400,
                                         fontFamily: FontFamily.metropolis,
@@ -270,14 +272,14 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                               children: [
                                 Expanded(
                                   flex: 6,
-                                  child: Text('Marital Status',
+                                  child: Text("Marital Status",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontFamily: FontFamily.metropolis,
                                           fontSize: 16.sp,
                                           color: AppColors.darkBlue)),
                                 ),
-                                Text('-',
+                                Text("-",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w400,
                                         fontFamily: FontFamily.metropolis,
@@ -301,7 +303,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                               children: [
                                 Expanded(
                                   flex: 6,
-                                  child: Text('Problem Area',
+                                  child: Text("Problem Area",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontFamily: FontFamily.metropolis,
@@ -310,7 +312,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                 ),
                                 Expanded(
                                     flex: 1,
-                                    child: Text('-',
+                                    child: Text("-",
                                         style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontFamily: FontFamily.metropolis,
@@ -341,7 +343,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                     children: [
                       Divider(thickness: 1, color: AppColors.darkBlue.withOpacity(0.1)),
                       SizedBox(height: 5.w),
-                      Text('orderDetails'.tr,
+                      Text("orderDetails".tr,
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontFamily: FontFamily.metropolis,
@@ -356,13 +358,13 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                 Assets.svg.orderTypeIcon.svg(height: 30.w, width: 30.w),
                                 SizedBox(width: 8.w),
                                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                  Text('orderType'.tr,
+                                  Text("orderType".tr,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontFamily: FontFamily.metropolis,
                                           fontSize: 16.sp,
                                           color: AppColors.darkBlue)),
-                                  Text('PAID',
+                                  Text("PAID",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontFamily: FontFamily.metropolis,
@@ -380,13 +382,13 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('walletBalance'.tr,
+                                    Text("walletBalance".tr,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontFamily: FontFamily.metropolis,
                                             fontSize: 16.sp,
                                             color: AppColors.darkBlue)),
-                                    Text('₹100',
+                                    Text("₹${widget.walletBalance}",
                                         style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontFamily: FontFamily.metropolis,
@@ -407,13 +409,13 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('maximumOrderTime'.tr,
+                              Text("maximumOrderTime".tr,
                                   style: TextStyle(
                                       fontWeight: FontWeight.w400,
                                       fontFamily: FontFamily.metropolis,
                                       fontSize: 16.sp,
                                       color: AppColors.darkBlue)),
-                              Text('00:05:00',
+                              Text("00:05:00",
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontFamily: FontFamily.metropolis,
@@ -432,7 +434,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                   border: Border.all(color: AppColors.brown),
                                   borderRadius: BorderRadius.circular(5.r)),
                               child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                Text('Waiting for user to connect',
+                                Text("Waiting for user to connect",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontFamily: FontFamily.metropolis,
@@ -451,7 +453,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                   width: double.infinity,
                                   borderRadius: 5.r,
                                   backgroundColor: AppColors.brownColour,
-                                  text: 'acceptChatRequest'.tr,
+                                  text: "acceptChatRequest".tr,
                                   onPressed: widget.onPressed)
                               : const SizedBox()
                     ],
