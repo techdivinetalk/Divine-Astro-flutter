@@ -30,7 +30,8 @@ class AppSocket {
         ..connect();
     }
     socket?.onConnect((_) {
-      Get.put(HomeController());
+      //Get.put(HomeController());
+      Get.find<HomeController>();
       socket?.emit(ApiProvider().joinRoomSocket, {
         "userId": preferenceService.getUserDetail()!.id.toString(),
         "userType": 'astrologer',
