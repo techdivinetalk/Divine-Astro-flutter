@@ -1,3 +1,4 @@
+import "package:divine_astrologer/di/shared_preference_service.dart";
 import 'package:divine_astrologer/model/refer_astrologer/refer_astrologer_request.dart';
 import 'package:divine_astrologer/model/refer_astrologer/refer_astrologer_response.dart';
 import 'package:divine_astrologer/repository/refer_astrologer_repository.dart';
@@ -68,6 +69,8 @@ class ReferAstrologerState {
   WorkingForPlatform platform = WorkingForPlatform.no;
   late final GlobalKey<FormState> formKey;
 
+  SharedPreferenceService pref = SharedPreferenceService();
+
   bool get isYes => platform == WorkingForPlatform.yes;
 
   bool get isNo => platform == WorkingForPlatform.no;
@@ -98,12 +101,12 @@ class ReferAstrologerState {
   ReferAstrologerRequest referAstrologerRequest() {
     return ReferAstrologerRequest(
       firstName: astrologerName.text.trim(),
+      email: "",
       contactNumber: mobileNumber.text.trim(),
-      skills: astrologySkills.text.trim(),
+      segment: astrologySkills.text.trim(),
+      notes: "came from ${otherPlatform.text.trim()}",
       experience: astrologerExperience.text.trim(),
-      isCustApp: "0",
-      userId: "31",
-      email: "test12Or289@gmail.com",
+      referBy: pref.getUserDetail()?.id,
     );
   }
 
