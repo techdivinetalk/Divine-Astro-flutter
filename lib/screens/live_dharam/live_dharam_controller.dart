@@ -49,13 +49,22 @@ class LiveDharamController extends GetxController {
   final RxBool _isMicOn = true.obs;
   final Rx<ZegoUIKitUser> _zegoUIKitUser = ZegoUIKitUser(id: "", name: "").obs;
   final RxBool _amIBlocked = false.obs;
-  final RxBool _isEngaged = false.obs;
-  final RxString _callType = "".obs;
+  final Rx<WaitListModel> _currentCaller = WaitListModel(
+    isEngaded: false,
+    callType: "callType",
+    totalTime: "",
+    avatar: "",
+    userName: "",
+    id: "",
+  ).obs;
 
   @override
   void onInit() {
     super.onInit();
+    initData();
+  }
 
+  void initData() {
     userId = (_pref.getUserDetail()?.id ?? "").toString();
     userName = _pref.getUserDetail()?.name ?? "";
     // avatar = _pref.getUserDetail()?.avatar ?? "";
@@ -82,8 +91,16 @@ class LiveDharamController extends GetxController {
     isMicOn = true;
     zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
     amIBlocked = false;
-    isEngaged = false;
-    callType = "";
+    currentCaller = WaitListModel(
+      isEngaded: false,
+      callType: "callType",
+      totalTime: "",
+      avatar: "",
+      userName: "",
+      id: "",
+    );
+
+    return;
   }
 
   @override
@@ -110,8 +127,7 @@ class LiveDharamController extends GetxController {
     _isMicOn.close();
     _zegoUIKitUser.close();
     _amIBlocked.close();
-    _isEngaged.close();
-    _callType.close();
+    _currentCaller.close();
 
     super.onClose();
   }
@@ -183,11 +199,8 @@ class LiveDharamController extends GetxController {
   bool get amIBlocked => _amIBlocked.value;
   set amIBlocked(bool value) => _amIBlocked(value);
 
-  bool get isEngaged => _isEngaged.value;
-  set isEngaged(bool value) => _isEngaged(value);
-
-  String get callType => _callType.value;
-  set callType(String value) => _callType(value);
+  WaitListModel get currentCaller => _currentCaller.value;
+  set currentCaller(WaitListModel value) => _currentCaller(value);
 
   Future<void> eventListner(DatabaseEvent event) async {
     final DataSnapshot dataSnapshot = event.snapshot;
@@ -203,7 +216,9 @@ class LiveDharamController extends GetxController {
             liveId = data.keys.toList()[currentIndex];
             isHostAvailable = checkIfAstrologerAvailable(map);
             amIBlocked = checkIfAstrologerBlockedMe(map);
-            print("amIBlocked: $amIBlocked");
+            var liveIdNode = data[liveId];
+            var waitListNode = liveIdNode["waitList"];
+            currentCaller = isEngadedNew(waitListNode, isForMe: false);
             // await getAstrologerDetails();
           } else {}
         } else {}
@@ -214,6 +229,43 @@ class LiveDharamController extends GetxController {
       data.clear();
     }
     return Future<void>.value();
+  }
+
+  WaitListModel isEngadedNew(
+    Map? map, {
+    required bool isForMe,
+  }) {
+    bool isEngaged = false;
+    String callType = "";
+    String totalTime = "";
+    String avatar = "";
+    String userName = "";
+    String id = "";
+    if (map != null) {
+      if (map.isNotEmpty) {
+        map.forEach(
+          // ignore: always_specify_types
+          (key, value) {
+            final bool c1 = (value["id"] ?? "") == userId;
+            final bool c2 = (value["isEngaded"] ?? false) == true;
+            isEngaged = isForMe ? c1 && c2 : c2;
+            callType = value["callType"] ?? "";
+            totalTime = value["totalTime"] ?? "";
+            avatar = value["avatar"] ?? "";
+            userName = value["userName"] ?? "";
+            id = value["id"] ?? "";
+          },
+        );
+      } else {}
+    } else {}
+    return WaitListModel(
+      isEngaded: isEngaged,
+      callType: callType,
+      totalTime: totalTime,
+      avatar: avatar,
+      userName: userName,
+      id: id,
+    );
   }
 
   bool checkIfAstrologerAvailable(Map<dynamic, dynamic> map) {
@@ -763,37 +815,6 @@ class LiveDharamController extends GetxController {
   Duration parseTime(String timeString) {
     final List<int> parts = timeString.split(":").map(int.parse).toList();
     return Duration(hours: parts[0], minutes: parts[1], seconds: parts[2]);
-  }
-
-  (bool, String) isEngaded(
-    DataSnapshot? dataSnapshot, {
-    required bool isForMe,
-  }) {
-    bool returnValueBool = false;
-    String returnValueString = "";
-    if (dataSnapshot != null) {
-      if (dataSnapshot.exists) {
-        if (dataSnapshot.value is Map<dynamic, dynamic>) {
-          ((dataSnapshot.value ?? <dynamic, dynamic>{})
-                  as Map<dynamic, dynamic>)
-              .forEach(
-            // ignore: always_specify_types
-            (key, value) {
-              // ignore:  avoid_dynamic_calls
-              final bool c1 = (value["id"] ?? "") == userId;
-              // ignore:  avoid_dynamic_calls
-              final bool c2 = (value["isEngaded"] ?? false) == true;
-              returnValueBool = isForMe ? c1 && c2 : c2;
-              // ignore:  avoid_dynamic_calls
-              returnValueString = value["callType"] ?? "";
-            },
-          );
-        } else {}
-      } else {}
-    } else {}
-    isEngaged = returnValueBool;
-    callType = returnValueString;
-    return (returnValueBool, returnValueString);
   }
 
   Future<void> addUpdateToBlockList({required String userId}) async {

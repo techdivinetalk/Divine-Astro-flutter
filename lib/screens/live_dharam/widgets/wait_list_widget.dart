@@ -17,6 +17,9 @@ class WaitListWidget extends StatefulWidget {
     required this.astologerName,
     required this.astologerImage,
     required this.astologerSpeciality,
+    required this.isHost,
+    required this.onAccept,
+    required this.onReject,
     super.key,
   });
 
@@ -26,10 +29,12 @@ class WaitListWidget extends StatefulWidget {
   final List<WaitListModel> list;
   final bool hasMyIdInWaitList;
   final void Function() onExitWaitList;
-
   final String astologerName;
   final String astologerImage;
   final String astologerSpeciality;
+  final bool isHost;
+  final void Function() onAccept;
+  final void Function() onReject;
 
   @override
   State<WaitListWidget> createState() => _WaitListWidgetState();
@@ -184,7 +189,6 @@ class _WaitListWidgetState extends State<WaitListWidget> {
 
   Widget callTypeIcon({required String callType}) {
     String returnString = "assets/images/live_call_video.png";
-
     switch (callType) {
       case "video":
         returnString = "assets/images/live_call_video.png";
@@ -196,9 +200,57 @@ class _WaitListWidgetState extends State<WaitListWidget> {
         returnString = "assets/images/live_call_private.png";
         break;
     }
-
     return Image.asset(returnString);
   }
+
+  // Widget exitWidget() {
+  //   return widget.isHost
+  //       ? Column(
+  //           children: <Widget>[
+  //             const SizedBox(height: 8),
+  //             Row(
+  //               children: [
+  //                 Expanded(
+  //                   child: TextButton(
+  //                     onPressed: widget.onReject,
+  //                     child: const Text(
+  //                       "Reject",
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Expanded(
+  //                   child: TextButton(
+  //                     onPressed: widget.onAccept,
+  //                     child: const Text(
+  //                       "Accept",
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //             const SizedBox(height: 8),
+  //           ],
+  //         )
+  //       : widget.hasMyIdInWaitList
+  //           ? Column(
+  //               children: <Widget>[
+  //                 const SizedBox(height: 8),
+  //                 TextButton(
+  //                   onPressed: widget.onExitWaitList,
+  //                   child: const Text(
+  //                     "Exit Waitlist",
+  //                     style: TextStyle(
+  //                       color: Colors.red,
+  //                       decoration: TextDecoration.underline,
+  //                       decorationColor: Colors.red,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 const SizedBox(height: 8),
+  //               ],
+  //             )
+  //           : const SizedBox();
+  // }
 
   Widget exitWidget() {
     return widget.hasMyIdInWaitList

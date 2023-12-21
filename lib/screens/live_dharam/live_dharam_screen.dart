@@ -12,7 +12,6 @@ import "package:divine_astrologer/screens/live_dharam/widgets/congratulations_wi
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/disconnect_call_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/end_session_widget.dart";
-import "package:divine_astrologer/screens/live_dharam/widgets/exit_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
@@ -23,6 +22,7 @@ import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
+//
 //
 //
 //
@@ -57,7 +57,7 @@ class _LivePage extends State<LiveDharamScreen>
   late StreamSubscription<ZegoSignalingPluginInRoomCommandMessageReceivedEvent>
       _zegocloudSubscription;
 
-  // late StreamSubscription<DatabaseEvent> _firebaseSubscription;
+  late StreamSubscription<DatabaseEvent> _firebaseSubscription;
 
   final TextEditingController _editingController = TextEditingController();
 
@@ -76,18 +76,18 @@ class _LivePage extends State<LiveDharamScreen>
         .getInRoomCommandMessageReceivedEventStream()
         .listen(onInRoomCommandMessageReceived);
 
-    // _firebaseSubscription = FirebaseDatabase.instance
-    //     .ref()
-    //     .child("live")
-    //     .onValue
-    //     .listen(_controller.eventListner);
+    _firebaseSubscription = FirebaseDatabase.instance
+        .ref()
+        .child("live")
+        .onValue
+        .listen(_controller.eventListner);
   }
 
   @override
   void dispose() {
     unawaited(_zegoMessageStreamController.close());
     unawaited(_zegocloudSubscription.cancel());
-    // unawaited(_firebaseSubscription.cancel());
+    unawaited(_firebaseSubscription.cancel());
     _editingController.dispose();
     _scrollController.dispose();
 
@@ -100,7 +100,7 @@ class _LivePage extends State<LiveDharamScreen>
       body: PopScope(
         canPop: false,
         onPopInvoked: (pop) async {
-          await exitFunc(isEngaded: _controller.isEngaged);
+          await exitFunc();
         },
         child: Obx(
           () {
@@ -132,7 +132,7 @@ class _LivePage extends State<LiveDharamScreen>
                         hostButtons: <ZegoMenuBarButtonName>[],
                         coHostButtons: <ZegoMenuBarButtonName>[],
                       )
-                      ..layout = galleryLayout
+                      ..layout = galleryLayout()
                       ..swipingConfig = swipingConfig
                       ..onLiveStreamingStateUpdate = onLiveStreamingStateUpdate
                       ..avatarBuilder = avatarWidget
@@ -174,8 +174,14 @@ class _LivePage extends State<LiveDharamScreen>
         : ZegoUIKitPrebuiltLiveStreamingConfig.audience(plugins: pluginsList);
   }
 
-  ZegoLayout get galleryLayout {
-    return _controller.isHost ? ZegoLayout.gallery() : ZegoLayout.gallery();
+  ZegoLayout galleryLayout() {
+    final bool isEngaged = _controller.currentCaller.isEngaded;
+    final String callType = _controller.currentCaller.callType;
+    if (isEngaged == true && callType == "video") {
+      return ZegoLayout.gallery();
+    } else {
+      return ZegoLayout.pictureInPicture(smallViewSize: const Size(0, 0));
+    }
   }
 
   Widget avatarWidget(
@@ -215,6 +221,8 @@ class _LivePage extends State<LiveDharamScreen>
           const SizedBox(height: 16),
           astrologerLiveStar(),
           const SizedBox(height: 16),
+          callerWithTimer(),
+          const SizedBox(height: 16),
           Expanded(
             child: Row(
               children: <Widget>[
@@ -244,7 +252,7 @@ class _LivePage extends State<LiveDharamScreen>
           const SizedBox(width: 16),
           IconButton(
             onPressed: () async {
-              await exitFunc(isEngaded: _controller.isEngaged);
+              await exitFunc();
             },
             icon: const Icon(Icons.arrow_back_ios, color: AppColors.white),
           ),
@@ -326,110 +334,100 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-  // Widget liveCamMicButtons() {
-  //   return StreamBuilder<DatabaseEvent>(
-  //     stream: FirebaseDatabase.instance
-  //         .ref()
-  //         .child("live/${_controller.liveId}/waitList")
-  //         .onValue
-  //         .asBroadcastStream(),
-  //     builder: (context, snapshot) {
-  //       (bool returnValueBool, String returnValueString) multipleReturns;
-  //       multipleReturns = _controller.isEngaded(
-  //         snapshot.data?.snapshot,
-  //         isForMe: true,
-  //       );
-  //       final bool isEngaded = multipleReturns.$1;
-  //       final String type = multipleReturns.$2;
-  //       final bool condForVideoCall = isEngaded && type == "video";
-  //       final bool condForAudioCall = isEngaded && type == "audio";
-  //       if (condForVideoCall) {
-  //         final ZegoUIKit instance = ZegoUIKit.instance;
-  //         _controller.isFront = true;
-  //         instance.useFrontFacingCamera(true);
-  //         _controller.isCamOn = true;
-  //         instance.turnCameraOn(true);
-  //         _controller.isMicOn = true;
-  //         instance.turnMicrophoneOn(true);
-  //       } else if (condForAudioCall) {
-  //         final ZegoUIKit instance = ZegoUIKit.instance;
-  //         _controller.isFront = false;
-  //         instance.useFrontFacingCamera(false);
-  //         _controller.isCamOn = false;
-  //         instance.turnCameraOn(false);
-  //         _controller.isMicOn = true;
-  //         instance.turnMicrophoneOn(true);
-  //       } else {}
-  //       return !isEngaded
-  //           ? const SizedBox()
-  //           : Obx(
-  //               () {
-  //                 return Row(
-  //                   children: [
-  //                     AnimatedOpacity(
-  //                       opacity: !condForVideoCall ? 0.0 : 1.0,
-  //                       duration: const Duration(seconds: 1),
-  //                       child: InkWell(
-  //                         onTap: () async {
-  //                           final ZegoUIKit instance = ZegoUIKit.instance;
-  //                           _controller.isFront = !_controller.isFront;
-  //                           instance.useFrontFacingCamera(_controller.isFront);
-  //                         },
-  //                         child: Image.asset(
-  //                           height: 40,
-  //                           fit: BoxFit.cover,
-  //                           !_controller.isFront
-  //                               ? "assets/images/live_switch_cam_new.png"
-  //                               : "assets/images/live_switch_cam_new.png",
-  //                         ),
-  //                       ),
-  //                     ),
-  //                     const SizedBox(width: 16),
-  //                     AnimatedOpacity(
-  //                       opacity: !condForVideoCall ? 0.0 : 1.0,
-  //                       duration: const Duration(seconds: 1),
-  //                       child: InkWell(
-  //                         onTap: () async {
-  //                           final ZegoUIKit instance = ZegoUIKit.instance;
-  //                           _controller.isCamOn = !_controller.isCamOn;
-  //                           instance.turnCameraOn(_controller.isCamOn);
-  //                         },
-  //                         child: Image.asset(
-  //                           height: 40,
-  //                           fit: BoxFit.cover,
-  //                           !_controller.isCamOn
-  //                               ? "assets/images/live_cam_on.png"
-  //                               : "assets/images/live_cam_off.png",
-  //                         ),
-  //                       ),
-  //                     ),
-  //                     const SizedBox(width: 16),
-  //                     AnimatedOpacity(
-  //                       opacity:
-  //                           !(condForVideoCall || condForAudioCall) ? 0.0 : 1.0,
-  //                       duration: const Duration(seconds: 1),
-  //                       child: InkWell(
-  //                         onTap: () {
-  //                           final ZegoUIKit instance = ZegoUIKit.instance;
-  //                           _controller.isMicOn = !_controller.isMicOn;
-  //                           instance.turnMicrophoneOn(_controller.isMicOn);
-  //                         },
-  //                         child: Image.asset(
-  //                           height: 40,
-  //                           fit: BoxFit.cover,
-  //                           !_controller.isMicOn
-  //                               ? "assets/images/live_mic_on.png"
-  //                               : "assets/images/live_mic_off.png",
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 );
-  //               },
-  //             );
-  //     },
-  //   );
-  // }
+  Widget liveCamMicButtons() {
+    return Builder(
+      builder: (context) {
+        final bool isEngaded = _controller.currentCaller.isEngaded;
+        final String type = _controller.currentCaller.callType;
+        final bool condForVideoCall = isEngaded && type == "video";
+        final bool condForAudioCall = isEngaded && type == "audio";
+        if (condForVideoCall) {
+          final ZegoUIKit instance = ZegoUIKit.instance;
+          _controller.isFront = true;
+          instance.useFrontFacingCamera(true);
+          _controller.isCamOn = true;
+          instance.turnCameraOn(true);
+          _controller.isMicOn = true;
+          instance.turnMicrophoneOn(true);
+        } else if (condForAudioCall) {
+          final ZegoUIKit instance = ZegoUIKit.instance;
+          _controller.isFront = false;
+          instance.useFrontFacingCamera(false);
+          _controller.isCamOn = false;
+          instance.turnCameraOn(false);
+          _controller.isMicOn = true;
+          instance.turnMicrophoneOn(true);
+        } else {}
+        return !isEngaded
+            ? const SizedBox()
+            : Obx(
+                () {
+                  return Row(
+                    children: [
+                      AnimatedOpacity(
+                        opacity: !condForVideoCall ? 0.0 : 1.0,
+                        duration: const Duration(seconds: 1),
+                        child: InkWell(
+                          onTap: () async {
+                            final ZegoUIKit instance = ZegoUIKit.instance;
+                            _controller.isFront = !_controller.isFront;
+                            instance.useFrontFacingCamera(_controller.isFront);
+                          },
+                          child: Image.asset(
+                            height: 32,
+                            fit: BoxFit.cover,
+                            !_controller.isFront
+                                ? "assets/images/live_switch_cam_new.png"
+                                : "assets/images/live_switch_cam_new.png",
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      AnimatedOpacity(
+                        opacity: !condForVideoCall ? 0.0 : 1.0,
+                        duration: const Duration(seconds: 1),
+                        child: InkWell(
+                          onTap: () async {
+                            final ZegoUIKit instance = ZegoUIKit.instance;
+                            _controller.isCamOn = !_controller.isCamOn;
+                            instance.turnCameraOn(_controller.isCamOn);
+                          },
+                          child: Image.asset(
+                            height: 32,
+                            fit: BoxFit.cover,
+                            !_controller.isCamOn
+                                ? "assets/images/live_cam_on.png"
+                                : "assets/images/live_cam_off.png",
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      AnimatedOpacity(
+                        opacity:
+                            !(condForVideoCall || condForAudioCall) ? 0.0 : 1.0,
+                        duration: const Duration(seconds: 1),
+                        child: InkWell(
+                          onTap: () {
+                            final ZegoUIKit instance = ZegoUIKit.instance;
+                            _controller.isMicOn = !_controller.isMicOn;
+                            instance.turnMicrophoneOn(_controller.isMicOn);
+                          },
+                          child: Image.asset(
+                            height: 32,
+                            fit: BoxFit.cover,
+                            !_controller.isMicOn
+                                ? "assets/images/live_mic_on.png"
+                                : "assets/images/live_mic_off.png",
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+      },
+    );
+  }
 
   Widget astrologerLiveStar() {
     return StreamBuilder<DatabaseEvent>(
@@ -522,6 +520,104 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
+  Widget callerWithTimer() {
+    var currentCaller = _controller.currentCaller;
+    return currentCaller.isEngaded
+        ? SizedBox(
+            height: 100,
+            child: Row(
+              children: <Widget>[
+                const SizedBox(width: 16),
+                Flexible(
+                  flex: 2,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(20.0)),
+                      border: Border.all(
+                        color: AppColors.black.withOpacity(0.2),
+                      ),
+                      color: AppColors.darkBlue.withOpacity(0.8),
+                    ),
+                    child: Column(
+                      children: [
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(50.0)),
+                            border: Border.all(
+                              color: AppColors.black.withOpacity(0.2),
+                            ),
+                            color: AppColors.darkBlue,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Row(
+                              children: <Widget>[
+                                const SizedBox(width: 4),
+                                SizedBox(
+                                  height: 40,
+                                  width: 40,
+                                  child: CustomImageWidget(
+                                    imageUrl: currentCaller.avatar,
+                                    rounded: true,
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                SizedBox(
+                                  height: 40,
+                                  width: 40,
+                                  child: CustomImageWidget(
+                                    imageUrl: currentCaller.avatar,
+                                    rounded: true,
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                const Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        '00:00:00',
+                                        style: TextStyle(
+                                          color: AppColors.white,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                "${currentCaller.userName} is on call",
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                const SizedBox(width: 16),
+              ],
+            ),
+          )
+        : const SizedBox();
+  }
+
   // Widget horizontalGiftBar() {
   //   return SizedBox(
   //     height: 50 + 32,
@@ -599,7 +695,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget bottomBarWidget() {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         const SizedBox(width: 16),
         Expanded(
@@ -657,7 +753,7 @@ class _LivePage extends State<LiveDharamScreen>
             instance.useFrontFacingCamera(_controller.isFront);
           },
           child: Image.asset(
-            height: 40,
+            height: 32,
             fit: BoxFit.cover,
             !_controller.isFront
                 ? "assets/images/live_switch_cam_new.png"
@@ -672,7 +768,7 @@ class _LivePage extends State<LiveDharamScreen>
             instance.turnCameraOn(_controller.isCamOn);
           },
           child: Image.asset(
-            height: 40,
+            height: 32,
             fit: BoxFit.cover,
             !_controller.isCamOn
                 ? "assets/images/live_cam_on.png"
@@ -687,7 +783,7 @@ class _LivePage extends State<LiveDharamScreen>
             instance.turnMicrophoneOn(_controller.isMicOn);
           },
           child: Image.asset(
-            height: 40,
+            height: 32,
             fit: BoxFit.cover,
             !_controller.isMicOn
                 ? "assets/images/live_mic_on.png"
@@ -798,29 +894,13 @@ class _LivePage extends State<LiveDharamScreen>
         : Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              StreamBuilder<DatabaseEvent>(
-                stream: FirebaseDatabase.instance
-                    .ref()
-                    .child("live/${_controller.liveId}/waitList")
-                    .onValue
-                    .asBroadcastStream(),
+              Builder(
                 builder: (
                   BuildContext context,
-                  AsyncSnapshot<DatabaseEvent> snapshot,
                 ) {
-                  (
-                    bool returnValueBool,
-                    String returnValueString
-                  ) multipleReturns;
-                  multipleReturns = _controller.isEngaded(
-                    snapshot.data?.snapshot,
-                    isForMe: false,
-                  );
-                  final bool isEngaded = multipleReturns.$1;
-                  // final String type = multipleReturns.$2;
                   return IconButton(
                     onPressed: () async {
-                      await exitFunc(isEngaded: isEngaded);
+                      await exitFunc();
                     },
                     icon: Image.asset("assets/images/live_exit_red.png"),
                   );
@@ -1103,6 +1183,14 @@ class _LivePage extends State<LiveDharamScreen>
           astologerName: _controller.userName,
           astologerImage: _controller.avatar,
           astologerSpeciality: _controller.hostSpeciality,
+          isHost: _controller.isHost,
+          onAccept: () async {
+            final String id = _controller.waitListModel.first.id;
+            final String name = _controller.waitListModel.first.userName;
+            final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
+            await onCoHostRequestCanceled(user);
+          },
+          onReject: () async {},
         );
       },
     );
@@ -1296,7 +1384,8 @@ class _LivePage extends State<LiveDharamScreen>
 
   // dharam
 
-  Future<void> exitFunc({required bool isEngaded}) async {
+  Future<void> exitFunc() async {
+    final bool isEngaded = _controller.currentCaller.isEngaded;
     if (isEngaded) {
       await disconnectPopup(
         noDisconnect: () {},
@@ -1391,7 +1480,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   Future<void> onCoHostRequestCanceled(ZegoUIKitUser user) async {
     await hostingAndCoHostingPopup(
-      onClose: Get.back,
+      onClose: () {},
       needAcceptButton: true,
       needDeclinetButton: false,
       onAcceptButton: () async {
@@ -1435,7 +1524,10 @@ class _LivePage extends State<LiveDharamScreen>
       context: context,
       builder: (BuildContext context) {
         return CallAcceptOrRejectWidget(
-          onClose: onClose,
+          onClose: () {
+            Get.back();
+            onClose();
+          },
           needAcceptButton: needAcceptButton,
           needDeclinetButton: needDeclinetButton,
           onAcceptButton: () {
@@ -1446,9 +1538,8 @@ class _LivePage extends State<LiveDharamScreen>
             Get.back();
             onDeclineButton();
           },
-          avatar:
-              "https://divinenew-prod.s3.ap-south-1.amazonaws.com/customer/8790/profile_image1702965912.jpg",
-          userName: 'Dharam',
+          avatar: _controller.currentCaller.avatar,
+          userName: _controller.currentCaller.userName,
         );
       },
     );
