@@ -49,6 +49,8 @@ class LiveDharamController extends GetxController {
   final RxBool _isMicOn = true.obs;
   final Rx<ZegoUIKitUser> _zegoUIKitUser = ZegoUIKitUser(id: "", name: "").obs;
   final RxBool _amIBlocked = false.obs;
+  final RxBool _isEngaged = false.obs;
+  final RxString _callType = "".obs;
 
   @override
   void onInit() {
@@ -80,6 +82,8 @@ class LiveDharamController extends GetxController {
     isMicOn = true;
     zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
     amIBlocked = false;
+    isEngaged = false;
+    callType = "";
   }
 
   @override
@@ -106,6 +110,8 @@ class LiveDharamController extends GetxController {
     _isMicOn.close();
     _zegoUIKitUser.close();
     _amIBlocked.close();
+    _isEngaged.close();
+    _callType.close();
 
     super.onClose();
   }
@@ -176,6 +182,12 @@ class LiveDharamController extends GetxController {
 
   bool get amIBlocked => _amIBlocked.value;
   set amIBlocked(bool value) => _amIBlocked(value);
+
+  bool get isEngaged => _isEngaged.value;
+  set isEngaged(bool value) => _isEngaged(value);
+
+  String get callType => _callType.value;
+  set callType(String value) => _callType(value);
 
   Future<void> eventListner(DatabaseEvent event) async {
     final DataSnapshot dataSnapshot = event.snapshot;
@@ -495,7 +507,7 @@ class LiveDharamController extends GetxController {
   //   required num quantity,
   //   required num amount,
   // }) async {
-  //   num currentAmount = amount;
+  //   num currentAmount = quantity * amount;
   //   final DataSnapshot dataSnapshot = await FirebaseDatabase.instance
   //       .ref()
   //       .child("live/$liveId/leaderboard/$userId")
@@ -773,12 +785,14 @@ class LiveDharamController extends GetxController {
               final bool c2 = (value["isEngaded"] ?? false) == true;
               returnValueBool = isForMe ? c1 && c2 : c2;
               // ignore:  avoid_dynamic_calls
-              returnValueString = value["callType"];
+              returnValueString = value["callType"] ?? "";
             },
           );
         } else {}
       } else {}
     } else {}
+    isEngaged = returnValueBool;
+    callType = returnValueString;
     return (returnValueBool, returnValueString);
   }
 
@@ -892,7 +906,10 @@ class LiveDharamController extends GetxController {
             giftImage: element.giftImage,
             giftPrice: element.giftPrice,
             giftSvga: element.giftSvga,
-            bytes: await GiftCache().downloadFile(url: element.giftSvga),
+            bytes: await GiftCache().downloadFile(
+              url: element.giftSvga,
+              ln: customGiftModel.length,
+            ),
           ),
         );
       },
@@ -900,6 +917,51 @@ class LiveDharamController extends GetxController {
     customGiftModel = temp;
     downloadEnded();
     return Future<void>.value();
+  }
+
+  Future<void> leaderboardChallengeCallback({
+    required Function(LeaderboardModel leader) onLeaderUpdated,
+  }) async {
+    final DataSnapshot dataSnapshot = await FirebaseDatabase.instance
+        .ref()
+        .child("live/$liveId/leaderboard")
+        .get();
+    if (dataSnapshot != null) {
+      if (dataSnapshot.exists) {
+        if (dataSnapshot.value is Map<dynamic, dynamic>) {
+          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+              as Map<dynamic, dynamic>;
+          final List<LeaderboardModel> tempList = <LeaderboardModel>[];
+          map.forEach(
+            // ignore: always_specify_types
+            (key, value) {
+              tempList.add(
+                LeaderboardModel(
+                  // ignore:  avoid_dynamic_calls
+                  amount: value["amount"] ?? 0,
+                  // ignore:  avoid_dynamic_calls
+                  avatar: value["avatar"] ?? "",
+                  // ignore:  avoid_dynamic_calls
+                  userName: value["userName"] ?? "",
+                  // ignore:  avoid_dynamic_calls
+                  id: value["id"] ?? "",
+                ),
+              );
+            },
+          );
+          tempList.sort(
+            (LeaderboardModel a, LeaderboardModel b) {
+              return b.amount.compareTo(a.amount);
+            },
+          );
+          if (tempList.isEmpty) {
+          } else {
+            onLeaderUpdated(tempList.first);
+          }
+        } else {}
+      } else {}
+    } else {}
   }
 }
 

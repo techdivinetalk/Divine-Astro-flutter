@@ -1,6 +1,7 @@
 import "dart:ui";
 
 import "package:divine_astrologer/common/colors.dart";
+import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
@@ -8,12 +9,14 @@ import "package:get/get.dart";
 class CongratulationsWidget extends StatefulWidget {
   const CongratulationsWidget({
     required this.onClose,
-    required this.imageURL,
+    required this.leader,
+    required this.isHost,
     super.key,
   });
 
   final void Function() onClose;
-  final String imageURL;
+  final LeaderboardModel leader;
+  final bool isHost;
 
   @override
   State<CongratulationsWidget> createState() => _CongratulationsWidgetState();
@@ -86,7 +89,10 @@ class _CongratulationsWidgetState extends State<CongratulationsWidget> {
             SizedBox(
               height: 100,
               width: 100,
-              child: CustomImageWidget(imageUrl: widget.imageURL, rounded: true),
+              child: CustomImageWidget(
+                imageUrl: widget.leader.avatar,
+                rounded: true,
+              ),
             ),
             Positioned(
               bottom: -10,
@@ -98,7 +104,11 @@ class _CongratulationsWidgetState extends State<CongratulationsWidget> {
         const SizedBox(height: 16),
         const Text("Congratulations!!"),
         const SizedBox(height: 16),
-        const Text("You are now Astrologer's Live Star"),
+        Text(
+          widget.isHost
+              ? "${widget.leader.userName} is your Live Star"
+              : "You are now Astrologer's Live Star",
+        ),
         const SizedBox(height: 16),
         Row(
           children: <Widget>[
@@ -118,9 +128,9 @@ class _CongratulationsWidgetState extends State<CongratulationsWidget> {
                       ),
                     ),
                     onPressed: widget.onClose,
-                    child: const Text(
-                      "Yay! Thank You",
-                      style: TextStyle(color: AppColors.black),
+                    child: Text(
+                      widget.isHost ? "Okay, Sure" : "Yay! Thank You",
+                      style: const TextStyle(color: AppColors.black),
                     ),
                   ),
                 ),
