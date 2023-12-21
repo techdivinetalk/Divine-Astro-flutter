@@ -3,14 +3,14 @@
 import "dart:async";
 
 import "package:divine_astrologer/di/shared_preference_service.dart";
+import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/model/res_login.dart";
+import "package:divine_astrologer/repository/astrologer_profile_repository.dart";
 import 'package:divine_astrologer/screens/live_dharam/widgets/gift_cache.dart';
 import "package:firebase_database/firebase_database.dart";
 import "package:get/get.dart";
+import "package:get/get_connect/http/src/status/http_status.dart";
 import "package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart";
-
-//
-//
 //
 //
 //
@@ -23,8 +23,8 @@ import "package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart";
 class LiveDharamController extends GetxController {
   final SharedPreferenceService _pref = Get.put(SharedPreferenceService());
 
-  // final AstrologerProfileRepository liveRepository =
-  //     AstrologerProfileRepository();
+  final AstrologerProfileRepository liveRepository =
+      AstrologerProfileRepository();
 
   final RxString _userId = "".obs;
   final RxString _userName = "".obs;
@@ -36,7 +36,7 @@ class LiveDharamController extends GetxController {
   final RxInt _currentIndex = 0.obs;
   final RxMap<dynamic, dynamic> _data = <dynamic, dynamic>{}.obs;
   // final Rx<GetAstroDetailsRes> _details = GetAstroDetailsRes().obs;
-  // final Rx<GiftResponse> _gifts = GiftResponse().obs;
+  final Rx<GiftResponse> _gifts = GiftResponse().obs;
   final RxList<CustomGiftModel> _customGiftModel = <CustomGiftModel>[].obs;
   final RxList<LeaderboardModel> _leaderboardModel = <LeaderboardModel>[].obs;
   final RxList<WaitListModel> _waitListModel = <WaitListModel>[].obs;
@@ -71,7 +71,6 @@ class LiveDharamController extends GetxController {
     final String awsURL = _pref.getAmazonUrl() ?? "";
     final String image = _pref.getUserDetail()?.image ?? "";
     avatar = isValidImageURL(imageURL: "$awsURL/$image");
-
     liveId = (Get.arguments ?? "").toString();
     isHost = true;
     isHostAvailable = true;
@@ -79,7 +78,7 @@ class LiveDharamController extends GetxController {
     currentIndex = 0;
     data = <dynamic, dynamic>{};
     // details = GetAstroDetailsRes();
-    // gifts = GiftResponse();
+    gifts = GiftResponse();
     customGiftModel = <CustomGiftModel>[];
     leaderboardModel = <LeaderboardModel>[];
     waitListModel = <WaitListModel>[];
@@ -115,7 +114,7 @@ class LiveDharamController extends GetxController {
     _currentIndex.close();
     _data.close();
     // _details.close();
-    // _gifts.close();
+    _gifts.close();
     _customGiftModel.close();
     _leaderboardModel.close();
     _waitListModel.close();
@@ -162,8 +161,8 @@ class LiveDharamController extends GetxController {
   // GetAstroDetailsRes get details => _details.value;
   // set details(GetAstroDetailsRes value) => _details(value);
 
-  // GiftResponse get gifts => _gifts.value;
-  // set gifts(GiftResponse value) => _gifts(value);
+  GiftResponse get gifts => _gifts.value;
+  set gifts(GiftResponse value) => _gifts(value);
 
   List<CustomGiftModel> get customGiftModel => _customGiftModel.value;
   set customGiftModel(List<CustomGiftModel> value) => _customGiftModel(value);
@@ -202,7 +201,7 @@ class LiveDharamController extends GetxController {
   WaitListModel get currentCaller => _currentCaller.value;
   set currentCaller(WaitListModel value) => _currentCaller(value);
 
-  Future<void> eventListner(DatabaseEvent event) async {
+  Future<void> eventListner(DatabaseEvent event, Function() zeroAstro) async {
     final DataSnapshot dataSnapshot = event.snapshot;
     if (dataSnapshot != null) {
       if (dataSnapshot.exists) {
@@ -224,6 +223,7 @@ class LiveDharamController extends GetxController {
         } else {}
       } else {
         data.clear();
+        zeroAstro();
       }
     } else {
       data.clear();
@@ -356,19 +356,19 @@ class LiveDharamController extends GetxController {
     return pivotList.join(", ");
   }
 
-  // Future<void> getAllGifts() async {
-  //   GiftResponse giftResponse = GiftResponse();
-  //   giftResponse = await liveRepository.getAllGiftsAPI();
-  //   gifts = giftResponse.statusCode == HttpStatus.ok
-  //       ? GiftResponse.fromJson(giftResponse.toJson())
-  //       : GiftResponse.fromJson(GiftResponse().toJson());
+  Future<void> getAllGifts() async {
+    GiftResponse giftResponse = GiftResponse();
+    giftResponse = await liveRepository.getAllGiftsAPI();
+    gifts = giftResponse.statusCode == HttpStatus.ok
+        ? GiftResponse.fromJson(giftResponse.toJson())
+        : GiftResponse.fromJson(GiftResponse().toJson());
 
-  //   for (int i = 0; i < (gifts.data?.length ?? 0); i++) {
-  //     gifts.data?[i].giftImage =
-  //         isValidImageURL(imageURL: gifts.data?[i].giftImage ?? "");
-  //   }
-  //   return Future<void>.value();
-  // }
+    for (int i = 0; i < (gifts.data?.length ?? 0); i++) {
+      gifts.data?[i].giftImage =
+          isValidImageURL(imageURL: gifts.data?[i].giftImage ?? "");
+    }
+    return Future<void>.value();
+  }
 
   // Future<void> followOrUnfollowAstrologer() async {
   //   Map<String, dynamic> param = <String, dynamic>{};
@@ -397,6 +397,7 @@ class LiveDharamController extends GetxController {
   //           ) ??
   //           "";
   //       final String giftSvga = globalConstantModel.data?.lottiFile?[id] ?? "";
+  //       //
   //       final CustomGiftModel customGiftModel = CustomGiftModel(
   //         giftId: element.id,
   //         giftName: element.giftName,
@@ -657,7 +658,8 @@ class LiveDharamController extends GetxController {
   //     <String, dynamic>{
   //       "isEngaded": isEngaded,
   //       "callType": previousType.toLowerCase(),
-  //       "totalTime": intToTimeLeft(walletBalance.value),
+  //       // "totalTime": intToTimeLeft(walletBalance.value),
+  //       "totalTime": (orderGenerate.data?.talktime ?? '0').toString(),
   //       "userName": userName,
   //       "avatar": avatar,
   //       "id": userId,

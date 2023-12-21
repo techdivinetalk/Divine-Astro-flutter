@@ -22,6 +22,7 @@ import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
+import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 //
 //
 //
@@ -76,11 +77,17 @@ class _LivePage extends State<LiveDharamScreen>
         .getInRoomCommandMessageReceivedEventStream()
         .listen(onInRoomCommandMessageReceived);
 
-    _firebaseSubscription = FirebaseDatabase.instance
-        .ref()
-        .child("live")
-        .onValue
-        .listen(_controller.eventListner);
+    _firebaseSubscription =
+        FirebaseDatabase.instance.ref().child("live").onValue.listen(
+      (event) {
+        _controller.eventListner(
+          event,
+          () async {
+            await _zegoController.leave(context);
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -567,25 +574,18 @@ class _LivePage extends State<LiveDharamScreen>
                                 SizedBox(
                                   height: 40,
                                   width: 40,
-                                  child: CustomImageWidget(
-                                    imageUrl: currentCaller.avatar,
-                                    rounded: true,
+                                  child: Image.asset(
+                                    "assets/images/live_call_wave.png",
                                   ),
                                 ),
                                 const SizedBox(width: 16),
-                                const Expanded(
+                                Expanded(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      Text(
-                                        '00:00:00',
-                                        style: TextStyle(
-                                          color: AppColors.white,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
+                                      timerWidget(),
                                     ],
                                   ),
                                 ),
@@ -616,6 +616,26 @@ class _LivePage extends State<LiveDharamScreen>
             ),
           )
         : const SizedBox();
+  }
+
+  Widget timerWidget() {
+    return TimerCountdown(
+      format: CountDownTimerFormat.hoursMinutesSeconds,
+      enableDescriptions: false,
+      timeTextStyle: const TextStyle(color: Colors.white),
+      colonsTextStyle: const TextStyle(color: Colors.white),
+      endTime: DateTime.now().add(
+        Duration(
+          days: 0,
+          hours: 0,
+          minutes: int.parse(
+            _controller.currentCaller.totalTime,
+          ),
+          seconds: 0,
+        ),
+      ),
+      onEnd: removeCoHostOrStopCoHost,
+    );
   }
 
   // Widget horizontalGiftBar() {
@@ -1500,7 +1520,7 @@ class _LivePage extends State<LiveDharamScreen>
     final ZegoLiveStreamingConnectController connect = _zegoController.connect;
     final bool removed = _controller.isHost
         ? await connect.removeCoHost(_controller.zegoUIKitUser)
-        : await connect.stopCoHost();
+        : await connect.stopCoHost(showRequestDialog: false);
     if (removed) {
       _controller.zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
       _controller.isHost

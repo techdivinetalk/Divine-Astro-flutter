@@ -111,18 +111,17 @@ class ApiProvider {
   final String deleteChatSession = "deleteChatSession";
   final String deleteChatSessionResponse = "deleteChatSessionResponse";
 
-  final String  joinRoomSocket = "join-room";
-  final String  startAstroCustPrivateChat = "start-astro-cust-private-chat";
-  final String  astrologerJoinedPrivateChat = "astrologer-joined-private-chat";
-  final String  userJoinedPrivateChat = "user-joined-private-chat";
-  final String  userTyping = "user-typing";
-  final String  sendMessage = "send-message";
-  final String  messageSent = "message-sent";
-  final String  changeMsgStatus = "change-msg-status";
-  final String  msgStatusChanged = "msg-status-changed";
-  final String  leavePrivateChat = "leave-private-chat";
-  final String  userDisconnected = "user-disconnected";
-
+  final String joinRoomSocket = "join-room";
+  final String startAstroCustPrivateChat = "start-astro-cust-private-chat";
+  final String astrologerJoinedPrivateChat = "astrologer-joined-private-chat";
+  final String userJoinedPrivateChat = "user-joined-private-chat";
+  final String userTyping = "user-typing";
+  final String sendMessage = "send-message";
+  final String messageSent = "message-sent";
+  final String changeMsgStatus = "change-msg-status";
+  final String msgStatusChanged = "msg-status-changed";
+  final String leavePrivateChat = "leave-private-chat";
+  final String userDisconnected = "user-disconnected";
 
   //privacy policy & terms
   final String termsAndCondition = "termsAndCondition";
@@ -142,6 +141,9 @@ class ApiProvider {
   ///This End point is for number change request not for login purpose.
   final sendOtp = "sendOtp";
   final verifyOtpUrl = "verifyOtp";
+
+  //added by dev-dharam
+  final String getAllGifts = "getAllGifts";
 
   //
   final NetworkService networkManager = Get.find<NetworkService>();
