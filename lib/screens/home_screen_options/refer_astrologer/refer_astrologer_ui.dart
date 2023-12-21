@@ -177,34 +177,38 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
               ),
             ),
             SizedBox(width: 25.w),
-            InkWell(
-              onTap: () {
-                controller.workingForPlatForm(value: WorkingForPlatform.no);
+            GetBuilder<ReferAstrologerController>(
+              builder: (controller) {
+                return InkWell(
+                  onTap: () {
+                    controller.workingForPlatForm(value: WorkingForPlatform.no);
+                  },
+                  child: Container(
+                      height: 35.h,
+                      width: 60.w,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 3.0,
+                              offset: const Offset(0.0, 3.0)),
+                        ],
+                        color:
+                            controller.isNo ? AppColors.darkBlue : AppColors.white,
+                        borderRadius: const BorderRadius.all(Radius.circular(15)),
+                      ),
+                      child: Text(
+                        "no".tr,
+                        textAlign: TextAlign.center,
+                        style: AppTextStyle.textStyle14(
+                            fontWeight: FontWeight.w600,
+                            fontColor: controller.isNo
+                                ? AppColors.white
+                                : AppColors.darkBlue),
+                      )),
+                );
               },
-              child: Container(
-                  height: 35.h,
-                  width: 60.w,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 3.0,
-                          offset: const Offset(0.0, 3.0)),
-                    ],
-                    color:
-                        controller.isNo ? AppColors.darkBlue : AppColors.white,
-                    borderRadius: const BorderRadius.all(Radius.circular(15)),
-                  ),
-                  child: Text(
-                    "no".tr,
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.textStyle14(
-                        fontWeight: FontWeight.w600,
-                        fontColor: controller.isNo
-                            ? AppColors.white
-                            : AppColors.darkBlue),
-                  )),
             ),
           ],
         ),
@@ -229,6 +233,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                         }
                         return null;
                       },
+                      controller: controller.state.otherPlatform,
                       inputType: TextInputType.text,
                       inputAction: TextInputAction.done,
                       hintText: "enterPlatformMsg".tr,

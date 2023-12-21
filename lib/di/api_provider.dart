@@ -137,7 +137,7 @@ class ApiProvider {
   ///ReferAn Astrologer Base
   final elasticDivineTalkBase = "https://crm-api.divinetalk.live/api/v1/";
 
-  final referAnAstrologer = "testaddQuickLeadByApp";
+  final referAnAstrologer = "addQuickLeadByApp";
 
   ///This End point is for number change request not for login purpose.
   final sendOtp = "sendOtp";
