@@ -52,9 +52,8 @@ class AppFirebaseService {
 
           if (realTimeData['callKundli'] != null) {
             Map<String, dynamic>? callKundli =
-            Map<String, dynamic>.from(realTimeData['callKundli'] as Map<Object?, Object?>);
-            sendBroadcast(
-                BroadcastMessage(name: "callKundli", data: callKundli));
+                Map<String, dynamic>.from(realTimeData['callKundli'] as Map<Object?, Object?>);
+            sendBroadcast(BroadcastMessage(name: "callKundli", data: callKundli));
           }
 
           if (realTimeData["notification"] != null) {
@@ -66,10 +65,11 @@ class AppFirebaseService {
                 showNotificationWithActions(
                     title: notificationData["value"] ?? "",
                     message: notificationData["message"] ?? "",
-                    payload: notificationData,hiveServices: hiveServices);
+                    payload: notificationData,
+                    hiveServices: hiveServices);
               }
             });
-           // FirebaseDatabase.instance.ref("$path/notification").remove();
+            FirebaseDatabase.instance.ref("$path/notification").remove();
           }
 
           if (realTimeData["uniqueId"] != null) {
@@ -100,12 +100,17 @@ class AppFirebaseService {
                 sendBroadcast(
                     BroadcastMessage(name: "AcceptChat", data: {"orderId": value, "orderData": orderData}));
                 acceptChatRequestBottomSheet(Get.context!, onPressed: () async {
-                  if (await acceptOrRejectChat(
-                      orderId: int.parse(value.toString()), queueId: orderData["queue_id"])) {
-                    acceptBottomWatcher.strValue = "1";
-                    writeData("order/$value", {"status": "1"});
-                    appSocket.sendConnectRequest(astroId: orderData["astroId"],custId: orderData["userId"]);
-                  }
+                  try {
+                    if (await acceptOrRejectChat(
+                        orderId: int.parse(value.toString()), queueId: orderData["queue_id"])) {
+                      acceptBottomWatcher.strValue = "1";
+                      writeData("order/$value", {"status": "1"});
+                      appSocket.sendConnectRequest(
+                          astroId: orderData["astroId"], custId: orderData["userId"]);
+                    }
+                  } on Exception catch (e) {
+                    debugPrint(e.toString());
+                  } finally {}
                 },
                     orderStatus: orderData["status"],
                     customerName: orderData["customerName"].toString(),
@@ -114,7 +119,8 @@ class AppFirebaseService {
                     timeOfBirth: orderData["timeOfBirth"].toString(),
                     maritalStatus: orderData["maritalStatus"].toString(),
                     walletBalance: orderData["walletBalance"].toString(),
-                    problemArea: orderData["problemArea"].toString());
+                    problemArea: orderData["problemArea"].toString(),
+                    orderData: orderData);
               } else if (orderData["status"] == "1") {
                 if (acceptBottomWatcher.currentName != "1") {
                   acceptBottomWatcher.strValue = "1";
@@ -127,7 +133,8 @@ class AppFirebaseService {
                       placeOfBirth: orderData["placeOfBirth"].toString(),
                       timeOfBirth: orderData["timeOfBirth"].toString(),
                       maritalStatus: orderData["maritalStatus"].toString(),
-                      problemArea: orderData["problemArea"].toString());
+                      problemArea: orderData["problemArea"].toString(),
+                      orderData: orderData);
                 }
               } else if (orderData["status"] == "3") {
                 sendBroadcast(
