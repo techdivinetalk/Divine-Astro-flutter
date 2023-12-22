@@ -6,7 +6,6 @@ import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/pages/home/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class AppSocket {
@@ -126,5 +125,10 @@ class AppSocket {
 
   void customerLeavedPrivateChatListenerSocket(void Function(dynamic) callback) {
     socket?.on(ApiProvider().userDisconnected, callback);
+  }
+
+  void sendConnectRequest({required String astroId, required String custId}) {
+    socket?.emit(
+        ApiProvider().sendConnectRequest, {'astroId': astroId, 'custId': custId, 'userType': 'astrologer'});
   }
 }

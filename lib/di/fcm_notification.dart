@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:math' as math;
 
 import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
@@ -180,29 +181,28 @@ Future<void> chatInit(String requestId) async {
 }
 
 Future<void> showNotificationWithActions(
-    {required String title, required String message, dynamic payload}) async {
+    {required String title, required String message, dynamic payload,HiveServices? hiveServices}) async {
 
   debugPrint("enter in showNotificationWithActions --> $payload");
   final String jsonEncodePayload = jsonEncode(payload);
-  if (payload["type"] == 1) {
+  if (payload["type"] == 2) {
     final Map<String, dynamic> chatListMap = jsonDecode(payload["chatList"]);
     final ChatMessage chatMessage = ChatMessage.fromOfflineJson(chatListMap);
     final String tableName = "chat_${chatMessage.senderId}";
-    final HiveServices hiveServices = HiveServices(boxName: userChatData);
-    await hiveServices.initialize();
+
     final databaseMessage = ChatMessagesOffline().obs;
-    final res = await hiveServices.getData(key: tableName);
+    final res = await hiveServices?.getData(key: tableName);
     var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
     var chatMessages = msg.chatMessages ?? [];
     chatMessages.add(chatMessage);
     databaseMessage.value.chatMessages = chatMessages;
-    await hiveServices.addData(key: tableName, data: jsonEncode(databaseMessage.value.toOfflineJson()));
-    final newRes = await hiveServices.getData(key: tableName);
-    debugPrint("this is my tableName ${tableName}");
-    debugPrint("enter in if condition $newRes");
+    log('data message ${databaseMessage.value.toOfflineJson()}');
+    await hiveServices?.addData(key: tableName, data: jsonEncode(databaseMessage.value.toOfflineJson()));
+    final newRes = await hiveServices?.getData(key: tableName);
+    log("this is my tableName $tableName");
+    log("enter in if condition $newRes");
   }
-
-
+  
   const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
     "DivineAstrologer",
     "AstrologerNotification",
@@ -210,5 +210,5 @@ Future<void> showNotificationWithActions(
   );
   const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
   await flutterLocalNotificationsPlugin
-      .show(math.Random().nextInt(10000), title, message, notificationDetails, payload: payload);
+      .show(math.Random().nextInt(10000), title, message, notificationDetails, payload: jsonEncodePayload);
 }

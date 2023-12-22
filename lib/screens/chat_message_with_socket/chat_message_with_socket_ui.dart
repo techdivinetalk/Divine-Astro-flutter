@@ -231,7 +231,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
   Widget chatBottomBar() {
     return Obx(
-      () => Padding(
+      () {
+        debugPrint('is recording value ${controller.isRecording.value}');
+        return Padding(
         padding: EdgeInsets.symmetric(horizontal: controller.isRecording.value ? 0 : 12.h),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -357,6 +359,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         controller.isRecording.value = false;
                       },
                       sendRequestFunction: (soundFile, time) {
+                        controller.isRecording.value = false;
                         debugPrint("soundFile ${soundFile.path}");
                         controller.uploadAudioFile(soundFile);
                       },
@@ -368,7 +371,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
             SizedBox(height: 20.h),
           ],
         ),
-      ),
+      );
+      },
     );
   }
 
@@ -488,7 +492,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             : msgType.value == 1
                                 ? Assets.images.icDoubleTick.svg(
                                     colorFilter: const ColorFilter.mode(AppColors.lightGrey, BlendMode.srcIn))
-                                : msgType.value == 2
+                                : msgType.value == 3
                                     ? Assets.images.icDoubleTick.svg()
                                     : Assets.images.icSingleTick.svg()
                     ],
@@ -503,7 +507,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   }
 
   Widget imageMsgView(String image, bool yourMessage, {required ChatMessage chatDetail, required int index}) {
-    Uint8List bytesImage = const Base64Decoder().convert(image);
+    // Uint8List bytesImage = const Base64Decoder().convert(image);
+    Uint8List bytesImage = base64.decode(image);
     RxInt msgType = (chatDetail.type ?? 0).obs;
     return SizedBox(
       width: double.maxFinite,
@@ -511,138 +516,292 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         crossAxisAlignment: yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.all(8.0),
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.2), blurRadius: 3.0, offset: const Offset(0.0, 3.0)),
-              ],
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(8.r)),
-            ),
-            constraints: BoxConstraints(
-                maxWidth: ScreenUtil().screenWidth * 0.7, minWidth: ScreenUtil().screenWidth * 0.27),
-            child: chatDetail.downloadedPath != ""
-                ? InkWell(
-                    onTap: () {
-                      Get.toNamed(RouteName.imagePreviewUi, arguments: chatDetail.downloadedPath);
-                    },
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0.r),
-                          child: Image.file(
-                            File(chatDetail.downloadedPath ?? ""),
-                            fit: BoxFit.cover,
-                            height: 200.h,
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6).copyWith(left: 10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.r)),
-                              gradient: LinearGradient(
-                                colors: [
-                                  AppColors.darkBlue.withOpacity(0.0),
-                                  AppColors.darkBlue.withOpacity(0.0),
-                                  AppColors.darkBlue.withOpacity(0.5),
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomCenter,
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  messageDateTime(chatDetail.time ?? 0),
-                                  style: AppTextStyle.textStyle10(fontColor: AppColors.white),
-                                ),
-                                if (yourMessage) SizedBox(width: 8.w),
-                                if (yourMessage)
-                                  msgType.value == 0
-                                      ? Assets.images.icSingleTick.svg()
-                                      : msgType.value == 1
-                                          ? Assets.images.icDoubleTick.svg(
-                                              colorFilter: const ColorFilter.mode(
-                                                  AppColors.greyColor, BlendMode.srcIn))
-                                          : msgType.value == 2
-                                              ? Assets.images.icDoubleTick.svg()
-                                              : Assets.images.icSingleTick.svg()
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                : Stack(
-                    alignment: Alignment.center,
+              padding: const EdgeInsets.all(8.0),
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.2), blurRadius: 3.0, offset: const Offset(0.0, 3.0)),
+                ],
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(8.r)),
+              ),
+              constraints: BoxConstraints(
+                  maxWidth: ScreenUtil().screenWidth * 0.7, minWidth: ScreenUtil().screenWidth * 0.27),
+              child: yourMessage
+                  ? Stack(
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0.sp),
-                        child: ImageFiltered(
-                          imageFilter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-                          child: Image.memory(
-                            bytesImage,
-                            fit: BoxFit.cover,
-                            height: 200.h,
-                          ),
+                      Image.memory(
+                          bytesImage,
+                          fit: BoxFit.cover,
+                          height: 200.h,
                         ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          controller.downloadImage(fileName: image, chatDetail: chatDetail, index: index);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: AppColors.darkBlue.withOpacity(0.3),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.download_rounded, color: AppColors.white),
-                        ),
-                      ),
+
                       Positioned(
                         bottom: 0,
                         right: 0,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6).copyWith(left: 10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.r)),
-                                gradient: LinearGradient(
-                                  colors: [
-                                    AppColors.darkBlue.withOpacity(0.0),
-                                    AppColors.darkBlue.withOpacity(0.0),
-                                    AppColors.darkBlue.withOpacity(0.5),
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomCenter,
-                                ),
-                              ),
-                              child: Text(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6).copyWith(left: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.r)),
+                            gradient: LinearGradient(
+                              colors: [
+                                AppColors.darkBlue.withOpacity(0.0),
+                                AppColors.darkBlue.withOpacity(0.0),
+                                AppColors.darkBlue.withOpacity(0.5),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomCenter,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
                                 messageDateTime(chatDetail.time ?? 0),
                                 style: AppTextStyle.textStyle10(fontColor: AppColors.white),
                               ),
-                            ),
-                            SizedBox(width: 8.w),
-                          ],
+                              if (yourMessage) SizedBox(width: 8.w),
+                              if (yourMessage)
+                                msgType.value == 0
+                                    ? Assets.images.icSingleTick.svg()
+                                    : msgType.value == 1
+                                    ? Assets.images.icDoubleTick.svg(
+                                    colorFilter: const ColorFilter.mode(
+                                        AppColors.greyColor, BlendMode.srcIn))
+                                    : msgType.value == 3
+                                    ? Assets.images.icDoubleTick.svg()
+                                    : Assets.images.icSingleTick.svg()
+                            ],
+                          ),
                         ),
                       ),
                     ],
-                  ),
-          )
+                  )
+                  : chatDetail.downloadedPath == ""
+                      ? Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0.sp),
+                              child: ImageFiltered(
+                                imageFilter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                                child: Image.network(
+                                  chatDetail.awsUrl ?? '',
+                                  fit: BoxFit.cover,
+                                  height: 200.h,
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                controller.downloadImage(
+                                    fileName: image, chatDetail: chatDetail, index: index);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: AppColors.darkBlue.withOpacity(0.3),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(Icons.download_rounded, color: AppColors.white),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 6).copyWith(left: 10),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.r)),
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          AppColors.darkBlue.withOpacity(0.0),
+                                          AppColors.darkBlue.withOpacity(0.0),
+                                          AppColors.darkBlue.withOpacity(0.5),
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomCenter,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      messageDateTime(chatDetail.time ?? 0),
+                                      style: AppTextStyle.textStyle10(fontColor: AppColors.white),
+                                    ),
+                                  ),
+                                  SizedBox(width: 8.w),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                      : InkWell(
+                          onTap: () {
+                            Get.toNamed(RouteName.imagePreviewUi, arguments: chatDetail.downloadedPath);
+                          },
+                          child: Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0.r),
+                                child: Image.file(
+                                  File(chatDetail.downloadedPath ?? ""),
+                                  fit: BoxFit.cover,
+                                  height: 200.h,
+                                ),
+                              ),
+
+                            ],
+                          ),
+                        ))
         ],
       ),
     );
   }
+
+  // Widget imageMsgView(String image, bool yourMessage, {required ChatMessage chatDetail, required int index}) {
+  //   Uint8List bytesImage = const Base64Decoder().convert(image);
+  //   RxInt msgType = (chatDetail.type ?? 0).obs;
+  //   return SizedBox(
+  //     width: double.maxFinite,
+  //     child: Column(
+  //       crossAxisAlignment: yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+  //       children: [
+  //         Container(
+  //           padding: const EdgeInsets.all(8.0),
+  //           clipBehavior: Clip.antiAlias,
+  //           decoration: BoxDecoration(
+  //             boxShadow: [
+  //               BoxShadow(
+  //                   color: Colors.black.withOpacity(0.2), blurRadius: 3.0, offset: const Offset(0.0, 3.0)),
+  //             ],
+  //             color: Colors.white,
+  //             borderRadius: BorderRadius.all(Radius.circular(8.r)),
+  //           ),
+  //           constraints: BoxConstraints(
+  //               maxWidth: ScreenUtil().screenWidth * 0.7, minWidth: ScreenUtil().screenWidth * 0.27),
+  //           child: chatDetail.downloadedPath != ""
+  //               ? InkWell(
+  //                   onTap: () {
+  //                     Get.toNamed(RouteName.imagePreviewUi, arguments: chatDetail.downloadedPath);
+  //                   },
+  //                   child: Stack(
+  //                     children: [
+  //                       ClipRRect(
+  //                         borderRadius: BorderRadius.circular(8.0.r),
+  //                         child: Image.file(
+  //                           File(chatDetail.downloadedPath ?? ""),
+  //                           fit: BoxFit.cover,
+  //                           height: 200.h,
+  //                         ),
+  //                       ),
+  //                       Positioned(
+  //                         bottom: 0,
+  //                         right: 0,
+  //                         child: Container(
+  //                           padding: const EdgeInsets.symmetric(horizontal: 6).copyWith(left: 10),
+  //                           decoration: BoxDecoration(
+  //                             borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.r)),
+  //                             gradient: LinearGradient(
+  //                               colors: [
+  //                                 AppColors.darkBlue.withOpacity(0.0),
+  //                                 AppColors.darkBlue.withOpacity(0.0),
+  //                                 AppColors.darkBlue.withOpacity(0.5),
+  //                               ],
+  //                               begin: Alignment.topLeft,
+  //                               end: Alignment.bottomCenter,
+  //                             ),
+  //                           ),
+  //                           child: Row(
+  //                             mainAxisAlignment: MainAxisAlignment.end,
+  //                             children: [
+  //                               Text(
+  //                                 messageDateTime(chatDetail.time ?? 0),
+  //                                 style: AppTextStyle.textStyle10(fontColor: AppColors.white),
+  //                               ),
+  //                               if (yourMessage) SizedBox(width: 8.w),
+  //                               if (yourMessage)
+  //                                 msgType.value == 0
+  //                                     ? Assets.images.icSingleTick.svg()
+  //                                     : msgType.value == 1
+  //                                         ? Assets.images.icDoubleTick.svg(
+  //                                             colorFilter: const ColorFilter.mode(
+  //                                                 AppColors.greyColor, BlendMode.srcIn))
+  //                                         : msgType.value == 2
+  //                                             ? Assets.images.icDoubleTick.svg()
+  //                                             : Assets.images.icSingleTick.svg()
+  //                             ],
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 )
+  //               : Stack(
+  //                   alignment: Alignment.center,
+  //                   children: [
+  //                     ClipRRect(
+  //                       borderRadius: BorderRadius.circular(10.0.sp),
+  //                       child: ImageFiltered(
+  //                         imageFilter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+  //                         child: Image.memory(
+  //                           bytesImage,
+  //                           fit: BoxFit.cover,
+  //                           height: 200.h,
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     InkWell(
+  //                       onTap: () {
+  //                         controller.downloadImage(fileName: image, chatDetail: chatDetail, index: index);
+  //                       },
+  //                       child: Container(
+  //                         padding: const EdgeInsets.all(10),
+  //                         decoration: BoxDecoration(
+  //                           color: AppColors.darkBlue.withOpacity(0.3),
+  //                           shape: BoxShape.circle,
+  //                         ),
+  //                         child: const Icon(Icons.download_rounded, color: AppColors.white),
+  //                       ),
+  //                     ),
+  //                     Positioned(
+  //                       bottom: 0,
+  //                       right: 0,
+  //                       child: Row(
+  //                         mainAxisAlignment: MainAxisAlignment.end,
+  //                         children: [
+  //                           Container(
+  //                             padding: const EdgeInsets.symmetric(horizontal: 6).copyWith(left: 10),
+  //                             decoration: BoxDecoration(
+  //                               borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.r)),
+  //                               gradient: LinearGradient(
+  //                                 colors: [
+  //                                   AppColors.darkBlue.withOpacity(0.0),
+  //                                   AppColors.darkBlue.withOpacity(0.0),
+  //                                   AppColors.darkBlue.withOpacity(0.5),
+  //                                 ],
+  //                                 begin: Alignment.topLeft,
+  //                                 end: Alignment.bottomCenter,
+  //                               ),
+  //                             ),
+  //                             child: Text(
+  //                               messageDateTime(chatDetail.time ?? 0),
+  //                               style: AppTextStyle.textStyle10(fontColor: AppColors.white),
+  //                             ),
+  //                           ),
+  //                           SizedBox(width: 8.w),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget kundliView({required ChatMessage chatDetail, required int index}) {
     return InkWell(

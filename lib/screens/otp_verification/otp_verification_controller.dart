@@ -26,6 +26,7 @@ class OtpVerificationController extends GetxController {
   var attempts = 3.obs;
   var countryCode = "";
   var sessionId = "";
+
   //String? token;
   var number = "".obs;
   var isWrongOtp = false.obs;
@@ -43,6 +44,10 @@ class OtpVerificationController extends GetxController {
       sessionId = args[1];
       countryCode = args[2];
     }
+    FirebaseMessaging.instance.getToken().then((value) {
+      debugPrint(value);
+      deviceToken = value;
+    });
     super.onReady();
   }
 
@@ -101,10 +106,9 @@ class OtpVerificationController extends GetxController {
   }
 
   Future<void> astroLogin() async {
-    deviceToken = await FirebaseMessaging.instance.getToken();
     Map<String, dynamic> params = {
       "mobile_no": number.value,
-      "device_token": await FirebaseMessaging.instance.getToken()
+      "device_token": deviceToken ?? await FirebaseMessaging.instance.getToken()
     };
     try {
       ResLogin data = await userRepository.userLogin(params);
@@ -140,23 +144,18 @@ class OtpVerificationController extends GetxController {
 
   Future<void> updateLoginDatainFirebase(ResLogin data) async {
     String uniqueId = await getDeviceId() ?? '';
-    var watcher = {"deviceToken": data.data!.deviceToken ?? ""};
     FirebaseUserData firebaseUserData = FirebaseUserData(
-      data.data!.name!,
-      watcher,
-      data.data!.image ?? "",
-      RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0)
-    );
+        data.data!.name!,
+        deviceToken ?? FirebaseMessaging.instance.getToken().toString(),
+        data.data!.image ?? "",
+        RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0));
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
 
-    final DatabaseReference databaseRef =
-        firebaseDatabase.ref().child("astrologer/${data.data?.id}");
+    final DatabaseReference databaseRef = firebaseDatabase.ref().child("astrologer/${data.data?.id}");
     databaseRef.set(firebaseUserData.toJson());
     final appFirebaseService = AppFirebaseService();
-    debugPrint(
-        'preferenceService.getUserDetail()!.id ${preferenceService.getUserDetail()!.id}');
-    appFirebaseService.readData(
-        'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
+    debugPrint('preferenceService.getUserDetail()!.id ${preferenceService.getUserDetail()!.id}');
+    appFirebaseService.readData('astrologer/${preferenceService.getUserDetail()!.id}/realTime');
   }
 
   navigateToDashboard(ResLogin data) async {
@@ -165,8 +164,7 @@ class OtpVerificationController extends GetxController {
     preferenceService.setUserDetail(data.data!);
     preferenceService.setToken(data.token!);
     preferenceService.setDeviceToken(deviceToken ?? "");
-    Get.offAllNamed(RouteName.dashboard,
-        arguments: [data.data!.phoneNo, data.data!.sessionId]);
+    Get.offAllNamed(RouteName.dashboard, arguments: [data.data!.phoneNo, data.data!.sessionId]);
   }
 
   removeAttempts() {
