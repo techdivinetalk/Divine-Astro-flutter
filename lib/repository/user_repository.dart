@@ -18,6 +18,7 @@ import 'package:get/get.dart';
 import '../common/app_exception.dart';
 import '../common/routes.dart';
 import '../di/api_provider.dart';
+import "../model/blocked_customers_response.dart";
 import '../model/constant_details_model_class.dart';
 import '../model/delete_customer_model_class.dart';
 import '../model/report_review_model_class.dart';
@@ -270,7 +271,7 @@ class UserRepository extends ApiProvider {
     }
   }
 
-  Future<ResBlockedCustomers> getBlockedCustomerList(
+  Future<BlockedCustomersResponse> getBlockedCustomerList(
       Map<String, dynamic> param) async {
     try {
       final response = await post(blockCustomerlistUrl,
@@ -282,12 +283,12 @@ class UserRepository extends ApiProvider {
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final blockedCustomerList =
-              ResBlockedCustomers.fromJson(json.decode(response.body));
+          BlockedCustomersResponse.fromJson(json.decode(response.body));
           if (blockedCustomerList.statusCode == successResponse &&
               blockedCustomerList.success!) {
             return blockedCustomerList;
           } else {
-            throw CustomException("Unknown Error");
+            throw CustomException("Data not found");
           }
         }
       } else {
