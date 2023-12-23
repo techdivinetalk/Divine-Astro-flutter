@@ -25,7 +25,7 @@ class GiftWidget extends StatefulWidget {
 
 class _GiftWidgetState extends State<GiftWidget> {
   Rx<num> quantity = 1.obs;
-  
+
   Rx<num> amount = 0.obs;
 
   @override
@@ -68,7 +68,7 @@ class _GiftWidgetState extends State<GiftWidget> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
-          height: Get.height / 1.50,
+          height: Get.height / 2,
           width: Get.width,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
@@ -191,39 +191,44 @@ class _GiftWidgetState extends State<GiftWidget> {
   }
 
   Widget grid() {
-    return DynamicHeightGridView(
-      itemCount: widget.list.length,
-      crossAxisCount: 4,
-      builder: (BuildContext context, int index) {
-        final CustomGiftModel item = widget.list[index];
-        return InkWell(
-          onTap: () {
-            final CustomGiftModel returnItem = item;
-            widget.onSelect(returnItem, quantity.value);
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                SizedBox(
-                    height: 50,
-                    width: 50,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: DynamicHeightGridView(
+        itemCount: widget.list.length,
+        crossAxisCount: 4,
+        builder: (BuildContext context, int index) {
+          final CustomGiftModel item = widget.list[index];
+          return InkWell(
+            onTap: () {
+              widget.onSelect(item, quantity.value);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  SizedBox(
+                    height: 40,
+                    width: 40,
                     child: CustomImageWidget(
-                        imageUrl: item.giftImage, rounded: false)),
-                const SizedBox(height: 8),
-                Text(
-                  "₹${item.giftPrice}",
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: AppColors.white,
+                      imageUrl: item.giftImage,
+                      rounded: false,
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 4),
+                  Text(
+                    "₹${item.giftPrice}",
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.white,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

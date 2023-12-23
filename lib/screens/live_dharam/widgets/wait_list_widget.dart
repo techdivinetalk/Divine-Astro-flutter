@@ -84,7 +84,7 @@ class _WaitListWidgetState extends State<WaitListWidget> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
             child: Container(
-              height: Get.height / 1.50,
+              height: Get.height / 2.24,
               width: Get.width,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(

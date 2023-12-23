@@ -1,6 +1,7 @@
 import "dart:ui";
 
 import "package:divine_astrologer/common/colors.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/common_button.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
 
@@ -61,7 +62,7 @@ class _EndSessionWidgetState extends State<EndSessionWidget> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
-          height: Get.height / 2.00,
+          height: Get.height / 2.24,
           width: Get.width,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
@@ -83,6 +84,8 @@ class _EndSessionWidgetState extends State<EndSessionWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          const SizedBox(height: 16),
+          const SizedBox(height: 16),
           SizedBox(
             height: 50,
             width: 50,
@@ -90,14 +93,12 @@ class _EndSessionWidgetState extends State<EndSessionWidget> {
               "assets/images/live_end_session.png",
             ),
           ),
-          const SizedBox(height: 16),
-          const SizedBox(height: 16),
+          const SizedBox(height: 16 + 8),
           const Text("Are you Sure you want to end the Live Session?"),
-          const SizedBox(height: 16),
-          const SizedBox(height: 16),
-          commonButton(
+          const SizedBox(height: 16 + 8),
+          CommonButton(
             buttonText: "No, Continue the Live",
-            onPressed: widget.continueLive,
+            buttonCallback: widget.continueLive,
           ),
           const SizedBox(height: 16),
           TextButton(
@@ -112,32 +113,6 @@ class _EndSessionWidgetState extends State<EndSessionWidget> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget commonButton({
-    required String buttonText,
-    required Function() onPressed,
-  }) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(
-            AppColors.appYellowColour,
-          ),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            ),
-          ),
-        ),
-        onPressed: onPressed,
-        child: Text(
-          buttonText,
-          style: const TextStyle(color: AppColors.black),
-        ),
       ),
     );
   }

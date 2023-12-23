@@ -2,6 +2,7 @@ import "dart:ui";
 
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/common_button.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
@@ -63,7 +64,7 @@ class _CongratulationsWidgetState extends State<CongratulationsWidget> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
-          height: Get.height / 2.00,
+          height: Get.height / 2.24,
           width: Get.width,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
@@ -80,65 +81,44 @@ class _CongratulationsWidgetState extends State<CongratulationsWidget> {
   }
 
   Widget grid() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Stack(
-          clipBehavior: Clip.none,
-          children: <Widget>[
-            SizedBox(
-              height: 100,
-              width: 100,
-              child: CustomImageWidget(
-                imageUrl: widget.leader.avatar,
-                rounded: true,
-              ),
-            ),
-            Positioned(
-              bottom: -10,
-              right: -10,
-              child: Image.asset("assets/images/live_champion.png"),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        const Text("Congratulations!!"),
-        const SizedBox(height: 16),
-        Text(
-          widget.isHost
-              ? "${widget.leader.userName} is your Live Star"
-              : "You are now Astrologer's Live Star",
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: SizedBox(
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                        AppColors.appYellowColour,
-                      ),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                      ),
-                    ),
-                    onPressed: widget.onClose,
-                    child: Text(
-                      widget.isHost ? "Okay, Sure" : "Yay! Thank You",
-                      style: const TextStyle(color: AppColors.black),
-                    ),
-                  ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Stack(
+            clipBehavior: Clip.none,
+            children: <Widget>[
+              SizedBox(
+                height: 100,
+                width: 100,
+                child: CustomImageWidget(
+                  imageUrl: widget.leader.avatar,
+                  rounded: true,
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
+              Positioned(
+                bottom: -10,
+                right: -10,
+                child: Image.asset("assets/images/live_champion.png"),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          const Text("Congratulations!!"),
+          const SizedBox(height: 16),
+          Text(
+            widget.isHost
+                ? "${widget.leader.userName} is your Live Star"
+                : "You are now Astrologer's Live Star",
+          ),
+          const SizedBox(height: 16),
+          CommonButton(
+            buttonText: widget.isHost ? "Okay, Sure" : "Yay! Thank You",
+            buttonCallback: widget.onClose,
+          )
+        ],
+      ),
     );
   }
 }

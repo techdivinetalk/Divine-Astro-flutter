@@ -1,6 +1,7 @@
 import "dart:ui";
 
 import "package:divine_astrologer/common/colors.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/common_button.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
@@ -72,7 +73,7 @@ class _DisconnectWidgetState extends State<DisconnectWidget> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
-          height: Get.height / 2.00,
+          height: Get.height / 2.24,
           width: Get.width,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
@@ -89,40 +90,38 @@ class _DisconnectWidgetState extends State<DisconnectWidget> {
   }
 
   Widget grid() {
-    final String userName =!widget.isAstro ? widget.astroUserName : widget.custoUserName;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const SizedBox(height: 16),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              const SizedBox(height: 16),
-              const SizedBox(height: 16),
               SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: CustomImageWidget(
-                      imageUrl: widget.custoAvatar, rounded: true)),
-              const SizedBox(width: 16),
+                height: 50,
+                width: 50,
+                child: CustomImageWidget(
+                  imageUrl: widget.custoAvatar,
+                  rounded: true,
+                ),
+              ),
               Image.asset(
                 "assets/images/live_dashes.png",
                 height: 50,
                 width: 150,
               ),
-              const SizedBox(width: 16),
               SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: CustomImageWidget(
-                      imageUrl: widget.astroAvatar, rounded: true)),
-              const SizedBox(height: 16),
-              const SizedBox(height: 16),
+                height: 50,
+                width: 50,
+                child: CustomImageWidget(
+                  imageUrl: widget.astroAvatar,
+                  rounded: true,
+                ),
+              ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           const Text(
             "Disconnect Call?",
             style: TextStyle(
@@ -131,14 +130,17 @@ class _DisconnectWidgetState extends State<DisconnectWidget> {
               color: Colors.red,
             ),
           ),
-          const SizedBox(height: 16),
-          Text("Are you Sure you want to disconnect the call with $userName?"),
-          const SizedBox(height: 16),
-          commonButton(
-            buttonText: "No, Continue the Call",
-            onPressed: widget.noDisconnect,
+          const SizedBox(height: 8),
+          Text(
+            "Are you Sure you want to disconnect the call with ${!widget.isAstro ? widget.astroUserName : widget.custoUserName}?",
+            textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
+          CommonButton(
+            buttonText: "No, Continue the Call",
+            buttonCallback: widget.noDisconnect,
+          ),
+          const SizedBox(height: 8),
           TextButton(
             onPressed: widget.yesDisconnect,
             child: const Text(
@@ -150,34 +152,7 @@ class _DisconnectWidgetState extends State<DisconnectWidget> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
         ],
-      ),
-    );
-  }
-
-  Widget commonButton({
-    required String buttonText,
-    required Function() onPressed,
-  }) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(
-            AppColors.appYellowColour,
-          ),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            ),
-          ),
-        ),
-        onPressed: onPressed,
-        child: Text(
-          buttonText,
-          style: const TextStyle(color: AppColors.black),
-        ),
       ),
     );
   }

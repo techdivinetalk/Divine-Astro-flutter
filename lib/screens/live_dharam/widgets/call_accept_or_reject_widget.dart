@@ -1,6 +1,7 @@
 import "dart:ui";
 
 import "package:divine_astrologer/common/colors.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/common_button.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
@@ -22,7 +23,6 @@ class CallAcceptOrRejectWidget extends StatefulWidget {
   final bool needDeclinetButton;
   final Function() onAcceptButton;
   final Function() onDeclineButton;
-
   final String avatar;
   final String userName;
 
@@ -72,7 +72,7 @@ class _CallAcceptOrRejectWidgetState extends State<CallAcceptOrRejectWidget> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
-          height: Get.height / 3.00,
+          height: Get.height / 2.24,
           width: Get.width,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
@@ -105,9 +105,9 @@ class _CallAcceptOrRejectWidgetState extends State<CallAcceptOrRejectWidget> {
             const SizedBox(width: 16),
             if (widget.needAcceptButton)
               Expanded(
-                child: commonButton(
+                child: CommonButton(
                   buttonText: "Accept",
-                  onPressed: widget.onAcceptButton,
+                  buttonCallback: widget.onAcceptButton,
                 ),
               )
             else
@@ -118,9 +118,9 @@ class _CallAcceptOrRejectWidgetState extends State<CallAcceptOrRejectWidget> {
             ),
             if (widget.needDeclinetButton)
               Expanded(
-                child: commonButton(
+                child: CommonButton(
                   buttonText: "Decline",
-                  onPressed: widget.onDeclineButton,
+                  buttonCallback: widget.onDeclineButton,
                 ),
               )
             else
@@ -129,31 +129,6 @@ class _CallAcceptOrRejectWidgetState extends State<CallAcceptOrRejectWidget> {
           ],
         ),
       ],
-    );
-  }
-
-  Widget commonButton({
-    required String buttonText,
-    required Function() onPressed,
-  }) {
-    return SizedBox(
-      child: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(
-            AppColors.appYellowColour,
-          ),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            ),
-          ),
-        ),
-        onPressed: onPressed,
-        child: Text(
-          buttonText,
-          style: const TextStyle(color: AppColors.black),
-        ),
-      ),
     );
   }
 }

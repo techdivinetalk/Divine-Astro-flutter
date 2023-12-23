@@ -126,8 +126,6 @@ class _LivePage extends State<LiveDharamScreen>
                       ..maxCoHostCount = 1
                       ..confirmDialogInfo = null
                       ..disableCoHostInvitationReceivedDialog = true
-                      // ..turnOnCameraWhenJoining = _controller.isCamOn
-                      // ..turnOnMicrophoneWhenJoining = _controller.isMicOn
                       ..audioVideoViewConfig = ZegoPrebuiltAudioVideoViewConfig(
                         showUserNameOnView: false,
                         showAvatarInAudioMode: true,
@@ -230,27 +228,29 @@ class _LivePage extends State<LiveDharamScreen>
       child: Column(
         children: <Widget>[
           appBarWidget(),
-          const SizedBox(height: 16),
-          astrologerLiveStar(),
-          const SizedBox(height: 16),
-          callerWithTimer(),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
+          // astrologerLiveStar(),
+          // const SizedBox(height: 8),
+          // callerWithTimer(),
+          // const SizedBox(height: 8),
           Expanded(
             child: Row(
               children: <Widget>[
-                const SizedBox(width: 16),
+                const SizedBox(width: 8),
                 Expanded(child: liveZegoMsg()),
-                const SizedBox(width: 16),
-                verticleLiveFeatures(),
-                const SizedBox(width: 16),
+                const SizedBox(width: 8),
+                !_controller.isHost
+                    ? verticleCallButtons()
+                    : verticleLiveFeatures(),
+                const SizedBox(width: 8),
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           // horizontalGiftBar(),
-          const SizedBox(height: 16),
+          // const SizedBox(height: 8),
           bottomBarWidget(),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
         ],
       ),
     );
@@ -258,96 +258,80 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget appBarWidget() {
     return SizedBox(
-      height: 34,
+      height: 32,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          // const SizedBox(width: 8),
-          // IconButton(
-          //   onPressed: () async {
-          //     await exitFunc();
-          //   },
-          //   icon: const Icon(Icons.arrow_back_ios, color: AppColors.white),
-          // ),
+          const SizedBox(width: 8),
+          SizedBox(
+            width: 24 - 8,
+            child: IconButton(
+              onPressed: exitFunc,
+              icon: const Icon(
+                size: 16,
+                Icons.arrow_back_ios,
+                color: AppColors.white,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
           Flexible(
             flex: 2,
-            child: InkWell(
-              onTap: () async {
-                //
-                //
-                // No need to
-                // navigate anywhere
-                //
-                //
-              },
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                  border: Border.all(color: AppColors.black.withOpacity(0.2)),
-                  color: AppColors.black.withOpacity(0.2),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Row(
-                    children: <Widget>[
-                      const SizedBox(width: 4),
-                      SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: CustomImageWidget(
-                          imageUrl: _controller.avatar,
-                          rounded: true,
-                        ),
+            child: SizedBox(
+              height: 32,
+              width: 148,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: InkWell(
+                  onTap: () async {
+                    // await Get.toNamed(
+                    //   RouteName.astrologerProfile,
+                    //   arguments: <String, dynamic>{
+                    //     "astrologer_id": _controller.liveId,
+                    //   },
+                    // );
+                  },
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(50.0),
                       ),
-                      const SizedBox(width: 4),
-                      Flexible(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              _controller.userName,
-                              style: const TextStyle(color: AppColors.white),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            // const SizedBox(width: 4),
-                            // Text(
-                            //   _controller.hostSpeciality,
-                            //   style: const TextStyle(color: AppColors.white),
-                            //   overflow: TextOverflow.ellipsis,
-                            // ),
-                          ],
-                        ),
+                      border: Border.all(
+                        color: const Color(0xFFEF5862),
                       ),
-                      const SizedBox(width: 4),
-                    ],
+                      color: AppColors.white,
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        const SizedBox(width: 8),
+                        SizedBox(
+                          height: 16,
+                          width: 16,
+                          child: CustomImageWidget(
+                            imageUrl: _controller.avatar,
+                            rounded: true,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                            _controller.userName,
+                            style: const TextStyle(),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
           ),
           const Spacer(),
-
-          if (_controller.isHost)
-            GestureDetector(
-              onTap: () async {
-                _controller.isHostAvailable = !_controller.isHostAvailable;
-                await _controller.updateHostAvailability();
-              },
-              child: _controller.isHostAvailable
-                  ? Image.asset("assets/images/live_calls_on_new.png")
-                  : Image.asset("assets/images/live_calls_off_new.png"),
-            )
-          else
-            const SizedBox(),
-
-          if (!_controller.isHost)
-          liveCamMicButtons()
-          else
-          const SizedBox(),
-
-          newLeaderboard(),
-          // const SizedBox(width: 8),
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: newLeaderboard(),
+          ),
         ],
       ),
     );
@@ -368,7 +352,8 @@ class _LivePage extends State<LiveDharamScreen>
           child: _controller.leaderboardModel.isEmpty
               ? const SizedBox()
               : SizedBox(
-                  width: 150,
+                  height: 32,
+                  width: 148,
                   child: Stack(
                     children: [
                       Image.asset(
@@ -377,10 +362,10 @@ class _LivePage extends State<LiveDharamScreen>
                         "assets/images/live_leaderboard_crown.png",
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 10.0),
+                        padding: const EdgeInsets.only(top: 12.0),
                         child: Row(
                           children: <Widget>[
-                            const SizedBox(width: 4),
+                            const SizedBox(width: 2),
                             SizedBox(
                               height: 16,
                               width: 16,
@@ -390,27 +375,15 @@ class _LivePage extends State<LiveDharamScreen>
                                 rounded: true,
                               ),
                             ),
-                            const SizedBox(width: 4),
+                            const SizedBox(width: 24),
                             Flexible(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    _controller.leaderboardModel.first.userName,
-                                    style: const TextStyle(),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  // const SizedBox(width: 4),
-                                  // Text(
-                                  //   _controller.hostSpeciality,
-                                  //   style: const TextStyle(color: AppColors.white),
-                                  //   overflow: TextOverflow.ellipsis,
-                                  // ),
-                                ],
+                              child: Text(
+                                _controller.leaderboardModel.first.userName,
+                                style: const TextStyle(),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            const SizedBox(width: 4),
+                            const SizedBox(width: 2),
                           ],
                         ),
                       ),
@@ -517,212 +490,213 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-  Widget astrologerLiveStar() {
-    return StreamBuilder<DatabaseEvent>(
-      stream: FirebaseDatabase.instance
-          .ref()
-          .child("live/${_controller.liveId}/leaderboard")
-          .onValue
-          .asBroadcastStream(),
-      builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
-        _controller.getLatestLeaderboard(snapshot.data?.snapshot);
-        return AnimatedOpacity(
-          opacity: _controller.leaderboardModel.isEmpty ? 0.0 : 1.0,
-          duration: const Duration(seconds: 1),
-          child: _controller.leaderboardModel.isEmpty
-              ? const SizedBox()
-              : SizedBox(
-                  height: 50,
-                  child: Row(
-                    children: <Widget>[
-                      const SizedBox(width: 16),
-                      Flexible(
-                        flex: 3,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10.0)),
-                            border: Border.all(
-                              color: AppColors.black.withOpacity(0.2),
-                            ),
-                            color: AppColors.black.withOpacity(0.2),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Row(
-                              children: <Widget>[
-                                const SizedBox(width: 4),
-                                SizedBox(
-                                  height: 40,
-                                  width: 40,
-                                  child: CustomImageWidget(
-                                    imageUrl: _controller
-                                        .leaderboardModel.first.avatar,
-                                    rounded: true,
-                                  ),
-                                ),
-                                const SizedBox(width: 4),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      const Text(
-                                        "Astrologer's Live Star",
-                                        style:
-                                            TextStyle(color: AppColors.white),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const SizedBox(width: 4),
-                                      Text(
-                                        _controller
-                                            .leaderboardModel.first.userName,
-                                        style: const TextStyle(
-                                          color: AppColors.white,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(width: 4),
-                                Image.asset(
-                                  "assets/images/live_star.png",
-                                  height: 40,
-                                  width: 40,
-                                ),
-                                const SizedBox(width: 4),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      const Spacer(),
-                      const SizedBox(width: 16),
-                    ],
-                  ),
-                ),
-        );
-      },
-    );
-  }
+  // Widget astrologerLiveStar() {
+  //   return StreamBuilder<DatabaseEvent>(
+  //     stream: FirebaseDatabase.instance
+  //         .ref()
+  //         .child("live/${_controller.liveId}/leaderboard")
+  //         .onValue
+  //         .asBroadcastStream(),
+  //     builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
+  //       _controller.getLatestLeaderboard(snapshot.data?.snapshot);
+  //       return AnimatedOpacity(
+  //         opacity: _controller.leaderboardModel.isEmpty ? 0.0 : 1.0,
+  //         duration: const Duration(seconds: 1),
+  //         child: _controller.leaderboardModel.isEmpty
+  //             ? const SizedBox()
+  //             : SizedBox(
+  //                 height: 50,
+  //                 child: Row(
+  //                   children: <Widget>[
+  //                     const SizedBox(width: 16),
+  //                     Flexible(
+  //                       flex: 3,
+  //                       child: DecoratedBox(
+  //                         decoration: BoxDecoration(
+  //                           borderRadius:
+  //                               const BorderRadius.all(Radius.circular(10.0)),
+  //                           border: Border.all(
+  //                             color: AppColors.black.withOpacity(0.2),
+  //                           ),
+  //                           color: AppColors.black.withOpacity(0.2),
+  //                         ),
+  //                         child: Padding(
+  //                           padding: const EdgeInsets.all(4.0),
+  //                           child: Row(
+  //                             children: <Widget>[
+  //                               const SizedBox(width: 4),
+  //                               SizedBox(
+  //                                 height: 40,
+  //                                 width: 40,
+  //                                 child: CustomImageWidget(
+  //                                   imageUrl: _controller
+  //                                       .leaderboardModel.first.avatar,
+  //                                   rounded: true,
+  //                                 ),
+  //                               ),
+  //                               const SizedBox(width: 4),
+  //                               Expanded(
+  //                                 child: Column(
+  //                                   mainAxisAlignment: MainAxisAlignment.center,
+  //                                   crossAxisAlignment:
+  //                                       CrossAxisAlignment.start,
+  //                                   children: <Widget>[
+  //                                     const Text(
+  //                                       "Astrologer's Live Star",
+  //                                       style:
+  //                                           TextStyle(color: AppColors.white),
+  //                                       overflow: TextOverflow.ellipsis,
+  //                                     ),
+  //                                     const SizedBox(width: 4),
+  //                                     Text(
+  //                                       _controller
+  //                                           .leaderboardModel.first.userName,
+  //                                       style: const TextStyle(
+  //                                         color: AppColors.white,
+  //                                       ),
+  //                                       overflow: TextOverflow.ellipsis,
+  //                                     ),
+  //                                   ],
+  //                                 ),
+  //                               ),
+  //                               const SizedBox(width: 4),
+  //                               Image.asset(
+  //                                 "assets/images/live_star.png",
+  //                                 height: 40,
+  //                                 width: 40,
+  //                               ),
+  //                               const SizedBox(width: 4),
+  //                             ],
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     const Spacer(),
+  //                     const SizedBox(width: 16),
+  //                   ],
+  //                 ),
+  //               ),
+  //       );
+  //     },
+  //   );
+  // }
 
-  Widget callerWithTimer() {
-    var currentCaller = _controller.currentCaller;
-    return currentCaller.isEngaded
-        ? SizedBox(
-            height: 100,
-            child: Row(
-              children: <Widget>[
-                const SizedBox(width: 16),
-                Flexible(
-                  flex: 2,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(20.0)),
-                      border: Border.all(
-                        color: AppColors.black.withOpacity(0.2),
-                      ),
-                      color: AppColors.darkBlue.withOpacity(0.8),
-                    ),
-                    child: Column(
-                      children: [
-                        DecoratedBox(
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(50.0)),
-                            border: Border.all(
-                              color: AppColors.black.withOpacity(0.2),
-                            ),
-                            color: AppColors.darkBlue,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Row(
-                              children: <Widget>[
-                                const SizedBox(width: 4),
-                                SizedBox(
-                                  height: 40,
-                                  width: 40,
-                                  child: CustomImageWidget(
-                                    imageUrl: currentCaller.avatar,
-                                    rounded: true,
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                SizedBox(
-                                  height: 40,
-                                  width: 40,
-                                  child: Image.asset(
-                                    "assets/images/live_call_wave.png",
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      timerWidget(),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(width: 4),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                "${currentCaller.userName} is on call",
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const Spacer(),
-                const SizedBox(width: 16),
-              ],
-            ),
-          )
-        : const SizedBox();
-  }
+  // Widget callerWithTimer() {
+  //   var currentCaller = _controller.currentCaller;
+  //   return currentCaller.isEngaded
+  //       ? SizedBox(
+  //           height: 100,
+  //           child: Row(
+  //             children: <Widget>[
+  //               const SizedBox(width: 16),
+  //               Flexible(
+  //                 flex: 2,
+  //                 child: DecoratedBox(
+  //                   decoration: BoxDecoration(
+  //                     borderRadius:
+  //                         const BorderRadius.all(Radius.circular(20.0)),
+  //                     border: Border.all(
+  //                       color: AppColors.black.withOpacity(0.2),
+  //                     ),
+  //                     color: AppColors.darkBlue.withOpacity(0.8),
+  //                   ),
+  //                   child: Column(
+  //                     children: [
+  //                       DecoratedBox(
+  //                         decoration: BoxDecoration(
+  //                           borderRadius:
+  //                               const BorderRadius.all(Radius.circular(50.0)),
+  //                           border: Border.all(
+  //                             color: AppColors.black.withOpacity(0.2),
+  //                           ),
+  //                           color: AppColors.darkBlue,
+  //                         ),
+  //                         child: Padding(
+  //                           padding: const EdgeInsets.all(4.0),
+  //                           child: Row(
+  //                             children: <Widget>[
+  //                               const SizedBox(width: 4),
+  //                               SizedBox(
+  //                                 height: 40,
+  //                                 width: 40,
+  //                                 child: CustomImageWidget(
+  //                                   imageUrl: currentCaller.avatar,
+  //                                   rounded: true,
+  //                                 ),
+  //                               ),
+  //                               const SizedBox(width: 16),
+  //                               SizedBox(
+  //                                 height: 40,
+  //                                 width: 40,
+  //                                 child: Image.asset(
+  //                                   "assets/images/live_call_wave.png",
+  //                                 ),
+  //                               ),
+  //                               const SizedBox(width: 16),
+  //                               Expanded(
+  //                                 child: Column(
+  //                                   mainAxisAlignment: MainAxisAlignment.center,
+  //                                   crossAxisAlignment:
+  //                                       CrossAxisAlignment.start,
+  //                                   children: <Widget>[
+  //                                     timerWidget(),
+  //                                   ],
+  //                                 ),
+  //                               ),
+  //                               const SizedBox(width: 4),
+  //                             ],
+  //                           ),
+  //                         ),
+  //                       ),
+  //                       Padding(
+  //                         padding: const EdgeInsets.all(12.0),
+  //                         child: Row(
+  //                           mainAxisAlignment: MainAxisAlignment.center,
+  //                           children: <Widget>[
+  //                             Text(
+  //                               "${currentCaller.userName} is on call",
+  //                               style: const TextStyle(color: Colors.white),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //               const Spacer(),
+  //               const SizedBox(width: 16),
+  //             ],
+  //           ),
+  //         )
+  //       : const SizedBox();
+  // }
 
-  Widget timerWidget() {
-    return TimerCountdown(
-      format: CountDownTimerFormat.hoursMinutesSeconds,
-      enableDescriptions: false,
-      timeTextStyle: const TextStyle(color: Colors.white),
-      colonsTextStyle: const TextStyle(color: Colors.white),
-      endTime: DateTime.now().add(
-        Duration(
-          days: 0,
-          hours: 0,
-          minutes: int.parse(
-            _controller.currentCaller.totalTime,
-          ),
-          seconds: 0,
-        ),
-      ),
-      onEnd: removeCoHostOrStopCoHost,
-    );
-  }
+  // Widget timerWidget() {
+  //   return TimerCountdown(
+  //     format: CountDownTimerFormat.hoursMinutesSeconds,
+  //     enableDescriptions: false,
+  //     timeTextStyle: const TextStyle(color: Colors.white),
+  //     colonsTextStyle: const TextStyle(color: Colors.white),
+  //     endTime: DateTime.now().add(
+  //       Duration(
+  //         days: 0,
+  //         hours: 0,
+  //         minutes: int.parse(
+  //           _controller.currentCaller.totalTime,
+  //         ),
+  //         seconds: 0,
+  //       ),
+  //     ),
+  //     onEnd: removeCoHostOrStopCoHost,
+  //   );
+  // }
 
   // Widget horizontalGiftBar() {
   //   return SizedBox(
-  //     height: 50 + 32,
+  //     height: 50 + 16 + 2,
   //     child: ListView.builder(
+  //       padding: EdgeInsets.zero,
   //       itemCount: _controller.customGiftModel.length,
   //       scrollDirection: Axis.horizontal,
   //       itemBuilder: (BuildContext context, int index) {
@@ -770,18 +744,18 @@ class _LivePage extends State<LiveDharamScreen>
   //               mainAxisSize: MainAxisSize.min,
   //               children: <Widget>[
   //                 SizedBox(
-  //                   height: 50,
-  //                   width: 50,
+  //                   height: 40,
+  //                   width: 40,
   //                   child: CustomImageWidget(
   //                     imageUrl: item.giftImage,
   //                     rounded: false,
   //                   ),
   //                 ),
-  //                 const SizedBox(height: 8),
+  //                 const SizedBox(height: 4),
   //                 Text(
   //                   "₹${item.giftPrice}",
   //                   style: const TextStyle(
-  //                     fontSize: 16,
+  //                     fontSize: 12,
   //                     color: AppColors.white,
   //                   ),
   //                 ),
@@ -796,9 +770,9 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget bottomBarWidget() {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        const SizedBox(width: 16),
+        const SizedBox(width: 8),
         Expanded(
           child: SizedBox(
             height: 40,
@@ -846,7 +820,7 @@ class _LivePage extends State<LiveDharamScreen>
             ),
           ),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: 8),
         InkWell(
           onTap: () async {
             final ZegoUIKit instance = ZegoUIKit.instance;
@@ -861,7 +835,7 @@ class _LivePage extends State<LiveDharamScreen>
                 : "assets/images/live_switch_cam_new.png",
           ),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: 8),
         InkWell(
           onTap: () async {
             final ZegoUIKit instance = ZegoUIKit.instance;
@@ -876,7 +850,7 @@ class _LivePage extends State<LiveDharamScreen>
                 : "assets/images/live_cam_off.png",
           ),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: 8),
         InkWell(
           onTap: () {
             final ZegoUIKit instance = ZegoUIKit.instance;
@@ -891,7 +865,7 @@ class _LivePage extends State<LiveDharamScreen>
                 : "assets/images/live_mic_off.png",
           ),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: 8),
       ],
     );
   }
@@ -906,7 +880,6 @@ class _LivePage extends State<LiveDharamScreen>
     //           Expanded(child: inRoomMessage()),
     //         ],
     //       );
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
@@ -939,7 +912,9 @@ class _LivePage extends State<LiveDharamScreen>
             return Row(
               children: <Widget>[
                 const SizedBox(width: 4),
-                CircleAvatar(
+                SizedBox(
+                  height: 24,
+                  width: 24,
                   child: CustomImageWidget(
                     imageUrl: zegoUser == mineUser
                         ? _controller.avatar
@@ -995,19 +970,42 @@ class _LivePage extends State<LiveDharamScreen>
         ? const SizedBox()
         : Column(
             mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
-              _controller.isHost || _controller.currentCaller.isEngaded
-                  ? IconButton(
-                      onPressed: exitFunc,
-                      icon: Image.asset("assets/images/live_exit_red.png"),
+              _controller.isHost
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            _controller.isHostAvailable =
+                                !_controller.isHostAvailable;
+                            await _controller.updateHostAvailability();
+                          },
+                          child: SizedBox(
+                            height: 32,
+                            child: Image.asset(
+                              _controller.isHostAvailable
+                                  ? "assets/images/live_calls_on_new.png"
+                                  : "assets/images/live_calls_off_new.png",
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        InkWell(
+                          onTap: exitFunc,
+                          child: Image.asset(
+                            height: 40,
+                            width: 40,
+                            fit: BoxFit.cover,
+                            "assets/images/live_exit_red.png",
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
                     )
                   : const SizedBox(),
-              SizedBox(
-                height:
-                    _controller.isHost || _controller.currentCaller.isEngaded
-                        ? 16
-                        : 0,
-              ),
               StreamBuilder<DatabaseEvent>(
                 stream: FirebaseDatabase.instance
                     .ref()
@@ -1024,23 +1022,27 @@ class _LivePage extends State<LiveDharamScreen>
                     duration: const Duration(seconds: 1),
                     child: _controller.waitListModel.isEmpty
                         ? const SizedBox()
-                        : Align(
-                            alignment: Alignment.centerRight,
-                            child: InkWell(
-                              onTap: waitListPopup,
-                              child: SizedBox(
-                                height: 50,
-                                width: 50,
-                                child: Image.asset(
-                                  "assets/images/live_new_hourglass.png",
+                        : Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: InkWell(
+                                  onTap: waitListPopup,
+                                  child: SizedBox(
+                                    height: 40,
+                                    width: 40,
+                                    child: Image.asset(
+                                      "assets/images/live_new_hourglass.png",
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              const SizedBox(height: 16),
+                            ],
                           ),
                   );
                 },
               ),
-              const SizedBox(height: 16),
               StreamBuilder<DatabaseEvent>(
                 stream: FirebaseDatabase.instance
                     .ref()
@@ -1057,56 +1059,65 @@ class _LivePage extends State<LiveDharamScreen>
                     duration: const Duration(seconds: 1),
                     child: _controller.leaderboardModel.isEmpty
                         ? const SizedBox()
-                        : Align(
-                            alignment: Alignment.centerRight,
-                            child: InkWell(
-                              onTap: leaderboardPopup,
-                              child: SizedBox(
-                                height: 50,
-                                width: 50,
-                                child: Image.asset(
-                                  "assets/images/live_new_podium.png",
+                        : Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: InkWell(
+                                  onTap: leaderboardPopup,
+                                  child: SizedBox(
+                                    height: 40,
+                                    width: 40,
+                                    child: Image.asset(
+                                      "assets/images/live_new_podium.png",
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              const SizedBox(height: 16),
+                            ],
                           ),
                   );
                 },
               ),
-              // const SizedBox(height: 16),
-              // AnimatedOpacity(
+              //  AnimatedOpacity(
               //   opacity: !_controller.isHostAvailable ? 0.0 : 1.0,
               //   duration: const Duration(seconds: 1),
               //   child: !_controller.isHostAvailable
               //       ? const SizedBox()
-              //       : Align(
-              //           alignment: Alignment.centerRight,
-              //           child: InkWell(
-              //             onTap: callAstrologerPopup,
-              //             child: SizedBox(
-              //               height: 50,
-              //               width: 50,
-              //               child: Image.asset(
-              //                 "assets/images/live_call_btn.png",
+              //       : Column(
+              //           children: [
+              //             Align(
+              //               alignment: Alignment.centerRight,
+              //               child: InkWell(
+              //                 onTap: callAstrologerPopup,
+              //                 child: SizedBox(
+              //                   height: 64,
+              //                   width: 54,
+              //                   child: Stack(
+              //                     children: <Widget>[
+              //                       Image.asset(
+              //                         "assets/images/live_call_btn.png",
+              //                       ),
+              //                       Positioned(
+              //                         top: 24,
+              //                         left: 8,
+              //                         child: Column(
+              //                           children: [
+              //                             const SizedBox(height: 8),
+              //                             callStack(),
+              //                           ],
+              //                         ),
+              //                       ),
+              //                     ],
+              //                   ),
+              //                 ),
               //               ),
               //             ),
-              //           ),
+              //             const SizedBox(height: 16),
+              //           ],
               //         ),
               // ),
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
-              //
             ],
           );
   }
@@ -1121,7 +1132,7 @@ class _LivePage extends State<LiveDharamScreen>
   //             Text(
   //               "$videoOriginal",
   //               style: const TextStyle(
-  //                 fontSize: 16,
+  //                 fontSize: 10,
   //                 fontWeight: FontWeight.bold,
   //               ),
   //             ),
@@ -1132,7 +1143,7 @@ class _LivePage extends State<LiveDharamScreen>
   //             Text(
   //               "₹$videoDiscount/Min",
   //               style: const TextStyle(
-  //                 fontSize: 16,
+  //                 fontSize: 10,
   //                 fontWeight: FontWeight.bold,
   //               ),
   //             ),
@@ -1148,6 +1159,70 @@ class _LivePage extends State<LiveDharamScreen>
   //           ],
   //         );
   // }
+
+  Widget verticleCallButtons() {
+    return MediaQuery.of(context).viewInsets.bottom != 0
+        ? const SizedBox()
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              InkWell(
+                onTap: exitFunc,
+                child: Image.asset(
+                  height: 32,
+                  fit: BoxFit.cover,
+                  "assets/images/live_exit_red.png",
+                ),
+              ),
+              const SizedBox(height: 16),
+              InkWell(
+                onTap: () async {
+                  final ZegoUIKit instance = ZegoUIKit.instance;
+                  _controller.isFront = !_controller.isFront;
+                  instance.useFrontFacingCamera(_controller.isFront);
+                },
+                child: Image.asset(
+                  height: 32,
+                  fit: BoxFit.cover,
+                  _controller.isFront
+                      ? "assets/images/live_switch_cam_new.png"
+                      : "assets/images/live_switch_cam_new.png",
+                ),
+              ),
+              const SizedBox(height: 16),
+              InkWell(
+                onTap: () async {
+                  final ZegoUIKit instance = ZegoUIKit.instance;
+                  _controller.isCamOn = !_controller.isCamOn;
+                  instance.turnCameraOn(_controller.isCamOn);
+                },
+                child: Image.asset(
+                  height: 32,
+                  fit: BoxFit.cover,
+                  _controller.isCamOn
+                      ? "assets/images/live_cam_on.png"
+                      : "assets/images/live_cam_off.png",
+                ),
+              ),
+              const SizedBox(height: 16),
+              InkWell(
+                onTap: () {
+                  final ZegoUIKit instance = ZegoUIKit.instance;
+                  _controller.isMicOn = !_controller.isMicOn;
+                  instance.turnMicrophoneOn(_controller.isMicOn);
+                },
+                child: Image.asset(
+                  height: 32,
+                  fit: BoxFit.cover,
+                  _controller.isMicOn
+                      ? "assets/images/live_mic_on.png"
+                      : "assets/images/live_mic_off.png",
+                ),
+              ),
+            ],
+          );
+  }
 
   Future<void> onLiveStreamingStateUpdate(ZegoLiveStreamingState state) async {
     // final bool condition1 = _controller.isHost == false;
