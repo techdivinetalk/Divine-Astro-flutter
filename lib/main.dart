@@ -32,6 +32,7 @@ import 'utils/utils.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await GetStorage.init();
   await initServices();
   final navigatorKey = GlobalKey<NavigatorState>();
@@ -63,12 +64,13 @@ Future<void> initServices() async {
   await Get.putAsync(() => SharedPreferenceService().init());
   await Get.putAsync(() => NetworkService().init());
   await Get.putAsync(() => FirebaseNetworkService().init());
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await Hive.initFlutter();
 }
 
+@pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
+  debugPrint("Handling a background message: ${message.messageId}");
 }
 
 class MyApp extends StatelessWidget {
@@ -88,17 +90,14 @@ class MyApp extends StatelessWidget {
                 debugShowCheckedModeBanner: false,
                 initialRoute: RouteName.initial,
                 getPages: Routes.routes,
-                locale: getLanStrToLocale(
-                    GetStorages.get(GetStorageKeys.language) ?? ""),
+                locale: getLanStrToLocale(GetStorages.get(GetStorageKeys.language) ?? ""),
                 fallbackLocale: AppTranslations.fallbackLocale,
                 translations: AppTranslations(),
                 theme: ThemeData(
                   splashColor: AppColors.transparent,
                   highlightColor: Colors.transparent,
                   colorScheme: ColorScheme.fromSeed(
-                      seedColor: Colors.white,
-                      background: AppColors.white,
-                      surfaceTint: AppColors.white),
+                      seedColor: Colors.white, background: AppColors.white, surfaceTint: AppColors.white),
                   useMaterial3: true,
                   fontFamily: FontFamily.poppins,
                   // cardTheme: const CardTheme(
@@ -112,20 +111,15 @@ class MyApp extends StatelessWidget {
                   return Stack(
                     children: <Widget>[
                       Obx(() => IgnorePointer(
-                          ignoring:
-                              Get.find<ProgressService>().showProgress.value,
-                          child: widget)),
+                          ignoring: Get.find<ProgressService>().showProgress.value, child: widget)),
                       StreamBuilder<bool?>(
                         initialData: true,
-                        stream: Get.find<FirebaseNetworkService>()
-                            .databaseConnectionStream,
+                        stream: Get.find<FirebaseNetworkService>().databaseConnectionStream,
                         builder: (context, snapshot) {
                           final appTheme = AppTheme.of(context);
                           return SafeArea(
                             child: AnimatedContainer(
-                              height: snapshot.data as bool
-                                  ? 0
-                                  : appTheme.getHeight(36),
+                              height: snapshot.data as bool ? 0 : appTheme.getHeight(36),
                               duration: Utils.animationDuration,
                               color: appTheme.redColor,
                               child: Material(

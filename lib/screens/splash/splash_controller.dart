@@ -31,9 +31,9 @@ class SplashController extends GetxController {
             .then((value) => Get.offAllNamed(RouteName.login)),
       );
     } else {
-      final socket = AppSocket();
+     // final socket = AppSocket();
     //  final appFirebaseService = AppFirebaseService();
-      socket.socketConnect();
+    //  socket.socketConnect();
     //  debugPrint('preferenceService.getUserDetail()!.id ${preferenceService.getUserDetail()!.id}');
      // appFirebaseService.readData('astrologer/${preferenceService.getUserDetail()!.id}/realTime');
       Future.delayed(
