@@ -88,6 +88,23 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+
+    ZegoUIKit().getUserJoinStream().listen(onUserJoin);
+    ZegoUIKit().getUserLeaveStream().listen(onUserLeave);
+  }
+
+  Future<void> onUserJoin(List<ZegoUIKitUser> users) async {
+    final String userName = _controller.userName;
+    final bool isSent = await ZegoUIKit().sendInRoomMessage('$userName joined');
+    print("onUserJoin: $isSent");
+    Future<void>.value();
+  }
+
+  Future<void> onUserLeave(List<ZegoUIKitUser> users) async {
+    // final String userName = _controller.userName;
+    // final bool isSent = await ZegoUIKit().sendInRoomMessage('$userName left');
+    // print("onUserJoin: $isSent");
+    Future<void>.value();
   }
 
   @override
@@ -227,7 +244,9 @@ class _LivePage extends State<LiveDharamScreen>
       padding: const EdgeInsets.only(top: kToolbarHeight - 16.0),
       child: Column(
         children: <Widget>[
-          appBarWidget(),
+          _controller.currentCaller.isEngaded
+              ? appBarWidgetWithCoHost()
+              : appBarWidget(),
           const SizedBox(height: 8),
           // astrologerLiveStar(),
           // const SizedBox(height: 8),
@@ -328,10 +347,108 @@ class _LivePage extends State<LiveDharamScreen>
             ),
           ),
           const Spacer(),
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: newLeaderboard(),
+        ],
+      ),
+    );
+  }
+
+  Widget appBarWidgetWithCoHost() {
+    return SizedBox(
+      height: 32 + 10,
+      child: Row(
+        children: <Widget>[
+          const SizedBox(width: 8),
+          SizedBox(
+            width: 24 - 8,
+            child: IconButton(
+              onPressed: exitFunc,
+              icon: const Icon(
+                size: 16,
+                Icons.arrow_back_ios,
+                color: AppColors.white,
+              ),
+            ),
           ),
+          const SizedBox(width: 8),
+          Flexible(
+            flex: 5,
+            child: SizedBox(
+              height: 32 + 10,
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: InkWell(
+                  onTap: () async {
+                    // await Get.toNamed(
+                    //   RouteName.astrologerProfile,
+                    //   arguments: <String, dynamic>{
+                    //     "astrologer_id": _controller.liveId,
+                    //   },
+                    // );
+                  },
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(50.0),
+                      ),
+                      border: Border.all(
+                        color: const Color(0xFFEF5862),
+                      ),
+                      color: AppColors.white,
+                    ),
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 4),
+                        SizedBox(
+                          height: 32,
+                          width: 32,
+                          child: CustomImageWidget(
+                            imageUrl: _controller.avatar,
+                            rounded: true,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: <Widget>[
+                                const SizedBox(width: 8),
+                                Text(
+                                  _controller.userName,
+                                  style: const TextStyle(),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(width: 8),
+                                const Text("and"),
+                                const SizedBox(width: 8),
+                                Text(
+                                  _controller.currentCaller.userName,
+                                  style: const TextStyle(),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(width: 8),
+                                const Text("is on call"),
+                                const SizedBox(width: 8),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(width: 8),
+                                timerWidget(),
+                                const SizedBox(width: 8),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
         ],
       ),
     );
@@ -672,25 +789,24 @@ class _LivePage extends State<LiveDharamScreen>
   //       : const SizedBox();
   // }
 
-  // Widget timerWidget() {
-  //   return TimerCountdown(
-  //     format: CountDownTimerFormat.hoursMinutesSeconds,
-  //     enableDescriptions: false,
-  //     timeTextStyle: const TextStyle(color: Colors.white),
-  //     colonsTextStyle: const TextStyle(color: Colors.white),
-  //     endTime: DateTime.now().add(
-  //       Duration(
-  //         days: 0,
-  //         hours: 0,
-  //         minutes: int.parse(
-  //           _controller.currentCaller.totalTime,
-  //         ),
-  //         seconds: 0,
-  //       ),
-  //     ),
-  //     onEnd: removeCoHostOrStopCoHost,
-  //   );
-  // }
+  Widget timerWidget() {
+    return TimerCountdown(
+      format: CountDownTimerFormat.hoursMinutesSeconds,
+      enableDescriptions: false,
+      spacerWidth: 4,
+      endTime: DateTime.now().add(
+        Duration(
+          days: 0,
+          hours: 0,
+          minutes: int.parse(
+            _controller.currentCaller.totalTime,
+          ),
+          seconds: 0,
+        ),
+      ),
+      onEnd: removeCoHostOrStopCoHost,
+    );
+  }
 
   // Widget horizontalGiftBar() {
   //   return SizedBox(
