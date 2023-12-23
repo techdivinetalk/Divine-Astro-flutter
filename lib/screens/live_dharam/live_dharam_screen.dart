@@ -163,7 +163,9 @@ class _LivePage extends State<LiveDharamScreen>
                         ) {
                           return const SizedBox();
                         },
-                      ),
+                      )
+                      ..slideSurfaceToHide = false
+                      ..durationConfig.isVisible = false,
                     controller: _zegoController,
                     events: events,
                   );
@@ -200,13 +202,16 @@ class _LivePage extends State<LiveDharamScreen>
     final String zegoUser = user?.id ?? "";
     final String mineUser = _controller.userId;
     // final String astroUser = (_controller.details.data?.id ?? 0).toString();
-    return CustomImageWidget(
-      imageUrl: zegoUser == mineUser
-          ? _controller.avatar
-          // : zegoUser == astroUser
-          //     ? (_controller.details.data?.image ?? "")
-          : "https://robohash.org/avatarWidget",
-      rounded: true,
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: CustomImageWidget(
+        imageUrl: zegoUser == mineUser
+            ? _controller.avatar
+            // : zegoUser == astroUser
+            //     ? (_controller.details.data?.image ?? "")
+            : "https://robohash.org/avatarWidget",
+        rounded: true,
+      ),
     );
   }
 
@@ -253,18 +258,19 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget appBarWidget() {
     return SizedBox(
-      height: 50,
+      height: 34,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          const SizedBox(width: 16),
-          IconButton(
-            onPressed: () async {
-              await exitFunc();
-            },
-            icon: const Icon(Icons.arrow_back_ios, color: AppColors.white),
-          ),
+          // const SizedBox(width: 8),
+          // IconButton(
+          //   onPressed: () async {
+          //     await exitFunc();
+          //   },
+          //   icon: const Icon(Icons.arrow_back_ios, color: AppColors.white),
+          // ),
           Flexible(
-            flex: 3,
+            flex: 2,
             child: InkWell(
               onTap: () async {
                 //
@@ -286,15 +292,15 @@ class _LivePage extends State<LiveDharamScreen>
                     children: <Widget>[
                       const SizedBox(width: 4),
                       SizedBox(
-                        height: 40,
-                        width: 40,
+                        height: 24,
+                        width: 24,
                         child: CustomImageWidget(
                           imageUrl: _controller.avatar,
                           rounded: true,
                         ),
                       ),
                       const SizedBox(width: 4),
-                      Expanded(
+                      Flexible(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -304,12 +310,12 @@ class _LivePage extends State<LiveDharamScreen>
                               style: const TextStyle(color: AppColors.white),
                               overflow: TextOverflow.ellipsis,
                             ),
-                            const SizedBox(width: 4),
-                            Text(
-                              _controller.hostSpeciality,
-                              style: const TextStyle(color: AppColors.white),
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                            // const SizedBox(width: 4),
+                            // Text(
+                            //   _controller.hostSpeciality,
+                            //   style: const TextStyle(color: AppColors.white),
+                            //   overflow: TextOverflow.ellipsis,
+                            // ),
                           ],
                         ),
                       ),
@@ -320,24 +326,81 @@ class _LivePage extends State<LiveDharamScreen>
               ),
             ),
           ),
-          const Spacer(),
-          const SizedBox(width: 16),
-          if (_controller.isHost)
-            GestureDetector(
-              onTap: () async {
-                _controller.isHostAvailable = !_controller.isHostAvailable;
-                await _controller.updateHostAvailability();
-              },
-              child: _controller.isHostAvailable
-                  ? Image.asset("assets/images/live_calls_on_new.png")
-                  : Image.asset("assets/images/live_calls_off_new.png"),
-            )
-          else
-            const SizedBox(),
+          // const Spacer(),
+
+          // lock
+          // const SizedBox(width: 8),
+          // if (_controller.isHost)
+          //   GestureDetector(
+          //     onTap: () async {
+          //       _controller.isHostAvailable = !_controller.isHostAvailable;
+          //       await _controller.updateHostAvailability();
+          //     },
+          //     child: _controller.isHostAvailable
+          //         ? Image.asset("assets/images/live_calls_on_new.png")
+          //         : Image.asset("assets/images/live_calls_off_new.png"),
+          //   )
+          // else
+          //   const SizedBox(),
+          // unlock
           // liveCamMicButtons(),
-          const SizedBox(width: 16),
+
+          Flexible(
+            flex: 2,
+            child: newLeaderboard(),
+          ),
+          // const SizedBox(width: 8),
         ],
       ),
+    );
+  }
+
+  Widget newLeaderboard() {
+    return Stack(
+      children: [
+        Image.asset(
+          height: 32,
+          fit: BoxFit.cover,
+          "assets/images/live_leaderboard_crown.png",
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Row(
+            children: <Widget>[
+              const SizedBox(width: 4),
+              SizedBox(
+                height: 16,
+                width: 16,
+                child: CustomImageWidget(
+                  imageUrl: _controller.avatar,
+                  rounded: true,
+                ),
+              ),
+              const SizedBox(width: 4),
+              Flexible(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      _controller.userName,
+                      style: const TextStyle(),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    // const SizedBox(width: 4),
+                    // Text(
+                    //   _controller.hostSpeciality,
+                    //   style: const TextStyle(color: AppColors.white),
+                    //   overflow: TextOverflow.ellipsis,
+                    // ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 4),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -383,7 +446,7 @@ class _LivePage extends State<LiveDharamScreen>
                           child: Image.asset(
                             height: 32,
                             fit: BoxFit.cover,
-                            !_controller.isFront
+                            _controller.isFront
                                 ? "assets/images/live_switch_cam_new.png"
                                 : "assets/images/live_switch_cam_new.png",
                           ),
@@ -402,7 +465,7 @@ class _LivePage extends State<LiveDharamScreen>
                           child: Image.asset(
                             height: 32,
                             fit: BoxFit.cover,
-                            !_controller.isCamOn
+                            _controller.isCamOn
                                 ? "assets/images/live_cam_on.png"
                                 : "assets/images/live_cam_off.png",
                           ),
@@ -422,7 +485,7 @@ class _LivePage extends State<LiveDharamScreen>
                           child: Image.asset(
                             height: 32,
                             fit: BoxFit.cover,
-                            !_controller.isMicOn
+                            _controller.isMicOn
                                 ? "assets/images/live_mic_on.png"
                                 : "assets/images/live_mic_off.png",
                           ),
@@ -775,7 +838,7 @@ class _LivePage extends State<LiveDharamScreen>
           child: Image.asset(
             height: 32,
             fit: BoxFit.cover,
-            !_controller.isFront
+            _controller.isFront
                 ? "assets/images/live_switch_cam_new.png"
                 : "assets/images/live_switch_cam_new.png",
           ),
@@ -790,7 +853,7 @@ class _LivePage extends State<LiveDharamScreen>
           child: Image.asset(
             height: 32,
             fit: BoxFit.cover,
-            !_controller.isCamOn
+            _controller.isCamOn
                 ? "assets/images/live_cam_on.png"
                 : "assets/images/live_cam_off.png",
           ),
@@ -805,7 +868,7 @@ class _LivePage extends State<LiveDharamScreen>
           child: Image.asset(
             height: 32,
             fit: BoxFit.cover,
-            !_controller.isMicOn
+            _controller.isMicOn
                 ? "assets/images/live_mic_on.png"
                 : "assets/images/live_mic_off.png",
           ),
@@ -855,52 +918,53 @@ class _LivePage extends State<LiveDharamScreen>
             final String mineUser = _controller.userId;
             // final String astroUser =
             //     (_controller.details.data?.id ?? 0).toString();
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Row(
+            return Row(
+              children: <Widget>[
+                const SizedBox(width: 4),
+                CircleAvatar(
+                  child: CustomImageWidget(
+                    imageUrl: zegoUser == mineUser
+                        ? _controller.avatar
+                        // : zegoUser == astroUser
+                        //     ? (_controller.details.data?.image ?? "")
+                        : "https://robohash.org/sa",
+                    rounded: true,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const SizedBox(width: 4),
-                    CircleAvatar(
-                      child: CustomImageWidget(
-                        imageUrl: zegoUser == mineUser
-                            ? _controller.avatar
-                            // : zegoUser == astroUser
-                            //     ? (_controller.details.data?.image ?? "")
-                            : "https://robohash.org/sa",
-                        rounded: true,
+                    Text(
+                      message.user.name,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: AppColors.white,
                       ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(width: 4),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          message.user.name,
-                          style: const TextStyle(color: AppColors.white),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          message.message,
-                          style: const TextStyle(color: AppColors.white),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                    Text(
+                      message.message,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.white,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(width: 4),
-                    IconButton(
-                      onPressed: () async {
-                        await moreOptionsPopup(userId: message.user.id);
-                      },
-                      icon: const Icon(Icons.more_vert),
-                    ),
-                    const SizedBox(width: 4),
                   ],
                 ),
-              ),
+                const SizedBox(width: 4),
+                IconButton(
+                  onPressed: () async {
+                    await moreOptionsPopup(userId: message.user.id);
+                  },
+                  icon: const Icon(Icons.more_vert),
+                ),
+                const SizedBox(width: 4),
+              ],
             );
           },
         );
@@ -914,19 +978,18 @@ class _LivePage extends State<LiveDharamScreen>
         : Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              Builder(
-                builder: (
-                  BuildContext context,
-                ) {
-                  return IconButton(
-                    onPressed: () async {
-                      await exitFunc();
-                    },
-                    icon: Image.asset("assets/images/live_exit_red.png"),
-                  );
-                },
+              _controller.isHost || _controller.currentCaller.isEngaded
+                  ? IconButton(
+                      onPressed: exitFunc,
+                      icon: Image.asset("assets/images/live_exit_red.png"),
+                    )
+                  : const SizedBox(),
+              SizedBox(
+                height:
+                    _controller.isHost || _controller.currentCaller.isEngaded
+                        ? 16
+                        : 0,
               ),
-              const SizedBox(height: 16),
               StreamBuilder<DatabaseEvent>(
                 stream: FirebaseDatabase.instance
                     .ref()
@@ -1192,7 +1255,8 @@ class _LivePage extends State<LiveDharamScreen>
       builder: (BuildContext context) {
         return WaitListWidget(
           onClose: Get.back,
-          waitTime: _controller.getTotalWaitTime(),
+          // waitTime: _controller.getTotalWaitTime(),
+          waitTime: "00:00:00",
           myUserId: _controller.userId,
           list: _controller.waitListModel,
           hasMyIdInWaitList: false,
@@ -1317,7 +1381,8 @@ class _LivePage extends State<LiveDharamScreen>
   //     builder: (BuildContext context) {
   //       return CallAstrologerWidget(
   //         onClose: Get.back,
-  //         waitTime: _controller.getTotalWaitTime(),
+  //         // waitTime: _controller.getTotalWaitTime(),
+  //         waitTime: "00:00:00",
   //         details: _controller.details,
   //         onSelect: (String type, int amount) async {
   //           Get.back();
@@ -1568,6 +1633,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) async {
+    await _zegoController.message.send("Joined");
     // await _controller.getAllGifts();
     // _controller.mapAndMergeGiftsWithConstant();
     // await _controller.concurrentDownload(

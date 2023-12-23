@@ -791,28 +791,28 @@ class LiveDharamController extends GetxController {
   //   return "$hourLeft:$minuteLeft:$secondsLeft";
   // }
 
-  String getTotalWaitTime() {
-    String time = "";
-    final List<String> tempList = <String>[];
-    for (final WaitListModel element in waitListModel) {
-      tempList.add(element.totalTime);
-    }
-    if (tempList.isEmpty) {
-      time = "00:00:00";
-    } else {
-      final List<Duration> durations = tempList.map(parseTime).toList();
-      final Duration totalTime = durations.reduce(
-        (Duration a, Duration b) {
-          return a + b;
-        },
-      );
-      final String hh = "${totalTime.inHours}";
-      final String mm = (totalTime.inMinutes % 60).toString().padLeft(2, "0");
-      final String ss = (totalTime.inSeconds % 60).toString().padLeft(2, "0");
-      time = "$hh:$mm:$ss";
-    }
-    return time;
-  }
+  // String getTotalWaitTime() {
+  //   String time = "";
+  //   final List<String> tempList = <String>[];
+  //   for (final WaitListModel element in waitListModel) {
+  //     tempList.add(element.totalTime);
+  //   }
+  //   if (tempList.isEmpty) {
+  //     time = "00:00:00";
+  //   } else {
+  //     final List<Duration> durations = tempList.map(parseTime).toList();
+  //     final Duration totalTime = durations.reduce(
+  //       (Duration a, Duration b) {
+  //         return a + b;
+  //       },
+  //     );
+  //     final String hh = "${totalTime.inHours}";
+  //     final String mm = (totalTime.inMinutes % 60).toString().padLeft(2, "0");
+  //     final String ss = (totalTime.inSeconds % 60).toString().padLeft(2, "0");
+  //     time = "$hh:$mm:$ss";
+  //   }
+  //   return time;
+  // }
 
   Duration parseTime(String timeString) {
     final List<int> parts = timeString.split(":").map(int.parse).toList();
