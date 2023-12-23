@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:contacts_service/contacts_service.dart';
+import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
@@ -48,11 +49,10 @@ class DashboardController extends GetxController with GetSingleTickerProviderSta
     var commonConstants = await userRepository.constantDetailsData();
     preferenceService.setConstantDetails(commonConstants);
     preferenceService.setBaseImageURL(commonConstants.data.awsCredentails.baseurl!);
-    
+
     //added by: dev-dharam
     Get.find<SharedPreferenceService>().setAmazonUrl(commonConstants.data.awsCredentails.baseurl!);
     //
-
 
     userProfileImage.value =
         userData?.image != null ? "${preferenceService.getBaseImageURL()}/${userData?.image}" : "";
@@ -64,6 +64,13 @@ class DashboardController extends GetxController with GetSingleTickerProviderSta
 
   notificationPermission() async {
     await PermissionHelper().askNotificationPermission();
+  }
+
+  @override
+  void onReady() {
+    final socket = AppSocket();
+    socket.socketConnect();
+    super.onReady();
   }
 
   // @override
