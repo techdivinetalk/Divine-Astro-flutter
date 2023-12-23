@@ -326,29 +326,27 @@ class _LivePage extends State<LiveDharamScreen>
               ),
             ),
           ),
-          // const Spacer(),
+          const Spacer(),
 
-          // lock
-          // const SizedBox(width: 8),
-          // if (_controller.isHost)
-          //   GestureDetector(
-          //     onTap: () async {
-          //       _controller.isHostAvailable = !_controller.isHostAvailable;
-          //       await _controller.updateHostAvailability();
-          //     },
-          //     child: _controller.isHostAvailable
-          //         ? Image.asset("assets/images/live_calls_on_new.png")
-          //         : Image.asset("assets/images/live_calls_off_new.png"),
-          //   )
-          // else
-          //   const SizedBox(),
-          // unlock
-          // liveCamMicButtons(),
+          if (_controller.isHost)
+            GestureDetector(
+              onTap: () async {
+                _controller.isHostAvailable = !_controller.isHostAvailable;
+                await _controller.updateHostAvailability();
+              },
+              child: _controller.isHostAvailable
+                  ? Image.asset("assets/images/live_calls_on_new.png")
+                  : Image.asset("assets/images/live_calls_off_new.png"),
+            )
+          else
+            const SizedBox(),
 
-          Flexible(
-            flex: 2,
-            child: newLeaderboard(),
-          ),
+          if (!_controller.isHost)
+          liveCamMicButtons()
+          else
+          const SizedBox(),
+
+          newLeaderboard(),
           // const SizedBox(width: 8),
         ],
       ),
@@ -356,51 +354,71 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Widget newLeaderboard() {
-    return Stack(
-      children: [
-        Image.asset(
-          height: 32,
-          fit: BoxFit.cover,
-          "assets/images/live_leaderboard_crown.png",
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: Row(
-            children: <Widget>[
-              const SizedBox(width: 4),
-              SizedBox(
-                height: 16,
-                width: 16,
-                child: CustomImageWidget(
-                  imageUrl: _controller.avatar,
-                  rounded: true,
+    return StreamBuilder<DatabaseEvent>(
+      stream: FirebaseDatabase.instance
+          .ref()
+          .child("live/${_controller.liveId}/leaderboard")
+          .onValue
+          .asBroadcastStream(),
+      builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
+        _controller.getLatestLeaderboard(snapshot.data?.snapshot);
+        return AnimatedOpacity(
+          opacity: _controller.leaderboardModel.isEmpty ? 0.0 : 1.0,
+          duration: const Duration(seconds: 1),
+          child: _controller.leaderboardModel.isEmpty
+              ? const SizedBox()
+              : SizedBox(
+                  width: 150,
+                  child: Stack(
+                    children: [
+                      Image.asset(
+                        height: 32,
+                        fit: BoxFit.cover,
+                        "assets/images/live_leaderboard_crown.png",
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: Row(
+                          children: <Widget>[
+                            const SizedBox(width: 4),
+                            SizedBox(
+                              height: 16,
+                              width: 16,
+                              child: CustomImageWidget(
+                                imageUrl:
+                                    _controller.leaderboardModel.first.avatar,
+                                rounded: true,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            Flexible(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    _controller.leaderboardModel.first.userName,
+                                    style: const TextStyle(),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  // const SizedBox(width: 4),
+                                  // Text(
+                                  //   _controller.hostSpeciality,
+                                  //   style: const TextStyle(color: AppColors.white),
+                                  //   overflow: TextOverflow.ellipsis,
+                                  // ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(width: 4),
-              Flexible(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      _controller.userName,
-                      style: const TextStyle(),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    // const SizedBox(width: 4),
-                    // Text(
-                    //   _controller.hostSpeciality,
-                    //   style: const TextStyle(color: AppColors.white),
-                    //   overflow: TextOverflow.ellipsis,
-                    // ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 4),
-            ],
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 
