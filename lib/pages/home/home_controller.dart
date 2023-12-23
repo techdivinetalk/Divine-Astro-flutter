@@ -100,8 +100,8 @@ class HomeController extends GetxController {
     userData = preferenceService.getUserDetail();
     appbarTitle.value = userData?.name ?? "Astrologer Name";
     await getFilteredPerformance();
-    fetchImportantNumbers();
-    getContactList();
+    // fetchImportantNumbers();
+    // getContactList();
     getConstantDetailsData();
     getDashboardDetail();
     getFeedbackData();
