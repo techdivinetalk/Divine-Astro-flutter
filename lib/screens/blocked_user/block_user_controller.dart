@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../../common/app_exception.dart';
 import '../../di/shared_preference_service.dart';
+import "../../model/blocked_customers_response.dart";
 import '../../model/res_blocked_customers.dart';
 import '../../model/res_login.dart';
 import '../../repository/user_repository.dart';
@@ -16,10 +17,12 @@ class BlockUserController extends GetxController {
   UserData? userData;
   final preferenceService = Get.find<SharedPreferenceService>();
   RxBool blockedUserDataSync = false.obs;
-  ResBlockedCustomers? blockedUserData;
+  BlockedCustomersResponse? blockedUserData;
+  List<BlockedUserList> allBlockedUsers = [];
+  List<BlockedUserList> searchesBlockedUsers = [];
   late TextEditingController controller;
 
-  List<AstroBlockCustomer> astroBlockCustomer = <AstroBlockCustomer>[];
+  //List<getCustomer> astroBlockCustomer = <AstroBlockCustomer>[];
 
   @override
   void onInit() {
@@ -37,13 +40,14 @@ class BlockUserController extends GetxController {
 
   void getBlockedCustomerList() async {
     try {
-      // Map<String, dynamic> params = {"role_id": userData?.roleId};
-      //blockedUserData = await userRepository.getBlockedCustomerList(params);
-      blockedUserData = resBlockedCustomersFromJson(staticBlockedUser);
+      Map<String, dynamic> params = {"role_id": userData?.roleId};
+      blockedUserData = await userRepository.getBlockedCustomerList(params);
+      allBlockedUsers = blockedUserData!.data!;
+      searchesBlockedUsers = blockedUserData!.data!;
 
-      astroBlockCustomer =
-          blockedUserData?.data.firstOrNull?.astroBlockCustomer ?? [];
-      update();
+      // astroBlockCustomer =
+      //     blockedUserData?.data.firstOrNull?.astroBlockCustomer ?? [];
+      update(["updateList"]);
     } catch (error) {
       if (error is AppException) {
         error.onException();
@@ -54,7 +58,7 @@ class BlockUserController extends GetxController {
     blockedUserDataSync.value = true;
   }
 
-  void unblockUser({required num customerId}) async {
+  void unblockUser({required int customerId}) async {
     blockedUserDataSync.value = false;
     Map<String, dynamic> params = {
       "role_id": userData?.roleId,
@@ -76,6 +80,24 @@ class BlockUserController extends GetxController {
       }
     }
     blockedUserDataSync.value = true;
+  }
+
+  onSearch(String value) {
+
+    List<BlockedUserList> searchResult = [];
+    if(value.isEmpty && value.trim() == "") {
+      allBlockedUsers = searchesBlockedUsers;
+      update(['updateList']);
+      return;
+    }
+    allBlockedUsers = searchesBlockedUsers;
+    for(int i=0; i<allBlockedUsers.length; i++) {
+      if(allBlockedUsers[i].getCustomers!.name!.toLowerCase().contains(value.toLowerCase())) {
+        searchResult.add(allBlockedUsers[i]);
+      }
+    }
+    allBlockedUsers = searchResult;
+    update(['updateList']);
   }
 }
 

@@ -2,6 +2,7 @@ import "dart:async";
 import "dart:convert";
 import "dart:developer";
 import "dart:io";
+import "dart:typed_data";
 
 import "package:divine_astrologer/app_socket/app_socket.dart";
 import "package:divine_astrologer/common/colors.dart";
@@ -101,6 +102,7 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     switch (state) {
       case AppLifecycleState.resumed:
         socket.socketConnect();
+
         break;
       case AppLifecycleState.inactive:
         debugPrint("App Inactive");
@@ -264,11 +266,12 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
 
   void typingListenerSocket() {
     socket.typingListenerSocket((data) {
-      if (data["typist"].toString() != userData!.id.toString()) {
+      debugPrint('data ........ ${data}');
+      debugPrint('${data['data']["typist"].toString()}  ${arguments["orderData"]["userId"].toString()}');
+      if (data['data']["typist"].toString() == arguments["orderData"]["userId"].toString()) {
         isTyping.value = true;
         chatStatus.value = "Typing";
-        update();
-        scrollToBottomFunc();
+        //  scrollToBottomFunc();
         // startTimer();
       }
     });
@@ -285,8 +288,7 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
       debugPrint("listenerMessageStatusSocket $data");
 
       final int index = chatMessages.indexWhere((ChatMessage element) {
-        debugPrint('check id ${element.id} ${data['chatMessageId']}');
-        return element.id.toString() == data["chatMessageId"].toString();
+        return element.id.toString() == data['data']["chatMessageId"].toString();
       });
 
       if (index != -1) {
@@ -389,7 +391,7 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
 
     final String uploadFile = await uploadImageToS3Bucket(File(fileData.path), time);
     if (uploadFile != "") {
-      addNewMessage(time, "image", awsUrl: uploadFile, base64Image: base64Image, downloadedPath: outPath);
+      addNewMessage(time, "image", awsUrl: uploadFile, base64Image: base64Image, downloadedPath: '');
     }
   }
 
@@ -536,13 +538,12 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
   }
 
   scrollToBottomFunc() {
-    messgeScrollController.hasClients
-        ? messgeScrollController.animateTo(
-            messgeScrollController.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 600),
-            curve: Curves.easeOut,
-          )
-        : null;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      messgeScrollController.hasClients
+          ? messgeScrollController.animateTo(messgeScrollController.position.maxScrollExtent * 2,
+              duration: const Duration(milliseconds: 600), curve: Curves.easeOut)
+          : null;
+    });
   }
 
   updateReadMessageStatus() async {
@@ -629,5 +630,27 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
       debugPrint("customerLeavedPrivateChatListenerSocket $data");
       chatStatus.value = "Offline";
     });
+  }
+
+  File getFile(String base64String) {
+    Directory? appDocumentsDirectory;
+    getApplicationDocumentsDirectory().then((value) {
+      debugPrint('what is value $value');
+      appDocumentsDirectory = value;
+    });
+    if (appDocumentsDirectory != null) {
+      String filePath = '${appDocumentsDirectory!.path}/${DateTime.now()}';
+      String data = base64String.replaceAll('data:image/*;base64,', '');
+
+      Uint8List bytes = base64.decode(data);
+
+      // Create a file and write the bytes to it
+      File file = File(filePath);
+      file.writeAsBytesSync(bytes);
+      return file;
+    } else {
+      debugPrint('else hit hua');
+      return File('');
+    }
   }
 }
