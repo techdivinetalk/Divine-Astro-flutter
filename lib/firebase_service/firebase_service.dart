@@ -97,6 +97,7 @@ class AppFirebaseService {
             debugPrint("orderData-------> $orderData");
             if (orderData["status"] != null) {
               if (orderData["status"] == "0") {
+                acceptBottomWatcher.strValue = "0";
                 sendBroadcast(
                     BroadcastMessage(name: "AcceptChat", data: {"orderId": value, "orderData": orderData}));
                 acceptChatRequestBottomSheet(Get.context!, onPressed: () async {
