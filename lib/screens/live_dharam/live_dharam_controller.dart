@@ -10,7 +10,6 @@ import 'package:divine_astrologer/screens/live_dharam/widgets/gift_cache.dart';
 import "package:firebase_database/firebase_database.dart";
 import "package:get/get.dart";
 import "package:get/get_connect/http/src/status/http_status.dart";
-import "package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart";
 //
 //
 //
@@ -47,7 +46,7 @@ class LiveDharamController extends GetxController {
   final RxBool _isFront = true.obs;
   final RxBool _isCamOn = true.obs;
   final RxBool _isMicOn = true.obs;
-  final Rx<ZegoUIKitUser> _zegoUIKitUser = ZegoUIKitUser(id: "", name: "").obs;
+  // final Rx<ZegoUIKitUser> _zegoUIKitUser = ZegoUIKitUser(id: "", name: "").obs;
   final RxBool _amIBlocked = false.obs;
   final Rx<WaitListModel> _currentCaller = WaitListModel(
     isEngaded: false,
@@ -61,6 +60,7 @@ class LiveDharamController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
     initData();
   }
 
@@ -88,7 +88,7 @@ class LiveDharamController extends GetxController {
     isFront = true;
     isCamOn = true;
     isMicOn = true;
-    zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
+    // zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
     amIBlocked = false;
     currentCaller = WaitListModel(
       isEngaded: false,
@@ -98,7 +98,6 @@ class LiveDharamController extends GetxController {
       userName: "",
       id: "",
     );
-
     return;
   }
 
@@ -124,7 +123,7 @@ class LiveDharamController extends GetxController {
     _isFront.close();
     _isCamOn.close();
     _isMicOn.close();
-    _zegoUIKitUser.close();
+    // _zegoUIKitUser.close();
     _amIBlocked.close();
     _currentCaller.close();
 
@@ -192,8 +191,8 @@ class LiveDharamController extends GetxController {
   bool get isMicOn => _isMicOn.value;
   set isMicOn(bool value) => _isMicOn(value);
 
-  ZegoUIKitUser get zegoUIKitUser => _zegoUIKitUser.value;
-  set zegoUIKitUser(ZegoUIKitUser value) => _zegoUIKitUser(value);
+  // ZegoUIKitUser get zegoUIKitUser => _zegoUIKitUser.value;
+  // set zegoUIKitUser(ZegoUIKitUser value) => _zegoUIKitUser(value);
 
   bool get amIBlocked => _amIBlocked.value;
   set amIBlocked(bool value) => _amIBlocked(value);
@@ -229,6 +228,13 @@ class LiveDharamController extends GetxController {
       data.clear();
     }
     return Future<void>.value();
+  }
+
+  WaitListModel engagedCoHostWithAstro() {
+    var liveId = data.keys.toList()[currentIndex];
+    var liveIdNode = data[liveId];
+    var waitListNode = liveIdNode["waitList"];
+    return isEngadedNew(waitListNode, isForMe: false);
   }
 
   WaitListModel isEngadedNew(

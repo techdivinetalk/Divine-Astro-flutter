@@ -2,6 +2,7 @@ import "dart:ui";
 
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/common_button.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
@@ -20,6 +21,7 @@ class WaitListWidget extends StatefulWidget {
     required this.isHost,
     required this.onAccept,
     required this.onReject,
+    required this.model,
     super.key,
   });
 
@@ -35,6 +37,7 @@ class WaitListWidget extends StatefulWidget {
   final bool isHost;
   final void Function() onAccept;
   final void Function() onReject;
+  final WaitListModel model;
 
   @override
   State<WaitListWidget> createState() => _WaitListWidgetState();
@@ -84,7 +87,7 @@ class _WaitListWidgetState extends State<WaitListWidget> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
             child: Container(
-              height: Get.height / 2.24,
+              height: Get.height / 1.40,
               width: Get.width,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
@@ -150,7 +153,7 @@ class _WaitListWidgetState extends State<WaitListWidget> {
             const SizedBox(height: 8),
             const Divider(),
             SizedBox(
-              height: Get.height / 3.0,
+              height: Get.height / 3,
               child: ListView.builder(
                 itemCount: widget.list.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -203,74 +206,38 @@ class _WaitListWidgetState extends State<WaitListWidget> {
     return Image.asset(returnString);
   }
 
-  // Widget exitWidget() {
-  //   return widget.isHost
-  //       ? Column(
-  //           children: <Widget>[
-  //             const SizedBox(height: 8),
-  //             Row(
-  //               children: [
-  //                 Expanded(
-  //                   child: TextButton(
-  //                     onPressed: widget.onReject,
-  //                     child: const Text(
-  //                       "Reject",
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 Expanded(
-  //                   child: TextButton(
-  //                     onPressed: widget.onAccept,
-  //                     child: const Text(
-  //                       "Accept",
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //             const SizedBox(height: 8),
-  //           ],
-  //         )
-  //       : widget.hasMyIdInWaitList
-  //           ? Column(
-  //               children: <Widget>[
-  //                 const SizedBox(height: 8),
-  //                 TextButton(
-  //                   onPressed: widget.onExitWaitList,
-  //                   child: const Text(
-  //                     "Exit Waitlist",
-  //                     style: TextStyle(
-  //                       color: Colors.red,
-  //                       decoration: TextDecoration.underline,
-  //                       decorationColor: Colors.red,
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 const SizedBox(height: 8),
-  //               ],
-  //             )
-  //           : const SizedBox();
-  // }
-
   Widget exitWidget() {
-    return widget.hasMyIdInWaitList
-        ? Column(
-            children: <Widget>[
-              const SizedBox(height: 8),
-              TextButton(
-                onPressed: widget.onExitWaitList,
-                child: const Text(
-                  "Exit Waitlist",
-                  style: TextStyle(
-                    color: Colors.red,
-                    decoration: TextDecoration.underline,
-                    decorationColor: Colors.red,
+    return widget.model.isEngaded /* && widget.model.id == widget.myUserId */
+        ? const SizedBox()
+        : widget.isHost
+            ? Column(
+                children: <Widget>[
+                  const SizedBox(height: 8),
+                  CommonButton(
+                    buttonCallback: widget.onAccept,
+                    buttonText: "Accept",
                   ),
-                ),
-              ),
-              const SizedBox(height: 8),
-            ],
-          )
-        : const SizedBox();
+                  const SizedBox(height: 8),
+                ],
+              )
+            : widget.hasMyIdInWaitList
+                ? Column(
+                    children: <Widget>[
+                      const SizedBox(height: 8),
+                      TextButton(
+                        onPressed: widget.onExitWaitList,
+                        child: const Text(
+                          "Exit Waitlist",
+                          style: TextStyle(
+                            color: Colors.red,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.red,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                  )
+                : const SizedBox();
   }
 }

@@ -94,16 +94,14 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> onUserJoin(List<ZegoUIKitUser> users) async {
-    final String userName = _controller.userName;
-    final bool isSent = await ZegoUIKit().sendInRoomMessage('$userName joined');
-    print("onUserJoin: $isSent");
+    if (_controller.isHost) {
+      final String userName = _controller.userName;
+      await ZegoUIKit().sendInRoomMessage('$userName joined');
+    } else {}
     Future<void>.value();
   }
 
   Future<void> onUserLeave(List<ZegoUIKitUser> users) async {
-    // final String userName = _controller.userName;
-    // final bool isSent = await ZegoUIKit().sendInRoomMessage('$userName left');
-    // print("onUserJoin: $isSent");
     Future<void>.value();
   }
 
@@ -199,8 +197,8 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   ZegoLayout galleryLayout() {
-    final bool isEngaged = _controller.currentCaller.isEngaded;
-    final String callType = _controller.currentCaller.callType;
+    final bool isEngaged = _controller.engagedCoHostWithAstro().isEngaded;
+    final String callType = _controller.engagedCoHostWithAstro().callType;
     if (isEngaged == true && callType == "video") {
       return ZegoLayout.gallery();
     } else {
@@ -230,13 +228,24 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
+  // ZegoLiveStreamingSwipingConfig? get swipingConfig {
+  //   return _controller.isHost
+  //       ? null
+  //       : ZegoLiveStreamingSwipingConfig(
+  //           requirePreviousLiveID: () => "",
+  //           requireNextLiveID: () => "",
+  //         );
+  // }
+
   ZegoLiveStreamingSwipingConfig? get swipingConfig {
     return _controller.isHost
         ? null
-        : ZegoLiveStreamingSwipingConfig(
-            requirePreviousLiveID: () => "",
-            requireNextLiveID: () => "",
-          );
+        : _controller.currentCaller.isEngaded
+            ? null
+            : ZegoLiveStreamingSwipingConfig(
+                requirePreviousLiveID: () => "",
+                requireNextLiveID: () => "",
+              );
   }
 
   Widget foregroundWidget() {
@@ -244,7 +253,7 @@ class _LivePage extends State<LiveDharamScreen>
       padding: const EdgeInsets.only(top: kToolbarHeight - 16.0),
       child: Column(
         children: <Widget>[
-          _controller.currentCaller.isEngaded
+          _controller.engagedCoHostWithAstro().isEngaded
               ? appBarWidgetWithCoHost()
               : appBarWidget(),
           const SizedBox(height: 8),
@@ -804,7 +813,14 @@ class _LivePage extends State<LiveDharamScreen>
           seconds: 0,
         ),
       ),
-      onEnd: removeCoHostOrStopCoHost,
+      // onEnd: removeCoHostOrStopCoHost,
+      onEnd: () async {
+        final bool isEngaded = _controller.currentCaller.isEngaded;
+        if (isEngaded) {
+        } else {
+          await removeCoHostOrStopCoHost();
+        }
+      },
     );
   }
 
@@ -1286,7 +1302,8 @@ class _LivePage extends State<LiveDharamScreen>
               InkWell(
                 onTap: exitFunc,
                 child: Image.asset(
-                  height: 32,
+                  height: 40,
+                  width: 40,
                   fit: BoxFit.cover,
                   "assets/images/live_exit_red.png",
                 ),
@@ -1341,11 +1358,6 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> onLiveStreamingStateUpdate(ZegoLiveStreamingState state) async {
-    // final bool condition1 = _controller.isHost == false;
-    // final bool condition2 = state == ZegoLiveStreamingState.ended;
-    // if (condition1 == false && condition2) {
-    //   await showAstrologerLeftDialog();
-    // } else {}
     return Future<void>.value();
   }
 
@@ -1478,12 +1490,22 @@ class _LivePage extends State<LiveDharamScreen>
           astologerSpeciality: _controller.hostSpeciality,
           isHost: _controller.isHost,
           onAccept: () async {
-            final String id = _controller.waitListModel.first.id;
-            final String name = _controller.waitListModel.first.userName;
+            Get.back();
+            final String id = _controller.waitListModel.last.id;
+            final String name = _controller.waitListModel.last.userName;
+            final String avatar = _controller.waitListModel.last.avatar;
             final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
-            await onCoHostRequestCanceled(user);
+            await onCoHostRequest(
+              user: user,
+              userId: id,
+              userName: name,
+              avatar: avatar,
+            );
           },
-          onReject: () async {},
+          onReject: () async {
+            Get.back();
+          },
+          model: _controller.currentCaller,
         );
       },
     );
@@ -1510,8 +1532,8 @@ class _LivePage extends State<LiveDharamScreen>
           isAstro: _controller.isHost,
           astroAvatar: _controller.avatar,
           astroUserName: _controller.userName,
-          custoAvatar: _controller.waitListModel.first.avatar,
-          custoUserName: _controller.waitListModel.first.userName,
+          custoAvatar: _controller.currentCaller.avatar,
+          custoUserName: _controller.currentCaller.userName,
         );
       },
     );
@@ -1691,7 +1713,6 @@ class _LivePage extends State<LiveDharamScreen>
           endLive: () async {
             if (mounted) {
               await _zegoController.leave(context);
-              _controller.zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
             } else {}
           },
         );
@@ -1701,7 +1722,6 @@ class _LivePage extends State<LiveDharamScreen>
         // );
         // if (mounted) {
         //   await _zegoController.leave(context);
-        //   _controller.zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
         // } else {}
       }
     }
@@ -1716,7 +1736,7 @@ class _LivePage extends State<LiveDharamScreen>
         },
         onCoHostRequestCanceled: (ZegoUIKitUser user) async {
           showNotifOverlay(user: user, msg: "onCoHostRequestCanceled");
-          await onCoHostRequestCanceled(user);
+          // await onCoHostRequestCanceled(user);
         },
         onCoHostRequestTimeout: (ZegoUIKitUser user) {
           showNotifOverlay(user: user, msg: "onCoHostRequestTimeout");
@@ -1772,31 +1792,39 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-  Future<void> onCoHostRequestCanceled(ZegoUIKitUser user) async {
+  Future<void> onCoHostRequest({
+    required ZegoUIKitUser user,
+    required String userId,
+    required String userName,
+    required String avatar,
+  }) async {
     await hostingAndCoHostingPopup(
       onClose: () {},
       needAcceptButton: true,
       needDeclinetButton: false,
       onAcceptButton: () async {
-        final ZegoLiveStreamingConnectInviteController connectInvite =
-            _zegoController.connectInvite;
-        _controller.zegoUIKitUser = user;
-        await connectInvite.hostSendCoHostInvitationToAudience(
-          user,
-        );
+        final connectInvite = _zegoController.connectInvite;
+        await connectInvite.hostSendCoHostInvitationToAudience(user);
       },
       onDeclineButton: () {},
+      user: user,
+      userId: userId,
+      userName: userName,
+      avatar: avatar,
     );
     return Future<void>.value();
   }
 
   Future<void> removeCoHostOrStopCoHost() async {
+    ZegoUIKitUser user = ZegoUIKitUser(
+      id: _controller.currentCaller.id,
+      name: _controller.currentCaller.userName,
+    );
     final ZegoLiveStreamingConnectController connect = _zegoController.connect;
     final bool removed = _controller.isHost
-        ? await connect.removeCoHost(_controller.zegoUIKitUser)
+        ? await connect.removeCoHost(user)
         : await connect.stopCoHost(showRequestDialog: false);
     if (removed) {
-      _controller.zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
       _controller.isHost
           ? await _controller.removeFromWaitListWhereEngadedIsTrue()
           : await _controller.removeFromWaitList();
@@ -1813,6 +1841,10 @@ class _LivePage extends State<LiveDharamScreen>
     required bool needDeclinetButton,
     required Function() onAcceptButton,
     required Function() onDeclineButton,
+    required ZegoUIKitUser user,
+    required String userId,
+    required String userName,
+    required String avatar,
   }) async {
     await showCupertinoModalPopup(
       context: context,
@@ -1832,8 +1864,9 @@ class _LivePage extends State<LiveDharamScreen>
             Get.back();
             onDeclineButton();
           },
-          avatar: _controller.currentCaller.avatar,
-          userName: _controller.currentCaller.userName,
+          userId: userId,
+          avatar: avatar,
+          userName: userName,
         );
       },
     );
@@ -1842,16 +1875,11 @@ class _LivePage extends State<LiveDharamScreen>
 
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) async {
-    await _zegoController.message.send("Joined");
     // await _controller.getAllGifts();
     // _controller.mapAndMergeGiftsWithConstant();
     // await _controller.concurrentDownload(
-    //   downloadStarted: () {
-    //     print("concurrentDownload: downloadStarted");
-    //   },
-    //   downloadEnded: () {
-    //     print("concurrentDownload: downloadEnded");
-    //   },
+    //   downloadStarted: () {},
+    //   downloadEnded: () {},
     // );
     return Future<void>.value();
   }

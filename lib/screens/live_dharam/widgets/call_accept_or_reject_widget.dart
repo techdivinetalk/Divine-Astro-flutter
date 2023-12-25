@@ -13,8 +13,9 @@ class CallAcceptOrRejectWidget extends StatefulWidget {
     required this.needDeclinetButton,
     required this.onAcceptButton,
     required this.onDeclineButton,
-    required this.avatar,
+    required this.userId,
     required this.userName,
+    required this.avatar,
     super.key,
   });
 
@@ -23,8 +24,9 @@ class CallAcceptOrRejectWidget extends StatefulWidget {
   final bool needDeclinetButton;
   final Function() onAcceptButton;
   final Function() onDeclineButton;
-  final String avatar;
+  final String userId;
   final String userName;
+  final String avatar;
 
   @override
   State<CallAcceptOrRejectWidget> createState() =>
