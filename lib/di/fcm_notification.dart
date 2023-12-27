@@ -57,8 +57,10 @@ Future<void> firebaseMessagingConfig(BuildContext buildContext) async {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     if (message.notification != null) {
-      debugPrint("Notification received : 1");
-      checkNotification(isFromNotification: true);
+      debugPrint("onMessage Notification received : ${message.notification?.title}");
+      showNotificationWithActions(
+          title: message.notification!.title ?? '', message: message.notification!.body ?? '');
+      //  checkNotification(isFromNotification: true);
     }
   });
 
@@ -85,12 +87,12 @@ Future<void> firebaseMessagingConfig(BuildContext buildContext) async {
 
 void initMessaging() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings("@mipmap/ic_launcher");
+  AndroidInitializationSettings("@mipmap/ic_launcher");
   const DarwinInitializationSettings initializationSettingsDarwin =
-      DarwinInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+  DarwinInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
   const InitializationSettings initializationSettings =
-      InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsDarwin);
+  InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsDarwin);
   flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
 }
@@ -99,25 +101,26 @@ void onDidReceiveLocalNotification(int id, String? title, String? body, String? 
   // display a dialog with the notification details, tap ok to go to another page
   showDialog(
     context: Get.context!,
-    builder: (BuildContext context) => CupertinoAlertDialog(
-      title: Text(title ?? ""),
-      content: Text(body ?? ""),
-      actions: [
-        CupertinoDialogAction(
-          isDefaultAction: true,
-          child: const Text('Ok'),
-          onPressed: () async {
-            // Navigator.of(context, rootNavigator: true).pop();
-            // await Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => SecondScreen(payload),
-            //   ),
-            // );
-          },
-        )
-      ],
-    ),
+    builder: (BuildContext context) =>
+        CupertinoAlertDialog(
+          title: Text(title ?? ""),
+          content: Text(body ?? ""),
+          actions: [
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              child: const Text('Ok'),
+              onPressed: () async {
+                // Navigator.of(context, rootNavigator: true).pop();
+                // await Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => SecondScreen(payload),
+                //   ),
+                // );
+              },
+            )
+          ],
+        ),
   );
 }
 
@@ -159,7 +162,9 @@ Future<void> chatInit(String requestId) async {
     final userDetail = preferenceService.getUserDetail();
     if (userDetail != null) {
       final notificationPath = 'user/$requestId/realTime/notification';
-      final int timestamp = DateTime.now().millisecondsSinceEpoch;
+      final int timestamp = DateTime
+          .now()
+          .millisecondsSinceEpoch;
       final notificationData = {
         '$timestamp': {
           'isActive': 1,
@@ -181,28 +186,30 @@ Future<void> chatInit(String requestId) async {
 }
 
 Future<void> showNotificationWithActions(
-    {required String title, required String message, dynamic payload,HiveServices? hiveServices}) async {
-
+    {required String title, required String message, dynamic payload, HiveServices? hiveServices}) async {
   debugPrint("enter in showNotificationWithActions --> $payload");
-  final String jsonEncodePayload = jsonEncode(payload);
-  if (payload["type"] == 2) {
-    final Map<String, dynamic> chatListMap = jsonDecode(payload["chatList"]);
-    final ChatMessage chatMessage = ChatMessage.fromOfflineJson(chatListMap);
-    final String tableName = "chat_${chatMessage.senderId}";
+  String? jsonEncodePayload;
+  if (payload != null) {
+     jsonEncodePayload = jsonEncode(payload);
+    if (payload["type"] == 2) {
+      final Map<String, dynamic> chatListMap = jsonDecode(payload["chatList"]);
+      final ChatMessage chatMessage = ChatMessage.fromOfflineJson(chatListMap);
+      final String tableName = "chat_${chatMessage.senderId}";
 
-    final databaseMessage = ChatMessagesOffline().obs;
-    final res = await hiveServices?.getData(key: tableName);
-    var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
-    var chatMessages = msg.chatMessages ?? [];
-    chatMessages.add(chatMessage);
-    databaseMessage.value.chatMessages = chatMessages;
-    log('data message ${databaseMessage.value.toOfflineJson()}');
-    await hiveServices?.addData(key: tableName, data: jsonEncode(databaseMessage.value.toOfflineJson()));
-    final newRes = await hiveServices?.getData(key: tableName);
-    log("this is my tableName $tableName");
-    log("enter in if condition $newRes");
+      final databaseMessage = ChatMessagesOffline().obs;
+      final res = await hiveServices?.getData(key: tableName);
+      var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
+      var chatMessages = msg.chatMessages ?? [];
+      chatMessages.add(chatMessage);
+      databaseMessage.value.chatMessages = chatMessages;
+      log('data message ${databaseMessage.value.toOfflineJson()}');
+      await hiveServices?.addData(key: tableName, data: jsonEncode(databaseMessage.value.toOfflineJson()));
+      final newRes = await hiveServices?.getData(key: tableName);
+      log("this is my tableName $tableName");
+      log("enter in if condition $newRes");
+    }
   }
-  
+
   const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
     "DivineAstrologer",
     "AstrologerNotification",
