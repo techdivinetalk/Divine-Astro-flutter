@@ -18,6 +18,7 @@ import "package:get/get_connect/http/src/status/http_status.dart";
 //
 //
 //
+//
 
 class LiveDharamController extends GetxController {
   final SharedPreferenceService _pref = Get.put(SharedPreferenceService());
@@ -35,8 +36,8 @@ class LiveDharamController extends GetxController {
   final RxInt _currentIndex = 0.obs;
   final RxMap<dynamic, dynamic> _data = <dynamic, dynamic>{}.obs;
   // final Rx<GetAstroDetailsRes> _details = GetAstroDetailsRes().obs;
-  final Rx<GiftResponse> _gifts = GiftResponse().obs;
-  final RxList<CustomGiftModel> _customGiftModel = <CustomGiftModel>[].obs;
+  // final Rx<GiftResponse> _gifts = GiftResponse().obs;
+  // final RxList<CustomGiftModel> _customGiftModel = <CustomGiftModel>[].obs;
   final RxList<LeaderboardModel> _leaderboardModel = <LeaderboardModel>[].obs;
   final RxList<WaitListModel> _waitListModel = <WaitListModel>[].obs;
   // final Rx<AstrologerFollowingResponse> _followRes =
@@ -57,6 +58,8 @@ class LiveDharamController extends GetxController {
     id: "",
   ).obs;
   final RxBool _showTopBanner = false.obs;
+  // final Rx<InsufficientBalModel> _insufficientBalModel =
+  //     InsufficientBalModel().obs;
 
   @override
   void onInit() {
@@ -78,8 +81,8 @@ class LiveDharamController extends GetxController {
     currentIndex = 0;
     data = <dynamic, dynamic>{};
     // details = GetAstroDetailsRes();
-    gifts = GiftResponse();
-    customGiftModel = <CustomGiftModel>[];
+    // gifts = GiftResponse();
+    // customGiftModel = <CustomGiftModel>[];
     leaderboardModel = <LeaderboardModel>[];
     waitListModel = <WaitListModel>[];
     // followRes = AstrologerFollowingResponse();
@@ -99,6 +102,7 @@ class LiveDharamController extends GetxController {
       id: "",
     );
     showTopBanner = false;
+    // insufficientBalModel = InsufficientBalModel();
     return;
   }
 
@@ -114,8 +118,8 @@ class LiveDharamController extends GetxController {
     _currentIndex.close();
     _data.close();
     // _details.close();
-    _gifts.close();
-    _customGiftModel.close();
+    // _gifts.close();
+    // _customGiftModel.close();
     _leaderboardModel.close();
     _waitListModel.close();
     // _followRes.close();
@@ -128,6 +132,7 @@ class LiveDharamController extends GetxController {
     _amIBlocked.close();
     _currentCaller.close();
     _showTopBanner.close();
+    // _insufficientBalModel.close();
 
     super.onClose();
   }
@@ -162,11 +167,11 @@ class LiveDharamController extends GetxController {
   // GetAstroDetailsRes get details => _details.value;
   // set details(GetAstroDetailsRes value) => _details(value);
 
-  GiftResponse get gifts => _gifts.value;
-  set gifts(GiftResponse value) => _gifts(value);
+  // GiftResponse get gifts => _gifts.value;
+  // set gifts(GiftResponse value) => _gifts(value);
 
-  List<CustomGiftModel> get customGiftModel => _customGiftModel.value;
-  set customGiftModel(List<CustomGiftModel> value) => _customGiftModel(value);
+  // List<CustomGiftModel> get customGiftModel => _customGiftModel.value;
+  // set customGiftModel(List<CustomGiftModel> value) => _customGiftModel(value);
 
   List<LeaderboardModel> get leaderboardModel => _leaderboardModel.value;
   set leaderboardModel(List<LeaderboardModel> value) =>
@@ -204,6 +209,10 @@ class LiveDharamController extends GetxController {
 
   bool get showTopBanner => _showTopBanner.value;
   set showTopBanner(bool value) => _showTopBanner(value);
+
+  // InsufficientBalModel get insufficientBalModel => _insufficientBalModel.value;
+  // set insufficientBalModel(InsufficientBalModel value) =>
+  //     _insufficientBalModel(value);
 
   Future<void> eventListner(DatabaseEvent event, Function() zeroAstro) async {
     final DataSnapshot dataSnapshot = event.snapshot;
@@ -367,20 +376,20 @@ class LiveDharamController extends GetxController {
     return pivotList.join(", ");
   }
 
-  Future<void> getAllGifts() async {
-    GiftResponse giftResponse = GiftResponse();
-    giftResponse = await liveRepository.getAllGiftsAPI();
-    gifts = giftResponse.statusCode == HttpStatus.ok
-        ? GiftResponse.fromJson(giftResponse.toJson())
-        : GiftResponse.fromJson(GiftResponse().toJson());
+  // Future<void> getAllGifts() async {
+  //   GiftResponse giftResponse = GiftResponse();
+  //   giftResponse = await liveRepository.getAllGiftsAPI();
+  //   gifts = giftResponse.statusCode == HttpStatus.ok
+  //       ? GiftResponse.fromJson(giftResponse.toJson())
+  //       : GiftResponse.fromJson(GiftResponse().toJson());
 
-    for (int i = 0; i < (gifts.data?.length ?? 0); i++) {
-      final String awsURL = _pref.getAmazonUrl() ?? "";
-      gifts.data?[i].giftImage = isValidImageURL(
-          imageURL: "$awsURL/${gifts.data?[i].giftImage ?? ""}");
-    }
-    return Future<void>.value();
-  }
+  //   for (int i = 0; i < (gifts.data?.length ?? 0); i++) {
+  //     final String awsURL = _pref.getAmazonUrl() ?? "";
+  //     gifts.data?[i].giftImage = isValidImageURL(
+  //         imageURL: "$awsURL/${gifts.data?[i].giftImage ?? ""}");
+  //   }
+  //   return Future<void>.value();
+  // }
 
   // Future<void> followOrUnfollowAstrologer() async {
   //   Map<String, dynamic> param = <String, dynamic>{};
@@ -976,34 +985,34 @@ class LiveDharamController extends GetxController {
   //   return Future<void>.value();
   // }
 
-  Future<void> concurrentDownload({
-    required downloadStarted,
-    required downloadEnded,
-  }) async {
-    downloadStarted();
-    List<CustomGiftModel> temp = <CustomGiftModel>[];
-    await Future.forEach<CustomGiftModel>(
-      customGiftModel,
-      (element) async {
-        temp.add(
-          CustomGiftModel(
-            giftId: element.giftId,
-            giftName: element.giftName,
-            giftImage: element.giftImage,
-            giftPrice: element.giftPrice,
-            giftSvga: element.giftSvga,
-            bytes: await GiftCache().downloadFile(
-              url: element.giftSvga,
-              ln: customGiftModel.length,
-            ),
-          ),
-        );
-      },
-    );
-    customGiftModel = temp;
-    downloadEnded();
-    return Future<void>.value();
-  }
+  // Future<void> concurrentDownload({
+  //   required downloadStarted,
+  //   required downloadEnded,
+  // }) async {
+  //   downloadStarted();
+  //   List<CustomGiftModel> temp = <CustomGiftModel>[];
+  //   await Future.forEach<CustomGiftModel>(
+  //     customGiftModel,
+  //     (element) async {
+  //       temp.add(
+  //         CustomGiftModel(
+  //           giftId: element.giftId,
+  //           giftName: element.giftName,
+  //           giftImage: element.giftImage,
+  //           giftPrice: element.giftPrice,
+  //           giftSvga: element.giftSvga,
+  //           bytes: await GiftCache().downloadFile(
+  //             url: element.giftSvga,
+  //             ln: customGiftModel.length,
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  //   customGiftModel = temp;
+  //   downloadEnded();
+  //   return Future<void>.value();
+  // }
 
   Future<void> leaderboardChallengeCallback({
     required Function(LeaderboardModel leader) onLeaderUpdated,

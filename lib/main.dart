@@ -2,6 +2,8 @@ import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
 import 'package:divine_astrologer/firebase_options.dart';
+import 'package:divine_astrologer/repository/user_repository.dart';
+import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -34,7 +36,15 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await GetStorage.init();
+
   await initServices();
+  Get.put(UserRepository());
+  var data = await userRepository.constantDetailsData();
+  preferenceService.setConstantDetails(data);
+  await initServices();
+
+  GiftsSingleton().init();
+
   final navigatorKey = GlobalKey<NavigatorState>();
   ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
   ZegoUIKit().initLog().then((value) {
@@ -80,7 +90,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppTheme(
       child: ScreenUtilInit(
-          designSize: Size(MediaQuery.sizeOf(context).width, MediaQuery.sizeOf(context).height),
+          designSize: Size(MediaQuery.sizeOf(context).width,
+              MediaQuery.sizeOf(context).height),
           builder: (context, child) {
             return OverlaySupport.global(
               child: GetMaterialApp(
@@ -90,14 +101,17 @@ class MyApp extends StatelessWidget {
                 debugShowCheckedModeBanner: false,
                 initialRoute: RouteName.initial,
                 getPages: Routes.routes,
-                locale: getLanStrToLocale(GetStorages.get(GetStorageKeys.language) ?? ""),
+                locale: getLanStrToLocale(
+                    GetStorages.get(GetStorageKeys.language) ?? ""),
                 fallbackLocale: AppTranslations.fallbackLocale,
                 translations: AppTranslations(),
                 theme: ThemeData(
                   splashColor: AppColors.transparent,
                   highlightColor: Colors.transparent,
                   colorScheme: ColorScheme.fromSeed(
-                      seedColor: Colors.white, background: AppColors.white, surfaceTint: AppColors.white),
+                      seedColor: Colors.white,
+                      background: AppColors.white,
+                      surfaceTint: AppColors.white),
                   useMaterial3: true,
                   fontFamily: FontFamily.poppins,
                   // cardTheme: const CardTheme(
@@ -111,15 +125,20 @@ class MyApp extends StatelessWidget {
                   return Stack(
                     children: <Widget>[
                       Obx(() => IgnorePointer(
-                          ignoring: Get.find<ProgressService>().showProgress.value, child: widget)),
+                          ignoring:
+                              Get.find<ProgressService>().showProgress.value,
+                          child: widget)),
                       StreamBuilder<bool?>(
                         initialData: true,
-                        stream: Get.find<FirebaseNetworkService>().databaseConnectionStream,
+                        stream: Get.find<FirebaseNetworkService>()
+                            .databaseConnectionStream,
                         builder: (context, snapshot) {
                           final appTheme = AppTheme.of(context);
                           return SafeArea(
                             child: AnimatedContainer(
-                              height: snapshot.data as bool ? 0 : appTheme.getHeight(36),
+                              height: snapshot.data as bool
+                                  ? 0
+                                  : appTheme.getHeight(36),
                               duration: Utils.animationDuration,
                               color: appTheme.redColor,
                               child: Material(

@@ -6,6 +6,7 @@ import "dart:convert";
 import "package:after_layout/after_layout.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
+import "package:divine_astrologer/screens/live_dharam/gifts_singleton.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/live_gift.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/call_accept_or_reject_widget.dart";
@@ -17,6 +18,7 @@ import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget
 import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/wait_list_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/zeo_team/player.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
@@ -24,6 +26,7 @@ import "package:get/get.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
+//
 //
 //
 //
@@ -310,7 +313,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget appBarWidget() {
     return SizedBox(
-      height: 32,
+      height: 40,
       child: Row(
         children: <Widget>[
           const SizedBox(width: 8),
@@ -329,7 +332,7 @@ class _LivePage extends State<LiveDharamScreen>
           Flexible(
             flex: 2,
             child: SizedBox(
-              height: 32,
+              height: 40,
               width: 148,
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0),
@@ -443,6 +446,7 @@ class _LivePage extends State<LiveDharamScreen>
                         ),
                         const SizedBox(width: 4),
                         Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
@@ -851,15 +855,17 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-  // Widget horizontalGiftBar() {
+  // Widget horizontalGiftBar({required BuildContext ctx}) {
   //   return SizedBox(
   //     height: 50 + 16 + 2,
   //     child: ListView.builder(
   //       padding: EdgeInsets.zero,
-  //       itemCount: _controller.customGiftModel.length,
+  //       // itemCount: _controller.customGiftModel.length,
+  //       itemCount: GiftsSingleton().customGiftModel.length,
   //       scrollDirection: Axis.horizontal,
   //       itemBuilder: (BuildContext context, int index) {
-  //         final CustomGiftModel item = _controller.customGiftModel[index];
+  //         // final CustomGiftModel item = _controller.customGiftModel[index];
+  //         final CustomGiftModel item = GiftsSingleton().customGiftModel[index];
   //         return InkWell(
   //           onTap: () async {
   //             final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
@@ -876,9 +882,17 @@ class _LivePage extends State<LiveDharamScreen>
   //                 if (mounted) {
   //                   // LiveGiftWidget.show(context, item.giftSvga);
   //                   if (item.bytes.isEmpty) {
-  //                     LiveGiftWidget.show(context, item.giftSvga);
+  //                     // LiveGiftWidget.show(context, item.giftSvga);
+  //                     ZegoGiftPlayer().play(
+  //                       ctx,
+  //                       GiftPlayerData(GiftPlayerSource.url, item.giftSvga),
+  //                     );
   //                   } else {
-  //                     LiveGiftCacheWidget.show(context, item.bytes);
+  //                     // LiveGiftCacheWidget.show(context, item.bytes);
+  //                     ZegoGiftPlayer().play(
+  //                       ctx,
+  //                       GiftPlayerData(GiftPlayerSource.url, item.giftSvga),
+  //                     );
   //                   }
   //                 } else {}
   //                 await _controller.sendGiftAPI(
@@ -891,7 +905,6 @@ class _LivePage extends State<LiveDharamScreen>
   //                   quantity: 1,
   //                   amount: item.giftPrice,
   //                 );
-  //                 await leaderboardChallengeCallback();
   //                 await _zegoController.message.send(
   //                     "${_controller.userName} sent you a ##### ${item.giftName}");
   //               } else {
@@ -1163,7 +1176,8 @@ class _LivePage extends State<LiveDharamScreen>
                                 final List part =
                                     message.message.split(" ##### ");
                                 final List<GiftData> gifts =
-                                    _controller.gifts.data?.where(
+                                    // _controller.gifts.data?.where(
+                                    GiftsSingleton().gifts.data?.where(
                                           (element) {
                                             return element.giftName == part[1];
                                           },
@@ -1352,8 +1366,8 @@ class _LivePage extends State<LiveDharamScreen>
                                 child: InkWell(
                                   onTap: leaderboardPopup,
                                   child: SizedBox(
-                                    height: 40,
-                                    width: 40,
+                                    height: 56,
+                                    width: 56,
                                     child: Image.asset(
                                       "assets/images/live_new_podium.png",
                                     ),
@@ -1513,6 +1527,9 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> onLiveStreamingStateUpdate(ZegoLiveStreamingState state) async {
+    if (state == ZegoLiveStreamingState.idle) {
+      ZegoGiftPlayer().clear();
+    } else {}
     return Future<void>.value();
   }
 
@@ -1562,13 +1579,14 @@ class _LivePage extends State<LiveDharamScreen>
     return Future<void>.value();
   }
 
-  // Future<void> giftPopup() async {
+  // Future<void> giftPopup({required BuildContext ctx}) async {
   //   await showCupertinoModalPopup(
   //     context: context,
   //     builder: (BuildContext context) {
   //       return GiftWidget(
   //         onClose: Get.back,
-  //         list: _controller.customGiftModel,
+  //         // list: _controller.customGiftModel,
+  //         list: GiftsSingleton().customGiftModel,
   //         onSelect: (CustomGiftModel item, num quantity) async {
   //           Get.back();
   //           final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
@@ -1585,9 +1603,17 @@ class _LivePage extends State<LiveDharamScreen>
   //               if (mounted) {
   //                 // LiveGiftWidget.show(context, item.giftSvga);
   //                 if (item.bytes.isEmpty) {
-  //                   LiveGiftWidget.show(context, item.giftSvga);
+  //                   // LiveGiftWidget.show(context, item.giftSvga);
+  //                   ZegoGiftPlayer().play(
+  //                     ctx,
+  //                     GiftPlayerData(GiftPlayerSource.url, item.giftSvga),
+  //                   );
   //                 } else {
-  //                   LiveGiftCacheWidget.show(context, item.bytes);
+  //                   // LiveGiftCacheWidget.show(context, item.bytes);
+  //                   ZegoGiftPlayer().play(
+  //                     ctx,
+  //                     GiftPlayerData(GiftPlayerSource.url, item.giftSvga),
+  //                   );
   //                 }
   //               } else {}
   //               await _controller.sendGiftAPI(
@@ -1600,7 +1626,8 @@ class _LivePage extends State<LiveDharamScreen>
   //                 quantity: quantity,
   //                 amount: item.giftPrice,
   //               );
-  //               await leaderboardChallengeCallback();
+  //               await _zegoController.message.send(
+  //                   "${_controller.userName} sent you a ##### ${item.giftName}");
   //             } else {
   //               await lowBalancePopup();
   //             }
@@ -1827,31 +1854,19 @@ class _LivePage extends State<LiveDharamScreen>
       final Map<String, dynamic> decodedMessage = jsonDecode(message);
       final String svga = decodedMessage["gift_type"];
       if (senderUserID != _controller.userId) {
-        LiveGiftWidget.show(context, svga);
+        // LiveGiftWidget.show(context, svga);
+        ZegoGiftPlayer().play(
+          context,
+          GiftPlayerData(GiftPlayerSource.url, svga),
+        );
       } else {}
     }
-    await leaderboardChallengeCallback();
     return Future<void>.value();
   }
 
   void scrollDown() {
     _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     return;
-  }
-
-  Future<void> leaderboardChallengeCallback() async {
-    // await _controller.leaderboardChallengeCallback(
-    //   onLeaderUpdated: (leader) async {
-    //     if (_controller.isHost) {
-    //       await congratulationsPopup(leader: leader);
-    //     } else {
-    //       if (leader.id == _controller.userId) {
-    //         await congratulationsPopup(leader: leader);
-    //       } else {}
-    //     }
-    //   },
-    // );
-    return Future<void>.value();
   }
 
   // d
@@ -2031,7 +2046,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) async {
-    await _controller.getAllGifts();
+    // await _controller.getAllGifts();
     // _controller.mapAndMergeGiftsWithConstant();
     // await _controller.concurrentDownload(
     //   downloadStarted: () {},
