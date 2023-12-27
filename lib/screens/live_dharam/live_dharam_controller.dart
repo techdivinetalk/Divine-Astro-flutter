@@ -56,11 +56,11 @@ class LiveDharamController extends GetxController {
     userName: "",
     id: "",
   ).obs;
+  final RxBool _showTopBanner = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-
     initData();
   }
 
@@ -98,6 +98,7 @@ class LiveDharamController extends GetxController {
       userName: "",
       id: "",
     );
+    showTopBanner = false;
     return;
   }
 
@@ -126,6 +127,7 @@ class LiveDharamController extends GetxController {
     // _zegoUIKitUser.close();
     _amIBlocked.close();
     _currentCaller.close();
+    _showTopBanner.close();
 
     super.onClose();
   }
@@ -199,6 +201,9 @@ class LiveDharamController extends GetxController {
 
   WaitListModel get currentCaller => _currentCaller.value;
   set currentCaller(WaitListModel value) => _currentCaller(value);
+
+  bool get showTopBanner => _showTopBanner.value;
+  set showTopBanner(bool value) => _showTopBanner(value);
 
   Future<void> eventListner(DatabaseEvent event, Function() zeroAstro) async {
     final DataSnapshot dataSnapshot = event.snapshot;
@@ -370,8 +375,9 @@ class LiveDharamController extends GetxController {
         : GiftResponse.fromJson(GiftResponse().toJson());
 
     for (int i = 0; i < (gifts.data?.length ?? 0); i++) {
-      gifts.data?[i].giftImage =
-          isValidImageURL(imageURL: gifts.data?[i].giftImage ?? "");
+      final String awsURL = _pref.getAmazonUrl() ?? "";
+      gifts.data?[i].giftImage = isValidImageURL(
+          imageURL: "$awsURL/${gifts.data?[i].giftImage ?? ""}");
     }
     return Future<void>.value();
   }
@@ -422,6 +428,11 @@ class LiveDharamController extends GetxController {
   // bool hasBalance({required num quantity, required num amount}) {
   //   final num myCurrentBalance = num.parse(walletBalance.value.toString());
   //   final num myPurchasedOrder = quantity * amount;
+  //   print("hasBalance: start  ----------");
+  //   print("hasBalance: myCurrentBalance: $myCurrentBalance");
+  //   print("hasBalance: myPurchasedOrder: $myPurchasedOrder");
+  //   print("hasBalance: result: ${myCurrentBalance >= myPurchasedOrder}");
+  //   print("hasBalance: end  ----------");
   //   return myCurrentBalance >= myPurchasedOrder;
   // }
 
@@ -431,16 +442,21 @@ class LiveDharamController extends GetxController {
   //   required int giftQuantity,
   //   required int giftAmount,
   // }) async {
-  //   final int totalGiftQuantity = giftQuantity;
-  //   final int totalGiftAmount = giftQuantity * giftAmount;
-  //   await checkWalletRechargeForSendingGift(
-  //     giftId: giftId,
-  //     giftName: giftName,
-  //     totalGiftQuantity: totalGiftQuantity,
-  //     totalGiftAmount: totalGiftAmount,
-  //   );
-  //   final bool value = walletRecharge.statusCode == HttpStatus.ok;
-  //   return Future<bool>.value(value);
+  //   bool hasBal = hasBalance(quantity: giftQuantity, amount: giftAmount);
+  //   if (hasBal) {
+  //     final int totalGiftQuantity = giftQuantity;
+  //     final int totalGiftAmount = giftQuantity * giftAmount;
+  //     await checkWalletRechargeForSendingGift(
+  //       giftId: giftId,
+  //       giftName: giftName,
+  //       totalGiftQuantity: totalGiftQuantity,
+  //       totalGiftAmount: totalGiftAmount,
+  //     );
+  //     final bool value = walletRecharge.statusCode == HttpStatus.ok;
+  //     return Future<bool>.value(value);
+  //   } else {
+  //     return Future<bool>.value(false);
+  //   }
   // }
 
   // Future<void> checkWalletRechargeForSendingGift({
@@ -532,9 +548,14 @@ class LiveDharamController extends GetxController {
   //   required String talkType,
   //   required int talkAmount,
   // }) async {
-  //   await liveOrderPlace(talkType: talkType, talkAmount: talkAmount);
-  //   final bool value = orderGenerate.statusCode == HttpStatus.ok;
-  //   return Future<bool>.value(value);
+  //   bool hasBal = hasBalance(quantity: 1, amount: talkAmount);
+  //   if (hasBal) {
+  //     await liveOrderPlace(talkType: talkType, talkAmount: talkAmount);
+  //     final bool value = orderGenerate.statusCode == HttpStatus.ok;
+  //     return Future<bool>.value(value);
+  //   } else {
+  //     return Future<bool>.value(false);
+  //   }
   // }
 
   // Future<void> liveOrderPlace({
@@ -820,9 +841,45 @@ class LiveDharamController extends GetxController {
   //   return time;
   // }
 
-  Duration parseTime(String timeString) {
-    final List<int> parts = timeString.split(":").map(int.parse).toList();
-    return Duration(hours: parts[0], minutes: parts[1], seconds: parts[2]);
+  // Duration parseTime(String timeString) {
+  //   final List<int> parts = timeString.split(":").map(int.parse).toList();
+  //   return Duration(hours: parts[0], minutes: parts[1], seconds: parts[2]);
+  // }
+
+  String getTotalWaitTime() {
+    String time = "";
+    int totalMinutes = 0;
+    final List<String> tempList = <String>[];
+    for (final WaitListModel element in waitListModel) {
+      tempList.add(element.totalTime);
+    }
+    if (tempList.isEmpty) {
+      time = "00:00:00";
+    } else {
+      for (String time in tempList) {
+        totalMinutes += int.parse(time);
+      }
+      Duration duration = Duration(minutes: totalMinutes);
+      String formattedTime = formatDuration(duration);
+      print("Total time: $formattedTime");
+      time = formattedTime;
+    }
+    return time;
+  }
+
+  String formatDuration(Duration duration) {
+    int hours = duration.inHours;
+    int minutes = duration.inMinutes % 60;
+    int seconds = duration.inSeconds % 60;
+    return '$hours:${_twoDigits(minutes)}:${_twoDigits(seconds)}';
+  }
+
+  String _twoDigits(int n) {
+    if (n >= 10) {
+      return '$n';
+    } else {
+      return '0$n';
+    }
   }
 
   Future<void> addUpdateToBlockList({required String userId}) async {
@@ -991,6 +1048,11 @@ class LiveDharamController extends GetxController {
         } else {}
       } else {}
     } else {}
+  }
+
+  Future<void> removeMyNode() async {
+    await FirebaseDatabase.instance.ref().child("live/$liveId").remove();
+    return Future<void>.value();
   }
 }
 

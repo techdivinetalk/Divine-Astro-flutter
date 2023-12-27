@@ -5,6 +5,7 @@ import "dart:convert";
 
 import "package:after_layout/after_layout.dart";
 import "package:divine_astrologer/common/colors.dart";
+import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/live_gift.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/call_accept_or_reject_widget.dart";
@@ -46,13 +47,17 @@ class LiveDharamScreen extends StatefulWidget {
 }
 
 class _LivePage extends State<LiveDharamScreen>
-    with AfterLayoutMixin<LiveDharamScreen> {
+    with AfterLayoutMixin<LiveDharamScreen>, WidgetsBindingObserver {
   final LiveDharamController _controller = Get.find();
 
   final ZegoUIKitPrebuiltLiveStreamingController _zegoController =
       ZegoUIKitPrebuiltLiveStreamingController();
 
   final StreamController<List<ZegoInRoomMessage>> _zegoMessageStreamController =
+      StreamController<List<ZegoInRoomMessage>>.broadcast();
+
+  final StreamController<List<ZegoInRoomMessage>>
+      _zegoMessageStreamControllerTop =
       StreamController<List<ZegoInRoomMessage>>.broadcast();
 
   late StreamSubscription<ZegoSignalingPluginInRoomCommandMessageReceivedEvent>
@@ -68,9 +73,23 @@ class _LivePage extends State<LiveDharamScreen>
   void initState() {
     super.initState();
 
+    WidgetsBinding.instance.addObserver(this);
+
     _zegoController.message
         .stream()
         .listen(_zegoMessageStreamController.sink.add);
+
+    _zegoController.message.stream().listen(
+      (event) async {
+        _controller.showTopBanner = true;
+        _zegoMessageStreamControllerTop.sink.add(event);
+
+        await Future.delayed(const Duration(seconds: 06));
+
+        _controller.showTopBanner = false;
+        _zegoMessageStreamControllerTop.sink.add(event);
+      },
+    );
 
     _zegocloudSubscription = ZegoUIKit()
         .getSignalingPlugin()
@@ -89,15 +108,13 @@ class _LivePage extends State<LiveDharamScreen>
       },
     );
 
-    ZegoUIKit().getUserJoinStream().listen(onUserJoin);
-    ZegoUIKit().getUserLeaveStream().listen(onUserLeave);
+    // ZegoUIKit().getUserJoinStream().listen(onUserJoin);
+    // ZegoUIKit().getUserLeaveStream().listen(onUserLeave);
   }
 
   Future<void> onUserJoin(List<ZegoUIKitUser> users) async {
-    if (_controller.isHost) {
-      final String userName = _controller.userName;
-      await ZegoUIKit().sendInRoomMessage('$userName joined');
-    } else {}
+    final String userName = _controller.userName;
+    await ZegoUIKit().sendInRoomMessage('$userName joined');
     Future<void>.value();
   }
 
@@ -107,11 +124,13 @@ class _LivePage extends State<LiveDharamScreen>
 
   @override
   void dispose() {
-    unawaited(_zegoMessageStreamController.close());
-    unawaited(_zegocloudSubscription.cancel());
-    unawaited(_firebaseSubscription.cancel());
-    _editingController.dispose();
-    _scrollController.dispose();
+    // unawaited(_zegoMessageStreamController.close());
+    // unawaited(_zegoMessageStreamControllerTop.close());
+    // unawaited(_zegocloudSubscription.cancel());
+    // unawaited(_firebaseSubscription.cancel());
+    // _editingController.dispose();
+    // _scrollController.dispose();
+    // WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
   }
@@ -197,8 +216,10 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   ZegoLayout galleryLayout() {
-    final bool isEngaged = _controller.engagedCoHostWithAstro().isEngaded;
-    final String callType = _controller.engagedCoHostWithAstro().callType;
+    // final bool isEngaged = _controller.engagedCoHostWithAstro().isEngaded;
+    // final String callType = _controller.engagedCoHostWithAstro().callType;
+    final bool isEngaged = _controller.currentCaller.isEngaded;
+    final String callType = _controller.currentCaller.callType;
     if (isEngaged == true && callType == "video") {
       return ZegoLayout.gallery();
     } else {
@@ -228,34 +249,37 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-  // ZegoLiveStreamingSwipingConfig? get swipingConfig {
-  //   return _controller.isHost
-  //       ? null
-  //       : ZegoLiveStreamingSwipingConfig(
-  //           requirePreviousLiveID: () => "",
-  //           requireNextLiveID: () => "",
-  //         );
-  // }
-
   ZegoLiveStreamingSwipingConfig? get swipingConfig {
     return _controller.isHost
         ? null
-        : _controller.currentCaller.isEngaded
-            ? null
-            : ZegoLiveStreamingSwipingConfig(
-                requirePreviousLiveID: () => "",
-                requireNextLiveID: () => "",
-              );
+        : ZegoLiveStreamingSwipingConfig(
+            requirePreviousLiveID: () => "",
+            requireNextLiveID: () => "",
+          );
   }
+
+  // ZegoLiveStreamingSwipingConfig? get swipingConfig {
+  //   return _controller.isHost
+  //       ? null
+  //       : _controller.currentCaller.isEngaded
+  //           ? null
+  //           : ZegoLiveStreamingSwipingConfig(
+  //               requirePreviousLiveID: () => "",
+  //               requireNextLiveID: () => "",
+  //             );
+  // }
 
   Widget foregroundWidget() {
     return Padding(
       padding: const EdgeInsets.only(top: kToolbarHeight - 16.0),
       child: Column(
         children: <Widget>[
-          _controller.engagedCoHostWithAstro().isEngaded
+          // _controller.engagedCoHostWithAstro().isEngaded
+          _controller.currentCaller.isEngaded
               ? appBarWidgetWithCoHost()
               : appBarWidget(),
+          // const SizedBox(height: 8),
+          inRoomMessageTop(),
           const SizedBox(height: 8),
           // astrologerLiveStar(),
           // const SizedBox(height: 8),
@@ -356,6 +380,7 @@ class _LivePage extends State<LiveDharamScreen>
             ),
           ),
           const Spacer(),
+          newLeaderboard(),
         ],
       ),
     );
@@ -501,15 +526,17 @@ class _LivePage extends State<LiveDharamScreen>
                                 rounded: true,
                               ),
                             ),
-                            const SizedBox(width: 24),
                             Flexible(
-                              child: Text(
-                                _controller.leaderboardModel.first.userName,
-                                style: const TextStyle(),
-                                overflow: TextOverflow.ellipsis,
+                              child: Align(
+                                child: Text(
+                                  _controller.leaderboardModel.first.userName,
+                                  style: const TextStyle(),
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             ),
-                            const SizedBox(width: 2),
+                            const SizedBox(width: 16),
                           ],
                         ),
                       ),
@@ -808,19 +835,19 @@ class _LivePage extends State<LiveDharamScreen>
           days: 0,
           hours: 0,
           minutes: int.parse(
-            _controller.currentCaller.totalTime,
+            _controller.currentCaller.totalTime ?? "0",
           ),
           seconds: 0,
         ),
       ),
-      // onEnd: removeCoHostOrStopCoHost,
-      onEnd: () async {
-        final bool isEngaded = _controller.currentCaller.isEngaded;
-        if (isEngaded) {
-        } else {
-          await removeCoHostOrStopCoHost();
-        }
-      },
+      onEnd: removeCoHostOrStopCoHost,
+      // onEnd: () async {
+      //   final bool isEngaded = _controller.currentCaller.isEngaded;
+      //   if (isEngaded) {
+      //   } else {
+      //     await removeCoHostOrStopCoHost();
+      //   }
+      // },
     );
   }
 
@@ -865,6 +892,8 @@ class _LivePage extends State<LiveDharamScreen>
   //                   amount: item.giftPrice,
   //                 );
   //                 await leaderboardChallengeCallback();
+  //                 await _zegoController.message.send(
+  //                     "${_controller.userName} sent you a ##### ${item.giftName}");
   //               } else {
   //                 await lowBalancePopup();
   //               }
@@ -1041,59 +1070,184 @@ class _LivePage extends State<LiveDharamScreen>
             final String mineUser = _controller.userId;
             // final String astroUser =
             //     (_controller.details.data?.id ?? 0).toString();
-            return Row(
-              children: <Widget>[
-                const SizedBox(width: 4),
-                SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: CustomImageWidget(
-                    imageUrl: zegoUser == mineUser
-                        ? _controller.avatar
-                        // : zegoUser == astroUser
-                        //     ? (_controller.details.data?.image ?? "")
-                        : "https://robohash.org/sa",
-                    rounded: true,
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      message.user.name,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: AppColors.white,
+            return message.message.contains(" ##### ")
+                ? const SizedBox()
+                : Row(
+                    children: <Widget>[
+                      const SizedBox(width: 4),
+                      SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CustomImageWidget(
+                          imageUrl: zegoUser == mineUser
+                              ? _controller.avatar
+                              // : zegoUser == astroUser
+                              //     ? (_controller.details.data?.image ?? "")
+                              : "https://robohash.org/sa",
+                          rounded: true,
+                        ),
                       ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      message.message,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.white,
+                      const SizedBox(width: 4),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            message.user.name,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: AppColors.white,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            message.message,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.white,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                       ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 4),
-                IconButton(
-                  onPressed: () async {
-                    await moreOptionsPopup(userId: message.user.id);
-                  },
-                  icon: const Icon(Icons.more_vert),
-                ),
-                const SizedBox(width: 4),
-              ],
-            );
+                      const SizedBox(width: 4),
+                      IconButton(
+                        onPressed: () async {
+                          await moreOptionsPopup(userId: message.user.id);
+                        },
+                        icon: const Icon(Icons.more_vert),
+                      ),
+                      const SizedBox(width: 4),
+                    ],
+                  );
           },
         );
       },
+    );
+  }
+
+  Widget inRoomMessageTop() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0),
+      child: StreamBuilder<List<ZegoInRoomMessage>>(
+        stream: _zegoMessageStreamControllerTop.stream.asBroadcastStream(),
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,
+        ) {
+          List<ZegoInRoomMessage> messages =
+              snapshot.data ?? <ZegoInRoomMessage>[];
+          messages = messages.reversed.toList();
+          return AnimatedOpacity(
+            opacity: !_controller.showTopBanner ? 0.0 : 1.0,
+            duration: const Duration(seconds: 1),
+            child: messages.isEmpty
+                ? const SizedBox()
+                : ListView.builder(
+                    reverse: true,
+                    shrinkWrap: true,
+                    itemCount: 1,
+                    controller: _scrollController,
+                    itemBuilder: (BuildContext context, int index) {
+                      final ZegoInRoomMessage message = messages[index];
+                      final String zegoUser = message.user.id;
+                      final String mineUser = _controller.userId;
+                      // final String astroUser =
+                      //     (_controller.details.data?.id ?? 0).toString();
+                      return message.message.contains(" ##### ")
+                          ? Builder(
+                              builder: (context) {
+                                String imageURL = "";
+                                final List part =
+                                    message.message.split(" ##### ");
+                                final List<GiftData> gifts =
+                                    _controller.gifts.data?.where(
+                                          (element) {
+                                            return element.giftName == part[1];
+                                          },
+                                        ).toList() ??
+                                        [];
+                                imageURL = gifts.isNotEmpty
+                                    ? gifts.first.giftImage
+                                    : "";
+                                return Row(
+                                  children: [
+                                    SizedBox(
+                                      height: 64,
+                                      width: 296,
+                                      child: Stack(
+                                        children: [
+                                          Image.asset(
+                                            height: 64,
+                                            fit: BoxFit.cover,
+                                            "assets/images/live_leaderboard_crown.png",
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 24.0),
+                                            child: Row(
+                                              children: <Widget>[
+                                                const SizedBox(width: 4),
+                                                SizedBox(
+                                                  height: 32,
+                                                  width: 32,
+                                                  child: CustomImageWidget(
+                                                    imageUrl: zegoUser ==
+                                                            mineUser
+                                                        ? _controller.avatar
+                                                        // : zegoUser == astroUser
+                                                        //     ? (_controller
+                                                        //             .details.data?.image ??
+                                                        //         "")
+                                                        : "https://robohash.org/sa",
+                                                    rounded: true,
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 4),
+                                                Flexible(
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Text(
+                                                      "${part[0]}",
+                                                      style: const TextStyle(),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 4),
+                                                imageURL == ""
+                                                    ? const SizedBox()
+                                                    : SizedBox(
+                                                        height: 64,
+                                                        width: 64,
+                                                        child:
+                                                            CustomImageWidget(
+                                                          imageUrl: imageURL,
+                                                          rounded: false,
+                                                        ),
+                                                      ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            )
+                          : const SizedBox();
+                    },
+                  ),
+          );
+        },
+      ),
     );
   }
 
@@ -1261,8 +1415,9 @@ class _LivePage extends State<LiveDharamScreen>
   //   return (videoDiscount == 0)
   //       ? Column(
   //           children: <Widget>[
+  //             const SizedBox(height: 4.0),
   //             Text(
-  //               "$videoOriginal",
+  //               "₹$videoOriginal/Min",
   //               style: const TextStyle(
   //                 fontSize: 10,
   //                 fontWeight: FontWeight.bold,
@@ -1463,7 +1618,8 @@ class _LivePage extends State<LiveDharamScreen>
       builder: (BuildContext context) {
         return LeaderboardWidget(
           onClose: Get.back,
-          list: _controller.leaderboardModel,
+          // list: _controller.leaderboardModel,
+          liveId: _controller.liveId,
         );
       },
     );
@@ -1476,10 +1632,10 @@ class _LivePage extends State<LiveDharamScreen>
       builder: (BuildContext context) {
         return WaitListWidget(
           onClose: Get.back,
-          // waitTime: _controller.getTotalWaitTime(),
-          waitTime: "00:00:00",
+          waitTime: _controller.getTotalWaitTime(),
+          // waitTime: "00:00:00",
           myUserId: _controller.userId,
-          list: _controller.waitListModel,
+          list: _controller.waitListModel ?? [],
           hasMyIdInWaitList: false,
           onExitWaitList: () async {
             Get.back();
@@ -1612,8 +1768,8 @@ class _LivePage extends State<LiveDharamScreen>
   //     builder: (BuildContext context) {
   //       return CallAstrologerWidget(
   //         onClose: Get.back,
-  //         // waitTime: _controller.getTotalWaitTime(),
-  //         waitTime: "00:00:00",
+  //         waitTime: _controller.getTotalWaitTime(),
+  //         // waitTime: "00:00:00",
   //         details: _controller.details,
   //         onSelect: (String type, int amount) async {
   //           Get.back();
@@ -1684,21 +1840,21 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> leaderboardChallengeCallback() async {
-    await _controller.leaderboardChallengeCallback(
-      onLeaderUpdated: (leader) async {
-        if (_controller.isHost) {
-          await congratulationsPopup(leader: leader);
-        } else {
-          if (leader.id == _controller.userId) {
-            await congratulationsPopup(leader: leader);
-          } else {}
-        }
-      },
-    );
+    // await _controller.leaderboardChallengeCallback(
+    //   onLeaderUpdated: (leader) async {
+    //     if (_controller.isHost) {
+    //       await congratulationsPopup(leader: leader);
+    //     } else {
+    //       if (leader.id == _controller.userId) {
+    //         await congratulationsPopup(leader: leader);
+    //       } else {}
+    //     }
+    //   },
+    // );
     return Future<void>.value();
   }
 
-  // dharam
+  // d
 
   Future<void> exitFunc() async {
     final bool isEngaded = _controller.currentCaller.isEngaded;
@@ -1875,12 +2031,24 @@ class _LivePage extends State<LiveDharamScreen>
 
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) async {
-    // await _controller.getAllGifts();
+    await _controller.getAllGifts();
     // _controller.mapAndMergeGiftsWithConstant();
     // await _controller.concurrentDownload(
     //   downloadStarted: () {},
     //   downloadEnded: () {},
     // );
     return Future<void>.value();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.detached) {
+      // final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
+      // if (hasMyIdInWaitList) {
+      //   await _controller.removeFromWaitList();
+      // } else {}
+      await _controller.removeMyNode();
+    } else {}
   }
 }
