@@ -68,7 +68,7 @@ class _GiftWidgetState extends State<GiftWidget> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
-          height: Get.height / 2,
+          height: Get.height / 1.5,
           width: Get.width,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(

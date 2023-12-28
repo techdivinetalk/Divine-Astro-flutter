@@ -51,6 +51,8 @@ class LiveTipsController extends GetxController {
     await Get.toNamed(RouteName.liveDharamScreen, arguments: userId);
     await database.ref().child("live/$userId").remove();
     // await database.ref().child("astro-live-list/$userId").remove();
+    Get.back();
+    Get.back();
     return Future<void>.value();
   }
 

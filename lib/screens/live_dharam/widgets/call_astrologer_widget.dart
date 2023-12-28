@@ -1,8 +1,9 @@
 // import "dart:ui";
 
-// import "package:divine_astrologer/common/colors.dart";
-// import "package:divine_astrologer/model/live/get_astrologer_details_response.dart";
-// import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
+// import "package:divine_app/common/colors.dart";
+// import "package:divine_app/model/live/get_astrologer_details_response.dart";
+// import "package:divine_app/screens/live_dharam/live_dharam_controller.dart";
+// import "package:divine_app/screens/live_dharam/widgets/custom_image_widget.dart";
 // import "package:flutter/material.dart";
 // import "package:get/get.dart";
 
@@ -12,6 +13,7 @@
 //     required this.waitTime,
 //     required this.details,
 //     required this.onSelect,
+//     required this.list,
 //     super.key,
 //   });
 
@@ -19,6 +21,7 @@
 //   final String waitTime;
 //   final GetAstroDetailsRes details;
 //   final void Function(String type, int amount) onSelect;
+//   final List<WaitListModel> list;
 
 //   @override
 //   State<CallAstrologerWidget> createState() => _CallAstrologerWidgetState();
@@ -68,7 +71,7 @@
 //           child: BackdropFilter(
 //             filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
 //             child: Container(
-//               height: Get.height / 1.50,
+//               // height: Get.height / 1.50,
 //               width: Get.width,
 //               decoration: BoxDecoration(
 //                 borderRadius: const BorderRadius.only(
@@ -128,17 +131,19 @@
 //               ),
 //             ),
 //             const SizedBox(height: 8),
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: <Widget>[
-//                 Image.asset("assets/images/live_mini_hourglass.png"),
-//                 const SizedBox(width: 4),
-//                 const Text("Wait Time - "),
-//                 const SizedBox(width: 4),
-//                 Text(widget.waitTime),
-//               ],
-//             ),
-//             const SizedBox(height: 8),
+//             widget.list.length > 1
+//                 ? Row(
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     children: <Widget>[
+//                       Image.asset("assets/images/live_mini_hourglass.png"),
+//                       const SizedBox(width: 4),
+//                       const Text("Wait Time - "),
+//                       const SizedBox(width: 4),
+//                       Text(widget.waitTime),
+//                     ],
+//                   )
+//                 : const SizedBox(),
+//             SizedBox(height: widget.list.length > 1 ? 8 : 0),
 //             const Divider(),
 //             listTile(
 //               asset: "assets/images/live_call_video.png",

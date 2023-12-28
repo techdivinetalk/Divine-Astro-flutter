@@ -435,14 +435,15 @@ class LiveDharamController extends GetxController {
   // }
 
   // bool hasBalance({required num quantity, required num amount}) {
-  //   final num myCurrentBalance = num.parse(walletBalance.value.toString());
-  //   final num myPurchasedOrder = quantity * amount;
-  //   print("hasBalance: start  ----------");
-  //   print("hasBalance: myCurrentBalance: $myCurrentBalance");
-  //   print("hasBalance: myPurchasedOrder: $myPurchasedOrder");
-  //   print("hasBalance: result: ${myCurrentBalance >= myPurchasedOrder}");
-  //   print("hasBalance: end  ----------");
-  //   return myCurrentBalance >= myPurchasedOrder;
+  //   // final num myCurrentBalance = num.parse(walletBalance.value.toString());
+  //   // final num myPurchasedOrder = quantity * amount;
+  //   // print("hasBalance: start  ----------");
+  //   // print("hasBalance: myCurrentBalance: $myCurrentBalance");
+  //   // print("hasBalance: myPurchasedOrder: $myPurchasedOrder");
+  //   // print("hasBalance: result: ${myCurrentBalance >= myPurchasedOrder}");
+  //   // print("hasBalance: end  ----------");
+  //   // return myCurrentBalance >= myPurchasedOrder;
+  //   return true;
   // }
 
   // Future<bool> hasBalanceForSendingGift({
@@ -450,6 +451,7 @@ class LiveDharamController extends GetxController {
   //   required String giftName,
   //   required int giftQuantity,
   //   required int giftAmount,
+  //   required Function(InsufficientBalModel balModel) needRecharge,
   // }) async {
   //   bool hasBal = hasBalance(quantity: giftQuantity, amount: giftAmount);
   //   if (hasBal) {
@@ -460,6 +462,7 @@ class LiveDharamController extends GetxController {
   //       giftName: giftName,
   //       totalGiftQuantity: totalGiftQuantity,
   //       totalGiftAmount: totalGiftAmount,
+  //       needRecharge: needRecharge,
   //     );
   //     final bool value = walletRecharge.statusCode == HttpStatus.ok;
   //     return Future<bool>.value(value);
@@ -473,6 +476,7 @@ class LiveDharamController extends GetxController {
   //   required String giftName,
   //   required int totalGiftQuantity,
   //   required int totalGiftAmount,
+  //   required Function(InsufficientBalModel balModel) needRecharge,
   // }) async {
   //   Map<String, dynamic> param = <String, dynamic>{};
   //   param = <String, dynamic>{
@@ -494,7 +498,10 @@ class LiveDharamController extends GetxController {
   //     "role_id": 7,
   //   };
   //   WalletRecharge walletRechargeRes = WalletRecharge();
-  //   walletRechargeRes = await liveRepository.walletRechargeApi(params: param);
+  //   walletRechargeRes = await liveRepository.walletRechargeApi(
+  //     params: param,
+  //     needRecharge: needRecharge,
+  //   );
   //   walletRecharge = walletRechargeRes.statusCode == HttpStatus.ok
   //       ? WalletRecharge.fromJson(walletRechargeRes.toJson())
   //       : WalletRecharge.fromJson(WalletRecharge().toJson());
@@ -556,10 +563,15 @@ class LiveDharamController extends GetxController {
   // Future<bool> canPlaceLiveOrder({
   //   required String talkType,
   //   required int talkAmount,
+  //   required Function(InsufficientBalModel balModel) needRecharge,
   // }) async {
   //   bool hasBal = hasBalance(quantity: 1, amount: talkAmount);
   //   if (hasBal) {
-  //     await liveOrderPlace(talkType: talkType, talkAmount: talkAmount);
+  //     await liveOrderPlace(
+  //       talkType: talkType,
+  //       talkAmount: talkAmount,
+  //       needRecharge: needRecharge,
+  //     );
   //     final bool value = orderGenerate.statusCode == HttpStatus.ok;
   //     return Future<bool>.value(value);
   //   } else {
@@ -570,6 +582,7 @@ class LiveDharamController extends GetxController {
   // Future<void> liveOrderPlace({
   //   required String talkType,
   //   required int talkAmount,
+  //   required Function(InsufficientBalModel balModel) needRecharge,
   // }) async {
   //   final int intValue = talkType == "Video"
   //       ? 3
@@ -585,7 +598,10 @@ class LiveDharamController extends GetxController {
   //     "role_id": 7,
   //   };
   //   OrderGenerate orderGenerateRes = OrderGenerate();
-  //   orderGenerateRes = await liveRepository.orderGenerateApi(params: param);
+  //   orderGenerateRes = await liveRepository.orderGenerateApi(
+  //     params: param,
+  //     needRecharge: needRecharge,
+  //   );
   //   orderGenerate = orderGenerateRes.statusCode == HttpStatus.ok
   //       ? OrderGenerate.fromJson(orderGenerateRes.toJson())
   //       : OrderGenerate.fromJson(OrderGenerate().toJson());

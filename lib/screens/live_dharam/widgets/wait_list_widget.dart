@@ -87,7 +87,7 @@ class _WaitListWidgetState extends State<WaitListWidget> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
             child: Container(
-              height: Get.height / 1.40,
+              // height: Get.height / 1.40,
               width: Get.width,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
@@ -140,32 +140,42 @@ class _WaitListWidgetState extends State<WaitListWidget> {
               ),
             ),
             const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Image.asset("assets/images/live_mini_hourglass.png"),
-                const SizedBox(width: 4),
-                const Text("Wait Time - "),
-                const SizedBox(width: 4),
-                Text(widget.waitTime),
-              ],
-            ),
-            const SizedBox(height: 8),
+            widget.list.length > 1
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Image.asset("assets/images/live_mini_hourglass.png"),
+                      const SizedBox(width: 4),
+                      const Text("Wait Time - "),
+                      const SizedBox(width: 4),
+                      Text(widget.waitTime),
+                    ],
+                  )
+                : const SizedBox(),
+            SizedBox(height: widget.list.length > 1 ? 8 : 0),
             const Divider(),
-            SizedBox(
-              height: Get.height / 3,
-              child: ListView.builder(
-                itemCount: widget.list.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final WaitListModel item = widget.list[index];
-                  return listTile(item: item);
-                },
-              ),
-            ),
+            widget.list.length >= 3
+                ? SizedBox(height: Get.height / 3, child: listView())
+                : listView(),
+            const SizedBox(height: 16),
             exitWidget(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget listView() {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: widget.list.length,
+      itemBuilder: (BuildContext context, int index) {
+        final WaitListModel item = widget.list[index];
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: listTile(item: item),
+        );
+      },
     );
   }
 
@@ -184,7 +194,7 @@ class _WaitListWidgetState extends State<WaitListWidget> {
         children: <Widget>[
           callTypeIcon(callType: item.callType),
           const SizedBox(width: 16),
-          Text(item.totalTime),
+          Text(getTotalWaitTime(int.parse(item.totalTime))),
         ],
       ),
     );
@@ -207,37 +217,48 @@ class _WaitListWidgetState extends State<WaitListWidget> {
   }
 
   Widget exitWidget() {
-    return widget.model.isEngaded /* && widget.model.id == widget.myUserId */
+    return widget.model.isEngaded && widget.model.id == widget.myUserId
         ? const SizedBox()
         : widget.isHost
-            ? Column(
-                children: <Widget>[
-                  const SizedBox(height: 8),
-                  CommonButton(
-                    buttonCallback: widget.onAccept,
-                    buttonText: "Accept",
-                  ),
-                  const SizedBox(height: 8),
-                ],
+            ? CommonButton(
+                buttonCallback: widget.onAccept,
+                buttonText: "Accept",
               )
             : widget.hasMyIdInWaitList
-                ? Column(
-                    children: <Widget>[
-                      const SizedBox(height: 8),
-                      TextButton(
-                        onPressed: widget.onExitWaitList,
-                        child: const Text(
-                          "Exit Waitlist",
-                          style: TextStyle(
-                            color: Colors.red,
-                            decoration: TextDecoration.underline,
-                            decorationColor: Colors.red,
-                          ),
-                        ),
+                ? TextButton(
+                    onPressed: widget.onExitWaitList,
+                    child: const Text(
+                      "Exit Waitlist",
+                      style: TextStyle(
+                        color: Colors.red,
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.red,
                       ),
-                      const SizedBox(height: 8),
-                    ],
+                    ),
                   )
                 : const SizedBox();
+  }
+
+  String getTotalWaitTime(totalMinutes) {
+    String time = "";
+    Duration duration = Duration(minutes: totalMinutes);
+    String formattedTime = formatDuration(duration);
+    time = formattedTime;
+    return time;
+  }
+
+  String formatDuration(Duration duration) {
+    int hours = duration.inHours;
+    int minutes = duration.inMinutes % 60;
+    int seconds = duration.inSeconds % 60;
+    return '$hours:${_twoDigits(minutes)}:${_twoDigits(seconds)}';
+  }
+
+  String _twoDigits(int n) {
+    if (n >= 10) {
+      return '$n';
+    } else {
+      return '0$n';
+    }
   }
 }
