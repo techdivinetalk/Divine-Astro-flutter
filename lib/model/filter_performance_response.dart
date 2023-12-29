@@ -36,11 +36,12 @@ class PerformanceFilterResponse {
 
 class Data {
   Response? response;
-  int? score;
-  int? totalScore;
-  int? scorePrecentage;
+  dynamic? score;
+  dynamic? totalScore;
+  dynamic? scorePrecentage;
   List<RankSystem>? rankSystem;
   String? rank;
+  String? image;
 
   Data(
       {this.response,
@@ -48,7 +49,8 @@ class Data {
         this.totalScore,
         this.scorePrecentage,
         this.rankSystem,
-        this.rank});
+        this.rank,
+        this.image});
 
   Data.fromJson(Map<String, dynamic> json) {
     response = json['response'] != null
@@ -64,6 +66,7 @@ class Data {
       });
     }
     rank = json['rank'];
+    image = json['image'];
   }
 
   Map<String, dynamic> toJson() {
@@ -78,6 +81,7 @@ class Data {
       data['rank_system'] = this.rankSystem!.map((v) => v.toJson()).toList();
     }
     data['rank'] = this.rank;
+    data['image'] = this.image;
     return data;
   }
 }
