@@ -307,9 +307,7 @@ class _LivePage extends State<LiveDharamScreen>
           newLeaderboard(),
           _controller.isHost
               ? settingsRowForAstro()
-              : const SizedBox(width: 120),
-          //
-          //
+              : const SizedBox(width: 120 - 8),
         ],
       ),
     );
@@ -1600,6 +1598,31 @@ class _LivePage extends State<LiveDharamScreen>
                 ),
               ),
               const SizedBox(width: 8),
+              InkWell(
+                onTap: () {},
+                child: SizedBox(
+                  height: 32,
+                  width: 32,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(50.0),
+                      ),
+                      border: Border.all(
+                        color: AppColors.appYellowColour,
+                      ),
+                      color: AppColors.black.withOpacity(0.2),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(0.0),
+                      child: Image.asset(
+                        "assets/images/live_new_plus_icon.png",
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
             ],
           ),
         ),
@@ -1866,6 +1889,51 @@ class _LivePage extends State<LiveDharamScreen>
       ],
     );
   }
+
+  // Widget followUnfollowRow() {
+  //   return Row(
+  //     //
+  //     children: [
+  //       SizedBox(
+  //         width: 120 - 8,
+  //         child: SizedBox(
+  //           height: 32,
+  //           width: 32,
+  //           child: InkWell(
+  //             onTap: () async {
+  //               await _zegoController.message.send("Followed");
+  //               await _controller.followOrUnfollowAstrologer();
+  //               await _controller.getAstrologerDetails();
+  //             },
+  //             child: DecoratedBox(
+  //               decoration: BoxDecoration(
+  //                 borderRadius: const BorderRadius.all(
+  //                   Radius.circular(50.0),
+  //                 ),
+  //                 border: Border.all(
+  //                   color: Colors.transparent,
+  //                 ),
+  //                 color: Colors.transparent,
+  //               ),
+  //               child: Align(
+  //                 alignment: Alignment.centerRight,
+  //                 child: Padding(
+  //                   padding: const EdgeInsets.all(0.0),
+  //                   child: Image.asset(
+  //                     _controller.details.data?.isFollow == 1
+  //                         ? "assets/images/live_new_unfollow.png"
+  //                         : "assets/images/live_new_follow.png",
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //       const SizedBox(width: 8),
+  //     ],
+  //   );
+  // }
 
   Widget settingsColForCust() {
     return Column(
@@ -2146,7 +2214,7 @@ class _LivePage extends State<LiveDharamScreen>
                                   await _controller.updateHostAvailability();
                                 },
                                 child: SizedBox(
-                                  height: 84,
+                                  height: 84 - 50,
                                   width: 84,
                                   child: DecoratedBox(
                                     decoration: BoxDecoration(
@@ -2210,12 +2278,13 @@ class _LivePage extends State<LiveDharamScreen>
                                           Image.asset(
                                             "assets/images/live_call_btn.png",
                                           ),
-                                          Positioned(
-                                            top: 26,
+                                          const Positioned(
+                                            top: 28,
                                             left: 14,
+                                            right: 14,
                                             child: Column(
                                               children: [
-                                                const SizedBox(height: 8),
+                                                SizedBox(height: 8),
                                                 // callStack(),
                                               ],
                                             ),
@@ -2266,7 +2335,7 @@ class _LivePage extends State<LiveDharamScreen>
             ),
           ),
         ),
-        const SizedBox(width: 84),
+        const SizedBox(width: 100 - 16),
       ],
     );
   }
