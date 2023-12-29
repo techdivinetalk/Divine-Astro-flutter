@@ -70,7 +70,8 @@ class _LivePage extends State<LiveDharamScreen>
 
   final TextEditingController _editingController = TextEditingController();
 
-  final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollControllerForTop = ScrollController();
+  final ScrollController _scrollControllerForBottom = ScrollController();
 
   @override
   void initState() {
@@ -134,7 +135,8 @@ class _LivePage extends State<LiveDharamScreen>
     // unawaited(_zegocloudSubscription.cancel());
     // unawaited(_firebaseSubscription.cancel());
     // _editingController.dispose();
-    // _scrollController.dispose();
+    // _scrollControllerForTop.dispose();
+    // _scrollControllerForBottom.dispose();
     // WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
@@ -143,6 +145,7 @@ class _LivePage extends State<LiveDharamScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: PopScope(
         canPop: false,
         onPopInvoked: (pop) async {
@@ -165,12 +168,40 @@ class _LivePage extends State<LiveDharamScreen>
                       ..maxCoHostCount = 1
                       ..confirmDialogInfo = null
                       ..disableCoHostInvitationReceivedDialog = true
-                      ..audioVideoViewConfig = ZegoPrebuiltAudioVideoViewConfig(
-                        showUserNameOnView: false,
-                        showAvatarInAudioMode: true,
-                        useVideoViewAspectFill: true,
-                        showSoundWavesInAudioMode: true,
-                      )
+                      // ..audioVideoViewConfig = ZegoPrebuiltAudioVideoViewConfig(
+                      //   showUserNameOnView: false,
+                      //   showAvatarInAudioMode: true,
+                      //   useVideoViewAspectFill: true,
+                      //   showSoundWavesInAudioMode: true,
+                      // )
+                      ..audioVideoViewConfig.playCoHostAudio = (
+                        ZegoUIKitUser localUser,
+                        ZegoLiveStreamingRole localRole,
+                        ZegoUIKitUser coHost,
+                      ) {
+                        final callType = _controller.currentCaller.callType;
+                        //
+                        if (callType == "private") {
+                          if (ZegoLiveStreamingRole.host == localRole ||
+                              ZegoLiveStreamingRole.coHost == localRole) {
+                            return true;
+                          }
+                          return false;
+                        }
+                        return true;
+                      }
+                      ..audioVideoViewConfig.playCoHostVideo = (
+                        ZegoUIKitUser localUser,
+                        ZegoLiveStreamingRole localRole,
+                        ZegoUIKitUser coHost,
+                      ) {
+                        final callType = _controller.currentCaller.callType;
+                        //
+                        if (callType == "private" || callType == "audio") {
+                          return false;
+                        }
+                        return true;
+                      }
                       ..bottomMenuBarConfig = ZegoBottomMenuBarConfig(
                         showInRoomMessageButton: false,
                         hostButtons: <ZegoMenuBarButtonName>[],
@@ -613,7 +644,8 @@ class _LivePage extends State<LiveDharamScreen>
                 await _zegoController.message.send(msg);
                 _editingController.clear();
                 FocusManager.instance.primaryFocus?.unfocus();
-                scrollDown();
+                scrollDownForTop();
+                scrollDownForBottom();
               },
               cursorColor: Colors.white,
               style: const TextStyle(color: Colors.white),
@@ -625,7 +657,8 @@ class _LivePage extends State<LiveDharamScreen>
                     await _zegoController.message.send(msg);
                     _editingController.clear();
                     FocusManager.instance.primaryFocus?.unfocus();
-                    scrollDown();
+                    scrollDownForTop();
+                    scrollDownForBottom();
                   },
                   icon: Image.asset("assets/images/live_send_message_new.png"),
                 ),
@@ -723,8 +756,9 @@ class _LivePage extends State<LiveDharamScreen>
           reverse: true,
           shrinkWrap: true,
           // itemCount: messages.length,
-          itemCount: messages.isNotEmpty && messages.length >= 5 ? 5 : 0,
-          controller: _scrollController,
+          itemCount:
+              messages.isNotEmpty && messages.length >= 5 ? 5 : messages.length,
+          controller: _scrollControllerForBottom,
           itemBuilder: (BuildContext context, int index) {
             final ZegoInRoomMessage message = messages[index];
             final String zegoUser = message.user.id;
@@ -809,8 +843,10 @@ class _LivePage extends State<LiveDharamScreen>
                 : ListView.builder(
                     reverse: true,
                     shrinkWrap: true,
-                    itemCount: 1,
-                    controller: _scrollController,
+                    itemCount: messages.isNotEmpty && messages.length >= 1
+                        ? 1
+                        : messages.length,
+                    controller: _scrollControllerForTop,
                     itemBuilder: (BuildContext context, int index) {
                       final ZegoInRoomMessage message = messages[index];
                       final String zegoUser = message.user.id;
@@ -1519,29 +1555,39 @@ class _LivePage extends State<LiveDharamScreen>
     return Future<void>.value();
   }
 
-  void scrollDown() {
-    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+  void scrollDownForTop() {
+    _scrollControllerForTop
+        .jumpTo(_scrollControllerForTop.position.maxScrollExtent);
+    return;
+  }
+
+  void scrollDownForBottom() {
+    _scrollControllerForBottom
+        .jumpTo(_scrollControllerForBottom.position.maxScrollExtent);
     return;
   }
 
   Widget newAppBarLeft() {
-    return SizedBox(
-      height: 50,
-      width: 50,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(
-            Radius.circular(50.0),
+    return InkWell(
+      onTap: keyboardPop,
+      child: SizedBox(
+        height: 50,
+        width: 50,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(
+              Radius.circular(50.0),
+            ),
+            border: Border.all(
+              color: AppColors.appYellowColour,
+            ),
+            color: AppColors.black.withOpacity(0.2),
           ),
-          border: Border.all(
-            color: AppColors.appYellowColour,
-          ),
-          color: AppColors.black.withOpacity(0.2),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Image.asset(
-            "assets/images/live_new_chat_icon.png",
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset(
+              "assets/images/live_new_chat_icon.png",
+            ),
           ),
         ),
       ),
@@ -2542,5 +2588,99 @@ class _LivePage extends State<LiveDharamScreen>
       // } else {}
       await _controller.removeMyNode();
     } else {}
+  }
+
+  Future<void> keyboardPop() async {
+    // List<double> viewInsetsList = [];
+    await showModalBottomSheet(
+      context: context,
+      elevation: 0,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        // viewInsetsList.add(MediaQuery.of(context).viewInsets.bottom);
+        // final bool condition1 = viewInsetsList.length > 1;
+        // final bool condition2 = MediaQuery.of(context).viewInsets.bottom == 0.0;
+        // if (condition1 && condition2) {
+        //   if (mounted) {
+        //     Navigator.of(context).pop();
+        //   } else {}
+        // }
+        return Container(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              autofocus: true,
+              controller: _editingController,
+              onSubmitted: (String value) async {
+                final String msg = _editingController.value.text;
+                bool isSent = await _zegoController.message.send(msg);
+                print("send: $isSent");
+                _editingController.clear();
+                FocusManager.instance.primaryFocus?.unfocus();
+                scrollDownForTop();
+                scrollDownForBottom();
+                if (mounted) {
+                  Navigator.of(context).pop();
+                } else {}
+              },
+              cursorColor: AppColors.appYellowColour,
+              style: const TextStyle(color: AppColors.appYellowColour),
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+                suffixIcon: IconButton(
+                  onPressed: () async {
+                    final String msg = _editingController.value.text;
+                    bool isSent = await _zegoController.message.send(msg);
+                    print("send: $isSent");
+                    _editingController.clear();
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    scrollDownForTop();
+                    scrollDownForBottom();
+                    if (mounted) {
+                      Navigator.of(context).pop();
+                    } else {}
+                  },
+                  icon: Image.asset(
+                    "assets/images/live_send_message_new.png",
+                    color: AppColors.appYellowColour,
+                  ),
+                ),
+                floatingLabelBehavior: FloatingLabelBehavior.never,
+                filled: true,
+                fillColor: AppColors.white,
+                hintText: "Say Hi",
+                hintStyle: const TextStyle(color: AppColors.appYellowColour),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    width: 2,
+                    color: AppColors.appYellowColour,
+                  ),
+                  borderRadius: BorderRadius.circular(50.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    width: 2,
+                    color: AppColors.appYellowColour,
+                  ),
+                  borderRadius: BorderRadius.circular(50.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    width: 2,
+                    color: AppColors.appYellowColour,
+                  ),
+                  borderRadius: BorderRadius.circular(50.0),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+    return Future<void>.value();
   }
 }
