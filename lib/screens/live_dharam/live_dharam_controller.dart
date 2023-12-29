@@ -3,13 +3,10 @@
 import "dart:async";
 
 import "package:divine_astrologer/di/shared_preference_service.dart";
-import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/model/res_login.dart";
 import "package:divine_astrologer/repository/astrologer_profile_repository.dart";
-import 'package:divine_astrologer/screens/live_dharam/widgets/gift_cache.dart';
 import "package:firebase_database/firebase_database.dart";
 import "package:get/get.dart";
-import "package:get/get_connect/http/src/status/http_status.dart";
 //
 //
 //
