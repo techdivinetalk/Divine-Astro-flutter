@@ -432,7 +432,8 @@ class HomeUI extends GetView<HomeController> {
       stream: controller.broadcastReceiver.messages,
       builder: (context, broadcastSnapshot) {
         Map<String, dynamic>? data = broadcastSnapshot.data?.data;
-        return Container(
+        return data?["userName"] == null ? const SizedBox() :
+          Container(
           width: ScreenUtil().screenWidth,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
