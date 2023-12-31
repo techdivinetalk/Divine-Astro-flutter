@@ -1,7 +1,7 @@
 // import "dart:ui";
 
-// import "package:divine_astrologer/common/colors.dart";
-// import "package:divine_astrologer/model/astrologer_profile/insufficient_bal_model.dart";
+// import "package:divine_app/common/colors.dart";
+// import "package:divine_app/model/astrologer_profile/insufficient_bal_model.dart";
 // import "package:dynamic_height_grid_view/dynamic_height_grid_view.dart";
 // import "package:flutter/material.dart";
 // import "package:get/get.dart";
@@ -70,7 +70,7 @@
 //               topLeft: Radius.circular(50.0),
 //               topRight: Radius.circular(50.0),
 //             ),
-//             border: Border.all(color: AppColors.appYellowColour),
+//             border: Border.all(color: AppColors.yellow),
 //             color: AppColors.white,
 //           ),
 //           child: grid(),
@@ -84,7 +84,7 @@
 //       padding: const EdgeInsets.all(16.0),
 //       child: Column(
 //         children: <Widget>[
-//           const SizedBox(height: 16),
+//           const SizedBox(height: 32),
 //           Image.asset("assets/images/live_new_wallet.png"),
 //           const SizedBox(height: 16),
 //           const Text("Low Balance!"),
@@ -121,7 +121,7 @@
 //                               topRight: Radius.circular(10.0),
 //                             ),
 //                             border: Border.all(
-//                               color: AppColors.appYellowColour,
+//                               color: AppColors.yellow,
 //                             ),
 //                             color: AppColors.white.withOpacity(0.2),
 //                           ),
@@ -143,9 +143,9 @@
 //                               bottomRight: Radius.circular(10.0),
 //                             ),
 //                             border: Border.all(
-//                               color: AppColors.appYellowColour,
+//                               color: AppColors.yellow,
 //                             ),
-//                             color: AppColors.appYellowColour,
+//                             color: AppColors.yellow,
 //                           ),
 //                           child: Center(
 //                             child: Text(

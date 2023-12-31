@@ -73,14 +73,14 @@ class _DisconnectWidgetState extends State<DisconnectWidget> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
-          height: Get.height / 2.24,
+          // height: Get.height / 2.24,
           width: Get.width,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: AppColors.appYellowColour),
+            border: Border.all(color: AppColors.yellow),
             color: AppColors.white,
           ),
           child: grid(),
@@ -94,7 +94,7 @@ class _DisconnectWidgetState extends State<DisconnectWidget> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: <Widget>[
-          const SizedBox(height: 16),
+          const SizedBox(height: 32),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
@@ -121,7 +121,7 @@ class _DisconnectWidgetState extends State<DisconnectWidget> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           const Text(
             "Disconnect Call?",
             style: TextStyle(
@@ -130,17 +130,17 @@ class _DisconnectWidgetState extends State<DisconnectWidget> {
               color: Colors.red,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           Text(
             "Are you Sure you want to disconnect the call with ${!widget.isAstro ? widget.astroUserName : widget.custoUserName}?",
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           CommonButton(
             buttonText: "No, Continue the Call",
             buttonCallback: widget.noDisconnect,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           TextButton(
             onPressed: widget.yesDisconnect,
             child: const Text(
@@ -152,6 +152,7 @@ class _DisconnectWidgetState extends State<DisconnectWidget> {
               ),
             ),
           ),
+          const SizedBox(height: 16),
         ],
       ),
     );

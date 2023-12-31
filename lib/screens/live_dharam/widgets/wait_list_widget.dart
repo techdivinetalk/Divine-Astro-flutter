@@ -94,7 +94,7 @@ class _WaitListWidgetState extends State<WaitListWidget> {
                   topLeft: Radius.circular(50.0),
                   topRight: Radius.circular(50.0),
                 ),
-                border: Border.all(color: AppColors.appYellowColour),
+                border: Border.all(color: AppColors.yellow),
                 color: AppColors.white,
               ),
               child: grid(),

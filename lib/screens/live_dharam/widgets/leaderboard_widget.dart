@@ -69,7 +69,7 @@
 //               topLeft: Radius.circular(50.0),
 //               topRight: Radius.circular(50.0),
 //             ),
-//             border: Border.all(color: AppColors.appYellowColour),
+//             border: Border.all(color: AppColors.yellow),
 //             color: AppColors.white.withOpacity(0.2),
 //           ),
 //           child: grid(),
@@ -88,7 +88,7 @@
 //           margin: const EdgeInsets.all(16.0),
 //           decoration: BoxDecoration(
 //             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-//             border: Border.all(color: AppColors.appYellowColour),
+//             border: Border.all(color: AppColors.yellow),
 //             color: AppColors.white,
 //           ),
 //           child: ListTile(
@@ -156,13 +156,11 @@ import "package:get/get.dart";
 class LeaderboardWidget extends StatefulWidget {
   const LeaderboardWidget({
     required this.onClose,
-    // required this.list,
     required this.liveId,
     super.key,
   });
 
   final void Function() onClose;
-  // final List<LeaderboardModel> list;
   final String liveId;
 
   @override
@@ -223,7 +221,7 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: AppColors.appYellowColour),
+            border: Border.all(color: AppColors.yellow),
             color: AppColors.white.withOpacity(0.2),
           ),
           child: grid(),
@@ -244,6 +242,7 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
         return leaderboardModel.isEmpty
             ? const SizedBox()
             : ListView.builder(
+                shrinkWrap: true,
                 itemCount: leaderboardModel.length,
                 padding: EdgeInsets.zero,
                 itemBuilder: (BuildContext context, int index) {
@@ -251,9 +250,10 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
                   return Container(
                     margin: const EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(50.0)),
-                      border: Border.all(color: AppColors.appYellowColour),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(50.0),
+                      ),
+                      border: Border.all(color: AppColors.yellow),
                       color: AppColors.white,
                     ),
                     child: ListTile(
@@ -278,7 +278,9 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
                                   )
                                 : null,
                             child: (index != 0 && index != 1 && index != 2)
-                                ? Text(index.toString())
+                                ? Text(
+                                    index.toString(),
+                                  )
                                 : null,
                           ),
                           const SizedBox(width: 16),
@@ -286,7 +288,9 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
                             height: 50,
                             width: 50,
                             child: CustomImageWidget(
-                                imageUrl: item.avatar, rounded: true),
+                              imageUrl: item.avatar,
+                              rounded: true,
+                            ),
                           ),
                         ],
                       ),

@@ -75,7 +75,7 @@
 //               topLeft: Radius.circular(50.0),
 //               topRight: Radius.circular(50.0),
 //             ),
-//             border: Border.all(color: AppColors.appYellowColour),
+//             border: Border.all(color: AppColors.yellow),
 //             color: AppColors.white.withOpacity(0.2),
 //           ),
 //           child: Column(
@@ -116,7 +116,7 @@
 //           padding: const EdgeInsets.all(8.0),
 //           decoration: BoxDecoration(
 //             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-//             border: Border.all(color: AppColors.appYellowColour),
+//             border: Border.all(color: AppColors.yellow),
 //             color: AppColors.white.withOpacity(0.2),
 //           ),
 //           child: Row(
@@ -167,7 +167,7 @@
 //           "₹ $amount",
 //           style: const TextStyle(
 //             fontSize: 16,
-//             color: AppColors.appYellowColour,
+//             color: AppColors.yellow,
 //           ),
 //         ),
 //       ],
@@ -183,7 +183,7 @@
 //         width: 24,
 //         decoration: const BoxDecoration(
 //           shape: BoxShape.circle,
-//           color: AppColors.appYellowColour,
+//           color: AppColors.yellow,
 //         ),
 //         child: Icon(iconData),
 //       ),
