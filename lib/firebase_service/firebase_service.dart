@@ -14,6 +14,7 @@ import "package:flutter/material.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 
+import "../model/chat_offline_model.dart";
 import "../screens/live_page/constant.dart";
 
 class AppFirebaseService {
@@ -38,9 +39,13 @@ class AppFirebaseService {
       debugPrint("Error writing data to the database: $e");
     }
   }
-
+  HiveServices hiveServices = HiveServices(boxName: userChatData);
+  String tableName = "";
   readData(String path) async {
     try {
+      var chatMessages = <ChatMessage>[].obs;
+      var databaseMessage = ChatMessagesOffline().obs;
+      await hiveServices.initialize();
       _database.child(path).onValue.listen((event) async {
         debugPrint("real time $path ---> ${event.snapshot.value}");
         if (preferenceService.getToken() == null || preferenceService.getToken() == "") {
@@ -49,29 +54,47 @@ class AppFirebaseService {
         if (event.snapshot.value is Map<Object?, Object?>) {
           Map<String, dynamic>? realTimeData =
               Map<String, dynamic>.from(event.snapshot.value! as Map<Object?, Object?>);
+          if (realTimeData["engageId"] != null) {
+            tableName = "chat_${realTimeData["engageId"]}";
+            debugPrint("tableName ${tableName}");
+          }
+          var res = await hiveServices.getData(key: tableName);
+          debugPrint("res dfsd $res");
+          if (res != null) {
+            var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
+            chatMessages.value = msg.chatMessages ?? [];
+            databaseMessage.value.chatMessages = chatMessages;
+            debugPrint("msg.chatMessages ${msg.chatMessages?.length}");
+          }
+          if (realTimeData["notification"] != null) {
+            final HiveServices hiveServices = HiveServices(boxName: userChatData);
+            await hiveServices.initialize();
+            realTimeData["notification"].forEach((key, notificationData) async {
 
+              if (notificationData["type"] == 2) {
+                final Map<String, dynamic> chatListMap = jsonDecode(notificationData["chatList"]);
+                final ChatMessage chatMessage = ChatMessage.fromOfflineJson(chatListMap);
+                chatMessages.add(chatMessage);
+                databaseMessage.value.chatMessages = chatMessages;
+                await hiveServices.addData(key: tableName, data: jsonEncode(databaseMessage.value.toOfflineJson()));
+              }
+
+            //   debugPrint("local notification $notificationData");
+            //   if (notificationData != null) {
+            //     showNotificationWithActions(
+            //         title: notificationData["value"] ?? "",
+            //         message: notificationData["message"] ?? "",
+            //         payload: notificationData,
+            //         hiveServices: hiveServices);
+            //   }
+             });
+            FirebaseDatabase.instance.ref("$path/notification").remove();
+          }
           if (realTimeData['callKundli'] != null) {
             Map<String, dynamic>? callKundli =
                 Map<String, dynamic>.from(realTimeData['callKundli'] as Map<Object?, Object?>);
             sendBroadcast(BroadcastMessage(name: "callKundli", data: callKundli));
           }
-
-          if (realTimeData["notification"] != null) {
-            final HiveServices hiveServices = HiveServices(boxName: userChatData);
-            await hiveServices.initialize();
-            realTimeData["notification"].forEach((key, notificationData) {
-              debugPrint("local notification $notificationData");
-              if (notificationData != null) {
-                showNotificationWithActions(
-                    title: notificationData["value"] ?? "",
-                    message: notificationData["message"] ?? "",
-                    payload: notificationData,
-                    hiveServices: hiveServices);
-              }
-            });
-            FirebaseDatabase.instance.ref("$path/notification").remove();
-          }
-
           if (realTimeData["uniqueId"] != null) {
             String uniqueId = await getDeviceId() ?? "";
             debugPrint('check uniqueId ${realTimeData['uniqueId']}\ngetDeviceId ${uniqueId.toString()}');

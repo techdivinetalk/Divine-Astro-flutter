@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
@@ -5,9 +7,11 @@ import 'package:divine_astrologer/firebase_options.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -17,16 +21,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
+import 'common/app_exception.dart';
 import 'common/app_theme.dart';
 import 'common/colors.dart';
 import 'common/common_functions.dart';
 import 'common/custom_progress_dialog.dart';
 import 'common/routes.dart';
 import 'common/strings.dart';
+import 'di/api_provider.dart';
+import 'di/fcm_notification.dart';
 import 'di/firebase_network_service.dart';
 import 'di/network_service.dart';
 import 'di/progress_service.dart';
 import 'di/shared_preference_service.dart';
+import 'firebase_service/firebase_service.dart';
 import 'gen/fonts.gen.dart';
 import 'localization/translations.dart';
 import 'utils/utils.dart';
@@ -34,14 +42,13 @@ import 'utils/utils.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  initMessaging();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await GetStorage.init();
-
   await initServices();
   Get.put(UserRepository());
   var data = await userRepository.constantDetailsData();
   preferenceService.setConstantDetails(data);
-  await initServices();
 
   GiftsSingleton().init();
 
@@ -54,6 +61,7 @@ Future<void> main() async {
     runApp(const MyApp());
   });
 }
+
 
 Future<bool> saveLanguage(String? lang) async {
   final box = GetStorage();
@@ -77,12 +85,39 @@ Future<void> initServices() async {
   await Hive.initFlutter();
 }
 
-@pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  debugPrint("Handling a background message: ${message.messageId}");
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseDatabase.instance.ref("demo").child("path").child("astro").set("${message.data}");
+  showNotification(message.data["title"],message.data["message"]);
+  var path = 'user/${message.data["userid"]}/realTime';
+  await AppFirebaseService().readData(path);
+  //debugPrint("Handling a background message: ${message.messageId}");
 }
+Future<void> showNotification(String title,String message) async {
+  const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
+    "DivineAstrologer",
+    "AstrologerNotification",
+    importance: Importance.high,
+  );
+  const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
+  await flutterLocalNotificationsPlugin
+      .show(math.Random().nextInt(10000), title, message, notificationDetails, payload: "jsonEncodePayload");
+}
+void initMessaging() async {
+  const AndroidInitializationSettings initializationSettingsAndroid =
+  AndroidInitializationSettings("@mipmap/ic_launcher");
+  const DarwinInitializationSettings initializationSettingsDarwin =
+  DarwinInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
+  const InitializationSettings initializationSettings =
+  InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsDarwin);
+  flutterLocalNotificationsPlugin.initialize(initializationSettings,
+      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
+
+  FirebaseMessaging.instance.onTokenRefresh.listen((token) async {
+    print("fcm token ${token}");
+  });
+}
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
