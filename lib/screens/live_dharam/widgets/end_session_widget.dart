@@ -62,14 +62,14 @@ class _EndSessionWidgetState extends State<EndSessionWidget> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
-          height: Get.height / 2.24,
+          // height: Get.height / 2.24,
           width: Get.width,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: AppColors.appYellowColour),
+            border: Border.all(color: AppColors.yellow),
             color: AppColors.white,
           ),
           child: grid(),
@@ -85,7 +85,6 @@ class _EndSessionWidgetState extends State<EndSessionWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const SizedBox(height: 16),
-          const SizedBox(height: 16),
           SizedBox(
             height: 50,
             width: 50,
@@ -93,9 +92,9 @@ class _EndSessionWidgetState extends State<EndSessionWidget> {
               "assets/images/live_end_session.png",
             ),
           ),
-          const SizedBox(height: 16 + 8),
+          const SizedBox(height: 16),
           const Text("Are you Sure you want to end the Live Session?"),
-          const SizedBox(height: 16 + 8),
+          const SizedBox(height: 16),
           CommonButton(
             buttonText: "No, Continue the Live",
             buttonCallback: widget.continueLive,
@@ -112,6 +111,7 @@ class _EndSessionWidgetState extends State<EndSessionWidget> {
               ),
             ),
           ),
+          const SizedBox(height: 16),
         ],
       ),
     );

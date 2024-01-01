@@ -78,7 +78,7 @@
 //                   topLeft: Radius.circular(50.0),
 //                   topRight: Radius.circular(50.0),
 //                 ),
-//                 border: Border.all(color: AppColors.appYellowColour),
+//                 border: Border.all(color: AppColors.yellow),
 //                 color: AppColors.white,
 //               ),
 //               child: grid(),
@@ -199,9 +199,8 @@
 //       subtitle: Text(subtitle),
 //       trailing: ElevatedButton(
 //         style: ButtonStyle(
-//           backgroundColor: MaterialStateProperty.all(
-//             AppColors.appYellowColour,
-//           ),
+//           elevation: MaterialStateProperty.all(4),
+//           backgroundColor: MaterialStateProperty.all(AppColors.yellow),
 //           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
 //             const RoundedRectangleBorder(
 //               borderRadius: BorderRadius.all(Radius.circular(50.0)),
@@ -228,36 +227,31 @@
 //     required int originalAmount,
 //   }) {
 //     return (discountAmount == 0)
-//         ? Row(
-//             children: <Widget>[
-//               Expanded(
-//                 flex: 2,
-//                 child: Text("$type Call @ ₹$originalAmount/Min"),
-//               ),
-//             ],
+//         ? Text(
+//             "$type Call @ ₹$originalAmount/Min",
+//             style: const TextStyle(
+//               fontWeight: FontWeight.bold,
+//             ),
 //           )
 //         : Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //             children: <Widget>[
-//               Expanded(
-//                 flex: 3,
-//                 child: Text(
-//                   "$type Call @ ₹$discountAmount/Min",
-//                   style: const TextStyle(
-//                     fontWeight: FontWeight.bold,
-//                   ),
+//               Text(
+//                 "$type Call @ ₹$discountAmount/Min",
+//                 style: const TextStyle(
+//                   fontWeight: FontWeight.bold,
 //                 ),
 //               ),
 //               const SizedBox(width: 4.0),
-//               Expanded(
-//                 child: Text(
-//                   "₹$originalAmount/Min",
-//                   style: const TextStyle(
-//                     fontSize: 10,
-//                     decoration: TextDecoration.lineThrough,
-//                     decorationColor: Colors.red,
-//                   ),
+//               Text(
+//                 "₹$originalAmount/Min",
+//                 style: const TextStyle(
+//                   fontSize: 10,
+//                   decoration: TextDecoration.lineThrough,
+//                   decorationColor: Colors.red,
 //                 ),
 //               ),
+//               const SizedBox(width: 4.0),
 //             ],
 //           );
 //   }

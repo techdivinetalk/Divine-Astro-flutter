@@ -74,14 +74,14 @@ class _CallAcceptOrRejectWidgetState extends State<CallAcceptOrRejectWidget> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
-          height: Get.height / 2.24,
+          // height: Get.height / 2.24,
           width: Get.width,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: AppColors.appYellowColour),
+            border: Border.all(color: AppColors.yellow),
             color: AppColors.white,
           ),
           child: grid(),
@@ -94,10 +94,17 @@ class _CallAcceptOrRejectWidgetState extends State<CallAcceptOrRejectWidget> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        SizedBox(
-          height: 100,
-          width: 100,
-          child: CustomImageWidget(imageUrl: widget.avatar, rounded: true),
+        const SizedBox(height: 16),
+        ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+          child: SizedBox(
+            height: 100,
+            width: 100,
+            child: CustomImageWidget(
+              imageUrl: widget.avatar,
+              rounded: false,
+            ),
+          ),
         ),
         const SizedBox(height: 16),
         Text("${widget.userName} wants to start the call"),
@@ -130,6 +137,7 @@ class _CallAcceptOrRejectWidgetState extends State<CallAcceptOrRejectWidget> {
             const SizedBox(width: 16),
           ],
         ),
+        const SizedBox(height: 16),
       ],
     );
   }

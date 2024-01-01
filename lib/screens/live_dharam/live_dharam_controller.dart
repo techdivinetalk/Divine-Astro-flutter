@@ -3,13 +3,10 @@
 import "dart:async";
 
 import "package:divine_astrologer/di/shared_preference_service.dart";
-import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/model/res_login.dart";
 import "package:divine_astrologer/repository/astrologer_profile_repository.dart";
-import 'package:divine_astrologer/screens/live_dharam/widgets/gift_cache.dart';
 import "package:firebase_database/firebase_database.dart";
 import "package:get/get.dart";
-import "package:get/get_connect/http/src/status/http_status.dart";
 //
 //
 //
@@ -1129,4 +1126,67 @@ class WaitListModel {
   final String avatar;
   final String userName;
   final String id;
+}
+
+// class CustomMessage {
+//   final String userId;
+//   final String userName;
+//   final String avatar;
+//   final String message;
+//   final DateTime timeStamp;
+//   final String giftName;
+
+//   CustomMessage({
+//     required this.userId,
+//     required this.userName,
+//     required this.avatar,
+//     required this.message,
+//     required this.timeStamp,
+//     required this.giftName,
+//   });
+// }
+
+class ZegoCustomMessage {
+  int? type;
+  String? liveId;
+  String? userId;
+  String? userName;
+  String? avatar;
+  String? message;
+  String? timeStamp;
+  String? fullGiftImage;
+
+  ZegoCustomMessage(
+      {this.type,
+      this.liveId,
+      this.userId,
+      this.userName,
+      this.avatar,
+      this.message,
+      this.timeStamp,
+      this.fullGiftImage});
+
+  ZegoCustomMessage.fromJson(Map<String, dynamic> json) {
+    type = json['type'];
+    liveId = json['liveId'];
+    userId = json['userId'];
+    userName = json['userName'];
+    avatar = json['avatar'];
+    message = json['message'];
+    timeStamp = json['timeStamp'];
+    fullGiftImage = json['fullGiftImage'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['type'] = this.type;
+    data['liveId'] = this.liveId;
+    data['userId'] = this.userId;
+    data['userName'] = this.userName;
+    data['avatar'] = this.avatar;
+    data['message'] = this.message;
+    data['timeStamp'] = this.timeStamp;
+    data['fullGiftImage'] = this.fullGiftImage;
+    return data;
+  }
 }

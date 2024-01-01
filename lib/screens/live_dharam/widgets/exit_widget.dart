@@ -65,14 +65,14 @@ class _ExitWidgetState extends State<ExitWidget> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
-          height: Get.height / 2.24,
+          // height: Get.height / 2.24,
           width: Get.width,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: AppColors.appYellowColour),
+            border: Border.all(color: AppColors.yellow),
             color: AppColors.white,
           ),
           child: grid(),
@@ -87,6 +87,7 @@ class _ExitWidgetState extends State<ExitWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          const SizedBox(height: 16),
           SizedBox(
             height: 100,
             width: 100,
@@ -95,23 +96,22 @@ class _ExitWidgetState extends State<ExitWidget> {
               rounded: true,
             ),
           ),
-          const SizedBox(height: 8),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           const Text("Would you like to follow"),
-          const SizedBox(height: 8),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           Text(
             widget.astrologerUserName,
             style: const TextStyle(
               fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 8),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           CommonButton(
             buttonText: "Yes, Follow",
             buttonCallback: widget.onClose,
-          )
+          ),
+          const SizedBox(height: 16),
         ],
       ),
     );

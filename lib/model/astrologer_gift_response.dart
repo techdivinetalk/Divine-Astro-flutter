@@ -44,6 +44,8 @@ class GiftData {
   int giftStatus;
   DateTime createdAt;
   DateTime updatedAt;
+  String fullGiftImage;
+  String animation;
 
   GiftData({
     required this.id,
@@ -53,6 +55,8 @@ class GiftData {
     required this.giftStatus,
     required this.createdAt,
     required this.updatedAt,
+    required this.fullGiftImage,
+    required this.animation,
   });
 
   factory GiftData.fromJson(Map<String, dynamic> json) => GiftData(
@@ -63,6 +67,8 @@ class GiftData {
         giftStatus: json["gift_status"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
+        fullGiftImage: json["full_gift_image"],
+        animation: json["animation"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -73,5 +79,7 @@ class GiftData {
         "gift_status": giftStatus,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
+        "full_gift_image": fullGiftImage,
+        "animation": animation,
       };
 }
