@@ -75,9 +75,10 @@ class OrderHistoryController extends GetxController {
       /// type 4 means suggest remedies
       "type": type,
       "page": page,
-      "device_token": "flK0vjuwShCgrDVctAlgYb:APA91bHGpnRlw04TwyHThWnR0c7LFQYV5CfqVFQDsHhVZVyuKazeLwxxjwxcfRcicIKvrr2ZaQnLkXQvoFomKuS-TZ7n7sKfVyfJiT3Cv4MTSaKO-LCYMWvoVHY_txFAFWFmy7NEn4mf",
-      "start_date": "2023-02-06",
-      "end_date": "2023-08-06"
+      "device_token": preferenceService.getDeviceToken(),
+      //"flK0vjuwShCgrDVctAlgYb:APA91bHGpnRlw04TwyHThWnR0c7LFQYV5CfqVFQDsHhVZVyuKazeLwxxjwxcfRcicIKvrr2ZaQnLkXQvoFomKuS-TZ7n7sKfVyfJiT3Cv4MTSaKO-LCYMWvoVHY_txFAFWFmy7NEn4mf",
+      // "start_date": "2023-02-06",
+      // "end_date": "2023-08-06"
     };
 
     /*Map<String, String> headers = {
