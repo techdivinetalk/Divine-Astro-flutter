@@ -277,30 +277,37 @@ class HomeUI extends GetView<HomeController> {
                       // SizedBox(height: 10.h),
                       // availableFeedbackWidget(controller.feedbackResponse ?? FeedbackData()),
                       // SizedBox(height: 10.h),
-                      GestureDetector(
-                        onTap: () {
-                          Get.toNamed(RouteName.noticeBoard);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "noticeBoard".tr,
-                              style: AppTextStyle.textStyle16(
-                                  fontColor: AppColors.darkBlue,
-                                  fontWeight: FontWeight.w400),
+                      controller.homeData?.noticeBoard == null ? const SizedBox() :
+                      Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(RouteName.noticeBoard);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "noticeBoard".tr,
+                                  style: AppTextStyle.textStyle16(
+                                      fontColor: AppColors.darkBlue,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                Text(
+                                  "viewAll".tr,
+                                  style: AppTextStyle.textStyle12(
+                                      fontColor: AppColors.darkBlue,
+                                      fontWeight: FontWeight.w400),
+                                )
+                              ],
                             ),
-                            Text(
-                              "viewAll".tr,
-                              style: AppTextStyle.textStyle12(
-                                  fontColor: AppColors.darkBlue,
-                                  fontWeight: FontWeight.w400),
-                            )
-                          ],
-                        ),
+                          ),
+                          SizedBox(height: 10.h),
+                          noticeBoardWidget(),
+                        ],
                       ),
-                      SizedBox(height: 10.h),
-                      senderCategoryWidget(),
+                      // SizedBox(height: 10.h),
+                      // noticeBoardWidget(),
                       SizedBox(height: 10.h),
                       viewKundliWidget(),
                       SizedBox(height: 10.h),
@@ -561,7 +568,7 @@ class HomeUI extends GetView<HomeController> {
     );
   }
 
-  Widget senderCategoryWidget() {
+  Widget noticeBoardWidget() {
     return ClipRRect(
       borderRadius: BorderRadius.all(Radius.circular(20.r)),
       child: Material(
@@ -606,7 +613,7 @@ class HomeUI extends GetView<HomeController> {
                               fontColor: AppColors.darkBlue),
                         ),
                         SizedBox(
-                          width: 30.w,
+                          width: 10.w,
                         ),
                         GestureDetector(
                             onTap: () {

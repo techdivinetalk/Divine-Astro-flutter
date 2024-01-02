@@ -53,6 +53,7 @@ class ApiProvider {
   final String getOrderHistoryUrl = "getOrderHistory";
   final String reviewReplyUrl = "reviewReply";
   final String astroNoticeBoard = "astroNoticeBoard";
+  final String getAstroAllNotice = "getAstroAllNotice";
   final String getSpecialityList = "getSpecialityList";
   final String updateProfileDetails = "updateProfileDetails";
   final String uploadAstroStories = "uploadAstroStories";

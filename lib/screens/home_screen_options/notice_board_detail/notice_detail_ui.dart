@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../../common/common_bottomsheet.dart';
 import 'notice_detail_controller.dart';
 
 class NoticeDetailUi extends GetView<NoticeDetailController> {
@@ -30,7 +31,8 @@ class NoticeDetailUi extends GetView<NoticeDetailController> {
         trailingWidget: Container(
           margin: EdgeInsets.only(right: 20.sp),
           child: Text(
-            '${formatTime(data.scheduleTime)} ${formatDateTime(data.scheduleDate)}',
+            '${dateToString(data.createdAt ?? DateTime.now(), format: "h:mm a")}  '
+                '${formatDateTime(data.createdAt ?? DateTime.now())} ',
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 10.sp,
