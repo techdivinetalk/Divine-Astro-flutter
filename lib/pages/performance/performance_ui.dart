@@ -879,11 +879,15 @@ class OverAllScoreData extends GetView<PerformanceController> {
                       ),
                       Row(
                         children: [
-                          Assets.images.icDiamond
-                              .image(height: 21.h, width: 21.h),
-                          SizedBox(
-                            width: 10.w,
-                          ),
+                          setImage(performanceFilterResponse?.data?.rank ?? "") ??
+                              SizedBox(
+                                width: 10.w,
+                              ),
+                          // Assets.images.icDiamond
+                          //     .image(height: 21.h, width: 21.h),
+                          // SizedBox(
+                          //   width: 10.w,
+                          // ),
                           Text(
                             performanceFilterResponse?.data?.rank ?? '-',
                             style: AppTextStyle.textStyle12(
@@ -908,6 +912,23 @@ class OverAllScoreData extends GetView<PerformanceController> {
         ),
       ),
     );
+  }
+}
+
+setImage(String rank) {
+  if (rank == "Diamond") {
+    return Assets.images.icDiamond.image(height: 21.h, width: 21.h);
+  } else if (rank == "Platinum") {
+    return Assets.images.icPlatinum.image(height: 21.h, width: 21.h);
+  } else if (rank == "Gold") {
+    return Assets.images.icGold.image(height: 21.h, width: 21.h);
+  } else if (rank == "Silver") {
+    return Assets.images.icSilver.image(height: 21.h, width: 21.h);
+  } else if (rank == "Bronze") {
+    return Assets.images.icBronze.image(height: 21.h, width: 21.h);
+  }
+  else {
+    return SizedBox(width: 10.w,);
   }
 }
 

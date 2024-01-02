@@ -72,6 +72,7 @@ class ApiProvider {
   final String getDonationList = "getDonationList";
   final String updateSessionType = "updateSessionType";
   final String updateOfferFlag = "updateOfferFlag";
+  final String customOfferManage = "customOfferManage";
 
   //Astro Internal API
   final String horoChartImageInt = "getChartImage/";

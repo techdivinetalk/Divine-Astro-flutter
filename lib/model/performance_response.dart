@@ -62,12 +62,12 @@ class Data {
 }
 
 class TodaysAvailiblity {
-  int? availableChat;
-  int? availableCall;
-  int? availableLive;
-  int? busyChat;
-  int? busyCall;
-  int? busyLive;
+  dynamic? availableChat;
+  dynamic? availableCall;
+  dynamic? availableLive;
+  dynamic? busyChat;
+  dynamic? busyCall;
+  dynamic? busyLive;
 
   TodaysAvailiblity(
       {this.availableChat,
@@ -99,11 +99,11 @@ class TodaysAvailiblity {
 }
 
 class Last30DaysAvailiblity {
-  int? availableChat;
-  int? availableCall;
-  int? busyChat;
-  int? busyCall;
-  int? availableLive;
+  dynamic? availableChat;
+  dynamic? availableCall;
+  dynamic? busyChat;
+  dynamic? busyCall;
+  dynamic? availableLive;
 
   Last30DaysAvailiblity(
       {this.availableChat,
