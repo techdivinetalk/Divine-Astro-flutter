@@ -8,6 +8,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../../common/common_bottomsheet.dart';
+import '../../../model/notice_response.dart';
 import 'notice_board_controller.dart';
 
 class NoticeBoardUi extends GetView<NoticeBoardController> {
@@ -51,7 +53,7 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
                               arguments: data, parameters: {"from_list": "1"});
                         },
                         title: data.title.toString(),
-                        date: data.getTimeAndDate(),
+                        date: data.createdAt,
                         description: data.description.toString(),
                       ),
                       separator,
@@ -70,7 +72,7 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
 
   Widget noticeBoardDetail({
     required String? title,
-    required String? date,
+    required DateTime? date,
     required String? description,
     required VoidCallback? onTap,
   }) =>
@@ -101,11 +103,12 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
                         fontColor: AppColors.darkBlue),
                   ),
                   Text(
-                    date ?? "",
+                    '${dateToString(date ?? DateTime.now(), format: "h:mm a")}  '
+                        '${formatDateTime(date ?? DateTime.now())} ',
                     style: AppTextStyle.textStyle10(
                         fontWeight: FontWeight.w400,
                         fontColor: AppColors.darkBlue),
-                  )
+                  ),
                 ],
               ),
               const SizedBox(height: 10),

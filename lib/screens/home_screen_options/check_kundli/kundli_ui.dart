@@ -101,47 +101,47 @@ class KundliUi extends GetView<KundliController> {
                     ),
                   ),
                   SizedBox(height: 30.h),
-                  Card(
-                    margin: EdgeInsets.symmetric(horizontal: 48.w),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(35)),
-                    child: Center(
-                      child: TabBar(
-                        indicatorWeight: 0.0,
-                        isScrollable: false,
-                        labelColor: AppColors.brown,
-                        unselectedLabelColor: AppColors.black,
-                        dividerColor: AppColors.transparent,
-                        labelPadding: EdgeInsets.zero,
-                        splashBorderRadius: BorderRadius.circular(28),
-                        padding: EdgeInsets.symmetric(
-                            vertical: 12.h, horizontal: 12.w),
-                        labelStyle: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14.sp,
-                          color: AppColors.darkBlue,
-                          fontFamily: FontFamily.poppins,
-                        ),
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        indicator: BoxDecoration(
-                          color: AppColors.yellow,
-                          borderRadius: BorderRadius.circular(28),
-                        ),
-                        tabs: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 25.w),
-                            child: const Tab(text: 'Add yours'),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 25.w),
-                            child: const Tab(
-                              text: 'Add Others',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  // Card(
+                  //   margin: EdgeInsets.symmetric(horizontal: 48.w),
+                  //   shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(35)),
+                  //   child: Center(
+                  //     child: TabBar(
+                  //       indicatorWeight: 0.0,
+                  //       isScrollable: false,
+                  //       labelColor: AppColors.brown,
+                  //       unselectedLabelColor: AppColors.black,
+                  //       dividerColor: AppColors.transparent,
+                  //       labelPadding: EdgeInsets.zero,
+                  //       splashBorderRadius: BorderRadius.circular(28),
+                  //       padding: EdgeInsets.symmetric(
+                  //           vertical: 12.h, horizontal: 12.w),
+                  //       labelStyle: TextStyle(
+                  //         fontWeight: FontWeight.w500,
+                  //         fontSize: 14.sp,
+                  //         color: AppColors.darkBlue,
+                  //         fontFamily: FontFamily.poppins,
+                  //       ),
+                  //       indicatorSize: TabBarIndicatorSize.tab,
+                  //       indicator: BoxDecoration(
+                  //         color: AppColors.yellow,
+                  //         borderRadius: BorderRadius.circular(28),
+                  //       ),
+                  //       tabs: [
+                  //         Padding(
+                  //           padding: EdgeInsets.symmetric(horizontal: 25.w),
+                  //           child: const Tab(text: 'Add yours'),
+                  //         ),
+                  //         Padding(
+                  //           padding: EdgeInsets.symmetric(horizontal: 25.w),
+                  //           child: const Tab(
+                  //             text: 'Add Others',
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                   const SizedBox(
                     height: 380,
                     child: TabBarView(
@@ -188,7 +188,7 @@ class CheckYours extends GetView<KundliController> {
                           return null;
                         },
                         prefixIcon: Assets.images.icUser.svg(),
-                        hintText: "enterName".tr,
+                        hintText: "Enter Name",
                         onTap: () {},
                       ),
                       // Row(
@@ -428,7 +428,7 @@ class CheckYours extends GetView<KundliController> {
                     }
                   },
                   child: Text(
-                    'Add Kundali',
+                    'Check Kundali',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 20.sp,
