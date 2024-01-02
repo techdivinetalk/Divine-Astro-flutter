@@ -643,7 +643,7 @@ class UserRepository extends ApiProvider {
   Future<UpdateOfferResponse> updateOfferTypeApi(
       Map<String, dynamic> params) async {
     try {
-      final response = await post(updateOfferFlag,
+      final response = await post(customOfferManage,
           body: jsonEncode(params), headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
