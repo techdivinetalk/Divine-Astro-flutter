@@ -277,30 +277,37 @@ class HomeUI extends GetView<HomeController> {
                       // SizedBox(height: 10.h),
                       // availableFeedbackWidget(controller.feedbackResponse ?? FeedbackData()),
                       // SizedBox(height: 10.h),
-                      GestureDetector(
-                        onTap: () {
-                          Get.toNamed(RouteName.noticeBoard);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "noticeBoard".tr,
-                              style: AppTextStyle.textStyle16(
-                                  fontColor: AppColors.darkBlue,
-                                  fontWeight: FontWeight.w400),
+                      controller.homeData?.noticeBoard == null ? const SizedBox() :
+                      Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(RouteName.noticeBoard);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "noticeBoard".tr,
+                                  style: AppTextStyle.textStyle16(
+                                      fontColor: AppColors.darkBlue,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                Text(
+                                  "viewAll".tr,
+                                  style: AppTextStyle.textStyle12(
+                                      fontColor: AppColors.darkBlue,
+                                      fontWeight: FontWeight.w400),
+                                )
+                              ],
                             ),
-                            Text(
-                              "viewAll".tr,
-                              style: AppTextStyle.textStyle12(
-                                  fontColor: AppColors.darkBlue,
-                                  fontWeight: FontWeight.w400),
-                            )
-                          ],
-                        ),
+                          ),
+                          SizedBox(height: 10.h),
+                          noticeBoardWidget(),
+                        ],
                       ),
-                      SizedBox(height: 10.h),
-                      senderCategoryWidget(),
+                      // SizedBox(height: 10.h),
+                      // noticeBoardWidget(),
                       SizedBox(height: 10.h),
                       viewKundliWidget(),
                       SizedBox(height: 10.h),
@@ -350,9 +357,13 @@ class HomeUI extends GetView<HomeController> {
                           color: AppColors.darkBlue.withOpacity(0.5)),
                       SizedBox(height: 10.h),
                       sessionTypeWidget(),
-                      if (controller.homeData?.offerType != null &&
-                          controller.homeData?.offerType != [])
-                        offerTypeWidget(),
+                      // if (controller.homeData?.offerType != null &&
+                      //     controller.homeData?.offerType != [])
+                      //   offerTypeWidget(),
+                      controller.homeData?.offers?.orderOffer != null ?
+                      orderOfferWidget() : const SizedBox(),
+                      controller.homeData?.offers?.customOffer != null ?
+                          customerOfferWidget() : const SizedBox(),
                       SizedBox(height: 10.h),
                       fullScreenBtnWidget(
                           imageName: Assets.images.icReferAFriend.svg(),
@@ -432,7 +443,8 @@ class HomeUI extends GetView<HomeController> {
       stream: controller.broadcastReceiver.messages,
       builder: (context, broadcastSnapshot) {
         Map<String, dynamic>? data = broadcastSnapshot.data?.data;
-        return Container(
+        return data?["userName"] == null ? const SizedBox() :
+          Container(
           width: ScreenUtil().screenWidth,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
@@ -556,7 +568,7 @@ class HomeUI extends GetView<HomeController> {
     );
   }
 
-  Widget senderCategoryWidget() {
+  Widget noticeBoardWidget() {
     return ClipRRect(
       borderRadius: BorderRadius.all(Radius.circular(20.r)),
       child: Material(
@@ -601,7 +613,7 @@ class HomeUI extends GetView<HomeController> {
                               fontColor: AppColors.darkBlue),
                         ),
                         SizedBox(
-                          width: 30.w,
+                          width: 10.w,
                         ),
                         GestureDetector(
                             onTap: () {
@@ -970,6 +982,194 @@ class HomeUI extends GetView<HomeController> {
     );
   }
 
+  Widget orderOfferWidget() {
+    return Container(
+      margin: EdgeInsets.only(top: 10.h),
+      padding: EdgeInsets.all(16.h),
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 1.0,
+              offset: const Offset(0.0, 3.0)),
+        ],
+        color: AppColors.white,
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Order Offers",
+                style: AppTextStyle.textStyle12(
+                  fontWeight: FontWeight.w500,
+                  fontColor: AppColors.darkBlue,
+                ),
+              ),
+              Text(
+                "status".tr,
+                style: AppTextStyle.textStyle12(
+                  fontWeight: FontWeight.w500,
+                  fontColor: AppColors.darkBlue,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10.h),
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: controller.homeData?.offers?.orderOffer?.length ?? 0,
+            separatorBuilder: (context, _) => SizedBox(height: 10.h),
+            itemBuilder: (context, index) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(
+                        "${controller.homeData?.offers?.orderOffer?[index].offerName}"
+                            .toUpperCase(),
+                        style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      if ((controller
+                          .homeData?.offers?.orderOffer?[index].callRate ??
+                          0) >
+                          0)
+                        CustomText(
+                          " (₹${controller.homeData?.offers?.orderOffer?[index].callRate}/min)"
+                              .toUpperCase(),
+                          fontSize: 10.sp,
+                        ),
+                    ],
+                  ),
+                  // Obx(
+                  //       () =>
+                            SwitchWidget(
+                      onTap: () {
+                        if (controller.offerTypeLoading.value !=
+                            Loading.loading) {
+                          controller.updateOfferType(
+                            index: index,
+                            offerId: controller.homeData?.offers?.orderOffer?[index].id ?? 0,
+                            offerType: 1,
+                            value: !controller.orderOfferSwitch[index],
+                          );
+                        }
+                      },
+                      switchValue:
+                      controller.orderOfferSwitch[index],
+                    ),
+                 // ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget customerOfferWidget() {
+    return Container(
+      margin: EdgeInsets.only(top: 10.h),
+      padding: EdgeInsets.all(16.h),
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 1.0,
+              offset: const Offset(0.0, 3.0)),
+        ],
+        color: AppColors.white,
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Discount Offers",
+                style: AppTextStyle.textStyle12(
+                  fontWeight: FontWeight.w500,
+                  fontColor: AppColors.darkBlue,
+                ),
+              ),
+              Text(
+                "status".tr,
+                style: AppTextStyle.textStyle12(
+                  fontWeight: FontWeight.w500,
+                  fontColor: AppColors.darkBlue,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10.h),
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: controller.homeData?.offers?.customOffer?.length ?? 0,
+            separatorBuilder: (context, _) => SizedBox(height: 10.h),
+            itemBuilder: (context, index) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(
+                        "${controller.homeData?.offers?.customOffer?[index].offerName}"
+                            .toUpperCase(),
+                        style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      // if ((controller
+                      //     .homeData?.offers?.customOffer?[index].callRate ??
+                      //     0) >
+                      //     0)
+                      //   CustomText(
+                      //     " (₹${controller.homeData?.offers?.orderOffer?[index].callRate}/min)"
+                      //         .toUpperCase(),
+                      //     fontSize: 10.sp,
+                      //   ),
+                    ],
+                  ),
+                  Obx(
+                        () =>
+                            SwitchWidget(
+                      onTap: () {
+                        if (controller.offerTypeLoading.value !=
+                            Loading.loading) {
+                          controller.updateOfferType(
+                              index: index,
+                              offerId: controller.homeData?.offers?.customOffer?[index].id ?? 0,
+                              offerType: 2,
+                              value: !controller.customOfferSwitch[index],
+                          );
+                        }
+                      },
+                      switchValue:
+                      controller.customOfferSwitch[index],
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget offerTypeWidget() {
     return Stack(
       children: [
@@ -1054,16 +1254,16 @@ class HomeUI extends GetView<HomeController> {
                       Obx(
                         () => SwitchWidget(
                           onTap: () {
-                            if (controller.offerTypeLoading.value !=
-                                Loading.loading) {
-                              controller.updateOfferType(
-                                  !controller.promotionOfferSwitch[index],
-                                  controller.homeData?.offerType?[index].id ??
-                                      0,
-                                  index);
-                            }
+                            // if (controller.offerTypeLoading.value !=
+                            //     Loading.loading) {
+                            //   controller.updateOfferType(
+                            //       !controller.promotionOfferSwitch[index],
+                            //       controller.homeData?.offerType?[index].id ??
+                            //           0,
+                            //       index);
+                            // }
                           },
-                          switchValue: controller.promotionOfferSwitch[index],
+                          switchValue: controller.customOfferSwitch[index],
                         ),
                       ),
                     ],

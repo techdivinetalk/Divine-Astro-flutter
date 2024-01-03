@@ -4,7 +4,9 @@ import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 
 import '../../common/routes.dart';
@@ -15,10 +17,14 @@ class SplashController extends GetxController {
       Get.find<SharedPreferenceService>();
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
+    String? token = await FirebaseMessaging.instance.getToken();
+    print("FCM Token: $token");
     navigation();
   }
+
+
 
   final repository = Get.put(UserRepository());
 
