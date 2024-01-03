@@ -4,6 +4,7 @@ import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/common_button.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:flutter/material.dart";
+import "package:flutter_timer_countdown/flutter_timer_countdown.dart";
 import "package:get/get.dart";
 
 class CallAcceptOrRejectWidget extends StatefulWidget {
@@ -16,6 +17,8 @@ class CallAcceptOrRejectWidget extends StatefulWidget {
     required this.userId,
     required this.userName,
     required this.avatar,
+    required this.isHost,
+    required this.onTimeout,
     super.key,
   });
 
@@ -27,6 +30,8 @@ class CallAcceptOrRejectWidget extends StatefulWidget {
   final String userId;
   final String userName;
   final String avatar;
+  final bool isHost;
+  final Function() onTimeout;
 
   @override
   State<CallAcceptOrRejectWidget> createState() =>
@@ -138,7 +143,37 @@ class _CallAcceptOrRejectWidgetState extends State<CallAcceptOrRejectWidget> {
           ],
         ),
         const SizedBox(height: 16),
+        autoCloseOrDecline(),
+        const SizedBox(height: 16),
       ],
+    );
+  }
+
+  Widget autoCloseOrDecline() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("Auto ${widget.isHost ? "close" : "decline"} in:"),
+          const SizedBox(width: 4),
+          newTimerWidget(),
+        ],
+      ),
+    );
+  }
+
+  Widget newTimerWidget() {
+    return TimerCountdown(
+      format: CountDownTimerFormat.hoursMinutesSeconds,
+      enableDescriptions: false,
+      spacerWidth: 4,
+      colonsTextStyle: const TextStyle(fontSize: 12, color: Colors.black),
+      timeTextStyle: const TextStyle(fontSize: 12, color: Colors.black),
+      endTime: DateTime.now().add(
+        const Duration(days: 0, hours: 0, minutes: 1, seconds: 0),
+      ),
+      onEnd: widget.onTimeout,
     );
   }
 }

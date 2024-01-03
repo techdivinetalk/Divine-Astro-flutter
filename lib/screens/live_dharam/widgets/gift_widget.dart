@@ -1,8 +1,8 @@
 // import "dart:ui";
 
-// import "package:divine_astrologer/common/colors.dart";
-// import "package:divine_astrologer/model/astrologer_profile/astrologer_gift_response.dart";
-// import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
+// import "package:divine_app/common/colors.dart";
+// import "package:divine_app/model/astrologer_profile/astrologer_gift_response.dart";
+// import "package:divine_app/screens/live_dharam/widgets/custom_image_widget.dart";
 // import "package:dynamic_height_grid_view/dynamic_height_grid_view.dart";
 // import "package:flutter/material.dart";
 // import "package:get/get.dart";
@@ -85,7 +85,8 @@
 //                 () {
 //                   return Row(
 //                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                     children: <Widget>[quantityWidget(), amountWidget()],
+//                     // children: <Widget>[quantityWidget(), amountWidget()],
+//                     children: <Widget>[quantityWidget()],
 //                   );
 //                 },
 //               ),
