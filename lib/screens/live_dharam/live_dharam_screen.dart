@@ -22,12 +22,12 @@ import "package:divine_astrologer/screens/live_dharam/zeo_team/player.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
+import "package:flutter/scheduler.dart";
 import "package:get/get.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-//
 //
 //
 //
@@ -105,11 +105,30 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
         FirebaseDatabase.instance.ref().child("live").onValue.listen(
       (event) {
         _controller.eventListner(
-          event,
-          () async {
-            // if (mounted) {
-            //   await _zegoController.leave(context);
-            // } else {}
+          event: event,
+          zeroAstro: () async {
+            if (mounted) {
+              await _zegoController.leave(context);
+            } else {}
+          },
+          engaging: (WaitListModel currentCaller) async {
+            final String id = currentCaller.id;
+            final String name = currentCaller.userName;
+            final String avatar = currentCaller.avatar;
+            final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
+
+            WidgetsBinding.instance.endOfFrame.then(
+              (_) async {
+                if (mounted) {
+                  await onCoHostRequest(
+                    user: user,
+                    userId: id,
+                    userName: name,
+                    avatar: avatar,
+                  );
+                } else {}
+              },
+            );
           },
         );
       },
@@ -869,12 +888,6 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
             final String name = _controller.waitListModel.last.userName;
             final String avatar = _controller.waitListModel.last.avatar;
             final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
-            // await onCoHostRequest(
-            //   user: user,
-            //   userId: id,
-            //   userName: name,
-            //   avatar: avatar,
-            // );
             final connectInvite = _zegoController.connectInvite;
             await connectInvite.hostSendCoHostInvitationToAudience(user);
           },
@@ -2197,6 +2210,7 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
     required String userName,
     required String avatar,
   }) async {
+    print("onCoHostRequest");
     await hostingAndCoHostingPopup(
       onClose: () {},
       needAcceptButton: true,
