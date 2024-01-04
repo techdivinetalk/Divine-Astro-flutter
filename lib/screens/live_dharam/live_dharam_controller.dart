@@ -33,8 +33,6 @@ class LiveDharamController extends GetxController {
   final RxInt _currentIndex = 0.obs;
   final RxMap<dynamic, dynamic> _data = <dynamic, dynamic>{}.obs;
   // final Rx<GetAstroDetailsRes> _details = GetAstroDetailsRes().obs;
-  // final Rx<GiftResponse> _gifts = GiftResponse().obs;
-  // final RxList<CustomGiftModel> _customGiftModel = <CustomGiftModel>[].obs;
   final RxList<LeaderboardModel> _leaderboardModel = <LeaderboardModel>[].obs;
   final RxList<WaitListModel> _waitListModel = <WaitListModel>[].obs;
   // final Rx<AstrologerFollowingResponse> _followRes =
@@ -44,7 +42,6 @@ class LiveDharamController extends GetxController {
   final RxBool _isFront = true.obs;
   final RxBool _isCamOn = true.obs;
   final RxBool _isMicOn = true.obs;
-  // final Rx<ZegoUIKitUser> _zegoUIKitUser = ZegoUIKitUser(id: "", name: "").obs;
   final RxBool _amIBlocked = false.obs;
   final Rx<WaitListModel> _currentCaller = WaitListModel(
     isEngaded: false,
@@ -78,8 +75,6 @@ class LiveDharamController extends GetxController {
     currentIndex = 0;
     data = <dynamic, dynamic>{};
     // details = GetAstroDetailsRes();
-    // gifts = GiftResponse();
-    // customGiftModel = <CustomGiftModel>[];
     leaderboardModel = <LeaderboardModel>[];
     waitListModel = <WaitListModel>[];
     // followRes = AstrologerFollowingResponse();
@@ -88,7 +83,6 @@ class LiveDharamController extends GetxController {
     isFront = true;
     isCamOn = true;
     isMicOn = true;
-    // zegoUIKitUser = ZegoUIKitUser(id: "", name: "");
     amIBlocked = false;
     currentCaller = WaitListModel(
       isEngaded: false,
@@ -115,8 +109,6 @@ class LiveDharamController extends GetxController {
     _currentIndex.close();
     _data.close();
     // _details.close();
-    // _gifts.close();
-    // _customGiftModel.close();
     _leaderboardModel.close();
     _waitListModel.close();
     // _followRes.close();
@@ -125,7 +117,6 @@ class LiveDharamController extends GetxController {
     _isFront.close();
     _isCamOn.close();
     _isMicOn.close();
-    // _zegoUIKitUser.close();
     _amIBlocked.close();
     _currentCaller.close();
     _showTopBanner.close();
@@ -164,12 +155,6 @@ class LiveDharamController extends GetxController {
   // GetAstroDetailsRes get details => _details.value;
   // set details(GetAstroDetailsRes value) => _details(value);
 
-  // GiftResponse get gifts => _gifts.value;
-  // set gifts(GiftResponse value) => _gifts(value);
-
-  // List<CustomGiftModel> get customGiftModel => _customGiftModel.value;
-  // set customGiftModel(List<CustomGiftModel> value) => _customGiftModel(value);
-
   List<LeaderboardModel> get leaderboardModel => _leaderboardModel.value;
   set leaderboardModel(List<LeaderboardModel> value) =>
       _leaderboardModel(value);
@@ -195,9 +180,6 @@ class LiveDharamController extends GetxController {
   bool get isMicOn => _isMicOn.value;
   set isMicOn(bool value) => _isMicOn(value);
 
-  // ZegoUIKitUser get zegoUIKitUser => _zegoUIKitUser.value;
-  // set zegoUIKitUser(ZegoUIKitUser value) => _zegoUIKitUser(value);
-
   bool get amIBlocked => _amIBlocked.value;
   set amIBlocked(bool value) => _amIBlocked(value);
 
@@ -211,7 +193,11 @@ class LiveDharamController extends GetxController {
   // set insufficientBalModel(InsufficientBalModel value) =>
   //     _insufficientBalModel(value);
 
-  Future<void> eventListner(DatabaseEvent event, Function() zeroAstro) async {
+  Future<void> eventListner({
+    required DatabaseEvent event,
+    required Function() zeroAstro,
+    required Function(WaitListModel currentCaller) engaging,
+  }) async {
     final DataSnapshot dataSnapshot = event.snapshot;
     if (dataSnapshot != null) {
       if (dataSnapshot.exists) {
@@ -228,6 +214,18 @@ class LiveDharamController extends GetxController {
             var liveIdNode = data[liveId];
             var waitListNode = liveIdNode["waitList"];
             currentCaller = isEngadedNew(waitListNode, isForMe: false);
+
+            await Future.delayed(const Duration(seconds: 1));
+            
+            final bool condition1 = isHost;
+            final bool condition2 = waitListModel.length == 1;
+            final bool condition3 = currentCaller.id.isNotEmpty;
+            final bool condition4 = !currentCaller.isEngaded;
+
+            if (condition1 && condition2 && condition3 && condition4) {
+              engaging(currentCaller);
+            } else {}
+
             // await getAstrologerDetails();
           } else {}
         } else {}
@@ -373,21 +371,6 @@ class LiveDharamController extends GetxController {
     return pivotList.join(", ");
   }
 
-  // Future<void> getAllGifts() async {
-  //   GiftResponse giftResponse = GiftResponse();
-  //   giftResponse = await liveRepository.getAllGiftsAPI();
-  //   gifts = giftResponse.statusCode == HttpStatus.ok
-  //       ? GiftResponse.fromJson(giftResponse.toJson())
-  //       : GiftResponse.fromJson(GiftResponse().toJson());
-
-  //   for (int i = 0; i < (gifts.data?.length ?? 0); i++) {
-  //     final String awsURL = _pref.getAmazonUrl() ?? "";
-  //     gifts.data?[i].giftImage = isValidImageURL(
-  //         imageURL: "$awsURL/${gifts.data?[i].giftImage ?? ""}");
-  //   }
-  //   return Future<void>.value();
-  // }
-
   // Future<void> followOrUnfollowAstrologer() async {
   //   Map<String, dynamic> param = <String, dynamic>{};
   //   param = <String, dynamic>{
@@ -403,32 +386,6 @@ class LiveDharamController extends GetxController {
   //           AstrologerFollowingResponse().toJson(),
   //         );
   //   return Future<void>.value();
-  // }
-
-  // void mapAndMergeGiftsWithConstant() {
-  //   final List<CustomGiftModel> temp = <CustomGiftModel>[];
-  //   gifts.data?.forEach(
-  //     (GiftData element) {
-  //       final String id = globalConstantModel.data?.lottiFile?.keys.firstWhere(
-  //             (String e) => e == element.id.toString(),
-  //             orElse: () => "",
-  //           ) ??
-  //           "";
-  //       final String giftSvga = globalConstantModel.data?.lottiFile?[id] ?? "";
-  //       //
-  //       final CustomGiftModel customGiftModel = CustomGiftModel(
-  //         giftId: element.id,
-  //         giftName: element.giftName,
-  //         giftImage: element.giftImage,
-  //         giftPrice: element.giftPrice,
-  //         giftSvga: giftSvga,
-  //         bytes: <int>[],
-  //       );
-  //       temp.add(customGiftModel);
-  //     },
-  //   );
-  //   customGiftModel = temp;
-  //   return;
   // }
 
   // bool hasBalance({required num quantity, required num amount}) {
@@ -499,58 +456,6 @@ class LiveDharamController extends GetxController {
   //     params: param,
   //     needRecharge: needRecharge,
   //   );
-  //   walletRecharge = walletRechargeRes.statusCode == HttpStatus.ok
-  //       ? WalletRecharge.fromJson(walletRechargeRes.toJson())
-  //       : WalletRecharge.fromJson(WalletRecharge().toJson());
-  //   return Future<void>.value();
-  // }
-
-  // Future<bool> hasBalanceForSendingCoHostRequest({
-  //   required String talkType, // Video call, Audio call or Private call
-  //   required int talkAmount, // Main: Discounted, Fallback: Original
-  // }) async {
-  //   await checkWalletRechargeForSendingCoHostRequest(
-  //     talkType: talkType,
-  //     talkAmount: talkAmount,
-  //   );
-  //   final value = walletRecharge.statusCode == HttpStatus.ok;
-  //   return Future<bool>.value(value);
-  // }
-
-  // Future<void> checkWalletRechargeForSendingCoHostRequest({
-  //   required String talkType,
-  //   required int talkAmount,
-  // }) async {
-
-  //   final String stringValue = talkType == "Video"
-  //       ? "video"
-  //       : talkType == "Audio"
-  //           ? "audio"
-  //           : talkType == "Private"
-  //               ? "anonymous"
-  //               : "";
-
-  //   final int intValue = talkType == "Video"
-  //       ? 3
-  //       : talkType == "Audio"
-  //           ? 4
-  //           : talkType == "Private"
-  //               ? 5
-  //               : 0;
-
-  //   Map<String, dynamic> param = <String, dynamic>{};
-  //   param = <String, dynamic>{
-  //     "product_id": 1,
-  //     "text": stringValue,
-  //     "quantity": 1,
-  //     "balance": talkAmount.toString(),
-  //     "astrologer_id": liveId,
-  //     "type": 2,
-  //     "product_type": intValue,
-  //     "role_id": 7,
-  //   };
-  //   WalletRecharge walletRechargeRes = WalletRecharge();
-  //   walletRechargeRes = await liveRepository.walletRechargeApi(params: param);
   //   walletRecharge = walletRechargeRes.statusCode == HttpStatus.ok
   //       ? WalletRecharge.fromJson(walletRechargeRes.toJson())
   //       : WalletRecharge.fromJson(WalletRecharge().toJson());
@@ -840,34 +745,6 @@ class LiveDharamController extends GetxController {
   //   return "$hourLeft:$minuteLeft:$secondsLeft";
   // }
 
-  // String getTotalWaitTime() {
-  //   String time = "";
-  //   final List<String> tempList = <String>[];
-  //   for (final WaitListModel element in waitListModel) {
-  //     tempList.add(element.totalTime);
-  //   }
-  //   if (tempList.isEmpty) {
-  //     time = "00:00:00";
-  //   } else {
-  //     final List<Duration> durations = tempList.map(parseTime).toList();
-  //     final Duration totalTime = durations.reduce(
-  //       (Duration a, Duration b) {
-  //         return a + b;
-  //       },
-  //     );
-  //     final String hh = "${totalTime.inHours}";
-  //     final String mm = (totalTime.inMinutes % 60).toString().padLeft(2, "0");
-  //     final String ss = (totalTime.inSeconds % 60).toString().padLeft(2, "0");
-  //     time = "$hh:$mm:$ss";
-  //   }
-  //   return time;
-  // }
-
-  // Duration parseTime(String timeString) {
-  //   final List<int> parts = timeString.split(":").map(int.parse).toList();
-  //   return Duration(hours: parts[0], minutes: parts[1], seconds: parts[2]);
-  // }
-
   String getTotalWaitTime() {
     String time = "";
     int totalMinutes = 0;
@@ -998,35 +875,6 @@ class LiveDharamController extends GetxController {
   //   return Future<void>.value();
   // }
 
-  // Future<void> concurrentDownload({
-  //   required downloadStarted,
-  //   required downloadEnded,
-  // }) async {
-  //   downloadStarted();
-  //   List<CustomGiftModel> temp = <CustomGiftModel>[];
-  //   await Future.forEach<CustomGiftModel>(
-  //     customGiftModel,
-  //     (element) async {
-  //       temp.add(
-  //         CustomGiftModel(
-  //           giftId: element.giftId,
-  //           giftName: element.giftName,
-  //           giftImage: element.giftImage,
-  //           giftPrice: element.giftPrice,
-  //           giftSvga: element.giftSvga,
-  //           bytes: await GiftCache().downloadFile(
-  //             url: element.giftSvga,
-  //             ln: customGiftModel.length,
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  //   customGiftModel = temp;
-  //   downloadEnded();
-  //   return Future<void>.value();
-  // }
-
   Future<void> leaderboardChallengeCallback({
     required Function(LeaderboardModel leader) onLeaderUpdated,
   }) async {
@@ -1127,24 +975,6 @@ class WaitListModel {
   final String userName;
   final String id;
 }
-
-// class CustomMessage {
-//   final String userId;
-//   final String userName;
-//   final String avatar;
-//   final String message;
-//   final DateTime timeStamp;
-//   final String giftName;
-
-//   CustomMessage({
-//     required this.userId,
-//     required this.userName,
-//     required this.avatar,
-//     required this.message,
-//     required this.timeStamp,
-//     required this.giftName,
-//   });
-// }
 
 class ZegoCustomMessage {
   int? type;

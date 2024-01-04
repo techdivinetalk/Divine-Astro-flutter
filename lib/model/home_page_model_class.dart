@@ -43,6 +43,7 @@ class HomeData {
   SessionType? sessionType;
   List<OfferType>? offerType;
   List<TrainingVideo>? trainingVideo;
+  Offers? offers;
 
   HomeData({
     this.noticeBoard,
@@ -52,6 +53,7 @@ class HomeData {
     this.sessionType,
     this.offerType,
     this.trainingVideo,
+    this.offers,
   });
 
   factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
@@ -74,6 +76,7 @@ class HomeData {
             ? []
             : List<TrainingVideo>.from(
                 json["training_video"]!.map((x) => TrainingVideo.fromJson(x))),
+        offers: json["offers"] == null ? null : Offers.fromJson(json["offers"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -88,7 +91,91 @@ class HomeData {
         "training_video": trainingVideo == null
             ? []
             : List<dynamic>.from(trainingVideo!.map((x) => x.toJson())),
+        "offers": offers?.toJson(),
       };
+}
+
+class Offers {
+  List<OrderOffer>? orderOffer;
+  List<CustomOffer>? customOffer;
+
+  Offers({this.orderOffer, this.customOffer});
+
+  Offers.fromJson(Map<String, dynamic> json) {
+    if (json['order_offer'] != null) {
+      orderOffer = <OrderOffer>[];
+      json['order_offer'].forEach((v) {
+        orderOffer!.add(new OrderOffer.fromJson(v));
+      });
+    }
+    if (json['custom_offer'] != null) {
+      customOffer = <CustomOffer>[];
+      json['custom_offer'].forEach((v) {
+        customOffer!.add(new CustomOffer.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.orderOffer != null) {
+      data['order_offer'] = this.orderOffer!.map((v) => v.toJson()).toList();
+    }
+    if (this.customOffer != null) {
+      data['custom_offer'] = this.customOffer!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class OrderOffer {
+  int? id;
+  String? offerName;
+  int? callRate;
+  int? freeMinutes;
+
+  OrderOffer({this.id, this.offerName, this.callRate, this.freeMinutes});
+
+  OrderOffer.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    offerName = json['offer_name'];
+    callRate = json['call_rate'];
+    freeMinutes = json['free_minutes'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['offer_name'] = this.offerName;
+    data['call_rate'] = this.callRate;
+    data['free_minutes'] = this.freeMinutes;
+    return data;
+  }
+}
+
+class CustomOffer {
+  int? id;
+  String? offerName;
+  int? offerPercentage;
+  int? toggle;
+
+  CustomOffer({this.id, this.offerName, this.offerPercentage, this.toggle});
+
+  CustomOffer.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    offerName = json['offer_name'];
+    offerPercentage = json['offer_percentage'];
+    toggle = json['toggle'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['offer_name'] = this.offerName;
+    data['offer_percentage'] = this.offerPercentage;
+    data['toggle'] = this.toggle;
+    return data;
+  }
 }
 
 class NoticeBoard {

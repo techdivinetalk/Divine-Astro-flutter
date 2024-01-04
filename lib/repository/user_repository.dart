@@ -613,7 +613,7 @@ class UserRepository extends ApiProvider {
   Future<UpdateSessionTypeResponse> updateSessionTypeApi(
       Map<String, dynamic> params) async {
     try {
-      final response = await post(updateSessionType,
+      final response = await post(astroOnline,
           body: jsonEncode(params), headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
@@ -643,7 +643,7 @@ class UserRepository extends ApiProvider {
   Future<UpdateOfferResponse> updateOfferTypeApi(
       Map<String, dynamic> params) async {
     try {
-      final response = await post(updateOfferFlag,
+      final response = await post(customOfferManage,
           body: jsonEncode(params), headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {

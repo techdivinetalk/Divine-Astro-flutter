@@ -9,7 +9,7 @@ class NoticeRepository extends ApiProvider {
   Future<NoticeResponse> noticeAPi() async {
     try {
       final response =
-          await get(astroNoticeBoard, headers: await getJsonHeaderURL());
+          await get(getAstroAllNotice, headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
         final noticeResponse = noticeResponseFromJson(response.body);

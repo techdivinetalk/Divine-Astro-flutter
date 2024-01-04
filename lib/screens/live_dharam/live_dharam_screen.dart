@@ -10,6 +10,7 @@ import "package:divine_astrologer/screens/live_dharam/gifts_singleton.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/live_gift.dart";
 import "package:divine_astrologer/screens/live_dharam/live_screen_widgets/leaderboard_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/astro_wait_list_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/call_accept_or_reject_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/disconnect_call_widget.dart";
@@ -22,6 +23,7 @@ import "package:divine_astrologer/screens/live_dharam/zeo_team/player.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
+import "package:flutter/scheduler.dart";
 import "package:get/get.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
@@ -105,11 +107,30 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
         FirebaseDatabase.instance.ref().child("live").onValue.listen(
       (event) {
         _controller.eventListner(
-          event,
-          () async {
-            // if (mounted) {
-            //   await _zegoController.leave(context);
-            // } else {}
+          event: event,
+          zeroAstro: () async {
+            if (mounted) {
+              await _zegoController.leave(context);
+            } else {}
+          },
+          engaging: (WaitListModel currentCaller) async {
+            final String id = currentCaller.id;
+            final String name = currentCaller.userName;
+            final String avatar = currentCaller.avatar;
+            final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
+
+            WidgetsBinding.instance.endOfFrame.then(
+              (_) async {
+                if (mounted) {
+                  await onCoHostRequest(
+                    user: user,
+                    userId: id,
+                    userName: name,
+                    avatar: avatar,
+                  );
+                } else {}
+              },
+            );
           },
         );
       },
@@ -424,74 +445,192 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
   //       scrollDirection: Axis.horizontal,
   //       itemBuilder: (BuildContext context, int index) {
   //         final GiftData item = tempData[index];
-  //         return Padding(
-  //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-  //           child: index == 0
-  //               ? InkWell(
+  //         var offerData = _controller.details.data?.offerData ?? OfferData();
+  //         return index == 0
+  //             ? Padding(
+  //                 padding: EdgeInsets.only(
+  //                   left: index == 0 ? 8.0 : 16.0,
+  //                   right: _controller.details.data?.isFollow == 0 ? 0 : 8.0,
+  //                 ),
+  //                 child: InkWell(
   //                   onTap: () async {
-  //                     await Get.toNamed(RouteName.wallet);
+  //                     await Get.toNamed(
+  //                       RouteName.paymentSummary,
+  //                       arguments: CommonOffer(
+  //                         extraAmount: offerData.extra_amount,
+  //                         offerAmount: offerData.offer_amount,
+  //                         percentage: offerData.percentage,
+  //                         rechargeAmount: offerData.recharge_amount,
+  //                       ),
+  //                     );
   //                   },
   //                   child: SizedBox(
-  //                     height: 72,
-  //                     width: 72,
-  //                     child: DecoratedBox(
+  //                     height: 50,
+  //                     width: 100,
+  //                     child: Container(
+  //                       padding: const EdgeInsets.symmetric(vertical: 4.0),
   //                       decoration: BoxDecoration(
   //                         borderRadius: const BorderRadius.all(
-  //                           Radius.circular(50.0),
+  //                           Radius.circular(10.0),
   //                         ),
   //                         border: Border.all(
-  //                           color: Colors.transparent,
+  //                           color: AppColors.yellow,
   //                         ),
-  //                         color: Colors.transparent,
+  //                         color: AppColors.black.withOpacity(0.2),
   //                       ),
-  //                       child: Image.asset(
-  //                         "assets/images/live_recharge_button.png",
+  //                       child: Row(
+  //                         children: <Widget>[
+  //                           const SizedBox(width: 8),
+  //                           SizedBox(
+  //                             height: 24,
+  //                             width: 24,
+  //                             child: Image.asset(
+  //                               "assets/images/live_new_money.png",
+  //                             ),
+  //                           ),
+  //                           const SizedBox(width: 8),
+  //                           Flexible(
+  //                             child: Row(
+  //                               children: [
+  //                                 Flexible(
+  //                                   child: Column(
+  //                                     mainAxisAlignment:
+  //                                         MainAxisAlignment.center,
+  //                                     crossAxisAlignment:
+  //                                         CrossAxisAlignment.center,
+  //                                     children: [
+  //                                       Row(
+  //                                         children: [
+  //                                           const Text(
+  //                                             "Pay ",
+  //                                             style: TextStyle(
+  //                                               fontSize: 10,
+  //                                               color: Colors.white,
+  //                                             ),
+  //                                             overflow: TextOverflow.ellipsis,
+  //                                           ),
+  //                                           Text(
+  //                                             "₹${offerData.recharge_amount ?? 0}",
+  //                                             style: const TextStyle(
+  //                                               fontSize: 10,
+  //                                               color: Colors.white,
+  //                                               fontWeight: FontWeight.bold,
+  //                                             ),
+  //                                             overflow: TextOverflow.ellipsis,
+  //                                           ),
+  //                                           const Text(
+  //                                             ",",
+  //                                             style: TextStyle(
+  //                                               fontSize: 10,
+  //                                               color: Colors.white,
+  //                                             ),
+  //                                             overflow: TextOverflow.ellipsis,
+  //                                           ),
+  //                                         ],
+  //                                       ),
+  //                                       Row(
+  //                                         children: [
+  //                                           const Text(
+  //                                             "Get ",
+  //                                             style: TextStyle(
+  //                                               fontSize: 10,
+  //                                               color: Colors.white,
+  //                                             ),
+  //                                             overflow: TextOverflow.ellipsis,
+  //                                           ),
+  //                                           Text(
+  //                                             "₹${offerData.offer_amount ?? 0}",
+  //                                             style: const TextStyle(
+  //                                               fontSize: 10,
+  //                                               color: AppColors.yellow,
+  //                                               fontWeight: FontWeight.bold,
+  //                                             ),
+  //                                             overflow: TextOverflow.ellipsis,
+  //                                           ),
+  //                                         ],
+  //                                       ),
+  //                                     ],
+  //                                   ),
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                           ),
+  //                           const SizedBox(width: 8),
+  //                         ],
   //                       ),
   //                     ),
   //                   ),
-  //                 )
-  //               : index == 1
-  //                   ? InkWell(
-  //                       onTap: () async {
-  //                         if (_controller.details.data?.isFollow == 0) {
-  //                           final ZegoCustomMessage model = ZegoCustomMessage(
-  //                             type: 1,
-  //                             liveId: _controller.liveId,
-  //                             userId: _controller.userId,
-  //                             userName: _controller.userName,
-  //                             avatar: _controller.avatar,
-  //                             message:
-  //                                 "${_controller.userName} Started following",
-  //                             timeStamp: DateTime.now().toString(),
-  //                             fullGiftImage: item.fullGiftImage,
-  //                           );
-  //                           await sendMessageToZego(model);
-  //                         } else {}
-  //                         await _controller.followOrUnfollowAstrologer();
-  //                         await _controller.getAstrologerDetails();
-  //                       },
-  //                       child: SizedBox(
-  //                         height: 52,
-  //                         width: 52,
-  //                         child: DecoratedBox(
-  //                           decoration: BoxDecoration(
-  //                             borderRadius: const BorderRadius.all(
-  //                               Radius.circular(50.0),
+  //                 ),
+  //               )
+  //             : index == 1
+  //                 ? (_controller.details.data?.isFollow == 1)
+  //                     ? const SizedBox()
+  //                     : Padding(
+  //                         padding:
+  //                             const EdgeInsets.only(left: 16.0, right: 16.0),
+  //                         child: InkWell(
+  //                           onTap: () async {
+  //                             if (_controller.details.data?.isFollow == 0) {
+  //                               final ZegoCustomMessage model =
+  //                                   ZegoCustomMessage(
+  //                                 type: 1,
+  //                                 liveId: _controller.liveId,
+  //                                 userId: _controller.userId,
+  //                                 userName: _controller.userName,
+  //                                 avatar: _controller.avatar,
+  //                                 message:
+  //                                     "${_controller.userName} Started following",
+  //                                 timeStamp: DateTime.now().toString(),
+  //                                 fullGiftImage: item.fullGiftImage,
+  //                               );
+  //                               await sendMessageToZego(model);
+  //                             } else {}
+  //                             await _controller.followOrUnfollowAstrologer();
+  //                             await _controller.getAstrologerDetails();
+  //                           },
+  //                           child: SizedBox(
+  //                             height: 52,
+  //                             width: 52,
+  //                             child: DecoratedBox(
+  //                               decoration: BoxDecoration(
+  //                                 borderRadius: const BorderRadius.all(
+  //                                   Radius.circular(50.0),
+  //                                 ),
+  //                                 border: Border.all(
+  //                                   color: Colors.transparent,
+  //                                 ),
+  //                                 color: Colors.transparent,
+  //                               ),
+  //                               child: Column(
+  //                                 mainAxisSize: MainAxisSize.min,
+  //                                 children: <Widget>[
+  //                                   Image.asset(
+  //                                     height: 32,
+  //                                     width: 32,
+  //                                     _controller.details.data?.isFollow == 1
+  //                                         ? "assets/images/live_new_follower_button.png"
+  //                                         : "assets/images/live_new_follower_button.png",
+  //                                   ),
+  //                                   const SizedBox(height: 4),
+  //                                   const Text(
+  //                                     "Follow",
+  //                                     style: TextStyle(
+  //                                       fontSize: 10,
+  //                                       color: AppColors.white,
+  //                                     ),
+  //                                   ),
+  //                                 ],
+  //                               ),
   //                             ),
-  //                             border: Border.all(
-  //                               color: Colors.transparent,
-  //                             ),
-  //                             color: Colors.transparent,
-  //                           ),
-  //                           child: Image.asset(
-  //                             _controller.details.data?.isFollow == 1
-  //                                 ? "assets/images/live_new_unfollow.png"
-  //                                 : "assets/images/live_new_follow.png",
   //                           ),
   //                         ),
-  //                       ),
-  //                     )
-  //                   : InkWell(
+  //                       )
+  //                 : Padding(
+  //                     padding: EdgeInsets.only(
+  //                       left: _controller.details.data?.isFollow == 0 ? 0 : 8.0,
+  //                       right: (tempData.length - 1 == index) ? 8.0 : 16.0,
+  //                     ),
+  //                     child: InkWell(
   //                       onTap: () async {
   //                         await sendGiftFunc(ctx: ctx, item: item, quantity: 1);
   //                       },
@@ -517,7 +656,7 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
   //                         ],
   //                       ),
   //                     ),
-  //         );
+  //                   );
   //       },
   //     ),
   //   );
@@ -847,7 +986,8 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
     await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
-        return WaitListWidget(
+        // return WaitListWidget(
+        return AstroWaitListWidget(
           onClose: Get.back,
           waitTime: _controller.getTotalWaitTime(),
           myUserId: _controller.userId,
@@ -869,12 +1009,6 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
             final String name = _controller.waitListModel.last.userName;
             final String avatar = _controller.waitListModel.last.avatar;
             final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
-            // await onCoHostRequest(
-            //   user: user,
-            //   userId: id,
-            //   userName: name,
-            //   avatar: avatar,
-            // );
             final connectInvite = _zegoController.connectInvite;
             await connectInvite.hostSendCoHostInvitationToAudience(user);
           },
@@ -2247,6 +2381,7 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
   }) async {
     await showCupertinoModalPopup(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return CallAcceptOrRejectWidget(
           onClose: () {
@@ -2266,6 +2401,14 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
           userId: userId,
           avatar: avatar,
           userName: userName,
+          isHost: _controller.isHost,
+          onTimeout: () {
+            Get.back();
+            if (_controller.isHost) {
+            } else {
+              onDeclineButton();
+            }
+          },
         );
       },
     );

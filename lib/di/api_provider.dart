@@ -53,6 +53,7 @@ class ApiProvider {
   final String getOrderHistoryUrl = "getOrderHistory";
   final String reviewReplyUrl = "reviewReply";
   final String astroNoticeBoard = "astroNoticeBoard";
+  final String getAstroAllNotice = "getAstroAllNotice";
   final String getSpecialityList = "getSpecialityList";
   final String updateProfileDetails = "updateProfileDetails";
   final String uploadAstroStories = "uploadAstroStories";
@@ -71,7 +72,9 @@ class ApiProvider {
   final String getImportantNumber = "getImportantNumber";
   final String getDonationList = "getDonationList";
   final String updateSessionType = "updateSessionType";
+  final String astroOnline = "astroOnline";
   final String updateOfferFlag = "updateOfferFlag";
+  final String customOfferManage = "customOfferManage";
 
   //Astro Internal API
   final String horoChartImageInt = "getChartImage/";
