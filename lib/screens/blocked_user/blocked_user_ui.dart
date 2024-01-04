@@ -46,7 +46,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
               child: GetBuilder<BlockUserController>(
                 id: "updateList",
                 builder: (controller) {
-                  return controller.allBlockedUsers.isEmpty ? Center(child: Text('No Data Found'),) :
+                  return controller.allBlockedUsers.isEmpty ? const Center(child: Text('No Data Found'),) :
                     ListView.builder(
                       itemCount: controller.allBlockedUsers.length,
                       itemBuilder: (context, index) {
