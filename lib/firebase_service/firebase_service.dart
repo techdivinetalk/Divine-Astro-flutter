@@ -94,6 +94,7 @@ class AppFirebaseService {
             Map<String, dynamic>? callKundli =
                 Map<String, dynamic>.from(realTimeData['callKundli'] as Map<Object?, Object?>);
             sendBroadcast(BroadcastMessage(name: "callKundli", data: callKundli));
+            FirebaseDatabase.instance.ref("$path/callKundli").remove();
           }
           if (realTimeData["uniqueId"] != null) {
             String uniqueId = await getDeviceId() ?? "";
