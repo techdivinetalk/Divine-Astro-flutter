@@ -471,10 +471,20 @@ class HomeController extends GetxController {
       bool value, RxBool switchType, int type) async {
     //type: 1 - chat, 2 - call, 3 - videoCall
     Map<String, dynamic> params = {
-      "is_chat": getBoolToString(type == 1 ? value : chatSwitch.value),
-      "is_call": getBoolToString(type == 2 ? value : callSwitch.value),
-      "is_video": getBoolToString(type == 3 ? value : videoSwitch.value)
+      "type": type,
+      "role_id": 7,
+      "device_token": preferenceService.getDeviceToken(),
+      // "is_chat": getBoolToString(type == 1 ? value : chatSwitch.value),
+      // "is_call": getBoolToString(type == 2 ? value : callSwitch.value),
+      // "is_video": getBoolToString(type == 3 ? value : videoSwitch.value)
     };
+
+    if(value) {
+      params["check_in"] = 1;
+    } else {
+      params["check_out"] = 1;
+    }
+
 
     sessionTypeLoading.value = Loading.loading;
     try {
