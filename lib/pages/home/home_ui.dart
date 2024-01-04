@@ -1149,12 +1149,27 @@ class HomeUI extends GetView<HomeController> {
                       onTap: () {
                         if (controller.offerTypeLoading.value !=
                             Loading.loading) {
-                          controller.updateOfferType(
+
+                          if(controller.customOfferSwitch[index]) {
+                            controller.updateOfferType(
                               index: index,
                               offerId: controller.homeData?.offers?.customOffer?[index].id ?? 0,
                               offerType: 2,
                               value: !controller.customOfferSwitch[index],
-                          );
+                            );
+                          } else {
+                            if(controller.customOfferSwitch.any((element) => element == true)) {
+                              divineSnackBar(data: "Only 1 custom offer is allowed at once", color: AppColors.redColor);
+                            } else {
+                              controller.updateOfferType(
+                                index: index,
+                                offerId: controller.homeData?.offers?.customOffer?[index].id ?? 0,
+                                offerType: 2,
+                                value: !controller.customOfferSwitch[index],
+                              );
+                            }
+                          }
+
                         }
                       },
                       switchValue:
