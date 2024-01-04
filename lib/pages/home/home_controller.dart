@@ -100,8 +100,8 @@ class HomeController extends GetxController {
     userData = preferenceService.getUserDetail();
     appbarTitle.value = userData?.name ?? "Astrologer Name";
     await getFilteredPerformance();
-    // fetchImportantNumbers();
-    // getContactList();
+    await getContactList();
+    fetchImportantNumbers();
     getConstantDetailsData();
     getDashboardDetail();
     getFeedbackData();
@@ -125,8 +125,14 @@ class HomeController extends GetxController {
     if (contact.isGranted) {
       allContacts = await ContactsService.getContacts();
     } else {
-      divineSnackBar(data: 'contactPermissionRequired'.tr);
+      PermissionStatus status = await Permission.contacts.request();
+      if(status.isGranted) {
+        allContacts = await ContactsService.getContacts();
+      }
     }
+    // {
+    //   divineSnackBar(data: 'contactPermissionRequired'.tr);
+    // }
   }
 
   bool checkForALlContact(List<MobileNumber> importantNumbers) {
@@ -154,8 +160,10 @@ class HomeController extends GetxController {
       if (contact.phones != null) {
         for (var element in contact.phones!) {
           //  log(element.value!);
-          if (contact.displayName == item.label &&
-              numberList.every((el) => el.contains(element.value!))) {
+          if (contact.displayName == item.label
+              // &&
+              // numberList.every((el) => el.contains(element.value!))
+          ) {
             return isExist = true;
           }
         }
