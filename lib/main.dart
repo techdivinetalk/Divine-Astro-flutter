@@ -87,10 +87,9 @@ Future<void> initServices() async {
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseDatabase.instance.ref("demo").child("path").child("astro").set("${message.data}");
-  showNotification(message.data["title"],message.data["message"]);
-  var path = 'user/${message.data["userid"]}/realTime';
-  await AppFirebaseService().readData(path);
+//  showNotification(message.data["title"],message.data["message"]);
+//  var path = 'user/${message.data["userid"]}/realTime';
+//  await AppFirebaseService().readData(path);
   //debugPrint("Handling a background message: ${message.messageId}");
 }
 Future<void> showNotification(String title,String message) async {

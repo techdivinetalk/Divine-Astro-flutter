@@ -29,7 +29,7 @@ var userData = preferenceService.getUserDetail();
 
 Future<String> uploadImageToS3Bucket(File? selectedFile, String fileName) async {
   var commonConstants = await userRepository.constantDetailsData();
-  var dataString = commonConstants.data.awsCredentails.baseurl?.split(".");
+  var dataString = commonConstants.data!.awsCredentails.baseurl?.split(".");
   var extension = p.extension(selectedFile!.path);
   var response = await AwsS3.uploadFile(
     // accessKey: commonConstants.data.awsCredentails.accesskey!,
@@ -82,30 +82,30 @@ void checkNotification({required bool isFromNotification, Map? updatedData}) asy
           downloadedPath: "",
           msgType: value["msgType"]);
 
-      if (Get.currentRoute == RouteName.chatMessageUI) {
-        var chatController = Get.find<ChatMessageController>();
-        if (chatController.currentUserId.value == value["sender_id"] ||
-            chatController.currentUserId.value == value["receiver_id"]) {
-          chatController.updateChatMessages(newMessage, true);
-          if (value["sender_id"] == chatController.currentUserId.value) {
-            chatController.updateChatMessages(newMessage, true);
-          }
-        } else {
-          if (value["type"] == 0) {
-            showNotificationWithActions(message: "${value["message"]}", title: "${value["title"]}");
-            updateMsgDelieveredStatus(newMessage, 1);
-          }
-
-          setHiveDatabase("userKey_${userData?.id}_$senderId", newMessage);
-        }
-      } else {
-        if (value["type"] == 0) {
-          showNotificationWithActions(message: "${value["message"]}", title: "${value["title"]}");
-          updateMsgDelieveredStatus(newMessage, 1);
-        }
-
-        setHiveDatabase("userKey_${userData?.id}_$senderId", newMessage);
-      }
+      // if (Get.currentRoute == RouteName.chatMessageUI) {
+      //   var chatController = Get.find<ChatMessageController>();
+      //   if (chatController.currentUserId.value == value["sender_id"] ||
+      //       chatController.currentUserId.value == value["receiver_id"]) {
+      //     chatController.updateChatMessages(newMessage, true);
+      //     if (value["sender_id"] == chatController.currentUserId.value) {
+      //       chatController.updateChatMessages(newMessage, true);
+      //     }
+      //   } else {
+      //     if (value["type"] == 0) {
+      //       showNotificationWithActions(message: "${value["message"]}", title: "${value["title"]}");
+      //       updateMsgDelieveredStatus(newMessage, 1);
+      //     }
+      //
+      //     setHiveDatabase("userKey_${userData?.id}_$senderId", newMessage);
+      //   }
+      // } else {
+      //   if (value["type"] == 0) {
+      //     showNotificationWithActions(message: "${value["message"]}", title: "${value["title"]}");
+      //     updateMsgDelieveredStatus(newMessage, 1);
+      //   }
+      //
+      //   setHiveDatabase("userKey_${userData?.id}_$senderId", newMessage);
+      // }
     });
   //  removeNotificationNode();
   }

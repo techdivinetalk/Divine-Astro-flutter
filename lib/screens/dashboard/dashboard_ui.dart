@@ -189,7 +189,7 @@ class DashboardScreen extends GetView<DashboardController> {
     const HomeUI(),
     const PerformanceUI(),
     const SuggestRemediesUI(),
-    const ChatAssistancePage(),
+    ChatAssistancePage(),
     ProfileUI()
   ];
 }

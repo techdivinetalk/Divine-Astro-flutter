@@ -1,16 +1,16 @@
 import 'dart:convert';
 
 class ConstantDetailsModelClass {
-  Data data;
-  bool success;
-  int statusCode;
-  String message;
+  Data? data;
+  bool? success;
+  int? statusCode;
+  String? message;
 
   ConstantDetailsModelClass({
-    required this.data,
-    required this.success,
-    required this.statusCode,
-    required this.message,
+    this.data,
+    this.success,
+    this.statusCode,
+    this.message,
   });
 
   ConstantDetailsModelClass copyWith({
@@ -40,7 +40,7 @@ class ConstantDetailsModelClass {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data.toJson(),
+        "data": data?.toJson(),
         "success": success,
         "status_code": statusCode,
         "message": message,

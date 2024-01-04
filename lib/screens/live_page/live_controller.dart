@@ -61,7 +61,7 @@ class LiveController extends GetxController {
 
   @override
   void onReady() {
-    badWordsData = pref.getConstantDetails().data.badWordsData;
+    badWordsData = pref.getConstantDetails().data?.badWordsData;
     connectSocket();
     super.onReady();
   }

@@ -334,7 +334,7 @@ class UserRepository extends ApiProvider {
         final constantDetailsModelClass =
             ConstantDetailsModelClass.fromJson(json.decode(response.body));
         if (constantDetailsModelClass.statusCode == successResponse &&
-            constantDetailsModelClass.success) {
+            constantDetailsModelClass.success == true) {
           return constantDetailsModelClass;
         } else {
           throw CustomException(json.decode(response.body)["error"]);

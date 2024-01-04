@@ -405,7 +405,7 @@ class HomeController extends GetxController {
   }
 
   whatsapp() async {
-    var contact = getConstantDetails?.data.whatsappNo ?? '';
+    var contact = getConstantDetails?.data?.whatsappNo ?? '';
     var androidUrl = "whatsapp://send?phone=$contact&text=Hi";
     var iosUrl = "https://wa.me/$contact?text=${Uri.parse('Hi')}";
 

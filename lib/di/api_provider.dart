@@ -123,13 +123,15 @@ class ApiProvider {
   final String  leavePrivateChat = "leave-private-chat";
   final String  userDisconnected = "user-disconnected";
   final String  sendConnectRequest = "send-connect-request";
-
+  final String getChatAssistAstrologers = "getChatAssistCustomers";
+  final String  sendChatAssistMessage = "send-chat-assist-message";
 
   //privacy policy & terms
   final String termsAndCondition = "termsAndCondition";
   final String privacyPolicy = "privacyPolicy";
 
   final String astroScheduleOnline = "astroScheduleOnline";
+  final String getChatAssistAstroData = "getChatAssistCustomerData";
 
   //Basic Auth
   final String username = "625170";

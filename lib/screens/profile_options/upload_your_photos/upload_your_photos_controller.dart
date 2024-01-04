@@ -59,13 +59,13 @@ class UploadYourPhotosController extends GetxController {
   uploadImageToS3Bucket(List<File> selectedImages) async {
     List<Future> futures = <Future>[];
     var commonConstants = await userRepository.constantDetailsData();
-    var dataString = commonConstants.data.awsCredentails.baseurl?.split(".");
+    var dataString = commonConstants.data!.awsCredentails.baseurl?.split(".");
     for (int i = 0; i < selectedImages.length; i++) {
       var extension = p.extension(selectedImages[i].path);
       futures.add(
         AwsS3.uploadFile(
-          accessKey: commonConstants.data.awsCredentails.accesskey!,
-          secretKey: commonConstants.data.awsCredentails.secretKey!,
+          accessKey: commonConstants.data!.awsCredentails.accesskey!,
+          secretKey: commonConstants.data!.awsCredentails.secretKey!,
           file: selectedImages[i],
           bucket: dataString![0].split("//")[1],
           destDir: 'astrologer/${userData?.id}',
