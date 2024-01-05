@@ -1,17 +1,19 @@
 // ignore_for_file: invalid_use_of_protected_member, unnecessary_null_comparison, lines_longer_than_80_chars
 
 import "dart:async";
+import "dart:convert";
 
 import "package:divine_astrologer/di/shared_preference_service.dart";
+import "package:divine_astrologer/model/live/blocked_customer_list_res.dart";
+import "package:divine_astrologer/model/live/blocked_customer_res.dart";
 import "package:divine_astrologer/model/res_login.dart";
 import "package:divine_astrologer/repository/astrologer_profile_repository.dart";
+import "package:divine_astrologer/repository/kundli_repository.dart";
+import "package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:get/get.dart";
-//
-//
-//
-//
-//
+import "package:get/get_connect/http/src/status/http_status.dart";
+import "package:http/http.dart" as http;
 //
 //
 //
@@ -33,6 +35,7 @@ class LiveDharamController extends GetxController {
   final RxInt _currentIndex = 0.obs;
   final RxMap<dynamic, dynamic> _data = <dynamic, dynamic>{}.obs;
   // final Rx<GetAstroDetailsRes> _details = GetAstroDetailsRes().obs;
+  // final Rx<IsCustomerBlockedRes> _isCustBlocked = IsCustomerBlockedRes().obs;
   final RxList<LeaderboardModel> _leaderboardModel = <LeaderboardModel>[].obs;
   final RxList<WaitListModel> _waitListModel = <WaitListModel>[].obs;
   // final Rx<AstrologerFollowingResponse> _followRes =
@@ -44,6 +47,7 @@ class LiveDharamController extends GetxController {
   final RxBool _isMicOn = true.obs;
   final RxBool _amIBlocked = false.obs;
   final Rx<WaitListModel> _currentCaller = WaitListModel(
+    isRequest: false,
     isEngaded: false,
     callType: "callType",
     totalTime: "",
@@ -54,6 +58,8 @@ class LiveDharamController extends GetxController {
   final RxBool _showTopBanner = false.obs;
   // final Rx<InsufficientBalModel> _insufficientBalModel =
   //     InsufficientBalModel().obs;
+  final Rx<BlockedCustomerListRes> _blockedCustomerList =
+      BlockedCustomerListRes().obs;
 
   @override
   void onInit() {
@@ -75,6 +81,7 @@ class LiveDharamController extends GetxController {
     currentIndex = 0;
     data = <dynamic, dynamic>{};
     // details = GetAstroDetailsRes();
+    // isCustBlocked = IsCustomerBlockedRes();
     leaderboardModel = <LeaderboardModel>[];
     waitListModel = <WaitListModel>[];
     // followRes = AstrologerFollowingResponse();
@@ -85,6 +92,7 @@ class LiveDharamController extends GetxController {
     isMicOn = true;
     amIBlocked = false;
     currentCaller = WaitListModel(
+      isRequest: false,
       isEngaded: false,
       callType: "callType",
       totalTime: "",
@@ -94,6 +102,7 @@ class LiveDharamController extends GetxController {
     );
     showTopBanner = false;
     // insufficientBalModel = InsufficientBalModel();
+    blockedCustomerList = BlockedCustomerListRes();
     return;
   }
 
@@ -109,6 +118,7 @@ class LiveDharamController extends GetxController {
     _currentIndex.close();
     _data.close();
     // _details.close();
+    // _isCustBlocked.close();
     _leaderboardModel.close();
     _waitListModel.close();
     // _followRes.close();
@@ -121,6 +131,7 @@ class LiveDharamController extends GetxController {
     _currentCaller.close();
     _showTopBanner.close();
     // _insufficientBalModel.close();
+    _blockedCustomerList.close();
 
     super.onClose();
   }
@@ -154,6 +165,9 @@ class LiveDharamController extends GetxController {
 
   // GetAstroDetailsRes get details => _details.value;
   // set details(GetAstroDetailsRes value) => _details(value);
+
+  // IsCustomerBlockedRes get isCustBlocked => _isCustBlocked.value;
+  // set isCustBlocked(IsCustomerBlockedRes value) => _isCustBlocked(value);
 
   List<LeaderboardModel> get leaderboardModel => _leaderboardModel.value;
   set leaderboardModel(List<LeaderboardModel> value) =>
@@ -193,10 +207,15 @@ class LiveDharamController extends GetxController {
   // set insufficientBalModel(InsufficientBalModel value) =>
   //     _insufficientBalModel(value);
 
+  BlockedCustomerListRes get blockedCustomerList => _blockedCustomerList.value;
+  set blockedCustomerList(BlockedCustomerListRes value) =>
+      _blockedCustomerList(value);
+
   Future<void> eventListner({
     required DatabaseEvent event,
     required Function() zeroAstro,
     required Function(WaitListModel currentCaller) engaging,
+    required Function() showFollowPopup,
   }) async {
     final DataSnapshot dataSnapshot = event.snapshot;
     if (dataSnapshot != null) {
@@ -216,17 +235,20 @@ class LiveDharamController extends GetxController {
             currentCaller = isEngadedNew(waitListNode, isForMe: false);
 
             await Future.delayed(const Duration(seconds: 1));
-            
-            final bool condition1 = isHost;
-            final bool condition2 = waitListModel.length == 1;
-            final bool condition3 = currentCaller.id.isNotEmpty;
-            final bool condition4 = !currentCaller.isEngaded;
 
-            if (condition1 && condition2 && condition3 && condition4) {
+            final bool cond1 = isHost;
+            final bool cond2 = waitListModel.length == 1;
+            final bool cond3 = currentCaller.id.isNotEmpty;
+            final bool cond4 = !currentCaller.isEngaded;
+            final bool cond5 = !currentCaller.isRequest;
+
+            if (cond1 && cond2 && cond3 && cond4 && cond5) {
               engaging(currentCaller);
             } else {}
 
             // await getAstrologerDetails();
+            // await isCustomerBlocked();
+            // showFollowPopup();
           } else {}
         } else {}
       } else {
@@ -250,6 +272,7 @@ class LiveDharamController extends GetxController {
     Map? map, {
     required bool isForMe,
   }) {
+    bool isRequest = false;
     bool isEngaged = false;
     String callType = "";
     String totalTime = "";
@@ -264,6 +287,7 @@ class LiveDharamController extends GetxController {
             final bool c1 = (value["id"] ?? "") == userId;
             final bool c2 = (value["isEngaded"] ?? false) == true;
             isEngaged = isForMe ? c1 && c2 : c2;
+            isRequest = value["isRequest"] ?? false;
             callType = value["callType"] ?? "";
             totalTime = value["totalTime"] ?? "";
             avatar = value["avatar"] ?? "";
@@ -274,6 +298,7 @@ class LiveDharamController extends GetxController {
       } else {}
     } else {}
     return WaitListModel(
+      isRequest: isRequest,
       isEngaded: isEngaged,
       callType: callType,
       totalTime: totalTime,
@@ -310,7 +335,7 @@ class LiveDharamController extends GetxController {
   // }
 
   // Map<String, dynamic> createGift({required num count, required String svga}) {
-  //   final String accessToken = preferenceService.getToken() ?? "";
+  //   final String accessToken = _pref.getToken() ?? "";
   //   return <String, dynamic>{
   //     "app_id": appID,
   //     "server_secret": serverSecret,
@@ -348,6 +373,51 @@ class LiveDharamController extends GetxController {
   //   return Future<void>.value();
   // }
 
+  Map<String, dynamic> createGift({
+    required num count,
+    required String svga,
+    required Map<String, dynamic> data,
+  }) {
+    final String accessToken = _pref.getToken() ?? "";
+    return <String, dynamic>{
+      "app_id": appID,
+      "server_secret": serverSecret,
+      "room_id": liveId,
+      "user_id": userId,
+      "user_name": userName,
+      // "gift_type": svga,
+      "gift_type": data,
+      "gift_count": count,
+      "access_token": accessToken,
+      "timestamp": DateTime.now().millisecondsSinceEpoch,
+    };
+  }
+
+  Future<void> sendGiftAPI({
+    required num count,
+    required String svga,
+    required Map<String, dynamic> data,
+    required void Function(String message) successCallback,
+    required void Function(String message) failureCallback,
+  }) async {
+    try {
+      const String url = "https://zego-virtual-gift.vercel.app/api/send_gift";
+      final http.Response response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{"Content-Type": "application/json"},
+        body: jsonEncode(
+          createGift(count: count, svga: svga, data: data),
+        ),
+      );
+      response.statusCode == HttpStatus.ok
+          ? successCallback("Yay!")
+          : failureCallback("[ERROR], Send Gift Fail: ${response.statusCode}");
+    } on Exception catch (error) {
+      failureCallback("[ERROR], Send Gift Fail, $error");
+    }
+    return Future<void>.value();
+  }
+
   // Future<void> getAstrologerDetails() async {
   //   Map<String, dynamic> param = <String, dynamic>{};
   //   param = <String, dynamic>{"astrologer_id": liveId};
@@ -360,6 +430,18 @@ class LiveDharamController extends GetxController {
   //   details.data?.image = isValidImageURL(imageURL: details.data?.image ?? "");
   //   details.data?.speciality = getSpeciality();
 
+  //   return Future<void>.value();
+  // }
+
+  // Future<void> isCustomerBlocked() async {
+  //   Map<String, dynamic> params = <String, dynamic>{};
+  //   params = <String, dynamic>{"member_id": liveId};
+  //   IsCustomerBlockedRes isCustomerBlockedRes = IsCustomerBlockedRes();
+  //   isCustomerBlockedRes =
+  //       await liveRepository.isCustomerBlockedAPI(params: params);
+  //   isCustBlocked = isCustomerBlockedRes.statusCode == HttpStatus.ok
+  //       ? IsCustomerBlockedRes.fromJson(isCustomerBlockedRes.toJson())
+  //       : IsCustomerBlockedRes.fromJson(IsCustomerBlockedRes().toJson());
   //   return Future<void>.value();
   // }
 
@@ -585,42 +667,45 @@ class LiveDharamController extends GetxController {
     return;
   }
 
-  // Future<void> addUpdateToWaitList({
-  //   required String callType,
-  //   required bool isEngaded,
-  // }) async {
-  //   String previousType = callType != "" ? callType : "";
-  //   final DataSnapshot dataSnapshot = await FirebaseDatabase.instance
-  //       .ref()
-  //       .child("live/$liveId/waitList/$userId")
-  //       .get();
-  //   if (dataSnapshot != null) {
-  //     if (dataSnapshot.exists) {
-  //       if (dataSnapshot.value is Map<dynamic, dynamic>) {
-  //         Map<dynamic, dynamic> map = <dynamic, dynamic>{};
-  //         map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-  //             as Map<dynamic, dynamic>;
-  //         final String type = map["callType"];
-  //         previousType = type;
-  //       } else {}
-  //     } else {}
-  //   } else {}
-  //   await FirebaseDatabase.instance
-  //       .ref()
-  //       .child("live/$liveId/waitList/$userId")
-  //       .update(
-  //     <String, dynamic>{
-  //       "isEngaded": isEngaded,
-  //       "callType": previousType.toLowerCase(),
-  //       // "totalTime": intToTimeLeft(walletBalance.value),
-  //       "totalTime": (orderGenerate.data?.talktime ?? '0').toString(),
-  //       "userName": userName,
-  //       "avatar": avatar,
-  //       "id": userId,
-  //     },
-  //   );
-  //   return Future<void>.value();
-  // }
+  Future<void> addUpdateToWaitList({
+    required String userId,
+    required String callType,
+    required bool isEngaded,
+    required bool isRequest,
+  }) async {
+    String previousType = callType != "" ? callType : "";
+    final DataSnapshot dataSnapshot = await FirebaseDatabase.instance
+        .ref()
+        .child("live/$liveId/waitList/$userId")
+        .get();
+    if (dataSnapshot != null) {
+      if (dataSnapshot.exists) {
+        if (dataSnapshot.value is Map<dynamic, dynamic>) {
+          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+              as Map<dynamic, dynamic>;
+          final String type = map["callType"];
+          previousType = type;
+        } else {}
+      } else {}
+    } else {}
+    await FirebaseDatabase.instance
+        .ref()
+        .child("live/$liveId/waitList/$userId")
+        .update(
+      <String, dynamic>{
+        "isRequest": isRequest,
+        "isEngaded": isEngaded,
+        "callType": previousType.toLowerCase(),
+        // "totalTime": intToTimeLeft(walletBalance.value),
+        "totalTime": "240",
+        "userName": userName,
+        "avatar": avatar,
+        "id": userId,
+      },
+    );
+    return Future<void>.value();
+  }
 
   void getLatestWaitList(
     DataSnapshot? dataSnapshot,
@@ -637,6 +722,8 @@ class LiveDharamController extends GetxController {
             (key, value) {
               tempList.add(
                 WaitListModel(
+                  // ignore:  avoid_dynamic_calls
+                  isRequest: value["isRequest"] ?? false,
                   // ignore:  avoid_dynamic_calls
                   isEngaded: value["isEngaded"] ?? false,
                   // ignore:  avoid_dynamic_calls
@@ -924,6 +1011,69 @@ class LiveDharamController extends GetxController {
     await FirebaseDatabase.instance.ref().child("live/$liveId").remove();
     return Future<void>.value();
   }
+
+  Future<void> callBlockedCustomerListRes() async {
+    Map<String, dynamic> param = <String, dynamic>{};
+    param = <String, dynamic>{"role_id": 7};
+    BlockedCustomerListRes blockedCustListRes = BlockedCustomerListRes();
+    blockedCustListRes =
+        await liveRepository.blockedCustomerListAPI(params: param);
+    blockedCustomerList = blockedCustListRes.statusCode == HttpStatus.ok
+        ? BlockedCustomerListRes.fromJson(blockedCustListRes.toJson())
+        : BlockedCustomerListRes.fromJson(BlockedCustomerListRes().toJson());
+    return Future<void>.value();
+  }
+
+  Future<void> callblockCustomer({required int id}) async {
+    Map<String, dynamic> param = <String, dynamic>{};
+    param = <String, dynamic>{
+      "customer_id": id,
+      "is_block": getBlockedInInt(id: id) == 0 ? 1 : 0,
+      "role_id": 7,
+    };
+    BlockedCustomerRes blockedCustListRes = BlockedCustomerRes();
+    blockedCustListRes = await liveRepository.blockedCustomerAPI(params: param);
+    blockedCustListRes = blockedCustListRes.statusCode == HttpStatus.ok
+        ? BlockedCustomerRes.fromJson(blockedCustListRes.toJson())
+        : BlockedCustomerRes.fromJson(BlockedCustomerRes().toJson());
+    await callBlockedCustomerListRes();
+    return Future<void>.value();
+  }
+
+  bool isBlocked({required int id}) {
+    Data? data = blockedCustomerList.data?.firstWhere(
+      (element) => (element.getCustomers?.id ?? 0) == id,
+      orElse: () => Data(),
+    );
+    return (data?.isBlock ?? 0) == 1;
+  }
+
+  int getBlockedInInt({required int id}) {
+    Data? data = blockedCustomerList.data?.firstWhere(
+      (element) => (element.getCustomers?.id ?? 0) == id,
+      orElse: () => Data(),
+    );
+    return (data?.isBlock ?? 0);
+  }
+
+  Future<bool> shouldOpenBottom() async {
+    bool isRequest = false;
+    final DataSnapshot dataSnapshot = await FirebaseDatabase.instance
+        .ref()
+        .child("live/$liveId/waitList/$userId")
+        .get();
+    if (dataSnapshot != null) {
+      if (dataSnapshot.exists) {
+        if (dataSnapshot.value is Map<dynamic, dynamic>) {
+          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+              as Map<dynamic, dynamic>;
+          isRequest = map["isRequest"];
+        } else {}
+      } else {}
+    } else {}
+    return Future<bool>.value(isRequest);
+  }
 }
 
 class CustomGiftModel {
@@ -960,6 +1110,7 @@ class LeaderboardModel {
 
 class WaitListModel {
   WaitListModel({
+    required this.isRequest,
     required this.isEngaded,
     required this.callType,
     required this.totalTime,
@@ -968,6 +1119,7 @@ class WaitListModel {
     required this.id,
   });
 
+  final bool isRequest;
   final bool isEngaded;
   final String callType;
   final String totalTime;

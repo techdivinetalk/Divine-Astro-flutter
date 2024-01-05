@@ -148,6 +148,8 @@ class ApiProvider {
 
   //added by dev-dharam
   final String getAllGifts = "getAllGifts";
+  final String blockCustomerlist = "blockCustomerlist";
+  final String blockCustomer = "blockCustomer";   
 
   //
   final NetworkService networkManager = Get.find<NetworkService>();

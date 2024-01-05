@@ -2,6 +2,7 @@
 
 import "dart:async";
 import "dart:convert";
+import "dart:developer";
 
 import "package:after_layout/after_layout.dart";
 import "package:divine_astrologer/common/colors.dart";
@@ -15,6 +16,7 @@ import "package:divine_astrologer/screens/live_dharam/widgets/call_accept_or_rej
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/disconnect_call_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/end_session_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/gift_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
@@ -29,6 +31,8 @@ import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_stre
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_astro_widget.dart";
+//
 //
 //
 //
@@ -50,7 +54,8 @@ class LiveDharamScreen extends StatefulWidget {
   State<LiveDharamScreen> createState() => _LivePage();
 }
 
-class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
+class _LivePage extends State<LiveDharamScreen>
+    with WidgetsBindingObserver, AfterLayoutMixin<LiveDharamScreen> {
   final LiveDharamController _controller = Get.find();
 
   final ZegoUIKitPrebuiltLiveStreamingController _zegoController =
@@ -131,6 +136,18 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
                 } else {}
               },
             );
+          },
+          showFollowPopup: () {
+            // WidgetsBinding.instance.endOfFrame.then(
+            //   (_) async {
+            //     if (mounted) {
+            //       if (_controller.details.data?.isFollow == 0) {
+            //         await Future.delayed(const Duration(seconds: 12));
+            //         await exitPopup();
+            //       } else {}
+            //     } else {}
+            //   },
+            // );
           },
         );
       },
@@ -700,7 +717,15 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
   //           GiftPlayerData(GiftPlayerSource.url, item.animation),
   //         );
   //       } else {}
+  //       var data = {
+  //         "room_id": _controller.liveId,
+  //         "user_id": _controller.userId,
+  //         "user_name": _controller.userName,
+  //         "item": item.toJson(),
+  //         "type": "",
+  //       };
   //       await _controller.sendGiftAPI(
+  //         data: data,
   //         count: quantity,
   //         svga: item.animation,
   //         successCallback: log,
@@ -709,18 +734,6 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
   //       await _controller.addUpdateLeaderboard(
   //         quantity: quantity,
   //         amount: item.giftPrice,
-  //       );
-  //       final ZegoCustomMessage model1 = ZegoCustomMessage(
-  //         type: 1,
-  //         liveId: _controller.liveId,
-  //         userId: _controller.userId,
-  //         userName: _controller.userName,
-  //         avatar: _controller.avatar,
-  //         message: quantity > 1
-  //             ? "${_controller.userName} sent a ${item.giftName} (${quantity}X)"
-  //             : "${_controller.userName} sent a ${item.giftName}",
-  //         timeStamp: DateTime.now().toString(),
-  //         fullGiftImage: item.fullGiftImage,
   //       );
   //       final ZegoCustomMessage model0 = ZegoCustomMessage(
   //         type: 0,
@@ -734,8 +747,23 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
   //         timeStamp: DateTime.now().toString(),
   //         fullGiftImage: item.fullGiftImage,
   //       );
-  //       await sendMessageToZego(model1);
   //       await sendMessageToZego(model0);
+
+  //       await Future.delayed(const Duration(seconds: 1));
+
+  //       final ZegoCustomMessage model1 = ZegoCustomMessage(
+  //         type: 1,
+  //         liveId: _controller.liveId,
+  //         userId: _controller.userId,
+  //         userName: _controller.userName,
+  //         avatar: _controller.avatar,
+  //         message: quantity > 1
+  //             ? "${_controller.userName} sent a ${item.giftName} (${quantity}X)"
+  //             : "${_controller.userName} sent a ${item.giftName}",
+  //         timeStamp: DateTime.now().toString(),
+  //         fullGiftImage: item.fullGiftImage,
+  //       );
+  //       await sendMessageToZego(model1);
   //     } else {}
   //   }
   //   return Future<void>.value();
@@ -821,7 +849,15 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
                                     size: 16,
                                     color: AppColors.yellow,
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    await moreOptionsPopup(
+                                      userId: msg.userId ?? "",
+                                      userName: msg.userName ?? "",
+                                      isBlocked: _controller.isBlocked(
+                                        id: int.parse(msg.userId ?? ""),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             ],
@@ -952,22 +988,60 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
     return Future<void>.value();
   }
 
-  // Future<void> giftPopup({required BuildContext ctx}) async {
-  //   await showCupertinoModalPopup(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return GiftWidget(
-  //         onClose: Get.back,
-  //         list: GiftsSingleton().gifts.data ?? <GiftData>[],
-  //         onSelect: (GiftData item, num quantity) async {
-  //           Get.back();
-  //           await sendGiftFunc(ctx: ctx, item: item, quantity: quantity);
-  //         },
-  //       );
-  //     },
-  //   );
-  //   return Future<void>.value();
-  // }
+  Future<void> giftPopup({
+    required BuildContext ctx,
+    required String userId,
+    required String userName,
+  }) async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return GiftWidget(
+          onClose: Get.back,
+          list: GiftsSingleton().gifts.data ?? <GiftData>[],
+          onSelect: (GiftData item, num quantity) async {
+            Get.back();
+            if (_controller.isHost) {
+              await sendGiftFuncAstro(
+                ctx: ctx,
+                item: item,
+                quantity: quantity,
+                userId: userId,
+                userName: userName,
+              );
+            } else {
+              // await sendGiftFunc(ctx: ctx, item: item, quantity: quantity);
+            }
+          },
+        );
+      },
+    );
+    return Future<void>.value();
+  }
+
+  Future<void> sendGiftFuncAstro({
+    required BuildContext ctx,
+    required GiftData item,
+    required num quantity,
+    required String userId,
+    required String userName,
+  }) async {
+    var data = {
+      "room_id": _controller.liveId,
+      "user_id": userId,
+      "user_name": userName,
+      "item": item.toJson(),
+      "type": "Ask For Gift",
+    };
+    await _controller.sendGiftAPI(
+      data: data,
+      count: quantity,
+      svga: "",
+      successCallback: log,
+      failureCallback: log,
+    );
+    return Future<void>.value();
+  }
 
   Future<void> leaderboardPopup() async {
     await showCupertinoModalPopup(
@@ -1048,7 +1122,7 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
     return Future<void>.value();
   }
 
-  // Future<void> exitPopup({required void Function() exitLive}) async {
+  // Future<void> exitPopup() async {
   //   await showCupertinoModalPopup(
   //     context: context,
   //     builder: (BuildContext context) {
@@ -1061,7 +1135,6 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
   //           if (_controller.details.data?.isFollow == 0) {
   //             await _controller.followOrUnfollowAstrologer();
   //           } else {}
-  //           exitLive();
   //         },
   //       );
   //     },
@@ -1157,30 +1230,183 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
   //       needRecharge: needRecharge,
   //     );
   //     if (canOrder) {
-  //       await _controller.addUpdateToWaitList(callType: type, isEngaded: false);
+  //       await _controller.addUpdateToWaitList(
+  //         userId: _controller.userId,
+  //         callType: type,
+  //         isEngaded: false,
+  //         isRequest: false,
+  //       );
   //     } else {}
   //   }
   //   return Future<void>.value();
   // }
 
-  // Future<void> moreOptionsPopup({required String userId}) async {
-  //   await showCupertinoModalPopup(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return MoreOptionsWidget(
-  //         onClose: Get.back,
-  //         isHost: _controller.isHost,
-  //         onTapOnBlockUser: () async {
-  //           Get.back();
-  //           if (_controller.isHost) {
-  //             await _controller.addUpdateToBlockList(userId: userId);
-  //           } else {}
-  //         },
-  //         onTapOnReportUser: Get.back,
-  //         onTapOnRequestGift: Get.back,
-  //       );
-  //     },
-  //   );
+  Future<void> moreOptionsPopup({
+    required String userId,
+    required String userName,
+    required bool isBlocked,
+  }) async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        var item = GiftData(
+          id: 0,
+          giftName: "",
+          giftImage: "",
+          giftPrice: 0,
+          giftStatus: 0,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+          fullGiftImage: "",
+          animation: "",
+        );
+
+        return MoreOptionsWidget(
+          onClose: Get.back,
+          isHost: _controller.isHost,
+          onTapAskForGifts: () async {
+            Get.back();
+            await giftPopup(ctx: context, userId: userId, userName: userName);
+          },
+          onTapAskForVideoCall: () async {
+            Get.back();
+            var data = {
+              "room_id": _controller.liveId,
+              "user_id": userId,
+              "user_name": userName,
+              "item": item.toJson(),
+              "type": "Ask For Video Call",
+            };
+            await _controller.sendGiftAPI(
+              data: data,
+              count: 1,
+              svga: "",
+              successCallback: log,
+              failureCallback: log,
+            );
+            await _controller.addUpdateToWaitList(
+              userId: userId,
+              callType: "Video",
+              isEngaded: false,
+              isRequest: true,
+            );
+            final String id = userId;
+            final String name = userName;
+            // final String avatar = _controller.waitListModel.last.avatar;
+            final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
+            final connectInvite = _zegoController.connectInvite;
+            await connectInvite.hostSendCoHostInvitationToAudience(user);
+          },
+          onTapAskForAudioCall: () async {
+            Get.back();
+            var data = {
+              "room_id": _controller.liveId,
+              "user_id": userId,
+              "user_name": userName,
+              "item": item.toJson(),
+              "type": "Ask For Voice Call",
+            };
+            await _controller.sendGiftAPI(
+              data: data,
+              count: 1,
+              svga: "",
+              successCallback: log,
+              failureCallback: log,
+            );
+            await _controller.addUpdateToWaitList(
+              userId: userId,
+              callType: "Audio",
+              isEngaded: false,
+              isRequest: true,
+            );
+            final String id = userId;
+            final String name = userName;
+            // final String avatar = _controller.waitListModel.last.avatar;
+            final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
+            final connectInvite = _zegoController.connectInvite;
+            await connectInvite.hostSendCoHostInvitationToAudience(user);
+          },
+          onTapAskForPrivateCall: () async {
+            Get.back();
+            var data = {
+              "room_id": _controller.liveId,
+              "user_id": userId,
+              "user_name": userName,
+              "item": item.toJson(),
+              "type": "Ask For Private Call",
+            };
+            await _controller.sendGiftAPI(
+              data: data,
+              count: 1,
+              svga: "",
+              successCallback: log,
+              failureCallback: log,
+            );
+            await _controller.addUpdateToWaitList(
+              userId: userId,
+              callType: "Private",
+              isEngaded: false,
+              isRequest: true,
+            );
+            final String id = userId;
+            final String name = userName;
+            // final String avatar = _controller.waitListModel.last.avatar;
+            final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
+            final connectInvite = _zegoController.connectInvite;
+            await connectInvite.hostSendCoHostInvitationToAudience(user);
+          },
+          onTapAskForBlockUnBlockUser: () async {
+            Get.back();
+            await _controller.callblockCustomer(id: int.parse(userId));
+            var data = {
+              "room_id": _controller.liveId,
+              "user_id": userId,
+              "user_name": userName,
+              "item": item.toJson(),
+              "type": "Block/Unblock",
+            };
+            await _controller.sendGiftAPI(
+              data: data,
+              count: 1,
+              svga: "",
+              successCallback: log,
+              failureCallback: log,
+            );
+          },
+          isBlocked: isBlocked,
+        );
+      },
+    );
+    return Future<void>.value();
+  }
+
+  // Future<void> onInRoomCommandMessageReceived(
+  //   ZegoSignalingPluginInRoomCommandMessageReceivedEvent event,
+  // ) async {
+  //   final List<ZegoSignalingPluginInRoomCommandMessage> msgs = event.messages;
+  //   for (final ZegoSignalingPluginInRoomCommandMessage commandMessage in msgs) {
+  //     final String senderUserID = commandMessage.senderUserID;
+  //     final String message = utf8.decode(commandMessage.message);
+  //     final Map<String, dynamic> decodedMessage = jsonDecode(message);
+
+  //     // final String svga = decodedMessage["gift_type"];
+  //     final String roomId = decodedMessage["room_id"];
+  //     final num giftCount = decodedMessage["gift_count"];
+
+  //     final animation = decodedMessage["gift_type"]["item"]["animation"];
+  //     print("decodedMessage: $animation");
+
+  //     if (senderUserID != _controller.userId) {
+  //       if (roomId == _controller.liveId) {
+  //         for (int i = 0; i < giftCount; i++) {
+  //           ZegoGiftPlayer().play(
+  //             context,
+  //             GiftPlayerData(GiftPlayerSource.url, animation),
+  //           );
+  //         }
+  //       } else {}
+  //     } else {}
+  //   }
   //   return Future<void>.value();
   // }
 
@@ -1192,22 +1418,129 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
       final String senderUserID = commandMessage.senderUserID;
       final String message = utf8.decode(commandMessage.message);
       final Map<String, dynamic> decodedMessage = jsonDecode(message);
-      final String svga = decodedMessage["gift_type"];
+      // final int appId = decodedMessage["app_id"];
+      // final String serverSecret = decodedMessage["server_secret"];
       final String roomId = decodedMessage["room_id"];
+      final String userId = decodedMessage["user_id"];
+      final String userName = decodedMessage["user_name"];
+      final Map<String, dynamic> giftType = decodedMessage["gift_type"];
+      final Map<String, dynamic> item = decodedMessage["gift_type"]["item"];
+      final String type = decodedMessage["gift_type"]["type"];
       final num giftCount = decodedMessage["gift_count"];
+      // final String accessToken = decodedMessage["access_token"];
+      // final int timestamp = decodedMessage["timestamp"];
       if (senderUserID != _controller.userId) {
         if (roomId == _controller.liveId) {
-          for (int i = 0; i < giftCount; i++) {
-            ZegoGiftPlayer().play(
-              context,
-              GiftPlayerData(GiftPlayerSource.url, svga),
-            );
-          }
+          if (type == "") {
+            if (mounted) {
+              ZegoGiftPlayer().play(
+                context,
+                GiftPlayerData(GiftPlayerSource.url, item["animation"]),
+              );
+            } else {}
+          } else if (type == "Ask For Gift") {
+            // await commonRequest(type: type, item: item, giftCount: giftCount);
+          } else if (type == "Ask For Video Call") {
+            // await commonRequest(type: type, item: item, giftCount: giftCount);
+          } else if (type == "Ask For Voice Call") {
+            // await commonRequest(type: type, item: item, giftCount: giftCount);
+          } else if (type == "Ask For Private Call") {
+            // await commonRequest(type: type, item: item, giftCount: giftCount);
+          } else if (type == "Block/Unblock") {
+            // await _controller.isCustomerBlocked();
+          } else {}
         } else {}
       } else {}
     }
     return Future<void>.value();
   }
+
+  // Future<void> commonRequest({
+  //   required String type,
+  //   required Map<String, dynamic> item,
+  //   required num giftCount,
+  // }) async {
+  //   WidgetsBinding.instance.endOfFrame.then(
+  //     (_) async {
+  //       if (mounted) {
+  //         await requestPopup(
+  //           ctx: context,
+  //           type: type,
+  //           giftData: GiftData.fromJson(item),
+  //           giftCount: giftCount,
+  //         );
+  //       } else {}
+  //     },
+  //   );
+  //   return Future<void>.value();
+  // }
+
+  // Future<void> requestPopup({
+  //   required BuildContext ctx,
+  //   required String type,
+  //   required GiftData giftData,
+  //   required num giftCount,
+  // }) async {
+  //   await showCupertinoDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return RequestPopupWidget(
+  //         onClose: Get.back,
+  //         details: _controller.details,
+  //         speciality: _controller.getSpeciality(),
+  //         type: type,
+  //         onTapAcceptForGifts: () async {
+  //           Get.back();
+  //           await sendGiftFunc(ctx: ctx, item: giftData, quantity: giftCount);
+  //         },
+  //         onTapAcceptForVideoCall: () async {
+  //           Get.back();
+  //           final connectInvite = _zegoController.connectInvite;
+  //           await _controller.makeAPICallForStartCall(hasAccepted: true);
+  //           await connectInvite.audienceAgreeCoHostInvitation();
+  //         },
+  //         onTapAcceptForAudioCall: () async {
+  //           Get.back();
+  //           final connectInvite = _zegoController.connectInvite;
+  //           await _controller.makeAPICallForStartCall(hasAccepted: true);
+  //           await connectInvite.audienceAgreeCoHostInvitation();
+  //         },
+  //         onTapAcceptForPrivateCall: () async {
+  //           Get.back();
+  //           final connectInvite = _zegoController.connectInvite;
+  //           await _controller.makeAPICallForStartCall(hasAccepted: true);
+  //           await connectInvite.audienceAgreeCoHostInvitation();
+  //         },
+  //         giftData: giftData,
+  //         giftCount: giftCount,
+  //       );
+  //     },
+  //   );
+  //   return Future<void>.value();
+  // }
+
+  // Future<void> youAreBlocked() async {
+  //   await showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: Text(
+  //           "You're Blocked by Astrologer ${_controller.details.data?.name ?? ""}",
+  //         ),
+  //         content: Text(
+  //           "You are not able to perform this action because you're blocked by Astrologer ${_controller.details.data?.name ?? ""}.",
+  //         ),
+  //         actions: <Widget>[
+  //           ElevatedButton(
+  //             onPressed: Get.back,
+  //             child: const Text("OK"),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  //   return Future<void>.value();
+  // }
 
   void scrollDownForTop() {
     final double maxScr = _scrollControllerForTop.position.maxScrollExtent;
@@ -1305,7 +1638,11 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
               ),
               const SizedBox(width: 8),
               InkWell(
-                onTap: () {},
+                onTap: () async {
+                  // _controller.isCustBlocked.data?.isCustomerBlocked == 1
+                  //     ? await youAreBlocked()
+                  //     : await callAstrologerPopup();
+                },
                 child: SizedBox(
                   height: 32,
                   width: 32,
@@ -1405,7 +1742,11 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
   Widget newAppBarRight() {
     return InkWell(
       onTap: () async {
-        // await giftPopup(ctx: context);
+        // await giftPopup(
+        //   ctx: context,
+        //   userId: _controller.userId,
+        //   userName: _controller.userName,
+        // );
       },
       child: SizedBox(
         height: 50,
@@ -2039,7 +2380,13 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
                         : Column(
                             children: [
                               InkWell(
-                                onTap: () {},
+                                onTap: () async {
+                                  // _controller.isCustBlocked.data
+                                  //             ?.isCustomerBlocked ==
+                                  //         1
+                                  //     ? await youAreBlocked()
+                                  //     : await callAstrologerPopup();
+                                },
                                 child: SizedBox(
                                   height: 84,
                                   width: 84 - 20,
@@ -2152,12 +2499,13 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
           },
         );
       } else {
-        // await exitPopup(
-        //   exitLive: () async {},
+        // await showAllAvailAstroPopup(
+        //   exitLive: () async {
+        //     if (mounted) {
+        //       await _zegoController.leave(context);
+        //     } else {}
+        //   },
         // );
-        // if (mounted) {
-        //   await _zegoController.leave(context);
-        // } else {}
       }
     }
     return Future<void>.value();
@@ -2415,6 +2763,25 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
     return Future<void>.value();
   }
 
+  Future<void> showAllAvailAstroPopup() async {
+    await showCupertinoModalPopup(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return ShowAllAvailAstroWidget(
+          onClose: Get.back,
+          list: [],
+          onSelect: (v) {
+            Get.back();
+          },
+          onFollowAndLeave: Get.back,
+          onLeave: Get.back,
+        );
+      },
+    );
+    return Future<void>.value();
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
@@ -2425,5 +2792,16 @@ class _LivePage extends State<LiveDharamScreen> with WidgetsBindingObserver {
       // } else {}
       await _controller.removeMyNode();
     } else {}
+  }
+
+  @override
+  FutureOr<void> afterFirstLayout(BuildContext context) async {
+    await _controller.callBlockedCustomerListRes();
+
+    _controller.blockedCustomerList.data?.forEach((element) {
+      print("blockedCustomerList: id:   ${element.getCustomers?.id}");
+      print("blockedCustomerList: name: ${element.getCustomers?.name}");
+    });
+    return Future<void>.value();
   }
 }
