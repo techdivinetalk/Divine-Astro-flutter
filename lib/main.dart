@@ -92,16 +92,16 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 //  await AppFirebaseService().readData(path);
   //debugPrint("Handling a background message: ${message.messageId}");
 }
-Future<void> showNotification(String title,String message) async {
-  const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
-    "DivineAstrologer",
-    "AstrologerNotification",
-    importance: Importance.high,
-  );
-  const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
-  await flutterLocalNotificationsPlugin
-      .show(math.Random().nextInt(10000), title, message, notificationDetails, payload: "jsonEncodePayload");
-}
+// Future<void> showNotification(String title,String message) async {
+//   const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
+//     "DivineAstrologer",
+//     "AstrologerNotification",
+//     importance: Importance.high,
+//   );
+//   const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
+//   await flutterLocalNotificationsPlugin
+//       .show(math.Random().nextInt(10000), title, message, notificationDetails, payload: "jsonEncodePayload");
+// }
 void initMessaging() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
   AndroidInitializationSettings("@mipmap/ic_launcher");
