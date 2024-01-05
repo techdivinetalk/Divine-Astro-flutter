@@ -131,4 +131,8 @@ class AppSocket {
     socket?.emit(
         ApiProvider().sendConnectRequest, {'astroId': astroId, 'custId': custId, 'userType': 'astrologer'});
   }
+  void sendAssistantMessage({required String message, required String astroId, required String customerId}) {
+    socket?.emit(ApiProvider().sendChatAssistMessage,
+        {'userType': 'customer', 'custId': customerId, 'astroId': astroId, 'message': message});
+  }
 }

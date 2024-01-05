@@ -118,6 +118,7 @@ class RouteName {
   static const String videoCall = "/videoCall";
   static const String numberChangeOtpScreen = "/numberChangeOtpScreen";
   static const String orderFeedback = "/orderFeedback";
+  static const String chatMessageSupportUI = "/chatMessageUI";
   static const String liveDharamScreen = "/liveDharamScreen";
 }
 
@@ -200,7 +201,7 @@ class Routes {
         name: RouteName.donationDetailPage,
         binding: DonationBinding()),
     GetPage(
-        page: () => const ChatMessageUI(),
+        page: () => const ChatMessageSupportUI(),
         name: RouteName.chatMessageUI,
         binding: ChatMessageBinding()),
     GetPage(

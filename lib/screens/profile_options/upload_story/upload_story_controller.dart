@@ -56,12 +56,12 @@ class UploadStoryController extends GetxController {
 
   uploadImageToS3Bucket(File? selectedFile) async {
     var commonConstants = await userRepository.constantDetailsData();
-    var dataString = commonConstants.data.awsCredentails.baseurl?.split(".");
+    var dataString = commonConstants.data!.awsCredentails.baseurl?.split(".");
     var extension = p.extension(selectedFile!.path);
 
     var response = await AwsS3.uploadFile(
-      accessKey: commonConstants.data.awsCredentails.accesskey!,
-      secretKey: commonConstants.data.awsCredentails.secretKey!,
+      accessKey: commonConstants.data!.awsCredentails.accesskey!,
+      secretKey: commonConstants.data!.awsCredentails.secretKey!,
       file: selectedFile,
       bucket: dataString![0].split("//")[1],
       destDir: 'astrologer/${userData?.id}',

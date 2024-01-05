@@ -4,9 +4,11 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/common_bottomsheet.dart';
 import '../../../model/notice_response.dart';
@@ -112,24 +114,30 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
                 ],
               ),
               const SizedBox(height: 10),
-              ReadMoreText(
-                description ?? "",
-                trimLines: 4,
-                colorClickableText: AppColors.blackColor,
-                trimMode: TrimMode.Line,
-                trimCollapsedText: "readMore".tr,
-                trimExpandedText: "showLess".tr,
-                moreStyle: TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.blackColor,
-                ),
-                lessStyle: TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.blackColor,
-                ),
+              Html(
+                data: description ?? "",
+                onLinkTap: (url, __, ___) {
+                  launchUrl(Uri.parse(url ?? ''));
+                },
               ),
+              // ReadMoreText(
+              //   description ?? "",
+              //   trimLines: 4,
+              //   colorClickableText: AppColors.blackColor,
+              //   trimMode: TrimMode.Line,
+              //   trimCollapsedText: "readMore".tr,
+              //   trimExpandedText: "showLess".tr,
+              //   moreStyle: TextStyle(
+              //     fontSize: 12.sp,
+              //     fontWeight: FontWeight.w700,
+              //     color: AppColors.blackColor,
+              //   ),
+              //   lessStyle: TextStyle(
+              //     fontSize: 12.sp,
+              //     fontWeight: FontWeight.w700,
+              //     color: AppColors.blackColor,
+              //   ),
+              // ),
             ],
           ),
         ),

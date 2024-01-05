@@ -334,7 +334,7 @@ class UserRepository extends ApiProvider {
         final constantDetailsModelClass =
             ConstantDetailsModelClass.fromJson(json.decode(response.body));
         if (constantDetailsModelClass.statusCode == successResponse &&
-            constantDetailsModelClass.success) {
+            constantDetailsModelClass.success == true) {
           return constantDetailsModelClass;
         } else {
           throw CustomException(json.decode(response.body)["error"]);
@@ -613,7 +613,7 @@ class UserRepository extends ApiProvider {
   Future<UpdateSessionTypeResponse> updateSessionTypeApi(
       Map<String, dynamic> params) async {
     try {
-      final response = await post(updateSessionType,
+      final response = await post(astroOnline,
           body: jsonEncode(params), headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {

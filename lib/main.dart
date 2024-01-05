@@ -87,22 +87,21 @@ Future<void> initServices() async {
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseDatabase.instance.ref("demo").child("path").child("astro").set("${message.data}");
-  showNotification(message.data["title"],message.data["message"]);
-  var path = 'user/${message.data["userid"]}/realTime';
-  await AppFirebaseService().readData(path);
+//  showNotification(message.data["title"],message.data["message"]);
+//  var path = 'user/${message.data["userid"]}/realTime';
+//  await AppFirebaseService().readData(path);
   //debugPrint("Handling a background message: ${message.messageId}");
 }
-Future<void> showNotification(String title,String message) async {
-  const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
-    "DivineAstrologer",
-    "AstrologerNotification",
-    importance: Importance.high,
-  );
-  const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
-  await flutterLocalNotificationsPlugin
-      .show(math.Random().nextInt(10000), title, message, notificationDetails, payload: "jsonEncodePayload");
-}
+// Future<void> showNotification(String title,String message) async {
+//   const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
+//     "DivineAstrologer",
+//     "AstrologerNotification",
+//     importance: Importance.high,
+//   );
+//   const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
+//   await flutterLocalNotificationsPlugin
+//       .show(math.Random().nextInt(10000), title, message, notificationDetails, payload: "jsonEncodePayload");
+// }
 void initMessaging() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
   AndroidInitializationSettings("@mipmap/ic_launcher");

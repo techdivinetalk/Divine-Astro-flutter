@@ -22,10 +22,13 @@ class $AssetsImagesGen {
   /// File path: assets/images/audio_enable_live.svg
   SvgGenImage get audioEnableLive =>
       const SvgGenImage('assets/images/audio_enable_live.svg');
-
+  SvgGenImage get searchIcon =>
+      const SvgGenImage('assets/images/Search_icon.svg');
   /// File path: assets/images/avatar.svg
   SvgGenImage get avatar => const SvgGenImage('assets/images/avatar.svg');
-
+  /// File path: assets/images/ic_emoji_share.png
+  AssetGenImage get icEmojiShare =>
+      const AssetGenImage('assets/images/ic_emoji_share.png');
   /// File path: assets/images/bg_MeterFinal.svg
   SvgGenImage get bgMeterFinal =>
       const SvgGenImage('assets/images/bg_MeterFinal.svg');
@@ -418,6 +421,58 @@ class $AssetsImagesGen {
   SvgGenImage get leftArrow =>
       const SvgGenImage('assets/images/left_arrow.svg');
 
+  /// File path: assets/images/live_call_audio.png
+  AssetGenImage get liveCallAudio =>
+      const AssetGenImage('assets/images/live_call_audio.png');
+
+  /// File path: assets/images/live_call_btn.png
+  AssetGenImage get liveCallBtn =>
+      const AssetGenImage('assets/images/live_call_btn.png');
+
+  /// File path: assets/images/live_call_private.png
+  AssetGenImage get liveCallPrivate =>
+      const AssetGenImage('assets/images/live_call_private.png');
+
+  /// File path: assets/images/live_call_video.png
+  AssetGenImage get liveCallVideo =>
+      const AssetGenImage('assets/images/live_call_video.png');
+
+  /// File path: assets/images/live_call_wave.png
+  AssetGenImage get liveCallWave =>
+      const AssetGenImage('assets/images/live_call_wave.png');
+
+  /// File path: assets/images/live_calls_off_new.png
+  AssetGenImage get liveCallsOffNew =>
+      const AssetGenImage('assets/images/live_calls_off_new.png');
+
+  /// File path: assets/images/live_calls_on_new.png
+  AssetGenImage get liveCallsOnNew =>
+      const AssetGenImage('assets/images/live_calls_on_new.png');
+
+  /// File path: assets/images/live_cam_off.png
+  AssetGenImage get liveCamOff =>
+      const AssetGenImage('assets/images/live_cam_off.png');
+
+  /// File path: assets/images/live_cam_on.png
+  AssetGenImage get liveCamOn =>
+      const AssetGenImage('assets/images/live_cam_on.png');
+
+  /// File path: assets/images/live_champion.png
+  AssetGenImage get liveChampion =>
+      const AssetGenImage('assets/images/live_champion.png');
+
+  /// File path: assets/images/live_dashes.png
+  AssetGenImage get liveDashes =>
+      const AssetGenImage('assets/images/live_dashes.png');
+
+  /// File path: assets/images/live_end_session.png
+  AssetGenImage get liveEndSession =>
+      const AssetGenImage('assets/images/live_end_session.png');
+
+  /// File path: assets/images/live_exit_red.png
+  AssetGenImage get liveExitRed =>
+      const AssetGenImage('assets/images/live_exit_red.png');
+
   /// File path: assets/images/live_first_medal.png
   AssetGenImage get liveFirstMedal =>
       const AssetGenImage('assets/images/live_first_medal.png');
@@ -426,13 +481,69 @@ class $AssetsImagesGen {
   AssetGenImage get liveLeaderboard =>
       const AssetGenImage('assets/images/live_leaderboard.png');
 
+  /// File path: assets/images/live_leaderboard_crown.png
+  AssetGenImage get liveLeaderboardCrown =>
+      const AssetGenImage('assets/images/live_leaderboard_crown.png');
+
+  /// File path: assets/images/live_mic_off.png
+  AssetGenImage get liveMicOff =>
+      const AssetGenImage('assets/images/live_mic_off.png');
+
+  /// File path: assets/images/live_mic_on.png
+  AssetGenImage get liveMicOn =>
+      const AssetGenImage('assets/images/live_mic_on.png');
+
+  /// File path: assets/images/live_mini_hourglass.png
+  AssetGenImage get liveMiniHourglass =>
+      const AssetGenImage('assets/images/live_mini_hourglass.png');
+
+  /// File path: assets/images/live_new_chat_icon.png
+  AssetGenImage get liveNewChatIcon =>
+      const AssetGenImage('assets/images/live_new_chat_icon.png');
+
+  /// File path: assets/images/live_new_gift.png
+  AssetGenImage get liveNewGift =>
+      const AssetGenImage('assets/images/live_new_gift.png');
+
+  /// File path: assets/images/live_new_gift_latest.png
+  AssetGenImage get liveNewGiftLatest =>
+      const AssetGenImage('assets/images/live_new_gift_latest.png');
+
+  /// File path: assets/images/live_new_hang_up.png
+  AssetGenImage get liveNewHangUp =>
+      const AssetGenImage('assets/images/live_new_hang_up.png');
+
+  /// File path: assets/images/live_new_hourglass.png
+  AssetGenImage get liveNewHourglass =>
+      const AssetGenImage('assets/images/live_new_hourglass.png');
+
+  /// File path: assets/images/live_new_plus_icon.png
+  AssetGenImage get liveNewPlusIcon =>
+      const AssetGenImage('assets/images/live_new_plus_icon.png');
+
+  /// File path: assets/images/live_new_podium.png
+  AssetGenImage get liveNewPodium =>
+      const AssetGenImage('assets/images/live_new_podium.png');
+
+  /// File path: assets/images/live_recharge_button.png
+  AssetGenImage get liveRechargeButton =>
+      const AssetGenImage('assets/images/live_recharge_button.png');
+
   /// File path: assets/images/live_second_medal.png
   AssetGenImage get liveSecondMedal =>
       const AssetGenImage('assets/images/live_second_medal.png');
 
+  /// File path: assets/images/live_send_message_new.png
+  AssetGenImage get liveSendMessageNew =>
+      const AssetGenImage('assets/images/live_send_message_new.png');
+
   /// File path: assets/images/live_star.png
   AssetGenImage get liveStar =>
       const AssetGenImage('assets/images/live_star.png');
+
+  /// File path: assets/images/live_switch_cam_new.png
+  AssetGenImage get liveSwitchCamNew =>
+      const AssetGenImage('assets/images/live_switch_cam_new.png');
 
   /// File path: assets/images/live_third_medal.png
   AssetGenImage get liveThirdMedal =>
@@ -597,10 +708,37 @@ class $AssetsImagesGen {
         icWedding,
         leaderboardLive,
         leftArrow,
+        liveCallAudio,
+        liveCallBtn,
+        liveCallPrivate,
+        liveCallVideo,
+        liveCallWave,
+        liveCallsOffNew,
+        liveCallsOnNew,
+        liveCamOff,
+        liveCamOn,
+        liveChampion,
+        liveDashes,
+        liveEndSession,
+        liveExitRed,
         liveFirstMedal,
         liveLeaderboard,
+        liveLeaderboardCrown,
+        liveMicOff,
+        liveMicOn,
+        liveMiniHourglass,
+        liveNewChatIcon,
+        liveNewGift,
+        liveNewGiftLatest,
+        liveNewHangUp,
+        liveNewHourglass,
+        liveNewPlusIcon,
+        liveNewPodium,
+        liveRechargeButton,
         liveSecondMedal,
+        liveSendMessageNew,
         liveStar,
+        liveSwitchCamNew,
         liveThirdMedal,
         logo,
         medalOne,
@@ -629,6 +767,9 @@ class $AssetsLottieGen {
   LottieGenImage get genericLoading =>
       const LottieGenImage('assets/lottie/generic loading .json');
 
+  /// File path: assets/lottie/gift.json
+  LottieGenImage get gift => const LottieGenImage('assets/lottie/gift.json');
+
   /// File path: assets/lottie/loading_dots.json
   LottieGenImage get loadingDots =>
       const LottieGenImage('assets/lottie/loading_dots.json');
@@ -645,6 +786,7 @@ class $AssetsLottieGen {
   List<LottieGenImage> get values => [
         exclamationMark,
         genericLoading,
+        gift,
         loadingDots,
         soundWaves,
         typingIndicator

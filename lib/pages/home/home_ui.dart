@@ -15,11 +15,13 @@ import 'package:divine_astrologer/utils/load_image.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:readmore/readmore.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../model/feedback_response.dart';
@@ -626,24 +628,30 @@ class HomeUI extends GetView<HomeController> {
                   ],
                 ),
                 const SizedBox(height: 10),
-                ReadMoreText(
-                  controller.homeData?.noticeBoard?.description ?? '',
-                  trimLines: 4,
-                  colorClickableText: AppColors.blackColor,
-                  trimMode: TrimMode.Line,
-                  trimCollapsedText: "readMore".tr,
-                  trimExpandedText: "showLess".tr,
-                  moreStyle: TextStyle(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.blackColor,
-                  ),
-                  lessStyle: TextStyle(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.blackColor,
-                  ),
+                Html(
+                  data: controller.homeData?.noticeBoard?.description ?? '',
+                  onLinkTap: (url, __, ___) {
+                    launchUrl(Uri.parse(url ?? ''));
+                  },
                 ),
+                // ReadMoreText(
+                //   controller.homeData?.noticeBoard?.description ?? '',
+                //   trimLines: 4,
+                //   colorClickableText: AppColors.blackColor,
+                //   trimMode: TrimMode.Line,
+                //   trimCollapsedText: "readMore".tr,
+                //   trimExpandedText: "showLess".tr,
+                //   moreStyle: TextStyle(
+                //     fontSize: 12.sp,
+                //     fontWeight: FontWeight.w700,
+                //     color: AppColors.blackColor,
+                //   ),
+                //   lessStyle: TextStyle(
+                //     fontSize: 12.sp,
+                //     fontWeight: FontWeight.w700,
+                //     color: AppColors.blackColor,
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -1149,12 +1157,27 @@ class HomeUI extends GetView<HomeController> {
                       onTap: () {
                         if (controller.offerTypeLoading.value !=
                             Loading.loading) {
-                          controller.updateOfferType(
+
+                          if(controller.customOfferSwitch[index]) {
+                            controller.updateOfferType(
                               index: index,
                               offerId: controller.homeData?.offers?.customOffer?[index].id ?? 0,
                               offerType: 2,
                               value: !controller.customOfferSwitch[index],
-                          );
+                            );
+                          } else {
+                            if(controller.customOfferSwitch.any((element) => element == true)) {
+                              divineSnackBar(data: "Only 1 custom offer is allowed at once", color: AppColors.redColor);
+                            } else {
+                              controller.updateOfferType(
+                                index: index,
+                                offerId: controller.homeData?.offers?.customOffer?[index].id ?? 0,
+                                offerType: 2,
+                                value: !controller.customOfferSwitch[index],
+                              );
+                            }
+                          }
+
                         }
                       },
                       switchValue:

@@ -70,7 +70,7 @@ class BlockUserController extends GetxController {
           await userRepository.blockUnblockCustomer(params);
 
       Get.back();
-      CustomException(response.message ?? "");
+      //CustomException(response.message ?? "");
       getBlockedCustomerList();
     } catch (error) {
       if (error is AppException) {

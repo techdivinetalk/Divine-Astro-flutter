@@ -139,7 +139,7 @@ class SharedPreferenceService extends GetxService {
     return await prefs!.setString(constantData, jsonEncode(constantDetails));
   }
 
-  int? getTalkTime() {
+  int getTalkTime() {
     return prefs!.getInt(talkTime) ?? 0;
   }
 

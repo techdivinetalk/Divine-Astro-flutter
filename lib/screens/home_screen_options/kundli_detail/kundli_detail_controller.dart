@@ -239,8 +239,8 @@ class KundliDetailController extends GetxController {
     try {
       ManglikDoshModel response = await kundliRepository
           .getManglikDoshDetails(fromKundali ? kundaliIdParms : params);
-      manglikDoshData.value = response;
-      log("manglikDoshData==>${jsonEncode(manglikDoshData.value)}");
+      manglikDosh.value = response;
+      log("manglikDoshData==>${jsonEncode(manglikDosh.value)}");
     } catch (error) {
       debugPrint("manglikDoshData==> $error");
       if (error is AppException) {

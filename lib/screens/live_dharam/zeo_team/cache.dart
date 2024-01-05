@@ -26,12 +26,12 @@ class GiftCache {
         final http.Response response = await http.get(uri);
         if (response.statusCode == HttpStatus.ok) {
           result = response.bodyBytes.toList();
-          print("concurrentDownload downloadFile result:  $result");
+          //print("concurrentDownload downloadFile result:  $result");
           await DefaultCacheManager().putFile(url, response.bodyBytes);
-          print("concurrentDownload downloadFile cache: cached");
+          //print("concurrentDownload downloadFile cache: cached");
         } else {}
       } on Exception catch (e, s) {
-        print("concurrentDownload downloadFile Exception: $e $s");
+        //print("concurrentDownload downloadFile Exception: $e $s");
       }
     } else {
       result = info.file.readAsBytesSync().toList();

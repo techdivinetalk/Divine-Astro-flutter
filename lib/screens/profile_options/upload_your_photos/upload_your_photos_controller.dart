@@ -37,10 +37,10 @@ class UploadYourPhotosController extends GetxController {
     if (xFilePick.isNotEmpty) {
       for (var i = 0; i < xFilePick.length; i++) {
         if (selectedImages
-            .any((element) => element.path != xFilePick[i].path)) {
-          selectedImages.add(File(xFilePick[i].path));
-        } else {
+            .any((element) => element.path == xFilePick[i].path)) {
           divineSnackBar(data: "This image already selected.");
+        } else {
+          selectedImages.add(File(xFilePick[i].path));
         }
       }
       update();
@@ -59,13 +59,13 @@ class UploadYourPhotosController extends GetxController {
   uploadImageToS3Bucket(List<File> selectedImages) async {
     List<Future> futures = <Future>[];
     var commonConstants = await userRepository.constantDetailsData();
-    var dataString = commonConstants.data.awsCredentails.baseurl?.split(".");
+    var dataString = commonConstants.data!.awsCredentails.baseurl?.split(".");
     for (int i = 0; i < selectedImages.length; i++) {
       var extension = p.extension(selectedImages[i].path);
       futures.add(
         AwsS3.uploadFile(
-          accessKey: commonConstants.data.awsCredentails.accesskey!,
-          secretKey: commonConstants.data.awsCredentails.secretKey!,
+          accessKey: commonConstants.data!.awsCredentails.accesskey!,
+          secretKey: commonConstants.data!.awsCredentails.secretKey!,
           file: selectedImages[i],
           bucket: dataString![0].split("//")[1],
           destDir: 'astrologer/${userData?.id}',

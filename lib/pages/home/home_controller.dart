@@ -17,6 +17,7 @@ import 'package:divine_astrologer/utils/enum.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import "package:permission_handler/permission_handler.dart";
@@ -100,8 +101,8 @@ class HomeController extends GetxController {
     userData = preferenceService.getUserDetail();
     appbarTitle.value = userData?.name ?? "Astrologer Name";
     await getFilteredPerformance();
-    // fetchImportantNumbers();
-    // getContactList();
+    await getContactList();
+    fetchImportantNumbers();
     getConstantDetailsData();
     getDashboardDetail();
     getFeedbackData();
@@ -125,8 +126,14 @@ class HomeController extends GetxController {
     if (contact.isGranted) {
       allContacts = await ContactsService.getContacts();
     } else {
-      divineSnackBar(data: 'contactPermissionRequired'.tr);
+      PermissionStatus status = await Permission.contacts.request();
+      if(status.isGranted) {
+        allContacts = await ContactsService.getContacts();
+      }
     }
+    // {
+    //   divineSnackBar(data: 'contactPermissionRequired'.tr);
+    // }
   }
 
   bool checkForALlContact(List<MobileNumber> importantNumbers) {
@@ -154,8 +161,10 @@ class HomeController extends GetxController {
       if (contact.phones != null) {
         for (var element in contact.phones!) {
           //  log(element.value!);
-          if (contact.displayName == item.label &&
-              numberList.every((el) => el.contains(element.value!))) {
+          if (contact.displayName == item.label
+              // &&
+              // numberList.every((el) => el.contains(element.value!))
+          ) {
             return isExist = true;
           }
         }
@@ -404,7 +413,7 @@ class HomeController extends GetxController {
   }
 
   whatsapp() async {
-    var contact = getConstantDetails?.data.whatsappNo ?? '';
+    var contact = getConstantDetails?.data?.whatsappNo ?? '';
     var androidUrl = "whatsapp://send?phone=$contact&text=Hi";
     var iosUrl = "https://wa.me/$contact?text=${Uri.parse('Hi')}";
 
@@ -471,10 +480,20 @@ class HomeController extends GetxController {
       bool value, RxBool switchType, int type) async {
     //type: 1 - chat, 2 - call, 3 - videoCall
     Map<String, dynamic> params = {
-      "is_chat": getBoolToString(type == 1 ? value : chatSwitch.value),
-      "is_call": getBoolToString(type == 2 ? value : callSwitch.value),
-      "is_video": getBoolToString(type == 3 ? value : videoSwitch.value)
+      "type": type,
+      "role_id": 7,
+      "device_token": preferenceService.getDeviceToken(),
+      // "is_chat": getBoolToString(type == 1 ? value : chatSwitch.value),
+      // "is_call": getBoolToString(type == 2 ? value : callSwitch.value),
+      // "is_video": getBoolToString(type == 3 ? value : videoSwitch.value)
     };
+
+    if(value) {
+      params["check_in"] = 1;
+    } else {
+      params["check_out"] = 1;
+    }
+
 
     sessionTypeLoading.value = Loading.loading;
     try {
@@ -641,11 +660,17 @@ class HomeController extends GetxController {
       Get.context!,
       title: "Feedback Available!!!",
       btnTitle: "Check Report",
-      functionalityWidget: Text(
-        feedbackResponse?.remark ?? '',
-        textAlign: TextAlign.center,
-        style: AppTextStyle.textStyle16(),
+      functionalityWidget: Html(
+        data: feedbackResponse?.remark ?? '',
+        onLinkTap: (url, __, ___) {
+          launchUrl(Uri.parse(url ?? ''));
+        },
       ),
+      // Text(
+      //   feedbackResponse?.remark ?? '',
+      //   textAlign: TextAlign.center,
+      //   style: AppTextStyle.textStyle16(),
+      // ),
     );
   }
 
