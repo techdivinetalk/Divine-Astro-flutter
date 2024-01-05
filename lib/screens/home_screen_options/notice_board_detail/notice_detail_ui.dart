@@ -6,9 +6,11 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/model/home_page_model_class.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/common_bottomsheet.dart';
 import 'notice_detail_controller.dart';
@@ -47,10 +49,16 @@ class NoticeDetailUi extends GetView<NoticeDetailController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              Text(
-                data.description.toString(),
-                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
-              )
+              Html(
+                data: data.description.toString(),
+                onLinkTap: (url, __, ___) {
+                  launchUrl(Uri.parse(url ?? ''));
+                },
+              ),
+              // Text(
+              //   data.description.toString(),
+              //   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+              // )
             ],
           ),
         ),

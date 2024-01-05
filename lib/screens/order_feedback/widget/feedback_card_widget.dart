@@ -1,6 +1,8 @@
 import 'package:divine_astrologer/model/feedback_response.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
@@ -82,10 +84,11 @@ class FeedbackCardWidget extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 16.h),
-              Text(
-                feedback.remark ?? '',
-                style: AppTextStyle.textStyle14(),
-                maxLines: 3,
+              Html(
+                data: feedback.remark ?? '',
+                onLinkTap: (url, __, ___) {
+                  launchUrl(Uri.parse(url ?? ''));
+                },
               ),
               SizedBox(height: 16.h),
               GestureDetector(

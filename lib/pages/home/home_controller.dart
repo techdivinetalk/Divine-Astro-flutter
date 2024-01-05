@@ -17,6 +17,7 @@ import 'package:divine_astrologer/utils/enum.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import "package:permission_handler/permission_handler.dart";
@@ -659,11 +660,17 @@ class HomeController extends GetxController {
       Get.context!,
       title: "Feedback Available!!!",
       btnTitle: "Check Report",
-      functionalityWidget: Text(
-        feedbackResponse?.remark ?? '',
-        textAlign: TextAlign.center,
-        style: AppTextStyle.textStyle16(),
+      functionalityWidget: Html(
+        data: feedbackResponse?.remark ?? '',
+        onLinkTap: (url, __, ___) {
+          launchUrl(Uri.parse(url ?? ''));
+        },
       ),
+      // Text(
+      //   feedbackResponse?.remark ?? '',
+      //   textAlign: TextAlign.center,
+      //   style: AppTextStyle.textStyle16(),
+      // ),
     );
   }
 
