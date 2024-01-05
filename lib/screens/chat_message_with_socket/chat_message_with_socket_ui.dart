@@ -344,26 +344,31 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   Positioned(
                     right: 0,
                     bottom: 0,
-                    child: SocialMediaRecorder(
-                      backGroundColor: AppColors.yellow,
-                      cancelTextBackGroundColor: Colors.white,
-                      recordIconBackGroundColor: AppColors.yellow,
-                      radius: BorderRadius.circular(30),
-                      initRecordPackageWidth: kToolbarHeight - Get.width * 0.010,
-                      recordIconWhenLockBackGroundColor: AppColors.yellow,
-                      maxRecordTimeInSecond: 30,
-                      startRecording: () {
-                        controller.isRecording.value = true;
+                    child: GestureDetector(
+                      onTap: () {
+                        Future.delayed(const Duration(milliseconds: 500)).then((value) => controller.isRecording.value = false);
                       },
-                      stopRecording: (time) {
-                        controller.isRecording.value = false;
-                      },
-                      sendRequestFunction: (soundFile, time) {
-                        controller.isRecording.value = false;
-                        debugPrint("soundFile ${soundFile.path}");
-                        controller.uploadAudioFile(soundFile);
-                      },
-                      encode: AudioEncoderType.AAC,
+                      child: SocialMediaRecorder(
+                        backGroundColor: AppColors.yellow,
+                        cancelTextBackGroundColor: Colors.white,
+                        recordIconBackGroundColor: AppColors.yellow,
+                        radius: BorderRadius.circular(30),
+                        initRecordPackageWidth: kToolbarHeight - Get.width * 0.010,
+                        recordIconWhenLockBackGroundColor: AppColors.yellow,
+                        maxRecordTimeInSecond: 30,
+                        startRecording: () {
+                          controller.isRecording.value = true;
+                        },
+                        stopRecording: (time) {
+                          controller.isRecording.value = false;
+                        },
+                        sendRequestFunction: (soundFile, time) {
+                          controller.isRecording.value = false;
+                          debugPrint("soundFile ${soundFile.path}");
+                          controller.uploadAudioFile(soundFile);
+                        },
+                        encode: AudioEncoderType.AAC,
+                      ),
                     ),
                   )
               ],
