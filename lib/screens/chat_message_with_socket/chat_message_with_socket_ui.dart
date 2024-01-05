@@ -16,12 +16,14 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:get/get.dart";
+import "package:hive/hive.dart";
 import "package:lottie/lottie.dart";
 import "package:permission_handler/permission_handler.dart";
 import "package:social_media_recorder/audio_encoder_type.dart";
 import "package:social_media_recorder/screen/social_media_recorder.dart";
 import "package:voice_message_package/voice_message_package.dart";
 
+import "../live_dharam/widgets/custom_image_widget.dart";
 import "chat_message_with_socket_controller.dart";
 
 class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
@@ -102,6 +104,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                               chatDetail: controller.chatMessages[index],
                                                               yourMessage: chatMessage.senderId ==
                                                                   preferenceService.getUserDetail()!.id)
+                                                      : chatMessage.msgType == "gift"
+                                                          ? giftMsgView(context,chatMessage, chatMessage.senderId ==
+                                                  preferenceService.getUserDetail()!.id,)
                                                           : textMsgView(
                                                               context,
                                                               chatMessage,
@@ -344,26 +349,31 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   Positioned(
                     right: 0,
                     bottom: 0,
-                    child: SocialMediaRecorder(
-                      backGroundColor: AppColors.yellow,
-                      cancelTextBackGroundColor: Colors.white,
-                      recordIconBackGroundColor: AppColors.yellow,
-                      radius: BorderRadius.circular(30),
-                      initRecordPackageWidth: kToolbarHeight - Get.width * 0.010,
-                      recordIconWhenLockBackGroundColor: AppColors.yellow,
-                      maxRecordTimeInSecond: 30,
-                      startRecording: () {
-                        controller.isRecording.value = true;
+                    child: GestureDetector(
+                      onTap: () {
+                        Future.delayed(const Duration(milliseconds: 500)).then((value) => controller.isRecording.value = false);
                       },
-                      stopRecording: (time) {
-                        controller.isRecording.value = false;
-                      },
-                      sendRequestFunction: (soundFile, time) {
-                        controller.isRecording.value = false;
-                        debugPrint("soundFile ${soundFile.path}");
-                        controller.uploadAudioFile(soundFile);
-                      },
-                      encode: AudioEncoderType.AAC,
+                      child: SocialMediaRecorder(
+                        backGroundColor: AppColors.yellow,
+                        cancelTextBackGroundColor: Colors.white,
+                        recordIconBackGroundColor: AppColors.yellow,
+                        radius: BorderRadius.circular(30),
+                        initRecordPackageWidth: kToolbarHeight - Get.width * 0.010,
+                        recordIconWhenLockBackGroundColor: AppColors.yellow,
+                        maxRecordTimeInSecond: 30,
+                        startRecording: () {
+                          controller.isRecording.value = true;
+                        },
+                        stopRecording: (time) {
+                          controller.isRecording.value = false;
+                        },
+                        sendRequestFunction: (soundFile, time) {
+                          controller.isRecording.value = false;
+                          debugPrint("soundFile ${soundFile.path}");
+                          controller.uploadAudioFile(soundFile);
+                        },
+                        encode: AudioEncoderType.AAC,
+                      ),
                     ),
                   )
               ],
@@ -373,6 +383,51 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         ),
       );
       },
+    );
+  }
+
+  Widget giftMsgView(BuildContext context, ChatMessage chatMessage, bool yourMessage) {
+    return SizedBox(
+      width: double.maxFinite,
+      child: Column(
+        crossAxisAlignment: yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(40)),
+              border: Border.all(width: 2, color: AppColors.appColorDark),
+              gradient: const LinearGradient(
+                colors: [
+                  AppColors.white,
+                  AppColors.appColorDark
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            constraints: BoxConstraints(
+                maxWidth: ScreenUtil().screenWidth * 0.8, minWidth: ScreenUtil().screenWidth * 0.27),
+            child:
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                SizedBox(
+                  height: 32,
+                  width: 32,
+                  child: CustomImageWidget(
+                    imageUrl: chatMessage.awsUrl ?? '',
+                    rounded: true,
+                  ),
+                ),
+                SizedBox(width: 6.w),
+                Flexible(child: Text('Astrologer has requested to send ${chatMessage.message}.'))
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -1000,28 +1055,71 @@ class AstrologerChatAppBar extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Obx(() => Visibility(
-                      visible: controller.isOngoingChat.value,
-                      child: Row(
-                        children: [
-                          InkWell(
-                              onTap: () {
-                                Duration initalTime = Duration(seconds: astroChatWatcher.value.talktime ?? 0);
-                                var initalDateTime = DateTime(2001).copyWith(second: initalTime.inSeconds);
-                                var currentTime = timer.chatDuration.value;
-                                var currentDateTime = DateTime(2001).copyWith(second: currentTime.inSeconds);
-                                int difference = initalDateTime.difference(currentDateTime).inSeconds;
-
-                                if (difference < 60) {
-                                  controller.cannotEndChat(Get.context!);
-                                } else {
-                                  controller.confirmChatEnd(Get.context!);
-                                }
-                              },
-                              child: Assets.images.icEndChat.svg()),
-                          SizedBox(width: 16.w),
+                  Row(
+                    children: [
+                      PopupMenuButton(
+                        surfaceTintColor: Colors.transparent,
+                        color: Colors.white,
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                              child: InkWell(
+                                onTap: () {
+                                  Get.back();
+                                  controller.askForGift();
+                                },
+                                child: Text(
+                                  "Ask For Gift",
+                                  style: AppTextStyle.textStyle13(),
+                                ),
+                              )),
+                          PopupMenuItem(
+                              child: InkWell(
+                                onTap: () {
+                                  // Navigator.pop(context);
+                                  //
+                                  // showCupertinoModalPopup(
+                                  //   barrierColor:
+                                  //   AppColors.darkBlue.withOpacity(0.5),
+                                  //   context: context,
+                                  //   builder: (context) => ReportPostReasons(
+                                  //       reviewData?.id.toString() ?? ''),
+                                  //
+                                  //   // builder: (context) => ReportPostReasons(reviewData?.id.),
+                                  // );
+                                },
+                                child: Text(
+                                  "Chat Histroy",
+                                  style: AppTextStyle.textStyle13(),
+                                ),
+                              )),
                         ],
-                      ))),
+                        child: const Icon(Icons.more_vert_rounded),
+                      ),
+                      SizedBox(width: 16.w),
+                    ],
+                  ),
+                  // Obx(() => Visibility(
+                  //     visible: controller.isOngoingChat.value,
+                  //     child: Row(
+                  //       children: [
+                  //         InkWell(
+                  //             onTap: () {
+                  //               Duration initalTime = Duration(seconds: astroChatWatcher.value.talktime ?? 0);
+                  //               var initalDateTime = DateTime(2001).copyWith(second: initalTime.inSeconds);
+                  //               var currentTime = timer.chatDuration.value;
+                  //               var currentDateTime = DateTime(2001).copyWith(second: currentTime.inSeconds);
+                  //               int difference = initalDateTime.difference(currentDateTime).inSeconds;
+                  //
+                  //               if (difference < 60) {
+                  //                 controller.cannotEndChat(Get.context!);
+                  //               } else {
+                  //                 controller.confirmChatEnd(Get.context!);
+                  //               }
+                  //             },
+                  //             child: Assets.images.icEndChat.svg()),
+                  //         SizedBox(width: 16.w),
+                  //       ],
+                  //     ))),
                 ],
               ),
             ),
