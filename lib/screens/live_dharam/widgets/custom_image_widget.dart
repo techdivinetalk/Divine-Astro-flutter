@@ -39,6 +39,11 @@ class CustomImageWidget extends StatelessWidget {
       errorWidget: (BuildContext context, String url, Object error) {
         return const Icon(Icons.error);
       },
+      //
+      memCacheWidth: 45,
+      memCacheHeight: 60,
+      maxHeightDiskCache: 60,
+      maxWidthDiskCache: 45,
     );
   }
 }
