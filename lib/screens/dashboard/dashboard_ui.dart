@@ -103,7 +103,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                         const SizedBox(height: 5),
                                       ],
                                     ),
-                                    label: 'suggestRemediesHome'.tr,
+                                    label: "Remedies",
                                   ),
                                   BottomNavigationBarItem(
                                     icon: Column(
@@ -120,7 +120,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                         const SizedBox(height: 5),
                                       ],
                                     ),
-                                    label: "chatAssistanceHome".tr,
+                                    label: "Assistance",
                                   ),
                                   BottomNavigationBarItem(
                                     icon: Column(
