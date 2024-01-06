@@ -1057,24 +1057,25 @@ class HomeUI extends GetView<HomeController> {
                         ),
                     ],
                   ),
-                  // Obx(
-                  //       () =>
+                  Obx(
+                        () =>
                             SwitchWidget(
                       onTap: () {
                         if (controller.offerTypeLoading.value !=
                             Loading.loading) {
-                          controller.updateOfferType(
-                            index: index,
-                            offerId: controller.homeData?.offers?.orderOffer?[index].id ?? 0,
-                            offerType: 1,
-                            value: !controller.orderOfferSwitch[index],
-                          );
+                          controller.orderOfferSwitch[index] = !controller.orderOfferSwitch[index];
                         }
-                      },
+                          // controller.updateOfferType(
+                          //   index: index,
+                          //   offerId: controller.homeData?.offers?.orderOffer?[index].id ?? 0,
+                          //   offerType: 1,
+                          //   value: !controller.orderOfferSwitch[index],
+                          // );
+                        },
                       switchValue:
                       controller.orderOfferSwitch[index],
                     ),
-                 // ),
+                 ),
                 ],
               );
             },
