@@ -127,7 +127,7 @@ class HomeController extends GetxController {
       allContacts = await ContactsService.getContacts();
     } else {
       PermissionStatus status = await Permission.contacts.request();
-      if(status.isGranted) {
+      if (status.isGranted) {
         allContacts = await ContactsService.getContacts();
       }
     }
@@ -164,7 +164,7 @@ class HomeController extends GetxController {
           if (contact.displayName == item.label
               // &&
               // numberList.every((el) => el.contains(element.value!))
-          ) {
+              ) {
             return isExist = true;
           }
         }
@@ -430,15 +430,18 @@ class HomeController extends GetxController {
   }
 
   void chatSwitchFN() {
-    updateSessionType(!chatSwitch.value, chatSwitch, 1);
+    chatSwitch(!chatSwitch.value);
+    updateSessionType(chatSwitch.value, chatSwitch, 1);
   }
 
   void callSwitchFN() {
-    updateSessionType(!callSwitch.value, callSwitch, 2);
+    callSwitch(!callSwitch.value);
+    updateSessionType(callSwitch.value, callSwitch, 2);
   }
 
   void videoCallSwitchFN() {
-    updateSessionType(!videoSwitch.value, videoSwitch, 3);
+    videoSwitch(!videoSwitch.value);
+    updateSessionType(videoSwitch.value, videoSwitch, 3);
   }
 
   final noticeRepository = Get.put(NoticeRepository());
@@ -488,12 +491,11 @@ class HomeController extends GetxController {
       // "is_video": getBoolToString(type == 3 ? value : videoSwitch.value)
     };
 
-    if(value) {
+    if (value) {
       params["check_in"] = 1;
     } else {
       params["check_out"] = 1;
     }
-
 
     sessionTypeLoading.value = Loading.loading;
     try {
@@ -535,9 +537,9 @@ class HomeController extends GetxController {
       UpdateOfferResponse response =
           await userRepository.updateOfferTypeApi(params);
       if (response.statusCode == 200) {
-        if(offerType == 1) {
+        if (offerType == 1) {
           orderOfferSwitch[index] = value;
-        } else if(offerType == 2) {
+        } else if (offerType == 2) {
           customOfferSwitch[index] = value;
         }
       }

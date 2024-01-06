@@ -11,6 +11,7 @@ import "package:divine_astrologer/screens/live_dharam/gifts_singleton.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/live_gift.dart";
 import "package:divine_astrologer/screens/live_dharam/live_screen_widgets/leaderboard_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/live_screen_widgets/live_keyboard.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/astro_wait_list_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/call_accept_or_reject_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
@@ -73,7 +74,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   late StreamSubscription<DatabaseEvent> _firebaseSubscription;
 
-  final TextEditingController _editingController = TextEditingController();
+  // final TextEditingController _editingController = TextEditingController();
 
   final ScrollController _scrollControllerForTop = ScrollController();
   final ScrollController _scrollControllerForBottom = ScrollController();
@@ -460,6 +461,7 @@ class _LivePage extends State<LiveDharamScreen>
   //       padding: EdgeInsets.zero,
   //       itemCount: tempData.length,
   //       scrollDirection: Axis.horizontal,
+  //       cacheExtent: tempData.length.toDouble(),
   //       itemBuilder: (BuildContext context, int index) {
   //         final GiftData item = tempData[index];
   //         var offerData = _controller.details.data?.offerData ?? OfferData();
@@ -920,42 +922,139 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   // Widget callStack() {
+  //   String singleColumn0 = "";
+  //   String doubleColumn1 = "";
+  //   String doubleColumn2 = "";
+  //   String doubleColumn3 = "";
+
   //   final Data data = _controller.details.data ?? Data();
-  //   final int videoDiscount = data.videoDiscountedAmount ?? 0;
+  //   final OfferDetails offerDetails = data.offerDetails ?? OfferDetails();
+  //   final bool isOfferAvailable = offerDetails.offerId != null;
+
   //   final int videoOriginal = data.videoCallAmount ?? 0;
-  //   return (videoDiscount == 0)
-  //       ? Column(
-  //           children: <Widget>[
-  //             const SizedBox(height: 4.0),
-  //             Text(
-  //               "₹$videoOriginal/Min",
-  //               style: const TextStyle(
-  //                 fontSize: 10,
-  //                 fontWeight: FontWeight.bold,
-  //               ),
+  //   final int audioOriginal = data.audioCallAmount ?? 0;
+  //   final int privateOriginal = data.anonymousCallAmount ?? 0;
+
+  //   final List<int> originalList = [
+  //     videoOriginal,
+  //     audioOriginal,
+  //     privateOriginal,
+  //   ];
+  //   originalList.sort(
+  //     (a, b) {
+  //       return a.compareTo(b);
+  //     },
+  //   );
+
+  //   if (isOfferAvailable) {
+  //     if (offerDetails.specialOfferText != null) {
+  //       doubleColumn1 = offerDetails.specialOfferText ?? "";
+  //       doubleColumn2 = offerDetails.offerText ?? "";
+  //       doubleColumn3 = originalList.first.toString();
+  //     } else {
+  //       doubleColumn1 = offerDetails.offerText ?? "";
+  //       doubleColumn2 = originalList.first.toString();
+  //     }
+  //   } else {
+  //     singleColumn0 = originalList.first.toString();
+  //   }
+
+  //   if (isOfferAvailable) {
+  //     if (offerDetails.specialOfferText != null) {
+  //       return Column(
+  //         children: <Widget>[
+  //           Text(
+  //             doubleColumn1,
+  //             style: const TextStyle(
+  //               fontSize: 8,
+  //               fontWeight: FontWeight.bold,
+  //               color: Colors.red,
   //             ),
-  //           ],
-  //         )
-  //       : Column(
-  //           children: <Widget>[
-  //             Text(
-  //               "₹$videoDiscount/Min",
-  //               style: const TextStyle(
-  //                 fontSize: 10,
-  //                 fontWeight: FontWeight.bold,
-  //               ),
+  //           ),
+  //           Text(
+  //             doubleColumn2,
+  //             style: const TextStyle(
+  //               fontSize: 8,
   //             ),
-  //             const SizedBox(width: 4.0),
-  //             Text(
-  //               "₹$videoOriginal/Min",
-  //               style: const TextStyle(
-  //                 fontSize: 10,
-  //                 decoration: TextDecoration.lineThrough,
-  //                 decorationColor: Colors.red,
-  //               ),
+  //           ),
+  //           Text(
+  //             "₹$doubleColumn3/Min",
+  //             style: const TextStyle(
+  //               fontSize: 8,
+  //               decoration: TextDecoration.lineThrough,
+  //               decorationColor: Colors.red,
   //             ),
-  //           ],
-  //         );
+  //           ),
+  //         ],
+  //       );
+  //     } else {
+  //       return Column(
+  //         children: <Widget>[
+  //           Text(
+  //             doubleColumn1,
+  //             style: const TextStyle(
+  //               fontSize: 8,
+  //               fontWeight: FontWeight.bold,
+  //             ),
+  //           ),
+  //           Text(
+  //             "₹$doubleColumn2/Min",
+  //             style: const TextStyle(
+  //               fontSize: 8,
+  //               decoration: TextDecoration.lineThrough,
+  //               decorationColor: Colors.red,
+  //             ),
+  //           ),
+  //         ],
+  //       );
+  //     }
+  //   } else {
+  //     return Column(
+  //       children: [
+  //         Text(
+  //           "₹$singleColumn0/Min",
+  //           style: const TextStyle(
+  //             fontSize: 8,
+  //             fontWeight: FontWeight.bold,
+  //           ),
+  //         ),
+  //       ],
+  //     );
+  //   }
+
+  //   // return (isOfferAvailable)
+  //   //     ? Column(
+  //   //         children: <Widget>[
+  //   //           Text(
+  //   //             doubleColumn1,
+  //   //             style: const TextStyle(
+  //   //               fontSize: 10,
+  //   //               fontWeight: FontWeight.bold,
+  //   //             ),
+  //   //           ),
+  //   //           const SizedBox(width: 4.0),
+  //   //           Text(
+  //   //             "₹$doubleColumn2/Min",
+  //   //             style: const TextStyle(
+  //   //               fontSize: 10,
+  //   //               decoration: TextDecoration.lineThrough,
+  //   //               decorationColor: Colors.red,
+  //   //             ),
+  //   //           ),
+  //   //         ],
+  //   //       )
+  //   //     : Column(
+  //   //         children: <Widget>[
+  //   //           const SizedBox(height: 4.0),
+  //   //           Text(
+  //   //             "₹$singleColumn0/Min",
+  //   //             style: const TextStyle(
+  //   //               fontSize: 10,
+  //   //               fontWeight: FontWeight.bold,
+  //   //             ),
+  //   //           ),
+  //   //         ],
+  //   //       );
   // }
 
   Future<void> onLiveStreamingStateUpdate(ZegoLiveStreamingState state) async {
@@ -1187,11 +1286,10 @@ class _LivePage extends State<LiveDharamScreen>
   //         onClose: Get.back,
   //         waitTime: _controller.getTotalWaitTime(),
   //         details: _controller.details,
-  //         onSelect: (String type, int amount) async {
+  //         onSelect: (String type) async {
   //           Get.back();
   //           await sendCallFunc(
   //             type: type,
-  //             amount: amount,
   //             needRecharge: (bal.InsufficientBalModel balModel) async {
   //               await lowBalancePopup(
   //                 balModel: balModel,
@@ -1217,7 +1315,6 @@ class _LivePage extends State<LiveDharamScreen>
 
   // Future<void> sendCallFunc({
   //   required String type,
-  //   required int amount,
   //   required dynamic Function(bal.InsufficientBalModel) needRecharge,
   // }) async {
   //   final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
@@ -1226,7 +1323,6 @@ class _LivePage extends State<LiveDharamScreen>
   //   } else {
   //     final bool canOrder = await _controller.canPlaceLiveOrder(
   //       talkType: type,
-  //       talkAmount: amount,
   //       needRecharge: needRecharge,
   //     );
   //     if (canOrder) {
@@ -2519,67 +2615,68 @@ class _LivePage extends State<LiveDharamScreen>
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        return Container(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              autofocus: true,
-              controller: _editingController,
-              onSubmitted: (String value) async {
-                await sendKeyboardMesage();
-              },
-              cursorColor: AppColors.yellow,
-              style: const TextStyle(color: AppColors.yellow),
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-                suffixIcon: IconButton(
-                  onPressed: sendKeyboardMesage,
-                  icon: Image.asset(
-                    "assets/images/live_send_message_new.png",
-                    color: AppColors.yellow,
-                  ),
-                ),
-                floatingLabelBehavior: FloatingLabelBehavior.never,
-                filled: true,
-                fillColor: AppColors.white,
-                hintText: "Say Hi",
-                hintStyle: const TextStyle(color: AppColors.yellow),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    width: 2,
-                    color: AppColors.yellow,
-                  ),
-                  borderRadius: BorderRadius.circular(50.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    width: 2,
-                    color: AppColors.yellow,
-                  ),
-                  borderRadius: BorderRadius.circular(50.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    width: 2,
-                    color: AppColors.yellow,
-                  ),
-                  borderRadius: BorderRadius.circular(50.0),
-                ),
-              ),
-            ),
-          ),
-        );
+        // return Container(
+        //   padding: EdgeInsets.only(
+        //     bottom: MediaQuery.of(context).viewInsets.bottom,
+        //   ),
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: TextField(
+        //       autofocus: true,
+        //       controller: _editingController,
+        //       onSubmitted: (String value) async {
+        //         await sendKeyboardMesage();
+        //       },
+        //       cursorColor: AppColors.yellow,
+        //       style: const TextStyle(color: AppColors.yellow),
+        //       decoration: InputDecoration(
+        //         contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+        //         suffixIcon: IconButton(
+        //           onPressed: sendKeyboardMesage,
+        //           icon: Image.asset(
+        //             "assets/images/live_send_message_new.png",
+        //             color: AppColors.yellow,
+        //           ),
+        //         ),
+        //         floatingLabelBehavior: FloatingLabelBehavior.never,
+        //         filled: true,
+        //         fillColor: AppColors.white,
+        //         hintText: "Say Hi",
+        //         hintStyle: const TextStyle(color: AppColors.yellow),
+        //         border: OutlineInputBorder(
+        //           borderSide: const BorderSide(
+        //             width: 2,
+        //             color: AppColors.yellow,
+        //           ),
+        //           borderRadius: BorderRadius.circular(50.0),
+        //         ),
+        //         enabledBorder: OutlineInputBorder(
+        //           borderSide: const BorderSide(
+        //             width: 2,
+        //             color: AppColors.yellow,
+        //           ),
+        //           borderRadius: BorderRadius.circular(50.0),
+        //         ),
+        //         focusedBorder: OutlineInputBorder(
+        //           borderSide: const BorderSide(
+        //             width: 2,
+        //             color: AppColors.yellow,
+        //           ),
+        //           borderRadius: BorderRadius.circular(50.0),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // );
+        return LiveKeyboard(sendKeyboardMesage: sendKeyboardMesage);
       },
     );
     _isKeyboardSheetOpen = false;
     return Future<void>.value();
   }
 
-  Future<void> sendKeyboardMesage() async {
-    final String msg = _editingController.value.text;
+  Future<void> sendKeyboardMesage(msg) async {
+    // final String msg = _editingController.value.text;
     final ZegoCustomMessage model = ZegoCustomMessage(
       type: 1,
       liveId: _controller.liveId,
@@ -2591,7 +2688,7 @@ class _LivePage extends State<LiveDharamScreen>
       fullGiftImage: "",
     );
     await sendMessageToZego(model);
-    _editingController.clear();
+    // _editingController.clear();
     FocusManager.instance.primaryFocus?.unfocus();
     scrollDownForTop();
     scrollDownForBottom();

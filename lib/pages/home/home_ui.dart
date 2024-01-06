@@ -279,35 +279,37 @@ class HomeUI extends GetView<HomeController> {
                       // SizedBox(height: 10.h),
                       // availableFeedbackWidget(controller.feedbackResponse ?? FeedbackData()),
                       // SizedBox(height: 10.h),
-                      controller.homeData?.noticeBoard == null ? const SizedBox() :
-                      Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Get.toNamed(RouteName.noticeBoard);
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      controller.homeData?.noticeBoard == null
+                          ? const SizedBox()
+                          : Column(
                               children: [
-                                Text(
-                                  "noticeBoard".tr,
-                                  style: AppTextStyle.textStyle16(
-                                      fontColor: AppColors.darkBlue,
-                                      fontWeight: FontWeight.w400),
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed(RouteName.noticeBoard);
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "noticeBoard".tr,
+                                        style: AppTextStyle.textStyle16(
+                                            fontColor: AppColors.darkBlue,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                      Text(
+                                        "viewAll".tr,
+                                        style: AppTextStyle.textStyle12(
+                                            fontColor: AppColors.darkBlue,
+                                            fontWeight: FontWeight.w400),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                                Text(
-                                  "viewAll".tr,
-                                  style: AppTextStyle.textStyle12(
-                                      fontColor: AppColors.darkBlue,
-                                      fontWeight: FontWeight.w400),
-                                )
+                                SizedBox(height: 10.h),
+                                noticeBoardWidget(),
                               ],
                             ),
-                          ),
-                          SizedBox(height: 10.h),
-                          noticeBoardWidget(),
-                        ],
-                      ),
                       // SizedBox(height: 10.h),
                       // noticeBoardWidget(),
                       SizedBox(height: 10.h),
@@ -315,7 +317,21 @@ class HomeUI extends GetView<HomeController> {
                       SizedBox(height: 10.h),
                       InkWell(
                         onTap: () async {
-                          Get.toNamed(RouteName.liveTipsUI);
+                          bool isChatOn = controller.chatSwitch.value;
+                          bool isAudioCallOn = controller.callSwitch.value;
+                          bool isVideoCallOn = controller.videoSwitch.value;
+                          if (isChatOn == false &&
+                              isAudioCallOn == false &&
+                              isVideoCallOn == false) {
+                            Get.toNamed(RouteName.liveTipsUI);
+                          } else {
+                            divineSnackBar(
+                              data:
+                                  "Please turn off all session types in order to go live.",
+                              color: AppColors.appColorDark,
+                              duration: const Duration(seconds: 6)
+                            );
+                          }
                         },
                         child: Container(
                           height: 60,
@@ -362,10 +378,12 @@ class HomeUI extends GetView<HomeController> {
                       // if (controller.homeData?.offerType != null &&
                       //     controller.homeData?.offerType != [])
                       //   offerTypeWidget(),
-                      controller.homeData?.offers?.orderOffer != null ?
-                      orderOfferWidget() : const SizedBox(),
-                      controller.homeData?.offers?.customOffer != null ?
-                          customerOfferWidget() : const SizedBox(),
+                      controller.homeData?.offers?.orderOffer != null
+                          ? orderOfferWidget()
+                          : const SizedBox(),
+                      controller.homeData?.offers?.customOffer != null
+                          ? customerOfferWidget()
+                          : const SizedBox(),
                       SizedBox(height: 10.h),
                       fullScreenBtnWidget(
                           imageName: Assets.images.icReferAFriend.svg(),
@@ -445,127 +463,135 @@ class HomeUI extends GetView<HomeController> {
       stream: controller.broadcastReceiver.messages,
       builder: (context, broadcastSnapshot) {
         Map<String, dynamic>? data = broadcastSnapshot.data?.data;
-        return data?["userName"] == null ? const SizedBox() :
-          Container(
-          width: ScreenUtil().screenWidth,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: AppColors.white,
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  blurRadius: 3.0,
-                  offset: const Offset(0, 3.0)),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Order Id : ${data?["orderId"]}',
-                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      '23 June 23, 02:46 PM',
-                      style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue.withOpacity(.5),
-                      ),
-                    ),
+        return data?["userName"] == null
+            ? const SizedBox()
+            : Container(
+                width: ScreenUtil().screenWidth,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: AppColors.white,
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        blurRadius: 3.0,
+                        offset: const Offset(0, 3.0)),
                   ],
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  'On-Going CALL',
-                  style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'with ${data?["username"]}(user id) for 00:04:32 ',
-                  style: AppTextStyle.textStyle12(
-                    fontWeight: FontWeight.w400,
-                    fontColor: AppColors.darkBlue.withOpacity(.5),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Gender: ${data?["gender"]}',
-                  style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'DOB: ${data?["dob"]}',
-                  style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'TOB: ${data?["tob"]}',
-                  style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'POB: ${data?["pob"]}',
-                  style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Marital Status: ${data?["marital"]}',
-                          style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Problem Area: ${data?["problem"]}',
-                          style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
-                        ),
-                      ],
-                    ),
-                    InkWell(
-                      onTap: () {
-
-                      },
-                      child: Container(
-                        height: 54.h,
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [
-                              AppColors.appYellowColour,
-                              AppColors.gradientBottom
-                            ],
-                          ),
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(30)),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                        // alignment: Alignment.center,
-                        child: Center(
-                          child: Text(
-                            "View Kundali",
-                            style: AppTextStyle.textStyle14(
-                                fontColor: AppColors.brownColour,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Order Id : ${data?["orderId"]}',
+                            style: AppTextStyle.textStyle12(
                                 fontWeight: FontWeight.w500),
                           ),
+                          Text(
+                            '23 June 23, 02:46 PM',
+                            style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w400,
+                              fontColor: AppColors.darkBlue.withOpacity(.5),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'On-Going CALL',
+                        style: AppTextStyle.textStyle12(
+                            fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'with ${data?["username"]}(user id) for 00:04:32 ',
+                        style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w400,
+                          fontColor: AppColors.darkBlue.withOpacity(.5),
                         ),
                       ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-        );
+                      const SizedBox(height: 8),
+                      Text(
+                        'Gender: ${data?["gender"]}',
+                        style: AppTextStyle.textStyle10(
+                            fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'DOB: ${data?["dob"]}',
+                        style: AppTextStyle.textStyle10(
+                            fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'TOB: ${data?["tob"]}',
+                        style: AppTextStyle.textStyle10(
+                            fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'POB: ${data?["pob"]}',
+                        style: AppTextStyle.textStyle10(
+                            fontWeight: FontWeight.w400),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Marital Status: ${data?["marital"]}',
+                                style: AppTextStyle.textStyle10(
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Problem Area: ${data?["problem"]}',
+                                style: AppTextStyle.textStyle10(
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ],
+                          ),
+                          InkWell(
+                            onTap: () {},
+                            child: Container(
+                              height: 54.h,
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                  colors: [
+                                    AppColors.appYellowColour,
+                                    AppColors.gradientBottom
+                                  ],
+                                ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30)),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 8),
+                              // alignment: Alignment.center,
+                              child: Center(
+                                child: Text(
+                                  "View Kundali",
+                                  style: AppTextStyle.textStyle14(
+                                      fontColor: AppColors.brownColour,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              );
       },
     );
   }
@@ -1046,9 +1072,9 @@ class HomeUI extends GetView<HomeController> {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      if ((controller
-                          .homeData?.offers?.orderOffer?[index].callRate ??
-                          0) >
+                      if ((controller.homeData?.offers?.orderOffer?[index]
+                                  .callRate ??
+                              0) >
                           0)
                         CustomText(
                           " (₹${controller.homeData?.offers?.orderOffer?[index].callRate}/min)"
@@ -1059,22 +1085,23 @@ class HomeUI extends GetView<HomeController> {
                   ),
                   // Obx(
                   //       () =>
-                            SwitchWidget(
-                      onTap: () {
-                        if (controller.offerTypeLoading.value !=
-                            Loading.loading) {
-                          controller.updateOfferType(
-                            index: index,
-                            offerId: controller.homeData?.offers?.orderOffer?[index].id ?? 0,
-                            offerType: 1,
-                            value: !controller.orderOfferSwitch[index],
-                          );
-                        }
-                      },
-                      switchValue:
-                      controller.orderOfferSwitch[index],
-                    ),
-                 // ),
+                  SwitchWidget(
+                    onTap: () {
+                      if (controller.offerTypeLoading.value !=
+                          Loading.loading) {
+                        controller.updateOfferType(
+                          index: index,
+                          offerId: controller
+                                  .homeData?.offers?.orderOffer?[index].id ??
+                              0,
+                          offerType: 1,
+                          value: !controller.orderOfferSwitch[index],
+                        );
+                      }
+                    },
+                    switchValue: controller.orderOfferSwitch[index],
+                  ),
+                  // ),
                 ],
               );
             },
@@ -1152,36 +1179,40 @@ class HomeUI extends GetView<HomeController> {
                     ],
                   ),
                   Obx(
-                        () =>
-                            SwitchWidget(
+                    () => SwitchWidget(
                       onTap: () {
                         if (controller.offerTypeLoading.value !=
                             Loading.loading) {
-
-                          if(controller.customOfferSwitch[index]) {
+                          if (controller.customOfferSwitch[index]) {
                             controller.updateOfferType(
                               index: index,
-                              offerId: controller.homeData?.offers?.customOffer?[index].id ?? 0,
+                              offerId: controller.homeData?.offers
+                                      ?.customOffer?[index].id ??
+                                  0,
                               offerType: 2,
                               value: !controller.customOfferSwitch[index],
                             );
                           } else {
-                            if(controller.customOfferSwitch.any((element) => element == true)) {
-                              divineSnackBar(data: "Only 1 custom offer is allowed at once", color: AppColors.redColor);
+                            if (controller.customOfferSwitch
+                                .any((element) => element == true)) {
+                              divineSnackBar(
+                                  data:
+                                      "Only 1 custom offer is allowed at once",
+                                  color: AppColors.redColor);
                             } else {
                               controller.updateOfferType(
                                 index: index,
-                                offerId: controller.homeData?.offers?.customOffer?[index].id ?? 0,
+                                offerId: controller.homeData?.offers
+                                        ?.customOffer?[index].id ??
+                                    0,
                                 offerType: 2,
                                 value: !controller.customOfferSwitch[index],
                               );
                             }
                           }
-
                         }
                       },
-                      switchValue:
-                      controller.customOfferSwitch[index],
+                      switchValue: controller.customOfferSwitch[index],
                     ),
                   ),
                 ],

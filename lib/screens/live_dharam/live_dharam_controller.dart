@@ -420,7 +420,7 @@ class LiveDharamController extends GetxController {
 
   // Future<void> getAstrologerDetails() async {
   //   Map<String, dynamic> param = <String, dynamic>{};
-  //   param = <String, dynamic>{"astrologer_id": liveId};
+  //   param = <String, dynamic>{"astrologer_id": int.parse(liveId)};
   //   GetAstroDetailsRes getAstroDetailsRes = GetAstroDetailsRes();
   //   getAstroDetailsRes = await liveRepository.getAstroDetailsAPI(params: param);
   //   details = getAstroDetailsRes.statusCode == HttpStatus.ok
@@ -456,9 +456,9 @@ class LiveDharamController extends GetxController {
   // Future<void> followOrUnfollowAstrologer() async {
   //   Map<String, dynamic> param = <String, dynamic>{};
   //   param = <String, dynamic>{
-  //     "astrologer_id": liveId,
+  //     "astrologer_id": int.parse(liveId),
   //     "is_follow": details.data?.isFollow == 1 ? 0 : 1,
-  //     "role_id": _pref.getUserDetail()?.roleId ?? "",
+  //     "role_id": _pref.getUserDetail()?.roleId ?? 7,
   //   };
   //   AstrologerFollowingResponse followUnfollow = AstrologerFollowingResponse();
   //   followUnfollow = await liveRepository.astrologerFollowApi(params: param);
@@ -470,17 +470,17 @@ class LiveDharamController extends GetxController {
   //   return Future<void>.value();
   // }
 
-  // bool hasBalance({required num quantity, required num amount}) {
-  //   // final num myCurrentBalance = num.parse(walletBalance.value.toString());
-  //   // final num myPurchasedOrder = quantity * amount;
-  //   // print("hasBalance: start  ----------");
-  //   // print("hasBalance: myCurrentBalance: $myCurrentBalance");
-  //   // print("hasBalance: myPurchasedOrder: $myPurchasedOrder");
-  //   // print("hasBalance: result: ${myCurrentBalance >= myPurchasedOrder}");
-  //   // print("hasBalance: end  ----------");
-  //   // return myCurrentBalance >= myPurchasedOrder;
-  //   return true;
-  // }
+  bool hasBalance({required num quantity}) {
+    // final num myCurrentBalance = num.parse(walletBalance.value.toString());
+    // final num myPurchasedOrder = quantity * amount;
+    // print("hasBalance: start  ----------");
+    // print("hasBalance: myCurrentBalance: $myCurrentBalance");
+    // print("hasBalance: myPurchasedOrder: $myPurchasedOrder");
+    // print("hasBalance: result: ${myCurrentBalance >= myPurchasedOrder}");
+    // print("hasBalance: end  ----------");
+    // return myCurrentBalance >= myPurchasedOrder;
+    return true;
+  }
 
   // Future<bool> hasBalanceForSendingGift({
   //   required int giftId,
@@ -546,14 +546,12 @@ class LiveDharamController extends GetxController {
 
   // Future<bool> canPlaceLiveOrder({
   //   required String talkType,
-  //   required int talkAmount,
   //   required Function(InsufficientBalModel balModel) needRecharge,
   // }) async {
-  //   bool hasBal = hasBalance(quantity: 1, amount: talkAmount);
+  //   bool hasBal = hasBalance(quantity: 1);
   //   if (hasBal) {
   //     await liveOrderPlace(
   //       talkType: talkType,
-  //       talkAmount: talkAmount,
   //       needRecharge: needRecharge,
   //     );
   //     final bool value = orderGenerate.statusCode == HttpStatus.ok;
@@ -565,7 +563,6 @@ class LiveDharamController extends GetxController {
 
   // Future<void> liveOrderPlace({
   //   required String talkType,
-  //   required int talkAmount,
   //   required Function(InsufficientBalModel balModel) needRecharge,
   // }) async {
   //   final int intValue = talkType == "Video"
@@ -581,6 +578,12 @@ class LiveDharamController extends GetxController {
   //     "product_type": intValue,
   //     "role_id": 7,
   //   };
+
+  //   if (details.data?.offerDetails?.offerId != null) {
+  //     int offerId = details.data?.offerDetails?.offerId ?? 0;
+  //     param.addAll(<String, dynamic>{"offer_id": offerId});
+  //   } else {}
+
   //   OrderGenerate orderGenerateRes = OrderGenerate();
   //   orderGenerateRes = await liveRepository.orderGenerateApi(
   //     params: param,
@@ -955,9 +958,14 @@ class LiveDharamController extends GetxController {
   //     "order_id": (orderGenerate.data?.generatedOrderId ?? 0).toString(),
   //     "duration": "0",
   //     "amount": "0.0",
-  //     "offer_id": "0",
-  //     "role_id": "7",
+  //     "role_id": 7,
   //   };
+
+  //   if (details.data?.offerDetails?.offerId != null) {
+  //     int offerId = details.data?.offerDetails?.offerId ?? 0;
+  //     param.addAll(<String, dynamic>{"offer_id": offerId});
+  //   } else {}
+
   //   await liveRepository.endLiveApi(params: param);
   //   return Future<void>.value();
   // }

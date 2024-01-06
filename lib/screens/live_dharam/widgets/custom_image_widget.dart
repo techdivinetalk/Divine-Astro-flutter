@@ -40,10 +40,11 @@ class CustomImageWidget extends StatelessWidget {
         return const Icon(Icons.error);
       },
       //
-      memCacheWidth: 45,
-      memCacheHeight: 60,
-      maxHeightDiskCache: 60,
-      maxWidthDiskCache: 45,
+      memCacheWidth: 100,
+      memCacheHeight: 100,
+      maxHeightDiskCache: 100,
+      maxWidthDiskCache: 100,
+      
     );
   }
 }
