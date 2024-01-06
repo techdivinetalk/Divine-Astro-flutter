@@ -15,6 +15,7 @@ import "package:divine_astrologer/repository/user_repository.dart";
 import "package:divine_astrologer/screens/dashboard/dashboard_controller.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
 import "package:firebase_database/firebase_database.dart";
+import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
@@ -25,11 +26,16 @@ import "package:image_picker/image_picker.dart";
 import "package:path_provider/path_provider.dart";
 import "package:socket_io_client/socket_io_client.dart";
 
+import "../../common/ask_for_gift_bottom_sheet.dart";
 import "../../common/common_functions.dart";
+import "../../model/astrologer_gift_response.dart";
+import "../live_dharam/gifts_singleton.dart";
 
-class ChatMessageWithSocketController extends GetxController with WidgetsBindingObserver {
+class ChatMessageWithSocketController extends GetxController
+    with WidgetsBindingObserver {
   final UserRepository userRepository = Get.find<UserRepository>();
-  SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
+  SharedPreferenceService preferenceService =
+      Get.find<SharedPreferenceService>();
   TextEditingController messageController = TextEditingController();
   UserData? userData = UserData();
   FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
@@ -41,7 +47,8 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
   final ImagePicker picker = ImagePicker();
   XFile? pickedFile;
   File? uploadFile;
-  final SharedPreferenceService preference = Get.find<SharedPreferenceService>();
+  final SharedPreferenceService preference =
+      Get.find<SharedPreferenceService>();
   RxInt currentUserId = 0.obs;
   String userDataKey = "";
   bool sendReadMessageStatus = false;
@@ -63,7 +70,8 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
   RxString chatStatus = "Offline".obs;
   DashboardController dashboardController = Get.find<DashboardController>();
   RxBool isTyping = false.obs;
-  BroadcastReceiver broadcastReceiver = BroadcastReceiver(names: <String>["EndChat"]);
+  BroadcastReceiver broadcastReceiver =
+      BroadcastReceiver(names: <String>["EndChat"]);
 
   final AppSocket socket = AppSocket();
   var arguments;
@@ -166,16 +174,19 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
           ? "${preference.getBaseImageURL()}/${data['orderData']['customerImage']}"
           : "";
       if (astroChatWatcher.value.orderId != null) {
-        timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0, astroChatWatcher.value.orderId!);
+        timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0,
+            astroChatWatcher.value.orderId!);
       }
       //  }
       // }
 
       if (data["orderData"]["talktime"] != null) {
         if (preferenceService.getTalkTime() == 0) {
-          final int talkTime = int.parse((data["orderData"]["talktime"] ?? 0).toString()) +
-              (DateTime.now().millisecondsSinceEpoch ~/ 1000).toInt();
-          debugPrint("millisecondsSinceEpoch ----> ${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
+          final int talkTime =
+              int.parse((data["orderData"]["talktime"] ?? 0).toString()) +
+                  (DateTime.now().millisecondsSinceEpoch ~/ 1000).toInt();
+          debugPrint(
+              "millisecondsSinceEpoch ----> ${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
           preferenceService.setTalkTime(talkTime);
         } else {
           debugPrint("else part - ${preferenceService.getTalkTime() ?? 0}");
@@ -196,7 +207,8 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
 
   void talkTimeStartTimer(int talkTime) {
     const Duration oneSecond = Duration(seconds: 1);
-    final DateTime futureTime = DateTime.fromMillisecondsSinceEpoch(talkTime * 1000);
+    final DateTime futureTime =
+        DateTime.fromMillisecondsSinceEpoch(talkTime * 1000);
     _timer = Timer.periodic(oneSecond, (Timer timer) {
       final DateTime now = DateTime.now();
       final Duration difference = futureTime.difference(now);
@@ -210,10 +222,13 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
         final int remainingSeconds = difference.inSeconds.remainder(60);
 
         final String hoursString = remainingHours.toString().padLeft(2, "0");
-        final String minutesString = remainingMinutes.toString().padLeft(2, "0");
-        final String secondsString = remainingSeconds.toString().padLeft(2, "0");
+        final String minutesString =
+            remainingMinutes.toString().padLeft(2, "0");
+        final String secondsString =
+            remainingSeconds.toString().padLeft(2, "0");
 
-        showTalkTime.value = "$hoursString:$minutesString:$secondsString Remaining";
+        showTalkTime.value =
+            "$hoursString:$minutesString:$secondsString Remaining";
       }
     });
   }
@@ -267,8 +282,10 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
   void typingListenerSocket() {
     socket.typingListenerSocket((data) {
       debugPrint('data ........ ${data}');
-      debugPrint('${data['data']["typist"].toString()}  ${arguments["orderData"]["userId"].toString()}');
-      if (data['data']["typist"].toString() == arguments["orderData"]["userId"].toString()) {
+      debugPrint(
+          '${data['data']["typist"].toString()}  ${arguments["orderData"]["userId"].toString()}');
+      if (data['data']["typist"].toString() ==
+          arguments["orderData"]["userId"].toString()) {
         isTyping.value = true;
         chatStatus.value = "Typing";
         //  scrollToBottomFunc();
@@ -288,7 +305,8 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
       debugPrint("listenerMessageStatusSocket $data");
 
       final int index = chatMessages.indexWhere((ChatMessage element) {
-        return element.id.toString() == data['data']["chatMessageId"].toString();
+        return element.id.toString() ==
+            data['data']["chatMessageId"].toString();
       });
 
       if (index != -1) {
@@ -298,7 +316,8 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
           "listenerMessageStatusSocket ${chatMessages[index].id} type---->  ${chatMessages[index].type}",
         );
       } else {
-        debugPrint("listenerMessageStatusSocket: Element not found in chatMessages");
+        debugPrint(
+            "listenerMessageStatusSocket: Element not found in chatMessages");
       }
     });
   }
@@ -309,7 +328,8 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
       if (data is Map<String, dynamic>) {
         isTyping.value = false;
         chatStatus.value = "Chat in - Progress";
-        final ChatMessage chatMessage = ChatMessage.fromOfflineJson(data["data"]);
+        final ChatMessage chatMessage =
+            ChatMessage.fromOfflineJson(data["data"]);
         final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
         socket.messageReceivedStatusUpdate(
           receiverId: preferenceService.getUserDetail()!.id.toString(),
@@ -325,7 +345,8 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
   }
 
   Future getImage(bool isCamera) async {
-    pickedFile = await picker.pickImage(source: isCamera ? ImageSource.camera : ImageSource.gallery);
+    pickedFile = await picker.pickImage(
+        source: isCamera ? ImageSource.camera : ImageSource.gallery);
 
     if (pickedFile != null) {
       image = File(pickedFile!.path);
@@ -389,9 +410,11 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     final String base64Image = base64Encode(imageBytes);
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
 
-    final String uploadFile = await uploadImageToS3Bucket(File(fileData.path), time);
+    final String uploadFile =
+        await uploadImageToS3Bucket(File(fileData.path), time);
     if (uploadFile != "") {
-      addNewMessage(time, "image", awsUrl: uploadFile, base64Image: base64Image, downloadedPath: '');
+      addNewMessage(time, "image",
+          awsUrl: uploadFile, base64Image: base64Image, downloadedPath: '');
     }
   }
 
@@ -474,19 +497,23 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     isDataLoad.value = true;
   }
 
-  updateChatMessages(ChatMessage newMessage, bool isFromNotification, {bool isSendMessage = false}) async {
-    final int index = chatMessages.indexWhere((ChatMessage element) => newMessage.id == element.id);
+  updateChatMessages(ChatMessage newMessage, bool isFromNotification,
+      {bool isSendMessage = false}) async {
+    final int index = chatMessages
+        .indexWhere((ChatMessage element) => newMessage.id == element.id);
     if (index >= 0) {
       chatMessages[index].type = newMessage.type;
       chatMessages.refresh();
     } else {
       if (isFromNotification && messgeScrollController.hasClients) {
-        if (messgeScrollController.position.pixels > messgeScrollController.position.maxScrollExtent - 100) {
+        if (messgeScrollController.position.pixels >
+            messgeScrollController.position.maxScrollExtent - 100) {
           newMessage.type = 2;
           chatMessages.add(newMessage);
           scrollToBottomFunc();
           updateMsgDelieveredStatus(newMessage, 2);
-          if (messgeScrollController.position.pixels == messgeScrollController.position.maxScrollExtent) {
+          if (messgeScrollController.position.pixels ==
+              messgeScrollController.position.maxScrollExtent) {
             Future.delayed(const Duration(seconds: 1)).then((value) {
               scrollToBottomFunc();
             });
@@ -495,7 +522,8 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
           newMessage.type = isSendMessage ? 0 : 1;
           chatMessages.add(newMessage);
           unreadMsgCount.value = chatMessages
-              .where((ChatMessage e) => e.type != 2 && e.senderId != preference.getUserDetail()!.id)
+              .where((ChatMessage e) =>
+                  e.type != 2 && e.senderId != preference.getUserDetail()!.id)
               .length;
           if (!isSendMessage) {
             updateMsgDelieveredStatus(newMessage, 1);
@@ -505,7 +533,8 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
         newMessage.type = isSendMessage ? 0 : 1;
         chatMessages.add(newMessage);
         unreadMsgCount.value = chatMessages
-            .where((ChatMessage e) => e.type != 2 && e.senderId != preference.getUserDetail()!.id)
+            .where((ChatMessage e) =>
+                e.type != 2 && e.senderId != preference.getUserDetail()!.id)
             .length;
         if (!isSendMessage) {
           updateMsgDelieveredStatus(newMessage, 1);
@@ -515,7 +544,8 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     unreadMessageIndex.value = chatMessages
             .firstWhere(
               (ChatMessage element) =>
-                  element.type != 2 && element.senderId != preference.getUserDetail()!.id,
+                  element.type != 2 &&
+                  element.senderId != preference.getUserDetail()!.id,
               orElse: () => ChatMessage(),
             )
             .id ??
@@ -534,21 +564,51 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     final HiveServices hiveServices = HiveServices(boxName: userChatData);
     await hiveServices.initialize();
     databaseMessage.value.chatMessages = chatMessages;
-    await hiveServices.addData(key: userDataKey, data: jsonEncode(databaseMessage.value.toOfflineJson()));
+    await hiveServices.addData(
+        key: userDataKey,
+        data: jsonEncode(databaseMessage.value.toOfflineJson()));
   }
 
   scrollToBottomFunc() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       messgeScrollController.hasClients
-          ? messgeScrollController.animateTo(messgeScrollController.position.maxScrollExtent * 2,
-              duration: const Duration(milliseconds: 600), curve: Curves.easeOut)
+          ? messgeScrollController.animateTo(
+              messgeScrollController.position.maxScrollExtent * 2,
+              duration: const Duration(milliseconds: 600),
+              curve: Curves.easeOut)
           : null;
     });
   }
 
+  askForGift() async {
+    await showCupertinoModalPopup(
+      //backgroundColor: Colors.transparent,
+      context: Get.context!,
+      builder: (context) {
+        return AskForGiftBottomSheet(
+          customerName: customerName.value,
+          giftList: GiftsSingleton().gifts.data ?? <GiftData>[],
+          onSelect: (GiftData item, num quantity) async {
+            Get.back();
+            await sendGiftFunc(item, quantity);
+          },
+        );
+      },
+    );
+  }
+
+  sendGiftFunc(GiftData item, num quantity) {
+    if (item.giftName.isNotEmpty) {
+      final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+      unreadMessageIndex.value = -1;
+      addNewMessage(time, "gift", messageText: "${quantity}x ${item.giftName}", awsUrl: item.fullGiftImage);
+    }
+  }
+
   updateReadMessageStatus() async {
     for (int i = 0; i < chatMessages.length; i++) {
-      if (chatMessages[i].type != 2 && chatMessages[i].senderId != preference.getUserDetail()!.id) {
+      if (chatMessages[i].type != 2 &&
+          chatMessages[i].senderId != preference.getUserDetail()!.id) {
         updateMsgDelieveredStatus(chatMessages[i], 2);
         chatMessages[i].type = 2;
       }
@@ -556,8 +616,11 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     databaseMessage.value.chatMessages = chatMessages;
     unreadMsgCount.value = 0;
     chatMessages.refresh();
-    await hiveServices.addData(key: userDataKey, data: jsonEncode(databaseMessage.value.toOfflineJson()));
-    Future.delayed(const Duration(seconds: 1)).then((value) => unreadMessageIndex.value = -1);
+    await hiveServices.addData(
+        key: userDataKey,
+        data: jsonEncode(databaseMessage.value.toOfflineJson()));
+    Future.delayed(const Duration(seconds: 1))
+        .then((value) => unreadMessageIndex.value = -1);
   }
 
   sendMsg() {
@@ -575,12 +638,14 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     await hiveServices.initialize();
     final res = await hiveServices.getData(key: userDataKey);
     if (res != null) {
-      final ChatMessagesOffline msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
+      final ChatMessagesOffline msg =
+          ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
       chatMessages.value = msg.chatMessages ?? <ChatMessage>[];
       if (sendReadMessageStatus) {
         unreadMessageIndex.value = chatMessages
                 .firstWhere(
-                  (ChatMessage element) => element.type != 2 && element.senderId != userData?.id,
+                  (ChatMessage element) =>
+                      element.type != 2 && element.senderId != userData?.id,
                   orElse: () => ChatMessage(),
                 )
                 .id ??
@@ -605,11 +670,17 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
     }
   }
 
-  downloadImage({required String fileName, required ChatMessage chatDetail, required int index}) async {
-    final http.Response response = await http.get(Uri.parse(chatDetail.awsUrl!));
-    final Directory documentDirectory = await getApplicationDocumentsDirectory();
+  downloadImage(
+      {required String fileName,
+      required ChatMessage chatDetail,
+      required int index}) async {
+    final http.Response response =
+        await http.get(Uri.parse(chatDetail.awsUrl!));
+    final Directory documentDirectory =
+        await getApplicationDocumentsDirectory();
     final String firstPath = "${documentDirectory.path}/images";
-    final String filePathAndName = "${documentDirectory.path}/images/${chatDetail.id}.jpg";
+    final String filePathAndName =
+        "${documentDirectory.path}/images/${chatDetail.id}.jpg";
 
     await Directory(firstPath).create(recursive: true);
     final File file2 = File(filePathAndName);

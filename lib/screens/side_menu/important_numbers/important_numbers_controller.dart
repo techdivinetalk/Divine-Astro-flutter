@@ -1,6 +1,7 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -19,11 +20,12 @@ class ImportantNumbersController extends GetxController {
   ImportantNumbersController(this.repository);
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     loading = Loading.loading;
+    await getContactList();
     fetchImportantNumbers();
-    getContactList();
+    // getContactList();
     update();
   }
 
@@ -40,8 +42,10 @@ class ImportantNumbersController extends GetxController {
       if (contact.phones != null) {
         for (var element in contact.phones!) {
           //  log(element.value!);
-          if (contact.displayName == item.label &&
-              numberList.every((el) => el.contains(element.value!))) {
+          if (contact.displayName == item.label
+              // &&
+              // numberList.every((el) => el.contains(element.value!))
+          ) {
             return isExist = true;
           }
         }
