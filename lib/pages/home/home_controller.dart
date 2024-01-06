@@ -335,7 +335,7 @@ class HomeController extends GetxController {
       showOnceInDay();
       update();
 
-      log("DashboardData==>${jsonEncode(homeData)}");
+      //log("DashboardData==>${jsonEncode(homeData)}");
     } catch (error) {
       if (error is AppException) {
         error.onException();
