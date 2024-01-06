@@ -1,4 +1,6 @@
+import 'dart:collection';
 import 'dart:math' as math;
+import 'dart:math';
 
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
@@ -87,21 +89,23 @@ Future<void> initServices() async {
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-//  showNotification(message.data["title"],message.data["message"]);
-//  var path = 'user/${message.data["userid"]}/realTime';
-//  await AppFirebaseService().readData(path);
-  //debugPrint("Handling a background message: ${message.messageId}");
+  FirebaseDatabase.instance.ref("demo").child("pushMess").set("${message.data}");
+  showNotification(message.data["title"],message.data["message"],message.data['type']);
+  if(message.data['type'] == "1") {
+    HashMap<String,dynamic> updateData = HashMap();
+    updateData[message.data["chatId"]] = 1;
+    FirebaseDatabase.instance.ref("user").child(
+        "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}").update(updateData);
+  }
 }
-// Future<void> showNotification(String title,String message) async {
-//   const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
-//     "DivineAstrologer",
-//     "AstrologerNotification",
-//     importance: Importance.high,
-//   );
-//   const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
-//   await flutterLocalNotificationsPlugin
-//       .show(math.Random().nextInt(10000), title, message, notificationDetails, payload: "jsonEncodePayload");
-// }
+
+Future<void> showNotification(String title,String message,String type) async {
+  AndroidNotificationDetails androidNotificationDetails =
+  const AndroidNotificationDetails("DivineCustomer", "CustomerNotification", importance: Importance.max,priority: Priority.high,);
+  NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
+  await flutterLocalNotificationsPlugin
+      .show(Random().nextInt(90000), title,message, notificationDetails, payload: "jsonEncodePayload");
+}
 void initMessaging() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
   AndroidInitializationSettings("@mipmap/ic_launcher");
