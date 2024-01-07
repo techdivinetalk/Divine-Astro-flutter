@@ -10,7 +10,7 @@ import "package:get/get.dart";
 class ShowAllAvailAstroWidget extends StatefulWidget {
   const ShowAllAvailAstroWidget({
     required this.onClose,
-    required this.list,
+    required this.data,
     required this.onSelect,
     required this.onLeave,
     required this.onFollowAndLeave,
@@ -18,7 +18,7 @@ class ShowAllAvailAstroWidget extends StatefulWidget {
   });
 
   final void Function() onClose;
-  final List<dynamic> list;
+  final Map<dynamic, dynamic> data;
   final void Function(dynamic item) onSelect;
   final void Function() onLeave;
   final void Function() onFollowAndLeave;
@@ -29,24 +29,6 @@ class ShowAllAvailAstroWidget extends StatefulWidget {
 }
 
 class _ShowAllAvailAstroWidgetState extends State<ShowAllAvailAstroWidget> {
-  List<String> availAstroList = [
-    "https://robohash.org/01",
-    "https://robohash.org/02",
-    "https://robohash.org/03",
-    "https://robohash.org/04",
-    "https://robohash.org/05",
-    "https://robohash.org/06",
-    "https://robohash.org/07",
-    "https://robohash.org/08",
-    "https://robohash.org/09",
-    "https://robohash.org/10",
-    "https://robohash.org/01",
-    "https://robohash.org/02",
-    "https://robohash.org/03",
-    "https://robohash.org/04",
-    "https://robohash.org/05",
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -144,13 +126,18 @@ class _ShowAllAvailAstroWidgetState extends State<ShowAllAvailAstroWidget> {
 
   Widget dynamicHeightGridView() {
     return DynamicHeightGridView(
-      itemCount: availAstroList.length,
+      itemCount: widget.data.length,
       crossAxisCount: 4,
       builder: (BuildContext context, int index) {
-        final String item = availAstroList[index];
+        final dynamic item = widget.data.values.elementAt(index);
+        final String id = item["id"];
+        final String name = item["name"];
+        final String image = item["image"];
+        final bool isAvailable = item["isAvailable"];
+        final int isEngaged = item["isEngaged"];
         return InkWell(
           onTap: () {
-            widget.onSelect(item);
+            widget.onSelect(id);
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -166,9 +153,12 @@ class _ShowAllAvailAstroWidgetState extends State<ShowAllAvailAstroWidget> {
                     border: Border.all(color: AppColors.yellow, width: 4),
                     color: AppColors.yellow.withOpacity(0.2),
                   ),
-                  child: CustomImageWidget(imageUrl: item, rounded: true),
+                  child: CustomImageWidget(imageUrl: image, rounded: true),
                 ),
-                Positioned(bottom: -5, child: liveStack()),
+                Positioned(
+                  bottom: -5,
+                  child: liveStack(),
+                ),
               ],
             ),
           ),

@@ -17,6 +17,7 @@ import "package:divine_astrologer/screens/live_dharam/widgets/call_accept_or_rej
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/disconnect_call_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/end_session_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/exit_wait_list_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/gift_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart";
@@ -348,8 +349,13 @@ class _LivePage extends State<LiveDharamScreen>
     return _controller.isHost
         ? null
         : ZegoLiveStreamingSwipingConfig(
+            //
             requirePreviousLiveID: () => "",
+            //
+            //
+            //
             requireNextLiveID: () => "",
+            //
           );
   }
 
@@ -1087,6 +1093,29 @@ class _LivePage extends State<LiveDharamScreen>
     return Future<void>.value();
   }
 
+  Future<void> youAreInTheWaitListDialog() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            "You're in the Wait List",
+          ),
+          content: Text(
+            "You are not able to perform this action because you're the Wait List of Astrologer ${_controller.userName}.",
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: Get.back,
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+    return Future<void>.value();
+  }
+
   Future<void> giftPopup({
     required BuildContext ctx,
     required String userId,
@@ -1168,9 +1197,14 @@ class _LivePage extends State<LiveDharamScreen>
           hasMyIdInWaitList: false,
           onExitWaitList: () async {
             Get.back();
-            if (!_controller.isHost) {
-              await _controller.removeFromWaitList();
-            } else {}
+            await exitWaitListPopup(
+              noDisconnect: () {},
+              yesDisconnect: () async {
+                if (!_controller.isHost) {
+                  await _controller.removeFromWaitList();
+                } else {}
+              },
+            );
           },
           astologerName: _controller.userName,
           astologerImage: _controller.avatar,
@@ -1201,6 +1235,34 @@ class _LivePage extends State<LiveDharamScreen>
       context: context,
       builder: (BuildContext context) {
         return DisconnectWidget(
+          onClose: Get.back,
+          noDisconnect: () {
+            Get.back();
+            noDisconnect();
+          },
+          yesDisconnect: () {
+            Get.back();
+            yesDisconnect();
+          },
+          isAstro: _controller.isHost,
+          astroAvatar: _controller.avatar,
+          astroUserName: _controller.userName,
+          custoAvatar: _controller.currentCaller.avatar,
+          custoUserName: _controller.currentCaller.userName,
+        );
+      },
+    );
+    return Future<void>.value();
+  }
+
+  Future<void> exitWaitListPopup({
+    required Function() noDisconnect,
+    required Function() yesDisconnect,
+  }) async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return ExitWaitListWidget(
           onClose: Get.back,
           noDisconnect: () {
             Get.back();
@@ -2579,6 +2641,19 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> exitFunc() async {
+    // final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
+    // if (hasMyIdInWaitList) {
+    //   await exitWaitListPopup(
+    //     noDisconnect: () {},
+    //     yesDisconnect: () async {
+    //       if (!_controller.isHost) {
+    //         await _controller.removeFromWaitList();
+    //       } else {}
+    //     },
+    //   );
+    //   return Future<void>.value();
+    // } else {}
+
     final bool isEngaded = _controller.currentCaller.isEngaded;
     if (isEngaded) {
       await disconnectPopup(
@@ -2860,19 +2935,31 @@ class _LivePage extends State<LiveDharamScreen>
     return Future<void>.value();
   }
 
-  Future<void> showAllAvailAstroPopup() async {
+  Future<void> showAllAvailAstroPopup({
+    required void Function() exitLive,
+  }) async {
     await showCupertinoModalPopup(
       context: context,
-      barrierDismissible: false,
       builder: (BuildContext context) {
         return ShowAllAvailAstroWidget(
           onClose: Get.back,
-          list: [],
-          onSelect: (v) {
+          data: _controller.data,
+          onSelect: (liveId) {
             Get.back();
+            if (liveId == _controller.liveId) {
+            } else {}
           },
-          onFollowAndLeave: Get.back,
-          onLeave: Get.back,
+          onFollowAndLeave: () async {
+            Get.back();
+            // if (_controller.details.data?.isFollow == 0) {
+            //   await _controller.followOrUnfollowAstrologer();
+            // } else {}
+            exitLive();
+          },
+          onLeave: () {
+            Get.back();
+            exitLive();
+          },
         );
       },
     );

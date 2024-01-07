@@ -314,24 +314,36 @@ class LiveDharamController extends GetxController {
     return isAvailable;
   }
 
-  // String requirePreviousLiveID() {
-  //   currentIndex = currentIndex - 1;
-  //   if (currentIndex < 0) {
-  //     currentIndex = data.keys.toList().length - 1;
-  //   } else {}
-  //   liveId = data.keys.toList()[currentIndex];
-  //   unawaited(getAstrologerDetails());
-  //   return liveId;
+  // String requirePreviousLiveID({required Function() acknowledgement}) {
+  //   final bool has = hasMyIdInWaitList();
+  //   if (has) {
+  //     acknowledgement();
+  //     return "";
+  //   } else {
+  //     currentIndex = currentIndex - 1;
+  //     if (currentIndex < 0) {
+  //       currentIndex = data.keys.toList().length - 1;
+  //     } else {}
+  //     liveId = data.keys.toList()[currentIndex];
+  //     unawaited(getAstrologerDetails());
+  //     return liveId;
+  //   }
   // }
 
-  // String requireNextLiveID() {
-  //   currentIndex = currentIndex + 1;
-  //   if (currentIndex > data.keys.toList().length - 1) {
-  //     currentIndex = 0;
-  //   } else {}
-  //   liveId = data.keys.toList()[currentIndex];
-  //   unawaited(getAstrologerDetails());
-  //   return liveId;
+  // String requireNextLiveID({required Function() acknowledgement}) {
+  //   final bool has = hasMyIdInWaitList();
+  //   if (has) {
+  //     acknowledgement();
+  //     return "";
+  //   } else {
+  //     currentIndex = currentIndex + 1;
+  //     if (currentIndex > data.keys.toList().length - 1) {
+  //       currentIndex = 0;
+  //     } else {}
+  //     liveId = data.keys.toList()[currentIndex];
+  //     unawaited(getAstrologerDetails());
+  //     return liveId;
+  //   }
   // }
 
   // Map<String, dynamic> createGift({required num count, required String svga}) {
