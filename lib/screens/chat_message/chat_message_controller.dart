@@ -1,37 +1,15 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:divine_astrologer/model/chat/req_common_chat_model.dart';
-import 'package:divine_astrologer/model/res_login.dart';
-import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:get/get.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import '../../app_socket/app_socket.dart';
-import '../../common/colors.dart';
 import '../../common/common_functions.dart';
-import '../../di/api_provider.dart';
-import '../../di/hive_services.dart';
-import '../../di/shared_preference_service.dart';
-import '../../model/chat/res_astro_chat_listener.dart';
-import '../../model/chat/res_common_chat_success.dart';
 import '../../model/chat_assistant/chat_assistant_astrologer_response.dart';
 import '../../model/chat_assistant/chat_assistant_chats_response.dart';
-import '../../model/chat_offline_model.dart';
 import '../../repository/chat_assistant_repository.dart';
 import '../../repository/chat_repository.dart';
 import '../../repository/kundli_repository.dart';
-import '../../repository/user_repository.dart';
-import 'package:path_provider/path_provider.dart';
-
-import '../live_page/constant.dart';
-
 class ChatMessageController extends GetxController {
   final chatAssistantRepository = ChatAssistantRepository();
   final messageScrollController = ScrollController();
@@ -43,14 +21,33 @@ class ChatMessageController extends GetxController {
   RxBool isEmojiShowing = false.obs;
   DataList? args;
   final appSocket = AppSocket();
-
+  BroadcastReceiver broadcastReceiver =
+  BroadcastReceiver(names: <String>["chatAssist"]);
   ChatMessageController(KundliRepository put, ChatRepository put2);
-
   @override
   void onInit() {
     super.onInit();
     if (Get.arguments != null) {
       args = Get.arguments;
+      broadcastReceiver.start();
+      broadcastReceiver.messages.listen((broadCastEvent) {
+        if (broadCastEvent.name == 'chatAssist'){
+          var responseMsg = broadCastEvent.data?['msg'];
+          print("responseMsg ${args!.id}");
+          if(responseMsg["sender_id"].toString() ==  args!.id.toString()) {
+            print("responseMsg id match");
+            chatMessageList.add(data(
+                message: responseMsg["message"],
+                astrologerId: args!.id,
+                createdAt: DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ").format(DateTime.now()),
+                id: DateTime.now().millisecondsSinceEpoch,
+                isSuspicious: 0,
+                msgType: 1,
+                seenStatus: 0,
+                customerId: int.parse(responseMsg["sender_id"] ?? 0)));
+          }
+        }
+      });
       getAssistantChatList();
     }
   }
