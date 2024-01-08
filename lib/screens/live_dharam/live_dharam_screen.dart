@@ -43,6 +43,8 @@ import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_ast
 //
 //
 //
+//
+//
 
 const int appID = 696414715;
 const String appSign =
@@ -351,7 +353,6 @@ class _LivePage extends State<LiveDharamScreen>
         : ZegoLiveStreamingSwipingConfig(
             //
             requirePreviousLiveID: () => "",
-            //
             //
             //
             requireNextLiveID: () => "",
@@ -832,6 +833,13 @@ class _LivePage extends State<LiveDharamScreen>
                                       style: const TextStyle(
                                         fontSize: 10,
                                         color: Colors.white,
+                                        shadows: [
+                                          Shadow(
+                                            color: Colors.black,
+                                            offset: Offset(1.0, 1.0),
+                                            blurRadius: 1.0,
+                                          ),
+                                        ],
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -841,6 +849,13 @@ class _LivePage extends State<LiveDharamScreen>
                                         fontSize: 10,
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
+                                        shadows: [
+                                          Shadow(
+                                            color: Colors.black,
+                                            offset: Offset(1.0, 1.0),
+                                            blurRadius: 1.0,
+                                          ),
+                                        ],
                                       ),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
@@ -848,26 +863,28 @@ class _LivePage extends State<LiveDharamScreen>
                                   ],
                                 ),
                               ),
-                              SizedBox(
-                                height: 24,
-                                width: 24,
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.more_vert,
-                                    size: 16,
-                                    color: AppColors.yellow,
-                                  ),
-                                  onPressed: () async {
-                                    await moreOptionsPopup(
-                                      userId: msg.userId ?? "",
-                                      userName: msg.userName ?? "",
-                                      isBlocked: _controller.isBlocked(
-                                        id: int.parse(msg.userId ?? ""),
+                              _controller.isHost
+                                  ? SizedBox(
+                                      height: 24,
+                                      width: 24,
+                                      child: IconButton(
+                                        icon: const Icon(
+                                          Icons.more_vert,
+                                          size: 16,
+                                          color: AppColors.yellow,
+                                        ),
+                                        onPressed: () async {
+                                          await moreOptionsPopup(
+                                            userId: msg.userId ?? "",
+                                            userName: msg.userName ?? "",
+                                            isBlocked: _controller.isBlocked(
+                                              id: int.parse(msg.userId ?? ""),
+                                            ),
+                                          );
+                                        },
                                       ),
-                                    );
-                                  },
-                                ),
-                              ),
+                                    )
+                                  : const SizedBox(),
                             ],
                           ),
                         ),
@@ -1141,6 +1158,8 @@ class _LivePage extends State<LiveDharamScreen>
               // await sendGiftFunc(ctx: ctx, item: item, quantity: quantity);
             }
           },
+          isHost: _controller.isHost,
+          walletBalance: 0,
         );
       },
     );
@@ -1442,18 +1461,18 @@ class _LivePage extends State<LiveDharamScreen>
               successCallback: log,
               failureCallback: log,
             );
-            await _controller.addUpdateToWaitList(
-              userId: userId,
-              callType: "Video",
-              isEngaded: false,
-              isRequest: true,
-            );
-            final String id = userId;
-            final String name = userName;
-            // final String avatar = _controller.waitListModel.last.avatar;
-            final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
-            final connectInvite = _zegoController.connectInvite;
-            await connectInvite.hostSendCoHostInvitationToAudience(user);
+            // await _controller.addUpdateToWaitList(
+            //   userId: userId,
+            //   callType: "Video",
+            //   isEngaded: false,
+            //   isRequest: true,
+            // );
+            // final String id = userId;
+            // final String name = userName;
+            // // final String avatar = _controller.waitListModel.last.avatar;
+            // final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
+            // final connectInvite = _zegoController.connectInvite;
+            // await connectInvite.hostSendCoHostInvitationToAudience(user);
           },
           onTapAskForAudioCall: () async {
             Get.back();
@@ -1471,18 +1490,18 @@ class _LivePage extends State<LiveDharamScreen>
               successCallback: log,
               failureCallback: log,
             );
-            await _controller.addUpdateToWaitList(
-              userId: userId,
-              callType: "Audio",
-              isEngaded: false,
-              isRequest: true,
-            );
-            final String id = userId;
-            final String name = userName;
-            // final String avatar = _controller.waitListModel.last.avatar;
-            final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
-            final connectInvite = _zegoController.connectInvite;
-            await connectInvite.hostSendCoHostInvitationToAudience(user);
+            // await _controller.addUpdateToWaitList(
+            //   userId: userId,
+            //   callType: "Audio",
+            //   isEngaded: false,
+            //   isRequest: true,
+            // );
+            // final String id = userId;
+            // final String name = userName;
+            // // final String avatar = _controller.waitListModel.last.avatar;
+            // final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
+            // final connectInvite = _zegoController.connectInvite;
+            // await connectInvite.hostSendCoHostInvitationToAudience(user);
           },
           onTapAskForPrivateCall: () async {
             Get.back();
@@ -1500,18 +1519,18 @@ class _LivePage extends State<LiveDharamScreen>
               successCallback: log,
               failureCallback: log,
             );
-            await _controller.addUpdateToWaitList(
-              userId: userId,
-              callType: "Private",
-              isEngaded: false,
-              isRequest: true,
-            );
-            final String id = userId;
-            final String name = userName;
-            // final String avatar = _controller.waitListModel.last.avatar;
-            final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
-            final connectInvite = _zegoController.connectInvite;
-            await connectInvite.hostSendCoHostInvitationToAudience(user);
+            // await _controller.addUpdateToWaitList(
+            //   userId: userId,
+            //   callType: "Private",
+            //   isEngaded: false,
+            //   isRequest: true,
+            // );
+            // final String id = userId;
+            // final String name = userName;
+            // // final String avatar = _controller.waitListModel.last.avatar;
+            // final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
+            // final connectInvite = _zegoController.connectInvite;
+            // await connectInvite.hostSendCoHostInvitationToAudience(user);
           },
           onTapAskForBlockUnBlockUser: () async {
             Get.back();
@@ -1653,24 +1672,39 @@ class _LivePage extends State<LiveDharamScreen>
   //         },
   //         onTapAcceptForVideoCall: () async {
   //           Get.back();
-  //           final connectInvite = _zegoController.connectInvite;
-  //           await _controller.makeAPICallForStartCall(hasAccepted: true);
-  //           await connectInvite.audienceAgreeCoHostInvitation();
+  //           await requestCallFunction(type: "Video");
   //         },
   //         onTapAcceptForAudioCall: () async {
   //           Get.back();
-  //           final connectInvite = _zegoController.connectInvite;
-  //           await _controller.makeAPICallForStartCall(hasAccepted: true);
-  //           await connectInvite.audienceAgreeCoHostInvitation();
+  //           await requestCallFunction(type: "Audio");
   //         },
   //         onTapAcceptForPrivateCall: () async {
   //           Get.back();
-  //           final connectInvite = _zegoController.connectInvite;
-  //           await _controller.makeAPICallForStartCall(hasAccepted: true);
-  //           await connectInvite.audienceAgreeCoHostInvitation();
+  //           await requestCallFunction(type: "Private");
   //         },
   //         giftData: giftData,
   //         giftCount: giftCount,
+  //       );
+  //     },
+  //   );
+  //   return Future<void>.value();
+  // }
+
+  // Future<void> requestCallFunction({required String type}) async {
+  //   await sendCallFunc(
+  //     type: type,
+  //     needRecharge: (bal.InsufficientBalModel balModel) async {
+  //       await lowBalancePopup(
+  //         balModel: balModel,
+  //         callbackBalModelData: (data) async {
+  //           final CommonOffer arg = CommonOffer(
+  //             extraAmount: data.extraAmount,
+  //             offerAmount: data.offerAmount,
+  //             percentage: data.percentage?.toInt(),
+  //             rechargeAmount: data.rechargeAmount,
+  //           );
+  //           await Get.toNamed(RouteName.paymentSummary, arguments: arg);
+  //         },
   //       );
   //     },
   //   );
@@ -2645,8 +2679,15 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> exitFunc() async {
+    final bool isEngaded = _controller.currentCaller.isEngaded;
     // final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
-    // if (hasMyIdInWaitList) {
+    if (isEngaded) {
+      await disconnectPopup(
+        noDisconnect: () {},
+        yesDisconnect: removeCoHostOrStopCoHost,
+      );
+    }
+    // else if (hasMyIdInWaitList) {
     //   await exitWaitListPopup(
     //     noDisconnect: () {},
     //     yesDisconnect: () async {
@@ -2656,15 +2697,8 @@ class _LivePage extends State<LiveDharamScreen>
     //     },
     //   );
     //   return Future<void>.value();
-    // } else {}
-
-    final bool isEngaded = _controller.currentCaller.isEngaded;
-    if (isEngaded) {
-      await disconnectPopup(
-        noDisconnect: () {},
-        yesDisconnect: removeCoHostOrStopCoHost,
-      );
-    } else {
+    // }
+    else {
       if (_controller.isHost) {
         await endLiveSession(
           endLive: () async {

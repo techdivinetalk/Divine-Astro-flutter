@@ -12,12 +12,16 @@ class GiftWidget extends StatefulWidget {
     required this.onClose,
     required this.list,
     required this.onSelect,
+    required this.isHost,
+    required this.walletBalance,
     super.key,
   });
 
   final void Function() onClose;
   final List<GiftData> list;
   final void Function(GiftData item, num quantity) onSelect;
+  final bool isHost;
+  final num walletBalance;
 
   @override
   State<GiftWidget> createState() => _GiftWidgetState();
@@ -85,8 +89,9 @@ class _GiftWidgetState extends State<GiftWidget> {
                 () {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    // children: <Widget>[quantityWidget(), amountWidget()],
-                    children: <Widget>[quantityWidget()],
+                    children: widget.isHost
+                        ? <Widget>[quantityWidget()]
+                        : <Widget>[quantityWidget(), amountWidget()],
                   );
                 },
               ),
@@ -157,7 +162,8 @@ class _GiftWidgetState extends State<GiftWidget> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         const Text(
-          "Amount:",
+          // "Amount:",
+          "Wallet Balance:",
           style: TextStyle(
             fontSize: 16,
             color: AppColors.white,
@@ -165,7 +171,8 @@ class _GiftWidgetState extends State<GiftWidget> {
         ),
         const SizedBox(width: 8),
         Text(
-          "₹ $amount",
+          // "₹ $amount",
+          "${widget.walletBalance}",
           style: const TextStyle(
             fontSize: 16,
             color: AppColors.yellow,
