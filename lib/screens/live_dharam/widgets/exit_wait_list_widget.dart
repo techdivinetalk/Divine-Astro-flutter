@@ -132,19 +132,19 @@ class _ExitWaitListWidgetState extends State<ExitWaitListWidget> {
           ),
           const SizedBox(height: 16),
           Text(
-            "Are you sure you want to exit the live session. Our Astrologer (${widget.astroUserName}) will soon be in touch with you.",
+            "Are you sure you want to exit the wait list? Our Astrologer (${widget.astroUserName}) will soon be in touch with you.",
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
           CommonButton(
-            buttonText: "Okay, Go back to live",
+            buttonText: "Okay, Keep in Wait List",
             buttonCallback: widget.noDisconnect,
           ),
           const SizedBox(height: 16),
           TextButton(
             onPressed: widget.yesDisconnect,
             child: const Text(
-              "Exit Live",
+              "Exit Wait List",
               style: TextStyle(
                 color: Colors.black,
                 decoration: TextDecoration.underline,

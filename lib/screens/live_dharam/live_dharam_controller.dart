@@ -49,7 +49,7 @@ class LiveDharamController extends GetxController {
   final Rx<WaitListModel> _currentCaller = WaitListModel(
     isRequest: false,
     isEngaded: false,
-    callType: "callType",
+    callType: "",
     totalTime: "",
     avatar: "",
     userName: "",
@@ -94,7 +94,7 @@ class LiveDharamController extends GetxController {
     currentCaller = WaitListModel(
       isRequest: false,
       isEngaded: false,
-      callType: "callType",
+      callType: "",
       totalTime: "",
       avatar: "",
       userName: "",

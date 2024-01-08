@@ -117,7 +117,10 @@ class GiftPlayerWidgetState extends State<GiftPlayerWidget>
                 ..forward().whenComplete(() {
                   widget.onRemove();
                 }));
-              return SVGAImage(animationController!);
+              return SVGAImage(
+                animationController!,
+                fit: BoxFit.fill,
+              );
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             } else {
