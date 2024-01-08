@@ -22,6 +22,8 @@ import 'package:divine_astrologer/screens/live_dharam/live_dharam_binding.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart';
 import 'package:divine_astrologer/screens/live_tips/live_tips_binding.dart';
 import 'package:divine_astrologer/screens/live_tips/live_tips_ui.dart';
+import 'package:divine_astrologer/screens/message_template/message_template_bindings.dart';
+import 'package:divine_astrologer/screens/message_template/message_template_ui.dart';
 import 'package:divine_astrologer/screens/number_change/sub_screen/otp_screen_for_update_mobile_number.dart';
 import 'package:divine_astrologer/screens/order_feedback/order_feedback_binding.dart';
 import 'package:divine_astrologer/screens/order_feedback/order_feedback_ui.dart';
@@ -43,6 +45,8 @@ import 'package:divine_astrologer/screens/video_call_page/video_call_page.dart';
 import 'package:divine_astrologer/screens/video_call_page/video_call_page_binding.dart';
 import 'package:get/get.dart';
 
+import '../screens/add_message_template/add_message_template_binding.dart';
+import '../screens/add_message_template/add_message_template_ui.dart';
 import '../screens/bank_details/bank_detail_binding.dart';
 import '../screens/bank_details/bank_details_ui.dart';
 import '../screens/blocked_user/blocked_user_ui.dart';
@@ -85,6 +89,8 @@ class RouteName {
   static const String blockedUser = "/blockedUser";
   static const String editProfileUI = "/editProfileUI";
   static const String orderHistory = "/orderHistory";
+  static const String messageTemplate = "/messageTemplate";
+  static const String addMessageTemplate = "/addMessageTemplate";
   static const String referAstrologer = "/referAstrologer";
   static const String yourEarning = "/yourEarning";
   static const String priceHistoryUI = "/priceHistoryUI";
@@ -156,6 +162,14 @@ class Routes {
         page: () => const OrderHistoryUI(),
         name: RouteName.orderHistory,
         binding: OrderHistoryBinding()),
+    GetPage(
+        page: () => const MessageTemplateUI(),
+        name: RouteName.messageTemplate,
+        binding: MessageTemplateBinding()),
+    GetPage(
+        page: () => const AddMessageTemplateUI(),
+        name: RouteName.addMessageTemplate,
+        binding: AddMessageTemplateBinding()),
     GetPage(
         page: () => const ReferAnAstrologer(),
         name: RouteName.referAstrologer,
