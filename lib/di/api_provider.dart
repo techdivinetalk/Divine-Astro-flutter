@@ -70,6 +70,9 @@ class ApiProvider {
   final String agoraEndCall = "agoraEndCall";
   final String getWaitingListQueue = "getWaitingListQueue";
   final String getImportantNumber = "getImportantNumber";
+  final String getMessageTemplate = "getMessageTemplate";
+  final String addMessageTemplate = "addMessageTemplate";
+  final String editMessageTemplate = "editMessageTemplate";
   final String getDonationList = "getDonationList";
   final String updateSessionType = "updateSessionType";
   final String astroOnline = "astroOnline";

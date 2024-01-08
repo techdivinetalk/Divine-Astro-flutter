@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:divine_astrologer/model/login_images.dart';
+import 'package:divine_astrologer/model/message_template_response.dart';
 import 'package:divine_astrologer/model/update_bank_response.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,6 +25,7 @@ class SharedPreferenceService extends GetxService {
   static const constantData = "constantData";
   static const performanceDialog = "performanceDialog";
   static const talkTime = "talkTime";
+  static const messageTemplate = "messageTemplate";
 
   Future<SharedPreferenceService> init() async {
     prefs = await SharedPreferences.getInstance();
@@ -113,6 +116,21 @@ class SharedPreferenceService extends GetxService {
   UpdateBankResponse? getUpdatedBankDetails() {
     String? data = prefs!.getString(updatedBankDetails);
     if (data != null) return updateBankResponseFromJson(data);
+    return null;
+  }
+
+  Future<void> saveMessageTemplates(String json) async {
+    debugPrint('ress1: ${json}');
+    await prefs!.setString(messageTemplate, json);
+    debugPrint('ress2: ${json}');
+  }
+
+  MessageTemplateResponse? getMessageTemplates() {
+    debugPrint('get tamplte func');
+    String? data = prefs!.getString(messageTemplate);
+    debugPrint('get tamplte func 2: $data');
+    if (data != null) return messageTemplateResponseFromJson(data);
+    debugPrint('get tamplte func 3: $data');
     return null;
   }
 
