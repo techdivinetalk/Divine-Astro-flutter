@@ -46,6 +46,8 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
 
 class WhiteTextField extends StatefulWidget {
   final String hintText;
+  final String? errorText;
+  final bool? enabled;
   final int maxLines;
   final TextInputType inputType;
   final TextInputAction inputAction;
@@ -63,6 +65,8 @@ class WhiteTextField extends StatefulWidget {
       required this.hintText,
       required this.inputType,
       required this.inputAction,
+        this.errorText,
+        this.enabled,
       this.maxLines = 1,
       this.controller,
       this.errorBorder,
@@ -92,6 +96,7 @@ class _WhiteTextFieldState extends State<WhiteTextField> {
         ],
       ),
       child: TextFormField(
+        enabled: widget.enabled,
         onChanged: widget.onChanged,
         validator: widget.validator,
         controller: widget.controller,
@@ -100,6 +105,7 @@ class _WhiteTextFieldState extends State<WhiteTextField> {
         textInputAction: widget.inputAction,
         decoration: InputDecoration(
           hintText: widget.hintText,
+          errorText: widget.errorText,
           isDense: widget.isDense,
           contentPadding: widget.contentPadding,
           helperStyle: AppTextStyle.textStyle16(),

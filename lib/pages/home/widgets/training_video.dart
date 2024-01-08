@@ -41,6 +41,7 @@ class _TrainingVideoUIState extends State<TrainingVideoUI> {
       flags: const YoutubePlayerFlags(
         autoPlay: true,
         mute: true,
+        showLiveFullscreenButton: true,
       ),
     );
     _controller.addListener(() {

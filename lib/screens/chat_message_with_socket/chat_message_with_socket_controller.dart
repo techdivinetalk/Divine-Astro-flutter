@@ -11,6 +11,7 @@ import "package:divine_astrologer/di/hive_services.dart";
 import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/model/chat_offline_model.dart";
 import "package:divine_astrologer/model/res_login.dart";
+import "package:divine_astrologer/repository/message_template_repository.dart";
 import "package:divine_astrologer/repository/user_repository.dart";
 import "package:divine_astrologer/screens/dashboard/dashboard_controller.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
@@ -29,11 +30,13 @@ import "package:socket_io_client/socket_io_client.dart";
 import "../../common/ask_for_gift_bottom_sheet.dart";
 import "../../common/common_functions.dart";
 import "../../model/astrologer_gift_response.dart";
+import "../../model/message_template_response.dart";
 import "../live_dharam/gifts_singleton.dart";
 
 class ChatMessageWithSocketController extends GetxController
     with WidgetsBindingObserver {
   final UserRepository userRepository = Get.find<UserRepository>();
+  final MessageTemplateRepo messageTemplateRepository = Get.put(MessageTemplateRepo());
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
   TextEditingController messageController = TextEditingController();
@@ -72,6 +75,8 @@ class ChatMessageWithSocketController extends GetxController
   RxBool isTyping = false.obs;
   BroadcastReceiver broadcastReceiver =
       BroadcastReceiver(names: <String>["EndChat"]);
+
+  RxList<MessageTemplates> messageTemplates = <MessageTemplates>[].obs;
 
   final AppSocket socket = AppSocket();
   var arguments;
@@ -146,6 +151,7 @@ class ChatMessageWithSocketController extends GetxController
     });
     debugPrint("arguments of socket $arguments");
     messageController.addListener(_onMessageChanged);
+    getMessageTemplates();
     isAstroJoinedChat();
     checkIsCustomerJoinedPrivateChat();
     typingListenerSocket();
@@ -203,6 +209,22 @@ class ChatMessageWithSocketController extends GetxController
     userDataKey = "chat_${currentUserId.value}";
     getChatList();
     socketReconnect();
+  }
+
+  getMessageTemplates() async {
+    try {
+      final response = await messageTemplateRepository.fetchTemplates();
+      if (response.data != null) {
+        messageTemplates.value = response.data!;
+        //await preferenceService.saveMessageTemplates(response.toPrettyString());
+      }
+      //MessageTemplateResponse? res = preferenceService.getMessageTemplates();
+      //debugPrint('res: ${res?.data?.length}');
+      //loading = Loading.loaded;
+      update();
+    } catch (error) {
+      divineSnackBar(data: error.toString(), color: AppColors.redColor);
+    }
   }
 
   void talkTimeStartTimer(int talkTime) {
@@ -632,6 +654,12 @@ class ChatMessageWithSocketController extends GetxController
       messageController.clear();
     }
   }
+
+  sendMsgTemplate(MessageTemplates msg) {
+    final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+    unreadMessageIndex.value = -1;
+    addNewMessage(time, "text", messageText: msg.description);
+    }
 
   getChatList() async {
     chatMessages.clear();
