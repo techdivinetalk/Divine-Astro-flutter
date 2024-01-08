@@ -94,10 +94,12 @@ class ChatMessageController extends GetxController {
   void sendMsg() {
     if (messageController.text.isNotEmpty) {
       appSocket.sendAssistantMessage(
-          customerId: preferenceService.getUserDetail()!.id.toString(),
+          customerId: args!.id.toString() ,
           message: messageController.text,
-          astroId: args!.id.toString());
-
+          astroId: preferenceService.getUserDetail()!.id.toString());
+      print("socket msg");
+      print(preferenceService.getUserDetail()!.id.toString());
+      print(args!.id.toString());
       chatMessageList.add(data(
           message: messageController.text,
           astrologerId: args!.id,

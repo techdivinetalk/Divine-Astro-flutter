@@ -106,7 +106,6 @@ Future<void> initServices() async {
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseDatabase.instance.ref("demo").child("pushMess").set("${message.data}");
   showNotification(message.data["title"],message.data["message"],message.data['type']);
   if(message.data['type'] == "1") {
     HashMap<String,dynamic> updateData = HashMap();
@@ -119,7 +118,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> showNotification(String title,String message,String type) async {
   AndroidNotificationDetails androidNotificationDetails =
   const AndroidNotificationDetails("DivineCustomer", "CustomerNotification", importance: Importance.max,priority: Priority.high,);
-  if(type == "3") {
+  if(type == "2") {
     androidNotificationDetails =
     const AndroidNotificationDetails("DivineCustomer", "CustomerNotification",
       sound: RawResourceAndroidNotificationSound('accept_ring'),
