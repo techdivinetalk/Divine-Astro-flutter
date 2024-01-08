@@ -23,6 +23,7 @@ import "package:social_media_recorder/audio_encoder_type.dart";
 import "package:social_media_recorder/screen/social_media_recorder.dart";
 import "package:voice_message_package/voice_message_package.dart";
 
+import "../../model/message_template_response.dart";
 import "../live_dharam/widgets/custom_image_widget.dart";
 import "chat_message_with_socket_controller.dart";
 
@@ -39,8 +40,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
               onTap: () {
                 controller.isEmojiShowing.value = false;
               },
-              child: Assets.images.bgChatWallpaper
-                  .image(width: MediaQuery.of(context).size.width, fit: BoxFit.fitWidth),
+              child: Assets.images.bgChatWallpaper.image(
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.fitWidth),
             ),
             Column(
               children: [
@@ -56,19 +58,25 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           child: Obx(
                             () => AnimatedCrossFade(
                               duration: const Duration(milliseconds: 200),
-                              crossFadeState:
-                                  controller.chatMessages.isEmpty || controller.isDataLoad.value == false
-                                      ? CrossFadeState.showSecond
-                                      : CrossFadeState.showFirst,
+                              crossFadeState: controller.chatMessages.isEmpty ||
+                                      controller.isDataLoad.value == false
+                                  ? CrossFadeState.showSecond
+                                  : CrossFadeState.showFirst,
                               secondChild: Container(),
                               firstChild: NotificationListener(
                                 onNotification: (t) {
                                   if (t is ScrollEndNotification) {
-                                    bool atScrollViewBottom =
-                                        controller.messgeScrollController.position.pixels <
-                                            controller.messgeScrollController.position.maxScrollExtent - 100;
-                                    controller.scrollToBottom.value = atScrollViewBottom;
-                                    if (atScrollViewBottom == false && controller.unreadMsgCount.value > 0) {
+                                    bool atScrollViewBottom = controller
+                                            .messgeScrollController
+                                            .position
+                                            .pixels <
+                                        controller.messgeScrollController
+                                                .position.maxScrollExtent -
+                                            100;
+                                    controller.scrollToBottom.value =
+                                        atScrollViewBottom;
+                                    if (atScrollViewBottom == false &&
+                                        controller.unreadMsgCount.value > 0) {
                                       controller.updateReadMessageStatus();
                                     }
                                   }
@@ -81,41 +89,77 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   reverse: false,
                                   padding: EdgeInsets.only(bottom: 10.h),
                                   itemBuilder: (context, index) {
-                                    var chatMessage = controller.chatMessages[index];
+                                    var chatMessage =
+                                        controller.chatMessages[index];
                                     return Column(
                                       children: [
                                         Padding(
-                                          padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 12.w),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 4.h, horizontal: 12.w),
                                           child: Column(
                                             children: [
-                                              if (chatMessage.id == controller.unreadMessageIndex.value)
+                                              if (chatMessage.id ==
+                                                  controller
+                                                      .unreadMessageIndex.value)
                                                 unreadMessageView(),
                                               chatMessage.msgType == "kundli"
-                                                  ? kundliView(chatDetail: chatMessage, index: index)
-                                                  : chatMessage.msgType == "image"
+                                                  ? kundliView(
+                                                      chatDetail: chatMessage,
+                                                      index: index)
+                                                  : chatMessage.msgType ==
+                                                          "image"
                                                       ? imageMsgView(
-                                                          controller.chatMessages[index].base64Image ?? "",
-                                                          chatDetail: controller.chatMessages[index],
+                                                          controller
+                                                                  .chatMessages[
+                                                                      index]
+                                                                  .base64Image ??
+                                                              "",
+                                                          chatDetail: controller
+                                                                  .chatMessages[
+                                                              index],
                                                           index: index,
                                                           chatMessage.senderId ==
-                                                              preferenceService.getUserDetail()!.id)
-                                                      : chatMessage.msgType == "audio"
+                                                              preferenceService
+                                                                  .getUserDetail()!
+                                                                  .id)
+                                                      : chatMessage.msgType ==
+                                                              "audio"
                                                           ? audioView(context,
-                                                              chatDetail: controller.chatMessages[index],
-                                                              yourMessage: chatMessage.senderId ==
-                                                                  preferenceService.getUserDetail()!.id)
-                                                      : chatMessage.msgType == "gift"
-                                                          ? giftMsgView(context,chatMessage, chatMessage.senderId ==
-                                                  preferenceService.getUserDetail()!.id,)
-                                                          : textMsgView(
-                                                              context,
-                                                              chatMessage,
-                                                              chatMessage.senderId ==
-                                                                  preferenceService.getUserDetail()!.id),
+                                                              chatDetail: controller
+                                                                      .chatMessages[
+                                                                  index],
+                                                              yourMessage: chatMessage
+                                                                      .senderId ==
+                                                                  preferenceService
+                                                                      .getUserDetail()!
+                                                                      .id)
+                                                          : chatMessage
+                                                                      .msgType ==
+                                                                  "gift"
+                                                              ? giftMsgView(
+                                                                  context,
+                                                                  chatMessage,
+                                                                  chatMessage
+                                                                          .senderId ==
+                                                                      preferenceService
+                                                                          .getUserDetail()!
+                                                                          .id,
+                                                                )
+                                                              : textMsgView(
+                                                                  context,
+                                                                  chatMessage,
+                                                                  chatMessage
+                                                                          .senderId ==
+                                                                      preferenceService
+                                                                          .getUserDetail()!
+                                                                          .id),
                                             ],
                                           ),
                                         ),
-                                        if (index == (controller.chatMessages.length - 1)) typingWidget()
+                                        if (index ==
+                                            (controller.chatMessages.length -
+                                                1))
+                                          typingWidget()
                                       ],
                                     );
                                   },
@@ -135,13 +179,18 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 child: Badge(
                                   backgroundColor: AppColors.darkBlue,
                                   offset: const Offset(4, -2),
-                                  isLabelVisible: (controller.unreadMsgCount.value > 0),
-                                  label: Text("${controller.unreadMsgCount.value}"),
-                                  padding: EdgeInsets.symmetric(horizontal: 6.w),
+                                  isLabelVisible:
+                                      (controller.unreadMsgCount.value > 0),
+                                  label: Text(
+                                      "${controller.unreadMsgCount.value}"),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 6.w),
                                   smallSize: 14.sp,
                                   largeSize: 20.sp,
-                                  child: Icon(Icons.arrow_drop_down_circle_outlined,
-                                      color: AppColors.appYellowColour, size: 40.h),
+                                  child: Icon(
+                                      Icons.arrow_drop_down_circle_outlined,
+                                      color: AppColors.appYellowColour,
+                                      size: 40.h),
                                 ),
                               )
                             : const SizedBox()),
@@ -150,6 +199,14 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   ),
                 ),
                 SizedBox(height: 10.h),
+                Obx( () => controller.messageTemplates.isNotEmpty ?
+                   Column(
+                    children: [
+                      messageTemplateRow(),
+                      SizedBox(height: 20.h),
+                    ],
+                  ) : const SizedBox(),
+                ),
                 chatBottomBar(),
                 Obx(() => AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
@@ -160,8 +217,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             onEmojiSelected: (category, emoji) {
                               controller.typingScrollController.hasClients
                                   ? controller.typingScrollController.animateTo(
-                                      controller.typingScrollController.position.maxScrollExtent,
-                                      duration: const Duration(milliseconds: 100),
+                                      controller.typingScrollController.position
+                                          .maxScrollExtent,
+                                      duration:
+                                          const Duration(milliseconds: 100),
                                       curve: Curves.easeOut)
                                   : null;
                             },
@@ -202,6 +261,82 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
     );
   }
 
+  Widget giftDisplayText(ChatMessage chatMessage) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(18)),
+        color: AppColors.white,
+      ),
+      child: Row(
+        children: [
+          SizedBox(
+            height: 20,
+            width: 20,
+            child: CustomImageWidget(
+              imageUrl: chatMessage.awsUrl ?? '',
+              rounded: true,
+            ),
+          ),
+          SizedBox(width: 2.w),
+          Text('${controller.customerName} has sent you ${chatMessage.message}',
+          style: AppTextStyle.textStyle12(fontColor: AppColors.red),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget messageTemplateRow() {
+    return SizedBox(
+      height: 35,
+      child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        scrollDirection: Axis.horizontal,
+        itemCount: controller.messageTemplates.length + 1,
+        separatorBuilder: (_, index) => SizedBox(width: 10.w),
+        itemBuilder: (context, index) {
+          //MessageTemplates msg = controller.messageTemplates[index];
+          return index == 0
+              ? GestureDetector(
+                  onTap: () {
+                    Get.toNamed(RouteName.addMessageTemplate, arguments: [true, false]);
+                  },
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: const BoxDecoration(
+                      color: AppColors.red,
+                      borderRadius: BorderRadius.all(Radius.circular(18)),
+                    ),
+                    child: Text(
+                      '+ Add',
+                      style: AppTextStyle.textStyle12(fontColor: AppColors.white),
+                    ),
+                  ),
+                )
+              : GestureDetector(
+            onTap: () {
+              controller.sendMsgTemplate(controller.messageTemplates[index-1]);
+            },
+                child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: const BoxDecoration(
+                      color: AppColors.brownColour,
+                      borderRadius: BorderRadius.all(Radius.circular(18)),
+                    ),
+                    child: Text(
+                      '${controller.messageTemplates[index-1].message}',
+                      style: AppTextStyle.textStyle12(fontColor: AppColors.white),
+                    ),
+                  ),
+              );
+        },
+      ),
+    );
+  }
+
   Widget typingWidget() {
     return Align(
       alignment: Alignment.centerLeft,
@@ -209,8 +344,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
             duration: const Duration(milliseconds: 200),
             child: controller.isTyping.value
                 ? Container(
-                    margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
                       boxShadow: [
@@ -227,7 +364,11 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     //   height: 30,
                     // ),
                     child: Assets.lottie.loadingDots.lottie(
-                        width: 45, height: 30, repeat: true, frameRate: FrameRate(120), animate: true),
+                        width: 45,
+                        height: 30,
+                        repeat: true,
+                        frameRate: FrameRate(120),
+                        animate: true),
                   )
                 : const SizedBox(),
           )),
@@ -239,158 +380,177 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       () {
         debugPrint('is recording value ${controller.isRecording.value}');
         return Padding(
-        padding: EdgeInsets.symmetric(horizontal: controller.isRecording.value ? 0 : 12.h),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Stack(
-              children: [
-                Visibility(
-                  visible: !controller.isRecording.value,
-                  maintainAnimation: true,
-                  maintainSize: true,
-                  maintainState: true,
-                  child: Row(
-                    children: [
-                      Flexible(
-                        child: Container(
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), boxShadow: [
-                            BoxShadow(
-                                color: Colors.black.withOpacity(0.3),
-                                blurRadius: 3.0,
-                                offset: const Offset(0.3, 3.0)),
-                          ]),
-                          child: TextFormField(
-                            controller: controller.messageController,
-                            keyboardType: TextInputType.text,
-                            minLines: 1,
-                            maxLines: 3,
-                            onTap: () {
-                              //  controller.userTypingSocket(isTyping: true);
-                              controller.scrollToBottomFunc();
-                              if (controller.isEmojiShowing.value) {
-                                controller.isEmojiShowing.value = false;
-                              }
-                            },
-                            onChanged: (value) {
-                              controller.tyingSocket();
-                            },
-                            scrollController: controller.typingScrollController,
-                            onTapOutside: (value) {
-                              FocusScope.of(Get.context!).unfocus();
-                              //   controller.userTypingSocket(isTyping: false);
-                            },
-                            decoration: InputDecoration(
-                              hintText: "message".tr,
-                              isDense: true,
-                              helperStyle: AppTextStyle.textStyle16(),
-                              fillColor: AppColors.white,
-                              hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.grey),
-                              hoverColor: AppColors.white,
-                              prefixIcon: InkWell(
-                                onTap: () async {
-                                  FocusManager.instance.primaryFocus?.unfocus();
-                                  controller.isEmojiShowing.value = !controller.isEmojiShowing.value;
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 11.h),
-                                  child: Assets.images.icEmoji.svg(),
+          padding: EdgeInsets.symmetric(
+              horizontal: controller.isRecording.value ? 0 : 12.h),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Stack(
+                children: [
+                  Visibility(
+                    visible: !controller.isRecording.value,
+                    maintainAnimation: true,
+                    maintainSize: true,
+                    maintainState: true,
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black.withOpacity(0.3),
+                                      blurRadius: 3.0,
+                                      offset: const Offset(0.3, 3.0)),
+                                ]),
+                            child: TextFormField(
+                              controller: controller.messageController,
+                              keyboardType: TextInputType.text,
+                              minLines: 1,
+                              maxLines: 3,
+                              onTap: () {
+                                //  controller.userTypingSocket(isTyping: true);
+                                controller.scrollToBottomFunc();
+                                if (controller.isEmojiShowing.value) {
+                                  controller.isEmojiShowing.value = false;
+                                }
+                              },
+                              onChanged: (value) {
+                                controller.tyingSocket();
+                              },
+                              scrollController:
+                                  controller.typingScrollController,
+                              onTapOutside: (value) {
+                                FocusScope.of(Get.context!).unfocus();
+                                //   controller.userTypingSocket(isTyping: false);
+                              },
+                              decoration: InputDecoration(
+                                hintText: "message".tr,
+                                isDense: true,
+                                helperStyle: AppTextStyle.textStyle16(),
+                                fillColor: AppColors.white,
+                                hintStyle: AppTextStyle.textStyle16(
+                                    fontColor: AppColors.grey),
+                                hoverColor: AppColors.white,
+                                prefixIcon: InkWell(
+                                  onTap: () async {
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+                                    controller.isEmojiShowing.value =
+                                        !controller.isEmojiShowing.value;
+                                  },
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 11.h),
+                                    child: Assets.images.icEmoji.svg(),
+                                  ),
                                 ),
-                              ),
-                              suffixIcon: InkWell(
-                                onTap: () async {
-                                  // if (controller.isOngoingChat.value) {
-                                  if (await PermissionHelper().askStoragePermission(Permission.photos)) {
-                                    controller.getImage(false);
-                                  }
-                                  //   } else {
-                                  //     divineSnackBar(
-                                  //         data: "${'chatEnded'.tr}.", color: AppColors.appYellowColour);
-                                  //   }
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.fromLTRB(0.w, 9.h, 10.w, 10.h),
-                                  child: Assets.images.icAttechment.svg(),
+                                suffixIcon: InkWell(
+                                  onTap: () async {
+                                    // if (controller.isOngoingChat.value) {
+                                    if (await PermissionHelper()
+                                        .askStoragePermission(
+                                            Permission.photos)) {
+                                      controller.getImage(false);
+                                    }
+                                    //   } else {
+                                    //     divineSnackBar(
+                                    //         data: "${'chatEnded'.tr}.", color: AppColors.appYellowColour);
+                                    //   }
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(
+                                        0.w, 9.h, 10.w, 10.h),
+                                    child: Assets.images.icAttechment.svg(),
+                                  ),
                                 ),
+                                filled: true,
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(30.0.sp),
+                                    borderSide: const BorderSide(
+                                      color: AppColors.white,
+                                      width: 1.0,
+                                    )),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(30.0.sp),
+                                    borderSide: const BorderSide(
+                                      color: AppColors.appYellowColour,
+                                      width: 1.0,
+                                    )),
                               ),
-                              filled: true,
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30.0.sp),
-                                  borderSide: const BorderSide(
-                                    color: AppColors.white,
-                                    width: 1.0,
-                                  )),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30.0.sp),
-                                  borderSide: const BorderSide(
-                                    color: AppColors.appYellowColour,
-                                    width: 1.0,
-                                  )),
                             ),
                           ),
                         ),
-                      ),
-                      Obx(() => SizedBox(width: !controller.hasMessage.value ? 25.w : 15.w)),
-                      Visibility(
-                        visible: controller.hasMessage.value,
-                        maintainAnimation: true,
-                        maintainSize: true,
-                        maintainState: true,
-                        child: InkWell(
-                            onTap: () => controller.sendMsg(),
-                            child: Assets.images.icSendMsg.svg(height: 48.h)),
-                      )
-                    ],
-                  ),
-                ),
-                if (!controller.hasMessage.value)
-                  Positioned(
-                    right: 0,
-                    bottom: 0,
-                    child: GestureDetector(
-                      onTap: () {
-                        Future.delayed(const Duration(milliseconds: 500)).then((value) => controller.isRecording.value = false);
-                      },
-                      child: SocialMediaRecorder(
-                        backGroundColor: AppColors.yellow,
-                        cancelTextBackGroundColor: Colors.white,
-                        recordIconBackGroundColor: AppColors.yellow,
-                        radius: BorderRadius.circular(30),
-                        initRecordPackageWidth: kToolbarHeight - Get.width * 0.010,
-                        recordIconWhenLockBackGroundColor: AppColors.yellow,
-                        maxRecordTimeInSecond: 30,
-                        startRecording: () {
-                          controller.isRecording.value = true;
-                        },
-                        stopRecording: (time) {
-                          controller.isRecording.value = false;
-                        },
-                        sendRequestFunction: (soundFile, time) {
-                          controller.isRecording.value = false;
-                          debugPrint("soundFile ${soundFile.path}");
-                          controller.uploadAudioFile(soundFile);
-                        },
-                        encode: AudioEncoderType.AAC,
-                      ),
+                        Obx(() => SizedBox(
+                            width: !controller.hasMessage.value ? 25.w : 15.w)),
+                        Visibility(
+                          visible: controller.hasMessage.value,
+                          maintainAnimation: true,
+                          maintainSize: true,
+                          maintainState: true,
+                          child: InkWell(
+                              onTap: () => controller.sendMsg(),
+                              child: Assets.images.icSendMsg.svg(height: 48.h)),
+                        )
+                      ],
                     ),
-                  )
-              ],
-            ),
-            SizedBox(height: 20.h),
-          ],
-        ),
-      );
+                  ),
+                  if (!controller.hasMessage.value)
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: GestureDetector(
+                        onTap: () {
+                          Future.delayed(const Duration(milliseconds: 500))
+                              .then((value) =>
+                                  controller.isRecording.value = false);
+                        },
+                        child: SocialMediaRecorder(
+                          backGroundColor: AppColors.yellow,
+                          cancelTextBackGroundColor: Colors.white,
+                          recordIconBackGroundColor: AppColors.yellow,
+                          radius: BorderRadius.circular(30),
+                          initRecordPackageWidth:
+                              kToolbarHeight - Get.width * 0.010,
+                          recordIconWhenLockBackGroundColor: AppColors.yellow,
+                          maxRecordTimeInSecond: 30,
+                          startRecording: () {
+                            controller.isRecording.value = true;
+                          },
+                          stopRecording: (time) {
+                            controller.isRecording.value = false;
+                          },
+                          sendRequestFunction: (soundFile, time) {
+                            controller.isRecording.value = false;
+                            debugPrint("soundFile ${soundFile.path}");
+                            controller.uploadAudioFile(soundFile);
+                          },
+                          encode: AudioEncoderType.AAC,
+                        ),
+                      ),
+                    )
+                ],
+              ),
+              SizedBox(height: 20.h),
+            ],
+          ),
+        );
       },
     );
   }
 
-  Widget giftMsgView(BuildContext context, ChatMessage chatMessage, bool yourMessage) {
+  Widget giftMsgView(
+      BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     return SizedBox(
       width: double.maxFinite,
       child: Column(
-        crossAxisAlignment: yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment:
+            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
@@ -399,18 +559,15 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
               borderRadius: const BorderRadius.all(Radius.circular(40)),
               border: Border.all(width: 2, color: AppColors.appColorDark),
               gradient: const LinearGradient(
-                colors: [
-                  AppColors.white,
-                  AppColors.appColorDark
-                ],
+                colors: [AppColors.white, AppColors.appColorDark],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
             ),
             constraints: BoxConstraints(
-                maxWidth: ScreenUtil().screenWidth * 0.8, minWidth: ScreenUtil().screenWidth * 0.27),
-            child:
-            Row(
+                maxWidth: ScreenUtil().screenWidth * 0.8,
+                minWidth: ScreenUtil().screenWidth * 0.27),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 SizedBox(
@@ -422,7 +579,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   ),
                 ),
                 SizedBox(width: 6.w),
-                Flexible(child: Text('Astrologer has requested to send ${chatMessage.message}.'))
+                Flexible(
+                    child: Text(
+                        'Astrologer has requested to send ${chatMessage.message}.'))
               ],
             ),
           ),
@@ -431,12 +590,14 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
     );
   }
 
-  Widget textMsgView(BuildContext context, ChatMessage chatMessage, bool yourMessage) {
+  Widget textMsgView(
+      BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     RxInt msgType = (chatMessage.type ?? 0).obs;
     return SizedBox(
       width: double.maxFinite,
       child: Column(
-        crossAxisAlignment: yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment:
+            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -444,15 +605,19 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black.withOpacity(0.2), blurRadius: 3.0, offset: const Offset(0.0, 3.0)),
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 3.0,
+                    offset: const Offset(0.0, 3.0)),
               ],
               color: Colors.white,
               borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
             constraints: BoxConstraints(
-                maxWidth: ScreenUtil().screenWidth * 0.7, minWidth: ScreenUtil().screenWidth * 0.27),
+                maxWidth: ScreenUtil().screenWidth * 0.7,
+                minWidth: ScreenUtil().screenWidth * 0.27),
             child: Stack(
-              alignment: yourMessage ? Alignment.centerRight : Alignment.centerLeft,
+              alignment:
+                  yourMessage ? Alignment.centerRight : Alignment.centerLeft,
               children: [
                 Column(
                   children: [
@@ -485,7 +650,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             ? Assets.images.icSingleTick.svg()
                             : msgType.value == 1
                                 ? Assets.images.icDoubleTick.svg(
-                                    colorFilter: const ColorFilter.mode(AppColors.greyColor, BlendMode.srcIn))
+                                    colorFilter: const ColorFilter.mode(
+                                        AppColors.greyColor, BlendMode.srcIn))
                                 : msgType.value == 3
                                     ? Assets.images.icDoubleTick.svg()
                                     : Assets.images.icSingleTick.svg())
@@ -500,12 +666,14 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
     );
   }
 
-  Widget audioView(BuildContext context, {required ChatMessage chatDetail, required bool yourMessage}) {
+  Widget audioView(BuildContext context,
+      {required ChatMessage chatDetail, required bool yourMessage}) {
     RxInt msgType = (chatDetail.type ?? 0).obs;
     return SizedBox(
       width: double.maxFinite,
       child: Column(
-        crossAxisAlignment: yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment:
+            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
             padding: const EdgeInsets.all(8.0),
@@ -513,7 +681,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black.withOpacity(0.2), blurRadius: 3.0, offset: const Offset(0.0, 3.0))
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 3.0,
+                    offset: const Offset(0.0, 3.0))
               ],
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(8.r)),
@@ -538,7 +708,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     children: [
                       Text(
                         messageDateTime(chatDetail.time ?? 0),
-                        style: AppTextStyle.textStyle10(fontColor: AppColors.black),
+                        style: AppTextStyle.textStyle10(
+                            fontColor: AppColors.black),
                       ),
                       if (yourMessage) SizedBox(width: 8.w),
                       if (yourMessage)
@@ -546,7 +717,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             ? Assets.images.icSingleTick.svg()
                             : msgType.value == 1
                                 ? Assets.images.icDoubleTick.svg(
-                                    colorFilter: const ColorFilter.mode(AppColors.lightGrey, BlendMode.srcIn))
+                                    colorFilter: const ColorFilter.mode(
+                                        AppColors.lightGrey, BlendMode.srcIn))
                                 : msgType.value == 3
                                     ? Assets.images.icDoubleTick.svg()
                                     : Assets.images.icSingleTick.svg()
@@ -561,14 +733,16 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
     );
   }
 
-  Widget imageMsgView(String image, bool yourMessage, {required ChatMessage chatDetail, required int index}) {
+  Widget imageMsgView(String image, bool yourMessage,
+      {required ChatMessage chatDetail, required int index}) {
     // Uint8List bytesImage = const Base64Decoder().convert(image);
     Uint8List bytesImage = base64.decode(image);
     RxInt msgType = (chatDetail.type ?? 0).obs;
     return SizedBox(
       width: double.maxFinite,
       child: Column(
-        crossAxisAlignment: yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment:
+            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
               padding: const EdgeInsets.all(8.0),
@@ -576,63 +750,70 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                      color: Colors.black.withOpacity(0.2), blurRadius: 3.0, offset: const Offset(0.0, 3.0)),
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 3.0,
+                      offset: const Offset(0.0, 3.0)),
                 ],
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(8.r)),
               ),
               constraints: BoxConstraints(
-                  maxWidth: ScreenUtil().screenWidth * 0.7, minWidth: ScreenUtil().screenWidth * 0.27),
+                  maxWidth: ScreenUtil().screenWidth * 0.7,
+                  minWidth: ScreenUtil().screenWidth * 0.27),
               child: yourMessage
                   ? Stack(
-                    children: [
-                      Image.memory(
+                      children: [
+                        Image.memory(
                           bytesImage,
                           fit: BoxFit.cover,
                           height: 200.h,
                         ),
-
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6).copyWith(left: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.r)),
-                            gradient: LinearGradient(
-                              colors: [
-                                AppColors.darkBlue.withOpacity(0.0),
-                                AppColors.darkBlue.withOpacity(0.0),
-                                AppColors.darkBlue.withOpacity(0.5),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6)
+                                .copyWith(left: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(10.r)),
+                              gradient: LinearGradient(
+                                colors: [
+                                  AppColors.darkBlue.withOpacity(0.0),
+                                  AppColors.darkBlue.withOpacity(0.0),
+                                  AppColors.darkBlue.withOpacity(0.5),
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomCenter,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  messageDateTime(chatDetail.time ?? 0),
+                                  style: AppTextStyle.textStyle10(
+                                      fontColor: AppColors.white),
+                                ),
+                                if (yourMessage) SizedBox(width: 8.w),
+                                if (yourMessage)
+                                  msgType.value == 0
+                                      ? Assets.images.icSingleTick.svg()
+                                      : msgType.value == 1
+                                          ? Assets.images.icDoubleTick.svg(
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                      AppColors.greyColor,
+                                                      BlendMode.srcIn))
+                                          : msgType.value == 3
+                                              ? Assets.images.icDoubleTick.svg()
+                                              : Assets.images.icSingleTick.svg()
                               ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomCenter,
                             ),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                messageDateTime(chatDetail.time ?? 0),
-                                style: AppTextStyle.textStyle10(fontColor: AppColors.white),
-                              ),
-                              if (yourMessage) SizedBox(width: 8.w),
-                              if (yourMessage)
-                                msgType.value == 0
-                                    ? Assets.images.icSingleTick.svg()
-                                    : msgType.value == 1
-                                    ? Assets.images.icDoubleTick.svg(
-                                    colorFilter: const ColorFilter.mode(
-                                        AppColors.greyColor, BlendMode.srcIn))
-                                    : msgType.value == 3
-                                    ? Assets.images.icDoubleTick.svg()
-                                    : Assets.images.icSingleTick.svg()
-                            ],
-                          ),
                         ),
-                      ),
-                    ],
-                  )
+                      ],
+                    )
                   : chatDetail.downloadedPath == ""
                       ? Stack(
                           alignment: Alignment.center,
@@ -640,7 +821,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10.0.sp),
                               child: ImageFiltered(
-                                imageFilter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                                imageFilter:
+                                    ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
                                 child: Image.network(
                                   chatDetail.awsUrl ?? '',
                                   fit: BoxFit.cover,
@@ -651,7 +833,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             InkWell(
                               onTap: () {
                                 controller.downloadImage(
-                                    fileName: image, chatDetail: chatDetail, index: index);
+                                    fileName: image,
+                                    chatDetail: chatDetail,
+                                    index: index);
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(10),
@@ -659,7 +843,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   color: AppColors.darkBlue.withOpacity(0.3),
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Icon(Icons.download_rounded, color: AppColors.white),
+                                child: const Icon(Icons.download_rounded,
+                                    color: AppColors.white),
                               ),
                             ),
                             Positioned(
@@ -669,9 +854,12 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 6).copyWith(left: 10),
+                                    padding: const EdgeInsets.symmetric(
+                                            horizontal: 6)
+                                        .copyWith(left: 10),
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.r)),
+                                      borderRadius: BorderRadius.only(
+                                          bottomRight: Radius.circular(10.r)),
                                       gradient: LinearGradient(
                                         colors: [
                                           AppColors.darkBlue.withOpacity(0.0),
@@ -684,7 +872,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                     ),
                                     child: Text(
                                       messageDateTime(chatDetail.time ?? 0),
-                                      style: AppTextStyle.textStyle10(fontColor: AppColors.white),
+                                      style: AppTextStyle.textStyle10(
+                                          fontColor: AppColors.white),
                                     ),
                                   ),
                                   SizedBox(width: 8.w),
@@ -695,7 +884,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         )
                       : InkWell(
                           onTap: () {
-                            Get.toNamed(RouteName.imagePreviewUi, arguments: chatDetail.downloadedPath);
+                            Get.toNamed(RouteName.imagePreviewUi,
+                                arguments: chatDetail.downloadedPath);
                           },
                           child: Stack(
                             children: [
@@ -707,7 +897,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   height: 200.h,
                                 ),
                               ),
-
                             ],
                           ),
                         ))
@@ -880,12 +1069,15 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.extraLightGrey),
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle, color: AppColors.extraLightGrey),
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Text(
                     chatDetail.kundliName?[0] ?? "",
-                    style: AppTextStyle.textStyle24(fontColor: AppColors.white, fontWeight: FontWeight.w600),
+                    style: AppTextStyle.textStyle24(
+                        fontColor: AppColors.white,
+                        fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
@@ -944,7 +1136,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         padding: EdgeInsets.all(10.h),
         decoration: BoxDecoration(
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 1.0, offset: const Offset(0.0, 3.0)),
+            BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 1.0,
+                offset: const Offset(0.0, 3.0)),
           ],
           color: AppColors.white,
           borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -957,15 +1152,16 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   _onBackspacePressed() {
     controller.messageController
       ..text = controller.messageController.text.characters.toString()
-      ..selection =
-          TextSelection.fromPosition(TextPosition(offset: controller.messageController.text.length));
+      ..selection = TextSelection.fromPosition(
+          TextPosition(offset: controller.messageController.text.length));
   }
 }
 
 class AstrologerChatAppBar extends StatelessWidget {
   AstrologerChatAppBar({super.key});
 
-  final ChatMessageWithSocketController controller = Get.find<ChatMessageWithSocketController>();
+  final ChatMessageWithSocketController controller =
+      Get.find<ChatMessageWithSocketController>();
 
   @override
   Widget build(BuildContext context) {
@@ -1006,7 +1202,10 @@ class AstrologerChatAppBar extends StatelessWidget {
                       SizedBox(width: 8.w),
                       Row(
                         children: [
-                          CachedNetworkPhoto(height: 48.h, width: 48.w, url: controller.profileImage.value),
+                          CachedNetworkPhoto(
+                              height: 48.h,
+                              width: 48.w,
+                              url: controller.profileImage.value),
                           SizedBox(width: 12.w),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1023,12 +1222,14 @@ class AstrologerChatAppBar extends StatelessWidget {
                               ),
                               Obx(() => AnimatedCrossFade(
                                     duration: const Duration(milliseconds: 200),
-                                    crossFadeState: controller.chatStatus.value != ""
-                                        ? CrossFadeState.showFirst
-                                        : CrossFadeState.showSecond,
+                                    crossFadeState:
+                                        controller.chatStatus.value != ""
+                                            ? CrossFadeState.showFirst
+                                            : CrossFadeState.showSecond,
                                     secondChild: const SizedBox(),
                                     firstChild: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           controller.showTalkTime.value,
@@ -1042,9 +1243,11 @@ class AstrologerChatAppBar extends StatelessWidget {
                                           style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               fontSize: 13.sp,
-                                              color: controller.chatStatus.value != "Offline"
-                                                  ? AppColors.darkGreen
-                                                  : AppColors.redColor),
+                                              color:
+                                                  controller.chatStatus.value !=
+                                                          "Offline"
+                                                      ? AppColors.darkGreen
+                                                      : AppColors.redColor),
                                         ),
                                       ],
                                     ),
@@ -1063,35 +1266,35 @@ class AstrologerChatAppBar extends StatelessWidget {
                         itemBuilder: (context) => [
                           PopupMenuItem(
                               child: InkWell(
-                                onTap: () {
-                                  Get.back();
-                                  controller.askForGift();
-                                },
-                                child: Text(
-                                  "Ask For Gift",
-                                  style: AppTextStyle.textStyle13(),
-                                ),
-                              )),
+                            onTap: () {
+                              Get.back();
+                              controller.askForGift();
+                            },
+                            child: Text(
+                              "Ask For Gift",
+                              style: AppTextStyle.textStyle13(),
+                            ),
+                          )),
                           PopupMenuItem(
                               child: InkWell(
-                                onTap: () {
-                                  // Navigator.pop(context);
-                                  //
-                                  // showCupertinoModalPopup(
-                                  //   barrierColor:
-                                  //   AppColors.darkBlue.withOpacity(0.5),
-                                  //   context: context,
-                                  //   builder: (context) => ReportPostReasons(
-                                  //       reviewData?.id.toString() ?? ''),
-                                  //
-                                  //   // builder: (context) => ReportPostReasons(reviewData?.id.),
-                                  // );
-                                },
-                                child: Text(
-                                  "Chat Histroy",
-                                  style: AppTextStyle.textStyle13(),
-                                ),
-                              )),
+                            onTap: () {
+                              // Navigator.pop(context);
+                              //
+                              // showCupertinoModalPopup(
+                              //   barrierColor:
+                              //   AppColors.darkBlue.withOpacity(0.5),
+                              //   context: context,
+                              //   builder: (context) => ReportPostReasons(
+                              //       reviewData?.id.toString() ?? ''),
+                              //
+                              //   // builder: (context) => ReportPostReasons(reviewData?.id.),
+                              // );
+                            },
+                            child: Text(
+                              "Chat Histroy",
+                              style: AppTextStyle.textStyle13(),
+                            ),
+                          )),
                         ],
                         child: const Icon(Icons.more_vert_rounded),
                       ),

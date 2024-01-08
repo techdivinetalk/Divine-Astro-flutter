@@ -15,6 +15,10 @@ import 'package:lottie/lottie.dart';
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/Search_icon.svg
+  SvgGenImage get searchIcon =>
+      const SvgGenImage('assets/images/Search_icon.svg');
+
   /// File path: assets/images/audio_disable_live.svg
   SvgGenImage get audioDisableLive =>
       const SvgGenImage('assets/images/audio_disable_live.svg');
@@ -22,13 +26,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/audio_enable_live.svg
   SvgGenImage get audioEnableLive =>
       const SvgGenImage('assets/images/audio_enable_live.svg');
-  SvgGenImage get searchIcon =>
-      const SvgGenImage('assets/images/Search_icon.svg');
+
   /// File path: assets/images/avatar.svg
   SvgGenImage get avatar => const SvgGenImage('assets/images/avatar.svg');
-  /// File path: assets/images/ic_emoji_share.png
-  AssetGenImage get icEmojiShare =>
-      const AssetGenImage('assets/images/ic_emoji_share.png');
+
   /// File path: assets/images/bg_MeterFinal.svg
   SvgGenImage get bgMeterFinal =>
       const SvgGenImage('assets/images/bg_MeterFinal.svg');
@@ -224,6 +225,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_emoji.svg
   SvgGenImage get icEmoji => const SvgGenImage('assets/images/ic_emoji.svg');
 
+  /// File path: assets/images/ic_emoji_share.png
+  AssetGenImage get icEmojiShare =>
+      const AssetGenImage('assets/images/ic_emoji_share.png');
+
   /// File path: assets/images/ic_end_chat.svg
   SvgGenImage get icEndChat =>
       const SvgGenImage('assets/images/ic_end_chat.svg');
@@ -292,6 +297,10 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/ic_mars.png
   AssetGenImage get icMars => const AssetGenImage('assets/images/ic_mars.png');
+
+  /// File path: assets/images/ic_messageTemplate.svg
+  SvgGenImage get icMessageTemplate =>
+      const SvgGenImage('assets/images/ic_messageTemplate.svg');
 
   /// File path: assets/images/ic_moon.svg
   SvgGenImage get icMoon => const SvgGenImage('assets/images/ic_moon.svg');
@@ -421,6 +430,10 @@ class $AssetsImagesGen {
   SvgGenImage get leftArrow =>
       const SvgGenImage('assets/images/left_arrow.svg');
 
+  /// File path: assets/images/live_block_icon.png
+  AssetGenImage get liveBlockIcon =>
+      const AssetGenImage('assets/images/live_block_icon.png');
+
   /// File path: assets/images/live_call_audio.png
   AssetGenImage get liveCallAudio =>
       const AssetGenImage('assets/images/live_call_audio.png');
@@ -517,6 +530,10 @@ class $AssetsImagesGen {
   AssetGenImage get liveNewHourglass =>
       const AssetGenImage('assets/images/live_new_hourglass.png');
 
+  /// File path: assets/images/live_new_money.png
+  AssetGenImage get liveNewMoney =>
+      const AssetGenImage('assets/images/live_new_money.png');
+
   /// File path: assets/images/live_new_plus_icon.png
   AssetGenImage get liveNewPlusIcon =>
       const AssetGenImage('assets/images/live_new_plus_icon.png');
@@ -599,6 +616,7 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<dynamic> get values => [
+        searchIcon,
         audioDisableLive,
         audioEnableLive,
         avatar,
@@ -654,6 +672,7 @@ class $AssetsImagesGen {
         icEcommerce,
         icEdit,
         icEmoji,
+        icEmojiShare,
         icEndChat,
         icEye,
         icFaqImg,
@@ -674,6 +693,7 @@ class $AssetsImagesGen {
         icLocation,
         icLogout,
         icMars,
+        icMessageTemplate,
         icMoon,
         icOneStar,
         icOrder,
@@ -708,6 +728,7 @@ class $AssetsImagesGen {
         icWedding,
         leaderboardLive,
         leftArrow,
+        liveBlockIcon,
         liveCallAudio,
         liveCallBtn,
         liveCallPrivate,
@@ -732,6 +753,7 @@ class $AssetsImagesGen {
         liveNewGiftLatest,
         liveNewHangUp,
         liveNewHourglass,
+        liveNewMoney,
         liveNewPlusIcon,
         liveNewPodium,
         liveRechargeButton,

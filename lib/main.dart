@@ -13,6 +13,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -23,6 +24,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
+import 'common/MiddleWare.dart';
 import 'common/app_exception.dart';
 import 'common/app_theme.dart';
 import 'common/colors.dart';
@@ -47,6 +49,21 @@ Future<void> main() async {
   initMessaging();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await GetStorage.init();
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Message data: ${message.data}');
+    if(message.data["type"] == "3") {
+      print('Message data:- ${MiddleWare.instance.currentPage}');
+      if(MiddleWare.instance.currentPage == RouteName.chatMessageUI) {
+        sendBroadcast(
+            BroadcastMessage(name: "chatAssist", data: {'msg': message.data}));
+      }else{
+        showNotification(message.data["title"],message.data["message"],message.data['type']);
+      }
+    }
+    if (message.notification != null) {
+      print('Message also contained a notification: ${message.notification}');
+    }
+  });
   await initServices();
   Get.put(UserRepository());
   var data = await userRepository.constantDetailsData();
@@ -102,6 +119,13 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> showNotification(String title,String message,String type) async {
   AndroidNotificationDetails androidNotificationDetails =
   const AndroidNotificationDetails("DivineCustomer", "CustomerNotification", importance: Importance.max,priority: Priority.high,);
+  if(type == "3") {
+    androidNotificationDetails =
+    const AndroidNotificationDetails("DivineCustomer", "CustomerNotification",
+      sound: RawResourceAndroidNotificationSound('accept_ring'),
+      importance: Importance.max,
+      priority: Priority.high,);
+  }
   NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
   await flutterLocalNotificationsPlugin
       .show(Random().nextInt(90000), title,message, notificationDetails, payload: "jsonEncodePayload");
@@ -133,6 +157,9 @@ class MyApp extends StatelessWidget {
           builder: (context, child) {
             return OverlaySupport.global(
               child: GetMaterialApp(
+                navigatorObservers: <NavigatorObserver>[
+                  GetObserver(MiddleWare.instance.observer, Get.routing),
+                ],
                 defaultTransition: Transition.fadeIn,
                 navigatorKey: navigatorKey,
                 color: AppColors.white,

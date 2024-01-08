@@ -48,6 +48,11 @@ class SideMenuDrawer extends GetView<HomeController> {
               onTap: () => {Get.back(), Get.toNamed(RouteName.orderHistory)},
             ),
             ListTile(
+              leading: Assets.images.icMessageTemplate.svg(),
+              title: Text("Message Template"),
+              onTap: () => {Get.back(), Get.toNamed(RouteName.messageTemplate)},
+            ),
+            ListTile(
               leading: Assets.images.icSetting.svg(),
               title: Text('settings'.tr),
               onTap: () => {
