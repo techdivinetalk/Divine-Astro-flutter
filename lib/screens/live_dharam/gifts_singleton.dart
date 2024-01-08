@@ -43,14 +43,14 @@ class GiftsSingleton {
 
   void cache() {
     for (final GiftData itemData in gifts.data ?? <GiftData>[]) {
-      debugPrint(
-        '${DateTime.now()} GiftsSingleton(): cache(): try cache ${itemData.animation}',
-      );
+      // debugPrint(
+      //   '${DateTime.now()} GiftsSingleton(): cache(): try cache ${itemData.animation}',
+      // );
       GiftCache().read(url: itemData.animation).then(
         (value) {
-          debugPrint(
-            '${DateTime.now()} GiftsSingleton(): cache(): cache done: ${itemData.animation}',
-          );
+          // debugPrint(
+          //   '${DateTime.now()} GiftsSingleton(): cache(): cache done: ${itemData.animation}',
+          // );
         },
       );
     }

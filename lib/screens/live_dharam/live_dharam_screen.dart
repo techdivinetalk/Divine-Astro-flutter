@@ -2532,8 +2532,12 @@ class _LivePage extends State<LiveDharamScreen>
                     opacity: !_controller.isHost && !_controller.isHostAvailable
                         ? 0.0
                         : 1.0,
+                    //
+                    //
                     duration: const Duration(seconds: 1),
                     child: !_controller.isHost && !_controller.isHostAvailable
+                        //
+                        //
                         ? const SizedBox()
                         : Column(
                             children: [
