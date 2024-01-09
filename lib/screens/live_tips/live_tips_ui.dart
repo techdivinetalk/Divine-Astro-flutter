@@ -1,7 +1,9 @@
+import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -134,9 +136,36 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                     //   builder: (context) => const GiftPopup(),
                     // );
                     //controller.giftPopup(Get.context!);
-                    if (await PermissionHelper().askPermissions()) {
-                      // controller.jumpToLivePage(controller.isFrontCamera.value);
-                      await controller.myFun();
+                    // if (await PermissionHelper().askPermissions()) {
+                    //   // controller.jumpToLivePage(controller.isFrontCamera.value);
+                    //   await controller.myFun();
+                    // }
+
+                    // Socket By: Vimal Solanki
+                    /*
+                    join-live
+                    userType : customer/astrologer
+                    userId : id of customer or astrologer as per userType
+                    */
+
+                    final int id = controller.pref.getUserDetail()?.id ?? 0;
+                    if (id == 0) {
+                      // todo
+                    } else {
+                      bool hasAllPerm = false;
+                      await AppPermissionService.instance.onPressedJoinButton(
+                        "Video",
+                        () async {
+                          hasAllPerm = true;
+                        },
+                      );
+                      if (hasAllPerm) {
+                        AppSocket().joinLive(
+                          userType: "astrologer",
+                          userId: controller.pref.getUserDetail()?.id ?? 0,
+                        );
+                        await controller.myFun();
+                      } else {}
                     }
                   },
                   child: Container(

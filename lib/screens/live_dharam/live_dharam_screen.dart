@@ -45,6 +45,7 @@ import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_ast
 //
 //
 //
+//
 
 const int appID = 696414715;
 const String appSign =
@@ -341,7 +342,8 @@ class _LivePage extends State<LiveDharamScreen>
             ? _controller.avatar
             // : zegoUser == astroUser
             //     ? (_controller.details.data?.image ?? "")
-            : "https://robohash.org/avatarWidget",
+            // : "https://robohash.org/avatarWidget",
+            : "",
         rounded: true,
         typeEnum: TypeEnum.user,
       ),
@@ -1373,23 +1375,35 @@ class _LivePage extends State<LiveDharamScreen>
   //         details: _controller.details,
   //         onSelect: (String type) async {
   //           Get.back();
-  //           await sendCallFunc(
-  //             type: type,
-  //             needRecharge: (bal.InsufficientBalModel balModel) async {
-  //               await lowBalancePopup(
-  //                 balModel: balModel,
-  //                 callbackBalModelData: (data) async {
-  //                   final CommonOffer arg = CommonOffer(
-  //                     extraAmount: data.extraAmount,
-  //                     offerAmount: data.offerAmount,
-  //                     percentage: data.percentage?.toInt(),
-  //                     rechargeAmount: data.rechargeAmount,
-  //                   );
-  //                   await Get.toNamed(RouteName.paymentSummary, arguments: arg);
-  //                 },
-  //               );
+  //           bool hasAllPerm = false;
+  //           await AppPermissionService.instance.onPressedJoinButton(
+  //             type,
+  //             () async {
+  //               hasAllPerm = true;
   //             },
   //           );
+  //           if (hasAllPerm) {
+  //             await sendCallFunc(
+  //               type: type,
+  //               needRecharge: (bal.InsufficientBalModel balModel) async {
+  //                 await lowBalancePopup(
+  //                   balModel: balModel,
+  //                   callbackBalModelData: (data) async {
+  //                     final CommonOffer arg = CommonOffer(
+  //                       extraAmount: data.extraAmount,
+  //                       offerAmount: data.offerAmount,
+  //                       percentage: data.percentage?.toInt(),
+  //                       rechargeAmount: data.rechargeAmount,
+  //                     );
+  //                     await Get.toNamed(
+  //                       RouteName.paymentSummary,
+  //                       arguments: arg,
+  //                     );
+  //                   },
+  //                 );
+  //               },
+  //             );
+  //           } else {}
   //         },
   //         list: _controller.waitListModel,
   //       );
@@ -1695,23 +1709,33 @@ class _LivePage extends State<LiveDharamScreen>
   // }
 
   // Future<void> requestCallFunction({required String type}) async {
-  //   await sendCallFunc(
-  //     type: type,
-  //     needRecharge: (bal.InsufficientBalModel balModel) async {
-  //       await lowBalancePopup(
-  //         balModel: balModel,
-  //         callbackBalModelData: (data) async {
-  //           final CommonOffer arg = CommonOffer(
-  //             extraAmount: data.extraAmount,
-  //             offerAmount: data.offerAmount,
-  //             percentage: data.percentage?.toInt(),
-  //             rechargeAmount: data.rechargeAmount,
-  //           );
-  //           await Get.toNamed(RouteName.paymentSummary, arguments: arg);
-  //         },
-  //       );
+  //   bool hasAllPerm = false;
+  //   await AppPermissionService.instance.onPressedJoinButton(
+  //     type,
+  //     () async {
+  //       hasAllPerm = true;
   //     },
   //   );
+  //   if (hasAllPerm) {
+  //     await sendCallFunc(
+  //       type: type,
+  //       needRecharge: (bal.InsufficientBalModel balModel) async {
+  //         await lowBalancePopup(
+  //           balModel: balModel,
+  //           callbackBalModelData: (data) async {
+  //             final CommonOffer arg = CommonOffer(
+  //               extraAmount: data.extraAmount,
+  //               offerAmount: data.offerAmount,
+  //               percentage: data.percentage?.toInt(),
+  //               rechargeAmount: data.rechargeAmount,
+  //             );
+  //             await Get.toNamed(RouteName.paymentSummary, arguments: arg);
+  //           },
+  //         );
+  //       },
+  //     );
+  //   } else {}
+
   //   return Future<void>.value();
   // }
 

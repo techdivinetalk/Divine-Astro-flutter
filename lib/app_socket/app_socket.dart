@@ -20,8 +20,11 @@ class AppSocket {
 
   void socketConnect() {
     debugPrint('socketConnect ');
-    socket =
-        io(ApiProvider.socketUrl, OptionBuilder().enableAutoConnect().setTransports(['websocket']).build());
+    socket = io(
+        ApiProvider.socketUrl,
+        OptionBuilder()
+            .enableAutoConnect()
+            .setTransports(['websocket']).build());
     socket!.connect();
     if (socket!.disconnected) {
       socket
@@ -42,7 +45,8 @@ class AppSocket {
     });
   }
 
-  void updateChatCallSocketEvent({required String chat, required String call, required String video}) {
+  void updateChatCallSocketEvent(
+      {required String chat, required String call, required String video}) {
     debugPrint(
         'data ${preferenceService.getUserDetail()!.id.toString()} chat: $chat "call": $call,"video": $video');
     debugPrint('enter updateChatCallSocketEvent');
@@ -55,7 +59,8 @@ class AppSocket {
     });
   }
 
-  void startAstroCustumerSocketEvent({required String orderId, required userId}) {
+  void startAstroCustumerSocketEvent(
+      {required String orderId, required userId}) {
     debugPrint('enter startAstroCustPrivateChat');
     socket?.emit(ApiProvider().startAstroCustPrivateChat, {
       "userId": userId,
@@ -78,8 +83,11 @@ class AppSocket {
   }
 
   void typingSocket({required String orderId, required userId}) {
-    socket?.emit(ApiProvider().userTyping,
-        {"typist": preferenceService.getUserDetail()!.id.toString(), "listener": userId, "orderId": orderId});
+    socket?.emit(ApiProvider().userTyping, {
+      "typist": preferenceService.getUserDetail()!.id.toString(),
+      "listener": userId,
+      "orderId": orderId
+    });
   }
 
   void typingListenerSocket(void Function(dynamic) callback) {
@@ -123,16 +131,41 @@ class AppSocket {
     socket?.on(ApiProvider().leavePrivateChat, callback);
   }
 
-  void customerLeavedPrivateChatListenerSocket(void Function(dynamic) callback) {
+  void customerLeavedPrivateChatListenerSocket(
+      void Function(dynamic) callback) {
     socket?.on(ApiProvider().userDisconnected, callback);
   }
 
   void sendConnectRequest({required String astroId, required String custId}) {
+    socket?.emit(ApiProvider().sendConnectRequest,
+        {'astroId': astroId, 'custId': custId, 'userType': 'astrologer'});
+  }
+
+  void sendAssistantMessage(
+      {required String message,
+      required String astroId,
+      required String customerId}) {
+    socket?.emit(ApiProvider().sendChatAssistMessage, {
+      'userType': 'astrologer',
+      'custId': customerId,
+      'astroId': astroId,
+      'message': message
+    });
+  }
+
+  // Added By: divine-dharam
+  void joinLive({
+    required String userType,
+    required int userId,
+  }) {
     socket?.emit(
-        ApiProvider().sendConnectRequest, {'astroId': astroId, 'custId': custId, 'userType': 'astrologer'});
+      ApiProvider().joinLive,
+      {
+        'userType': userType,
+        'userId': userId,
+      },
+    );
+    return;
   }
-  void sendAssistantMessage({required String message, required String astroId, required String customerId}) {
-    socket?.emit(ApiProvider().sendChatAssistMessage,
-        {'userType': 'astrologer', 'custId': customerId, 'astroId': astroId, 'message': message});
-  }
+  //
 }

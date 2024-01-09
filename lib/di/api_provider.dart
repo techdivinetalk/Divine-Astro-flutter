@@ -132,6 +132,11 @@ class ApiProvider {
   final String getChatAssistAstrologers = "getChatAssistCustomers";
   final String  sendChatAssistMessage = "send-chat-assist-message";
 
+  // Added By: divine-dharam
+  final String  joinLive = "join-live";
+  //
+
+
   //privacy policy & terms
   final String termsAndCondition = "termsAndCondition";
   final String privacyPolicy = "privacyPolicy";

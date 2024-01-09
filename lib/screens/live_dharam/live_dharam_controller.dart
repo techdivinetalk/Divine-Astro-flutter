@@ -800,7 +800,8 @@ class LiveDharamController extends GetxController {
       if (GetUtils.isURL(imageURL)) {
         return imageURL;
       } else {
-        return "https://robohash.org/details";
+        // return "https://robohash.org/details";
+        return "";
       }
     }
   }
