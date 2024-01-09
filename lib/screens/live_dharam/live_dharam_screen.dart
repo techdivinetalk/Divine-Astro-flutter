@@ -343,6 +343,7 @@ class _LivePage extends State<LiveDharamScreen>
             //     ? (_controller.details.data?.image ?? "")
             : "https://robohash.org/avatarWidget",
         rounded: true,
+        typeEnum: TypeEnum.user,
       ),
     );
   }
@@ -468,7 +469,8 @@ class _LivePage extends State<LiveDharamScreen>
   //       padding: EdgeInsets.zero,
   //       itemCount: tempData.length,
   //       scrollDirection: Axis.horizontal,
-  //       cacheExtent: tempData.length.toDouble(),
+  //       // cacheExtent: tempData.length.toDouble(),
+  //       cacheExtent: 9999,
   //       itemBuilder: (BuildContext context, int index) {
   //         final GiftData item = tempData[index];
   //         var offerData = _controller.details.data?.offerData ?? OfferData();
@@ -669,6 +671,7 @@ class _LivePage extends State<LiveDharamScreen>
   //                             child: CustomImageWidget(
   //                               imageUrl: item.fullGiftImage,
   //                               rounded: false,
+  //                               typeEnum: TypeEnum.gift,
   //                             ),
   //                           ),
   //                           const SizedBox(height: 4),
@@ -818,6 +821,7 @@ class _LivePage extends State<LiveDharamScreen>
                           child: CustomImageWidget(
                             imageUrl: msg.avatar ?? "",
                             rounded: true,
+                            typeEnum: TypeEnum.user,
                           ),
                         ),
                         const SizedBox(width: 4),
@@ -1798,6 +1802,7 @@ class _LivePage extends State<LiveDharamScreen>
                   child: CustomImageWidget(
                     imageUrl: _controller.avatar,
                     rounded: true,
+                    typeEnum: TypeEnum.user,
                   ),
                 ),
               ),
@@ -1998,6 +2003,7 @@ class _LivePage extends State<LiveDharamScreen>
           child: CustomImageWidget(
             imageUrl: _controller.avatar,
             rounded: true,
+            typeEnum: TypeEnum.user,
           ),
         ),
         Positioned(
@@ -2008,6 +2014,7 @@ class _LivePage extends State<LiveDharamScreen>
             child: CustomImageWidget(
               imageUrl: _controller.currentCaller.avatar,
               rounded: true,
+              typeEnum: TypeEnum.user,
             ),
           ),
         ),

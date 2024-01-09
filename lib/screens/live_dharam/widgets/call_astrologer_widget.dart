@@ -1,9 +1,9 @@
 // import "dart:ui";
 
-// import "package:divine_app/common/colors.dart";
-// import "package:divine_app/model/live/get_astrologer_details_response.dart";
-// import "package:divine_app/screens/live_dharam/live_dharam_controller.dart";
-// import "package:divine_app/screens/live_dharam/widgets/custom_image_widget.dart";
+// import "package:divine_astrologer/common/colors.dart";
+// import "package:divine_astrologer/model/live/get_astrologer_details_response.dart";
+// import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
+// import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 // import "package:flutter/material.dart";
 // import "package:get/get.dart";
 
@@ -96,6 +96,7 @@
 //             child: CustomImageWidget(
 //               imageUrl: widget.details.data?.image ?? "",
 //               rounded: true,
+//               typeEnum: TypeEnum.user,
 //             ),
 //           ),
 //         ),

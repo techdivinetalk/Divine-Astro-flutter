@@ -290,6 +290,7 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
                             child: CustomImageWidget(
                               imageUrl: item.avatar,
                               rounded: true,
+                              typeEnum: TypeEnum.user,
                             ),
                           ),
                         ],

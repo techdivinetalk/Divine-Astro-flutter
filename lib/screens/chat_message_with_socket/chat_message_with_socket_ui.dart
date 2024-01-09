@@ -199,13 +199,15 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   ),
                 ),
                 SizedBox(height: 10.h),
-                Obx( () => controller.messageTemplates.isNotEmpty ?
-                   Column(
-                    children: [
-                      messageTemplateRow(),
-                      SizedBox(height: 20.h),
-                    ],
-                  ) : const SizedBox(),
+                Obx(
+                  () => controller.messageTemplates.isNotEmpty
+                      ? Column(
+                          children: [
+                            messageTemplateRow(),
+                            SizedBox(height: 20.h),
+                          ],
+                        )
+                      : const SizedBox(),
                 ),
                 chatBottomBar(),
                 Obx(() => AnimatedContainer(
@@ -276,11 +278,15 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
             child: CustomImageWidget(
               imageUrl: chatMessage.awsUrl ?? '',
               rounded: true,
+              // added by divine-dharam
+              typeEnum: TypeEnum.gift,
+              //
             ),
           ),
           SizedBox(width: 2.w),
-          Text('${controller.customerName} has sent you ${chatMessage.message}',
-          style: AppTextStyle.textStyle12(fontColor: AppColors.red),
+          Text(
+            '${controller.customerName} has sent you ${chatMessage.message}',
+            style: AppTextStyle.textStyle12(fontColor: AppColors.red),
           ),
         ],
       ),
@@ -300,7 +306,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
           return index == 0
               ? GestureDetector(
                   onTap: () {
-                    Get.toNamed(RouteName.addMessageTemplate, arguments: [true, false]);
+                    Get.toNamed(RouteName.addMessageTemplate,
+                        arguments: [true, false]);
                   },
                   child: Container(
                     padding:
@@ -311,15 +318,17 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     ),
                     child: Text(
                       '+ Add',
-                      style: AppTextStyle.textStyle12(fontColor: AppColors.white),
+                      style:
+                          AppTextStyle.textStyle12(fontColor: AppColors.white),
                     ),
                   ),
                 )
               : GestureDetector(
-            onTap: () {
-              controller.sendMsgTemplate(controller.messageTemplates[index-1]);
-            },
-                child: Container(
+                  onTap: () {
+                    controller.sendMsgTemplate(
+                        controller.messageTemplates[index - 1]);
+                  },
+                  child: Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: const BoxDecoration(
@@ -327,11 +336,12 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       borderRadius: BorderRadius.all(Radius.circular(18)),
                     ),
                     child: Text(
-                      '${controller.messageTemplates[index-1].message}',
-                      style: AppTextStyle.textStyle12(fontColor: AppColors.white),
+                      '${controller.messageTemplates[index - 1].message}',
+                      style:
+                          AppTextStyle.textStyle12(fontColor: AppColors.white),
                     ),
                   ),
-              );
+                );
         },
       ),
     );
@@ -576,6 +586,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   child: CustomImageWidget(
                     imageUrl: chatMessage.awsUrl ?? '',
                     rounded: true,
+                    // added by divine-dharam
+                    typeEnum: TypeEnum.gift,
+                    //
                   ),
                 ),
                 SizedBox(width: 6.w),

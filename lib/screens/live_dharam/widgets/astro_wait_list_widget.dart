@@ -180,7 +180,11 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
         leading: SizedBox(
           height: 50,
           width: 50,
-          child: CustomImageWidget(imageUrl: item.avatar, rounded: true),
+          child: CustomImageWidget(
+            imageUrl: item.avatar,
+            rounded: true,
+            typeEnum: TypeEnum.user,
+          ),
         ),
         title: Text(item.userName),
         trailing: Row(
