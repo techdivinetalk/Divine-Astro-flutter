@@ -468,7 +468,8 @@ class _LivePage extends State<LiveDharamScreen>
   //       padding: EdgeInsets.zero,
   //       itemCount: tempData.length,
   //       scrollDirection: Axis.horizontal,
-  //       cacheExtent: tempData.length.toDouble(),
+  //       // cacheExtent: tempData.length.toDouble(),
+  //       cacheExtent: 9999,
   //       itemBuilder: (BuildContext context, int index) {
   //         final GiftData item = tempData[index];
   //         var offerData = _controller.details.data?.offerData ?? OfferData();

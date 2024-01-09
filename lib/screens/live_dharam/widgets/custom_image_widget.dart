@@ -39,12 +39,13 @@ class CustomImageWidget extends StatelessWidget {
       errorWidget: (BuildContext context, String url, Object error) {
         return const Icon(Icons.error);
       },
-      //
       memCacheWidth: 100,
       memCacheHeight: 100,
       maxHeightDiskCache: 100,
       maxWidthDiskCache: 100,
-      
+      fadeInDuration: Duration.zero,
+      fadeOutDuration: Duration.zero,
+      placeholderFadeInDuration: Duration.zero,
     );
   }
 }
