@@ -207,8 +207,8 @@ class RankDetail {
 }
 
 class Performance {
-  int? marksObtains;
-  int? totalMarks;
+  dynamic? marksObtains;
+  dynamic? totalMarks;
   List<Marks>? marks;
 
   Performance({this.marksObtains, this.totalMarks, this.marks});
