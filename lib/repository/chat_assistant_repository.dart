@@ -40,7 +40,7 @@ class ChatAssistantRepository extends ApiProvider {
 
   Future<ChatAssistChatResponse> getAstrologerChats(Map<String, dynamic> params) async {
     try {
-      final response = await post(getChatAssistAstroData, body: jsonEncode(params));
+      final response = await post(getChatAssistCustomerData, body: jsonEncode(params));
       log('response --- ${response.body}');
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {

@@ -51,9 +51,17 @@ class AppFirebaseService {
         if (preferenceService.getToken() == null || preferenceService.getToken() == "") {
           return;
         }
+
         if (event.snapshot.value is Map<Object?, Object?>) {
           Map<String, dynamic>? realTimeData =
               Map<String, dynamic>.from(event.snapshot.value! as Map<Object?, Object?>);
+          if (realTimeData["uniqueId"] != null) {
+            String uniqueId = await getDeviceId() ?? "";
+            debugPrint('check uniqueId ${realTimeData['uniqueId']}\ngetDeviceId ${uniqueId.toString()}');
+            if (realTimeData["uniqueId"] != uniqueId) {
+              Get.put(SettingsController()).logOut();
+            }
+          }
           if (realTimeData["engageId"] != null) {
             tableName = "chat_${realTimeData["engageId"]}";
             debugPrint("tableName ${tableName}");
@@ -96,13 +104,7 @@ class AppFirebaseService {
             sendBroadcast(BroadcastMessage(name: "callKundli", data: callKundli));
             FirebaseDatabase.instance.ref("$path/callKundli").remove();
           }
-          if (realTimeData["uniqueId"] != null) {
-            String uniqueId = await getDeviceId() ?? "";
-            debugPrint('check uniqueId ${realTimeData['uniqueId']}\ngetDeviceId ${uniqueId.toString()}');
-            if (realTimeData["uniqueId"] != uniqueId) {
-              Get.put(SettingsController()).logOut();
-            }
-          }
+
           if (realTimeData["order_id"] != null) {
             watcher.strValue = realTimeData["order_id"].toString();
           }
