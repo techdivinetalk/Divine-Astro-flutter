@@ -59,12 +59,6 @@ class HomeController extends GetxController {
   final homeScreenKey = GlobalKey<ScaffoldState>();
   int scoreIndex = 0;
   List<Map<String, dynamic>> yourScore = [
-    {"title": "Your Conversion Rate", "score": "80"},
-    {"title": "Your Repurchase Rate", "score": "60"},
-    {"title": "Your Online Hours", "score": "50"},
-    {"title": "Your Live Hours", "score": "70"},
-    {"title": "E-Commerce", "score": "80"},
-    {"title": "Your Busy Hours", "score": "60"},
   ];
 
   Rx<Loading> offerTypeLoading = Loading.initial.obs;

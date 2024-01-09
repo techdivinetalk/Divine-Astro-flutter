@@ -142,7 +142,7 @@ class ApiProvider {
   final String privacyPolicy = "privacyPolicy";
 
   final String astroScheduleOnline = "astroScheduleOnline";
-  final String getChatAssistAstroData = "getChatAssistCustomerData";
+  final String getChatAssistCustomerData = "getChatAssistCustomerData";
 
   //Basic Auth
   final String username = "625170";
