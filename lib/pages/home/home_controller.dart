@@ -58,7 +58,8 @@ class HomeController extends GetxController {
   final HomePageRepository homePageRepository = Get.put(HomePageRepository());
   final homeScreenKey = GlobalKey<ScaffoldState>();
   int scoreIndex = 0;
-
+  List<Map<String, dynamic>> yourScore = [
+  ];
 
   Rx<Loading> offerTypeLoading = Loading.initial.obs;
   Rx<Loading> sessionTypeLoading = Loading.initial.obs;
