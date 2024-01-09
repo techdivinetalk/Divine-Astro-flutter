@@ -2,15 +2,19 @@ import "package:cached_network_image/cached_network_image.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 
+enum TypeEnum { user, gift }
+
 class CustomImageWidget extends StatelessWidget {
   const CustomImageWidget({
     required this.imageUrl,
     required this.rounded,
+    required this.typeEnum,
     super.key,
   });
 
   final String imageUrl;
   final bool rounded;
+  final TypeEnum typeEnum;
 
   @override
   Widget build(BuildContext context) {

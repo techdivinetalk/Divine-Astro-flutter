@@ -38,6 +38,7 @@ class LeaderBoardWidget extends StatelessWidget {
                   child: CustomImageWidget(
                     imageUrl: avatar,
                     rounded: true,
+                    typeEnum: TypeEnum.user,
                   ),
                 ),
                 Flexible(
@@ -61,6 +62,7 @@ class LeaderBoardWidget extends StatelessWidget {
                     child: CustomImageWidget(
                       imageUrl: fullGiftImage,
                       rounded: false,
+                      typeEnum: TypeEnum.gift,
                     ),
                   ),
                 ),

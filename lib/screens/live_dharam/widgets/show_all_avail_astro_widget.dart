@@ -153,7 +153,11 @@ class _ShowAllAvailAstroWidgetState extends State<ShowAllAvailAstroWidget> {
                     border: Border.all(color: AppColors.yellow, width: 4),
                     color: AppColors.yellow.withOpacity(0.2),
                   ),
-                  child: CustomImageWidget(imageUrl: image, rounded: true),
+                  child: CustomImageWidget(
+                    imageUrl: image,
+                    rounded: true,
+                    typeEnum: TypeEnum.user,
+                  ),
                 ),
                 Positioned(
                   bottom: -5,

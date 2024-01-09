@@ -108,6 +108,7 @@ class _CallAcceptOrRejectWidgetState extends State<CallAcceptOrRejectWidget> {
             child: CustomImageWidget(
               imageUrl: widget.avatar,
               rounded: false,
+              typeEnum: TypeEnum.user,
             ),
           ),
         ),

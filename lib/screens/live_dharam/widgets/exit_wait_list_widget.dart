@@ -104,6 +104,7 @@ class _ExitWaitListWidgetState extends State<ExitWaitListWidget> {
                 child: CustomImageWidget(
                   imageUrl: widget.custoAvatar,
                   rounded: true,
+                  typeEnum: TypeEnum.user,
                 ),
               ),
               Image.asset(
@@ -117,6 +118,7 @@ class _ExitWaitListWidgetState extends State<ExitWaitListWidget> {
                 child: CustomImageWidget(
                   imageUrl: widget.astroAvatar,
                   rounded: true,
+                  typeEnum: TypeEnum.user,
                 ),
               ),
             ],

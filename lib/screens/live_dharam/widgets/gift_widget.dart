@@ -221,6 +221,7 @@ class _GiftWidgetState extends State<GiftWidget> {
                     child: CustomImageWidget(
                       imageUrl: item.fullGiftImage,
                       rounded: false,
+                      typeEnum: TypeEnum.gift,
                     ),
                   ),
                   const SizedBox(height: 4),

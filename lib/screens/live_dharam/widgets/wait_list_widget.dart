@@ -111,6 +111,7 @@ class _WaitListWidgetState extends State<WaitListWidget> {
             child: CustomImageWidget(
               imageUrl: widget.astologerImage,
               rounded: true,
+              typeEnum: TypeEnum.user,
             ),
           ),
         ),
@@ -186,7 +187,11 @@ class _WaitListWidgetState extends State<WaitListWidget> {
       leading: SizedBox(
         height: 50,
         width: 50,
-        child: CustomImageWidget(imageUrl: item.avatar, rounded: true),
+        child: CustomImageWidget(
+          imageUrl: item.avatar,
+          rounded: true,
+          typeEnum: TypeEnum.user,
+        ),
       ),
       title: Text(item.userName),
       trailing: Row(

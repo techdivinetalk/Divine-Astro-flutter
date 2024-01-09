@@ -118,6 +118,9 @@ class _AskForGiftState extends State<AskForGiftBottomSheet> {
                   child: CustomImageWidget(
                     imageUrl: item.fullGiftImage,
                     rounded: true,
+                    // added by divine-dharam  
+                    typeEnum: TypeEnum.gift,
+                    //
                   ),
                 ),
                 const SizedBox(height: 4),

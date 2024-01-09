@@ -94,6 +94,7 @@ class _ExitWidgetState extends State<ExitWidget> {
             child: CustomImageWidget(
               imageUrl: widget.astrologerAvatar,
               rounded: true,
+              typeEnum: TypeEnum.user,
             ),
           ),
           const SizedBox(height: 16),
