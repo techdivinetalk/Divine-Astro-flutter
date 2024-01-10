@@ -119,7 +119,8 @@ class GiftPlayerWidgetState extends State<GiftPlayerWidget>
                 }));
               return SVGAImage(
                 animationController!,
-                fit: BoxFit.fill,
+                // fit: BoxFit.fill,
+                fit: BoxFit.cover ,
               );
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');

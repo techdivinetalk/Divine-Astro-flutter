@@ -5,8 +5,10 @@ import "dart:convert";
 import "dart:developer";
 
 import "package:after_layout/after_layout.dart";
+import "package:auto_scroll/auto_scroll.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
+import "package:divine_astrologer/model/live/notice_board_res.dart";
 import "package:divine_astrologer/screens/live_dharam/gifts_singleton.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/live_gift.dart";
@@ -29,13 +31,12 @@ import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter/scheduler.dart";
 import "package:get/get.dart";
+import "package:intl/intl.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_astro_widget.dart";
-//
-//
 //
 //
 //
@@ -87,6 +88,7 @@ class _LivePage extends State<LiveDharamScreen>
   late StreamSubscription<bool> keyboardSubscription;
 
   bool _isKeyboardSheetOpen = false;
+  late Timer _timer;
 
   @override
   void initState() {
@@ -167,6 +169,22 @@ class _LivePage extends State<LiveDharamScreen>
         } else {}
       },
     );
+
+    _startTimer();
+  }
+
+  void _startTimer() {
+    const duration = Duration(seconds: 5);
+    _timer = Timer.periodic(
+      duration,
+      (Timer timer) {
+        _controller.timerCurrentIndex++;
+        if (_controller.timerCurrentIndex >
+            (_controller.noticeBoardRes.data?.length ?? 0)) {
+          _controller.timerCurrentIndex = 1;
+        } else {}
+      },
+    );
   }
 
   Future<void> onUserJoin(List<ZegoUIKitUser> users) async {
@@ -194,6 +212,7 @@ class _LivePage extends State<LiveDharamScreen>
     // _editingController.dispose();
     // _scrollControllerForTop.dispose();
     // _scrollControllerForBottom.dispose();
+    // _timer.cancel();
     // WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
@@ -376,7 +395,22 @@ class _LivePage extends State<LiveDharamScreen>
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 const SizedBox(width: 8),
-                Expanded(child: inRoomMessage()),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      noticeBoard(),
+                      SizedBox(
+                          height:
+                              (_controller.noticeBoardRes.data ?? []).isEmpty
+                                  ? 8.0
+                                  : 0.0),
+                      inRoomMessage(),
+                    ],
+                  ),
+                ),
                 const SizedBox(width: 8),
                 //
                 verticalDefault(),
@@ -392,6 +426,92 @@ class _LivePage extends State<LiveDharamScreen>
           const SizedBox(height: 8),
         ],
       ),
+    );
+  }
+
+  String formatDate(DateTime dateTime) {
+    final DateFormat formatter = DateFormat('d MMM yyyy');
+    return formatter.format(dateTime);
+  }
+
+  Widget noticeBoard() {
+    // do not remove
+    print("timerCurrentIndex: ${_controller.timerCurrentIndex - 1}");
+    //
+    return AnimatedOpacity(
+      opacity: (_controller.noticeBoardRes.data ?? []).isEmpty ? 0.0 : 1.0,
+      duration: const Duration(seconds: 1),
+      child: (_controller.noticeBoardRes.data ?? []).isEmpty
+          ? const SizedBox()
+          : SizedBox(
+              width: Get.width / 2,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: 1,
+                padding: EdgeInsets.zero,
+                itemBuilder: (BuildContext context, int index) {
+                  final int timerCurrentIndex =
+                      _controller.timerCurrentIndex - 1;
+                  final NoticeBoardResData noticeBoardResData =
+                      _controller.noticeBoardRes.data?[timerCurrentIndex] ??
+                          NoticeBoardResData();
+                  final int id = noticeBoardResData.id ?? 0;
+                  final String title = noticeBoardResData.title ?? "";
+                  final String description =
+                      noticeBoardResData.description ?? "";
+                  final String createdAt = noticeBoardResData.createdAt ?? "";
+                  final DateTime tzDateTime = DateTime.parse(createdAt).toUtc();
+                  final String formattedDate = formatDate(tzDateTime);
+                  return DecoratedBox(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
+                      border: Border.all(
+                        color: AppColors.yellow,
+                      ),
+                      color: AppColors.black.withOpacity(0.2),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 8),
+                          Text(
+                            title,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            description,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            formattedDate,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
     );
   }
 
@@ -796,6 +916,7 @@ class _LivePage extends State<LiveDharamScreen>
         return ListView.builder(
           reverse: true,
           shrinkWrap: true,
+          padding: EdgeInsets.zero,
           itemCount:
               messages.isNotEmpty && messages.length >= 5 ? 5 : messages.length,
           controller: _scrollControllerForBottom,
@@ -2759,59 +2880,6 @@ class _LivePage extends State<LiveDharamScreen>
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        // return Container(
-        //   padding: EdgeInsets.only(
-        //     bottom: MediaQuery.of(context).viewInsets.bottom,
-        //   ),
-        //   child: Padding(
-        //     padding: const EdgeInsets.all(8.0),
-        //     child: TextField(
-        //       autofocus: true,
-        //       controller: _editingController,
-        //       onSubmitted: (String value) async {
-        //         await sendKeyboardMesage();
-        //       },
-        //       cursorColor: AppColors.yellow,
-        //       style: const TextStyle(color: AppColors.yellow),
-        //       decoration: InputDecoration(
-        //         contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-        //         suffixIcon: IconButton(
-        //           onPressed: sendKeyboardMesage,
-        //           icon: Image.asset(
-        //             "assets/images/live_send_message_new.png",
-        //             color: AppColors.yellow,
-        //           ),
-        //         ),
-        //         floatingLabelBehavior: FloatingLabelBehavior.never,
-        //         filled: true,
-        //         fillColor: AppColors.white,
-        //         hintText: "Say Hi",
-        //         hintStyle: const TextStyle(color: AppColors.yellow),
-        //         border: OutlineInputBorder(
-        //           borderSide: const BorderSide(
-        //             width: 2,
-        //             color: AppColors.yellow,
-        //           ),
-        //           borderRadius: BorderRadius.circular(50.0),
-        //         ),
-        //         enabledBorder: OutlineInputBorder(
-        //           borderSide: const BorderSide(
-        //             width: 2,
-        //             color: AppColors.yellow,
-        //           ),
-        //           borderRadius: BorderRadius.circular(50.0),
-        //         ),
-        //         focusedBorder: OutlineInputBorder(
-        //           borderSide: const BorderSide(
-        //             width: 2,
-        //             color: AppColors.yellow,
-        //           ),
-        //           borderRadius: BorderRadius.circular(50.0),
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // );
         return LiveKeyboard(sendKeyboardMesage: sendKeyboardMesage);
       },
     );
@@ -2820,7 +2888,6 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> sendKeyboardMesage(msg) async {
-    // final String msg = _editingController.value.text;
     final ZegoCustomMessage model = ZegoCustomMessage(
       type: 1,
       liveId: _controller.liveId,
@@ -2832,7 +2899,6 @@ class _LivePage extends State<LiveDharamScreen>
       fullGiftImage: "",
     );
     await sendMessageToZego(model);
-    // _editingController.clear();
     FocusManager.instance.primaryFocus?.unfocus();
     scrollDownForTop();
     scrollDownForBottom();
@@ -3049,12 +3115,8 @@ class _LivePage extends State<LiveDharamScreen>
 
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) async {
+    await _controller.noticeBoard();
     await _controller.callBlockedCustomerListRes();
-
-    _controller.blockedCustomerList.data?.forEach((element) {
-      print("blockedCustomerList: id:   ${element.getCustomers?.id}");
-      print("blockedCustomerList: name: ${element.getCustomers?.name}");
-    });
     return Future<void>.value();
   }
 }

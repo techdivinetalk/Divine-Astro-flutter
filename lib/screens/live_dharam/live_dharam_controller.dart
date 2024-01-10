@@ -6,6 +6,7 @@ import "dart:convert";
 import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/model/live/blocked_customer_list_res.dart";
 import "package:divine_astrologer/model/live/blocked_customer_res.dart";
+import "package:divine_astrologer/model/live/notice_board_res.dart";
 import "package:divine_astrologer/model/res_login.dart";
 import "package:divine_astrologer/repository/astrologer_profile_repository.dart";
 import "package:divine_astrologer/repository/kundli_repository.dart";
@@ -60,6 +61,8 @@ class LiveDharamController extends GetxController {
   //     InsufficientBalModel().obs;
   final Rx<BlockedCustomerListRes> _blockedCustomerList =
       BlockedCustomerListRes().obs;
+  final Rx<NoticeBoardRes> _noticeBoardRes = NoticeBoardRes().obs;
+  final RxInt _timerCurrentIndex = 1.obs;
 
   @override
   void onInit() {
@@ -103,6 +106,8 @@ class LiveDharamController extends GetxController {
     showTopBanner = false;
     // insufficientBalModel = InsufficientBalModel();
     blockedCustomerList = BlockedCustomerListRes();
+    noticeBoardRes = NoticeBoardRes();
+    timerCurrentIndex = 1;
     return;
   }
 
@@ -132,6 +137,8 @@ class LiveDharamController extends GetxController {
     _showTopBanner.close();
     // _insufficientBalModel.close();
     _blockedCustomerList.close();
+    _noticeBoardRes.close();
+    _timerCurrentIndex.close();
 
     super.onClose();
   }
@@ -210,6 +217,12 @@ class LiveDharamController extends GetxController {
   BlockedCustomerListRes get blockedCustomerList => _blockedCustomerList.value;
   set blockedCustomerList(BlockedCustomerListRes value) =>
       _blockedCustomerList(value);
+
+  NoticeBoardRes get noticeBoardRes => _noticeBoardRes.value;
+  set noticeBoardRes(NoticeBoardRes value) => _noticeBoardRes(value);
+
+  int get timerCurrentIndex => _timerCurrentIndex.value;
+  set timerCurrentIndex(int value) => _timerCurrentIndex(value);
 
   Future<void> eventListner({
     required DatabaseEvent event,
@@ -1094,6 +1107,15 @@ class LiveDharamController extends GetxController {
       } else {}
     } else {}
     return Future<bool>.value(isRequest);
+  }
+
+  Future<void> noticeBoard() async {
+    NoticeBoardRes res = NoticeBoardRes();
+    res = await liveRepository.noticeBoardAPI();
+    noticeBoardRes = res.statusCode == HttpStatus.ok
+        ? NoticeBoardRes.fromJson(res.toJson())
+        : NoticeBoardRes.fromJson(NoticeBoardRes().toJson());
+    return Future<void>.value();
   }
 }
 
