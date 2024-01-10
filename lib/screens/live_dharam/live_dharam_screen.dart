@@ -551,10 +551,14 @@ class _LivePage extends State<LiveDharamScreen>
           .asBroadcastStream(),
       builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
         _controller.getLatestLeaderboard(snapshot.data?.snapshot);
+        bool isEngaged = _controller.isHost
+            ? _controller.currentCaller.isEngaded
+            : _controller.engagedCoHostWithAstro().isEngaded;
         return AnimatedOpacity(
-          opacity: _controller.leaderboardModel.isEmpty ? 0.0 : 1.0,
+          opacity:
+              _controller.leaderboardModel.isEmpty || isEngaged ? 0.0 : 1.0,
           duration: const Duration(seconds: 1),
-          child: _controller.leaderboardModel.isEmpty
+          child: _controller.leaderboardModel.isEmpty || isEngaged
               ? const SizedBox()
               : LeaderBoardWidget(
                   avatar: _controller.leaderboardModel.first.avatar,
