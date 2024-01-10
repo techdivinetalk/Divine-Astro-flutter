@@ -120,6 +120,10 @@ class AppFirebaseService {
                 Map<String, dynamic>.from(event.snapshot.value! as Map<Object?, Object?>);
             debugPrint("orderData-------> $orderData");
             if (orderData["status"] != null) {
+            if (orderData["orderPurchase"] != null) {
+              sendBroadcast(
+                  BroadcastMessage(name: "updateTime", data: {"talktime": orderData["talktime"],}));
+            }
               if (orderData["status"] == "0") {
                 acceptBottomWatcher.strValue = "0";
                 sendBroadcast(
