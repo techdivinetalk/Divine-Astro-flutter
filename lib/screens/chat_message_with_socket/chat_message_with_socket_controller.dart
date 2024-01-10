@@ -74,7 +74,7 @@ class ChatMessageWithSocketController extends GetxController
   DashboardController dashboardController = Get.find<DashboardController>();
   RxBool isTyping = false.obs;
   BroadcastReceiver broadcastReceiver =
-      BroadcastReceiver(names: <String>["EndChat"]);
+      BroadcastReceiver(names: <String>["EndChat", "updateTime"]);
 
   RxList<MessageTemplates> messageTemplates = <MessageTemplates>[].obs;
 
@@ -144,6 +144,10 @@ class ChatMessageWithSocketController extends GetxController
     arguments = Get.arguments;
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) {
+      if (event.name == "updateTime") {
+        debugPrint("talkTime hello: ${event.data?["talktime"]}");
+        updateTime(event.data?["talktime"], true );
+      }
       if (event.name == "EndChat") {
         Get.offAllNamed(RouteName.dashboard);
         broadcastReceiver.stop();
@@ -185,30 +189,64 @@ class ChatMessageWithSocketController extends GetxController
       }
       //  }
       // }
+      updateTime(data["orderData"]["talktime"], false);
 
-      if (data["orderData"]["talktime"] != null) {
-        if (preferenceService.getTalkTime() == 0) {
-          final int talkTime =
-              int.parse((data["orderData"]["talktime"] ?? 0).toString()) +
-                  (DateTime.now().millisecondsSinceEpoch ~/ 1000).toInt();
-          debugPrint(
-              "millisecondsSinceEpoch ----> ${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
-          preferenceService.setTalkTime(talkTime);
-        } else {
-          debugPrint("else part - ${preferenceService.getTalkTime() ?? 0}");
-        }
-        //   FirebaseDatabase.instance.ref('order/$orderId/talktime').remove();
-      }
-
-      if (preferenceService.getTalkTime() != null) {
-        talkTimeStartTimer(preferenceService.getTalkTime() ?? 0);
-      }
+      // if (data["orderData"]["talktime"] != null) {
+      //   if (preferenceService.getTalkTime() == 0) {
+      //     final int talkTime =
+      //         int.parse((data["orderData"]["talktime"] ?? 0).toString()) +
+      //             (DateTime.now().millisecondsSinceEpoch ~/ 1000).toInt();
+      //     debugPrint(
+      //         "millisecondsSinceEpoch ----> ${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
+      //     preferenceService.setTalkTime(talkTime);
+      //   } else {
+      //     debugPrint("else part - ${preferenceService.getTalkTime() ?? 0}");
+      //   }
+      //   //   FirebaseDatabase.instance.ref('order/$orderId/talktime').remove();
+      // }
+      //
+      // if (preferenceService.getTalkTime() != null) {
+      //   talkTimeStartTimer(preferenceService.getTalkTime() ?? 0);
+      // }
     }
     userData = preferenceService.getUserDetail();
 
     userDataKey = "chat_${currentUserId.value}";
     getChatList();
     socketReconnect();
+  }
+
+  updateTime(int? talk, bool isTimeUpdate) {
+    debugPrint('my talk: $talk');
+    if (talk != null) {
+    if (isTimeUpdate) {
+      final int talkTime =
+          talk + (DateTime.now().millisecondsSinceEpoch ~/ 1000).toInt();
+      debugPrint(
+          "millisecondsSinceEpoch ----> ${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
+      preferenceService.setTalkTime(talkTime);
+    } else {
+      if (preferenceService.getTalkTime() == 0) {
+        final int talkTime =
+            talk + (DateTime.now().millisecondsSinceEpoch ~/ 1000).toInt();
+        debugPrint(
+            "millisecondsSinceEpoch ----> ${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
+        preferenceService.setTalkTime(talkTime);
+      } else {
+        debugPrint("else part - ${preferenceService.getTalkTime() ?? 0}");
+      }
+    }
+    }
+
+    if (preferenceService.getTalkTime() != null) {
+      debugPrint('prfs time: ${preferenceService.getTalkTime()}');
+      if(_timer?.isActive ?? false) {
+        debugPrint('timer is not null');
+        _timer!.cancel();
+        _timer = null;
+      }
+      talkTimeStartTimer(preferenceService.getTalkTime() ?? 0);
+    }
   }
 
   getMessageTemplates() async {
