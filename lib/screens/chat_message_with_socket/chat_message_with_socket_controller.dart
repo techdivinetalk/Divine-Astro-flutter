@@ -74,8 +74,7 @@ class ChatMessageWithSocketController extends GetxController
   DashboardController dashboardController = Get.find<DashboardController>();
   RxBool isTyping = false.obs;
   BroadcastReceiver broadcastReceiver =
-      BroadcastReceiver(names: <String>["EndChat","deliveredMsg"]);
-      BroadcastReceiver(names: <String>["EndChat", "updateTime"]);
+      BroadcastReceiver(names: <String>["EndChat","deliveredMsg","updateTime"]);
 
   RxList<MessageTemplates> messageTemplates = <MessageTemplates>[].obs;
 
