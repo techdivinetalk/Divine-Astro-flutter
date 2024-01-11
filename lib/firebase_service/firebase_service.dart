@@ -104,7 +104,10 @@ class AppFirebaseService {
             sendBroadcast(BroadcastMessage(name: "callKundli", data: callKundli));
             FirebaseDatabase.instance.ref("$path/callKundli").remove();
           }
-
+          if (realTimeData["deliveredMsg"] != null) {
+            sendBroadcast(
+                BroadcastMessage(name: "deliveredMsg", data: {'deliveredMsgList': realTimeData["deliveredMsg"]}));
+          }
           if (realTimeData["order_id"] != null) {
             watcher.strValue = realTimeData["order_id"].toString();
           }

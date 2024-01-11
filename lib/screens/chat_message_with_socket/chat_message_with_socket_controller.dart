@@ -74,6 +74,7 @@ class ChatMessageWithSocketController extends GetxController
   DashboardController dashboardController = Get.find<DashboardController>();
   RxBool isTyping = false.obs;
   BroadcastReceiver broadcastReceiver =
+      BroadcastReceiver(names: <String>["EndChat","deliveredMsg"]);
       BroadcastReceiver(names: <String>["EndChat", "updateTime"]);
 
   RxList<MessageTemplates> messageTemplates = <MessageTemplates>[].obs;
@@ -151,6 +152,19 @@ class ChatMessageWithSocketController extends GetxController
       if (event.name == "EndChat") {
         Get.offAllNamed(RouteName.dashboard);
         broadcastReceiver.stop();
+      }else if(event.name == 'deliveredMsg'){
+        var response = event.data?['deliveredMsgList'];
+        response.forEach((key, value) {
+          value.forEach((innerKey, innerValue) {
+            print('deliveredData Outer Key: $key, Inner Key: $innerKey, Value: $innerValue');
+            var index = chatMessages.indexWhere((element) => innerKey == element.id.toString());
+            if(index >= 0){
+              chatMessages[index].type = innerValue;
+              chatMessages.refresh();
+            }
+          });
+        });
+        FirebaseDatabase.instance.ref("astrologer/${preferenceService.getUserDetail()!.id}/realTime/deliveredMsg/${int.parse(arguments["orderData"]["userId"].toString())}").remove();
       }
     });
     debugPrint("arguments of socket $arguments");
