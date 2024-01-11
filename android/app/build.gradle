@@ -64,6 +64,7 @@ android {
             // minifyEnabled true
             // shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
         }
     }
 }
@@ -83,4 +84,7 @@ dependencies {
             because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
         }
     }
+
+    implementation 'com.google.firebase:firebase-messaging:21.1.0'
+
 }

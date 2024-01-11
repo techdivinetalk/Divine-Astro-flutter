@@ -174,7 +174,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   void _startTimer() {
-    const duration = Duration(seconds: 5);
+    const duration = Duration(seconds: 15);
     _timer = Timer.periodic(
       duration,
       (Timer timer) {
