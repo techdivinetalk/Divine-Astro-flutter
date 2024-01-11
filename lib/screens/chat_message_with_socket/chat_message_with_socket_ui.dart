@@ -1275,8 +1275,8 @@ class AstrologerChatAppBar extends StatelessWidget {
                   Row(
                     children: [
                       SizedBox(
-                        height: 24,
-                        width: 24,
+                        height: 50,
+                        width: 50,
                         child: ZegoService().buttonUI(
                           isVideoCall: false,
                           targetUserID: Get.arguments["orderData"]["userId"],
@@ -1285,8 +1285,8 @@ class AstrologerChatAppBar extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        height: 24,
-                        width: 24,
+                        height: 50,
+                        width: 50,
                         child: ZegoService().buttonUI(
                           isVideoCall: true,
                           targetUserID: Get.arguments["orderData"]["userId"],
