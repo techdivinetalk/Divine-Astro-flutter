@@ -8,6 +8,7 @@ import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
 import 'package:divine_astrologer/firebase_options.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
+import 'package:divine_astrologer/zego_call/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -43,6 +44,8 @@ import 'gen/fonts.gen.dart';
 import 'localization/translations.dart';
 import 'utils/utils.dart';
 
+GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -51,13 +54,14 @@ Future<void> main() async {
   await GetStorage.init();
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print('Message data: ${message.data}');
-    if(message.data["type"] == "3") {
+    if (message.data["type"] == "3") {
       print('Message data:- ${MiddleWare.instance.currentPage}');
-      if(MiddleWare.instance.currentPage == RouteName.chatMessageUI) {
+      if (MiddleWare.instance.currentPage == RouteName.chatMessageUI) {
         sendBroadcast(
             BroadcastMessage(name: "chatAssist", data: {'msg': message.data}));
-      }else{
-        showNotification(message.data["title"],message.data["message"],message.data['type']);
+      } else {
+        showNotification(message.data["title"], message.data["message"],
+            message.data['type']);
       }
     }
     if (message.notification != null) {
@@ -71,16 +75,24 @@ Future<void> main() async {
 
   GiftsSingleton().init();
 
-  final navigatorKey = GlobalKey<NavigatorState>();
+  // final navigatorKey = GlobalKey<NavigatorState>();
+  // ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
+  // ZegoUIKit().initLog().then((value) {
+  //   ZegoUIKitPrebuiltCallInvitationService().useSystemCallingUI(
+  //     [ZegoUIKitSignalingPlugin()],
+  //   );
+  //   runApp(const MyApp());
+  // });
+
   ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
+  // call the useSystemCallingUI
   ZegoUIKit().initLog().then((value) {
     ZegoUIKitPrebuiltCallInvitationService().useSystemCallingUI(
       [ZegoUIKitSignalingPlugin()],
     );
-    runApp(const MyApp());
+    runApp(MyApp());
   });
 }
-
 
 Future<bool> saveLanguage(String? lang) async {
   final box = GetStorage();
@@ -106,37 +118,53 @@ Future<void> initServices() async {
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  showNotification(message.data["title"],message.data["message"],message.data['type']);
-  if(message.data['type'] == "1") {
-    HashMap<String,dynamic> updateData = HashMap();
+  showNotification(
+      message.data["title"], message.data["message"], message.data['type']);
+  if (message.data['type'] == "1") {
+    HashMap<String, dynamic> updateData = HashMap();
     updateData[message.data["chatId"]] = 1;
-    FirebaseDatabase.instance.ref("user").child(
-        "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}").update(updateData);
+    FirebaseDatabase.instance
+        .ref("user")
+        .child(
+            "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}")
+        .update(updateData);
   }
 }
 
-Future<void> showNotification(String title,String message,String type) async {
+Future<void> showNotification(String title, String message, String type) async {
   AndroidNotificationDetails androidNotificationDetails =
-  const AndroidNotificationDetails("DivineCustomer", "CustomerNotification", importance: Importance.max,priority: Priority.high,);
-  if(type == "2") {
-    androidNotificationDetails =
-    const AndroidNotificationDetails("DivineCustomer", "CustomerNotification",
+      const AndroidNotificationDetails(
+    "DivineCustomer",
+    "CustomerNotification",
+    importance: Importance.max,
+    priority: Priority.high,
+  );
+  if (type == "2") {
+    androidNotificationDetails = const AndroidNotificationDetails(
+      "DivineCustomer",
+      "CustomerNotification",
       sound: RawResourceAndroidNotificationSound('accept_ring'),
       importance: Importance.max,
-      priority: Priority.high,);
+      priority: Priority.high,
+    );
   }
-  NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
-  await flutterLocalNotificationsPlugin
-      .show(Random().nextInt(90000), title,message, notificationDetails, payload: "jsonEncodePayload");
+  NotificationDetails notificationDetails =
+      NotificationDetails(android: androidNotificationDetails);
+  await flutterLocalNotificationsPlugin.show(
+      Random().nextInt(90000), title, message, notificationDetails,
+      payload: "jsonEncodePayload");
 }
+
 void initMessaging() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings("@mipmap/ic_launcher");
+      AndroidInitializationSettings("@mipmap/ic_launcher");
   const DarwinInitializationSettings initializationSettingsDarwin =
-  DarwinInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+      DarwinInitializationSettings(
+          onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
-  const InitializationSettings initializationSettings =
-  InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsDarwin);
+  const InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsDarwin);
   flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
 
@@ -144,6 +172,7 @@ void initMessaging() async {
     print("fcm token ${token}");
   });
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -164,7 +193,8 @@ class MyApp extends StatelessWidget {
                 color: AppColors.white,
                 debugShowCheckedModeBanner: false,
                 initialRoute: RouteName.initial,
-                getPages: Routes.routes,
+                getPages: Routes.routes, 
+                // home: ZegoLoginScreen(),
                 locale: getLanStrToLocale(
                     GetStorages.get(GetStorageKeys.language) ?? ""),
                 fallbackLocale: AppTranslations.fallbackLocale,

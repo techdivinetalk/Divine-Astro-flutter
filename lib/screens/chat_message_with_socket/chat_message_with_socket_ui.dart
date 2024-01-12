@@ -11,6 +11,7 @@ import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/gen/assets.gen.dart";
 import "package:divine_astrologer/model/chat_offline_model.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
+import "package:divine_astrologer/zego_call/zego_service.dart";
 import "package:emoji_picker_flutter/emoji_picker_flutter.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
@@ -1273,6 +1274,27 @@ class AstrologerChatAppBar extends StatelessWidget {
                   ),
                   Row(
                     children: [
+                      SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: ZegoService().buttonUI(
+                          isVideoCall: false,
+                          targetUserID: Get.arguments["orderData"]["userId"],
+                          targetUserName: Get.arguments["orderData"]
+                              ["customerName"],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: ZegoService().buttonUI(
+                          isVideoCall: true,
+                          targetUserID: Get.arguments["orderData"]["userId"],
+                          targetUserName: Get.arguments["orderData"]
+                              ["customerName"],
+                        ),
+                      ),
+                      SizedBox(width: 16.w),
                       PopupMenuButton(
                         surfaceTintColor: Colors.transparent,
                         color: Colors.white,

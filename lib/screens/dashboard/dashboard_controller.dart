@@ -7,6 +7,7 @@ import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
+import 'package:divine_astrologer/zego_call/zego_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:get/get.dart';
@@ -17,7 +18,8 @@ import '../../common/permission_handler.dart';
 import '../../di/fcm_notification.dart';
 import '../../model/res_login.dart';
 
-class DashboardController extends GetxController with GetSingleTickerProviderStateMixin {
+class DashboardController extends GetxController
+    with GetSingleTickerProviderStateMixin {
   final PreDefineRepository repository;
 
   DashboardController(this.repository);
@@ -25,10 +27,12 @@ class DashboardController extends GetxController with GetSingleTickerProviderSta
   RxInt selectedIndex = 0.obs;
   RxString userProfileImage = " ".obs;
   final GlobalKey<ScaffoldState> scaffoldkey = GlobalKey();
-  SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
+  SharedPreferenceService preferenceService =
+      Get.find<SharedPreferenceService>();
   UserData? userData;
   final appFirebaseService = AppFirebaseService();
-  BroadcastReceiver broadcastReceiver = BroadcastReceiver(names: <String>["AcceptChat", "ReJoinChat"]);
+  BroadcastReceiver broadcastReceiver =
+      BroadcastReceiver(names: <String>["AcceptChat", "ReJoinChat"]);
 
   // StreamSubscription<DatabaseEvent>? realTimeListener;
   // StreamSubscription<DatabaseEvent>? astroChatListener;
@@ -43,23 +47,33 @@ class DashboardController extends GetxController with GetSingleTickerProviderSta
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(const Duration(seconds: 5), () {
-        appFirebaseService.readData('astrologer/${preferenceService.getUserDetail()!.id}/realTime');
+        appFirebaseService.readData(
+            'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
       });
     });
     var commonConstants = await userRepository.constantDetailsData();
     preferenceService.setConstantDetails(commonConstants);
-    preferenceService.setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
+    preferenceService
+        .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
 
     //added by: dev-dharam
-    Get.find<SharedPreferenceService>().setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
+    Get.find<SharedPreferenceService>()
+        .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
     //
 
-    userProfileImage.value =
-        userData?.image != null ? "${preferenceService.getBaseImageURL()}/${userData?.image}" : "";
+    userProfileImage.value = userData?.image != null
+        ? "${preferenceService.getBaseImageURL()}/${userData?.image}"
+        : "";
     //  connectSocket();
     loadPreDefineData();
     firebaseMessagingConfig(Get.context!);
     notificationPermission();
+
+    //
+    print("asasasasasasa");
+    await ZegoService().zegoLogin();
+    print("asasasasasasa");
+    //
   }
 
   notificationPermission() async {
@@ -213,7 +227,8 @@ class DashboardController extends GetxController with GetSingleTickerProviderSta
   }
 
   void askPermission() async {
-    await [Permission.camera, Permission.microphone, Permission.contacts].request();
+    await [Permission.camera, Permission.microphone, Permission.contacts]
+        .request();
 
     PermissionStatus? permissionStatus;
     if (permissionStatus == PermissionStatus.granted) {
@@ -235,7 +250,8 @@ class DashboardController extends GetxController with GetSingleTickerProviderSta
     var allContacts = await ContactsService.getContacts();
     var isContactExists = allContacts.any((element) {
       if (element.phones != null) {
-        return element.phones!.any((element) => element.value!.contains("+91 9876543210"));
+        return element.phones!
+            .any((element) => element.value!.contains("+91 9876543210"));
       } else {
         return false;
       }

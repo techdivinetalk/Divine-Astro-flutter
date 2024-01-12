@@ -29,7 +29,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(ChatMessageController(KundliRepository(),ChatRepository()));
+    Get.put(ChatMessageController(KundliRepository(), ChatRepository()));
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.yellow,
@@ -47,20 +47,23 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                         assetImage: false,
                         placeHolderPath: Assets.images.defaultProfile.path,
                         imagePath:
-                        "${globalConstantModel.data?.awsCredentails.baseurl}/${controller.args!.name ?? ''}",
+                            "${globalConstantModel.data?.awsCredentails.baseurl}/${controller.args!.name ?? ''}",
                         loadingIndicator: const SizedBox(
-                            child: CircularProgressIndicator(color: Color(0XFFFDD48E), strokeWidth: 2))),
+                            child: CircularProgressIndicator(
+                                color: Color(0XFFFDD48E), strokeWidth: 2))),
                   )),
             ),
             SizedBox(width: 10.w),
             Text(controller.args!.name ?? '',
-                style: AppTextStyle.textStyle16(fontWeight: FontWeight.w500, fontColor: AppColors.brown))
+                style: AppTextStyle.textStyle16(
+                    fontWeight: FontWeight.w500, fontColor: AppColors.brown))
           ],
         ),
       ),
       body: Stack(
         children: [
-          Assets.images.bgChatWallpaper.image(width: MediaQuery.of(context).size.width, fit: BoxFit.fitWidth),
+          Assets.images.bgChatWallpaper.image(
+              width: MediaQuery.of(context).size.width, fit: BoxFit.fitWidth),
           Column(
             children: [
               Expanded(
@@ -75,7 +78,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                     return false;
                   },
                   child: Obx(
-                        () => ListView.builder(
+                    () => ListView.builder(
                       itemCount: controller.chatMessageList.length,
                       controller: controller.messageScrollController,
                       reverse: false,
@@ -85,14 +88,16 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                         return SizedBox(
                           width: double.maxFinite,
                           child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 12.w, vertical: 4.h),
                             child: Column(
                               crossAxisAlignment: (data.msgType ?? 0) == 0
                                   ? CrossAxisAlignment.end
                                   : CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 8),
                                   clipBehavior: Clip.antiAlias,
                                   decoration: BoxDecoration(
                                     boxShadow: [
@@ -102,11 +107,13 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                                           offset: const Offset(0.0, 3.0)),
                                     ],
                                     color: Colors.white,
-                                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(10)),
                                   ),
                                   constraints: BoxConstraints(
                                       maxWidth: ScreenUtil().screenWidth * 0.7,
-                                      minWidth: ScreenUtil().screenWidth * 0.27),
+                                      minWidth:
+                                          ScreenUtil().screenWidth * 0.27),
                                   child: Stack(
                                     alignment: (data.msgType ?? 0) == 0
                                         ? Alignment.centerRight
@@ -114,13 +121,20 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                                     children: [
                                       Column(
                                         children: [
-                                          Wrap(alignment: WrapAlignment.end, children: [
-                                            Text(data.message ?? "",
-                                                style: AppTextStyle.textStyle14(
-                                                    fontColor: (data.msgType ?? 0) == 0
-                                                        ? AppColors.darkBlue
-                                                        : AppColors.darkBlue))
-                                          ]),
+                                          Wrap(
+                                              alignment: WrapAlignment.end,
+                                              children: [
+                                                Text(data.message ?? "",
+                                                    style: AppTextStyle.textStyle14(
+                                                        fontColor:
+                                                            (data.msgType ??
+                                                                        0) ==
+                                                                    0
+                                                                ? AppColors
+                                                                    .darkBlue
+                                                                : AppColors
+                                                                    .darkBlue))
+                                              ]),
                                           SizedBox(height: 20.h)
                                         ],
                                       ),
@@ -129,16 +143,24 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                                         right: 0,
                                         child: Row(
                                           children: [
-                                            Text(DateFormat.jm().format(DateTime.parse(data.createdAt ?? '')),
-                                                style:
-                                                AppTextStyle.textStyle10(fontColor: AppColors.darkBlue)),
+                                            Text(
+                                                DateFormat.jm().format(
+                                                    DateTime.parse(
+                                                        data.createdAt ?? '')),
+                                                style: AppTextStyle.textStyle10(
+                                                    fontColor:
+                                                        AppColors.darkBlue)),
                                             (data.seenStatus ?? 0) == 0
                                                 ? SizedBox(width: 8.w)
                                                 : (data.seenStatus ?? 0) == 1
-                                                ? Assets.images.icSingleTick.svg()
-                                                : (data.seenStatus ?? 0) == 2
-                                                ? Assets.images.icDoubleTick.svg()
-                                                : const SizedBox()
+                                                    ? Assets.images.icSingleTick
+                                                        .svg()
+                                                    : (data.seenStatus ?? 0) ==
+                                                            2
+                                                        ? Assets
+                                                            .images.icDoubleTick
+                                                            .svg()
+                                                        : const SizedBox()
                                           ],
                                         ),
                                       ),
@@ -236,12 +258,14 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                 Flexible(
                   child: Container(
                     // height: 50.h,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          blurRadius: 3.0,
-                          offset: const Offset(0.3, 3.0)),
-                    ]),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 3.0,
+                              offset: const Offset(0.3, 3.0)),
+                        ]),
                     child: TextFormField(
                       controller: controller.messageController,
                       keyboardType: TextInputType.text,
@@ -256,11 +280,13 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                         isDense: true,
                         helperStyle: AppTextStyle.textStyle16(),
                         fillColor: AppColors.white,
-                        hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.grey),
+                        hintStyle:
+                            AppTextStyle.textStyle16(fontColor: AppColors.grey),
                         hoverColor: AppColors.white,
                         prefixIcon: InkWell(
                           onTap: () async {
-                            controller.isEmojiShowing.value = !controller.isEmojiShowing.value;
+                            controller.isEmojiShowing.value =
+                                !controller.isEmojiShowing.value;
                             FocusManager.instance.primaryFocus?.unfocus();
                           },
                           child: Padding(
@@ -295,20 +321,30 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                         filled: true,
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0.sp),
-                            borderSide: const BorderSide(color: AppColors.white, width: 1.0)),
+                            borderSide: const BorderSide(
+                                color: AppColors.white, width: 1.0)),
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0.sp),
-                            borderSide: const BorderSide(color: AppColors.appColorLite, width: 1.0)),
+                            borderSide: const BorderSide(
+                                color: AppColors.appColorLite, width: 1.0)),
                       ),
                     ),
                   ),
                 ),
                 SizedBox(width: 15.w),
                 InkWell(
-                    onTap: () {
-                      controller.sendMsg();
-                    },
-                    child: Assets.images.icSendMsg.svg(height: 48.h))
+                  onTap: () {
+                    //
+                  },
+                  child: Assets.images.icSendMsg.svg(height: 48.h),
+                ),
+                SizedBox(width: 15.w),
+                InkWell(
+                  onTap: () {
+                    controller.sendMsg();
+                  },
+                  child: Assets.images.icSendMsg.svg(height: 48.h),
+                )
               ],
             ),
           ),
