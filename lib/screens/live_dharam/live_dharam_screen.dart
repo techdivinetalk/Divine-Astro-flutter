@@ -5,7 +5,6 @@ import "dart:convert";
 import "dart:developer";
 
 import "package:after_layout/after_layout.dart";
-import "package:auto_scroll/auto_scroll.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/model/live/notice_board_res.dart";
@@ -20,6 +19,7 @@ import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widge
 import "package:divine_astrologer/screens/live_dharam/widgets/disconnect_call_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/end_session_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/exit_wait_list_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/follow_player.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/gift_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart";
@@ -37,9 +37,6 @@ import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_astro_widget.dart";
-//
-//
-//
 //
 //
 //
@@ -67,19 +64,10 @@ class _LivePage extends State<LiveDharamScreen>
   final ZegoUIKitPrebuiltLiveStreamingController _zegoController =
       ZegoUIKitPrebuiltLiveStreamingController();
 
-  final StreamController<List<ZegoInRoomMessage>> _zegoMessageStreamController =
-      StreamController<List<ZegoInRoomMessage>>.broadcast();
-
-  final StreamController<List<ZegoInRoomMessage>>
-      _zegoMessageStreamControllerTop =
-      StreamController<List<ZegoInRoomMessage>>.broadcast();
-
   late StreamSubscription<ZegoSignalingPluginInRoomCommandMessageReceivedEvent>
       _zegocloudSubscription;
 
   late StreamSubscription<DatabaseEvent> _firebaseSubscription;
-
-  // final TextEditingController _editingController = TextEditingController();
 
   final ScrollController _scrollControllerForTop = ScrollController();
   final ScrollController _scrollControllerForBottom = ScrollController();
@@ -95,20 +83,6 @@ class _LivePage extends State<LiveDharamScreen>
     super.initState();
 
     WidgetsBinding.instance.addObserver(this);
-
-    _zegoController.message
-        .stream()
-        .listen(_zegoMessageStreamController.sink.add);
-
-    _zegoController.message.stream().listen(
-      (event) async {
-        _controller.showTopBanner = true;
-        _zegoMessageStreamControllerTop.sink.add(event);
-        await Future.delayed(const Duration(seconds: 06));
-        _controller.showTopBanner = false;
-        _zegoMessageStreamControllerTop.sink.add(event);
-      },
-    );
 
     _zegocloudSubscription = ZegoUIKit()
         .getSignalingPlugin()
@@ -148,10 +122,8 @@ class _LivePage extends State<LiveDharamScreen>
             // WidgetsBinding.instance.endOfFrame.then(
             //   (_) async {
             //     if (mounted) {
-            //       if (_controller.details.data?.isFollow == 0) {
-            //         await Future.delayed(const Duration(seconds: 12));
-            //         await exitPopup();
-            //       } else {}
+            //       await Future.delayed(const Duration(seconds: 15));
+            //       await exitPopup();
             //     } else {}
             //   },
             // );
@@ -205,11 +177,8 @@ class _LivePage extends State<LiveDharamScreen>
   @override
   void dispose() {
     // keyboardSubscription.cancel();
-    // unawaited(_zegoMessageStreamController.close());
-    // unawaited(_zegoMessageStreamControllerTop.close());
     // unawaited(_zegocloudSubscription.cancel());
     // unawaited(_firebaseSubscription.cancel());
-    // _editingController.dispose();
     // _scrollControllerForTop.dispose();
     // _scrollControllerForBottom.dispose();
     // _timer.cancel();
@@ -302,8 +271,77 @@ class _LivePage extends State<LiveDharamScreen>
                         showCloseButton: false,
                       )
                       ..memberButtonConfig = ZegoMemberButtonConfig(
+                        icon: const Icon(Icons.remove_red_eye_outlined),
                         builder: (int memberCount) {
-                          return const SizedBox();
+                          return Row(
+                            children: [
+                              SizedBox(
+                                height: 32,
+                                width: 48,
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(50.0),
+                                    ),
+                                    border: Border.all(
+                                      color: AppColors.yellow,
+                                    ),
+                                    color: AppColors.black.withOpacity(0.2),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                          Icons.remove_red_eye,
+                                          color: Colors.white,
+                                          size: 16,
+                                        ),
+                                        Text(
+                                          memberCount.toString(),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: _controller.isHost ? (16 + 2) : (8 + 2),
+                              ),
+                            ],
+                          );
+                        },
+                      )
+                      ..memberListConfig = ZegoMemberListConfig(
+                        onClicked: (ZegoUIKitUser user) {},
+                        itemBuilder: (
+                          BuildContext context,
+                          Size size,
+                          ZegoUIKitUser user,
+                          Map<String, dynamic> extraInfo,
+                        ) {
+                          return ListTile(
+                            dense: true,
+                            title: Text(
+                              user.name,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
                         },
                       )
                       ..foreground = foregroundWidget()
@@ -724,23 +762,7 @@ class _LivePage extends State<LiveDharamScreen>
   //                             const EdgeInsets.only(left: 16.0, right: 16.0),
   //                         child: InkWell(
   //                           onTap: () async {
-  //                             if (_controller.details.data?.isFollow == 0) {
-  //                               final ZegoCustomMessage model =
-  //                                   ZegoCustomMessage(
-  //                                 type: 1,
-  //                                 liveId: _controller.liveId,
-  //                                 userId: _controller.userId,
-  //                                 userName: _controller.userName,
-  //                                 avatar: _controller.avatar,
-  //                                 message:
-  //                                     "${_controller.userName} Started following",
-  //                                 timeStamp: DateTime.now().toString(),
-  //                                 fullGiftImage: item.fullGiftImage,
-  //                               );
-  //                               await sendMessageToZego(model);
-  //                             } else {}
-  //                             await _controller.followOrUnfollowAstrologer();
-  //                             await _controller.getAstrologerDetails();
+  //                             await followOrUnfollowFunction();
   //                           },
   //                           child: SizedBox(
   //                             height: 52,
@@ -886,22 +908,22 @@ class _LivePage extends State<LiveDharamScreen>
   //         fullGiftImage: item.fullGiftImage,
   //       );
   //       await sendMessageToZego(model0);
-
   //       await Future.delayed(const Duration(seconds: 1));
-
-  //       final ZegoCustomMessage model1 = ZegoCustomMessage(
-  //         type: 1,
-  //         liveId: _controller.liveId,
-  //         userId: _controller.userId,
-  //         userName: _controller.userName,
-  //         avatar: _controller.avatar,
-  //         message: quantity > 1
-  //             ? "${_controller.userName} sent a ${item.giftName} (${quantity}X)"
-  //             : "${_controller.userName} sent a ${item.giftName}",
-  //         timeStamp: DateTime.now().toString(),
-  //         fullGiftImage: item.fullGiftImage,
-  //       );
-  //       await sendMessageToZego(model1);
+  //       await showHideTopBanner();
+  //       // final ZegoCustomMessage model1 = ZegoCustomMessage(
+  //       //   type: 1,
+  //       //   liveId: _controller.liveId,
+  //       //   userId: _controller.userId,
+  //       //   userName: _controller.userName,
+  //       //   avatar: _controller.avatar,
+  //       //   message: quantity > 1
+  //       //       ? "${_controller.userName} sent a ${item.giftName} (${quantity}X)"
+  //       //       : "${_controller.userName} sent a ${item.giftName}",
+  //       //   timeStamp: DateTime.now().toString(),
+  //       //   fullGiftImage: item.fullGiftImage,
+  //       // );
+  //       // await sendMessageToZego(model1);
+  //       // await Future.delayed(const Duration(seconds: 1));
   //     } else {}
   //   }
   //   return Future<void>.value();
@@ -909,7 +931,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget inRoomMessage() {
     return StreamBuilder<List<ZegoInRoomMessage>>(
-      stream: _zegoMessageStreamController.stream.asBroadcastStream(),
+      stream: _zegoController.message.stream(),
       builder: (
         BuildContext context,
         AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,
@@ -1029,49 +1051,52 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Widget inRoomMessageTop() {
-    return StreamBuilder<List<ZegoInRoomMessage>>(
-      stream: _zegoMessageStreamControllerTop.stream.asBroadcastStream(),
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,
-      ) {
-        List<ZegoInRoomMessage> messages =
-            snapshot.data ?? <ZegoInRoomMessage>[];
-        messages = messages.reversed.toList();
-        return AnimatedOpacity(
-          opacity: !_controller.showTopBanner ? 0.0 : 1.0,
-          duration: const Duration(seconds: 1),
-          child: messages.isEmpty
-              ? const SizedBox()
-              : Transform.scale(
-                  scale: 1.50,
-                  child: SizedBox(
-                    height: 32,
-                    width: Get.width / 3,
-                    child: ListView.builder(
-                      reverse: true,
-                      shrinkWrap: true,
-                      itemCount: messages.isNotEmpty && messages.length >= 1
-                          ? 1
-                          : messages.length,
-                      controller: _scrollControllerForTop,
-                      itemBuilder: (BuildContext context, int index) {
-                        final ZegoInRoomMessage message = messages[index];
-                        final ZegoCustomMessage msg =
-                            receiveMessageToZego(message.message);
-                        return msg.type == 1
-                            ? const SizedBox()
-                            : LeaderBoardWidget(
-                                avatar: msg.avatar ?? "",
-                                userName: msg.userName ?? "",
-                                fullGiftImage: msg.fullGiftImage ?? "",
-                              );
+    return SizedBox(
+      height: 64,
+      width: (Get.width / 3),
+      child: StreamBuilder<List<ZegoInRoomMessage>>(
+        stream: _zegoController.message.stream(),
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,
+        ) {
+          List<ZegoInRoomMessage> messages =
+              snapshot.data ?? <ZegoInRoomMessage>[];
+          messages = messages.reversed.toList();
+          return ListView.builder(
+            reverse: true,
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            itemCount: messages.isNotEmpty && messages.length >= 1
+                ? 1
+                : messages.length,
+            controller: _scrollControllerForBottom,
+            itemBuilder: (BuildContext context, int index) {
+              final ZegoInRoomMessage message = messages[index];
+              final ZegoCustomMessage msg =
+                  receiveMessageToZego(message.message);
+              return msg.type == 1
+                  ? const SizedBox()
+                  : Obx(
+                      () {
+                        return AnimatedOpacity(
+                          opacity: !_controller.showTopBanner ? 0.0 : 1.0,
+                          duration: const Duration(seconds: 1),
+                          child: Transform.scale(
+                            scale: 1.50,
+                            child: LeaderBoardWidget(
+                              avatar: msg.avatar ?? "",
+                              userName: "${msg.message}",
+                              fullGiftImage: msg.fullGiftImage ?? "",
+                            ),
+                          ),
+                        );
                       },
-                    ),
-                  ),
-                ),
-        );
-      },
+                    );
+            },
+          );
+        },
+      ),
     );
   }
 
@@ -1443,9 +1468,7 @@ class _LivePage extends State<LiveDharamScreen>
   //         astrologerUserName: _controller.details.data?.name ?? "",
   //         onFollow: () async {
   //           Get.back();
-  //           if (_controller.details.data?.isFollow == 0) {
-  //             await _controller.followOrUnfollowAstrologer();
-  //           } else {}
+  //           await followOrUnfollowFunction();
   //         },
   //       );
   //     },
@@ -1758,6 +1781,16 @@ class _LivePage extends State<LiveDharamScreen>
                 GiftPlayerData(GiftPlayerSource.url, item["animation"]),
               );
             } else {}
+            await showHideTopBanner();
+          } else if (type == "Started following") {
+            FollowPlayer().play(
+              context,
+              FollowPlayerData(
+                FollowPlayerSource.url,
+                "https://lottie.host/0b77dd9f-a81e-4268-8fb5-cc7f5b958e00/rtEwgdQPKc.json",
+                userName,
+              ),
+            );
           } else if (type == "Ask For Gift") {
             // await commonRequest(type: type, item: item, giftCount: giftCount);
           } else if (type == "Ask For Video Call") {
@@ -1772,6 +1805,13 @@ class _LivePage extends State<LiveDharamScreen>
         } else {}
       } else {}
     }
+    return Future<void>.value();
+  }
+
+  Future<void> showHideTopBanner() async {
+    _controller.showTopBanner = true;
+    await Future<void>.delayed(const Duration(seconds: 6));
+    _controller.showTopBanner = false;
     return Future<void>.value();
   }
 
@@ -2554,6 +2594,54 @@ class _LivePage extends State<LiveDharamScreen>
             );
           },
         ),
+        //
+        StreamBuilder<Object>(
+          stream: null,
+          builder: (context, snapshot) {
+            return AnimatedOpacity(
+              opacity:
+                  _controller.isHost && !_controller.currentCaller.isEngaded
+                      ? 0.0
+                      : 1.0,
+              duration: const Duration(seconds: 1),
+              child: _controller.isHost && !_controller.currentCaller.isEngaded
+                  ? const SizedBox()
+                  : Column(
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            await _controller.addOrUpdateCard();
+                          },
+                          child: SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(50.0),
+                                ),
+                                border: Border.all(
+                                  color: AppColors.yellow,
+                                ),
+                                color: AppColors.black.withOpacity(0.2),
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.all(0.0),
+                                child: Icon(
+                                  Icons.category,
+                                  color: AppColors.yellow,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                      ],
+                    ),
+            );
+          },
+        ),
+        //
         StreamBuilder<DatabaseEvent>(
           stream: FirebaseDatabase.instance
               .ref()
@@ -2912,6 +3000,61 @@ class _LivePage extends State<LiveDharamScreen>
     return Future<void>.value();
   }
 
+  // Future<void> followOrUnfollowFunction() async {
+  //   final ZegoCustomMessage model = ZegoCustomMessage(
+  //     type: 1,
+  //     liveId: _controller.liveId,
+  //     userId: _controller.userId,
+  //     userName: _controller.userName,
+  //     avatar: _controller.avatar,
+  //     message: "${_controller.userName} Started following",
+  //     timeStamp: DateTime.now().toString(),
+  //     fullGiftImage: "",
+  //   );
+  //   await sendMessageToZego(model);
+
+  //   await _controller.followOrUnfollowAstrologer();
+  //   await _controller.getAstrologerDetails();
+
+  //   var item = GiftData(
+  //     id: 0,
+  //     giftName: "",
+  //     giftImage: "",
+  //     giftPrice: 0,
+  //     giftStatus: 0,
+  //     createdAt: DateTime.now(),
+  //     updatedAt: DateTime.now(),
+  //     fullGiftImage: "",
+  //     animation: "",
+  //   );
+  //   var data = {
+  //     "room_id": _controller.liveId,
+  //     "user_id": _controller.userId,
+  //     "user_name": _controller.userName,
+  //     "item": item.toJson(),
+  //     "type": "Started following",
+  //   };
+  //   await _controller.sendGiftAPI(
+  //     data: data,
+  //     count: 1,
+  //     svga: "",
+  //     successCallback: log,
+  //     failureCallback: log,
+  //   );
+
+  //   if (mounted) {
+  //     FollowPlayer().play(
+  //       context,
+  //       FollowPlayerData(
+  //         FollowPlayerSource.url,
+  //         "https://lottie.host/0b77dd9f-a81e-4268-8fb5-cc7f5b958e00/rtEwgdQPKc.json",
+  //         _controller.userName,
+  //       ),
+  //     );
+  //   } else {}
+  //   return Future<void>.value();
+  // }
+
   // d
 
   ZegoUIKitPrebuiltLiveStreamingEvents get events {
@@ -3090,9 +3233,7 @@ class _LivePage extends State<LiveDharamScreen>
           },
           onFollowAndLeave: () async {
             Get.back();
-            // if (_controller.details.data?.isFollow == 0) {
-            //   await _controller.followOrUnfollowAstrologer();
-            // } else {}
+            // await followOrUnfollowFunction();
             exitLive();
           },
           onLeave: () {

@@ -254,14 +254,20 @@ class LiveDharamController extends GetxController {
             final bool cond3 = currentCaller.id.isNotEmpty;
             final bool cond4 = !currentCaller.isEngaded;
             final bool cond5 = !currentCaller.isRequest;
-
             if (cond1 && cond2 && cond3 && cond4 && cond5) {
               engaging(currentCaller);
             } else {}
 
             // await getAstrologerDetails();
+
+            // final isNotFollowing = details.data?.isFollow == 0;
+            // final hasNotSeenPopup = (details.data?.seenPopup ?? false) == false;
+            // if (isNotFollowing && hasNotSeenPopup) {
+            //   showFollowPopup();
+            //   details.data?.seenPopup = true;
+            // } else {}
+
             // await isCustomerBlocked();
-            // showFollowPopup();
           } else {}
         } else {}
       } else {
@@ -1115,6 +1121,27 @@ class LiveDharamController extends GetxController {
     noticeBoardRes = res.statusCode == HttpStatus.ok
         ? NoticeBoardRes.fromJson(res.toJson())
         : NoticeBoardRes.fromJson(NoticeBoardRes().toJson());
+    return Future<void>.value();
+  }
+
+  Future<void> addOrUpdateCard() async {
+    await FirebaseDatabase.instance
+        .ref()
+        .child("live/$liveId/card/${currentCaller.id}")
+        .update(
+      <String, dynamic>{
+        "card": {1: true, 2: false, 3: true},
+        "isCardVisible": false,
+      },
+    );
+    return Future<void>.value();
+  }
+
+  Future<void> removeCard() async {
+    await FirebaseDatabase.instance
+        .ref()
+        .child("live/$liveId/card/${currentCaller.id}")
+        .remove();
     return Future<void>.value();
   }
 }

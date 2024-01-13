@@ -169,14 +169,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
-  auto_scroll:
-    dependency: "direct main"
-    description:
-      name: auto_scroll
-      sha256: "91a65ac64dc211328d679485a4584a3d4e5863e6e3f925b021f8de072a6705ab"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
   auto_size_text:
     dependency: transitive
     description:
@@ -947,14 +939,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.17"
-  flutter_resize_observer:
-    dependency: transitive
-    description:
-      name: flutter_resize_observer
-      sha256: "7fea87040d2798832329b75825d3ccba994b7264ac369b7e39ceea2efea031d5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.0"
   flutter_screenutil:
     dependency: "direct main"
     description:
@@ -1954,6 +1938,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  truecaller_sdk:
+    dependency: "direct main"
+    description:
+      name: truecaller_sdk
+      sha256: de67f7c54b4990625f4aa3f52ae699f75fce4c75d077896c2901ae1b1b014b07
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   typed_data:
     dependency: transitive
     description:
@@ -2270,10 +2262,10 @@ packages:
     dependency: transitive
     description:
       name: zego_uikit
-      sha256: "1ad067d5538af3c9ec674044533d2c082a6f0a85b91e0f22f4cf6d00651f670c"
+      sha256: "0efc3183b115b9815a90174460928ec8d5e830d33a931aaa2e7139108c3b05b2"
       url: "https://pub.dev"
     source: hosted
-    version: "2.15.10"
+    version: "2.17.3"
   zego_uikit_prebuilt_call:
     dependency: "direct main"
     description:
@@ -2286,10 +2278,10 @@ packages:
     dependency: "direct main"
     description:
       name: zego_uikit_prebuilt_live_streaming
-      sha256: "4ebfbcc72430ddad7718b0a2a7337f15834f41405f8fc42aadedd63352a5c2a4"
+      sha256: "1e9b5ebd612ae33955e15e4d6bfadc9d2123961c2e778b738f927e94d1d78e6d"
       url: "https://pub.dev"
     source: hosted
-    version: "2.26.0"
+    version: "2.27.0"
   zego_uikit_signaling_plugin:
     dependency: "direct main"
     description:

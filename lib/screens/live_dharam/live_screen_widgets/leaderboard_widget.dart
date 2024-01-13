@@ -45,7 +45,9 @@ class LeaderBoardWidget extends StatelessWidget {
                   child: Align(
                     child: Text(
                       userName,
-                      style: const TextStyle(),
+                      style:   TextStyle(
+                       fontSize: fullGiftImage.isNotEmpty ? 8 : null, 
+                      ),
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
                     ),

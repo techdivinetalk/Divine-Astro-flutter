@@ -110,7 +110,7 @@ class _ExitWidgetState extends State<ExitWidget> {
           const SizedBox(height: 16),
           CommonButton(
             buttonText: "Yes, Follow",
-            buttonCallback: widget.onClose,
+            buttonCallback: widget.onFollow,
           ),
           const SizedBox(height: 16),
         ],
