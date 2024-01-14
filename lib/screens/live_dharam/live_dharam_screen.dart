@@ -43,7 +43,6 @@ import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_ast
 //
 //
 //
-//
 
 const int appID = 696414715;
 const String appSign =
@@ -92,8 +91,9 @@ class _LivePage extends State<LiveDharamScreen>
     _firebaseSubscription =
         FirebaseDatabase.instance.ref().child("live").onValue.listen(
       (event) {
+        final DataSnapshot dataSnapshot = event.snapshot;
         _controller.eventListner(
-          event: event,
+          snapshot: dataSnapshot,
           zeroAstro: () async {
             if (mounted) {
               await _zegoController.leave(context);
@@ -427,6 +427,8 @@ class _LivePage extends State<LiveDharamScreen>
         children: <Widget>[
           appBarWidget(),
           const SizedBox(height: 8),
+          // Text(_controller.liveId),
+          // const SizedBox(height: 8),
           Expanded(
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -657,8 +659,8 @@ class _LivePage extends State<LiveDharamScreen>
   //                     );
   //                   },
   //                   child: SizedBox(
-  //                     height: 50,
-  //                     width: 100,
+  //                     height: 52,
+  //                     width: 52 * 2,
   //                     child: Container(
   //                       padding: const EdgeInsets.symmetric(vertical: 4.0),
   //                       decoration: BoxDecoration(
@@ -1240,6 +1242,16 @@ class _LivePage extends State<LiveDharamScreen>
     if (state == ZegoLiveStreamingState.idle) {
       ZegoGiftPlayer().clear();
     } else {}
+
+    if (state == ZegoLiveStreamingState.ended) {
+      ZegoGiftPlayer().clear();
+
+      await _controller.updateInfo();
+      List<dynamic> list = await _controller.onLiveStreamingEnded();
+      _zegoController.swiping.next();
+      await _controller.updateInfo();
+    } else {}
+
     return Future<void>.value();
   }
 
@@ -3226,10 +3238,15 @@ class _LivePage extends State<LiveDharamScreen>
         return ShowAllAvailAstroWidget(
           onClose: Get.back,
           data: _controller.data,
-          onSelect: (liveId) {
+          onSelect: (liveId) async {
             Get.back();
-            if (liveId == _controller.liveId) {
-            } else {}
+
+            await _controller.updateInfo();
+            List<dynamic> list = await _controller.onLiveStreamingEnded();
+            _controller.liveId = liveId;
+            _controller.currentIndex = list.indexWhere((e) => e == liveId);
+            _zegoController.swiping.jumpTo(liveId);
+            await _controller.updateInfo();
           },
           onFollowAndLeave: () async {
             Get.back();
