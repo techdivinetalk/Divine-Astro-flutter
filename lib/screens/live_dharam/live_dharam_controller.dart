@@ -225,12 +225,14 @@ class LiveDharamController extends GetxController {
   set timerCurrentIndex(int value) => _timerCurrentIndex(value);
 
   Future<void> eventListner({
-    required DatabaseEvent event,
+    // required DatabaseEvent event,
+    required DataSnapshot snapshot,
     required Function() zeroAstro,
     required Function(WaitListModel currentCaller) engaging,
     required Function() showFollowPopup,
   }) async {
-    final DataSnapshot dataSnapshot = event.snapshot;
+    // final DataSnapshot dataSnapshot = event.snapshot;
+    final DataSnapshot dataSnapshot = snapshot;
     if (dataSnapshot != null) {
       if (dataSnapshot.exists) {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
@@ -240,9 +242,9 @@ class LiveDharamController extends GetxController {
           data.addAll(map);
           if (data.isEmpty) {
           } else if (data.isNotEmpty) {
-            liveId = data.keys.toList()[currentIndex];
-            isHostAvailable = checkIfAstrologerAvailable(map);
-            amIBlocked = checkIfAstrologerBlockedMe(map);
+            liveId = isHost ? liveId : data.keys.toList()[currentIndex];
+            // isHostAvailable = checkIfAstrologerAvailable(map);
+            // amIBlocked = checkIfAstrologerBlockedMe(map);
             var liveIdNode = data[liveId];
             var waitListNode = liveIdNode["waitList"];
             currentCaller = isEngadedNew(waitListNode, isForMe: false);
@@ -277,6 +279,40 @@ class LiveDharamController extends GetxController {
     } else {
       data.clear();
     }
+    return Future<void>.value();
+  }
+
+  Future<List<dynamic>> onLiveStreamingEnded() async {
+    final List<dynamic> liveList = [];
+    final DataSnapshot dataSnapshot =
+        await FirebaseDatabase.instance.ref().child("live").get();
+    if (dataSnapshot != null) {
+      if (dataSnapshot.exists) {
+        if (dataSnapshot.value is Map<dynamic, dynamic>) {
+          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+              as Map<dynamic, dynamic>;
+          data.addAll(map);
+          if (data.isEmpty) {
+          } else if (data.isNotEmpty) {
+            liveList.addAll(data.keys.toList());
+          } else {}
+        } else {}
+      } else {}
+    } else {}
+    return Future<List<dynamic>>.value(liveList);
+  }
+
+  Future<void> updateInfo() async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref();
+    final DataSnapshot dataSnapshot = await ref.child("live").get();
+
+    await eventListner(
+      snapshot: dataSnapshot,
+      zeroAstro: () {},
+      engaging: (waitListModel) {},
+      showFollowPopup: () {},
+    );
     return Future<void>.value();
   }
 
@@ -327,13 +363,19 @@ class LiveDharamController extends GetxController {
     );
   }
 
-  bool checkIfAstrologerAvailable(Map<dynamic, dynamic> map) {
-    final Map<dynamic, dynamic> currentHostId = map[liveId];
-    final bool isAvailable = currentHostId["isAvailable"] ?? false;
-    return isAvailable;
-  }
+  // bool checkIfAstrologerAvailable(Map<dynamic, dynamic> map) {
+  //   bool isAvailable = false;
+  //   if (map.isEmpty) {
+  //     return isAvailable;
+  //   } else {
+  //     final Map<dynamic, dynamic> currentHostId = map[liveId];
+  //     isAvailable = currentHostId["isAvailable"] ?? false;
+  //     return isAvailable;
+  //   }
+  // }
 
   // String requirePreviousLiveID({required Function() acknowledgement}) {
+  //   print("requirePreviousLiveID");
   //   final bool has = hasMyIdInWaitList();
   //   if (has) {
   //     acknowledgement();
@@ -344,12 +386,14 @@ class LiveDharamController extends GetxController {
   //       currentIndex = data.keys.toList().length - 1;
   //     } else {}
   //     liveId = data.keys.toList()[currentIndex];
-  //     unawaited(getAstrologerDetails());
+  //     // unawaited(getAstrologerDetails());
+  //     unawaited(updateInfo());
   //     return liveId;
   //   }
   // }
 
   // String requireNextLiveID({required Function() acknowledgement}) {
+  //   print("requireNextLiveID");
   //   final bool has = hasMyIdInWaitList();
   //   if (has) {
   //     acknowledgement();
@@ -360,7 +404,8 @@ class LiveDharamController extends GetxController {
   //       currentIndex = 0;
   //     } else {}
   //     liveId = data.keys.toList()[currentIndex];
-  //     unawaited(getAstrologerDetails());
+  //     // unawaited(getAstrologerDetails());
+  //     unawaited(updateInfo());
   //     return liveId;
   //   }
   // }
@@ -967,12 +1012,12 @@ class LiveDharamController extends GetxController {
     return Future<void>.value();
   }
 
-  bool checkIfAstrologerBlockedMe(map) {
-    final Map<dynamic, dynamic> currentHostId = map[liveId];
-    final List<dynamic> list =
-        (currentHostId["blockList"] ?? <dynamic>[]) ?? <dynamic>[];
-    return list.contains(userId);
-  }
+  // bool checkIfAstrologerBlockedMe(map) {
+  //   final Map<dynamic, dynamic> currentHostId = map[liveId];
+  //   final List<dynamic> list =
+  //       (currentHostId["blockList"] ?? <dynamic>[]) ?? <dynamic>[];
+  //   return list.contains(userId);
+  // }
 
   // Future<void> makeAPICallForStartCall({required bool hasAccepted}) async {
   //   Map<String, dynamic> param = <String, dynamic>{};
