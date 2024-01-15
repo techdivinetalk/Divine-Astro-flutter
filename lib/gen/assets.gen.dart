@@ -818,6 +818,13 @@ class $AssetsLottieGen {
 class $AssetsSvgGen {
   const $AssetsSvgGen();
 
+  /// File path: assets/svg/.flutter-plugins
+  String get flutterPlugins => 'assets/svg/.flutter-plugins';
+
+  /// File path: assets/svg/.flutter-plugins-dependencies
+  String get flutterPluginsDependencies =>
+      'assets/svg/.flutter-plugins-dependencies';
+
   /// File path: assets/svg/black_dot.svg
   SvgGenImage get blackDot => const SvgGenImage('assets/svg/black_dot.svg');
 
@@ -924,6 +931,8 @@ class $AssetsSvgGen {
 
   /// List of all assets
   List<dynamic> get values => [
+        flutterPlugins,
+        flutterPluginsDependencies,
         blackDot,
         block,
         blockUser,
