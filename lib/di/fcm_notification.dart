@@ -132,7 +132,7 @@ void onDidReceiveNotificationResponse(NotificationResponse notificationResponse)
     debugPrint('notification payload: -- ${payloadMap}');
    //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
    // // if(payloadMap["type"] == "2") {
-   //    AppFirebaseService().openChatUserId = payloadMap["userid"];
+       AppFirebaseService().openChatUserId = payloadMap["userid"];
    // }
     // Accessing individual values
     // String requestId = payloadMap['receiver_id'].toString();

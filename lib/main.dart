@@ -53,7 +53,12 @@ Future<void> main() async {
   await GetStorage.init();
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print('Message data: ${message.data}');
-    if (message.data["type"] == "3") {
+    print('Message data-: ${message.data["type"] == "1"}');
+    print('Message data-: ${MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI}');
+    if (message.data["type"] == "1" && MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
+      showNotification(message.data["title"], message.data["message"],
+          message.data['type'],message.data);
+    }else if (message.data["type"] == "3") {
       print('Message data:- ${MiddleWare.instance.currentPage}');
       if (MiddleWare.instance.currentPage == RouteName.chatMessageUI) {
         sendBroadcast(
