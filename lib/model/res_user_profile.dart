@@ -80,8 +80,8 @@ class GetAstrolopgerDetails {
   String? ifscCode;
   String? accountHolderName;
   String? accountType;
-  double? totalPayout;
-  double? totalPayment;
+  dynamic totalPayout;
+  dynamic totalPayment;
   int? razorpayContactId;
   String? employmentType;
   String? bankName;
