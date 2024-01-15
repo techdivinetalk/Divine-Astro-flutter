@@ -327,8 +327,33 @@ class ChatMessageWithSocketController extends GetxController
   @override
   void onReady() {
     super.onReady();
-    Future.delayed(const Duration(milliseconds: 600)).then((value) {
+    Future.delayed(const Duration(milliseconds: 600)).then((value) async {
       scrollToBottomFunc();
+
+      await ZegoService().startZegoService(
+        successCallback: () {
+          if (Get.arguments["orderData"]["orderId"] != null) {}
+          FirebaseDatabase.instance
+              .ref()
+              .child("order/${Get.arguments["orderData"]["orderId"]}")
+              .update(
+            <String, dynamic>{
+              "astrologer_permission": true,
+            },
+          );
+        },
+        failureCallback: () {
+          if (Get.arguments["orderData"]["orderId"] != null) {}
+          FirebaseDatabase.instance
+              .ref()
+              .child("order/${Get.arguments["orderData"]["orderId"]}")
+              .update(
+            <String, dynamic>{
+              "astrologer_permission": false,
+            },
+          );
+        },
+      );
     });
   }
 
