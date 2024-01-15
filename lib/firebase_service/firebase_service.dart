@@ -29,6 +29,7 @@ class AppFirebaseService {
   var watcher = RealTimeWatcher();
   var acceptBottomWatcher = RealTimeWatcher();
   final appSocket = AppSocket();
+  var openChatUserId = "";
 
   final DatabaseReference _database = FirebaseDatabase.instance.ref();
 
@@ -180,6 +181,10 @@ class AppFirebaseService {
                     BroadcastMessage(name: "ReJoinChat", data: {"orderId": value, "orderData": orderData}));
                 Get.toNamed(RouteName.chatMessageWithSocketUI, arguments: {"orderData": orderData});
               }
+            }else {
+              preferenceService.remove(SharedPreferenceService.talkTime);
+              debugPrint("remove method called");
+              sendBroadcast(BroadcastMessage(name: "EndChat"));
             }
           } else {
             preferenceService.remove(SharedPreferenceService.talkTime);

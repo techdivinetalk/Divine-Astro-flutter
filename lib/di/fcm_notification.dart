@@ -125,26 +125,27 @@ void onDidReceiveLocalNotification(int id, String? title, String? body, String? 
 }
 
 void onDidReceiveNotificationResponse(NotificationResponse notificationResponse) async {
-  debugPrint('notification payload: $notificationResponse');
   final String? payload = notificationResponse.payload;
   if (notificationResponse.payload != null) {
     ///// redirect to bottom sheet of accept the request
-
-    debugPrint('notification payload: $payload');
-    final Map<String, dynamic> payloadMap = jsonDecode(notificationResponse.payload!);
-
+      final Map<String, dynamic> payloadMap = jsonDecode(notificationResponse.payload!);
+    debugPrint('notification payload: -- ${payloadMap}');
+   //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
+   // // if(payloadMap["type"] == "2") {
+   //    AppFirebaseService().openChatUserId = payloadMap["userid"];
+   // }
     // Accessing individual values
-    String requestId = payloadMap['receiver_id'].toString();
-    String orderId = payloadMap['order_id'].toString();
-
-    if (payloadMap['msgType'] == 'request') {
-      await AppFirebaseService().writeData('order/$orderId', {'status': '1'});
-    }
-
-    final notificationPath = 'astrologer/${preferenceService.getUserDetail()!.id}/realTime';
-    final orderData = {'order_id': orderId};
-    await AppFirebaseService().writeData(notificationPath, orderData);
-    chatInit(requestId);
+    // String requestId = payloadMap['receiver_id'].toString();
+    // String orderId = payloadMap['order_id'].toString();
+    //
+    // if (payloadMap['msgType'] == 'request') {
+    //   await AppFirebaseService().writeData('order/$orderId', {'status': '1'});
+    // }
+    //
+    // final notificationPath = 'astrologer/${preferenceService.getUserDetail()!.id}/realTime';
+    // final orderData = {'order_id': orderId};
+    // await AppFirebaseService().writeData(notificationPath, orderData);
+    // chatInit(requestId);
 
     // acceptChatRequestBottomSheet(Get.context!, onPressed: () async {
     //

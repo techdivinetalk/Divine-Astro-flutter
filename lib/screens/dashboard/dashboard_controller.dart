@@ -43,7 +43,14 @@ class DashboardController extends GetxController
     super.onInit();
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {
-      debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
+      print("broadCastResponse");
+      print(event.name == "ReJoinChat" );
+      print(AppFirebaseService().openChatUserId != "");
+      print(event.data!["orderData"]);
+      if(event.name == "ReJoinChat" && AppFirebaseService().openChatUserId != "" && event.data != null && event.data!["orderData"]["status"] != null){
+        var orderData = event.data!["orderData"];
+        Get.toNamed(RouteName.chatMessageWithSocketUI, arguments: orderData);
+      }
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(const Duration(seconds: 5), () {

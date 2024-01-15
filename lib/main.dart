@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
@@ -57,7 +58,7 @@ Future<void> main() async {
             BroadcastMessage(name: "chatAssist", data: {'msg': message.data}));
       } else {
         showNotification(message.data["title"], message.data["message"],
-            message.data['type']);
+            message.data['type'],message.data);
       }
     }
     if (message.notification != null) {
@@ -114,8 +115,9 @@ Future<void> initServices() async {
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseDatabase.instance.ref().child("pushR").set(DateTime.now());
   showNotification(
-      message.data["title"], message.data["message"], message.data['type']);
+      message.data["title"], message.data["message"], message.data['type'],message.data);
   if (message.data['type'] == "1") {
     HashMap<String, dynamic> updateData = HashMap();
     updateData[message.data["chatId"]] = 1;
@@ -127,7 +129,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 }
 
-Future<void> showNotification(String title, String message, String type) async {
+Future<void> showNotification(String title, String message, String type, Map<String, dynamic> data) async {
   AndroidNotificationDetails androidNotificationDetails =
       const AndroidNotificationDetails(
     "DivineCustomer",
@@ -148,7 +150,7 @@ Future<void> showNotification(String title, String message, String type) async {
       NotificationDetails(android: androidNotificationDetails);
   await flutterLocalNotificationsPlugin.show(
       Random().nextInt(90000), title, message, notificationDetails,
-      payload: "jsonEncodePayload");
+      payload:json.encode(data));
 }
 
 void initMessaging() async {
