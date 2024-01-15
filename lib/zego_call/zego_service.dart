@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart';
+import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
@@ -32,7 +33,6 @@ class ZegoService {
         icon: "call",
       ),
     );
-    print("ZegoService: zegoLogin(): $userID - $userName");
     Future<void>.value();
   }
 
@@ -41,19 +41,44 @@ class ZegoService {
     required String targetUserID,
     required String targetUserName,
   }) {
-    print("ZegoService: buttonUI(): $targetUserID - $targetUserName");
     return ZegoSendCallInvitationButton(
       isVideoCall: isVideoCall,
       resourceID: "zegouikit_call",
-      invitees: [
-        ZegoUIKitUser(id: targetUserID, name: targetUserName),
-      ],
+      invitees: [ZegoUIKitUser(id: targetUserID, name: targetUserName)],
     );
   }
 
   Future<void> zegoLogout() async {
-    print("ZegoService: zegoLogout()");
     await ZegoUIKitPrebuiltCallInvitationService().uninit();
     Future<void>.value();
+  }
+
+  Future<void> goInsideChat({
+    required Function() successCallback,
+    required Function() failureCallback,
+  }) async {
+    bool hasAllPerm = false;
+    await AppPermissionService.instance.zegoOnPressedJoinButton(
+      () {
+        hasAllPerm = true;
+      },
+    );
+    hasAllPerm ? successCallback() : failureCallback();
+    return Future<void>.value();
+  }
+
+  Future<void> startZegoService({
+    required Function() successCallback,
+    required Function() failureCallback,
+  }) async {
+    await AppPermissionService.instance.showAlertDialog(
+      "Chat",
+      ["Allow display over other apps", "Camera", "Microphone"],
+    );
+    await goInsideChat(
+      successCallback: successCallback,
+      failureCallback: failureCallback,
+    );
+    return Future<void>.value();
   }
 }

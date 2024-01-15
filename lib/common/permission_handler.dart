@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_settings/app_settings.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 
 class PermissionHelper {
   askPermissions() async {
@@ -142,7 +144,7 @@ class PermissionHelper {
       return 'videos';
     } else if (permission == Permission.contacts) {
       return 'contacts';
-    } else if(permission == Permission.notification) {
+    } else if (permission == Permission.notification) {
       return 'notification';
     }
   }
@@ -206,6 +208,7 @@ class AskPermissionDialog extends StatelessWidget {
                     'Allow $permissionName access',
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w700,
+                    maxLines: 3,
                   ),
                   SizedBox(height: 15.h),
                   Padding(
@@ -214,6 +217,7 @@ class AskPermissionDialog extends StatelessWidget {
                       'We require $permissionName permission to access $permissionName features in the app!',
                       overflow: TextOverflow.visible,
                       textAlign: TextAlign.center,
+                      maxLines: 3,
                     ),
                   ),
                   SizedBox(height: 20.h),
@@ -256,8 +260,10 @@ class AskPermissionDialog extends StatelessWidget {
 
 class PermissionDialog extends StatelessWidget {
   final String permissionName;
+  final bool? isForOverlayPermission;
 
-  const PermissionDialog({super.key, required this.permissionName});
+  const PermissionDialog(
+      {super.key, required this.permissionName, this.isForOverlayPermission});
 
   @override
   Widget build(BuildContext context) {
@@ -326,10 +332,14 @@ class PermissionDialog extends StatelessWidget {
                       children: [
                         Expanded(
                           child: CustomButton(
-                            onTap: () {
+                            onTap: () async {
                               // Get.back();
                               Navigator.pop(context);
-                              openAppSettings();
+
+                              (isForOverlayPermission ?? false) == true
+                                  ? await FlutterOverlayWindow
+                                      .requestPermission()
+                                  : await openAppSettings();
                             },
                             radius: 100.r,
                             padding: EdgeInsets.symmetric(vertical: 16.h),

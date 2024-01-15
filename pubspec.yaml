@@ -81,6 +81,7 @@ dependencies:
   flutter_keyboard_visibility: ^6.0.0
   app_settings: ^5.1.1
   truecaller_sdk: ^1.0.0
+  flutter_overlay_window: ^0.4.3
 
 dependency_overrides:
   intl: ^0.18.1

@@ -6,7 +6,9 @@ import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
 import 'package:divine_astrologer/firebase_options.dart';
+import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
+import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
 import 'package:divine_astrologer/zego_call/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -67,6 +69,7 @@ Future<void> main() async {
   });
   await initServices();
   Get.put(UserRepository());
+  Get.put(DashboardController(PreDefineRepository()));
   var data = await userRepository.constantDetailsData();
   preferenceService.setConstantDetails(data);
 

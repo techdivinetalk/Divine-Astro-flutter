@@ -32,6 +32,7 @@ import "../../common/common_functions.dart";
 import "../../model/astrologer_gift_response.dart";
 import "../../model/message_template_response.dart";
 import "../live_dharam/gifts_singleton.dart";
+import "package:divine_astrologer/zego_call/zego_service.dart";
 
 class ChatMessageWithSocketController extends GetxController
     with WidgetsBindingObserver {
@@ -141,6 +142,8 @@ class ChatMessageWithSocketController extends GetxController
   @override
   void onInit() {
     super.onInit();
+    ZegoService().goInsideChat(successCallback: () {}, failureCallback: () {});
+
     arguments = Get.arguments;
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) {
