@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:math' as math;
 import 'dart:math';
 
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
@@ -26,20 +25,17 @@ import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 import 'common/MiddleWare.dart';
-import 'common/app_exception.dart';
 import 'common/app_theme.dart';
 import 'common/colors.dart';
 import 'common/common_functions.dart';
 import 'common/custom_progress_dialog.dart';
 import 'common/routes.dart';
 import 'common/strings.dart';
-import 'di/api_provider.dart';
 import 'di/fcm_notification.dart';
 import 'di/firebase_network_service.dart';
 import 'di/network_service.dart';
 import 'di/progress_service.dart';
 import 'di/shared_preference_service.dart';
-import 'firebase_service/firebase_service.dart';
 import 'gen/fonts.gen.dart';
 import 'localization/translations.dart';
 import 'utils/utils.dart';

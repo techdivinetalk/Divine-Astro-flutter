@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -14,6 +15,8 @@ import 'package:divine_astrologer/pages/home/home_ui.dart';
 import "package:divine_astrologer/screens/side_menu/important_numbers/important_numbers_controller.dart";
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
@@ -28,6 +31,7 @@ import "../../common/important_number_bottomsheet.dart";
 import '../../di/shared_preference_service.dart';
 import '../../model/constant_details_model_class.dart';
 import '../../model/filter_performance_response.dart';
+import '../../model/firebase_model.dart';
 import '../../model/home_page_model_class.dart';
 import "../../model/important_numbers.dart";
 import '../../model/res_login.dart';
@@ -38,6 +42,7 @@ import "../../repository/important_number_repository.dart";
 import '../../repository/notice_repository.dart';
 import '../../repository/performance_repository.dart';
 import '../../repository/user_repository.dart';
+import '../../screens/dashboard/widgets/GiftCountPopup.dart';
 
 class HomeController extends GetxController {
   RxBool chatSwitch = true.obs;
@@ -79,27 +84,29 @@ class HomeController extends GetxController {
   }
 
   BroadcastReceiver broadcastReceiver =
-      BroadcastReceiver(names: <String>["callKundli"]);
+      BroadcastReceiver(names: <String>["callKundli","giftCount"]);
 
   List<MobileNumber> importantNumbers = <MobileNumber>[];
   List<Contact> allContacts = <Contact>[].obs;
   bool? isAllNumbersExist;
-
   @override
   void onInit() async {
     super.onInit();
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {
       debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
+      if(event.name == "giftCount") {
+        showGiftBottomSheet(event.data?["giftCount"]);
+      }
     });
     userData = preferenceService.getUserDetail();
     appbarTitle.value = userData?.name ?? "Astrologer Name";
     await getFilteredPerformance();
-    await getContactList();
-    fetchImportantNumbers();
-    getConstantDetailsData();
-    getDashboardDetail();
-    getFeedbackData();
+    //await getContactList();
+    // fetchImportantNumbers();
+     getConstantDetailsData();
+     getDashboardDetail();
+     getFeedbackData();
   }
 
   fetchImportantNumbers() async {
@@ -328,7 +335,7 @@ class HomeController extends GetxController {
 
       showOnceInDay();
       update();
-
+   //   getFeedbackData();
       //log("DashboardData==>${jsonEncode(homeData)}");
     } catch (error) {
       if (error is AppException) {
@@ -396,6 +403,7 @@ class HomeController extends GetxController {
       preferenceService.setConstantDetails(data);
       // debugPrint("ConstantDetails Data==> $data");
       profileDataSync.value = true;
+  //    getDashboardDetail();
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
@@ -667,6 +675,14 @@ class HomeController extends GetxController {
       //   textAlign: TextAlign.center,
       //   style: AppTextStyle.textStyle16(),
       // ),
+    );
+  }
+  showGiftBottomSheet(int giftCount) async {
+    await GiftCountPopup(
+      Get.context!,
+      title: "Congratulations!",
+      btnTitle: "Check Order History",
+      totaltGift: giftCount,
     );
   }
 

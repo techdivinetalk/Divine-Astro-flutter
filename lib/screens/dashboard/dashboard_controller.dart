@@ -67,8 +67,6 @@ class DashboardController extends GetxController
     //  connectSocket();
     loadPreDefineData();
     firebaseMessagingConfig(Get.context!);
-    notificationPermission();
-
     //
     print("asasasasasasa");
     await ZegoService().zegoLogin();
@@ -76,9 +74,6 @@ class DashboardController extends GetxController
     //
   }
 
-  notificationPermission() async {
-    await PermissionHelper().askNotificationPermission();
-  }
 
   @override
   void onReady() {

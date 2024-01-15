@@ -105,7 +105,7 @@ class SharedPreferenceService extends GetxService {
 
   LoginImages? getLoginImages() {
     String? images = prefs!.getString(loginImages);
-    if (images != null) return loginImagesFromJson(images);
+    return loginImagesFromJson(images!);
     return null;
   }
 
@@ -115,7 +115,7 @@ class SharedPreferenceService extends GetxService {
 
   UpdateBankResponse? getUpdatedBankDetails() {
     String? data = prefs!.getString(updatedBankDetails);
-    if (data != null) return updateBankResponseFromJson(data);
+    return updateBankResponseFromJson(data!);
     return null;
   }
 
@@ -129,7 +129,7 @@ class SharedPreferenceService extends GetxService {
     debugPrint('get tamplte func');
     String? data = prefs!.getString(messageTemplate);
     debugPrint('get tamplte func 2: $data');
-    if (data != null) return messageTemplateResponseFromJson(data);
+    return messageTemplateResponseFromJson(data!);
     debugPrint('get tamplte func 3: $data');
     return null;
   }

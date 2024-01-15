@@ -67,8 +67,7 @@ class AppFirebaseService {
             debugPrint("tableName ${tableName}");
           }
           var res = await hiveServices.getData(key: tableName);
-          debugPrint("res dfsd $res");
-          if (res != null) {
+           if (res != null) {
             var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
             chatMessages.value = msg.chatMessages ?? [];
             databaseMessage.value.chatMessages = chatMessages;
@@ -91,12 +90,18 @@ class AppFirebaseService {
             //   if (notificationData != null) {
             //     showNotificationWithActions(
             //         title: notificationData["value"] ?? "",
-            //         message: notificationData["message"] ?? "",
+            //         message: notificationData["message"] ??€ "",
             //         payload: notificationData,
             //         hiveServices: hiveServices);
             //   }
              });
             FirebaseDatabase.instance.ref("$path/notification").remove();
+          }
+          if (realTimeData['giftCount'] != null) {
+            print("giftCount ${realTimeData['giftCount']}");
+            sendBroadcast(
+                BroadcastMessage(name: "giftCount", data: {'giftCount': realTimeData["giftCount"]}));
+            FirebaseDatabase.instance.ref("$path/giftCount").remove();
           }
           if (realTimeData['callKundli'] != null) {
             Map<String, dynamic>? callKundli =

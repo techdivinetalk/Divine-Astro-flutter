@@ -24,7 +24,6 @@ import "package:social_media_recorder/audio_encoder_type.dart";
 import "package:social_media_recorder/screen/social_media_recorder.dart";
 import "package:voice_message_package/voice_message_package.dart";
 
-import "../../model/message_template_response.dart";
 import "../live_dharam/widgets/custom_image_widget.dart";
 import "chat_message_with_socket_controller.dart";
 

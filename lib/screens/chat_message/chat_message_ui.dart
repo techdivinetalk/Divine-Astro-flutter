@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:divine_astrologer/common/cached_network_image.dart';
@@ -16,10 +13,7 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../common/app_textstyle.dart';
-import '../../common/common_functions.dart';
-import '../../common/routes.dart';
 import '../../gen/assets.gen.dart';
-import '../../model/chat_offline_model.dart';
 import '../../utils/load_image.dart';
 import '../live_page/constant.dart';
 import 'chat_message_controller.dart';

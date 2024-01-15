@@ -14,7 +14,6 @@ import 'Widget/all_order_history_ui.dart';
 import 'Widget/call_order_history_ui.dart';
 import 'Widget/chat_order_history_ui.dart';
 import 'Widget/suggest_remedies_history.dart';
-import 'all_tab/all_option_ui.dart';
 import 'order_history_controller.dart';
 
 class OrderHistoryUI extends GetView<OrderHistoryController> {

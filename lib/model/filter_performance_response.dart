@@ -36,9 +36,9 @@ class PerformanceFilterResponse {
 
 class Data {
   Response? response;
-  dynamic? score;
-  dynamic? totalScore;
-  dynamic? scorePrecentage;
+  dynamic score;
+  dynamic totalScore;
+  dynamic scorePrecentage;
   List<RankSystem>? rankSystem;
   String? rank;
   String? image;
@@ -207,8 +207,8 @@ class RankDetail {
 }
 
 class Performance {
-  dynamic? marksObtains;
-  dynamic? totalMarks;
+  dynamic marksObtains;
+  dynamic totalMarks;
   List<Marks>? marks;
 
   Performance({this.marksObtains, this.totalMarks, this.marks});

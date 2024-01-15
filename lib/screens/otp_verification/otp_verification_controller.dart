@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/screens/otp_verification/timer_controller.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -106,14 +108,14 @@ class OtpVerificationController extends GetxController {
   }
 
   Future<void> astroLogin() async {
+    print("UserStatus login api");
     Map<String, dynamic> params = {
       "mobile_no": number.value,
       "device_token": deviceToken ?? await FirebaseMessaging.instance.getToken()
     };
     try {
       ResLogin data = await userRepository.userLogin(params);
-      updateLoginDatainFirebase(data);
-      navigateToDashboard(data);
+      await updateLoginDataInFirebase(data);
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
@@ -142,21 +144,34 @@ class OtpVerificationController extends GetxController {
   //   databaseRef.set(firebaseUserData.toJson());
   // }
 
-  Future<void> updateLoginDatainFirebase(ResLogin data) async {
+   updateLoginDataInFirebase(ResLogin data) async {
     String uniqueId = await getDeviceId() ?? '';
-    FirebaseUserData firebaseUserData = FirebaseUserData(
-        data.data!.name!,
-        deviceToken ?? FirebaseMessaging.instance.getToken().toString(),
-        data.data!.image ?? "",
-        RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0));
+    String firebaseNodeUrl = 'astrologer/${data.data?.id}';
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
-
-    final DatabaseReference databaseRef = firebaseDatabase.ref().child("astrologer/${data.data?.id}");
-    databaseRef.set(firebaseUserData.toJson());
+    firebaseDatabase.ref().child(firebaseNodeUrl).onValue.listen((DatabaseEvent event) {
+      if(event.snapshot.value == null){
+      print("userStatus  New user");
+      FirebaseUserData firebaseUserData = FirebaseUserData(
+          data.data!.name!,
+          deviceToken ?? FirebaseMessaging.instance.getToken().toString(),
+          data.data!.image ?? "",
+          RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0));
+      firebaseDatabase.ref().child(firebaseNodeUrl).set(firebaseUserData.toJson());
+      navigateToDashboard(data);
+    }else{
+      print("userStatus existing user");
+      HashMap<String,dynamic> realTime = HashMap();
+      realTime["uniqueId"] = uniqueId; // Add to HashMap
+      HashMap<String,dynamic> deviceTokenNode = HashMap();
+      deviceTokenNode["deviceToken"] = deviceToken; // Add to HashMap
+      firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
+      firebaseDatabase.ref().child("$firebaseNodeUrl/realTime").update(realTime);
+      navigateToDashboard(data);
+    }
     final appFirebaseService = AppFirebaseService();
-    debugPrint('preferenceService.getUserDetail()!.id ${preferenceService.getUserDetail()!.id}');
-    appFirebaseService.readData('astrologer/${preferenceService.getUserDetail()!.id}/realTime');
-  }
+    appFirebaseService.readData('$firebaseNodeUrl/realTime');
+    });
+   }
 
   navigateToDashboard(ResLogin data) async {
     preferenceService.erase();
@@ -164,7 +179,9 @@ class OtpVerificationController extends GetxController {
     preferenceService.setUserDetail(data.data!);
     preferenceService.setToken(data.token!);
     preferenceService.setDeviceToken(deviceToken ?? "");
-    Get.offAllNamed(RouteName.dashboard, arguments: [data.data!.phoneNo, data.data!.sessionId]);
+
+    Get.offAllNamed(RouteName.dashboard);
+    //Get.offAllNamed(RouteName.dashboard, arguments: [data.data!.phoneNo, data.data!.sessionId]);
   }
 
   removeAttempts() {

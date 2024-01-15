@@ -9,7 +9,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../common/app_exception.dart';
 import '../../model/filter_performance_response.dart';
-import '../../model/performance_model_class.dart';
 import '../../repository/performance_repository.dart';
 
 class PerformanceController extends GetxController {

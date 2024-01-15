@@ -14,8 +14,6 @@ import 'package:get/get.dart';
 import '../../../common/app_exception.dart';
 import '../../../common/routes.dart';
 import '../../../di/shared_preference_service.dart';
-import '../../../model/firebase_model.dart';
-import '../../../model/res_login.dart';
 import '../../../model/send_otp.dart';
 import '../../../repository/user_repository.dart';
 
