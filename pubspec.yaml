@@ -82,6 +82,7 @@ dependencies:
   app_settings: ^5.1.1
   truecaller_sdk: ^1.0.0
   flutter_overlay_window: ^0.4.3
+  velocity_x: ^4.1.2
 
 dependency_overrides:
   intl: ^0.18.1
