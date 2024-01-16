@@ -29,6 +29,7 @@ class AppFirebaseService {
   var watcher = RealTimeWatcher();
   var acceptBottomWatcher = RealTimeWatcher();
   final appSocket = AppSocket();
+  var openChatUserId = "";
 
   final DatabaseReference _database = FirebaseDatabase.instance.ref();
 
@@ -67,8 +68,7 @@ class AppFirebaseService {
             debugPrint("tableName ${tableName}");
           }
           var res = await hiveServices.getData(key: tableName);
-          debugPrint("res dfsd $res");
-          if (res != null) {
+           if (res != null) {
             var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
             chatMessages.value = msg.chatMessages ?? [];
             databaseMessage.value.chatMessages = chatMessages;
@@ -91,12 +91,17 @@ class AppFirebaseService {
             //   if (notificationData != null) {
             //     showNotificationWithActions(
             //         title: notificationData["value"] ?? "",
-            //         message: notificationData["message"] ?? "",
+            //         message: notificationData["message"] ??€ "",
             //         payload: notificationData,
             //         hiveServices: hiveServices);
             //   }
              });
             FirebaseDatabase.instance.ref("$path/notification").remove();
+          }
+          if (realTimeData['giftCount'] != null) {
+            sendBroadcast(
+                BroadcastMessage(name: "giftCount", data: {'giftCount': realTimeData["giftCount"]}));
+            FirebaseDatabase.instance.ref("$path/giftCount").remove();
           }
           if (realTimeData['callKundli'] != null) {
             Map<String, dynamic>? callKundli =
@@ -179,6 +184,10 @@ class AppFirebaseService {
                     BroadcastMessage(name: "ReJoinChat", data: {"orderId": value, "orderData": orderData}));
                 Get.toNamed(RouteName.chatMessageWithSocketUI, arguments: {"orderData": orderData});
               }
+            }else {
+              preferenceService.remove(SharedPreferenceService.talkTime);
+              debugPrint("remove method called");
+              sendBroadcast(BroadcastMessage(name: "EndChat"));
             }
           } else {
             preferenceService.remove(SharedPreferenceService.talkTime);

@@ -9,7 +9,6 @@ import '../../../common/appbar.dart';
 import '../../../common/colors.dart';
 
 import '../../../gen/assets.gen.dart';
-import '../../common/app_textstyle.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'suggest_remedies_controller.dart';
 

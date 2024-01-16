@@ -85,7 +85,7 @@ class Data {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['current_page'] = currentPage;
     if (chatDataList != null) {
-      data['data'] = chatDataList!.map((v) => v?.toJson()).toList();
+      data['data'] = chatDataList!.map((v) => v.toJson()).toList();
     }
     data['first_page_url'] = firstPageUrl;
     data['from'] = from;

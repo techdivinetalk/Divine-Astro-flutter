@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
@@ -11,7 +10,6 @@ import '../../common/app_textstyle.dart';
 import '../../common/colors.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../gen/assets.gen.dart';
-import '../live_page/live_page.dart';
 
 class LiveTipsController extends GetxController {
   var pref = Get.find<SharedPreferenceService>();

@@ -45,6 +45,7 @@ class ProfilePageController extends GetxController {
   final picker = ImagePicker();
   XFile? pickedFile;
   File? uploadFile;
+  RxBool isLoading = false.obs;
 
   List<List<String>> reportReason = <List<String>>[
     ["itSpam", ''],
@@ -277,13 +278,17 @@ class ProfilePageController extends GetxController {
     }
   }
 
-  getReplyOnReview({required String textMsg, required int reviewId}) async {
+  Future<void> getReplyOnReview({required String textMsg, required int reviewId}) async {
     try {
+      // Set loading state to true
+      isLoading.value = true;
+
       Map<String, dynamic> params = {
         "review_id": reviewId,
         "comment": textMsg,
         "role_id": userData?.roleId ?? 7
       };
+
       var response = await userRepository.reviewReply(params);
       reviewReply = response;
 
@@ -295,8 +300,13 @@ class ProfilePageController extends GetxController {
       } else {
         divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
+    } finally {
+      // Set loading state to false regardless of success or failure
+      isLoading.value = false;
+
+      // Update the value
+      reviewDataSync.value = true;
     }
-    reviewDataSync.value = true;
   }
 
 //Update profile image

@@ -7,12 +7,10 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../common/colors.dart';
-import '../../../common/common_bottomsheet.dart';
 import '../../../common/custom_radio_button.dart';
 import '../../../common/custom_widgets.dart';
 import '../../../common/text_field_custom.dart';
 import '../../../gen/assets.gen.dart';
-import '../../../gen/fonts.gen.dart';
 import '../../../utils/utils.dart';
 import 'kundli_controller.dart';
 

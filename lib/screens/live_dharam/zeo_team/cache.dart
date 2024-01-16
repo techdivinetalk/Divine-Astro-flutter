@@ -30,7 +30,7 @@ class GiftCache {
           await DefaultCacheManager().putFile(url, response.bodyBytes);
           // print("concurrentDownload downloadFile cache: cached");
         } else {}
-      } on Exception catch (e, s) {
+      } on Exception {
         // print("concurrentDownload downloadFile Exception: $e $s");
       }
     } else {

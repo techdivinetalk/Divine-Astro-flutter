@@ -1,12 +1,14 @@
 import 'dart:collection';
-import 'dart:math' as math;
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
 import 'package:divine_astrologer/firebase_options.dart';
+import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
+import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
 import 'package:divine_astrologer/zego_call/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,20 +28,17 @@ import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 import 'common/MiddleWare.dart';
-import 'common/app_exception.dart';
 import 'common/app_theme.dart';
 import 'common/colors.dart';
 import 'common/common_functions.dart';
 import 'common/custom_progress_dialog.dart';
 import 'common/routes.dart';
 import 'common/strings.dart';
-import 'di/api_provider.dart';
 import 'di/fcm_notification.dart';
 import 'di/firebase_network_service.dart';
 import 'di/network_service.dart';
 import 'di/progress_service.dart';
 import 'di/shared_preference_service.dart';
-import 'firebase_service/firebase_service.dart';
 import 'gen/fonts.gen.dart';
 import 'localization/translations.dart';
 import 'utils/utils.dart';
@@ -54,14 +53,19 @@ Future<void> main() async {
   await GetStorage.init();
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print('Message data: ${message.data}');
-    if (message.data["type"] == "3") {
+    print('Message data-: ${message.data["type"] == "1"}');
+    print('Message data-: ${MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI}');
+    if (message.data["type"] == "1" && MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
+      showNotification(message.data["title"], message.data["message"],
+          message.data['type'],message.data);
+    }else if (message.data["type"] == "3") {
       print('Message data:- ${MiddleWare.instance.currentPage}');
       if (MiddleWare.instance.currentPage == RouteName.chatMessageUI) {
         sendBroadcast(
             BroadcastMessage(name: "chatAssist", data: {'msg': message.data}));
       } else {
         showNotification(message.data["title"], message.data["message"],
-            message.data['type']);
+            message.data['type'],message.data);
       }
     }
     if (message.notification != null) {
@@ -70,6 +74,7 @@ Future<void> main() async {
   });
   await initServices();
   Get.put(UserRepository());
+  Get.put(DashboardController(PreDefineRepository()));
   var data = await userRepository.constantDetailsData();
   preferenceService.setConstantDetails(data);
 
@@ -118,8 +123,9 @@ Future<void> initServices() async {
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseDatabase.instance.ref().child("pushR").set(DateTime.now());
   showNotification(
-      message.data["title"], message.data["message"], message.data['type']);
+      message.data["title"], message.data["message"], message.data['type'],message.data);
   if (message.data['type'] == "1") {
     HashMap<String, dynamic> updateData = HashMap();
     updateData[message.data["chatId"]] = 1;
@@ -131,7 +137,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 }
 
-Future<void> showNotification(String title, String message, String type) async {
+Future<void> showNotification(String title, String message, String type, Map<String, dynamic> data) async {
   AndroidNotificationDetails androidNotificationDetails =
       const AndroidNotificationDetails(
     "DivineCustomer",
@@ -152,7 +158,7 @@ Future<void> showNotification(String title, String message, String type) async {
       NotificationDetails(android: androidNotificationDetails);
   await flutterLocalNotificationsPlugin.show(
       Random().nextInt(90000), title, message, notificationDetails,
-      payload: "jsonEncodePayload");
+      payload:json.encode(data));
 }
 
 void initMessaging() async {

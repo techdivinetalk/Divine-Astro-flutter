@@ -169,19 +169,19 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
-  auto_scroll:
-    dependency: "direct main"
-    description:
-      name: auto_scroll
-      sha256: "91a65ac64dc211328d679485a4584a3d4e5863e6e3f925b021f8de072a6705ab"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
   auto_size_text:
     dependency: transitive
     description:
       name: auto_size_text
       sha256: "3f5261cd3fb5f2a9ab4e2fc3fba84fd9fcaac8821f20a1d4e71f557521b22599"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
+  auto_size_text_pk:
+    dependency: transitive
+    description:
+      name: auto_size_text_pk
+      sha256: ced55de5336fa7f438c1f5a9aa234e25d7a120c1d40d376a7cdc2af28cdb6995
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
@@ -939,6 +939,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.11"
+  flutter_overlay_window:
+    dependency: "direct main"
+    description:
+      name: flutter_overlay_window
+      sha256: "5bab855f641b4fca176c9002cd351b53cce518102721e4aec60eda3c74054360"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.3"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -947,14 +955,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.17"
-  flutter_resize_observer:
-    dependency: transitive
-    description:
-      name: flutter_resize_observer
-      sha256: "7fea87040d2798832329b75825d3ccba994b7264ac369b7e39ceea2efea031d5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.0"
   flutter_screenutil:
     dependency: "direct main"
     description:
@@ -1261,6 +1261,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.9"
+  leak_tracker:
+    dependency: transitive
+    description:
+      name: leak_tracker
+      sha256: f8cdf1383f5b4672a2693d875f1f239af6bd7e4a8925a17ef7219226db932624
+      url: "https://pub.dev"
+    source: hosted
+    version: "10.0.1"
+  leak_tracker_flutter_testing:
+    dependency: transitive
+    description:
+      name: leak_tracker_flutter_testing
+      sha256: a2055640bf5bc903475e4bbdb34e04f8bf698542bee41edec47d337a5939e1ae
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.3"
+  leak_tracker_testing:
+    dependency: transitive
+    description:
+      name: leak_tracker_testing
+      sha256: e62042d479c4c139dd774125ed4dfbde646b8f07ac228e3c1b57a3d91d6d9df4
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   lints:
     dependency: transitive
     description:
@@ -1297,26 +1321,26 @@ packages:
     dependency: transitive
     description:
       name: matcher
-      sha256: "1803e76e6653768d64ed8ff2e1e67bea3ad4b923eb5c56a295c3e634bad5960e"
+      sha256: d2323aa2060500f906aa31a895b4030b6da3ebdcc5619d14ce1aada65cd161cb
       url: "https://pub.dev"
     source: hosted
-    version: "0.12.16"
+    version: "0.12.16+1"
   material_color_utilities:
     dependency: transitive
     description:
       name: material_color_utilities
-      sha256: "9528f2f296073ff54cb9fee677df673ace1218163c3bc7628093e7eed5203d41"
+      sha256: "0e0a020085b65b6083975e499759762399b4475f766c21668c4ecca34ea74e5a"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0"
+    version: "0.8.0"
   meta:
     dependency: transitive
     description:
       name: meta
-      sha256: a6e590c838b18133bb482a2745ad77c5bb7715fb0451209e1a7567d416678b8e
+      sha256: d584fa6707a52763a52446f02cc621b077888fb63b93bbcb1143a7be5a0c0c04
       url: "https://pub.dev"
     source: hosted
-    version: "1.10.0"
+    version: "1.11.0"
   mime:
     dependency: transitive
     description:
@@ -1393,10 +1417,10 @@ packages:
     dependency: transitive
     description:
       name: path
-      sha256: "8829d8a55c13fc0e37127c29fedf290c102f4e40ae94ada574091fe0ff96c917"
+      sha256: "087ce49c3f0dc39180befefc60fdb4acd8f8620e5682fe2476afd0b3688bb4af"
       url: "https://pub.dev"
     source: hosted
-    version: "1.8.3"
+    version: "1.9.0"
   path_drawing:
     dependency: transitive
     description:
@@ -1954,6 +1978,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  truecaller_sdk:
+    dependency: "direct main"
+    description:
+      name: truecaller_sdk
+      sha256: de67f7c54b4990625f4aa3f52ae699f75fce4c75d077896c2901ae1b1b014b07
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   typed_data:
     dependency: transitive
     description:
@@ -2082,6 +2114,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  velocity_x:
+    dependency: "direct main"
+    description:
+      name: velocity_x
+      sha256: "38585b8ed87c17ccb42a5c13d55bdafdc65e7cd3f41dceb61c38714c758fa228"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.2"
   video_player:
     dependency: transitive
     description:
@@ -2138,6 +2178,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  vm_service:
+    dependency: transitive
+    description:
+      name: vm_service
+      sha256: b3d56ff4341b8f182b96aceb2fa20e3dcb336b9f867bc0eafc0de10f1048e957
+      url: "https://pub.dev"
+    source: hosted
+    version: "13.0.0"
   voice_message_package:
     dependency: "direct main"
     description:
@@ -2146,6 +2194,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  vxstate:
+    dependency: transitive
+    description:
+      name: vxstate
+      sha256: ed5a880018191c5cfed8528bd77f2a942b04847168ca12636a306c323d311086
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
   wakelock_plus:
     dependency: transitive
     description:
@@ -2170,14 +2226,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
-  web:
-    dependency: transitive
-    description:
-      name: web
-      sha256: afe077240a270dcfd2aafe77602b4113645af95d0ad31128cc02bce5ac5d5152
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.0"
   web_socket_channel:
     dependency: transitive
     description:
@@ -2270,10 +2318,10 @@ packages:
     dependency: transitive
     description:
       name: zego_uikit
-      sha256: "1ad067d5538af3c9ec674044533d2c082a6f0a85b91e0f22f4cf6d00651f670c"
+      sha256: "0efc3183b115b9815a90174460928ec8d5e830d33a931aaa2e7139108c3b05b2"
       url: "https://pub.dev"
     source: hosted
-    version: "2.15.10"
+    version: "2.17.3"
   zego_uikit_prebuilt_call:
     dependency: "direct main"
     description:
@@ -2286,10 +2334,10 @@ packages:
     dependency: "direct main"
     description:
       name: zego_uikit_prebuilt_live_streaming
-      sha256: "4ebfbcc72430ddad7718b0a2a7337f15834f41405f8fc42aadedd63352a5c2a4"
+      sha256: "1e9b5ebd612ae33955e15e4d6bfadc9d2123961c2e778b738f927e94d1d78e6d"
       url: "https://pub.dev"
     source: hosted
-    version: "2.26.0"
+    version: "2.27.0"
   zego_uikit_signaling_plugin:
     dependency: "direct main"
     description:
@@ -2315,5 +2363,5 @@ packages:
     source: hosted
     version: "2.6.0+1"
 sdks:
-  dart: ">=3.2.0-194.0.dev <4.0.0"
-  flutter: ">=3.13.0"
+  dart: ">=3.2.0 <4.0.0"
+  flutter: ">=3.18.0-18.0.pre.54"
