@@ -357,6 +357,9 @@ class $AssetsImagesGen {
   SvgGenImage get icSendMsg =>
       const SvgGenImage('assets/images/ic_sendMsg.svg');
 
+SvgGenImage get icchatgift =>
+      const SvgGenImage('assets/svg/chat_gift.svg');
+
   /// File path: assets/images/ic_setting.svg
   SvgGenImage get icSetting =>
       const SvgGenImage('assets/images/ic_setting.svg');
