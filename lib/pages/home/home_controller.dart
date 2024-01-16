@@ -1,22 +1,19 @@
-import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import "package:contacts_service/contacts_service.dart";
 import 'package:divine_astrologer/app_socket/app_socket.dart';
-import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/di/fcm_notification.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
 import 'package:divine_astrologer/model/feedback_response.dart';
 import 'package:divine_astrologer/model/update_offer_type_response.dart';
 import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/pages/home/home_ui.dart';
-import "package:divine_astrologer/screens/side_menu/important_numbers/important_numbers_controller.dart";
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
@@ -25,13 +22,14 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import "package:permission_handler/permission_handler.dart";
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../common/PopupManager.dart';
 import '../../common/app_exception.dart';
 import '../../common/feedback_bottomsheet.dart';
 import "../../common/important_number_bottomsheet.dart";
 import '../../di/shared_preference_service.dart';
 import '../../model/constant_details_model_class.dart';
 import '../../model/filter_performance_response.dart';
-import '../../model/firebase_model.dart';
 import '../../model/home_page_model_class.dart';
 import "../../model/important_numbers.dart";
 import '../../model/res_login.dart';
@@ -42,7 +40,6 @@ import "../../repository/important_number_repository.dart";
 import '../../repository/notice_repository.dart';
 import '../../repository/performance_repository.dart';
 import '../../repository/user_repository.dart';
-import '../../screens/dashboard/widgets/GiftCountPopup.dart';
 
 class HomeController extends GetxController {
   RxBool chatSwitch = true.obs;
@@ -96,7 +93,7 @@ class HomeController extends GetxController {
     broadcastReceiver.messages.listen((event) {
       debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
       if(event.name == "giftCount") {
-        showGiftBottomSheet(event.data?["giftCount"]);
+        showGiftBottomSheet(event.data?["giftCount"],contextDetail);
       }
     });
     userData = preferenceService.getUserDetail();
@@ -677,13 +674,14 @@ class HomeController extends GetxController {
       // ),
     );
   }
-  showGiftBottomSheet(int giftCount) async {
-    await GiftCountPopup(
-      Get.context!,
-      title: "Congratulations!",
-      btnTitle: "Check Order History",
-      totaltGift: giftCount,
-    );
+  showGiftBottomSheet(int giftCount, BuildContext? contextDetail) async {
+    PopupManager.showGiftCountPopup(contextDetail!, title: "Congratulations", btnTitle: "Check Order History", totalGift: giftCount);
+    // await GiftCountPopup(
+    //   Get.context!,
+    //   title: "Congratulations!",
+    //   btnTitle: "Check Order History",
+    //   totaltGift: giftCount,
+    // );
   }
 
   getDateDifference(int timestamp) {
