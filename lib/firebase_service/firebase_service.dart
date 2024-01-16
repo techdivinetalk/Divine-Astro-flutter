@@ -99,7 +99,6 @@ class AppFirebaseService {
             FirebaseDatabase.instance.ref("$path/notification").remove();
           }
           if (realTimeData['giftCount'] != null) {
-            print("giftCount ${realTimeData['giftCount']}");
             sendBroadcast(
                 BroadcastMessage(name: "giftCount", data: {'giftCount': realTimeData["giftCount"]}));
             FirebaseDatabase.instance.ref("$path/giftCount").remove();

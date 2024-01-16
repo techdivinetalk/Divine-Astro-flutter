@@ -1,16 +1,24 @@
-
-
+import 'package:divine_astrologer/common/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
-import '../../../common/app_textstyle.dart';
-import '../../../common/colors.dart';
-import '../../../common/routes.dart';
+import 'app_textstyle.dart';
+import 'colors.dart';
 
-Future GiftCountPopup(BuildContext context,
-      {String? title, String? btnTitle,int? totaltGift}) {
-    return showModalBottomSheet(
+
+class PopupManager {
+  static bool isPopupOpen = false;
+
+  static Future<void> showGiftCountPopup(BuildContext context, {String? title, String? btnTitle, int? totalGift}) async {
+    if (isPopupOpen) {
+      return;
+    }
+
+    isPopupOpen = true;
+
+    await showModalBottomSheet(
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
@@ -53,7 +61,7 @@ Future GiftCountPopup(BuildContext context,
                   ),
                 SizedBox(height: 10.h),
                 Text(
-              "${totaltGift} Gift${totaltGift! > 1 ? 's' : ''} Received",
+                  "$totalGift Gift${totalGift! > 1 ? 's' : ''} Received",
                   style: AppTextStyle.textStyle14( fontColor: AppColors.black),
                 ),
                 SizedBox(height: 16.h),
@@ -91,5 +99,8 @@ Future GiftCountPopup(BuildContext context,
           ),
         ],
       ),
-    );
+    ).then((_) => isPopupOpen = false);
+
+    isPopupOpen = false;
   }
+}

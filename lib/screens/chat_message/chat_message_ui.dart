@@ -328,13 +328,6 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                 SizedBox(width: 15.w),
                 InkWell(
                   onTap: () {
-                    //
-                  },
-                  child: Assets.images.icSendMsg.svg(height: 48.h),
-                ),
-                SizedBox(width: 15.w),
-                InkWell(
-                  onTap: () {
                     controller.sendMsg();
                   },
                   child: Assets.images.icSendMsg.svg(height: 48.h),
