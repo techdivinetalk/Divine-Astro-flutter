@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../../../common/colors.dart';
 import 'login_controller.dart';
@@ -208,12 +209,7 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
               .map((item) => Column(
                     children: [
                       item.value,
-                      Center(
-                        child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 20.w),
-                          child: Text(controller.imageDec[item.key]),
-                        ),
-                      ),
+                      Text(controller.imageDec[item.key]).centered()
                     ],
                   ))
               .toList(),

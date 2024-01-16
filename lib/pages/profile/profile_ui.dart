@@ -269,7 +269,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                       color: AppColors.white.withOpacity(0.1)),
                                   child: const Icon(
                                     Icons.close,
-                                    color: Colors.white,
+                                    color: Colors.transparent,
                                   ),
                                 ),
                               ),
@@ -461,6 +461,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                         } else {
                           Get.toNamed(item.nav.toString());
                         }
+                      } else if(index == 5){
+                        Get.toNamed(RouteName.faq);
                       }
                     },
                     child: Container(
@@ -523,7 +525,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                         Padding(
                           padding: EdgeInsets.only(left: 20.h),
                           child: Text(
-                            "${controller.ratingsData?.data?.totalReviews}",
+                            "${controller.ratingsData?.data?.totalRating}",
                             style: TextStyle(
                                 fontSize: 17.sp, fontWeight: FontWeight.w400),
                           ),
@@ -778,51 +780,72 @@ class ProfileUI extends GetView<ProfilePageController> {
                       style: AppTextStyle.textStyle12(),
                     ),
                   SizedBox(height: 15.h),
-                  if (reviewData?.replyData == null &&
-                      reviewData?.comment != null)
-                    replyTextView(
-                        textController: replyController,
-                        reviewId: reviewData?.id ?? 0),
-                  if (reviewData?.replyData != null)
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  if (reviewData?.replyData == null && reviewData?.comment != null)
+                    Stack(
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(40),
-                          child: CachedNetworkPhoto(
-                            url:
-                                "${controller.preference.getBaseImageURL()}/${reviewData?.replyData?.astrologerImage}",
-                            height: 40,
-                            width: 40,
-                            fit: BoxFit.cover,
+                        Visibility(
+                          visible: !controller.isLoading.value,
+                          child: replyTextView(
+                            textController: replyController,
+                            reviewId: reviewData?.id ?? 0,
+                            onSendPressed: () {
+                              controller.getReplyOnReview(reviewId: reviewData?.id ?? 0, textMsg: replyController.text.trim());
+                              controller.reviewDataSync.value = true;
+                            },
                           ),
                         ),
-                        SizedBox(width: 10.h),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                controller.userData?.name != null
-                                    ? (controller.userData?.name ?? "")
-                                    : "",
-                                style: AppTextStyle.textStyle14(
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              Text(
-                                "${reviewData?.replyData?.replyDate}",
-                                style: AppTextStyle.textStyle12(),
-                              ),
-                              SizedBox(height: 8.h),
-                              Text(
-                                "${reviewData?.replyData?.reply}",
-                                style: AppTextStyle.textStyle12(),
-                              ),
-                            ],
-                          ),
+                        Visibility(
+                          visible: controller.isLoading.value,
+                          child: const CircularProgressIndicator(color: AppColors.yellow),
                         ),
                       ],
-                    )
+                    ),
+
+                  if (reviewData?.replyData != null)
+                    Obx(() {
+                      return Visibility(
+                        visible: controller.reviewDataSync.value,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(40),
+                              child: CachedNetworkPhoto(
+                                url: "${controller.preference.getBaseImageURL()}/${reviewData?.replyData?.astrologerImage}",
+                                height: 40,
+                                width: 40,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            SizedBox(width: 10.h),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    controller.userData?.name != null
+                                        ? (controller.userData?.name ?? "")
+                                        : "",
+                                    style: AppTextStyle.textStyle14(
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  Text(
+                                    "${reviewData?.replyData?.replyDate}",
+                                    style: AppTextStyle.textStyle12(),
+                                  ),
+                                  SizedBox(height: 8.h),
+                                  Text(
+                                    "${reviewData?.replyData?.reply}",
+                                    style: AppTextStyle.textStyle12(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
                 ],
               ),
             ),
@@ -832,26 +855,41 @@ class ProfileUI extends GetView<ProfilePageController> {
     );
   }
 
-  Widget replyTextView(
-      {required TextEditingController textController, required int reviewId}) {
+  Widget replyTextView({
+    required TextEditingController textController,
+    required int reviewId,
+    required VoidCallback onSendPressed, // Callback for handling send button press
+  }) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(30),
         border: Border.all(color: AppColors.darkBlue.withOpacity(0.10)),
       ),
-      padding: const EdgeInsets.only(left: 12, right: 12),
-      child: TextFormField(
-        controller: textController,
-        onFieldSubmitted: (text) {
-          controller.getReplyOnReview(reviewId: reviewId, textMsg: text.trim());
-        },
-        onTapOutside: (event) => FocusScope.of(Get.context!).unfocus(),
-        decoration: InputDecoration(
-            hintText: "${'replyHere'.tr}...",
-            isDense: true,
-            hintStyle: TextStyle(color: AppColors.greyColor, fontSize: 12.sp),
-            border: InputBorder.none),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              controller: textController,
+             /* onFieldSubmitted: (text) {
+                // You can still keep the existing logic here if needed
+                controller.getReplyOnReview(reviewId: reviewId, textMsg: text.trim());
+              },*/
+              onTapOutside: (event) => FocusScope.of(Get.context!).unfocus(),
+              decoration: InputDecoration(
+                hintText: "${'replyHere'.tr}...",
+                isDense: true,
+                hintStyle: TextStyle(color: AppColors.greyColor, fontSize: 12.sp),
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.send, size: 20,),
+            onPressed: onSendPressed,
+          ),
+        ],
       ),
     );
   }
