@@ -78,6 +78,7 @@ class ApiProvider {
   final String astroOnline = "astroOnline";
   final String updateOfferFlag = "updateOfferFlag";
   final String customOfferManage = "customOfferManage";
+  final String faq = "faq";
 
   //Astro Internal API
   final String horoChartImageInt = "getChartImage/";

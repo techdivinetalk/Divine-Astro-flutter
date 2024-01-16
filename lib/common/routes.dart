@@ -7,6 +7,8 @@ import 'package:divine_astrologer/screens/chat_message/chat_message_binding.dart
 import 'package:divine_astrologer/screens/chat_message/chat_message_ui.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_binding.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_ui.dart';
+import 'package:divine_astrologer/screens/faq/faqs_binding.dart';
+import 'package:divine_astrologer/screens/faq/faqs_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_binding.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/earning/earning_bindings.dart';
@@ -126,9 +128,10 @@ class RouteName {
   static const String orderFeedback = "/orderFeedback";
   static const String chatMessageSupportUI = "/chatMessageUI";
   static const String liveDharamScreen = "/liveDharamScreen";
+  static const String faq = "/faqPage";
 }
 
-final Set<String> validRoutes = {RouteName.chatMessageUI};
+final Set<String> validRoutes = {RouteName.chatMessageUI,  RouteName.faq,};
 
 class Routes {
   static final routes = <GetPage>[
@@ -303,6 +306,11 @@ class Routes {
       name: RouteName.liveDharamScreen,
       page: LiveDharamScreen.new,
       binding: LiveDharamBinding(),
-    )
+    ),
+    GetPage(
+      page: () => const FAQsUI(),
+      name: RouteName.faq,
+      binding: FAQsBindings(),
+    ),
   ];
 }
