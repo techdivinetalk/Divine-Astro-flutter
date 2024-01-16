@@ -6,7 +6,9 @@ import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
 import 'package:divine_astrologer/firebase_options.dart';
+import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
+import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
 import 'package:divine_astrologer/zego_call/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -51,7 +53,12 @@ Future<void> main() async {
   await GetStorage.init();
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print('Message data: ${message.data}');
-    if (message.data["type"] == "3") {
+    print('Message data-: ${message.data["type"] == "1"}');
+    print('Message data-: ${MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI}');
+    if (message.data["type"] == "1" && MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
+      showNotification(message.data["title"], message.data["message"],
+          message.data['type'],message.data);
+    }else if (message.data["type"] == "3") {
       print('Message data:- ${MiddleWare.instance.currentPage}');
       if (MiddleWare.instance.currentPage == RouteName.chatMessageUI) {
         sendBroadcast(
@@ -67,6 +74,7 @@ Future<void> main() async {
   });
   await initServices();
   Get.put(UserRepository());
+  Get.put(DashboardController(PreDefineRepository()));
   var data = await userRepository.constantDetailsData();
   preferenceService.setConstantDetails(data);
 

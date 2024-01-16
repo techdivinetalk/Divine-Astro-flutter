@@ -75,9 +75,9 @@ class DashboardController extends GetxController
     loadPreDefineData();
     firebaseMessagingConfig(Get.context!);
     //
-    print("asasasasasasa");
-    await ZegoService().zegoLogin();
-    print("asasasasasasa");
+    // print("asasasasasasa");
+    // await ZegoService().zegoLogin();
+    // print("asasasasasasa");
     //
   }
 

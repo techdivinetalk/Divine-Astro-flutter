@@ -13,6 +13,7 @@ import "package:divine_astrologer/model/chat_offline_model.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
 import "package:divine_astrologer/zego_call/zego_service.dart";
 import "package:emoji_picker_flutter/emoji_picker_flutter.dart";
+import "package:firebase_database/firebase_database.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -47,7 +48,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
             Column(
               children: [
                 AstrologerChatAppBar(),
-                // const SizedBox(height: 4),
+                permissionRequestWidget(),
                 Expanded(
                   child: Stack(
                     children: [
@@ -261,6 +262,72 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         );
       }),
     );
+  }
+
+  Widget permissionRequestWidget() {
+    return StreamBuilder<DatabaseEvent>(
+      stream: FirebaseDatabase.instance
+          .ref()
+          .child("order/${Get.arguments["orderData"]["orderId"]}")
+          .onValue
+          .asBroadcastStream(),
+      builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
+        final astPerm = hasAstrologerPermission(snapshot.data?.snapshot);
+        final cusPerm = hasCustomerPermission(snapshot.data?.snapshot);
+        return AnimatedOpacity(
+          opacity: astPerm ? 0.0 : 1.0,
+          duration: const Duration(seconds: 1),
+          child: astPerm
+              ? const SizedBox()
+              : InkWell(
+                  onTap: () async {
+                    await ZegoService().onPressed();
+                  },
+                  child: const SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: Card(
+                      child: Center(
+                        child: Text(
+                          "Allow permissions required for Video / Audio calls.",
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+        );
+      },
+    );
+  }
+
+  bool hasAstrologerPermission(DataSnapshot? dataSnapshot) {
+    bool hasPermission = false;
+    if (dataSnapshot != null) {
+      if (dataSnapshot.exists) {
+        if (dataSnapshot.value is Map<dynamic, dynamic>) {
+          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+              as Map<dynamic, dynamic>;
+          hasPermission = map["astrologer_permission"] ?? false;
+        } else {}
+      } else {}
+    } else {}
+    return hasPermission;
+  }
+
+  bool hasCustomerPermission(DataSnapshot? dataSnapshot) {
+    bool hasPermission = false;
+    if (dataSnapshot != null) {
+      if (dataSnapshot.exists) {
+        if (dataSnapshot.value is Map<dynamic, dynamic>) {
+          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+              as Map<dynamic, dynamic>;
+          hasPermission = map["customer_permission"] ?? false;
+        } else {}
+      } else {}
+    } else {}
+    return hasPermission;
   }
 
   Widget giftDisplayText(ChatMessage chatMessage) {
@@ -1273,25 +1340,34 @@ class AstrologerChatAppBar extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: ZegoService().buttonUI(
-                          isVideoCall: false,
-                          targetUserID: Get.arguments["orderData"]["userId"],
-                          targetUserName: Get.arguments["orderData"]
-                              ["customerName"],
-                        ),
+                      ZegoService().buttonUI(
+                        isVideoCall: false,
+                        targetUserID: Get.arguments["orderData"]["userId"],
+                        targetUserName: Get.arguments["orderData"]
+                            ["customerName"],
+                        checkOppositeSidePermGranted: () {
+                          String name =
+                              preferenceService.getUserDetail()?.name ?? "";
+                          String message =
+                              "$name wants to start a call, please allow all required permissions";
+                          controller.messageController.text = message;
+                          controller.sendMsg();
+                        },
                       ),
-                      SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: ZegoService().buttonUI(
-                          isVideoCall: true,
-                          targetUserID: Get.arguments["orderData"]["userId"],
-                          targetUserName: Get.arguments["orderData"]
-                              ["customerName"],
-                        ),
+                      SizedBox(width: 16.w),
+                      ZegoService().buttonUI(
+                        isVideoCall: true,
+                        targetUserID: Get.arguments["orderData"]["userId"],
+                        targetUserName: Get.arguments["orderData"]
+                            ["customerName"],
+                        checkOppositeSidePermGranted: () {
+                          String name =
+                              preferenceService.getUserDetail()?.name ?? "";
+                          String message =
+                              "$name wants to start a call, please allow all required permissions";
+                          controller.messageController.text = message;
+                          controller.sendMsg();
+                        },
                       ),
                       SizedBox(width: 16.w),
                       PopupMenuButton(

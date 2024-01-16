@@ -32,11 +32,13 @@ import "../../common/common_functions.dart";
 import "../../model/astrologer_gift_response.dart";
 import "../../model/message_template_response.dart";
 import "../live_dharam/gifts_singleton.dart";
+import "package:divine_astrologer/zego_call/zego_service.dart";
 
 class ChatMessageWithSocketController extends GetxController
     with WidgetsBindingObserver {
   final UserRepository userRepository = Get.find<UserRepository>();
-  final MessageTemplateRepo messageTemplateRepository = Get.put(MessageTemplateRepo());
+  final MessageTemplateRepo messageTemplateRepository =
+      Get.put(MessageTemplateRepo());
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
   TextEditingController messageController = TextEditingController();
@@ -73,8 +75,8 @@ class ChatMessageWithSocketController extends GetxController
   RxString chatStatus = "Offline".obs;
   DashboardController dashboardController = Get.find<DashboardController>();
   RxBool isTyping = false.obs;
-  BroadcastReceiver broadcastReceiver =
-      BroadcastReceiver(names: <String>["EndChat","deliveredMsg","updateTime"]);
+  BroadcastReceiver broadcastReceiver = BroadcastReceiver(
+      names: <String>["EndChat", "deliveredMsg", "updateTime"]);
 
   RxList<MessageTemplates> messageTemplates = <MessageTemplates>[].obs;
 
@@ -146,24 +148,29 @@ class ChatMessageWithSocketController extends GetxController
     broadcastReceiver.messages.listen((BroadcastMessage event) {
       if (event.name == "updateTime") {
         debugPrint("talkTime hello: ${event.data?["talktime"]}");
-        updateTime(event.data?["talktime"], true );
+        updateTime(event.data?["talktime"], true);
       }
       if (event.name == "EndChat") {
         Get.offAllNamed(RouteName.dashboard);
         broadcastReceiver.stop();
-      }else if(event.name == 'deliveredMsg'){
+      } else if (event.name == 'deliveredMsg') {
         var response = event.data?['deliveredMsgList'];
         response.forEach((key, value) {
           value.forEach((innerKey, innerValue) {
-            print('deliveredData Outer Key: $key, Inner Key: $innerKey, Value: $innerValue');
-            var index = chatMessages.indexWhere((element) => innerKey == element.id.toString());
-            if(index >= 0){
+            print(
+                'deliveredData Outer Key: $key, Inner Key: $innerKey, Value: $innerValue');
+            var index = chatMessages
+                .indexWhere((element) => innerKey == element.id.toString());
+            if (index >= 0) {
               chatMessages[index].type = innerValue;
               chatMessages.refresh();
             }
           });
         });
-        FirebaseDatabase.instance.ref("astrologer/${preferenceService.getUserDetail()!.id}/realTime/deliveredMsg/${int.parse(arguments["orderData"]["userId"].toString())}").remove();
+        FirebaseDatabase.instance
+            .ref(
+                "astrologer/${preferenceService.getUserDetail()!.id}/realTime/deliveredMsg/${int.parse(arguments["orderData"]["userId"].toString())}")
+            .remove();
       }
     });
     debugPrint("arguments of socket $arguments");
@@ -232,28 +239,28 @@ class ChatMessageWithSocketController extends GetxController
   updateTime(int? talk, bool isTimeUpdate) {
     debugPrint('my talk: $talk');
     if (talk != null) {
-    if (isTimeUpdate) {
-      final int talkTime =
-          talk + (DateTime.now().millisecondsSinceEpoch ~/ 1000).toInt();
-      debugPrint(
-          "millisecondsSinceEpoch ----> ${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
-      preferenceService.setTalkTime(talkTime);
-    } else {
-      if (preferenceService.getTalkTime() == 0) {
+      if (isTimeUpdate) {
         final int talkTime =
             talk + (DateTime.now().millisecondsSinceEpoch ~/ 1000).toInt();
         debugPrint(
             "millisecondsSinceEpoch ----> ${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
         preferenceService.setTalkTime(talkTime);
       } else {
-        debugPrint("else part - ${preferenceService.getTalkTime() ?? 0}");
+        if (preferenceService.getTalkTime() == 0) {
+          final int talkTime =
+              talk + (DateTime.now().millisecondsSinceEpoch ~/ 1000).toInt();
+          debugPrint(
+              "millisecondsSinceEpoch ----> ${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
+          preferenceService.setTalkTime(talkTime);
+        } else {
+          debugPrint("else part - ${preferenceService.getTalkTime() ?? 0}");
+        }
       }
-    }
     }
 
     if (preferenceService.getTalkTime() != null) {
       debugPrint('prfs time: ${preferenceService.getTalkTime()}');
-      if(_timer?.isActive ?? false) {
+      if (_timer?.isActive ?? false) {
         debugPrint('timer is not null');
         _timer!.cancel();
         _timer = null;
@@ -324,8 +331,9 @@ class ChatMessageWithSocketController extends GetxController
   @override
   void onReady() {
     super.onReady();
-    Future.delayed(const Duration(milliseconds: 600)).then((value) {
+    Future.delayed(const Duration(milliseconds: 600)).then((value) async {
       scrollToBottomFunc();
+       await ZegoService().onPressed();
     });
   }
 
@@ -674,7 +682,9 @@ class ChatMessageWithSocketController extends GetxController
     if (item.giftName.isNotEmpty) {
       final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       unreadMessageIndex.value = -1;
-      addNewMessage(time, "gift", messageText: "${quantity}x ${item.giftName}", awsUrl: item.fullGiftImage);
+      addNewMessage(time, "gift",
+          messageText: "${quantity}x ${item.giftName}",
+          awsUrl: item.fullGiftImage);
     }
   }
 
@@ -710,7 +720,7 @@ class ChatMessageWithSocketController extends GetxController
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
     unreadMessageIndex.value = -1;
     addNewMessage(time, "text", messageText: msg.description);
-    }
+  }
 
   getChatList() async {
     chatMessages.clear();
