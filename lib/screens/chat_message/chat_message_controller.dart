@@ -106,7 +106,7 @@ class ChatMessageController extends GetxController {
           createdAt: DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ").format(DateTime.now()),
           id: DateTime.now().millisecondsSinceEpoch,
           isSuspicious: 0,
-          msgType: 0,
+          msgType: 1,
           seenStatus: 0,
           customerId: preferenceService.getUserDetail()!.id));
       messageController.clear();
