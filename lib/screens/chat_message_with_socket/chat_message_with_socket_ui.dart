@@ -1,3 +1,4 @@
+import "dart:collection";
 import "dart:convert";
 import "dart:io";
 import "dart:ui";
@@ -8,17 +9,20 @@ import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/common/permission_handler.dart";
 import "package:divine_astrologer/common/routes.dart";
+import "package:divine_astrologer/di/shared_preference_service.dart";
+import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/gen/assets.gen.dart";
 import "package:divine_astrologer/model/chat_offline_model.dart";
-import "package:divine_astrologer/screens/live_page/constant.dart";
+import "package:divine_astrologer/tarotCard/FlutterCarousel.dart";
 import "package:divine_astrologer/zego_call/zego_service.dart";
 import "package:emoji_picker_flutter/emoji_picker_flutter.dart";
 import "package:firebase_database/firebase_database.dart";
+import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:flutter_svg/svg.dart";
 import "package:get/get.dart";
-import "package:hive/hive.dart";
 import "package:lottie/lottie.dart";
 import "package:permission_handler/permission_handler.dart";
 import "package:social_media_recorder/audio_encoder_type.dart";
@@ -33,6 +37,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
   @override
   Widget build(BuildContext context) {
+    var pref = Get.find<SharedPreferenceService>();
     return Scaffold(
       body: GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
         return Stack(
@@ -199,6 +204,87 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     ],
                   ),
                 ),
+                Obx(() => (AppFirebaseService().orderData.value["card"] ==
+                            null ||
+                        AppFirebaseService().orderData.value["card"]
+                                ["isCardVisible"] ==
+                            false)
+                    ? const SizedBox()
+                    : Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF2F2F2F),
+                            borderRadius: BorderRadius.circular(
+                                14), // First container border radius
+                          ), // First container color
+                          child: Column(
+                            children: [
+                              const Center(
+                                child: Text("Chosen cards",
+                                    style: TextStyle(color: Colors.white)),
+                              ),
+                              SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: List.generate(
+                                  controller.getListOfCardLength(),
+                                  (index) => Expanded(
+                                    flex: 1,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4),
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: 120,
+                                        // Adjust the height as needed
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFF212121),
+                                          borderRadius: BorderRadius.circular(
+                                              10), // Second container border radius
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Image.network(
+                                            "${pref.getAmazonUrl()}/${controller.getValueByPosition(index)}",
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: List.generate(
+                                  controller.getListOfCardLength(),
+                                  (index) => Expanded(
+                                    flex: 1,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4),
+                                      child: Center(
+                                          child: Text(
+                                        controller.getKeyByPosition(index),
+                                        style:
+                                            const TextStyle(color: AppColors.white),
+                                        overflow: TextOverflow.ellipsis,
+                                        softWrap: false,
+                                      )),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Text("House of cards ",
+                                  style: TextStyle(color: Colors.white)),
+                            ],
+                          ),
+                        ),
+                      )),
                 SizedBox(height: 10.h),
                 Obx(
                   () => controller.messageTemplates.isNotEmpty
@@ -210,7 +296,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         )
                       : const SizedBox(),
                 ),
-                chatBottomBar(),
+                chatBottomBar(context),
                 Obx(() => AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       height: controller.isEmojiShowing.value ? 300 : 0,
@@ -452,7 +538,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
     );
   }
 
-  Widget chatBottomBar() {
+  Widget chatBottomBar(BuildContext context) {
     return Obx(
       () {
         debugPrint('is recording value ${controller.isRecording.value}');
@@ -527,12 +613,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 ),
                                 suffixIcon: InkWell(
                                   onTap: () async {
+                                    showCurvedBottomSheet(context);
                                     // if (controller.isOngoingChat.value) {
-                                    if (await PermissionHelper()
-                                        .askStoragePermission(
-                                            Permission.photos)) {
-                                      controller.getImage(false);
-                                    }
+
                                     //   } else {
                                     //     divineSnackBar(
                                     //         data: "${'chatEnded'.tr}.", color: AppColors.appYellowColour);
@@ -619,6 +702,92 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         );
       },
     );
+  }
+
+  void showCurvedBottomSheet(context) {
+    List<SvgPicture> itemList = [
+      SvgPicture.asset('assets/svg/camera_icon.svg'),
+      SvgPicture.asset('assets/svg/gallery_icon.svg'),
+      SvgPicture.asset('assets/svg/remedies_icon.svg'),
+      SvgPicture.asset('assets/svg/deck_icon.svg'),
+      SvgPicture.asset('assets/svg/kundli_icon.svg'),
+      // Add more items as needed
+    ];
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30),
+              ),
+            ),
+            child: GridView.count(
+              crossAxisCount: 4,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              children: List.generate(itemList.length, (index) {
+                return GestureDetector(
+                  onTap: () {
+                    switch (index) {
+                      case 0:
+                        controller.getImage(false);
+                        break;
+                      case 1:
+                        controller.getImage(false);
+                        break;
+                      case 2:
+                        controller.getImage(false);
+                        break;
+                      case 3:
+                        showCardChoiceBottomSheet(context, controller);
+                        // showModalBottomSheet<void>(
+                        //   context: context,
+                        //   builder: (BuildContext context) {
+                        //     return SizedBox(
+                        //       height: 200,
+                        //       child: Center(
+                        //         child: Column(
+                        //           mainAxisAlignment: MainAxisAlignment.center,
+                        //           mainAxisSize: MainAxisSize.min,
+                        //           children: <Widget>[
+                        //             const Text('Modal BottomSheet'),
+                        //             ElevatedButton(
+                        //               child: const Text('Close BottomSheet'),
+                        //               onPressed: () => Navigator.pop(context),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     );
+                        //   },
+                        // );
+                        //  showOneCard(context);
+                        break;
+                      case 4:
+                        controller.getImage(false);
+                        break;
+                    }
+                  },
+                  //     if (await PermissionHelper()
+                  //     .askStoragePermission(
+                  //     Permission.photos)) {
+                  // }
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      itemList[index],
+                      // Replace with your asset images
+                    ],
+                  ),
+                );
+              }),
+            ),
+          );
+        });
   }
 
   Widget giftMsgView(
