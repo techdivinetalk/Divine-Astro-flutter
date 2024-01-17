@@ -1,4 +1,5 @@
 import "dart:async";
+import "dart:collection";
 import "dart:convert";
 import "dart:developer";
 import "dart:io";
@@ -29,6 +30,7 @@ import "package:socket_io_client/socket_io_client.dart";
 
 import "../../common/ask_for_gift_bottom_sheet.dart";
 import "../../common/common_functions.dart";
+import "../../firebase_service/firebase_service.dart";
 import "../../model/astrologer_gift_response.dart";
 import "../../model/message_template_response.dart";
 import "../live_dharam/gifts_singleton.dart";
@@ -333,7 +335,7 @@ class ChatMessageWithSocketController extends GetxController
     super.onReady();
     Future.delayed(const Duration(milliseconds: 600)).then((value) async {
       scrollToBottomFunc();
-       await ZegoService().onPressed();
+      await ZegoService().onPressed();
     });
   }
 
@@ -716,12 +718,79 @@ class ChatMessageWithSocketController extends GetxController
     }
   }
 
+  sendTarotCard(int? choice) {
+    HashMap<String, dynamic> hsMap = HashMap();
+    hsMap["isCardVisible"] = false;
+    HashMap<String, dynamic> listOfCard = HashMap();
+    for (var i = 1; i <= choice!; i++) {
+      listOfCard["card${i}"] = false;
+    }
+    hsMap["listOfCard"] = listOfCard;
+    FirebaseDatabase.instance
+        .ref()
+        .child("order/${Get.arguments["orderData"]["orderId"]}/card")
+        .set(hsMap);
+  }
+
   sendMsgTemplate(MessageTemplates msg) {
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
     unreadMessageIndex.value = -1;
     addNewMessage(time, "text", messageText: msg.description);
   }
+  // int getListOfCardLength() {
+  //   var orderData = AppFirebaseService().orderData.value;
+  //   Map<dynamic, dynamic> listOfCard = Map();
+  //   var card = orderData['card'];
+  //   listOfCard = card['listOfCard'] as Map;
+  //   print("listOfCard ${listOfCard.length}");
+  //   return listOfCard.length;
+  // }
+  // String getKeyByPosition( int position) {
+  //   var orderData = AppFirebaseService().orderData.value;
+  //   Map<dynamic, dynamic> listOfCard = Map();
+  //   var card = orderData['card'];
+  //   listOfCard = card['listOfCard'] as Map;
+  //   if (position < listOfCard.length) {
+  //     return listOfCard[position];
+  //   } else {
+  //     throw IndexError(position, listOfCard, 'Index out of range');
+  //   }
+  // }
+  var orderData = AppFirebaseService().orderData.value;
+  int getListOfCardLength() {
 
+    var card = orderData['card'];
+    var listOfCard = card['listOfCard'] as Map;
+
+    print("listOfCard ${listOfCard.length}");
+    return listOfCard.length;
+  }
+  String getValueByPosition( int position) {
+    var card = orderData['card'];
+    var listOfCard = card['listOfCard'] as Map;
+    var keysList = listOfCard.keys.toList();
+
+    if (position < keysList.length) {
+      String key = keysList[position];
+      //  return keysList[position];
+      return listOfCard[key].toString();
+    } else {
+      throw IndexError(position, keysList, 'Index out of range');
+    }
+  }
+ String getKeyByPosition( int position) {
+    var card = orderData['card'];
+    var listOfCard = card['listOfCard'] as Map;
+    var keysList = listOfCard.keys.toList();
+
+    if (position < keysList.length) {
+      String key = keysList[position];
+      //  return keysList[position];
+      return key;
+    } else {
+      throw IndexError(position, keysList, 'Index out of range');
+    }
+  }
   getChatList() async {
     chatMessages.clear();
     await hiveServices.initialize();
