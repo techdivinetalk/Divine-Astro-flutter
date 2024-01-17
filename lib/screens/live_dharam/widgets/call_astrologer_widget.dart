@@ -1,9 +1,9 @@
 // import "dart:ui";
 
-// import "package:divine_astrologer/common/colors.dart";
-// import "package:divine_astrologer/model/live/get_astrologer_details_response.dart";
-// import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
-// import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
+// import "package:divine_app/common/colors.dart";
+// import "package:divine_app/model/live/get_astrologer_details_response.dart";
+// import "package:divine_app/screens/live_dharam/live_dharam_controller.dart";
+// import "package:divine_app/screens/live_dharam/widgets/custom_image_widget.dart";
 // import "package:flutter/material.dart";
 // import "package:get/get.dart";
 
@@ -187,7 +187,7 @@
 //             SizedBox(height: offerDetails.offerDesc != null ? 16 : 0),
 //             Text(offerDetails.offerDesc ?? ""),
 //             SizedBox(height: offerDetails.offerDesc != null ? 16 : 0),
-//             const Divider(),
+//             const Divider(height: 1, thickness: 1),
 //             listTile(
 //               asset: "assets/images/live_call_video.png",
 //               type: "Video",
@@ -203,7 +203,7 @@
 //               subtitle: "Both consultant and you on video call",
 //               buttonText: "Join",
 //             ),
-//             const Divider(),
+//             const Divider(height: 1, thickness: 1),
 //             listTile(
 //               asset: "assets/images/live_call_audio.png",
 //               type: "Audio",
@@ -219,7 +219,7 @@
 //               subtitle: "Consultant on video and you on audio",
 //               buttonText: "Join",
 //             ),
-//             const Divider(),
+//             const Divider(height: 1, thickness: 1),
 //             listTile(
 //               asset: "assets/images/live_call_private.png",
 //               type: "Private",

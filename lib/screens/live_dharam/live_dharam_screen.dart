@@ -44,7 +44,6 @@ import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_ast
 //
 //
 //
-//
 
 const int appID = 696414715;
 const String appSign =
@@ -117,24 +116,26 @@ class _LivePage extends State<LiveDharamScreen>
       },
     );
 
-    // receiver.start();
-    // receiver.messages.listen(
-    //   (event) {
-    //     final DataSnapshot dataSnapshot = event.data?["data"] as DataSnapshot;
-    //     _controller.eventListner(
-    //       snapshot: dataSnapshot,
-    //       zeroAstro: zeroAstro,
-    //       engaging: engaging,
-    //       showFollowPopup: showFollowPopup,
-    //     );
-    //   },
-    // );
-
     _startTimer();
+
+    receiver.start();
+    receiver.messages.listen(
+      (event) async {
+        DatabaseReference ref = FirebaseDatabase.instance.ref();
+        final DataSnapshot dataSnapshot = await ref.child("live").get();
+        _controller.eventListner(
+          snapshot: dataSnapshot,
+          zeroAstro: zeroAstro,
+          engaging: engaging,
+          showFollowPopup: showFollowPopup,
+        );
+      },
+    );
   }
 
   Future<void> zeroAstro() async {
     if (mounted) {
+      _timer.cancel();
       await _zegoController.leave(context);
     } else {}
     return Future<void>.value();
@@ -188,6 +189,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> onUserJoin(List<ZegoUIKitUser> users) async {
+    await Future.delayed(const Duration(seconds: 1));
     final ZegoCustomMessage model = ZegoCustomMessage(
       type: 1,
       liveId: _controller.liveId,
@@ -786,7 +788,7 @@ class _LivePage extends State<LiveDharamScreen>
   //                 ),
   //               )
   //             : index == 1
-  //                 ? (_controller.details.data?.isFollow == 1)
+  //                 ? ((_controller.details.data?.isFollow ?? 0) == 1)
   //                     ? const SizedBox()
   //                     : Padding(
   //                         padding:
@@ -3000,18 +3002,20 @@ class _LivePage extends State<LiveDharamScreen>
         await endLiveSession(
           endLive: () async {
             if (mounted) {
+              _timer.cancel();
               await _zegoController.leave(context);
             } else {}
           },
         );
       } else {
-        // await showAllAvailAstroPopup(
-        //   exitLive: () async {
-        //     if (mounted) {
-        //       await _zegoController.leave(context);
-        //     } else {}
-        //   },
-        // );
+        await showAllAvailAstroPopup(
+          exitLive: () async {
+            if (mounted) {
+              _timer.cancel();
+              await _zegoController.leave(context);
+            } else {}
+          },
+        );
       }
     }
     return Future<void>.value();

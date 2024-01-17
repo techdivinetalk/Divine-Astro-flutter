@@ -63,6 +63,7 @@ class LiveDharamController extends GetxController {
       BlockedCustomerListRes().obs;
   final Rx<NoticeBoardRes> _noticeBoardRes = NoticeBoardRes().obs;
   final RxInt _timerCurrentIndex = 1.obs;
+  final RxList<String> _astroFollowPopup = <String>[].obs;
 
   @override
   void onInit() {
@@ -107,6 +108,7 @@ class LiveDharamController extends GetxController {
     blockedCustomerList = BlockedCustomerListRes();
     noticeBoardRes = NoticeBoardRes();
     timerCurrentIndex = 1;
+    astroFollowPopup = [];
     return;
   }
 
@@ -137,6 +139,7 @@ class LiveDharamController extends GetxController {
     _blockedCustomerList.close();
     _noticeBoardRes.close();
     _timerCurrentIndex.close();
+    _astroFollowPopup.close();
 
     super.onClose();
   }
@@ -219,7 +222,8 @@ class LiveDharamController extends GetxController {
   int get timerCurrentIndex => _timerCurrentIndex.value;
   set timerCurrentIndex(int value) => _timerCurrentIndex(value);
 
-  List<String> astroFollowPopup = [];
+  List<String> get astroFollowPopup => _astroFollowPopup.value;
+  set astroFollowPopup(List<String> value) => _astroFollowPopup(value);
 
   Future<void> eventListner({
     // required DatabaseEvent event,
@@ -241,33 +245,35 @@ class LiveDharamController extends GetxController {
           } else if (data.isNotEmpty) {
             if (data.keys.toList().isEmpty) {
             } else {
-              liveId = isHost ? liveId : data.keys.toList()[currentIndex];
-              // isHostAvailable = checkIfAstrologerAvailable(map);
-              var liveIdNode = data[liveId];
-              var waitListNode = liveIdNode["waitList"];
-              currentCaller = isEngadedNew(waitListNode, isForMe: false);
+              if (data.keys.toList()[currentIndex] != null) {
+                liveId = isHost ? liveId : data.keys.toList()[currentIndex];
+                // isHostAvailable = checkIfAstrologerAvailable(map);
+                var liveIdNode = data[liveId];
+                var waitListNode = liveIdNode["waitList"];
+                currentCaller = isEngadedNew(waitListNode, isForMe: false);
 
-              await Future.delayed(const Duration(seconds: 1));
+                await Future.delayed(const Duration(seconds: 1));
 
-              final bool cond1 = isHost;
-              final bool cond2 = waitListModel.length == 1;
-              final bool cond3 = currentCaller.id.isNotEmpty;
-              final bool cond4 = !currentCaller.isEngaded;
-              final bool cond5 = !currentCaller.isRequest;
-              if (cond1 && cond2 && cond3 && cond4 && cond5) {
-                engaging(currentCaller);
+                final bool cond1 = isHost;
+                final bool cond2 = waitListModel.length == 1;
+                final bool cond3 = currentCaller.id.isNotEmpty;
+                final bool cond4 = !currentCaller.isEngaded;
+                final bool cond5 = !currentCaller.isRequest;
+                if (cond1 && cond2 && cond3 && cond4 && cond5) {
+                  engaging(currentCaller);
+                } else {}
+
+                // await getAstrologerDetails();
+
+                // final isNotFollowing = details.data?.isFollow == 0;
+                // final hasNotSeenPopup = !astroFollowPopup.contains(liveId);
+                // if (isNotFollowing && hasNotSeenPopup) {
+                //   astroFollowPopup.add(liveId);
+                //   showFollowPopup();
+                // } else {}
+
+                // await isCustomerBlocked();
               } else {}
-
-              // await getAstrologerDetails();
-
-              // final isNotFollowing = details.data?.isFollow == 0;
-              // final hasNotSeenPopup = !astroFollowPopup.contains(liveId);
-              // if (isNotFollowing && hasNotSeenPopup) {
-              //   astroFollowPopup.add(liveId);
-              //   showFollowPopup();
-              // } else {}
-
-              // await isCustomerBlocked();
             }
           } else {}
         } else {}
@@ -303,29 +309,30 @@ class LiveDharamController extends GetxController {
   }
 
   Future<void> updateInfo() async {
-    DatabaseReference ref = FirebaseDatabase.instance.ref();
-    final DataSnapshot dataSnapshot = await ref.child("live").get();
-    if (dataSnapshot != null) {
-      if (dataSnapshot.exists) {
-        await eventListner(
-          snapshot: dataSnapshot,
-          zeroAstro: () {},
-          engaging: (waitListModel) {},
-          showFollowPopup: () {},
-        );
-        // sendBroadcast(
-        //   BroadcastMessage(name: "LiveDharamScreen_eventListner", data: {"data": dataSnapshot}),
-        // );
-      } else {}
-    } else {}
+    astroFollowPopup = [];
+    await sendBroadcast(
+      BroadcastMessage(name: "LiveDharamScreen_eventListner"),
+    );
     return Future<void>.value();
   }
 
   WaitListModel engagedCoHostWithAstro() {
-    var liveId = data.keys.toList()[currentIndex];
-    var liveIdNode = data[liveId];
-    var waitListNode = liveIdNode["waitList"];
-    return isEngadedNew(waitListNode, isForMe: false);
+    if (data.keys.toList()[currentIndex] != null) {
+      var liveId = data.keys.toList()[currentIndex];
+      var liveIdNode = data[liveId];
+      var waitListNode = liveIdNode["waitList"];
+      return isEngadedNew(waitListNode, isForMe: false);
+    } else {
+      return WaitListModel(
+        isRequest: false,
+        isEngaded: false,
+        callType: "",
+        totalTime: "",
+        avatar: "",
+        userName: "",
+        id: "",
+      );
+    }
   }
 
   WaitListModel isEngadedNew(
@@ -390,10 +397,14 @@ class LiveDharamController extends GetxController {
   //     if (currentIndex < 0) {
   //       currentIndex = data.keys.toList().length - 1;
   //     } else {}
-  //     liveId = data.keys.toList()[currentIndex];
-  //     // unawaited(getAstrologerDetails());
-  //     unawaited(updateInfo());
-  //     return liveId;
+  //     if (data.keys.toList()[currentIndex] != null) {
+  //       liveId = data.keys.toList()[currentIndex];
+  //       // unawaited(getAstrologerDetails());
+  //       unawaited(updateInfo());
+  //       return liveId;
+  //     } else {
+  //       return "";
+  //     }
   //   }
   // }
 
@@ -408,10 +419,14 @@ class LiveDharamController extends GetxController {
   //     if (currentIndex > data.keys.toList().length - 1) {
   //       currentIndex = 0;
   //     } else {}
-  //     liveId = data.keys.toList()[currentIndex];
-  //     // unawaited(getAstrologerDetails());
-  //     unawaited(updateInfo());
-  //     return liveId;
+  //     if (data.keys.toList()[currentIndex] != null) {
+  //       liveId = data.keys.toList()[currentIndex];
+  //       // unawaited(getAstrologerDetails());
+  //       unawaited(updateInfo());
+  //       return liveId;
+  //     } else {
+  //       return "";
+  //     }
   //   }
   // }
 
@@ -543,7 +558,7 @@ class LiveDharamController extends GetxController {
   //   param = <String, dynamic>{
   //     "astrologer_id": int.parse(liveId),
   //     "is_follow": details.data?.isFollow == 1 ? 0 : 1,
-  //     "role_id": _pref.getUserDetail()?.roleId ?? 7,
+  //     "role_id": 7,
   //   };
   //   AstrologerFollowingResponse followUnfollow = AstrologerFollowingResponse();
   //   followUnfollow = await liveRepository.astrologerFollowApi(params: param);
