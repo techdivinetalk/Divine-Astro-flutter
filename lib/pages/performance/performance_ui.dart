@@ -102,9 +102,8 @@ class YourScoreWidget extends GetView<PerformanceController> {
                 itemCount: controller.overAllScoreList.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    mainAxisSpacing: 10.h,
                     crossAxisSpacing: 20.h,
-                    childAspectRatio: 0.78),
+                    childAspectRatio: 0.68),
                 itemBuilder: (BuildContext context, int index) {
                   Conversion? item = controller.overAllScoreList[index];
                   ScoreModelClass model = controller.percentageSubTitle[index];
