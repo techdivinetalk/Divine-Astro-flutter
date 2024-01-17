@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:app_settings/app_settings.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';

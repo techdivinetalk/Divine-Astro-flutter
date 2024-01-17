@@ -1,4 +1,5 @@
 import "dart:async";
+import "dart:collection";
 import "dart:convert";
 import "dart:developer";
 import "dart:io";
@@ -21,16 +22,20 @@ import "package:flutter/material.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
 import "package:get/get.dart";
+import "package:get_storage/get_storage.dart";
 import "package:http/http.dart" as http;
 import "package:image_cropper/image_cropper.dart";
 import "package:image_picker/image_picker.dart";
 import "package:path_provider/path_provider.dart";
+import "package:shared_preferences/shared_preferences.dart";
 import "package:socket_io_client/socket_io_client.dart";
 
 import "../../common/ask_for_gift_bottom_sheet.dart";
 import "../../common/common_functions.dart";
+import "../../firebase_service/firebase_service.dart";
 import "../../model/astrologer_gift_response.dart";
 import "../../model/message_template_response.dart";
+import "../../model/tarot_response.dart";
 import "../live_dharam/gifts_singleton.dart";
 import "package:divine_astrologer/zego_call/zego_service.dart";
 
@@ -333,7 +338,7 @@ class ChatMessageWithSocketController extends GetxController
     super.onReady();
     Future.delayed(const Duration(milliseconds: 600)).then((value) async {
       scrollToBottomFunc();
-       await ZegoService().onPressed();
+      await ZegoService().onPressed();
     });
   }
 
@@ -412,14 +417,17 @@ class ChatMessageWithSocketController extends GetxController
         final ChatMessage chatMessage =
             ChatMessage.fromOfflineJson(data["data"]);
         final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-        socket.messageReceivedStatusUpdate(
-          receiverId: preferenceService.getUserDetail()!.id.toString(),
-          chatMessageId: chatMessage.id.toString(),
-          chatStatus: "read",
-          time: time,
-          orderId: arguments["orderData"]["orderId"].toString(),
-        );
-        updateChatMessages(chatMessage, false, isSendMessage: false);
+        if (data["data"]["receiverId"] ==
+            preferenceService.getUserDetail()!.id.toString()) {
+          socket.messageReceivedStatusUpdate(
+            receiverId: preferenceService.getUserDetail()!.id.toString(),
+            chatMessageId: chatMessage.id.toString(),
+            chatStatus: "read",
+            time: time,
+            orderId: arguments["orderData"]["orderId"].toString(),
+          );
+          updateChatMessages(chatMessage, false, isSendMessage: false);
+        }
       }
       debugPrint("chatMessage.value.length ${chatMessages.length}");
     });
@@ -716,10 +724,110 @@ class ChatMessageWithSocketController extends GetxController
     }
   }
 
+  sendTarotCard(int? choice) async {
+    print("tarot card running 1");
+    HashMap<String, dynamic> hsMap = HashMap();
+    hsMap["isCardVisible"] = false;
+    hsMap["listOfCard"] = await  printRandomTarotCards(choice);
+    print("tarot card running 2 ${hsMap}");
+    print("tarot card running 3 ${AppFirebaseService().orderData.value["orderId"]}");
+    FirebaseDatabase.instance
+        .ref()
+        .child("order/${AppFirebaseService().orderData.value["orderId"]}/card")
+        .set(hsMap);
+  }
+
+  Future<HashMap<String, dynamic>> printRandomTarotCards(int? choice) async {
+    List<TarotCard> cards = await loadTarotCards();
+    HashMap<String, dynamic> listOfCard = HashMap();
+    if (cards.isNotEmpty) {
+      // Shuffle the list and take the first 3 cards
+      cards.shuffle();
+      List<TarotCard> randomCards = cards.take(choice!).toList();
+
+      for (var card in randomCards) {
+        print(card.name);
+        listOfCard["${card.name}"] = card.image;
+      }
+      return listOfCard;
+    } else {
+      return HashMap();
+    }
+  }
+
+  Future<List<TarotCard>> loadTarotCards() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? cardsJson = prefs.getString('tarot_cards');
+
+    if (cardsJson != null) {
+      List<dynamic> jsonList = json.decode(cardsJson) as List;
+      return jsonList.map((jsonItem) => TarotCard.fromJson(jsonItem)).toList();
+    } else {
+      return [];
+    }
+  }
+
   sendMsgTemplate(MessageTemplates msg) {
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
     unreadMessageIndex.value = -1;
     addNewMessage(time, "text", messageText: msg.description);
+  }
+
+  // int getListOfCardLength() {
+  //   var orderData = AppFirebaseService().orderData.value;
+  //   Map<dynamic, dynamic> listOfCard = Map();
+  //   var card = orderData['card'];
+  //   listOfCard = card['listOfCard'] as Map;
+  //   print("listOfCard ${listOfCard.length}");
+  //   return listOfCard.length;
+  // }
+  // String getKeyByPosition( int position) {
+  //   var orderData = AppFirebaseService().orderData.value;
+  //   Map<dynamic, dynamic> listOfCard = Map();
+  //   var card = orderData['card'];
+  //   listOfCard = card['listOfCard'] as Map;
+  //   if (position < listOfCard.length) {
+  //     return listOfCard[position];
+  //   } else {
+  //     throw IndexError(position, listOfCard, 'Index out of range');
+  //   }
+  // }
+  var orderData = AppFirebaseService().orderData.value;
+
+  int getListOfCardLength() {
+    var card = orderData['card'];
+    var listOfCard = card['listOfCard'] as Map;
+
+    print("listOfCard ${listOfCard.length}");
+    return listOfCard.length;
+  }
+
+  String getValueByPosition(int position) {
+    var card = orderData['card'];
+    var listOfCard = card['listOfCard'] as Map;
+    var keysList = listOfCard.keys.toList();
+
+    if (position < keysList.length) {
+      String key = keysList[position];
+      print("imgUrl --${listOfCard[key]}");
+      return listOfCard[key];
+    } else {
+      throw IndexError(position, keysList, 'Index out of range');
+    }
+  }
+
+  String getKeyByPosition(int position) {
+    var card = orderData['card'];
+    var listOfCard = card['listOfCard'] as Map;
+    var keysList = listOfCard.keys.toList();
+
+    if (position < keysList.length) {
+      String key = keysList[position];
+      //  return keysList[position];
+      return key;
+    } else {
+      throw IndexError(position, keysList, 'Index out of range');
+    }
   }
 
   getChatList() async {
