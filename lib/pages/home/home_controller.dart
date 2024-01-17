@@ -104,6 +104,7 @@ class HomeController extends GetxController {
      getConstantDetailsData();
      getDashboardDetail();
      getFeedbackData();
+    tarotCardData();
   }
 
   fetchImportantNumbers() async {
@@ -335,6 +336,20 @@ class HomeController extends GetxController {
    //   getFeedbackData();
       //log("DashboardData==>${jsonEncode(homeData)}");
     } catch (error) {
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      }
+    }
+  }
+ tarotCardData() async {
+   // loading = Loading.initial;
+    print("response.data");
+    try {
+      print("response.data1");
+      var response = await HomePageRepository().getTarotCardData();
+     } catch (error) {
       if (error is AppException) {
         error.onException();
       } else {

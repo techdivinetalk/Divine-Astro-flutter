@@ -414,14 +414,18 @@ class ChatMessageWithSocketController extends GetxController
         final ChatMessage chatMessage =
             ChatMessage.fromOfflineJson(data["data"]);
         final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-        socket.messageReceivedStatusUpdate(
-          receiverId: preferenceService.getUserDetail()!.id.toString(),
-          chatMessageId: chatMessage.id.toString(),
-          chatStatus: "read",
-          time: time,
-          orderId: arguments["orderData"]["orderId"].toString(),
-        );
-        updateChatMessages(chatMessage, false, isSendMessage: false);
+        if (data["data"]["receiverId"] ==
+            preferenceService.getUserDetail()!.id.toString()) {
+          socket.messageReceivedStatusUpdate(
+            receiverId: preferenceService.getUserDetail()!.id.toString(),
+            chatMessageId: chatMessage.id.toString(),
+            chatStatus: "read",
+            time: time,
+            orderId: arguments["orderData"]["orderId"].toString(),
+          );
+          updateChatMessages(chatMessage, false, isSendMessage: false);
+        }
+
       }
       debugPrint("chatMessage.value.length ${chatMessages.length}");
     });
@@ -737,6 +741,7 @@ class ChatMessageWithSocketController extends GetxController
     unreadMessageIndex.value = -1;
     addNewMessage(time, "text", messageText: msg.description);
   }
+
   // int getListOfCardLength() {
   //   var orderData = AppFirebaseService().orderData.value;
   //   Map<dynamic, dynamic> listOfCard = Map();
@@ -757,15 +762,16 @@ class ChatMessageWithSocketController extends GetxController
   //   }
   // }
   var orderData = AppFirebaseService().orderData.value;
-  int getListOfCardLength() {
 
+  int getListOfCardLength() {
     var card = orderData['card'];
     var listOfCard = card['listOfCard'] as Map;
 
     print("listOfCard ${listOfCard.length}");
     return listOfCard.length;
   }
-  String getValueByPosition( int position) {
+
+  String getValueByPosition(int position) {
     var card = orderData['card'];
     var listOfCard = card['listOfCard'] as Map;
     var keysList = listOfCard.keys.toList();
@@ -778,7 +784,8 @@ class ChatMessageWithSocketController extends GetxController
       throw IndexError(position, keysList, 'Index out of range');
     }
   }
- String getKeyByPosition( int position) {
+
+  String getKeyByPosition(int position) {
     var card = orderData['card'];
     var listOfCard = card['listOfCard'] as Map;
     var keysList = listOfCard.keys.toList();
@@ -791,6 +798,7 @@ class ChatMessageWithSocketController extends GetxController
       throw IndexError(position, keysList, 'Index out of range');
     }
   }
+
   getChatList() async {
     chatMessages.clear();
     await hiveServices.initialize();
