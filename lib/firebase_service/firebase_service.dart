@@ -30,7 +30,7 @@ class AppFirebaseService {
   var acceptBottomWatcher = RealTimeWatcher();
   final appSocket = AppSocket();
   var openChatUserId = "";
-
+  Rx<Map<String, dynamic>> orderData = Rx<Map<String, dynamic>>({});
   final DatabaseReference _database = FirebaseDatabase.instance.ref();
 
   Future<void> writeData(String path, Map<String, dynamic> data) async {
@@ -125,10 +125,10 @@ class AppFirebaseService {
     } catch (e) {
       debugPrint("Error reading data from the database: $e");
     }
-
     watcher.nameStream.listen((value) {
       if (value != "") {
         _database.child("order/$value").onValue.listen((event) {
+          orderData.value = (event.snapshot.value == null ? null : Map<String, dynamic>.from(event.snapshot.value! as Map<Object?, Object?>))!;
           if (event.snapshot.value != null) {
             Map<String, dynamic>? orderData =
                 Map<String, dynamic>.from(event.snapshot.value! as Map<Object?, Object?>);

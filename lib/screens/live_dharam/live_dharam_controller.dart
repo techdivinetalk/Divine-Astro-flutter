@@ -12,6 +12,7 @@ import "package:divine_astrologer/repository/astrologer_profile_repository.dart"
 import "package:divine_astrologer/repository/kundli_repository.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart";
 import "package:firebase_database/firebase_database.dart";
+import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 import "package:get/get_connect/http/src/status/http_status.dart";
 import "package:http/http.dart" as http;
@@ -46,7 +47,6 @@ class LiveDharamController extends GetxController {
   final RxBool _isFront = true.obs;
   final RxBool _isCamOn = true.obs;
   final RxBool _isMicOn = true.obs;
-  final RxBool _amIBlocked = false.obs;
   final Rx<WaitListModel> _currentCaller = WaitListModel(
     isRequest: false,
     isEngaded: false,
@@ -93,7 +93,6 @@ class LiveDharamController extends GetxController {
     isFront = true;
     isCamOn = true;
     isMicOn = true;
-    amIBlocked = false;
     currentCaller = WaitListModel(
       isRequest: false,
       isEngaded: false,
@@ -132,7 +131,6 @@ class LiveDharamController extends GetxController {
     _isFront.close();
     _isCamOn.close();
     _isMicOn.close();
-    _amIBlocked.close();
     _currentCaller.close();
     _showTopBanner.close();
     // _insufficientBalModel.close();
@@ -201,9 +199,6 @@ class LiveDharamController extends GetxController {
   bool get isMicOn => _isMicOn.value;
   set isMicOn(bool value) => _isMicOn(value);
 
-  bool get amIBlocked => _amIBlocked.value;
-  set amIBlocked(bool value) => _amIBlocked(value);
-
   WaitListModel get currentCaller => _currentCaller.value;
   set currentCaller(WaitListModel value) => _currentCaller(value);
 
@@ -224,6 +219,8 @@ class LiveDharamController extends GetxController {
   int get timerCurrentIndex => _timerCurrentIndex.value;
   set timerCurrentIndex(int value) => _timerCurrentIndex(value);
 
+  List<String> astroFollowPopup = [];
+
   Future<void> eventListner({
     // required DatabaseEvent event,
     required DataSnapshot snapshot,
@@ -242,34 +239,36 @@ class LiveDharamController extends GetxController {
           data.addAll(map);
           if (data.isEmpty) {
           } else if (data.isNotEmpty) {
-            liveId = isHost ? liveId : data.keys.toList()[currentIndex];
-            // isHostAvailable = checkIfAstrologerAvailable(map);
-            // amIBlocked = checkIfAstrologerBlockedMe(map);
-            var liveIdNode = data[liveId];
-            var waitListNode = liveIdNode["waitList"];
-            currentCaller = isEngadedNew(waitListNode, isForMe: false);
+            if (data.keys.toList().isEmpty) {
+            } else {
+              liveId = isHost ? liveId : data.keys.toList()[currentIndex];
+              // isHostAvailable = checkIfAstrologerAvailable(map);
+              var liveIdNode = data[liveId];
+              var waitListNode = liveIdNode["waitList"];
+              currentCaller = isEngadedNew(waitListNode, isForMe: false);
 
-            await Future.delayed(const Duration(seconds: 1));
+              await Future.delayed(const Duration(seconds: 1));
 
-            final bool cond1 = isHost;
-            final bool cond2 = waitListModel.length == 1;
-            final bool cond3 = currentCaller.id.isNotEmpty;
-            final bool cond4 = !currentCaller.isEngaded;
-            final bool cond5 = !currentCaller.isRequest;
-            if (cond1 && cond2 && cond3 && cond4 && cond5) {
-              engaging(currentCaller);
-            } else {}
+              final bool cond1 = isHost;
+              final bool cond2 = waitListModel.length == 1;
+              final bool cond3 = currentCaller.id.isNotEmpty;
+              final bool cond4 = !currentCaller.isEngaded;
+              final bool cond5 = !currentCaller.isRequest;
+              if (cond1 && cond2 && cond3 && cond4 && cond5) {
+                engaging(currentCaller);
+              } else {}
 
-            // await getAstrologerDetails();
+              // await getAstrologerDetails();
 
-            // final isNotFollowing = details.data?.isFollow == 0;
-            // final hasNotSeenPopup = (details.data?.seenPopup ?? false) == false;
-            // if (isNotFollowing && hasNotSeenPopup) {
-            //   showFollowPopup();
-            //   details.data?.seenPopup = true;
-            // } else {}
+              // final isNotFollowing = details.data?.isFollow == 0;
+              // final hasNotSeenPopup = !astroFollowPopup.contains(liveId);
+              // if (isNotFollowing && hasNotSeenPopup) {
+              //   astroFollowPopup.add(liveId);
+              //   showFollowPopup();
+              // } else {}
 
-            // await isCustomerBlocked();
+              // await isCustomerBlocked();
+            }
           } else {}
         } else {}
       } else {
@@ -306,13 +305,19 @@ class LiveDharamController extends GetxController {
   Future<void> updateInfo() async {
     DatabaseReference ref = FirebaseDatabase.instance.ref();
     final DataSnapshot dataSnapshot = await ref.child("live").get();
-
-    await eventListner(
-      snapshot: dataSnapshot,
-      zeroAstro: () {},
-      engaging: (waitListModel) {},
-      showFollowPopup: () {},
-    );
+    if (dataSnapshot != null) {
+      if (dataSnapshot.exists) {
+        await eventListner(
+          snapshot: dataSnapshot,
+          zeroAstro: () {},
+          engaging: (waitListModel) {},
+          showFollowPopup: () {},
+        );
+        // sendBroadcast(
+        //   BroadcastMessage(name: "LiveDharamScreen_eventListner", data: {"data": dataSnapshot}),
+        // );
+      } else {}
+    } else {}
     return Future<void>.value();
   }
 
@@ -520,6 +525,10 @@ class LiveDharamController extends GetxController {
   //       : IsCustomerBlockedRes.fromJson(IsCustomerBlockedRes().toJson());
   //   return Future<void>.value();
   // }
+
+  bool isCustomerBlockedBool() {
+    return false;
+  }
 
   String getSpeciality() {
     final List<String> pivotList = <String>[];
@@ -1012,13 +1021,6 @@ class LiveDharamController extends GetxController {
     return Future<void>.value();
   }
 
-  // bool checkIfAstrologerBlockedMe(map) {
-  //   final Map<dynamic, dynamic> currentHostId = map[liveId];
-  //   final List<dynamic> list =
-  //       (currentHostId["blockList"] ?? <dynamic>[]) ?? <dynamic>[];
-  //   return list.contains(userId);
-  // }
-
   // Future<void> makeAPICallForStartCall({required bool hasAccepted}) async {
   //   Map<String, dynamic> param = <String, dynamic>{};
   //   param = <String, dynamic>{
@@ -1126,17 +1128,17 @@ class LiveDharamController extends GetxController {
   }
 
   bool isBlocked({required int id}) {
-    Data? data = blockedCustomerList.data?.firstWhere(
+    BlockedCustomerListResData? data = blockedCustomerList.data?.firstWhere(
       (element) => (element.getCustomers?.id ?? 0) == id,
-      orElse: () => Data(),
+      orElse: () => BlockedCustomerListResData(),
     );
     return (data?.isBlock ?? 0) == 1;
   }
 
   int getBlockedInInt({required int id}) {
-    Data? data = blockedCustomerList.data?.firstWhere(
+    BlockedCustomerListResData? data = blockedCustomerList.data?.firstWhere(
       (element) => (element.getCustomers?.id ?? 0) == id,
-      orElse: () => Data(),
+      orElse: () => BlockedCustomerListResData(),
     );
     return (data?.isBlock ?? 0);
   }
@@ -1252,6 +1254,7 @@ class ZegoCustomMessage {
   String? message;
   String? timeStamp;
   String? fullGiftImage;
+  bool? isBlockedCustomer;
 
   ZegoCustomMessage(
       {this.type,
@@ -1261,7 +1264,8 @@ class ZegoCustomMessage {
       this.avatar,
       this.message,
       this.timeStamp,
-      this.fullGiftImage});
+      this.fullGiftImage,
+      required this.isBlockedCustomer});
 
   ZegoCustomMessage.fromJson(Map<String, dynamic> json) {
     type = json['type'];
@@ -1272,6 +1276,7 @@ class ZegoCustomMessage {
     message = json['message'];
     timeStamp = json['timeStamp'];
     fullGiftImage = json['fullGiftImage'];
+    isBlockedCustomer = json['isBlockedCustomer'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1284,6 +1289,7 @@ class ZegoCustomMessage {
     data['message'] = this.message;
     data['timeStamp'] = this.timeStamp;
     data['fullGiftImage'] = this.fullGiftImage;
+    data['isBlockedCustomer'] = this.isBlockedCustomer;
     return data;
   }
 }
