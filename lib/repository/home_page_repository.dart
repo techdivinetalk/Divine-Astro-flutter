@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../common/app_exception.dart';
 import '../di/api_provider.dart';
@@ -34,7 +35,7 @@ class HomePageRepository extends ApiProvider {
       rethrow;
     }
   }
-  //Future<TarotResponse>
+  Future<TarotResponse>
   getTarotCardData() async {
     print("response.data3");
     try {
@@ -48,9 +49,10 @@ class HomePageRepository extends ApiProvider {
           throw CustomException(json.decode(response.body)["error"]);
         } else{
 
-          // final tarotResponse =
-          // TarotResponse.fromJson(json.decode(response.body));
-          // return tarotResponse;
+          final tarotResponse =
+          TarotResponse.fromJson(json.decode(response.body));
+          saveTarotCards(tarotResponse.data!);
+          return tarotResponse;
         }
       } else {
         throw CustomException(json.decode(response.body)["error"]);
@@ -60,7 +62,11 @@ class HomePageRepository extends ApiProvider {
       rethrow;
     }
   }
-
+  Future<void> saveTarotCards(List<TarotCard> cards) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String cardsJson = json.encode(cards.map((card) => card.toJson()).toList());
+    await prefs.setString('tarot_cards', cardsJson);
+  }
   Future<FeedbackResponse> getFeedbackData() async {
     try {
       final response = await get(

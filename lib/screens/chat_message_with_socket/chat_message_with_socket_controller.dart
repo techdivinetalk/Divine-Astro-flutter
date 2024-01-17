@@ -22,10 +22,12 @@ import "package:flutter/material.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
 import "package:get/get.dart";
+import "package:get_storage/get_storage.dart";
 import "package:http/http.dart" as http;
 import "package:image_cropper/image_cropper.dart";
 import "package:image_picker/image_picker.dart";
 import "package:path_provider/path_provider.dart";
+import "package:shared_preferences/shared_preferences.dart";
 import "package:socket_io_client/socket_io_client.dart";
 
 import "../../common/ask_for_gift_bottom_sheet.dart";
@@ -33,6 +35,7 @@ import "../../common/common_functions.dart";
 import "../../firebase_service/firebase_service.dart";
 import "../../model/astrologer_gift_response.dart";
 import "../../model/message_template_response.dart";
+import "../../model/tarot_response.dart";
 import "../live_dharam/gifts_singleton.dart";
 import "package:divine_astrologer/zego_call/zego_service.dart";
 
@@ -425,7 +428,6 @@ class ChatMessageWithSocketController extends GetxController
           );
           updateChatMessages(chatMessage, false, isSendMessage: false);
         }
-
       }
       debugPrint("chatMessage.value.length ${chatMessages.length}");
     });
@@ -722,18 +724,47 @@ class ChatMessageWithSocketController extends GetxController
     }
   }
 
-  sendTarotCard(int? choice) {
+  sendTarotCard(int? choice) async {
+    print("tarot card running 1");
     HashMap<String, dynamic> hsMap = HashMap();
     hsMap["isCardVisible"] = false;
-    HashMap<String, dynamic> listOfCard = HashMap();
-    for (var i = 1; i <= choice!; i++) {
-      listOfCard["card${i}"] = false;
-    }
-    hsMap["listOfCard"] = listOfCard;
+    hsMap["listOfCard"] = await  printRandomTarotCards(choice);
+    print("tarot card running 2 ${hsMap}");
+    print("tarot card running 3 ${AppFirebaseService().orderData.value["orderId"]}");
     FirebaseDatabase.instance
         .ref()
-        .child("order/${Get.arguments["orderData"]["orderId"]}/card")
+        .child("order/${AppFirebaseService().orderData.value["orderId"]}/card")
         .set(hsMap);
+  }
+
+  Future<HashMap<String, dynamic>> printRandomTarotCards(int? choice) async {
+    List<TarotCard> cards = await loadTarotCards();
+    HashMap<String, dynamic> listOfCard = HashMap();
+    if (cards.isNotEmpty) {
+      // Shuffle the list and take the first 3 cards
+      cards.shuffle();
+      List<TarotCard> randomCards = cards.take(choice!).toList();
+
+      for (var card in randomCards) {
+        print(card.name);
+        listOfCard["${card.name}"] = card.image;
+      }
+      return listOfCard;
+    } else {
+      return HashMap();
+    }
+  }
+
+  Future<List<TarotCard>> loadTarotCards() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? cardsJson = prefs.getString('tarot_cards');
+
+    if (cardsJson != null) {
+      List<dynamic> jsonList = json.decode(cardsJson) as List;
+      return jsonList.map((jsonItem) => TarotCard.fromJson(jsonItem)).toList();
+    } else {
+      return [];
+    }
   }
 
   sendMsgTemplate(MessageTemplates msg) {
@@ -778,8 +809,8 @@ class ChatMessageWithSocketController extends GetxController
 
     if (position < keysList.length) {
       String key = keysList[position];
-      //  return keysList[position];
-      return listOfCard[key].toString();
+      print("imgUrl --${listOfCard[key]}");
+      return listOfCard[key];
     } else {
       throw IndexError(position, keysList, 'Index out of range');
     }
