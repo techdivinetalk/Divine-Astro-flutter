@@ -7,6 +7,7 @@ import "dart:developer";
 import "package:after_layout/after_layout.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
+import "package:divine_astrologer/model/live/blocked_customer_list_res.dart";
 import "package:divine_astrologer/model/live/notice_board_res.dart";
 import "package:divine_astrologer/screens/live_dharam/gifts_singleton.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
@@ -30,6 +31,7 @@ import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter/scheduler.dart";
+import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 import "package:intl/intl.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
@@ -77,6 +79,10 @@ class _LivePage extends State<LiveDharamScreen>
   bool _isKeyboardSheetOpen = false;
   late Timer _timer;
 
+  BroadcastReceiver receiver = BroadcastReceiver(
+    names: <String>["LiveDharamScreen_eventListner"],
+  );
+
   @override
   void initState() {
     super.initState();
@@ -94,40 +100,9 @@ class _LivePage extends State<LiveDharamScreen>
         final DataSnapshot dataSnapshot = event.snapshot;
         _controller.eventListner(
           snapshot: dataSnapshot,
-          zeroAstro: () async {
-            if (mounted) {
-              await _zegoController.leave(context);
-            } else {}
-          },
-          engaging: (WaitListModel currentCaller) async {
-            final String id = currentCaller.id;
-            final String name = currentCaller.userName;
-            final String avatar = currentCaller.avatar;
-            final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
-
-            WidgetsBinding.instance.endOfFrame.then(
-              (_) async {
-                if (mounted) {
-                  await onCoHostRequest(
-                    user: user,
-                    userId: id,
-                    userName: name,
-                    avatar: avatar,
-                  );
-                } else {}
-              },
-            );
-          },
-          showFollowPopup: () {
-            // WidgetsBinding.instance.endOfFrame.then(
-            //   (_) async {
-            //     if (mounted) {
-            //       await Future.delayed(const Duration(seconds: 15));
-            //       await exitPopup();
-            //     } else {}
-            //   },
-            // );
-          },
+          zeroAstro: zeroAstro,
+          engaging: engaging,
+          showFollowPopup: showFollowPopup,
         );
       },
     );
@@ -142,7 +117,60 @@ class _LivePage extends State<LiveDharamScreen>
       },
     );
 
+    // receiver.start();
+    // receiver.messages.listen(
+    //   (event) {
+    //     final DataSnapshot dataSnapshot = event.data?["data"] as DataSnapshot;
+    //     _controller.eventListner(
+    //       snapshot: dataSnapshot,
+    //       zeroAstro: zeroAstro,
+    //       engaging: engaging,
+    //       showFollowPopup: showFollowPopup,
+    //     );
+    //   },
+    // );
+
     _startTimer();
+  }
+
+  Future<void> zeroAstro() async {
+    if (mounted) {
+      await _zegoController.leave(context);
+    } else {}
+    return Future<void>.value();
+  }
+
+  Future<void> engaging(WaitListModel currentCaller) async {
+    final String id = currentCaller.id;
+    final String name = currentCaller.userName;
+    final String avatar = currentCaller.avatar;
+    final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
+
+    WidgetsBinding.instance.endOfFrame.then(
+      (_) async {
+        if (mounted) {
+          await onCoHostRequest(
+            user: user,
+            userId: id,
+            userName: name,
+            avatar: avatar,
+          );
+        } else {}
+      },
+    );
+    return Future<void>.value();
+  }
+
+  Future<void> showFollowPopup() async {
+    // WidgetsBinding.instance.endOfFrame.then(
+    //   (_) async {
+    //     if (mounted) {
+    //       await Future.delayed(const Duration(seconds: 15));
+    //       await exitPopup();
+    //     } else {}
+    //   },
+    // );
+    return Future<void>.value();
   }
 
   void _startTimer() {
@@ -160,17 +188,18 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> onUserJoin(List<ZegoUIKitUser> users) async {
-    // final ZegoCustomMessage model = ZegoCustomMessage(
-    //   type: 1,
-    //   liveId: _controller.liveId,
-    //   userId: _controller.userId,
-    //   userName: _controller.userName,
-    //   avatar: _controller.avatar,
-    //   message: "${_controller.userName} Joined",
-    //   timeStamp: DateTime.now().toString(),
-    //   fullGiftImage: "",
-    // );
-    // await sendMessageToZego(model);
+    final ZegoCustomMessage model = ZegoCustomMessage(
+      type: 1,
+      liveId: _controller.liveId,
+      userId: _controller.userId,
+      userName: _controller.userName,
+      avatar: _controller.avatar,
+      message: "${_controller.userName} Joined",
+      timeStamp: DateTime.now().toString(),
+      fullGiftImage: "",
+      isBlockedCustomer: _controller.isCustomerBlockedBool(),
+    );
+    await sendMessageToZego(model);
     Future<void>.value();
   }
 
@@ -908,6 +937,7 @@ class _LivePage extends State<LiveDharamScreen>
   //             : "${_controller.userName} sent a ${item.giftName}",
   //         timeStamp: DateTime.now().toString(),
   //         fullGiftImage: item.fullGiftImage,
+  //         isBlockedCustomer: _controller.isCustomerBlockedBool(),
   //       );
   //       await sendMessageToZego(model0);
   //       await Future.delayed(const Duration(seconds: 1));
@@ -923,6 +953,7 @@ class _LivePage extends State<LiveDharamScreen>
   //       //       : "${_controller.userName} sent a ${item.giftName}",
   //       //   timeStamp: DateTime.now().toString(),
   //       //   fullGiftImage: item.fullGiftImage,
+  //       //   isBlockedCustomer: _controller.isCustomerBlockedBool(),
   //       // );
   //       // await sendMessageToZego(model1);
   //       // await Future.delayed(const Duration(seconds: 1));
@@ -1003,7 +1034,6 @@ class _LivePage extends State<LiveDharamScreen>
                                       style: const TextStyle(
                                         fontSize: 10,
                                         color: Colors.white,
-                                        fontWeight: FontWeight.bold,
                                         shadows: [
                                           Shadow(
                                             color: Colors.black,
@@ -1072,7 +1102,7 @@ class _LivePage extends State<LiveDharamScreen>
             itemCount: messages.isNotEmpty && messages.length >= 1
                 ? 1
                 : messages.length,
-            controller: _scrollControllerForBottom,
+            controller: _scrollControllerForTop,
             itemBuilder: (BuildContext context, int index) {
               final ZegoInRoomMessage message = messages[index];
               final ZegoCustomMessage msg =
@@ -1248,8 +1278,11 @@ class _LivePage extends State<LiveDharamScreen>
 
       await _controller.updateInfo();
       List<dynamic> list = await _controller.onLiveStreamingEnded();
-      _zegoController.swiping.next();
-      await _controller.updateInfo();
+      if (list.isEmpty) {
+      } else {
+        _zegoController.swiping.next();
+        await _controller.updateInfo();
+      }
     } else {}
 
     return Future<void>.value();
@@ -1953,7 +1986,15 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget newAppBarLeft() {
     return InkWell(
-      onTap: keyboardPop,
+      onTap: () async {
+        if (_controller.isHost) {
+          await keyboardPop();
+        } else {
+          //  _controller.isCustBlocked.data?.isCustomerBlocked == 1
+          //     ? await youAreBlocked()
+          //     : await keyboardPop();
+        }
+      },
       child: SizedBox(
         height: 50,
         width: 50,
@@ -3001,6 +3042,7 @@ class _LivePage extends State<LiveDharamScreen>
       message: msg,
       timeStamp: DateTime.now().toString(),
       fullGiftImage: "",
+      isBlockedCustomer: _controller.isCustomerBlockedBool(),
     );
     await sendMessageToZego(model);
     FocusManager.instance.primaryFocus?.unfocus();
@@ -3022,6 +3064,7 @@ class _LivePage extends State<LiveDharamScreen>
   //     message: "${_controller.userName} Started following",
   //     timeStamp: DateTime.now().toString(),
   //     fullGiftImage: "",
+  //      isBlockedCustomer: _controller.isCustomerBlockedBool(),
   //   );
   //   await sendMessageToZego(model);
 
