@@ -1,5 +1,5 @@
 class BlockedCustomerListRes {
-  List<Data>? data;
+  List<BlockedCustomerListResData>? data;
   bool? success;
   int? statusCode;
   String? message;
@@ -9,9 +9,9 @@ class BlockedCustomerListRes {
 
   BlockedCustomerListRes.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <BlockedCustomerListResData>[];
       json['data'].forEach((v) {  
-        data!.add(new Data.fromJson(v));
+        data!.add(new BlockedCustomerListResData.fromJson(v));
       });
     }
     success = json['success'];
@@ -31,15 +31,15 @@ class BlockedCustomerListRes {
   }
 }
 
-class Data {
+class BlockedCustomerListResData {
   int? id;
   int? customerId;
   int? isBlock;
   GetCustomers? getCustomers;
 
-  Data({this.id, this.customerId, this.isBlock, this.getCustomers});
+  BlockedCustomerListResData({this.id, this.customerId, this.isBlock, this.getCustomers});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  BlockedCustomerListResData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     customerId = json['customer_id'];
     isBlock = json['is_block'];
