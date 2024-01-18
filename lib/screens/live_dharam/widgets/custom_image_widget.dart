@@ -1,12 +1,12 @@
 import "package:cached_network_image/cached_network_image.dart";
-import "package:flutter/cupertino.dart";
+import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:flutter/material.dart";
-import "package:get/utils.dart";
+import "package:get/get.dart";
 
 enum TypeEnum { user, gift }
 
 class CustomImageWidget extends StatelessWidget {
-  const CustomImageWidget({
+  CustomImageWidget({
     required this.imageUrl,
     required this.rounded,
     required this.typeEnum,
@@ -16,6 +16,8 @@ class CustomImageWidget extends StatelessWidget {
   final String imageUrl;
   final bool rounded;
   final TypeEnum typeEnum;
+
+  final SharedPreferenceService _pref = Get.put(SharedPreferenceService());
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +37,24 @@ class CustomImageWidget extends StatelessWidget {
   }
 
   Widget dec() {
+    final bool condition1 = imageUrl == "${_pref.getAmazonUrl()}";
+    final bool condition2 = imageUrl == "${_pref.getAmazonUrl()}/";
+    
     Widget widget = const SizedBox();
     switch (typeEnum) {
       case TypeEnum.user:
-        widget = GetUtils.isURL(imageUrl) ? cachedNetworkImage() : assetImage();
+        widget = GetUtils.isURL(imageUrl)
+            ? (condition1 || condition2)
+                ? assetImage()
+                : networkImage()
+            : assetImage();
         break;
       case TypeEnum.gift:
-        widget = GetUtils.isURL(imageUrl) ? cachedNetworkImage() : assetImage();
+        widget = GetUtils.isURL(imageUrl)
+            ? (condition1 || condition2)
+                ? assetImage()
+                : networkImage()
+            : assetImage();
         break;
     }
     return widget;
@@ -54,16 +67,10 @@ class CustomImageWidget extends StatelessWidget {
         widget = CachedNetworkImage(
           imageUrl: imageUrl,
           fit: BoxFit.fill,
-          // progressIndicatorBuilder: (context, string, progress) {
-          //   // return SizedBox();
-          //   return assetImage();
-          // },
           placeholder: (BuildContext context, String url) {
-            // return const CupertinoActivityIndicator();
             return assetImage();
           },
           errorWidget: (BuildContext context, String url, Object error) {
-            // return const Icon(Icons.error);
             return assetImage();
           },
           memCacheWidth: 100,
@@ -73,7 +80,7 @@ class CustomImageWidget extends StatelessWidget {
           fadeInDuration: Duration.zero,
           fadeOutDuration: Duration.zero,
           placeholderFadeInDuration: Duration.zero,
-          useOldImageOnUrlChange: true,
+          useOldImageOnUrlChange: false,
           errorListener: (e) => print("errorListener: $e"),
         );
         break;
@@ -81,16 +88,10 @@ class CustomImageWidget extends StatelessWidget {
         widget = CachedNetworkImage(
           imageUrl: imageUrl,
           fit: BoxFit.fill,
-          // progressIndicatorBuilder: (context, string, progress) {
-          //   // return SizedBox();
-          //   return assetImage();
-          // },
           placeholder: (BuildContext context, String url) {
-            // return const CupertinoActivityIndicator();
             return assetImage();
           },
           errorWidget: (BuildContext context, String url, Object error) {
-            // return const Icon(Icons.error);
             return assetImage();
           },
           memCacheWidth: 100,
@@ -100,7 +101,7 @@ class CustomImageWidget extends StatelessWidget {
           fadeInDuration: Duration.zero,
           fadeOutDuration: Duration.zero,
           placeholderFadeInDuration: Duration.zero,
-          useOldImageOnUrlChange: true,
+          useOldImageOnUrlChange: false,
           errorListener: (e) => print("errorListener: $e"),
         );
         break;

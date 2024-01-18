@@ -128,7 +128,7 @@ class AppFirebaseService {
     watcher.nameStream.listen((value) {
       if (value != "") {
         _database.child("order/$value").onValue.listen((event) {
-          orderData.value = (event.snapshot.value == null ? null : Map<String, dynamic>.from(event.snapshot.value! as Map<Object?, Object?>))!;
+          orderData.value = (event.snapshot.value == null ? <String, String>{} : Map<String, dynamic>.from(event.snapshot.value! as Map<Object?, Object?>));
           if (event.snapshot.value != null) {
             Map<String, dynamic>? orderData =
                 Map<String, dynamic>.from(event.snapshot.value! as Map<Object?, Object?>);

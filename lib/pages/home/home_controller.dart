@@ -21,6 +21,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import "package:permission_handler/permission_handler.dart";
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/PopupManager.dart';
@@ -34,6 +35,7 @@ import '../../model/home_page_model_class.dart';
 import "../../model/important_numbers.dart";
 import '../../model/res_login.dart';
 import '../../model/send_feed_back_model.dart';
+import '../../model/tarot_response.dart';
 import '../../model/view_training_video_model.dart';
 import '../../repository/home_page_repository.dart';
 import "../../repository/important_number_repository.dart";
@@ -60,8 +62,7 @@ class HomeController extends GetxController {
   final HomePageRepository homePageRepository = Get.put(HomePageRepository());
   final homeScreenKey = GlobalKey<ScaffoldState>();
   int scoreIndex = 0;
-  List<Map<String, dynamic>> yourScore = [
-  ];
+  List<Map<String, dynamic>> yourScore = [];
 
   Rx<Loading> offerTypeLoading = Loading.initial.obs;
   Rx<Loading> sessionTypeLoading = Loading.initial.obs;
@@ -81,19 +82,20 @@ class HomeController extends GetxController {
   }
 
   BroadcastReceiver broadcastReceiver =
-      BroadcastReceiver(names: <String>["callKundli","giftCount"]);
+      BroadcastReceiver(names: <String>["callKundli", "giftCount"]);
 
   List<MobileNumber> importantNumbers = <MobileNumber>[];
   List<Contact> allContacts = <Contact>[].obs;
   bool? isAllNumbersExist;
+
   @override
   void onInit() async {
     super.onInit();
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {
       debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
-      if(event.name == "giftCount") {
-        showGiftBottomSheet(event.data?["giftCount"],contextDetail);
+      if (event.name == "giftCount") {
+        showGiftBottomSheet(event.data?["giftCount"], contextDetail);
       }
     });
     userData = preferenceService.getUserDetail();
@@ -101,9 +103,9 @@ class HomeController extends GetxController {
     await getFilteredPerformance();
     //await getContactList();
     // fetchImportantNumbers();
-     getConstantDetailsData();
-     getDashboardDetail();
-     getFeedbackData();
+    getConstantDetailsData();
+    getDashboardDetail();
+    getFeedbackData();
     tarotCardData();
   }
 
@@ -333,7 +335,7 @@ class HomeController extends GetxController {
 
       showOnceInDay();
       update();
-   //   getFeedbackData();
+      //   getFeedbackData();
       //log("DashboardData==>${jsonEncode(homeData)}");
     } catch (error) {
       if (error is AppException) {
@@ -343,13 +345,13 @@ class HomeController extends GetxController {
       }
     }
   }
- tarotCardData() async {
-   // loading = Loading.initial;
-    print("response.data");
+
+  tarotCardData() async {
+    // loading = Loading.initial;
     try {
       print("response.data1");
-      var response = await HomePageRepository().getTarotCardData();
-     } catch (error) {
+      await HomePageRepository().getTarotCardData();
+    } catch (error) {
       if (error is AppException) {
         error.onException();
       } else {
@@ -357,6 +359,7 @@ class HomeController extends GetxController {
       }
     }
   }
+
 
   updateCurrentData() {
     chatSwitch.value = homeData?.sessionType?.chat == 1;
@@ -415,7 +418,7 @@ class HomeController extends GetxController {
       preferenceService.setConstantDetails(data);
       // debugPrint("ConstantDetails Data==> $data");
       profileDataSync.value = true;
-  //    getDashboardDetail();
+      //    getDashboardDetail();
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
@@ -689,8 +692,12 @@ class HomeController extends GetxController {
       // ),
     );
   }
+
   showGiftBottomSheet(int giftCount, BuildContext? contextDetail) async {
-    PopupManager.showGiftCountPopup(contextDetail!, title: "Congratulations", btnTitle: "Check Order History", totalGift: giftCount);
+    PopupManager.showGiftCountPopup(contextDetail!,
+        title: "Congratulations",
+        btnTitle: "Check Order History",
+        totalGift: giftCount);
     // await GiftCountPopup(
     //   Get.context!,
     //   title: "Congratulations!",

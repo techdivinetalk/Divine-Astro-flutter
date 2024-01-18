@@ -9,6 +9,7 @@ import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/common/permission_handler.dart";
 import "package:divine_astrologer/common/routes.dart";
+import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/gen/assets.gen.dart";
 import "package:divine_astrologer/model/chat_offline_model.dart";
@@ -36,6 +37,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
   @override
   Widget build(BuildContext context) {
+    var pref = Get.find<SharedPreferenceService>();
     return Scaffold(
       body: GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
         return Stack(
@@ -245,8 +247,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(5.0),
-                                          child: Image.asset(
-                                            "assets/images/${controller.getValueByPosition(index)}.png",
+                                          child: Image.network(
+                                            "${pref.getAmazonUrl()}/${controller.getValueByPosition(index)}",
                                           ),
                                         ),
                                       ),
@@ -266,15 +268,18 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                           horizontal: 4),
                                       child: Center(
                                           child: Text(
-                                              controller.getKeyByPosition(index)    ,style: TextStyle(color: AppColors.white),                                      )
-                                      ),
+                                        controller.getKeyByPosition(index),
+                                        style:
+                                            const TextStyle(color: AppColors.white),
+                                        overflow: TextOverflow.ellipsis,
+                                        softWrap: false,
+                                      )),
                                     ),
                                   ),
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              Text(
-                                  "House of cards ${AppFirebaseService().orderData.value["dob"]}",
+                              Text("House of cards ",
                                   style: TextStyle(color: Colors.white)),
                             ],
                           ),
