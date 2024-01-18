@@ -1946,11 +1946,15 @@ class PerformanceDialog extends StatelessWidget {
                                 SizedBox(height: 16.h),
                                 Center(
                                   child: Text(
-                                    controller
-                                            .performanceScoreList[
-                                                controller.scoreIndex]
-                                            ?.label ??
-                                        '',
+                                    
+                                    controller.getLabel(),
+
+                                    // controller
+                                    //         .performanceScoreList[
+                                    //             controller.scoreIndex]
+                                    //         ?.label ??
+                                    //     '',
+
                                     // controller.yourScore[controller.scoreIndex]
                                     //     ['title'],
                                     style: AppTextStyle.textStyle14(
