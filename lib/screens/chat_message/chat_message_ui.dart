@@ -85,7 +85,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 12.w, vertical: 4.h),
                             child: Column(
-                              crossAxisAlignment: (data.msgType ?? 0) == 0
+                              crossAxisAlignment: (data.msgType ?? 0) == 1
                                   ? CrossAxisAlignment.end
                                   : CrossAxisAlignment.start,
                               children: [
@@ -109,7 +109,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                                       minWidth:
                                           ScreenUtil().screenWidth * 0.27),
                                   child: Stack(
-                                    alignment: (data.msgType ?? 0) == 0
+                                    alignment: (data.msgType ?? 0) == 1
                                         ? Alignment.centerRight
                                         : Alignment.centerLeft,
                                     children: [
@@ -123,7 +123,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                                                         fontColor:
                                                             (data.msgType ??
                                                                         0) ==
-                                                                    0
+                                                                    1
                                                                 ? AppColors
                                                                     .darkBlue
                                                                 : AppColors

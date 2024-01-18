@@ -113,6 +113,10 @@ class AppFirebaseService {
             sendBroadcast(
                 BroadcastMessage(name: "deliveredMsg", data: {'deliveredMsgList': realTimeData["deliveredMsg"]}));
           }
+          if (realTimeData["totalGift"] != null) {
+            sendBroadcast(
+                BroadcastMessage(name: "totalGift", data: {'totalGift': realTimeData["totalGift"]}));
+          }
           if (realTimeData["order_id"] != null) {
             watcher.strValue = realTimeData["order_id"].toString();
           }
