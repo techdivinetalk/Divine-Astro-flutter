@@ -1,9 +1,11 @@
+import 'package:device_apps/device_apps.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/login_images.dart';
+import 'package:divine_astrologer/true_caller_divine/true_caller_divine_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +23,8 @@ class LoginController extends GetxController {
   LoginController(this.userRepository);
 
   final UserRepository userRepository;
-  SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
+  SharedPreferenceService preferenceService =
+      Get.find<SharedPreferenceService>();
   late TextEditingController countryCodeController;
   late TextEditingController mobileNumberController;
 
@@ -33,9 +36,13 @@ class LoginController extends GetxController {
 
   final List<Widget> imgList = [
     Assets.images.bgRegisterLogo.image(
-        width: ScreenUtil().screenWidth * 0.9, height: ScreenUtil().screenHeight * 0.25, fit: BoxFit.contain),
+        width: ScreenUtil().screenWidth * 0.9,
+        height: ScreenUtil().screenHeight * 0.25,
+        fit: BoxFit.contain),
     Assets.images.bgServiceLogo.image(
-        width: ScreenUtil().screenWidth * 0.9, height: ScreenUtil().screenHeight * 0.25, fit: BoxFit.contain),
+        width: ScreenUtil().screenWidth * 0.9,
+        height: ScreenUtil().screenHeight * 0.25,
+        fit: BoxFit.contain),
   ];
 
   final List<String> infoList = [
@@ -73,8 +80,11 @@ class LoginController extends GetxController {
   }
 
   void navigateToOtpPage(SendOtpModel data) {
-    Get.toNamed(RouteName.otpVerificationPage,
-        arguments: [data.data.mobileNo, data.data.sessionId, countryCodeController.text]);
+    Get.toNamed(RouteName.otpVerificationPage, arguments: [
+      data.data.mobileNo,
+      data.data.sessionId,
+      countryCodeController.text
+    ]);
     mobileNumberController.clear();
     enable.value = true;
   }
@@ -91,12 +101,27 @@ class LoginController extends GetxController {
   //   enable.value = true;
   // }
 
+  RxBool showTrueCaller = false.obs;
+
   @override
   void onInit() {
     super.onInit();
     getLoginImages();
     countryCodeController = TextEditingController(text: "+91");
     mobileNumberController = TextEditingController(text: "");
+    TrueCallerService().isTrueCallerInstalled().then((value) {
+      showTrueCaller.value = value;
+    });
+  }
+
+  @override
+  void onReady() async {
+    super.onReady();
+
+    showTrueCaller.value = await TrueCallerService().isTrueCallerInstalled();
+    DeviceApps.listenToAppsChanges().listen((ApplicationEvent event) async {
+      showTrueCaller.value = await TrueCallerService().isTrueCallerInstalled();
+    });
   }
 
   @override
@@ -133,11 +158,11 @@ class LoginController extends GetxController {
 
   Future<LoginImages> getInitialLoginImages() async {
     final response = await userRepository.getInitialLoginImages();
-    
+
     //added by: dev-dharam
     Get.find<SharedPreferenceService>().setAmazonUrl(response.data.baseurl);
     //
-    
+
     return response;
   }
 

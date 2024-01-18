@@ -83,6 +83,9 @@ dependencies:
   truecaller_sdk: ^1.0.0
   flutter_overlay_window: ^0.4.3
   velocity_x: ^4.1.2
+  uuid: ^4.3.2
+  flutter_json_viewer: ^1.0.1
+  device_apps: ^2.2.0
 
 dependency_overrides:
   intl: ^0.18.1
