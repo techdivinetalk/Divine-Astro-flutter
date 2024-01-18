@@ -14,6 +14,7 @@ import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/pages/home/home_ui.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
@@ -359,7 +360,6 @@ class HomeController extends GetxController {
       }
     }
   }
-
 
   updateCurrentData() {
     chatSwitch.value = homeData?.sessionType?.chat == 1;
@@ -717,5 +717,38 @@ class HomeController extends GetxController {
     } else {
       return false;
     }
+  }
+
+  Future<bool> hasOpenOrder() async {
+    bool hasOpenOrder = false;
+
+    final String id = (preferenceService.getUserDetail()?.id ?? "").toString();
+    final String realTimeNode = "astrologer/$id/realTime";
+
+    final DatabaseReference reference = FirebaseDatabase.instance.ref();
+    final DataSnapshot dataSnapshot = await reference.child(realTimeNode).get();
+
+    if (dataSnapshot.exists) {
+      if (dataSnapshot.value is Map<dynamic, dynamic>) {
+        Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+        map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+            as Map<dynamic, dynamic>;
+
+        if (map.isEmpty) {
+        } else if (map.isNotEmpty) {
+          hasOpenOrder = map["order_id"] != null;
+        } else {}
+      } else {}
+    } else {}
+    return Future<bool>.value(hasOpenOrder);
+  }
+
+  String getLabel() {
+    final bool b1 = (performanceScoreList ?? <Conversion?>[]).isNotEmpty;
+    final bool b2 = performanceScoreList[scoreIndex] != null;
+    final bool b3 = performanceScoreList[scoreIndex]?.label != null;
+    return (b1 && b2 && b3)
+        ? performanceScoreList[scoreIndex]?.label ?? ""
+        : "";
   }
 }

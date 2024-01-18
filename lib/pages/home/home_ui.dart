@@ -317,20 +317,31 @@ class HomeUI extends GetView<HomeController> {
                       SizedBox(height: 10.h),
                       InkWell(
                         onTap: () async {
-                          bool isChatOn = controller.chatSwitch.value;
-                          bool isAudioCallOn = controller.callSwitch.value;
-                          bool isVideoCallOn = controller.videoSwitch.value;
-                          if (isChatOn == false &&
-                              isAudioCallOn == false &&
-                              isVideoCallOn == false) {
-                            Get.toNamed(RouteName.liveTipsUI);
-                          } else {
+                          bool hasOpenOrder = false;
+                          hasOpenOrder = await controller.hasOpenOrder();
+                          if (hasOpenOrder) {
                             divineSnackBar(
-                              data:
-                                  "Please turn off all session types in order to go live.",
-                              color: AppColors.appColorDark,
-                              duration: const Duration(seconds: 6)
-                            );
+                                data:
+                                    "Unable to Go Live due to your active order.",
+                                color: AppColors.appColorDark,
+                                duration: const Duration(seconds: 6),
+                              );
+                          } else {
+                            bool isChatOn = controller.chatSwitch.value;
+                            bool isAudioCallOn = controller.callSwitch.value;
+                            bool isVideoCallOn = controller.videoSwitch.value;
+                            if (isChatOn == false &&
+                                isAudioCallOn == false &&
+                                isVideoCallOn == false) {
+                              await Get.toNamed(RouteName.liveTipsUI);
+                            } else {
+                              divineSnackBar(
+                                data:
+                                    "Please turn off all session types in order to go live.",
+                                color: AppColors.appColorDark,
+                                duration: const Duration(seconds: 6),
+                              );
+                            }
                           }
                         },
                         child: Container(
@@ -1084,24 +1095,23 @@ class HomeUI extends GetView<HomeController> {
                     ],
                   ),
                   Obx(
-                        () =>
-                            SwitchWidget(
+                    () => SwitchWidget(
                       onTap: () {
                         if (controller.offerTypeLoading.value !=
                             Loading.loading) {
-                          controller.orderOfferSwitch[index] = !controller.orderOfferSwitch[index];
+                          controller.orderOfferSwitch[index] =
+                              !controller.orderOfferSwitch[index];
                         }
-                          // controller.updateOfferType(
-                          //   index: index,
-                          //   offerId: controller.homeData?.offers?.orderOffer?[index].id ?? 0,
-                          //   offerType: 1,
-                          //   value: !controller.orderOfferSwitch[index],
-                          // );
-                        },
-                      switchValue:
-                      controller.orderOfferSwitch[index],
+                        // controller.updateOfferType(
+                        //   index: index,
+                        //   offerId: controller.homeData?.offers?.orderOffer?[index].id ?? 0,
+                        //   offerType: 1,
+                        //   value: !controller.orderOfferSwitch[index],
+                        // );
+                      },
+                      switchValue: controller.orderOfferSwitch[index],
                     ),
-                 ),
+                  ),
                 ],
               );
             },
@@ -1936,11 +1946,15 @@ class PerformanceDialog extends StatelessWidget {
                                 SizedBox(height: 16.h),
                                 Center(
                                   child: Text(
-                                    controller
-                                            .performanceScoreList[
-                                                controller.scoreIndex]
-                                            ?.label ??
-                                        '',
+                                    
+                                    controller.getLabel(),
+
+                                    // controller
+                                    //         .performanceScoreList[
+                                    //             controller.scoreIndex]
+                                    //         ?.label ??
+                                    //     '',
+
                                     // controller.yourScore[controller.scoreIndex]
                                     //     ['title'],
                                     style: AppTextStyle.textStyle14(
