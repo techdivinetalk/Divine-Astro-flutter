@@ -83,14 +83,16 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
   final appFirebaseService = AppFirebaseService();
   final appSocket = AppSocket();
   bool isBottomSheetOpen = false;
-  BroadcastReceiver broadcastReceiver = BroadcastReceiver(names: <String>["EndChat"]);
+  BroadcastReceiver broadcastReceiver = BroadcastReceiver(names: <String>["EndChat","backReq"]);
   bool isLoader = false;
 
   @override
   void initState() {
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {
-      if (event.name == "EndChat") {
+      if (event.name == "backReq") {
+        Get.offAllNamed(RouteName.dashboard);
+      }else if (event.name == "EndChat") {
         Get.offAllNamed(RouteName.dashboard);
         broadcastReceiver.stop();
       }
