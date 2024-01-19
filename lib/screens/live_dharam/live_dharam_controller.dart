@@ -245,34 +245,39 @@ class LiveDharamController extends GetxController {
           } else if (data.isNotEmpty) {
             if (data.keys.toList().isEmpty) {
             } else {
-              if (data.keys.toList()[currentIndex] != null) {
-                liveId = isHost ? liveId : data.keys.toList()[currentIndex];
-                // isHostAvailable = checkIfAstrologerAvailable(map);
-                var liveIdNode = data[liveId];
-                var waitListNode = liveIdNode["waitList"];
-                currentCaller = isEngadedNew(waitListNode, isForMe: false);
+              if (data.keys.toList() != null &&
+                  data.keys.toList().length > currentIndex) {
+                if (data.keys.toList()[currentIndex] != null) {
+                  liveId = isHost ? liveId : data.keys.toList()[currentIndex];
+                  // isHostAvailable = checkIfAstrologerAvailable(map);
+                  var liveIdNode = data[liveId];
+                  var waitListNode = liveIdNode["waitList"];
+                  currentCaller = isEngadedNew(waitListNode, isForMe: false);
 
-                await Future.delayed(const Duration(seconds: 1));
+                  await Future.delayed(const Duration(seconds: 1));
 
-                final bool cond1 = isHost;
-                final bool cond2 = waitListModel.length == 1;
-                final bool cond3 = currentCaller.id.isNotEmpty;
-                final bool cond4 = !currentCaller.isEngaded;
-                final bool cond5 = !currentCaller.isRequest;
-                if (cond1 && cond2 && cond3 && cond4 && cond5) {
-                  engaging(currentCaller);
+                  final bool cond1 = isHost;
+                  final bool cond2 = waitListModel.length == 1;
+                  final bool cond3 = currentCaller.id.isNotEmpty;
+                  final bool cond4 = !currentCaller.isEngaded;
+                  final bool cond5 = !currentCaller.isRequest;
+                  if (cond1 && cond2 && cond3 && cond4 && cond5) {
+                    engaging(currentCaller);
+                  } else {}
+
+                  // await getAstrologerDetails();
+
+                  // final isNotFollowing = details.data?.isFollow == 0;
+                  // final hasNotSeenPopup = !astroFollowPopup.contains(liveId);
+                  // if (isNotFollowing && hasNotSeenPopup) {
+                  //   astroFollowPopup = [
+                  //     ...[liveId]
+                  //   ];
+                  //   showFollowPopup();
+                  // } else {}
+
+                  // await isCustomerBlocked();
                 } else {}
-
-                // await getAstrologerDetails();
-
-                // final isNotFollowing = details.data?.isFollow == 0;
-                // final hasNotSeenPopup = !astroFollowPopup.contains(liveId);
-                // if (isNotFollowing && hasNotSeenPopup) {
-                //   astroFollowPopup = [...[liveId]];
-                //   showFollowPopup();
-                // } else {}
-
-                // await isCustomerBlocked();
               } else {}
             }
           } else {}
@@ -298,22 +303,20 @@ class LiveDharamController extends GetxController {
           map = (dataSnapshot.value ?? <dynamic, dynamic>{})
               as Map<dynamic, dynamic>;
           data.addAll(map);
-          if (data.isEmpty) {
-          } else if (data.isNotEmpty) {
-            liveList.addAll(data.keys.toList());
-          } else {}
+          liveList.addAll(data.keys.toList());
         } else {}
       } else {}
     } else {}
     return Future<List<dynamic>>.value(liveList);
   }
 
-  Future<void> updateInfo() async {
+  void updateInfo() {
     astroFollowPopup = [];
-    await sendBroadcast(
+    // do not write await here!
+    sendBroadcast(
       BroadcastMessage(name: "LiveDharamScreen_eventListner"),
     );
-    return Future<void>.value();
+    return;
   }
 
   WaitListModel engagedCoHostWithAstro() {
@@ -380,7 +383,7 @@ class LiveDharamController extends GetxController {
   //   if (map.isEmpty) {
   //     return isAvailable;
   //   } else {
-  //     final Map<dynamic, dynamic> currentHostId = map[liveId];
+  //     final Map<dynamic, dynamic> currentHostId = map[liveId] ?? {};
   //     isAvailable = currentHostId["isAvailable"] ?? false;
   //     return isAvailable;
   //   }
@@ -400,7 +403,8 @@ class LiveDharamController extends GetxController {
   //     if (data.keys.toList()[currentIndex] != null) {
   //       liveId = data.keys.toList()[currentIndex];
   //       // unawaited(getAstrologerDetails());
-  //       unawaited(updateInfo());
+  //       // unawaited(updateInfo());
+  //       updateInfo();
   //       return liveId;
   //     } else {
   //       return "";
@@ -422,7 +426,8 @@ class LiveDharamController extends GetxController {
   //     if (data.keys.toList()[currentIndex] != null) {
   //       liveId = data.keys.toList()[currentIndex];
   //       // unawaited(getAstrologerDetails());
-  //       unawaited(updateInfo());
+  //       // unawaited(updateInfo());
+  //       updateInfo();
   //       return liveId;
   //     } else {
   //       return "";
@@ -710,7 +715,7 @@ class LiveDharamController extends GetxController {
   //         Map<dynamic, dynamic> map = <dynamic, dynamic>{};
   //         map = (dataSnapshot.value ?? <dynamic, dynamic>{})
   //             as Map<dynamic, dynamic>;
-  //         final num previousAmount = map["amount"];
+  //         final num previousAmount = map["amount"] ?? 0;
   //         currentAmount = currentAmount + previousAmount;
   //       } else {}
   //     } else {}
@@ -787,7 +792,7 @@ class LiveDharamController extends GetxController {
           Map<dynamic, dynamic> map = <dynamic, dynamic>{};
           map = (dataSnapshot.value ?? <dynamic, dynamic>{})
               as Map<dynamic, dynamic>;
-          final String type = map["callType"];
+          final String type = map["callType"] ?? "";
           previousType = type;
         } else {}
       } else {}
@@ -1170,7 +1175,7 @@ class LiveDharamController extends GetxController {
           Map<dynamic, dynamic> map = <dynamic, dynamic>{};
           map = (dataSnapshot.value ?? <dynamic, dynamic>{})
               as Map<dynamic, dynamic>;
-          isRequest = map["isRequest"];
+          isRequest = map["isRequest"] ?? false;
         } else {}
       } else {}
     } else {}

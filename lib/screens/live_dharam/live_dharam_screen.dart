@@ -95,9 +95,9 @@ class _LivePage extends State<LiveDharamScreen>
 
     _firebaseSubscription =
         FirebaseDatabase.instance.ref().child("live").onValue.listen(
-      (event) {
+      (event) async {
         final DataSnapshot dataSnapshot = event.snapshot;
-        _controller.eventListner(
+        await _controller.eventListner(
           snapshot: dataSnapshot,
           zeroAstro: zeroAstro,
           engaging: engaging,
@@ -121,9 +121,9 @@ class _LivePage extends State<LiveDharamScreen>
     receiver.start();
     receiver.messages.listen(
       (event) async {
-        DatabaseReference ref = FirebaseDatabase.instance.ref();
+        final DatabaseReference ref = FirebaseDatabase.instance.ref();
         final DataSnapshot dataSnapshot = await ref.child("live").get();
-        _controller.eventListner(
+        await _controller.eventListner(
           snapshot: dataSnapshot,
           zeroAstro: zeroAstro,
           engaging: engaging,
@@ -1049,7 +1049,8 @@ class _LivePage extends State<LiveDharamScreen>
                                   ],
                                 ),
                               ),
-                              _controller.isHost
+                              _controller.isHost &&
+                                      !_controller.currentCaller.isEngaded
                                   ? SizedBox(
                                       height: 24,
                                       width: 24,
@@ -1269,6 +1270,29 @@ class _LivePage extends State<LiveDharamScreen>
   //   //       );
   // }
 
+  // Future<void> onLiveStreamingStateUpdate(ZegoLiveStreamingState state) async {
+  //   if (state == ZegoLiveStreamingState.idle) {
+  //     ZegoGiftPlayer().clear();
+  //   } else {}
+
+  //   if (state == ZegoLiveStreamingState.ended) {
+  //     ZegoGiftPlayer().clear();
+  //     await _controller.updateInfo();
+  //     final List<dynamic> list = await _controller.onLiveStreamingEnded();
+  //     final bool canNext = _zegoController.swiping.next();
+  //     if (canNext) {
+  //       await _controller.updateInfo();
+  //       return Future<void>.value();
+  //     } else {}
+  //     final bool canPrevious = _zegoController.swiping.previous();
+  //     if (canPrevious) {
+  //       await _controller.updateInfo();
+  //       return Future<void>.value();
+  //     } else {}
+  //   } else {}
+  //   return Future<void>.value();
+  // }
+
   Future<void> onLiveStreamingStateUpdate(ZegoLiveStreamingState state) async {
     if (state == ZegoLiveStreamingState.idle) {
       ZegoGiftPlayer().clear();
@@ -1276,22 +1300,13 @@ class _LivePage extends State<LiveDharamScreen>
 
     if (state == ZegoLiveStreamingState.ended) {
       ZegoGiftPlayer().clear();
-      await _controller.updateInfo();
+
+      _controller.updateInfo();
       List<dynamic> list = await _controller.onLiveStreamingEnded();
-      if (list.isEmpty) {
-      } else {
-        final bool canNext = _zegoController.swiping.next();
-        if (canNext) {
-          await _controller.updateInfo();
-          return Future<void>.value();
-        } else {}
-        final bool canPrevious = _zegoController.swiping.previous();
-        if (canPrevious) {
-          await _controller.updateInfo();
-          return Future<void>.value();
-        } else {}
-      }
+      _zegoController.swiping.next();
+      _controller.updateInfo();
     } else {}
+
     return Future<void>.value();
   }
 
@@ -3293,12 +3308,12 @@ class _LivePage extends State<LiveDharamScreen>
           onSelect: (liveId) async {
             Get.back();
 
-            await _controller.updateInfo();
+            _controller.updateInfo();
             List<dynamic> list = await _controller.onLiveStreamingEnded();
             _controller.liveId = liveId;
             _controller.currentIndex = list.indexWhere((e) => e == liveId);
             _zegoController.swiping.jumpTo(liveId);
-            await _controller.updateInfo();
+            _controller.updateInfo();
           },
           onFollowAndLeave: () async {
             Get.back();
