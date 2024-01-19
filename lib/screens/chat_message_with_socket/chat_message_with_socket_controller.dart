@@ -420,19 +420,22 @@ class ChatMessageWithSocketController extends GetxController
         isTyping.value = false;
         chatStatus.value = "Chat in - Progress";
         final ChatMessage chatMessage =
-            ChatMessage.fromOfflineJson(data["data"]);
-        final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-        if (data["data"]["receiverId"] ==
-            preferenceService.getUserDetail()!.id.toString()) {
-          socket.messageReceivedStatusUpdate(
-            receiverId: preferenceService.getUserDetail()!.id.toString(),
-            chatMessageId: chatMessage.id.toString(),
-            chatStatus: "read",
-            time: time,
-            orderId: arguments["orderData"]["orderId"].toString(),
-          );
+        ChatMessage.fromOfflineJson(data["data"]);
+        final String time = "${DateTime
+            .now()
+            .millisecondsSinceEpoch ~/ 1000}";
+         if (data["data"]["receiverId"] ==
+             preferenceService.getUserDetail()!.id.toString()) {
+        socket.messageReceivedStatusUpdate(
+          receiverId: preferenceService.getUserDetail()!.id.toString(),
+          chatMessageId: chatMessage.id.toString(),
+          chatStatus: "read",
+          time: time,
+          orderId: arguments["orderData"]["orderId"].toString(),
+        );
+      }
           updateChatMessages(chatMessage, false, isSendMessage: false);
-        }
+        //}
       }
       debugPrint("chatMessage.value.length ${chatMessages.length}");
     });
