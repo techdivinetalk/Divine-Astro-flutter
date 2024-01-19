@@ -8,7 +8,7 @@ class ReferAstrologerRepository extends ApiProvider {
     //progressService.showProgressDialog(true);
     try {
       final response = await post(referAnAstrologer,
-          endPoint: "http://13.127.232.36:8081/api/v3/", body: json);
+          endPoint: "http://15.206.23.215:8081/api/v3/", body: json);
       //progressService.showProgressDialog(false);
       if (response.statusCode == 200) {
         final apiResponse = referAstrologerResponseFromJson(response.body);
