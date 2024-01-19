@@ -139,13 +139,19 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> showNotification(String title, String message, String type, Map<String, dynamic> data) async {
   AndroidNotificationDetails androidNotificationDetails =
-      const AndroidNotificationDetails(
+       AndroidNotificationDetails(
     "DivineCustomer",
     "CustomerNotification",
     importance: Importance.max,
     priority: Priority.high,
+          actions: type == "1" ?  [
+            const AndroidNotificationAction(
+              'accept',
+              'Accept',
+            ),
+          ] : []
   );
-  if (type == "2") {
+  if (type == "1") {
     androidNotificationDetails = const AndroidNotificationDetails(
       "DivineCustomer",
       "CustomerNotification",

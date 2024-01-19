@@ -184,6 +184,9 @@ class AppFirebaseService {
                       orderData: orderData);
                 }
               } else if (orderData["status"] == "3") {
+                print("calling this broadCast backReq");
+                sendBroadcast(
+                    BroadcastMessage(name: "backReq", data:null));
                 sendBroadcast(
                     BroadcastMessage(name: "ReJoinChat", data: {"orderId": value, "orderData": orderData}));
                 Get.toNamed(RouteName.chatMessageWithSocketUI, arguments: {"orderData": orderData});
