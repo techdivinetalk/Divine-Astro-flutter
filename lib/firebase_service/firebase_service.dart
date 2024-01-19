@@ -138,6 +138,10 @@ class AppFirebaseService {
               sendBroadcast(
                   BroadcastMessage(name: "updateTime", data: {"talktime": orderData["talktime"],}));
             }
+            if (orderData["card"] != null) {
+              sendBroadcast(
+                  BroadcastMessage(name: "displayCard", data: null));
+            }
               if (orderData["status"] == "0") {
                 acceptBottomWatcher.strValue = "0";
                 sendBroadcast(

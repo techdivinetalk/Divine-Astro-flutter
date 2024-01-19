@@ -1,10 +1,12 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart';
 import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
@@ -128,7 +130,7 @@ class ZegoService {
     );
     FirebaseDatabase.instance
         .ref()
-        .child("order/${Get.arguments["orderData"]["orderId"]}")
+        .child("order/${AppFirebaseService().orderData.value["orderId"]}")
         .update(
       <String, dynamic>{"astrologer_permission": value},
     );

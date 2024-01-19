@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_controller.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_controller.dart';
 import 'package:divine_astrologer/tarotCard/src/_flutter_carousel_widget.dart';
 import 'package:divine_astrologer/tarotCard/src/components/image_constant.dart';
@@ -915,26 +916,13 @@ class _CardChoiceBottomSheetState extends State<CardChoiceBottomSheet> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () => Navigator.pop(context),
-              ),
-              Text(
-                'Show Card Deck to User',
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-              ),
-              Opacity(
-                opacity: 0, // Invisible IconButton to balance the row alignment
-                child: IconButton(
-                  icon: Icon(Icons.close),
-                  onPressed: null,
-                ),
-              ),
-            ],
+          Center(
+            child: Text(
+              isVisible ? "Waiting For User to Select Cards" : 'Show Card Deck to User',
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            ),
           ),
+          SizedBox(height: 8,),
           Visibility(
             visible: !isVisible,
             child: Container(
@@ -991,15 +979,13 @@ class _CardChoiceBottomSheetState extends State<CardChoiceBottomSheet> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  Column(
-                    children: [const Text('Name'), const Text('05 M 30 S')],
-                  ),
+                  Text(AppFirebaseService().orderData.value["customerName"]),
                   Spacer(), // This will create the gap in the middle
                   ElevatedButton(
                     onPressed: _choice != null
                         ? () {
                             isVisible = true;
-                            Get.back();
+                            //Get.back();
                             setState(() {});
                             controller.sendTarotCard(_choice);
                             // Logic to handle send action

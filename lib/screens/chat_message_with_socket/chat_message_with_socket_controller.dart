@@ -81,7 +81,7 @@ class ChatMessageWithSocketController extends GetxController
   DashboardController dashboardController = Get.find<DashboardController>();
   RxBool isTyping = false.obs;
   BroadcastReceiver broadcastReceiver = BroadcastReceiver(
-      names: <String>["EndChat", "deliveredMsg", "updateTime"]);
+      names: <String>["EndChat", "deliveredMsg", "updateTime","displayCard"]);
 
   RxList<MessageTemplates> messageTemplates = <MessageTemplates>[].obs;
 
@@ -144,6 +144,7 @@ class ChatMessageWithSocketController extends GetxController
     WidgetsBinding.instance.removeObserver(this);
     super.onClose();
   }
+  var isCardVisible = false.obs;
 
   @override
   void onInit() {
@@ -151,6 +152,10 @@ class ChatMessageWithSocketController extends GetxController
     arguments = Get.arguments;
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) {
+      if (event.name == "displayCard") {
+        isCardVisible.value = AppFirebaseService().orderData.value["card"]
+        ["isCardVisible"];
+      }
       if (event.name == "updateTime") {
         debugPrint("talkTime hello: ${event.data?["talktime"]}");
         updateTime(event.data?["talktime"], true);
@@ -796,10 +801,13 @@ class ChatMessageWithSocketController extends GetxController
 
   int getListOfCardLength() {
     var card = orderData['card'];
-    var listOfCard = card['listOfCard'] as Map;
+    if(card != null) {
+      var listOfCard = card['listOfCard'] as Map;
 
-    print("listOfCard ${listOfCard.length}");
-    return listOfCard.length;
+      print("listOfCard ${listOfCard.length}");
+      return listOfCard.length;
+    }
+    return 0;
   }
 
   String getValueByPosition(int position) {
