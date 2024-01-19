@@ -15,7 +15,7 @@ import 'shared_preference_service.dart';
 class ApiProvider {
   static const String version = 'v7';
   // static const String socketUrl = "http://13.127.116.89:4000";
-  static const String socketUrl = "http://13.127.232.36:8081";
+  static const String socketUrl = "http://15.206.23.215:8081";
   final String baseUrl = "https://wakanda-api.divinetalk.live/api/astro/$version/";
   //final String baseUrl = "http://13.235.46.27/admin/$version/";
 
