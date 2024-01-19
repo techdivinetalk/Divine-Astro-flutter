@@ -14,6 +14,7 @@ import 'package:divine_astrologer/model/upload_image_model.dart';
 import 'package:divine_astrologer/model/upload_story_response.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 
 import '../common/app_exception.dart';
 import '../common/routes.dart';
@@ -31,19 +32,17 @@ import '../model/verify_otp.dart';
 import '../model/view_training_video_model.dart';
 
 class UserRepository extends ApiProvider {
-
   Future sentOtp(Map<String, dynamic> param) async {
     //progressService.showProgressDialog(true);
     try {
-      final response =
-      await post(sendOtp, body: jsonEncode(param).toString());
+      final response = await post(sendOtp, body: jsonEncode(param).toString());
       //progressService.showProgressDialog(false);
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
           preferenceService.erase();
           Get.offNamed(RouteName.login);
           throw CustomException(json.decode(response.body)["error"]);
-        } else if(json.decode(response.body)["status_code"] == 400) {
+        } else if (json.decode(response.body)["status_code"] == 400) {
           preferenceService.erase();
           Get.offNamed(RouteName.login);
           throw CustomException(json.decode(response.body)["message"]);
@@ -76,7 +75,7 @@ class UserRepository extends ApiProvider {
     //progressService.showProgressDialog(true);
     try {
       final response =
-      await post(verifyOtpUrl, body: jsonEncode(param).toString());
+          await post(verifyOtpUrl, body: jsonEncode(param).toString());
       //progressService.showProgressDialog(false);
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
@@ -102,7 +101,6 @@ class UserRepository extends ApiProvider {
     }
   }
 
-
   Future<ViewTrainingVideoModelClass> viewTrainingVideoApi(
       Map<String, dynamic> param) async {
     try {
@@ -115,7 +113,7 @@ class UserRepository extends ApiProvider {
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final blockedCustomerList =
-          ViewTrainingVideoModelClass.fromJson(json.decode(response.body));
+              ViewTrainingVideoModelClass.fromJson(json.decode(response.body));
           return blockedCustomerList;
         }
       } else {
@@ -127,9 +125,7 @@ class UserRepository extends ApiProvider {
     }
   }
 
-
-  Future<SendFeedBackModel> sendFeedBack(
-      Map<String, dynamic> param) async {
+  Future<SendFeedBackModel> sendFeedBack(Map<String, dynamic> param) async {
     try {
       final response = await post(saveAstrologerExperience,
           body: jsonEncode(param).toString(),
@@ -140,7 +136,7 @@ class UserRepository extends ApiProvider {
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final blockedCustomerList =
-          SendFeedBackModel.fromJson(json.decode(response.body));
+              SendFeedBackModel.fromJson(json.decode(response.body));
           return blockedCustomerList;
         }
       } else {
@@ -151,8 +147,6 @@ class UserRepository extends ApiProvider {
       rethrow;
     }
   }
-
-
 
   Future<ResLogin> userLogin(Map<String, dynamic> param) async {
     try {
@@ -175,6 +169,33 @@ class UserRepository extends ApiProvider {
       rethrow;
     }
   }
+
+  //
+  Future<ResLogin> astrologerLoginWithTrueCaller({
+    required Map<String, dynamic> params,
+  }) async {
+    ResLogin data = ResLogin();
+    try {
+      final String requestBody = jsonEncode(params);
+      final response = await post(loginUrl, body: requestBody);
+      final Map<String, dynamic> responseBody = json.decode(response.body);
+      if (response.statusCode == HttpStatus.ok) {
+        if (responseBody["status_code"] == HttpStatus.ok) {
+          data = ResLogin.fromJson(responseBody);
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
+          await preferenceService.erase();
+          await Get.offAllNamed(RouteName.login);
+        } else {}
+      } else {}
+    } on Exception catch (error, stack) {
+      debugPrint(
+          "astrologerLoginWithTrueCaller(): Exception caught: error: $error");
+      debugPrint(
+          "astrologerLoginWithTrueCaller(): Exception caught: stack: $stack");
+    }
+    return Future<ResLogin>.value(data);
+  }
+  //
 
   Future<GetUserProfile> getProfileDetail(Map<String, dynamic> param) async {
     try {
@@ -283,7 +304,7 @@ class UserRepository extends ApiProvider {
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final blockedCustomerList =
-          BlockedCustomersResponse.fromJson(json.decode(response.body));
+              BlockedCustomersResponse.fromJson(json.decode(response.body));
           if (blockedCustomerList.statusCode == successResponse &&
               blockedCustomerList.success!) {
             return blockedCustomerList;

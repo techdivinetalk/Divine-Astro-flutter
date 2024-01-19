@@ -39,21 +39,24 @@ class CustomImageWidget extends StatelessWidget {
   Widget dec() {
     final bool condition1 = imageUrl == "${_pref.getAmazonUrl()}";
     final bool condition2 = imageUrl == "${_pref.getAmazonUrl()}/";
-    
+    final bool condition3 =
+        imageUrl == "https://divinenew-prod.s3.ap-south-1.amazonaws.com";
+    final bool condition4 =
+        imageUrl == "https://divinenew-prod.s3.ap-south-1.amazonaws.com/";
     Widget widget = const SizedBox();
     switch (typeEnum) {
       case TypeEnum.user:
         widget = GetUtils.isURL(imageUrl)
             ? (condition1 || condition2)
                 ? assetImage()
-                : networkImage()
+                : cachedNetworkImage()
             : assetImage();
         break;
       case TypeEnum.gift:
         widget = GetUtils.isURL(imageUrl)
-            ? (condition1 || condition2)
+            ? (condition1 || condition2 || condition3 || condition4)
                 ? assetImage()
-                : networkImage()
+                : cachedNetworkImage()
             : assetImage();
         break;
     }

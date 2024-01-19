@@ -189,19 +189,18 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> onUserJoin(List<ZegoUIKitUser> users) async {
-    await Future.delayed(const Duration(seconds: 1));
-    final ZegoCustomMessage model = ZegoCustomMessage(
-      type: 1,
-      liveId: _controller.liveId,
-      userId: _controller.userId,
-      userName: _controller.userName,
-      avatar: _controller.avatar,
-      message: "${_controller.userName} Joined",
-      timeStamp: DateTime.now().toString(),
-      fullGiftImage: "",
-      isBlockedCustomer: _controller.isCustomerBlockedBool(),
-    );
-    await sendMessageToZego(model);
+    // final ZegoCustomMessage model = ZegoCustomMessage(
+    //   type: 1,
+    //   liveId: _controller.liveId,
+    //   userId: _controller.userId,
+    //   userName: _controller.userName,
+    //   avatar: _controller.avatar,
+    //   message: "${_controller.userName} Joined",
+    //   timeStamp: DateTime.now().toString(),
+    //   fullGiftImage: "",
+    //   isBlockedCustomer: _controller.isCustomerBlockedBool(),
+    // );
+    // await sendMessageToZego(model);
     Future<void>.value();
   }
 
@@ -1277,16 +1276,22 @@ class _LivePage extends State<LiveDharamScreen>
 
     if (state == ZegoLiveStreamingState.ended) {
       ZegoGiftPlayer().clear();
-
       await _controller.updateInfo();
       List<dynamic> list = await _controller.onLiveStreamingEnded();
       if (list.isEmpty) {
       } else {
-        _zegoController.swiping.next();
-        await _controller.updateInfo();
+        final bool canNext = _zegoController.swiping.next();
+        if (canNext) {
+          await _controller.updateInfo();
+          return Future<void>.value();
+        } else {}
+        final bool canPrevious = _zegoController.swiping.previous();
+        if (canPrevious) {
+          await _controller.updateInfo();
+          return Future<void>.value();
+        } else {}
       }
     } else {}
-
     return Future<void>.value();
   }
 

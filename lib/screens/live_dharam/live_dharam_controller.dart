@@ -268,7 +268,7 @@ class LiveDharamController extends GetxController {
                 // final isNotFollowing = details.data?.isFollow == 0;
                 // final hasNotSeenPopup = !astroFollowPopup.contains(liveId);
                 // if (isNotFollowing && hasNotSeenPopup) {
-                //   astroFollowPopup.add(liveId);
+                //   astroFollowPopup = [...[liveId]];
                 //   showFollowPopup();
                 // } else {}
 
