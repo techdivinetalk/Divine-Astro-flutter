@@ -367,9 +367,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
           child: astPerm
               ? const SizedBox()
               : InkWell(
-                  onTap: () async {
-                    await ZegoService().onPressed();
-                  },
+                  onTap: ZegoService().newOnBannerPressed,
                   child: const SizedBox(
                     height: 50,
                     width: double.infinity,

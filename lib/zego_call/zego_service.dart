@@ -1,14 +1,14 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
-import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart';
 import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
+
+import '../firebase_service/firebase_service.dart';
 
 class ZegoService {
   static final ZegoService _singleton = ZegoService._internal();
@@ -40,6 +40,12 @@ class ZegoService {
         icon: "call",
       ),
     );
+    print("ZegoService: zegoLogin: $userID $userName");
+    Future<void>.value();
+  }
+
+  Future<void> zegoLogout() async {
+    await ZegoUIKitPrebuiltCallInvitationService().uninit();
     Future<void>.value();
   }
 
@@ -49,6 +55,7 @@ class ZegoService {
     required String targetUserName,
     required Function() checkOppositeSidePermGranted,
   }) {
+    
     return SizedBox(
       height: 32,
       width: 32,
@@ -56,78 +63,57 @@ class ZegoService {
         elevation: 0,
         backgroundColor: AppColors.appYellowColour,
         onPressed: () async {
-          bool condi = await AppPermissionService.instance.hasAllPermissions();
-          if (condi) {
-            bool checkOppositeSidePerm = await checkOppositeSidePermission();
-            if (checkOppositeSidePerm) {
-              await controller.sendCallInvitation(
-                invitees: [ZegoCallUser(targetUserID, targetUserName)],
-                isVideoCall: isVideoCall,
-              );
-            } else {
-              checkOppositeSidePermGranted();
-            }
-          } else {
-            await ZegoService().onPressed();
-          }
+          print("ZegoService: buttonUI: $targetUserID $targetUserName");
+          await newOnPressed(
+            isVideoCall: isVideoCall,
+            targetUserID: targetUserID,
+            targetUserName: targetUserName,
+            checkOppositeSidePermGranted: checkOppositeSidePermGranted,
+          );
         },
         child: Icon(isVideoCall ? Icons.video_call : Icons.call),
       ),
     );
   }
 
-  Future<void> zegoLogout() async {
-    await ZegoUIKitPrebuiltCallInvitationService().uninit();
-    Future<void>.value();
-  }
-
-  Future<void> goInsideChat({
-    required Function() successCallback,
-    required Function() failureCallback,
+  Future<void> newOnPressed({
+    required bool isVideoCall,
+    required String targetUserID,
+    required String targetUserName,
+    required Function() checkOppositeSidePermGranted,
   }) async {
-    bool hasAllPerm = false;
-    await AppPermissionService.instance.zegoOnPressedJoinButton(
-      () {
-        hasAllPerm = true;
-      },
-    );
-    if (hasAllPerm) {
-      await zegoLogin();
-      successCallback();
+    final bool value = await AppPermissionService.instance.hasAllPermissions();
+    if (value) {
+      await canInit();
+      final bool checkOppositeSidePerm = await checkOppositeSidePermission();
+      checkOppositeSidePerm
+          ? await controller.sendCallInvitation(
+              invitees: [ZegoCallUser(targetUserID, targetUserName)],
+              isVideoCall: isVideoCall,
+            )
+          : checkOppositeSidePermGranted();
     } else {
-      failureCallback();
-    }
-    return Future<void>.value();
-  }
-
-  Future<void> startZegoService({
-    required Function() successCallback,
-    required Function() failureCallback,
-  }) async {
-    bool condi = await AppPermissionService.instance.hasAllPermissions();
-    if (condi == false) {
       await AppPermissionService.instance.showAlertDialog(
         "Chat",
         ["Allow display over other apps", "Camera", "Microphone"],
       );
-    } else {}
-    await goInsideChat(
-      successCallback: successCallback,
-      failureCallback: failureCallback,
-    );
+      await AppPermissionService.instance.zegoOnPressedJoinButton(() {});
+      await canInit();
+    }
     return Future<void>.value();
   }
 
-  Future<void> onPressed() async {
-    bool value = false;
-    await ZegoService().startZegoService(
-      successCallback: () {
-        value = true;
-      },
-      failureCallback: () {
-        value = false;
-      },
-    );
+  Future<void> canInit() async {
+    final bool value = await AppPermissionService.instance.hasAllPermissions();
+    if (value) {
+      await zegoLogin();
+    } else {}
+    await addUpdatePermission();
+    Future<void>.value();
+  }
+
+  Future<void> addUpdatePermission() async {
+    final bool value = await AppPermissionService.instance.hasAllPermissions();
     FirebaseDatabase.instance
         .ref()
         .child("order/${AppFirebaseService().orderData.value["orderId"]}")
@@ -152,5 +138,15 @@ class ZegoService {
       } else {}
     } else {}
     return Future<bool>.value(hasPermission);
+  }
+
+  Future<void> newOnBannerPressed() async {
+    await AppPermissionService.instance.showAlertDialog(
+      "Chat",
+      ["Allow display over other apps", "Camera", "Microphone"],
+    );
+    await AppPermissionService.instance.zegoOnPressedJoinButton(() {});
+    await canInit();
+    return Future<void>.value();
   }
 }
