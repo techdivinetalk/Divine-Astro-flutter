@@ -151,6 +151,13 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                                           .getUserDetail()!
                                                                           .id,
                                                                 )
+                                                              : chatMessage
+                                                                      .msgType ==
+                                                                  "sendGifts"
+                                                              ?  giftSendUi(
+                                                  context,
+                                                  chatMessage,
+                                                  chatMessage.senderId == preferenceService.getUserDetail()!.id)
                                                               : textMsgView(
                                                                   context,
                                                                   chatMessage,
@@ -350,7 +357,35 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       }),
     );
   }
-
+  Widget giftSendUi(
+      BuildContext context, ChatMessage chatMessage, bool yourMessage) {
+    return Container(
+      color: AppColors.white,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(15.0, 4.0, 15.0, 4.0),
+        child: Row(
+          children: [
+            SizedBox(
+              height: 32,
+              width: 32,
+              child: CustomImageWidget(
+                imageUrl: chatMessage.awsUrl ?? '',
+                rounded: true,
+                // added by divine-dharam
+                typeEnum: TypeEnum.gift,
+                //
+              ),
+            ),
+            Flexible(
+                child: Text(
+                  "You have received ${chatMessage.message}",
+                  style: const TextStyle(color: Colors.red),
+                )),
+          ],
+        ),
+      ),
+    );
+  }
   Widget permissionRequestWidget() {
     return StreamBuilder<DatabaseEvent>(
       stream: FirebaseDatabase.instance
