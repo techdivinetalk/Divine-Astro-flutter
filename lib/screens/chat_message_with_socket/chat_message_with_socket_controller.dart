@@ -15,6 +15,7 @@ import "package:divine_astrologer/model/res_login.dart";
 import "package:divine_astrologer/repository/message_template_repository.dart";
 import "package:divine_astrologer/repository/user_repository.dart";
 import "package:divine_astrologer/screens/dashboard/dashboard_controller.dart";
+import "package:divine_astrologer/screens/live_dharam/zeo_team/player.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
@@ -42,6 +43,13 @@ import "package:divine_astrologer/zego_call/zego_service.dart";
 
 class ChatMessageWithSocketController extends GetxController
     with WidgetsBindingObserver {
+  BuildContext? context;
+
+  void setContext(BuildContext context) {
+    this.context = context;
+    return;
+  }
+
   final UserRepository userRepository = Get.find<UserRepository>();
   final MessageTemplateRepo messageTemplateRepository =
       Get.put(MessageTemplateRepo());
@@ -82,7 +90,7 @@ class ChatMessageWithSocketController extends GetxController
   DashboardController dashboardController = Get.find<DashboardController>();
   RxBool isTyping = false.obs;
   BroadcastReceiver broadcastReceiver = BroadcastReceiver(
-      names: <String>["EndChat", "deliveredMsg", "updateTime","displayCard"]);
+      names: <String>["EndChat", "deliveredMsg", "updateTime", "displayCard"]);
 
   RxList<MessageTemplates> messageTemplates = <MessageTemplates>[].obs;
 
@@ -145,6 +153,7 @@ class ChatMessageWithSocketController extends GetxController
     WidgetsBinding.instance.removeObserver(this);
     super.onClose();
   }
+
   var isCardVisible = false.obs;
 
   @override
@@ -154,8 +163,8 @@ class ChatMessageWithSocketController extends GetxController
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) {
       if (event.name == "displayCard") {
-        isCardVisible.value = AppFirebaseService().orderData.value["card"]
-        ["isCardVisible"];
+        isCardVisible.value =
+            AppFirebaseService().orderData.value["card"]["isCardVisible"];
       }
       if (event.name == "updateTime") {
         debugPrint("talkTime hello: ${event.data?["talktime"]}");
@@ -417,32 +426,55 @@ class ChatMessageWithSocketController extends GetxController
   void sendMessageListenerSocket() {
     socket.sendMessageListenerSocket((data) {
       debugPrint("sendMessageListenerSocket $data");
+      debugPrint("sendMessageListenerSocket context $context");
+
       if (data is Map<String, dynamic>) {
         isTyping.value = false;
         chatStatus.value = "Chat in - Progress";
         final ChatMessage chatMessage =
-        ChatMessage.fromOfflineJson(data["data"]);
-        final String time = "${DateTime
-            .now()
-            .millisecondsSinceEpoch ~/ 1000}";
-         if (data["data"]["receiverId"] ==
-             preferenceService.getUserDetail()!.id.toString()) {
-           if(chatMessage.msgType == "sendGifts"){
+            ChatMessage.fromOfflineJson(data["data"]);
 
-           }
-        socket.messageReceivedStatusUpdate(
-          receiverId: preferenceService.getUserDetail()!.id.toString(),
-          chatMessageId: chatMessage.id.toString(),
-          chatStatus: "read",
-          time: time,
-          orderId: arguments["orderData"]["orderId"].toString(),
-        );
-      }
-          updateChatMessages(chatMessage, false, isSendMessage: false);
+        if (chatMessage.title != null && chatMessage.title != "") {
+          playAnimation(id: chatMessage.title ?? "");
+        }
+
+        final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+        if (data["data"]["receiverId"] ==
+            preferenceService.getUserDetail()!.id.toString()) {
+          if (chatMessage.msgType == "sendGifts") {}
+          socket.messageReceivedStatusUpdate(
+            receiverId: preferenceService.getUserDetail()!.id.toString(),
+            chatMessageId: chatMessage.id.toString(),
+            chatStatus: "read",
+            time: time,
+            orderId: arguments["orderData"]["orderId"].toString(),
+          );
+        }
+        updateChatMessages(chatMessage, false, isSendMessage: false);
         //}
       }
       debugPrint("chatMessage.value.length ${chatMessages.length}");
     });
+  }
+
+  void playAnimation({required String id}) {
+    List<GiftData> data = GiftsSingleton().gifts.data?.where(
+          (element) {
+            return element.id == int.parse(id);
+          },
+        ).toList() ??
+        <GiftData>[];
+
+    if (data.isNotEmpty) {
+      ZegoGiftPlayer().play(
+        context!,
+        GiftPlayerData(
+          GiftPlayerSource.url,
+          data.first.animation,
+        ),
+      );
+    } else {}
+    return;
   }
 
   Future getImage(bool isCamera) async {
@@ -705,7 +737,8 @@ class ChatMessageWithSocketController extends GetxController
       unreadMessageIndex.value = -1;
       addNewMessage(time, "gift",
           messageText: "${quantity}x ${item.giftName}",
-          awsUrl: item.fullGiftImage,giftId : item.id.toString());
+          awsUrl: item.fullGiftImage,
+          giftId: item.id.toString());
     }
   }
 
@@ -741,9 +774,10 @@ class ChatMessageWithSocketController extends GetxController
     print("tarot card running 1");
     HashMap<String, dynamic> hsMap = HashMap();
     hsMap["isCardVisible"] = false;
-    hsMap["listOfCard"] = await  printRandomTarotCards(choice);
+    hsMap["listOfCard"] = await printRandomTarotCards(choice);
     print("tarot card running 2 ${hsMap}");
-    print("tarot card running 3 ${AppFirebaseService().orderData.value["orderId"]}");
+    print(
+        "tarot card running 3 ${AppFirebaseService().orderData.value["orderId"]}");
     FirebaseDatabase.instance
         .ref()
         .child("order/${AppFirebaseService().orderData.value["orderId"]}/card")
@@ -809,7 +843,7 @@ class ChatMessageWithSocketController extends GetxController
 
   int getListOfCardLength() {
     var card = orderData['card'];
-    if(card != null) {
+    if (card != null) {
       var listOfCard = card['listOfCard'] as Map;
 
       print("listOfCard ${listOfCard.length}");

@@ -37,6 +37,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
   @override
   Widget build(BuildContext context) {
+    controller.setContext(context);
+    
     var pref = Get.find<SharedPreferenceService>();
     return Scaffold(
       body: GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
