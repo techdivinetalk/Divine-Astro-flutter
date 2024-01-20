@@ -427,6 +427,9 @@ class ChatMessageWithSocketController extends GetxController
             .millisecondsSinceEpoch ~/ 1000}";
          if (data["data"]["receiverId"] ==
              preferenceService.getUserDetail()!.id.toString()) {
+           if(chatMessage.msgType == "sendGifts"){
+
+           }
         socket.messageReceivedStatusUpdate(
           receiverId: preferenceService.getUserDetail()!.id.toString(),
           chatMessageId: chatMessage.id.toString(),
