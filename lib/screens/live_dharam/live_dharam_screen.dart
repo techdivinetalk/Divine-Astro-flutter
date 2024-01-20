@@ -983,6 +983,9 @@ class _LivePage extends State<LiveDharamScreen>
           itemBuilder: (BuildContext context, int index) {
             final ZegoInRoomMessage message = messages[index];
             final ZegoCustomMessage msg = receiveMessageToZego(message.message);
+            final bool isBlocked =
+                _controller.firebaseBlockUsersIds.contains(msg.userId);
+                
             return msg.type == 0
                 ? const SizedBox()
                 : Container(
@@ -1017,10 +1020,12 @@ class _LivePage extends State<LiveDharamScreen>
                                   children: [
                                     Text(
                                       msg.userName ?? "",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 10,
-                                        color: Colors.white,
-                                        shadows: [
+                                        color: isBlocked
+                                            ? Colors.red
+                                            : Colors.white,
+                                        shadows: const [
                                           Shadow(
                                             color: Colors.black,
                                             offset: Offset(1.0, 1.0),
@@ -1032,10 +1037,12 @@ class _LivePage extends State<LiveDharamScreen>
                                     ),
                                     Text(
                                       msg.message ?? "",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 10,
-                                        color: Colors.white,
-                                        shadows: [
+                                        color: isBlocked
+                                            ? Colors.red
+                                            : Colors.white,
+                                        shadows: const [
                                           Shadow(
                                             color: Colors.black,
                                             offset: Offset(1.0, 1.0),

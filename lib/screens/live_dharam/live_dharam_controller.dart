@@ -65,6 +65,7 @@ class LiveDharamController extends GetxController {
   final RxInt _timerCurrentIndex = 1.obs;
   final RxList<String> _astroFollowPopup = <String>[].obs;
   final Rx<bool> _isWaitingForCallAstrologerPopupResponse = false.obs;
+  final RxList<dynamic> _firebaseBlockUsersIds = <dynamic>[].obs;
 
   @override
   void onInit() {
@@ -111,6 +112,7 @@ class LiveDharamController extends GetxController {
     timerCurrentIndex = 1;
     astroFollowPopup = [];
     isWaitingForCallAstrologerPopupResponse = false;
+    firebaseBlockUsersIds = [];
     return;
   }
 
@@ -143,6 +145,7 @@ class LiveDharamController extends GetxController {
     _timerCurrentIndex.close();
     _astroFollowPopup.close();
     _isWaitingForCallAstrologerPopupResponse.close();
+    _firebaseBlockUsersIds.close();
 
     super.onClose();
   }
@@ -233,6 +236,10 @@ class LiveDharamController extends GetxController {
   set isWaitingForCallAstrologerPopupResponse(bool value) =>
       _isWaitingForCallAstrologerPopupResponse(value);
 
+  List<dynamic> get firebaseBlockUsersIds => _firebaseBlockUsersIds.value;
+  set firebaseBlockUsersIds(List<dynamic> value) =>
+      _firebaseBlockUsersIds(value);
+
   Future<void> eventListner({
     // required DatabaseEvent event,
     required DataSnapshot snapshot,
@@ -259,6 +266,11 @@ class LiveDharamController extends GetxController {
                   liveId = isHost ? liveId : data.keys.toList()[currentIndex];
                   // isHostAvailable = checkIfAstrologerAvailable(map);
                   var liveIdNode = data[liveId];
+
+                  var blockListNode = liveIdNode["blockList"] ?? [];
+                  firebaseBlockUsersIds = blockListNode;
+                  print("firebaseBlockUsersIds: $firebaseBlockUsersIds");
+
                   var waitListNode = liveIdNode["waitList"];
                   currentCaller = isEngadedNew(waitListNode, isForMe: false);
 
@@ -1028,6 +1040,7 @@ class LiveDharamController extends GetxController {
         temp.add((element.customerId ?? 0).toString());
       },
     );
+    print("blockList:: $temp");
     await FirebaseDatabase.instance.ref().child("live/$liveId").update(
       <String, Object?>{
         "blockList": temp,
