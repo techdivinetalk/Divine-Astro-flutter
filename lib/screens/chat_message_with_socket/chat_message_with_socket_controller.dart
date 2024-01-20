@@ -425,7 +425,7 @@ class ChatMessageWithSocketController extends GetxController
 
   void sendMessageListenerSocket() {
     socket.sendMessageListenerSocket((data) {
-      debugPrint("sendMessageListenerSocket $data");
+      debugPrint("sendMessageListenerSocketssss $data");
       debugPrint("sendMessageListenerSocket context $context");
 
       if (data is Map<String, dynamic>) {
@@ -433,15 +433,13 @@ class ChatMessageWithSocketController extends GetxController
         chatStatus.value = "Chat in - Progress";
         final ChatMessage chatMessage =
             ChatMessage.fromOfflineJson(data["data"]);
-
-        if (chatMessage.title != null && chatMessage.title != "") {
-          playAnimation(id: chatMessage.title ?? "");
-        }
-
         final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+        if (chatMessage.msgType == "sendGifts") {
+          debugPrint("sendMessageListenerSocketssssxxxxxxx $data");
+        }
         if (data["data"]["receiverId"] ==
             preferenceService.getUserDetail()!.id.toString()) {
-          if (chatMessage.msgType == "sendGifts") {}
+
           socket.messageReceivedStatusUpdate(
             receiverId: preferenceService.getUserDetail()!.id.toString(),
             chatMessageId: chatMessage.id.toString(),
