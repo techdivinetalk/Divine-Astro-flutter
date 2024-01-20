@@ -64,6 +64,7 @@ class LiveDharamController extends GetxController {
   final Rx<NoticeBoardRes> _noticeBoardRes = NoticeBoardRes().obs;
   final RxInt _timerCurrentIndex = 1.obs;
   final RxList<String> _astroFollowPopup = <String>[].obs;
+  final Rx<bool> _isWaitingForCallAstrologerPopupResponse = false.obs;
 
   @override
   void onInit() {
@@ -109,6 +110,7 @@ class LiveDharamController extends GetxController {
     noticeBoardRes = NoticeBoardRes();
     timerCurrentIndex = 1;
     astroFollowPopup = [];
+    isWaitingForCallAstrologerPopupResponse = false;
     return;
   }
 
@@ -140,6 +142,7 @@ class LiveDharamController extends GetxController {
     _noticeBoardRes.close();
     _timerCurrentIndex.close();
     _astroFollowPopup.close();
+    _isWaitingForCallAstrologerPopupResponse.close();
 
     super.onClose();
   }
@@ -224,6 +227,11 @@ class LiveDharamController extends GetxController {
 
   List<String> get astroFollowPopup => _astroFollowPopup.value;
   set astroFollowPopup(List<String> value) => _astroFollowPopup(value);
+
+  bool get isWaitingForCallAstrologerPopupResponse =>
+      _isWaitingForCallAstrologerPopupResponse.value;
+  set isWaitingForCallAstrologerPopupResponse(bool value) =>
+      _isWaitingForCallAstrologerPopupResponse(value);
 
   Future<void> eventListner({
     // required DatabaseEvent event,
@@ -391,7 +399,8 @@ class LiveDharamController extends GetxController {
 
   // String requirePreviousLiveID({required Function() acknowledgement}) {
   //   print("requirePreviousLiveID");
-  //   final bool has = hasMyIdInWaitList();
+  //   final bool has =
+  //       hasMyIdInWaitList() || isWaitingForCallAstrologerPopupResponse;
   //   if (has) {
   //     acknowledgement();
   //     return "";
@@ -414,7 +423,8 @@ class LiveDharamController extends GetxController {
 
   // String requireNextLiveID({required Function() acknowledgement}) {
   //   print("requireNextLiveID");
-  //   final bool has = hasMyIdInWaitList();
+  //   final bool has =
+  //       hasMyIdInWaitList() || isWaitingForCallAstrologerPopupResponse;
   //   if (has) {
   //     acknowledgement();
   //     return "";

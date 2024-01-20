@@ -1,10 +1,12 @@
-
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
+import 'package:divine_astrologer/model/live/blocked_customer_list_res.dart';
+import 'package:divine_astrologer/repository/astrologer_profile_repository.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 
 import '../../common/app_textstyle.dart';
 import '../../common/colors.dart';
@@ -16,6 +18,9 @@ class LiveTipsController extends GetxController {
   String astroId = "", name = "", image = "";
   FirebaseDatabase database = FirebaseDatabase.instance;
   var isFrontCamera = true.obs;
+
+  final AstrologerProfileRepository liveRepository =
+      AstrologerProfileRepository();
 
   @override
   void onReady() {
@@ -32,6 +37,7 @@ class LiveTipsController extends GetxController {
     final String awsURL = pref.getAmazonUrl() ?? "";
     final String image = pref.getUserDetail()?.image ?? "";
     final String avatar = isValidImageURL(imageURL: "$awsURL/$image");
+    final List<String> blockedCustomerList = await callBlockedCustomerListRes();
     await database.ref().child("live/$userId").update(
       {
         "id": userId,
@@ -39,6 +45,7 @@ class LiveTipsController extends GetxController {
         "image": avatar,
         "isAvailable": true,
         "isEngaged": 0,
+        "blockList": blockedCustomerList,
       },
     );
     await database.ref().child("astro-live-list/$userId").set(1);
@@ -48,6 +55,22 @@ class LiveTipsController extends GetxController {
     Get.back();
     Get.back();
     return Future<void>.value();
+  }
+
+  Future<List<String>> callBlockedCustomerListRes() async {
+    final List<String> blockedCustomerList = [];
+    final Map<String, dynamic> param = <String, dynamic>{"role_id": 7};
+    BlockedCustomerListRes res = BlockedCustomerListRes();
+    res = await liveRepository.blockedCustomerListAPI(params: param);
+    res.statusCode == HttpStatus.ok
+        ? BlockedCustomerListRes.fromJson(res.toJson())
+        : BlockedCustomerListRes.fromJson(BlockedCustomerListRes().toJson());
+    res.data?.forEach(
+      (element) {
+        blockedCustomerList.add((element.customerId ?? 0).toString());
+      },
+    );
+    return Future<List<String>>.value(blockedCustomerList);
   }
 
   String isValidImageURL({required String imageURL}) {

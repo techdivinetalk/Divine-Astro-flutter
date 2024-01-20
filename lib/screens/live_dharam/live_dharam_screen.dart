@@ -1590,6 +1590,13 @@ class _LivePage extends State<LiveDharamScreen>
   //         details: _controller.details,
   //         onSelect: (String type) async {
   //           Get.back();
+  //           //
+  //           // Exceptional Case Start
+  //           //
+  //           _controller.isWaitingForCallAstrologerPopupResponse = true;
+  //           //
+  //           // Exceptional Case End
+  //           //
   //           bool hasAllPerm = false;
   //           await AppPermissionService.instance.onPressedJoinButton(
   //             type,
@@ -1619,6 +1626,13 @@ class _LivePage extends State<LiveDharamScreen>
   //               },
   //             );
   //           } else {}
+  //           //
+  //           // Exceptional Case Start
+  //           //
+  //           _controller.isWaitingForCallAstrologerPopupResponse = false;
+  //           //
+  //           // Exceptional Case End
+  //           //
   //         },
   //         list: _controller.waitListModel,
   //       );
