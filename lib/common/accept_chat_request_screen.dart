@@ -91,7 +91,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {
       if (event.name == "backReq") {
-        Get.offAllNamed(RouteName.dashboard);
+        Navigator.pop(context);
       }else if (event.name == "EndChat") {
         Get.offAllNamed(RouteName.dashboard);
         broadcastReceiver.stop();

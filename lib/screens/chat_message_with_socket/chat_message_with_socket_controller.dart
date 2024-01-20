@@ -29,6 +29,7 @@ import "package:image_picker/image_picker.dart";
 import "package:path_provider/path_provider.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:socket_io_client/socket_io_client.dart";
+import "package:velocity_x/velocity_x.dart";
 
 import "../../common/ask_for_gift_bottom_sheet.dart";
 import "../../common/common_functions.dart";
@@ -572,6 +573,7 @@ class ChatMessageWithSocketController extends GetxController
     String? base64Image,
     String? downloadedPath,
     String? kundliId,
+    String? giftId,
   }) async {
     final ChatMessage newMessage = ChatMessage(
       orderId: int.parse(arguments["orderData"]["orderId"].toString()),
@@ -585,7 +587,7 @@ class ChatMessageWithSocketController extends GetxController
       downloadedPath: downloadedPath,
       msgType: msgType,
       kundliId: kundliId,
-      title: "${userData?.name} sent you message.",
+      title: giftId ?? "${userData?.name} sent you a message.",
       type: 0,
       userType: "astrologer",
     );
@@ -700,7 +702,7 @@ class ChatMessageWithSocketController extends GetxController
       unreadMessageIndex.value = -1;
       addNewMessage(time, "gift",
           messageText: "${quantity}x ${item.giftName}",
-          awsUrl: item.fullGiftImage);
+          awsUrl: item.fullGiftImage,giftId : item.id.toString());
     }
   }
 
