@@ -987,37 +987,52 @@ class LiveDharamController extends GetxController {
     }
   }
 
-  Future<void> addUpdateToBlockList({required String userId}) async {
-    List<dynamic> blockList = <dynamic>[];
-    final DataSnapshot dataSnapshot = await FirebaseDatabase.instance
-        .ref()
-        .child("live/$liveId/blockList")
-        .get();
-    if (dataSnapshot != null) {
-      if (dataSnapshot.exists) {
-        if (dataSnapshot.value is List<dynamic>) {
-          List<dynamic> list = <dynamic>[];
-          list = (dataSnapshot.value ?? <dynamic, dynamic>{}) as List<dynamic>;
-          if (list.contains(userId)) {
-          } else {
-            list = <dynamic>[
-              ...list,
-              ...<dynamic>[userId],
-            ];
-          }
-          blockList = list;
-          await FirebaseDatabase.instance.ref().child("live/$liveId").update(
-            <String, Object?>{"blockList": blockList},
-          );
-        } else {}
-      } else {
-        await FirebaseDatabase.instance.ref().child("live/$liveId").update(
-          <String, Object?>{
-            "blockList": <dynamic>[userId],
-          },
-        );
-      }
-    } else {}
+  // Future<void> addUpdateToBlockList({required String userId}) async {
+  //   List<dynamic> blockList = <dynamic>[];
+  //   final DataSnapshot dataSnapshot = await FirebaseDatabase.instance
+  //       .ref()
+  //       .child("live/$liveId/blockList")
+  //       .get();
+  //   if (dataSnapshot != null) {
+  //     if (dataSnapshot.exists) {
+  //       if (dataSnapshot.value is List<dynamic>) {
+  //         List<dynamic> list = <dynamic>[];
+  //         list = (dataSnapshot.value ?? <dynamic, dynamic>{}) as List<dynamic>;
+  //         if (list.contains(userId)) {
+  //         } else {
+  //           list = <dynamic>[
+  //             ...list,
+  //             ...<dynamic>[userId],
+  //           ];
+  //         }
+  //         blockList = list;
+  //         await FirebaseDatabase.instance.ref().child("live/$liveId").update(
+  //           <String, Object?>{"blockList": blockList},
+  //         );
+  //       } else {}
+  //     } else {
+  //       await FirebaseDatabase.instance.ref().child("live/$liveId").update(
+  //         <String, Object?>{
+  //           "blockList": <dynamic>[userId],
+  //         },
+  //       );
+  //     }
+  //   } else {}
+  //   return Future<void>.value();
+  // }
+
+  Future<void> addUpdateToBlockList() async {
+    final List<String> temp = [];
+    blockedCustomerList.data?.forEach(
+      (element) {
+        temp.add((element.customerId ?? 0).toString());
+      },
+    );
+    await FirebaseDatabase.instance.ref().child("live/$liveId").update(
+      <String, Object?>{
+        "blockList": temp,
+      },
+    );
     return Future<void>.value();
   }
 
@@ -1154,6 +1169,7 @@ class LiveDharamController extends GetxController {
         ? BlockedCustomerRes.fromJson(blockedCustListRes.toJson())
         : BlockedCustomerRes.fromJson(BlockedCustomerRes().toJson());
     await callBlockedCustomerListRes();
+    await addUpdateToBlockList();
     return Future<void>.value();
   }
 
