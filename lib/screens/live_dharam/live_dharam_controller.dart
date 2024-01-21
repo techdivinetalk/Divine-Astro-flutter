@@ -6,6 +6,7 @@ import "dart:convert";
 import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/model/live/blocked_customer_list_res.dart";
 import "package:divine_astrologer/model/live/blocked_customer_res.dart";
+import "package:divine_astrologer/model/live/deck_card_model.dart";
 import "package:divine_astrologer/model/live/notice_board_res.dart";
 import "package:divine_astrologer/model/res_login.dart";
 import "package:divine_astrologer/repository/astrologer_profile_repository.dart";
@@ -22,7 +23,7 @@ import "package:http/http.dart" as http;
 //
 
 class LiveDharamController extends GetxController {
-  final SharedPreferenceService _pref = Get.put(SharedPreferenceService());
+  final SharedPreferenceService pref = Get.put(SharedPreferenceService());
 
   final AstrologerProfileRepository liveRepository =
       AstrologerProfileRepository();
@@ -66,6 +67,8 @@ class LiveDharamController extends GetxController {
   final RxList<String> _astroFollowPopup = <String>[].obs;
   final Rx<bool> _isWaitingForCallAstrologerPopupResponse = false.obs;
   final RxList<dynamic> _firebaseBlockUsersIds = <dynamic>[].obs;
+  final RxList<DeckCardModel> _deckCardModelList = <DeckCardModel>[].obs;
+  final Rx<TarotGameModel> _tarotGameModel = TarotGameModel().obs;
 
   @override
   void onInit() {
@@ -74,11 +77,11 @@ class LiveDharamController extends GetxController {
   }
 
   void initData() {
-    userId = (_pref.getUserDetail()?.id ?? "").toString();
-    userName = _pref.getUserDetail()?.name ?? "";
+    userId = (pref.getUserDetail()?.id ?? "").toString();
+    userName = pref.getUserDetail()?.name ?? "";
     // avatar = _pref.getUserDetail()?.avatar ?? "";
-    final String awsURL = _pref.getAmazonUrl() ?? "";
-    final String image = _pref.getUserDetail()?.image ?? "";
+    final String awsURL = pref.getAmazonUrl() ?? "";
+    final String image = pref.getUserDetail()?.image ?? "";
     avatar = isValidImageURL(imageURL: "$awsURL/$image");
     liveId = (Get.arguments ?? "").toString();
     isHost = true;
@@ -113,6 +116,8 @@ class LiveDharamController extends GetxController {
     astroFollowPopup = [];
     isWaitingForCallAstrologerPopupResponse = false;
     firebaseBlockUsersIds = [];
+    deckCardModelList = [];
+    tarotGameModel = TarotGameModel();
     return;
   }
 
@@ -146,6 +151,8 @@ class LiveDharamController extends GetxController {
     _astroFollowPopup.close();
     _isWaitingForCallAstrologerPopupResponse.close();
     _firebaseBlockUsersIds.close();
+    _deckCardModelList.close();
+    _tarotGameModel.close();
 
     super.onClose();
   }
@@ -239,6 +246,12 @@ class LiveDharamController extends GetxController {
   List<dynamic> get firebaseBlockUsersIds => _firebaseBlockUsersIds.value;
   set firebaseBlockUsersIds(List<dynamic> value) =>
       _firebaseBlockUsersIds(value);
+
+  List<DeckCardModel> get deckCardModelList => _deckCardModelList.value;
+  set deckCardModelList(List<DeckCardModel> value) => _deckCardModelList(value);
+
+  TarotGameModel get  tarotGameModel => _tarotGameModel.value;
+  set tarotGameModel(TarotGameModel value) => _tarotGameModel(value);
 
   Future<void> eventListner({
     // required DatabaseEvent event,
@@ -501,7 +514,7 @@ class LiveDharamController extends GetxController {
     required String svga,
     required Map<String, dynamic> data,
   }) {
-    final String accessToken = _pref.getToken() ?? "";
+    final String accessToken = pref.getToken() ?? "";
     return <String, dynamic>{
       "app_id": appID,
       "server_secret": serverSecret,
@@ -574,7 +587,7 @@ class LiveDharamController extends GetxController {
 
   String getSpeciality() {
     final List<String> pivotList = <String>[];
-    _pref.getUserDetail()?.astroCatPivot?.forEach(
+    pref.getUserDetail()?.astroCatPivot?.forEach(
           (AstroCatPivot e) => pivotList.add(e.categoryDetails?.name ?? ""),
         );
     return pivotList.join(", ");
@@ -911,7 +924,7 @@ class LiveDharamController extends GetxController {
     if (GetUtils.isURL(imageURL)) {
       return imageURL;
     } else {
-      imageURL = "${_pref.getAmazonUrl()}$imageURL";
+      imageURL = "${pref.getAmazonUrl()}$imageURL";
       if (GetUtils.isURL(imageURL)) {
         return imageURL;
       } else {
@@ -1349,6 +1362,60 @@ class ZegoCustomMessage {
     data['timeStamp'] = this.timeStamp;
     data['fullGiftImage'] = this.fullGiftImage;
     data['isBlockedCustomer'] = this.isBlockedCustomer;
+    return data;
+  }
+}
+
+class TarotGameModel {
+  int? currentStep;
+  int? canPick;
+  List<UserPicked>? userPicked;
+
+  TarotGameModel({this.currentStep, this.canPick, this.userPicked});
+
+  TarotGameModel.fromJson(Map<String, dynamic> json) {
+    currentStep = json['current_step'];
+    canPick = json['can_pick'];
+    if (json['user_picked'] != null) {
+      userPicked = <UserPicked>[];
+      json['user_picked'].forEach((v) {
+        userPicked!.add(new UserPicked.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['current_step'] = this.currentStep;
+    data['can_pick'] = this.canPick;
+    if (this.userPicked != null) {
+      data['user_picked'] = this.userPicked!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class UserPicked {
+  int? id;
+  String? name;
+  int? status;
+  String? image;
+
+  UserPicked({this.id, this.name, this.status, this.image});
+
+  UserPicked.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    status = json['status'];
+    image = json['image'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['status'] = this.status;
+    data['image'] = this.image;
     return data;
   }
 }
