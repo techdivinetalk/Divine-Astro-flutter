@@ -250,7 +250,7 @@ class LiveDharamController extends GetxController {
   List<DeckCardModel> get deckCardModelList => _deckCardModelList.value;
   set deckCardModelList(List<DeckCardModel> value) => _deckCardModelList(value);
 
-  TarotGameModel get  tarotGameModel => _tarotGameModel.value;
+  TarotGameModel get tarotGameModel => _tarotGameModel.value;
   set tarotGameModel(TarotGameModel value) => _tarotGameModel(value);
 
   Future<void> eventListner({

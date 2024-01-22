@@ -253,6 +253,14 @@ class _LivePage extends State<LiveDharamScreen>
                         showAvatarInAudioMode: true,
                         useVideoViewAspectFill: true,
                         showSoundWavesInAudioMode: true,
+                        visible: (
+                          ZegoUIKitUser localUser,
+                          ZegoLiveStreamingRole localRole,
+                          ZegoUIKitUser targetUser,
+                          ZegoLiveStreamingRole targetUserRole,
+                        ) {
+                          return true;
+                        },
                       )
                       ..audioVideoViewConfig.playCoHostAudio = (
                         ZegoUIKitUser localUser,
@@ -2413,17 +2421,22 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Widget newTimerWidget() {
+    String totalTime = _controller.currentCaller.totalTime;
     return TimerCountdown(
       format: CountDownTimerFormat.hoursMinutesSeconds,
       enableDescriptions: false,
       spacerWidth: 4,
       colonsTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
       timeTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
+      onTick: (Duration duration) {
+        print("duration:: $duration");
+        totalTime = duration.inMinutes.toString();
+      },
       endTime: DateTime.now().add(
         Duration(
           days: 0,
           hours: 0,
-          minutes: int.parse(_controller.currentCaller.totalTime ?? "0"),
+          minutes: int.parse(totalTime ?? "0"),
           seconds: 0,
         ),
       ),

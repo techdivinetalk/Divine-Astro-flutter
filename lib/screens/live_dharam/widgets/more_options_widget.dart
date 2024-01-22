@@ -94,6 +94,7 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const SizedBox(height: 8),
+          const SizedBox(height: 8),
           moreOptionsButton(
             buttonText: "Ask For Gift",
             buttonCallback: widget.onTapAskForGifts,
