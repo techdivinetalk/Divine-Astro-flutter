@@ -919,7 +919,7 @@ class _CardChoiceBottomSheetState extends State<CardChoiceBottomSheet> {
           Center(
             child: Text(
               isVisible ? "Waiting For User to Select Cards" : 'Show Card Deck to User',
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(height: 8,),

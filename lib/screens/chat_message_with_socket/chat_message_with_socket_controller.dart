@@ -162,7 +162,8 @@ class ChatMessageWithSocketController extends GetxController
     arguments = Get.arguments;
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) {
-      if (event.name == "displayCard") {
+      print("displayCard--");
+;      if (event.name == "displayCard") {
         isCardVisible.value =
             AppFirebaseService().orderData.value["card"]["isCardVisible"];
       }
@@ -845,7 +846,7 @@ class ChatMessageWithSocketController extends GetxController
   int getListOfCardLength() {
     var card = orderData['card'];
     if (card != null) {
-      var listOfCard = card['listOfCard'] as Map;
+      var listOfCard = AppFirebaseService().orderData.value['card']['listOfCard'] as Map;
 
       print("listOfCard ${listOfCard.length}");
       return listOfCard.length;

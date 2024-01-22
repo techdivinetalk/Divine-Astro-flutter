@@ -213,88 +213,91 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     ],
                   ),
                 ),
-                Visibility(
-                    visible: controller.isCardVisible.value == true,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF2F2F2F),
-                          borderRadius: BorderRadius.circular(
-                              14), // First container border radius
-                        ), // First container color
-                        child: Column(
-                          children: [
-                            const Center(
-                                child: Text(
-                              "Chosen cards",
-                              style: TextStyle(color: Color(0xFCD194)),
-                            )),
-                            SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: List.generate(
-                                controller.getListOfCardLength(),
-                                (index) => Expanded(
-                                  flex: 1,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 4),
-                                    child: Container(
-                                      width: double.infinity,
-                                      height: 120,
-                                      // Adjust the height as needed
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFF212121),
-                                        borderRadius: BorderRadius.circular(
-                                            10), // Second container border radius
-                                      ),
+                Obx(() {
+                    return Visibility(
+                        visible: controller.isCardVisible.value == true,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF2F2F2F),
+                              borderRadius: BorderRadius.circular(
+                                  14), // First container border radius
+                            ), // First container color
+                            child: Column(
+                              children: [
+                                const Center(
+                                    child: Text(
+                                  "Chosen cards",
+                                  style: TextStyle(color: Color(0xFCD194)),
+                                )),
+                                SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: List.generate(
+                                    controller.getListOfCardLength(),
+                                    (index) => Expanded(
+                                      flex: 1,
                                       child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Image.network(
-                                          "${pref.getAmazonUrl()}/${controller.getValueByPosition(index)}",
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 4),
+                                        child: Container(
+                                          width: double.infinity,
+                                          height: 120,
+                                          // Adjust the height as needed
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFF212121),
+                                            borderRadius: BorderRadius.circular(
+                                                10), // Second container border radius
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: Image.network(
+                                              "${pref.getAmazonUrl()}/${controller.getValueByPosition(index)}",
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: List.generate(
-                                controller.getListOfCardLength(),
-                                (index) => Expanded(
-                                  flex: 1,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 2),
-                                    child: Center(
-                                        child: Text(
-                                      textAlign: TextAlign.center,
-                                      // Add this line for text alignment
-                                      controller.getKeyByPosition(index),
-                                      style: const TextStyle(
-                                        color: AppColors.white,
-                                        fontSize:
-                                            12, // Adjust the font size as needed
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: List.generate(
+                                    controller.getListOfCardLength(),
+                                    (index) => Expanded(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 2),
+                                        child: Center(
+                                            child: Text(
+                                          textAlign: TextAlign.center,
+                                          // Add this line for text alignment
+                                          controller.getKeyByPosition(index),
+                                          style: const TextStyle(
+                                            color: AppColors.white,
+                                            fontSize:
+                                                12, // Adjust the font size as needed
+                                          ),
+                                          softWrap: true,
+                                          maxLines: 3,
+                                          // Maximum lines allowed
+                                          overflow: TextOverflow
+                                              .ellipsis, // Optional: use ellipsis to indicate text overflow
+                                        )),
                                       ),
-                                      softWrap: true,
-                                      maxLines: 3,
-                                      // Maximum lines allowed
-                                      overflow: TextOverflow
-                                          .ellipsis, // Optional: use ellipsis to indicate text overflow
-                                    )),
+                                    ),
                                   ),
                                 ),
-                              ),
+                                const SizedBox(height: 10),
+                              ],
                             ),
-                            const SizedBox(height: 10),
-                          ],
-                        ),
-                      ),
-                    )),
+                          ),
+                        ));
+                  }
+                ),
                 SizedBox(height: 10.h),
                 Obx(
                   () => controller.messageTemplates.isNotEmpty
