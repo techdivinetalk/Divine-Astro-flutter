@@ -2420,8 +2420,19 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
+  // temporary purpose
+  DateTime? endTime;
+  //
+
   Widget newTimerWidget() {
-    String totalTime = _controller.currentCaller.totalTime;
+    endTime ??= DateTime.now().add(
+      Duration(
+        days: 0,
+        hours: 0,
+        minutes: int.parse(_controller.currentCaller.totalTime),
+        seconds: 0,
+      ),
+    );
     return TimerCountdown(
       format: CountDownTimerFormat.hoursMinutesSeconds,
       enableDescriptions: false,
@@ -2429,17 +2440,13 @@ class _LivePage extends State<LiveDharamScreen>
       colonsTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
       timeTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
       onTick: (Duration duration) {
-        print("duration:: $duration");
-        totalTime = duration.inMinutes.toString();
+        endTime = DateTime.now().add(duration);
+        
+        if (duration == const Duration(minutes: 1)) {
+          print("showOneMin");
+        } else {}
       },
-      endTime: DateTime.now().add(
-        Duration(
-          days: 0,
-          hours: 0,
-          minutes: int.parse(totalTime ?? "0"),
-          seconds: 0,
-        ),
-      ),
+      endTime: endTime!,
       onEnd: () async {
         final bool isEngaded = _controller.currentCaller.isEngaded;
         if (isEngaded) {

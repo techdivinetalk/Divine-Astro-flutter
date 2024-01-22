@@ -56,6 +56,8 @@ class LiveDharamController extends GetxController {
     avatar: "",
     userName: "",
     id: "",
+    generatedOrderId: 0,
+    offerId: 0,
   ).obs;
   final RxBool _showTopBanner = false.obs;
   // final Rx<InsufficientBalModel> _insufficientBalModel =
@@ -107,6 +109,8 @@ class LiveDharamController extends GetxController {
       avatar: "",
       userName: "",
       id: "",
+      generatedOrderId: 0,
+      offerId: 0,
     );
     showTopBanner = false;
     // insufficientBalModel = InsufficientBalModel();
@@ -367,6 +371,8 @@ class LiveDharamController extends GetxController {
         avatar: "",
         userName: "",
         id: "",
+        generatedOrderId: 0,
+        offerId: 0,
       );
     }
   }
@@ -382,6 +388,9 @@ class LiveDharamController extends GetxController {
     String avatar = "";
     String userName = "";
     String id = "";
+    int generatedOrderId = 0;
+    int offerId = 0;
+
     if (map != null) {
       if (map.isNotEmpty) {
         map.forEach(
@@ -396,6 +405,8 @@ class LiveDharamController extends GetxController {
             avatar = value["avatar"] ?? "";
             userName = value["userName"] ?? "";
             id = value["id"] ?? "";
+            generatedOrderId = value["generatedOrderId"] ?? 0;
+            offerId = value["offerId"] ?? 0;
           },
         );
       } else {}
@@ -408,6 +419,8 @@ class LiveDharamController extends GetxController {
       avatar: avatar,
       userName: userName,
       id: id,
+      generatedOrderId: generatedOrderId,
+      offerId: offerId,
     );
   }
 
@@ -845,6 +858,10 @@ class LiveDharamController extends GetxController {
         "userName": userName,
         "avatar": avatar,
         "id": userId,
+        //
+        // "generatedOrderId": (orderGenerate.data?.generatedOrderId ?? 0),
+        // "offerId": (details.data?.offerDetails?.offerId ?? 0)
+        //
       },
     );
     return Future<void>.value();
@@ -879,6 +896,10 @@ class LiveDharamController extends GetxController {
                   userName: value["userName"] ?? "",
                   // ignore:  avoid_dynamic_calls
                   id: value["id"] ?? "",
+                  // ignore:  avoid_dynamic_calls
+                  generatedOrderId: value["generatedOrderId"] ?? 0,
+                  // ignore:  avoid_dynamic_calls
+                  offerId: value["offerId"] ?? 0,
                 ),
               );
             },
@@ -1306,6 +1327,8 @@ class WaitListModel {
     required this.avatar,
     required this.userName,
     required this.id,
+    required this.generatedOrderId,
+    required this.offerId,
   });
 
   final bool isRequest;
@@ -1315,6 +1338,8 @@ class WaitListModel {
   final String avatar;
   final String userName;
   final String id;
+  final int generatedOrderId;
+  final int offerId;
 }
 
 class ZegoCustomMessage {

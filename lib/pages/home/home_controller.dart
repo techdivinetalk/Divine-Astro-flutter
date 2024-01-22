@@ -503,9 +503,9 @@ class HomeController extends GetxController {
       "type": type,
       "role_id": 7,
       "device_token": preferenceService.getDeviceToken(),
-      // "is_chat": getBoolToString(type == 1 ? value : chatSwitch.value),
-      // "is_call": getBoolToString(type == 2 ? value : callSwitch.value),
-      // "is_video": getBoolToString(type == 3 ? value : videoSwitch.value)
+      "is_chat": getBoolToString(type == 1 ? value : chatSwitch.value),
+      "is_call": getBoolToString(type == 2 ? value : callSwitch.value),
+      "is_video": getBoolToString(type == 3 ? value : videoSwitch.value)
     };
 
     if (value) {
