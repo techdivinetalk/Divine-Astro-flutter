@@ -7,13 +7,16 @@ import "dart:developer";
 import "package:after_layout/after_layout.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
-import "package:divine_astrologer/model/live/blocked_customer_list_res.dart";
+import "package:divine_astrologer/model/live/deck_card_model.dart";
 import "package:divine_astrologer/model/live/notice_board_res.dart";
 import "package:divine_astrologer/screens/live_dharam/gifts_singleton.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
-import "package:divine_astrologer/screens/live_dharam/live_gift.dart";
 import "package:divine_astrologer/screens/live_dharam/live_screen_widgets/leaderboard_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/live_screen_widgets/live_keyboard.dart";
+import "package:divine_astrologer/screens/live_dharam/live_tarot_game/chosen_cards.dart";
+import "package:divine_astrologer/screens/live_dharam/live_tarot_game/live_carousal.dart";
+import "package:divine_astrologer/screens/live_dharam/live_tarot_game/show_card_deck_to_user.dart";
+import "package:divine_astrologer/screens/live_dharam/live_tarot_game/waiting_for_user_to_select_cards.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/astro_wait_list_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/call_accept_or_reject_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
@@ -25,7 +28,6 @@ import "package:divine_astrologer/screens/live_dharam/widgets/gift_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
-import "package:divine_astrologer/screens/live_dharam/widgets/wait_list_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/zeo_team/player.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
@@ -34,11 +36,16 @@ import "package:flutter/scheduler.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 import "package:intl/intl.dart";
+import "package:shared_preferences/shared_preferences.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_astro_widget.dart";
+//
+//
+//
+//
 //
 //
 //
@@ -457,6 +464,10 @@ class _LivePage extends State<LiveDharamScreen>
         children: <Widget>[
           appBarWidget(),
           const SizedBox(height: 8),
+          // ElevatedButton(
+          //   onPressed: showCardDeckToUserPopup,
+          //   child: Text("Game"),
+          // ),
           // Text(_controller.liveId),
           // const SizedBox(height: 8),
           Expanded(
@@ -983,6 +994,9 @@ class _LivePage extends State<LiveDharamScreen>
           itemBuilder: (BuildContext context, int index) {
             final ZegoInRoomMessage message = messages[index];
             final ZegoCustomMessage msg = receiveMessageToZego(message.message);
+            final bool isBlocked =
+                _controller.firebaseBlockUsersIds.contains(msg.userId);
+
             return msg.type == 0
                 ? const SizedBox()
                 : Container(
@@ -1017,10 +1031,12 @@ class _LivePage extends State<LiveDharamScreen>
                                   children: [
                                     Text(
                                       msg.userName ?? "",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 10,
-                                        color: Colors.white,
-                                        shadows: [
+                                        color: isBlocked
+                                            ? Colors.red
+                                            : Colors.white,
+                                        shadows: const [
                                           Shadow(
                                             color: Colors.black,
                                             offset: Offset(1.0, 1.0),
@@ -1032,10 +1048,12 @@ class _LivePage extends State<LiveDharamScreen>
                                     ),
                                     Text(
                                       msg.message ?? "",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 10,
-                                        color: Colors.white,
-                                        shadows: [
+                                        color: isBlocked
+                                            ? Colors.red
+                                            : Colors.white,
+                                        shadows: const [
                                           Shadow(
                                             color: Colors.black,
                                             offset: Offset(1.0, 1.0),
@@ -1882,10 +1900,157 @@ class _LivePage extends State<LiveDharamScreen>
             // await commonRequest(type: type, item: item, giftCount: giftCount);
           } else if (type == "Block/Unblock") {
             // await _controller.isCustomerBlocked();
+          } else if (type == "Tarot Card") {
+            TarotGameModel model = TarotGameModel.fromJson(item);
+            _controller.tarotGameModel = model;
+
+            final int currentStep = _controller.tarotGameModel.currentStep ?? 0;
+            if (waitingForUserToSelectCardsPopupVisible) {
+              Get.back();
+            } else {}
+            switch (currentStep) {
+              case 0:
+                await showCardDeckToUserPopup();
+                break;
+              case 1:
+                await showCardDeckToUserPopup1();
+                break;
+              case 2:
+                await showCardDeckToUserPopup2();
+                break;
+              default:
+                break;
+            }
           } else {}
         } else {}
       } else {}
     }
+    return Future<void>.value();
+  }
+
+  bool waitingForUserToSelectCardsPopupVisible = false;
+  Future<void> waitingForUserToSelectCardsPopup() async {
+    waitingForUserToSelectCardsPopupVisible = true;
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return WaitingForUserToSelectCards(
+          onClose: Get.back,
+          userName: _controller.currentCaller.userName,
+        );
+      },
+    );
+    waitingForUserToSelectCardsPopupVisible = false;
+    return Future<void>.value();
+  }
+
+  Future<void> showCardDeckToUserPopup() async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return ShowCardDeckToUser(
+          onClose: Get.back,
+          onSelect: (int value) async {
+            Get.back();
+
+            var item = TarotGameModel(
+              currentStep: 1,
+              canPick: value,
+              userPicked: [],
+            );
+            await sendTaroCard(item);
+
+            if (_controller.isHost) {
+              await waitingForUserToSelectCardsPopup();
+            } else {}
+          },
+          userName: _controller.currentCaller.userName,
+        );
+      },
+    );
+    return Future<void>.value();
+  }
+
+  Future<void> showCardDeckToUserPopup1() async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return LiveCarousal(
+          onClose: Get.back,
+          allCards: _controller.deckCardModelList,
+          onSelect: (List<DeckCardModel> selectedCards) async {
+            Get.back();
+
+            final List<UserPicked> userPicked = [];
+            for (DeckCardModel element in selectedCards) {
+              userPicked.add(
+                UserPicked(
+                  id: element.id,
+                  name: element.name,
+                  status: element.status,
+                  image: element.image,
+                ),
+              );
+            }
+            var item = TarotGameModel(
+              currentStep: 2,
+              canPick: _controller.tarotGameModel.canPick ?? 0,
+              userPicked: userPicked,
+            );
+            await sendTaroCard(item);
+
+            if (_controller.isHost) {
+            } else {}
+          },
+          numOfSelection: _controller.tarotGameModel.canPick ?? 0,
+          userName: _controller.currentCaller.userName,
+        );
+      },
+    );
+    return Future<void>.value();
+  }
+
+  Future<void> showCardDeckToUserPopup2() async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        final List<DeckCardModel> userPicked = [];
+        for (UserPicked element
+            in _controller.tarotGameModel.userPicked ?? []) {
+          userPicked.add(
+            DeckCardModel(
+              id: element.id,
+              name: element.name,
+              status: element.status,
+              image: element.image,
+            ),
+          );
+        }
+        return ChosenCards(
+          onClose: Get.back,
+          userChosenCards: userPicked,
+          userName: "Dharam",
+        );
+      },
+    );
+    return Future<void>.value();
+  }
+
+  Future<void> sendTaroCard(item) async {
+    var data = {
+      "room_id": _controller.liveId,
+      "user_id": _controller.userId,
+      "user_name": _controller.userName,
+      "item": item.toJson(),
+      "type": "Tarot Card",
+    };
+    await _controller.sendGiftAPI(
+      data: data,
+      count: 1,
+      svga: "",
+      successCallback: log,
+      failureCallback: log,
+    );
     return Future<void>.value();
   }
 
@@ -2699,7 +2864,8 @@ class _LivePage extends State<LiveDharamScreen>
                       children: [
                         InkWell(
                           onTap: () async {
-                            await _controller.addOrUpdateCard();
+                            // await _controller.addOrUpdateCard();
+                            await showCardDeckToUserPopup();
                           },
                           child: SizedBox(
                             height: 50,
@@ -3356,10 +3522,27 @@ class _LivePage extends State<LiveDharamScreen>
     } else {}
   }
 
+  Future<void> initTarot() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final List<dynamic> list = jsonDecode(prefs.getString('tarot_cards') ?? "");
+
+    for (var element in list) {
+      _controller.deckCardModelList = [
+        ...[DeckCardModel.fromJson(element)]
+      ];
+    }
+    for (var element in _controller.deckCardModelList) {
+      element.image = "${_controller.pref.getAmazonUrl()}/${element.image}";
+    }
+
+    return Future<void>.value();
+  }
+
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) async {
     await _controller.noticeBoard();
     await _controller.callBlockedCustomerListRes();
+    await initTarot();
     return Future<void>.value();
   }
 }
