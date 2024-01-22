@@ -23,6 +23,7 @@ import "package:flutter/material.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
 import "package:get/get.dart";
+import "package:get/get_rx/get_rx.dart";
 import "package:get_storage/get_storage.dart";
 import "package:http/http.dart" as http;
 import "package:image_cropper/image_cropper.dart";
@@ -155,15 +156,25 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   var isCardVisible = false.obs;
+ // RxInt cardListCount = 0.obs;
 
   @override
   void onInit() {
     super.onInit();
     arguments = Get.arguments;
     broadcastReceiver.start();
+    print("isCardVisible");
+    if (AppFirebaseService().orderData.value.containsKey("card")) {
+      isCardVisible.value =
+          AppFirebaseService().orderData.value["card"]["isCardVisible"];
+     // cardListCount = getListOfCardLength();
+      print(AppFirebaseService().orderData.value["card"]["isCardVisible"]);
+    }
+    //isCardVisible = AppFirebaseService().orderData.value["card"] != null ? AppFirebaseService().orderData.value["card"]["isCardVisible"] : true;
     broadcastReceiver.messages.listen((BroadcastMessage event) {
-      print("displayCard--");
-;      if (event.name == "displayCard") {
+      if (event.name == "displayCard") {
+        print("displayCard--${AppFirebaseService().orderData.value["card"]["isCardVisible"]}");
+
         isCardVisible.value =
             AppFirebaseService().orderData.value["card"]["isCardVisible"];
       }
@@ -443,7 +454,6 @@ class ChatMessageWithSocketController extends GetxController
         }
         if (data["data"]["receiverId"] ==
             preferenceService.getUserDetail()!.id.toString()) {
-
           socket.messageReceivedStatusUpdate(
             receiverId: preferenceService.getUserDetail()!.id.toString(),
             chatMessageId: chatMessage.id.toString(),
@@ -765,25 +775,25 @@ class ChatMessageWithSocketController extends GetxController
   sendMsg() {
     if (messageController.text.trim().isNotEmpty) {
       final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-      // type 1= New chat message, 2 = Delievered, 3= Msg read, 4= Other messages
+      // type 1= New chat message, 2 = Delivered, 3= Msg read, 4= Other messages
       unreadMessageIndex.value = -1;
       addNewMessage(time, "text", messageText: messageController.text.trim());
       messageController.clear();
     }
   }
 
-  sendTarotCard(int? choice) async {
-    print("tarot card running 1");
+  Future<void> sendTarotCard(int? choice) async {
     HashMap<String, dynamic> hsMap = HashMap();
     hsMap["isCardVisible"] = false;
-    hsMap["listOfCard"] = await printRandomTarotCards(choice);
-    print("tarot card running 2 ${hsMap}");
-    print(
-        "tarot card running 3 ${AppFirebaseService().orderData.value["orderId"]}");
-    FirebaseDatabase.instance
-        .ref()
-        .child("order/${AppFirebaseService().orderData.value["orderId"]}/card")
-        .set(hsMap);
+    var randomTarotCards = await printRandomTarotCards(choice);
+    hsMap["listOfCard"] = randomTarotCards;
+    int orderId = AppFirebaseService().orderData.value["orderId"] ?? 0;
+    if (orderId != 0) {
+      await FirebaseDatabase.instance
+          .ref()
+          .child("order/$orderId/card")
+          .set(hsMap);
+    }
   }
 
   Future<HashMap<String, dynamic>> printRandomTarotCards(int? choice) async {
@@ -841,12 +851,12 @@ class ChatMessageWithSocketController extends GetxController
   //     throw IndexError(position, listOfCard, 'Index out of range');
   //   }
   // }
-  var orderData = AppFirebaseService().orderData.value;
 
   int getListOfCardLength() {
-    var card = orderData['card'];
-    if (card != null) {
-      var listOfCard = AppFirebaseService().orderData.value['card']['listOfCard'] as Map;
+    var orderData = AppFirebaseService().orderData.value;
+    if (isCardVisible.value == true && orderData.containsKey("card")) {
+      var listOfCard =
+          AppFirebaseService().orderData.value['card']['listOfCard'] as Map;
 
       print("listOfCard ${listOfCard.length}");
       return listOfCard.length;
@@ -855,7 +865,7 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   String getValueByPosition(int position) {
-    var card = orderData['card'];
+    var card = AppFirebaseService().orderData.value['card'];
     var listOfCard = card['listOfCard'] as Map;
     var keysList = listOfCard.keys.toList();
 
@@ -869,6 +879,7 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   String getKeyByPosition(int position) {
+    var orderData = AppFirebaseService().orderData.value;
     var card = orderData['card'];
     var listOfCard = card['listOfCard'] as Map;
     var keysList = listOfCard.keys.toList();
