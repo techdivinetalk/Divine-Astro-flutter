@@ -74,9 +74,9 @@ Future<void> main() async {
   });
   await initServices();
   Get.put(UserRepository());
-  Get.put(DashboardController(PreDefineRepository()));
+ /* Get.put(DashboardController(PreDefineRepository()));
   var data = await userRepository.constantDetailsData();
-  preferenceService.setConstantDetails(data);
+  preferenceService.setConstantDetails(data);*/
 
   GiftsSingleton().init();
 
