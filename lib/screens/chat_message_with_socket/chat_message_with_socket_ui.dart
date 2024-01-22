@@ -20,9 +20,11 @@ import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
+import "package:flutter_html/flutter_html.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
 import "package:get/get.dart";
+import "package:get/get_state_manager/get_state_manager.dart";
 import "package:lottie/lottie.dart";
 import "package:permission_handler/permission_handler.dart";
 import "package:social_media_recorder/audio_encoder_type.dart";
@@ -38,7 +40,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   @override
   Widget build(BuildContext context) {
     controller.setContext(context);
-    
+
     var pref = Get.find<SharedPreferenceService>();
     return Scaffold(
       body: GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
@@ -117,10 +119,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                   : chatMessage.msgType ==
                                                           "image"
                                                       ? imageMsgView(
-                                                          controller
-                                                                  .chatMessages[
-                                                                      index]
-                                                                  .base64Image ??
+                                                          controller.chatMessages[index].base64Image ??
                                                               "",
                                                           chatDetail: controller
                                                                   .chatMessages[
@@ -141,8 +140,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                                   preferenceService
                                                                       .getUserDetail()!
                                                                       .id)
-                                                          : chatMessage
-                                                                      .msgType ==
+                                                          : chatMessage.msgType ==
                                                                   "gift"
                                                               ? giftMsgView(
                                                                   context,
@@ -153,21 +151,19 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                                           .getUserDetail()!
                                                                           .id,
                                                                 )
-                                                              : chatMessage
-                                                                      .msgType ==
-                                                                  "sendGifts"
-                                                              ?  giftSendUi(
-                                                  context,
-                                                  chatMessage,
-                                                  chatMessage.senderId == preferenceService.getUserDetail()!.id)
-                                                              : textMsgView(
-                                                                  context,
-                                                                  chatMessage,
-                                                                  chatMessage
-                                                                          .senderId ==
-                                                                      preferenceService
-                                                                          .getUserDetail()!
-                                                                          .id),
+                                                              : chatMessage.msgType ==
+                                                                      "sendGifts"
+                                                                  ? giftSendUi(
+                                                                      context,
+                                                                      chatMessage,
+                                                                      chatMessage.senderId ==
+                                                                          preferenceService
+                                                                              .getUserDetail()!
+                                                                              .id)
+                                                                  : textMsgView(
+                                                                      context,
+                                                                      chatMessage,
+                                                                      chatMessage.senderId == preferenceService.getUserDetail()!.id),
                                             ],
                                           ),
                                         ),
@@ -214,27 +210,43 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   ),
                 ),
                 Obx(() {
-                    return Visibility(
-                        visible: controller.isCardVisible.value == true,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            padding: const EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF2F2F2F),
-                              borderRadius: BorderRadius.circular(
-                                  14), // First container border radius
-                            ), // First container color
-                            child: Column(
-                              children: [
-                                const Center(
-                                    child: Text(
-                                  "Chosen cards",
-                                  style: TextStyle(color: Color(0xFCD194)),
-                                )),
-                                SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  return Visibility(
+                      visible: controller.isCardVisible.value == true,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF2F2F2F),
+                            borderRadius: BorderRadius.circular(
+                                14), // First container border radius
+                          ), // First container color
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      FirebaseDatabase.instance
+                                          .ref(
+                                              "order/${AppFirebaseService().orderData.value["orderId"]}/card")
+                                          .remove();
+                                      controller.isCardVisible.value = false;
+                                    },
+                                    child: const Icon(Icons.cancel,
+                                        color: AppColors.white),
+                                  ),
+                                  const Text(
+                                    "Chosen cards",
+                                    style: TextStyle(color: Color(0x00ffffff)),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              Obx(() {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: List.generate(
                                     controller.getListOfCardLength(),
                                     (index) => Expanded(
@@ -261,43 +273,47 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                       ),
                                     ),
                                   ),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: List.generate(
-                                    controller.getListOfCardLength(),
-                                    (index) => Expanded(
-                                      flex: 1,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 2),
-                                        child: Center(
-                                            child: Text(
-                                          textAlign: TextAlign.center,
-                                          // Add this line for text alignment
-                                          controller.getKeyByPosition(index),
-                                          style: const TextStyle(
-                                            color: AppColors.white,
-                                            fontSize:
-                                                12, // Adjust the font size as needed
-                                          ),
-                                          softWrap: true,
-                                          maxLines: 3,
-                                          // Maximum lines allowed
-                                          overflow: TextOverflow
-                                              .ellipsis, // Optional: use ellipsis to indicate text overflow
-                                        )),
+                                );
+                              }),
+                              Obx( () {
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: List.generate(
+                                      controller.getListOfCardLength(),
+                                      (index) => Expanded(
+                                        flex: 1,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 2),
+                                          child: Center(
+                                              child: Text(
+                                            textAlign: TextAlign.center,
+                                            // Add this line for text alignment
+                                            controller.getKeyByPosition(index),
+                                            style: const TextStyle(
+                                              color: AppColors.white,
+                                              fontSize:
+                                                  12, // Adjust the font size as needed
+                                            ),
+                                            softWrap: true,
+                                            maxLines: 3,
+                                            // Maximum lines allowed
+                                            overflow: TextOverflow
+                                                .ellipsis, // Optional: use ellipsis to indicate text overflow
+                                          )),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                              ],
-                            ),
+                                  );
+                                }
+                              ),
+                              const SizedBox(height: 10),
+                            ],
                           ),
-                        ));
-                  }
-                ),
+                        ),
+                      ));
+                }),
                 SizedBox(height: 10.h),
                 Obx(
                   () => controller.messageTemplates.isNotEmpty
@@ -362,6 +378,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       }),
     );
   }
+
   Widget giftSendUi(
       BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     return Container(
@@ -383,14 +400,15 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
             ),
             Flexible(
                 child: Text(
-                  "You have received ${chatMessage.message}",
-                  style: const TextStyle(color: Colors.red),
-                )),
+              "You have received ${chatMessage.message}",
+              style: const TextStyle(color: Colors.red),
+            )),
           ],
         ),
       ),
     );
   }
+
   Widget permissionRequestWidget() {
     return StreamBuilder<DatabaseEvent>(
       stream: FirebaseDatabase.instance
@@ -685,14 +703,16 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                            width: 15.w),
+                        SizedBox(width: 15.w),
                         GestureDetector(
-                          onTap: () {
-                            controller.askForGift();
-                          },
-                            child: SvgPicture.asset('assets/svg/chat_gift.svg')),
-                        const SizedBox(width: 10,),
+                            onTap: () {
+                              controller.askForGift();
+                            },
+                            child:
+                                SvgPicture.asset('assets/svg/chat_gift.svg')),
+                        const SizedBox(
+                          width: 10,
+                        ),
                         Visibility(
                           visible: controller.hasMessage.value,
                           maintainAnimation: true,
@@ -770,7 +790,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
               ),
             ),
             child: GridView.count(
-              shrinkWrap:true,
+              shrinkWrap: true,
               crossAxisCount: 4,
               mainAxisSpacing: 10,
               crossAxisSpacing: 10,
