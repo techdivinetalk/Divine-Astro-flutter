@@ -30,7 +30,7 @@ class AppFirebaseService {
   var acceptBottomWatcher = RealTimeWatcher();
   final appSocket = AppSocket();
   var openChatUserId = "";
-  var orderData = <String, dynamic>{}.obs;
+  Rx<Map<String, dynamic>> orderData = Rx<Map<String, dynamic>>({});
   final DatabaseReference _database = FirebaseDatabase.instance.ref();
 
   Future<void> writeData(String path, Map<String, dynamic> data) async {

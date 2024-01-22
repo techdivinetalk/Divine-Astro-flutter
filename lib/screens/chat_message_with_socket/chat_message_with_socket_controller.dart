@@ -161,6 +161,7 @@ class ChatMessageWithSocketController extends GetxController
     super.onInit();
     arguments = Get.arguments;
     broadcastReceiver.start();
+    //isCardVisible = AppFirebaseService().orderData.value["card"] != null ? AppFirebaseService().orderData.value["card"]["isCardVisible"] : true;
     broadcastReceiver.messages.listen((BroadcastMessage event) {
       print("displayCard--");
 ;      if (event.name == "displayCard") {
