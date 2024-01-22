@@ -144,6 +144,7 @@ Future<void> showNotification(String title, String message, String type, Map<Str
     "CustomerNotification",
     importance: Importance.max,
     priority: Priority.high,
+         autoCancel: true,
           actions: type == "1" ?  [
             const AndroidNotificationAction(
               'accept',
@@ -158,6 +159,7 @@ Future<void> showNotification(String title, String message, String type, Map<Str
       sound: RawResourceAndroidNotificationSound('accept_ring'),
       importance: Importance.max,
       priority: Priority.high,
+        autoCancel: true
     );
   }
   NotificationDetails notificationDetails =

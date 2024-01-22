@@ -214,7 +214,7 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                   ),
                   SizedBox(height: 5.h),
                   CustomText(
-                    'is ready to assist you!',
+                    'is ready to chat with you!',
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w700,
                   ),

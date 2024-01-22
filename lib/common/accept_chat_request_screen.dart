@@ -144,7 +144,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                     fontFamily: FontFamily.metropolis,
                                     fontSize: 20.sp,
                                     color: AppColors.appYellowColour)),
-                            Text("Ready to assist you!",
+                            Text("Ready to chat with you!",
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontFamily: FontFamily.metropolis,
