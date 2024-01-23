@@ -71,6 +71,7 @@ class LiveDharamController extends GetxController {
   final RxList<dynamic> _firebaseBlockUsersIds = <dynamic>[].obs;
   final RxList<DeckCardModel> _deckCardModelList = <DeckCardModel>[].obs;
   final Rx<TarotGameModel> _tarotGameModel = TarotGameModel().obs;
+  final Rx<DateTime> _endTime = DateTime(2001).obs;
 
   @override
   void onInit() {
@@ -122,6 +123,7 @@ class LiveDharamController extends GetxController {
     firebaseBlockUsersIds = [];
     deckCardModelList = [];
     tarotGameModel = TarotGameModel();
+    endTime = DateTime(2001);
     return;
   }
 
@@ -157,6 +159,7 @@ class LiveDharamController extends GetxController {
     _firebaseBlockUsersIds.close();
     _deckCardModelList.close();
     _tarotGameModel.close();
+    _endTime.close();
 
     super.onClose();
   }
@@ -257,6 +260,9 @@ class LiveDharamController extends GetxController {
   TarotGameModel get tarotGameModel => _tarotGameModel.value;
   set tarotGameModel(TarotGameModel value) => _tarotGameModel(value);
 
+  DateTime get endTime => _endTime.value;
+  set endTime(DateTime value) => _endTime(value);
+
   Future<void> eventListner({
     // required DatabaseEvent event,
     required DataSnapshot snapshot,
@@ -286,7 +292,6 @@ class LiveDharamController extends GetxController {
 
                   var blockListNode = liveIdNode["blockList"] ?? [];
                   firebaseBlockUsersIds = blockListNode;
-                  print("firebaseBlockUsersIds: $firebaseBlockUsersIds");
 
                   var waitListNode = liveIdNode["waitList"];
                   currentCaller = isEngadedNew(waitListNode, isForMe: false);
@@ -854,7 +859,8 @@ class LiveDharamController extends GetxController {
         "isEngaded": isEngaded,
         "callType": previousType.toLowerCase(),
         // "totalTime": intToTimeLeft(walletBalance.value),
-        "totalTime": "240",
+        // "totalTime": "240",
+        "totalTime": "2",
         "userName": userName,
         "avatar": avatar,
         "id": userId,

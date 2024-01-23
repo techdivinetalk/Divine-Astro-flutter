@@ -42,6 +42,7 @@ import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_astro_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/extend_time_widget.dart";
 //
 //
 //
@@ -2421,40 +2422,62 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   // temporary purpose
-  DateTime? endTime;
+  // DateTime? endTime;
   //
 
   Widget newTimerWidget() {
-    endTime ??= DateTime.now().add(
-      Duration(
-        days: 0,
-        hours: 0,
-        minutes: int.parse(_controller.currentCaller.totalTime),
-        seconds: 0,
-      ),
-    );
+    // endTime ??= DateTime.now().add(
+    //   Duration(
+    //     days: 0,
+    //     hours: 0,
+    //     minutes: int.parse(_controller.currentCaller.totalTime),
+    //     seconds: 0,
+    //   ),
+    // );
     return TimerCountdown(
       format: CountDownTimerFormat.hoursMinutesSeconds,
       enableDescriptions: false,
       spacerWidth: 4,
       colonsTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
       timeTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
-      onTick: (Duration duration) {
-        endTime = DateTime.now().add(duration);
-        
-        if (duration == const Duration(minutes: 1)) {
-          print("showOneMin");
+      onTick: (Duration duration) async {
+        _controller.endTime = DateTime.now().add(duration);
+
+        if (isLessThanOneMinute(duration) && !extendTimeWidgetVisible) {
+          extendTimeWidgetVisible = true;
+          await extendTimeWidgetPopup();
         } else {}
       },
-      endTime: endTime!,
-      onEnd: () async {
-        final bool isEngaded = _controller.currentCaller.isEngaded;
-        if (isEngaded) {
-        } else {
-          await removeCoHostOrStopCoHost();
-        }
+      endTime: _controller.endTime,
+      onEnd: removeCoHostOrStopCoHost,
+    );
+  }
+
+  bool isLessThanOneMinute(Duration duration) {
+    return duration < const Duration(minutes: 1);
+  }
+
+  // temporary purpose
+  bool extendTimeWidgetVisible = false;
+  //
+
+  Future<void> extendTimeWidgetPopup() async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return ExtendTimeWidget(
+          onClose: Get.back,
+          isAstro: _controller.isHost,
+          yesExtend: () {
+            Get.back();
+          },
+          noExtend: () {
+            Get.back();
+          },
+        );
       },
     );
+    return Future<void>.value();
   }
 
   Widget stacked() {
@@ -3369,6 +3392,15 @@ class _LivePage extends State<LiveDharamScreen>
         },
         onCoHostInvitationAccepted: (ZegoUIKitUser user) {
           showNotifOverlay(user: user, msg: "onCoHostInvitationAccepted");
+
+          _controller.endTime = DateTime.now().add(
+            Duration(
+              days: 0,
+              hours: 0,
+              minutes: int.parse(_controller.currentCaller.totalTime),
+              seconds: 0,
+            ),
+          );
         },
         onCoHostInvitationRefused: (ZegoUIKitUser user) {
           showNotifOverlay(user: user, msg: "onCoHostInvitationRefused");
