@@ -89,6 +89,7 @@ class FollowPlayerWidgetState extends State<FollowPlayerWidget>
         alignment: Alignment.center,
         children: [
           LottieBuilder(
+            fit: BoxFit.cover,
             lottie: lottieProviderFunction(),
             controller: _animationController,
             onLoaded: (composition) {

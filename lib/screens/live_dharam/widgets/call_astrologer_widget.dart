@@ -189,7 +189,7 @@
 //             SizedBox(height: offerDetails.offerDesc != null ? 16 : 0),
 //             const Divider(height: 1, thickness: 1),
 //             listTile(
-//               asset: "assets/images/live_call_video.png",
+//               asset: "assets/images/live_new_video_icon.png",
 //               type: "Video",
 //               singleColumn0: singleColumn0,
 //               doubleColumn1: doubleColumn1,
@@ -205,7 +205,7 @@
 //             ),
 //             const Divider(height: 1, thickness: 1),
 //             listTile(
-//               asset: "assets/images/live_call_audio.png",
+//               asset: "assets/images/live_new_audio_icon.png",
 //               type: "Audio",
 //               singleColumn0: singleColumn0,
 //               doubleColumn1: doubleColumn1,
@@ -221,7 +221,7 @@
 //             ),
 //             const Divider(height: 1, thickness: 1),
 //             listTile(
-//               asset: "assets/images/live_call_private.png",
+//               asset: "assets/images/live_new_private_icon.png",
 //               type: "Private",
 //               singleColumn0: singleColumn0,
 //               doubleColumn1: doubleColumn1,
@@ -261,7 +261,15 @@
 //     return ListTile(
 //       dense: true,
 //       contentPadding: EdgeInsets.zero,
-//       leading: Image.asset(asset),
+//       minLeadingWidth: 0,
+//       leading: Column(
+//         children: [
+//           const SizedBox(height: 8),
+//           Image.asset(asset),
+//           const Spacer(),
+//         ],
+//       ),
+//       horizontalTitleGap: 8,
 //       title: textWidget(
 //         type: type,
 //         singleColumn0: singleColumn0,
@@ -345,6 +353,7 @@
 //       if (offerDetails.specialOfferText != null) {
 //         return Row(
 //           mainAxisAlignment: MainAxisAlignment.start,
+//           crossAxisAlignment: CrossAxisAlignment.start,
 //           children: <Widget>[
 //             Text(
 //               "$type Call",
@@ -386,6 +395,7 @@
 //       } else {
 //         return Row(
 //           mainAxisAlignment: MainAxisAlignment.start,
+//           crossAxisAlignment: CrossAxisAlignment.start,
 //           children: <Widget>[
 //             Text(
 //               "$type Call",
@@ -408,6 +418,7 @@
 //               style: const TextStyle(
 //                 fontWeight: FontWeight.bold,
 //                 color: Colors.red,
+//                 fontSize: 12,
 //               ),
 //               overflow: TextOverflow.ellipsis,
 //             ),
@@ -418,6 +429,7 @@
 //               style: const TextStyle(
 //                 decoration: TextDecoration.lineThrough,
 //                 decorationColor: Colors.red,
+//                 fontSize: 12,
 //               ),
 //               overflow: TextOverflow.ellipsis,
 //             ),
@@ -427,6 +439,7 @@
 //     } else {
 //       return Row(
 //         mainAxisAlignment: MainAxisAlignment.start,
+//         crossAxisAlignment: CrossAxisAlignment.start,
 //         children: [
 //           Text(
 //             "$type Call",
@@ -449,6 +462,7 @@
 //             "₹${typeBased(type: type, videoOriginal: videoOriginal, audioOriginal: audioOriginal, privateOriginal: privateOriginal)}/Min",
 //             style: const TextStyle(
 //               fontWeight: FontWeight.bold,
+//               fontSize: 12,
 //             ),
 //             overflow: TextOverflow.ellipsis,
 //           ),

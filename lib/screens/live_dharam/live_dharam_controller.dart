@@ -1129,23 +1129,23 @@ class LiveDharamController extends GetxController {
   //   return Future<void>.value();
   // }
 
-  // Future<void> makeAPICallForEndCall() async {
-  //   Map<String, dynamic> param = <String, dynamic>{};
-  //   param = <String, dynamic>{
-  //     "order_id": (orderGenerate.data?.generatedOrderId ?? 0).toString(),
-  //     "duration": "0",
-  //     "amount": "0.0",
-  //     "role_id": 7,
-  //   };
+  Future<void> makeAPICallForEndCall() async {
+    Map<String, dynamic> param = <String, dynamic>{};
+    param = <String, dynamic>{
+      "order_id": (currentCaller.generatedOrderId ?? 0).toString(),
+      "duration": "0",
+      "amount": "0.0",
+      "role_id": 7,
+    };
 
-  //   if (details.data?.offerDetails?.offerId != null) {
-  //     int offerId = details.data?.offerDetails?.offerId ?? 0;
-  //     param.addAll(<String, dynamic>{"offer_id": offerId});
-  //   } else {}
+    if (currentCaller.offerId != null) {
+      int offerId = currentCaller.offerId ?? 0;
+      param.addAll(<String, dynamic>{"offer_id": offerId});
+    } else {}
 
-  //   await liveRepository.endLiveApi(params: param);
-  //   return Future<void>.value();
-  // }
+    await liveRepository.endLiveApi(params: param);
+    return Future<void>.value();
+  }
 
   Future<void> leaderboardChallengeCallback({
     required Function(LeaderboardModel leader) onLeaderUpdated,
