@@ -1,7 +1,9 @@
+import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/model/feedback_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/app_textstyle.dart';
@@ -92,7 +94,12 @@ class FeedbackCardWidget extends StatelessWidget {
               ),
               SizedBox(height: 16.h),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Get.toNamed(RouteName.feedback, arguments: {
+                    'order_id': feedback.orderId,
+                    'feedback_data': feedback,
+                  });
+                },
                 child: Text('Read More',
                   style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w600,

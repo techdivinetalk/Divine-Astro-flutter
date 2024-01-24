@@ -17,7 +17,6 @@ import "package:divine_astrologer/screens/live_dharam/live_tarot_game/chosen_car
 import "package:divine_astrologer/screens/live_dharam/live_tarot_game/live_carousal.dart";
 import "package:divine_astrologer/screens/live_dharam/live_tarot_game/show_card_deck_to_user.dart";
 import "package:divine_astrologer/screens/live_dharam/live_tarot_game/waiting_for_user_to_select_cards.dart";
-import "package:divine_astrologer/screens/live_dharam/widgets/already_in_waitlist_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/astro_wait_list_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/call_accept_or_reject_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
@@ -43,7 +42,6 @@ import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_astro_widget.dart";
-import "package:divine_astrologer/screens/live_dharam/widgets/extend_time_widget.dart";
 //
 //
 //
@@ -116,7 +114,6 @@ class _LivePage extends State<LiveDharamScreen>
     );
 
     ZegoUIKit().getUserJoinStream().listen(onUserJoin);
-    ZegoUIKit().getUserLeaveStream().listen(onUserLeave);
 
     keyboardSubscription = keyboardVisibilityController.onChange.listen(
       (bool visible) {
@@ -211,13 +208,6 @@ class _LivePage extends State<LiveDharamScreen>
     //   isBlockedCustomer: _controller.isCustomerBlockedBool(),
     // );
     // await sendMessageToZego(model);
-    Future<void>.value();
-  }
-
-  Future<void> onUserLeave(List<ZegoUIKitUser> users) async {
-    if (_controller.currentCaller.isEngaded) {
-      await removeCoHostOrStopCoHost();
-    } else {}
     Future<void>.value();
   }
 
@@ -907,8 +897,7 @@ class _LivePage extends State<LiveDharamScreen>
   // }) async {
   //   final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
   //   if (hasMyIdInWaitList) {
-  //     // await alreadyInTheWaitListDialog();
-  //     await alreadyInWaitlistPopup();
+  //     await alreadyInTheWaitListDialog();
   //   } else {
   //     final bool hasBal = await _controller.hasBalanceForSendingGift(
   //       giftId: item.id,
@@ -1347,62 +1336,46 @@ class _LivePage extends State<LiveDharamScreen>
     return Future<void>.value();
   }
 
-  // Future<void> alreadyInTheWaitListDialog() async {
-  //   await showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: const Text(
-  //           "Already in the Wait List",
-  //         ),
-  //         content: const Text(
-  //           "You're already in the Astrologer's Wait List. Tap on hourglass to see your waiting time.",
-  //         ),
-  //         actions: <Widget>[
-  //           ElevatedButton(
-  //             onPressed: Get.back,
-  //             child: const Text("OK"),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  //   return Future<void>.value();
-  // }
-
-  // Future<void> youAreInTheWaitListDialog() async {
-  //   await showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: const Text(
-  //           "You're in the Wait List",
-  //         ),
-  //         content: Text(
-  //           "You are not able to perform this action because you're the Wait List of Astrologer ${_controller.userName}.",
-  //         ),
-  //         actions: <Widget>[
-  //           ElevatedButton(
-  //             onPressed: Get.back,
-  //             child: const Text("OK"),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  //   return Future<void>.value();
-  // }
-
-  Future<void> alreadyInWaitlistPopup() async {
-    await showCupertinoModalPopup(
+  Future<void> alreadyInTheWaitListDialog() async {
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlreadyInWaitlistWidget(
-          onClose: Get.back,
-          openWaitlist: () async {
-            Get.back();
-            await waitListPopup();
-          },
+        return AlertDialog(
+          title: const Text(
+            "Already in the Wait List",
+          ),
+          content: const Text(
+            "You're already in the Astrologer's Wait List. Tap on hourglass to see your waiting time.",
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: Get.back,
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+    return Future<void>.value();
+  }
+
+  Future<void> youAreInTheWaitListDialog() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            "You're in the Wait List",
+          ),
+          content: Text(
+            "You are not able to perform this action because you're the Wait List of Astrologer ${_controller.userName}.",
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: Get.back,
+              child: const Text("OK"),
+            ),
+          ],
         );
       },
     );
@@ -1511,16 +1484,6 @@ class _LivePage extends State<LiveDharamScreen>
             final String name = _controller.waitListModel.last.userName;
             final String avatar = _controller.waitListModel.last.avatar;
             final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
-
-            _controller.endTime = DateTime.now().add(
-              Duration(
-                days: 0,
-                hours: 0,
-                minutes: int.parse(_controller.currentCaller.totalTime),
-                seconds: 0,
-              ),
-            );
-
             final connectInvite = _zegoController.connectInvite;
             await connectInvite.hostSendCoHostInvitationToAudience(user);
           },
@@ -1710,8 +1673,7 @@ class _LivePage extends State<LiveDharamScreen>
   // }) async {
   //   final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
   //   if (hasMyIdInWaitList) {
-  //     // await alreadyInTheWaitListDialog();
-  //     await alreadyInWaitlistPopup();
+  //     await alreadyInTheWaitListDialog();
   //   } else {
   //     final bool canOrder = await _controller.canPlaceLiveOrder(
   //       talkType: type,
@@ -1931,11 +1893,9 @@ class _LivePage extends State<LiveDharamScreen>
             FollowPlayer().play(
               context,
               FollowPlayerData(
-                // FollowPlayerSource.url,
-                // "https://lottie.host/0b77dd9f-a81e-4268-8fb5-cc7f5b958e00/rtEwgdQPKc.json",
-                FollowPlayerSource.asset,
-                "assets/lottie/live_follow_heart.json",
-                _controller.userName,
+                FollowPlayerSource.url,
+                "https://lottie.host/0b77dd9f-a81e-4268-8fb5-cc7f5b958e00/rtEwgdQPKc.json",
+                userName,
               ),
             );
           } else if (type == "Ask For Gift") {
@@ -2461,62 +2421,40 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   // temporary purpose
-  // DateTime? endTime;
+  DateTime? endTime;
   //
 
   Widget newTimerWidget() {
-    // endTime ??= DateTime.now().add(
-    //   Duration(
-    //     days: 0,
-    //     hours: 0,
-    //     minutes: int.parse(_controller.currentCaller.totalTime),
-    //     seconds: 0,
-    //   ),
-    // );
+    endTime ??= DateTime.now().add(
+      Duration(
+        days: 0,
+        hours: 0,
+        minutes: int.parse(_controller.currentCaller.totalTime),
+        seconds: 0,
+      ),
+    );
     return TimerCountdown(
       format: CountDownTimerFormat.hoursMinutesSeconds,
       enableDescriptions: false,
       spacerWidth: 4,
       colonsTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
       timeTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
-      onTick: (Duration duration) async {
-        _controller.endTime = DateTime.now().add(duration);
-
-        if (isLessThanOneMinute(duration) && !extendTimeWidgetVisible) {
-          extendTimeWidgetVisible = true;
-          await extendTimeWidgetPopup();
+      onTick: (Duration duration) {
+        endTime = DateTime.now().add(duration);
+        
+        if (duration == const Duration(minutes: 1)) {
+          print("showOneMin");
         } else {}
       },
-      endTime: _controller.endTime,
-      onEnd: removeCoHostOrStopCoHost,
-    );
-  }
-
-  bool isLessThanOneMinute(Duration duration) {
-    return duration < const Duration(minutes: 1);
-  }
-
-  // temporary purpose
-  bool extendTimeWidgetVisible = false;
-  //
-
-  Future<void> extendTimeWidgetPopup() async {
-    await showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) {
-        return ExtendTimeWidget(
-          onClose: Get.back,
-          isAstro: _controller.isHost,
-          yesExtend: () {
-            Get.back();
-          },
-          noExtend: () {
-            Get.back();
-          },
-        );
+      endTime: endTime!,
+      onEnd: () async {
+        final bool isEngaded = _controller.currentCaller.isEngaded;
+        if (isEngaded) {
+        } else {
+          await removeCoHostOrStopCoHost();
+        }
       },
     );
-    return Future<void>.value();
   }
 
   Widget stacked() {
@@ -3350,7 +3288,7 @@ class _LivePage extends State<LiveDharamScreen>
   //     message: "${_controller.userName} Started following",
   //     timeStamp: DateTime.now().toString(),
   //     fullGiftImage: "",
-  //     isBlockedCustomer: _controller.isCustomerBlockedBool(),
+  //      isBlockedCustomer: _controller.isCustomerBlockedBool(),
   //   );
   //   await sendMessageToZego(model);
 
@@ -3387,10 +3325,8 @@ class _LivePage extends State<LiveDharamScreen>
   //     FollowPlayer().play(
   //       context,
   //       FollowPlayerData(
-  //         // FollowPlayerSource.url,
-  //         // "https://lottie.host/0b77dd9f-a81e-4268-8fb5-cc7f5b958e00/rtEwgdQPKc.json",
-  //         FollowPlayerSource.asset,
-  //         "assets/lottie/live_follow_heart.json",
+  //         FollowPlayerSource.url,
+  //         "https://lottie.host/0b77dd9f-a81e-4268-8fb5-cc7f5b958e00/rtEwgdQPKc.json",
   //         _controller.userName,
   //       ),
   //     );
@@ -3481,15 +3417,6 @@ class _LivePage extends State<LiveDharamScreen>
       needAcceptButton: true,
       needDeclinetButton: false,
       onAcceptButton: () async {
-        _controller.endTime = DateTime.now().add(
-          Duration(
-            days: 0,
-            hours: 0,
-            minutes: int.parse(_controller.currentCaller.totalTime),
-            seconds: 0,
-          ),
-        );
-
         final connectInvite = _zegoController.connectInvite;
         await connectInvite.hostSendCoHostInvitationToAudience(user);
       },
@@ -3516,8 +3443,8 @@ class _LivePage extends State<LiveDharamScreen>
           ? await _controller.removeFromWaitListWhereEngadedIsTrue()
           : await _controller.removeFromWaitList();
     } else {}
-    if (removed) {
-      await _controller.makeAPICallForEndCall();
+    if (removed && !_controller.isHost) {
+      // await _controller.makeAPICallForEndCall();
     } else {}
     return Future<void>.value();
   }

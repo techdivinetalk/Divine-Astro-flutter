@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/astrologer_gift_response.dart';
@@ -96,30 +95,5 @@ class AstrologerProfileRepository extends ApiProvider {
     }
     return Future<NoticeBoardRes>.value(data);
   }
-
-  Future<String> endLiveApi({
-    required Map<String, dynamic> params,
-  }) async {
-    String data = "";
-    try {
-      final String requestBody = jsonEncode(params);
-      print("live api endLiveApi 1:: $requestBody");
-      final response = await post(agoraEndCall, body: requestBody);
-      final Map<String, dynamic> responseBody = json.decode(response.body);
-      print("live api endLiveApi 2:: ${response.body}");
-      if (response.statusCode == HttpStatus.ok) {
-        if (responseBody["status_code"] == HttpStatus.ok) {
-          data = "";
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-          await preferenceService.erase();
-          await Get.offAllNamed(RouteName.login);
-        } else {}
-      } else {}
-    } on Exception catch (error, stack) {
-      debugPrint("endLiveApi(): Exception caught: error: $error");
-      debugPrint("endLiveApi(): Exception caught: stack: $stack");
-    }
-    return Future<String>.value(data);
-  }
-
 }
+ 

@@ -63,3 +63,63 @@ class FeedbackData {
   }
 }
 
+/*class FeedbackData {
+  int? id;
+  int? orderId;
+  OrderDetails order;
+  String? remark;
+  DateTime? createdAt; // Change the type to DateTime
+
+  FeedbackData({this.id, this.orderId, required this.order, this.remark, this.createdAt});
+
+  factory FeedbackData.fromJson(Map<String, dynamic> json) {
+    return FeedbackData(
+      id: json['id'],
+      orderId: json['order_id'],
+      order: OrderDetails.fromJson(json['order']),
+      remark: json['remark'],
+      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = this.id;
+    data['order_id'] = this.orderId;
+    data['order'] = this.order.toJson();
+    data['remark'] = this.remark;
+    data['created_at'] = this.createdAt?.toIso8601String(); // Convert DateTime to string
+    return data;
+  }
+}
+
+class OrderDetails {
+  int? astrologerId;
+  int? id;
+  int? productType;
+  String? orderId;
+  String? createdAt;
+
+  OrderDetails({this.astrologerId, this.id, this.productType, this.orderId, this.createdAt});
+
+  factory OrderDetails.fromJson(Map<String, dynamic> json) {
+    return OrderDetails(
+      astrologerId: json['astrologer_id'],
+      id: json['id'],
+      productType: json['product_type'],
+      orderId: json['order_id'],
+      createdAt: json['created_at'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['astrologer_id'] = this.astrologerId;
+    data['id'] = this.id;
+    data['product_type'] = this.productType;
+    data['order_id'] = this.orderId;
+    data['created_at'] = this.createdAt;
+    return data;
+  }
+}*/
+
