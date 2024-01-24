@@ -55,6 +55,20 @@ class AppPermissionService {
     return Future<bool>.value(hasMicrophonePermission);
   }
 
+  Future<bool> permissionStorage() async {
+    bool hasStoragePermission = false;
+    final PermissionStatus try0 = await Permission.storage.status;
+    if (try0 == PermissionStatus.granted) {
+      hasStoragePermission = true;
+    } else {
+      final PermissionStatus try1 = await Permission.storage.request();
+      if (try1 == PermissionStatus.granted) {
+        hasStoragePermission = true;
+      } else {}
+    }
+    return Future<bool>.value(hasStoragePermission);
+  }
+
   Future<void> onPressedJoinButton(type, Function() callback) async {
     final bool vid = type == "Video";
     final bool voi = type == "Audio" || type == "Private";
@@ -99,6 +113,39 @@ class AppPermissionService {
       log("Unknown type $type");
     }
 
+    return Future<void>.value();
+  }
+
+  Future<void> onPressedAstrologerGoLive(Function() callback) async {
+    bool hasAllPerm = false;
+    bool hasCamPerm = false;
+    bool hasMicPerm = false;
+    bool hasOvrStrg = false;
+    hasCamPerm = await AppPermissionService.instance.permissionCam();
+    hasMicPerm = await AppPermissionService.instance.permissionMic();
+    hasOvrStrg = await AppPermissionService.instance.permissionStorage();
+    hasAllPerm = hasCamPerm && hasMicPerm && hasOvrStrg;
+    if (hasAllPerm) {
+      log("hasAllPerm");
+      callback();
+    } else {
+      if (!hasCamPerm) {
+        await showPermissionDialog(
+          permissionName: 'Camera',
+          isForOverlayPermission: false,
+        );
+      } else if (!hasMicPerm) {
+        await showPermissionDialog(
+          permissionName: 'Microphone',
+          isForOverlayPermission: false,
+        );
+      } else if (!hasOvrStrg) {
+        await showPermissionDialog(
+          permissionName: 'Storage',
+          isForOverlayPermission: false,
+        );
+      } else {}
+    }
     return Future<void>.value();
   }
 

@@ -72,6 +72,7 @@ class LiveDharamController extends GetxController {
   final RxList<DeckCardModel> _deckCardModelList = <DeckCardModel>[].obs;
   final Rx<TarotGameModel> _tarotGameModel = TarotGameModel().obs;
   final Rx<DateTime> _endTime = DateTime(2001).obs;
+  final RxBool _hasFollowPopupOpen = false.obs;
 
   @override
   void onInit() {
@@ -124,6 +125,8 @@ class LiveDharamController extends GetxController {
     deckCardModelList = [];
     tarotGameModel = TarotGameModel();
     endTime = DateTime(2001);
+    hasFollowPopupOpen = false;
+
     return;
   }
 
@@ -160,6 +163,7 @@ class LiveDharamController extends GetxController {
     _deckCardModelList.close();
     _tarotGameModel.close();
     _endTime.close();
+    _hasFollowPopupOpen.close();
 
     super.onClose();
   }
@@ -263,6 +267,9 @@ class LiveDharamController extends GetxController {
   DateTime get endTime => _endTime.value;
   set endTime(DateTime value) => _endTime(value);
 
+  bool get hasFollowPopupOpen => _hasFollowPopupOpen.value;
+  set hasFollowPopupOpen(bool value) => _hasFollowPopupOpen(value);
+
   Future<void> eventListner({
     // required DatabaseEvent event,
     required DataSnapshot snapshot,
@@ -311,7 +318,9 @@ class LiveDharamController extends GetxController {
 
                   // final isNotFollowing = details.data?.isFollow == 0;
                   // final hasNotSeenPopup = !astroFollowPopup.contains(liveId);
-                  // if (isNotFollowing && hasNotSeenPopup) {
+                  // if (isNotFollowing &&
+                  //     hasNotSeenPopup &&
+                  //     !hasFollowPopupOpen) {
                   //   astroFollowPopup = [
                   //     ...[liveId]
                   //   ];

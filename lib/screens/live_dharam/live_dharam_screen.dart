@@ -993,6 +993,17 @@ class _LivePage extends State<LiveDharamScreen>
   //   return Future<void>.value();
   // }
 
+  bool shouldVisible2(ZegoCustomMessage msg) {
+    final bool isBlocked =
+        _controller.firebaseBlockUsersIds.contains(msg.userId);
+    if (msg.userId == _controller.liveId ||
+        msg.userId == _controller.userId && isBlocked) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Widget inRoomMessage() {
     return StreamBuilder<List<ZegoInRoomMessage>>(
       stream: _zegoController.message.stream(),
@@ -1013,9 +1024,9 @@ class _LivePage extends State<LiveDharamScreen>
           itemBuilder: (BuildContext context, int index) {
             final ZegoInRoomMessage message = messages[index];
             final ZegoCustomMessage msg = receiveMessageToZego(message.message);
-            final bool isBlocked =
-                _controller.firebaseBlockUsersIds.contains(msg.userId);
-
+            // final bool isBlocked =
+            //     _controller.firebaseBlockUsersIds.contains(msg.userId);
+            final bool isBlocked = shouldVisible2(msg);
             return msg.type == 0
                 ? const SizedBox()
                 : Container(
@@ -1049,7 +1060,10 @@ class _LivePage extends State<LiveDharamScreen>
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      msg.userName ?? "",
+                                      // msg.userName ?? "",
+                                      isBlocked
+                                          ? msg.userName ?? ""
+                                          : "Blocked",
                                       style: TextStyle(
                                         fontSize: 10,
                                         color: isBlocked
@@ -1066,7 +1080,8 @@ class _LivePage extends State<LiveDharamScreen>
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     Text(
-                                      msg.message ?? "",
+                                      // msg.message ?? "",
+                                      isBlocked ? msg.message ?? "" : "Blocked",
                                       style: TextStyle(
                                         fontSize: 10,
                                         color: isBlocked
@@ -1935,7 +1950,7 @@ class _LivePage extends State<LiveDharamScreen>
                 // "https://lottie.host/0b77dd9f-a81e-4268-8fb5-cc7f5b958e00/rtEwgdQPKc.json",
                 FollowPlayerSource.asset,
                 "assets/lottie/live_follow_heart.json",
-                _controller.userName,
+                userName,
               ),
             );
           } else if (type == "Ask For Gift") {
@@ -2430,11 +2445,11 @@ class _LivePage extends State<LiveDharamScreen>
   Widget newAppBarRight() {
     return InkWell(
       onTap: () async {
-        // await giftPopup(
-        //   ctx: context,
-        //   userId: _controller.userId,
-        //   userName: _controller.userName,
-        // );
+        //
+        //
+        await exitFunc();
+        //
+        //
       },
       child: SizedBox(
         height: 50,
@@ -2450,9 +2465,11 @@ class _LivePage extends State<LiveDharamScreen>
             color: AppColors.black.withOpacity(0.2),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(0.0),
             child: Image.asset(
-              "assets/images/live_new_gift_latest.png",
+              _controller.currentCaller.isEngaded
+                  ? "assets/images/live_new_hang_up.png"
+                  : "assets/images/live_exit_red.png",
             ),
           ),
         ),
@@ -2888,48 +2905,48 @@ class _LivePage extends State<LiveDharamScreen>
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        StreamBuilder<Object>(
-          stream: null,
-          builder: (context, snapshot) {
-            return AnimatedOpacity(
-              opacity: !_controller.isHost ? 0.0 : 1.0,
-              duration: const Duration(seconds: 1),
-              child: !_controller.isHost
-                  ? const SizedBox()
-                  : Column(
-                      children: [
-                        InkWell(
-                          onTap: exitFunc,
-                          child: SizedBox(
-                            height: 50,
-                            width: 50,
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(50.0),
-                                ),
-                                border: Border.all(
-                                  color: AppColors.yellow,
-                                ),
-                                color: AppColors.black.withOpacity(0.2),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(0.0),
-                                child: Image.asset(
-                                  _controller.currentCaller.isEngaded
-                                      ? "assets/images/live_new_hang_up.png"
-                                      : "assets/images/live_exit_red.png",
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                      ],
-                    ),
-            );
-          },
-        ),
+        // StreamBuilder<Object>(
+        //   stream: null,
+        //   builder: (context, snapshot) {
+        //     return AnimatedOpacity(
+        //       opacity: !_controller.isHost ? 0.0 : 1.0,
+        //       duration: const Duration(seconds: 1),
+        //       child: !_controller.isHost
+        //           ? const SizedBox()
+        //           : Column(
+        //               children: [
+        //                 InkWell(
+        //                   onTap: exitFunc,
+        //                   child: SizedBox(
+        //                     height: 50,
+        //                     width: 50,
+        //                     child: DecoratedBox(
+        //                       decoration: BoxDecoration(
+        //                         borderRadius: const BorderRadius.all(
+        //                           Radius.circular(50.0),
+        //                         ),
+        //                         border: Border.all(
+        //                           color: AppColors.yellow,
+        //                         ),
+        //                         color: AppColors.black.withOpacity(0.2),
+        //                       ),
+        //                       child: Padding(
+        //                         padding: const EdgeInsets.all(0.0),
+        //                         child: Image.asset(
+        //                           _controller.currentCaller.isEngaded
+        //                               ? "assets/images/live_new_hang_up.png"
+        //                               : "assets/images/live_exit_red.png",
+        //                         ),
+        //                       ),
+        //                     ),
+        //                   ),
+        //                 ),
+        //                 const SizedBox(height: 8),
+        //               ],
+        //             ),
+        //     );
+        //   },
+        // ),
         //
         StreamBuilder<Object>(
           stream: null,
@@ -3244,6 +3261,7 @@ class _LivePage extends State<LiveDharamScreen>
     //   RouteName.astrologerProfile,
     //   arguments: <String, dynamic>{"astrologer_id": _controller.liveId},
     // );
+    // await _controller.getAstrologerDetails();
     return Future<void>.value();
   }
 
@@ -3512,12 +3530,12 @@ class _LivePage extends State<LiveDharamScreen>
         ? await connect.removeCoHost(user)
         : await connect.stopCoHost(showRequestDialog: false);
     if (removed) {
+      await _controller.makeAPICallForEndCall();
+    } else {}
+    if (removed) {
       _controller.isHost
           ? await _controller.removeFromWaitListWhereEngadedIsTrue()
           : await _controller.removeFromWaitList();
-    } else {}
-    if (removed) {
-      await _controller.makeAPICallForEndCall();
     } else {}
     return Future<void>.value();
   }
