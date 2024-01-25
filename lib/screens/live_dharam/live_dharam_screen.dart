@@ -46,6 +46,7 @@ import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_astro_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/extend_time_widget.dart";
+import 'package:random_name_generator/random_name_generator.dart';
 //
 //
 //
@@ -86,7 +87,8 @@ class _LivePage extends State<LiveDharamScreen>
   late StreamSubscription<bool> keyboardSubscription;
 
   bool _isKeyboardSheetOpen = false;
-  late Timer _timer;
+  Timer? _timer;
+  Timer? _msgTimer;
 
   BroadcastReceiver receiver = BroadcastReceiver(
     names: <String>["LiveDharamScreen_eventListner"],
@@ -128,6 +130,7 @@ class _LivePage extends State<LiveDharamScreen>
     );
 
     _startTimer();
+    _startMsgTimer();
 
     receiver.start();
     receiver.messages.listen(
@@ -146,7 +149,8 @@ class _LivePage extends State<LiveDharamScreen>
 
   Future<void> zeroAstro() async {
     if (mounted) {
-      _timer.cancel();
+      _timer?.cancel();
+      _msgTimer?.cancel();
       // await _zegoController.leave(context);
       unawaited(_zegoController.leave(context));
     } else {}
@@ -211,6 +215,28 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
+  void _startMsgTimer() {
+    const duration = Duration(seconds: 5);
+    _msgTimer = Timer.periodic(
+      duration,
+      (Timer timer) async {
+        final String fullName = RandomNames(Zone.india).fullName();
+        final ZegoCustomMessage model = ZegoCustomMessage(
+          type: 1,
+          liveId: _controller.liveId,
+          userId: DateTime.now().toString(),
+          userName: fullName,
+          avatar: _controller.avatar,
+          message: "$fullName Joined",
+          timeStamp: DateTime.now().toString(),
+          fullGiftImage: "",
+          isBlockedCustomer: _controller.isCustomerBlockedBool(),
+        );
+        await sendMessageToZego(model);
+      },
+    );
+  }
+
   Future<void> onUserJoin(List<ZegoUIKitUser> users) async {
     // final ZegoCustomMessage model = ZegoCustomMessage(
     //   type: 1,
@@ -241,7 +267,8 @@ class _LivePage extends State<LiveDharamScreen>
     // unawaited(_firebaseSubscription.cancel());
     // _scrollControllerForTop.dispose();
     // _scrollControllerForBottom.dispose();
-    // _timer.cancel();
+    // _timer?.cancel();
+    // _msgTimer?.cancel();
     // WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
@@ -1352,8 +1379,10 @@ class _LivePage extends State<LiveDharamScreen>
 
       _controller.updateInfo();
       List<dynamic> list = await _controller.onLiveStreamingEnded();
-      _zegoController.swiping.next();
-      _controller.updateInfo();
+      if (list.isNotEmpty) {
+        _zegoController.swiping.next();
+        _controller.updateInfo();
+      } else {}
     } else {}
 
     return Future<void>.value();
@@ -3313,7 +3342,8 @@ class _LivePage extends State<LiveDharamScreen>
         await endLiveSession(
           endLive: () async {
             if (mounted) {
-              _timer.cancel();
+              _timer?.cancel();
+              _msgTimer?.cancel();
               // await _zegoController.leave(context);
               unawaited(_zegoController.leave(context));
             } else {}
@@ -3323,7 +3353,8 @@ class _LivePage extends State<LiveDharamScreen>
         await showAllAvailAstroPopup(
           exitLive: () async {
             if (mounted) {
-              _timer.cancel();
+              _timer?.cancel();
+              _msgTimer?.cancel();
               // await _zegoController.leave(context);
               unawaited(_zegoController.leave(context));
             } else {}

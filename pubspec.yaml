@@ -87,6 +87,9 @@ dependencies:
   flutter_json_viewer: ^1.0.1
   device_apps: ^2.2.0
   flutter_screen_recording: ^2.0.10
+  overlapped_carousel: ^1.0.1
+  coverflow: ^2.0.3
+  random_name_generator: ^1.2.0
 
 dependency_overrides:
   intl: ^0.18.1

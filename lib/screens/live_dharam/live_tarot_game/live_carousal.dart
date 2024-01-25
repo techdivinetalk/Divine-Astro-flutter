@@ -116,6 +116,7 @@ class _LiveCarousalState extends State<LiveCarousal> {
           CarouselSlider.builder(
             itemCount: widget.allCards.length,
             options: CarouselOptions(
+              height: 200,
               viewportFraction: 0.25,
               initialPage: 0,
               enableInfiniteScroll: true,
