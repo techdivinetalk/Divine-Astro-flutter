@@ -17,8 +17,8 @@ class OrderFeedbackUI extends GetView<OrderFeedbackController> {
     return Scaffold(
       appBar: commonDetailAppbar(
         title: "All Order Feedback",
-        trailingWidget: GestureDetector(
-          onTap: () {},
+        trailingWidget: InkWell(
+          onTap: () => controller.homeController.whatsapp(),
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -31,10 +31,11 @@ class OrderFeedbackUI extends GetView<OrderFeedbackController> {
               style: AppTextStyle.textStyle12(
                 fontColor: AppColors.red,
               ),
-            ),
+            )
           ),
         ),
       ),
+
       body: ListView.separated(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
         itemBuilder: (context, index) {

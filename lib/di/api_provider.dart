@@ -112,6 +112,7 @@ class ApiProvider {
   final String endChatAPI = "end_chat";
   final String uploadAstrologerimage = "uploadAstrologerimage";
   final String getChatHistory = "getOrderChatHistory";
+  final String getOrderCallHistory = "getOrderCallHistory";
 
   //Socket Events for Chat
   final String initChat = "initChat";

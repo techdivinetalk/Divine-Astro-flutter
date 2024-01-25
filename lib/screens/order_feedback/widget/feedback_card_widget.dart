@@ -19,6 +19,7 @@ class FeedbackCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("FeedbackData: ${feedback.order?.orderId}");
     return ClipRRect(
       borderRadius: BorderRadius.all(Radius.circular(14.r)),
       child: Material(
@@ -61,7 +62,7 @@ class FeedbackCardWidget extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Assets.svg.message.svg(height: 12.h, width: 12.h),
+                      feedback.order?.productType == 12 ? Assets.svg.message.svg(height: 12.h, width: 12.h) :Assets.svg.icCall1.svg(height: 12.h, width: 12.h),
                       SizedBox(width: 8.w),
                       Text(
                         'ID : ${feedback.orderId}',
@@ -75,7 +76,7 @@ class FeedbackCardWidget extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        feedback.order?.createdAt != null ? "${dateToString(feedback.order!.createdAt!, format: "h:mm a")} ${formatDateTime(feedback.order!.createdAt!)}" : "NA",
+                        feedback.createdAt != null ? "${dateToString(feedback.createdAt!, format: "h:mm a")} ${formatDateTime(feedback.createdAt!)}" : "NA",
                         style: AppTextStyle.textStyle10(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue.withOpacity(.5),
@@ -97,7 +98,7 @@ class FeedbackCardWidget extends StatelessWidget {
                 onTap: () {
                   Get.toNamed(RouteName.feedback, arguments: {
                     'order_id': feedback.orderId,
-                    'feedback_data': feedback,
+                    'product_type': feedback.order?.productType,
                   });
                 },
                 child: Text('Read More',

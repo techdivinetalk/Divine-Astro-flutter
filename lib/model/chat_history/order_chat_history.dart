@@ -81,6 +81,22 @@ class ChatMessage {
   dynamic deletedAt;
   int? chatMsgId;
 
+  int? astrologerId;
+  int? callInitiate;
+  dynamic exotelInitiateResponse;
+  dynamic callStartedAt;
+  dynamic callEndedAt;
+  dynamic callDuration;
+  dynamic exotelEndResponse;
+  dynamic exotelCallSid;
+  String? callStatus;
+  dynamic callRejectReason;
+  int? callEnd;
+  dynamic callRecording;
+  dynamic customerCallStatus;
+  dynamic memberCallStatus;
+  dynamic apiCallFrom;
+
   ChatMessage({
     this.id,
     this.orderId,
@@ -102,6 +118,24 @@ class ChatMessage {
     this.base64Image,
     this.deletedAt,
     this.chatMsgId,
+
+    this.astrologerId,
+    this.callInitiate,
+    this.exotelInitiateResponse,
+    this.callStartedAt,
+    this.callEndedAt,
+    this.callDuration,
+
+    this.exotelEndResponse,
+    this.exotelCallSid,
+    this.callStatus,
+    this.callRejectReason,
+    this.callEnd,
+    this.callRecording,
+
+    this.customerCallStatus,
+    this.memberCallStatus,
+    this.apiCallFrom,
   });
 
   ChatMessage.fromJson(Map<String, dynamic> json) {
@@ -125,6 +159,24 @@ class ChatMessage {
     base64Image = json['base64image'];
     deletedAt = json['deleted_at'];
     chatMsgId = json['chat_msg_id'];
+
+    astrologerId = json['astrologer_id'];
+    callInitiate = json['call_initiate'];
+    exotelInitiateResponse = json['exotel_initiate_response'];
+    callStartedAt = json['call_started_at'];
+    callEndedAt = json['call_ended_at'];
+    callDuration = json['call_duration'];
+    exotelEndResponse = json['exotel_end_response'];
+    exotelCallSid = json['exotel_call_sid'];
+    callStatus = json['call_status'];
+    callRejectReason = json['call_reject_reason'];
+    callEnd = json['call_end'];
+    callRecording = json['call_recording'];
+
+    roleId = json['role_id'];
+    customerCallStatus = json['customer_call_status'];
+    memberCallStatus = json['member_call_status'];
+    apiCallFrom = json['api_call_from'];
   }
 
   Map<String, dynamic> toJson() {
@@ -149,6 +201,26 @@ class ChatMessage {
     data['base64image'] = base64Image;
     data['deleted_at'] = deletedAt;
     data['chat_msg_id'] = chatMsgId;
+
+
+    data['astrologer_id'] = astrologerId;
+    data['call_initiate'] = callInitiate;
+    data['exotel_initiate_response'] = exotelInitiateResponse;
+    data['call_started_at'] = callStartedAt;
+    data['call_ended_at'] = callEndedAt;
+    data['call_duration'] = callDuration;
+
+    data['exotel_end_response'] = exotelEndResponse;
+    data['exotel_call_sid'] = exotelCallSid;
+    data['call_status'] = callStatus;
+    data['call_reject_reason'] = callRejectReason;
+    data['call_end'] = callEnd;
+    data['call_recording'] = callRecording;
+    data['order_id'] = orderId;
+
+    data['customer_call_status'] = customerCallStatus;
+    data['member_call_status'] = memberCallStatus;
+    data['api_call_from'] = apiCallFrom;
     return data;
   }
 }

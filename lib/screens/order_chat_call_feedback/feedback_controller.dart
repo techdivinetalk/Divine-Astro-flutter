@@ -1,9 +1,12 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/astrr_feedback_details.dart';
 import 'package:divine_astrologer/model/chat_history/order_chat_history.dart';
 import 'package:divine_astrologer/model/feedback_response.dart';
+import 'package:divine_astrologer/pages/home/home_controller.dart';
 import 'package:divine_astrologer/repository/chat_call_feeback_repository.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +21,7 @@ class FeedbackController extends GetxController {
   RxInt currentPage = 1.obs;
 
   AstroFeedbackDetailData? astroFeedbackDetailData;
+  var homeController = Get.find<HomeController>();
   Order? order;
   RxList<FeedbackData> feedbacks = <FeedbackData>[].obs;
 
@@ -31,9 +35,36 @@ class FeedbackController extends GetxController {
     var arguments = Get.arguments;
     if (arguments != null) {
       int orderId = arguments['order_id'];
+      int productId = arguments['product_type'];
+     // String ordercall = arguments['order_id'];
       print("Id :: $orderId");
+      print("Call :: $productId");
       getAstroFeedbackDetail(orderId);
-      getAstroChatList(273);
+      //getAstroChatList(273);
+      //getAstroCallList(2009);
+      // Check the order type and call the respective API
+      fetchDataBasedOnProductId(productId);
+    }
+  }
+
+  Future<void> fetchDataBasedOnProductId(int productId) async {
+    try {
+      loading.value = Loading.initial;
+      update();
+
+      if (productId == 12) {
+        await getAstroChatList(24580);
+      } else {
+        await getAstroCallList(2009);
+      }
+
+
+    } catch (error) {
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      }
     }
   }
 
@@ -89,5 +120,36 @@ class FeedbackController extends GetxController {
     }
   }
 
+  Future<void> getAstroCallList(int orderId) async {
+    loading.value = Loading.initial;
+    update();
+    try {
+      if (processedPages.contains(currentPage.value)) {
+        return;
+      }
 
+      var response = await callChatFeedBackRepository.getAstrologerCall(orderId);
+
+      if (response != null) {
+        if (response.success ?? false) {
+          // Process the chat history data
+          List<ChatMessage> chatMessages = response.data ?? [];
+          // Access the order information
+          order = response.order?.isNotEmpty == true ? response.order![0] : null;
+          if (chatMessages.isNotEmpty) {
+            chatMessageList.addAll(chatMessages);
+            processedPages.add(currentPage.value);
+          }
+        } else {
+          throw CustomException(response.message ?? 'Failed to get call history');
+        }
+      }
+    } catch (error) {
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      }
+    }
+  }
 }
