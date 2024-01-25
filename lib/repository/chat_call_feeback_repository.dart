@@ -68,9 +68,9 @@ class CallChatFeedBackRepository extends ApiProvider {
     }
   }
 
-  Future<ChatAssistChatResponse> getAstrologerCall(int orderId) async {
+  Future<ChatHistoryResponse> getAstrologerCall(int orderId) async {
     try {
-      final response = await post(getChatHistory, body: json.encode({'order_id': orderId}));
+      final response = await post(getOrderCallHistory, body: json.encode({'order_id': orderId}));
       log('response --- ${response.body}');
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
@@ -78,7 +78,7 @@ class CallChatFeedBackRepository extends ApiProvider {
           Get.offNamed(RouteName.login);
           throw CustomException(json.decode(response.body)["error"]);
         } else {
-          final assistantAstrologerChatList = ChatAssistChatResponse.fromJson(json.decode(response.body));
+          final assistantAstrologerChatList = ChatHistoryResponse.fromJson(json.decode(response.body));
           if (assistantAstrologerChatList.statusCode == successResponse &&
               assistantAstrologerChatList.success!) {
             return assistantAstrologerChatList;

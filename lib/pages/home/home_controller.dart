@@ -308,17 +308,6 @@ class HomeController extends GetxController {
         //print(" Dharam::${response.data?[0].order?.orderId}");
         feedbackResponse = response.data?[0];
         feedbacksList = response.data;
-
-       // OrderDetails order = feedbacksList![0].order;
-
-      /*  String orderId = order.orderId ?? "N/A";
-        int productId = order.productType ?? -1; // Replace -1 with a default value if needed
-        DateTime? createdAt = order.createdAt;
-
-        // Use orderId, productId, and createdAt as needed
-        print("Order ID: $orderId");
-        print("Product ID: $productId");
-        print("Order Created At: $createdAt");*/
         showFeedbackBottomSheet();
         debugPrint('feed id: ${feedbackResponse?.id}');
       }

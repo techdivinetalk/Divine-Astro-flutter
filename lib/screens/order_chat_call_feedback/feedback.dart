@@ -1,5 +1,8 @@
 import 'package:divine_astrologer/common/appbar.dart';
+import 'package:divine_astrologer/common/common_bottomsheet.dart';
+import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/screens/order_chat_call_feedback/feedback_controller.dart';
 import 'package:divine_astrologer/screens/order_chat_call_feedback/widget/feedback_card.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +18,21 @@ class FeedBack extends GetView<FeedbackController> {
 
   @override
   Widget build(BuildContext context) {
+
+    bool isPlaying = false;
+
+    double playbackProgress = 0.5;
+    void togglePlayback() {
+      isPlaying = !isPlaying;
+
+      // Add logic to start/stop audio playback here
+    }
+
     return Scaffold(
       appBar: commonDetailAppbar(
         title: "Order Feedback",
-        trailingWidget: GestureDetector(
-          onTap: () {},
+        trailingWidget: InkWell(
+          onTap: () => controller.homeController.whatsapp(),
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -48,7 +61,9 @@ class FeedBack extends GetView<FeedbackController> {
                   children: [
                     Row(
                       children: [
-                        controller.order?.orderId == "CHAT" ? Assets.svg.message.svg(height: 12.h, width: 12.h) :Assets.svg.icCall1.svg(height: 12.h, width: 12.h),
+                        controller.order?.productType == 12
+                            ? Assets.svg.message.svg(height: 12.h, width: 12.h)
+                            : Assets.svg.icCall1.svg(height: 12.h, width: 12.h),
                         SizedBox(width: 8.w),
                         Text(
                           'ID : ${controller.order?.id ?? "N/A"}',
@@ -61,23 +76,67 @@ class FeedBack extends GetView<FeedbackController> {
                     ),
                     Row(
                       children: [
-                        Text(controller.order?.createdAt ?? "N/A",
+                        Text(
+                          controller.order?.createdAt != null
+                              ? DateFormat('dd MMMM, hh:mma').format(
+                                  DateTime.parse(controller.order!.createdAt!),
+                                )
+                              : "N/A",
                           style: AppTextStyle.textStyle10(
                             fontWeight: FontWeight.w400,
                             fontColor: AppColors.darkBlue.withOpacity(.5),
                           ),
-                        ),
+                        )
                       ],
                     )
                   ],
                 ),
               ),
+              /*Card(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+                      onPressed: togglePlayback,
+                      iconSize: 24.0,
+                      color: Colors.grey,
+                    ),
+                    const SizedBox(width: 2.0),
+                    const Text(
+                      '0:00',
+                      style: TextStyle(fontSize: 14.0, color: Colors.grey),
+                    ),
+                    Slider(
+                      value: playbackProgress,
+                      onChanged: (double value) {
+                        playbackProgress = value;
+                      },
+                      activeColor: Colors.greenAccent,
+                      inactiveColor: Colors.grey,
+                    ),
+                    const Text(
+                      '-0:00',
+                      style: TextStyle(fontSize: 14.0, color: Colors.grey),
+                    ),
+                    const SizedBox(width: 4.0),
+                    const Icon(
+                      Icons.volume_up,
+                      color: Colors.grey,
+                      size: 24.0,
+                    ),
+                    const SizedBox(width: 4.0),
+                  ],
+                ),
+              ),*/
               SizedBox(
                 height: Get.height * 0.4,
                 child: Stack(
                   children: [
                     Assets.images.bgChatWallpaper.image(
-                        width: MediaQuery.of(context).size.width, fit: BoxFit.fitWidth),
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.fitWidth,
+                    ),
                     ListView.builder(
                       itemCount: controller.chatMessageList.length,
                       controller: controller.messageScrollController,
@@ -85,94 +144,144 @@ class FeedBack extends GetView<FeedbackController> {
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         final data = controller.chatMessageList[index];
-                        return SizedBox(
-                          width: double.maxFinite,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 12.w, vertical: 4.h),
-                            child: Column(
-                              crossAxisAlignment: (data.msgType ?? 0) == 1
-                                  ? CrossAxisAlignment.end
-                                  : CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 8),
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.black.withOpacity(0.2),
-                                          blurRadius: 3.0,
-                                          offset: const Offset(0.0, 3.0)),
-                                    ],
-                                    color: Colors.white,
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(10)),
+
+                        bool isNewDay = index == 0 ||
+                            DateTime.parse(data.createdAt!).day !=
+                                DateTime.parse(controller
+                                        .chatMessageList[index - 1].createdAt!)
+                                    .day;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Display date header if it's a new day
+                            if (isNewDay)
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 15.w),
+                              child: Container(
+                                width: 60,
+                                height: 25,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF5F3C08),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    DateFormat('dd MMM')
+                                        .format(DateTime.parse(data.createdAt!)),
+                                    style: AppTextStyle.textStyle10(
+                                      fontColor: AppColors.white,
+                                    ),
                                   ),
-                                  constraints: BoxConstraints(
-                                      maxWidth: ScreenUtil().screenWidth * 0.7,
-                                      minWidth:
-                                      ScreenUtil().screenWidth * 0.27),
-                                  child: Stack(
-                                    alignment: (data.msgType ?? 0) == 1
-                                        ? Alignment.centerRight
-                                        : Alignment.centerLeft,
-                                    children: [
-                                      Column(
+                                ),
+                              ).centered(),
+                            ),
+                            // Display chat message
+                            SizedBox(
+                              width: double.maxFinite,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12.w, vertical: 4.h),
+                                child: Column(
+                                  crossAxisAlignment: (data.msgType ?? 0) == 1
+                                      ? CrossAxisAlignment.end
+                                      : CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12, vertical: 8),
+                                      clipBehavior: Clip.antiAlias,
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.2),
+                                            blurRadius: 3.0,
+                                            offset: const Offset(0.0, 3.0),
+                                          ),
+                                        ],
+                                        color: Colors.white,
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
+                                      constraints: BoxConstraints(
+                                        maxWidth:
+                                            ScreenUtil().screenWidth * 0.7,
+                                        minWidth:
+                                            ScreenUtil().screenWidth * 0.27,
+                                      ),
+                                      child: Stack(
+                                        alignment: (data.msgType ?? 0) == 1
+                                            ? Alignment.centerRight
+                                            : Alignment.centerLeft,
                                         children: [
-                                          Wrap(
-                                              alignment: WrapAlignment.end,
+                                          Column(
+                                            children: [
+                                              Wrap(
+                                                alignment: WrapAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    data.message ?? "",
+                                                    style: AppTextStyle
+                                                        .textStyle14(
+                                                      fontColor:
+                                                          (data.msgType ??
+                                                                      0) ==
+                                                                  1
+                                                              ? AppColors
+                                                                  .darkBlue
+                                                              : AppColors
+                                                                  .darkBlue,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 20.h),
+                                            ],
+                                          ),
+                                          Positioned(
+                                            bottom: 0,
+                                            right: 0,
+                                            child: Row(
                                               children: [
-                                                Text(data.message ?? "",
-                                                    style: AppTextStyle.textStyle14(
-                                                        fontColor:
-                                                        (data.msgType ??
-                                                            0) ==
+                                                Text(
+                                                  DateFormat.jm().format(
+                                                    DateTime.parse(
+                                                        data.createdAt ?? ''),
+                                                  ),
+                                                  style:
+                                                      AppTextStyle.textStyle10(
+                                                    fontColor:
+                                                        AppColors.darkBlue,
+                                                  ),
+                                                ),
+                                                (data.seenStatus ?? 0) == 0
+                                                    ? SizedBox(width: 8.w)
+                                                    : (data.seenStatus ?? 0) ==
                                                             1
-                                                            ? AppColors
-                                                            .darkBlue
-                                                            : AppColors
-                                                            .darkBlue))
-                                              ]),
-                                          SizedBox(height: 20.h)
+                                                        ? Assets
+                                                            .images.icSingleTick
+                                                            .svg()
+                                                        : (data.seenStatus ??
+                                                                    0) ==
+                                                                2
+                                                            ? Assets.images
+                                                                .icDoubleTick
+                                                                .svg()
+                                                            : const SizedBox(),
+                                              ],
+                                            ),
+                                          ),
                                         ],
                                       ),
-                                      Positioned(
-                                        bottom: 0,
-                                        right: 0,
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                                DateFormat.jm().format(
-                                                    DateTime.parse(
-                                                        data.createdAt ?? '')),
-                                                style: AppTextStyle.textStyle10(
-                                                    fontColor:
-                                                    AppColors.darkBlue)),
-                                            (data.seenStatus ?? 0) == 0
-                                                ? SizedBox(width: 8.w)
-                                                : (data.seenStatus ?? 0) == 1
-                                                ? Assets.images.icSingleTick
-                                                .svg()
-                                                : (data.seenStatus ?? 0) ==
-                                                2
-                                                ? Assets
-                                                .images.icDoubleTick
-                                                .svg()
-                                                : const SizedBox()
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         );
                       },
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -189,11 +298,14 @@ class FeedBack extends GetView<FeedbackController> {
                             RichText(
                               text: TextSpan(
                                 text: 'Total problems Found : ',
-                                style: AppTextStyle.textStyle16(fontWeight: FontWeight.bold),
+                                style: AppTextStyle.textStyle16(
+                                    fontWeight: FontWeight.w500),
                                 children: [
                                   TextSpan(
-                                    text: '${controller.astroFeedbackDetailData?.totalProblem ?? 0}',
-                                    style: const TextStyle(color: AppColors.red),
+                                    text:
+                                        '${controller.astroFeedbackDetailData?.totalProblem ?? 0}',
+                                    style:
+                                        const TextStyle(color: AppColors.red),
                                   ),
                                 ],
                               ),
@@ -202,11 +314,14 @@ class FeedBack extends GetView<FeedbackController> {
                             RichText(
                               text: TextSpan(
                                 text: 'Total Applicable Fine : ',
-                                style: AppTextStyle.textStyle16(fontWeight: FontWeight.bold),
+                                style: AppTextStyle.textStyle16(
+                                    fontWeight: FontWeight.w500),
                                 children: [
                                   TextSpan(
-                                    text: '₹ ${controller.astroFeedbackDetailData?.fineAmounts ?? 0}',
-                                    style: const TextStyle(color: AppColors.red),
+                                    text:
+                                        '-₹ ${controller.astroFeedbackDetailData?.fineAmounts ?? 0}',
+                                    style:
+                                        const TextStyle(color: AppColors.red),
                                   ),
                                 ],
                               ),
@@ -228,20 +343,23 @@ class FeedBack extends GetView<FeedbackController> {
                     SizedBox(height: 20.h),
                     ListView.builder(
                       shrinkWrap: true,
-                      itemCount: controller.astroFeedbackDetailData?.problems?.length ?? 0,
+                      itemCount: controller
+                              .astroFeedbackDetailData?.problems?.length ??
+                          0,
                       itemBuilder: (context, index) {
-                        final feedbackProblem = controller.astroFeedbackDetailData?.problems?[index];
-                        return FeedbackCallChatCardWidget(feedbackProblem: feedbackProblem!);
+                        final feedbackProblem = controller
+                            .astroFeedbackDetailData?.problems?[index];
+                        return FeedbackCallChatCardWidget(
+                            feedbackProblem: feedbackProblem!);
                       },
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           );
         } else {
-          // Display a placeholder or loading indicator when data is not available
-          return const Center(child: CircularProgressIndicator());
+          return const GenericLoadingWidget();
         }
       }),
     );
