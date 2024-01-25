@@ -18,6 +18,7 @@ class FeedbackController extends GetxController {
   RxInt currentPage = 1.obs;
 
   AstroFeedbackDetailData? astroFeedbackDetailData;
+  Order? order;
   RxList<FeedbackData> feedbacks = <FeedbackData>[].obs;
 
 
@@ -32,7 +33,7 @@ class FeedbackController extends GetxController {
       int orderId = arguments['order_id'];
       print("Id :: $orderId");
       getAstroFeedbackDetail(orderId);
-      getAstroChatList(24580);
+      getAstroChatList(273);
     }
   }
 
@@ -62,12 +63,15 @@ class FeedbackController extends GetxController {
       if (processedPages.contains(currentPage.value)) {
         return;
       }
+
       var response = await callChatFeedBackRepository.getAstrologerChats(orderId);
 
       if (response != null) {
-        if (response.success) {
+        if (response.success ?? false) {
           // Process the chat history data
           List<ChatMessage> chatMessages = response.data ?? [];
+          // Access the order information
+          order = response.order?.isNotEmpty == true ? response.order![0] : null;
           if (chatMessages.isNotEmpty) {
             chatMessageList.addAll(chatMessages);
             processedPages.add(currentPage.value);
@@ -84,5 +88,6 @@ class FeedbackController extends GetxController {
       }
     }
   }
+
 
 }

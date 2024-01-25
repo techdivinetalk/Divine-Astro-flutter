@@ -75,11 +75,11 @@ class FeedbackCardWidget extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        '${dateToString(DateTime.parse(feedback.createdAt ?? '') , format: "h:mm a")}  '
-                            '${formatDateTime(DateTime.parse(feedback.createdAt ?? ''))} ',
+                        feedback.order?.createdAt != null ? "${dateToString(feedback.order!.createdAt!, format: "h:mm a")} ${formatDateTime(feedback.order!.createdAt!)}" : "NA",
                         style: AppTextStyle.textStyle10(
-                            fontWeight: FontWeight.w400,
-                            fontColor: AppColors.darkBlue.withOpacity(.5)),
+                          fontWeight: FontWeight.w400,
+                          fontColor: AppColors.darkBlue.withOpacity(.5),
+                        ),
                       ),
                     ],
                   )

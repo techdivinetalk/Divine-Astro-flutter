@@ -65,6 +65,8 @@ class HomeController extends GetxController {
   int scoreIndex = 0;
   List<Map<String, dynamic>> yourScore = [];
 
+  OrderDetails? order;
+
   Rx<Loading> offerTypeLoading = Loading.initial.obs;
   Rx<Loading> sessionTypeLoading = Loading.initial.obs;
 
@@ -303,8 +305,20 @@ class HomeController extends GetxController {
       isFeedbackAvailable.value = response.success ?? false;
       debugPrint('val: $isFeedbackAvailable');
       if (isFeedbackAvailable.value) {
+        //print(" Dharam::${response.data?[0].order?.orderId}");
         feedbackResponse = response.data?[0];
         feedbacksList = response.data;
+
+       // OrderDetails order = feedbacksList![0].order;
+
+      /*  String orderId = order.orderId ?? "N/A";
+        int productId = order.productType ?? -1; // Replace -1 with a default value if needed
+        DateTime? createdAt = order.createdAt;
+
+        // Use orderId, productId, and createdAt as needed
+        print("Order ID: $orderId");
+        print("Product ID: $productId");
+        print("Order Created At: $createdAt");*/
         showFeedbackBottomSheet();
         debugPrint('feed id: ${feedbackResponse?.id}');
       }

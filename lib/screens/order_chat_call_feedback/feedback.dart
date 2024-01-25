@@ -48,10 +48,10 @@ class FeedBack extends GetView<FeedbackController> {
                   children: [
                     Row(
                       children: [
-                        Assets.svg.message.svg(height: 12.h, width: 12.h),
+                        controller.order?.orderId == "CHAT" ? Assets.svg.message.svg(height: 12.h, width: 12.h) :Assets.svg.icCall1.svg(height: 12.h, width: 12.h),
                         SizedBox(width: 8.w),
                         Text(
-                          'ID : 25478',
+                          'ID : ${controller.order?.id ?? "N/A"}',
                           style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w400,
                             fontColor: AppColors.darkBlue,
@@ -61,13 +61,12 @@ class FeedBack extends GetView<FeedbackController> {
                     ),
                     Row(
                       children: [
-                        Text("NA",
+                        Text(controller.order?.createdAt ?? "N/A",
                           style: AppTextStyle.textStyle10(
                             fontWeight: FontWeight.w400,
                             fontColor: AppColors.darkBlue.withOpacity(.5),
                           ),
                         ),
-
                       ],
                     )
                   ],
