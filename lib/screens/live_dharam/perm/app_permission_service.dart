@@ -6,6 +6,9 @@ import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "package:permission_handler/permission_handler.dart";
+import "dart:io";
+
+import "package:device_info_plus/device_info_plus.dart";
 
 class AppPermissionService {
   AppPermissionService._();
@@ -55,6 +58,20 @@ class AppPermissionService {
     return Future<bool>.value(hasMicrophonePermission);
   }
 
+  Future<bool> permissionPhotos() async {
+    bool hasPhotosPermission = false;
+    final PermissionStatus try0 = await Permission.photos.status;
+    if (try0 == PermissionStatus.granted) {
+      hasPhotosPermission = true;
+    } else {
+      final PermissionStatus try1 = await Permission.photos.request();
+      if (try1 == PermissionStatus.granted) {
+        hasPhotosPermission = true;
+      } else {}
+    }
+    return Future<bool>.value(hasPhotosPermission);
+  }
+
   Future<bool> permissionStorage() async {
     bool hasStoragePermission = false;
     final PermissionStatus try0 = await Permission.storage.status;
@@ -67,6 +84,18 @@ class AppPermissionService {
       } else {}
     }
     return Future<bool>.value(hasStoragePermission);
+  }
+
+  Future<bool> permissionPhotoOrStorage() async {
+    bool perm = false;
+    if (Platform.isIOS) {
+      perm = await permissionPhotos();
+    } else if (Platform.isAndroid) {
+      final AndroidDeviceInfo android = await DeviceInfoPlugin().androidInfo;
+      final int sdkInt = android.version.sdkInt;
+      perm = sdkInt > 32 ? await permissionPhotos() : await permissionStorage();
+    } else {}
+    return Future<bool>.value(perm);
   }
 
   Future<void> onPressedJoinButton(type, Function() callback) async {
@@ -123,7 +152,8 @@ class AppPermissionService {
     bool hasOvrStrg = false;
     hasCamPerm = await AppPermissionService.instance.permissionCam();
     hasMicPerm = await AppPermissionService.instance.permissionMic();
-    hasOvrStrg = await AppPermissionService.instance.permissionStorage();
+    // hasOvrStrg = await AppPermissionService.instance.permissionStorage();
+    hasOvrStrg = await AppPermissionService.instance.permissionPhotoOrStorage();
     hasAllPerm = hasCamPerm && hasMicPerm && hasOvrStrg;
     if (hasAllPerm) {
       log("hasAllPerm");

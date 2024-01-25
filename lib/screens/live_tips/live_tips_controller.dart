@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/live/blocked_customer_list_res.dart';
@@ -50,13 +52,21 @@ class LiveTipsController extends GetxController {
       },
     );
     await database.ref().child("astro-live-list/$userId").set(1);
-    
+
     await Get.toNamed(RouteName.liveDharamScreen, arguments: userId);
+
+    // await database.ref().child("live/$userId").remove();
+    // await database.ref().child("astro-live-list/$userId").remove();
+
+    // Get.back();
+    // Get.back();
+
+    unawaited(database.ref().child("live/$userId").remove());
+    unawaited(database.ref().child("astro-live-list/$userId").remove());
     
-    await database.ref().child("live/$userId").remove();
-    await database.ref().child("astro-live-list/$userId").remove();
-    Get.back();
-    Get.back();
+    Get.back(closeOverlays: true);
+    Get.back(closeOverlays: true);
+
     return Future<void>.value();
   }
 

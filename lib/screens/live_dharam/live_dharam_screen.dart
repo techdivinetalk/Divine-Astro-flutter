@@ -6,6 +6,7 @@ import "dart:developer";
 
 import "package:after_layout/after_layout.dart";
 import "package:divine_astrologer/common/colors.dart";
+import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/model/live/deck_card_model.dart";
 import "package:divine_astrologer/model/live/notice_board_res.dart";
@@ -19,6 +20,7 @@ import "package:divine_astrologer/screens/live_dharam/live_tarot_game/show_card_
 import "package:divine_astrologer/screens/live_dharam/live_tarot_game/waiting_for_user_to_select_cards.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/already_in_waitlist_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/astro_wait_list_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/block_unlock_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/call_accept_or_reject_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/disconnect_call_widget.dart";
@@ -44,7 +46,6 @@ import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_astro_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/extend_time_widget.dart";
-//
 //
 //
 //
@@ -146,7 +147,8 @@ class _LivePage extends State<LiveDharamScreen>
   Future<void> zeroAstro() async {
     if (mounted) {
       _timer.cancel();
-      await _zegoController.leave(context);
+      // await _zegoController.leave(context);
+      unawaited(_zegoController.leave(context));
     } else {}
     return Future<void>.value();
   }
@@ -177,11 +179,22 @@ class _LivePage extends State<LiveDharamScreen>
     //   (_) async {
     //     if (mounted) {
     //       await Future.delayed(const Duration(seconds: 15));
-    //       await exitPopup();
+
+    //       final String liveId = _controller.liveId;
+    //       final isNotFollowing = (_controller.details.data?.isFollow ?? 0) == 0;
+    //       final hasntSeenPopup = !_controller.astroFollowPopup.contains(liveId);
+    //       final hasntOpenPopup = !_controller.hasFollowPopupOpen;
+
+    //       if (isNotFollowing && hasntSeenPopup && hasntOpenPopup) {
+    //         _controller.astroFollowPopup = [
+    //           ...[_controller.liveId]
+    //         ];
+    //         await exitPopup();
+    //       } else {}
     //     } else {}
     //   },
     // );
-    return Future<void>.value();
+    // return Future<void>.value();
   }
 
   void _startTimer() {
@@ -993,17 +1006,6 @@ class _LivePage extends State<LiveDharamScreen>
   //   return Future<void>.value();
   // }
 
-  bool shouldVisible2(ZegoCustomMessage msg) {
-    final bool isBlocked =
-        _controller.firebaseBlockUsersIds.contains(msg.userId);
-    if (msg.userId == _controller.liveId ||
-        msg.userId == _controller.userId && isBlocked) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   Widget inRoomMessage() {
     return StreamBuilder<List<ZegoInRoomMessage>>(
       stream: _zegoController.message.stream(),
@@ -1024,9 +1026,8 @@ class _LivePage extends State<LiveDharamScreen>
           itemBuilder: (BuildContext context, int index) {
             final ZegoInRoomMessage message = messages[index];
             final ZegoCustomMessage msg = receiveMessageToZego(message.message);
-            // final bool isBlocked =
-            //     _controller.firebaseBlockUsersIds.contains(msg.userId);
-            final bool isBlocked = shouldVisible2(msg);
+            final bool isBlocked =
+                _controller.firebaseBlockUsersIds.contains(msg.userId);
             return msg.type == 0
                 ? const SizedBox()
                 : Container(
@@ -1060,10 +1061,7 @@ class _LivePage extends State<LiveDharamScreen>
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      // msg.userName ?? "",
-                                      isBlocked
-                                          ? msg.userName ?? ""
-                                          : "Blocked",
+                                      msg.userName ?? "",
                                       style: TextStyle(
                                         fontSize: 10,
                                         color: isBlocked
@@ -1080,8 +1078,7 @@ class _LivePage extends State<LiveDharamScreen>
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     Text(
-                                      // msg.message ?? "",
-                                      isBlocked ? msg.message ?? "" : "Blocked",
+                                      msg.message ?? "",
                                       style: TextStyle(
                                         fontSize: 10,
                                         color: isBlocked
@@ -1763,13 +1760,13 @@ class _LivePage extends State<LiveDharamScreen>
           fullGiftImage: "",
           animation: "",
         );
-
         return MoreOptionsWidget(
           onClose: Get.back,
           isHost: _controller.isHost,
           onTapAskForGifts: () async {
             Get.back();
             await giftPopup(ctx: context, userId: userId, userName: userName);
+            showacknowledgementSnackBar("Gift");
           },
           onTapAskForVideoCall: () async {
             Get.back();
@@ -1787,18 +1784,7 @@ class _LivePage extends State<LiveDharamScreen>
               successCallback: log,
               failureCallback: log,
             );
-            // await _controller.addUpdateToWaitList(
-            //   userId: userId,
-            //   callType: "Video",
-            //   isEngaded: false,
-            //   isRequest: true,
-            // );
-            // final String id = userId;
-            // final String name = userName;
-            // // final String avatar = _controller.waitListModel.last.avatar;
-            // final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
-            // final connectInvite = _zegoController.connectInvite;
-            // await connectInvite.hostSendCoHostInvitationToAudience(user);
+            showacknowledgementSnackBar("Video Call");
           },
           onTapAskForAudioCall: () async {
             Get.back();
@@ -1816,18 +1802,7 @@ class _LivePage extends State<LiveDharamScreen>
               successCallback: log,
               failureCallback: log,
             );
-            // await _controller.addUpdateToWaitList(
-            //   userId: userId,
-            //   callType: "Audio",
-            //   isEngaded: false,
-            //   isRequest: true,
-            // );
-            // final String id = userId;
-            // final String name = userName;
-            // // final String avatar = _controller.waitListModel.last.avatar;
-            // final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
-            // final connectInvite = _zegoController.connectInvite;
-            // await connectInvite.hostSendCoHostInvitationToAudience(user);
+            showacknowledgementSnackBar("Voice Call");
           },
           onTapAskForPrivateCall: () async {
             Get.back();
@@ -1845,35 +1820,29 @@ class _LivePage extends State<LiveDharamScreen>
               successCallback: log,
               failureCallback: log,
             );
-            // await _controller.addUpdateToWaitList(
-            //   userId: userId,
-            //   callType: "Private",
-            //   isEngaded: false,
-            //   isRequest: true,
-            // );
-            // final String id = userId;
-            // final String name = userName;
-            // // final String avatar = _controller.waitListModel.last.avatar;
-            // final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
-            // final connectInvite = _zegoController.connectInvite;
-            // await connectInvite.hostSendCoHostInvitationToAudience(user);
+            showacknowledgementSnackBar("Private Call");
           },
           onTapAskForBlockUnBlockUser: () async {
             Get.back();
-            await _controller.callblockCustomer(id: int.parse(userId));
-            var data = {
-              "room_id": _controller.liveId,
-              "user_id": userId,
-              "user_name": userName,
-              "item": item.toJson(),
-              "type": "Block/Unblock",
-            };
-            await _controller.sendGiftAPI(
-              data: data,
-              count: 1,
-              svga: "",
-              successCallback: log,
-              failureCallback: log,
+            await blockUnblockPopup(
+              isAlreadyBeenBlocked: isBlocked,
+              performAction: () async {
+                await _controller.callblockCustomer(id: int.parse(userId));
+                var data = {
+                  "room_id": _controller.liveId,
+                  "user_id": userId,
+                  "user_name": userName,
+                  "item": item.toJson(),
+                  "type": "Block/Unblock",
+                };
+                await _controller.sendGiftAPI(
+                  data: data,
+                  count: 1,
+                  svga: "",
+                  successCallback: log,
+                  failureCallback: log,
+                );
+              },
             );
           },
           isBlocked: isBlocked,
@@ -1881,6 +1850,48 @@ class _LivePage extends State<LiveDharamScreen>
       },
     );
     return Future<void>.value();
+  }
+
+  Future<void> blockUnblockPopup({
+    required bool isAlreadyBeenBlocked,
+    required Function() performAction,
+  }) async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return BlockUnblockWidget(
+          onClose: Get.back,
+          isAlreadyBeenBlocked: isAlreadyBeenBlocked,
+          performAction: () {
+            Get.back();
+            performAction();
+          },
+        );
+      },
+    );
+    return Future<void>.value();
+  }
+
+  void showacknowledgementSnackBar(String type) {
+    final SnackBar snackBar = SnackBar(
+      width: Get.width / 1.5,
+      content: Text(
+        "$type Request Sent",
+        style: const TextStyle(
+          fontSize: 16,
+          color: AppColors.black,
+          fontWeight: FontWeight.bold,
+        ),
+        textAlign: TextAlign.center,
+      ),
+      backgroundColor: AppColors.yellow,
+      behavior: SnackBarBehavior.floating,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(50.0)),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    return;
   }
 
   // Future<void> onInRoomCommandMessageReceived(
@@ -3303,7 +3314,8 @@ class _LivePage extends State<LiveDharamScreen>
           endLive: () async {
             if (mounted) {
               _timer.cancel();
-              await _zegoController.leave(context);
+              // await _zegoController.leave(context);
+              unawaited(_zegoController.leave(context));
             } else {}
           },
         );
@@ -3312,7 +3324,8 @@ class _LivePage extends State<LiveDharamScreen>
           exitLive: () async {
             if (mounted) {
               _timer.cancel();
-              await _zegoController.leave(context);
+              // await _zegoController.leave(context);
+              unawaited(_zegoController.leave(context));
             } else {}
           },
         );

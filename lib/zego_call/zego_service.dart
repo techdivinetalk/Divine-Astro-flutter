@@ -55,7 +55,6 @@ class ZegoService {
     required String targetUserName,
     required Function() checkOppositeSidePermGranted,
   }) {
-    
     return SizedBox(
       height: 32,
       width: 32,
@@ -90,6 +89,7 @@ class ZegoService {
           ? await controller.sendCallInvitation(
               invitees: [ZegoCallUser(targetUserID, targetUserName)],
               isVideoCall: isVideoCall,
+              resourceID: "zego_call",
             )
           : checkOppositeSidePermGranted();
     } else {
