@@ -27,6 +27,8 @@ import 'package:divine_astrologer/screens/live_tips/live_tips_ui.dart';
 import 'package:divine_astrologer/screens/message_template/message_template_bindings.dart';
 import 'package:divine_astrologer/screens/message_template/message_template_ui.dart';
 import 'package:divine_astrologer/screens/number_change/sub_screen/otp_screen_for_update_mobile_number.dart';
+import 'package:divine_astrologer/screens/order_chat_call_feedback/feedback.dart';
+import 'package:divine_astrologer/screens/order_chat_call_feedback/feedback_binding.dart';
 import 'package:divine_astrologer/screens/order_feedback/order_feedback_binding.dart';
 import 'package:divine_astrologer/screens/order_feedback/order_feedback_ui.dart';
 import 'package:divine_astrologer/screens/otp_verification/otp_verification_binding.dart';
@@ -126,6 +128,7 @@ class RouteName {
   static const String videoCall = "/videoCall";
   static const String numberChangeOtpScreen = "/numberChangeOtpScreen";
   static const String orderFeedback = "/orderFeedback";
+  static const String feedback = "/feedback";
   static const String chatMessageSupportUI = "/chatMessageUI";
   static const String liveDharamScreen = "/liveDharamScreen";
   static const String faq = "/faqPage";
@@ -302,6 +305,11 @@ class Routes {
         page: () => const OrderFeedbackUI(),
         name: RouteName.orderFeedback,
         binding: OrderFeedbackBinding()),
+
+    GetPage(
+        page: () => const FeedBack(),
+        name: RouteName.feedback,
+        binding: FeedbackBinding()),
     GetPage<dynamic>(
       name: RouteName.liveDharamScreen,
       page: LiveDharamScreen.new,

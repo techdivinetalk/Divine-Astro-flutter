@@ -68,6 +68,7 @@ class ApiProvider {
   final String getHomePageData = "astroDashboard";
   final String getTarotCardDataApi = "getTarotCard";
   final String getFeedback = "getNotSeenFeedback";
+  final String getAstroFeedback = "getAstroFeedbackDetail";
   final String agoraEndCall = "agoraEndCall";
   final String getWaitingListQueue = "getWaitingListQueue";
   final String getImportantNumber = "getImportantNumber";
@@ -110,6 +111,7 @@ class ApiProvider {
   final String chatAcceptAPI = "partner_chat_accept";
   final String endChatAPI = "end_chat";
   final String uploadAstrologerimage = "uploadAstrologerimage";
+  final String getChatHistory = "getOrderChatHistory";
 
   //Socket Events for Chat
   final String initChat = "initChat";

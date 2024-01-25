@@ -266,11 +266,17 @@ class HomeUI extends GetView<HomeController> {
                                   FeedbackCardWidget(
                                       feedback: controller.feedbackResponse ??
                                           FeedbackData(
-                                              createdAt:
-                                                  "2023-11-30T07:39:12.000000Z",
-                                              id: 9,
-                                              orderId: 2739782,
-                                              remark: "add review")),
+                                            id: controller.feedbackResponse?.id,
+                                            orderId: controller.feedbackResponse?.orderId,
+                                            remark: controller.feedbackResponse?.remark,
+                                            order: OrderDetails(
+                                              astrologerId: controller.feedbackResponse?.order?.astrologerId,
+                                              id: controller.feedbackResponse?.order?.id,
+                                              productType: controller.feedbackResponse?.order?.productType,
+                                              orderId: controller.feedbackResponse?.order?.orderId,
+                                              createdAt: controller.feedbackResponse?.order?.createdAt,
+                                            ),
+                                          )),
                                   SizedBox(height: 10.h),
                                 ],
                               )
@@ -1968,6 +1974,43 @@ class PerformanceDialog extends StatelessWidget {
                                   children: [
                                     Assets.images.bgMeterFinal
                                         .svg(width: 190.h),
+                                   /* Positioned(
+                                      left: 32.h,
+                                      top: 40.h,
+                                      child: CustomText(
+                                        // "25",
+                                        '${item?.performance?.marks?[1].min ?? 0}',
+                                        //'${item?.rankDetail?[0].max ?? 0}',
+                                        fontSize: 8.sp,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      right: 38.h,
+                                      top: 40.h,
+                                      child: CustomText(
+                                        // "50",
+                                        '${item?.performance?.marks?[1].max ?? 0}',
+                                        fontSize: 8.sp,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      left: 5.h,
+                                      top: 105.h,
+                                      child: CustomText(
+                                        //0
+                                        '${item?.performance?.marks?[0].min ?? 0}',
+                                        fontSize: 8.sp,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      right: 0.h,
+                                      top: 105.h,
+                                      child: CustomText(
+                                        //100
+                                        '${item?.performance?.marks?[2].max ?? 0}',
+                                        fontSize: 8.sp,
+                                      ),
+                                    ),*/
                                     Column(
                                       children: [
                                         SizedBox(height: 60.h),

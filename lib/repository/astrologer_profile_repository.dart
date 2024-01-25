@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/astrologer_gift_response.dart';
@@ -123,3 +122,4 @@ class AstrologerProfileRepository extends ApiProvider {
   }
 
 }
+ 
