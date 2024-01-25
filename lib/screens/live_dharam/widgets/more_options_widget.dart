@@ -118,7 +118,9 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
           moreOptionsButton2(
             buttonText: "${widget.isBlocked ? "Unblock" : "Block"} This User",
             buttonCallback: widget.onTapAskForBlockUnBlockUser,
-            buttonImage: "assets/images/live_block_icon.png",
+            buttonImage: widget.isBlocked
+                ? "assets/images/live_unblock_icon.png"
+                : "assets/images/live_block_icon.png",
           ),
           const SizedBox(height: 8),
         ],

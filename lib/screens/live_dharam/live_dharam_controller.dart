@@ -327,6 +327,8 @@ class LiveDharamController extends GetxController {
                   //   showFollowPopup();
                   // } else {}
 
+                  // showFollowPopup();
+
                   // await isCustomerBlocked();
                 } else {}
               } else {}
