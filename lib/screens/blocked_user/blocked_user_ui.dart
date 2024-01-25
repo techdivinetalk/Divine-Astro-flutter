@@ -23,7 +23,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: commonDetailAppbar(
-        title: "blockedUsers".tr,
+        title: '"blockedUsers".tr',
       ),
       body: Padding(
         padding: EdgeInsets.all(14.h),
@@ -50,7 +50,8 @@ class BlockedUserUI extends GetView<BlockUserController> {
                     ListView.builder(
                       itemCount: controller.allBlockedUsers.length,
                       itemBuilder: (context, index) {
-                        GetCustomers customer = controller.allBlockedUsers[index].getCustomers!;
+                        GetCustomers customer = controller.allBlockedUsers[index].getCustomers ?? 
+                        GetCustomers();
                     return ListTile(
                       contentPadding: EdgeInsets.symmetric(
                         vertical: 4.h,

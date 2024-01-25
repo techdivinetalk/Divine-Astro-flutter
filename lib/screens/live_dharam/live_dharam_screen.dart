@@ -17,6 +17,7 @@ import "package:divine_astrologer/screens/live_dharam/live_tarot_game/chosen_car
 import "package:divine_astrologer/screens/live_dharam/live_tarot_game/live_carousal.dart";
 import "package:divine_astrologer/screens/live_dharam/live_tarot_game/show_card_deck_to_user.dart";
 import "package:divine_astrologer/screens/live_dharam/live_tarot_game/waiting_for_user_to_select_cards.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/already_in_waitlist_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/astro_wait_list_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/call_accept_or_reject_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
@@ -42,6 +43,7 @@ import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_astro_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/extend_time_widget.dart";
 //
 //
 //
@@ -114,6 +116,7 @@ class _LivePage extends State<LiveDharamScreen>
     );
 
     ZegoUIKit().getUserJoinStream().listen(onUserJoin);
+    ZegoUIKit().getUserLeaveStream().listen(onUserLeave);
 
     keyboardSubscription = keyboardVisibilityController.onChange.listen(
       (bool visible) {
@@ -208,6 +211,13 @@ class _LivePage extends State<LiveDharamScreen>
     //   isBlockedCustomer: _controller.isCustomerBlockedBool(),
     // );
     // await sendMessageToZego(model);
+    Future<void>.value();
+  }
+
+  Future<void> onUserLeave(List<ZegoUIKitUser> users) async {
+    if (_controller.currentCaller.isEngaded) {
+      await removeCoHostOrStopCoHost();
+    } else {}
     Future<void>.value();
   }
 
@@ -897,7 +907,8 @@ class _LivePage extends State<LiveDharamScreen>
   // }) async {
   //   final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
   //   if (hasMyIdInWaitList) {
-  //     await alreadyInTheWaitListDialog();
+  //     // await alreadyInTheWaitListDialog();
+  //     await alreadyInWaitlistPopup();
   //   } else {
   //     final bool hasBal = await _controller.hasBalanceForSendingGift(
   //       giftId: item.id,
@@ -982,6 +993,17 @@ class _LivePage extends State<LiveDharamScreen>
   //   return Future<void>.value();
   // }
 
+  bool shouldVisible2(ZegoCustomMessage msg) {
+    final bool isBlocked =
+        _controller.firebaseBlockUsersIds.contains(msg.userId);
+    if (msg.userId == _controller.liveId ||
+        msg.userId == _controller.userId && isBlocked) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Widget inRoomMessage() {
     return StreamBuilder<List<ZegoInRoomMessage>>(
       stream: _zegoController.message.stream(),
@@ -1002,9 +1024,9 @@ class _LivePage extends State<LiveDharamScreen>
           itemBuilder: (BuildContext context, int index) {
             final ZegoInRoomMessage message = messages[index];
             final ZegoCustomMessage msg = receiveMessageToZego(message.message);
-            final bool isBlocked =
-                _controller.firebaseBlockUsersIds.contains(msg.userId);
-
+            // final bool isBlocked =
+            //     _controller.firebaseBlockUsersIds.contains(msg.userId);
+            final bool isBlocked = shouldVisible2(msg);
             return msg.type == 0
                 ? const SizedBox()
                 : Container(
@@ -1038,7 +1060,10 @@ class _LivePage extends State<LiveDharamScreen>
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      msg.userName ?? "",
+                                      // msg.userName ?? "",
+                                      isBlocked
+                                          ? msg.userName ?? ""
+                                          : "Blocked",
                                       style: TextStyle(
                                         fontSize: 10,
                                         color: isBlocked
@@ -1055,7 +1080,8 @@ class _LivePage extends State<LiveDharamScreen>
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     Text(
-                                      msg.message ?? "",
+                                      // msg.message ?? "",
+                                      isBlocked ? msg.message ?? "" : "Blocked",
                                       style: TextStyle(
                                         fontSize: 10,
                                         color: isBlocked
@@ -1336,46 +1362,62 @@ class _LivePage extends State<LiveDharamScreen>
     return Future<void>.value();
   }
 
-  Future<void> alreadyInTheWaitListDialog() async {
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            "Already in the Wait List",
-          ),
-          content: const Text(
-            "You're already in the Astrologer's Wait List. Tap on hourglass to see your waiting time.",
-          ),
-          actions: <Widget>[
-            ElevatedButton(
-              onPressed: Get.back,
-              child: const Text("OK"),
-            ),
-          ],
-        );
-      },
-    );
-    return Future<void>.value();
-  }
+  // Future<void> alreadyInTheWaitListDialog() async {
+  //   await showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: const Text(
+  //           "Already in the Wait List",
+  //         ),
+  //         content: const Text(
+  //           "You're already in the Astrologer's Wait List. Tap on hourglass to see your waiting time.",
+  //         ),
+  //         actions: <Widget>[
+  //           ElevatedButton(
+  //             onPressed: Get.back,
+  //             child: const Text("OK"),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  //   return Future<void>.value();
+  // }
 
-  Future<void> youAreInTheWaitListDialog() async {
-    await showDialog(
+  // Future<void> youAreInTheWaitListDialog() async {
+  //   await showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: const Text(
+  //           "You're in the Wait List",
+  //         ),
+  //         content: Text(
+  //           "You are not able to perform this action because you're the Wait List of Astrologer ${_controller.userName}.",
+  //         ),
+  //         actions: <Widget>[
+  //           ElevatedButton(
+  //             onPressed: Get.back,
+  //             child: const Text("OK"),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  //   return Future<void>.value();
+  // }
+
+  Future<void> alreadyInWaitlistPopup() async {
+    await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            "You're in the Wait List",
-          ),
-          content: Text(
-            "You are not able to perform this action because you're the Wait List of Astrologer ${_controller.userName}.",
-          ),
-          actions: <Widget>[
-            ElevatedButton(
-              onPressed: Get.back,
-              child: const Text("OK"),
-            ),
-          ],
+        return AlreadyInWaitlistWidget(
+          onClose: Get.back,
+          openWaitlist: () async {
+            Get.back();
+            await waitListPopup();
+          },
         );
       },
     );
@@ -1484,6 +1526,16 @@ class _LivePage extends State<LiveDharamScreen>
             final String name = _controller.waitListModel.last.userName;
             final String avatar = _controller.waitListModel.last.avatar;
             final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
+
+            _controller.endTime = DateTime.now().add(
+              Duration(
+                days: 0,
+                hours: 0,
+                minutes: int.parse(_controller.currentCaller.totalTime),
+                seconds: 0,
+              ),
+            );
+
             final connectInvite = _zegoController.connectInvite;
             await connectInvite.hostSendCoHostInvitationToAudience(user);
           },
@@ -1673,7 +1725,8 @@ class _LivePage extends State<LiveDharamScreen>
   // }) async {
   //   final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
   //   if (hasMyIdInWaitList) {
-  //     await alreadyInTheWaitListDialog();
+  //     // await alreadyInTheWaitListDialog();
+  //     await alreadyInWaitlistPopup();
   //   } else {
   //     final bool canOrder = await _controller.canPlaceLiveOrder(
   //       talkType: type,
@@ -1893,8 +1946,10 @@ class _LivePage extends State<LiveDharamScreen>
             FollowPlayer().play(
               context,
               FollowPlayerData(
-                FollowPlayerSource.url,
-                "https://lottie.host/0b77dd9f-a81e-4268-8fb5-cc7f5b958e00/rtEwgdQPKc.json",
+                // FollowPlayerSource.url,
+                // "https://lottie.host/0b77dd9f-a81e-4268-8fb5-cc7f5b958e00/rtEwgdQPKc.json",
+                FollowPlayerSource.asset,
+                "assets/lottie/live_follow_heart.json",
                 userName,
               ),
             );
@@ -2390,11 +2445,11 @@ class _LivePage extends State<LiveDharamScreen>
   Widget newAppBarRight() {
     return InkWell(
       onTap: () async {
-        // await giftPopup(
-        //   ctx: context,
-        //   userId: _controller.userId,
-        //   userName: _controller.userName,
-        // );
+        //
+        //
+        await exitFunc();
+        //
+        //
       },
       child: SizedBox(
         height: 50,
@@ -2410,9 +2465,11 @@ class _LivePage extends State<LiveDharamScreen>
             color: AppColors.black.withOpacity(0.2),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(0.0),
             child: Image.asset(
-              "assets/images/live_new_gift_latest.png",
+              _controller.currentCaller.isEngaded
+                  ? "assets/images/live_new_hang_up.png"
+                  : "assets/images/live_exit_red.png",
             ),
           ),
         ),
@@ -2421,40 +2478,62 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   // temporary purpose
-  DateTime? endTime;
+  // DateTime? endTime;
   //
 
   Widget newTimerWidget() {
-    endTime ??= DateTime.now().add(
-      Duration(
-        days: 0,
-        hours: 0,
-        minutes: int.parse(_controller.currentCaller.totalTime),
-        seconds: 0,
-      ),
-    );
+    // endTime ??= DateTime.now().add(
+    //   Duration(
+    //     days: 0,
+    //     hours: 0,
+    //     minutes: int.parse(_controller.currentCaller.totalTime),
+    //     seconds: 0,
+    //   ),
+    // );
     return TimerCountdown(
       format: CountDownTimerFormat.hoursMinutesSeconds,
       enableDescriptions: false,
       spacerWidth: 4,
       colonsTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
       timeTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
-      onTick: (Duration duration) {
-        endTime = DateTime.now().add(duration);
-        
-        if (duration == const Duration(minutes: 1)) {
-          print("showOneMin");
+      onTick: (Duration duration) async {
+        _controller.endTime = DateTime.now().add(duration);
+
+        if (isLessThanOneMinute(duration) && !extendTimeWidgetVisible) {
+          extendTimeWidgetVisible = true;
+          await extendTimeWidgetPopup();
         } else {}
       },
-      endTime: endTime!,
-      onEnd: () async {
-        final bool isEngaded = _controller.currentCaller.isEngaded;
-        if (isEngaded) {
-        } else {
-          await removeCoHostOrStopCoHost();
-        }
+      endTime: _controller.endTime,
+      onEnd: removeCoHostOrStopCoHost,
+    );
+  }
+
+  bool isLessThanOneMinute(Duration duration) {
+    return duration < const Duration(minutes: 1);
+  }
+
+  // temporary purpose
+  bool extendTimeWidgetVisible = false;
+  //
+
+  Future<void> extendTimeWidgetPopup() async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return ExtendTimeWidget(
+          onClose: Get.back,
+          isAstro: _controller.isHost,
+          yesExtend: () {
+            Get.back();
+          },
+          noExtend: () {
+            Get.back();
+          },
+        );
       },
     );
+    return Future<void>.value();
   }
 
   Widget stacked() {
@@ -2826,48 +2905,48 @@ class _LivePage extends State<LiveDharamScreen>
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        StreamBuilder<Object>(
-          stream: null,
-          builder: (context, snapshot) {
-            return AnimatedOpacity(
-              opacity: !_controller.isHost ? 0.0 : 1.0,
-              duration: const Duration(seconds: 1),
-              child: !_controller.isHost
-                  ? const SizedBox()
-                  : Column(
-                      children: [
-                        InkWell(
-                          onTap: exitFunc,
-                          child: SizedBox(
-                            height: 50,
-                            width: 50,
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(50.0),
-                                ),
-                                border: Border.all(
-                                  color: AppColors.yellow,
-                                ),
-                                color: AppColors.black.withOpacity(0.2),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(0.0),
-                                child: Image.asset(
-                                  _controller.currentCaller.isEngaded
-                                      ? "assets/images/live_new_hang_up.png"
-                                      : "assets/images/live_exit_red.png",
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                      ],
-                    ),
-            );
-          },
-        ),
+        // StreamBuilder<Object>(
+        //   stream: null,
+        //   builder: (context, snapshot) {
+        //     return AnimatedOpacity(
+        //       opacity: !_controller.isHost ? 0.0 : 1.0,
+        //       duration: const Duration(seconds: 1),
+        //       child: !_controller.isHost
+        //           ? const SizedBox()
+        //           : Column(
+        //               children: [
+        //                 InkWell(
+        //                   onTap: exitFunc,
+        //                   child: SizedBox(
+        //                     height: 50,
+        //                     width: 50,
+        //                     child: DecoratedBox(
+        //                       decoration: BoxDecoration(
+        //                         borderRadius: const BorderRadius.all(
+        //                           Radius.circular(50.0),
+        //                         ),
+        //                         border: Border.all(
+        //                           color: AppColors.yellow,
+        //                         ),
+        //                         color: AppColors.black.withOpacity(0.2),
+        //                       ),
+        //                       child: Padding(
+        //                         padding: const EdgeInsets.all(0.0),
+        //                         child: Image.asset(
+        //                           _controller.currentCaller.isEngaded
+        //                               ? "assets/images/live_new_hang_up.png"
+        //                               : "assets/images/live_exit_red.png",
+        //                         ),
+        //                       ),
+        //                     ),
+        //                   ),
+        //                 ),
+        //                 const SizedBox(height: 8),
+        //               ],
+        //             ),
+        //     );
+        //   },
+        // ),
         //
         StreamBuilder<Object>(
           stream: null,
@@ -3182,6 +3261,7 @@ class _LivePage extends State<LiveDharamScreen>
     //   RouteName.astrologerProfile,
     //   arguments: <String, dynamic>{"astrologer_id": _controller.liveId},
     // );
+    // await _controller.getAstrologerDetails();
     return Future<void>.value();
   }
 
@@ -3288,7 +3368,7 @@ class _LivePage extends State<LiveDharamScreen>
   //     message: "${_controller.userName} Started following",
   //     timeStamp: DateTime.now().toString(),
   //     fullGiftImage: "",
-  //      isBlockedCustomer: _controller.isCustomerBlockedBool(),
+  //     isBlockedCustomer: _controller.isCustomerBlockedBool(),
   //   );
   //   await sendMessageToZego(model);
 
@@ -3325,8 +3405,10 @@ class _LivePage extends State<LiveDharamScreen>
   //     FollowPlayer().play(
   //       context,
   //       FollowPlayerData(
-  //         FollowPlayerSource.url,
-  //         "https://lottie.host/0b77dd9f-a81e-4268-8fb5-cc7f5b958e00/rtEwgdQPKc.json",
+  //         // FollowPlayerSource.url,
+  //         // "https://lottie.host/0b77dd9f-a81e-4268-8fb5-cc7f5b958e00/rtEwgdQPKc.json",
+  //         FollowPlayerSource.asset,
+  //         "assets/lottie/live_follow_heart.json",
   //         _controller.userName,
   //       ),
   //     );
@@ -3417,6 +3499,15 @@ class _LivePage extends State<LiveDharamScreen>
       needAcceptButton: true,
       needDeclinetButton: false,
       onAcceptButton: () async {
+        _controller.endTime = DateTime.now().add(
+          Duration(
+            days: 0,
+            hours: 0,
+            minutes: int.parse(_controller.currentCaller.totalTime),
+            seconds: 0,
+          ),
+        );
+
         final connectInvite = _zegoController.connectInvite;
         await connectInvite.hostSendCoHostInvitationToAudience(user);
       },
@@ -3439,12 +3530,12 @@ class _LivePage extends State<LiveDharamScreen>
         ? await connect.removeCoHost(user)
         : await connect.stopCoHost(showRequestDialog: false);
     if (removed) {
+      await _controller.makeAPICallForEndCall();
+    } else {}
+    if (removed) {
       _controller.isHost
           ? await _controller.removeFromWaitListWhereEngadedIsTrue()
           : await _controller.removeFromWaitList();
-    } else {}
-    if (removed && !_controller.isHost) {
-      // await _controller.makeAPICallForEndCall();
     } else {}
     return Future<void>.value();
   }

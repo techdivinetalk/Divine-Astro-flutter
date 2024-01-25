@@ -4,6 +4,7 @@ import 'package:divine_astrologer/model/live/blocked_customer_list_res.dart';
 import 'package:divine_astrologer/repository/astrologer_profile_repository.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screen_recording/flutter_screen_recording.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
@@ -49,7 +50,9 @@ class LiveTipsController extends GetxController {
       },
     );
     await database.ref().child("astro-live-list/$userId").set(1);
+    
     await Get.toNamed(RouteName.liveDharamScreen, arguments: userId);
+    
     await database.ref().child("live/$userId").remove();
     await database.ref().child("astro-live-list/$userId").remove();
     Get.back();

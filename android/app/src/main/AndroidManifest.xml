@@ -31,6 +31,7 @@
 
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <!-- android:launchMode="singleTop" -->
 
@@ -84,5 +85,11 @@
         <meta-data android:name="com.truecaller.android.sdk.ClientId" android:value="qz4fupwn14zc1qt0hcljoq5dkbxpbo6ki_tv3jgrphq"/>
 
         <service android:name="flutter.overlay.window.flutter_overlay_window.OverlayService" android:exported="false" />
+
+        <service
+            android:name="com.foregroundservice.ForegroundService"
+            android:foregroundServiceType="mediaProjection">
+        </service>
+
     </application>
 </manifest>
