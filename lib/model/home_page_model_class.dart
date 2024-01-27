@@ -44,6 +44,12 @@ class HomeData {
   List<OfferType>? offerType;
   List<TrainingVideo>? trainingVideo;
   Offers? offers;
+  
+  //
+  int? inAppChatPrevStatus;
+  int? audioCallPrevStatus;
+  int? videoCallPrevStatus;
+  //
 
   HomeData({
     this.noticeBoard,
@@ -54,6 +60,12 @@ class HomeData {
     this.offerType,
     this.trainingVideo,
     this.offers,
+
+    //
+    this.inAppChatPrevStatus,
+    this.audioCallPrevStatus,
+    this.videoCallPrevStatus,
+    //
   });
 
   factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
@@ -77,6 +89,12 @@ class HomeData {
             : List<TrainingVideo>.from(
                 json["training_video"]!.map((x) => TrainingVideo.fromJson(x))),
         offers: json["offers"] == null ? null : Offers.fromJson(json["offers"]),
+
+        //
+        inAppChatPrevStatus: json["chat_previous_status"] ?? 0,
+        audioCallPrevStatus: json["call_previous_status"] ?? 0,
+        videoCallPrevStatus: json["video_call_previous_status"] ?? 0,
+        //
       );
 
   Map<String, dynamic> toJson() => {
@@ -92,6 +110,12 @@ class HomeData {
             ? []
             : List<dynamic>.from(trainingVideo!.map((x) => x.toJson())),
         "offers": offers?.toJson(),
+
+        //
+        "chat_previous_status": inAppChatPrevStatus,
+        "call_previous_status": audioCallPrevStatus,
+        "video_call_previous_status": videoCallPrevStatus,
+        //
       };
 }
 

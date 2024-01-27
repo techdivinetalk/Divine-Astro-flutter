@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:device_apps/device_apps.dart';
+import 'package:divine_astrologer/common/colors.dart';
 import 'package:http/http.dart';
 import 'package:truecaller_sdk/truecaller_sdk.dart';
 import 'package:uuid/uuid.dart';
@@ -16,14 +17,22 @@ class TrueCallerService {
 
   TrueCallerService._internal();
 
-  dynamic codeVerifier;
-  dynamic oAuthState;
+  String codeVerifier = "";
+  String oAuthState = "";
 
   Future<void> startTrueCaller() async {
-    const sdkOption = TcSdkOptions.OPTION_VERIFY_ONLY_TC_USERS;
+    const int sdkOption = TcSdkOptions.OPTION_VERIFY_ONLY_TC_USERS;
     log("TrueCallerService: start(): sdkOption: $sdkOption");
 
-    final init = TcSdk.initializeSDK(sdkOption: sdkOption);
+    final dynamic init = TcSdk.initializeSDK(
+      sdkOption: sdkOption,
+      consentHeadingOption: TcSdkOptions.SDK_CONSENT_HEADING_LOG_IN_TO,
+      footerType: TcSdkOptions.FOOTER_TYPE_ANOTHER_MOBILE_NO,
+      ctaText: TcSdkOptions.CTA_TEXT_PROCEED,
+      buttonShapeOption: TcSdkOptions.BUTTON_SHAPE_ROUNDED,
+      buttonColor: AppColors.yellow.value,
+      buttonTextColor: AppColors.black.value,
+    );
     log("TrueCallerService: start(): init: $init");
 
     final bool isOAuthFlowUsable = await TcSdk.isOAuthFlowUsable;
@@ -36,10 +45,11 @@ class TrueCallerService {
       TcSdk.setOAuthState(oAuthState);
       TcSdk.setOAuthScopes(['profile', 'phone', 'openid', 'offline_access']);
 
-      final codeVerifier = await TcSdk.generateRandomCodeVerifier;
+      final dynamic codeVerifier = await TcSdk.generateRandomCodeVerifier;
       log("TrueCallerService: start(): codeVerifier: $codeVerifier");
 
-      final codeChallenge = await TcSdk.generateCodeChallenge(codeVerifier);
+      final dynamic codeChallenge =
+          await TcSdk.generateCodeChallenge(codeVerifier);
       log("TrueCallerService: start(): codeChallenge: $codeChallenge");
 
       if (codeChallenge != null) {

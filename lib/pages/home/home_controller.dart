@@ -365,13 +365,19 @@ class HomeController extends GetxController {
   }
 
   updateCurrentData() {
-    chatSwitch.value = homeData?.sessionType?.chat == 1;
-    callSwitch.value = homeData?.sessionType?.call == 1;
-    videoSwitch.value = homeData?.sessionType?.video == 1;
+    // chatSwitch.value = homeData?.sessionType?.chat == 1;
+    // callSwitch.value = homeData?.sessionType?.call == 1;
+    // videoSwitch.value = homeData?.sessionType?.video == 1;
+
+    chatSwitch.value = (homeData?.inAppChatPrevStatus ?? 0) == 1;
+    callSwitch.value = (homeData?.audioCallPrevStatus ?? 0) == 1;
+    videoSwitch.value = (homeData?.videoCallPrevStatus ?? 0) == 1;
+
     socket.updateChatCallSocketEvent(
-        call: callSwitch.value ? "1" : "0",
-        chat: chatSwitch.value ? "1" : "0",
-        video: videoSwitch.value ? "1" : "0");
+      call: callSwitch.value ? "1" : "0",
+      chat: chatSwitch.value ? "1" : "0",
+      video: videoSwitch.value ? "1" : "0",
+    );
 
     if (homeData?.sessionType?.chatSchedualAt != null &&
         homeData?.sessionType?.chatSchedualAt != '') {
@@ -500,15 +506,18 @@ class HomeController extends GetxController {
   }
 
   Future<void> updateSessionType(
-      bool value, RxBool switchType, int type) async {
+    bool value,
+    RxBool switchType,
+    int type,
+  ) async {
     //type: 1 - chat, 2 - call, 3 - videoCall
     Map<String, dynamic> params = {
       "type": type,
       "role_id": 7,
       "device_token": preferenceService.getDeviceToken(),
-      "is_chat": getBoolToString(type == 1 ? value : chatSwitch.value),
-      "is_call": getBoolToString(type == 2 ? value : callSwitch.value),
-      "is_video": getBoolToString(type == 3 ? value : videoSwitch.value)
+      // "is_chat": getBoolToString(type == 1 ? value : chatSwitch.value),
+      // "is_call": getBoolToString(type == 2 ? value : callSwitch.value),
+      // "is_video": getBoolToString(type == 3 ? value : videoSwitch.value)
     };
 
     if (value) {
@@ -517,6 +526,8 @@ class HomeController extends GetxController {
       params["check_out"] = 1;
     }
 
+    print("Dashboard:: send:: $params");
+
     sessionTypeLoading.value = Loading.loading;
     try {
       UpdateSessionTypeResponse response =
@@ -524,9 +535,10 @@ class HomeController extends GetxController {
       if (response.statusCode == 200) {
         switchType.value = value;
         socket.updateChatCallSocketEvent(
-            call: callSwitch.value ? "1" : "0",
-            chat: chatSwitch.value ? "1" : "0",
-            video: videoSwitch.value ? "1" : "0");
+          call: callSwitch.value ? "1" : "0",
+          chat: chatSwitch.value ? "1" : "0",
+          video: videoSwitch.value ? "1" : "0",
+        );
       }
       update();
     } catch (error) {

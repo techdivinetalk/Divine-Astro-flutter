@@ -87,9 +87,13 @@ dependencies:
   flutter_json_viewer: ^1.0.1
   device_apps: ^2.2.0
   flutter_screen_recording: ^2.0.10
-  overlapped_carousel: ^1.0.1
+  # overlapped_carousel: ^1.0.1
   coverflow: ^2.0.3
   random_name_generator: ^1.2.0
+  overlapped_carousel:
+    git:
+      url: https://github.com/delwar36/overlapped_carousel.git
+      ref: b910005b978c35e0be5cadbb82c000faf6abebdf
 
 dependency_overrides:
   intl: ^0.18.1

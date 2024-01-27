@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,6 +20,10 @@ class HomePageRepository extends ApiProvider {
         headers: await getJsonHeaderURL(),
       );
 
+      log("Dashboard:: chat_previous_status:: ${json.decode(response.body)["data"]["chat_previous_status"]}");
+      log("Dashboard:: call_previous_status:: ${json.decode(response.body)["data"]["call_previous_status"]}");
+      log("Dashboard:: video_call_previous_status:: ${json.decode(response.body)["data"]["video_call_previous_status"]}");
+
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
           throw CustomException(json.decode(response.body)["error"]);
@@ -35,8 +40,8 @@ class HomePageRepository extends ApiProvider {
       rethrow;
     }
   }
-  Future<TarotResponse>
-  getTarotCardData() async {
+
+  Future<TarotResponse> getTarotCardData() async {
     print("response.data3");
     try {
       final response = await get(
@@ -47,10 +52,9 @@ class HomePageRepository extends ApiProvider {
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
           throw CustomException(json.decode(response.body)["error"]);
-        } else{
-
+        } else {
           final tarotResponse =
-          TarotResponse.fromJson(json.decode(response.body));
+              TarotResponse.fromJson(json.decode(response.body));
           saveTarotCards(tarotResponse.data!);
           return tarotResponse;
         }
@@ -62,11 +66,13 @@ class HomePageRepository extends ApiProvider {
       rethrow;
     }
   }
+
   Future<void> saveTarotCards(List<TarotCard> cards) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String cardsJson = json.encode(cards.map((card) => card.toJson()).toList());
     await prefs.setString('tarot_cards', cardsJson);
   }
+
   Future<FeedbackResponse> getFeedbackData() async {
     try {
       final response = await get(
@@ -79,7 +85,7 @@ class HomePageRepository extends ApiProvider {
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final feedbackResponse =
-          FeedbackResponse.fromJson(json.decode(response.body));
+              FeedbackResponse.fromJson(json.decode(response.body));
           return feedbackResponse;
         }
       } else {

@@ -116,13 +116,12 @@ class _LiveCarousalState extends State<LiveCarousal> {
           CarouselSlider.builder(
             itemCount: widget.allCards.length,
             options: CarouselOptions(
-              height: 200,
-              viewportFraction: 0.25,
+              height: Get.height / 4.80,
+              viewportFraction: 0.20,
               initialPage: 0,
               enableInfiniteScroll: true,
               enlargeCenterPage: true,
-              enlargeFactor: 0.25,
-              onPageChanged: (int index, CarouselPageChangedReason reason) {},
+              enlargeFactor: 0.20,
               scrollDirection: Axis.horizontal,
               enlargeStrategy: CenterPageEnlargeStrategy.height,
             ),
@@ -133,9 +132,10 @@ class _LiveCarousalState extends State<LiveCarousal> {
                   autoInsertValue(model);
                   setState(() {});
                 },
-                child: SizedBox(
-                  height: Get.width / 2.5,
+                child: Container(
+                  height: Get.height / 4.80,
                   width: Get.width / 4,
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: ClipRRect(
                     borderRadius: const BorderRadius.all(
                       Radius.circular(10.0),
@@ -165,7 +165,7 @@ class _LiveCarousalState extends State<LiveCarousal> {
                       alignment: Alignment.center,
                       children: [
                         SizedBox(
-                          height: Get.width / 2.5,
+                          height: Get.height / 4.80,
                           width: Get.width / 4,
                           child: ClipRRect(
                             borderRadius: const BorderRadius.all(
@@ -202,7 +202,10 @@ class _LiveCarousalState extends State<LiveCarousal> {
                     const SizedBox(height: 8),
                     Text(
                       model.name ?? "Not Selected",
-                      style: const TextStyle(color: AppColors.white),
+                      style: const TextStyle(
+                        color: AppColors.white,
+                        fontSize: 10,
+                      ),
                     ),
                   ],
                 ),
@@ -212,7 +215,10 @@ class _LiveCarousalState extends State<LiveCarousal> {
           const SizedBox(height: 16),
           const Text(
             "Note : We'll send the chosen tarot cards to our live astrologer and they will do a live tarot card reading for you.",
-            style: TextStyle(color: AppColors.white),
+            style: TextStyle(
+              color: AppColors.white,
+              fontSize: 10,
+            ),
           ),
           const SizedBox(height: 16),
           SizedBox(height: 60, width: double.infinity, child: button()),

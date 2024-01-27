@@ -373,11 +373,26 @@ class LiveDharamController extends GetxController {
   }
 
   WaitListModel engagedCoHostWithAstro() {
-    if (data.keys.toList()[currentIndex] != null) {
-      var liveId = data.keys.toList()[currentIndex];
-      var liveIdNode = data[liveId];
-      var waitListNode = liveIdNode["waitList"];
-      return isEngadedNew(waitListNode, isForMe: false);
+    if (data.keys.toList() != null &&
+        data.keys.toList().length > currentIndex) {
+      if (data.keys.toList()[currentIndex] != null) {
+        var liveId = data.keys.toList()[currentIndex];
+        var liveIdNode = data[liveId];
+        var waitListNode = liveIdNode["waitList"];
+        return isEngadedNew(waitListNode, isForMe: false);
+      } else {
+        return WaitListModel(
+          isRequest: false,
+          isEngaded: false,
+          callType: "",
+          totalTime: "",
+          avatar: "",
+          userName: "",
+          id: "",
+          generatedOrderId: 0,
+          offerId: 0,
+        );
+      }
     } else {
       return WaitListModel(
         isRequest: false,

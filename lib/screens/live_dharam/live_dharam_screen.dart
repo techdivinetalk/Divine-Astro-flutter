@@ -31,6 +31,7 @@ import "package:divine_astrologer/screens/live_dharam/widgets/gift_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
+import "package:divine_astrologer/screens/live_dharam/you_are_blocked_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/zeo_team/player.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
@@ -89,6 +90,7 @@ class _LivePage extends State<LiveDharamScreen>
   bool _isKeyboardSheetOpen = false;
   Timer? _timer;
   Timer? _msgTimer;
+  Timer? _msgTimerLiveMonitoring;
 
   BroadcastReceiver receiver = BroadcastReceiver(
     names: <String>["LiveDharamScreen_eventListner"],
@@ -131,6 +133,7 @@ class _LivePage extends State<LiveDharamScreen>
 
     _startTimer();
     _startMsgTimer();
+    _startMsgTimerLiveMonitoring();
 
     receiver.start();
     receiver.messages.listen(
@@ -151,6 +154,7 @@ class _LivePage extends State<LiveDharamScreen>
     if (mounted) {
       _timer?.cancel();
       _msgTimer?.cancel();
+      _msgTimerLiveMonitoring?.cancel();
       // await _zegoController.leave(context);
       unawaited(_zegoController.leave(context));
     } else {}
@@ -237,6 +241,28 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
+  void _startMsgTimerLiveMonitoring() {
+    const duration = Duration(seconds: 30);
+    _msgTimerLiveMonitoring = Timer.periodic(
+      duration,
+      (Timer timer) async {
+        final ZegoCustomMessage model = ZegoCustomMessage(
+          type: 1,
+          liveId: _controller.liveId,
+          userId: "0",
+          userName: "Live Monitoring Team",
+          avatar:
+              "https://divinenew-prod.s3.ap-south-1.amazonaws.com/divine/January2024/fGfpNU1Y40lV0ojgh0JBpgbc4mJtAdV6hgG5xZXJ.jpg",
+          message: "Live Monitoring Team Joined",
+          timeStamp: DateTime.now().toString(),
+          fullGiftImage: "",
+          isBlockedCustomer: false,
+        );
+        await sendMessageToZego(model);
+      },
+    );
+  }
+
   Future<void> onUserJoin(List<ZegoUIKitUser> users) async {
     // final ZegoCustomMessage model = ZegoCustomMessage(
     //   type: 1,
@@ -269,6 +295,7 @@ class _LivePage extends State<LiveDharamScreen>
     // _scrollControllerForBottom.dispose();
     // _timer?.cancel();
     // _msgTimer?.cancel();
+    // _msgTimerLiveMonitoring?.cancel();
     // WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
@@ -523,7 +550,7 @@ class _LivePage extends State<LiveDharamScreen>
           appBarWidget(),
           const SizedBox(height: 8),
           // ElevatedButton(
-          //   onPressed: showCardDeckToUserPopup,
+          //   onPressed: showCardDeckToUserPopup1,
           //   child: Text("Game"),
           // ),
           // Text(_controller.liveId),
@@ -544,8 +571,8 @@ class _LivePage extends State<LiveDharamScreen>
                       SizedBox(
                           height:
                               (_controller.noticeBoardRes.data ?? []).isEmpty
-                                  ? 8.0
-                                  : 0.0),
+                                  ? 0.0
+                                  : 4.0),
                       inRoomMessage(),
                     ],
                   ),
@@ -621,27 +648,33 @@ class _LivePage extends State<LiveDharamScreen>
                           Text(
                             title,
                             style: const TextStyle(
-                              fontSize: 12,
+                              fontSize: 10,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
+                            maxLines: 5,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 8),
                           Text(
                             description,
                             style: const TextStyle(
-                              fontSize: 12,
+                              fontSize: 10,
                               color: Colors.white,
                             ),
+                            maxLines: 5,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 8),
                           Text(
                             formattedDate,
                             style: const TextStyle(
-                              fontSize: 12,
+                              fontSize: 10,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
+                            maxLines: 5,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 8),
                         ],
@@ -656,7 +689,8 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget appBarWidget() {
     return SizedBox(
-      height: 32 + 120,
+      // height: 32 + 120,
+      height: 32 + 100,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -665,7 +699,7 @@ class _LivePage extends State<LiveDharamScreen>
           Column(
             children: [
               newLeaderboard(),
-              const SizedBox(height: 32),
+              const SizedBox(height: 64),
               inRoomMessageTop(),
             ],
           ),
@@ -1011,7 +1045,7 @@ class _LivePage extends State<LiveDharamScreen>
   //         isBlockedCustomer: _controller.isCustomerBlockedBool(),
   //       );
   //       await sendMessageToZego(model0);
-  //       await Future.delayed(const Duration(seconds: 1));
+  //       // await Future.delayed(const Duration(seconds: 1));
   //       await showHideTopBanner();
   //       // final ZegoCustomMessage model1 = ZegoCustomMessage(
   //       //   type: 1,
@@ -1055,6 +1089,7 @@ class _LivePage extends State<LiveDharamScreen>
             final ZegoCustomMessage msg = receiveMessageToZego(message.message);
             final bool isBlocked =
                 _controller.firebaseBlockUsersIds.contains(msg.userId);
+            final isLiveMonitoringTeam = msg.userName == "Live Monitoring Team";
             return msg.type == 0
                 ? const SizedBox()
                 : Container(
@@ -1093,7 +1128,9 @@ class _LivePage extends State<LiveDharamScreen>
                                         fontSize: 10,
                                         color: isBlocked
                                             ? Colors.red
-                                            : Colors.white,
+                                            : isLiveMonitoringTeam
+                                                ? AppColors.yellow
+                                                : Colors.white,
                                         shadows: const [
                                           Shadow(
                                             color: Colors.black,
@@ -1110,7 +1147,9 @@ class _LivePage extends State<LiveDharamScreen>
                                         fontSize: 10,
                                         color: isBlocked
                                             ? Colors.red
-                                            : Colors.white,
+                                            : isLiveMonitoringTeam
+                                                ? AppColors.yellow
+                                                : Colors.white,
                                         shadows: const [
                                           Shadow(
                                             color: Colors.black,
@@ -1126,7 +1165,8 @@ class _LivePage extends State<LiveDharamScreen>
                                 ),
                               ),
                               _controller.isHost &&
-                                      !_controller.currentCaller.isEngaded
+                                      !_controller.currentCaller.isEngaded &&
+                                      !isLiveMonitoringTeam
                                   ? SizedBox(
                                       height: 24,
                                       width: 24,
@@ -1162,8 +1202,8 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget inRoomMessageTop() {
     return SizedBox(
-      height: 64,
-      width: (Get.width / 3),
+      height: 32,
+      width: Get.width / 1.5,
       child: StreamBuilder<List<ZegoInRoomMessage>>(
         stream: _zegoController.message.stream(),
         builder: (
@@ -1189,16 +1229,16 @@ class _LivePage extends State<LiveDharamScreen>
                   ? const SizedBox()
                   : Obx(
                       () {
+                        //
+                        print("showTopBanner: ${_controller.showTopBanner}");
+                        //
                         return AnimatedOpacity(
                           opacity: !_controller.showTopBanner ? 0.0 : 1.0,
                           duration: const Duration(seconds: 1),
-                          child: Transform.scale(
-                            scale: 1.50,
-                            child: LeaderBoardWidget(
-                              avatar: msg.avatar ?? "",
-                              userName: "${msg.message}",
-                              fullGiftImage: msg.fullGiftImage ?? "",
-                            ),
+                          child: LeaderBoardWidget(
+                            avatar: msg.avatar ?? "",
+                            userName: "${msg.message}",
+                            fullGiftImage: msg.fullGiftImage ?? "",
                           ),
                         );
                       },
@@ -2159,7 +2199,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   Future<void> showHideTopBanner() async {
     _controller.showTopBanner = true;
-    await Future<void>.delayed(const Duration(seconds: 6));
+    await Future<void>.delayed(const Duration(seconds: 15));
     _controller.showTopBanner = false;
     return Future<void>.value();
   }
@@ -2270,6 +2310,18 @@ class _LivePage extends State<LiveDharamScreen>
   //             child: const Text("OK"),
   //           ),
   //         ],
+  //       );
+  //     },
+  //   );
+  //   return Future<void>.value();
+  // }
+
+  // Future<void> youAreBlocked() async {
+  //   await showCupertinoModalPopup(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return YouAreBlockedWidget(
+  //         onClose: Get.back,
   //       );
   //     },
   //   );
@@ -3344,6 +3396,7 @@ class _LivePage extends State<LiveDharamScreen>
             if (mounted) {
               _timer?.cancel();
               _msgTimer?.cancel();
+              _msgTimerLiveMonitoring?.cancel();
               // await _zegoController.leave(context);
               unawaited(_zegoController.leave(context));
             } else {}
@@ -3355,6 +3408,7 @@ class _LivePage extends State<LiveDharamScreen>
             if (mounted) {
               _timer?.cancel();
               _msgTimer?.cancel();
+              _msgTimerLiveMonitoring?.cancel();
               // await _zegoController.leave(context);
               unawaited(_zegoController.leave(context));
             } else {}

@@ -1,5 +1,6 @@
+import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LeaderBoardWidget extends StatelessWidget {
@@ -18,58 +19,127 @@ class LeaderBoardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 32,
-      width: Get.width / 3,
+      width: fullGiftImage.isEmpty ? Get.width / 2.0 : Get.width / 1.5,
       child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
         children: [
-          Image.asset(
+          SizedBox(
             height: 32,
-            width: Get.width / 3,
-            fit: BoxFit.contain,
-            "assets/images/live_leaderboard_crown.png",
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 12.0),
-            child: Row(
-              children: <Widget>[
-                const SizedBox(width: 2),
-                SizedBox(
-                  height: 16,
-                  width: 16,
-                  child: CustomImageWidget(
-                    imageUrl: avatar,
-                    rounded: true,
-                    typeEnum: TypeEnum.user,
-                  ),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    AppColors.white,
+                    AppColors.yellow,
+                  ],
                 ),
-                Flexible(
-                  child: Align(
-                    child: Text(
-                      userName,
-                      style:   TextStyle(
-                       fontSize: fullGiftImage.isNotEmpty ? 8 : null, 
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(50.0),
+                ),
+                border: Border.all(
+                  color: AppColors.yellow,
+                ),
+                color: AppColors.yellow,
+              ),
+              child: Row(
+                children: <Widget>[
+                  const SizedBox(width: 4),
+                  SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(50.0),
+                        ),
+                        border: Border.all(
+                          color: AppColors.yellow,
+                        ),
+                        color: AppColors.black.withOpacity(0.2),
                       ),
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
+                      child: Padding(
+                        padding: const EdgeInsets.all(0.0),
+                        child: CustomImageWidget(
+                          imageUrl: avatar,
+                          rounded: true,
+                          typeEnum: TypeEnum.user,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-                Visibility(
-                  maintainSize: true,
-                  maintainAnimation: true,
-                  maintainState: true,
-                  visible: fullGiftImage.isNotEmpty,
-                  child: SizedBox(
-                    height: 16,
-                    width: 16,
-                    child: CustomImageWidget(
-                      imageUrl: fullGiftImage,
-                      rounded: false,
-                      typeEnum: TypeEnum.gift,
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: fullGiftImage.isEmpty
+                          ? [
+                              Text(
+                                userName,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const Text(
+                                'is Astrologer Live Star',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.black,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ]
+                          : [
+                              Text(
+                                userName,
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.black,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(width: 4),
+                  SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(50.0),
+                        ),
+                        border: Border.all(
+                          color: AppColors.transparent,
+                        ),
+                        color: AppColors.transparent,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(0.0),
+                        child: fullGiftImage.isEmpty
+                            ? const Icon(Icons.star, size: 20)
+                            : CustomImageWidget(
+                                imageUrl: fullGiftImage,
+                                rounded: false,
+                                typeEnum: TypeEnum.gift,
+                              ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                ],
+              ),
             ),
+          ),
+          Positioned(
+            bottom: 28,
+            child: Image.asset("assets/images/live_seperated_crown.png"),
           )
         ],
       ),

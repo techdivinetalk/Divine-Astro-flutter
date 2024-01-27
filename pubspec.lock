@@ -1416,10 +1416,11 @@ packages:
   overlapped_carousel:
     dependency: "direct main"
     description:
-      name: overlapped_carousel
-      sha256: e9c83f2e6fca50391065aa07e397d56391f62846167c8d262fd63d979fbf7878
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: b910005b978c35e0be5cadbb82c000faf6abebdf
+      resolved-ref: b910005b978c35e0be5cadbb82c000faf6abebdf
+      url: "https://github.com/delwar36/overlapped_carousel.git"
+    source: git
     version: "1.0.1"
   overlay_support:
     dependency: "direct main"
