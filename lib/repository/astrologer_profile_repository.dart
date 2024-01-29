@@ -6,6 +6,7 @@ import 'package:divine_astrologer/model/live/blocked_customer_list_res.dart';
 import 'package:divine_astrologer/model/live/blocked_customer_res.dart';
 import 'package:divine_astrologer/model/live/notice_board_res.dart';
 import 'package:flutter/foundation.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
 
@@ -21,8 +22,20 @@ class AstrologerProfileRepository extends ApiProvider {
         } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
           await preferenceService.erase();
           await Get.offAllNamed(RouteName.login);
-        } else {}
-      } else {}
+        } else {
+          Fluttertoast.showToast(
+            msg: responseBody["message"],
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+          );
+        }
+      } else {
+        Fluttertoast.showToast(
+          msg: responseBody["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+        );
+      }
     } on Exception catch (error, stack) {
       debugPrint("getAllGiftsAPI(): Exception caught: error: $error");
       debugPrint("getAllGiftsAPI(): Exception caught: stack: $stack");
@@ -44,8 +57,20 @@ class AstrologerProfileRepository extends ApiProvider {
         } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
           await preferenceService.erase();
           await Get.offAllNamed(RouteName.login);
-        } else {}
-      } else {}
+        } else {
+          Fluttertoast.showToast(
+            msg: responseBody["message"],
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+          );
+        }
+      } else {
+        Fluttertoast.showToast(
+          msg: responseBody["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+        );
+      }
     } on Exception catch (error, stack) {
       debugPrint("blockedCustomerListAPI(): Exception caught: error: $error");
       debugPrint("blockedCustomerListAPI(): Exception caught: stack: $stack");
@@ -67,8 +92,20 @@ class AstrologerProfileRepository extends ApiProvider {
         } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
           await preferenceService.erase();
           await Get.offAllNamed(RouteName.login);
-        } else {}
-      } else {}
+        } else {
+          Fluttertoast.showToast(
+            msg: responseBody["message"],
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+          );
+        }
+      } else {
+        Fluttertoast.showToast(
+          msg: responseBody["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+        );
+      }
     } on Exception catch (error, stack) {
       debugPrint("blockedCustomerAPI(): Exception caught: error: $error");
       debugPrint("blockedCustomerAPI(): Exception caught: stack: $stack");
@@ -87,8 +124,20 @@ class AstrologerProfileRepository extends ApiProvider {
         } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
           await preferenceService.erase();
           await Get.offAllNamed(RouteName.login);
-        } else {}
-      } else {}
+        } else {
+          Fluttertoast.showToast(
+            msg: responseBody["message"],
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+          );
+        }
+      } else {
+        Fluttertoast.showToast(
+          msg: responseBody["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+        );
+      }
     } on Exception catch (error, stack) {
       debugPrint("noticeBoardAPI(): Exception caught: error: $error");
       debugPrint("noticeBoardAPI(): Exception caught: stack: $stack");
@@ -112,14 +161,24 @@ class AstrologerProfileRepository extends ApiProvider {
         } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
           await preferenceService.erase();
           await Get.offAllNamed(RouteName.login);
-        } else {}
-      } else {}
+        } else {
+          Fluttertoast.showToast(
+            msg: responseBody["message"],
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+          );
+        }
+      } else {
+        Fluttertoast.showToast(
+          msg: responseBody["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+        );
+      }
     } on Exception catch (error, stack) {
       debugPrint("endLiveApi(): Exception caught: error: $error");
       debugPrint("endLiveApi(): Exception caught: stack: $stack");
     }
     return Future<String>.value(data);
   }
-
 }
- 
