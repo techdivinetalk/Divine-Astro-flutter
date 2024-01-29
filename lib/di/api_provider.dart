@@ -113,6 +113,8 @@ class ApiProvider {
   final String uploadAstrologerimage = "uploadAstrologerimage";
   final String getChatHistory = "getOrderChatHistory";
   final String getOrderCallHistory = "getOrderCallHistory";
+  final String getChatSuggestRemedies = "getMasterRemedies";
+  final String getChatSuggestRemediesDetail = "getRemediesForMasterRemedy";
 
   //Socket Events for Chat
   final String initChat = "initChat";
@@ -224,7 +226,7 @@ class ApiProvider {
     }
   }
 
-  get(String url,
+  /*get(String url,
       {Map<String, String>? headers, bool closeDialogOnTimeout = true}) async {
     if (headers == null) {
       headers = await getAuthorisedHeader();
@@ -246,6 +248,39 @@ class ApiProvider {
       throw NoInternetException(AppString.noInternetConnection);
     }
   }
+*/
+  Future<http.Response> get(
+      String url, {
+        Map<String, String>? headers,
+        Map<String, dynamic>? queryParameters,
+        bool closeDialogOnTimeout = true,
+      }) async {
+    if (headers == null) {
+      headers = await getAuthorisedHeader();
+      log("headers: $headers");
+    }
+
+    if (queryParameters != null) {
+      url += '?${Uri(queryParameters: queryParameters).query}';
+    }
+
+    if (await networkManager.isConnected() ?? false) {
+      log('url: $baseUrl$url');
+      var response = await http
+          .get(Uri.parse(baseUrl + url), headers: headers)
+          .timeout(const Duration(seconds: 15), onTimeout: () {
+        if (closeDialogOnTimeout) {
+          progressService.showProgressDialog(false);
+        }
+        throw CustomException(AppString.timeoutMessage);
+      });
+      log('response: ${response.body}');
+      return response;
+    } else {
+      throw NoInternetException(AppString.noInternetConnection);
+    }
+  }
+
 
   delete(String url,
       {Map<String, String>? headers, bool closeDialogOnTimeout = true}) async {

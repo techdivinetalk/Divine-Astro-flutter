@@ -7,6 +7,10 @@ import 'package:divine_astrologer/screens/chat_message/chat_message_binding.dart
 import 'package:divine_astrologer/screens/chat_message/chat_message_ui.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_binding.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_ui.dart';
+import 'package:divine_astrologer/screens/chat_remedies/chat_suggest_remedies.dart';
+import 'package:divine_astrologer/screens/chat_remedies/chat_suggest_remedies_binding.dart';
+import 'package:divine_astrologer/screens/chat_remedies_details/chat_suggest_remedies_details.dart';
+import 'package:divine_astrologer/screens/chat_remedies_details/chat_suggets_remedies_detail_binding.dart';
 import 'package:divine_astrologer/screens/faq/faqs_binding.dart';
 import 'package:divine_astrologer/screens/faq/faqs_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_binding.dart';
@@ -128,6 +132,8 @@ class RouteName {
   static const String videoCall = "/videoCall";
   static const String numberChangeOtpScreen = "/numberChangeOtpScreen";
   static const String orderFeedback = "/orderFeedback";
+  static const String chatSuggestRemedy = "/chatSuggestRemedy";
+  static const String chatSuggestRemedyDetails = "/chatSuggestRemedyDetails";
   static const String feedback = "/feedback";
   static const String chatMessageSupportUI = "/chatMessageUI";
   static const String liveDharamScreen = "/liveDharamScreen";
@@ -305,6 +311,16 @@ class Routes {
         page: () => const OrderFeedbackUI(),
         name: RouteName.orderFeedback,
         binding: OrderFeedbackBinding()),
+
+    GetPage(
+        page: () => const ChatSuggestRemedyPage(),
+        name: RouteName.chatSuggestRemedy,
+        binding: ChatSuggestRemediesBinding()),
+
+    GetPage(
+        page: () => const ChatSuggestRemediesDetailsPage(),
+        name: RouteName.chatSuggestRemedyDetails,
+        binding: ChatSuggestRemediesDetailsBinding()),
 
     GetPage(
         page: () => const FeedBack(),

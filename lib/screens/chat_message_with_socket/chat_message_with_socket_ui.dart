@@ -7,6 +7,7 @@ import "package:divine_astrologer/common/app_textstyle.dart";
 import "package:divine_astrologer/common/cached_network_image.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/common_functions.dart";
+import "package:divine_astrologer/common/custom_widgets.dart";
 import "package:divine_astrologer/common/permission_handler.dart";
 import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/di/shared_preference_service.dart";
@@ -151,6 +152,24 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                                           .getUserDetail()!
                                                                           .id,
                                                                 )
+
+
+
+                                                  : chatMessage.msgType ==
+                                                  "Remedies"
+                                                  ? remediesMsgView(
+                                                context,
+                                                chatMessage,
+                                                chatMessage
+                                                    .senderId ==
+                                                    preferenceService
+                                                        .getUserDetail()!
+                                                        .id,
+                                              )
+
+
+
+
                                                               : chatMessage.msgType ==
                                                                       "sendGifts"
                                                                   ? giftSendUi(
@@ -671,6 +690,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 suffixIcon: InkWell(
                                   onTap: () async {
                                     showCurvedBottomSheet(context);
+
+                                    // Move focus to an invisible focus node to dismiss the keyboard
+                                    FocusScope.of(context).requestFocus(FocusNode());
                                     // if (controller.isOngoingChat.value) {
 
                                     //   } else {
@@ -781,12 +803,12 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         context: context,
         builder: (BuildContext context) {
           return Container(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(10.sp),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
+                topLeft: Radius.circular(30.sp),
+                topRight: Radius.circular(30.sp),
               ),
             ),
             child: GridView.count(
@@ -796,7 +818,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
               crossAxisSpacing: 10,
               children: List.generate(itemList.length, (index) {
                 return GestureDetector(
-                  onTap: () {
+                  onTap: () async{
                     Navigator.pop(context);
                     switch (index) {
                       case 0:
@@ -806,7 +828,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         controller.getImage(false);
                         break;
                       case 2:
-                        controller.getImage(false);
+                        var result = await Get.toNamed(RouteName.chatSuggestRemedy);
+                        final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+                        controller.addNewMessage(time, "Remedies", messageText: result.toString());
                         break;
                       case 3:
                         showCardChoiceBottomSheet(context, controller);
@@ -898,6 +922,49 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     child: Text(
                         'Astrologer has requested to send ${chatMessage.message}.'))
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget remediesMsgView(
+      BuildContext context, ChatMessage chatMessage, bool yourMessage) {
+    var jsonString = (chatMessage.message ?? '').substring(1,(chatMessage.message ?? '').length -1);
+    List temp = jsonString.split(', ');
+    return SizedBox(
+      width: double.maxFinite,
+      child: Column(
+        crossAxisAlignment:
+        yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Card(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color:  AppColors.yellow ,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: AppColors.red,
+                  child: CustomText(
+                    temp[0][0],
+                    fontColor: AppColors.white,
+                  ), // Display the first letter of the name
+                ),
+                title: CustomText(
+                  temp[0],
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+                subtitle: CustomText(
+                  temp[1],
+                  fontSize: 12.sp,
+                ),
+              ),
             ),
           ),
         ],
