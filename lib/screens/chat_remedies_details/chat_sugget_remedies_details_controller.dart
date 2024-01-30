@@ -53,4 +53,10 @@ class ChatSuggestRemedyDetailsController extends GetxController {
     }
     update();
   }
+
+  @override
+  void onClose() {
+    selectedIndex.close();
+    super.onClose();
+  }
 }

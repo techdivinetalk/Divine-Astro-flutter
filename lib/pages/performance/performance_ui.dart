@@ -103,7 +103,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 20.h,
-                    childAspectRatio: 0.68),
+                    childAspectRatio: 0.66),
                 itemBuilder: (BuildContext context, int index) {
                   Conversion? item = controller.overAllScoreList[index];
                   ScoreModelClass model = controller.percentageSubTitle[index];
@@ -405,23 +405,21 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                         color: AppColors.white,
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(10))),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          item?.label ?? '',
-                                          textAlign: TextAlign
-                                              .center,
-                                          style: AppTextStyle.textStyle12(
-                                              fontColor: AppColors.darkBlue),
-                                        ),
-                                      ],
+                                    child: Text(
+                                      item?.label ?? '',
+                                      textAlign: TextAlign
+                                          .center,
+                                      style: AppTextStyle.textStyle12(
+                                          fontColor: AppColors.darkBlue),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
                                     )),
                               ),
                             ),
                           ],
                         ),
                       ],
-                    ), //just for testing, will fill with image later
+                    ),
                   );
                 },
               ),

@@ -36,20 +36,20 @@ class UploadYourPhotosController extends GetxController {
 
     if (xFilePick.isNotEmpty) {
       for (var i = 0; i < xFilePick.length; i++) {
-        if (selectedImages
-            .any((element) => element.path == xFilePick[i].path)) {
+        if (selectedImages.any((element) => element.path == xFilePick[i].path)) {
           divineSnackBar(data: "This image already selected.");
         } else {
           selectedImages.add(File(xFilePick[i].path));
         }
       }
       update();
-    } else {
-      ScaffoldMessenger.of(Get.context!).showSnackBar(
-        const SnackBar(content: Text('Nothing is selected')),
-      );
-    }
+    } /*else {
+      // Use Get.context for the correct context
+      ScaffoldMessenger.of(Get.overlayContext ?? Get.context!)
+          .showSnackBar(const SnackBar(content: Text('Nothing is selected')));
+    }*/
   }
+
 
   void removeImages(String value) {
     selectedImages.removeWhere((element) => element.path == value);

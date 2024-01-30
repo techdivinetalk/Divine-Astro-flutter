@@ -7,6 +7,8 @@ import 'package:divine_astrologer/screens/chat_message/chat_message_binding.dart
 import 'package:divine_astrologer/screens/chat_message/chat_message_ui.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_binding.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_ui.dart';
+import 'package:divine_astrologer/screens/chat_message_with_socket/remedy_view/remedies_detail_binding.dart';
+import 'package:divine_astrologer/screens/chat_message_with_socket/remedy_view/renedies_detail_view.dart';
 import 'package:divine_astrologer/screens/chat_remedies/chat_suggest_remedies.dart';
 import 'package:divine_astrologer/screens/chat_remedies/chat_suggest_remedies_binding.dart';
 import 'package:divine_astrologer/screens/chat_remedies_details/chat_suggest_remedies_details.dart';
@@ -138,9 +140,10 @@ class RouteName {
   static const String chatMessageSupportUI = "/chatMessageUI";
   static const String liveDharamScreen = "/liveDharamScreen";
   static const String faq = "/faqPage";
+  static const String remediesDetail = "/RemediesDetailsView";
 }
 
-final Set<String> validRoutes = {RouteName.chatMessageUI,  RouteName.faq,};
+final Set<String> validRoutes = {RouteName.chatMessageUI,  RouteName.faq, RouteName.remediesDetail};
 
 class Routes {
   static final routes = <GetPage>[
@@ -335,6 +338,11 @@ class Routes {
       page: () => const FAQsUI(),
       name: RouteName.faq,
       binding: FAQsBindings(),
+    ),
+    GetPage(
+      page: () => const RemediesDetailPage(),
+      name: RouteName.remediesDetail,
+      binding: RemediesDetailBinding(),
     ),
   ];
 }
