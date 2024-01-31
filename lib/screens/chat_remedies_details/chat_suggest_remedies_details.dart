@@ -22,7 +22,7 @@ class ChatSuggestRemediesDetailsPage
           onPressed: () => Get.back(),
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
-        title: CustomText(controller.name.value.upperCamelCase),
+        title: CustomText("${controller.name.value.upperCamelCase} Remedies"),
       ),
       body: Obx(() {
         if (controller.remedies.value.remedies?.isEmpty ?? true) {
@@ -49,7 +49,7 @@ class ChatSuggestRemediesDetailsPage
                     onTap: () {
                       final remedy = controller.remedies.value.remedies![controller.selectedIndex.value];
                       List temp = [ remedy.name.upperCamelCase, remedy.content];
-                      Get.back(result: temp);
+                      Get.back();
                       Get.back(result: temp);
                     },
                     child: Container(
@@ -108,6 +108,7 @@ class ChatSuggestRemediesDetailsPage
           subtitle: CustomText(
             remedy.content,
             fontSize: 12.sp,
+            maxLines: 20,
           ),
           onTap: () {
             controller.selectedIndex(index).obs;

@@ -125,10 +125,16 @@ class UploadYourPhotosUi extends GetView<UploadYourPhotosController> {
               builder: (controller) => CustomLightYellowButton(
                 name: "uploadImages".tr,
                 onTaped: () {
-                  if (controller.selectedImages.length <= 5) {
-                    controller.uploadImageToS3Bucket(controller.selectedImages);
+                  if (controller.selectedImages.isNotEmpty) {
+                    // Images are selected, proceed with uploading
+                    if (controller.selectedImages.length <= 5) {
+                      controller.uploadImageToS3Bucket(controller.selectedImages);
+                    } else {
+                      divineSnackBar(data: "imageValidationMsg".tr);
+                    }
                   } else {
-                    divineSnackBar(data: "imageValidationMsg".tr);
+                    // No images are selected, show a Snackbar
+                    divineSnackBar(data: "No images selected. Please choose at least one image to upload.".tr);
                   }
                 },
               ),

@@ -109,7 +109,7 @@ class AllOrderHistoryUi extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             CommonOptionRow(
-              leftBtnTitle: "refund".tr,
+              leftBtnTitle: "FeedBack".tr,
               onLeftTap: () {},
               onRightTap: () {
                 Get.toNamed(RouteName.suggestRemediesView, arguments: data[index].id);

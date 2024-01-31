@@ -169,7 +169,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
 
 
-
                                                               : chatMessage.msgType ==
                                                                       "sendGifts"
                                                                   ? giftSendUi(
@@ -829,8 +828,11 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         break;
                       case 2:
                         var result = await Get.toNamed(RouteName.chatSuggestRemedy);
-                        final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-                        controller.addNewMessage(time, "Remedies", messageText: result.toString());
+                        if (result != null){
+                          final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+                          controller.addNewMessage(time, "Remedies", messageText: result.toString());
+                          print("getting ul not add1");
+                        }
                         break;
                       case 3:
                         showCardChoiceBottomSheet(context, controller);
@@ -933,6 +935,12 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     var jsonString = (chatMessage.message ?? '').substring(1,(chatMessage.message ?? '').length -1);
     List temp = jsonString.split(', ');
+
+    print("get templist $temp");
+
+    if (temp.length < 2) {
+      return const SizedBox.shrink();
+    }
     return SizedBox(
       width: double.maxFinite,
       child: Column(
@@ -961,9 +969,11 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   fontWeight: FontWeight.w600,
                 ),
                 subtitle: CustomText(
-                  temp[1],
+                  temp[1] ?? '',
                   fontSize: 12.sp,
+                  maxLines: 20,
                 ),
+                onTap: () => Get.toNamed(RouteName.remediesDetail, arguments:{'title': temp[0], 'subtitle': temp[1]}),
               ),
             ),
           ),
@@ -1576,17 +1586,17 @@ class AstrologerChatAppBar extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      SizedBox(width: 16.w),
+                     // SizedBox(width: 16.w),
                       IconButton(
                         onPressed: () => Get.back(),
                         icon: const Icon(Icons.arrow_back_ios_new_rounded),
                       ),
-                      SizedBox(width: 8.w),
+                      //SizedBox(width: 8.w),
                       Row(
                         children: [
                           CachedNetworkPhoto(
-                              height: 48.h,
-                              width: 48.w,
+                              height: 45.h,
+                              width: 45.w,
                               url: controller.profileImage.value),
                           SizedBox(width: 12.w),
                           Column(
@@ -1598,7 +1608,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                                   controller.customerName.value,
                                   style: TextStyle(
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 16.sp,
+                                      fontSize: 14.sp,
                                       color: AppColors.darkBlue),
                                 ),
                               ),
@@ -1617,14 +1627,14 @@ class AstrologerChatAppBar extends StatelessWidget {
                                           controller.showTalkTime.value,
                                           style: TextStyle(
                                               fontWeight: FontWeight.w500,
-                                              fontSize: 13.sp,
+                                              fontSize: 10.sp,
                                               color: AppColors.brownColour),
                                         ),
                                         Text(
                                           controller.chatStatus.value,
                                           style: TextStyle(
                                               fontWeight: FontWeight.w400,
-                                              fontSize: 13.sp,
+                                              fontSize: 10.sp,
                                               color:
                                                   controller.chatStatus.value !=
                                                           "Offline"
@@ -1658,7 +1668,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                           controller.sendMsg();
                         },
                       ),
-                      SizedBox(width: 16.w),
+                      SizedBox(width: 10.w),
                       ZegoService().buttonUI(
                         isVideoCall: true,
                         targetUserID:
@@ -1675,7 +1685,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                           controller.sendMsg();
                         },
                       ),
-                      SizedBox(width: 16.w),
+                      SizedBox(width: 5.w),
                       PopupMenuButton(
                         surfaceTintColor: Colors.transparent,
                         color: Colors.white,
@@ -1703,7 +1713,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                         ],
                         child: const Icon(Icons.more_vert_rounded),
                       ),
-                      SizedBox(width: 16.w),
+                      SizedBox(width: 10.w),
                     ],
                   ),
                   // Obx(() => Visibility(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import 'app_textstyle.dart';
 import 'colors.dart';
@@ -26,25 +28,42 @@ class CommonOptionRow extends StatelessWidget {
         InkWell(
           onTap: onLeftTap,
           child: Container(
-            width: 90,
             height: 37,
             decoration: BoxDecoration(
-              border: Border.all(color: AppColors.darkBlue, width: 1.0),
+              border: Border.all(color: AppColors.red, width: 1.0),
               borderRadius: BorderRadius.circular(22.0),
             ),
-            child: Center(
-              child: Text(
-                leftBtnTitle,
-                style: AppTextStyle.textStyle14(
-                    fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  leftBtnTitle,
+                  style: AppTextStyle.textStyle12(
+                      fontWeight: FontWeight.w500, fontColor: AppColors.red),
+                ),
+                SizedBox(width: 8.w),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 5.0.h,),
+                  decoration: BoxDecoration(
+                    color: AppColors.red, // Set the background color
+                    borderRadius: BorderRadius.circular(20.0), // Set the border radius
+                  ),
+                  child: Text(
+                    "New",
+                    style: AppTextStyle.textStyle12(
+                      fontWeight: FontWeight.w500,
+                      fontColor: Colors.white, // Set the text color
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
-        ),
+        ).expand(),
+        SizedBox(width: 15.w),
         InkWell(
           onTap: onRightTap,
           child: Container(
-            width: 172,
             height: 37,
             decoration: BoxDecoration(
               boxShadow: [
@@ -63,13 +82,13 @@ class CommonOptionRow extends StatelessWidget {
             child: Center(
               child: Text(
                 "suggestRemedies".tr,
-                style: AppTextStyle.textStyle14(
+                style: AppTextStyle.textStyle12(
                     fontColor: AppColors.brownColour,
                     fontWeight: FontWeight.w500),
               ),
             ),
           ),
-        )
+        ).expand()
       ],
     );
   }
