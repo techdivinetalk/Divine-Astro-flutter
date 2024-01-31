@@ -37,6 +37,36 @@ class ChatAssistantRepository extends ApiProvider {
       rethrow;
     }
   }
+Future<ChatAssistantAstrologerListResponse> getConsulation() async {
+    try {
+      final response = await get(getConsulationData);
+      log('response --- ${response.body}');
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          preferenceService.erase();
+          Get.offNamed(RouteName.login);
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          print("objectAsist ${json.decode(response.body)}");
+          throw CustomException(json.decode(response.body)["error"]);
+          //
+          // final assistantAstrologerList =
+          //     ChatAssistantAstrologerListResponse.fromJson(json.decode(response.body));
+          // if (assistantAstrologerList.statusCode == successResponse && assistantAstrologerList.success!) {
+          //   return assistantAstrologerList;
+          //   throw CustomException(assistantAstrologerList.message!);
+          // } else {
+          //   throw CustomException(assistantAstrologerList.message!);
+          // }
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
 
   Future<ChatAssistChatResponse> getAstrologerChats(Map<String, dynamic> params) async {
     try {

@@ -10,7 +10,6 @@ class ChatAssistanceController extends GetxController {
   final chatAssistantRepository = ChatAssistantRepository();
   ChatAssistantAstrologerListResponse? chatAssistantAstrologerListResponse;
   Loading loading = Loading.initial;
-  RxList searchData = [].obs;
 
   RxBool isSearchEnable = RxBool(false);
 
@@ -33,20 +32,13 @@ class ChatAssistanceController extends GetxController {
     }
     update();
   }
-
-  void searchCall(String value) {
-    searchData.clear();
-    if (value.isEmpty) {
-      return;
-    }
-    if (chatAssistantAstrologerListResponse != null ||
-        chatAssistantAstrologerListResponse!.data != null ||
-        chatAssistantAstrologerListResponse!.data!.data!.isNotEmpty) {
-      for (var userDetail in chatAssistantAstrologerListResponse!.data!.data!) {
-        if (userDetail.name!.toLowerCase().contains(value.toLowerCase())) {
-          searchData.add(userDetail);
-        }
-      }
+Future<void> getConsulation() async {
+    try {
+      loading = Loading.loading;
+      chatAssistantAstrologerListResponse = await chatAssistantRepository.getConsulation();
+      loading = Loading.loaded;
+    } catch (err) {
+      loading = Loading.error;
     }
     update();
   }

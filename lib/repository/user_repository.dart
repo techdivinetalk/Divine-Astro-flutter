@@ -77,17 +77,20 @@ class UserRepository extends ApiProvider {
       final response =
           await post(verifyOtpUrl, body: jsonEncode(param).toString());
       //progressService.showProgressDialog(false);
+      print("messResponse");
+      print(json.decode(response.body)["message"]);
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
           preferenceService.erase();
-          Get.offNamed(RouteName.login);
-          throw CustomException(json.decode(response.body)["error"]);
+          Get.offNamed(RouteName.login);          throw CustomException(json.decode(response.body)["error"]);
         } else {
           final verifyOtpModel = verifyOtpModelFromJson(response.body);
+
           if (verifyOtpModel.statusCode == successResponse &&
               verifyOtpModel.success) {
             return verifyOtpModel;
           } else {
+
             throw CustomException(verifyOtpModel.message);
           }
         }

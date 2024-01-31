@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../../common/SvgIconButton.dart';
 import '../../common/colors.dart';
@@ -20,7 +23,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
   ChatAssistancePage({super.key});
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  Rx<bool> isUSerTabSelected = true.obs;
   @override
   Widget build(BuildContext context) {
     Get.put(ChatAssistanceController());
@@ -30,29 +33,119 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
       }
       if (controller.loading == Loading.loaded) {
         return Scaffold(
-          appBar: appBar(),
-          body: (controller.chatAssistantAstrologerListResponse == null ||
-                  controller.chatAssistantAstrologerListResponse!.data == null ||
-                  controller.chatAssistantAstrologerListResponse!.data!.data!.isEmpty)
-              ? const Center(
-                  child: Text('No Data found',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.black,
-                          fontFamily: FontFamily.metropolis)))
-              : Obx(
-                  () => ListView.builder(
-                    padding: EdgeInsets.symmetric(vertical: 10.h),
-                    itemCount: (controller.searchData).isNotEmpty
-                        ? controller.searchData.length
-                        : controller.chatAssistantAstrologerListResponse!.data!.data!.length,
-                    itemBuilder: (context, index) => ChatAssistanceTile(
-                        data: (controller.searchData).isNotEmpty
-                            ? controller.searchData[index]
-                            : controller.chatAssistantAstrologerListResponse!.data!.data![index]),
+            appBar: appBar(),
+            body: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: SizedBox(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              isUSerTabSelected.value = true;
+                              controller.getAssistantAstrologerList();
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10), // Adjust padding as needed
+                              decoration:  BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.blue, // Color of the underline
+                                    width: isUSerTabSelected.value ? 3.0 : 00, // Thickness of the underline
+                                  ),
+                                ),
+                              ),
+                              child: const Center(
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.person,  // User icon
+                                      size: 30,
+                                    ),
+                                    SizedBox(width: 8), // Provides a space between the icon and the text
+                                    Text(
+                                      "Users",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              isUSerTabSelected.value = false;
+                              controller.getConsulation();
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10), // Adjust padding as needed
+                              decoration:  BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.black, // Color of the underline
+                                    width: !isUSerTabSelected.value ? 3.0 : 00, // Thickness of the underline
+                                  ),
+                                ),
+                              ),
+                              child: const Center(
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.folder,  // User icon
+                                      size: 30,
+                                    ),
+                                    SizedBox(width: 8), // Provides a space between the icon and the text
+                                    Text(
+                                      "User's Data",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-        );
+                Expanded(
+                    child: (controller.chatAssistantAstrologerListResponse ==
+                                null ||
+                            controller.chatAssistantAstrologerListResponse!
+                                    .data ==
+                                null ||
+                            controller.chatAssistantAstrologerListResponse!
+                                .data!.data!.isEmpty)
+                        ? const Center(
+                            child: Text('No Data found',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    color: AppColors.black,
+                                    fontFamily: FontFamily.metropolis)))
+                        : Obx(
+                            () => ListView.builder(
+                              padding: EdgeInsets.symmetric(vertical: 10.h),
+                              itemCount:  controller
+                                      .chatAssistantAstrologerListResponse!
+                                      .data!
+                                      .data!
+                                      .length,
+                              itemBuilder: (context, index) => ChatAssistanceTile(
+                                  data:   controller
+                                          .chatAssistantAstrologerListResponse!
+                                          .data!
+                                          .data![index]),
+                            ),
+                          )),
+              ],
+            ));
       }
       return const SizedBox.shrink();
     });
@@ -61,88 +154,29 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
   PreferredSize appBar({Color backgroundColor = const Color(0XFFFDD48E)}) {
     return PreferredSize(
         preferredSize: AppBar().preferredSize,
-        child: Obx(
-          () => Container(
-            color: AppColors.yellow,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 100),
-              child: controller.isSearchEnable.value
-                  ? searchWidget(backgroundColor)
-                  : AppBar(
-                      surfaceTintColor: AppColors.yellow,
-                      title: Text(
-                        "chatAssistance".tr,
-                        style: const TextStyle(
-                          fontSize: 14.0,
-                        ),
-                      ),
-                      leading: IconButton(
-                        onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-                        icon: Icon(
-                          Icons.menu_rounded,
-                          size: 32.sp,
-                          color: AppColors.blackColor,
-                        ),
-                      ),
-                      backgroundColor: backgroundColor,
-                      elevation: 0,
-                      actions: [
-                        SvgIconButton(
-                            onPressed: () {
-                              controller.isSearchEnable.value = true;
-                            },
-                            svg: Assets.images.searchIcon.svg()),
-                        SizedBox(width: 10.w)
-                      ],
-                    ),
+        child:AppBar(
+          surfaceTintColor: AppColors.yellow,
+          title: Text(
+            "chatAssistance".tr,
+            style: const TextStyle(
+              fontSize: 14.0,
             ),
           ),
+          leading: IconButton(
+            onPressed: () =>
+                _scaffoldKey.currentState?.openDrawer(),
+            icon: Icon(
+              Icons.arrow_back_ios,
+              size: 32.sp,
+              color: AppColors.blackColor,
+            ),
+          ),
+          backgroundColor: backgroundColor,
+          elevation: 0,
         ));
   }
 
-  Widget searchWidget(Color backgroundColor) {
-    return Container(
-      color: backgroundColor,
-      child: SafeArea(
-        child: SizedBox(
-          height: AppBar().preferredSize.height,
-          child: Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  controller.isSearchEnable.value = false;
-                  controller.searchController.clear();
-                  controller.searchData.clear();
-                },
-                icon: const Icon(Icons.arrow_back_ios_new_rounded),
-              ),
-              Expanded(
-                child: Card(
-                  child: CustomTextField(
-                    autoFocus: true,
-                    align: TextAlignVertical.center,
-                    height: 40,
-                    onChanged: (value) {
-                      controller.searchCall(value);
-                    },
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    controller: controller.searchController,
-                    inputBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(10.sp)),
-                    prefixIcon: null,
-                    suffixIcon: InkWell(onTap: () {}, child: Assets.images.searchIcon.svg()),
-                    hintText: '${'search'.tr}...', suffixIconPadding: 0,
-                  ),
-                ),
-              ),
-              SizedBox(width: 20.w)
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+ }
 
 class ChatAssistanceTile extends StatelessWidget {
   final DataList data;
@@ -158,18 +192,21 @@ class ChatAssistanceTile extends StatelessWidget {
       leading: ClipRRect(
           borderRadius: BorderRadius.circular(50.r),
           child: Container(
-            decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.yellow),
+            decoration: const BoxDecoration(
+                shape: BoxShape.circle, color: AppColors.yellow),
             height: 50.w,
             width: 50.w,
             child: LoadImage(
                 imageModel: ImageModel(
                     assetImage: false,
                     placeHolderPath: Assets.images.defaultProfile.path,
-                    imagePath: "${preferenceService.getAmazonUrl()}${data.image ?? ''}",
+                    imagePath:
+                        "${preferenceService.getAmazonUrl()}${data.image ?? ''}",
                     loadingIndicator: SizedBox(
                         height: 25.h,
                         width: 25.w,
-                        child: const CircularProgressIndicator(color: Color(0XFFFDD48E), strokeWidth: 2)))),
+                        child: const CircularProgressIndicator(
+                            color: Color(0XFFFDD48E), strokeWidth: 2)))),
           )),
       title: CustomText(
         data.name ?? '',

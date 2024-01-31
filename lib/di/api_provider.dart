@@ -137,6 +137,7 @@ class ApiProvider {
   final String  userDisconnected = "user-disconnected";
   final String  sendConnectRequest = "send-connect-request";
   final String getChatAssistAstrologers = "getChatAssistCustomers";
+  final String getConsulationData = "getConsulationData";
   final String  sendChatAssistMessage = "send-chat-assist-message";
 
   // Added By: divine-dharam
