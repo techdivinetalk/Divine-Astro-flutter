@@ -92,7 +92,7 @@ class ChatMessage {
   String? callStatus;
   dynamic callRejectReason;
   int? callEnd;
-  dynamic callRecording;
+  String? callRecording;
   dynamic customerCallStatus;
   dynamic memberCallStatus;
   dynamic apiCallFrom;

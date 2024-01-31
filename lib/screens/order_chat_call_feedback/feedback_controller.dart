@@ -40,22 +40,20 @@ class FeedbackController extends GetxController {
       print("Id :: $orderId");
       print("Call :: $productId");
       getAstroFeedbackDetail(orderId);
-      //getAstroChatList(273);
-      //getAstroCallList(2009);
-      // Check the order type and call the respective API
-      fetchDataBasedOnProductId(productId);
+      fetchDataBasedOnProductId(productId, orderId);
     }
   }
 
-  Future<void> fetchDataBasedOnProductId(int productId) async {
+
+  Future<void> fetchDataBasedOnProductId(int productId, int orderId) async {
     try {
       loading.value = Loading.initial;
       update();
 
       if (productId == 12) {
-        await getAstroChatList(24580);
+        await getAstroChatList(orderId);
       } else {
-        await getAstroCallList(2009);
+        await getAstroCallList(orderId);
       }
 
 
@@ -101,6 +99,7 @@ class FeedbackController extends GetxController {
         if (response.success ?? false) {
           // Process the chat history data
           List<ChatMessage> chatMessages = response.data ?? [];
+
           // Access the order information
           order = response.order?.isNotEmpty == true ? response.order![0] : null;
           if (chatMessages.isNotEmpty) {
@@ -139,6 +138,7 @@ class FeedbackController extends GetxController {
           if (chatMessages.isNotEmpty) {
             chatMessageList.addAll(chatMessages);
             processedPages.add(currentPage.value);
+            print("resopnsecall${processedPages.add(currentPage.value)}");
           }
         } else {
           throw CustomException(response.message ?? 'Failed to get call history');

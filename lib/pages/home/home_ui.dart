@@ -22,6 +22,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:readmore/readmore.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:velocity_x/velocity_x.dart';
 import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../model/feedback_response.dart';
@@ -70,7 +71,8 @@ class HomeUI extends GetView<HomeController> {
                     : Assets.images.icVisibilityOff.svg(),
               ),
             ),
-          )
+          ),
+          SizedBox(width: 10.w,)
         ],
       ),
       body: GetBuilder<HomeController>(
@@ -267,14 +269,29 @@ class HomeUI extends GetView<HomeController> {
                                       feedback: controller.feedbackResponse ??
                                           FeedbackData(
                                             id: controller.feedbackResponse?.id,
-                                            orderId: controller.feedbackResponse?.orderId,
-                                            remark: controller.feedbackResponse?.remark,
+                                            orderId: controller
+                                                .feedbackResponse?.orderId,
+                                            remark: controller
+                                                .feedbackResponse?.remark,
                                             order: OrderDetails(
-                                              astrologerId: controller.feedbackResponse?.order?.astrologerId,
-                                              id: controller.feedbackResponse?.order?.id,
-                                              productType: controller.feedbackResponse?.order?.productType,
-                                              orderId: controller.feedbackResponse?.order?.orderId,
-                                              createdAt: controller.feedbackResponse?.order?.createdAt,
+                                              astrologerId: controller
+                                                  .feedbackResponse
+                                                  ?.order
+                                                  ?.astrologerId,
+                                              id: controller
+                                                  .feedbackResponse?.order?.id,
+                                              productType: controller
+                                                  .feedbackResponse
+                                                  ?.order
+                                                  ?.productType,
+                                              orderId: controller
+                                                  .feedbackResponse
+                                                  ?.order
+                                                  ?.orderId,
+                                              createdAt: controller
+                                                  .feedbackResponse
+                                                  ?.order
+                                                  ?.createdAt,
                                             ),
                                           )),
                                   SizedBox(height: 10.h),
@@ -327,11 +344,11 @@ class HomeUI extends GetView<HomeController> {
                           hasOpenOrder = await controller.hasOpenOrder();
                           if (hasOpenOrder) {
                             divineSnackBar(
-                                data:
-                                    "Unable to Go Live due to your active order.",
-                                color: AppColors.appColorDark,
-                                duration: const Duration(seconds: 6),
-                              );
+                              data:
+                                  "Unable to Go Live due to your active order.",
+                              color: AppColors.appColorDark,
+                              duration: const Duration(seconds: 6),
+                            );
                           } else {
                             bool isChatOn = controller.chatSwitch.value;
                             bool isAudioCallOn = controller.callSwitch.value;
@@ -1952,7 +1969,6 @@ class PerformanceDialog extends StatelessWidget {
                                 SizedBox(height: 16.h),
                                 Center(
                                   child: Text(
-                                    
                                     controller.getLabel(),
 
                                     // controller
@@ -1974,7 +1990,7 @@ class PerformanceDialog extends StatelessWidget {
                                   children: [
                                     Assets.images.bgMeterFinal
                                         .svg(width: 190.h),
-                                   /* Positioned(
+                                    /* Positioned(
                                       left: 32.h,
                                       top: 40.h,
                                       child: CustomText(
