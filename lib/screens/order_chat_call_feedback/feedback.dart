@@ -20,15 +20,6 @@ class FeedBack extends GetView<FeedbackController> {
 
   @override
   Widget build(BuildContext context) {
-    bool isPlaying = false;
-
-    double playbackProgress = 0.5;
-    void togglePlayback() {
-      isPlaying = !isPlaying;
-
-      // Add logic to start/stop audio playback here
-    }
-
     return Scaffold(
       appBar: commonDetailAppbar(
         title: "Order Feedback",
