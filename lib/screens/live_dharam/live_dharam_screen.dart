@@ -156,8 +156,8 @@ class _LivePage extends State<LiveDharamScreen>
       _timer?.cancel();
       _msgTimer?.cancel();
       _msgTimerLiveMonitoring?.cancel();
-      // await _zegoController.leave(context);
-      unawaited(_zegoController.leave(context));
+      await _zegoController.leave(context);
+      // unawaited(_zegoController.leave(context));
     } else {}
     return Future<void>.value();
   }
@@ -405,11 +405,11 @@ class _LivePage extends State<LiveDharamScreen>
                     userName: _controller.userName,
                     liveID: _controller.liveId,
                     config: streamingConfig
-                      ..previewConfig.showPreviewForHost = false
+                      ..preview.showPreviewForHost = false
                       ..maxCoHostCount = 1
                       ..confirmDialogInfo = null
                       ..disableCoHostInvitationReceivedDialog = true
-                      ..audioVideoViewConfig = ZegoPrebuiltAudioVideoViewConfig(
+                      ..audioVideoView = ZegoLiveStreamingAudioVideoViewConfig(
                         showUserNameOnView: false,
                         showAvatarInAudioMode: true,
                         useVideoViewAspectFill: true,
@@ -423,7 +423,18 @@ class _LivePage extends State<LiveDharamScreen>
                           return true;
                         },
                       )
-                      ..audioVideoViewConfig.playCoHostAudio = (
+                      ..turnOnCameraWhenCohosted = () {
+                        final callType = _controller.currentCaller.callType;
+                        //
+                        if (callType == "video") {
+                          return true;
+                        } else if (callType == "private" ||
+                            callType == "audio") {
+                          return false;
+                        }
+                        return false;
+                      }
+                      ..audioVideoView.playCoHostAudio = (
                         ZegoUIKitUser localUser,
                         ZegoLiveStreamingRole localRole,
                         ZegoUIKitUser coHost,
@@ -444,7 +455,7 @@ class _LivePage extends State<LiveDharamScreen>
                         }
                         return true;
                       }
-                      ..audioVideoViewConfig.playCoHostVideo = (
+                      ..audioVideoView.playCoHostVideo = (
                         ZegoUIKitUser localUser,
                         ZegoLiveStreamingRole localRole,
                         ZegoUIKitUser coHost,
@@ -461,22 +472,23 @@ class _LivePage extends State<LiveDharamScreen>
                         }
                         return true;
                       }
-                      ..bottomMenuBarConfig = ZegoBottomMenuBarConfig(
+                      ..bottomMenuBar = ZegoLiveStreamingBottomMenuBarConfig(
                         showInRoomMessageButton: false,
                         hostButtons: <ZegoMenuBarButtonName>[],
                         coHostButtons: <ZegoMenuBarButtonName>[],
                       )
                       ..layout = galleryLayout()
-                      ..swipingConfig = swipingConfig
-                      ..onLiveStreamingStateUpdate = onLiveStreamingStateUpdate
+                      // ..swipingConfig = swipingConfig
+                      ..swiping = swipingConfig
+                      // ..onLiveStreamingStateUpdate = onLiveStreamingStateUpdate
                       ..avatarBuilder = avatarWidget
-                      ..topMenuBarConfig = ZegoTopMenuBarConfig(
+                      ..topMenuBar = ZegoLiveStreamingTopMenuBarConfig(
                         hostAvatarBuilder: (ZegoUIKitUser host) {
                           return const SizedBox();
                         },
                         showCloseButton: false,
                       )
-                      ..memberButtonConfig = ZegoMemberButtonConfig(
+                      ..memberButton = ZegoLiveStreamingMemberButtonConfig(
                         icon: const Icon(Icons.remove_red_eye_outlined),
                         builder: (int memberCount) {
                           // return Row(
@@ -527,11 +539,11 @@ class _LivePage extends State<LiveDharamScreen>
                           //     ),
                           //   ],
                           // );
-                          return SizedBox();
+                          return const SizedBox();
                         },
                       )
-                      ..memberListConfig = ZegoMemberListConfig(
-                        onClicked: (ZegoUIKitUser user) {},
+                      ..memberList = ZegoLiveStreamingMemberListConfig(
+                        // onClicked: (ZegoUIKitUser user) {},
                         itemBuilder: (
                           BuildContext context,
                           Size size,
@@ -552,7 +564,7 @@ class _LivePage extends State<LiveDharamScreen>
                         },
                       )
                       ..foreground = foregroundWidget()
-                      ..inRoomMessageConfig = ZegoInRoomMessageConfig(
+                      ..inRoomMessage = ZegoLiveStreamingInRoomMessageConfig(
                         itemBuilder: (
                           BuildContext context,
                           ZegoInRoomMessage message,
@@ -562,8 +574,8 @@ class _LivePage extends State<LiveDharamScreen>
                         },
                       )
                       ..slideSurfaceToHide = false
-                      ..durationConfig.isVisible = false,
-                    controller: _zegoController,
+                      ..duration.isVisible = false,
+                    // controller: _zegoController,
                     events: events,
                   );
           },
@@ -1689,7 +1701,7 @@ class _LivePage extends State<LiveDharamScreen>
               ),
             );
 
-            final connectInvite = _zegoController.connectInvite;
+            final connectInvite = _zegoController.coHost;
             await connectInvite.hostSendCoHostInvitationToAudience(user);
           },
           onReject: Get.back,
@@ -2839,7 +2851,7 @@ class _LivePage extends State<LiveDharamScreen>
               onTap: () {
                 final ZegoUIKit instance = ZegoUIKit.instance;
                 _controller.isMicOn = !_controller.isMicOn;
-                instance.turnMicrophoneOn(_controller.isMicOn);
+                instance.turnMicrophoneOn(_controller.isMicOn, muteMode: true);
               },
               child: SizedBox(
                 height: 32,
@@ -2893,7 +2905,7 @@ class _LivePage extends State<LiveDharamScreen>
       } else {}
       if (_controller.isMicOn == false) {
         _controller.isMicOn = true;
-        instance.turnMicrophoneOn(true);
+        instance.turnMicrophoneOn(true, muteMode: true);
       } else {}
     } else {}
 
@@ -2908,7 +2920,7 @@ class _LivePage extends State<LiveDharamScreen>
       } else {}
       if (_controller.isMicOn == false) {
         _controller.isMicOn = true;
-        instance.turnMicrophoneOn(true);
+        instance.turnMicrophoneOn(true, muteMode: true);
       } else {}
     } else {}
   }
@@ -3053,7 +3065,8 @@ class _LivePage extends State<LiveDharamScreen>
                       onTap: () {
                         final ZegoUIKit instance = ZegoUIKit.instance;
                         _controller.isMicOn = !_controller.isMicOn;
-                        instance.turnMicrophoneOn(_controller.isMicOn);
+                        instance.turnMicrophoneOn(_controller.isMicOn,
+                            muteMode: true);
                       },
                       child: SizedBox(
                         height: 50,
@@ -3492,8 +3505,8 @@ class _LivePage extends State<LiveDharamScreen>
               _timer?.cancel();
               _msgTimer?.cancel();
               _msgTimerLiveMonitoring?.cancel();
-              // await _zegoController.leave(context);
-              unawaited(_zegoController.leave(context));
+              await _zegoController.leave(context);
+              // unawaited(_zegoController.leave(context));
             } else {}
           },
         );
@@ -3504,8 +3517,8 @@ class _LivePage extends State<LiveDharamScreen>
               _timer?.cancel();
               _msgTimer?.cancel();
               _msgTimerLiveMonitoring?.cancel();
-              // await _zegoController.leave(context);
-              unawaited(_zegoController.leave(context));
+              await _zegoController.leave(context);
+              // unawaited(_zegoController.leave(context));
             } else {}
           },
         );
@@ -3611,72 +3624,167 @@ class _LivePage extends State<LiveDharamScreen>
 
   // d
 
+  // ZegoUIKitPrebuiltLiveStreamingEvents get events {
+  //   return ZegoUIKitPrebuiltLiveStreamingEvents(
+  //     hostEvents: ZegoUIKitPrebuiltLiveStreamingHostEvents(
+  //       onCoHostRequestReceived: (ZegoUIKitUser user) async {
+  //         showNotifOverlay(user: user, msg: "onCoHostRequestReceived");
+  //         await onCoHostRequest(
+  //           user: user,
+  //           userId: user.id,
+  //           userName: user.name,
+  //           avatar: "https://robohash.org/avatarWidget",
+  //         );
+  //       },
+  //       onCoHostRequestCanceled: (ZegoUIKitUser user) async {
+  //         showNotifOverlay(user: user, msg: "onCoHostRequestCanceled");
+  //         // await onCoHostRequestCanceled(user);
+  //       },
+  //       onCoHostRequestTimeout: (ZegoUIKitUser user) {
+  //         showNotifOverlay(user: user, msg: "onCoHostRequestTimeout");
+  //       },
+  //       onActionAcceptCoHostRequest: () {
+  //         showNotifOverlay(user: null, msg: "onActionAcceptCoHostRequest");
+  //       },
+  //       onActionRefuseCoHostRequest: () {
+  //         showNotifOverlay(user: null, msg: "onActionRefuseCoHostRequest");
+  //       },
+  //       onCoHostInvitationSent: (ZegoUIKitUser user) {
+  //         showNotifOverlay(user: user, msg: "onCoHostInvitationSent");
+  //       },
+  //       onCoHostInvitationTimeout: (ZegoUIKitUser user) {
+  //         showNotifOverlay(user: user, msg: "onCoHostInvitationTimeout");
+  //       },
+  //       onCoHostInvitationAccepted: (ZegoUIKitUser user) {
+  //         showNotifOverlay(user: user, msg: "onCoHostInvitationAccepted");
+  //       },
+  //       onCoHostInvitationRefused: (ZegoUIKitUser user) {
+  //         showNotifOverlay(user: user, msg: "onCoHostInvitationRefused");
+  //       },
+  //     ),
+  //     audienceEvents: ZegoUIKitPrebuiltLiveStreamingAudienceEvents(
+  //       onCoHostRequestSent: () {
+  //         showNotifOverlay(user: null, msg: "onCoHostRequestSent");
+  //       },
+  //       onActionCancelCoHostRequest: () {
+  //         showNotifOverlay(user: null, msg: "onActionCancelCoHostRequest");
+  //       },
+  //       onCoHostRequestTimeout: () {
+  //         showNotifOverlay(user: null, msg: "onCoHostRequestTimeout");
+  //       },
+  //       onCoHostRequestAccepted: () {
+  //         showNotifOverlay(user: null, msg: "onCoHostRequestAccepted");
+  //       },
+  //       onCoHostRequestRefused: () {
+  //         showNotifOverlay(user: null, msg: "onCoHostRequestRefused");
+  //       },
+  //       onCoHostInvitationReceived: (ZegoUIKitUser user) {
+  //         showNotifOverlay(user: user, msg: "onCoHostInvitationReceived");
+  //       },
+  //       onCoHostInvitationTimeout: () {
+  //         showNotifOverlay(user: null, msg: "onCoHostInvitationTimeout");
+  //       },
+  //       onActionAcceptCoHostInvitation: () {
+  //         showNotifOverlay(user: null, msg: "onActionAcceptCoHostInvitation");
+  //       },
+  //       onActionRefuseCoHostInvitation: () {
+  //         showNotifOverlay(user: null, msg: "onActionRefuseCoHostInvitation");
+  //       },
+  //     ),
+  //   );
+  // }
+
   ZegoUIKitPrebuiltLiveStreamingEvents get events {
     return ZegoUIKitPrebuiltLiveStreamingEvents(
-      hostEvents: ZegoUIKitPrebuiltLiveStreamingHostEvents(
-        onCoHostRequestReceived: (ZegoUIKitUser user) async {
-          showNotifOverlay(user: user, msg: "onCoHostRequestReceived");
-          await onCoHostRequest(
-            user: user,
-            userId: user.id,
-            userName: user.name,
-            avatar: "https://robohash.org/avatarWidget",
-          );
+      onStateUpdated: onLiveStreamingStateUpdate,
+      audioVideo: ZegoLiveStreamingAudioVideoEvents(
+        onCameraTurnOnByOthersConfirmation: (context) {
+          return Future<bool>.value(true);
         },
-        onCoHostRequestCanceled: (ZegoUIKitUser user) async {
-          showNotifOverlay(user: user, msg: "onCoHostRequestCanceled");
-          // await onCoHostRequestCanceled(user);
-        },
-        onCoHostRequestTimeout: (ZegoUIKitUser user) {
-          showNotifOverlay(user: user, msg: "onCoHostRequestTimeout");
-        },
-        onActionAcceptCoHostRequest: () {
-          showNotifOverlay(user: null, msg: "onActionAcceptCoHostRequest");
-        },
-        onActionRefuseCoHostRequest: () {
-          showNotifOverlay(user: null, msg: "onActionRefuseCoHostRequest");
-        },
-        onCoHostInvitationSent: (ZegoUIKitUser user) {
-          showNotifOverlay(user: user, msg: "onCoHostInvitationSent");
-        },
-        onCoHostInvitationTimeout: (ZegoUIKitUser user) {
-          showNotifOverlay(user: user, msg: "onCoHostInvitationTimeout");
-        },
-        onCoHostInvitationAccepted: (ZegoUIKitUser user) {
-          showNotifOverlay(user: user, msg: "onCoHostInvitationAccepted");
-        },
-        onCoHostInvitationRefused: (ZegoUIKitUser user) {
-          showNotifOverlay(user: user, msg: "onCoHostInvitationRefused");
+        onMicrophoneTurnOnByOthersConfirmation: (context) {
+          return Future<bool>.value(true);
         },
       ),
-      audienceEvents: ZegoUIKitPrebuiltLiveStreamingAudienceEvents(
-        onCoHostRequestSent: () {
-          showNotifOverlay(user: null, msg: "onCoHostRequestSent");
-        },
-        onActionCancelCoHostRequest: () {
-          showNotifOverlay(user: null, msg: "onActionCancelCoHostRequest");
-        },
-        onCoHostRequestTimeout: () {
-          showNotifOverlay(user: null, msg: "onCoHostRequestTimeout");
-        },
-        onCoHostRequestAccepted: () {
-          showNotifOverlay(user: null, msg: "onCoHostRequestAccepted");
-        },
-        onCoHostRequestRefused: () {
-          showNotifOverlay(user: null, msg: "onCoHostRequestRefused");
-        },
-        onCoHostInvitationReceived: (ZegoUIKitUser user) {
-          showNotifOverlay(user: user, msg: "onCoHostInvitationReceived");
-        },
-        onCoHostInvitationTimeout: () {
-          showNotifOverlay(user: null, msg: "onCoHostInvitationTimeout");
-        },
-        onActionAcceptCoHostInvitation: () {
-          showNotifOverlay(user: null, msg: "onActionAcceptCoHostInvitation");
-        },
-        onActionRefuseCoHostInvitation: () {
-          showNotifOverlay(user: null, msg: "onActionRefuseCoHostInvitation");
-        },
+      topMenuBar: ZegoLiveStreamingTopMenuBarEvents(
+        onHostAvatarClicked: (host) {},
+      ),
+      memberList: ZegoLiveStreamingMemberListEvents(
+        onClicked: (user) {},
+      ),
+      inRoomMessage: ZegoLiveStreamingInRoomMessageEvents(
+        onClicked: (message) {},
+        onLocalSend: (message) {},
+        onLongPress: (message) {},
+      ),
+      duration: ZegoLiveStreamingDurationEvents(
+        onUpdated: (duration) {},
+      ),
+      coHost: ZegoLiveStreamingCoHostEvents(
+        host: ZegoLiveStreamingCoHostHostEvents(
+          onRequestReceived: (ZegoUIKitUser user) async {
+            showNotifOverlay(user: user, msg: "onCoHostRequestReceived");
+            await onCoHostRequest(
+              user: user,
+              userId: user.id,
+              userName: user.name,
+              avatar: "https://robohash.org/avatarWidget",
+            );
+          },
+          onRequestCanceled: (ZegoUIKitUser user) async {
+            showNotifOverlay(user: user, msg: "onCoHostRequestCanceled");
+            // await onCoHostRequestCanceled(user);
+          },
+          onRequestTimeout: (ZegoUIKitUser user) {
+            showNotifOverlay(user: user, msg: "onCoHostRequestTimeout");
+          },
+          onActionAcceptRequest: () {
+            showNotifOverlay(user: null, msg: "onActionAcceptCoHostRequest");
+          },
+          onActionRefuseRequest: () {
+            showNotifOverlay(user: null, msg: "onActionRefuseCoHostRequest");
+          },
+          onInvitationSent: (ZegoUIKitUser user) {
+            showNotifOverlay(user: user, msg: "onCoHostInvitationSent");
+          },
+          onInvitationTimeout: (ZegoUIKitUser user) {
+            showNotifOverlay(user: user, msg: "onCoHostInvitationTimeout");
+          },
+          onInvitationAccepted: (ZegoUIKitUser user) {
+            showNotifOverlay(user: user, msg: "onCoHostInvitationAccepted");
+          },
+          onInvitationRefused: (ZegoUIKitUser user) {
+            showNotifOverlay(user: user, msg: "onCoHostInvitationRefused");
+          },
+        ),
+        audience: ZegoLiveStreamingCoHostAudienceEvents(
+          onRequestSent: () {
+            showNotifOverlay(user: null, msg: "onCoHostRequestSent");
+          },
+          onActionCancelRequest: () {
+            showNotifOverlay(user: null, msg: "onActionCancelCoHostRequest");
+          },
+          onRequestTimeout: () {
+            showNotifOverlay(user: null, msg: "onCoHostRequestTimeout");
+          },
+          onRequestAccepted: () {
+            showNotifOverlay(user: null, msg: "onCoHostRequestAccepted");
+          },
+          onRequestRefused: () {
+            showNotifOverlay(user: null, msg: "onCoHostRequestRefused");
+          },
+          onInvitationReceived: (ZegoUIKitUser user) {
+            showNotifOverlay(user: user, msg: "onCoHostInvitationReceived");
+          },
+          onInvitationTimeout: () {
+            showNotifOverlay(user: null, msg: "onCoHostInvitationTimeout");
+          },
+          onActionAcceptInvitation: () {
+            showNotifOverlay(user: null, msg: "onActionAcceptCoHostInvitation");
+          },
+          onActionRefuseInvitation: () {
+            showNotifOverlay(user: null, msg: "onActionRefuseCoHostInvitation");
+          },
+        ),
       ),
     );
   }
@@ -3703,7 +3811,7 @@ class _LivePage extends State<LiveDharamScreen>
             ),
           );
 
-          final connectInvite = _zegoController.connectInvite;
+          final connectInvite = _zegoController.coHost;
           await connectInvite.hostSendCoHostInvitationToAudience(user);
         } else {}
       },
@@ -3722,7 +3830,7 @@ class _LivePage extends State<LiveDharamScreen>
       id: _controller.currentCaller.id,
       name: _controller.currentCaller.userName,
     );
-    final ZegoLiveStreamingConnectController connect = _zegoController.connect;
+    final connect = _zegoController.coHost;
     final bool removed = _controller.isHost
         ? await connect.removeCoHost(user)
         : await connect.stopCoHost(showRequestDialog: false);

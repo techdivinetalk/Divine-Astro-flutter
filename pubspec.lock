@@ -409,14 +409,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.6"
-  coverflow:
-    dependency: "direct main"
-    description:
-      name: coverflow
-      sha256: "135a0bce351bbf754ec2736494fa5fede0928124c3d4ef08d64aff19701452c9"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.3"
   cross_file:
     dependency: transitive
     description:
@@ -774,14 +766,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.7"
-  flutter_foreground_task:
-    dependency: transitive
-    description:
-      name: flutter_foreground_task
-      sha256: e48d2d810a2d643362e64de41146ed8e95d4dd282bae6abbb32309d9f0bf5d67
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.1.2"
   flutter_gen:
     dependency: "direct dev"
     description:
@@ -987,30 +971,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.17"
-  flutter_screen_recording:
-    dependency: "direct main"
-    description:
-      name: flutter_screen_recording
-      sha256: "65e5e2555494a5d4dd54bbbb0c2fa1b96210ed444950f07556aacee970799342"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.10"
-  flutter_screen_recording_platform_interface:
-    dependency: transitive
-    description:
-      name: flutter_screen_recording_platform_interface
-      sha256: e177557cbca61d8cf0f6ecc3f65ab5638dfa912f00ac8c31ac7f0f40c241ec81
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.2"
-  flutter_screen_recording_web:
-    dependency: transitive
-    description:
-      name: flutter_screen_recording_web
-      sha256: "1dedf6e067b4c23b8c357200e6fa811ab9a894371721b31bac027bd7c06a4b6e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.4"
   flutter_screenutil:
     dependency: "direct main"
     description:
@@ -1317,30 +1277,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.9"
-  leak_tracker:
-    dependency: transitive
-    description:
-      name: leak_tracker
-      sha256: f8cdf1383f5b4672a2693d875f1f239af6bd7e4a8925a17ef7219226db932624
-      url: "https://pub.dev"
-    source: hosted
-    version: "10.0.1"
-  leak_tracker_flutter_testing:
-    dependency: transitive
-    description:
-      name: leak_tracker_flutter_testing
-      sha256: a2055640bf5bc903475e4bbdb34e04f8bf698542bee41edec47d337a5939e1ae
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.3"
-  leak_tracker_testing:
-    dependency: transitive
-    description:
-      name: leak_tracker_testing
-      sha256: e62042d479c4c139dd774125ed4dfbde646b8f07ac228e3c1b57a3d91d6d9df4
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.2"
   lints:
     dependency: transitive
     description:
@@ -1377,26 +1313,26 @@ packages:
     dependency: transitive
     description:
       name: matcher
-      sha256: d2323aa2060500f906aa31a895b4030b6da3ebdcc5619d14ce1aada65cd161cb
+      sha256: "1803e76e6653768d64ed8ff2e1e67bea3ad4b923eb5c56a295c3e634bad5960e"
       url: "https://pub.dev"
     source: hosted
-    version: "0.12.16+1"
+    version: "0.12.16"
   material_color_utilities:
     dependency: transitive
     description:
       name: material_color_utilities
-      sha256: "0e0a020085b65b6083975e499759762399b4475f766c21668c4ecca34ea74e5a"
+      sha256: "9528f2f296073ff54cb9fee677df673ace1218163c3bc7628093e7eed5203d41"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.0"
+    version: "0.5.0"
   meta:
     dependency: transitive
     description:
       name: meta
-      sha256: d584fa6707a52763a52446f02cc621b077888fb63b93bbcb1143a7be5a0c0c04
+      sha256: a6e590c838b18133bb482a2745ad77c5bb7715fb0451209e1a7567d416678b8e
       url: "https://pub.dev"
     source: hosted
-    version: "1.11.0"
+    version: "1.10.0"
   mime:
     dependency: transitive
     description:
@@ -1437,15 +1373,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
-  overlapped_carousel:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: b910005b978c35e0be5cadbb82c000faf6abebdf
-      resolved-ref: b910005b978c35e0be5cadbb82c000faf6abebdf
-      url: "https://github.com/delwar36/overlapped_carousel.git"
-    source: git
-    version: "1.0.1"
   overlay_support:
     dependency: "direct main"
     description:
@@ -1482,10 +1409,10 @@ packages:
     dependency: transitive
     description:
       name: path
-      sha256: "087ce49c3f0dc39180befefc60fdb4acd8f8620e5682fe2476afd0b3688bb4af"
+      sha256: "8829d8a55c13fc0e37127c29fedf290c102f4e40ae94ada574091fe0ff96c917"
       url: "https://pub.dev"
     source: hosted
-    version: "1.9.0"
+    version: "1.8.3"
   path_drawing:
     dependency: transitive
     description:
@@ -1638,14 +1565,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.3"
-  platform_detect:
-    dependency: transitive
-    description:
-      name: platform_detect
-      sha256: "08f4ee79c0e1c4858d37e06b22352a3ebdef5466b613749a3adb03e703d4f5b0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.11"
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -1862,14 +1781,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  simple_shadow:
-    dependency: transitive
-    description:
-      name: simple_shadow
-      sha256: f1d1fe66b146fb31d1bb5fb55d3f219723f6918c0f37f1c2d922195908b53748
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -2267,14 +2178,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
-  vm_service:
-    dependency: transitive
-    description:
-      name: vm_service
-      sha256: b3d56ff4341b8f182b96aceb2fa20e3dcb336b9f867bc0eafc0de10f1048e957
-      url: "https://pub.dev"
-    source: hosted
-    version: "13.0.0"
   voice_message_package:
     dependency: "direct main"
     description:
@@ -2315,6 +2218,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  web:
+    dependency: transitive
+    description:
+      name: web
+      sha256: afe077240a270dcfd2aafe77602b4113645af95d0ad31128cc02bce5ac5d5152
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.0"
   web_socket_channel:
     dependency: transitive
     description:
@@ -2407,10 +2318,10 @@ packages:
     dependency: transitive
     description:
       name: zego_uikit
-      sha256: "0efc3183b115b9815a90174460928ec8d5e830d33a931aaa2e7139108c3b05b2"
+      sha256: da529bea406e7ecbc78ca1fe0f901e629c3d7e8a8988a87e0b431bf6169f0934
       url: "https://pub.dev"
     source: hosted
-    version: "2.17.3"
+    version: "2.18.3"
   zego_uikit_prebuilt_call:
     dependency: "direct main"
     description:
@@ -2423,10 +2334,10 @@ packages:
     dependency: "direct main"
     description:
       name: zego_uikit_prebuilt_live_streaming
-      sha256: "1e9b5ebd612ae33955e15e4d6bfadc9d2123961c2e778b738f927e94d1d78e6d"
+      sha256: "2dcba2009c2382b46a94d58c48ac76a8f829486536e0de2fd1201fb92020b78a"
       url: "https://pub.dev"
     source: hosted
-    version: "2.27.0"
+    version: "3.1.7"
   zego_uikit_signaling_plugin:
     dependency: "direct main"
     description:
@@ -2452,5 +2363,5 @@ packages:
     source: hosted
     version: "2.6.0+1"
 sdks:
-  dart: ">=3.2.0 <4.0.0"
-  flutter: ">=3.18.0-18.0.pre.54"
+  dart: ">=3.2.0-194.0.dev <4.0.0"
+  flutter: ">=3.13.0"
