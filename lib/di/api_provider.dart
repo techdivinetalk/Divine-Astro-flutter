@@ -68,6 +68,7 @@ class ApiProvider {
   final String getHomePageData = "astroDashboard";
   final String getTarotCardDataApi = "getTarotCard";
   final String getFeedback = "getNotSeenFeedback";
+  final String getFeedbackList = "getAstroFeedbackList";
   final String getAstroFeedback = "getAstroFeedbackDetail";
   final String agoraEndCall = "agoraEndCall";
   final String getWaitingListQueue = "getWaitingListQueue";

@@ -5,6 +5,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AppTextStyle {
   AppTextStyle._();
 
+  static TextStyle textStyle9({Color? fontColor, FontWeight? fontWeight}) {
+    return TextStyle(
+      fontSize: 9.sp,
+      fontWeight: fontWeight ?? FontWeight.w400,
+      color: fontColor ?? AppColors.darkBlue,
+    );
+  }
+
   static TextStyle textStyle10({Color? fontColor, FontWeight? fontWeight}) {
     return TextStyle(
       fontSize: 10.sp,
