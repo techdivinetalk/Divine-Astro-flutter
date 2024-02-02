@@ -301,11 +301,11 @@ class Routes {
       name: RouteName.videoCallPage,
       binding: VideoCallPageBinding(),
     ),
-    GetPage(
-      page: () => const VideoCall(),
-      name: RouteName.videoCall,
-      binding: VideoCallBinding(),
-    ),
+    // GetPage(
+    //   page: () => const VideoCall(),
+    //   name: RouteName.videoCall,
+    //   binding: VideoCallBinding(),
+    // ),
     GetPage(
       page: () => const OtpVerificationForNumberChange(),
       name: RouteName.numberChangeOtpScreen,

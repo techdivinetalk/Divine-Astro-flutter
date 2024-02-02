@@ -156,7 +156,7 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   var isCardVisible = false.obs;
- // RxInt cardListCount = 0.obs;
+  // RxInt cardListCount = 0.obs;
 
   @override
   void onInit() {
@@ -167,13 +167,14 @@ class ChatMessageWithSocketController extends GetxController
     if (AppFirebaseService().orderData.value.containsKey("card")) {
       isCardVisible.value =
           AppFirebaseService().orderData.value["card"]["isCardVisible"];
-     // cardListCount = getListOfCardLength();
+      // cardListCount = getListOfCardLength();
       print(AppFirebaseService().orderData.value["card"]["isCardVisible"]);
     }
     //isCardVisible = AppFirebaseService().orderData.value["card"] != null ? AppFirebaseService().orderData.value["card"]["isCardVisible"] : true;
     broadcastReceiver.messages.listen((BroadcastMessage event) {
       if (event.name == "displayCard") {
-        print("displayCard--${AppFirebaseService().orderData.value["card"]["isCardVisible"]}");
+        print(
+            "displayCard--${AppFirebaseService().orderData.value["card"]["isCardVisible"]}");
 
         isCardVisible.value =
             AppFirebaseService().orderData.value["card"]["isCardVisible"];
@@ -344,6 +345,15 @@ class ChatMessageWithSocketController extends GetxController
       }
     });
   }
+
+  // Added by divine-dharam
+  Future<void> callHangup() {
+    print("ZegoService().controller.hangUp start");
+    ZegoService().controller.hangUp(context!, showConfirmation: false);
+    print("ZegoService().controller.hangUp end");
+    return Future<void>.value();
+  }
+  //
 
   socketReconnect() {
     if (socket.socket!.disconnected) {
