@@ -1,4 +1,4 @@
-import 'package:divine_astrologer/screens/live_dharam/zeo_team/cache.dart';
+import 'package:divine_astrologer/screens/live_dharam/zego_team/cache.dart';
 import 'package:flutter/material.dart';
 
 import 'package:svgaplayer_flutter/parser.dart';

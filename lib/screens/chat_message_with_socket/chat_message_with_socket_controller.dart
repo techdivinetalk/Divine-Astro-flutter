@@ -15,7 +15,7 @@ import "package:divine_astrologer/model/res_login.dart";
 import "package:divine_astrologer/repository/message_template_repository.dart";
 import "package:divine_astrologer/repository/user_repository.dart";
 import "package:divine_astrologer/screens/dashboard/dashboard_controller.dart";
-import "package:divine_astrologer/screens/live_dharam/zeo_team/player.dart";
+import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
