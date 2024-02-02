@@ -138,8 +138,13 @@ class ChatOrderHistory extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             CommonOptionRow(
-              leftBtnTitle: "refund".tr,
-              onLeftTap: () {},
+              leftBtnTitle: "FeedBack".tr,
+              onLeftTap: () {
+                Get.toNamed(RouteName.feedback, arguments: {
+                  'order_id': data[index].id,
+                  'product_type': data[index].productType,
+                });
+              },
               onRightTap: () {
                 Get.toNamed(RouteName.suggestRemediesView, arguments: data[index].id);
               },

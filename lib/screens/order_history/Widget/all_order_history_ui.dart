@@ -111,7 +111,6 @@ class AllOrderHistoryUi extends StatelessWidget {
             CommonOptionRow(
               leftBtnTitle: "FeedBack".tr,
               onLeftTap: () {
-                print("idears ${data[index].id}");
                 Get.toNamed(RouteName.feedback, arguments: {
                   'order_id': data[index].id,
                   'product_type': data[index].productType,
