@@ -48,7 +48,7 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
               },
               child: Container(
                 width: Get.width,
-                padding: EdgeInsets.symmetric(vertical: 16.h),
+                padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 10.w),
                 decoration: BoxDecoration(
                   border: Border.all(width: 1, color: AppColors.darkBlue),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -56,7 +56,7 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                 child: Center(
                     child: Text(
                   '+ Click here to add message template',
-                  style: AppTextStyle.textStyle16(),
+                  style: AppTextStyle.textStyle14(),
                 )),
               ),
             ),
@@ -64,8 +64,7 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
             Expanded(
               child: GetBuilder<MessageTemplateController>(
                 builder: (controller) {
-                  if (controller.loading == Loading.loading ||
-                      controller.messageTemplates.isEmpty) {
+                  if (controller.loading == Loading.loading || controller.messageTemplates.isEmpty) {
                     return const Center(
                       child: CircularProgressIndicator.adaptive(
                         valueColor: AlwaysStoppedAnimation(Colors.yellow),
@@ -76,26 +75,22 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                       itemCount: controller.messageTemplates.length,
                       primary: false,
                       shrinkWrap: true,
-                      separatorBuilder: (_, index) => SizedBox(height: 20.h,),
+                      separatorBuilder: (_, index) => SizedBox(
+                        height: 20.h,
+                      ),
                       itemBuilder: (context, index) {
-                        MessageTemplates messageTemplate =
-                            controller.messageTemplates[index];
+                        MessageTemplates messageTemplate = controller.messageTemplates[index];
                         return GestureDetector(
                           onTap: () {
-                            Get.toNamed(RouteName.addMessageTemplate,arguments: [false, true, messageTemplate]);
+                            Get.toNamed(RouteName.addMessageTemplate, arguments: [false, true, messageTemplate]);
                           },
                           child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 20),
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                             decoration: BoxDecoration(
                               color: AppColors.white,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(20)),
+                              borderRadius: const BorderRadius.all(Radius.circular(20)),
                               boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    blurRadius: 1.0,
-                                    offset: const Offset(0.0, 3.0)),
+                                BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 1.0, offset: const Offset(0.0, 3.0)),
                               ],
                             ),
                             child: Column(
@@ -107,15 +102,12 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                                     Expanded(
                                       child: Row(
                                         children: [
-                                          Text('Template Name: ',
-                                              style: AppTextStyle.textStyle14(
-                                                  fontWeight: FontWeight.w600)),
+                                          Text('Template Name: ', style: AppTextStyle.textStyle14(fontWeight: FontWeight.w600)),
                                           SizedBox(width: 2.w),
                                           Flexible(
                                             child: Text('${messageTemplate.message}',
                                                 overflow: TextOverflow.ellipsis,
-                                                style: AppTextStyle.textStyle14(
-                                                    fontWeight: FontWeight.w400)),
+                                                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
                                           )
                                         ],
                                       ),
@@ -149,22 +141,17 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                                     text: TextSpan(children: [
                                       TextSpan(
                                           text: 'Display Message: ',
-                                          style: AppTextStyle.textStyle14(
-                                              fontWeight: FontWeight.w600)),
-                                      TextSpan(
-                                          text: '${messageTemplate.description}',
-                                          style: AppTextStyle.textStyle14()),
+                                          style: AppTextStyle.textStyle14(fontWeight: FontWeight.w600)),
+                                      TextSpan(text: '${messageTemplate.description}', style: AppTextStyle.textStyle14()),
                                     ])),
                                 SizedBox(height: 10.h),
                                 RichText(
                                     maxLines: 4,
                                     text: TextSpan(children: [
                                       TextSpan(
-                                          text: 'Created On: ',
-                                          style: AppTextStyle.textStyle14(
-                                              fontWeight: FontWeight.w600)),
+                                          text: 'Created On: ', style: AppTextStyle.textStyle14(fontWeight: FontWeight.w600)),
                                       TextSpan(
-                                          text: '${formatDateTime( messageTemplate.createdAt ?? DateTime.now())} ',
+                                          text: '${formatDateTime(messageTemplate.createdAt ?? DateTime.now())} ',
                                           //'${messageTemplate.createdAt}',
                                           style: AppTextStyle.textStyle14()),
                                     ])),

@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:readmore/readmore.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/common_bottomsheet.dart';
@@ -38,30 +37,23 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
             }
 
             if (controller.loading == Loading.loaded) {
-              return ListView.builder(
+              return ListView.separated(
                 controller: controller.earningScrollController,
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: controller.noticeList.length,
                 itemBuilder: (context, index) {
-                  Widget separator = SizedBox(height: 15.sp);
                   final data = controller.noticeList[index];
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      noticeBoardDetail(
-                        onTap: () {
-                          Get.toNamed(RouteName.noticeDetail,
-                              arguments: data, parameters: {"from_list": "1"});
-                        },
-                        title: data.title.toString(),
-                        date: data.createdAt,
-                        description: data.description.toString(),
-                      ),
-                      separator,
-                    ],
+                  return noticeBoardDetail(
+                    onTap: () {
+                      Get.toNamed(RouteName.noticeDetail, arguments: data, parameters: {"from_list": "1"});
+                    },
+                    title: data.title.toString(),
+                    date: data.createdAt,
+                    description: data.description.toString(),
                   );
                 },
+                separatorBuilder: (context, index) => SizedBox(height: 15.sp),
               );
             }
 
@@ -78,16 +70,17 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
     required String? description,
     required VoidCallback? onTap,
   }) =>
-      InkWell(
+      GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.all(16.h),
+          padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 12.h),
           decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 3.0,
-                    offset: const Offset(0.0, 3.0)),
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 3.0,
+                  offset: Offset(0.0, 3.0),
+                ),
               ],
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(20.r)),
@@ -100,46 +93,75 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
                 children: [
                   Text(
                     title ?? "",
-                    style: AppTextStyle.textStyle16(
-                        fontWeight: FontWeight.w500,
-                        fontColor: AppColors.darkBlue),
+                    style: AppTextStyle.textStyle16(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
                   ),
                   Text(
                     '${dateToString(date ?? DateTime.now(), format: "h:mm a")}  '
-                        '${formatDateTime(date ?? DateTime.now())} ',
-                    style: AppTextStyle.textStyle10(
-                        fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue),
+                    '${formatDateTime(date ?? DateTime.now())} ',
+                    style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
-              Html(
-                data: description ?? "",
-                onLinkTap: (url, __, ___) {
-                  launchUrl(Uri.parse(url ?? ''));
-                },
+              ExpandableHtml(
+                htmlData: description ?? "",
+                trimLength: 100,
               ),
-              // ReadMoreText(
-              //   description ?? "",
-              //   trimLines: 4,
-              //   colorClickableText: AppColors.blackColor,
-              //   trimMode: TrimMode.Line,
-              //   trimCollapsedText: "readMore".tr,
-              //   trimExpandedText: "showLess".tr,
-              //   moreStyle: TextStyle(
-              //     fontSize: 12.sp,
-              //     fontWeight: FontWeight.w700,
-              //     color: AppColors.blackColor,
-              //   ),
-              //   lessStyle: TextStyle(
-              //     fontSize: 12.sp,
-              //     fontWeight: FontWeight.w700,
-              //     color: AppColors.blackColor,
-              //   ),
-              // ),
             ],
           ),
         ),
       );
+}
+
+class ExpandableHtml extends StatefulWidget {
+  final String htmlData;
+  final int trimLength;
+
+  const ExpandableHtml({
+    Key? key,
+    required this.htmlData,
+    this.trimLength = 100,
+  }) : super(key: key);
+
+  @override
+  _ExpandableHtmlState createState() => _ExpandableHtmlState();
+}
+
+class _ExpandableHtmlState extends State<ExpandableHtml> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final String trimmedText = widget.htmlData.length > widget.trimLength && !_isExpanded
+        ? widget.htmlData.substring(0, widget.trimLength) + '...'
+        : widget.htmlData;
+
+    return Column(
+      children: [
+        Html(
+          data: trimmedText,
+          onLinkTap: (url, attributes, element) {
+            launchUrl(Uri.parse(url ?? ''));
+          },
+        ),
+        Align(
+          alignment: Alignment.topRight,
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                _isExpanded = !_isExpanded;
+              });
+            },
+            child: Text(
+              _isExpanded ? "Show Less" : "Show More",
+              style: TextStyle(
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w700,
+                color: AppColors.blackColor,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }

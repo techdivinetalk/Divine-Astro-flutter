@@ -25,8 +25,7 @@ class DonationUi extends GetView<DonationController> {
               width: 47.w,
               height: 26.h,
               decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.greyColor, width: 1),
-                  borderRadius: BorderRadius.circular(10)),
+                  border: Border.all(color: AppColors.greyColor, width: 1), borderRadius: BorderRadius.circular(10)),
               child: Center(
                 child: Text("₹500",
                     style: TextStyle(
@@ -42,10 +41,7 @@ class DonationUi extends GetView<DonationController> {
         child: GridView.builder(
             itemCount: controller.item.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                mainAxisSpacing: 15.h,
-                crossAxisSpacing: 15.h,
-                crossAxisCount: 2,
-                childAspectRatio: 0.75
+                mainAxisSpacing: 15.h, crossAxisSpacing: 15.h, crossAxisCount: 2, childAspectRatio: 0.68
                 // childAspectRatio: 172.w / 260.h
                 ),
             itemBuilder: (BuildContext context, int index) {
@@ -55,14 +51,12 @@ class DonationUi extends GetView<DonationController> {
                 surfaceTintColor: AppColors.white,
                 elevation: 2.0,
                 clipBehavior: Clip.antiAlias,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 child: Material(
                   color: AppColors.transparent,
                   child: InkWell(
                     onTap: () {
-                      Get.toNamed(RouteName.donationDetailPage,
-                          arguments: item);
+                      Get.toNamed(RouteName.donationDetailPage, arguments: item);
                     },
                     child: Column(
                       children: [
@@ -85,7 +79,6 @@ class DonationUi extends GetView<DonationController> {
                                   color: AppColors.darkBlue,
                                 ),
                               ),
-                              if (item.last.isNotEmpty) SizedBox(height: 5.h),
                               item.last.isNotEmpty
                                   ? Text(
                                       item.last,
@@ -97,7 +90,8 @@ class DonationUi extends GetView<DonationController> {
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     )
-                                  : const SizedBox.shrink(),
+                                  : SizedBox.shrink(),
+                              if (item.last.isNotEmpty) SizedBox(height: 2.h),
                             ],
                           ),
                         ),
