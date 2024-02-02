@@ -9,7 +9,7 @@ import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screen_recording/flutter_screen_recording.dart';
+// import 'package:flutter_screen_recording/flutter_screen_recording.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -164,22 +164,24 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                         },
                       );
                       if (hasAllPerm) {
-                        final bool started = await FlutterScreenRecording.startRecordScreenAndAudio(
-                          "Video_${DateTime.now()}",
-                          titleNotification: "DivineTalk Astrology",
-                          messageNotification: "Monitoring Live Session",
-                        );
-                        print("Screen Recording Started Status: $started");
-
+                        // final bool started = await FlutterScreenRecording.startRecordScreenAndAudio(
+                        //   "Video_${DateTime.now()}",
+                        //   titleNotification: "DivineTalk Astrology",
+                        //   messageNotification: "Monitoring Live Session",
+                        // );
+                        // print("Screen Recording Started Status: $started");
+                        bool started = true;
                         if (started) {
-                          AppSocket().joinLive(userType: "astrologer", userId: controller.pref.getUserDetail()?.id ?? 0);
+                          AppSocket().joinLive(
+                              userType: "astrologer",
+                              userId: controller.pref.getUserDetail()?.id ?? 0);
                           await controller.myFun();
 
-                          final String ended =  await FlutterScreenRecording.stopRecordScreen;
-                          print("Screen Recording Ended Path: $ended");
+                          // final String ended =  await FlutterScreenRecording.stopRecordScreen;
+                          // print("Screen Recording Ended Path: $ended");
 
-                          File file = File(ended);
-                          print("Screen Recording IO File Size: ${file.lengthSync()}");
+                          // File file = File(ended);
+                          // print("Screen Recording IO File Size: ${file.lengthSync()}");
                         } else {
                           divineSnackBar(
                             data: "Start Screen Recording in order to Go Live",
