@@ -6,6 +6,8 @@ import "package:contacts_service/contacts_service.dart";
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/common/custom_widgets.dart';
+import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/fcm_notification.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
 import 'package:divine_astrologer/model/feedback_response.dart';
@@ -19,6 +21,7 @@ import 'package:flutter/material.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import "package:permission_handler/permission_handler.dart";
@@ -670,13 +673,22 @@ class HomeController extends GetxController {
     await feedbackBottomSheet(
       Get.context!,
       title: "Feedback Available!!!",
+      subTitle: 'We noticed a little guideline slip in your previous order. No worries! '
+          'We\'ve sorted out the fines and shared some helpful feedback. '
+          'Thanks for your understanding!',
       btnTitle: "Check Report",
-      functionalityWidget: Html(
+      onTap: () {
+        Get.toNamed(RouteName.feedback, arguments: {
+          'order_id': feedbackResponse?.orderId,
+          'product_type': feedbackResponse?.order?.productType,
+        });
+      },
+    /*  functionalityWidget: Html(
         data: feedbackResponse?.remark ?? '',
         onLinkTap: (url, __, ___) {
           launchUrl(Uri.parse(url ?? ''));
         },
-      ),
+      )*/
       // Text(
       //   feedbackResponse?.remark ?? '',
       //   textAlign: TextAlign.center,

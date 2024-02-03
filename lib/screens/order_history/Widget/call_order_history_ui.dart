@@ -10,7 +10,7 @@ import '../../../common/common_options_row.dart';
 import '../../../common/routes.dart';
 
 class CallOrderHistory extends StatelessWidget {
-  const CallOrderHistory({Key? key, this.controller}) : super(key: key);
+  const CallOrderHistory({super.key, this.controller});
 
   final ScrollController? controller;
 
@@ -138,8 +138,13 @@ class CallOrderHistory extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             CommonOptionRow(
-              leftBtnTitle: "refund".tr,
-              onLeftTap: () {},
+              leftBtnTitle: "FeedBack".tr,
+              onLeftTap: () {
+                Get.toNamed(RouteName.feedback, arguments: {
+                  'order_id': data[index].id,
+                  'product_type': data[index].productType,
+                });
+              },
               onRightTap: () {
                 Get.toNamed(RouteName.suggestRemediesView, arguments: data[index].id);
               },

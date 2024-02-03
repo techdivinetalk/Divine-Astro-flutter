@@ -65,7 +65,7 @@ class FeedbackCardWidget extends StatelessWidget {
                       feedback.order?.productType == 12 ? Assets.svg.message.svg(height: 12.h, width: 12.h) :Assets.svg.icCall1.svg(height: 12.h, width: 12.h),
                       SizedBox(width: 8.w),
                       Text(
-                        'ID : ${feedback.orderId}',
+                        'ID : ${feedback.orderId ?? 'NA'}',
                         style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue,

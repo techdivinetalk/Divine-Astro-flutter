@@ -15,7 +15,7 @@ import "package:divine_astrologer/model/res_login.dart";
 import "package:divine_astrologer/repository/message_template_repository.dart";
 import "package:divine_astrologer/repository/user_repository.dart";
 import "package:divine_astrologer/screens/dashboard/dashboard_controller.dart";
-import "package:divine_astrologer/screens/live_dharam/zeo_team/player.dart";
+import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
 import "package:divine_astrologer/zego_call/zego_service.dart";
 import "package:firebase_database/firebase_database.dart";
@@ -155,18 +155,19 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
   void onInit() {
     super.onInit();
     arguments = Get.arguments;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      broadcastReceiver.start();
-      print("isCardVisible");
-      if (AppFirebaseService().orderData.value.containsKey("card")) {
-        isCardVisible.value = AppFirebaseService().orderData.value["card"]["isCardVisible"];
-        // cardListCount = getListOfCardLength();
-        print(AppFirebaseService().orderData.value["card"]["isCardVisible"]);
-      }
-      //isCardVisible = AppFirebaseService().orderData.value["card"] != null ? AppFirebaseService().orderData.value["card"]["isCardVisible"] : true;
-      broadcastReceiver.messages.listen((BroadcastMessage event) {
-        if (event.name == "displayCard") {
-          print("displayCard--${AppFirebaseService().orderData.value["card"]["isCardVisible"]}");
+    broadcastReceiver.start();
+    print("isCardVisible");
+    if (AppFirebaseService().orderData.value.containsKey("card")) {
+      isCardVisible.value =
+          AppFirebaseService().orderData.value["card"]["isCardVisible"];
+      // cardListCount = getListOfCardLength();
+      print(AppFirebaseService().orderData.value["card"]["isCardVisible"]);
+    }
+    //isCardVisible = AppFirebaseService().orderData.value["card"] != null ? AppFirebaseService().orderData.value["card"]["isCardVisible"] : true;
+    broadcastReceiver.messages.listen((BroadcastMessage event) {
+      if (event.name == "displayCard") {
+        print(
+            "displayCard--${AppFirebaseService().orderData.value["card"]["isCardVisible"]}");
 
           isCardVisible.value = AppFirebaseService().orderData.value["card"]["isCardVisible"];
         }
@@ -332,6 +333,15 @@ class ChatMessageWithSocketController extends GetxController with WidgetsBinding
       }
     });
   }
+
+  // Added by divine-dharam
+  Future<void> callHangup() {
+    print("ZegoService().controller.hangUp start");
+    ZegoService().controller.hangUp(context!, showConfirmation: false);
+    print("ZegoService().controller.hangUp end");
+    return Future<void>.value();
+  }
+  //
 
   socketReconnect() {
     if (socket.socket!.disconnected) {

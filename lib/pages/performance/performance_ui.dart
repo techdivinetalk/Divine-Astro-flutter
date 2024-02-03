@@ -144,7 +144,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                               ),
                             ),
                             SizedBox(
-                              height: 135.h,
+                              height: 150.h,
                               width: 270.h,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -370,7 +370,7 @@ class LastAvailabilityWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(12.h),
+      padding: EdgeInsets.all(10.h),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 1.0, offset: const Offset(0.0, 3.0)),
@@ -411,7 +411,9 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "date".tr,
-                      style: AppTextStyle.textStyle10(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle9(
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ),
                   SizedBox(
@@ -421,7 +423,9 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "availableChat".tr,
-                      style: AppTextStyle.textStyle10(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle9(
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ),
                   SizedBox(
@@ -431,7 +435,9 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "availableCall".tr,
-                      style: AppTextStyle.textStyle10(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle9(
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ),
                   SizedBox(
@@ -441,7 +447,9 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "busyChat".tr,
-                      style: AppTextStyle.textStyle10(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle9(
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ),
                   SizedBox(
@@ -451,7 +459,9 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "busyCall".tr,
-                      style: AppTextStyle.textStyle10(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle9(
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ),
                   SizedBox(
@@ -461,7 +471,9 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "availableLive".tr,
-                      style: AppTextStyle.textStyle10(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle9(
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ),
                 ],
@@ -477,42 +489,54 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "20-06-23",
-                      style: AppTextStyle.textStyle10(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle9(
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ),
                   Expanded(
                     child: Text(
                       textAlign: TextAlign.center,
                       "${last30DaysAvailiblity?.availableChat ?? "0"}",
-                      style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle9(
+                          fontWeight: FontWeight.w400,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ),
                   Expanded(
                     child: Text(
                       textAlign: TextAlign.center,
                       "${last30DaysAvailiblity?.availableCall ?? "0"}",
-                      style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle9(
+                          fontWeight: FontWeight.w400,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ),
                   Expanded(
                     child: Text(
                       textAlign: TextAlign.center,
                       "${last30DaysAvailiblity?.busyChat ?? "0"}",
-                      style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle9(
+                          fontWeight: FontWeight.w400,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ),
                   Expanded(
                     child: Text(
                       textAlign: TextAlign.center,
                       "${last30DaysAvailiblity?.busyCall ?? "0"}",
-                      style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle9(
+                          fontWeight: FontWeight.w400,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ),
                   Expanded(
                     child: Text(
                       textAlign: TextAlign.center,
                       "${last30DaysAvailiblity?.availableLive ?? "0"}",
-                      style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle9(
+                          fontWeight: FontWeight.w400,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ),
                 ],

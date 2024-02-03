@@ -96,6 +96,18 @@ class ChatMessage {
   dynamic customerCallStatus;
   dynamic memberCallStatus;
   dynamic apiCallFrom;
+  int? receiverId;
+  int? senderId;
+  String? awsUrl;
+  String? downloadedPath;
+  String? kundliName;
+  String? kundliDateTime;
+  String? kundliPlace;
+  String? gender;
+  String? title;
+  int? time;
+  int? type;
+  String? userType;
 
   ChatMessage({
     this.id,
@@ -136,6 +148,18 @@ class ChatMessage {
     this.customerCallStatus,
     this.memberCallStatus,
     this.apiCallFrom,
+    this.receiverId,
+    this.senderId,
+    this.time,
+    this.awsUrl,
+    this.downloadedPath,
+    this.kundliName,
+    this.kundliDateTime,
+    this.kundliPlace,
+    this.gender,
+    this.title,
+    this.type,
+    this.userType,
   });
 
   ChatMessage.fromJson(Map<String, dynamic> json) {
@@ -177,6 +201,20 @@ class ChatMessage {
     customerCallStatus = json['customer_call_status'];
     memberCallStatus = json['member_call_status'];
     apiCallFrom = json['api_call_from'];
+    receiverId = json['receiverId'];
+    senderId = json['senderId'];
+    orderId = json['orderId'];
+    time = json['time'];
+    type = json['type'];
+    awsUrl = json['awsUrl'];
+    downloadedPath = json['kundliId'];
+    kundliName = json['kundliName'];
+    kundliDateTime = json['kundliDateTime'];
+    kundliPlace = json['kundliPlace'];
+    kundliId = json['kundliId'];
+    gender = json['gender'];
+    title = json['title'];
+    userType = json['userType'];
   }
 
   Map<String, dynamic> toJson() {
@@ -221,6 +259,20 @@ class ChatMessage {
     data['customer_call_status'] = customerCallStatus;
     data['member_call_status'] = memberCallStatus;
     data['api_call_from'] = apiCallFrom;
+    data['receiverId'] = receiverId;
+    data['senderId'] = senderId;
+    data['orderId'] = orderId;
+    data['time'] = time;
+    data['type'] = type;
+    data['awsUrl'] = awsUrl;
+    data['downloadedPath'] = downloadedPath;
+    data['kundliId'] = kundliId;
+    data['kundliName'] = kundliName;
+    data['kundliDateTime'] = kundliDateTime;
+    data['kundliPlace'] = kundliPlace;
+    data['gender'] = gender;
+    data['title'] = title;
+    data['userType'] = userType;
     return data;
   }
 }

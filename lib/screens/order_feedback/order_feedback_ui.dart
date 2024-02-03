@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/model/feedback_response.dart';
 import 'package:divine_astrologer/screens/order_feedback/order_feedback_controller.dart';
 import 'package:divine_astrologer/screens/order_feedback/widget/feedback_card_widget.dart';
@@ -36,15 +37,18 @@ class OrderFeedbackUI extends GetView<OrderFeedbackController> {
         ),
       ),
 
-      body: ListView.separated(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-        itemBuilder: (context, index) {
-          FeedbackData feedback = controller.feedbacks[index];
-          return FeedbackCardWidget(feedback: feedback);
-        },
-        itemCount: controller.feedbacks.length,
-        separatorBuilder: (context, index) => SizedBox(height: 20.h),
-      ),
+      body: Obx((){
+        return controller.feedbacks.isEmpty ? const GenericLoadingWidget() :
+        ListView.separated(
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+          itemBuilder: (context, index) {
+            FeedbackData feedback = controller.feedbacks[index];
+            return FeedbackCardWidget(feedback: feedback);
+          },
+          itemCount: controller.feedbacks.length,
+          separatorBuilder: (context, index) => SizedBox(height: 20.h),
+        );
+      }),
     );
   }
 }

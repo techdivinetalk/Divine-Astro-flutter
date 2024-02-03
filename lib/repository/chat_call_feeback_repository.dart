@@ -21,12 +21,20 @@ class CallChatFeedBackRepository extends ApiProvider {
       );
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          throw CustomException(json.decode(response.body)["error"]);
+        final jsonResponse = json.decode(response.body);
+
+        if (jsonResponse["status_code"] == 401) {
+          throw CustomException(jsonResponse["error"]);
         } else {
-          final astroFeedbackDetailResponse =
-          AstroFeedbackDetailResponse.fromJson(json.decode(response.body));
-          return astroFeedbackDetailResponse;
+          final data = jsonResponse["data"];
+
+          if (data is List) {
+            return AstroFeedbackDetailResponse(data: AstroFeedbackDetailData());
+          } else {
+            final astroFeedbackDetailResponse =
+            AstroFeedbackDetailResponse.fromJson(jsonResponse);
+            return astroFeedbackDetailResponse;
+          }
         }
       } else {
         throw CustomException(json.decode(response.body)["error"]);
@@ -36,6 +44,7 @@ class CallChatFeedBackRepository extends ApiProvider {
       rethrow;
     }
   }
+
 
   Future<ChatHistoryResponse> getAstrologerChats(int orderId) async {
     try {

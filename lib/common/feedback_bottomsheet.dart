@@ -12,7 +12,7 @@ import 'package:intl/intl.dart';
 import 'date_picker/date_picker_widget.dart';
 
 Future feedbackBottomSheet(BuildContext context,
-    {String? title, String? btnTitle, required Widget functionalityWidget}) {
+    {String? title, String? subTitle, String? btnTitle,  Widget? functionalityWidget, VoidCallback? onTap}) {
   return showModalBottomSheet(
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
@@ -55,26 +55,34 @@ Future feedbackBottomSheet(BuildContext context,
                       fontWeight: FontWeight.w600, fontColor: AppColors.red),
                 ),
               SizedBox(height: 16.h),
-              Padding(
+              if(subTitle != null) Text(
+                subTitle,
+                style: AppTextStyle.textStyle13(fontColor: AppColors.black),
+                textAlign: TextAlign.center,
+              ),
+              if(functionalityWidget != null) Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: functionalityWidget,
               ),
               const SizedBox(height: 20),
               if (btnTitle != null)
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  width: Get.width,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.red, width: 2,),
-                    borderRadius: BorderRadius.circular(32),
-                  ),
-                  child: Center(
-                    child: Text(
-                      btnTitle,
-                      style: AppTextStyle.textStyle20(
-                        fontWeight: FontWeight.w600,
-                        fontColor: AppColors.red,
+                GestureDetector(
+                  onTap: onTap,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    width: Get.width,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.red, width: 2,),
+                      borderRadius: BorderRadius.circular(32),
+                    ),
+                    child: Center(
+                      child: Text(
+                        btnTitle,
+                        style: AppTextStyle.textStyle20(
+                          fontWeight: FontWeight.w600,
+                          fontColor: AppColors.red,
+                        ),
                       ),
                     ),
                   ),

@@ -8,6 +8,7 @@ import "package:divine_astrologer/common/cached_network_image.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/common/custom_widgets.dart";
+import "package:divine_astrologer/common/message_view.dart";
 import "package:divine_astrologer/common/permission_handler.dart";
 import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/di/shared_preference_service.dart";
@@ -107,7 +108,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                         Padding(
                                           padding: EdgeInsets.symmetric(
                                               vertical: 4.h, horizontal: 12.w),
-                                          child: Column(
+                                          child: /*Column(
                                             children: [
                                               if (chatMessage.id ==
                                                   controller
@@ -183,7 +184,18 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                                       chatMessage,
                                                                       chatMessage.senderId == preferenceService.getUserDetail()!.id),
                                             ],
-                                          ),
+                                          )*/
+                                              MessageView(
+                                                index: index,
+                                                  chatMessage: chatMessage,
+                                                  yourMessage:
+                                                      chatMessage.senderId ==
+                                                          preferenceService
+                                                              .getUserDetail()!
+                                                              .id,
+                                                  unreadMessage: controller
+                                                      .unreadMessageIndex
+                                                      .value),
                                         ),
                                         if (index ==
                                             (controller.chatMessages.length -
@@ -293,39 +305,38 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   ),
                                 );
                               }),
-                              Obx( () {
-                                  return Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: List.generate(
-                                      controller.getListOfCardLength(),
-                                      (index) => Expanded(
-                                        flex: 1,
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 2),
-                                          child: Center(
-                                              child: Text(
-                                            textAlign: TextAlign.center,
-                                            // Add this line for text alignment
-                                            controller.getKeyByPosition(index),
-                                            style: const TextStyle(
-                                              color: AppColors.white,
-                                              fontSize:
-                                                  12, // Adjust the font size as needed
-                                            ),
-                                            softWrap: true,
-                                            maxLines: 3,
-                                            // Maximum lines allowed
-                                            overflow: TextOverflow
-                                                .ellipsis, // Optional: use ellipsis to indicate text overflow
-                                          )),
-                                        ),
+                              Obx(() {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: List.generate(
+                                    controller.getListOfCardLength(),
+                                    (index) => Expanded(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 2),
+                                        child: Center(
+                                            child: Text(
+                                          textAlign: TextAlign.center,
+                                          // Add this line for text alignment
+                                          controller.getKeyByPosition(index),
+                                          style: const TextStyle(
+                                            color: AppColors.white,
+                                            fontSize:
+                                                12, // Adjust the font size as needed
+                                          ),
+                                          softWrap: true,
+                                          maxLines: 3,
+                                          // Maximum lines allowed
+                                          overflow: TextOverflow
+                                              .ellipsis, // Optional: use ellipsis to indicate text overflow
+                                        )),
                                       ),
                                     ),
-                                  );
-                                }
-                              ),
+                                  ),
+                                );
+                              }),
                               const SizedBox(height: 10),
                             ],
                           ),
@@ -691,7 +702,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                     showCurvedBottomSheet(context);
 
                                     // Move focus to an invisible focus node to dismiss the keyboard
-                                    FocusScope.of(context).requestFocus(FocusNode());
+                                    FocusScope.of(context)
+                                        .requestFocus(FocusNode());
                                     // if (controller.isOngoingChat.value) {
 
                                     //   } else {
@@ -817,7 +829,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
               crossAxisSpacing: 10,
               children: List.generate(itemList.length, (index) {
                 return GestureDetector(
-                  onTap: () async{
+                  onTap: () async {
                     Navigator.pop(context);
                     switch (index) {
                       case 0:
@@ -827,10 +839,13 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         controller.getImage(false);
                         break;
                       case 2:
-                        var result = await Get.toNamed(RouteName.chatSuggestRemedy);
-                        if (result != null){
-                          final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-                          controller.addNewMessage(time, "Remedies", messageText: result.toString());
+                        var result =
+                            await Get.toNamed(RouteName.chatSuggestRemedy);
+                        if (result != null) {
+                          final String time =
+                              "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+                          controller.addNewMessage(time, "Remedies",
+                              messageText: result.toString());
                           print("getting ul not add1");
                         }
                         break;
@@ -933,7 +948,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
   Widget remediesMsgView(
       BuildContext context, ChatMessage chatMessage, bool yourMessage) {
-    var jsonString = (chatMessage.message ?? '').substring(1,(chatMessage.message ?? '').length -1);
+    var jsonString = (chatMessage.message ?? '')
+        .substring(1, (chatMessage.message ?? '').length - 1);
     List temp = jsonString.split(', ');
 
     print("get templist $temp");
@@ -945,13 +961,13 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       width: double.maxFinite,
       child: Column(
         crossAxisAlignment:
-        yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Card(
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color:  AppColors.yellow ,
+                  color: AppColors.yellow,
                 ),
                 borderRadius: BorderRadius.circular(8.0),
               ),
@@ -973,7 +989,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   fontSize: 12.sp,
                   maxLines: 20,
                 ),
-                onTap: () => Get.toNamed(RouteName.remediesDetail, arguments:{'title': temp[0], 'subtitle': temp[1]}),
+                onTap: () => Get.toNamed(RouteName.remediesDetail,
+                    arguments: {'title': temp[0], 'subtitle': temp[1]}),
               ),
             ),
           ),
@@ -1586,7 +1603,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                     // SizedBox(width: 16.w),
+                      // SizedBox(width: 16.w),
                       IconButton(
                         onPressed: () => Get.back(),
                         icon: const Icon(Icons.arrow_back_ios_new_rounded),

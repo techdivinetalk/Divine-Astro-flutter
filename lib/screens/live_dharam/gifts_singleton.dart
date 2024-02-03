@@ -1,7 +1,7 @@
 import "dart:async";
 
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
-import "package:divine_astrologer/screens/live_dharam/zeo_team/cache.dart";
+import "package:divine_astrologer/screens/live_dharam/zego_team/cache.dart";
 import "package:flutter/foundation.dart";
 import "package:get/get.dart";
 import "package:get/get_connect/http/src/status/http_status.dart";
