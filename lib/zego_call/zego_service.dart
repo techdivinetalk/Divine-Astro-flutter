@@ -7,7 +7,9 @@ import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_servic
 import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
@@ -26,18 +28,21 @@ class ZegoService {
 
   final controller = ZegoUIKitPrebuiltCallController();
 
+  Rx<Size> ourSize = const Size(0, 0).obs;
   RxBool isFront = true.obs;
   RxBool isCamOn = true.obs;
   RxBool isMicOn = true.obs;
+  Rx<DateTime> endTime = DateTime.now().obs;
+  Rx<String> currentUserOnScreen = "".obs;
+  Rx<Duration> onTickDuration = Duration.zero.obs;
+  RxBool isCardVisible = false.obs;
 
   Future<void> zegoLogin() async {
-    String userID = (_pref.getUserDetail()?.id ?? "").toString();
-    String userName = _pref.getUserDetail()?.name ?? "";
     await ZegoUIKitPrebuiltCallInvitationService().init(
       appID: appID,
       appSign: appSign,
-      userID: userID,
-      userName: userName,
+      userID: (_pref.getUserDetail()?.id ?? "").toString(),
+      userName: _pref.getUserDetail()?.name ?? "",
       plugins: [ZegoUIKitSignalingPlugin()],
       notificationConfig: ZegoCallInvitationNotificationConfig(
         androidNotificationConfig: ZegoAndroidNotificationConfig(
@@ -49,13 +54,25 @@ class ZegoService {
       ),
       requireConfig: (ZegoCallInvitationData data) {
         final Map map = json.decode(data.customData);
-        final String targetUserID = map["userId"];
-        final String targetUserName = map["userName"];
-        final String targetUserImage = map["userImage"];
+        // final String astrId = map["astr_id"];
+        // final String astrName = map["astr_name"];
+        final String astrImage = map["astr_image"];
+        // final String custId = map["cust_id"];
+        // final String custName = map["cust_name"];
+        final String custImage = map["cust_image"];
+        final String callTime = map["time"];
+        endTime(
+          DateTime.now().add(
+            Duration(
+              hours: DateFormat("hh:mm:ss").parse(callTime).hour,
+              minutes: DateFormat("hh:mm:ss").parse(callTime).minute,
+              seconds: DateFormat("hh:mm:ss").parse(callTime).second,
+            ),
+          ),
+        );
         final Color color = data.type == ZegoCallType.videoCall
             ? AppColors.white
             : const Color(0xff5F3C08);
-
         ZegoUIKitPrebuiltCallConfig config = data.type == ZegoCallType.videoCall
             ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
             : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
@@ -66,122 +83,209 @@ class ZegoService {
           ZegoUIKitUser? user,
           Map<String, dynamic> extraInfo,
         ) {
-          return avatarWidget(context, size, user, extraInfo, targetUserImage);
+          return avatarWidget(user, astrImage, custImage);
         };
         config.topMenuBar = ZegoCallTopMenuBarConfig(buttons: []);
         config.bottomMenuBar = ZegoCallBottomMenuBarConfig(buttons: []);
         config.audioVideoView = ZegoCallAudioVideoViewConfig(
           useVideoViewAspectFill: true,
-
-          // backgroundBuilder: (
-          //   BuildContext context,
-          //   Size size,
-          //   ZegoUIKitUser? user,
-          //   Map<String, dynamic> extraInfo,
-          // ) {
-          //   return (user?.id == targetUserID)
-          //       ? Container(
-          //           height: Get.height,
-          //           width: Get.width,
-          //           color: color,
-          //         )
-          //       : Image.asset(
-          //           "assets/images/bg_chat_wallpaper.png",
-          //           height: Get.height,
-          //           width: Get.width,
-          //           fit: BoxFit.fill,
-          //         );
-          // },
+          showSoundWavesInAudioMode: false,
+          showCameraStateOnView: data.type == ZegoCallType.videoCall,
+          showUserNameOnView: false,
+          backgroundBuilder: (
+            BuildContext context,
+            Size size,
+            ZegoUIKitUser? user,
+            Map<String, dynamic> extraInfo,
+          ) {
+            WidgetsBinding.instance.addPostFrameCallback(
+              (Duration duration) {
+                currentUserOnScreen(user?.name ?? "");
+                ourSize(
+                    ourSize.value == const Size(0, 0) ? size : ourSize.value);
+              },
+            );
+            return size == ourSize.value
+                ? Image.asset(
+                    "assets/images/bg_chat_wallpaper.png",
+                    height: Get.height,
+                    width: Get.width,
+                    fit: BoxFit.fill,
+                  )
+                : Container(height: Get.height, width: Get.width, color: color);
+          },
         );
         config.foreground = Positioned(
-          top: 50,
-          left: 0,
-          right: 0,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Row(
+          child: Obx(
+            () {
+              return Column(
                 mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.lock,
-                    color: color,
+                children: <Widget>[
+                  const SizedBox(height: 32),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: Image.asset(
+                          data.type == ZegoCallType.videoCall
+                              ? "assets/images/chat_video_call_lock.png"
+                              : "assets/images/chat_voice_call_lock.png",
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        "100% Private Call",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: color,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 4),
+                  const SizedBox(height: 16),
                   Text(
-                    "100% Private Call",
+                    currentUserOnScreen.value,
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w600,
                       color: color,
                     ),
                   ),
+                  const SizedBox(height: 8),
+                  commonTimerCountdown(color, false),
+                  SizedBox(height: Get.height * 0.50),
+                  commonBottomCard(),
+                  const SizedBox(height: 16),
+                  settingsColForCust(data.type),
+                  const SizedBox(height: 16),
                 ],
-              ),
-              const SizedBox(height: 16),
-              Text(
-                targetUserName,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w600,
-                  color: color,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                "00:00:00",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                  color: color,
-                ),
-              ),
-              SizedBox(height: Get.height * 0.64),
-              settingsColForCust(data.type),
-              const SizedBox(height: 16),
-            ],
+              );
+            },
           ),
         );
         return config;
       },
     );
-    print("ZegoService: zegoLogin: $userID $userName");
     Future<void>.value();
   }
 
-  Widget avatarWidget(
-    BuildContext context,
-    Size size,
-    ZegoUIKitUser? user,
-    Map<String, dynamic> extraInfo,
-    String targetUserImage,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-        child: SizedBox(
-          height: 100,
-          width: 100,
-          child: CustomImageWidget(
-            imageUrl: targetUserImage,
-            rounded: false,
-            typeEnum: TypeEnum.user,
+  Widget commonTimerCountdown(Color color, bool isForBottomCard) {
+    return TimerCountdown(
+      format: CountDownTimerFormat.hoursMinutesSeconds,
+      enableDescriptions: false,
+      spacerWidth: 4,
+      colonsTextStyle: TextStyle(
+        fontSize: isForBottomCard ? 12 : 20,
+        fontWeight: FontWeight.w400,
+        color: color,
+      ),
+      timeTextStyle: TextStyle(
+        fontSize: isForBottomCard ? 12 : 20,
+        fontWeight: FontWeight.w400,
+        color: color,
+      ),
+      onTick: (Duration duration) {
+        onTickDuration(duration);
+        endTime(DateTime.now().add(duration));
+        isCardVisible(duration < const Duration(seconds: 30));
+      },
+      endTime: endTime.value,
+      onEnd: () async {
+        await controller.hangUp(Get.context!);
+      },
+    );
+  }
+
+  Widget commonBottomCard() {
+    return Visibility(
+      maintainSize: true,
+      maintainAnimation: true,
+      maintainState: true,
+      visible: isCardVisible.value,
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.red, width: 2),
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+          color: AppColors.white,
+        ),
+        child: ListTile(
+          dense: true,
+          contentPadding: EdgeInsets.zero,
+          minLeadingWidth: 0,
+          horizontalTitleGap: 0,
+          leading: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: SizedBox(
+              height: 40,
+              width: 64,
+              child: Image.asset("assets/images/chat_common_clock.png"),
+            ),
+          ),
+          title: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text:
+                      '${onTickDuration.value.inHours}:${onTickDuration.value.inMinutes}:${onTickDuration.value.inSeconds}',
+                  style: const TextStyle(color: AppColors.red, fontSize: 12),
+                ),
+                const TextSpan(
+                  text:
+                      ' are remaining! Please recharge to continue the chat and get Offer% + ',
+                  style: TextStyle(color: AppColors.black, fontSize: 12),
+                ),
+                const TextSpan(
+                  text: '5% Extra!',
+                  style: TextStyle(color: AppColors.red, fontSize: 12),
+                ),
+              ],
+            ),
+          ),
+          trailing: InkWell(
+            onTap: () async {},
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: SizedBox(
+                height: 40,
+                width: 64,
+                child: Image.asset("assets/images/chat_common_recharge.png"),
+              ),
+            ),
           ),
         ),
       ),
     );
   }
 
+  Widget avatarWidget(ZegoUIKitUser? user, String astrImage, String custImage) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+      child: SizedBox(
+        height: 100,
+        width: 100,
+        child: CustomImageWidget(
+          imageUrl:
+              (user?.id ?? "") == (_pref.getUserDetail()?.id ?? "").toString()
+                  ? astrImage
+                  : custImage,
+          rounded: false,
+          typeEnum: TypeEnum.user,
+        ),
+      ),
+    );
+  }
+
   Widget settingsColForCust(ZegoCallType type) {
-    final bool condForVideoCall = type == ZegoCallType.videoCall;
-    final bool condForAudioCall = type == ZegoCallType.voiceCall;
     return Obx(
       () {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: condForVideoCall
+          children: type == ZegoCallType.videoCall
               ? [
                   InkWell(
                     onTap: () async {
@@ -233,7 +337,7 @@ class ZegoService {
                   ),
                   InkWell(
                     onTap: () async {
-                      controller.hangUp(Get.context!, showConfirmation: true);
+                      await controller.hangUp(Get.context!);
                     },
                     child: SizedBox(
                       height: 64,
@@ -244,7 +348,7 @@ class ZegoService {
                     ),
                   ),
                 ]
-              : condForAudioCall
+              : type == ZegoCallType.voiceCall
                   ? [
                       InkWell(
                         onTap: () {
@@ -265,8 +369,7 @@ class ZegoService {
                       ),
                       InkWell(
                         onTap: () async {
-                          controller.hangUp(Get.context!,
-                              showConfirmation: true);
+                          await controller.hangUp(Get.context!);
                         },
                         child: SizedBox(
                           height: 64,
@@ -293,23 +396,26 @@ class ZegoService {
     required String targetUserID,
     required String targetUserName,
     required Function() checkOppositeSidePermGranted,
+    required Map customData,
   }) {
-    return SizedBox(
-      height: 32,
-      width: 32,
-      child: FloatingActionButton(
-        elevation: 0,
-        backgroundColor: AppColors.appYellowColour,
-        onPressed: () async {
-          print("ZegoService: buttonUI: $targetUserID $targetUserName");
-          await newOnPressed(
-            isVideoCall: isVideoCall,
-            targetUserID: targetUserID,
-            targetUserName: targetUserName,
-            checkOppositeSidePermGranted: checkOppositeSidePermGranted,
-          );
-        },
-        child: Icon(isVideoCall ? Icons.video_call : Icons.call),
+    return InkWell(
+      onTap: () async {
+        await newOnPressed(
+          isVideoCall: isVideoCall,
+          targetUserID: targetUserID,
+          targetUserName: targetUserName,
+          checkOppositeSidePermGranted: checkOppositeSidePermGranted,
+          customData: customData,
+        );
+      },
+      child: SizedBox(
+        height: 32,
+        width: 32,
+        child: Image.asset(
+          isVideoCall
+              ? "assets/images/chat_video_call_icon.png"
+              : "assets/images/chat_voice_call_icon.png",
+        ),
       ),
     );
   }
@@ -319,6 +425,7 @@ class ZegoService {
     required String targetUserID,
     required String targetUserName,
     required Function() checkOppositeSidePermGranted,
+    required Map customData,
   }) async {
     final bool value = await AppPermissionService.instance.hasAllPermissions();
     if (value) {
@@ -329,14 +436,7 @@ class ZegoService {
               invitees: [ZegoCallUser(targetUserID, targetUserName)],
               isVideoCall: isVideoCall,
               resourceID: "zego_call",
-              customData: json.encode(
-                {
-                  "userId": targetUserID,
-                  "userName": targetUserName,
-                  "userImage":
-                      "https://divinenew-prod.s3.ap-south-1.amazonaws.com/divine/January2024/fGfpNU1Y40lV0ojgh0JBpgbc4mJtAdV6hgG5xZXJ.jpg",
-                },
-              ),
+              customData: json.encode(customData),
             )
           : checkOppositeSidePermGranted();
     } else {
