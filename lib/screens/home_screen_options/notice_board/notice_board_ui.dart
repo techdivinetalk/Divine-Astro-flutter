@@ -97,7 +97,7 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
                   ),
                   Text(
                     '${dateToString(date ?? DateTime.now(), format: "h:mm a")}  '
-                    '${formatDateTime(date ?? DateTime.now())} ',
+                        '${formatDateTime(date ?? DateTime.now())} ',
                     style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
                   ),
                 ],
