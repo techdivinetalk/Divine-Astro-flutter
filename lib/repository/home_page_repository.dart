@@ -109,7 +109,7 @@ class HomePageRepository extends ApiProvider {
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final feedbackResponse =
-          FeedbackResponse.fromJson(json.decode(response.body));
+              FeedbackResponse.fromJson(json.decode(response.body));
           return feedbackResponse;
         }
       } else {

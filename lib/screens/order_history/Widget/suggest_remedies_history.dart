@@ -133,16 +133,22 @@ class SuggestRemedies extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Remedy Suggested :",
-                    style: AppTextStyle.textStyle12(
+                Expanded(
+                  child: Text("Remedy Suggested :",
+                      style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w400,
+                          fontColor: AppColors.darkBlue)),
+                ),
+                Expanded(
+                  child: Text("${data[index].productDetails?.prodName}",
+                      textAlign: TextAlign.end,
+                      style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue)),
-                Text("${data[index].productDetails?.prodName}",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue)),
+                        fontColor: AppColors.darkBlue,
+                      )),
+                ),
               ],
             ),
             const SizedBox(height: 8),

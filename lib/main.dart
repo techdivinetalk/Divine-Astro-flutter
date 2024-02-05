@@ -6,11 +6,8 @@ import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
 import 'package:divine_astrologer/firebase_options.dart';
-import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
-import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
-import 'package:divine_astrologer/zego_call/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -30,7 +27,6 @@ import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import 'common/MiddleWare.dart';
 import 'common/app_theme.dart';
 import 'common/colors.dart';
-import 'common/common_functions.dart';
 import 'common/custom_progress_dialog.dart';
 import 'common/routes.dart';
 import 'common/strings.dart';
@@ -54,18 +50,20 @@ Future<void> main() async {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print('Message data: ${message.data}');
     print('Message data-: ${message.data["type"] == "1"}');
-    print('Message data-: ${MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI}');
-    if (message.data["type"] == "1" && MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
+    print(
+        'Message data-: ${MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI}');
+    if (message.data["type"] == "1" &&
+        MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
       showNotification(message.data["title"], message.data["message"],
-          message.data['type'],message.data);
-    }else if (message.data["type"] == "3") {
+          message.data['type'], message.data);
+    } else if (message.data["type"] == "3") {
       print('Message data:- ${MiddleWare.instance.currentPage}');
       if (MiddleWare.instance.currentPage == RouteName.chatMessageUI) {
         sendBroadcast(
             BroadcastMessage(name: "chatAssist", data: {'msg': message.data}));
       } else {
         showNotification(message.data["title"], message.data["message"],
-            message.data['type'],message.data);
+            message.data['type'], message.data);
       }
     }
     if (message.notification != null) {
@@ -74,7 +72,7 @@ Future<void> main() async {
   });
   await initServices();
   Get.put(UserRepository());
- /* Get.put(DashboardController(PreDefineRepository()));
+  /* Get.put(DashboardController(PreDefineRepository()));
   var data = await userRepository.constantDetailsData();
   preferenceService.setConstantDetails(data);*/
 
@@ -124,8 +122,8 @@ Future<void> initServices() async {
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseDatabase.instance.ref().child("pushR").set(DateTime.now());
-  showNotification(
-      message.data["title"], message.data["message"], message.data['type'],message.data);
+  showNotification(message.data["title"], message.data["message"],
+      message.data['type'], message.data);
   if (message.data['type'] == "1") {
     HashMap<String, dynamic> updateData = HashMap();
     updateData[message.data["chatId"]] = 1;
@@ -137,36 +135,34 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 }
 
-Future<void> showNotification(String title, String message, String type, Map<String, dynamic> data) async {
+Future<void> showNotification(String title, String message, String type,
+    Map<String, dynamic> data) async {
   AndroidNotificationDetails androidNotificationDetails =
-       AndroidNotificationDetails(
-    "DivineCustomer",
-    "CustomerNotification",
-    importance: Importance.max,
-    priority: Priority.high,
-         autoCancel: true,
-          actions: type == "1" ?  [
-            const AndroidNotificationAction(
-              'accept',
-              'Accept',
-            ),
-          ] : []
-  );
+      AndroidNotificationDetails("DivineCustomer", "CustomerNotification",
+          importance: Importance.max,
+          priority: Priority.high,
+          autoCancel: true,
+          actions: type == "1"
+              ? [
+                  const AndroidNotificationAction(
+                    'accept',
+                    'Accept',
+                  ),
+                ]
+              : []);
   if (type == "1") {
     androidNotificationDetails = const AndroidNotificationDetails(
-      "DivineCustomer",
-      "CustomerNotification",
-      sound: RawResourceAndroidNotificationSound('accept_ring'),
-      importance: Importance.max,
-      priority: Priority.high,
-        autoCancel: true
-    );
+        "DivineCustomer", "CustomerNotification",
+        sound: RawResourceAndroidNotificationSound('accept_ring'),
+        importance: Importance.max,
+        priority: Priority.high,
+        autoCancel: true);
   }
   NotificationDetails notificationDetails =
       NotificationDetails(android: androidNotificationDetails);
   await flutterLocalNotificationsPlugin.show(
       Random().nextInt(90000), title, message, notificationDetails,
-      payload:json.encode(data));
+      payload: json.encode(data));
 }
 
 void initMessaging() async {
@@ -207,7 +203,7 @@ class MyApp extends StatelessWidget {
                 color: AppColors.white,
                 debugShowCheckedModeBanner: false,
                 initialRoute: RouteName.initial,
-                getPages: Routes.routes, 
+                getPages: Routes.routes,
                 // home: ZegoLoginScreen(),
                 locale: getLanStrToLocale(
                     GetStorages.get(GetStorageKeys.language) ?? ""),

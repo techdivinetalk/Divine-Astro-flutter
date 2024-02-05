@@ -96,6 +96,7 @@ dependencies:
   #     url: https://github.com/delwar36/overlapped_carousel.git
   #     ref: b910005b978c35e0be5cadbb82c000faf6abebdf
   audioplayers: ^5.2.1
+  speed_test_dart: ^1.0.4+1
 
 dependency_overrides:
   intl: ^0.18.1

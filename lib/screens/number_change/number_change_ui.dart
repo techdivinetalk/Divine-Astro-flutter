@@ -37,7 +37,7 @@ class NumberChangeReqUI extends GetView<NumberChangeReqController> {
                       Text(
                         "numChangeMsgTitle".tr,
                         style: TextStyle(
-                          fontSize: 15.sp,
+                          fontSize: 13.sp,
                           fontWeight: FontWeight.w400,
                           color: AppColors.greyColor,
                           decoration: TextDecoration.underline,
@@ -117,7 +117,7 @@ class NumberChangeReqUI extends GetView<NumberChangeReqController> {
                                             if (controller
                                                     .controller.text.length ==
                                                 10) {
-                                              controller.sendOtp();
+                                              controller.sendOtpForNumberChange();
                                             } else {
                                               divineSnackBar(
                                                 data: "phoneNumberMustBe10Digit"

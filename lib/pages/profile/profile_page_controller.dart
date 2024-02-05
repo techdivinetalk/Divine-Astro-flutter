@@ -1,20 +1,22 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'package:divine_astrologer/common/common_functions.dart';
-import 'package:divine_astrologer/pages/profile/profile_ui.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:path/path.dart' as p;
+
 import 'package:aws_s3_upload/aws_s3_upload.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
 import 'package:divine_astrologer/model/res_reply_review.dart';
+import 'package:divine_astrologer/pages/profile/profile_ui.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as p;
+
 import '../../common/app_exception.dart';
 import '../../common/colors.dart';
 import '../../common/custom_widgets.dart';
@@ -268,7 +270,7 @@ class ProfilePageController extends GetxController {
         context: Get.context!,
         builder: (context) => ThankYouReportUI(
           onPressed: () {
-            // Get.back();
+            Get.back();
           },
         ),
       );
@@ -278,7 +280,8 @@ class ProfilePageController extends GetxController {
     }
   }
 
-  Future<void> getReplyOnReview({required String textMsg, required int reviewId}) async {
+  Future<void> getReplyOnReview(
+      {required String textMsg, required int reviewId}) async {
     try {
       // Set loading state to true
       isLoading.value = true;

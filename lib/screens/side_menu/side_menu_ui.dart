@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,6 +12,7 @@ class SideMenuDrawer extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    checkInternetSpeed(true,context);
     return Drawer(
       backgroundColor: AppColors.white,
       surfaceTintColor: Colors.transparent,

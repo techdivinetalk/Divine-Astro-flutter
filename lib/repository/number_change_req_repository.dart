@@ -12,7 +12,7 @@ class NumberChangeReqRepository extends ApiProvider {
       Map<String, dynamic> param) async {
     try {
       final response = await post(
-        sendOtp,
+        sendOtpNumberChange,
         headers: await getJsonHeaderURL(version: 7),
         body: jsonEncode(param),
       );
@@ -44,7 +44,7 @@ class NumberChangeReqRepository extends ApiProvider {
   Future<VerifyOtpResponse> verifyOtpAPi(Map<String, dynamic> param) async {
     try {
       final response = await post(
-        verifyOtpUrl,
+        verifyOtpNumberChange,
         headers: await getJsonHeaderURL(version: 7),
         body: jsonEncode(param),
       );

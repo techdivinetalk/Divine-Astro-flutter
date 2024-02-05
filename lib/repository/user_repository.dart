@@ -37,6 +37,8 @@ class UserRepository extends ApiProvider {
     try {
       final response = await post(sendOtp, body: jsonEncode(param).toString());
       //progressService.showProgressDialog(false);
+      print(response.statusCode);
+      print("response.statusCode");
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
           preferenceService.erase();
@@ -47,21 +49,26 @@ class UserRepository extends ApiProvider {
           Get.offNamed(RouteName.login);
           throw CustomException(json.decode(response.body)["message"]);
         } else {
-          final sendOtpModel = sendOtpModelFromJson(response.body);
+          print(jsonDecode(response.body));
+          SendOtpModel sendOtpModel =
+              SendOtpModel.fromJson(jsonDecode(response.body));
+
           if (sendOtpModel.statusCode == successResponse &&
-              sendOtpModel.success) {
+              sendOtpModel.success!) {
             return sendOtpModel;
           } else {
-            throw CustomException(sendOtpModel.message);
+            throw CustomException(sendOtpModel.message!);
           }
         }
       } else {
-        final errorMessage = json.decode(response.body)["message"];
-        if (errorMessage
+        final errorMessage =
+            SendOtpModel.fromJson(jsonDecode(response.body)).message;
+
+        if (errorMessage!
             .contains("Too many requests. Please try again after")) {
-          throw OtpInvalidTimerException(json.decode(response.body)["message"]);
+          throw OtpInvalidTimerException(errorMessage);
         } else {
-          throw CustomException(json.decode(response.body)["message"]);
+          throw CustomException(errorMessage);
         }
       }
     } catch (e, s) {
@@ -82,7 +89,8 @@ class UserRepository extends ApiProvider {
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
           preferenceService.erase();
-          Get.offNamed(RouteName.login);          throw CustomException(json.decode(response.body)["error"]);
+          Get.offNamed(RouteName.login);
+          throw CustomException(json.decode(response.body)["error"]);
         } else {
           final verifyOtpModel = verifyOtpModelFromJson(response.body);
 
@@ -90,7 +98,6 @@ class UserRepository extends ApiProvider {
               verifyOtpModel.success) {
             return verifyOtpModel;
           } else {
-
             throw CustomException(verifyOtpModel.message);
           }
         }

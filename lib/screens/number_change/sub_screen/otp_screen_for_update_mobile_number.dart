@@ -50,13 +50,13 @@ class OtpVerificationForNumberChange
                       const InCorrectOtpWidget(),
                       SizedBox(height: 12.h),
                       NotReceiveOtpText(
-                        onResend: () => controller.sendOtp(),
+                        onResend: () => controller.sendOtpForNumberChange(),
                       ),
                       CustomMaterialButton(
                         buttonName: "submit".tr,
                         textColor: AppColors.brownColour,
                         onPressed: () {
-                          controller.verifyOtp();
+                          controller.verifyOtpForNumberChange();
                         },
                       ),
                     ],
