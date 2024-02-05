@@ -355,8 +355,12 @@ class HomeUI extends GetView<HomeController> {
                       // if (controller.homeData?.offerType != null &&
                       //     controller.homeData?.offerType != [])
                       //   offerTypeWidget(),
-                      controller.homeData?.offers?.orderOffer != null ? orderOfferWidget() : const SizedBox(),
-                      controller.homeData?.offers?.customOffer != null ? customerOfferWidget() : const SizedBox(),
+                      controller.homeData?.offers?.orderOffer != null
+                          ? orderOfferWidget()
+                          : const SizedBox(),
+                      controller.homeData?.offers?.customOffer != null
+                          ? customerOfferWidget(context)
+                          : const SizedBox(),
                       SizedBox(height: 10.h),
                       fullScreenBtnWidget(
                           imageName: Assets.images.icReferAFriend.svg(),
@@ -999,7 +1003,7 @@ class HomeUI extends GetView<HomeController> {
     );
   }
 
-  Widget customerOfferWidget() {
+  Widget customerOfferWidget(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 10.h),
       padding: EdgeInsets.all(16.h),
@@ -1022,11 +1026,17 @@ class HomeUI extends GetView<HomeController> {
                   fontColor: AppColors.darkBlue,
                 ),
               ),
-              Text(
-                "status".tr,
-                style: AppTextStyle.textStyle12(
-                  fontWeight: FontWeight.w500,
-                  fontColor: AppColors.darkBlue,
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(
+                      context, RouteName.discountOffers);
+                },
+                child: Text(
+                  "viewAll".tr,
+                  style: AppTextStyle.textStyle12(
+                    fontWeight: FontWeight.w500,
+                    fontColor: AppColors.darkBlue,
+                  ),
                 ),
               ),
             ],

@@ -17,6 +17,7 @@ import 'package:divine_astrologer/screens/faq/faqs_binding.dart';
 import 'package:divine_astrologer/screens/faq/faqs_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_binding.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_ui.dart';
+import 'package:divine_astrologer/screens/home_screen_options/discount_offers/discount_offers.dart';
 import 'package:divine_astrologer/screens/home_screen_options/earning/earning_bindings.dart';
 import 'package:divine_astrologer/screens/home_screen_options/earning/earning_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/kundli_detail/kundli_detail.binding.dart';
@@ -65,6 +66,7 @@ import '../screens/dashboard/dashboard_bindings.dart';
 import '../screens/dashboard/dashboard_ui.dart';
 import '../screens/edit_profile/edit_profile_binding.dart';
 import '../screens/edit_profile/edit_profile_ui.dart';
+import '../screens/home_screen_options/discount_offers/discount_offers_bindings.dart';
 import '../screens/home_screen_options/notice_board_detail/notice_detail_bindings.dart';
 import '../screens/number_change/number_change_binding.dart';
 import '../screens/number_change/number_change_ui.dart';
@@ -110,6 +112,7 @@ class RouteName {
   static const String checkKundli = "/checkKundli";
   static const String rankSystemUI = "/rankSystemUI";
   static const String kundliDetail = "/kundliDetail";
+  static const String discountOffers = "/discountOffers";
   static const String donationUi = "/donationUi";
   static const String donationDetailPage = "/donationDetailPage";
   static const String chatMessageUI = "/chatMessageUI";
@@ -143,7 +146,11 @@ class RouteName {
   static const String remediesDetail = "/RemediesDetailsView";
 }
 
-final Set<String> validRoutes = {RouteName.chatMessageUI,  RouteName.faq, RouteName.remediesDetail};
+final Set<String> validRoutes = {
+  RouteName.chatMessageUI,
+  RouteName.faq,
+  RouteName.remediesDetail
+};
 
 class Routes {
   static final routes = <GetPage>[
@@ -213,6 +220,10 @@ class Routes {
         page: () => const KundliUi(),
         name: RouteName.checkKundli,
         binding: KundliBinding()),
+    GetPage(
+        page: () => const DiscountOfferUI(),
+        name: RouteName.discountOffers,
+        binding: DiscountOfferBindings()),
     GetPage(
         page: () => const RankSystemUI(),
         name: RouteName.rankSystemUI,

@@ -24,7 +24,7 @@ class NumberChangeReqController extends GetxController {
 
   VerifyOtpResponse? verifyOtpResponse;
 
-  int get remainingCount => numberChangeResponse.data!.remainingAttempt!;
+  int get remainingCount => numberChangeResponse.data?.remainingAttempt??0;
 
   @override
   void onInit() {
@@ -50,7 +50,7 @@ class NumberChangeReqController extends GetxController {
     }
   }
 
-  void sendOtp() async {
+  void sendOtpForNumberChange() async {
     try {
       Map<String, dynamic> param = {
         "mobile_no": controller.text.trim(),
@@ -75,7 +75,7 @@ class NumberChangeReqController extends GetxController {
 
   String? errorMessage;
 
-  void verifyOtp() async {
+  void verifyOtpForNumberChange() async {
     try {
       if (pinController.text.isEmpty || pinController.text.length != 6) return;
       Map<String, dynamic> param = {
@@ -88,8 +88,8 @@ class NumberChangeReqController extends GetxController {
       if (response.statusCode == 200 && response.success!) {
         divineSnackBar(data: response.message.toString());
         Get.back();
-        await preferenceService.erase();
-        Get.offNamed(RouteName.login);
+        // await preferenceService.erase();
+        Get.offNamed(RouteName.dashboard);
       }
     } catch (err) {
       if (err is CustomException) {

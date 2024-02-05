@@ -169,8 +169,13 @@ class ApiProvider {
   //added by dev-dharam
   final String getAllGifts = "getAllGifts";
   final String blockCustomerlist = "blockCustomerlist";
-  final String blockCustomer = "blockCustomer";
+  final String blockCustomer = "blockCustomer";   
   final String getAstroAllNoticeType2 = "getAstroAllNotice?notice_type=2";
+
+  //added by dev-chetan
+  final String getCustomOffer = "getCustomOffer";
+  final String sendOtpNumberChange = "sendOtpForNumberChange";
+  final String verifyOtpNumberChange = "verifyOtpForNumberChange";
 
   //
   final NetworkService networkManager = Get.find<NetworkService>();
