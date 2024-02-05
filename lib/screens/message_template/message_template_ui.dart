@@ -44,7 +44,8 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
             SizedBox(height: 24.h),
             GestureDetector(
               onTap: () {
-                Get.toNamed(RouteName.addMessageTemplate, arguments: [false, false]);
+                Get.toNamed(RouteName.addMessageTemplate,
+                    arguments: [false, false]);
               },
               child: Container(
                 width: Get.width,
@@ -64,7 +65,8 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
             Expanded(
               child: GetBuilder<MessageTemplateController>(
                 builder: (controller) {
-                  if (controller.loading == Loading.loading || controller.messageTemplates.isEmpty) {
+                  if (controller.loading == Loading.loading ||
+                      controller.messageTemplates.isEmpty) {
                     return const Center(
                       child: CircularProgressIndicator.adaptive(
                         valueColor: AlwaysStoppedAnimation(Colors.yellow),
@@ -79,35 +81,48 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                         height: 20.h,
                       ),
                       itemBuilder: (context, index) {
-                        MessageTemplates messageTemplate = controller.messageTemplates[index];
+                        MessageTemplates messageTemplate =
+                            controller.messageTemplates[index];
                         return GestureDetector(
                           onTap: () {
-                            Get.toNamed(RouteName.addMessageTemplate, arguments: [false, true, messageTemplate]);
+                            Get.toNamed(RouteName.addMessageTemplate,
+                                arguments: [false, true, messageTemplate]);
                           },
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 20),
                             decoration: BoxDecoration(
                               color: AppColors.white,
-                              borderRadius: const BorderRadius.all(Radius.circular(20)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(20)),
                               boxShadow: [
-                                BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 1.0, offset: const Offset(0.0, 3.0)),
+                                BoxShadow(
+                                    color: Colors.black.withOpacity(0.2),
+                                    blurRadius: 1.0,
+                                    offset: const Offset(0.0, 3.0)),
                               ],
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                       child: Row(
                                         children: [
-                                          Text('Template Name: ', style: AppTextStyle.textStyle14(fontWeight: FontWeight.w600)),
+                                          Text('Template Name: ',
+                                              style: AppTextStyle.textStyle14(
+                                                  fontWeight: FontWeight.w600)),
                                           SizedBox(width: 2.w),
                                           Flexible(
-                                            child: Text('${messageTemplate.message}',
+                                            child: Text(
+                                                '${messageTemplate.message}',
                                                 overflow: TextOverflow.ellipsis,
-                                                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+                                                style: AppTextStyle.textStyle14(
+                                                    fontWeight:
+                                                        FontWeight.w400)),
                                           )
                                         ],
                                       ),
@@ -119,7 +134,6 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                                           onTap: () {
                                             // if (controller.offerTypeLoading.value !=
                                             //     Loading.loading) {
-                                            //   controller.orderOfferSwitch[index] = !controller.orderOfferSwitch[index];
                                             // }
                                             // controller.updateOfferType(
                                             //   index: index,
@@ -127,9 +141,11 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                                             //   offerType: 1,
                                             //   value: !controller.orderOfferSwitch[index],
                                             // );
+                                            messageTemplate.isOn =
+                                                !messageTemplate.isOn!;
+                                            controller.update();
                                           },
-                                          switchValue: true,
-                                          //controller.orderOfferSwitch[index],
+                                          switchValue: messageTemplate.isOn,
                                         ),
                                       ],
                                     ),
@@ -141,17 +157,24 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                                     text: TextSpan(children: [
                                       TextSpan(
                                           text: 'Display Message: ',
-                                          style: AppTextStyle.textStyle14(fontWeight: FontWeight.w600)),
-                                      TextSpan(text: '${messageTemplate.description}', style: AppTextStyle.textStyle14()),
+                                          style: AppTextStyle.textStyle14(
+                                              fontWeight: FontWeight.w600)),
+                                      TextSpan(
+                                          text:
+                                              '${messageTemplate.description}',
+                                          style: AppTextStyle.textStyle14()),
                                     ])),
                                 SizedBox(height: 10.h),
                                 RichText(
                                     maxLines: 4,
                                     text: TextSpan(children: [
                                       TextSpan(
-                                          text: 'Created On: ', style: AppTextStyle.textStyle14(fontWeight: FontWeight.w600)),
+                                          text: 'Created On: ',
+                                          style: AppTextStyle.textStyle14(
+                                              fontWeight: FontWeight.w600)),
                                       TextSpan(
-                                          text: '${formatDateTime(messageTemplate.createdAt ?? DateTime.now())} ',
+                                          text:
+                                              '${formatDateTime(messageTemplate.createdAt ?? DateTime.now())} ',
                                           //'${messageTemplate.createdAt}',
                                           style: AppTextStyle.textStyle14()),
                                     ])),

@@ -26,12 +26,15 @@ class PerformanceUI extends GetView<PerformanceController> {
     Get.put(PerformanceController());
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: commonAppbar(title: "performance".tr, trailingWidget: Container()),
+      appBar:
+          commonAppbar(title: "performance".tr, trailingWidget: Container()),
       drawer: const SideMenuDrawer(),
       body: GetBuilder<PerformanceController>(builder: (controller) {
         return AnimatedCrossFade(
           duration: const Duration(milliseconds: 200),
-          crossFadeState: controller.loading.value == Loading.loading ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+          crossFadeState: controller.loading.value == Loading.loading
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
           firstChild: const GenericLoadingWidget(),
           secondChild: SingleChildScrollView(
             child: Padding(
@@ -39,11 +42,15 @@ class PerformanceUI extends GetView<PerformanceController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TodayAvailabilityWidget(todaysAvailiblity: controller.performanceData?.data?.todaysAvailiblity),
+                  TodayAvailabilityWidget(
+                      todaysAvailiblity:
+                          controller.performanceData?.data?.todaysAvailiblity),
                   SizedBox(
                     height: 20.h,
                   ),
-                  LastAvailabilityWidget(last30DaysAvailiblity: controller.performanceData?.data?.last30DaysAvailiblity),
+                  LastAvailabilityWidget(
+                      last30DaysAvailiblity: controller
+                          .performanceData?.data?.last30DaysAvailiblity),
                   SizedBox(
                     height: 20.h,
                   ),
@@ -52,7 +59,9 @@ class PerformanceUI extends GetView<PerformanceController> {
                   SizedBox(
                     height: 20.h,
                   ),
-                  OverAllScoreData(performanceFilterResponse: controller.performanceFilterResponse),
+                  OverAllScoreData(
+                      performanceFilterResponse:
+                          controller.performanceFilterResponse),
                   SizedBox(
                     height: 30.h,
                   ),
@@ -92,8 +101,11 @@ class YourScoreWidget extends GetView<PerformanceController> {
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 primary: false,
                 itemCount: controller.overAllScoreList.length,
-                gridDelegate:
-                    SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 20.h, childAspectRatio: 0.66),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 20.h,
+                  childAspectRatio: 0.62,
+                ),
                 itemBuilder: (BuildContext context, int index) {
                   Conversion? item = controller.overAllScoreList[index];
                   ScoreModelClass model = controller.percentageSubTitle[index];
@@ -152,7 +164,8 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                   SizedBox(height: 25.h),
                                   Text(
                                     "Your Score",
-                                    style: AppTextStyle.textStyle10(fontColor: AppColors.darkBlue),
+                                    style: AppTextStyle.textStyle10(
+                                        fontColor: AppColors.darkBlue),
                                   ),
                                   SizedBox(height: 5.h),
                                   Text(
@@ -160,7 +173,10 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                     // item?.performance?.isNotEmpty ?? false
                                     //     ? '${item?.performance?[0].value ?? 0}'
                                     //     : "0",
-                                    style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.darkBlue, fontSize: 20.sp),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.darkBlue,
+                                        fontSize: 20.sp),
                                   ),
                                   SizedBox(height: 5.h),
                                   Text(
@@ -169,7 +185,8 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                     //     ? 'Out of ${item?.performance?[0].valueOutOff ?? 0}'
                                     //     : "Out of 0",
                                     // "Out of 100",
-                                    style: AppTextStyle.textStyle10(fontColor: AppColors.darkBlue),
+                                    style: AppTextStyle.textStyle10(
+                                        fontColor: AppColors.darkBlue),
                                   ),
                                 ],
                               ),
@@ -184,14 +201,17 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                 onTap: () {
                                   openBottomSheet(context,
                                       functionalityWidget: Padding(
-                                        padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                                        padding: const EdgeInsets.only(
+                                            left: 20, right: 20, top: 20),
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               "${item?.label} ( Percentage vs Marks )",
                                               style: AppTextStyle.textStyle16(
-                                                  fontColor: AppColors.darkBlue, fontWeight: FontWeight.w700),
+                                                  fontColor: AppColors.darkBlue,
+                                                  fontWeight: FontWeight.w700),
                                             ),
                                             SizedBox(
                                               height: 15.h,
@@ -199,7 +219,8 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                             Text(
                                               model.scoreName.toString(),
                                               style: AppTextStyle.textStyle14(
-                                                  fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
+                                                  fontColor: AppColors.darkBlue,
+                                                  fontWeight: FontWeight.w400),
                                             ),
                                             SizedBox(
                                               height: 25.h,
@@ -209,9 +230,11 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                               decoration: BoxDecoration(
                                                 boxShadow: [
                                                   BoxShadow(
-                                                      color: Colors.black.withOpacity(0.2),
+                                                      color: Colors.black
+                                                          .withOpacity(0.2),
                                                       blurRadius: 1.0,
-                                                      offset: const Offset(0.0, 3.0)),
+                                                      offset: const Offset(
+                                                          0.0, 3.0)),
                                                 ],
                                                 color: Colors.white,
                                                 borderRadius: BorderRadius.all(
@@ -234,9 +257,16 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                             children: [
                                                               Text(
                                                                 "Percentage",
-                                                                textAlign: TextAlign.center,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
                                                                 style: AppTextStyle.textStyle12(
-                                                                    fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                    fontColor:
+                                                                        AppColors
+                                                                            .darkBlue),
                                                               ),
                                                               SizedBox(
                                                                 height: 5.h,
@@ -249,9 +279,16 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                             children: [
                                                               Text(
                                                                 "Marks",
-                                                                textAlign: TextAlign.center,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
                                                                 style: AppTextStyle.textStyle12(
-                                                                    fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                    fontColor:
+                                                                        AppColors
+                                                                            .darkBlue),
                                                               ),
                                                               SizedBox(
                                                                 height: 5.h,
@@ -265,42 +302,50 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                       height: 10.h,
                                                     ),
                                                     ListView.builder(
-                                                        physics: const NeverScrollableScrollPhysics(),
-                                                        itemCount: item?.rankDetail?.length ?? 0,
+                                                        physics:
+                                                            const NeverScrollableScrollPhysics(),
+                                                        itemCount: item
+                                                                ?.rankDetail
+                                                                ?.length ??
+                                                            0,
                                                         shrinkWrap: true,
                                                         primary: false,
-                                                        itemBuilder: (context, index) {
-                                                          RankDetail? model = item?.rankDetail?[index];
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          RankDetail? model =
+                                                              item?.rankDetail?[
+                                                                  index];
                                                           return Row(
                                                             children: [
                                                               Expanded(
                                                                 child: Column(
                                                                   children: [
-                                                                    model?.min == '0' || model?.min == null
+                                                                    model?.min ==
+                                                                                '0' ||
+                                                                            model?.min ==
+                                                                                null
                                                                         ? Text(
                                                                             'Less than ${model?.max}${model?.text}',
-                                                                            textAlign: TextAlign.center,
-                                                                            style: AppTextStyle.textStyle12(
-                                                                                fontWeight: FontWeight.w400,
-                                                                                fontColor: AppColors.darkBlue),
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
                                                                           )
-                                                                        : model?.max == '0' || model?.max == null
+                                                                        : model?.max == '0' ||
+                                                                                model?.max == null
                                                                             ? Text(
                                                                                 '${model?.min}${model?.text}+',
                                                                                 textAlign: TextAlign.center,
-                                                                                style: AppTextStyle.textStyle12(
-                                                                                    fontWeight: FontWeight.w400,
-                                                                                    fontColor: AppColors.darkBlue),
+                                                                                style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
                                                                               )
                                                                             : Text(
                                                                                 '${model?.min}${model?.text}-${model?.max}${model?.text}',
                                                                                 textAlign: TextAlign.center,
-                                                                                style: AppTextStyle.textStyle12(
-                                                                                    fontWeight: FontWeight.w400,
-                                                                                    fontColor: AppColors.darkBlue),
+                                                                                style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
                                                                               ),
                                                                     SizedBox(
-                                                                      height: 10.h,
+                                                                      height:
+                                                                          10.h,
                                                                     )
                                                                   ],
                                                                 ),
@@ -309,14 +354,21 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                                 child: Column(
                                                                   children: [
                                                                     Text(
-                                                                      (model?.value ?? '-').toString(),
-                                                                      textAlign: TextAlign.center,
+                                                                      (model?.value ??
+                                                                              '-')
+                                                                          .toString(),
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
                                                                       style: AppTextStyle.textStyle12(
-                                                                          fontWeight: FontWeight.w700,
-                                                                          fontColor: AppColors.darkBlue),
+                                                                          fontWeight: FontWeight
+                                                                              .w700,
+                                                                          fontColor:
+                                                                              AppColors.darkBlue),
                                                                     ),
                                                                     SizedBox(
-                                                                      height: 10.h,
+                                                                      height:
+                                                                          10.h,
                                                                     )
                                                                   ],
                                                                 ),
@@ -334,14 +386,22 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                 },
                                 child: Container(
                                     padding: EdgeInsets.all(12.h),
-                                    decoration: BoxDecoration(boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.black.withOpacity(0.2), blurRadius: 3.0, offset: const Offset(0.0, 3.0)),
-                                    ], color: AppColors.white, borderRadius: const BorderRadius.all(Radius.circular(10))),
+                                    decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color:
+                                                  Colors.black.withOpacity(0.2),
+                                              blurRadius: 3.0,
+                                              offset: const Offset(0.0, 3.0)),
+                                        ],
+                                        color: AppColors.white,
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10))),
                                     child: Text(
                                       item?.label ?? '',
                                       textAlign: TextAlign.center,
-                                      style: AppTextStyle.textStyle12(fontColor: AppColors.darkBlue),
+                                      style: AppTextStyle.textStyle12(
+                                          fontColor: AppColors.darkBlue),
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 2,
                                     )),
@@ -373,7 +433,10 @@ class LastAvailabilityWidget extends StatelessWidget {
       padding: EdgeInsets.all(10.h),
       decoration: BoxDecoration(
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 1.0, offset: const Offset(0.0, 3.0)),
+          BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 1.0,
+              offset: const Offset(0.0, 3.0)),
         ],
         color: Colors.white,
         borderRadius: BorderRadius.all(
@@ -387,7 +450,8 @@ class LastAvailabilityWidget extends StatelessWidget {
             children: [
               Text(
                 "${'last30DaysAvailability'.tr} (${'inMins'.tr})",
-                style: AppTextStyle.textStyle12(fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+                style: AppTextStyle.textStyle12(
+                    fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
               ),
               const Expanded(child: SizedBox()),
               GestureDetector(
@@ -560,7 +624,10 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
       padding: EdgeInsets.all(12.h),
       decoration: BoxDecoration(
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 1.0, offset: const Offset(0.0, 3.0)),
+          BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 1.0,
+              offset: const Offset(0.0, 3.0)),
         ],
         color: Colors.white,
         borderRadius: BorderRadius.all(
@@ -574,7 +641,8 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
             children: [
               Text(
                 "availabilityTitle".tr,
-                style: AppTextStyle.textStyle12(fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+                style: AppTextStyle.textStyle12(
+                    fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
               ),
               const Expanded(child: SizedBox()),
               GestureDetector(
@@ -597,28 +665,36 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                   children: [
                     Text(
                       "sessionType".tr,
-                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
                     ),
                     SizedBox(
                       height: 10.h,
                     ),
                     Text(
                       "chat".tr.toUpperCase(),
-                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w700,
+                          fontColor: AppColors.darkBlue),
                     ),
                     SizedBox(
                       height: 10.h,
                     ),
                     Text(
                       "call".tr.toUpperCase(),
-                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w700,
+                          fontColor: AppColors.darkBlue),
                     ),
                     SizedBox(
                       height: 10.h,
                     ),
                     Text(
                       "live".tr.toUpperCase(),
-                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w700,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ],
                 ),
@@ -633,28 +709,36 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                   children: [
                     Text(
                       "available".tr,
-                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
                     ),
                     SizedBox(
                       height: 10.h,
                     ),
                     Text(
                       "${todaysAvailiblity?.availableChat ?? "0"} mins",
-                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w400,
+                          fontColor: AppColors.darkBlue),
                     ),
                     SizedBox(
                       height: 10.h,
                     ),
                     Text(
                       "${todaysAvailiblity?.availableCall ?? "0"} mins",
-                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w400,
+                          fontColor: AppColors.darkBlue),
                     ),
                     SizedBox(
                       height: 10.h,
                     ),
                     Text(
                       "${todaysAvailiblity?.availableLive ?? "0"} mins",
-                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w400,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ],
                 ),
@@ -670,7 +754,9 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                   children: [
                     Text(
                       "busy".tr,
-                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.darkBlue),
                     ),
                     SizedBox(
                       height: 10.h,
@@ -678,21 +764,27 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                     Text(
                       // "19 mins",
                       "${todaysAvailiblity?.busyChat ?? "0"} mins",
-                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w400,
+                          fontColor: AppColors.darkBlue),
                     ),
                     SizedBox(
                       height: 10.h,
                     ),
                     Text(
                       "${todaysAvailiblity?.busyCall ?? "0"} mins",
-                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w400,
+                          fontColor: AppColors.darkBlue),
                     ),
                     SizedBox(
                       height: 10.h,
                     ),
                     Text(
                       "${todaysAvailiblity?.busyLive} mins",
-                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w400,
+                          fontColor: AppColors.darkBlue),
                     ),
                   ],
                 ),
@@ -714,13 +806,18 @@ class OverAllScoreData extends GetView<PerformanceController> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.toNamed(RouteName.rankSystemUI, arguments: [controller.performanceFilterResponse?.data?.rankSystem]);
+        Get.toNamed(RouteName.rankSystemUI, arguments: [
+          controller.performanceFilterResponse?.data?.rankSystem
+        ]);
       },
       child: Container(
         padding: EdgeInsets.all(12.h),
         decoration: BoxDecoration(
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 1.0, offset: const Offset(0.0, 3.0)),
+            BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 1.0,
+                offset: const Offset(0.0, 3.0)),
           ],
           color: Colors.white,
           borderRadius: BorderRadius.all(
@@ -740,7 +837,9 @@ class OverAllScoreData extends GetView<PerformanceController> {
                     children: [
                       Text(
                         "overallScore".tr,
-                        style: AppTextStyle.textStyle12(fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+                        style: AppTextStyle.textStyle12(
+                            fontWeight: FontWeight.w700,
+                            fontColor: AppColors.darkBlue),
                       ),
                       SizedBox(
                         height: 10.h,
@@ -748,7 +847,9 @@ class OverAllScoreData extends GetView<PerformanceController> {
                       Text(
                         // "540/600 (90%)",
                         "${performanceFilterResponse?.data?.score ?? '-'}/${performanceFilterResponse?.data?.totalScore ?? '-'} (${performanceFilterResponse?.data?.scorePrecentage ?? 0}%)",
-                        style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                        style: AppTextStyle.textStyle12(
+                            fontWeight: FontWeight.w400,
+                            fontColor: AppColors.darkBlue),
                       ),
                     ],
                   ),
@@ -759,14 +860,17 @@ class OverAllScoreData extends GetView<PerformanceController> {
                     children: [
                       Text(
                         "rank".tr,
-                        style: AppTextStyle.textStyle12(fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+                        style: AppTextStyle.textStyle12(
+                            fontWeight: FontWeight.w700,
+                            fontColor: AppColors.darkBlue),
                       ),
                       SizedBox(
                         height: 10.h,
                       ),
                       Row(
                         children: [
-                          setImage(performanceFilterResponse?.data?.rank ?? "") ??
+                          setImage(performanceFilterResponse?.data?.rank ??
+                                  "") ??
                               SizedBox(
                                 width: 10.w,
                               ),
@@ -777,14 +881,17 @@ class OverAllScoreData extends GetView<PerformanceController> {
                           // ),
                           Text(
                             performanceFilterResponse?.data?.rank ?? '-',
-                            style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                            style: AppTextStyle.textStyle12(
+                                fontWeight: FontWeight.w400,
+                                fontColor: AppColors.darkBlue),
                           ),
                           const Expanded(child: SizedBox()),
                           GestureDetector(
                               onTap: () {
                                 Fluttertoast.showToast(msg: "No info for now!");
                               },
-                              child: Assets.images.icInfo.svg(height: 17.h, width: 17.h)),
+                              child: Assets.images.icInfo
+                                  .svg(height: 17.h, width: 17.h)),
                         ],
                       ),
                     ],
@@ -826,7 +933,10 @@ class DurationUI extends StatelessWidget {
       padding: EdgeInsets.all(8.h),
       decoration: BoxDecoration(
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 3.0, offset: const Offset(0.0, 3.0)),
+          BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 3.0,
+              offset: const Offset(0.0, 3.0)),
         ],
         color: AppColors.white,
         borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -838,7 +948,8 @@ class DurationUI extends StatelessWidget {
               isExpanded: true,
               hint: Text(
                 "select".tr,
-                style: AppTextStyle.textStyle16(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                style: AppTextStyle.textStyle16(
+                    fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
               ),
               items: controller.durationOptions
                   .map((String item) => DropdownMenuItem<String>(
@@ -847,13 +958,16 @@ class DurationUI extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 20),
                           child: Text(
                             item.tr,
-                            style: AppTextStyle.textStyle16(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                            style: AppTextStyle.textStyle16(
+                                fontWeight: FontWeight.w400,
+                                fontColor: AppColors.darkBlue),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ))
                   .toList(),
-              style: AppTextStyle.textStyle16(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+              style: AppTextStyle.textStyle16(
+                  fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
               value: controller.selectedOption.value,
               onChanged: (String? value) {
                 // if(value == controller.durationOptions.last){
