@@ -57,15 +57,13 @@ class HomeUI extends GetView<HomeController> {
         ),
         actions: [
           Obx(
-            () => Padding(
+                () => Padding(
               padding: const EdgeInsets.only(right: 20),
               child: InkWell(
                 onTap: () {
                   controller.isShowTitle.value = !controller.isShowTitle.value;
                 },
-                child: controller.isShowTitle.value
-                    ? Assets.images.icVisibility.svg()
-                    : Assets.images.icVisibilityOff.svg(),
+                child: controller.isShowTitle.value ? Assets.images.icVisibility.svg() : Assets.images.icVisibilityOff.svg(),
               ),
             ),
           ),
@@ -84,120 +82,106 @@ class HomeUI extends GetView<HomeController> {
                   child: Column(
                     children: [
                       Obx(
-                        () => Row(
+                            () => Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             controller.isShowTitle.value
                                 ? InkWell(
-                                    onTap: () {},
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
-                                          style: AppTextStyle.textStyle16(
-                                              fontColor: AppColors.appRedColour,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                        Text(
-                                          "today".tr,
-                                          style: AppTextStyle.textStyle16(
-                                              fontColor: AppColors.darkBlue,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                : InkWell(
-                                    onTap: () {},
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "₹******",
-                                          style: AppTextStyle.textStyle16(
-                                              fontColor: AppColors.appRedColour,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                        Text(
-                                          "today".tr,
-                                          style: AppTextStyle.textStyle16(
-                                              fontColor: AppColors.darkBlue,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                      ],
-                                    ),
+                              onTap: () {},
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
+                                    style: AppTextStyle.textStyle16(
+                                        fontColor: AppColors.appRedColour, fontWeight: FontWeight.w700),
                                   ),
+                                  Text(
+                                    "today".tr,
+                                    style: AppTextStyle.textStyle16(
+                                        fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
+                                  ),
+                                ],
+                              ),
+                            )
+                                : InkWell(
+                              onTap: () {},
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "₹******",
+                                    style: AppTextStyle.textStyle16(
+                                        fontColor: AppColors.appRedColour, fontWeight: FontWeight.w700),
+                                  ),
+                                  Text(
+                                    "today".tr,
+                                    style: AppTextStyle.textStyle16(
+                                        fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
+                                  ),
+                                ],
+                              ),
+                            ),
                             SizedBox(width: 15.w),
                             controller.isShowTitle.value
                                 ? InkWell(
-                                    onTap: () {
-                                      earningDetailPopup(Get.context!);
-                                      // Get.toNamed(RouteName.yourEarning);
-                                    },
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "₹${controller.homeData?.totalEarning?.toStringAsFixed(2)}",
-                                              style: AppTextStyle.textStyle16(
-                                                  fontColor:
-                                                      AppColors.appRedColour,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                            const Icon(
-                                              Icons.arrow_forward_ios,
-                                              size: 20,
-                                            )
-                                          ],
-                                        ),
-                                        Text(
-                                          "total".trParams({"count": ""}),
-                                          style: AppTextStyle.textStyle16(
-                                              fontColor: AppColors.darkBlue,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                : InkWell(
-                                    onTap: () {
-                                      earningDetailPopup(Get.context!);
-                                      // Get.toNamed(RouteName.yourEarning);
-                                    },
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "₹********",
-                                              style: AppTextStyle.textStyle16(
-                                                  fontColor:
-                                                      AppColors.appRedColour,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                            const Icon(
-                                              Icons.arrow_forward_ios,
-                                              size: 20,
-                                            )
-                                          ],
-                                        ),
-                                        Text(
-                                          "total".trParams({"count": ""}),
-                                          style: AppTextStyle.textStyle16(
-                                              fontColor: AppColors.darkBlue,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                      ],
-                                    ),
+                              onTap: () {
+                                earningDetailPopup(Get.context!);
+                                // Get.toNamed(RouteName.yourEarning);
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "₹${controller.homeData?.totalEarning?.toStringAsFixed(2)}",
+                                        style: AppTextStyle.textStyle16(
+                                            fontColor: AppColors.appRedColour, fontWeight: FontWeight.w700),
+                                      ),
+                                      const Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 20,
+                                      )
+                                    ],
                                   ),
+                                  Text(
+                                    "total".trParams({"count": ""}),
+                                    style: AppTextStyle.textStyle16(
+                                        fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
+                                  ),
+                                ],
+                              ),
+                            )
+                                : InkWell(
+                              onTap: () {
+                                earningDetailPopup(Get.context!);
+                                // Get.toNamed(RouteName.yourEarning);
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "₹********",
+                                        style: AppTextStyle.textStyle16(
+                                            fontColor: AppColors.appRedColour, fontWeight: FontWeight.w700),
+                                      ),
+                                      const Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 20,
+                                      )
+                                    ],
+                                  ),
+                                  Text(
+                                    "total".trParams({"count": ""}),
+                                    style: AppTextStyle.textStyle16(
+                                        fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
+                                  ),
+                                ],
+                              ),
+                            ),
                             SizedBox(width: 10.w),
                             InkWell(
                               onTap: () {
@@ -209,22 +193,17 @@ class HomeUI extends GetView<HomeController> {
                                   gradient: LinearGradient(
                                     begin: Alignment.bottomCenter,
                                     end: Alignment.topCenter,
-                                    colors: [
-                                      AppColors.appYellowColour,
-                                      AppColors.gradientBottom
-                                    ],
+                                    colors: [AppColors.appYellowColour, AppColors.gradientBottom],
                                   ),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
                                 ),
                                 padding: EdgeInsets.symmetric(horizontal: 15.w),
                                 // alignment: Alignment.center,
                                 child: Center(
                                   child: Text(
                                     "checkKundli".tr,
-                                    style: AppTextStyle.textStyle14(
-                                        fontColor: AppColors.brownColour,
-                                        fontWeight: FontWeight.w500),
+                                    style:
+                                    AppTextStyle.textStyle14(fontColor: AppColors.brownColour, fontWeight: FontWeight.w500),
                                   ),
                                 ),
                               ),
@@ -234,68 +213,47 @@ class HomeUI extends GetView<HomeController> {
                       ),
                       SizedBox(height: 10.h),
                       Obx(
-                        () => controller.isFeedbackAvailable.value
+                            () => controller.isFeedbackAvailable.value
                             ? Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Get.toNamed(RouteName.orderFeedback, arguments: [controller.feedbacksList]);
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Get.toNamed(RouteName.orderFeedback,
-                                          arguments: [
-                                            controller.feedbacksList
-                                          ]);
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Order Feedback',
-                                          style: AppTextStyle.textStyle16(
-                                              fontColor: AppColors.darkBlue,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                        Text(
-                                          "viewAll".tr,
-                                          style: AppTextStyle.textStyle12(
-                                              fontColor: AppColors.darkBlue,
-                                              fontWeight: FontWeight.w400),
-                                        )
-                                      ],
-                                    ),
+                                  Text(
+                                    'Order Feedback',
+                                    style: AppTextStyle.textStyle16(
+                                        fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
                                   ),
-                                  SizedBox(height: 10.h),
-                                  FeedbackCardWidget(
-                                      feedback: controller.feedbackResponse ??
-                                          FeedbackData(
-                                            id: controller.feedbackResponse?.id,
-                                            orderId: controller
-                                                .feedbackResponse?.orderId,
-                                            remark: controller
-                                                .feedbackResponse?.remark,
-                                            order: OrderDetails(
-                                              astrologerId: controller
-                                                  .feedbackResponse
-                                                  ?.order
-                                                  ?.astrologerId,
-                                              id: controller
-                                                  .feedbackResponse?.order?.id,
-                                              productType: controller
-                                                  .feedbackResponse
-                                                  ?.order
-                                                  ?.productType,
-                                              orderId: controller
-                                                  .feedbackResponse
-                                                  ?.order
-                                                  ?.orderId,
-                                              createdAt: controller
-                                                  .feedbackResponse
-                                                  ?.order
-                                                  ?.createdAt,
-                                            ),
-                                          )),
-                                  SizedBox(height: 10.h),
+                                  Text(
+                                    "viewAll".tr,
+                                    style: AppTextStyle.textStyle12(
+                                        fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
+                                  )
                                 ],
-                              )
+                              ),
+                            ),
+                            SizedBox(height: 10.h),
+                            FeedbackCardWidget(
+                                feedback: controller.feedbackResponse ??
+                                    FeedbackData(
+                                      id: controller.feedbackResponse?.id,
+                                      orderId: controller.feedbackResponse?.orderId,
+                                      remark: controller.feedbackResponse?.remark,
+                                      order: OrderDetails(
+                                        astrologerId: controller.feedbackResponse?.order?.astrologerId,
+                                        id: controller.feedbackResponse?.order?.id,
+                                        productType: controller.feedbackResponse?.order?.productType,
+                                        orderId: controller.feedbackResponse?.order?.orderId,
+                                        createdAt: controller.feedbackResponse?.order?.createdAt,
+                                      ),
+                                    )),
+                            SizedBox(height: 10.h),
+                          ],
+                        )
                             : const SizedBox(),
                       ),
                       // SizedBox(height: 10.h),
@@ -304,34 +262,31 @@ class HomeUI extends GetView<HomeController> {
                       controller.homeData?.noticeBoard == null
                           ? const SizedBox()
                           : Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(RouteName.noticeBoard);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(RouteName.noticeBoard);
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "noticeBoard".tr,
-                                        style: AppTextStyle.textStyle16(
-                                            fontColor: AppColors.darkBlue,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                      Text(
-                                        "viewAll".tr,
-                                        style: AppTextStyle.textStyle12(
-                                            fontColor: AppColors.darkBlue,
-                                            fontWeight: FontWeight.w400),
-                                      )
-                                    ],
-                                  ),
+                                Text(
+                                  "noticeBoard".tr,
+                                  style:
+                                  AppTextStyle.textStyle16(fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
                                 ),
-                                SizedBox(height: 10.h),
-                                noticeBoardWidget(),
+                                Text(
+                                  "viewAll".tr,
+                                  style:
+                                  AppTextStyle.textStyle12(fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
+                                )
                               ],
                             ),
+                          ),
+                          SizedBox(height: 10.h),
+                          noticeBoardWidget(),
+                        ],
+                      ),
                       // SizedBox(height: 10.h),
                       // noticeBoardWidget(),
                       SizedBox(height: 10.h),
@@ -343,8 +298,7 @@ class HomeUI extends GetView<HomeController> {
                           hasOpenOrder = await controller.hasOpenOrder();
                           if (hasOpenOrder) {
                             divineSnackBar(
-                              data:
-                                  "Unable to Go Live due to your active order.",
+                              data: "Unable to Go Live due to your active order.",
                               color: AppColors.appColorDark,
                               duration: const Duration(seconds: 6),
                             );
@@ -352,14 +306,11 @@ class HomeUI extends GetView<HomeController> {
                             bool isChatOn = controller.chatSwitch.value;
                             bool isAudioCallOn = controller.callSwitch.value;
                             bool isVideoCallOn = controller.videoSwitch.value;
-                            if (isChatOn == false &&
-                                isAudioCallOn == false &&
-                                isVideoCallOn == false) {
+                            if (isChatOn == false && isAudioCallOn == false && isVideoCallOn == false) {
                               await Get.toNamed(RouteName.liveTipsUI);
                             } else {
                               divineSnackBar(
-                                data:
-                                    "Please turn off all session types in order to go live.",
+                                data: "Please turn off all session types in order to go live.",
                                 color: AppColors.appColorDark,
                                 duration: const Duration(seconds: 6),
                               );
@@ -381,10 +332,7 @@ class HomeUI extends GetView<HomeController> {
                             gradient: const LinearGradient(
                               begin: Alignment.bottomCenter,
                               end: Alignment.topCenter,
-                              colors: [
-                                AppColors.appYellowColour,
-                                AppColors.gradientBottom
-                              ],
+                              colors: [AppColors.appYellowColour, AppColors.gradientBottom],
                             ),
                           ),
                           child: Row(
@@ -394,18 +342,14 @@ class HomeUI extends GetView<HomeController> {
                               const SizedBox(width: 15),
                               Text(
                                 "goLive".tr,
-                                style: AppTextStyle.textStyle20(
-                                    fontWeight: FontWeight.w700,
-                                    fontColor: AppColors.brownColour),
+                                style: AppTextStyle.textStyle20(fontWeight: FontWeight.w700, fontColor: AppColors.brownColour),
                               ),
                             ],
                           ),
                         ),
                       ),
                       SizedBox(height: 10.h),
-                      Container(
-                          height: 1.h,
-                          color: AppColors.darkBlue.withOpacity(0.5)),
+                      Container(height: 1.h, color: AppColors.darkBlue.withOpacity(0.5)),
                       SizedBox(height: 10.h),
                       sessionTypeWidget(),
                       // if (controller.homeData?.offerType != null &&
@@ -459,10 +403,7 @@ class HomeUI extends GetView<HomeController> {
                           gradient: const LinearGradient(
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
-                            colors: [
-                              AppColors.appYellowColour,
-                              AppColors.gradientBottom
-                            ],
+                            colors: [AppColors.appYellowColour, AppColors.gradientBottom],
                           ),
                         ),
                         child: Center(
@@ -472,9 +413,7 @@ class HomeUI extends GetView<HomeController> {
                               Assets.images.icHelp.svg(),
                               Text(
                                 "help".tr,
-                                style: AppTextStyle.textStyle10(
-                                    fontColor: AppColors.brownColour,
-                                    fontWeight: FontWeight.w700),
+                                style: AppTextStyle.textStyle10(fontColor: AppColors.brownColour, fontWeight: FontWeight.w700),
                               )
                             ],
                           ),
@@ -499,135 +438,117 @@ class HomeUI extends GetView<HomeController> {
         return data?["userName"] == null
             ? const SizedBox()
             : Container(
-                width: ScreenUtil().screenWidth,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: AppColors.white,
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        blurRadius: 3.0,
-                        offset: const Offset(0, 3.0)),
+          width: ScreenUtil().screenWidth,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: AppColors.white,
+            boxShadow: [
+              BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 3.0, offset: const Offset(0, 3.0)),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Order Id : ${data?["orderId"]}',
+                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500),
+                    ),
+                    Text(
+                      '23 June 23, 02:46 PM',
+                      style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue.withOpacity(.5),
+                      ),
+                    ),
                   ],
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Order Id : ${data?["orderId"]}',
-                            style: AppTextStyle.textStyle12(
-                                fontWeight: FontWeight.w500),
-                          ),
-                          Text(
-                            '23 June 23, 02:46 PM',
-                            style: AppTextStyle.textStyle12(
-                              fontWeight: FontWeight.w400,
-                              fontColor: AppColors.darkBlue.withOpacity(.5),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'On-Going CALL',
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w400),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'with ${data?["username"]}(user id) for 00:04:32 ',
-                        style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w400,
-                          fontColor: AppColors.darkBlue.withOpacity(.5),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Gender: ${data?["gender"]}',
-                        style: AppTextStyle.textStyle10(
-                            fontWeight: FontWeight.w400),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'DOB: ${data?["dob"]}',
-                        style: AppTextStyle.textStyle10(
-                            fontWeight: FontWeight.w400),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'TOB: ${data?["tob"]}',
-                        style: AppTextStyle.textStyle10(
-                            fontWeight: FontWeight.w400),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'POB: ${data?["pob"]}',
-                        style: AppTextStyle.textStyle10(
-                            fontWeight: FontWeight.w400),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Marital Status: ${data?["marital"]}',
-                                  style: AppTextStyle.textStyle10(
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Problem Area: ${data?["problem"]}',
-                                  maxLines: 1,
-                                  style: AppTextStyle.textStyle10(
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ],
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              height: 54.h,
-                              decoration: const BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.bottomCenter,
-                                  end: Alignment.topCenter,
-                                  colors: [
-                                    AppColors.appYellowColour,
-                                    AppColors.gradientBottom
-                                  ],
-                                ),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30)),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 8),
-                              // alignment: Alignment.center,
-                              child: Center(
-                                child: Text(
-                                  "View Kundali",
-                                  style: AppTextStyle.textStyle14(
-                                      fontColor: AppColors.brownColour,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
+                const SizedBox(height: 8),
+                Text(
+                  'On-Going CALL',
+                  style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'with ${data?["username"]}(user id) for 00:04:32 ',
+                  style: AppTextStyle.textStyle12(
+                    fontWeight: FontWeight.w400,
+                    fontColor: AppColors.darkBlue.withOpacity(.5),
                   ),
                 ),
-              );
+                const SizedBox(height: 8),
+                Text(
+                  'Gender: ${data?["gender"]}',
+                  style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'DOB: ${data?["dob"]}',
+                  style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'TOB: ${data?["tob"]}',
+                  style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'POB: ${data?["pob"]}',
+                  style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Marital Status: ${data?["marital"]}',
+                            style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Problem Area: ${data?["problem"]}',
+                            maxLines: 1,
+                            style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
+                          ),
+                        ],
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        height: 54.h,
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [AppColors.appYellowColour, AppColors.gradientBottom],
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(30)),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                        // alignment: Alignment.center,
+                        child: Center(
+                          child: Text(
+                            "View Kundali",
+                            style: AppTextStyle.textStyle14(fontColor: AppColors.brownColour, fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
       },
     );
   }
@@ -639,18 +560,13 @@ class HomeUI extends GetView<HomeController> {
         color: AppColors.transparent,
         child: InkWell(
           onTap: () {
-            Get.toNamed(RouteName.noticeDetail,
-                arguments: controller.homeData?.noticeBoard,
-                parameters: {"from_list": "0"});
+            Get.toNamed(RouteName.noticeDetail, arguments: controller.homeData?.noticeBoard, parameters: {"from_list": "0"});
           },
           child: Ink(
             padding: EdgeInsets.all(16.h),
             decoration: BoxDecoration(
                 boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 3.0,
-                      offset: const Offset(0.0, 3.0)),
+                  BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 3.0, offset: const Offset(0.0, 3.0)),
                 ],
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(20.r)),
@@ -663,18 +579,14 @@ class HomeUI extends GetView<HomeController> {
                   children: [
                     Text(
                       controller.homeData?.noticeBoard?.title ?? '',
-                      style: AppTextStyle.textStyle16(
-                          fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle16(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
                     ),
                     Row(
                       children: [
                         Text(
                           '${dateToString(controller.homeData?.noticeBoard?.createdAt ?? DateTime.now(), format: "h:mm a")}  '
-                          '${formatDateTime(controller.homeData?.noticeBoard?.createdAt! ?? DateTime.now())} ',
-                          style: AppTextStyle.textStyle10(
-                              fontWeight: FontWeight.w400,
-                              fontColor: AppColors.darkBlue),
+                              '${formatDateTime(controller.homeData?.noticeBoard?.createdAt! ?? DateTime.now())} ',
+                          style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
                         ),
                         SizedBox(
                           width: 10.w,
@@ -683,8 +595,7 @@ class HomeUI extends GetView<HomeController> {
                             onTap: () {
                               Fluttertoast.showToast(msg: "No info for now!");
                             },
-                            child: Assets.images.icInfo
-                                .svg(height: 18.h, width: 18.h)),
+                            child: Assets.images.icInfo.svg(height: 18.h, width: 18.h)),
                       ],
                     ),
                   ],
@@ -732,10 +643,7 @@ class HomeUI extends GetView<HomeController> {
         padding: EdgeInsets.all(16.h),
         decoration: BoxDecoration(
           boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 1.0,
-                offset: const Offset(0.0, 3.0)),
+            BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 1.0, offset: const Offset(0.0, 3.0)),
           ],
           color: AppColors.white,
           borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -749,48 +657,34 @@ class HomeUI extends GetView<HomeController> {
               children: [
                 Text(
                   "sessionType".tr,
-                  style: AppTextStyle.textStyle12(
-                      fontWeight: FontWeight.w500,
-                      fontColor: AppColors.darkBlue),
+                  style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
                 ),
                 SizedBox(height: 16.h),
                 Text(
                   "chat".tr.toUpperCase(),
-                  style: AppTextStyle.textStyle12(
-                      fontColor: AppColors.darkBlue,
-                      fontWeight: FontWeight.w700),
+                  style: AppTextStyle.textStyle12(fontColor: AppColors.darkBlue, fontWeight: FontWeight.w700),
                 ),
                 Text(
                   "₹${controller.homeData?.sessionType?.chatAmount}/Min",
-                  style: AppTextStyle.textStyle10(
-                      fontColor: AppColors.darkBlue,
-                      fontWeight: FontWeight.w400),
+                  style: AppTextStyle.textStyle10(fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
                 ),
                 SizedBox(height: 16.h),
                 Text(
                   "call".tr.toUpperCase(),
-                  style: AppTextStyle.textStyle12(
-                      fontColor: AppColors.darkBlue,
-                      fontWeight: FontWeight.w700),
+                  style: AppTextStyle.textStyle12(fontColor: AppColors.darkBlue, fontWeight: FontWeight.w700),
                 ),
                 Text(
                   "₹${controller.homeData?.sessionType?.chatAmount}/Min",
-                  style: AppTextStyle.textStyle10(
-                      fontColor: AppColors.darkBlue,
-                      fontWeight: FontWeight.w400),
+                  style: AppTextStyle.textStyle10(fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
                 ),
                 SizedBox(height: 16.h),
                 Text(
                   "videoCall".tr.toUpperCase(),
-                  style: AppTextStyle.textStyle12(
-                      fontColor: AppColors.darkBlue,
-                      fontWeight: FontWeight.w700),
+                  style: AppTextStyle.textStyle12(fontColor: AppColors.darkBlue, fontWeight: FontWeight.w700),
                 ),
                 Text(
                   "₹${controller.homeData?.sessionType?.videoCallAmount}/Min",
-                  style: AppTextStyle.textStyle10(
-                      fontColor: AppColors.darkBlue,
-                      fontWeight: FontWeight.w400),
+                  style: AppTextStyle.textStyle10(fontColor: AppColors.darkBlue, fontWeight: FontWeight.w400),
                 ),
               ],
             ),
@@ -798,27 +692,25 @@ class HomeUI extends GetView<HomeController> {
               children: [
                 Text(
                   "status".tr,
-                  style: AppTextStyle.textStyle12(
-                      fontWeight: FontWeight.w500,
-                      fontColor: AppColors.darkBlue),
+                  style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
                 ),
                 SizedBox(height: 18.h),
                 Obx(
-                  () => SwitchWidget(
+                      () => SwitchWidget(
                     onTap: () => controller.chatSwitchFN(),
                     switchValue: controller.chatSwitch.value,
                   ),
                 ),
                 SizedBox(height: 20.h),
                 Obx(
-                  () => SwitchWidget(
+                      () => SwitchWidget(
                     onTap: () => controller.callSwitchFN(),
                     switchValue: controller.callSwitch.value,
                   ),
                 ),
                 SizedBox(height: 20.h),
                 Obx(
-                  () => SwitchWidget(
+                      () => SwitchWidget(
                     onTap: () => controller.videoCallSwitchFN(),
                     switchValue: controller.videoSwitch.value,
                   ),
@@ -831,9 +723,7 @@ class HomeUI extends GetView<HomeController> {
                   children: [
                     Text(
                       "nextOnlineTiming".tr,
-                      style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
                     ),
                     SizedBox(
                       width: 8.w,
@@ -842,211 +732,184 @@ class HomeUI extends GetView<HomeController> {
                         onTap: () {
                           Fluttertoast.showToast(msg: "No info for now!");
                         },
-                        child: Assets.images.icInfo
-                            .svg(height: 16.h, width: 16.h)),
+                        child: Assets.images.icInfo.svg(height: 16.h, width: 16.h)),
                   ],
                 ),
                 SizedBox(height: 15.h),
                 Obx(() => controller.selectedChatTime.value.isEmpty
                     ? InkWell(
-                        onTap: () {
-                          selectDateOrTime(
-                            Get.context!,
-                            futureDate: true,
-                            title: "ScheduleOnlineDate".tr,
-                            btnTitle: "confirmNextDate".tr,
-                            pickerStyle: "DateCalendar",
-                            looping: true,
-                            initialDate: DateTime.now(),
-                            lastDate: DateTime(2050),
-                            onConfirm: (value) =>
-                                controller.selectChatDate(value),
-                            onChange: (value) =>
-                                controller.selectChatDate(value),
-                            onClickOkay: (value) {
-                              Get.back();
+                  onTap: () {
+                    selectDateOrTime(
+                      Get.context!,
+                      futureDate: true,
+                      title: "ScheduleOnlineDate".tr,
+                      btnTitle: "confirmNextDate".tr,
+                      pickerStyle: "DateCalendar",
+                      looping: true,
+                      initialDate: DateTime.now(),
+                      lastDate: DateTime(2050),
+                      onConfirm: (value) => controller.selectChatDate(value),
+                      onChange: (value) => controller.selectChatDate(value),
+                      onClickOkay: (value) {
+                        Get.back();
 
-                              selectDateOrTime(
-                                Get.context!,
-                                title: "scheduleOnlineTime".tr,
-                                btnTitle: "confirmOnlineTime".tr,
-                                pickerStyle: "TimeCalendar",
-                                looping: true,
-                                onConfirm: (value) {
-                                  // controller.selectChatTime(value),
-                                },
-                                onChange: (value) {
-                                  // controller.selectChatTime(value),
-                                },
-                                onClickOkay: (timeValue) {
-                                  if (controller.isValidDate(
-                                      "CHAT", timeValue)) {
-                                    controller.selectChatTime(timeValue);
-                                    controller.scheduleCall("CHAT");
-                                  } else {
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            "Please select future date and time");
-                                  }
-                                },
-                              );
-                            },
-                          );
-                        },
-                        child: Container(
-                          width: 128.w,
-                          height: 31.h,
-                          decoration: const BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                              colors: [
-                                AppColors.appYellowColour,
-                                AppColors.gradientBottom
-                              ],
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "scheduleNow".tr,
-                              style: AppTextStyle.textStyle10(
-                                  fontColor: AppColors.brownColour,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                        ),
-                      )
+                        selectDateOrTime(
+                          Get.context!,
+                          title: "scheduleOnlineTime".tr,
+                          btnTitle: "confirmOnlineTime".tr,
+                          pickerStyle: "TimeCalendar",
+                          looping: true,
+                          onConfirm: (value) {
+                            // controller.selectChatTime(value),
+                          },
+                          onChange: (value) {
+                            // controller.selectChatTime(value),
+                          },
+                          onClickOkay: (timeValue) {
+                            if (controller.isValidDate("CHAT", timeValue)) {
+                              controller.selectChatTime(timeValue);
+                              controller.scheduleCall("CHAT");
+                            } else {
+                              Fluttertoast.showToast(msg: "Please select future date and time");
+                            }
+                          },
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    width: 128.w,
+                    height: 31.h,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [AppColors.appYellowColour, AppColors.gradientBottom],
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "scheduleNow".tr,
+                        style: AppTextStyle.textStyle10(fontColor: AppColors.brownColour, fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                  ),
+                )
                     : const SelectedTimeForChat()),
                 SizedBox(height: 15.h),
                 //const SelectedTime(),
                 Obx(() => controller.selectedCallTime.value.isEmpty
                     ? InkWell(
-                        onTap: () {
-                          selectDateOrTime(
-                            futureDate: true,
-                            Get.context!,
-                            title: "ScheduleOnlineDate".tr,
-                            btnTitle: "confirmNextDate".tr,
-                            pickerStyle: "DateCalendar",
-                            looping: true,
-                            lastDate: DateTime(2050),
-                            onConfirm: (value) =>
-                                controller.selectCallDate(value),
-                            onChange: (value) =>
-                                controller.selectCallDate(value),
-                            onClickOkay: (value) {
-                              Get.back();
-                              selectDateOrTime(Get.context!,
-                                  title: "scheduleOnlineTime".tr,
-                                  btnTitle: "confirmOnlineTime".tr,
-                                  pickerStyle: "TimeCalendar",
-                                  looping: true, onConfirm: (value) {
-                                // controller.selectCallTime(value),
-                              }, onChange: (value1) {
-                                // controller.selectCallTime(value),
-                              }, onClickOkay: (value1) {
-                                if (controller.isValidDate("CALL", value1)) {
-                                  controller.selectCallTime(value1);
-                                  controller.scheduleCall("CALL");
-                                } else {
-                                  Fluttertoast.showToast(
-                                      msg:
-                                          "Please select future date and time");
-                                }
-                              });
-                            },
-                          );
-                        },
-                        child: Container(
-                          width: 128.w,
-                          height: 31.h,
-                          decoration: const BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                              colors: [
-                                AppColors.appYellowColour,
-                                AppColors.gradientBottom
-                              ],
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "scheduleNow".tr,
-                              style: AppTextStyle.textStyle10(
-                                  fontColor: AppColors.brownColour,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                        ),
-                      )
+                  onTap: () {
+                    selectDateOrTime(
+                      futureDate: true,
+                      Get.context!,
+                      title: "ScheduleOnlineDate".tr,
+                      btnTitle: "confirmNextDate".tr,
+                      pickerStyle: "DateCalendar",
+                      looping: true,
+                      lastDate: DateTime(2050),
+                      onConfirm: (value) => controller.selectCallDate(value),
+                      onChange: (value) => controller.selectCallDate(value),
+                      onClickOkay: (value) {
+                        Get.back();
+                        selectDateOrTime(Get.context!,
+                            title: "scheduleOnlineTime".tr,
+                            btnTitle: "confirmOnlineTime".tr,
+                            pickerStyle: "TimeCalendar",
+                            looping: true, onConfirm: (value) {
+                              // controller.selectCallTime(value),
+                            }, onChange: (value1) {
+                              // controller.selectCallTime(value),
+                            }, onClickOkay: (value1) {
+                              if (controller.isValidDate("CALL", value1)) {
+                                controller.selectCallTime(value1);
+                                controller.scheduleCall("CALL");
+                              } else {
+                                Fluttertoast.showToast(msg: "Please select future date and time");
+                              }
+                            });
+                      },
+                    );
+                  },
+                  child: Container(
+                    width: 128.w,
+                    height: 31.h,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [AppColors.appYellowColour, AppColors.gradientBottom],
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "scheduleNow".tr,
+                        style: AppTextStyle.textStyle10(fontColor: AppColors.brownColour, fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                  ),
+                )
                     : const SelectedTimeForCall()),
                 SizedBox(height: 15.h),
                 Obx(() => controller.selectedVideoTime.value.isEmpty
                     ? InkWell(
-                        onTap: () {
-                          selectDateOrTime(
-                            futureDate: true,
-                            Get.context!,
-                            title: "ScheduleOnlineDate".tr,
-                            btnTitle: "confirmNextDate".tr,
-                            pickerStyle: "DateCalendar",
-                            looping: true,
-                            lastDate: DateTime(2050),
-                            onConfirm: (value) =>
-                                controller.selectVideoDate(value),
-                            onChange: (value) =>
-                                controller.selectVideoDate(value),
-                            onClickOkay: (value) {
-                              Get.back();
-                              selectDateOrTime(Get.context!,
-                                  title: "scheduleOnlineTime".tr,
-                                  btnTitle: "confirmOnlineTime".tr,
-                                  pickerStyle: "TimeCalendar",
-                                  looping: true, onConfirm: (value) {
-                                // controller.selectVideoTime(value),
-                              }, onChange: (value) {
-                                // controller.selectVideoTime(value);
-                              }, onClickOkay: (value) {
-                                if (controller.isValidDate("VIDEO", value)) {
-                                  controller.selectVideoTime(value);
-                                  controller.scheduleCall("VIDEO");
-                                } else {
-                                  Fluttertoast.showToast(
-                                      msg:
-                                          "Please select future date and time");
-                                }
-                              });
-                            },
-                          );
-                        },
-                        child: Container(
-                          width: 128.w,
-                          height: 31.h,
-                          decoration: const BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                              colors: [
-                                AppColors.appYellowColour,
-                                AppColors.gradientBottom
-                              ],
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "scheduleNow".tr,
-                              style: AppTextStyle.textStyle10(
-                                fontColor: AppColors.brownColour,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
+                  onTap: () {
+                    selectDateOrTime(
+                      futureDate: true,
+                      Get.context!,
+                      title: "ScheduleOnlineDate".tr,
+                      btnTitle: "confirmNextDate".tr,
+                      pickerStyle: "DateCalendar",
+                      looping: true,
+                      lastDate: DateTime(2050),
+                      onConfirm: (value) => controller.selectVideoDate(value),
+                      onChange: (value) => controller.selectVideoDate(value),
+                      onClickOkay: (value) {
+                        Get.back();
+                        selectDateOrTime(Get.context!,
+                            title: "scheduleOnlineTime".tr,
+                            btnTitle: "confirmOnlineTime".tr,
+                            pickerStyle: "TimeCalendar",
+                            looping: true, onConfirm: (value) {
+                              // controller.selectVideoTime(value),
+                            }, onChange: (value) {
+                              // controller.selectVideoTime(value);
+                            }, onClickOkay: (value) {
+                              if (controller.isValidDate("VIDEO", value)) {
+                                controller.selectVideoTime(value);
+                                controller.scheduleCall("VIDEO");
+                              } else {
+                                Fluttertoast.showToast(msg: "Please select future date and time");
+                              }
+                            });
+                      },
+                    );
+                  },
+                  child: Container(
+                    width: 128.w,
+                    height: 31.h,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [AppColors.appYellowColour, AppColors.gradientBottom],
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "scheduleNow".tr,
+                        style: AppTextStyle.textStyle10(
+                          fontColor: AppColors.brownColour,
+                          fontWeight: FontWeight.w400,
                         ),
-                      )
+                      ),
+                    ),
+                  ),
+                )
                     : const SelectedTimeForVideoCall()),
               ],
             ),
@@ -1062,10 +925,7 @@ class HomeUI extends GetView<HomeController> {
       padding: EdgeInsets.all(16.h),
       decoration: BoxDecoration(
         boxShadow: [
-          BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 1.0,
-              offset: const Offset(0.0, 3.0)),
+          BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 1.0, offset: const Offset(0.0, 3.0)),
         ],
         color: AppColors.white,
         borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -1106,30 +966,23 @@ class HomeUI extends GetView<HomeController> {
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Text(
-                        "${controller.homeData?.offers?.orderOffer?[index].offerName}"
-                            .toUpperCase(),
+                        "${controller.homeData?.offers?.orderOffer?[index].offerName}".toUpperCase(),
                         style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      if ((controller.homeData?.offers?.orderOffer?[index]
-                                  .callRate ??
-                              0) >
-                          0)
+                      if ((controller.homeData?.offers?.orderOffer?[index].callRate ?? 0) > 0)
                         CustomText(
-                          " (₹${controller.homeData?.offers?.orderOffer?[index].callRate}/min)"
-                              .toUpperCase(),
+                          " (₹${controller.homeData?.offers?.orderOffer?[index].callRate}/min)".toUpperCase(),
                           fontSize: 10.sp,
                         ),
                     ],
                   ),
                   Obx(
-                    () => SwitchWidget(
+                        () => SwitchWidget(
                       onTap: () {
-                        if (controller.offerTypeLoading.value !=
-                            Loading.loading) {
-                          controller.orderOfferSwitch[index] =
-                              !controller.orderOfferSwitch[index];
+                        if (controller.offerTypeLoading.value != Loading.loading) {
+                          controller.orderOfferSwitch[index] = !controller.orderOfferSwitch[index];
                         }
                         // controller.updateOfferType(
                         //   index: index,
@@ -1156,10 +1009,7 @@ class HomeUI extends GetView<HomeController> {
       padding: EdgeInsets.all(16.h),
       decoration: BoxDecoration(
         boxShadow: [
-          BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 1.0,
-              offset: const Offset(0.0, 3.0)),
+          BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 1.0, offset: const Offset(0.0, 3.0)),
         ],
         color: AppColors.white,
         borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -1206,8 +1056,7 @@ class HomeUI extends GetView<HomeController> {
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Text(
-                        "${controller.homeData?.offers?.customOffer?[index].offerName}"
-                            .toUpperCase(),
+                        "${controller.homeData?.offers?.customOffer?[index].offerName}".toUpperCase(),
                         style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w700,
                         ),
@@ -1224,32 +1073,23 @@ class HomeUI extends GetView<HomeController> {
                     ],
                   ),
                   Obx(
-                    () => SwitchWidget(
+                        () => SwitchWidget(
                       onTap: () {
-                        if (controller.offerTypeLoading.value !=
-                            Loading.loading) {
+                        if (controller.offerTypeLoading.value != Loading.loading) {
                           if (controller.customOfferSwitch[index]) {
                             controller.updateOfferType(
                               index: index,
-                              offerId: controller.homeData?.offers
-                                      ?.customOffer?[index].id ??
-                                  0,
+                              offerId: controller.homeData?.offers?.customOffer?[index].id ?? 0,
                               offerType: 2,
                               value: !controller.customOfferSwitch[index],
                             );
                           } else {
-                            if (controller.customOfferSwitch
-                                .any((element) => element == true)) {
-                              divineSnackBar(
-                                  data:
-                                      "Only 1 custom offer is allowed at once",
-                                  color: AppColors.redColor);
+                            if (controller.customOfferSwitch.any((element) => element == true)) {
+                              divineSnackBar(data: "Only 1 custom offer is allowed at once", color: AppColors.redColor);
                             } else {
                               controller.updateOfferType(
                                 index: index,
-                                offerId: controller.homeData?.offers
-                                        ?.customOffer?[index].id ??
-                                    0,
+                                offerId: controller.homeData?.offers?.customOffer?[index].id ?? 0,
                                 offerType: 2,
                                 value: !controller.customOfferSwitch[index],
                               );
@@ -1277,10 +1117,7 @@ class HomeUI extends GetView<HomeController> {
           padding: EdgeInsets.all(16.h),
           decoration: BoxDecoration(
             boxShadow: [
-              BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 1.0,
-                  offset: const Offset(0.0, 3.0)),
+              BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 1.0, offset: const Offset(0.0, 3.0)),
             ],
             color: AppColors.white,
             borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -1313,8 +1150,7 @@ class HomeUI extends GetView<HomeController> {
                           onTap: () {
                             Fluttertoast.showToast(msg: "No info for now!");
                           },
-                          child: Assets.images.icInfo
-                              .svg(height: 16.h, width: 16.h)),
+                          child: Assets.images.icInfo.svg(height: 16.h, width: 16.h)),
                     ],
                   ),
                 ],
@@ -1333,25 +1169,20 @@ class HomeUI extends GetView<HomeController> {
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           Text(
-                            "${controller.homeData?.offerType?[index].offerName}"
-                                .toUpperCase(),
+                            "${controller.homeData?.offerType?[index].offerName}".toUpperCase(),
                             style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-                          if ((controller
-                                      .homeData?.offerType?[index].callRate ??
-                                  0) >
-                              0)
+                          if ((controller.homeData?.offerType?[index].callRate ?? 0) > 0)
                             CustomText(
-                              " (₹${controller.homeData?.offerType?[index].callRate}/min)"
-                                  .toUpperCase(),
+                              " (₹${controller.homeData?.offerType?[index].callRate}/min)".toUpperCase(),
                               fontSize: 10.sp,
                             ),
                         ],
                       ),
                       Obx(
-                        () => SwitchWidget(
+                            () => SwitchWidget(
                           onTap: () {
                             // if (controller.offerTypeLoading.value !=
                             //     Loading.loading) {
@@ -1431,8 +1262,7 @@ class HomeUI extends GetView<HomeController> {
               SizedBox(width: 5.w),
               Text(
                 btnTitle ?? "",
-                style: AppTextStyle.textStyle20(
-                    fontWeight: FontWeight.w600, fontColor: AppColors.darkBlue),
+                style: AppTextStyle.textStyle20(fontWeight: FontWeight.w600, fontColor: AppColors.darkBlue),
               )
             ],
           ),
@@ -1440,8 +1270,7 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget trainingVideoWidget() {
-    if (controller.homeData?.trainingVideo == null ||
-        (controller.homeData?.trainingVideo ?? []).isEmpty) {
+    if (controller.homeData?.trainingVideo == null || (controller.homeData?.trainingVideo ?? []).isEmpty) {
       return const SizedBox.shrink();
     }
     return Container(
@@ -1513,9 +1342,7 @@ class HomeUI extends GetView<HomeController> {
                           child: LoadImage(
                             boxFit: BoxFit.cover,
                             imageModel: ImageModel(
-                              imagePath: getYoutubeThumbnail(controller
-                                      .homeData?.trainingVideo?[index].url ??
-                                  ''),
+                              imagePath: getYoutubeThumbnail(controller.homeData?.trainingVideo?[index].url ?? ''),
                               loadingIndicator: const SizedBox(
                                 child: CircularProgressIndicator(
                                   color: Color(0XFFFDD48E),
@@ -1546,10 +1373,7 @@ class HomeUI extends GetView<HomeController> {
         borderRadius: BorderRadius.circular(10),
         color: const Color(0xffEDEDED),
         boxShadow: [
-          BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              blurRadius: 3.0,
-              offset: const Offset(0.3, 3.0)),
+          BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 3.0, offset: const Offset(0.3, 3.0)),
         ],
       ),
       child: Padding(
@@ -1570,8 +1394,7 @@ class HomeUI extends GetView<HomeController> {
             ),
             SizedBox(height: 10.h),
             Container(
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
               child: TextFormField(
                 maxLines: 6,
                 maxLength: 96,
@@ -1608,9 +1431,7 @@ class HomeUI extends GetView<HomeController> {
             GestureDetector(
               onTap: () {
                 if (controller.feedBackText.text.isEmpty) {
-                  divineSnackBar(
-                      data: "${'feedbackValidation'.tr}.",
-                      color: AppColors.redColor);
+                  divineSnackBar(data: "${'feedbackValidation'.tr}.", color: AppColors.redColor);
                 } else {
                   controller.sendFeedbackAPI(controller.feedBackText.text);
                 }
@@ -1619,16 +1440,12 @@ class HomeUI extends GetView<HomeController> {
                 child: Container(
                     width: ScreenUtil().screenWidth / 1.5,
                     height: 56,
-                    decoration: BoxDecoration(
-                        color: AppColors.lightYellow,
-                        borderRadius: BorderRadius.circular(30)),
+                    decoration: BoxDecoration(color: AppColors.lightYellow, borderRadius: BorderRadius.circular(30)),
                     child: Center(
                         child: Text(
-                      "submitFeedback".tr,
-                      style: AppTextStyle.textStyle16(
-                          fontWeight: FontWeight.w600,
-                          fontColor: AppColors.brownColour),
-                    ))),
+                          "submitFeedback".tr,
+                          style: AppTextStyle.textStyle16(fontWeight: FontWeight.w600, fontColor: AppColors.brownColour),
+                        ))),
               ),
             ),
             SizedBox(height: 20.h),
@@ -1650,15 +1467,11 @@ class HomeUI extends GetView<HomeController> {
                 children: [
                   Text(
                     "Actual Payment:",
-                    style: AppTextStyle.textStyle16(
-                        fontWeight: FontWeight.w500,
-                        fontColor: AppColors.appRedColour),
+                    style: AppTextStyle.textStyle16(fontWeight: FontWeight.w500, fontColor: AppColors.appRedColour),
                   ),
                   Text(
                     "₹1000000000",
-                    style: AppTextStyle.textStyle16(
-                        fontWeight: FontWeight.w500,
-                        fontColor: AppColors.appRedColour),
+                    style: AppTextStyle.textStyle16(fontWeight: FontWeight.w500, fontColor: AppColors.appRedColour),
                   ),
                 ],
               ),
@@ -1677,15 +1490,11 @@ class HomeUI extends GetView<HomeController> {
                 children: [
                   Text(
                     "${'actualPayment'.tr}:",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w500,
-                        fontColor: AppColors.darkBlue),
+                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
                   ),
                   Text(
                     "₹1000000000",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w500,
-                        fontColor: AppColors.darkBlue),
+                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
                   ),
                 ],
               ),
@@ -1696,15 +1505,13 @@ class HomeUI extends GetView<HomeController> {
                     children: [
                       Text(
                         '-${'amount'.tr}:',
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: AppColors.darkBlue.withOpacity(0.5)),
+                        style:
+                        AppTextStyle.textStyle12(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue.withOpacity(0.5)),
                       ),
                       Text(
                         "₹1000000000",
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: AppColors.darkBlue.withOpacity(0.5)),
+                        style:
+                        AppTextStyle.textStyle12(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue.withOpacity(0.5)),
                       ),
                     ],
                   ),
@@ -1714,9 +1521,8 @@ class HomeUI extends GetView<HomeController> {
                     children: [
                       Text(
                         "-${'lastBillingCycle'.tr}",
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: AppColors.darkBlue.withOpacity(0.5)),
+                        style:
+                        AppTextStyle.textStyle12(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue.withOpacity(0.5)),
                       ),
                     ],
                   ),
@@ -1730,16 +1536,14 @@ class HomeUI extends GetView<HomeController> {
                           Text(
                             "${'refund'.tr}:",
                             style: AppTextStyle.textStyle12(
-                                fontWeight: FontWeight.w500,
-                                fontColor: AppColors.darkBlue.withOpacity(0.5)),
+                                fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue.withOpacity(0.5)),
                           ),
                         ],
                       ),
                       Text(
                         "₹1000000000",
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: AppColors.darkBlue.withOpacity(0.5)),
+                        style:
+                        AppTextStyle.textStyle12(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue.withOpacity(0.5)),
                       ),
                     ],
                   ),
@@ -1754,18 +1558,15 @@ class HomeUI extends GetView<HomeController> {
                             Text(
                               "Supplement:",
                               style: AppTextStyle.textStyle12(
-                                  fontWeight: FontWeight.w500,
-                                  fontColor:
-                                      AppColors.darkBlue.withOpacity(0.5)),
+                                  fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue.withOpacity(0.5)),
                             ),
                           ],
                         ),
                       ),
                       Text(
                         "₹1000000000",
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: AppColors.darkBlue.withOpacity(0.5)),
+                        style:
+                        AppTextStyle.textStyle12(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue.withOpacity(0.5)),
                       ),
                     ],
                   ),
@@ -1786,15 +1587,11 @@ class HomeUI extends GetView<HomeController> {
                   children: [
                     Text(
                       "${'totalTax'.tr}:",
-                      style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
                     ),
                     Text(
                       "₹1000000000",
-                      style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
                     ),
                   ],
                 ),
@@ -1807,15 +1604,13 @@ class HomeUI extends GetView<HomeController> {
                           child: Text(
                             "-TDS:",
                             style: AppTextStyle.textStyle12(
-                                fontWeight: FontWeight.w500,
-                                fontColor: AppColors.darkBlue.withOpacity(0.5)),
+                                fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue.withOpacity(0.5)),
                           ),
                         ),
                         Text(
                           "₹1000000000",
                           style: AppTextStyle.textStyle12(
-                              fontWeight: FontWeight.w500,
-                              fontColor: AppColors.darkBlue.withOpacity(0.5)),
+                              fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue.withOpacity(0.5)),
                         ),
                       ],
                     ),
@@ -1827,15 +1622,13 @@ class HomeUI extends GetView<HomeController> {
                           child: Text(
                             "-${'paymentGateway'.tr}:",
                             style: AppTextStyle.textStyle12(
-                                fontWeight: FontWeight.w500,
-                                fontColor: AppColors.darkBlue.withOpacity(0.5)),
+                                fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue.withOpacity(0.5)),
                           ),
                         ),
                         Text(
                           "₹1000000000",
                           style: AppTextStyle.textStyle12(
-                              fontWeight: FontWeight.w500,
-                              fontColor: AppColors.darkBlue.withOpacity(0.5)),
+                              fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue.withOpacity(0.5)),
                         ),
                       ],
                     ),
@@ -1850,16 +1643,12 @@ class HomeUI extends GetView<HomeController> {
                   Expanded(
                     child: Text(
                       "${'status'.tr}:",
-                      style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
                     ),
                   ),
                   Text(
                     "toBeSettled".tr,
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w500,
-                        fontColor: AppColors.darkBlue),
+                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
                   ),
                 ],
               ),
@@ -1873,16 +1662,12 @@ class HomeUI extends GetView<HomeController> {
                   Expanded(
                     child: Text(
                       "timePeriod".tr,
-                      style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
+                      style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
                     ),
                   ),
                   Text(
                     "16th May 2023 - 23rd May 2023",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w500,
-                        fontColor: AppColors.darkBlue),
+                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
                   ),
                 ],
               ),
@@ -1902,7 +1687,7 @@ class SelectedTimeForChat extends GetView<HomeController> {
       alignment: Alignment.center,
       height: 31.h,
       child: Obx(
-        () {
+            () {
           if (controller.selectedChatTime.value.isNotEmpty) {
             return Text(
               "${controller.selectedChatDate.value.toCustomFormat()} ${controller.selectedChatTime.value}",
@@ -1935,8 +1720,7 @@ class PerformanceDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(15.0))),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
       child: Builder(
         builder: (context) {
           return GetBuilder<HomeController>(
@@ -1944,12 +1728,9 @@ class PerformanceDialog extends StatelessWidget {
               builder: (controller) {
                 // print(controller.performanceScoreList[controller.scoreIndex]?.performance?.marksObtains);
                 return Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15)),
+                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
                   child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                    padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
@@ -1957,9 +1738,7 @@ class PerformanceDialog extends StatelessWidget {
                         Center(
                           child: Text(
                             "${'payAttention'.tr}!",
-                            style: AppTextStyle.textStyle20(
-                                fontColor: AppColors.redColor,
-                                fontWeight: FontWeight.w600),
+                            style: AppTextStyle.textStyle20(fontColor: AppColors.redColor, fontWeight: FontWeight.w600),
                           ),
                         ),
                         SizedBox(height: 20.h),
@@ -1968,14 +1747,10 @@ class PerformanceDialog extends StatelessWidget {
                             width: 230.h,
                             decoration: BoxDecoration(
                               boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    blurRadius: 3.0,
-                                    offset: const Offset(0.0, 3.0)),
+                                BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 3.0, offset: const Offset(0.0, 3.0)),
                               ],
                               color: Colors.white,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(20)),
+                              borderRadius: const BorderRadius.all(Radius.circular(20)),
                             ),
                             child: Column(
                               children: [
@@ -1992,9 +1767,7 @@ class PerformanceDialog extends StatelessWidget {
 
                                     // controller.yourScore[controller.scoreIndex]
                                     //     ['title'],
-                                    style: AppTextStyle.textStyle14(
-                                        fontColor: AppColors.blackColor,
-                                        fontWeight: FontWeight.w400),
+                                    style: AppTextStyle.textStyle14(fontColor: AppColors.blackColor, fontWeight: FontWeight.w400),
                                   ),
                                 ),
                                 // SizedBox(height: 15.h),
@@ -2185,15 +1958,12 @@ class PerformanceDialog extends StatelessWidget {
                                         height: 135.h,
                                         width: 270.h,
                                         child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
+                                          mainAxisAlignment: MainAxisAlignment.end,
                                           children: [
                                             SizedBox(height: 25.h),
                                             Text(
                                               "Your Score",
-                                              style: AppTextStyle.textStyle10(
-                                                  fontColor:
-                                                      AppColors.darkBlue),
+                                              style: AppTextStyle.textStyle10(fontColor: AppColors.darkBlue),
                                             ),
                                             SizedBox(height: 5.h),
                                             Text(
@@ -2202,9 +1972,7 @@ class PerformanceDialog extends StatelessWidget {
                                               //     ? '${item?.performance?[0].value ?? 0}'
                                               //     : "0",
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.w700,
-                                                  color: AppColors.darkBlue,
-                                                  fontSize: 20.sp),
+                                                  fontWeight: FontWeight.w700, color: AppColors.darkBlue, fontSize: 20.sp),
                                             ),
                                             SizedBox(height: 5.h),
                                             Text(
@@ -2213,9 +1981,7 @@ class PerformanceDialog extends StatelessWidget {
                                               //     ? 'Out of ${item?.performance?[0].valueOutOff ?? 0}'
                                               //     : "Out of 0",
                                               // "Out of 100",
-                                              style: AppTextStyle.textStyle10(
-                                                  fontColor:
-                                                      AppColors.darkBlue),
+                                              style: AppTextStyle.textStyle10(fontColor: AppColors.darkBlue),
                                             ),
                                           ],
                                         ),
@@ -2232,115 +1998,96 @@ class PerformanceDialog extends StatelessWidget {
                         controller.performanceScoreList.length == 1
                             ? const SizedBox()
                             : Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        controller.onPreviousTap();
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(width: 1),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Center(
-                                            child: Text(
-                                              "previous".tr,
-                                              style: AppTextStyle.textStyle16(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontColor:
-                                                      AppColors.darkBlue),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(width: 20.w),
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        controller.onNextTap();
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(width: 1),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Center(
-                                            child: Text(
-                                              "next".tr,
-                                              style: AppTextStyle.textStyle16(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontColor:
-                                                      AppColors.darkBlue),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                        controller.performanceScoreList.length == 1
-                            ? const SizedBox()
-                            : SizedBox(height: 15.h),
-                        controller.scoreIndex == controller.yourScore.length - 1
-                            ? GestureDetector(
-                                onTap: () => Navigator.pop(context),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      gradient: const LinearGradient(
-                                        begin: Alignment.bottomCenter,
-                                        end: Alignment.topCenter,
-                                        colors: [
-                                          AppColors.appYellowColour,
-                                          AppColors.gradientBottom
-                                        ],
-                                      ),
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Center(
-                                      child: Text(
-                                        "close".tr,
-                                        style: AppTextStyle.textStyle16(
-                                            fontWeight: FontWeight.w600,
-                                            fontColor: AppColors.brownColour),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : GestureDetector(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: InkWell(
                                 onTap: () {
-                                  Navigator.pop(context);
-                                  dashboardController.selectedIndex.value = 1;
+                                  controller.onPreviousTap();
                                 },
                                 child: Container(
-                                  decoration: BoxDecoration(
-                                      color: AppColors.lightGrey,
-                                      borderRadius: BorderRadius.circular(10)),
+                                  decoration:
+                                  BoxDecoration(border: Border.all(width: 1), borderRadius: BorderRadius.circular(10)),
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Center(
                                       child: Text(
-                                        "viewScore".tr,
+                                        "previous".tr,
                                         style: AppTextStyle.textStyle16(
-                                            fontWeight: FontWeight.w600,
-                                            fontColor: AppColors.white),
+                                            fontWeight: FontWeight.w600, fontColor: AppColors.darkBlue),
                                       ),
                                     ),
                                   ),
                                 ),
-                              )
+                              ),
+                            ),
+                            SizedBox(width: 20.w),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  controller.onNextTap();
+                                },
+                                child: Container(
+                                  decoration:
+                                  BoxDecoration(border: Border.all(width: 1), borderRadius: BorderRadius.circular(10)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text(
+                                        "next".tr,
+                                        style: AppTextStyle.textStyle16(
+                                            fontWeight: FontWeight.w600, fontColor: AppColors.darkBlue),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        controller.performanceScoreList.length == 1 ? const SizedBox() : SizedBox(height: 15.h),
+                        controller.scoreIndex == controller.yourScore.length - 1
+                            ? GestureDetector(
+                          onTap: () => Navigator.pop(context),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                  colors: [AppColors.appYellowColour, AppColors.gradientBottom],
+                                ),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: Text(
+                                  "close".tr,
+                                  style: AppTextStyle.textStyle16(
+                                      fontWeight: FontWeight.w600, fontColor: AppColors.brownColour),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                            : GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                            dashboardController.selectedIndex.value = 1;
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(color: AppColors.lightGrey, borderRadius: BorderRadius.circular(10)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: Text(
+                                  "viewScore".tr,
+                                  style: AppTextStyle.textStyle16(fontWeight: FontWeight.w600, fontColor: AppColors.white),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -2361,7 +2108,7 @@ class SelectedTimeForCall extends GetView<HomeController> {
       alignment: Alignment.center,
       height: 31.h,
       child: Obx(
-        () {
+            () {
           if (controller.selectedCallTime.value.isNotEmpty) {
             return Text(
               "${controller.selectedCallDate.value.toCustomFormat()} ${controller.selectedCallTime.value}",
@@ -2394,7 +2141,7 @@ class SelectedTimeForVideoCall extends GetView<HomeController> {
       alignment: Alignment.center,
       height: 31.h,
       child: Obx(
-        () {
+            () {
           if (controller.selectedVideoTime.value.isNotEmpty) {
             return Text(
               "${controller.selectedVideoDate.value.toCustomFormat()} ${controller.selectedVideoTime.value}",
