@@ -451,24 +451,66 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         return AnimatedOpacity(
           opacity: astPerm ? 0.0 : 1.0,
           duration: const Duration(seconds: 1),
-          child: astPerm
-              ? const SizedBox()
-              : InkWell(
-                  onTap: ZegoService().newOnBannerPressed,
-                  child: const SizedBox(
-                    height: 50,
-                    width: double.infinity,
-                    child: Card(
-                      child: Center(
-                        child: Text(
-                          "Allow permissions required for Video / Audio calls.",
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+          child: astPerm ? const SizedBox() : commonRedContainer(),
         );
       },
+    );
+  }
+
+  Widget commonRedContainer() {
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        horizontal: 16.0,
+        vertical: 8.0,
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(color: AppColors.red, width: 2),
+        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+        color: AppColors.white,
+      ),
+      child: ListTile(
+        dense: true,
+        contentPadding: EdgeInsets.zero,
+        minLeadingWidth: 0,
+        horizontalTitleGap: 0,
+        leading: const Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 8.0,
+            vertical: 8.0,
+          ),
+        ),
+        title: const Text(
+          "Enable required settings before initiating or accepting the call.",
+          style: TextStyle(
+            color: AppColors.red,
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        trailing: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 8.0,
+            vertical: 8.0,
+          ),
+          child: OutlinedButton(
+            onPressed: ZegoService().newOnBannerPressed,
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8.0,
+              ),
+              side: const BorderSide(color: AppColors.red, width: 1),
+            ),
+            child: const Text(
+              "Open Settings",
+              style: TextStyle(
+                color: AppColors.red,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -1672,6 +1714,10 @@ class AstrologerChatAppBar extends StatelessWidget {
                       Builder(
                         builder: (context) {
                           Map orderData = AppFirebaseService().orderData.value;
+                           String astrImage =
+                              "${controller.preference.getAmazonUrl()}${orderData["astroImage"] ?? ""}";
+                          String custImage =
+                              "${controller.preference.getAmazonUrl()}${orderData["customer_image"] ?? ""}";
                           return ZegoService().buttonUI(
                             isVideoCall: false,
                             targetUserID: orderData["userId"] ?? "",
@@ -1687,12 +1733,10 @@ class AstrologerChatAppBar extends StatelessWidget {
                             customData: {
                               "astr_id": orderData["astroId"] ?? "",
                               "astr_name": orderData["astrologerName"] ?? "",
-                              "astr_image":
-                                  "https://i.postimg.cc/vH63dN8v/Group-128434.png",
+                              "astr_image": astrImage,
                               "cust_id": orderData["userId"] ?? "",
                               "cust_name": orderData["customerName"] ?? "",
-                              "cust_image":
-                                  "https://i.postimg.cc/nV9PHz07/Group-128434-1.png",
+                              "cust_image": custImage,
                               "time": "00:01:00",
                             },
                           );
@@ -1702,6 +1746,10 @@ class AstrologerChatAppBar extends StatelessWidget {
                       Builder(
                         builder: (context) {
                           Map orderData = AppFirebaseService().orderData.value;
+                           String astrImage =
+                              "${controller.preference.getAmazonUrl()}${orderData["astroImage"] ?? ""}";
+                          String custImage =
+                              "${controller.preference.getAmazonUrl()}${orderData["customer_image"] ?? ""}";
                           return ZegoService().buttonUI(
                             isVideoCall: true,
                             targetUserID: orderData["userId"] ?? "",
@@ -1717,12 +1765,10 @@ class AstrologerChatAppBar extends StatelessWidget {
                             customData: {
                               "astr_id": orderData["astroId"] ?? "",
                               "astr_name": orderData["astrologerName"] ?? "",
-                              "astr_image":
-                                  "https://i.postimg.cc/vH63dN8v/Group-128434.png",
+                              "astr_image": astrImage,
                               "cust_id": orderData["userId"] ?? "",
                               "cust_name": orderData["customerName"] ?? "",
-                              "cust_image":
-                                  "https://i.postimg.cc/nV9PHz07/Group-128434-1.png",
+                              "cust_image": custImage,
                               "time": "00:01:00",
                             },
                           );
