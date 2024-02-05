@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 class TimeDurationService extends GetxService {
   Timer? chatTimer;
-  Rx<Duration> chatDuration = const Duration(minutes: 0).obs;
+  Rx<Duration> chatDuration = Duration(minutes: 0).obs;
   int orderId = 0;
 
   startMinuteTimer(int minDuration, int id) {
@@ -12,8 +12,7 @@ class TimeDurationService extends GetxService {
       orderId = id;
       chatDuration.value = Duration(seconds: minDuration);
       chatTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-        chatDuration.value =
-            Duration(seconds: chatDuration.value.inSeconds - 1);
+        chatDuration.value = Duration(seconds: chatDuration.value.inSeconds - 1);
         if (chatDuration.value.inSeconds <= 0) {
           stopTimer();
         }

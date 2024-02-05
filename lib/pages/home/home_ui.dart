@@ -8,6 +8,7 @@ import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
 import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
+import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_ui.dart';
 import 'package:divine_astrologer/screens/order_feedback/widget/feedback_card_widget.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
@@ -15,14 +16,10 @@ import 'package:divine_astrologer/utils/load_image.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/adapters.dart';
-import 'package:readmore/readmore.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:velocity_x/velocity_x.dart';
+
 import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../model/feedback_response.dart';
@@ -577,23 +574,26 @@ class HomeUI extends GetView<HomeController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         //crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Marital Status: ${data?["marital"]}',
-                                style: AppTextStyle.textStyle10(
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                'Problem Area: ${data?["problem"]}',
-                                style: AppTextStyle.textStyle10(
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Marital Status: ${data?["marital"]}',
+                                  style: AppTextStyle.textStyle10(
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'Problem Area: ${data?["problem"]}',
+                                  maxLines: 1,
+                                  style: AppTextStyle.textStyle10(
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ],
+                            ),
                           ),
-                          InkWell(
+                          GestureDetector(
                             onTap: () {},
                             child: Container(
                               height: 54.h,
@@ -690,30 +690,34 @@ class HomeUI extends GetView<HomeController> {
                   ],
                 ),
                 const SizedBox(height: 10),
-                Html(
+                /*Html(
                   data: controller.homeData?.noticeBoard?.description ?? '',
                   onLinkTap: (url, __, ___) {
                     launchUrl(Uri.parse(url ?? ''));
                   },
                 ),
-                // ReadMoreText(
-                //   controller.homeData?.noticeBoard?.description ?? '',
-                //   trimLines: 4,
-                //   colorClickableText: AppColors.blackColor,
-                //   trimMode: TrimMode.Line,
-                //   trimCollapsedText: "readMore".tr,
-                //   trimExpandedText: "showLess".tr,
-                //   moreStyle: TextStyle(
-                //     fontSize: 12.sp,
-                //     fontWeight: FontWeight.w700,
-                //     color: AppColors.blackColor,
-                //   ),
-                //   lessStyle: TextStyle(
-                //     fontSize: 12.sp,
-                //     fontWeight: FontWeight.w700,
-                //     color: AppColors.blackColor,
-                //   ),
-                // ),
+                ReadMoreText(
+                  controller.homeData?.noticeBoard?.description ?? '',
+                  trimLines: 4,
+                  colorClickableText: AppColors.blackColor,
+                  trimMode: TrimMode.Line,
+                  trimCollapsedText: "readMore".tr,
+                  trimExpandedText: "showLess".tr,
+                  moreStyle: TextStyle(
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.blackColor,
+                  ),
+                  lessStyle: TextStyle(
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.blackColor,
+                  ),
+                ),*/
+                ExpandableHtml(
+                  htmlData: controller.homeData?.noticeBoard?.description ?? "",
+                  trimLength: 100,
+                ),
               ],
             ),
           ),
@@ -1938,6 +1942,7 @@ class PerformanceDialog extends StatelessWidget {
           return GetBuilder<HomeController>(
               id: "score_update",
               builder: (controller) {
+                // print(controller.performanceScoreList[controller.scoreIndex]?.performance?.marksObtains);
                 return Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
@@ -1978,7 +1983,7 @@ class PerformanceDialog extends StatelessWidget {
                                 Center(
                                   child: Text(
                                     controller.getLabel(),
-
+                                    // "",
                                     // controller
                                     //         .performanceScoreList[
                                     //             controller.scoreIndex]
@@ -1992,13 +1997,12 @@ class PerformanceDialog extends StatelessWidget {
                                         fontWeight: FontWeight.w400),
                                   ),
                                 ),
-                                SizedBox(height: 15.h),
-                                Stack(
+                                // SizedBox(height: 15.h),
+                                /*Stack(
                                   alignment: Alignment.topCenter,
                                   children: [
-                                    Assets.images.bgMeterFinal
-                                        .svg(width: 190.h),
-                                    /* Positioned(
+                                    Assets.images.bgMeterFinal.svg(width: 190.h),
+                                     Positioned(
                                       left: 32.h,
                                       top: 40.h,
                                       child: CustomText(
@@ -2034,38 +2038,30 @@ class PerformanceDialog extends StatelessWidget {
                                         '${item?.performance?.marks?[2].max ?? 0}',
                                         fontSize: 8.sp,
                                       ),
-                                    ),*/
+                                    ),
                                     Column(
                                       children: [
                                         SizedBox(height: 60.h),
                                         Text(
                                           "Your Score",
-                                          style: AppTextStyle.textStyle10(
-                                              fontColor: AppColors.darkBlue),
+                                          style: AppTextStyle.textStyle10(fontColor: AppColors.darkBlue),
                                         ),
                                         SizedBox(height: 5.h),
                                         Text(
-                                          controller
-                                                  .performanceScoreList[
-                                                      controller.scoreIndex]
-                                                  ?.performance
-                                                  ?.marksObtains
+                                          controller.performanceScoreList[controller.scoreIndex]?.performance?.marksObtains
                                                   .toString() ??
                                               '',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              color: AppColors.darkBlue,
-                                              fontSize: 20.sp),
+                                          style:
+                                              TextStyle(fontWeight: FontWeight.w700, color: AppColors.darkBlue, fontSize: 20.sp),
                                         ),
                                         SizedBox(height: 5.h),
                                         Text(
                                           'Out of ${controller.performanceScoreList[controller.scoreIndex]?.performance?.totalMarks ?? 0}',
-                                          style: AppTextStyle.textStyle10(
-                                              fontColor: AppColors.darkBlue),
+                                          style: AppTextStyle.textStyle10(fontColor: AppColors.darkBlue),
                                         ),
                                       ],
                                     ),
-                                    /*Center(
+                                   Center(
                                               child: SizedBox(
                                                 height: 140.h,
                                                 width: 280.h,
@@ -2136,8 +2132,96 @@ class PerformanceDialog extends StatelessWidget {
                                                   ],
                                                 ),
                                               ),
-                                            ),*/
+                                            ),
+
                                   ],
+                                ),*/
+                                SizedBox(
+                                  width: 190.h,
+                                  child: Stack(
+                                    children: [
+                                      Assets.images.bgMeterFinal.svg(
+                                        height: 135.h,
+                                        width: 135.h,
+                                      ),
+                                      Positioned(
+                                        left: 32.h,
+                                        top: 40.h,
+                                        child: CustomText(
+                                          // "25",
+                                          '${controller.performanceScoreList[controller.scoreIndex]?.performance?.marks?[1].min ?? 0}',
+                                          //'${item?.rankDetail?[0].max ?? 0}',
+                                          fontSize: 8.sp,
+                                        ),
+                                      ),
+                                      Positioned(
+                                        right: 38.h,
+                                        top: 40.h,
+                                        child: CustomText(
+                                          // "50",
+                                          '${controller.performanceScoreList[controller.scoreIndex]?.performance?.marks?[1].max ?? 0}',
+                                          fontSize: 8.sp,
+                                        ),
+                                      ),
+                                      Positioned(
+                                        left: 5.h,
+                                        top: 105.h,
+                                        child: CustomText(
+                                          //0
+                                          '${controller.performanceScoreList[controller.scoreIndex]?.performance?.marks?[0].min ?? 0}',
+                                          fontSize: 8.sp,
+                                        ),
+                                      ),
+                                      Positioned(
+                                        right: 0.h,
+                                        top: 105.h,
+                                        child: CustomText(
+                                          //100
+                                          '${controller.performanceScoreList[controller.scoreIndex]?.performance?.marks?[2].max ?? 0}',
+                                          fontSize: 8.sp,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 135.h,
+                                        width: 270.h,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            SizedBox(height: 25.h),
+                                            Text(
+                                              "Your Score",
+                                              style: AppTextStyle.textStyle10(
+                                                  fontColor:
+                                                      AppColors.darkBlue),
+                                            ),
+                                            SizedBox(height: 5.h),
+                                            Text(
+                                              '${controller.performanceScoreList[controller.scoreIndex]?.performance?.marksObtains ?? 0}',
+                                              // item?.performance?.isNotEmpty ?? false
+                                              //     ? '${item?.performance?[0].value ?? 0}'
+                                              //     : "0",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  color: AppColors.darkBlue,
+                                                  fontSize: 20.sp),
+                                            ),
+                                            SizedBox(height: 5.h),
+                                            Text(
+                                              'Out of ${controller.performanceScoreList[controller.scoreIndex]?.performance?.totalMarks ?? 0}',
+                                              // item?.performance?.isNotEmpty ?? false
+                                              //     ? 'Out of ${item?.performance?[0].valueOutOff ?? 0}'
+                                              //     : "Out of 0",
+                                              // "Out of 100",
+                                              style: AppTextStyle.textStyle10(
+                                                  fontColor:
+                                                      AppColors.darkBlue),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 SizedBox(height: 20.h),
                               ],

@@ -186,7 +186,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                             ],
                                           )*/
                                               MessageView(
-                                                index: index,
+                                                  index: index,
                                                   chatMessage: chatMessage,
                                                   yourMessage:
                                                       chatMessage.senderId ==
@@ -1669,37 +1669,63 @@ class AstrologerChatAppBar extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      ZegoService().buttonUI(
-                        isVideoCall: false,
-                        targetUserID:
-                            AppFirebaseService().orderData.value["userId"],
-                        targetUserName: AppFirebaseService()
-                            .orderData
-                            .value["customerName"],
-                        checkOppositeSidePermGranted: () {
-                          String name =
-                              preferenceService.getUserDetail()?.name ?? "";
-                          String message =
-                              "$name wants to start a call, please allow all required permissions";
-                          controller.messageController.text = message;
-                          controller.sendMsg();
+                      Builder(
+                        builder: (context) {
+                          Map orderData = AppFirebaseService().orderData.value;
+                          return ZegoService().buttonUI(
+                            isVideoCall: false,
+                            targetUserID: orderData["userId"] ?? "",
+                            targetUserName: orderData["customerName"] ?? "",
+                            checkOppositeSidePermGranted: () {
+                              String name =
+                                  preferenceService.getUserDetail()?.name ?? "";
+                              String message =
+                                  "$name wants to start a call, please allow all required permissions";
+                              controller.messageController.text = message;
+                              controller.sendMsg();
+                            },
+                            customData: {
+                              "astr_id": orderData["astroId"] ?? "",
+                              "astr_name": orderData["astrologerName"] ?? "",
+                              "astr_image":
+                                  "https://i.postimg.cc/vH63dN8v/Group-128434.png",
+                              "cust_id": orderData["userId"] ?? "",
+                              "cust_name": orderData["customerName"] ?? "",
+                              "cust_image":
+                                  "https://i.postimg.cc/nV9PHz07/Group-128434-1.png",
+                              "time": "00:01:00",
+                            },
+                          );
                         },
                       ),
                       SizedBox(width: 10.w),
-                      ZegoService().buttonUI(
-                        isVideoCall: true,
-                        targetUserID:
-                            AppFirebaseService().orderData.value["userId"],
-                        targetUserName: AppFirebaseService()
-                            .orderData
-                            .value["customerName"],
-                        checkOppositeSidePermGranted: () {
-                          String name =
-                              preferenceService.getUserDetail()?.name ?? "";
-                          String message =
-                              "$name wants to start a call, please allow all required permissions";
-                          controller.messageController.text = message;
-                          controller.sendMsg();
+                      Builder(
+                        builder: (context) {
+                          Map orderData = AppFirebaseService().orderData.value;
+                          return ZegoService().buttonUI(
+                            isVideoCall: true,
+                            targetUserID: orderData["userId"] ?? "",
+                            targetUserName: orderData["customerName"] ?? "",
+                            checkOppositeSidePermGranted: () {
+                              String name =
+                                  preferenceService.getUserDetail()?.name ?? "";
+                              String message =
+                                  "$name wants to start a call, please allow all required permissions";
+                              controller.messageController.text = message;
+                              controller.sendMsg();
+                            },
+                            customData: {
+                              "astr_id": orderData["astroId"] ?? "",
+                              "astr_name": orderData["astrologerName"] ?? "",
+                              "astr_image":
+                                  "https://i.postimg.cc/vH63dN8v/Group-128434.png",
+                              "cust_id": orderData["userId"] ?? "",
+                              "cust_name": orderData["customerName"] ?? "",
+                              "cust_image":
+                                  "https://i.postimg.cc/nV9PHz07/Group-128434-1.png",
+                              "time": "00:01:00",
+                            },
+                          );
                         },
                       ),
                       SizedBox(width: 5.w),

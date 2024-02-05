@@ -16,7 +16,8 @@ class ApiProvider {
   static const String version = 'v7';
   // static const String socketUrl = "http://13.127.116.89:4000";
   static const String socketUrl = "http://15.206.23.215:8081";
-  final String baseUrl = "https://wakanda-api.divinetalk.live/api/astro/$version/";
+  final String baseUrl =
+      "https://wakanda-api.divinetalk.live/api/astro/$version/";
   //final String baseUrl = "http://13.235.46.27/admin/$version/";
 
   //Socket Event
@@ -125,26 +126,25 @@ class ApiProvider {
   final String deleteChatSession = "deleteChatSession";
   final String deleteChatSessionResponse = "deleteChatSessionResponse";
 
-  final String  joinRoomSocket = "join-room";
-  final String  startAstroCustPrivateChat = "start-astro-cust-private-chat";
-  final String  astrologerJoinedPrivateChat = "astrologer-joined-private-chat";
-  final String  userJoinedPrivateChat = "user-joined-private-chat";
-  final String  userTyping = "user-typing";
-  final String  sendMessage = "send-message";
-  final String  messageSent = "message-sent";
-  final String  changeMsgStatus = "change-msg-status";
-  final String  msgStatusChanged = "msg-status-changed";
-  final String  leavePrivateChat = "leave-private-chat";
-  final String  userDisconnected = "user-disconnected";
-  final String  sendConnectRequest = "send-connect-request";
+  final String joinRoomSocket = "join-room";
+  final String startAstroCustPrivateChat = "start-astro-cust-private-chat";
+  final String astrologerJoinedPrivateChat = "astrologer-joined-private-chat";
+  final String userJoinedPrivateChat = "user-joined-private-chat";
+  final String userTyping = "user-typing";
+  final String sendMessage = "send-message";
+  final String messageSent = "message-sent";
+  final String changeMsgStatus = "change-msg-status";
+  final String msgStatusChanged = "msg-status-changed";
+  final String leavePrivateChat = "leave-private-chat";
+  final String userDisconnected = "user-disconnected";
+  final String sendConnectRequest = "send-connect-request";
   final String getChatAssistAstrologers = "getChatAssistCustomers";
   final String getConsulationData = "getConsulationData";
-  final String  sendChatAssistMessage = "send-chat-assist-message";
+  final String sendChatAssistMessage = "send-chat-assist-message";
 
   // Added By: divine-dharam
-  final String  joinLive = "join-live";
+  final String joinLive = "join-live";
   //
-
 
   //privacy policy & terms
   final String termsAndCondition = "termsAndCondition";
@@ -257,11 +257,11 @@ class ApiProvider {
   }
 */
   Future<http.Response> get(
-      String url, {
-        Map<String, String>? headers,
-        Map<String, dynamic>? queryParameters,
-        bool closeDialogOnTimeout = true,
-      }) async {
+    String url, {
+    Map<String, String>? headers,
+    Map<String, dynamic>? queryParameters,
+    bool closeDialogOnTimeout = true,
+  }) async {
     if (headers == null) {
       headers = await getAuthorisedHeader();
       log("headers: $headers");
@@ -287,7 +287,6 @@ class ApiProvider {
       throw NoInternetException(AppString.noInternetConnection);
     }
   }
-
 
   delete(String url,
       {Map<String, String>? headers, bool closeDialogOnTimeout = true}) async {

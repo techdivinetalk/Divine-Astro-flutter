@@ -60,7 +60,8 @@ class PerformanceUI extends GetView<PerformanceController> {
                     height: 20.h,
                   ),
                   OverAllScoreData(
-                      performanceFilterResponse: controller.performanceFilterResponse),
+                      performanceFilterResponse:
+                          controller.performanceFilterResponse),
                   SizedBox(
                     height: 30.h,
                   ),
@@ -101,9 +102,10 @@ class YourScoreWidget extends GetView<PerformanceController> {
                 primary: false,
                 itemCount: controller.overAllScoreList.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 20.h,
-                    childAspectRatio: 0.60),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 20.h,
+                  childAspectRatio: 0.62,
+                ),
                 itemBuilder: (BuildContext context, int index) {
                   Conversion? item = controller.overAllScoreList[index];
                   ScoreModelClass model = controller.percentageSubTitle[index];
@@ -302,55 +304,45 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                     ListView.builder(
                                                         physics:
                                                             const NeverScrollableScrollPhysics(),
-                                                        itemCount: item?.rankDetail
+                                                        itemCount: item
+                                                                ?.rankDetail
                                                                 ?.length ??
                                                             0,
                                                         shrinkWrap: true,
                                                         primary: false,
                                                         itemBuilder:
                                                             (context, index) {
-                                                          RankDetail? model = item
-                                                              ?.rankDetail?[index];
+                                                          RankDetail? model =
+                                                              item?.rankDetail?[
+                                                                  index];
                                                           return Row(
                                                             children: [
                                                               Expanded(
                                                                 child: Column(
                                                                   children: [
-                                                                    model?.min == '0' || model?.min == null ?
-                                                                        Text(
-                                                                          'Less than ${model?.max}${model?.text}',
-                                                                          textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                          style: AppTextStyle.textStyle12(
-                                                                              fontWeight: FontWeight
-                                                                                  .w400,
-                                                                              fontColor:
-                                                                              AppColors.darkBlue),
-                                                                        ) :
-                                                                    model?.max == '0' || model?.max == null ?
-                                                                        Text(
-                                                                          '${model?.min}${model?.text}+',
-                                                                          textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                          style: AppTextStyle.textStyle12(
-                                                                              fontWeight: FontWeight
-                                                                                  .w400,
-                                                                              fontColor:
-                                                                              AppColors.darkBlue),
-                                                                        ) :
-                                                                    Text(
-                                                                      '${model?.min}${model?.text}-${model?.max}${model?.text}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style: AppTextStyle.textStyle12(
-                                                                          fontWeight: FontWeight
-                                                                              .w400,
-                                                                          fontColor:
-                                                                              AppColors.darkBlue),
-                                                                    ),
+                                                                    model?.min ==
+                                                                                '0' ||
+                                                                            model?.min ==
+                                                                                null
+                                                                        ? Text(
+                                                                            'Less than ${model?.max}${model?.text}',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                                                                          )
+                                                                        : model?.max == '0' ||
+                                                                                model?.max == null
+                                                                            ? Text(
+                                                                                '${model?.min}${model?.text}+',
+                                                                                textAlign: TextAlign.center,
+                                                                                style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                                                                              )
+                                                                            : Text(
+                                                                                '${model?.min}${model?.text}-${model?.max}${model?.text}',
+                                                                                textAlign: TextAlign.center,
+                                                                                style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                                                                              ),
                                                                     SizedBox(
                                                                       height:
                                                                           10.h,
@@ -407,8 +399,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                             Radius.circular(10))),
                                     child: Text(
                                       item?.label ?? '',
-                                      textAlign: TextAlign
-                                          .center,
+                                      textAlign: TextAlign.center,
                                       style: AppTextStyle.textStyle12(
                                           fontColor: AppColors.darkBlue),
                                       overflow: TextOverflow.ellipsis,
@@ -815,7 +806,9 @@ class OverAllScoreData extends GetView<PerformanceController> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.toNamed(RouteName.rankSystemUI, arguments: [controller.performanceFilterResponse?.data?.rankSystem]);
+        Get.toNamed(RouteName.rankSystemUI, arguments: [
+          controller.performanceFilterResponse?.data?.rankSystem
+        ]);
       },
       child: Container(
         padding: EdgeInsets.all(12.h),
@@ -876,7 +869,8 @@ class OverAllScoreData extends GetView<PerformanceController> {
                       ),
                       Row(
                         children: [
-                          setImage(performanceFilterResponse?.data?.rank ?? "") ??
+                          setImage(performanceFilterResponse?.data?.rank ??
+                                  "") ??
                               SizedBox(
                                 width: 10.w,
                               ),
@@ -923,9 +917,10 @@ setImage(String rank) {
     return Assets.images.icSilver.image(height: 21.h, width: 21.h);
   } else if (rank == "Bronze") {
     return Assets.images.icBronze.image(height: 21.h, width: 21.h);
-  }
-  else {
-    return SizedBox(width: 10.w,);
+  } else {
+    return SizedBox(
+      width: 10.w,
+    );
   }
 }
 

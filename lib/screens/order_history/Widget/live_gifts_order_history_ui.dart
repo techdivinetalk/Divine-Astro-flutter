@@ -16,8 +16,7 @@ class LiveGiftsHistory extends StatelessWidget {
   LiveGiftsHistory({Key? key, this.controller}) : super(key: key);
 
   final ScrollController? controller;
-  SharedPreferenceService preferenceService =
-      Get.find<SharedPreferenceService>();
+  SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
 
   @override
   Widget build(BuildContext context) {
@@ -68,15 +67,9 @@ class LiveGiftsHistory extends StatelessWidget {
       onTap: () {},
       child: Container(
         padding: const EdgeInsets.all(12.0),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: AppColors.white,
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  blurRadius: 3.0,
-                  offset: const Offset(0.3, 3.0)),
-            ]),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColors.white, boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 3.0, offset: const Offset(0.3, 3.0)),
+        ]),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -94,10 +87,8 @@ class LiveGiftsHistory extends StatelessWidget {
                               height: 65,
                               width: 65,
                               child: CachedNetworkImage(
-                                imageUrl:
-                                    "${preferenceService.getBaseImageURL()}/${data[index].getGift?.giftImage ?? ''}",
-                                errorWidget: (context, s, d) =>
-                                    Assets.images.bgTmpUser.svg(),
+                                imageUrl: "${preferenceService.getBaseImageURL()}/${data[index].getGift?.giftImage ?? ''}",
+                                errorWidget: (context, s, d) => Assets.images.bgTmpUser.svg(),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -108,14 +99,9 @@ class LiveGiftsHistory extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("${'orderId'.tr} : ${data[index].orderId}",
-                            style: AppTextStyle.textStyle12(
-                                fontWeight: FontWeight.w400,
-                                fontColor: AppColors.darkBlue)),
-                        Text(
-                            "${data[index].getCustomers != null ? data[index].getCustomers?.name : "UserName"}",
-                            style: AppTextStyle.textStyle20(
-                                fontWeight: FontWeight.w600,
-                                fontColor: AppColors.darkBlue))
+                            style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                        Text("${data[index].getCustomers != null ? data[index].getCustomers?.name : "UserName"}",
+                            style: AppTextStyle.textStyle20(fontWeight: FontWeight.w600, fontColor: AppColors.darkBlue))
                       ],
                     )
                   ],
@@ -126,8 +112,7 @@ class LiveGiftsHistory extends StatelessWidget {
                     width: 90,
                     height: 37,
                     decoration: BoxDecoration(
-                      border:
-                          Border.all(color: AppColors.lightGreen, width: 1.0),
+                      border: Border.all(color: AppColors.lightGreen, width: 1.0),
                       borderRadius: BorderRadius.circular(22.0),
                     ),
                     child: Row(
@@ -135,9 +120,7 @@ class LiveGiftsHistory extends StatelessWidget {
                       children: [
                         Text(
                           "${data[index].status}",
-                          style: AppTextStyle.textStyle14(
-                              fontWeight: FontWeight.w500,
-                              fontColor: AppColors.lightGreen),
+                          style: AppTextStyle.textStyle14(fontWeight: FontWeight.w500, fontColor: AppColors.lightGreen),
                         ),
                       ],
                     ),
@@ -150,14 +133,10 @@ class LiveGiftsHistory extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("${'dateTime'.tr} :",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue)),
+                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
                 Text(
                   DateFormat("dd MMM, hh:mm aa").format(data[index].createdAt!),
-                  style: AppTextStyle.textStyle12(
-                      fontWeight: FontWeight.w400,
-                      fontColor: AppColors.darkBlue),
+                  style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
                 ),
               ],
             ),
@@ -166,13 +145,9 @@ class LiveGiftsHistory extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("${'giftName'.tr} :",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue)),
+                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
                 Text("${data[index].getGift?.giftName}",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue)),
+                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
@@ -180,13 +155,9 @@ class LiveGiftsHistory extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("${'giftPrice'.tr} :",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue)),
+                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
                 Text("₹${data[index].amount}",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue)),
+                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
@@ -194,13 +165,8 @@ class LiveGiftsHistory extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("${'quantity'.tr} :",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue)),
-                Text("30%",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue)),
+                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                Text("30%", style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
@@ -213,10 +179,7 @@ class LiveGiftsHistory extends StatelessWidget {
                   "totalEarning".tr,
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600),
                 ),
-                Text("₹300",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w600,
-                        fontColor: AppColors.lightGreen)),
+                Text("₹300", style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600, fontColor: AppColors.lightGreen)),
               ],
             ),
             const SizedBox(height: 8),
