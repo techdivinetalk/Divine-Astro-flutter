@@ -25,6 +25,16 @@ class LiveTipsController extends GetxController {
   final AstrologerProfileRepository liveRepository =
       AstrologerProfileRepository();
 
+			
+  final StreamController<bool> streamController = StreamController<bool>()
+    ..add(false);
+
+  @override
+  void dispose() {
+    streamController.close();
+    super.dispose();
+  }
+  
   @override
   void onReady() {
     var data = pref.getUserDetail();
@@ -34,7 +44,7 @@ class LiveTipsController extends GetxController {
     super.onReady();
   }
 
-  Future<void> myFun() async {
+  Future<void> furtherProcedure() async {
     final String userId = (pref.getUserDetail()?.id ?? "").toString();
     final String userName = pref.getUserDetail()?.name ?? "";
     final String awsURL = pref.getAmazonUrl() ?? "";
@@ -63,7 +73,7 @@ class LiveTipsController extends GetxController {
 
     // unawaited(database.ref().child("live/$userId").remove());
     // unawaited(database.ref().child("astro-live-list/$userId").remove());
-    
+
     // Get.back(closeOverlays: true);
     // Get.back(closeOverlays: true);
 
