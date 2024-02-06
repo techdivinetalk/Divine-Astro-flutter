@@ -152,13 +152,13 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> zeroAstro() async {
-    if (mounted) {
-      _timer?.cancel();
-      _msgTimer?.cancel();
-      _msgTimerLiveMonitoring?.cancel();
-      await _zegoController.leave(context);
-      // unawaited(_zegoController.leave(context));
-    } else {}
+    // if (mounted) {
+    //   _timer?.cancel();
+    //   _msgTimer?.cancel();
+    //   _msgTimerLiveMonitoring?.cancel();
+    //   await _zegoController.leave(context);
+    //   // unawaited(_zegoController.leave(context));
+    // } else {}
     return Future<void>.value();
   }
 
@@ -3787,10 +3787,7 @@ class _LivePage extends State<LiveDharamScreen>
           },
         ),
       ),
-      onEnded: (
-        ZegoLiveStreamingEndEvent event,
-        VoidCallback defaultAction,
-      ) {},
+      onEnded: (ZegoLiveStreamingEndEvent event, VoidCallback defaultAction) {},
     );
   }
 
@@ -3914,7 +3911,7 @@ class _LivePage extends State<LiveDharamScreen>
             _controller.liveId = liveId;
             _controller.currentIndex = list.indexWhere((e) => e == liveId);
             _zegoController.swiping.jumpTo(liveId);
-            
+
             _controller.initData();
             _controller.updateInfo();
           },
