@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:divine_astrologer/common/appbar.dart';
-import 'package:divine_astrologer/common/common_bottomsheet.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
-import 'package:divine_astrologer/common/generic_loading_widget.dart';
+import 'package:divine_astrologer/common/message_view.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
-import 'package:divine_astrologer/model/chat_history/order_chat_history.dart';
+import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/screens/order_chat_call_feedback/feedback_controller.dart';
 import 'package:divine_astrologer/screens/order_chat_call_feedback/widget/feedback_card.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +44,7 @@ class FeedBack extends GetView<FeedbackController> {
         ),
       ),
       body: Obx(() {
+        print ("Product Id :: ${controller.order?.productType}");
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -145,8 +145,20 @@ class FeedBack extends GetView<FeedbackController> {
                                   ),
                                 // Display chat message
                                 data.msgType == 0
-                                    ? remediesMsgView(context, data, data.senderId == preferenceService.getUserDetail()!.id,
-                                ): SizedBox(
+                                    ? Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 12.w, vertical: 4.h),
+                                  child: MessageView(
+                                    index: index,
+                                    chatMessage: data,
+                                    yourMessage:
+                                    data.senderId ==
+                                        preferenceService
+                                            .getUserDetail()!
+                                            .id,
+                                  ),
+                                )
+                                    : SizedBox(
                                   width: double.maxFinite,
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(

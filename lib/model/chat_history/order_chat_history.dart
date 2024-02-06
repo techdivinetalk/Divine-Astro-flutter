@@ -1,3 +1,5 @@
+import 'package:divine_astrologer/model/chat_offline_model.dart';
+
 class ChatHistoryResponse {
   List<Order>? order;
   List<ChatMessage>? data;
@@ -12,7 +14,7 @@ class ChatHistoryResponse {
       order = List<Order>.from(json['order'].map((order) => Order.fromJson(order)));
     }
     if (json['data'] != null) {
-      data = List<ChatMessage>.from(json['data'].map((message) => ChatMessage.fromJson(message)));
+      data = List<ChatMessage>.from(json['data'].map((message) => ChatMessage.fromOfflineJson(message)));
     }
     success = json['success'];
     statusCode = json['status_code'];
@@ -25,7 +27,7 @@ class ChatHistoryResponse {
       data['order'] = order!.map((order) => order.toJson()).toList();
     }
     if (this.data != null) {
-      data['data'] = this.data!.map((message) => message.toJson()).toList();
+      data['data'] = this.data!.map((message) => message.toOfflineJson()).toList();
     }
     data['success'] = success;
     data['status_code'] = statusCode;
@@ -59,7 +61,7 @@ class Order {
   }
 }
 
-class ChatMessage {
+/*class ChatMessage {
   int? id;
   int? orderId;
   int? memberId;
@@ -275,4 +277,4 @@ class ChatMessage {
     data['userType'] = userType;
     return data;
   }
-}
+}*/

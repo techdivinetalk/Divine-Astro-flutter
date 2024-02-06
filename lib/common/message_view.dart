@@ -21,24 +21,24 @@ class MessageView extends StatelessWidget {
   final int index;
   final ChatMessage chatMessage;
   final bool yourMessage;
-  final int unreadMessage;
+  final int? unreadMessage;
 
   const MessageView({
     super.key,
     required this.index,
     required this.chatMessage,
     required this.yourMessage,
-    required this.unreadMessage,
+     this.unreadMessage,
   });
 
   Widget buildMessageView(BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     Widget messageWidget;
-
+    print("chat Message:: ${chatMessage.msgType}");
     switch (chatMessage.msgType) {
-      case "gift":
+      case "gift" :
         messageWidget = giftMsgView(context, chatMessage, yourMessage);
         break;
-      case "Remedies":
+      case "Remedies" || 0:
         messageWidget = remediesMsgView(context, chatMessage, yourMessage);
         break;
       case "text":
