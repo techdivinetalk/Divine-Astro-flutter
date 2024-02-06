@@ -529,29 +529,31 @@ class ZegoService {
 
   Future<void> addUpdatePermission() async {
     final bool value = await AppPermissionService.instance.hasAllPermissions();
-    FirebaseDatabase.instance
-        .ref()
-        .child("order/${AppFirebaseService().orderData.value["orderId"]}")
-        .update(
-      <String, dynamic>{"astrologer_permission": value},
-    );
+    final int orderId = AppFirebaseService().orderData.value["orderId"] ?? 0;
+    if (orderId == 0) {
+    } else {
+      final DatabaseReference ref = FirebaseDatabase.instance.ref();
+      await ref.child("order/$orderId").update({"astrologer_permission": value});
+    }
     return Future<void>.value();
   }
 
   Future<bool> checkOppositeSidePermission() async {
+    final int orderId = AppFirebaseService().orderData.value["orderId"] ?? 0;
     bool hasPermission = false;
-    final DataSnapshot dataSnapshot = await FirebaseDatabase.instance
-        .ref()
-        .child("order/${Get.arguments["orderData"]["orderId"]}")
-        .get();
-    if (dataSnapshot.exists) {
-      if (dataSnapshot.value is Map<dynamic, dynamic>) {
-        Map<dynamic, dynamic> map = <dynamic, dynamic>{};
-        map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-            as Map<dynamic, dynamic>;
-        hasPermission = map["customer_permission"] ?? false;
+    if (orderId == 0) {
+    } else {
+      final DatabaseReference ref = FirebaseDatabase.instance.ref();
+      final DataSnapshot dataSnapshot = await ref.child("order/$orderId").get();
+      if (dataSnapshot.exists) {
+        if (dataSnapshot.value is Map<dynamic, dynamic>) {
+          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+              as Map<dynamic, dynamic>;
+          hasPermission = map["customer_permission"] ?? false;
+        } else {}
       } else {}
-    } else {}
+    }
     return Future<bool>.value(hasPermission);
   }
 

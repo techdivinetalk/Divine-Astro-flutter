@@ -499,7 +499,6 @@ class LiveDharamController extends GetxController {
   //       liveId = data.keys.toList()[currentIndex];
   //       // unawaited(getAstrologerDetails());
   //       // unawaited(updateInfo());
-  //       initData();
   //       updateInfo();
   //       return liveId;
   //     } else {
@@ -524,7 +523,6 @@ class LiveDharamController extends GetxController {
   //       liveId = data.keys.toList()[currentIndex];
   //       // unawaited(getAstrologerDetails());
   //       // unawaited(updateInfo());
-  //       initData();
   //       updateInfo();
   //       return liveId;
   //     } else {
