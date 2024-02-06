@@ -15,9 +15,8 @@ class CategoryDetailController extends GetxController {
   final ShopRepository shopRepository;
   CategoryDetailController(this.shopRepository);
   UserData? userData;
-  SharedPreferenceService preferenceService =
-      Get.find<SharedPreferenceService>();
-  ProductDetailData? productDetail;
+  SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
+  Products? productDetail;
   SaveRemediesResponse? saveRemediesResponse;
   RxBool productListSync = false.obs;
   RxBool shopDataSync = false.obs;
@@ -30,7 +29,9 @@ class CategoryDetailController extends GetxController {
     if (Get.arguments != null) {
       productId = Get.arguments["productId"];
       orderId = Get.arguments["orderId"];
-      getProductDetails();
+      if (productId != null) {
+        getProductDetails();
+      }
     }
     //getProductDetails();
   }
@@ -39,14 +40,14 @@ class CategoryDetailController extends GetxController {
     Map<String, dynamic> params = {"product_id": productId};
     try {
       var response = await shopRepository.getProductDetail(params);
-      productDetail = response.data;
-      shopId = productDetail?.products?[0].prodShopId;
+      productDetail = response.data!.products![0];
+      shopId = productDetail?.prodShopId;
       shopDataSync.value = true;
     } catch (error) {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
     productListSync.value = true;
@@ -57,15 +58,27 @@ class CategoryDetailController extends GetxController {
     try {
       var response = await shopRepository.saveRemedies(params);
       saveRemediesResponse = response;
-      Get.offNamedUntil(RouteName.orderHistory,
-          ModalRoute.withName(RouteName.dashboard));
+      Get.offNamedUntil(RouteName.orderHistory, ModalRoute.withName(RouteName.dashboard));
       shopDataSync.value = true;
     } catch (error) {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
+    }
+  }
+
+  int selectedQuantity = 0;
+  incrementQuantity() {
+    selectedQuantity++;
+    update();
+  }
+
+  decrementQuantity() {
+    if (selectedQuantity > 0) {
+      selectedQuantity--;
+      update();
     }
   }
 }

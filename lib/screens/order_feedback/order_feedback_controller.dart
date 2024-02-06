@@ -20,12 +20,12 @@ class OrderFeedbackController extends GetxController{
   @override
   void onInit() {
     var arguments = Get.arguments;
-    if (arguments != null && arguments is List) {
-      feedbacks.value = arguments.first;
-    } else {
-      print('rajeshbhai');
-      getFeedbackData();
+    if(arguments == null){
+      if (arguments != null && arguments is List != null) {
+        feedbacks.value = arguments.first;
+      }
     }
+    getFeedbackData();
     super.onInit();
   }
 

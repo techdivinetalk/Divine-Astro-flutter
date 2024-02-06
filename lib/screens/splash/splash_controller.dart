@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter/services.dart';
 
 import '../../common/colors.dart';
 import '../../common/common_functions.dart';
@@ -23,7 +24,6 @@ class SplashController extends GetxController {
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
   List<MobileNumber> importantNumbers = <MobileNumber>[];
-
   @override
   Future<void> onInit() async {
     super.onInit();

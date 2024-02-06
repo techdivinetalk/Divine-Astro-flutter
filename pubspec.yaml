@@ -62,10 +62,10 @@ dependencies:
   video_trimmer: ^2.1.0
   voice_message_package: ^2.1.2
   youtube_player_flutter: ^8.1.2
-  zego_uikit_prebuilt_call: ^3.17.11
+  zego_uikit_prebuilt_call: ^4.1.9
   # zego_uikit_prebuilt_live_streaming: ^2.27.0
   zego_uikit_prebuilt_live_streaming: ^3.1.7
-  zego_uikit_signaling_plugin: ^2.7.1
+  zego_uikit_signaling_plugin: ^2.7.4
   dynamic_height_grid_view: ^0.0.4
   dio: ^5.4.0
   after_layout: ^1.2.0
@@ -77,7 +77,7 @@ dependencies:
   dio_cache_interceptor: ^3.3.0
   dio_cache_interceptor_hive_store: ^3.2.0
   flutter_cache_manager: ^3.3.1
-  zego_express_engine: ^3.11.0
+  zego_express_engine: ^3.12.4
   flutter_timer_countdown: ^1.0.7
   flutter_keyboard_visibility: ^6.0.0
   app_settings: ^5.1.1
@@ -96,6 +96,7 @@ dependencies:
   #     url: https://github.com/delwar36/overlapped_carousel.git
   #     ref: b910005b978c35e0be5cadbb82c000faf6abebdf
   audioplayers: ^5.2.1
+  speed_test_dart: ^1.0.4+1
 
 dependency_overrides:
   intl: ^0.18.1

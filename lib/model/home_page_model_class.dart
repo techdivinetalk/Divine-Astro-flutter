@@ -121,7 +121,7 @@ class HomeData {
 
 class Offers {
   List<OrderOffer>? orderOffer;
-  List<CustomOffer>? customOffer;
+  List<DiscountOffer>? customOffer;
 
   Offers({this.orderOffer, this.customOffer});
 
@@ -133,9 +133,9 @@ class Offers {
       });
     }
     if (json['custom_offer'] != null) {
-      customOffer = <CustomOffer>[];
+      customOffer = <DiscountOffer>[];
       json['custom_offer'].forEach((v) {
-        customOffer!.add(new CustomOffer.fromJson(v));
+        customOffer!.add(new DiscountOffer.fromJson(v));
       });
     }
   }
@@ -177,15 +177,15 @@ class OrderOffer {
   }
 }
 
-class CustomOffer {
+class DiscountOffer {
   int? id;
   String? offerName;
   int? offerPercentage;
   int? toggle;
 
-  CustomOffer({this.id, this.offerName, this.offerPercentage, this.toggle});
+  DiscountOffer({this.id, this.offerName, this.offerPercentage, this.toggle});
 
-  CustomOffer.fromJson(Map<String, dynamic> json) {
+  DiscountOffer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     offerName = json['offer_name'];
     offerPercentage = json['offer_percentage'];

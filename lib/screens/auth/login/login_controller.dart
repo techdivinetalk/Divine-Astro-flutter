@@ -2,7 +2,6 @@ import 'dart:collection';
 import 'dart:developer';
 
 import 'package:device_apps/device_apps.dart';
-import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
@@ -70,11 +69,13 @@ class LoginController extends GetxController {
       //"device_token": await FirebaseMessaging.instance.getToken()
     };
     try {
-      SendOtpModel data = await userRepository.sentOtp(params);
+      final data = await userRepository.sentOtp(params);
       navigateToOtpPage(data);
       //updateLoginDatainFirebase(data);
       //navigateToDashboard(data);
     } catch (error) {
+      print(error);
+      print("errorerrorerrorerror");
       enable.value = true;
       debugPrint("error $error");
       if (error is AppException) {
@@ -87,8 +88,8 @@ class LoginController extends GetxController {
 
   void navigateToOtpPage(SendOtpModel data) {
     Get.toNamed(RouteName.otpVerificationPage, arguments: [
-      data.data.mobileNo,
-      data.data.sessionId,
+      data.data?.mobileNo,
+      data.data?.sessionId,
       countryCodeController.text
     ]);
     mobileNumberController.clear();

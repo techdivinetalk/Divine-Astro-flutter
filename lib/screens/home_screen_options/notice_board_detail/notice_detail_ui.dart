@@ -34,7 +34,7 @@ class NoticeDetailUi extends GetView<NoticeDetailController> {
           margin: EdgeInsets.only(right: 20.sp),
           child: Text(
             '${dateToString(data.createdAt ?? DateTime.now(), format: "h:mm a")}  '
-                '${formatDateTime(data.createdAt ?? DateTime.now())} ',
+            '${formatDateTime(data.createdAt ?? DateTime.now())} ',
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 10.sp,
@@ -75,10 +75,7 @@ class NoticeDetailUi extends GetView<NoticeDetailController> {
       padding: EdgeInsets.all(10.h),
       decoration: BoxDecoration(
           boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 3.0,
-                offset: const Offset(0.0, 3.0)),
+            BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 3.0, offset: const Offset(0.0, 3.0)),
           ],
           color: Colors.white,
           borderRadius: const BorderRadius.all(
@@ -92,13 +89,11 @@ class NoticeDetailUi extends GetView<NoticeDetailController> {
             children: [
               Text(
                 title ?? "",
-                style: AppTextStyle.textStyle16(
-                    fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                style: AppTextStyle.textStyle16(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
               ),
               Text(
                 date ?? "",
-                style: AppTextStyle.textStyle10(
-                    fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
               )
             ],
           ),

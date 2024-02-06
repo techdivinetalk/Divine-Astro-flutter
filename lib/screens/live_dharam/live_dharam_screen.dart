@@ -152,13 +152,13 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> zeroAstro() async {
-    if (mounted) {
-      _timer?.cancel();
-      _msgTimer?.cancel();
-      _msgTimerLiveMonitoring?.cancel();
-      await _zegoController.leave(context);
-      // unawaited(_zegoController.leave(context));
-    } else {}
+    // if (mounted) {
+    //   _timer?.cancel();
+    //   _msgTimer?.cancel();
+    //   _msgTimerLiveMonitoring?.cancel();
+    //   await _zegoController.leave(context);
+    //   // unawaited(_zegoController.leave(context));
+    // } else {}
     return Future<void>.value();
   }
 
@@ -221,11 +221,10 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> showFollowPopup() async {
+    // await Future.delayed(const Duration(seconds: 15));
     // WidgetsBinding.instance.endOfFrame.then(
     //   (_) async {
     //     if (mounted) {
-    //       await Future.delayed(const Duration(seconds: 15));
-
     //       final String liveId = _controller.liveId;
     //       final isNotFollowing = (_controller.details.data?.isFollow ?? 0) == 0;
     //       final hasntSeenPopup = !_controller.astroFollowPopup.contains(liveId);
@@ -240,7 +239,7 @@ class _LivePage extends State<LiveDharamScreen>
     //     } else {}
     //   },
     // );
-    // return Future<void>.value();
+    return Future<void>.value();
   }
 
   void _startTimer() {
@@ -1518,6 +1517,8 @@ class _LivePage extends State<LiveDharamScreen>
       List<dynamic> list = await _controller.onLiveStreamingEnded();
       if (list.isNotEmpty) {
         _zegoController.swiping.next();
+
+        _controller.initData();
         _controller.updateInfo();
       } else {}
     } else {}
@@ -3786,6 +3787,7 @@ class _LivePage extends State<LiveDharamScreen>
           },
         ),
       ),
+      onEnded: (ZegoLiveStreamingEndEvent event, VoidCallback defaultAction) {},
     );
   }
 
@@ -3909,6 +3911,8 @@ class _LivePage extends State<LiveDharamScreen>
             _controller.liveId = liveId;
             _controller.currentIndex = list.indexWhere((e) => e == liveId);
             _zegoController.swiping.jumpTo(liveId);
+
+            _controller.initData();
             _controller.updateInfo();
           },
           onFollowAndLeave: () async {
