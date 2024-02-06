@@ -5,6 +5,7 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/astrr_feedback_details.dart';
 import 'package:divine_astrologer/model/chat_history/order_chat_history.dart';
+import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/model/feedback_response.dart';
 import 'package:divine_astrologer/pages/home/home_controller.dart';
 import 'package:divine_astrologer/repository/chat_call_feeback_repository.dart';
@@ -86,7 +87,7 @@ class FeedbackController extends GetxController {
   }
 
   Future<void> getAstroChatList(int orderId) async {
-    loading.value = Loading.initial;
+   // loading.value = Loading.initial;
     update();
     try {
       if (processedPages.contains(currentPage.value)) {
@@ -102,6 +103,7 @@ class FeedbackController extends GetxController {
 
           // Access the order information
           order = response.order?.isNotEmpty == true ? response.order![0] : null;
+          print(" Print order ${order?.productType.toString()}");
           if (chatMessages.isNotEmpty) {
             chatMessageList.addAll(chatMessages);
             processedPages.add(currentPage.value);
@@ -117,10 +119,11 @@ class FeedbackController extends GetxController {
         divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
+    update();
   }
 
   Future<void> getAstroCallList(int orderId) async {
-    loading.value = Loading.initial;
+   // loading.value = Loading.initial;
     update();
     try {
       if (processedPages.contains(currentPage.value)) {
@@ -151,5 +154,6 @@ class FeedbackController extends GetxController {
         divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
+    update();
   }
 }

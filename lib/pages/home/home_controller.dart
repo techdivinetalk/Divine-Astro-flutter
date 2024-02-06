@@ -299,14 +299,17 @@ class HomeController extends GetxController {
     update();
     try {
       var response = await homePageRepository.getFeedbackData();
+
       isFeedbackAvailable.value = response.success ?? false;
       debugPrint('val: $isFeedbackAvailable');
       if (isFeedbackAvailable.value) {
         //print(" Dharam::${response.data?[0].order?.orderId}");
         feedbackResponse = response.data?[0];
         feedbacksList = response.data;
-        showFeedbackBottomSheet();
-        debugPrint('feed id: ${feedbackResponse?.id}');
+        if(feedbackResponse?.id != null  && !isFeedbackAvailable.value ){
+          showFeedbackBottomSheet();
+          debugPrint('feed id: ${feedbackResponse?.id}');
+        }
       }
     } catch (error) {
       if (error is AppException) {
