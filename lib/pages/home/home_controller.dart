@@ -6,7 +6,7 @@ import "package:contacts_service/contacts_service.dart";
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
-import 'package:divine_astrologer/common/custom_widgets.dart';
+
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/fcm_notification.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
@@ -49,6 +49,8 @@ class HomeController extends GetxController {
   RxBool chatSwitch = true.obs;
   RxBool callSwitch = false.obs;
   RxBool videoSwitch = false.obs;
+  double xPosition = 10.0;
+  double yPosition = Get.height * 0.4;
   RxString chatSchedule = "".obs, callSchedule = "".obs, videoSchedule = "".obs;
   RxList<bool> customOfferSwitch = RxList([]);
   RxList<bool> orderOfferSwitch = RxList([false, false]);
@@ -85,7 +87,8 @@ class HomeController extends GetxController {
     }
   }
 
-  BroadcastReceiver broadcastReceiver = BroadcastReceiver(names: <String>["callKundli", "giftCount"]);
+  BroadcastReceiver broadcastReceiver =
+        BroadcastReceiver(names: <String>["callKundli", "giftCount"]);
 
   List<MobileNumber> importantNumbers = <MobileNumber>[];
   List<Contact> allContacts = <Contact>[].obs;
@@ -153,7 +156,8 @@ class HomeController extends GetxController {
   }
 
   bool checkForContactExist(MobileNumber numbers) {
-    Item item = Item(label: numbers.title ?? "", value: numbers.mobileNumber ?? "");
+    Item item =
+        Item(label: numbers.title ?? "", value: numbers.mobileNumber ?? "");
     List<String> numberList = [];
     if (item.value != null && item.value!.contains(",")) {
       numberList = item.value!.split(",").toList();
@@ -210,7 +214,7 @@ class HomeController extends GetxController {
   HomeData? homeData;
   RxBool isFeedbackAvailable = false.obs;
   FeedbackData? feedbackResponse;
-
+  Offset fabPosition = Offset(20, 20);
   List<FeedbackData>? feedbacksList;
   Loading loading = Loading.initial;
   RxBool shopDataSync = false.obs;
@@ -224,7 +228,8 @@ class HomeController extends GetxController {
   getFilteredPerformance() async {
     try {
       Map<String, dynamic> params = {"filter": 'today'};
-      var response = await PerformanceRepository().getFilteredPerformance(params);
+      var response =
+          await PerformanceRepository().getFilteredPerformance(params);
       log("Res-->${jsonEncode(response.data)}");
       performanceFilterResponse = response;
       overAllScoreList.value = [
@@ -237,7 +242,8 @@ class HomeController extends GetxController {
       ];
 
       for (int i = 0; i < overAllScoreList.length; i++) {
-        int averageScore = int.parse(overAllScoreList[i]?.performance?.marks?[1].max ?? '0');
+        int averageScore =
+            int.parse(overAllScoreList[i]?.performance?.marks?[1].max ?? '0');
         int yourMarks = overAllScoreList[i]?.performance?.marksObtains ?? 0;
         if (averageScore > yourMarks) {
           performanceScoreList.add(overAllScoreList[i]);
@@ -376,22 +382,28 @@ class HomeController extends GetxController {
       video: videoSwitch.value ? "1" : "0",
     );
 
-    if (homeData?.sessionType?.chatSchedualAt != null && homeData?.sessionType?.chatSchedualAt != '') {
-      DateTime formattedDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(homeData!.sessionType!.chatSchedualAt!);
+    if (homeData?.sessionType?.chatSchedualAt != null &&
+        homeData?.sessionType?.chatSchedualAt != '') {
+      DateTime formattedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
+          .parse(homeData!.sessionType!.chatSchedualAt!);
       String formattedTime = DateFormat("hh:mm a").format(formattedDate);
 
       selectedChatDate.value = formattedDate;
       selectedChatTime.value = formattedTime;
     }
-    if (homeData?.sessionType?.callSchedualAt != null && homeData?.sessionType?.callSchedualAt != '') {
-      DateTime formattedDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(homeData!.sessionType!.callSchedualAt!);
+    if (homeData?.sessionType?.callSchedualAt != null &&
+        homeData?.sessionType?.callSchedualAt != '') {
+      DateTime formattedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
+          .parse(homeData!.sessionType!.callSchedualAt!);
       String formattedTime = DateFormat("hh:mm a").format(formattedDate);
 
       selectedCallDate.value = formattedDate;
       selectedCallTime.value = formattedTime;
     }
-    if (homeData?.sessionType?.videoSchedualAt != null && homeData?.sessionType?.videoSchedualAt != '') {
-      DateTime formattedDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(homeData!.sessionType!.videoSchedualAt!);
+    if (homeData?.sessionType?.videoSchedualAt != null &&
+        homeData?.sessionType?.videoSchedualAt != '') {
+      DateTime formattedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
+          .parse(homeData!.sessionType!.videoSchedualAt!);
       String formattedTime = DateFormat("hh:mm a").format(formattedDate);
 
       selectedVideoDate.value = formattedDate;
@@ -399,7 +411,8 @@ class HomeController extends GetxController {
     }
 
     ///Customer Offer data
-    if (homeData?.offers?.customOffer != null && homeData?.offers?.customOffer != []) {
+    if (homeData?.offers?.customOffer != null &&
+        homeData?.offers?.customOffer != []) {
       for (int i = 0; i < homeData!.offers!.customOffer!.length; i++) {
         bool value = homeData?.offers?.customOffer![i].toggle == 1;
 
@@ -520,7 +533,8 @@ class HomeController extends GetxController {
 
     sessionTypeLoading.value = Loading.loading;
     try {
-      UpdateSessionTypeResponse response = await userRepository.updateSessionTypeApi(params);
+      UpdateSessionTypeResponse response =
+          await userRepository.updateSessionTypeApi(params);
       if (response.statusCode == 200) {
         switchType.value = value;
         socket.updateChatCallSocketEvent(
@@ -555,7 +569,8 @@ class HomeController extends GetxController {
     };
     offerTypeLoading.value = Loading.loading;
     try {
-      UpdateOfferResponse response = await userRepository.updateOfferTypeApi(params);
+      UpdateOfferResponse response =
+          await userRepository.updateOfferTypeApi(params);
       if (response.statusCode == 200) {
         if (offerType == 1) {
           orderOfferSwitch[index] = value;
@@ -584,7 +599,8 @@ class HomeController extends GetxController {
             ? selectedCallDate.value
             : selectedVideoDate.value;
     DateTime parseDate = DateFormat("hh:mm a").parse(selectedTime);
-    var formattedTime = (DateTime(selectedDate.year, selectedDate.month, selectedDate.day, parseDate.hour, parseDate.minute, 0));
+    var formattedTime = (DateTime(selectedDate.year, selectedDate.month,
+        selectedDate.day, parseDate.hour, parseDate.minute, 0));
 
     bool difference = DateTime.now().isBefore(formattedTime);
     return difference;
@@ -602,7 +618,8 @@ class HomeController extends GetxController {
             ? selectedCallDate.value
             : selectedVideoDate.value;
     DateTime parseDate = DateFormat("hh:mm a").parse(selectedTime);
-    var formattedTime = (DateTime(selectedDate.year, selectedDate.month, selectedDate.day, parseDate.hour, parseDate.minute, 0));
+    var formattedTime = (DateTime(selectedDate.year, selectedDate.month,
+        selectedDate.day, parseDate.hour, parseDate.minute, 0));
 
     bool difference = DateTime.now().isBefore(formattedTime);
 
@@ -655,12 +672,18 @@ class HomeController extends GetxController {
   }
 
   showOnceInDay() async {
-    int timestamp = await preferenceService.getIntPrefs(SharedPreferenceService.performanceDialog);
+    int timestamp = await preferenceService
+        .getIntPrefs(SharedPreferenceService.performanceDialog);
 
     if (timestamp == 0 ||
-        (DateTime.now().difference(DateTime.fromMillisecondsSinceEpoch(timestamp)).inDays > 0) ||
+        (DateTime.now()
+                .difference(DateTime.fromMillisecondsSinceEpoch(timestamp))
+                .inDays >
+            0) ||
         getDateDifference(timestamp)) {
-      await preferenceService.setIntPrefs(SharedPreferenceService.performanceDialog, DateTime.now().millisecondsSinceEpoch);
+      await preferenceService.setIntPrefs(
+          SharedPreferenceService.performanceDialog,
+          DateTime.now().millisecondsSinceEpoch);
       showDialog(
         context: Get.context!,
         barrierColor: AppColors.darkBlue.withOpacity(0.5),
@@ -673,7 +696,8 @@ class HomeController extends GetxController {
     await feedbackBottomSheet(
       Get.context!,
       title: "Feedback Available!!!",
-      subTitle: 'We noticed a little guideline slip in your previous order. No worries! '
+      subTitle:
+          'We noticed a little guideline slip in your previous order. No worries! '
           'We\'ve sorted out the fines and shared some helpful feedback. '
           'Thanks for your understanding!',
       btnTitle: "Check Report",
@@ -683,7 +707,7 @@ class HomeController extends GetxController {
           'product_type': feedbackResponse?.order?.productType,
         });
       },
-    /*  functionalityWidget: Html(
+      /*  functionalityWidget: Html(
         data: feedbackResponse?.remark ?? '',
         onLinkTap: (url, __, ___) {
           launchUrl(Uri.parse(url ?? ''));
@@ -699,7 +723,9 @@ class HomeController extends GetxController {
 
   showGiftBottomSheet(int giftCount, BuildContext? contextDetail) async {
     PopupManager.showGiftCountPopup(contextDetail!,
-        title: "Congratulations", btnTitle: "Check Order History", totalGift: giftCount);
+        title: "Congratulations",
+        btnTitle: "Check Order History",
+        totalGift: giftCount);
     // await GiftCountPopup(
     //   Get.context!,
     //   title: "Congratulations!",
@@ -712,7 +738,9 @@ class HomeController extends GetxController {
     DateTime dtTimestamp = DateTime.fromMillisecondsSinceEpoch(timestamp);
     DateTime now = DateTime.now();
 
-    if (now.day != dtTimestamp.day || now.month != dtTimestamp.month || now.year != dtTimestamp.year) {
+    if (now.day != dtTimestamp.day ||
+        now.month != dtTimestamp.month ||
+        now.year != dtTimestamp.year) {
       return true;
     } else {
       return false;
@@ -731,12 +759,13 @@ class HomeController extends GetxController {
     if (dataSnapshot.exists) {
       if (dataSnapshot.value is Map<dynamic, dynamic>) {
         Map<dynamic, dynamic> map = <dynamic, dynamic>{};
-        map = (dataSnapshot.value ?? <dynamic, dynamic>{}) as Map<dynamic, dynamic>;
+        map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+            as Map<dynamic, dynamic>;
 
         if (map.isEmpty) {
         } else if (map.isNotEmpty) {
           hasOpenOrder = map["order_id"] != null;
-        } else {}
+        } else { }
       } else {}
     } else {}
     return Future<bool>.value(hasOpenOrder);
@@ -746,6 +775,8 @@ class HomeController extends GetxController {
     final bool b1 = (performanceScoreList ?? <Conversion?>[]).isNotEmpty;
     final bool b2 = performanceScoreList[scoreIndex] != null;
     final bool b3 = performanceScoreList[scoreIndex]?.label != null;
-    return (b1 && b2 && b3) ? performanceScoreList[scoreIndex]?.label ?? "" : "";
+    return (b1 && b2 && b3)
+        ? performanceScoreList[scoreIndex]?.label ?? ""
+        : "";
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/model/log_out_response.dart';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/model/pivacy_policy_model.dart';
@@ -12,6 +13,8 @@ import 'package:divine_astrologer/model/update_profile_response.dart';
 import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/model/upload_image_model.dart';
 import 'package:divine_astrologer/model/upload_story_response.dart';
+import 'package:divine_astrologer/pages/profile/profile_ui.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
@@ -59,6 +62,16 @@ class UserRepository extends ApiProvider {
           } else {
             throw CustomException(sendOtpModel.message!);
           }
+        }
+      }else if(response.statusCode == 429){
+        SendOtpModel sendOtpModel =
+        SendOtpModel.fromJson(jsonDecode(response.body));
+        if (sendOtpModel.statusCode == 429) {
+          showCupertinoModalPopup(
+            barrierColor: AppColors.darkBlue.withOpacity(0.5),
+            context: Get.context!,
+            builder: (context) =>  ManyTimeExException(message: sendOtpModel.message),
+          );
         }
       } else {
         final errorMessage =
@@ -456,8 +469,11 @@ class UserRepository extends ApiProvider {
     }
   }
 
+
+
   Future<LogOutResponse> logOut() async {
-    //progressService.showProgressDialog(true);
+    print("LogOutResponse-----LogOutResponse");
+    progressService.showProgressDialog(true);
     try {
       final response = await post(logout, headers: await getJsonHeaderURL());
       //progressService.showProgressDialog(false);
@@ -483,6 +499,7 @@ class UserRepository extends ApiProvider {
       debugPrint("we got $e $s");
       rethrow;
     }
+    throw CustomException("json.decode(response.body)['message']");
   }
 
   Future<LoginImages> getInitialLoginImages() async {

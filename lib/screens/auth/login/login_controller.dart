@@ -70,18 +70,23 @@ class LoginController extends GetxController {
     };
     try {
       final data = await userRepository.sentOtp(params);
-      navigateToOtpPage(data);
+      if(data != null){
+        navigateToOtpPage(data);
+      }else {
+        print(data.message);
+        print("data.message");
+      }
+
       //updateLoginDatainFirebase(data);
       //navigateToDashboard(data);
     } catch (error) {
-      print(error);
-      print("errorerrorerrorerror");
+
       enable.value = true;
       debugPrint("error $error");
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: AppColors.redColor,duration: const Duration(milliseconds: 200));
       }
     }
   }
