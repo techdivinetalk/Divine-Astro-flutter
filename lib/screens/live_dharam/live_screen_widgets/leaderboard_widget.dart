@@ -8,12 +8,14 @@ class LeaderBoardWidget extends StatelessWidget {
     required this.avatar,
     required this.userName,
     required this.fullGiftImage,
+    required this.astrologerName,
     super.key,
   });
 
   final String avatar;
   final String userName;
   final String fullGiftImage;
+  final String astrologerName;
 
   @override
   Widget build(BuildContext context) {
@@ -85,9 +87,9 @@ class LeaderBoardWidget extends StatelessWidget {
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              const Text(
-                                'is Astrologer Live Star',
-                                style: TextStyle(
+                              Text(
+                                'is $astrologerName Live Star',
+                                style: const TextStyle(
                                   fontSize: 10,
                                   color: Colors.black,
                                 ),
@@ -123,7 +125,9 @@ class LeaderBoardWidget extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(0.0),
                         child: fullGiftImage.isEmpty
-                            ? const Icon(Icons.star, size: 20)
+                            ? Image.asset(
+                                "assets/images/live_new_astro_live_star.png",
+                              )
                             : CustomImageWidget(
                                 imageUrl: fullGiftImage,
                                 rounded: false,
