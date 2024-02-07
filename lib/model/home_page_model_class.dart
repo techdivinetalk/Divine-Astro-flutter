@@ -47,7 +47,7 @@ class HomeData {
   Wallet? wallet;
   double? payoutPending;
   double? tds;
-  int? totalPaymentGatewayCharges;
+  dynamic totalPaymentGatewayCharges;
   //
   int? inAppChatPrevStatus;
   int? audioCallPrevStatus;

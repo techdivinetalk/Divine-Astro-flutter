@@ -214,7 +214,7 @@ class HomeController extends GetxController {
   HomeData? homeData;
   RxBool isFeedbackAvailable = false.obs;
   FeedbackData? feedbackResponse;
-  Offset fabPosition = Offset(20, 20);
+  Offset fabPosition = const Offset(20, 20);
   List<FeedbackData>? feedbacksList;
   Loading loading = Loading.initial;
   RxBool shopDataSync = false.obs;
