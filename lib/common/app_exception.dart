@@ -1,6 +1,13 @@
+import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/common/custom_widgets.dart';
+import 'package:divine_astrologer/generated/assets.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 abstract class AppException implements Exception {
   void onException(
@@ -57,3 +64,67 @@ class OtpInvalidTimerException implements Exception {
     return 'MyCustomException: $message';
   }
 }
+
+
+class ManyTimeExException extends StatelessWidget {
+  final String? message;
+  const ManyTimeExException({super.key, this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.transparent,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            width: double.maxFinite,
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
+              color: AppColors.white,
+            ),
+            child: Column(
+              children: [
+                SizedBox(height: 20.h),
+               SvgPicture.asset("assets/svg/caution.svg",height: 64.h,width: 64.w,),
+                SizedBox(height: 20.h),
+                CustomText("${message!.split(".").first}!",
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w700,
+                    fontColor: AppColors.appRedColour),
+                SizedBox(height: 10.h),
+                Text(
+                  "${message!.split(".").last}",
+                  textAlign: TextAlign.center,
+                  style: AppTextStyle.textStyle16(fontWeight: FontWeight.w400),
+                ),
+                SizedBox(height: 20.h),
+                MaterialButton(
+                    elevation: 0,
+                    height: 56,
+                    minWidth: Get.width,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                    ),
+                    onPressed: () {
+                      Get.back();
+                    },
+                    color: AppColors.lightYellow,
+                    child: Text(
+                      "okay".tr,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.sp,
+                        color: AppColors.brownColour,
+                      ),
+                    ))
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+

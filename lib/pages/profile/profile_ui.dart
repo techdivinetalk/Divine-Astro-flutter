@@ -895,6 +895,7 @@ class ProfileUI extends GetView<ProfilePageController> {
             icon: const Icon(
               Icons.send,
               size: 20,
+              color: AppColors.black,
             ),
             onPressed: onSendPressed,
           ),
