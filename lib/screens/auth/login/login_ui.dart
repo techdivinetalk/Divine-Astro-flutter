@@ -269,7 +269,7 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
               .entries
               .map((item) => Column(
                     children: [
-                      item.value,
+                      item.value.expand(),
                       Text(controller.imageDec[item.key]).centered()
                     ],
                   ))

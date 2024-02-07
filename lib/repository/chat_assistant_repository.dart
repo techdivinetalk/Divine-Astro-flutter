@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:divine_astrologer/model/chat_assistant/CustomerDetailsResponse.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,7 +12,8 @@ import '../model/chat_assistant/chat_assistant_astrologer_response.dart';
 import '../model/chat_assistant/chat_assistant_chats_response.dart';
 
 class ChatAssistantRepository extends ApiProvider {
-  Future<ChatAssistantAstrologerListResponse> getChatAssistantAstrologerList() async {
+  Future<ChatAssistantAstrologerListResponse>
+      getChatAssistantAstrologerList() async {
     try {
       final response = await get(getChatAssistAstrologers);
       log('response --- ${response.body}');
@@ -22,8 +24,10 @@ class ChatAssistantRepository extends ApiProvider {
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final assistantAstrologerList =
-              ChatAssistantAstrologerListResponse.fromJson(json.decode(response.body));
-          if (assistantAstrologerList.statusCode == successResponse && assistantAstrologerList.success!) {
+              ChatAssistantAstrologerListResponse.fromJson(
+                  json.decode(response.body));
+          if (assistantAstrologerList.statusCode == successResponse &&
+              assistantAstrologerList.success!) {
             return assistantAstrologerList;
           } else {
             throw CustomException(assistantAstrologerList.message!);
@@ -38,9 +42,41 @@ class ChatAssistantRepository extends ApiProvider {
     }
   }
 
-  Future<ChatAssistChatResponse> getAstrologerChats(Map<String, dynamic> params) async {
+  Future<CustomerDetailsResponse> getConsulation() async {
     try {
-      final response = await post(getChatAssistCustomerData, body: jsonEncode(params));
+      final response = await get(getConsulationData);
+      log('response --- ${response.body}');
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          preferenceService.erase();
+          Get.offNamed(RouteName.login);
+          print("objectAssist ${json.decode(response.body)}");
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final customerDetailsResponse =
+              CustomerDetailsResponse.fromJson(json.decode(response.body));
+          if (customerDetailsResponse.statusCode == successResponse &&
+              customerDetailsResponse.success) {
+            return customerDetailsResponse;
+          } else {
+            print("objectAssist ${json.decode(response.body)}");
+            throw CustomException(json.decode(response.body)["error"]);
+          }
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<ChatAssistChatResponse> getAstrologerChats(
+      Map<String, dynamic> params) async {
+    try {
+      final response =
+          await post(getChatAssistCustomerData, body: jsonEncode(params));
       log('response --- ${response.body}');
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
@@ -48,7 +84,8 @@ class ChatAssistantRepository extends ApiProvider {
           Get.offNamed(RouteName.login);
           throw CustomException(json.decode(response.body)["error"]);
         } else {
-          final assistantAstrologerChatList = ChatAssistChatResponse.fromJson(json.decode(response.body));
+          final assistantAstrologerChatList =
+              ChatAssistChatResponse.fromJson(json.decode(response.body));
           if (assistantAstrologerChatList.statusCode == successResponse &&
               assistantAstrologerChatList.success!) {
             return assistantAstrologerChatList;

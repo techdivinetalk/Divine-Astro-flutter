@@ -1,11 +1,9 @@
-import "dart:collection";
 import "dart:convert";
 
 import "package:divine_astrologer/app_socket/app_socket.dart";
 import "package:divine_astrologer/common/accept_chat_request_screen.dart";
 import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/common/routes.dart";
-import "package:divine_astrologer/di/fcm_notification.dart";
 import "package:divine_astrologer/di/hive_services.dart";
 import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/screens/side_menu/settings/settings_controller.dart";
@@ -141,7 +139,7 @@ class AppFirebaseService {
     }
     watcher.nameStream.listen((value) {
       if (value != "") {
-        _database.child("order/$value").onValue.listen((event) {
+        _database.child("order/$value").onValue.listen((event) async {
           orderData.value = (event.snapshot.value == null
               ? <String, String>{}
               : Map<String, dynamic>.from(
@@ -157,10 +155,9 @@ class AppFirebaseService {
                 }));
               }
               if (orderData.containsKey("card")) {
-
                 print("displayCard");
                 sendBroadcast(
-                    BroadcastMessage(name: "displayCard", data:null));
+                    BroadcastMessage(name: "displayCard", data: null));
               }
               if (orderData["status"] == "0") {
                 acceptBottomWatcher.strValue = "0";
@@ -212,6 +209,7 @@ class AppFirebaseService {
                 sendBroadcast(BroadcastMessage(
                     name: "ReJoinChat",
                     data: {"orderId": value, "orderData": orderData}));
+
                 Get.toNamed(RouteName.chatMessageWithSocketUI,
                     arguments: {"orderData": orderData});
               }

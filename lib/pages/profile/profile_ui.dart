@@ -182,16 +182,16 @@ class ProfileUI extends GetView<ProfilePageController> {
                           width: MediaQuery.of(context).size.width,
                           padding: EdgeInsets.all(16.w),
                           decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color:
-                                        AppColors.blackColor.withOpacity(0.2),
-                                    blurRadius: 1.0,
-                                    offset: const Offset(0.0, 3.0)),
-                              ],
-                              color: AppColors.white,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10))),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: AppColors.blackColor.withOpacity(0.2),
+                                  blurRadius: 1.0,
+                                  offset: const Offset(0.0, 3.0)),
+                            ],
+                            color: AppColors.white,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                          ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -205,7 +205,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                           ),
                         )
                       : const SizedBox()
-                  : const SizedBox())
+                  : const SizedBox()),
             ],
           ),
         ),
@@ -461,7 +461,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                         } else {
                           Get.toNamed(item.nav.toString());
                         }
-                      } else if(index == 5){
+                      } else if (index == 5) {
                         Get.toNamed(RouteName.faq);
                       }
                     },
@@ -688,7 +688,7 @@ class ProfileUI extends GetView<ProfilePageController> {
       shrinkWrap: true,
       separatorBuilder: (context, index) => Padding(
         padding: EdgeInsets.all(8.h),
-        child: const Divider(color: AppColors.extraLightGrey),
+        child: Divider(color: AppColors.extraLightGrey),
       ),
       itemBuilder: (context, index) {
         TextEditingController replyController = TextEditingController();
@@ -780,7 +780,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                       style: AppTextStyle.textStyle12(),
                     ),
                   SizedBox(height: 15.h),
-                  if (reviewData?.replyData == null && reviewData?.comment != null)
+                  if (reviewData?.replyData == null &&
+                      reviewData?.comment != null)
                     Stack(
                       children: [
                         Visibility(
@@ -789,18 +790,20 @@ class ProfileUI extends GetView<ProfilePageController> {
                             textController: replyController,
                             reviewId: reviewData?.id ?? 0,
                             onSendPressed: () {
-                              controller.getReplyOnReview(reviewId: reviewData?.id ?? 0, textMsg: replyController.text.trim());
+                              controller.getReplyOnReview(
+                                  reviewId: reviewData?.id ?? 0,
+                                  textMsg: replyController.text.trim());
                               controller.reviewDataSync.value = true;
                             },
                           ),
                         ),
                         Visibility(
                           visible: controller.isLoading.value,
-                          child: const CircularProgressIndicator(color: AppColors.yellow),
+                          child: const CircularProgressIndicator(
+                              color: AppColors.yellow),
                         ),
                       ],
                     ),
-
                   if (reviewData?.replyData != null)
                     Obx(() {
                       return Visibility(
@@ -811,7 +814,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(40),
                               child: CachedNetworkPhoto(
-                                url: "${controller.preference.getBaseImageURL()}/${reviewData?.replyData?.astrologerImage}",
+                                url:
+                                    "${controller.preference.getBaseImageURL()}/${reviewData?.replyData?.astrologerImage}",
                                 height: 40,
                                 width: 40,
                                 fit: BoxFit.cover,
@@ -858,7 +862,8 @@ class ProfileUI extends GetView<ProfilePageController> {
   Widget replyTextView({
     required TextEditingController textController,
     required int reviewId,
-    required VoidCallback onSendPressed, // Callback for handling send button press
+    required VoidCallback
+        onSendPressed, // Callback for handling send button press
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -872,7 +877,7 @@ class ProfileUI extends GetView<ProfilePageController> {
           Expanded(
             child: TextFormField(
               controller: textController,
-             /* onFieldSubmitted: (text) {
+              /* onFieldSubmitted: (text) {
                 // You can still keep the existing logic here if needed
                 controller.getReplyOnReview(reviewId: reviewId, textMsg: text.trim());
               },*/
@@ -880,13 +885,18 @@ class ProfileUI extends GetView<ProfilePageController> {
               decoration: InputDecoration(
                 hintText: "${'replyHere'.tr}...",
                 isDense: true,
-                hintStyle: TextStyle(color: AppColors.greyColor, fontSize: 12.sp),
+                hintStyle:
+                    TextStyle(color: AppColors.greyColor, fontSize: 12.sp),
                 border: InputBorder.none,
               ),
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.send, size: 20,),
+            icon: const Icon(
+              Icons.send,
+              size: 20,
+              color: AppColors.black,
+            ),
             onPressed: onSendPressed,
           ),
         ],
@@ -1052,9 +1062,7 @@ class ThankYouReportUI extends GetView<ProfilePageController> {
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(30)),
                     ),
-                    onPressed: () {
-                      Get.back();
-                    },
+                    onPressed: onPressed,
                     color: AppColors.lightYellow,
                     child: Text(
                       "okay".tr,

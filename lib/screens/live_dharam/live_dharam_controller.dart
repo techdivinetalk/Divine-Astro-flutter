@@ -73,6 +73,8 @@ class LiveDharamController extends GetxController {
   final Rx<TarotGameModel> _tarotGameModel = TarotGameModel().obs;
   final Rx<DateTime> _endTime = DateTime(2001).obs;
   final RxBool _hasFollowPopupOpen = false.obs;
+  final RxBool _hasCallAcceptRejectPopupOpen = false.obs;
+  final RxString _openAceeptRejectDialogForId = "".obs;
 
   @override
   void onInit() {
@@ -91,7 +93,8 @@ class LiveDharamController extends GetxController {
     isHost = true;
     isHostAvailable = true;
     hostSpeciality = getSpeciality();
-    currentIndex = 0;
+    // currentIndex = 0;
+    currentIndex = currentIndex == 0 ? 0 : currentIndex;
     data = <dynamic, dynamic>{};
     // details = GetAstroDetailsRes();
     // isCustBlocked = IsCustomerBlockedRes();
@@ -126,6 +129,8 @@ class LiveDharamController extends GetxController {
     tarotGameModel = TarotGameModel();
     endTime = DateTime(2001);
     hasFollowPopupOpen = false;
+    hasCallAcceptRejectPopupOpen = false;
+    openAceeptRejectDialogForId = "";
 
     return;
   }
@@ -164,6 +169,8 @@ class LiveDharamController extends GetxController {
     _tarotGameModel.close();
     _endTime.close();
     _hasFollowPopupOpen.close();
+    _hasCallAcceptRejectPopupOpen.close();
+    _openAceeptRejectDialogForId.close();
 
     super.onClose();
   }
@@ -270,6 +277,14 @@ class LiveDharamController extends GetxController {
   bool get hasFollowPopupOpen => _hasFollowPopupOpen.value;
   set hasFollowPopupOpen(bool value) => _hasFollowPopupOpen(value);
 
+  bool get hasCallAcceptRejectPopupOpen => _hasCallAcceptRejectPopupOpen.value;
+  set hasCallAcceptRejectPopupOpen(bool value) =>
+      _hasCallAcceptRejectPopupOpen(value);
+
+  String get openAceeptRejectDialogForId => _openAceeptRejectDialogForId.value;
+  set openAceeptRejectDialogForId(String value) =>
+      _openAceeptRejectDialogForId(value);
+
   Future<void> eventListner({
     // required DatabaseEvent event,
     required DataSnapshot snapshot,
@@ -305,14 +320,16 @@ class LiveDharamController extends GetxController {
 
                   await Future.delayed(const Duration(seconds: 1));
 
-                  final bool cond1 = isHost;
-                  final bool cond2 = waitListModel.length == 1;
-                  final bool cond3 = currentCaller.id.isNotEmpty;
-                  final bool cond4 = !currentCaller.isEngaded;
-                  final bool cond5 = !currentCaller.isRequest;
-                  if (cond1 && cond2 && cond3 && cond4 && cond5) {
-                    engaging(currentCaller);
-                  } else {}
+                  // final bool cond1 = isHost;
+                  // final bool cond2 = waitListModel.length == 1;
+                  // final bool cond3 = currentCaller.id.isNotEmpty;
+                  // final bool cond4 = !currentCaller.isEngaded;
+                  // final bool cond5 = !currentCaller.isRequest;
+                  // if (cond1 && cond2 && cond3 && cond4 && cond5) {
+                  //   engaging(currentCaller);
+                  // } else {}
+
+                  engaging(currentCaller);
 
                   // await getAstrologerDetails();
 
@@ -885,8 +902,8 @@ class LiveDharamController extends GetxController {
         "isEngaded": isEngaded,
         "callType": previousType.toLowerCase(),
         // "totalTime": intToTimeLeft(walletBalance.value),
-        // "totalTime": "240",
-        "totalTime": "2",
+        "totalTime": "240",
+        // "totalTime": "2",
         "userName": userName,
         "avatar": avatar,
         "id": userId,

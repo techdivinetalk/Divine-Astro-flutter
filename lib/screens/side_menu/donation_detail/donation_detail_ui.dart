@@ -78,57 +78,41 @@ class DonationDetailUi extends GetView<DonationDetailController> {
                   )),
               SizedBox(height: 20.h),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  MaterialButton(
-                      height: 68,
-                      minWidth: 108.w,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                      ),
-                      onPressed: () {},
-                      color: AppColors.white,
-                      child: Text(
-                        "₹100",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 24.sp,
-                          color: AppColors.darkBlue,
-                        ),
-                      )),
-                  MaterialButton(
-                      height: 68,
-                      minWidth: 108.w,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                      ),
-                      onPressed: () {},
-                      color: AppColors.white,
-                      child: Text(
-                        "₹200",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 24.sp,
-                          color: AppColors.darkBlue,
-                        ),
-                      )),
-                  MaterialButton(
-                      height: 68,
-                      minWidth: 108.w,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                      ),
-                      onPressed: () {},
-                      color: AppColors.white,
-                      child: Text(
-                        "₹500",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 24.sp,
-                          color: AppColors.darkBlue,
-                        ),
-                      )),
-                ],
+                children: List.generate(
+                  3,
+                  (index) => Expanded(
+                    child: GestureDetector(
+                      child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: 5.w),
+                          alignment: Alignment.center,
+                          height: 68,
+                          decoration:  BoxDecoration(
+                              color: AppColors.white,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(15.0),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.darkBlue.withOpacity(0.15),
+                                  offset: const Offset(0, 1),
+                                  blurRadius: 3,
+                                )
+                              ]),
+                          child: Text(
+                            index == 0
+                                ? "₹100"
+                                : index == 1
+                                    ? "200"
+                                    : "500",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 24.sp,
+                              color: AppColors.darkBlue,
+                            ),
+                          )),
+                    ),
+                  ),
+                ),
               ),
               SizedBox(height: 20.h),
               Row(

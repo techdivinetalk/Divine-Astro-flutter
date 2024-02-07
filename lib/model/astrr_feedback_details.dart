@@ -23,7 +23,7 @@ class AstroFeedbackDetailResponse {
       AstroFeedbackDetailResponse(
         data: json['data'] != null
             ? AstroFeedbackDetailData.fromJson(json['data'])
-            : null,
+            : AstroFeedbackDetailData(),
         success: json['success'],
         statusCode: json['status_code'],
         message: json['message'],

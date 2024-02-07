@@ -96,4 +96,28 @@ class HomePageRepository extends ApiProvider {
       rethrow;
     }
   }
+
+  Future<FeedbackResponse> getFeedbackDataList() async {
+    try {
+      final response = await get(
+        getFeedbackList,
+        headers: await getJsonHeaderURL(),
+      );
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final feedbackResponse =
+              FeedbackResponse.fromJson(json.decode(response.body));
+          return feedbackResponse;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
 }

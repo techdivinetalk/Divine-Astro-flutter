@@ -176,8 +176,8 @@ class Assets {
   static const String imagesVideoDisableLive = 'assets/images/video_disable_live.svg';
   static const String imagesVidioEnableLive = 'assets/images/vidio_enable_live.svg';
   static const String imagesWaitlistLive = 'assets/images/waitlist_live.svg';
-  static const String lottieExclamation Mark = 'assets/lottie/exclamation _mark.json';
-  static const String lottieGeneric loading  = 'assets/lottie/generic loading .json';
+  static const String lottieExclamationMark = 'assets/lottie/exclamation _mark.json';
+  static const String lottieGenericloading  = 'assets/lottie/generic loading .json';
   static const String lottieGift = 'assets/lottie/gift.json';
   static const String lottieLiveFollowHeart = 'assets/lottie/live_follow_heart.json';
   static const String lottieLoadingDots = 'assets/lottie/loading_dots.json';
@@ -201,7 +201,7 @@ class Assets {
   static const String metropolisMetropolisSemiBoldItalic = 'assets/fonts/metropolis/Metropolis-SemiBoldItalic.otf';
   static const String metropolisMetropolisThin = 'assets/fonts/metropolis/Metropolis-Thin.otf';
   static const String metropolisMetropolisThinItalic = 'assets/fonts/metropolis/Metropolis-ThinItalic.otf';
-  static const String metropolisSIL Open Font License = 'assets/fonts/metropolis/SIL Open Font License.txt';
+  static const String metropolisSILOpenFontLicense = 'assets/fonts/metropolis/SIL Open Font License.txt';
   static const String notoSansNotoSansBold = 'assets/fonts/noto_sans/NotoSans-Bold.ttf';
   static const String notoSansNotoSansExtraBold = 'assets/fonts/noto_sans/NotoSans-ExtraBold.ttf';
   static const String notoSansNotoSansExtraLight = 'assets/fonts/noto_sans/NotoSans-ExtraLight.ttf';

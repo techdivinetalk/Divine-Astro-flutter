@@ -44,7 +44,10 @@ class HomeData {
   List<OfferType>? offerType;
   List<TrainingVideo>? trainingVideo;
   Offers? offers;
-  
+  Wallet? wallet;
+  double? payoutPending;
+  double? tds;
+  int? totalPaymentGatewayCharges;
   //
   int? inAppChatPrevStatus;
   int? audioCallPrevStatus;
@@ -65,6 +68,10 @@ class HomeData {
     this.inAppChatPrevStatus,
     this.audioCallPrevStatus,
     this.videoCallPrevStatus,
+    this.wallet,
+    this.payoutPending,
+    this.tds,
+    this.totalPaymentGatewayCharges,
     //
   });
 
@@ -77,6 +84,10 @@ class HomeData {
         onGoingCall: json["on_going_call"] == null
             ? null
             : OnGoingCall.fromJson(json["on_going_call"]),
+        wallet: Wallet.fromJson(json["wallet"]),
+        payoutPending: json["payout_pending"]?.toDouble(),
+        tds: json["tds"]?.toDouble(),
+        totalPaymentGatewayCharges: json["total_payment_gateway_charges"],
         sessionType: json["session_type"] == null
             ? null
             : SessionType.fromJson(json["session_type"]),
@@ -103,6 +114,10 @@ class HomeData {
         "todays_earning": todaysEarning,
         "on_going_call": onGoingCall?.toJson(),
         "session_type": sessionType?.toJson(),
+        "wallet": wallet?.toJson(),
+        "payout_pending": payoutPending,
+        "tds": tds,
+        "total_payment_gateway_charges": totalPaymentGatewayCharges,
         "offer_type": offerType == null
             ? []
             : List<dynamic>.from(offerType!.map((x) => x.toJson())),
@@ -121,7 +136,7 @@ class HomeData {
 
 class Offers {
   List<OrderOffer>? orderOffer;
-  List<CustomOffer>? customOffer;
+  List<DiscountOffer>? customOffer;
 
   Offers({this.orderOffer, this.customOffer});
 
@@ -133,9 +148,9 @@ class Offers {
       });
     }
     if (json['custom_offer'] != null) {
-      customOffer = <CustomOffer>[];
+      customOffer = <DiscountOffer>[];
       json['custom_offer'].forEach((v) {
-        customOffer!.add(new CustomOffer.fromJson(v));
+        customOffer!.add(new DiscountOffer.fromJson(v));
       });
     }
   }
@@ -150,6 +165,30 @@ class Offers {
     }
     return data;
   }
+}
+
+class Wallet {
+  int? amounEarned;
+  int? promoOffline;
+  String? promoTime;
+
+  Wallet({
+    this.amounEarned,
+    this.promoOffline,
+    this.promoTime,
+  });
+
+  factory Wallet.fromJson(Map<String, dynamic> json) => Wallet(
+        amounEarned: json["amoun_earned"],
+        promoOffline: json["promo_offline"],
+        promoTime: json["promo_time"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "amoun_earned": amounEarned,
+        "promo_offline": promoOffline,
+        "promo_time": promoTime,
+      };
 }
 
 class OrderOffer {
@@ -177,15 +216,15 @@ class OrderOffer {
   }
 }
 
-class CustomOffer {
+class DiscountOffer {
   int? id;
   String? offerName;
   int? offerPercentage;
   int? toggle;
 
-  CustomOffer({this.id, this.offerName, this.offerPercentage, this.toggle});
+  DiscountOffer({this.id, this.offerName, this.offerPercentage, this.toggle});
 
-  CustomOffer.fromJson(Map<String, dynamic> json) {
+  DiscountOffer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     offerName = json['offer_name'];
     offerPercentage = json['offer_percentage'];

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/model/log_out_response.dart';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/model/pivacy_policy_model.dart';
@@ -12,6 +13,8 @@ import 'package:divine_astrologer/model/update_profile_response.dart';
 import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/model/upload_image_model.dart';
 import 'package:divine_astrologer/model/upload_story_response.dart';
+import 'package:divine_astrologer/pages/profile/profile_ui.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
@@ -37,6 +40,8 @@ class UserRepository extends ApiProvider {
     try {
       final response = await post(sendOtp, body: jsonEncode(param).toString());
       //progressService.showProgressDialog(false);
+      print(response.statusCode);
+      print("response.statusCode");
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
           preferenceService.erase();
@@ -47,21 +52,36 @@ class UserRepository extends ApiProvider {
           Get.offNamed(RouteName.login);
           throw CustomException(json.decode(response.body)["message"]);
         } else {
-          final sendOtpModel = sendOtpModelFromJson(response.body);
+          print(jsonDecode(response.body));
+          SendOtpModel sendOtpModel =
+              SendOtpModel.fromJson(jsonDecode(response.body));
+
           if (sendOtpModel.statusCode == successResponse &&
-              sendOtpModel.success) {
+              sendOtpModel.success!) {
             return sendOtpModel;
           } else {
-            throw CustomException(sendOtpModel.message);
+            throw CustomException(sendOtpModel.message!);
           }
         }
+      }else if(response.statusCode == 429){
+        SendOtpModel sendOtpModel =
+        SendOtpModel.fromJson(jsonDecode(response.body));
+        if (sendOtpModel.statusCode == 429) {
+          showCupertinoModalPopup(
+            barrierColor: AppColors.darkBlue.withOpacity(0.5),
+            context: Get.context!,
+            builder: (context) =>  ManyTimeExException(message: sendOtpModel.message),
+          );
+        }
       } else {
-        final errorMessage = json.decode(response.body)["message"];
-        if (errorMessage
+        final errorMessage =
+            SendOtpModel.fromJson(jsonDecode(response.body)).message;
+
+        if (errorMessage!
             .contains("Too many requests. Please try again after")) {
-          throw OtpInvalidTimerException(json.decode(response.body)["message"]);
+          throw OtpInvalidTimerException(errorMessage);
         } else {
-          throw CustomException(json.decode(response.body)["message"]);
+          throw CustomException(errorMessage);
         }
       }
     } catch (e, s) {
@@ -77,6 +97,8 @@ class UserRepository extends ApiProvider {
       final response =
           await post(verifyOtpUrl, body: jsonEncode(param).toString());
       //progressService.showProgressDialog(false);
+      print("messResponse");
+      print(json.decode(response.body)["message"]);
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
           preferenceService.erase();
@@ -84,6 +106,7 @@ class UserRepository extends ApiProvider {
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final verifyOtpModel = verifyOtpModelFromJson(response.body);
+
           if (verifyOtpModel.statusCode == successResponse &&
               verifyOtpModel.success) {
             return verifyOtpModel;
@@ -446,8 +469,11 @@ class UserRepository extends ApiProvider {
     }
   }
 
+
+
   Future<LogOutResponse> logOut() async {
-    //progressService.showProgressDialog(true);
+    print("LogOutResponse-----LogOutResponse");
+    progressService.showProgressDialog(true);
     try {
       final response = await post(logout, headers: await getJsonHeaderURL());
       //progressService.showProgressDialog(false);
@@ -473,6 +499,7 @@ class UserRepository extends ApiProvider {
       debugPrint("we got $e $s");
       rethrow;
     }
+    throw CustomException("json.decode(response.body)['message']");
   }
 
   Future<LoginImages> getInitialLoginImages() async {

@@ -5,6 +5,7 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/astrr_feedback_details.dart';
 import 'package:divine_astrologer/model/chat_history/order_chat_history.dart';
+import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/model/feedback_response.dart';
 import 'package:divine_astrologer/pages/home/home_controller.dart';
 import 'package:divine_astrologer/repository/chat_call_feeback_repository.dart';
@@ -40,22 +41,20 @@ class FeedbackController extends GetxController {
       print("Id :: $orderId");
       print("Call :: $productId");
       getAstroFeedbackDetail(orderId);
-      //getAstroChatList(273);
-      //getAstroCallList(2009);
-      // Check the order type and call the respective API
-      fetchDataBasedOnProductId(productId);
+      fetchDataBasedOnProductId(productId, orderId);
     }
   }
 
-  Future<void> fetchDataBasedOnProductId(int productId) async {
+
+  Future<void> fetchDataBasedOnProductId(int productId, int orderId) async {
     try {
       loading.value = Loading.initial;
       update();
 
       if (productId == 12) {
-        await getAstroChatList(24580);
+        await getAstroChatList(orderId);
       } else {
-        await getAstroCallList(2009);
+        await getAstroCallList(orderId);
       }
 
 
@@ -88,7 +87,7 @@ class FeedbackController extends GetxController {
   }
 
   Future<void> getAstroChatList(int orderId) async {
-    loading.value = Loading.initial;
+   // loading.value = Loading.initial;
     update();
     try {
       if (processedPages.contains(currentPage.value)) {
@@ -101,8 +100,10 @@ class FeedbackController extends GetxController {
         if (response.success ?? false) {
           // Process the chat history data
           List<ChatMessage> chatMessages = response.data ?? [];
+
           // Access the order information
           order = response.order?.isNotEmpty == true ? response.order![0] : null;
+          print(" Print order ${order?.productType.toString()}");
           if (chatMessages.isNotEmpty) {
             chatMessageList.addAll(chatMessages);
             processedPages.add(currentPage.value);
@@ -118,10 +119,11 @@ class FeedbackController extends GetxController {
         divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
+    update();
   }
 
   Future<void> getAstroCallList(int orderId) async {
-    loading.value = Loading.initial;
+   // loading.value = Loading.initial;
     update();
     try {
       if (processedPages.contains(currentPage.value)) {
@@ -139,6 +141,7 @@ class FeedbackController extends GetxController {
           if (chatMessages.isNotEmpty) {
             chatMessageList.addAll(chatMessages);
             processedPages.add(currentPage.value);
+            print("resopnsecall${processedPages.add(currentPage.value)}");
           }
         } else {
           throw CustomException(response.message ?? 'Failed to get call history');
@@ -151,5 +154,6 @@ class FeedbackController extends GetxController {
         divineSnackBar(data: error.toString(), color: AppColors.redColor);
       }
     }
+    update();
   }
 }

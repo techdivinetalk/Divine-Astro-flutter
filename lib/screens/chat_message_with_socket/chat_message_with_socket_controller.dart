@@ -15,23 +15,21 @@ import "package:divine_astrologer/model/res_login.dart";
 import "package:divine_astrologer/repository/message_template_repository.dart";
 import "package:divine_astrologer/repository/user_repository.dart";
 import "package:divine_astrologer/screens/dashboard/dashboard_controller.dart";
-import "package:divine_astrologer/screens/live_dharam/zeo_team/player.dart";
+import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
+import "package:divine_astrologer/zego_call/zego_service.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
 import "package:get/get.dart";
-import "package:get/get_rx/get_rx.dart";
-import "package:get_storage/get_storage.dart";
 import "package:http/http.dart" as http;
 import "package:image_cropper/image_cropper.dart";
 import "package:image_picker/image_picker.dart";
 import "package:path_provider/path_provider.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:socket_io_client/socket_io_client.dart";
-import "package:velocity_x/velocity_x.dart";
 
 import "../../common/ask_for_gift_bottom_sheet.dart";
 import "../../common/common_functions.dart";
@@ -40,7 +38,6 @@ import "../../model/astrologer_gift_response.dart";
 import "../../model/message_template_response.dart";
 import "../../model/tarot_response.dart";
 import "../live_dharam/gifts_singleton.dart";
-import "package:divine_astrologer/zego_call/zego_service.dart";
 
 class ChatMessageWithSocketController extends GetxController
     with WidgetsBindingObserver {
@@ -156,7 +153,7 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   var isCardVisible = false.obs;
- // RxInt cardListCount = 0.obs;
+  // RxInt cardListCount = 0.obs;
 
   @override
   void onInit() {
@@ -167,13 +164,14 @@ class ChatMessageWithSocketController extends GetxController
     if (AppFirebaseService().orderData.value.containsKey("card")) {
       isCardVisible.value =
           AppFirebaseService().orderData.value["card"]["isCardVisible"];
-     // cardListCount = getListOfCardLength();
+      // cardListCount = getListOfCardLength();
       print(AppFirebaseService().orderData.value["card"]["isCardVisible"]);
     }
     //isCardVisible = AppFirebaseService().orderData.value["card"] != null ? AppFirebaseService().orderData.value["card"]["isCardVisible"] : true;
     broadcastReceiver.messages.listen((BroadcastMessage event) {
       if (event.name == "displayCard") {
-        print("displayCard--${AppFirebaseService().orderData.value["card"]["isCardVisible"]}");
+        print(
+            "displayCard--${AppFirebaseService().orderData.value["card"]["isCardVisible"]}");
 
         isCardVisible.value =
             AppFirebaseService().orderData.value["card"]["isCardVisible"];
@@ -183,7 +181,8 @@ class ChatMessageWithSocketController extends GetxController
         updateTime(event.data?["talktime"], true);
       }
       if (event.name == "EndChat") {
-        Get.offAllNamed(RouteName.dashboard);
+        navigateToOtherScreen();
+
         broadcastReceiver.stop();
       } else if (event.name == 'deliveredMsg') {
         var response = event.data?['deliveredMsgList'];
@@ -268,6 +267,11 @@ class ChatMessageWithSocketController extends GetxController
     socketReconnect();
   }
 
+  navigateToOtherScreen() async {
+    await Future.delayed(Duration(milliseconds: 300));
+    Get.offAllNamed(RouteName.dashboard);
+  }
+
   updateTime(int? talk, bool isTimeUpdate) {
     debugPrint('my talk: $talk');
     if (talk != null) {
@@ -344,6 +348,15 @@ class ChatMessageWithSocketController extends GetxController
       }
     });
   }
+
+  // Added by divine-dharam
+  Future<void> callHangup() {
+    print("ZegoService().controller.hangUp start");
+    ZegoService().controller.hangUp(context!, showConfirmation: false);
+    print("ZegoService().controller.hangUp end");
+    return Future<void>.value();
+  }
+  //
 
   socketReconnect() {
     if (socket.socket!.disconnected) {

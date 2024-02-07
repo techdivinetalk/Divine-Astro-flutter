@@ -16,7 +16,8 @@ class ApiProvider {
   static const String version = 'v7';
   // static const String socketUrl = "http://13.127.116.89:4000";
   static const String socketUrl = "http://15.206.23.215:8081";
-  final String baseUrl = "https://wakanda-api.divinetalk.live/api/astro/$version/";
+  final String baseUrl =
+      "https://wakanda-api.divinetalk.live/api/astro/$version/";
   //final String baseUrl = "http://13.235.46.27/admin/$version/";
 
   //Socket Event
@@ -68,6 +69,7 @@ class ApiProvider {
   final String getHomePageData = "astroDashboard";
   final String getTarotCardDataApi = "getTarotCard";
   final String getFeedback = "getNotSeenFeedback";
+  final String getFeedbackList = "getAstroFeedbackList";
   final String getAstroFeedback = "getAstroFeedbackDetail";
   final String agoraEndCall = "agoraEndCall";
   final String getWaitingListQueue = "getWaitingListQueue";
@@ -113,6 +115,8 @@ class ApiProvider {
   final String uploadAstrologerimage = "uploadAstrologerimage";
   final String getChatHistory = "getOrderChatHistory";
   final String getOrderCallHistory = "getOrderCallHistory";
+  final String getChatSuggestRemedies = "getMasterRemedies";
+  final String getChatSuggestRemediesDetail = "getRemediesForMasterRemedy";
 
   //Socket Events for Chat
   final String initChat = "initChat";
@@ -122,25 +126,25 @@ class ApiProvider {
   final String deleteChatSession = "deleteChatSession";
   final String deleteChatSessionResponse = "deleteChatSessionResponse";
 
-  final String  joinRoomSocket = "join-room";
-  final String  startAstroCustPrivateChat = "start-astro-cust-private-chat";
-  final String  astrologerJoinedPrivateChat = "astrologer-joined-private-chat";
-  final String  userJoinedPrivateChat = "user-joined-private-chat";
-  final String  userTyping = "user-typing";
-  final String  sendMessage = "send-message";
-  final String  messageSent = "message-sent";
-  final String  changeMsgStatus = "change-msg-status";
-  final String  msgStatusChanged = "msg-status-changed";
-  final String  leavePrivateChat = "leave-private-chat";
-  final String  userDisconnected = "user-disconnected";
-  final String  sendConnectRequest = "send-connect-request";
+  final String joinRoomSocket = "join-room";
+  final String startAstroCustPrivateChat = "start-astro-cust-private-chat";
+  final String astrologerJoinedPrivateChat = "astrologer-joined-private-chat";
+  final String userJoinedPrivateChat = "user-joined-private-chat";
+  final String userTyping = "user-typing";
+  final String sendMessage = "send-message";
+  final String messageSent = "message-sent";
+  final String changeMsgStatus = "change-msg-status";
+  final String msgStatusChanged = "msg-status-changed";
+  final String leavePrivateChat = "leave-private-chat";
+  final String userDisconnected = "user-disconnected";
+  final String sendConnectRequest = "send-connect-request";
   final String getChatAssistAstrologers = "getChatAssistCustomers";
-  final String  sendChatAssistMessage = "send-chat-assist-message";
+  final String getConsulationData = "getConsulationData";
+  final String sendChatAssistMessage = "send-chat-assist-message";
 
   // Added By: divine-dharam
-  final String  joinLive = "join-live";
+  final String joinLive = "join-live";
   //
-
 
   //privacy policy & terms
   final String termsAndCondition = "termsAndCondition";
@@ -165,8 +169,13 @@ class ApiProvider {
   //added by dev-dharam
   final String getAllGifts = "getAllGifts";
   final String blockCustomerlist = "blockCustomerlist";
-  final String blockCustomer = "blockCustomer";   
-  final String getAstroAllNoticeType2 = "getAstroAllNotice?notice_type=2";   
+  final String blockCustomer = "blockCustomer";
+  final String getAstroAllNoticeType2 = "getAstroAllNotice?notice_type=2";
+
+  //added by dev-chetan
+  final String getCustomOffer = "getCustomOffer";
+  final String sendOtpNumberChange = "sendOtpForNumberChange";
+  final String verifyOtpNumberChange = "verifyOtpForNumberChange";
 
   //
   final NetworkService networkManager = Get.find<NetworkService>();
@@ -198,6 +207,11 @@ class ApiProvider {
     var header = getJsonHeader();
     if (_token.isNotEmpty) {
       header[jsonAuthenticationName] = 'Bearer $_token';
+
+      // Added by: divine-dharam
+      header['Content-type'] = 'application/json';
+      header['Accept'] = 'application/json';
+      //
     }
     log("Token is $_token");
     return header;
@@ -210,6 +224,11 @@ class ApiProvider {
     var header = <String, String>{};
     if (_token.isNotEmpty) {
       header[jsonAuthenticationName] = 'Bearer $_token';
+
+      // Added by: divine-dharam
+      header['Content-type'] = 'application/json';
+      header['Accept'] = 'application/json';
+      //
     }
     log("Token is $_token");
     return header;
@@ -224,12 +243,44 @@ class ApiProvider {
     }
   }
 
-  get(String url,
+  /*get(String url,
       {Map<String, String>? headers, bool closeDialogOnTimeout = true}) async {
     if (headers == null) {
       headers = await getAuthorisedHeader();
       log("headers: $headers");
     }
+    if (await networkManager.isConnected() ?? false) {
+      log('url: $baseUrl$url');
+      var response = await http
+          .get(Uri.parse(baseUrl + url), headers: headers)
+          .timeout(const Duration(seconds: 15), onTimeout: () {
+        if (closeDialogOnTimeout) {
+          progressService.showProgressDialog(false);
+        }
+        throw CustomException(AppString.timeoutMessage);
+      });
+      log('response: ${response.body}');
+      return response;
+    } else {
+      throw NoInternetException(AppString.noInternetConnection);
+    }
+  }
+*/
+  Future<http.Response> get(
+    String url, {
+    Map<String, String>? headers,
+    Map<String, dynamic>? queryParameters,
+    bool closeDialogOnTimeout = true,
+  }) async {
+    if (headers == null) {
+      headers = await getAuthorisedHeader();
+      log("headers: $headers");
+    }
+
+    if (queryParameters != null) {
+      url += '?${Uri(queryParameters: queryParameters).query}';
+    }
+
     if (await networkManager.isConnected() ?? false) {
       log('url: $baseUrl$url');
       var response = await http

@@ -60,7 +60,8 @@ class PerformanceUI extends GetView<PerformanceController> {
                     height: 20.h,
                   ),
                   OverAllScoreData(
-                      performanceFilterResponse: controller.performanceFilterResponse),
+                      performanceFilterResponse:
+                          controller.performanceFilterResponse),
                   SizedBox(
                     height: 30.h,
                   ),
@@ -101,9 +102,10 @@ class YourScoreWidget extends GetView<PerformanceController> {
                 primary: false,
                 itemCount: controller.overAllScoreList.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 20.h,
-                    childAspectRatio: 0.68),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 20.h,
+                  childAspectRatio: 0.62,
+                ),
                 itemBuilder: (BuildContext context, int index) {
                   Conversion? item = controller.overAllScoreList[index];
                   ScoreModelClass model = controller.percentageSubTitle[index];
@@ -154,7 +156,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                               ),
                             ),
                             SizedBox(
-                              height: 135.h,
+                              height: 150.h,
                               width: 270.h,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -302,55 +304,45 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                     ListView.builder(
                                                         physics:
                                                             const NeverScrollableScrollPhysics(),
-                                                        itemCount: item?.rankDetail
+                                                        itemCount: item
+                                                                ?.rankDetail
                                                                 ?.length ??
                                                             0,
                                                         shrinkWrap: true,
                                                         primary: false,
                                                         itemBuilder:
                                                             (context, index) {
-                                                          RankDetail? model = item
-                                                              ?.rankDetail?[index];
+                                                          RankDetail? model =
+                                                              item?.rankDetail?[
+                                                                  index];
                                                           return Row(
                                                             children: [
                                                               Expanded(
                                                                 child: Column(
                                                                   children: [
-                                                                    model?.min == '0' || model?.min == null ?
-                                                                        Text(
-                                                                          'Less than ${model?.max}${model?.text}',
-                                                                          textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                          style: AppTextStyle.textStyle12(
-                                                                              fontWeight: FontWeight
-                                                                                  .w400,
-                                                                              fontColor:
-                                                                              AppColors.darkBlue),
-                                                                        ) :
-                                                                    model?.max == '0' || model?.max == null ?
-                                                                        Text(
-                                                                          '${model?.min}${model?.text}+',
-                                                                          textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                          style: AppTextStyle.textStyle12(
-                                                                              fontWeight: FontWeight
-                                                                                  .w400,
-                                                                              fontColor:
-                                                                              AppColors.darkBlue),
-                                                                        ) :
-                                                                    Text(
-                                                                      '${model?.min}${model?.text}-${model?.max}${model?.text}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style: AppTextStyle.textStyle12(
-                                                                          fontWeight: FontWeight
-                                                                              .w400,
-                                                                          fontColor:
-                                                                              AppColors.darkBlue),
-                                                                    ),
+                                                                    model?.min ==
+                                                                                '0' ||
+                                                                            model?.min ==
+                                                                                null
+                                                                        ? Text(
+                                                                            'Less than ${model?.max}${model?.text}',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                                                                          )
+                                                                        : model?.max == '0' ||
+                                                                                model?.max == null
+                                                                            ? Text(
+                                                                                '${model?.min}${model?.text}+',
+                                                                                textAlign: TextAlign.center,
+                                                                                style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                                                                              )
+                                                                            : Text(
+                                                                                '${model?.min}${model?.text}-${model?.max}${model?.text}',
+                                                                                textAlign: TextAlign.center,
+                                                                                style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                                                                              ),
                                                                     SizedBox(
                                                                       height:
                                                                           10.h,
@@ -405,23 +397,20 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                         color: AppColors.white,
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(10))),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          item?.label ?? '',
-                                          textAlign: TextAlign
-                                              .center,
-                                          style: AppTextStyle.textStyle12(
-                                              fontColor: AppColors.darkBlue),
-                                        ),
-                                      ],
+                                    child: Text(
+                                      item?.label ?? '',
+                                      textAlign: TextAlign.center,
+                                      style: AppTextStyle.textStyle12(
+                                          fontColor: AppColors.darkBlue),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
                                     )),
                               ),
                             ),
                           ],
                         ),
                       ],
-                    ), //just for testing, will fill with image later
+                    ),
                   );
                 },
               ),
@@ -441,7 +430,7 @@ class LastAvailabilityWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(12.h),
+      padding: EdgeInsets.all(10.h),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -486,7 +475,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "date".tr,
-                      style: AppTextStyle.textStyle10(
+                      style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
                     ),
@@ -498,7 +487,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "availableChat".tr,
-                      style: AppTextStyle.textStyle10(
+                      style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
                     ),
@@ -510,7 +499,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "availableCall".tr,
-                      style: AppTextStyle.textStyle10(
+                      style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
                     ),
@@ -522,7 +511,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "busyChat".tr,
-                      style: AppTextStyle.textStyle10(
+                      style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
                     ),
@@ -534,7 +523,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "busyCall".tr,
-                      style: AppTextStyle.textStyle10(
+                      style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
                     ),
@@ -546,7 +535,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "availableLive".tr,
-                      style: AppTextStyle.textStyle10(
+                      style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
                     ),
@@ -564,7 +553,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "20-06-23",
-                      style: AppTextStyle.textStyle10(
+                      style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w500,
                           fontColor: AppColors.darkBlue),
                     ),
@@ -573,7 +562,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "${last30DaysAvailiblity?.availableChat ?? "0"}",
-                      style: AppTextStyle.textStyle10(
+                      style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue),
                     ),
@@ -582,7 +571,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "${last30DaysAvailiblity?.availableCall ?? "0"}",
-                      style: AppTextStyle.textStyle10(
+                      style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue),
                     ),
@@ -591,7 +580,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "${last30DaysAvailiblity?.busyChat ?? "0"}",
-                      style: AppTextStyle.textStyle10(
+                      style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue),
                     ),
@@ -600,7 +589,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "${last30DaysAvailiblity?.busyCall ?? "0"}",
-                      style: AppTextStyle.textStyle10(
+                      style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue),
                     ),
@@ -609,7 +598,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "${last30DaysAvailiblity?.availableLive ?? "0"}",
-                      style: AppTextStyle.textStyle10(
+                      style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w400,
                           fontColor: AppColors.darkBlue),
                     ),
@@ -817,7 +806,9 @@ class OverAllScoreData extends GetView<PerformanceController> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.toNamed(RouteName.rankSystemUI, arguments: [controller.performanceFilterResponse?.data?.rankSystem]);
+        Get.toNamed(RouteName.rankSystemUI, arguments: [
+          controller.performanceFilterResponse?.data?.rankSystem
+        ]);
       },
       child: Container(
         padding: EdgeInsets.all(12.h),
@@ -878,7 +869,8 @@ class OverAllScoreData extends GetView<PerformanceController> {
                       ),
                       Row(
                         children: [
-                          setImage(performanceFilterResponse?.data?.rank ?? "") ??
+                          setImage(performanceFilterResponse?.data?.rank ??
+                                  "") ??
                               SizedBox(
                                 width: 10.w,
                               ),
@@ -925,9 +917,10 @@ setImage(String rank) {
     return Assets.images.icSilver.image(height: 21.h, width: 21.h);
   } else if (rank == "Bronze") {
     return Assets.images.icBronze.image(height: 21.h, width: 21.h);
-  }
-  else {
-    return SizedBox(width: 10.w,);
+  } else {
+    return SizedBox(
+      width: 10.w,
+    );
   }
 }
 

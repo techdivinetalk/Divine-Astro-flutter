@@ -6,7 +6,7 @@ import 'package:divine_astrologer/model/live/blocked_customer_list_res.dart';
 import 'package:divine_astrologer/repository/astrologer_profile_repository.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screen_recording/flutter_screen_recording.dart';
+// import 'package:flutter_screen_recording/flutter_screen_recording.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
@@ -25,6 +25,16 @@ class LiveTipsController extends GetxController {
   final AstrologerProfileRepository liveRepository =
       AstrologerProfileRepository();
 
+			
+  final StreamController<bool> streamController = StreamController<bool>()
+    ..add(false);
+
+  @override
+  void dispose() {
+    streamController.close();
+    super.dispose();
+  }
+  
   @override
   void onReady() {
     var data = pref.getUserDetail();
@@ -34,7 +44,7 @@ class LiveTipsController extends GetxController {
     super.onReady();
   }
 
-  Future<void> myFun() async {
+  Future<void> furtherProcedure() async {
     final String userId = (pref.getUserDetail()?.id ?? "").toString();
     final String userName = pref.getUserDetail()?.name ?? "";
     final String awsURL = pref.getAmazonUrl() ?? "";
@@ -55,17 +65,17 @@ class LiveTipsController extends GetxController {
 
     await Get.toNamed(RouteName.liveDharamScreen, arguments: userId);
 
-    // await database.ref().child("live/$userId").remove();
-    // await database.ref().child("astro-live-list/$userId").remove();
+    await database.ref().child("live/$userId").remove();
+    await database.ref().child("astro-live-list/$userId").remove();
 
-    // Get.back();
-    // Get.back();
+    Get.back();
+    Get.back();
 
-    unawaited(database.ref().child("live/$userId").remove());
-    unawaited(database.ref().child("astro-live-list/$userId").remove());
-    
-    Get.back(closeOverlays: true);
-    Get.back(closeOverlays: true);
+    // unawaited(database.ref().child("live/$userId").remove());
+    // unawaited(database.ref().child("astro-live-list/$userId").remove());
+
+    // Get.back(closeOverlays: true);
+    // Get.back(closeOverlays: true);
 
     return Future<void>.value();
   }

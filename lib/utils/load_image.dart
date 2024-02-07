@@ -17,10 +17,10 @@ class ImageModel {
 
 class LoadImage extends StatelessWidget {
   const LoadImage({
-    Key? key,
+    super.key,
     required this.imageModel,
     this.boxFit = BoxFit.cover,
-  }) : super(key: key);
+  });
 
   final ImageModel imageModel;
   final BoxFit boxFit;

@@ -27,8 +27,8 @@ class AddMessageTemplateUI extends GetView<AddMessageTemplateController> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
+          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 20.h),
             Obx(
@@ -49,8 +49,7 @@ class AddMessageTemplateUI extends GetView<AddMessageTemplateController> {
                   padding: const EdgeInsets.only(top: 12),
                   child: Text(
                     '${controller.nameLenght}/15',
-                    style:
-                        AppTextStyle.textStyle12(fontColor: AppColors.darkBlue),
+                    style: AppTextStyle.textStyle12(fontColor: AppColors.darkBlue),
                   ),
                 ),
               ),

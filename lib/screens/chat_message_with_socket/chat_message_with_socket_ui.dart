@@ -7,6 +7,8 @@ import "package:divine_astrologer/common/app_textstyle.dart";
 import "package:divine_astrologer/common/cached_network_image.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/common_functions.dart";
+import "package:divine_astrologer/common/custom_widgets.dart";
+import "package:divine_astrologer/common/message_view.dart";
 import "package:divine_astrologer/common/permission_handler.dart";
 import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/di/shared_preference_service.dart";
@@ -106,7 +108,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                         Padding(
                                           padding: EdgeInsets.symmetric(
                                               vertical: 4.h, horizontal: 12.w),
-                                          child: Column(
+                                          child: /*Column(
                                             children: [
                                               if (chatMessage.id ==
                                                   controller
@@ -151,6 +153,23 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                                           .getUserDetail()!
                                                                           .id,
                                                                 )
+
+
+
+                                                  : chatMessage.msgType ==
+                                                  "Remedies"
+                                                  ? remediesMsgView(
+                                                context,
+                                                chatMessage,
+                                                chatMessage
+                                                    .senderId ==
+                                                    preferenceService
+                                                        .getUserDetail()!
+                                                        .id,
+                                              )
+
+
+
                                                               : chatMessage.msgType ==
                                                                       "sendGifts"
                                                                   ? giftSendUi(
@@ -165,7 +184,18 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                                       chatMessage,
                                                                       chatMessage.senderId == preferenceService.getUserDetail()!.id),
                                             ],
-                                          ),
+                                          )*/
+                                              MessageView(
+                                                  index: index,
+                                                  chatMessage: chatMessage,
+                                                  yourMessage:
+                                                      chatMessage.senderId ==
+                                                          preferenceService
+                                                              .getUserDetail()!
+                                                              .id,
+                                                  unreadMessage: controller
+                                                      .unreadMessageIndex
+                                                      .value),
                                         ),
                                         if (index ==
                                             (controller.chatMessages.length -
@@ -275,39 +305,38 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   ),
                                 );
                               }),
-                              Obx( () {
-                                  return Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: List.generate(
-                                      controller.getListOfCardLength(),
-                                      (index) => Expanded(
-                                        flex: 1,
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 2),
-                                          child: Center(
-                                              child: Text(
-                                            textAlign: TextAlign.center,
-                                            // Add this line for text alignment
-                                            controller.getKeyByPosition(index),
-                                            style: const TextStyle(
-                                              color: AppColors.white,
-                                              fontSize:
-                                                  12, // Adjust the font size as needed
-                                            ),
-                                            softWrap: true,
-                                            maxLines: 3,
-                                            // Maximum lines allowed
-                                            overflow: TextOverflow
-                                                .ellipsis, // Optional: use ellipsis to indicate text overflow
-                                          )),
-                                        ),
+                              Obx(() {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: List.generate(
+                                    controller.getListOfCardLength(),
+                                    (index) => Expanded(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 2),
+                                        child: Center(
+                                            child: Text(
+                                          textAlign: TextAlign.center,
+                                          // Add this line for text alignment
+                                          controller.getKeyByPosition(index),
+                                          style: const TextStyle(
+                                            color: AppColors.white,
+                                            fontSize:
+                                                12, // Adjust the font size as needed
+                                          ),
+                                          softWrap: true,
+                                          maxLines: 3,
+                                          // Maximum lines allowed
+                                          overflow: TextOverflow
+                                              .ellipsis, // Optional: use ellipsis to indicate text overflow
+                                        )),
                                       ),
                                     ),
-                                  );
-                                }
-                              ),
+                                  ),
+                                );
+                              }),
                               const SizedBox(height: 10),
                             ],
                           ),
@@ -422,24 +451,66 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         return AnimatedOpacity(
           opacity: astPerm ? 0.0 : 1.0,
           duration: const Duration(seconds: 1),
-          child: astPerm
-              ? const SizedBox()
-              : InkWell(
-                  onTap: ZegoService().newOnBannerPressed,
-                  child: const SizedBox(
-                    height: 50,
-                    width: double.infinity,
-                    child: Card(
-                      child: Center(
-                        child: Text(
-                          "Allow permissions required for Video / Audio calls.",
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+          child: astPerm ? const SizedBox() : commonRedContainer(),
         );
       },
+    );
+  }
+
+  Widget commonRedContainer() {
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        horizontal: 16.0,
+        vertical: 8.0,
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(color: AppColors.red, width: 2),
+        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+        color: AppColors.white,
+      ),
+      child: ListTile(
+        dense: true,
+        contentPadding: EdgeInsets.zero,
+        minLeadingWidth: 0,
+        horizontalTitleGap: 0,
+        leading: const Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 8.0,
+            vertical: 8.0,
+          ),
+        ),
+        title: const Text(
+          "Enable required settings before initiating or accepting the call.",
+          style: TextStyle(
+            color: AppColors.red,
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        trailing: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 8.0,
+            vertical: 8.0,
+          ),
+          child: OutlinedButton(
+            onPressed: ZegoService().newOnBannerPressed,
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8.0,
+              ),
+              side: const BorderSide(color: AppColors.red, width: 1),
+            ),
+            child: const Text(
+              "Open Settings",
+              style: TextStyle(
+                color: AppColors.red,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -671,6 +742,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 suffixIcon: InkWell(
                                   onTap: () async {
                                     showCurvedBottomSheet(context);
+
+                                    // Move focus to an invisible focus node to dismiss the keyboard
+                                    FocusScope.of(context)
+                                        .requestFocus(FocusNode());
                                     // if (controller.isOngoingChat.value) {
 
                                     //   } else {
@@ -781,12 +856,12 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         context: context,
         builder: (BuildContext context) {
           return Container(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(10.sp),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
+                topLeft: Radius.circular(30.sp),
+                topRight: Radius.circular(30.sp),
               ),
             ),
             child: GridView.count(
@@ -796,7 +871,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
               crossAxisSpacing: 10,
               children: List.generate(itemList.length, (index) {
                 return GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     Navigator.pop(context);
                     switch (index) {
                       case 0:
@@ -806,7 +881,15 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         controller.getImage(false);
                         break;
                       case 2:
-                        controller.getImage(false);
+                        var result =
+                            await Get.toNamed(RouteName.chatSuggestRemedy);
+                        if (result != null) {
+                          final String time =
+                              "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+                          controller.addNewMessage(time, "Remedies",
+                              messageText: result.toString());
+                          print("getting ul not add1");
+                        }
                         break;
                       case 3:
                         showCardChoiceBottomSheet(context, controller);
@@ -898,6 +981,59 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     child: Text(
                         'Astrologer has requested to send ${chatMessage.message}.'))
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget remediesMsgView(
+      BuildContext context, ChatMessage chatMessage, bool yourMessage) {
+    var jsonString = (chatMessage.message ?? '')
+        .substring(1, (chatMessage.message ?? '').length - 1);
+    List temp = jsonString.split(', ');
+
+    print("get templist $temp");
+
+    if (temp.length < 2) {
+      return const SizedBox.shrink();
+    }
+    return SizedBox(
+      width: double.maxFinite,
+      child: Column(
+        crossAxisAlignment:
+            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Card(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: AppColors.yellow,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: AppColors.red,
+                  child: CustomText(
+                    temp[0][0],
+                    fontColor: AppColors.white,
+                  ), // Display the first letter of the name
+                ),
+                title: CustomText(
+                  temp[0],
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+                subtitle: CustomText(
+                  temp[1] ?? '',
+                  fontSize: 12.sp,
+                  maxLines: 20,
+                ),
+                onTap: () => Get.toNamed(RouteName.remediesDetail,
+                    arguments: {'title': temp[0], 'subtitle': temp[1]}),
+              ),
             ),
           ),
         ],
@@ -1509,17 +1645,17 @@ class AstrologerChatAppBar extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      SizedBox(width: 16.w),
+                      // SizedBox(width: 16.w),
                       IconButton(
                         onPressed: () => Get.back(),
                         icon: const Icon(Icons.arrow_back_ios_new_rounded),
                       ),
-                      SizedBox(width: 8.w),
+                      //SizedBox(width: 8.w),
                       Row(
                         children: [
                           CachedNetworkPhoto(
-                              height: 48.h,
-                              width: 48.w,
+                              height: 45.h,
+                              width: 45.w,
                               url: controller.profileImage.value),
                           SizedBox(width: 12.w),
                           Column(
@@ -1531,7 +1667,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                                   controller.customerName.value,
                                   style: TextStyle(
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 16.sp,
+                                      fontSize: 14.sp,
                                       color: AppColors.darkBlue),
                                 ),
                               ),
@@ -1550,14 +1686,14 @@ class AstrologerChatAppBar extends StatelessWidget {
                                           controller.showTalkTime.value,
                                           style: TextStyle(
                                               fontWeight: FontWeight.w500,
-                                              fontSize: 13.sp,
+                                              fontSize: 10.sp,
                                               color: AppColors.brownColour),
                                         ),
                                         Text(
                                           controller.chatStatus.value,
                                           style: TextStyle(
                                               fontWeight: FontWeight.w400,
-                                              fontSize: 13.sp,
+                                              fontSize: 10.sp,
                                               color:
                                                   controller.chatStatus.value !=
                                                           "Offline"
@@ -1575,40 +1711,70 @@ class AstrologerChatAppBar extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      ZegoService().buttonUI(
-                        isVideoCall: false,
-                        targetUserID:
-                            AppFirebaseService().orderData.value["userId"],
-                        targetUserName: AppFirebaseService()
-                            .orderData
-                            .value["customerName"],
-                        checkOppositeSidePermGranted: () {
-                          String name =
-                              preferenceService.getUserDetail()?.name ?? "";
-                          String message =
-                              "$name wants to start a call, please allow all required permissions";
-                          controller.messageController.text = message;
-                          controller.sendMsg();
+                      Builder(
+                        builder: (context) {
+                          Map orderData = AppFirebaseService().orderData.value;
+                           String astrImage =
+                              "${controller.preference.getAmazonUrl()}${orderData["astroImage"] ?? ""}";
+                          String custImage =
+                              "${controller.preference.getAmazonUrl()}${orderData["customer_image"] ?? ""}";
+                          return ZegoService().buttonUI(
+                            isVideoCall: false,
+                            targetUserID: orderData["userId"] ?? "",
+                            targetUserName: orderData["customerName"] ?? "",
+                            checkOppositeSidePermGranted: () {
+                              String name =
+                                  preferenceService.getUserDetail()?.name ?? "";
+                              String message =
+                                  "$name wants to start a call, please allow all required permissions";
+                              controller.messageController.text = message;
+                              controller.sendMsg();
+                            },
+                            customData: {
+                              "astr_id": orderData["astroId"] ?? "",
+                              "astr_name": orderData["astrologerName"] ?? "",
+                              "astr_image": astrImage,
+                              "cust_id": orderData["userId"] ?? "",
+                              "cust_name": orderData["customerName"] ?? "",
+                              "cust_image": custImage,
+                              "time": "00:01:00",
+                            },
+                          );
                         },
                       ),
-                      SizedBox(width: 16.w),
-                      ZegoService().buttonUI(
-                        isVideoCall: true,
-                        targetUserID:
-                            AppFirebaseService().orderData.value["userId"],
-                        targetUserName: AppFirebaseService()
-                            .orderData
-                            .value["customerName"],
-                        checkOppositeSidePermGranted: () {
-                          String name =
-                              preferenceService.getUserDetail()?.name ?? "";
-                          String message =
-                              "$name wants to start a call, please allow all required permissions";
-                          controller.messageController.text = message;
-                          controller.sendMsg();
+                      SizedBox(width: 10.w),
+                      Builder(
+                        builder: (context) {
+                          Map orderData = AppFirebaseService().orderData.value;
+                           String astrImage =
+                              "${controller.preference.getAmazonUrl()}${orderData["astroImage"] ?? ""}";
+                          String custImage =
+                              "${controller.preference.getAmazonUrl()}${orderData["customer_image"] ?? ""}";
+                          return ZegoService().buttonUI(
+                            isVideoCall: true,
+                            targetUserID: orderData["userId"] ?? "",
+                            targetUserName: orderData["customerName"] ?? "",
+                            checkOppositeSidePermGranted: () {
+                              String name =
+                                  preferenceService.getUserDetail()?.name ?? "";
+                              String message =
+                                  "$name wants to start a call, please allow all required permissions";
+                              controller.messageController.text = message;
+                              controller.sendMsg();
+                            },
+                            customData: {
+                              "astr_id": orderData["astroId"] ?? "",
+                              "astr_name": orderData["astrologerName"] ?? "",
+                              "astr_image": astrImage,
+                              "cust_id": orderData["userId"] ?? "",
+                              "cust_name": orderData["customerName"] ?? "",
+                              "cust_image": custImage,
+                              "time": "00:01:00",
+                            },
+                          );
                         },
                       ),
-                      SizedBox(width: 16.w),
+                      SizedBox(width: 5.w),
                       PopupMenuButton(
                         surfaceTintColor: Colors.transparent,
                         color: Colors.white,
@@ -1636,7 +1802,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                         ],
                         child: const Icon(Icons.more_vert_rounded),
                       ),
-                      SizedBox(width: 16.w),
+                      SizedBox(width: 10.w),
                     ],
                   ),
                   // Obx(() => Visibility(
