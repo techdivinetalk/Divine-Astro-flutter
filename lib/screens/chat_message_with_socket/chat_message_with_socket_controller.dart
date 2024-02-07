@@ -459,7 +459,7 @@ class ChatMessageWithSocketController extends GetxController
             chatMessageId: chatMessage.id.toString(),
             chatStatus: "read",
             time: time,
-            orderId: arguments["orderData"]["orderId"].toString(),
+            orderId: arguments["orde```````rData"]["orderId"].toString(),
           );
         }
         updateChatMessages(chatMessage, false, isSendMessage: false);

@@ -350,7 +350,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.symmetric(vertical: 15.w),
+                        padding: EdgeInsets.symmetric(vertical: 10.w),
                         decoration: const BoxDecoration(color: Colors.transparent),
                         child: Column(
                           children: [
@@ -360,7 +360,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontFamily: FontFamily.metropolis,
-                                    fontSize: 20.sp,
+                                    fontSize: 17.sp,
                                     color: AppColors.brownColour)),
                             SizedBox(height: 15.w),
                             Row(
@@ -428,7 +428,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                             fontFamily: FontFamily.metropolis,
                                             fontSize: 16.sp,
                                             color: AppColors.darkBlue)),
-                                    Text("00:05:00",
+                                    Text(AppFirebaseService().orderData.value["max_order_time"],
                                         style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontFamily: FontFamily.metropolis,
