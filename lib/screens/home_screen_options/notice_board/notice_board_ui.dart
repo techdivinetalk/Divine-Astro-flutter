@@ -46,7 +46,8 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
                   final data = controller.noticeList[index];
                   return noticeBoardDetail(
                     onTap: () {
-                      Get.toNamed(RouteName.noticeDetail, arguments: data, parameters: {"from_list": "1"});
+                      Get.toNamed(RouteName.noticeDetail,
+                          arguments: data, parameters: {"from_list": "1"});
                     },
                     title: data.title.toString(),
                     date: data.createdAt,
@@ -93,12 +94,16 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
                 children: [
                   Text(
                     title ?? "",
-                    style: AppTextStyle.textStyle16(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                    style: AppTextStyle.textStyle16(
+                        fontWeight: FontWeight.w500,
+                        fontColor: AppColors.darkBlue),
                   ),
                   Text(
                     '${dateToString(date ?? DateTime.now(), format: "h:mm a")}  '
-                        '${formatDateTime(date ?? DateTime.now())} ',
-                    style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                    '${formatDateTime(date ?? DateTime.now())} ',
+                    style: AppTextStyle.textStyle10(
+                        fontWeight: FontWeight.w400,
+                        fontColor: AppColors.darkBlue),
                   ),
                 ],
               ),
@@ -131,9 +136,10 @@ class _ExpandableHtmlState extends State<ExpandableHtml> {
 
   @override
   Widget build(BuildContext context) {
-    final String trimmedText = widget.htmlData.length > widget.trimLength && !_isExpanded
-        ? widget.htmlData.substring(0, widget.trimLength) + '...'
-        : widget.htmlData;
+    final String trimmedText =
+        widget.htmlData.length > widget.trimLength && !_isExpanded
+            ? widget.htmlData.substring(0, widget.trimLength) + '...'
+            : widget.htmlData;
 
     return Column(
       children: [
@@ -143,24 +149,26 @@ class _ExpandableHtmlState extends State<ExpandableHtml> {
             launchUrl(Uri.parse(url ?? ''));
           },
         ),
-        Align(
-          alignment: Alignment.topRight,
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                _isExpanded = !_isExpanded;
-              });
-            },
-            child: Text(
-              _isExpanded ? "Show Less" : "Show More",
-              style: TextStyle(
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w700,
-                color: AppColors.blackColor,
-              ),
-            ),
-          ),
-        ),
+        widget.htmlData.length > widget.trimLength
+            ? Align(
+                alignment: Alignment.topRight,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _isExpanded = !_isExpanded;
+                    });
+                  },
+                  child: Text(
+                    _isExpanded ? "Show Less" : "Show More",
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.blackColor,
+                    ),
+                  ),
+                ),
+              )
+            : SizedBox(),
       ],
     );
   }
