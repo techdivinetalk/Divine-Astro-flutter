@@ -1954,16 +1954,6 @@ class _LivePage extends State<LiveDharamScreen>
             final String name = _controller.waitListModel.last.userName;
             final String avatar = _controller.waitListModel.last.avatar;
             final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
-
-            _controller.endTime = DateTime.now().add(
-              Duration(
-                days: 0,
-                hours: 0,
-                minutes: int.parse(_controller.currentCaller.totalTime),
-                seconds: 0,
-              ),
-            );
-
             final connectInvite = _zegoController.coHost;
             await connectInvite.hostSendCoHostInvitationToAudience(user);
           },
@@ -3018,19 +3008,10 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-  // temporary purpose
-  // DateTime? endTime;
-  //
-
   Widget newTimerWidget() {
-    // endTime ??= DateTime.now().add(
-    //   Duration(
-    //     days: 0,
-    //     hours: 0,
-    //     minutes: int.parse(_controller.currentCaller.totalTime),
-    //     seconds: 0,
-    //   ),
-    // );
+    final String source = _controller.engagedCoHostWithAstro().totalTime;
+    final int epoch = int.parse(source);
+    final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
     return TimerCountdown(
       format: CountDownTimerFormat.hoursMinutesSeconds,
       enableDescriptions: false,
@@ -3038,14 +3019,12 @@ class _LivePage extends State<LiveDharamScreen>
       colonsTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
       timeTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
       onTick: (Duration duration) async {
-        _controller.endTime = DateTime.now().add(duration);
-
-        if (isLessThanOneMinute(duration) && !extendTimeWidgetVisible) {
-          extendTimeWidgetVisible = true;
-          await extendTimeWidgetPopup();
-        } else {}
+        // if (isLessThanOneMinute(duration) && !extendTimeWidgetVisible) {
+        //   extendTimeWidgetVisible = true;
+        //   await extendTimeWidgetPopup();
+        // } else {}
       },
-      endTime: _controller.endTime,
+      endTime: dateTime,
       onEnd: removeCoHostOrStopCoHost,
     );
   }
@@ -4204,15 +4183,6 @@ class _LivePage extends State<LiveDharamScreen>
       needDeclinetButton: false,
       onAcceptButton: () async {
         if (_controller.openAceeptRejectDialogForId == userId) {
-          _controller.endTime = DateTime.now().add(
-            Duration(
-              days: 0,
-              hours: 0,
-              minutes: int.parse(_controller.currentCaller.totalTime),
-              seconds: 0,
-            ),
-          );
-
           final connectInvite = _zegoController.coHost;
           await connectInvite.hostSendCoHostInvitationToAudience(user);
         } else {}

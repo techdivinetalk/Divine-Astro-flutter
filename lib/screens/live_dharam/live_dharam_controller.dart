@@ -72,7 +72,6 @@ class LiveDharamController extends GetxController {
   final RxList<dynamic> _firebaseBlockUsersIds = <dynamic>[].obs;
   final RxList<DeckCardModel> _deckCardModelList = <DeckCardModel>[].obs;
   final Rx<TarotGameModel> _tarotGameModel = TarotGameModel().obs;
-  final Rx<DateTime> _endTime = DateTime(2001).obs;
   final RxBool _hasFollowPopupOpen = false.obs;
   final RxBool _hasCallAcceptRejectPopupOpen = false.obs;
   final RxString _openAceeptRejectDialogForId = "".obs;
@@ -143,7 +142,6 @@ class LiveDharamController extends GetxController {
     firebaseBlockUsersIds = [];
     deckCardModelList = [];
     tarotGameModel = TarotGameModel();
-    endTime = DateTime(2001);
     hasFollowPopupOpen = false;
     hasCallAcceptRejectPopupOpen = false;
     openAceeptRejectDialogForId = "";
@@ -198,7 +196,6 @@ class LiveDharamController extends GetxController {
     _firebaseBlockUsersIds.close();
     _deckCardModelList.close();
     _tarotGameModel.close();
-    _endTime.close();
     _hasFollowPopupOpen.close();
     _hasCallAcceptRejectPopupOpen.close();
     _openAceeptRejectDialogForId.close();
@@ -302,9 +299,6 @@ class LiveDharamController extends GetxController {
 
   TarotGameModel get tarotGameModel => _tarotGameModel.value;
   set tarotGameModel(TarotGameModel value) => _tarotGameModel(value);
-
-  DateTime get endTime => _endTime.value;
-  set endTime(DateTime value) => _endTime(value);
 
   bool get hasFollowPopupOpen => _hasFollowPopupOpen.value;
   set hasFollowPopupOpen(bool value) => _hasFollowPopupOpen(value);
@@ -980,8 +974,7 @@ class LiveDharamController extends GetxController {
         "isRequest": isRequest,
         "isEngaded": isEngaded,
         "callType": previousType.toLowerCase(),
-        // "totalTime": intToTimeLeft(walletBalance.value),
-        "totalTime": "240",
+        // "totalTime": "240",
         // "totalTime": "2",
         "userName": userName,
         "avatar": avatar,
@@ -994,6 +987,14 @@ class LiveDharamController extends GetxController {
     );
     return Future<void>.value();
   }
+
+  // String generateFutureTime() {
+  //   final DateTime current = DateTime.now();
+  //   final int min = (orderGenerate.data?.talktime ?? 0);
+  //   final DateTime addedTime = current.add(Duration(minutes: min));
+  //   final int millisecondsSinceEpoch = addedTime.millisecondsSinceEpoch;
+  //   return millisecondsSinceEpoch.toString();
+  // }
 
   void getLatestWaitList(
     DataSnapshot? dataSnapshot,
