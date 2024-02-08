@@ -713,6 +713,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.6.4"
+  firebase_remote_config:
+    dependency: "direct main"
+    description:
+      name: firebase_remote_config
+      sha256: "701d563063b44ea39e4d23bb5c3fcc3f6eab8fa9247a9a0b276058ad7325ec86"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.3.13"
+  firebase_remote_config_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_remote_config_platform_interface
+      sha256: "270df798d81421bfbb7fdc4f0bebdcb77e594fefdf1e6a65d56584ff5a06ea54"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.21"
+  firebase_remote_config_web:
+    dependency: transitive
+    description:
+      name: firebase_remote_config_web
+      sha256: a78967a208bc7a9bf44f8339c3c411b9d7e9529c644194ea5d4d0ca503c3481b
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.21"
   fixnum:
     dependency: transitive
     description:
@@ -2366,10 +2390,10 @@ packages:
     dependency: transitive
     description:
       name: zego_uikit
-      sha256: e5e5aa4bf5243e5fbc39ec979817d744ce1c57df4b0058de29d8b8f457d95929
+      sha256: ef9b8c55823c49ff154ad23e50693ad208ca3ecfcadbeb2f9edb57c3393eecac
       url: "https://pub.dev"
     source: hosted
-    version: "2.18.4"
+    version: "2.18.5"
   zego_uikit_prebuilt_call:
     dependency: "direct main"
     description:
@@ -2382,10 +2406,10 @@ packages:
     dependency: "direct main"
     description:
       name: zego_uikit_prebuilt_live_streaming
-      sha256: "6c897550f92f81f78a9c13793be5daa6e1f0982768b6deafde987ee66af365c0"
+      sha256: cab42f4c3c6a3ecb30d854bf651abb8f5144cc2c3d53fd5a29120960793a1886
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.9"
+    version: "3.1.11"
   zego_uikit_signaling_plugin:
     dependency: "direct main"
     description:
