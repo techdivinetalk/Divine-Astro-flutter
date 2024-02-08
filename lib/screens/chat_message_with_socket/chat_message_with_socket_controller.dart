@@ -35,8 +35,11 @@ import "../../common/ask_for_gift_bottom_sheet.dart";
 import "../../common/common_functions.dart";
 import "../../firebase_service/firebase_service.dart";
 import "../../model/astrologer_gift_response.dart";
+import "../../model/chat/ReqCommonChat.dart";
+import "../../model/chat/ReqEndChat.dart";
 import "../../model/message_template_response.dart";
 import "../../model/tarot_response.dart";
+import "../../repository/chat_repository.dart";
 import "../live_dharam/gifts_singleton.dart";
 
 class ChatMessageWithSocketController extends GetxController
@@ -89,11 +92,10 @@ class ChatMessageWithSocketController extends GetxController
   RxBool isTyping = false.obs;
   BroadcastReceiver broadcastReceiver = BroadcastReceiver(
       names: <String>["EndChat", "deliveredMsg", "updateTime", "displayCard"]);
-
+  late Duration timeDifference;
   RxList<MessageTemplates> messageTemplates = <MessageTemplates>[].obs;
 
   final AppSocket socket = AppSocket();
-  var arguments;
 
   Timer? _timer;
 
@@ -160,7 +162,6 @@ class ChatMessageWithSocketController extends GetxController
     super.onInit();
     int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
     talkTimeStartTimer(remainingTime);
-    arguments = Get.arguments;
     broadcastReceiver.start();
     print("isCardVisible");
     if (AppFirebaseService().orderData.value.containsKey("card")) {
@@ -315,30 +316,40 @@ class ChatMessageWithSocketController extends GetxController
     }
   }
 
-  void talkTimeStartTimer(int talkTime) {
-    const Duration oneSecond = Duration(seconds: 1);
-    final DateTime futureTime =
-        DateTime.fromMillisecondsSinceEpoch(talkTime * 1000);
-    _timer = Timer.periodic(oneSecond, (Timer timer) {
-      final DateTime now = DateTime.now();
-      final Duration difference = futureTime.difference(now);
-
-      if (difference.isNegative) {
-        timer.cancel();
-        showTalkTime.value = "000:00 min Remaining";
+  void talkTimeStartTimer(int futureTimeInEpochMillis) {
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
+    print("futureTime.minute");
+    if (_timer != null) {
+      _timer?.cancel();
+    }
+    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
+      timeDifference = dateTime.difference(DateTime.now());
+      if (timeDifference.isNegative || timeDifference.inSeconds == 0) {
+        if(timeDifference.inSeconds == -60) {
+          _timer?.cancel();
+          final ReqEndChat response = await ChatRepository().endChat(
+              ReqCommonChat(
+                  orderId: AppFirebaseService().orderData.value["orderId"],
+                  queueId:AppFirebaseService().orderData.value["queue_id"])
+                  .toJson());
+          if (response.statusCode == 200) {
+            divineSnackBar(
+                data: "Chat ended.", color: AppColors.appYellowColour);
+            Get.back();
+          }
+        }
+        if(timeDifference.inSeconds == 0){
+          await callHangup();
+        }
+        showTalkTime.value = "${timeDifference.inSeconds == -60} seconds extra talk time";
+        print(timeDifference.inSeconds);
+        print('Countdown finished');
       } else {
-        final int remainingHours = difference.inHours;
-        final int remainingMinutes = difference.inMinutes.remainder(60);
-        final int remainingSeconds = difference.inSeconds.remainder(60);
-
-        final String hoursString = remainingHours.toString().padLeft(2, "0");
-        final String minutesString =
-            remainingMinutes.toString().padLeft(2, "0");
-        final String secondsString =
-            remainingSeconds.toString().padLeft(2, "0");
-
         showTalkTime.value =
-            "$hoursString:$minutesString:$secondsString Remaining";
+        "${timeDifference.inHours}:${timeDifference.inMinutes.remainder(60)}:${timeDifference.inSeconds.remainder(60)}"; // Update the reactive variable
+        print('Countdown working');
+        print(
+            '${timeDifference.inHours}:${timeDifference.inMinutes.remainder(60)}:${timeDifference.inSeconds.remainder(60)}');
       }
     });
   }
@@ -360,8 +371,8 @@ class ChatMessageWithSocketController extends GetxController
     }
     socket.socket!.onConnect((_) {
       socket.startAstroCustumerSocketEvent(
-        orderId: arguments["orderData"]["orderId"].toString(),
-        userId: arguments["orderData"]["userId"],
+        orderId: AppFirebaseService().orderData.value["orderId"].toString(),
+        userId: AppFirebaseService().orderData.value["userId"],
       );
       log("Socket startAstroCustumerSocketEvent connected successfully");
     });
@@ -384,11 +395,11 @@ class ChatMessageWithSocketController extends GetxController
 
   void tyingSocket() {
     debugPrint(
-      'tyingSocket orderId:${arguments['orderData']['orderId'].toString()}, userId: ${arguments['orderData']['userId']}',
+      'tyingSocket orderId:${AppFirebaseService().orderData.value['orderId'].toString()}, userId: ${AppFirebaseService().orderData.value['userId']}',
     );
     socket.typingSocket(
-      orderId: arguments["orderData"]["orderId"].toString(),
-      userId: arguments["orderData"]["userId"].toString(),
+      orderId: AppFirebaseService().orderData.value["orderId"].toString(),
+      userId: AppFirebaseService().orderData.value["userId"].toString(),
     );
   }
 
@@ -403,9 +414,9 @@ class ChatMessageWithSocketController extends GetxController
     socket.typingListenerSocket((data) {
       debugPrint('data ........ ${data}');
       debugPrint(
-          '${data['data']["typist"].toString()}  ${arguments["orderData"]["userId"].toString()}');
+          '${data['data']["typist"].toString()}  ${AppFirebaseService().orderData.value["userId"].toString()}');
       if (data['data']["typist"].toString() ==
-          arguments["orderData"]["userId"].toString()) {
+          AppFirebaseService().orderData.value["userId"].toString()) {
         isTyping.value = true;
         chatStatus.value = "Typing";
         //  scrollToBottomFunc();
@@ -466,7 +477,7 @@ class ChatMessageWithSocketController extends GetxController
             chatMessageId: chatMessage.id.toString(),
             chatStatus: "read",
             time: time,
-            orderId: arguments["orde```````rData"]["orderId"].toString(),
+            orderId: AppFirebaseService().orderData.value["orderId"].toString(),
           );
         }
         updateChatMessages(chatMessage, false, isSendMessage: false);
@@ -571,53 +582,53 @@ class ChatMessageWithSocketController extends GetxController
   }
 
 //Cannot end chat
-  cannotEndChat(BuildContext context) async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Divine Customer"),
-          content: const Text("You cannot end chat before 1 min."),
-          actions: <Widget>[
-            TextButton(
-              child: const Text("Ok"),
-              onPressed: () async {
-                Get.back();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+//   cannotEndChat(BuildContext context) async {
+//     showDialog(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return AlertDialog(
+//           title: const Text("Divine Customer"),
+//           content: const Text("You cannot end chat before 1 min."),
+//           actions: <Widget>[
+//             TextButton(
+//               child: const Text("Ok"),
+//               onPressed: () async {
+//                 Get.back();
+//               },
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//   }
 
 //End Chat
-  confirmChatEnd(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Divine Astrologer"),
-          content: const Text("Are you sure you want to end this chat?"),
-          actions: <Widget>[
-            TextButton(
-              child: const Text("Yes"),
-              onPressed: () async {
-                Get.back();
-                //   await onEndChat();
-              },
-            ),
-            TextButton(
-              child: const Text("No"),
-              onPressed: () async {
-                Get.back();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+//   confirmChatEnd(BuildContext context) {
+//     showDialog(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return AlertDialog(
+//           title: const Text("Divine Astrologer"),
+//           content: const Text("Are you sure you want to end this chat?"),
+//           actions: <Widget>[
+//             TextButton(
+//               child: const Text("Yes"),
+//               onPressed: () async {
+//                 Get.back();
+//
+//               },
+//             ),
+//             TextButton(
+//               child: const Text("No"),
+//               onPressed: () async {
+//                 Get.back();
+//               },
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//   }
 
   addNewMessage(
     String time,
@@ -630,10 +641,10 @@ class ChatMessageWithSocketController extends GetxController
     String? giftId,
   }) async {
     final ChatMessage newMessage = ChatMessage(
-      orderId: int.parse(arguments["orderData"]["orderId"].toString()),
+      orderId: int.parse(AppFirebaseService().orderData.value["orderId"].toString()),
       id: int.parse(time),
       message: messageText,
-      receiverId: int.parse(arguments["orderData"]["userId"].toString()),
+      receiverId: int.parse(AppFirebaseService().orderData.value["userId"].toString()),
       senderId: preference.getUserDetail()!.id,
       time: int.parse(time),
       awsUrl: awsUrl,
