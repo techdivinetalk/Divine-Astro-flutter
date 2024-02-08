@@ -14,9 +14,12 @@ import 'package:divine_astrologer/model/feedback_response.dart';
 import 'package:divine_astrologer/model/update_offer_type_response.dart';
 import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/pages/home/home_ui.dart';
+import 'package:divine_astrologer/remote_config/remote_config_helper.dart';
+import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
@@ -97,6 +100,7 @@ class HomeController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
+    getColors();
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {
       debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
@@ -113,6 +117,17 @@ class HomeController extends GetxController {
     getDashboardDetail();
     getFeedbackData();
     tarotCardData();
+  }
+
+  RemoteConfigHelper? remoteConfigHelper;
+  getColors() async {
+    // final remoteConfig = FirebaseRemoteConfig.instance;
+    // remoteConfigHelper = RemoteConfigHelper(remoteConfig: remoteConfig);
+    // await remoteConfigHelper!.initialize();
+    // print(remoteConfigHelper!.getString("background"));
+    // print("get color here");
+    print(remoteConfigData);
+    print("remoteConfigData");
   }
 
   fetchImportantNumbers() async {

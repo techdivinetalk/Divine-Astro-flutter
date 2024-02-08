@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:pin_input_text_field/pin_input_text_field.dart';
 import 'package:pinput/pinput.dart';
 
-
 import '../../common/colors.dart';
 import '../../common/custom_widgets.dart';
 import '../../common/routes.dart';
@@ -29,7 +28,9 @@ class OtpVerificationUI extends GetView<OtpVerificationController> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                BackNavigationWidget(onPressedBack: () => Get.back(), title: "otpVerification".tr),
+                BackNavigationWidget(
+                    onPressedBack: () => Get.back(),
+                    title: "otpVerification".tr),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20.w),
                   child: Column(
@@ -40,50 +41,66 @@ class OtpVerificationUI extends GetView<OtpVerificationController> {
                       OtpVerificationField(),
                       OtpFieldView(
                           controller: controller.pinController,
-                          onChanged: (value) => controller.otpLength.value = value.trim().length),
+                          onChanged: (value) =>
+                              controller.otpLength.value = value.trim().length),
                       InCorrectOtpWidget(),
                       SizedBox(height: 12.h),
-                      NotReceiveOtpText(onResend: () => controller.resendOtp()),
                       Obx(
-                            () => controller.enableSubmit.value
+                        () => controller.isResendOtp.value
+                            ? SizedBox(
+                                height: 30.h,
+                                width: 30.h,
+                                child: const CircularProgressIndicator(
+                                    strokeWidth: 3, color: AppColors.brown),
+                              )
+                            : NotReceiveOtpText(
+                                onResend: () => controller.resendOtp(),
+                              ),
+                      ),
+                      Obx(
+                        () => controller.enableSubmit.value
                             ? CustomMaterialButton(
-                          buttonName: "submit".tr,
-                          radius: 10.sp,
-                          textColor: AppColors.brown,
-                          disabledColor: AppColors.yellow.withOpacity(0.5),
-                          onPressed: controller.otpLength.value == 6
-                              ? () {
-                            if (controller.attempts.value == 0) {
-                              showOtpSheet(context);
-                            } else {
-                              controller.verifyOtp();
-                              // controller.enableSubmit.value = false;
-                            }
-                          }
-                              : null,
-                        )
+                                buttonName: "submit".tr,
+                                radius: 10.sp,
+                                textColor: AppColors.brown,
+                                disabledColor:
+                                    AppColors.yellow.withOpacity(0.5),
+                                onPressed: controller.otpLength.value == 6
+                                    ? () {
+                                        if (controller.attempts.value == 0) {
+                                          showOtpSheet(context);
+                                        } else {
+                                          controller.verifyOtp();
+                                          // controller.enableSubmit.value = false;
+                                        }
+                                      }
+                                    : null,
+                              )
                             : Container(
-                          margin: EdgeInsets.symmetric(vertical: 15.sp),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: MaterialButton(
-                                  height: 55.h,
-                                  disabledColor: AppColors.yellow,
-                                  highlightElevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(79.sp)),
-                                  onPressed: null,
-                                  child: SizedBox(
-                                      height: 30.h,
-                                      width: 30.h,
-                                      child: const CircularProgressIndicator(
-                                          strokeWidth: 3, color: AppColors.brown)),
+                                margin: EdgeInsets.symmetric(vertical: 15.sp),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: MaterialButton(
+                                        height: 55.h,
+                                        disabledColor: AppColors.yellow,
+                                        highlightElevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(79.sp)),
+                                        onPressed: null,
+                                        child: SizedBox(
+                                            height: 30.h,
+                                            width: 30.h,
+                                            child:
+                                                const CircularProgressIndicator(
+                                                    strokeWidth: 3,
+                                                    color: AppColors.brown)),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
                       ),
                     ],
                   ),
@@ -124,7 +141,7 @@ class OtpVerificationField extends StatelessWidget {
           style: descriptionTextStyle,
         ),
         Obx(
-              () => Text(
+          () => Text(
             "${controller.countryCode} ${controller.number.value}",
             style: mobileNumberTextStyle,
           ),
@@ -200,19 +217,24 @@ class OtpFieldView extends StatelessWidget {
           fontWeight: FontWeight.w600),
       decoration: BoxDecoration(
         border: Border.all(
-            color:
-            contro.isWrongOtp.isTrue ? AppColors.red.withOpacity(0.5) : AppColors.yellow.withOpacity(0.5),
+            color: contro.isWrongOtp.isTrue
+                ? AppColors.red.withOpacity(0.5)
+                : AppColors.yellow.withOpacity(0.5),
             width: 2),
         borderRadius: BorderRadius.circular(10),
       ),
     );
 
     final focusedPinTheme = defaultPinTheme.copyDecorationWith(
-        border: Border.all(color: contro.isWrongOtp.isTrue ? AppColors.red : AppColors.yellow, width: 2),
+        border: Border.all(
+            color: contro.isWrongOtp.isTrue ? AppColors.red : AppColors.yellow,
+            width: 2),
         borderRadius: BorderRadius.circular(10));
 
     final submittedPinTheme = defaultPinTheme.copyDecorationWith(
-        border: Border.all(color: contro.isWrongOtp.isTrue ? AppColors.red : AppColors.yellow, width: 2),
+        border: Border.all(
+            color: contro.isWrongOtp.isTrue ? AppColors.red : AppColors.yellow,
+            width: 2),
         borderRadius: BorderRadius.circular(10));
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 22.0.sp),
@@ -220,7 +242,8 @@ class OtpFieldView extends StatelessWidget {
         children: [
           Pinput(
               length: 6,
-              androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsRetrieverApi,
+              androidSmsAutofillMethod:
+                  AndroidSmsAutofillMethod.smsRetrieverApi,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               defaultPinTheme: defaultPinTheme,
               focusedPinTheme: focusedPinTheme,
@@ -228,7 +251,9 @@ class OtpFieldView extends StatelessWidget {
               keyboardType: TextInputType.number,
               controller: controller,
               focusNode: focusNode,
-              inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly
+              ],
               pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
               showCursor: true,
               onChanged: onChanged,
@@ -262,20 +287,23 @@ class OtpFieldView extends StatelessWidget {
   }
 }
 
-Future<void> showOtpSheet(BuildContext context) async => await showModalBottomSheet(
-  context: context,
-  builder: (context) => const OtpSheet(),
-);
+Future<void> showOtpSheet(BuildContext context) async =>
+    await showModalBottomSheet(
+      context: context,
+      builder: (context) => const OtpSheet(),
+    );
 
 class OtpSheet extends StatelessWidget {
   const OtpSheet({Key? key}) : super(key: key);
 
-  TextStyle get textStyle => TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp, color: AppColors.red);
+  TextStyle get textStyle => TextStyle(
+      fontWeight: FontWeight.w600, fontSize: 16.sp, color: AppColors.red);
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.only(topLeft: Radius.circular(20.sp), topRight: Radius.circular(20.sp)),
+      borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.sp), topRight: Radius.circular(20.sp)),
       child: SizedBox(
         width: context.width,
         child: Column(
@@ -308,18 +336,18 @@ class InCorrectOtpWidget extends StatelessWidget {
   final controller = Get.find<OtpVerificationController>();
 
   TextStyle get currentOtpStyle => TextStyle(
-    fontWeight: FontWeight.w400,
-    fontSize: 12.sp,
-    color: AppColors.red,
-    fontFamily: FontFamily.notoSans,
-  );
+        fontWeight: FontWeight.w400,
+        fontSize: 12.sp,
+        color: AppColors.red,
+        fontFamily: FontFamily.notoSans,
+      );
 
   TextStyle get attemptsStyle => TextStyle(
-    fontWeight: FontWeight.w700,
-    fontSize: 12.sp,
-    color: AppColors.darkBlue,
-    fontFamily: FontFamily.notoSans,
-  );
+        fontWeight: FontWeight.w700,
+        fontSize: 12.sp,
+        color: AppColors.darkBlue,
+        fontFamily: FontFamily.notoSans,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -328,24 +356,24 @@ class InCorrectOtpWidget extends StatelessWidget {
       children: [
         Obx(() => (controller.validationMsg.value.isNotEmpty)
             ? Text('Please Enter Correct OTP.',
-            //  controller.validationMsg.value,
-            style: currentOtpStyle)
+                //  controller.validationMsg.value,
+                style: currentOtpStyle)
             : const SizedBox.shrink()),
         Obx(() => controller.attempts.value < 3
             ? Text.rich(
-          TextSpan(
-            text: "${"attemptsRemaining".tr} : ",
-            children: [
-              TextSpan(
-                text: controller.attempts.toString(),
-                style: currentOtpStyle.copyWith(
-                  fontWeight: FontWeight.w700,
+                TextSpan(
+                  text: "${"attemptsRemaining".tr} : ",
+                  children: [
+                    TextSpan(
+                      text: controller.attempts.toString(),
+                      style: currentOtpStyle.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-          style: attemptsStyle,
-        )
+                style: attemptsStyle,
+              )
             : const Offstage())
       ],
     );

@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/update_bank_request.dart';
+import 'package:divine_astrologer/model/update_bank_response.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -111,6 +113,7 @@ class BankDetailState {
   late TextEditingController holderName;
   late TextEditingController accountNumber;
   late TextEditingController ifscCode;
+  String status = "";
   bool isImagesUploaded = false;
   String? passBookUrl;
   String? cancelledChequeUrl;
@@ -126,19 +129,26 @@ class BankDetailState {
   }
 
   void setUserData() {
-    final details = service.getUpdatedBankDetails();
+    final details =
+        service.prefs!.getString(SharedPreferenceService.updatedBankDetails);
     if (details != null) {
-      bankName.text = details.data.bankName;
-      holderName.text = details.data.accountHolderName;
-      accountNumber.text = details.data.accountNumber;
-      ifscCode.text = details.data.ifscCode;
+      UpdateBankResponse data = updateBankResponseFromJson(details);
+      bankName.text = data.data.bankName ?? "";
+      holderName.text = data.data.accountHolderName ?? "";
+      accountNumber.text = data.data.accountNumber ?? "";
+      ifscCode.text = data.data.ifscCode ?? "";
+      status = data.data.status ?? "";
+      if (data.data.legalDocuments!.isNotEmpty) {
+        passBookUrl = jsonDecode(data.data.legalDocuments!)[0];
+        cancelledChequeUrl = jsonDecode(data.data.legalDocuments!)[1];
+      }
     } else {
       final userData = service.getUserDetail();
       bankName.text = userData?.bankName ?? "";
       holderName.text = userData?.accountHolderName ?? "";
       accountNumber.text = userData?.accountNumber ?? "";
       ifscCode.text = userData?.ifscCode ?? "";
-    }
+    }  
   }
 
   void dispose() {

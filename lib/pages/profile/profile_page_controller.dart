@@ -33,6 +33,7 @@ class ProfilePageController extends GetxController {
   final UserRepository userRepository;
 
   ProfilePageController(this.userRepository);
+
   var homeController = Get.find<HomeController>();
   UserData? userData;
   GetUserProfile? userProfile;
@@ -201,7 +202,9 @@ class ProfilePageController extends GetxController {
     super.onInit();
     userData = preference.getUserDetail();
     baseAmazonUrl = preference.getBaseImageURL();
-    userProfileImage.value = "$baseAmazonUrl/${userData?.image}";
+    userProfileImage.value = "${userData?.image}";
+    print(userProfileImage.value);
+    print("userProfileImage.value");
     getUserProfileDetails();
     getReviewRating();
   }
@@ -240,7 +243,7 @@ class ProfilePageController extends GetxController {
       Map<String, dynamic> params = {"role_id": userData?.roleId, "page": 1};
       var response = await userRepository.getReviewRatings(params);
       ratingsData = response;
-
+update();
       log("Data==>${jsonEncode(ratingsData!.data)}");
     } catch (error) {
       debugPrint("error $error");
@@ -293,9 +296,11 @@ class ProfilePageController extends GetxController {
       };
 
       var response = await userRepository.reviewReply(params);
-      reviewReply = response;
-
+      // reviewReply = response;
+      print(jsonEncode(response));
+      print("responseresponseresponseresponseresponse");
       getReviewRating();
+      update();
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
@@ -483,9 +488,13 @@ class ProfilePageController extends GetxController {
       region: dataString[2],
     );
     if (response != null) {
+      print(dashboardController.userProfileImage.value);
+      print("dashboardController.userProfileImage.value");
       dashboardController.userProfileImage.value = response;
       userProfileImage.value = response;
       userData?.image = response;
+      print(userData?.image);
+      print("userData?.image");
       preference.setUserDetail(userData!);
       divineSnackBar(data: "Profile image update successfully");
     } else {

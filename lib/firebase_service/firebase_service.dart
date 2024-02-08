@@ -15,7 +15,7 @@ import "package:get/get.dart";
 
 import "../model/chat_offline_model.dart";
 import "../screens/live_page/constant.dart";
-
+bool isLogOut = false;
 class AppFirebaseService {
   AppFirebaseService._privateConstructor();
 

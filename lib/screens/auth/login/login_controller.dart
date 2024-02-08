@@ -61,7 +61,9 @@ class LoginController extends GetxController {
     update();
   }
 
+  var isLoading = false.obs;
   login() async {
+
     //deviceToken = await FirebaseMessaging.instance.getToken();
     Map<String, dynamic> params = {
       "mobile_no": mobileNumberController.text,
@@ -69,24 +71,29 @@ class LoginController extends GetxController {
       //"device_token": await FirebaseMessaging.instance.getToken()
     };
     try {
+      isLoading.value = true;
       final data = await userRepository.sentOtp(params);
-      if(data != null){
+      if (data != null) {
+        isLoading.value = false;
         navigateToOtpPage(data);
-      }else {
-        print(data.message);
-        print("data.message");
-      }
+      } else {
+        isLoading.value = false;
 
+      }
+      update();
       //updateLoginDatainFirebase(data);
       //navigateToDashboard(data);
     } catch (error) {
-
+      isLoading.value = false;
       enable.value = true;
       debugPrint("error $error");
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor,duration: const Duration(milliseconds: 200));
+        divineSnackBar(
+            data: error.toString(),
+            color: AppColors.redColor,
+            duration: const Duration(milliseconds: 200));
       }
     }
   }
@@ -117,6 +124,7 @@ class LoginController extends GetxController {
 
   @override
   void onInit() {
+    // isLogOut = false;
     super.onInit();
     getLoginImages();
     countryCodeController = TextEditingController(text: "+91");
@@ -312,7 +320,10 @@ class LoginController extends GetxController {
           navigateToDashboard(data);
         }
         final appFirebaseService = AppFirebaseService();
-        appFirebaseService.readData('$firebaseNodeUrl/realTime');
+
+          appFirebaseService.readData('$firebaseNodeUrl/realTime');
+
+
       },
     );
   }
