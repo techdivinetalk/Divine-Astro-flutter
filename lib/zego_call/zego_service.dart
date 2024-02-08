@@ -14,6 +14,8 @@ import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 import '../firebase_service/firebase_service.dart';
+//
+//
 
 class ZegoService {
   static final ZegoService _singleton = ZegoService._internal();
@@ -32,10 +34,11 @@ class ZegoService {
   RxBool isFront = true.obs;
   RxBool isCamOn = true.obs;
   RxBool isMicOn = true.obs;
-  Rx<DateTime> endTime = DateTime.now().obs;
+  Rx<DateTime> endTime = DateTime(1970, 01, 01).obs;
   Rx<String> currentUserOnScreen = "".obs;
   Rx<Duration> onTickDuration = Duration.zero.obs;
   RxBool isCardVisible = false.obs;
+  RxBool isAstrologer = true.obs;
 
   Future<void> zegoLogin() async {
     await ZegoUIKitPrebuiltCallInvitationService().init(
@@ -52,6 +55,26 @@ class ZegoService {
           icon: "call",
         ),
       ),
+      invitationEvents: ZegoUIKitPrebuiltCallInvitationEvents(
+        onIncomingCallAcceptButtonPressed: () {
+          endTime(DateTime(1970, 01, 01));
+        },
+        onOutgoingCallAccepted: (String callID, ZegoCallUser callee) {
+          endTime(DateTime(1970, 01, 01));
+        },
+      ),
+      uiConfig: ZegoCallInvitationUIConfig(
+        prebuiltWithSafeArea: false,
+        callingBackgroundBuilder: (
+          BuildContext context,
+          Size size,
+          ZegoCallingBackgroundBuilderInfo info,
+        ) {
+          return info.callType == ZegoCallType.voiceCall
+              ? backgroundImage(needBlendedColor: true)
+              : null;
+        },
+      ),
       requireConfig: (ZegoCallInvitationData data) {
         final Map map = json.decode(data.customData);
         // final String astrId = map["astr_id"];
@@ -61,15 +84,17 @@ class ZegoService {
         // final String custName = map["cust_name"];
         final String custImage = map["cust_image"];
         final String callTime = map["time"];
-        endTime(
-          DateTime.now().add(
-            Duration(
-              hours: DateFormat("hh:mm:ss").parse(callTime).hour,
-              minutes: DateFormat("hh:mm:ss").parse(callTime).minute,
-              seconds: DateFormat("hh:mm:ss").parse(callTime).second,
+        if (endTime.value == DateTime(1970, 01, 01)) {
+          endTime(
+            DateTime.now().add(
+              Duration(
+                hours: DateFormat("hh:mm:ss").parse(callTime).hour,
+                minutes: DateFormat("hh:mm:ss").parse(callTime).minute,
+                seconds: DateFormat("hh:mm:ss").parse(callTime).second,
+              ),
             ),
-          ),
-        );
+          );
+        } else {}
         final Color color = data.type == ZegoCallType.videoCall
             ? AppColors.white
             : AppColors.brown;
@@ -102,20 +127,16 @@ class ZegoService {
               (Duration duration) {
                 currentUserOnScreen(user?.name ?? "");
                 ourSize(
-                    ourSize.value == const Size(0, 0) ? size : ourSize.value);
+                  ourSize.value == const Size(0, 0) ? size : ourSize.value,
+                );
               },
             );
             return size == ourSize.value
-                ? Image.asset(
-                    "assets/images/bg_chat_wallpaper.png",
-                    height: Get.height,
-                    width: Get.width,
-                    fit: BoxFit.fill,
-                  )
+                ? backgroundImage(needBlendedColor: false)
                 : Container(height: Get.height, width: Get.width, color: color);
           },
         );
-        config.foreground = Positioned(
+        config.foreground = Positioned.fill(
           child: Obx(
             () {
               return Column(
@@ -142,6 +163,13 @@ class ZegoService {
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
                           color: color,
+                          shadows: [
+                            Shadow(
+                              color: color,
+                              offset: const Offset(1.0, 1.0),
+                              blurRadius: 1.0,
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -153,11 +181,18 @@ class ZegoService {
                       fontSize: 24,
                       fontWeight: FontWeight.w600,
                       color: color,
+                      shadows: [
+                        Shadow(
+                          color: color,
+                          offset: const Offset(1.0, 1.0),
+                          blurRadius: 1.0,
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 8),
                   commonTimerCountdown(color, false),
-                  SizedBox(height: Get.height * 0.50),
+                  SizedBox(height: Get.height * 0.60),
                   commonBottomCard(),
                   const SizedBox(height: 16),
                   settingsColForCust(data.type),
@@ -173,6 +208,17 @@ class ZegoService {
     Future<void>.value();
   }
 
+  Widget backgroundImage({required bool needBlendedColor}) {
+    return Image.asset(
+      "assets/images/bg_chat_wallpaper.png",
+      height: Get.height,
+      width: Get.width,
+      fit: BoxFit.fill,
+      color: needBlendedColor ? const Color.fromRGBO(255, 255, 255, 0.5) : null,
+      colorBlendMode: needBlendedColor ? BlendMode.modulate : null,
+    );
+  }
+
   Widget commonTimerCountdown(Color color, bool isForBottomCard) {
     return TimerCountdown(
       format: CountDownTimerFormat.hoursMinutesSeconds,
@@ -182,16 +228,32 @@ class ZegoService {
         fontSize: isForBottomCard ? 12 : 20,
         fontWeight: FontWeight.w400,
         color: color,
+        shadows: [
+          Shadow(
+            color: color,
+            offset: const Offset(1.0, 1.0),
+            blurRadius: 1.0,
+          ),
+        ],
       ),
       timeTextStyle: TextStyle(
         fontSize: isForBottomCard ? 12 : 20,
         fontWeight: FontWeight.w400,
         color: color,
+        shadows: [
+          Shadow(
+            color: color,
+            offset: const Offset(1.0, 1.0),
+            blurRadius: 1.0,
+          ),
+        ],
       ),
       onTick: (Duration duration) {
         onTickDuration(duration);
-        endTime(DateTime.now().add(duration));
-        isCardVisible(duration < const Duration(seconds: 30));
+        if (endTime.value != DateTime(1970, 01, 01)) {
+          endTime(DateTime.now().add(duration));
+        } else {}
+        isCardVisible(duration <= const Duration(seconds: 30));
       },
       endTime: endTime.value,
       onEnd: () async {
@@ -205,7 +267,7 @@ class ZegoService {
       maintainSize: true,
       maintainAnimation: true,
       maintainState: true,
-      visible: isCardVisible.value,
+      visible: isCardVisible.value && !isAstrologer.value,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
@@ -247,7 +309,13 @@ class ZegoService {
             ),
           ),
           trailing: InkWell(
-            onTap: () async {},
+            onTap: () async {
+              // await Get.toNamed(RouteName.wallet);
+              // if (onTickDuration.value == Duration.zero) {
+              //   await controller.hangUp(Get.context!);
+              //   Get.back();
+              // } else {}
+            },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: SizedBox(
@@ -461,29 +529,31 @@ class ZegoService {
 
   Future<void> addUpdatePermission() async {
     final bool value = await AppPermissionService.instance.hasAllPermissions();
-    FirebaseDatabase.instance
-        .ref()
-        .child("order/${AppFirebaseService().orderData.value["orderId"]}")
-        .update(
-      <String, dynamic>{"astrologer_permission": value},
-    );
+    final int orderId = AppFirebaseService().orderData.value["orderId"] ?? 0;
+    if (orderId == 0) {
+    } else {
+      final DatabaseReference ref = FirebaseDatabase.instance.ref();
+      await ref.child("order/$orderId").update({"astrologer_permission": value});
+    }
     return Future<void>.value();
   }
 
   Future<bool> checkOppositeSidePermission() async {
+    final int orderId = AppFirebaseService().orderData.value["orderId"] ?? 0;
     bool hasPermission = false;
-    final DataSnapshot dataSnapshot = await FirebaseDatabase.instance
-        .ref()
-        .child("order/${Get.arguments["orderData"]["orderId"]}")
-        .get();
-    if (dataSnapshot.exists) {
-      if (dataSnapshot.value is Map<dynamic, dynamic>) {
-        Map<dynamic, dynamic> map = <dynamic, dynamic>{};
-        map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-            as Map<dynamic, dynamic>;
-        hasPermission = map["customer_permission"] ?? false;
+    if (orderId == 0) {
+    } else {
+      final DatabaseReference ref = FirebaseDatabase.instance.ref();
+      final DataSnapshot dataSnapshot = await ref.child("order/$orderId").get();
+      if (dataSnapshot.exists) {
+        if (dataSnapshot.value is Map<dynamic, dynamic>) {
+          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+              as Map<dynamic, dynamic>;
+          hasPermission = map["customer_permission"] ?? false;
+        } else {}
       } else {}
-    } else {}
+    }
     return Future<bool>.value(hasPermission);
   }
 

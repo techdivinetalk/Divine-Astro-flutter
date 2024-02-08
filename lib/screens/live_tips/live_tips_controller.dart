@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
@@ -25,6 +26,15 @@ class LiveTipsController extends GetxController {
   final AstrologerProfileRepository liveRepository =
       AstrologerProfileRepository();
 
+  final StreamController<bool> streamController = StreamController<bool>()
+    ..add(false);
+
+  @override
+  void dispose() {
+    streamController.close();
+    super.dispose();
+  }
+
   @override
   void onReady() {
     var data = pref.getUserDetail();
@@ -34,7 +44,7 @@ class LiveTipsController extends GetxController {
     super.onReady();
   }
 
-  Future<void> myFun() async {
+  Future<void> furtherProcedure() async {
     final String userId = (pref.getUserDetail()?.id ?? "").toString();
     final String userName = pref.getUserDetail()?.name ?? "";
     final String awsURL = pref.getAmazonUrl() ?? "";
@@ -55,17 +65,17 @@ class LiveTipsController extends GetxController {
 
     await Get.toNamed(RouteName.liveDharamScreen, arguments: userId);
 
-    // await database.ref().child("live/$userId").remove();
-    // await database.ref().child("astro-live-list/$userId").remove();
+    await database.ref().child("live/$userId").remove();
+    await database.ref().child("astro-live-list/$userId").remove();
 
-    // Get.back();
-    // Get.back();
+    Get.back();
+    Get.back();
 
-    unawaited(database.ref().child("live/$userId").remove());
-    unawaited(database.ref().child("astro-live-list/$userId").remove());
-    
-    Get.back(closeOverlays: true);
-    Get.back(closeOverlays: true);
+    // unawaited(database.ref().child("live/$userId").remove());
+    // unawaited(database.ref().child("astro-live-list/$userId").remove());
+
+    // Get.back(closeOverlays: true);
+    // Get.back(closeOverlays: true);
 
     return Future<void>.value();
   }
@@ -74,7 +84,11 @@ class LiveTipsController extends GetxController {
     final List<String> blockedCustomerList = [];
     final Map<String, dynamic> param = <String, dynamic>{"role_id": 7};
     BlockedCustomerListRes res = BlockedCustomerListRes();
-    res = await liveRepository.blockedCustomerListAPI(params: param);
+    res = await liveRepository.blockedCustomerListAPI(
+      params: param,
+      successCallBack: log,
+      failureCallBack: log,
+    );
     res.statusCode == HttpStatus.ok
         ? BlockedCustomerListRes.fromJson(res.toJson())
         : BlockedCustomerListRes.fromJson(BlockedCustomerListRes().toJson());

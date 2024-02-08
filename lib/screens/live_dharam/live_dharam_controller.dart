@@ -291,6 +291,8 @@ class LiveDharamController extends GetxController {
     required Function() zeroAstro,
     required Function(WaitListModel currentCaller) engaging,
     required Function() showFollowPopup,
+    required Function(String message) successCallBack,
+    required Function(String message) failureCallBack,
   }) async {
     // final DataSnapshot dataSnapshot = event.snapshot;
     final DataSnapshot dataSnapshot = snapshot;
@@ -331,7 +333,10 @@ class LiveDharamController extends GetxController {
 
                   engaging(currentCaller);
 
-                  // await getAstrologerDetails();
+                  // await getAstrologerDetails(
+                  //   successCallBack: successCallBack,
+                  //   failureCallBack: failureCallBack,
+                  // );
 
                   // final isNotFollowing = details.data?.isFollow == 0;
                   // final hasNotSeenPopup = !astroFollowPopup.contains(liveId);
@@ -346,7 +351,10 @@ class LiveDharamController extends GetxController {
 
                   // showFollowPopup();
 
-                  // await isCustomerBlocked();
+                  // await isCustomerBlocked(
+                  //   successCallBack: successCallBack,
+                  //   failureCallBack: failureCallBack,
+                  // );
                 } else {}
               } else {}
             }
@@ -499,7 +507,6 @@ class LiveDharamController extends GetxController {
   //       liveId = data.keys.toList()[currentIndex];
   //       // unawaited(getAstrologerDetails());
   //       // unawaited(updateInfo());
-  //       initData();
   //       updateInfo();
   //       return liveId;
   //     } else {
@@ -524,7 +531,6 @@ class LiveDharamController extends GetxController {
   //       liveId = data.keys.toList()[currentIndex];
   //       // unawaited(getAstrologerDetails());
   //       // unawaited(updateInfo());
-  //       initData();
   //       updateInfo();
   //       return liveId;
   //     } else {
@@ -617,11 +623,18 @@ class LiveDharamController extends GetxController {
     return Future<void>.value();
   }
 
-  // Future<void> getAstrologerDetails() async {
+  // Future<void> getAstrologerDetails({
+  //   required Function(String message) successCallBack,
+  //   required Function(String message) failureCallBack,
+  // }) async {
   //   Map<String, dynamic> param = <String, dynamic>{};
   //   param = <String, dynamic>{"astrologer_id": int.parse(liveId)};
   //   GetAstroDetailsRes getAstroDetailsRes = GetAstroDetailsRes();
-  //   getAstroDetailsRes = await liveRepository.getAstroDetailsAPI(params: param);
+  //   getAstroDetailsRes = await liveRepository.getAstroDetailsAPI(
+  //     params: param,
+  //     successCallBack: successCallBack,
+  //     failureCallBack: failureCallBack,
+  //   );
   //   details = getAstroDetailsRes.statusCode == HttpStatus.ok
   //       ? GetAstroDetailsRes.fromJson(getAstroDetailsRes.toJson())
   //       : GetAstroDetailsRes.fromJson(GetAstroDetailsRes().toJson());
@@ -632,12 +645,18 @@ class LiveDharamController extends GetxController {
   //   return Future<void>.value();
   // }
 
-  // Future<void> isCustomerBlocked() async {
+  // Future<void> isCustomerBlocked({
+  //   required Function(String message) successCallBack,
+  //   required Function(String message) failureCallBack,
+  // }) async {
   //   Map<String, dynamic> params = <String, dynamic>{};
   //   params = <String, dynamic>{"member_id": liveId};
   //   IsCustomerBlockedRes isCustomerBlockedRes = IsCustomerBlockedRes();
-  //   isCustomerBlockedRes =
-  //       await liveRepository.isCustomerBlockedAPI(params: params);
+  //   isCustomerBlockedRes = await liveRepository.isCustomerBlockedAPI(
+  //     params: params,
+  //     successCallBack: successCallBack,
+  //     failureCallBack: failureCallBack,
+  //   );
   //   isCustBlocked = isCustomerBlockedRes.statusCode == HttpStatus.ok
   //       ? IsCustomerBlockedRes.fromJson(isCustomerBlockedRes.toJson())
   //       : IsCustomerBlockedRes.fromJson(IsCustomerBlockedRes().toJson());
@@ -656,7 +675,10 @@ class LiveDharamController extends GetxController {
     return pivotList.join(", ");
   }
 
-  // Future<void> followOrUnfollowAstrologer() async {
+  // Future<void> followOrUnfollowAstrologer({
+  //   required Function(String message) successCallBack,
+  //   required Function(String message) failureCallBack,
+  // }) async {
   //   Map<String, dynamic> param = <String, dynamic>{};
   //   param = <String, dynamic>{
   //     "astrologer_id": int.parse(liveId),
@@ -664,7 +686,11 @@ class LiveDharamController extends GetxController {
   //     "role_id": 7,
   //   };
   //   AstrologerFollowingResponse followUnfollow = AstrologerFollowingResponse();
-  //   followUnfollow = await liveRepository.astrologerFollowApi(params: param);
+  //   followUnfollow = await liveRepository.astrologerFollowApi(
+  //     params: param,
+  //     successCallBack: successCallBack,
+  //     failureCallBack: failureCallBack,
+  //   );
   //   followRes = followUnfollow.statusCode == HttpStatus.ok
   //       ? AstrologerFollowingResponse.fromJson(followUnfollow.toJson())
   //       : AstrologerFollowingResponse.fromJson(
@@ -691,8 +717,10 @@ class LiveDharamController extends GetxController {
   //   required int giftQuantity,
   //   required int giftAmount,
   //   required Function(InsufficientBalModel balModel) needRecharge,
+  //   required Function(String message) successCallBack,
+  //   required Function(String message) failureCallBack,
   // }) async {
-  //   bool hasBal = hasBalance(quantity: giftQuantity, amount: giftAmount);
+  //   bool hasBal = hasBalance(quantity: giftQuantity);
   //   if (hasBal) {
   //     final int totalGiftQuantity = giftQuantity;
   //     final int totalGiftAmount = giftQuantity * giftAmount;
@@ -702,6 +730,8 @@ class LiveDharamController extends GetxController {
   //       totalGiftQuantity: totalGiftQuantity,
   //       totalGiftAmount: totalGiftAmount,
   //       needRecharge: needRecharge,
+  //       successCallBack: successCallBack,
+  //       failureCallBack: failureCallBack,
   //     );
   //     final bool value = walletRecharge.statusCode == HttpStatus.ok;
   //     return Future<bool>.value(value);
@@ -716,6 +746,8 @@ class LiveDharamController extends GetxController {
   //   required int totalGiftQuantity,
   //   required int totalGiftAmount,
   //   required Function(InsufficientBalModel balModel) needRecharge,
+  //   required Function(String message) successCallBack,
+  //   required Function(String message) failureCallBack,
   // }) async {
   //   Map<String, dynamic> param = <String, dynamic>{};
   //   param = <String, dynamic>{
@@ -740,6 +772,8 @@ class LiveDharamController extends GetxController {
   //   walletRechargeRes = await liveRepository.walletRechargeApi(
   //     params: param,
   //     needRecharge: needRecharge,
+  //     successCallBack: successCallBack,
+  //     failureCallBack: failureCallBack,
   //   );
   //   walletRecharge = walletRechargeRes.statusCode == HttpStatus.ok
   //       ? WalletRecharge.fromJson(walletRechargeRes.toJson())
@@ -750,12 +784,16 @@ class LiveDharamController extends GetxController {
   // Future<bool> canPlaceLiveOrder({
   //   required String talkType,
   //   required Function(InsufficientBalModel balModel) needRecharge,
+  //   required Function(String message) successCallBack,
+  //   required Function(String message) failureCallBack,
   // }) async {
   //   bool hasBal = hasBalance(quantity: 1);
   //   if (hasBal) {
   //     await liveOrderPlace(
   //       talkType: talkType,
   //       needRecharge: needRecharge,
+  //       successCallBack: successCallBack,
+  //       failureCallBack: failureCallBack,
   //     );
   //     final bool value = orderGenerate.statusCode == HttpStatus.ok;
   //     return Future<bool>.value(value);
@@ -767,6 +805,8 @@ class LiveDharamController extends GetxController {
   // Future<void> liveOrderPlace({
   //   required String talkType,
   //   required Function(InsufficientBalModel balModel) needRecharge,
+  //   required Function(String message) successCallBack,
+  //   required Function(String message) failureCallBack,
   // }) async {
   //   final int intValue = talkType == "Video"
   //       ? 3
@@ -791,6 +831,8 @@ class LiveDharamController extends GetxController {
   //   orderGenerateRes = await liveRepository.orderGenerateApi(
   //     params: param,
   //     needRecharge: needRecharge,
+  //     successCallBack: successCallBack,
+  //     failureCallBack: failureCallBack,
   //   );
   //   orderGenerate = orderGenerateRes.statusCode == HttpStatus.ok
   //       ? OrderGenerate.fromJson(orderGenerateRes.toJson())
@@ -1164,17 +1206,28 @@ class LiveDharamController extends GetxController {
     return Future<void>.value();
   }
 
-  // Future<void> makeAPICallForStartCall({required bool hasAccepted}) async {
+  // Future<void> makeAPICallForStartCall({
+  //   required bool hasAccepted,
+  //   required Function(String message) successCallBack,
+  //   required Function(String message) failureCallBack,
+  // }) async {
   //   Map<String, dynamic> param = <String, dynamic>{};
   //   param = <String, dynamic>{
   //     "order_id": (orderGenerate.data?.generatedOrderId ?? 0).toString(),
-  //     "type": hasAccepted ? 1 : 0, //0 reject, 1 accept
+  //     "type": hasAccepted ? 1 : 0,
   //   };
-  //   await liveRepository.startLiveApi(params: param);
+  //   await liveRepository.startLiveApi(
+  //     params: param,
+  //     successCallBack: successCallBack,
+  //     failureCallBack: failureCallBack,
+  //   );
   //   return Future<void>.value();
   // }
 
-  Future<void> makeAPICallForEndCall() async {
+  Future<void> makeAPICallForEndCall({
+    required Function(String message) successCallBack,
+    required Function(String message) failureCallBack,
+  }) async {
     Map<String, dynamic> param = <String, dynamic>{};
     param = <String, dynamic>{
       "order_id": (currentCaller.generatedOrderId ?? 0).toString(),
@@ -1188,7 +1241,11 @@ class LiveDharamController extends GetxController {
       param.addAll(<String, dynamic>{"offer_id": offerId});
     } else {}
 
-    await liveRepository.endLiveApi(params: param);
+    await liveRepository.endLiveApi(
+      params: param,
+      successCallBack: successCallBack,
+      failureCallBack: failureCallBack,
+    );
     return Future<void>.value();
   }
 
@@ -1242,19 +1299,29 @@ class LiveDharamController extends GetxController {
     return Future<void>.value();
   }
 
-  Future<void> callBlockedCustomerListRes() async {
+  Future<void> callBlockedCustomerListRes({
+    required Function(String message) successCallBack,
+    required Function(String message) failureCallBack,
+  }) async {
     Map<String, dynamic> param = <String, dynamic>{};
     param = <String, dynamic>{"role_id": 7};
     BlockedCustomerListRes blockedCustListRes = BlockedCustomerListRes();
-    blockedCustListRes =
-        await liveRepository.blockedCustomerListAPI(params: param);
+    blockedCustListRes = await liveRepository.blockedCustomerListAPI(
+      params: param,
+      successCallBack: successCallBack,
+      failureCallBack: failureCallBack,
+    );
     blockedCustomerList = blockedCustListRes.statusCode == HttpStatus.ok
         ? BlockedCustomerListRes.fromJson(blockedCustListRes.toJson())
         : BlockedCustomerListRes.fromJson(BlockedCustomerListRes().toJson());
     return Future<void>.value();
   }
 
-  Future<void> callblockCustomer({required int id}) async {
+  Future<void> callblockCustomer({
+    required int id,
+    required Function(String message) successCallBack,
+    required Function(String message) failureCallBack,
+  }) async {
     Map<String, dynamic> param = <String, dynamic>{};
     param = <String, dynamic>{
       "customer_id": id,
@@ -1262,11 +1329,18 @@ class LiveDharamController extends GetxController {
       "role_id": 7,
     };
     BlockedCustomerRes blockedCustListRes = BlockedCustomerRes();
-    blockedCustListRes = await liveRepository.blockedCustomerAPI(params: param);
+    blockedCustListRes = await liveRepository.blockedCustomerAPI(
+      params: param,
+      successCallBack: successCallBack,
+      failureCallBack: failureCallBack,
+    );
     blockedCustListRes = blockedCustListRes.statusCode == HttpStatus.ok
         ? BlockedCustomerRes.fromJson(blockedCustListRes.toJson())
         : BlockedCustomerRes.fromJson(BlockedCustomerRes().toJson());
-    await callBlockedCustomerListRes();
+    await callBlockedCustomerListRes(
+      successCallBack: successCallBack,
+      failureCallBack: failureCallBack,
+    );
     await addUpdateToBlockList();
     return Future<void>.value();
   }
@@ -1306,9 +1380,15 @@ class LiveDharamController extends GetxController {
     return Future<bool>.value(isRequest);
   }
 
-  Future<void> noticeBoard() async {
+  Future<void> noticeBoard({
+    required Function(String message) successCallBack,
+    required Function(String message) failureCallBack,
+  }) async {
     NoticeBoardRes res = NoticeBoardRes();
-    res = await liveRepository.noticeBoardAPI();
+    res = await liveRepository.noticeBoardAPI(
+      successCallBack: successCallBack,
+      failureCallBack: failureCallBack,
+    );
     noticeBoardRes = res.statusCode == HttpStatus.ok
         ? NoticeBoardRes.fromJson(res.toJson())
         : NoticeBoardRes.fromJson(NoticeBoardRes().toJson());

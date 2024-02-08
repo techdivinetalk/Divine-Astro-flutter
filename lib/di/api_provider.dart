@@ -169,7 +169,7 @@ class ApiProvider {
   //added by dev-dharam
   final String getAllGifts = "getAllGifts";
   final String blockCustomerlist = "blockCustomerlist";
-  final String blockCustomer = "blockCustomer";   
+  final String blockCustomer = "blockCustomer";
   final String getAstroAllNoticeType2 = "getAstroAllNotice?notice_type=2";
 
   //added by dev-chetan
@@ -207,6 +207,11 @@ class ApiProvider {
     var header = getJsonHeader();
     if (_token.isNotEmpty) {
       header[jsonAuthenticationName] = 'Bearer $_token';
+
+      // Added by: divine-dharam
+      header['Content-type'] = 'application/json';
+      header['Accept'] = 'application/json';
+      //
     }
     log("Token is $_token");
     return header;
@@ -219,6 +224,11 @@ class ApiProvider {
     var header = <String, String>{};
     if (_token.isNotEmpty) {
       header[jsonAuthenticationName] = 'Bearer $_token';
+
+      // Added by: divine-dharam
+      header['Content-type'] = 'application/json';
+      header['Accept'] = 'application/json';
+      //
     }
     log("Token is $_token");
     return header;
