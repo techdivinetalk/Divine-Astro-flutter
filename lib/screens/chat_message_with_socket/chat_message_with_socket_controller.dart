@@ -205,11 +205,10 @@ class ChatMessageWithSocketController extends GetxController
         });
         FirebaseDatabase.instance
             .ref(
-                "astrologer/${preferenceService.getUserDetail()!.id}/realTime/deliveredMsg/${int.parse(arguments["orderData"]["userId"].toString())}")
+                "astrologer/${preferenceService.getUserDetail()!.id}/realTime/deliveredMsg/${int.parse(AppFirebaseService().orderData.value["userId"].toString())}")
             .remove();
       }
     });
-    debugPrint("arguments of socket $arguments");
     messageController.addListener(_onMessageChanged);
     getMessageTemplates();
     isAstroJoinedChat();
