@@ -39,8 +39,8 @@ class LiveTipsController extends GetxController {
   void onReady() {
     var data = pref.getUserDetail();
     astroId = data!.id.toString();
-    name = data.name!;
-    image = data.image!;
+    name = data.name ?? "";
+    image = data.image ?? "";
     super.onReady();
   }
 
