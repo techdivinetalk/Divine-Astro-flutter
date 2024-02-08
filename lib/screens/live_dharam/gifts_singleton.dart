@@ -1,12 +1,10 @@
 import "dart:async";
+import "dart:developer";
 
-import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/zego_team/cache.dart";
-import "package:flutter/foundation.dart";
 import "package:get/get.dart";
 import "package:get/get_connect/http/src/status/http_status.dart";
 
-import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/repository/astrologer_profile_repository.dart";
 
@@ -34,7 +32,10 @@ class GiftsSingleton {
 
   Future<void> getAllGifts() async {
     GiftResponse giftResponse = GiftResponse();
-    giftResponse = await liveRepository.getAllGiftsAPI();
+    giftResponse = await liveRepository.getAllGiftsAPI(
+      successCallBack: log,
+      failureCallBack: log,
+    );
     gifts = giftResponse.statusCode == HttpStatus.ok
         ? GiftResponse.fromJson(giftResponse.toJson())
         : GiftResponse.fromJson(GiftResponse().toJson());

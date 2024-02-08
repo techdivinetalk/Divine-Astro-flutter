@@ -264,7 +264,7 @@ class HomeUI extends GetView<HomeController> {
                                     ),
                                   ),
                                   SizedBox(height: 10.h),
-                                  FeedbackCardWidget(
+                                  controller.feedbackResponse == null ? const SizedBox.shrink() : FeedbackCardWidget(
                                       feedback: controller.feedbackResponse ??
                                           FeedbackData(
                                             id: controller.feedbackResponse?.id,
