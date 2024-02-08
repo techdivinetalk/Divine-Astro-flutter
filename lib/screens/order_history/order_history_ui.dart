@@ -90,6 +90,7 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
             value: controller.selectedValue.value,
             onChanged: (String? value) {
               controller.selectedValue.value = value ?? "daily".tr;
+              controller.getFilterDate(type:controller.selectedValue.value );
             },
             iconStyleData: const IconStyleData(
               icon: Icon(

@@ -37,27 +37,35 @@ class DashboardController extends GetxController
   // StreamSubscription<DatabaseEvent>? realTimeListener;
   // StreamSubscription<DatabaseEvent>? astroChatListener;
   // Socket? socket;
-
+  var preference = Get.find<SharedPreferenceService>();
   @override
   void onInit() async {
     super.onInit();
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {
       print("broadCastResponse");
-      print(event.name == "ReJoinChat" );
+      print(event.name == "ReJoinChat");
       print(AppFirebaseService().openChatUserId != "");
       print(event.data!["orderData"]);
-      if(event.name == "ReJoinChat" && AppFirebaseService().openChatUserId != "" && event.data != null && event.data!["orderData"]["status"] != null){
+      if (event.name == "ReJoinChat" &&
+          AppFirebaseService().openChatUserId != "" &&
+          event.data != null &&
+          event.data!["orderData"]["status"] != null) {
         var orderData = event.data!["orderData"];
         Get.toNamed(RouteName.chatMessageWithSocketUI, arguments: orderData);
       }
     });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(const Duration(seconds: 5), () {
-        appFirebaseService.readData(
-            'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
+    if (!isLogOut) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Future.delayed(const Duration(seconds: 5), () {
+        print("is logged in");
+          appFirebaseService.readData(
+              'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
+        });
       });
-    });
+    } else {
+      print("is logged out");
+    }
     var commonConstants = await userRepository.constantDetailsData();
     preferenceService.setConstantDetails(commonConstants);
     preferenceService
@@ -67,10 +75,12 @@ class DashboardController extends GetxController
     Get.find<SharedPreferenceService>()
         .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
     //
-
-    userProfileImage.value = userData?.image != null
-        ? "${preferenceService.getBaseImageURL()}/${userData?.image}"
-        : "";
+    userData = preference.getUserDetail();
+    userProfileImage.value =
+        userData?.image != null ? "${userData?.image}" : "";
+    print(userData?.image);
+    print(userProfileImage.value);
+    print("userProfileImage.value");
     //  connectSocket();
     loadPreDefineData();
     firebaseMessagingConfig(Get.context!);
@@ -80,7 +90,6 @@ class DashboardController extends GetxController
     // print("asasasasasasa");
     //
   }
-
 
   @override
   void onReady() {

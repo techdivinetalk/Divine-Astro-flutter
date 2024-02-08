@@ -69,14 +69,14 @@ class CategoryDetailController extends GetxController {
     }
   }
 
-  int selectedQuantity = 0;
+  int selectedQuantity = 1;
   incrementQuantity() {
     selectedQuantity++;
     update();
   }
 
   decrementQuantity() {
-    if (selectedQuantity > 0) {
+    if (selectedQuantity > 1) {
       selectedQuantity--;
       update();
     }

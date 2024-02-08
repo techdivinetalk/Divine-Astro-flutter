@@ -59,6 +59,7 @@ class NumberChangeReqController extends GetxController {
       if (response.statusCode == 200 && response.success!) {
         numberChangeResponse = response;
         update();
+        print("request to change mobile number");
         Get.toNamed(RouteName.numberChangeOtpScreen);
         focusNodeOtp.requestFocus();
       }

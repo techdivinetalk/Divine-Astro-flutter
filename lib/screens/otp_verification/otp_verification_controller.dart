@@ -36,6 +36,7 @@ class OtpVerificationController extends GetxController {
   String? deviceToken;
 
   final timerController = Get.put(TimerController());
+  var isLoading = false.obs;
 
   @override
   void onReady() async {
@@ -53,12 +54,19 @@ class OtpVerificationController extends GetxController {
     super.onReady();
   }
 
+  var isResendOtp = false.obs;
+
   resendOtp() async {
     Map<String, dynamic> params = {"mobile_no": number.value};
     try {
+      isResendOtp.value = true;
       SendOtpModel data = await userRepository.sentOtp(params);
+      isResendOtp.value = false;
       divineSnackBar(data: "OTP Re-send successfully.");
+      update();
     } catch (error) {
+      isResendOtp.value = false;
+      update();
       debugPrint("error $error");
       if (error is AppException) {
         error.onException();
@@ -108,6 +116,7 @@ class OtpVerificationController extends GetxController {
   }
 
   Future<void> astroLogin() async {
+    update();
     print("UserStatus login api");
     Map<String, dynamic> params = {
       "mobile_no": number.value,
@@ -144,42 +153,52 @@ class OtpVerificationController extends GetxController {
   //   databaseRef.set(firebaseUserData.toJson());
   // }
 
-   updateLoginDataInFirebase(ResLogin data) async {
+  updateLoginDataInFirebase(ResLogin data) async {
+    await FirebaseDatabase.instance.goOnline();
     String uniqueId = await getDeviceId() ?? '';
     String firebaseNodeUrl = 'astrologer/${data.data?.id}';
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
-    firebaseDatabase.ref().child(firebaseNodeUrl).onValue.listen((DatabaseEvent event) {
-      if(event.snapshot.value == null){
-      print("userStatus  New user");
-      FirebaseUserData firebaseUserData = FirebaseUserData(
-          data.data!.name!,
-          deviceToken ?? FirebaseMessaging.instance.getToken().toString(),
-          data.data!.image ?? "",
-          RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0));
-      firebaseDatabase.ref().child(firebaseNodeUrl).set(firebaseUserData.toJson());
-      navigateToDashboard(data);
-    }else{
-      print("userStatus existing user");
-      HashMap<String,dynamic> realTime = HashMap();
-      realTime["uniqueId"] = uniqueId; // Add to HashMap
-      HashMap<String,dynamic> deviceTokenNode = HashMap();
-      deviceTokenNode["deviceToken"] = deviceToken; // Add to HashMap
-      firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
-      firebaseDatabase.ref().child("$firebaseNodeUrl/realTime").update(realTime);
-      navigateToDashboard(data);
-    }
-    final appFirebaseService = AppFirebaseService();
-    appFirebaseService.readData('$firebaseNodeUrl/realTime');
+    firebaseDatabase
+        .ref()
+        .child(firebaseNodeUrl)
+        .onValue
+        .listen((DatabaseEvent event) {
+      if (event.snapshot.value == null) {
+        print("userStatus  New user");
+        FirebaseUserData firebaseUserData = FirebaseUserData(
+            data.data!.name!,
+            deviceToken ?? FirebaseMessaging.instance.getToken().toString(),
+            data.data!.image ?? "",
+            RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0));
+        firebaseDatabase
+            .ref()
+            .child(firebaseNodeUrl)
+            .set(firebaseUserData.toJson());
+        navigateToDashboard(data);
+      } else {
+        print("userStatus existing user");
+        HashMap<String, dynamic> realTime = HashMap();
+        realTime["uniqueId"] = uniqueId; // Add to HashMap
+        HashMap<String, dynamic> deviceTokenNode = HashMap();
+        deviceTokenNode["deviceToken"] = deviceToken; // Add to HashMap
+        firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
+        firebaseDatabase
+            .ref()
+            .child("$firebaseNodeUrl/realTime")
+            .update(realTime);
+        navigateToDashboard(data);
+      }
+      final appFirebaseService = AppFirebaseService();
+
+      appFirebaseService.readData('$firebaseNodeUrl/realTime');
     });
-   }
+  }
 
   navigateToDashboard(ResLogin data) async {
     preferenceService.erase();
-
     preferenceService.setUserDetail(data.data!);
     preferenceService.setToken(data.token!);
     preferenceService.setDeviceToken(deviceToken ?? "");
-
     Get.offAllNamed(RouteName.dashboard);
     //Get.offAllNamed(RouteName.dashboard, arguments: [data.data!.phoneNo, data.data!.sessionId]);
   }
