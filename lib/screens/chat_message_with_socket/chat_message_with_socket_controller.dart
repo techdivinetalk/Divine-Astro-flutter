@@ -158,6 +158,8 @@ class ChatMessageWithSocketController extends GetxController
   @override
   void onInit() {
     super.onInit();
+    int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
+    talkTimeStartTimer(remainingTime);
     arguments = Get.arguments;
     broadcastReceiver.start();
     print("isCardVisible");
@@ -175,12 +177,14 @@ class ChatMessageWithSocketController extends GetxController
 
         isCardVisible.value =
             AppFirebaseService().orderData.value["card"]["isCardVisible"];
-      }
-      if (event.name == "updateTime") {
+      } else if (event.name == 'endTime') {
+        int remainingTime =
+            AppFirebaseService().orderData.value["end_time"] ?? 0;
+        talkTimeStartTimer(remainingTime);
+      }else if (event.name == "updateTime") {
         debugPrint("talkTime hello: ${event.data?["talktime"]}");
         updateTime(event.data?["talktime"], true);
-      }
-      if (event.name == "EndChat") {
+      }else if (event.name == "EndChat") {
         navigateToOtherScreen();
 
         broadcastReceiver.stop();
@@ -292,16 +296,6 @@ class ChatMessageWithSocketController extends GetxController
           debugPrint("else part - ${preferenceService.getTalkTime() ?? 0}");
         }
       }
-    }
-
-    if (preferenceService.getTalkTime() != null) {
-      debugPrint('prfs time: ${preferenceService.getTalkTime()}');
-      if (_timer?.isActive ?? false) {
-        debugPrint('timer is not null');
-        _timer!.cancel();
-        _timer = null;
-      }
-      talkTimeStartTimer(preferenceService.getTalkTime() ?? 0);
     }
   }
 
