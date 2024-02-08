@@ -126,7 +126,7 @@ class FeedBack extends GetView<FeedbackController> {
                                       width: 60,
                                       height: 25,
                                       decoration: BoxDecoration(
-                                        color: const Color(0xFF5F3C08),
+                                        color: AppColors.brown,
                                         borderRadius: BorderRadius.circular(15),
                                       ),
                                       child: Center(
@@ -265,7 +265,7 @@ class FeedBack extends GetView<FeedbackController> {
                                       width: 60,
                                       height: 25,
                                       decoration: BoxDecoration(
-                                        color: const Color(0xFF5F3C08),
+                                        color: AppColors.brown,
                                         borderRadius: BorderRadius.circular(15),
                                       ),
                                       child: Center(

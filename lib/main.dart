@@ -17,6 +17,7 @@ import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get/get_navigation/src/routes/get_transition_mixin.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:overlay_support/overlay_support.dart';
@@ -77,6 +78,7 @@ Future<void> main() async {
   preferenceService.setConstantDetails(data);*/
 
   GiftsSingleton().init();
+
 
   // final navigatorKey = GlobalKey<NavigatorState>();
   // ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);

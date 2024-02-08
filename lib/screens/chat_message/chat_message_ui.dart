@@ -44,7 +44,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                             "${globalConstantModel.data?.awsCredentails.baseurl}/${controller.args!.name ?? ''}",
                         loadingIndicator: const SizedBox(
                             child: CircularProgressIndicator(
-                                color: Color(0XFFFDD48E), strokeWidth: 2))),
+                                color: AppColors.yellow, strokeWidth: 2))),
                   )),
             ),
             SizedBox(width: 10.w),

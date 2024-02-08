@@ -1343,9 +1343,9 @@ class HomeUI extends GetView<HomeController> {
                             boxFit: BoxFit.cover,
                             imageModel: ImageModel(
                               imagePath: getYoutubeThumbnail(controller.homeData?.trainingVideo?[index].url ?? ''),
-                              loadingIndicator: const SizedBox(
+                              loadingIndicator:  SizedBox(
                                 child: CircularProgressIndicator(
-                                  color: Color(0XFFFDD48E),
+                                  color: AppColors.yellow,
                                   strokeWidth: 2,
                                 ),
                               ),

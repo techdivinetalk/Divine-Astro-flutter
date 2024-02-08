@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/common/custom_get_page.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_binding.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_ui.dart';
 import 'package:divine_astrologer/screens/auth/login/login_binding.dart';
@@ -155,9 +156,10 @@ final Set<String> validRoutes = {
 class Routes {
   static final routes = <GetPage>[
     GetPage(
-        page: () => const SplashUI(),
-        name: RouteName.root,
-        binding: SplashBinding()),
+      page: () => const SplashUI(),
+      name: RouteName.root,
+      binding: SplashBinding(),
+    ),
     GetPage(
       page: () => LoginUI(),
       name: RouteName.login,
@@ -176,10 +178,12 @@ class Routes {
         page: () => const BlockedUserUI(),
         name: RouteName.blockedUser,
         binding: BlockedUserBinding()),
-    GetPage(
-        page: () => const EditProfileUI(),
-        name: RouteName.editProfileUI,
-        binding: EditProfileBinding()),
+    CustomGetPage(
+        name: RouteName.editProfileUI, page: () => const EditProfileUI()),
+    // GetPage(
+    //     page: () => const EditProfileUI(),
+    //     name: RouteName.editProfileUI,
+    //     binding: EditProfileBinding()),
     GetPage(
         page: () => const OrderHistoryUI(),
         name: RouteName.orderHistory,

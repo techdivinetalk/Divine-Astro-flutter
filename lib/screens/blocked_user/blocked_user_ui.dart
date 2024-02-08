@@ -67,9 +67,9 @@ class BlockedUserUI extends GetView<BlockUserController> {
                               placeHolderPath:
                               Assets.images.defaultProfile.path,
                               imagePath: customer.avatar ?? "",
-                              loadingIndicator: const SizedBox(
+                              loadingIndicator:  SizedBox(
                                 child: CircularProgressIndicator(
-                                  color: Color(0XFFFFFFFF),
+                                  color: AppColors.white,
                                   strokeWidth: 2,
                                 ),
                               ),
