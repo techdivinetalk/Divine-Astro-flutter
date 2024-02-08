@@ -148,7 +148,7 @@ class OrderHistoryRepository extends ApiProvider {
             orderHistoryShop.success!) {
           return orderHistoryShop;
         } else {
-          throw CustomException(orderHistoryShop.message!);
+          throw CustomException(orderHistoryShop.message ?? "");
         }
       } else {
         throw CustomException(json.decode(response.body)["message"]);

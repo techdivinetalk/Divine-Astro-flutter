@@ -106,7 +106,13 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                   ),
                                 ),
                                 sizedBox25,
-                                title("attachments".tr),
+                                Row(
+                                  children: [
+                                    title("attachments".tr),
+                                   const Spacer(),
+                                    title("status".tr +" : " + controller.state.status,)
+                                  ],
+                                ),
                                 sizedBox5,
                               ],
                             )),

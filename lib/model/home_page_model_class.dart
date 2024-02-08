@@ -49,9 +49,9 @@ class HomeData {
   double? tds;
   dynamic totalPaymentGatewayCharges;
   //
-  int? inAppChatPrevStatus;
-  int? audioCallPrevStatus;
-  int? videoCallPrevStatus;
+  dynamic inAppChatPrevStatus;
+  dynamic audioCallPrevStatus;
+  dynamic videoCallPrevStatus;
   //
 
   HomeData({

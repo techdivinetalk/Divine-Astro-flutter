@@ -49,6 +49,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_astro_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/extend_time_widget.dart";
 import 'package:random_name_generator/random_name_generator.dart';
+
 //
 //
 //
@@ -2046,9 +2047,11 @@ class _LivePage extends State<LiveDharamScreen>
         return EndSessionWidget(
           onClose: Get.back,
           continueLive: Get.back,
-          endLive: () {
-            Get.back();
+          endLive: () async {
             endLive();
+            await Future.delayed(const Duration(milliseconds: 300));
+            print("after they delayed");
+            Get.back();
           },
         );
       },
@@ -2488,6 +2491,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   bool waitingForUserToSelectCardsPopupVisible = false;
+
   Future<void> waitingForUserToSelectCardsPopup() async {
     waitingForUserToSelectCardsPopupVisible = true;
     await showCupertinoModalPopup(
@@ -3035,6 +3039,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   // temporary purpose
   bool extendTimeWidgetVisible = false;
+
   //
 
   Future<void> extendTimeWidgetPopup() async {
@@ -3814,6 +3819,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> exitFunc() async {
+
     final bool isEngaded = _controller.currentCaller.isEngaded;
     // final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
     if (isEngaded) {
