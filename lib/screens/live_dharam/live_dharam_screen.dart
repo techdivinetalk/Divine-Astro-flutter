@@ -165,8 +165,8 @@ class _LivePage extends State<LiveDharamScreen>
       },
     );
 
-    ZegoUIKit().getUserJoinStream().listen(onUserJoin);
-    ZegoUIKit().getUserLeaveStream().listen(onUserLeave);
+    // ZegoUIKit().getUserJoinStream().listen(onUserJoin);
+    // ZegoUIKit().getUserLeaveStream().listen(onUserLeave);
 
     keyboardSubscription = keyboardVisibilityController.onChange.listen(
       (bool visible) {
@@ -463,7 +463,7 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-  Future<void> onUserJoin(List<ZegoUIKitUser> users) async {
+  Future<void> onUserJoin() async {
     // final ZegoCustomMessage model = ZegoCustomMessage(
     //   type: 1,
     //   liveId: _controller.liveId,
@@ -479,7 +479,7 @@ class _LivePage extends State<LiveDharamScreen>
     Future<void>.value();
   }
 
-  Future<void> onUserLeave(List<ZegoUIKitUser> users) async {
+  Future<void> onUserLeave() async {
     if (_controller.currentCaller.isEngaded) {
       await removeCoHostOrStopCoHost();
     } else {}
@@ -763,10 +763,10 @@ class _LivePage extends State<LiveDharamScreen>
         children: <Widget>[
           appBarWidget(),
           const SizedBox(height: 8),
-          ElevatedButton(
-            onPressed: _restartMsgTimerForFollowPopup,
-            child: Text("Reset"),
-          ),
+          // ElevatedButton(
+          //   onPressed: _restartMsgTimerForFollowPopup,
+          //   child: Text("Reset"),
+          // ),
           // Text(_controller.liveId),
           // const SizedBox(height: 8),
           Expanded(
@@ -782,6 +782,7 @@ class _LivePage extends State<LiveDharamScreen>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       noticeBoard(),
+                      // requestedBoard(),
                       SizedBox(
                           height:
                               (_controller.noticeBoardRes.data ?? []).isEmpty
@@ -900,6 +901,131 @@ class _LivePage extends State<LiveDharamScreen>
             ),
     );
   }
+
+  // Widget requestedBoard() {
+  //   // do not remove
+  //   print("_controller.requestClass.type: ${_controller.requestClass.type}");
+  //   //
+
+  //   String string = "";
+
+  //   final String type = _controller.requestClass.type;
+  //   if (type == "Ask For Gift") {
+  //     string =
+  //         "${_controller.requestClass.giftCount}X ${_controller.requestClass.giftData.giftName}";
+  //   } else if (type == "Ask For Video Call") {
+  //     string = "Video Call";
+  //   } else if (type == "Ask For Voice Call") {
+  //     string = "Voice Call";
+  //   } else if (type == "Ask For Private Call") {
+  //     string = "Private Call";
+  //   } else {
+  //     string = "";
+  //   }
+
+  //   return AnimatedOpacity(
+  //     opacity: _controller.requestClass.type == "" ? 0.0 : 1.0,
+  //     duration: const Duration(seconds: 1),
+  //     child: _controller.requestClass.type == ""
+  //         ? const SizedBox()
+  //         : SizedBox(
+  //             width: double.infinity,
+  //             child: DecoratedBox(
+  //               decoration: BoxDecoration(
+  //                 gradient: const LinearGradient(
+  //                   begin: Alignment.topCenter,
+  //                   end: Alignment.bottomCenter,
+  //                   colors: [
+  //                     AppColors.white,
+  //                     AppColors.yellow,
+  //                   ],
+  //                 ),
+  //                 borderRadius: const BorderRadius.all(
+  //                   Radius.circular(50.0),
+  //                 ),
+  //                 border: Border.all(
+  //                   color: AppColors.yellow,
+  //                 ),
+  //                 color: AppColors.yellow,
+  //               ),
+  //               child: Padding(
+  //                 padding: const EdgeInsets.all(4.0),
+  //                 child: Row(
+  //                   children: <Widget>[
+  //                     const SizedBox(width: 4),
+  //                     SizedBox(
+  //                       height: 32,
+  //                       width: 32,
+  //                       child: DecoratedBox(
+  //                         decoration: BoxDecoration(
+  //                           borderRadius: const BorderRadius.all(
+  //                             Radius.circular(50.0),
+  //                           ),
+  //                           border: Border.all(
+  //                             color: AppColors.transparent,
+  //                           ),
+  //                           color: AppColors.transparent,
+  //                         ),
+  //                         child: Padding(
+  //                           padding: const EdgeInsets.all(0.0),
+  //                           child: type == "Ask For Gift"
+  //                               ? CustomImageWidget(
+  //                                   imageUrl: _controller
+  //                                       .requestClass.giftData.fullGiftImage,
+  //                                   rounded: false,
+  //                                   typeEnum: TypeEnum.gift,
+  //                                 )
+  //                               : Image.asset(
+  //                                   "assets/images/live_requested_popup.png",
+  //                                 ),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     const SizedBox(width: 4),
+  //                     Expanded(
+  //                       child: Column(
+  //                         mainAxisAlignment: MainAxisAlignment.center,
+  //                         crossAxisAlignment: CrossAxisAlignment.center,
+  //                         children: [
+  //                           Text(
+  //                             "${_controller.details.data?.name ?? "Astrologer"} has requested $string.",
+  //                             style: const TextStyle(
+  //                               fontSize: 12,
+  //                               color: Colors.black,
+  //                             ),
+  //                             maxLines: 5,
+  //                             overflow: TextOverflow.ellipsis,
+  //                           ),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                     const SizedBox(width: 4),
+  //                     ElevatedButton(
+  //                       onPressed: () async {
+  //                         if (type == "Ask For Gift") {
+  //                           await sendGiftFunc(
+  //                             ctx: context,
+  //                             item: _controller.requestClass.giftData,
+  //                             quantity: _controller.requestClass.giftCount,
+  //                           );
+  //                         } else if (type == "Ask For Video Call") {
+  //                           await requestCallFunction(type: "Video");
+  //                         } else if (type == "Ask For Voice Call") {
+  //                           await requestCallFunction(type: "Audio");
+  //                         } else if (type == "Ask For Private Call") {
+  //                           await requestCallFunction(type: "Private");
+  //                         } else {}
+  //                       },
+  //                       child: Text(type == "Ask For Gift" ? "Send" : "Call"),
+  //                     ),
+  //                     const SizedBox(width: 4),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //   );
+  // }
 
   Widget appBarWidget() {
     return SizedBox(
@@ -1257,6 +1383,7 @@ class _LivePage extends State<LiveDharamScreen>
   //         successCallback: log,
   //         failureCallback: log,
   //       );
+  //       _controller.clearRequest();
   //       await _controller.addUpdateLeaderboard(
   //         quantity: quantity,
   //         amount: item.giftPrice,
@@ -2048,6 +2175,7 @@ class _LivePage extends State<LiveDharamScreen>
   //       },
   //     );
   //     if (canOrder) {
+  //       _controller.clearRequest();
   //       await _controller.addUpdateToWaitList(
   //         userId: _controller.userId,
   //         callType: type,
@@ -2318,6 +2446,11 @@ class _LivePage extends State<LiveDharamScreen>
           } else if (askFor) {
             if (receiverUserId == _controller.userId) {
               // await commonRequest(type: type, item: item, giftCount: giftCount);
+              // _controller.requestClass = RequestClass(
+              //   type: type,
+              //   giftData: GiftData.fromJson(item),
+              //   giftCount: giftCount,
+              // );
             } else {}
           } else if (type == "Block/Unblock") {
             // await _controller.isCustomerBlocked(
@@ -2725,35 +2858,58 @@ class _LivePage extends State<LiveDharamScreen>
                 ),
               ),
               const SizedBox(width: 8),
-              InkWell(
-                onTap: () async {
-                  // _controller.isCustBlocked.data?.isCustomerBlocked == 1
-                  //     ? await youAreBlocked()
-                  //     : await callAstrologerPopup();
-                },
-                child: SizedBox(
-                  height: 32,
-                  width: 32,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(50.0),
-                      ),
-                      border: Border.all(
-                        color: AppColors.yellow,
-                      ),
-                      color: AppColors.black.withOpacity(0.2),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(0.0),
-                      child: Image.asset(
-                        "assets/images/live_new_plus_icon.png",
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
+              // StreamBuilder<Object>(
+              //   stream: null,
+              //   builder: (context, snapshot) {
+              //     return AnimatedOpacity(
+              //       opacity:
+              //           !_controller.isHost && !_controller.isHostAvailable ||
+              //                   _controller.hasMyIdInWaitList()
+              //               ? 0.0
+              //               : 1.0,
+              //       duration: const Duration(seconds: 1),
+              //       child: !_controller.isHost &&
+              //                   !_controller.isHostAvailable ||
+              //               _controller.hasMyIdInWaitList()
+              //           ? const SizedBox()
+              //           : Row(
+              //               children: [
+              //                 InkWell(
+              //                   onTap: () async {
+              //                     _controller.isCustBlocked.data
+              //                                 ?.isCustomerBlocked ==
+              //                             1
+              //                         ? await youAreBlocked()
+              //                         : await callAstrologerPopup();
+              //                   },
+              //                   child: SizedBox(
+              //                     height: 32,
+              //                     width: 32,
+              //                     child: DecoratedBox(
+              //                       decoration: BoxDecoration(
+              //                         borderRadius: const BorderRadius.all(
+              //                           Radius.circular(50.0),
+              //                         ),
+              //                         border: Border.all(
+              //                           color: AppColors.yellow,
+              //                         ),
+              //                         color: AppColors.black.withOpacity(0.2),
+              //                       ),
+              //                       child: Padding(
+              //                         padding: const EdgeInsets.all(0.0),
+              //                         child: Image.asset(
+              //                           "assets/images/live_new_plus_icon.png",
+              //                         ),
+              //                       ),
+              //                     ),
+              //                   ),
+              //                 ),
+              //                 const SizedBox(width: 8),
+              //               ],
+              //             ),
+              //     );
+              //   },
+              // ),
             ],
           ),
         ),
@@ -4020,6 +4176,18 @@ class _LivePage extends State<LiveDharamScreen>
         ),
       ),
       onEnded: (ZegoLiveStreamingEndEvent event, VoidCallback defaultAction) {},
+      user: ZegoLiveStreamingUserEvents(
+        onEnter: (ZegoUIKitUser zegoUIKitUser) async {
+          if (zegoUIKitUser.id == _controller.liveId) {
+            await onUserJoin();
+          } else {}
+        },
+        onLeave: (ZegoUIKitUser zegoUIKitUser) async {
+          if (zegoUIKitUser.id == _controller.liveId) {
+            await onUserLeave();
+          } else {}
+        },
+      ),
     );
   }
 
