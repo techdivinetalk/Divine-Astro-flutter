@@ -1,3 +1,5 @@
+import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
@@ -11,9 +13,7 @@ class CustomGetPage<T> extends GetPage<T> {
   }) : super(
     name: name,
     page: () {
-      if (condition != null && !condition()) {
-        return Container(); // Return an empty container if the condition is not met
-      }
+      checkInternetSpeed(true, navigatorKey.currentContext!);
       return page();
     },
   );
