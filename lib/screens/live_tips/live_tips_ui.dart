@@ -10,6 +10,7 @@ import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_servic
 import 'package:divine_astrologer/screens/live_dharam/widgets/common_button.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 // import 'package:flutter_screen_recording/flutter_screen_recording.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -227,9 +228,38 @@ class LiveTipsUI extends GetView<LiveTipsController> {
       );
 
       if (hasAllPerm) {
-        final int userId = controller.pref.getUserDetail()?.id ?? 0;
-        AppSocket().joinLive(userType: "astrologer", userId: userId);
-        await controller.furtherProcedure();
+        bool canEnter = false;
+
+        await controller.astroOnlineAPI(
+          entering: true,
+          successCallBack: (message) {
+            canEnter = true;
+            divineSnackBar(data: message);
+          },
+          failureCallBack: (message) {
+            canEnter = false;
+            divineSnackBar(data: message);
+          },
+        );
+
+        if (canEnter) {
+          final int userId = controller.pref.getUserDetail()?.id ?? 0;
+          AppSocket().joinLive(userType: "astrologer", userId: userId);
+
+          await controller.furtherProcedure();
+
+          await controller.astroOnlineAPI(
+            entering: false,
+            successCallBack: (message) {
+              divineSnackBar(data: message);
+            },
+            failureCallBack: (message) {
+              divineSnackBar(data: message);
+            },
+          );
+        } else {
+          divineSnackBar(data: "Something went wrong, please try again later");
+        }
       } else {
         divineSnackBar(data: "Insufficient Permission");
       }
