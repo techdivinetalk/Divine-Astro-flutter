@@ -189,7 +189,7 @@ class SuggestRemedies extends StatelessWidget {
                   "Total Earning",
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600),
                 ),
-                Text("₹300",
+                Text("₹${data[index].getOrder?.amount}",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w600,
                         fontColor: AppColors.lightGreen)),

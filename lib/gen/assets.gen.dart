@@ -577,6 +577,10 @@ class $AssetsImagesGen {
   AssetGenImage get liveMiniHourglass =>
       const AssetGenImage('assets/images/live_mini_hourglass.png');
 
+  /// File path: assets/images/live_new_astro_live_star.png
+  AssetGenImage get liveNewAstroLiveStar =>
+      const AssetGenImage('assets/images/live_new_astro_live_star.png');
+
   /// File path: assets/images/live_new_audio_icon.png
   AssetGenImage get liveNewAudioIcon =>
       const AssetGenImage('assets/images/live_new_audio_icon.png');
@@ -624,6 +628,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/live_recharge_button.png
   AssetGenImage get liveRechargeButton =>
       const AssetGenImage('assets/images/live_recharge_button.png');
+
+  /// File path: assets/images/live_requested_popup.png
+  AssetGenImage get liveRequestedPopup =>
+      const AssetGenImage('assets/images/live_requested_popup.png');
 
   /// File path: assets/images/live_second_medal.png
   AssetGenImage get liveSecondMedal =>
@@ -708,6 +716,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/vidio_enable_live.svg
   SvgGenImage get vidioEnableLive =>
       const SvgGenImage('assets/images/vidio_enable_live.svg');
+
+  /// File path: assets/images/waiting-period.svg
+  SvgGenImage get waitingPeriod =>
+      const SvgGenImage('assets/images/waiting-period.svg');
 
   /// File path: assets/images/waitlist_live.svg
   SvgGenImage get waitlistLive =>
@@ -864,6 +876,7 @@ class $AssetsImagesGen {
         liveMicOff,
         liveMicOn,
         liveMiniHourglass,
+        liveNewAstroLiveStar,
         liveNewAudioIcon,
         liveNewChatIcon,
         liveNewGift,
@@ -876,6 +889,7 @@ class $AssetsImagesGen {
         liveNewPrivateIcon,
         liveNewVideoIcon,
         liveRechargeButton,
+        liveRequestedPopup,
         liveSecondMedal,
         liveSendMessageNew,
         liveSeperatedCrown,
@@ -898,6 +912,7 @@ class $AssetsImagesGen {
         trueCallerIcon,
         videoDisableLive,
         vidioEnableLive,
+        waitingPeriod,
         waitlistLive
       ];
 }

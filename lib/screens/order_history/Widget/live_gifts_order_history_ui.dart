@@ -63,6 +63,7 @@ class LiveGiftsHistory extends StatelessWidget {
   }
 
   Widget orderDetailView(List<GiftDataList> data, int index) {
+
     return InkWell(
       onTap: () {},
       child: Container(
@@ -153,7 +154,7 @@ class LiveGiftsHistory extends StatelessWidget {
               children: [
                 Text("${'giftPrice'.tr} :",
                     style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
-                Text("₹${data[index].amount}",
+                Text("₹${data[index].getGift?.giftPrice}",
                     style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
               ],
             ),
@@ -163,7 +164,7 @@ class LiveGiftsHistory extends StatelessWidget {
               children: [
                 Text("${'quantity'.tr} :",
                     style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
-                Text("30%", style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                Text("${data[index].quantity}", style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
@@ -176,7 +177,7 @@ class LiveGiftsHistory extends StatelessWidget {
                   "totalEarning".tr,
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600),
                 ),
-                Text("₹300", style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600, fontColor: AppColors.lightGreen)),
+                Text("₹${data[index].amount}", style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600, fontColor: AppColors.lightGreen)),
               ],
             ),
             const SizedBox(height: 8),
