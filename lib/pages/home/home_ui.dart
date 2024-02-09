@@ -76,6 +76,7 @@ class HomeUI extends GetView<HomeController> {
         ],
       ),
       body: GetBuilder<HomeController>(
+        init: HomeController(),
         builder: (controller) {
           if (controller.loading == Loading.loaded) {
             return LayoutBuilder(builder: (context, constraints) {
@@ -238,67 +239,75 @@ class HomeUI extends GetView<HomeController> {
                       SizedBox(height: 10.h),
                       Obx(
                         () => controller.isFeedbackAvailable.value
-                            ? Column(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Get.toNamed(RouteName.orderFeedback,
-                                          arguments: [
-                                            controller.feedbacksList
-                                          ]);
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Order Feedback',
-                                          style: AppTextStyle.textStyle16(
-                                              fontColor: AppColors.darkBlue,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                        Text(
-                                          "viewAll".tr,
-                                          style: AppTextStyle.textStyle12(
-                                              fontColor: AppColors.darkBlue,
-                                              fontWeight: FontWeight.w400),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(height: 10.h),
-                                  controller.feedbackResponse == null ? const SizedBox.shrink() :   FeedbackCardWidget(
-                                      feedback: controller.feedbackResponse ??
-                                          FeedbackData(
-                                            id: controller.feedbackResponse?.id,
-                                            orderId: controller
-                                                .feedbackResponse?.orderId,
-                                            remark: controller
-                                                .feedbackResponse?.remark,
-                                            order: OrderDetails(
-                                              astrologerId: controller
-                                                  .feedbackResponse
-                                                  ?.order
-                                                  ?.astrologerId,
-                                              id: controller
-                                                  .feedbackResponse?.order?.id,
-                                              productType: controller
-                                                  .feedbackResponse
-                                                  ?.order
-                                                  ?.productType,
-                                              orderId: controller
-                                                  .feedbackResponse
-                                                  ?.order
-                                                  ?.orderId,
-                                              createdAt: controller
-                                                  .feedbackResponse
-                                                  ?.order
-                                                  ?.createdAt,
+                            ? controller.feedbackResponse == null
+                                ? const SizedBox.shrink()
+                                : Column(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed(RouteName.orderFeedback,
+                                              arguments: [
+                                                controller.feedbacksList
+                                              ]);
+                                        },
+                                        child: Row( 
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              'Order Feedback',
+                                              style: AppTextStyle.textStyle16(
+                                                  fontColor: AppColors.darkBlue,
+                                                  fontWeight: FontWeight.w400),
                                             ),
-                                          )),
-                                  SizedBox(height: 10.h),
-                                ],
-                              )
+                                            Text(
+                                              "viewAll".tr,
+                                              style: AppTextStyle.textStyle12(
+                                                  fontColor: AppColors.darkBlue,
+                                                  fontWeight: FontWeight.w400),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(height: 10.h),
+                                      FeedbackCardWidget(
+                                          feedback:
+                                              controller.feedbackResponse ??
+                                                  FeedbackData(
+                                                    id: controller
+                                                        .feedbackResponse?.id,
+                                                    orderId: controller
+                                                        .feedbackResponse
+                                                        ?.orderId,
+                                                    remark: controller
+                                                        .feedbackResponse
+                                                        ?.remark,
+                                                    order: OrderDetails(
+                                                      astrologerId: controller
+                                                          .feedbackResponse
+                                                          ?.order
+                                                          ?.astrologerId,
+                                                      id: controller
+                                                          .feedbackResponse
+                                                          ?.order
+                                                          ?.id,
+                                                      productType: controller
+                                                          .feedbackResponse
+                                                          ?.order
+                                                          ?.productType,
+                                                      orderId: controller
+                                                          .feedbackResponse
+                                                          ?.order
+                                                          ?.orderId,
+                                                      createdAt: controller
+                                                          .feedbackResponse
+                                                          ?.order
+                                                          ?.createdAt,
+                                                    ),
+                                                  )),
+                                      SizedBox(height: 10.h),
+                                    ],
+                                  )
                             : const SizedBox(),
                       ),
                       // SizedBox(height: 10.h),
