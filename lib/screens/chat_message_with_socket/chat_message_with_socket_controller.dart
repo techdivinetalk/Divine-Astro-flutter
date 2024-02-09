@@ -753,6 +753,7 @@ class ChatMessageWithSocketController extends GetxController
           giftList: GiftsSingleton().gifts.data ?? <GiftData>[],
           onSelect: (GiftData item, num quantity) async {
             Get.back();
+            print('number of gifts $quantity');
             await sendGiftFunc(item, quantity);
           },
         );

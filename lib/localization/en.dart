@@ -10,6 +10,7 @@ Map<String, String> en() {
     "timeoutMessage":
         "Something went wrong.\nPlease check you internet connection and please try again.",
     "today": "Today",
+    'deleteChat':'Delete Chat',
     "followers": "Followers",
     "dasha": "Dasha",
     "version": "Version",

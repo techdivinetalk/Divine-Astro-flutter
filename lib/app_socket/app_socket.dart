@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
+import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/pages/home/home_controller.dart';
 import 'package:flutter/material.dart';
@@ -141,12 +142,24 @@ class AppSocket {
         {'astroId': astroId, 'custId': custId, 'userType': 'astrologer'});
   }
 
+  void listenForAssistantChatMessage(void Function(dynamic) callback) {
+    print("function called 123");
+      socket?.on(ApiProvider().sendConnectRequest, (data) {
+        print("socket called");
+        callback(data);
+        print("socket executed");
+      },);
+    print("socket finished");
+  }
+
   void sendAssistantMessage(
       {required String message,
       required String astroId,
+        required ChatAssistData msgData,
       required String customerId}) {
     socket?.emit(ApiProvider().sendChatAssistMessage, {
       'userType': 'astrologer',
+      'msgData': msgData.toJson(),
       'custId': customerId,
       'astroId': astroId,
       'message': message

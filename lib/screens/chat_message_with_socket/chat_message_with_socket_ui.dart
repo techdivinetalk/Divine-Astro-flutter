@@ -362,14 +362,14 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         height: 300,
                         child: EmojiPicker(
                             onEmojiSelected: (category, emoji) {
-                              controller.typingScrollController.hasClients
-                                  ? controller.typingScrollController.animateTo(
-                                      controller.typingScrollController.position
-                                          .maxScrollExtent,
-                                      duration:
-                                          const Duration(milliseconds: 100),
-                                      curve: Curves.easeOut)
-                                  : null;
+                              // controller.typingScrollController.hasClients
+                              //     ? controller.typingScrollController.animateTo(
+                              //         controller.typingScrollController.position
+                              //             .maxScrollExtent,
+                              //         duration:
+                              //             const Duration(milliseconds: 100),
+                              //         curve: Curves.easeOut)
+                              //     : null;
                             },
                             onBackspacePressed: () {
                               _onBackspacePressed();
@@ -1773,34 +1773,6 @@ class AstrologerChatAppBar extends StatelessWidget {
                             },
                           );
                         },
-                      ),
-                      SizedBox(width: 5.w),
-                      PopupMenuButton(
-                        surfaceTintColor: Colors.transparent,
-                        color: Colors.white,
-                        itemBuilder: (context) => [
-                          PopupMenuItem(
-                              child: InkWell(
-                            onTap: () {
-                              // Navigator.pop(context);
-                              //
-                              // showCupertinoModalPopup(
-                              //   barrierColor:
-                              //   AppColors.darkBlue.withOpacity(0.5),
-                              //   context: context,
-                              //   builder: (context) => ReportPostReasons(
-                              //       reviewData?.id.toString() ?? ''),
-                              //
-                              //   // builder: (context) => ReportPostReasons(reviewData?.id.),
-                              // );
-                            },
-                            child: Text(
-                              "Chat History",
-                              style: AppTextStyle.textStyle13(),
-                            ),
-                          )),
-                        ],
-                        child: const Icon(Icons.more_vert_rounded),
                       ),
                       SizedBox(width: 10.w),
                     ],

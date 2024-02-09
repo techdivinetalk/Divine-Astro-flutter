@@ -133,14 +133,7 @@ class ChatMessageController extends GetxController {
 
   void sendMsg() {
     if (messageController.text.isNotEmpty) {
-      appSocket.sendAssistantMessage(
-          customerId: args!.id.toString(),
-          message: messageController.text,
-          astroId: preferenceService.getUserDetail()!.id.toString());
-      print("socket msg");
-      print(preferenceService.getUserDetail()!.id.toString());
-      print(args!.id.toString());
-      chatMessageList.add(ChatAssistData(
+      final msgData = ChatAssistData(
           message: messageController.text,
           astrologerId: args!.id,
           createdAt: DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ")
@@ -149,7 +142,18 @@ class ChatMessageController extends GetxController {
           isSuspicious: 0,
           msgType: 1,
           seenStatus: 0,
-          customerId: preferenceService.getUserDetail()!.id));
+          msgStatus: MsgStatus.sent,
+          chatType: ChatType.text,
+          customerId: preferenceService.getUserDetail()!.id);
+      appSocket.sendAssistantMessage(
+          customerId: args!.id.toString(),
+          msgData: msgData,
+          message: messageController.text,
+          astroId: preferenceService.getUserDetail()!.id.toString());
+      // print("socket msg");
+      // print(preferenceService.getUserDetail()!.id.toString());
+      // print(args!.id.toString());
+      chatMessageList.add(msgData);
       scrollToBottomFunc();
       messageController.clear();
     }
