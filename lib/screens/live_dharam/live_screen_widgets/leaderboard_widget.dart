@@ -88,7 +88,7 @@ class LeaderBoardWidget extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(
-                                'is $astrologerName Live Star',
+                                'is $astrologerName\'s Live Star',
                                 style: const TextStyle(
                                   fontSize: 10,
                                   color: Colors.black,

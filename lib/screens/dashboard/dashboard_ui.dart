@@ -1,8 +1,10 @@
 import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
 import 'package:divine_astrologer/common/cached_network_image.dart';
+import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/screens/order_history/order_history_ui.dart';
 import 'package:divine_astrologer/screens/dashboard/widgets/accept_chat_widget.dart';
 import 'package:divine_astrologer/screens/dashboard/widgets/rejoin_widget.dart';
+import 'package:divine_astrologer/tarotCard/widget/custom_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,8 +38,10 @@ class DashboardScreen extends GetView<DashboardController> {
                     body: Obx(
                       () => AnimatedSwitcher(
                         duration: const Duration(milliseconds: 250),
-                        child: widgetOptions.elementAt(controller.selectedIndex.value),
-                        transitionBuilder: (child, anim) => FadeTransition(opacity: anim, child: child),
+                        child: widgetOptions
+                            .elementAt(controller.selectedIndex.value),
+                        transitionBuilder: (child, anim) =>
+                            FadeTransition(opacity: anim, child: child),
                       ),
                     ),
                     bottomNavigationBar: Obx(() => SafeArea(
@@ -65,7 +69,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                         Assets.images.icSelectedHome.svg(
                                             height: 22.h,
                                             colorFilter: ColorFilter.mode(
-                                                controller.selectedIndex.value == 0
+                                                controller.selectedIndex
+                                                            .value ==
+                                                        0
                                                     ? AppColors.darkBlue
                                                     : AppColors.lightGrey,
                                                 BlendMode.srcIn)),
@@ -80,7 +86,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                         Assets.images.icSelectedPerfom.svg(
                                             height: 22.h,
                                             colorFilter: ColorFilter.mode(
-                                                controller.selectedIndex.value == 1
+                                                controller.selectedIndex
+                                                            .value ==
+                                                        1
                                                     ? AppColors.darkBlue
                                                     : AppColors.lightGrey,
                                                 BlendMode.srcIn)),
@@ -95,7 +103,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                         Assets.images.icSelectedSuggest.svg(
                                             height: 22.h,
                                             colorFilter: ColorFilter.mode(
-                                                controller.selectedIndex.value == 2
+                                                controller.selectedIndex
+                                                            .value ==
+                                                        2
                                                     ? AppColors.darkBlue
                                                     : AppColors.lightGrey,
                                                 BlendMode.srcIn)),
@@ -106,13 +116,17 @@ class DashboardScreen extends GetView<DashboardController> {
                                   ),
                                   BottomNavigationBarItem(
                                     icon: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Assets.images.icChatBottom.svg(
                                             height: 22.h,
                                             colorFilter: ColorFilter.mode(
-                                                controller.selectedIndex.value == 3
+                                                controller.selectedIndex
+                                                            .value ==
+                                                        3
                                                     ? AppColors.darkBlue
                                                     : AppColors.lightGrey,
                                                 BlendMode.srcIn)),
@@ -133,6 +147,14 @@ class DashboardScreen extends GetView<DashboardController> {
                                             width: 30,
                                           ),
                                         ),
+                                        /*    CommonImageView(
+                                          imagePath:
+                                              "${controller.userProfileImage}",
+                                          fit: BoxFit.cover,
+                                          height: 30,
+                                          width: 30,
+                                          radius: BorderRadius.circular(50),
+                                        ),*/
                                         const SizedBox(height: 5),
                                       ],
                                     ),
@@ -151,14 +173,14 @@ class DashboardScreen extends GetView<DashboardController> {
                 if (broadcastSnapshot.data!.name == 'ReJoinChat' &&
                     broadcastSnapshot.data!.data!['orderData']['status'] == '3')
                   Positioned(
-                      bottom: kToolbarHeight+20.w,
+                      bottom: kToolbarHeight + 20.w,
                       left: 0,
                       right: 0,
                       child: RejoinWidget(data: broadcastSnapshot.data!.data!)),
                 if (broadcastSnapshot.data!.name == 'AcceptChat' &&
                     broadcastSnapshot.data!.data!['orderData']['status'] == '0')
                   Positioned(
-                      bottom: kToolbarHeight+20.w,
+                      bottom: kToolbarHeight + 20.w,
                       left: 0,
                       right: 0,
                       child: AcceptChatWidget(
@@ -166,8 +188,10 @@ class DashboardScreen extends GetView<DashboardController> {
                         onTap: () {
                           debugPrint('AcceptChatWidget onTap');
                           controller.appFirebaseService.writeData(
-                              'order/${broadcastSnapshot.data!.data!['orderId']}', {'status': '1'});
-                          controller.appFirebaseService.acceptBottomWatcher.strValue = '1';
+                              'order/${broadcastSnapshot.data!.data!['orderId']}',
+                              {'status': '1'});
+                          controller.appFirebaseService.acceptBottomWatcher
+                              .strValue = '1';
                         },
                       ))
               ],
@@ -177,7 +201,7 @@ class DashboardScreen extends GetView<DashboardController> {
   }
 
   void _onItemTapped(int index) async {
-    if(index == 2) {
+    if (index == 2) {
       Get.toNamed(RouteName.orderHistory);
     } else {
       controller.selectedIndex.value = index;

@@ -4,6 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../gen/assets.gen.dart';
+
 class CommonImageView extends StatelessWidget {
   final String? imagePath;
 
@@ -29,7 +31,7 @@ class CommonImageView extends StatelessWidget {
     this.radius,
     this.margin,
     this.border,
-    this.placeHolder = 'assets/images/report.svg',
+    this.placeHolder = 'assets/svg/caution.svg',
   });
 
   @override
@@ -126,7 +128,7 @@ class CommonImageView extends StatelessWidget {
             ),
             errorWidget: (context, url, error) => Center(
               child: SvgPicture.asset(
-                placeHolder,
+                "assets/svg/caution.svg",
                 height: height,
                 width: width,
                 fit: BoxFit.cover,

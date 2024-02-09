@@ -9,6 +9,7 @@ import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
 import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_ui.dart';
+import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/screens/order_feedback/widget/feedback_card_widget.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
@@ -77,8 +78,10 @@ class HomeUI extends GetView<HomeController> {
       body: GetBuilder<HomeController>(
         builder: (controller) {
           if (controller.loading == Loading.loaded) {
-            return Stack(
-              children: [
+            return LayoutBuilder(builder: (context, constraints) {
+              final double maxHeight = constraints.maxHeight;
+              final double maxWidth = constraints.maxWidth;
+              return Stack(children: [
                 SingleChildScrollView(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: Column(
@@ -264,7 +267,7 @@ class HomeUI extends GetView<HomeController> {
                                     ),
                                   ),
                                   SizedBox(height: 10.h),
-                                  controller.feedbackResponse == null ? const SizedBox.shrink() : FeedbackCardWidget(
+                                  controller.feedbackResponse == null ? const SizedBox.shrink() :   FeedbackCardWidget(
                                       feedback: controller.feedbackResponse ??
                                           FeedbackData(
                                             id: controller.feedbackResponse?.id,
@@ -445,57 +448,67 @@ class HomeUI extends GetView<HomeController> {
                 ),
                 Positioned(
                     top: controller.yPosition,
-                    left: controller.xPosition,
+                    left: controller.xPosition + 10,
                     child: GestureDetector(
-                      onPanUpdate: (tapInfo) {
-                        controller.xPosition += tapInfo.delta.dx;
-                        controller.yPosition += tapInfo.delta.dy;
-                        controller.update();
-                      },
-                      onPanEnd: (details) {
-                        if (controller.xPosition + 25 < Get.width / 2) {
-                          controller.xPosition = 0;
-                        } else {
-                          controller.xPosition = Get.width - 50;
-                        }
-                        controller.update();
-                      },
-                      onTap: () {
-                        controller.whatsapp();
-                      },
-                      child: Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          color: AppColors.lightYellow,
-                          borderRadius: BorderRadius.circular(25.0),
-                          gradient: const LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [
-                              AppColors.appYellowColour,
-                              AppColors.gradientBottom
-                            ],
-                          ),
-                        ),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Assets.images.icHelp.svg(),
-                              Text(
-                                "help".tr,
-                                style: AppTextStyle.textStyle10(
-                                    fontColor: AppColors.brownColour,
-                                    fontWeight: FontWeight.w700),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    )),
-              ],
-            );
+                        onPanUpdate: (tapInfo) {
+                          double newXPosition =
+                              controller.xPosition + tapInfo.delta.dx;
+                          double newYPosition =
+                              controller.yPosition + tapInfo.delta.dy;
+
+                          // Ensure newXPosition is within screen bounds
+                          newXPosition = newXPosition.clamp(0.0,
+                              maxWidth - 50); // Assuming widget width is 50
+                          newYPosition = newYPosition.clamp(0,
+                              maxHeight - 50); // Assuming widget height is 50
+
+                          controller.xPosition = newXPosition;
+                          controller.yPosition = newYPosition;
+                          controller.update();
+                        },
+                        onPanEnd: (details) {
+                          if (controller.xPosition + 25 < Get.width / 2) {
+                            controller.xPosition = 0;
+                          } else {
+                            controller.xPosition = Get.width - 70;
+                          }
+
+                          controller.update();
+                        },
+                        onTap: () {
+                          controller.whatsapp();
+                        },
+                        child: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: AppColors.lightYellow,
+                              borderRadius: BorderRadius.circular(25.0),
+                              gradient: const LinearGradient(
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                                colors: [
+                                  AppColors.appYellowColour,
+                                  AppColors.gradientBottom
+                                ],
+                              ),
+                            ),
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Assets.images.icHelp.svg(),
+                                  Text(
+                                    "help".tr,
+                                    style: AppTextStyle.textStyle10(
+                                        fontColor: AppColors.brownColour,
+                                        fontWeight: FontWeight.w700),
+                                  )
+                                ],
+                              ),
+                            ))))
+              ]);
+            });
           }
           return const SizedBox.shrink();
         },
@@ -2198,15 +2211,18 @@ class PerformanceDialog extends StatelessWidget {
                             : GestureDetector(
                                 onTap: () {
                                   if (controller.performanceScoreList.last ==
-                                      (controller.performanceScoreList[controller.scoreIndex])) {
+                                      (controller.performanceScoreList[
+                                          controller.scoreIndex])) {
                                     Navigator.pop(context);
                                     dashboardController.selectedIndex.value = 1;
                                   }
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
-                                      color: controller.performanceScoreList.last ==
-                                          controller.performanceScoreList[controller.scoreIndex]
+                                      color: controller
+                                                  .performanceScoreList.last ==
+                                              controller.performanceScoreList[
+                                                  controller.scoreIndex]
                                           ? AppColors.yellow
                                           : AppColors.lightGrey,
                                       borderRadius: BorderRadius.circular(10)),
