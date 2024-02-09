@@ -58,7 +58,7 @@ class RemoteConfigHelper {
   Future<void> updateGlobalConstantWithFirebaseData() async {
     try {
       /// update colors
-      // remoteConfigData = remoteConfig.getString("background");
+      AppColors();
 
     } catch (exception) {
       debugPrint('Error fetching remote config: $exception');

@@ -38,21 +38,23 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                margin: const EdgeInsets.only(left: 20, right: 20),
-                padding: EdgeInsets.all(12.h),
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 3.0,
-                          offset: const Offset(0.0, 3.0)),
-                    ],
-                    color: AppColors.white,
-                    borderRadius: const BorderRadius.all(Radius.circular(20))),
-                child: durationOptions(),
-              ),
-              const SizedBox(height: 20),
+
+              /// remove filter ui
+              // Container(
+              //   margin: const EdgeInsets.only(left: 20, right: 20),
+              //   padding: EdgeInsets.all(12.h),
+              //   decoration: BoxDecoration(
+              //       boxShadow: [
+              //         BoxShadow(
+              //             color: Colors.black.withOpacity(0.2),
+              //             blurRadius: 3.0,
+              //             offset: const Offset(0.0, 3.0)),
+              //       ],
+              //       color: AppColors.white,
+              //       borderRadius: const BorderRadius.all(Radius.circular(20))),
+              //   child: durationOptions(),
+              // ),
+              // const SizedBox(height: 20),
               const OrderTab(),
             ],
           ),
@@ -150,6 +152,7 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
             data: ThemeData(useMaterial3: true),
             child: TabBar(
               isScrollable: true,
+              tabAlignment: TabAlignment.start,
               controller: controller.tabbarController,
               labelColor: AppColors.blackColor,
               unselectedLabelColor: AppColors.blackColor,

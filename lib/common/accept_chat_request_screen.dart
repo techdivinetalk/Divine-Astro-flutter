@@ -91,7 +91,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {
       if (event.name == "backReq") {
-        Navigator.pop(context);
+
       }else if (event.name == "EndChat") {
         Get.offAllNamed(RouteName.dashboard);
         broadcastReceiver.stop();
@@ -428,7 +428,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                             fontFamily: FontFamily.metropolis,
                                             fontSize: 16.sp,
                                             color: AppColors.darkBlue)),
-                                    Text(formatTime((AppFirebaseService().orderData.value["max_order_time"] * 1000 * 60) ?? 0),
+                                    Text(formatMinutesToHoursMinutes((AppFirebaseService().orderData.value["max_order_time"]) ?? 0),
                                         style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontFamily: FontFamily.metropolis,
@@ -502,12 +502,20 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
           })),
     );
   }
-  String formatTime(int totalSeconds) {
-    int hours = totalSeconds ~/ 3600;
-    int minutes = (totalSeconds % 3600) ~/ 60;
-    int seconds = totalSeconds % 60;
+  String formatMinutesToHoursMinutes(int minutes) {
+    final hours = minutes ~/ 60;
+    final remainingMinutes = minutes % 60;
 
-    String formattedTime = "${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
-    return formattedTime;
+    // Handle edge cases for negative or zero minutes
+    if (minutes < 0) {
+      return "${formatMinutesToHoursMinutes(-minutes)} (negative)";
+    } else if (minutes == 0) {
+      return "0:00";
+    }
+
+    // Ensure consistent two-digit format for minutes
+    final formattedMinutes = remainingMinutes.toString().padLeft(2, '0');
+
+    return '$hours:$formattedMinutes';
   }
 }
