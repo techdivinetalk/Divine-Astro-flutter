@@ -340,7 +340,7 @@ class ChatMessageWithSocketController extends GetxController
         if(timeDifference.inSeconds == 0){
           await callHangup();
         }
-        showTalkTime.value = "${timeDifference.inSeconds == -60} seconds extra talk time";
+        showTalkTime.value = "${-60 + timeDifference.inSeconds} extra time";
         print(timeDifference.inSeconds);
         print('Countdown finished');
       } else {
