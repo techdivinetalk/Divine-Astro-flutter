@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/generic_loading_widget.dart';
+import 'package:divine_astrologer/common/toolInfo_bottomsheet.dart';
 import 'package:divine_astrologer/model/performance_response.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -647,7 +648,11 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
               const Expanded(child: SizedBox()),
               GestureDetector(
                   onTap: () {
-                    Fluttertoast.showToast(msg: "No info for now!");
+                    toolInfoBottomSheet(context,
+                        title: "Tool Info Heading",
+                        subTitle:
+                            "Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text  Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text D",
+                    btnTitle: 'Submit');
                   },
                   child: Assets.images.icInfo.svg(height: 17.h, width: 17.h)),
             ],

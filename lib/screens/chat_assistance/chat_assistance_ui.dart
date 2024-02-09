@@ -205,7 +205,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
     });
   }
 
-  PreferredSize appBar({Color backgroundColor = const Color(0XFFFDD48E)}) {
+  PreferredSize appBar({Color backgroundColor = AppColors.yellow}) {
     return PreferredSize(
         preferredSize: AppBar().preferredSize,
         child: AppBar(
@@ -257,8 +257,8 @@ class ChatAssistanceTile extends StatelessWidget {
                     loadingIndicator: SizedBox(
                         height: 25.h,
                         width: 25.w,
-                        child: const CircularProgressIndicator(
-                            color: Color(0XFFFDD48E), strokeWidth: 2)))),
+                        child:  CircularProgressIndicator(
+                            color: AppColors.yellow, strokeWidth: 2)))),
           )),
       title: CustomText(
         data.name ?? '',
@@ -343,7 +343,7 @@ class ChatAssistanceDataTile extends StatelessWidget {
                               height: 25.h,
                               width: 25.w,
                               child: const CircularProgressIndicator(
-                                  color: Color(0XFFFDD48E), strokeWidth: 2)))),
+                                  color: AppColors.yellow, strokeWidth: 2)))),
                 )),
             const SizedBox(
               width: 10,

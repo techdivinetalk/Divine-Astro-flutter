@@ -113,9 +113,9 @@ class OrderHistoryController extends GetxController {
       //"flK0vjuwShCgrDVctAlgYb:APA91bHGpnRlw04TwyHThWnR0c7LFQYV5CfqVFQDsHhVZVyuKazeLwxxjwxcfRcicIKvrr2ZaQnLkXQvoFomKuS-TZ7n7sKfVyfJiT3Cv4MTSaKO-LCYMWvoVHY_txFAFWFmy7NEn4mf",
       // "start_date": "2023-02-06",
       // "end_date": "2023-08-06",
-      "start_date":
-          startDate ?? DateFormat("yyyy-mm-dd").format(DateTime.now()),
-      "end_date": endDate ?? DateFormat("yyyy-mm-dd").format(DateTime.now()),
+      // "start_date":
+      //     startDate ?? DateFormat("yyyy-mm-dd").format(DateTime.now()),
+      // "end_date": endDate ?? DateFormat("yyyy-mm-dd").format(DateTime.now()),
     };
 
     // 0: All,

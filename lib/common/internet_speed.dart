@@ -1,7 +1,14 @@
 
+import 'package:divine_astrologer/utils/utils.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:speed_test_dart/classes/server.dart';
 import 'package:speed_test_dart/speed_test_dart.dart';
+
+void _onPageBuilderStarted(String to, BuildContext context, Route route) {
+  // Your function here
+ checkInternetSpeed(true, context);
+}
 
 
 class InternetSpeedController extends GetxController{

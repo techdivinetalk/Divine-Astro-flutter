@@ -97,7 +97,7 @@ class ZegoService {
         } else {}
         final Color color = data.type == ZegoCallType.videoCall
             ? AppColors.white
-            : const Color(0xff5F3C08);
+            : AppColors.brown;
         ZegoUIKitPrebuiltCallConfig config = data.type == ZegoCallType.videoCall
             ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
             : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();

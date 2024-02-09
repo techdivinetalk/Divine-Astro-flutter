@@ -44,7 +44,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                             "${globalConstantModel.data?.awsCredentails.baseurl}/${controller.args!.name ?? ''}",
                         loadingIndicator: const SizedBox(
                             child: CircularProgressIndicator(
-                                color: Color(0XFFFDD48E), strokeWidth: 2))),
+                                color: AppColors.yellow, strokeWidth: 2))),
                   )),
             ),
             SizedBox(width: 10.w),
@@ -67,7 +67,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                         notification.metrics.pixels == 0.0 &&
                         notification.metrics.axis == Axis.vertical &&
                         notification.dragDetails != null) {
-                      controller.getAssistantChatList();
+                      // controller.getAssistantChatList();
                     }
                     return false;
                   },
@@ -116,7 +116,9 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                                       Column(
                                         children: [
                                           Wrap(
-                                              alignment: WrapAlignment.end,
+                                              alignment: data.msgType == 1
+                                                  ? WrapAlignment.end
+                                                  : WrapAlignment.start,
                                               children: [
                                                 Text(data.message ?? "",
                                                     style: AppTextStyle.textStyle14(
@@ -144,17 +146,20 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                                                 style: AppTextStyle.textStyle10(
                                                     fontColor:
                                                         AppColors.darkBlue)),
-                                            (data.seenStatus ?? 0) == 0
-                                                ? SizedBox(width: 8.w)
-                                                : (data.seenStatus ?? 0) == 1
-                                                    ? Assets.images.icSingleTick
-                                                        .svg()
-                                                    : (data.seenStatus ?? 0) ==
-                                                            2
-                                                        ? Assets
-                                                            .images.icDoubleTick
-                                                            .svg()
-                                                        : const SizedBox()
+                                            if (data.msgType == 1)
+                                              (data.seenStatus ?? 0) == 0
+                                                  ? SizedBox(width: 8.w)
+                                                  : (data.seenStatus ?? 0) == 1
+                                                      ? Assets
+                                                          .images.icSingleTick
+                                                          .svg()
+                                                      : (data.seenStatus ??
+                                                                  0) ==
+                                                              2
+                                                          ? Assets.images
+                                                              .icDoubleTick
+                                                              .svg()
+                                                          : const SizedBox()
                                           ],
                                         ),
                                       ),
@@ -267,7 +272,10 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                       maxLines: 1,
                       // focusNode: controller.msgFocus,
                       onChanged: (value) {
-                        controller.isEmojiShowing.value = true;
+                        // controller.isEmojiShowing.value = true;
+                        FocusManager.instance.primaryFocus?.hasFocus ?? false
+                            ? controller.scrollToBottomFunc()
+                            : null;
                       },
                       decoration: InputDecoration(
                         hintText: "message".tr,
@@ -277,17 +285,17 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                         hintStyle:
                             AppTextStyle.textStyle16(fontColor: AppColors.grey),
                         hoverColor: AppColors.white,
-                        prefixIcon: InkWell(
-                          onTap: () async {
-                            controller.isEmojiShowing.value =
-                                !controller.isEmojiShowing.value;
-                            FocusManager.instance.primaryFocus?.unfocus();
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(6.w, 5.h, 6.w, 8.h),
-                            child: Assets.images.icEmojiShare.image(),
-                          ),
-                        ),
+                        // prefixIcon: InkWell(
+                        //   onTap: () async {
+                        //     controller.isEmojiShowing.value =
+                        //         !controller.isEmojiShowing.value;
+                        //     FocusManager.instance.primaryFocus?.unfocus();
+                        //   },
+                        //   child: Padding(
+                        //     padding: EdgeInsets.fromLTRB(6.w, 5.h, 6.w, 8.h),
+                        //     child: Assets.images.icEmojiShare.image(),
+                        //   ),
+                        // ),
                         // suffixIcon: Row(
                         //   mainAxisSize: MainAxisSize.min,
                         //   mainAxisAlignment: MainAxisAlignment.end,

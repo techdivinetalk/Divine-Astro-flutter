@@ -4,6 +4,7 @@ import "dart:async";
 import "dart:convert";
 
 import "package:divine_astrologer/di/shared_preference_service.dart";
+import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/model/live/blocked_customer_list_res.dart";
 import "package:divine_astrologer/model/live/blocked_customer_res.dart";
 import "package:divine_astrologer/model/live/deck_card_model.dart";
@@ -71,10 +72,24 @@ class LiveDharamController extends GetxController {
   final RxList<dynamic> _firebaseBlockUsersIds = <dynamic>[].obs;
   final RxList<DeckCardModel> _deckCardModelList = <DeckCardModel>[].obs;
   final Rx<TarotGameModel> _tarotGameModel = TarotGameModel().obs;
-  final Rx<DateTime> _endTime = DateTime(2001).obs;
   final RxBool _hasFollowPopupOpen = false.obs;
   final RxBool _hasCallAcceptRejectPopupOpen = false.obs;
   final RxString _openAceeptRejectDialogForId = "".obs;
+  final Rx<RequestClass> _requestClass = RequestClass(
+    type: "",
+    giftData: GiftData(
+      id: 0,
+      giftName: "",
+      giftImage: "",
+      giftPrice: 0,
+      giftStatus: 0,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      fullGiftImage: "",
+      animation: "",
+    ),
+    giftCount: 0,
+  ).obs;
 
   @override
   void onInit() {
@@ -127,10 +142,24 @@ class LiveDharamController extends GetxController {
     firebaseBlockUsersIds = [];
     deckCardModelList = [];
     tarotGameModel = TarotGameModel();
-    endTime = DateTime(2001);
     hasFollowPopupOpen = false;
     hasCallAcceptRejectPopupOpen = false;
     openAceeptRejectDialogForId = "";
+    requestClass = RequestClass(
+      type: "",
+      giftData: GiftData(
+        id: 0,
+        giftName: "",
+        giftImage: "",
+        giftPrice: 0,
+        giftStatus: 0,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        fullGiftImage: "",
+        animation: "",
+      ),
+      giftCount: 0,
+    );
 
     return;
   }
@@ -167,10 +196,10 @@ class LiveDharamController extends GetxController {
     _firebaseBlockUsersIds.close();
     _deckCardModelList.close();
     _tarotGameModel.close();
-    _endTime.close();
     _hasFollowPopupOpen.close();
     _hasCallAcceptRejectPopupOpen.close();
     _openAceeptRejectDialogForId.close();
+    _requestClass.close();
 
     super.onClose();
   }
@@ -271,9 +300,6 @@ class LiveDharamController extends GetxController {
   TarotGameModel get tarotGameModel => _tarotGameModel.value;
   set tarotGameModel(TarotGameModel value) => _tarotGameModel(value);
 
-  DateTime get endTime => _endTime.value;
-  set endTime(DateTime value) => _endTime(value);
-
   bool get hasFollowPopupOpen => _hasFollowPopupOpen.value;
   set hasFollowPopupOpen(bool value) => _hasFollowPopupOpen(value);
 
@@ -284,6 +310,9 @@ class LiveDharamController extends GetxController {
   String get openAceeptRejectDialogForId => _openAceeptRejectDialogForId.value;
   set openAceeptRejectDialogForId(String value) =>
       _openAceeptRejectDialogForId(value);
+
+  RequestClass get requestClass => _requestClass.value;
+  set requestClass(RequestClass value) => _requestClass(value);
 
   Future<void> eventListner({
     // required DatabaseEvent event,
@@ -945,8 +974,7 @@ class LiveDharamController extends GetxController {
         "isRequest": isRequest,
         "isEngaded": isEngaded,
         "callType": previousType.toLowerCase(),
-        // "totalTime": intToTimeLeft(walletBalance.value),
-        "totalTime": "240",
+        // "totalTime": "240",
         // "totalTime": "2",
         "userName": userName,
         "avatar": avatar,
@@ -959,6 +987,14 @@ class LiveDharamController extends GetxController {
     );
     return Future<void>.value();
   }
+
+  // String generateFutureTime() {
+  //   final DateTime current = DateTime.now();
+  //   final int min = (orderGenerate.data?.talktime ?? 0);
+  //   final DateTime addedTime = current.add(Duration(minutes: min));
+  //   final int millisecondsSinceEpoch = addedTime.millisecondsSinceEpoch;
+  //   return millisecondsSinceEpoch.toString();
+  // }
 
   void getLatestWaitList(
     DataSnapshot? dataSnapshot,
@@ -1415,6 +1451,25 @@ class LiveDharamController extends GetxController {
         .remove();
     return Future<void>.value();
   }
+
+  void clearRequest() {
+    requestClass = RequestClass(
+      type: "",
+      giftData: GiftData(
+        id: 0,
+        giftName: "",
+        giftImage: "",
+        giftPrice: 0,
+        giftStatus: 0,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        fullGiftImage: "",
+        animation: "",
+      ),
+      giftCount: 0,
+    );
+    return;
+  }
 }
 
 class CustomGiftModel {
@@ -1574,4 +1629,16 @@ class UserPicked {
     data['image'] = this.image;
     return data;
   }
+}
+
+class RequestClass {
+  final String type;
+  final GiftData giftData;
+  final num giftCount;
+
+  RequestClass({
+    required this.type,
+    required this.giftData,
+    required this.giftCount,
+  });
 }
