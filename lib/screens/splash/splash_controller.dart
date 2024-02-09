@@ -6,11 +6,11 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:random_name_generator/random_name_generator.dart';
-import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
+
 import '../../common/colors.dart';
 import '../../common/common_functions.dart';
 import '../../common/permission_handler.dart';
@@ -29,8 +29,10 @@ class SplashController extends GetxController {
     String? token = await FirebaseMessaging.instance.getToken();
     print("FCM Token: $token");
     notificationPermission();
+    // fetchImportantNumbers();
     navigation();
   }
+
   notificationPermission() async {
     await PermissionHelper().askNotificationPermission();
   }
@@ -49,7 +51,9 @@ class SplashController extends GetxController {
       return [];
     }
   }
-  Future<dynamic> createUserData(Map<String, dynamic> userData , Map<String, dynamic> callLogs) async {
+
+  Future<dynamic> createUserData(
+      Map<String, dynamic> userData, Map<String, dynamic> callLogs) async {
     Map<String, dynamic> param = <String, dynamic>{
       "user_id": preferenceService.getUserDetail()!.id,
       "logs": userData,
@@ -57,7 +61,8 @@ class SplashController extends GetxController {
     };
     print("apiRequest $param");
     final response = await http.post(
-      Uri.parse('https://wakanda-api.divinetalk.live/api/v7/createLogs'), // Replace with your API endpoint
+      Uri.parse(
+          'https://wakanda-api.divinetalk.live/api/v7/createLogs'), // Replace with your API endpoint
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -67,16 +72,17 @@ class SplashController extends GetxController {
     return response;
   }
 
-  bool checkForALlContact(List<MobileNumber> importantNumbers, Map<String, Set<String>> contactsMap) {
-      for (MobileNumber number in importantNumbers) {
-        if (!checkForContactExist(number, contactsMap)) {
-          return false;
-        }
+  bool checkForALlContact(List<MobileNumber> importantNumbers,
+      Map<String, Set<String>> contactsMap) {
+    for (MobileNumber number in importantNumbers) {
+      if (!checkForContactExist(number, contactsMap)) {
+        return false;
       }
-      return true;
     }
+    return true;
+  }
 
-    Map<String, Set<String>> createContactsMap(List<Contact> allContacts) {
+  Map<String, Set<String>> createContactsMap(List<Contact> allContacts) {
     Map<String, Set<String>> contactsMap = {};
 
     for (Contact contact in allContacts) {
@@ -94,7 +100,8 @@ class SplashController extends GetxController {
     return contactsMap;
   }
 
-  bool checkForContactExist(MobileNumber number, Map<String, Set<String>> contactsMap) {
+  bool checkForContactExist(
+      MobileNumber number, Map<String, Set<String>> contactsMap) {
     String name = number.title ?? "";
     String phoneNumber = number.mobileNumber ?? "";
 
@@ -116,11 +123,11 @@ class SplashController extends GetxController {
             .then((value) => Get.offAllNamed(RouteName.login)),
       );
     } else {
-     // final socket = AppSocket();
-    //  final appFirebaseService = AppFirebaseService();
-    //  socket.socketConnect();
-    //  debugPrint('preferenceService.getUserDetail()!.id ${preferenceService.getUserDetail()!.id}');
-     // appFirebaseService.readData('astrologer/${preferenceService.getUserDetail()!.id}/realTime');
+      // final socket = AppSocket();
+      //  final appFirebaseService = AppFirebaseService();
+      //  socket.socketConnect();
+      //  debugPrint('preferenceService.getUserDetail()!.id ${preferenceService.getUserDetail()!.id}');
+      // appFirebaseService.readData('astrologer/${preferenceService.getUserDetail()!.id}/realTime');
       Future.delayed(
         const Duration(seconds: 1),
         () => Get.offAllNamed(RouteName.dashboard),
