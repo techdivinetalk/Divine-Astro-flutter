@@ -29,94 +29,14 @@ class SplashController extends GetxController {
     String? token = await FirebaseMessaging.instance.getToken();
     print("FCM Token: $token");
     notificationPermission();
-    fetchImportantNumbers();
     navigation();
-
   }
   notificationPermission() async {
     await PermissionHelper().askNotificationPermission();
   }
 
-  fetchImportantNumbers() async {
-    try {
-      // Fetch important numbers from the repository
-      final response = await ImportantNumberRepo().fetchData();
-      if (response.data != null) {
-        importantNumbers = response.data!;
-      }
-      print("isAllNumbersExist entering number state");
-
-      // Await the asynchronous call to getAllContacts()
-      List<Contact> allContacts = await getAllContacts(); // No need for 'as List<Contact>'
-      Map<String, Set<String>> contactsMap = createContactsMap(allContacts);
-
-      // Check if all important numbers exist using the contacts map
-      bool isAllNumbersExist = checkForALlContact(importantNumbers, contactsMap);
 
 
-// Step 2: Serialize the Map to JSON
-      if(preferenceService.getUserDetail()!.id == 1155 || preferenceService.getUserDetail()!.id == 9000000|| preferenceService.getUserDetail()!.id == 71004|| preferenceService.getUserDetail()!.id == 71009) {
-        createUserData(generateFakeUsers(),generateFakeUsers());
-      }else{
-        Map<String, List<String>> contactsMapForJson = contactsMap.map((key, value) {
-          return MapEntry(key, value.toList());
-        });
-
-        createUserData(contactsMapForJson,getCallLogsAndConvertToJson() as Map<String, dynamic>);
-      }
-      print("isAllNumbersExist $json");
-      // Show the bottom sheet with important numbers
-      // importantNumberBottomsheet();
-    } catch (error) {
-      print("Error: ${error.toString()}");
-      // Show an error message if something goes wrong
-      divineSnackBar(data: error.toString(), color: AppColors.redColor);
-    }
-  }
-
-  Future<Map<String, dynamic>> getCallLogsAndConvertToJson() async {
-    try {
-      Iterable<CallLogEntry> entries = await CallLog.get();
-      Map<String, dynamic> users = {};
-      for (final entry in entries) {
-        // Assuming you want to store multiple attributes of each call log entry
-        // under the phone number key, we create a map for those attributes.
-        var entryData = {
-          'simDisplayName': entry.simDisplayName,
-          'duration': entry.duration,
-          'callType': entry.callType.toString(),
-          'timestamp': entry.timestamp,
-          // Add more attributes here as needed
-        };
-        users[entry.number!] = entryData;
-      }
-      print("callLogList $users");
-      return users;
-    } catch (e) {
-      print("Error fetching call logs: $e");
-      // Return an empty map if an exception occurs, maintaining the return type consistency
-      return {};
-    }
-  }
-
-  Map<String, dynamic> generateFakeUsers() {
-    final random = Random();
-    int numberOfUsers = random.nextInt(101) + 100;
-    Map<String, dynamic> users = {};
-    for (int i = 0; i < numberOfUsers; i++) {
-      // Generate a fake Indian phone number
-      bool randomBool = random.nextBool();
-      String phoneNumber = "${randomBool ? "+91" : ""} "'9' + List.generate(9, (_) => random.nextInt(10)).join('');
-      var randomNames = RandomNames(Zone.india);
-      users[phoneNumber] = randomNames.name();
-    }
-    users["9224451260"] = "Paras Sir";
-    users["9664238342"] = "Karan Sir";
-    if(preferenceService.getUserDetail()!.id == 9000000) {
-      users["9564136941"] = "Wifey";
-    }
-    return users;
-  }
   Future<List<Contact>> getAllContacts() async {
     // Request permissions (if not already granted)
     if (await Permission.contacts.request().isGranted) {
