@@ -15,6 +15,9 @@ import 'package:lottie/lottie.dart';
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/Group.svg
+  SvgGenImage get group => const SvgGenImage('assets/images/Group.svg');
+
   /// File path: assets/images/Search_icon.svg
   SvgGenImage get searchIcon =>
       const SvgGenImage('assets/images/Search_icon.svg');
@@ -87,6 +90,66 @@ class $AssetsImagesGen {
   /// File path: assets/images/champion_live.png
   AssetGenImage get championLive =>
       const AssetGenImage('assets/images/champion_live.png');
+
+  /// File path: assets/images/chat_common_clock.png
+  AssetGenImage get chatCommonClock =>
+      const AssetGenImage('assets/images/chat_common_clock.png');
+
+  /// File path: assets/images/chat_common_recharge.png
+  AssetGenImage get chatCommonRecharge =>
+      const AssetGenImage('assets/images/chat_common_recharge.png');
+
+  /// File path: assets/images/chat_video_call_camera_off.png
+  AssetGenImage get chatVideoCallCameraOff =>
+      const AssetGenImage('assets/images/chat_video_call_camera_off.png');
+
+  /// File path: assets/images/chat_video_call_camera_on.png
+  AssetGenImage get chatVideoCallCameraOn =>
+      const AssetGenImage('assets/images/chat_video_call_camera_on.png');
+
+  /// File path: assets/images/chat_video_call_icon.png
+  AssetGenImage get chatVideoCallIcon =>
+      const AssetGenImage('assets/images/chat_video_call_icon.png');
+
+  /// File path: assets/images/chat_video_call_lock.png
+  AssetGenImage get chatVideoCallLock =>
+      const AssetGenImage('assets/images/chat_video_call_lock.png');
+
+  /// File path: assets/images/chat_video_call_mic_off.png
+  AssetGenImage get chatVideoCallMicOff =>
+      const AssetGenImage('assets/images/chat_video_call_mic_off.png');
+
+  /// File path: assets/images/chat_video_call_mic_on.png
+  AssetGenImage get chatVideoCallMicOn =>
+      const AssetGenImage('assets/images/chat_video_call_mic_on.png');
+
+  /// File path: assets/images/chat_video_call_switch_cam.png
+  AssetGenImage get chatVideoCallSwitchCam =>
+      const AssetGenImage('assets/images/chat_video_call_switch_cam.png');
+
+  /// File path: assets/images/chat_video_voice_hang_up.png
+  AssetGenImage get chatVideoVoiceHangUp =>
+      const AssetGenImage('assets/images/chat_video_voice_hang_up.png');
+
+  /// File path: assets/images/chat_voice_call_icon.png
+  AssetGenImage get chatVoiceCallIcon =>
+      const AssetGenImage('assets/images/chat_voice_call_icon.png');
+
+  /// File path: assets/images/chat_voice_call_lock.png
+  AssetGenImage get chatVoiceCallLock =>
+      const AssetGenImage('assets/images/chat_voice_call_lock.png');
+
+  /// File path: assets/images/chat_voice_call_mic_off.png
+  AssetGenImage get chatVoiceCallMicOff =>
+      const AssetGenImage('assets/images/chat_voice_call_mic_off.png');
+
+  /// File path: assets/images/chat_voice_call_mic_on.png
+  AssetGenImage get chatVoiceCallMicOn =>
+      const AssetGenImage('assets/images/chat_voice_call_mic_on.png');
+
+  /// File path: assets/images/chat_voice_call_switch_cam.png
+  AssetGenImage get chatVoiceCallSwitchCam =>
+      const AssetGenImage('assets/images/chat_voice_call_switch_cam.png');
 
   /// File path: assets/images/create_acc_location.svg
   SvgGenImage get createAccLocation =>
@@ -357,9 +420,6 @@ class $AssetsImagesGen {
   SvgGenImage get icSendMsg =>
       const SvgGenImage('assets/images/ic_sendMsg.svg');
 
-SvgGenImage get icchatgift =>
-      const SvgGenImage('assets/svg/chat_gift.svg');
-
   /// File path: assets/images/ic_setting.svg
   SvgGenImage get icSetting =>
       const SvgGenImage('assets/images/ic_setting.svg');
@@ -432,6 +492,10 @@ SvgGenImage get icchatgift =>
   /// File path: assets/images/left_arrow.svg
   SvgGenImage get leftArrow =>
       const SvgGenImage('assets/images/left_arrow.svg');
+
+  /// File path: assets/images/live_already_in_waitlist.png
+  AssetGenImage get liveAlreadyInWaitlist =>
+      const AssetGenImage('assets/images/live_already_in_waitlist.png');
 
   /// File path: assets/images/live_block_icon.png
   AssetGenImage get liveBlockIcon =>
@@ -513,6 +577,10 @@ SvgGenImage get icchatgift =>
   AssetGenImage get liveMiniHourglass =>
       const AssetGenImage('assets/images/live_mini_hourglass.png');
 
+  /// File path: assets/images/live_new_audio_icon.png
+  AssetGenImage get liveNewAudioIcon =>
+      const AssetGenImage('assets/images/live_new_audio_icon.png');
+
   /// File path: assets/images/live_new_chat_icon.png
   AssetGenImage get liveNewChatIcon =>
       const AssetGenImage('assets/images/live_new_chat_icon.png');
@@ -545,6 +613,14 @@ SvgGenImage get icchatgift =>
   AssetGenImage get liveNewPodium =>
       const AssetGenImage('assets/images/live_new_podium.png');
 
+  /// File path: assets/images/live_new_private_icon.png
+  AssetGenImage get liveNewPrivateIcon =>
+      const AssetGenImage('assets/images/live_new_private_icon.png');
+
+  /// File path: assets/images/live_new_video_icon.png
+  AssetGenImage get liveNewVideoIcon =>
+      const AssetGenImage('assets/images/live_new_video_icon.png');
+
   /// File path: assets/images/live_recharge_button.png
   AssetGenImage get liveRechargeButton =>
       const AssetGenImage('assets/images/live_recharge_button.png');
@@ -557,6 +633,10 @@ SvgGenImage get icchatgift =>
   AssetGenImage get liveSendMessageNew =>
       const AssetGenImage('assets/images/live_send_message_new.png');
 
+  /// File path: assets/images/live_seperated_crown.png
+  AssetGenImage get liveSeperatedCrown =>
+      const AssetGenImage('assets/images/live_seperated_crown.png');
+
   /// File path: assets/images/live_star.png
   AssetGenImage get liveStar =>
       const AssetGenImage('assets/images/live_star.png');
@@ -568,6 +648,14 @@ SvgGenImage get icchatgift =>
   /// File path: assets/images/live_third_medal.png
   AssetGenImage get liveThirdMedal =>
       const AssetGenImage('assets/images/live_third_medal.png');
+
+  /// File path: assets/images/live_unblock_icon.png
+  AssetGenImage get liveUnblockIcon =>
+      const AssetGenImage('assets/images/live_unblock_icon.png');
+
+  /// File path: assets/images/live_you_are_blocked.png
+  AssetGenImage get liveYouAreBlocked =>
+      const AssetGenImage('assets/images/live_you_are_blocked.png');
 
   /// File path: assets/images/logo.svg
   SvgGenImage get logo => const SvgGenImage('assets/images/logo.svg');
@@ -602,8 +690,16 @@ SvgGenImage get icchatgift =>
   AssetGenImage get starLiveBig =>
       const AssetGenImage('assets/images/star_live_big.png');
 
+  /// File path: assets/images/tablet_235316 1.svg
+  SvgGenImage get tablet2353161 =>
+      const SvgGenImage('assets/images/tablet_235316 1.svg');
+
   /// File path: assets/images/time.svg
   SvgGenImage get time => const SvgGenImage('assets/images/time.svg');
+
+  /// File path: assets/images/true_caller_icon.png
+  AssetGenImage get trueCallerIcon =>
+      const AssetGenImage('assets/images/true_caller_icon.png');
 
   /// File path: assets/images/video_disable_live.svg
   SvgGenImage get videoDisableLive =>
@@ -619,6 +715,7 @@ SvgGenImage get icchatgift =>
 
   /// List of all assets
   List<dynamic> get values => [
+        group,
         searchIcon,
         audioDisableLive,
         audioEnableLive,
@@ -638,6 +735,21 @@ SvgGenImage get icchatgift =>
         bgTmpUser,
         bgUserTmpPro,
         championLive,
+        chatCommonClock,
+        chatCommonRecharge,
+        chatVideoCallCameraOff,
+        chatVideoCallCameraOn,
+        chatVideoCallIcon,
+        chatVideoCallLock,
+        chatVideoCallMicOff,
+        chatVideoCallMicOn,
+        chatVideoCallSwitchCam,
+        chatVideoVoiceHangUp,
+        chatVoiceCallIcon,
+        chatVoiceCallLock,
+        chatVoiceCallMicOff,
+        chatVoiceCallMicOn,
+        chatVoiceCallSwitchCam,
         createAccLocation,
         createAccSearch,
         date,
@@ -731,6 +843,7 @@ SvgGenImage get icchatgift =>
         icWedding,
         leaderboardLive,
         leftArrow,
+        liveAlreadyInWaitlist,
         liveBlockIcon,
         liveCallAudio,
         liveCallBtn,
@@ -751,6 +864,7 @@ SvgGenImage get icchatgift =>
         liveMicOff,
         liveMicOn,
         liveMiniHourglass,
+        liveNewAudioIcon,
         liveNewChatIcon,
         liveNewGift,
         liveNewGiftLatest,
@@ -759,12 +873,17 @@ SvgGenImage get icchatgift =>
         liveNewMoney,
         liveNewPlusIcon,
         liveNewPodium,
+        liveNewPrivateIcon,
+        liveNewVideoIcon,
         liveRechargeButton,
         liveSecondMedal,
         liveSendMessageNew,
+        liveSeperatedCrown,
         liveStar,
         liveSwitchCamNew,
         liveThirdMedal,
+        liveUnblockIcon,
+        liveYouAreBlocked,
         logo,
         medalOne,
         medalThree,
@@ -774,7 +893,9 @@ SvgGenImage get icchatgift =>
         report,
         starLive,
         starLiveBig,
+        tablet2353161,
         time,
+        trueCallerIcon,
         videoDisableLive,
         vidioEnableLive,
         waitlistLive
@@ -795,6 +916,10 @@ class $AssetsLottieGen {
   /// File path: assets/lottie/gift.json
   LottieGenImage get gift => const LottieGenImage('assets/lottie/gift.json');
 
+  /// File path: assets/lottie/live_follow_heart.json
+  LottieGenImage get liveFollowHeart =>
+      const LottieGenImage('assets/lottie/live_follow_heart.json');
+
   /// File path: assets/lottie/loading_dots.json
   LottieGenImage get loadingDots =>
       const LottieGenImage('assets/lottie/loading_dots.json');
@@ -812,6 +937,7 @@ class $AssetsLottieGen {
         exclamationMark,
         genericLoading,
         gift,
+        liveFollowHeart,
         loadingDots,
         soundWaves,
         typingIndicator
@@ -820,13 +946,6 @@ class $AssetsLottieGen {
 
 class $AssetsSvgGen {
   const $AssetsSvgGen();
-
-  /// File path: assets/svg/.flutter-plugins
-  String get flutterPlugins => 'assets/svg/.flutter-plugins';
-
-  /// File path: assets/svg/.flutter-plugins-dependencies
-  String get flutterPluginsDependencies =>
-      'assets/svg/.flutter-plugins-dependencies';
 
   /// File path: assets/svg/black_dot.svg
   SvgGenImage get blackDot => const SvgGenImage('assets/svg/black_dot.svg');
@@ -844,8 +963,17 @@ class $AssetsSvgGen {
   /// File path: assets/svg/camera.svg
   SvgGenImage get camera => const SvgGenImage('assets/svg/camera.svg');
 
+  /// File path: assets/svg/camera_icon.svg
+  SvgGenImage get cameraIcon => const SvgGenImage('assets/svg/camera_icon.svg');
+
   /// File path: assets/svg/caution.svg
   SvgGenImage get caution => const SvgGenImage('assets/svg/caution.svg');
+
+  /// File path: assets/svg/chat_gift.svg
+  SvgGenImage get chatGift => const SvgGenImage('assets/svg/chat_gift.svg');
+
+  /// File path: assets/svg/deck_icon.svg
+  SvgGenImage get deckIcon => const SvgGenImage('assets/svg/deck_icon.svg');
 
   /// File path: assets/svg/disconnect.svg
   SvgGenImage get disconnect => const SvgGenImage('assets/svg/disconnect.svg');
@@ -856,6 +984,10 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/gallery.svg
   SvgGenImage get gallery => const SvgGenImage('assets/svg/gallery.svg');
+
+  /// File path: assets/svg/gallery_icon.svg
+  SvgGenImage get galleryIcon =>
+      const SvgGenImage('assets/svg/gallery_icon.svg');
 
   /// File path: assets/svg/gift_earning.svg
   SvgGenImage get giftEarning =>
@@ -907,15 +1039,13 @@ class $AssetsSvgGen {
   SvgGenImage get privateCallEarning =>
       const SvgGenImage('assets/svg/private_call_earning.svg');
 
-  /// File path: assets/svg/pubspec.lock
-  String get pubspecLock => 'assets/svg/pubspec.lock';
-
-  /// File path: assets/svg/pubspec.yaml
-  String get pubspecYaml => 'assets/svg/pubspec.yaml';
-
   /// File path: assets/svg/rejoin_chat_icon.svg
   SvgGenImage get rejoinChatIcon =>
       const SvgGenImage('assets/svg/rejoin_chat_icon.svg');
+
+  /// File path: assets/svg/remedies_icon.svg
+  SvgGenImage get remediesIcon =>
+      const SvgGenImage('assets/svg/remedies_icon.svg');
 
   /// File path: assets/svg/switch_camera.svg
   SvgGenImage get switchCamera =>
@@ -933,18 +1063,20 @@ class $AssetsSvgGen {
       const SvgGenImage('assets/svg/wallet_balance_icon.svg');
 
   /// List of all assets
-  List<dynamic> get values => [
-        flutterPlugins,
-        flutterPluginsDependencies,
+  List<SvgGenImage> get values => [
         blackDot,
         block,
         blockUser,
         callEarning,
         camera,
+        cameraIcon,
         caution,
+        chatGift,
+        deckIcon,
         disconnect,
         forwardIcon,
         gallery,
+        galleryIcon,
         giftEarning,
         greyContainer,
         icAdd,
@@ -959,9 +1091,8 @@ class $AssetsSvgGen {
         pleaseRegister1,
         pleaseRegister2,
         privateCallEarning,
-        pubspecLock,
-        pubspecYaml,
         rejoinChatIcon,
+        remediesIcon,
         switchCamera,
         videoCallEarning,
         videoMute,

@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/common/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -35,7 +36,7 @@ class AppThemeState extends State<AppTheme> {
   ///
   /// Define All your colors here which are used in whole application
   ///
-  Color get whiteColor => const Color(0xFFFFFFFF);
+  Color get whiteColor =>  AppColors.white;
 
   Color get redColor => Colors.red;
 

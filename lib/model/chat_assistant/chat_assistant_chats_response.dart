@@ -27,7 +27,7 @@ class ChatAssistChatResponse {
 
 class Data {
   int? currentPage;
-  List<data>? chatDataList;
+  List<ChatAssistData>? chatAssistMsgList;
   String? firstPageUrl;
   int? from;
   int? lastPage;
@@ -42,7 +42,7 @@ class Data {
 
   Data(
       {this.currentPage,
-      this.chatDataList,
+      this.chatAssistMsgList,
       this.firstPageUrl,
       this.from,
       this.lastPage,
@@ -58,9 +58,9 @@ class Data {
   Data.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
     if (json['data'] != null) {
-      chatDataList = <data>[];
+      chatAssistMsgList = <ChatAssistData>[];
       json['data'].forEach((v) {
-        chatDataList!.add(data.fromJson(v));
+        chatAssistMsgList!.add(ChatAssistData.fromJson(v));
       });
     }
     firstPageUrl = json['first_page_url'];
@@ -84,8 +84,8 @@ class Data {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['current_page'] = currentPage;
-    if (chatDataList != null) {
-      data['data'] = chatDataList!.map((v) => v.toJson()).toList();
+    if (chatAssistMsgList != null) {
+      data['data'] = chatAssistMsgList!.map((v) => v.toJson()).toList();
     }
     data['first_page_url'] = firstPageUrl;
     data['from'] = from;
@@ -104,24 +104,28 @@ class Data {
   }
 }
 
-class data {
+class ChatAssistData {
   int? id;
   String? message;
   int? customerId;
   int? astrologerId;
   int? msgType;
+  ChatType? chatType;
+  MsgStatus? msgStatus;
   String? createdAt;
   int? seenStatus;
   int? isSuspicious;
 
-  data({this.id, this.message, this.customerId, this.astrologerId, this.msgType, this.createdAt,this.isSuspicious,this.seenStatus});
+  ChatAssistData({this.id, this.message, this.customerId, this.astrologerId, this.msgStatus,this.msgType, this.chatType,this.createdAt,this.isSuspicious,this.seenStatus});
 
-  data.fromJson(Map<String, dynamic> json) {
+  ChatAssistData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     message = json['message'];
     customerId = json['customer_id'];
     astrologerId = json['astrologer_id'];
     msgType = json['msg_type'];
+    chatType = json['chat_type']!= null? chatTypeValues.map[json["chat_type"]] : ChatType.text;
+    msgStatus = json['msg_status']!= null? msgStatusValues.map[json["msg_status"]] : MsgStatus.delivered;
     createdAt = json['created_at'];
     isSuspicious = json['is_suspicious'];
     seenStatus = json['seen_status'];
@@ -134,12 +138,42 @@ class data {
     data['customer_id'] = customerId;
     data['astrologer_id'] = astrologerId;
     data['msg_type'] = msgType;
+    data['chat_type'] = chatTypeValues.reverse[chatType];
+    data['msg_status'] = msgStatusValues.reverse[msgStatus];
     data['created_at'] = createdAt;
     data['is_suspicious'] = isSuspicious;
     data['seen_status'] = seenStatus;
     return data;
   }
 }
+
+
+enum ChatType { text, Gift }
+
+final chatTypeValues = EnumValues({
+  "textChat": ChatType.text,
+  "giftChat": ChatType.Gift,
+});
+
+enum MsgStatus {sent, delivered, received}
+
+final msgStatusValues = EnumValues({
+  "sent": MsgStatus.sent,
+  "delivered": MsgStatus.delivered,
+  "received": MsgStatus.received,
+});
+
+class EnumValues<T> {
+  Map<String, T> map;
+  late Map<T, String> reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    reverseMap = map.map((k, v) => MapEntry(v, k));
+    return reverseMap;
+  }}
+
 
 class Links {
   String? url;

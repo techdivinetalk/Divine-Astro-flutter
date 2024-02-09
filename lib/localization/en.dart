@@ -4,6 +4,9 @@ Map<String, String> en() {
     "Saved": "Saved",
     "contactPermissionRequired": "Contact permission is required",
     "noInternetConnection": "Please check your Internet connection",
+    "internetSpeed": "Your Internet speed",
+    "goodInternetConnection": "You Can Take Internet Calling",
+    "badInternetConnection": "You Will Face Internet Call Issues.",
     "timeoutMessage":
         "Something went wrong.\nPlease check you internet connection and please try again.",
     "today": "Today",
@@ -54,7 +57,7 @@ Map<String, String> en() {
     "offerName": "Offer Name",
     "displayName": "Display Name",
     "userType": "User Type",
-    "price":"Price",
+    "price": "Price",
     "discountedPrice": "Discounted Price",
     'callAndChat': "Call & Chat",
     "status": "Status",
@@ -118,6 +121,7 @@ Map<String, String> en() {
     "serviceType": "Service Type",
     "priceRequested": "Price Requested",
     "requestRaised": "Request Raised",
+    "raiseTechnicalIssues": "Raise a Technical Issues",
     "priceChangeBtn": "Raise Request for New Price",
     "descriptions": "Descriptions",
     "speciality": "Speciality",
@@ -221,6 +225,8 @@ Map<String, String> en() {
     "reportEarning": "Report Earning",
     "suggestedRemediesEarning": "Suggested Remedies Earning",
     "help": "Help ",
+    "poor": "poor",
+    "veryGood": "Very Good",
     "verify": "Verify",
     "enterRegisteredNumber": "Enter Registered Number",
     "mobileNumber10Digits": "Mobile number should be 10 digits.",
@@ -394,14 +400,13 @@ Map<String, String> en() {
     "YouHaveReceivedPrivateCalls": "You've received @count private calls.",
     "YouHaveReceivedLiveGifts": "You've received @count live gifts.",
     "isOnCall": "is on call",
-    'orderDetails':'Order Details',
-    'orderType':'Order Type',
-    'walletBalance':'Wallet Balance',
-    'maximumOrderTime':'Maximum Order Time',
-    'specialty':'Specialty',
-    'languageProficiency':'Language Proficiency',
-    'astrologerRating':'Astrologer Rating',
-    'acceptChatRequest':'Accept Chat Request'
-
+    'orderDetails': 'Order Details',
+    'orderType': 'Order Type',
+    'walletBalance': 'Wallet Balance',
+    'maximumOrderTime': 'Maximum Order Time',
+    'specialty': 'Specialty',
+    'languageProficiency': 'Language Proficiency',
+    'astrologerRating': 'Astrologer Rating',
+    'acceptChatRequest': 'Accept Chat Request'
   };
 }

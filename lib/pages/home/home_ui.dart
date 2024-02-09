@@ -1545,7 +1545,7 @@ class HomeUI extends GetView<HomeController> {
                                   ''),
                               loadingIndicator: const SizedBox(
                                 child: CircularProgressIndicator(
-                                  color: Color(0XFFFDD48E),
+                                  color: AppColors.yellow,
                                   strokeWidth: 2,
                                 ),
                               ),
