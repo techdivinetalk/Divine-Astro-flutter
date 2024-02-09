@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
@@ -25,7 +26,6 @@ class LiveTipsController extends GetxController {
   final AstrologerProfileRepository liveRepository =
       AstrologerProfileRepository();
 
-			
   final StreamController<bool> streamController = StreamController<bool>()
     ..add(false);
 
@@ -34,13 +34,13 @@ class LiveTipsController extends GetxController {
     streamController.close();
     super.dispose();
   }
-  
+
   @override
   void onReady() {
     var data = pref.getUserDetail();
     astroId = data!.id.toString();
-    name = data.name!;
-    image = data.image!;
+    name = data.name ?? "";
+    image = data.image ?? "";
     super.onReady();
   }
 
@@ -84,7 +84,11 @@ class LiveTipsController extends GetxController {
     final List<String> blockedCustomerList = [];
     final Map<String, dynamic> param = <String, dynamic>{"role_id": 7};
     BlockedCustomerListRes res = BlockedCustomerListRes();
-    res = await liveRepository.blockedCustomerListAPI(params: param);
+    res = await liveRepository.blockedCustomerListAPI(
+      params: param,
+      successCallBack: log,
+      failureCallBack: log,
+    );
     res.statusCode == HttpStatus.ok
         ? BlockedCustomerListRes.fromJson(res.toJson())
         : BlockedCustomerListRes.fromJson(BlockedCustomerListRes().toJson());

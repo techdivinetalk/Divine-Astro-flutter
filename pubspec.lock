@@ -61,10 +61,10 @@ packages:
     dependency: "direct main"
     description:
       name: animated_toggle_switch
-      sha256: "19afc84373ad0fca147869e1b984afb3778ea8080f8d0af4fd1ff604d41b2635"
+      sha256: "79dc2901da470bdd5753d9d6689a9a00cc4d378f806a60df89f3bdd4ef455884"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.0"
+    version: "0.8.1"
   app_settings:
     dependency: "direct main"
     description:
@@ -669,74 +669,50 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_database
-      sha256: ddbc666802638067b8a4ed56a98419e21d41b6b3242b34b67424aba907b010a7
+      sha256: "3beb37b5869e68dba67fc648a9ee2398bb5284d9e94d513e84bb85b1b010048e"
       url: "https://pub.dev"
     source: hosted
-    version: "10.4.4"
+    version: "10.4.5"
   firebase_database_platform_interface:
     dependency: transitive
     description:
       name: firebase_database_platform_interface
-      sha256: fcbedfcca4df64f1acccc913c97bffd9e0877426c6158ec6b2f92c644df4ff04
+      sha256: "9d5f25225a17200d59470da1d5c0646c75aaa73c5df6f920e36bae1c60e0b83d"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.5+20"
+    version: "0.2.5+21"
   firebase_database_web:
     dependency: transitive
     description:
       name: firebase_database_web
-      sha256: "578affd7d6227184340e5b757e3956966bc52d3bc63db6ff0b4aad071c8afe50"
+      sha256: "751c047a362fad3d2fea60b1d97bbb2f4515097b641a5b38ab5aa5ba0e1afd26"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.3+20"
+    version: "0.2.3+21"
   firebase_messaging:
     dependency: "direct main"
     description:
       name: firebase_messaging
-      sha256: "56a35bb6cf3a0dd4878c052b10ab3b7ccece95f1961066e6c6078d8f2559d0f5"
+      sha256: "9c97b20c012542252a8853f11334efd833ddae83551fe37d27f87d885c655038"
       url: "https://pub.dev"
     source: hosted
-    version: "14.7.14"
+    version: "14.7.15"
   firebase_messaging_platform_interface:
     dependency: transitive
     description:
       name: firebase_messaging_platform_interface
-      sha256: d52e428a51144b916ce2a09635d8da4eeee0613b2bb76c40288585f6015ce3f3
+      sha256: d464b255e922c7915dc4b0ebc305ebad4e1f130519bee3d6e568ef2ea1613a4b
       url: "https://pub.dev"
     source: hosted
-    version: "4.5.22"
+    version: "4.5.23"
   firebase_messaging_web:
     dependency: transitive
     description:
       name: firebase_messaging_web
-      sha256: "8796f9e947c92e51ed48fed702522c5c1a7d7c62197c8f1e23e9691793d20689"
+      sha256: f3f71aeec719ec1fe2c99f75cd74d00d33f1c240cf1e402cc9d43883e84f935a
       url: "https://pub.dev"
     source: hosted
-    version: "3.6.3"
-  firebase_remote_config:
-    dependency: "direct main"
-    description:
-      name: firebase_remote_config
-      sha256: "701d563063b44ea39e4d23bb5c3fcc3f6eab8fa9247a9a0b276058ad7325ec86"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.3.13"
-  firebase_remote_config_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_remote_config_platform_interface
-      sha256: "270df798d81421bfbb7fdc4f0bebdcb77e594fefdf1e6a65d56584ff5a06ea54"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.21"
-  firebase_remote_config_web:
-    dependency: transitive
-    description:
-      name: firebase_remote_config_web
-      sha256: a78967a208bc7a9bf44f8339c3c411b9d7e9529c644194ea5d4d0ca503c3481b
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.21"
+    version: "3.6.4"
   fixnum:
     dependency: transitive
     description:
@@ -2150,26 +2126,26 @@ packages:
     dependency: transitive
     description:
       name: vector_graphics
-      sha256: "18f6690295af52d081f6808f2f7c69f0eed6d7e23a71539d75f4aeb8f0062172"
+      sha256: "4ac59808bbfca6da38c99f415ff2d3a5d7ca0a6b4809c71d9cf30fba5daf9752"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.9+2"
+    version: "1.1.10+1"
   vector_graphics_codec:
     dependency: transitive
     description:
       name: vector_graphics_codec
-      sha256: "531d20465c10dfac7f5cd90b60bbe4dd9921f1ec4ca54c83ebb176dbacb7bb2d"
+      sha256: f3247e7ab0ec77dc759263e68394990edc608fb2b480b80db8aa86ed09279e33
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.9+2"
+    version: "1.1.10+1"
   vector_graphics_compiler:
     dependency: transitive
     description:
       name: vector_graphics_compiler
-      sha256: "03012b0a33775c5530576b70240308080e1d5050f0faf000118c20e6463bc0ad"
+      sha256: "18489bdd8850de3dd7ca8a34e0c446f719ec63e2bab2e7a8cc66a9028dd76c5a"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.9+2"
+    version: "1.1.10+1"
   vector_math:
     dependency: transitive
     description:
@@ -2398,10 +2374,10 @@ packages:
     dependency: "direct main"
     description:
       name: zego_uikit_prebuilt_call
-      sha256: "028c8b76068a17657162987045462d83b8b6d982b9055b976f32abf36ba68bda"
+      sha256: "055a4be91c0ea7d8020415635b726a38f2c11869ff8f71ae00896486414b0900"
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.9"
+    version: "4.2.0"
   zego_uikit_prebuilt_live_streaming:
     dependency: "direct main"
     description:
