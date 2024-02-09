@@ -3,31 +3,21 @@ import 'dart:math';
 
 import 'package:call_log/call_log.dart';
 import 'package:contacts_service/contacts_service.dart';
-import 'package:divine_astrologer/app_socket/app_socket.dart';
-import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:random_name_generator/random_name_generator.dart';
-
+import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 import '../../common/colors.dart';
 import '../../common/common_functions.dart';
 import '../../common/permission_handler.dart';
 import '../../common/routes.dart';
 import '../../di/shared_preference_service.dart';
-import '../../model/filter_performance_response.dart';
-import '../../model/filter_performance_response.dart';
-import '../../model/filter_performance_response.dart';
-import '../../model/filter_performance_response.dart';
-import '../../model/filter_performance_response.dart';
 import '../../model/important_numbers.dart';
 import '../../repository/important_number_repository.dart';
-import 'package:http/http.dart' as http;
 
 class SplashController extends GetxController {
   SharedPreferenceService preferenceService =
@@ -41,6 +31,7 @@ class SplashController extends GetxController {
     notificationPermission();
     fetchImportantNumbers();
     navigation();
+
   }
   notificationPermission() async {
     await PermissionHelper().askNotificationPermission();
