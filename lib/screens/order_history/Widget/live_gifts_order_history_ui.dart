@@ -99,31 +99,28 @@ class LiveGiftsHistory extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("${'orderId'.tr} : ${data[index].orderId}",
-                            style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                            style: AppTextStyle.textStyle9(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
                         Text("${data[index].getCustomers != null ? data[index].getCustomers?.name : "UserName"}",
                             style: AppTextStyle.textStyle20(fontWeight: FontWeight.w600, fontColor: AppColors.darkBlue))
                       ],
                     )
                   ],
                 ),
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    width: 90,
-                    height: 37,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.lightGreen, width: 1.0),
-                      borderRadius: BorderRadius.circular(22.0),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "${data[index].status}",
-                          style: AppTextStyle.textStyle14(fontWeight: FontWeight.w500, fontColor: AppColors.lightGreen),
-                        ),
-                      ],
-                    ),
+                Container(
+                  width: 70,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.lightGreen, width: 1.0),
+                    borderRadius: BorderRadius.circular(22.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "${data[index].status}",
+                        style: AppTextStyle.textStyle10(fontWeight: FontWeight.w500, fontColor: AppColors.lightGreen),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -269,5 +266,15 @@ class LiveGiftsHistory extends StatelessWidget {
         ),
       ),
     );*/
+
+
+    String _truncateText(String text, int maxWords) {
+      if (text.split(' ').length <= maxWords) {
+        return text;
+      } else {
+        List<String> words = text.split(' ');
+        return '${words.take(maxWords).join(' ')}...';
+      }
+    }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -20,7 +21,7 @@ class _TrainingVideoUIState extends State<TrainingVideoUI> {
   late YoutubePlayerController _controller;
   var shouldCall = true;
 
- /* Widget player() {
+  /* Widget player() {
     return YoutubePlayer(
       controller: _controller,
       showVideoProgressIndicator: true,
@@ -45,18 +46,46 @@ class _TrainingVideoUIState extends State<TrainingVideoUI> {
       ),
     );
     _controller.addListener(() {
-      var time = durationFormatter((_controller.metadata.duration.inMilliseconds) -
-          (_controller.value.position.inMilliseconds));
+      var time = durationFormatter(
+          (_controller.metadata.duration.inMilliseconds) -
+              (_controller.value.position.inMilliseconds));
       time = time.substring(time.length - 5);
-      if(time == "00:30"){
-        if(shouldCall){
+      if (time == "00:30") {
+        if (shouldCall) {
           shouldCall = false;
           var controller = Get.find<HomeController>();
           controller.trainingVideoViewData(widget.video?.id ?? 0);
         }
       }
+      // youtubePlayerListener();
     });
     super.initState();
+  }
+
+  void youtubePlayerListener() {
+    // print(_controller.value.isFullScreen = false);
+    print("_controller.value.isFullScreen");
+    // if (!_controller.value.isFullScreen ) {
+    //   print("if ma jai 6e");
+    //   SystemChrome.setPreferredOrientations([
+    //     DeviceOrientation.portraitUp,
+    //     DeviceOrientation.portraitDown,
+    //   ]);
+    // } else {
+    //
+    //
+    // }
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -89,8 +118,7 @@ class _TrainingVideoUIState extends State<TrainingVideoUI> {
                 backgroundColor: AppColors.white.withOpacity(0.5),
               ),
             ),
-
-            // const FullScreenExit(),
+            FullScreenButton(controller: _controller),
           ],
         );
       }),
@@ -107,18 +135,18 @@ String durationFormatter(int milliSeconds) {
   final hoursString = hours >= 10
       ? '$hours'
       : hours == 0
-      ? '00'
-      : '0$hours';
+          ? '00'
+          : '0$hours';
   final minutesString = minutes >= 10
       ? '$minutes'
       : minutes == 0
-      ? '00'
-      : '0$minutes';
+          ? '00'
+          : '0$minutes';
   final secondsString = seconds >= 10
       ? '$seconds'
       : seconds == 0
-      ? '00'
-      : '0$seconds';
+          ? '00'
+          : '0$seconds';
   final formattedTime =
       '${hoursString == '00' ? '' : '$hoursString:'}$minutesString:$secondsString';
   return formattedTime;

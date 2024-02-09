@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/log_out_response.dart';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/model/pivacy_policy_model.dart';
@@ -63,14 +64,15 @@ class UserRepository extends ApiProvider {
             throw CustomException(sendOtpModel.message!);
           }
         }
-      }else if(response.statusCode == 429){
+      } else if (response.statusCode == 429) {
         SendOtpModel sendOtpModel =
-        SendOtpModel.fromJson(jsonDecode(response.body));
+            SendOtpModel.fromJson(jsonDecode(response.body));
         if (sendOtpModel.statusCode == 429) {
           showCupertinoModalPopup(
             barrierColor: AppColors.darkBlue.withOpacity(0.5),
             context: Get.context!,
-            builder: (context) =>  ManyTimeExException(message: sendOtpModel.message),
+            builder: (context) =>
+                ManyTimeExException(message: sendOtpModel.message),
           );
         }
       } else {
@@ -369,6 +371,8 @@ class UserRepository extends ApiProvider {
   }
 
   Future<ConstantDetailsModelClass> constantDetailsData() async {
+    print(DateTime.now());
+    print("DateTime.now()");
     try {
       // debugPrint("Params $param");
       final response =
@@ -469,11 +473,7 @@ class UserRepository extends ApiProvider {
     }
   }
 
-
-
   Future<LogOutResponse> logOut() async {
-    print("LogOutResponse-----LogOutResponse");
-    progressService.showProgressDialog(true);
     try {
       final response = await post(logout, headers: await getJsonHeaderURL());
       //progressService.showProgressDialog(false);
@@ -486,6 +486,8 @@ class UserRepository extends ApiProvider {
           final logOutResponse = logOutResponseFromJson(response.body);
           if (logOutResponse.statusCode == successResponse &&
               logOutResponse.success!) {
+            print("One time log out");
+            isLogOut = true;
             return logOutResponse;
           } else {
             throw CustomException(logOutResponse.message!);
@@ -527,7 +529,7 @@ class UserRepository extends ApiProvider {
     try {
       final response = await post(updateBankDetails,
           body: jsonEncode(param).toString(),
-          headers: await getJsonHeaderURL());
+          headers: await getJsonHeaderURL(version: 7));
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {

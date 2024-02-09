@@ -6,11 +6,13 @@ import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
 import 'package:divine_astrologer/firebase_options.dart';
+import 'package:divine_astrologer/remote_config/remote_config_helper.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
@@ -45,6 +47,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   initMessaging();
+  final remoteConfig = FirebaseRemoteConfig.instance;
+  final remoteConfigHelper = RemoteConfigHelper(remoteConfig: remoteConfig);
+  await remoteConfigHelper.initialize();
+  remoteConfigHelper.updateGlobalConstantWithFirebaseData();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await GetStorage.init();
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {

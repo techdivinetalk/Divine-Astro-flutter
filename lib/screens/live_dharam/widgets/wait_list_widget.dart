@@ -5,6 +5,7 @@ import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dar
 import "package:divine_astrologer/screens/live_dharam/widgets/common_button.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:flutter/material.dart";
+import "package:flutter_timer_countdown/flutter_timer_countdown.dart";
 import "package:get/get.dart";
 
 class WaitListWidget extends StatefulWidget {
@@ -199,7 +200,8 @@ class _WaitListWidgetState extends State<WaitListWidget> {
         children: <Widget>[
           callTypeIcon(callType: item.callType),
           const SizedBox(width: 16),
-          Text(getTotalWaitTime(int.parse(item.totalTime))),
+          // Text(getTotalWaitTime(item)),
+          newTimerWidget(item),
         ],
       ),
     );
@@ -244,26 +246,51 @@ class _WaitListWidgetState extends State<WaitListWidget> {
                 : const SizedBox();
   }
 
-  String getTotalWaitTime(totalMinutes) {
-    String time = "";
-    Duration duration = Duration(minutes: totalMinutes);
-    String formattedTime = formatDuration(duration);
-    time = formattedTime;
-    return time;
+  String getTotalWaitTime(WaitListModel item) {
+    final String source = item.totalTime;
+    final int epoch = int.parse(source);
+    final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
+    final String formattedTime =
+        "${dateTime.hour}:${dateTime.minute}:${dateTime.second}";
+    return formattedTime;
   }
 
-  String formatDuration(Duration duration) {
-    int hours = duration.inHours;
-    int minutes = duration.inMinutes % 60;
-    int seconds = duration.inSeconds % 60;
-    return '$hours:${_twoDigits(minutes)}:${_twoDigits(seconds)}';
+  Widget newTimerWidget(WaitListModel item) {
+    final String source = item.totalTime;
+    final int epoch = int.parse(source);
+    final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
+    return TimerCountdown(
+      format: CountDownTimerFormat.hoursMinutesSeconds,
+      enableDescriptions: false,
+      spacerWidth: 4,
+      colonsTextStyle: const TextStyle(fontSize: 12, color: Colors.black),
+      timeTextStyle: const TextStyle(fontSize: 12, color: Colors.black),
+      onTick: (Duration duration) async {},
+      endTime: dateTime,
+      onEnd: () {},
+    );
   }
 
-  String _twoDigits(int n) {
-    if (n >= 10) {
-      return '$n';
-    } else {
-      return '0$n';
-    }
-  }
+  // String getTotalWaitTime(totalMinutes) {
+  //   String time = "";
+  //   Duration duration = Duration(minutes: totalMinutes);
+  //   String formattedTime = formatDuration(duration);
+  //   time = formattedTime;
+  //   return time;
+  // }
+
+  // String formatDuration(Duration duration) {
+  //   int hours = duration.inHours;
+  //   int minutes = duration.inMinutes % 60;
+  //   int seconds = duration.inSeconds % 60;
+  //   return '$hours:${_twoDigits(minutes)}:${_twoDigits(seconds)}';
+  // }
+
+  // String _twoDigits(int n) {
+  //   if (n >= 10) {
+  //     return '$n';
+  //   } else {
+  //     return '0$n';
+  //   }
+  // }
 }
