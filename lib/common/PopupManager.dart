@@ -34,11 +34,11 @@ class PopupManager {
               padding: const EdgeInsets.all(15.0),
               decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                  border: Border.all(color: AppColors.white),
-                  color: AppColors.transparent),
-              child: const Icon(
+                  border: Border.all(color: appColors.white),
+                  color: appColors.transparent),
+              child:  Icon(
                 Icons.close_rounded,
-                color: AppColors.white,
+                color: appColors.white,
               ),
             ),
           ),
@@ -57,12 +57,12 @@ class PopupManager {
                   Text(
                     title,
                     style: AppTextStyle.textStyle20(
-                        fontWeight: FontWeight.w600, fontColor: AppColors.appColorDark),
+                        fontWeight: FontWeight.w600, fontColor: appColors.appColorDark),
                   ),
                 SizedBox(height: 10.h),
                 Text(
                   "$totalGift Gift${totalGift! > 1 ? 's' : ''} Received",
-                  style: AppTextStyle.textStyle14( fontColor: AppColors.black),
+                  style: AppTextStyle.textStyle14( fontColor: appColors.black),
                 ),
                 SizedBox(height: 16.h),
                 Image.asset("assets/images/bg_heart.png"),
@@ -71,6 +71,8 @@ class PopupManager {
                   GestureDetector(
                     onTap: () {
                       print("Clicked order history");
+                      Get.back();
+
                       Get.toNamed(RouteName.orderHistory);
                     },
                     child: Container(
@@ -78,15 +80,15 @@ class PopupManager {
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       width: Get.width,
                       decoration: BoxDecoration(
-                        color: AppColors.appColorDark,
-                        border: Border.all(color: AppColors.appColorDark, width: 2,),
+                        color: appColors.appColorDark,
+                        border: Border.all(color: appColors.appColorDark, width: 2,),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Center(
                         child: Text(
                           btnTitle,
                           style: AppTextStyle.textStyle15(
-                            fontColor: AppColors.black,
+                            fontColor: appColors.black,
                           ),
                         ),
                       ),

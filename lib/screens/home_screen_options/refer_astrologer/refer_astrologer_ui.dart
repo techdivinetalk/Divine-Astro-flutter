@@ -14,7 +14,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: appColors.white,
       appBar: commonDetailAppbar(title: "referAnAstrologer".tr),
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
@@ -51,7 +51,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   inputType: TextInputType.text,
                   inputAction: TextInputAction.next,
                   hintText: "enterNameMsg".tr,
-                  errorBorder: AppColors.white,
+                  errorBorder: appColors.white,
                 ),
                 const SizedBox(height: 20),
                 Text(
@@ -126,8 +126,8 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   style: AppTextStyle.textStyle14(
                       fontWeight: FontWeight.w400,
                       fontColor: controller.formValidateVal.value
-                          ? AppColors.darkBlue
-                          : AppColors.redColor),
+                          ? appColors.darkBlue
+                          : appColors.redColor),
                 ),
                 SizedBox(height: 5.h),
               ],
@@ -161,8 +161,8 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                             offset: const Offset(0.0, 3.0)),
                       ],
                       color: controller.isYes
-                          ? AppColors.darkBlue
-                          : AppColors.white,
+                          ? appColors.darkBlue
+                          : appColors.white,
                       borderRadius: const BorderRadius.all(Radius.circular(15)),
                     ),
                     child: Text(
@@ -171,8 +171,8 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                       style: AppTextStyle.textStyle14(
                           fontWeight: FontWeight.w600,
                           fontColor: controller.isYes
-                              ? AppColors.white
-                              : AppColors.darkBlue),
+                              ? appColors.white
+                              : appColors.darkBlue),
                     )),
               ),
             ),
@@ -195,7 +195,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                               offset: const Offset(0.0, 3.0)),
                         ],
                         color:
-                            controller.isNo ? AppColors.darkBlue : AppColors.white,
+                            controller.isNo ? appColors.darkBlue : appColors.white,
                         borderRadius: const BorderRadius.all(Radius.circular(15)),
                       ),
                       child: Text(
@@ -204,8 +204,8 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                         style: AppTextStyle.textStyle14(
                             fontWeight: FontWeight.w600,
                             fontColor: controller.isNo
-                                ? AppColors.white
-                                : AppColors.darkBlue),
+                                ? appColors.white
+                                : appColors.darkBlue),
                       )),
                 );
               },
@@ -301,37 +301,37 @@ class ReferAstrologerField extends StatelessWidget {
           errorStyle: const TextStyle(height: 0),
           hintText: hintText,
           helperStyle: AppTextStyle.textStyle16(),
-          fillColor: AppColors.white,
-          hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.grey),
-          hoverColor: AppColors.white,
+          fillColor: appColors.white,
+          hintStyle: AppTextStyle.textStyle16(fontColor: appColors.grey),
+          hoverColor: appColors.white,
           prefixIcon: icon,
           suffixIcon: suffixIcon,
           filled: true,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: errorBorder ?? AppColors.white,
+              color: errorBorder ?? appColors.white,
               width: 1.0,
             ),
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: errorBorder ?? AppColors.white,
+              color: errorBorder ?? appColors.white,
               width: 1.0,
             ),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide: const BorderSide(
-              color: AppColors.redColor,
+            borderSide:  BorderSide(
+              color: appColors.redColor,
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide: const BorderSide(
-              color: AppColors.lightYellow,
+            borderSide:  BorderSide(
+              color: appColors.lightYellow,
               width: 1.0,
             ),
           ),
@@ -400,37 +400,37 @@ class WhiteTextField extends StatelessWidget {
           errorStyle: const TextStyle(height: 0),
           hintText: hintText,
           helperStyle: AppTextStyle.textStyle16(),
-          fillColor: AppColors.white,
-          hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.grey),
-          hoverColor: AppColors.white,
+          fillColor: appColors.white,
+          hintStyle: AppTextStyle.textStyle16(fontColor: appColors.grey),
+          hoverColor: appColors.white,
           prefixIcon: icon,
           suffixIcon: suffixIcon,
           filled: true,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: errorBorder ?? AppColors.white,
+              color: errorBorder ?? appColors.white,
               width: 1.0,
             ),
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: errorBorder ?? AppColors.white,
+              color: errorBorder ?? appColors.white,
               width: 1.0,
             ),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide: const BorderSide(
-              color: AppColors.redColor,
+            borderSide:  BorderSide(
+              color: appColors.redColor,
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide: const BorderSide(
-              color: AppColors.lightYellow,
+            borderSide:  BorderSide(
+              color: appColors.lightYellow,
               width: 1.0,
             ),
           ),

@@ -318,7 +318,7 @@
 //                       Text(
 //                         '${message.user.name}: ',
 //                         style: const TextStyle(
-//                           color: AppColors.appYellowColour,
+//                           color: appColors.appYellowColour,
 //                           fontSize: 12,
 //                           fontWeight: FontWeight.bold,
 //                         ),
@@ -356,7 +356,7 @@
 //         height: 57.h,
 //         margin: EdgeInsets.only(left: 22.w, top: 15.h),
 //         decoration: BoxDecoration(
-//             color: AppColors.lightBlack.withOpacity(.3),
+//             color: appColors.lightBlack.withOpacity(.3),
 //             borderRadius: BorderRadius.circular(10)),
 //         child: Row(
 //           mainAxisSize: MainAxisSize.min,
@@ -378,10 +378,10 @@
 //               children: [
 //                 CustomText("astrologersLiveStar".tr,
 //                     fontSize: 14.sp,
-//                     fontColor: AppColors.white,
+//                     fontColor: appColors.white,
 //                     fontWeight: FontWeight.bold),
 //                 CustomText("${controller.liveStar["name"]}",
-//                     fontSize: 10.sp, fontColor: AppColors.white),
+//                     fontSize: 10.sp, fontColor: appColors.white),
 //               ],
 //             ),
 //             SizedBox(width: 10.w),
@@ -396,7 +396,7 @@
 //       height: 65.h,
 //       margin: EdgeInsets.only(left: 12.w),
 //       decoration: BoxDecoration(
-//           color: AppColors.lightBlack.withOpacity(.3),
+//           color: appColors.lightBlack.withOpacity(.3),
 //           borderRadius: BorderRadius.circular(18)),
 //       child: Stack(
 //         alignment: Alignment.topCenter,
@@ -404,7 +404,7 @@
 //           Container(
 //             height: 40.h,
 //             decoration: BoxDecoration(
-//                 color: AppColors.darkBlue,
+//                 color: appColors.darkBlue,
 //                 borderRadius: BorderRadius.circular(18)),
 //             child: Row(
 //               mainAxisSize: MainAxisSize.min,
@@ -434,7 +434,7 @@
 //                   " ${controller.coHostUser?.name ?? ""} ${"isOnCall".tr}",
 //                   overflow: TextOverflow.ellipsis,
 //                   fontSize: 12.sp,
-//                   fontColor: AppColors.white),
+//                   fontColor: appColors.white),
 //             ),
 //           ),
 //         ],
@@ -445,10 +445,10 @@
 //   CustomText buildCustomTimer() {
 //     if (controller.hour.value == "00") {
 //       return CustomText("${controller.min}:${controller.sec}",
-//           fontSize: 14.sp, fontColor: AppColors.white);
+//           fontSize: 14.sp, fontColor: appColors.white);
 //     }
 //     return CustomText("${controller.hour}:${controller.min}:${controller.sec}",
-//         fontSize: 14.sp, fontColor: AppColors.white);
+//         fontSize: 14.sp, fontColor: appColors.white);
 //   }
 
 //   Widget foreground(BoxConstraints constraints) {
@@ -611,7 +611,7 @@
 //                       style: TextStyle(
 //                         fontSize: 16.sp,
 //                         fontWeight: FontWeight.w400,
-//                         color: AppColors.white,
+//                         color: appColors.white,
 //                       ),
 //                       focusNode: controller.myFocus,
 //                       onSubmit: (value) {
@@ -629,7 +629,7 @@
 //                       inputAction: TextInputAction.send,
 //                       readOnly: false,
 //                       hintText: "${'sayHi'.tr}...",
-//                       hintColor: AppColors.white,
+//                       hintColor: appColors.white,
 //                       controller: controller.msg,
 //                       keyboardType: TextInputType.text,
 //                       suffixIconPadding: 8.w,
@@ -641,7 +641,7 @@
 //                       ],
 //                       inputBorder: OutlineInputBorder(
 //                         borderSide: BorderSide(
-//                           color: AppColors.white.withOpacity(0.15),
+//                           color: appColors.white.withOpacity(0.15),
 //                         ),
 //                         borderRadius: BorderRadius.circular(40.sp),
 //                       ),
@@ -734,7 +734,7 @@
 //   //             child: Container(
 //   //               padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 4.h),
 //   //               decoration: BoxDecoration(
-//   //                   color: AppColors.blackColor.withOpacity(.3),
+//   //                   color: appColors.blackColor.withOpacity(.3),
 //   //                   borderRadius: BorderRadius.circular(40)),
 //   //               child: Row(
 //   //                 mainAxisSize: MainAxisSize.min,
@@ -759,7 +759,7 @@
 //   //                     overflow: TextOverflow.ellipsis,
 //   //                     style: TextStyle(
 //   //                         fontSize: 12.sp,
-//   //                         color: AppColors.white,
+//   //                         color: appColors.white,
 //   //                         fontWeight: FontWeight.w500),
 //   //                   )
 //   //                 ],
@@ -856,7 +856,7 @@
 //                             padding: EdgeInsets.symmetric(
 //                                 horizontal: 5.w, vertical: 4.h),
 //                             decoration: BoxDecoration(
-//                                 color: AppColors.black.withOpacity(.3),
+//                                 color: appColors.black.withOpacity(.3),
 //                                 borderRadius: BorderRadius.circular(40)),
 //                             child: Row(
 //                               mainAxisSize: MainAxisSize.min,
@@ -901,7 +901,7 @@
 //                                         overflow: TextOverflow.ellipsis,
 //                                         style: TextStyle(
 //                                             fontSize: 16.sp,
-//                                             color: AppColors.white,
+//                                             color: appColors.white,
 //                                             fontWeight: FontWeight.w500),
 //                                       ),
 //                                       Text(
@@ -914,7 +914,7 @@
 //                                         overflow: TextOverflow.ellipsis,
 //                                         style: TextStyle(
 //                                             fontSize: 12.sp,
-//                                             color: AppColors.white,
+//                                             color: appColors.white,
 //                                             fontWeight: FontWeight.w500),
 //                                       ),
 //                                     ],
@@ -944,12 +944,12 @@
 //                       crossAxisAlignment: CrossAxisAlignment.center,
 //                       children: [
 //                         FlutterSwitch(
-//                           activeColor: AppColors.appYellowColour.withOpacity(0.7),
-//                           inactiveColor: AppColors.grey.withOpacity(0.7),
+//                           activeColor: appColors.appYellowColour.withOpacity(0.7),
+//                           inactiveColor: appColors.grey.withOpacity(0.7),
 //                           activeText: "call".tr,
 //                           inactiveText: "call".tr,
-//                           activeTextColor: AppColors.white,
-//                           inactiveTextColor: AppColors.white,
+//                           activeTextColor: appColors.white,
+//                           inactiveTextColor: appColors.white,
 //                           showOnOff: true,
 //                           height: 28.h,
 //                           padding: 2,
@@ -1038,7 +1038,7 @@
 //                         height: 46.h,
 //                         clipBehavior: Clip.antiAlias,
 //                         decoration: const BoxDecoration(
-//                             shape: BoxShape.circle, color: AppColors.redColor),
+//                             shape: BoxShape.circle, color: appColors.redColor),
 //                         child: Assets.svg.disconnect.svg(),
 //                       ),
 //                     ),
@@ -1072,9 +1072,9 @@
 //                 height: 46.h,
 //                 clipBehavior: Clip.antiAlias,
 //                 decoration: const BoxDecoration(
-//                     shape: BoxShape.circle, color: AppColors.appRedColour),
+//                     shape: BoxShape.circle, color: appColors.appRedColour),
 //                 child: const Center(
-//                     child: Icon(Icons.exit_to_app, color: AppColors.white)),
+//                     child: Icon(Icons.exit_to_app, color: appColors.white)),
 //               ),
 //             ),
 //           ),
@@ -1099,7 +1099,7 @@
 //                         clipBehavior: Clip.antiAlias,
 //                         decoration: BoxDecoration(
 //                             shape: BoxShape.circle,
-//                             color: AppColors.white.withOpacity(.6)),
+//                             color: appColors.white.withOpacity(.6)),
 //                         child:
 //                             Center(child: Assets.images.leaderboardLive.svg()),
 //                       ),
@@ -1130,7 +1130,7 @@
 //                 clipBehavior: Clip.antiAlias,
 //                 decoration: BoxDecoration(
 //                     shape: BoxShape.circle,
-//                     color: AppColors.white.withOpacity(.6)),
+//                     color: appColors.white.withOpacity(.6)),
 //                 child: Center(
 //                     child: Assets.svg.blockUser.svg(width: 30.w, height: 30.w)),
 //               ),
@@ -1162,7 +1162,7 @@
 //                     clipBehavior: Clip.antiAlias,
 //                     decoration: BoxDecoration(
 //                         shape: BoxShape.circle,
-//                         color: AppColors.white.withOpacity(.6)),
+//                         color: appColors.white.withOpacity(.6)),
 //                     child: Center(child: Assets.images.giftLive.svg()),
 //                   ),
 //                 ),
@@ -1219,7 +1219,7 @@
 //                           clipBehavior: Clip.antiAlias,
 //                           decoration: BoxDecoration(
 //                               shape: BoxShape.circle,
-//                               color: AppColors.white.withOpacity(.6)),
+//                               color: appColors.white.withOpacity(.6)),
 //                           child:
 //                               Center(child: Assets.images.waitlistLive.svg()),
 //                         ),
@@ -1239,7 +1239,7 @@
 //       context: context,
 //       builder: (BuildContext context) {
 //         return Material(
-//           color: AppColors.transparent,
+//           color: appColors.transparent,
 //           child: Column(
 //             mainAxisSize: MainAxisSize.min,
 //             children: [
@@ -1250,11 +1250,11 @@
 //                 child: Container(
 //                   padding: const EdgeInsets.all(15.0),
 //                   decoration: BoxDecoration(
-//                     border: Border.all(color: AppColors.white),
+//                     border: Border.all(color: appColors.white),
 //                     borderRadius: const BorderRadius.all(
 //                       Radius.circular(50.0),
 //                     ),
-//                     color: AppColors.white.withOpacity(0.2),
+//                     color: appColors.white.withOpacity(0.2),
 //                   ),
 //                   child: const Icon(
 //                     Icons.close,
@@ -1274,12 +1274,12 @@
 //                     child: Container(
 //                       height: Get.height / 2,
 //                       decoration: BoxDecoration(
-//                         border: Border.all(color: AppColors.white),
+//                         border: Border.all(color: appColors.white),
 //                         borderRadius: const BorderRadius.only(
 //                           topLeft: Radius.circular(50.0),
 //                           topRight: Radius.circular(50.0),
 //                         ),
-//                         color: AppColors.white.withOpacity(0.2),
+//                         color: appColors.white.withOpacity(0.2),
 //                       ),
 //                       child: leaderboardWidget(),
 //                     ),
@@ -1299,14 +1299,14 @@
 //             height: 80,
 //             decoration: BoxDecoration(
 //               border: Border.all(
-//                 color: AppColors.yellow,
+//                 color: appColors.yellow,
 //                 width: 2,
 //               ),
 //               borderRadius: const BorderRadius.only(
 //                 topLeft: Radius.circular(50.0),
 //                 topRight: Radius.circular(50.0),
 //               ),
-//               color: AppColors.white,
+//               color: appColors.white,
 //             ),
 //             child: const Center(
 //               child: ListTile(
@@ -1333,13 +1333,13 @@
 //                 ),
 //                 decoration: BoxDecoration(
 //                   border: Border.all(
-//                     color: AppColors.yellow,
+//                     color: appColors.yellow,
 //                     width: 2,
 //                   ),
 //                   borderRadius: const BorderRadius.all(
 //                     Radius.circular(50.0),
 //                   ),
-//                   color: AppColors.white,
+//                   color: appColors.white,
 //                 ),
 //                 child: Center(
 //                   child: ListTile(
@@ -1399,14 +1399,14 @@
 //             height: 80,
 //             decoration: BoxDecoration(
 //               border: Border.all(
-//                 color: AppColors.yellow,
+//                 color: appColors.yellow,
 //                 width: 2,
 //               ),
 //               borderRadius: const BorderRadius.only(
 //                 topLeft: Radius.circular(50.0),
 //                 topRight: Radius.circular(50.0),
 //               ),
-//               color: AppColors.white,
+//               color: appColors.white,
 //             ),
 //             child: const Center(
 //               child: ListTile(
@@ -1429,7 +1429,7 @@
 //               borderRadius: const BorderRadius.all(
 //                 Radius.circular(10.0),
 //               ),
-//               color: AppColors.darkBlue.withOpacity(.5),
+//               color: appColors.darkBlue.withOpacity(.5),
 //             ),
 //             child: Center(
 //               child: ListTile(
@@ -1437,11 +1437,11 @@
 //                 dense: true,
 //                 title: const Text(
 //                   "Astrologer's Live Star",
-//                   style: TextStyle(color: AppColors.white),
+//                   style: TextStyle(color: appColors.white),
 //                 ),
 //                 subtitle: Text(
 //                   sortedList[0]["name"],
-//                   style: const TextStyle(color: AppColors.white),
+//                   style: const TextStyle(color: appColors.white),
 //                 ),
 //                 leading: Padding(
 //                   padding: const EdgeInsets.all(4.0),

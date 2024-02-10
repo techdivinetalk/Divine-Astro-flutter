@@ -20,12 +20,12 @@ class WaitListUI extends GetView<WaitListUIController> {
       appBar: AppBar(
         centerTitle: false,
         forceMaterialTransparency: true,
-        backgroundColor: AppColors.white,
+        backgroundColor: appColors.white,
         title: Text("waitlist".tr,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
-              color: AppColors.darkBlue,
+              color: appColors.darkBlue,
             )),
       ),
       body: GetBuilder<WaitListUIController>(builder: (controller) {
@@ -49,7 +49,7 @@ class WaitListUI extends GetView<WaitListUIController> {
                   Text(
                     "nextInLine".tr,
                     style:
-                        AppTextStyle.textStyle20(fontColor: AppColors.darkBlue),
+                        AppTextStyle.textStyle20(fontColor: appColors.darkBlue),
                   ),
                   SizedBox(
                     height: 15.h,
@@ -65,7 +65,7 @@ class WaitListUI extends GetView<WaitListUIController> {
                   Text(
                     "waitingQueue".tr,
                     style:
-                        AppTextStyle.textStyle20(fontColor: AppColors.darkBlue),
+                        AppTextStyle.textStyle20(fontColor: appColors.darkBlue),
                   ),
                   SizedBox(
                     height: 15.h,
@@ -104,7 +104,7 @@ class WaitListUI extends GetView<WaitListUIController> {
           Expanded(
             child: Text(
               waitingCustomer.name ?? "",
-              style: AppTextStyle.textStyle16(fontColor: AppColors.darkBlue),
+              style: AppTextStyle.textStyle16(fontColor: appColors.darkBlue),
             ),
           ),
           Row(
@@ -116,7 +116,7 @@ class WaitListUI extends GetView<WaitListUIController> {
               Text(
                 "$waitTime minutes",
                 style: AppTextStyle.textStyle16(
-                    fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                    fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
               ),
             ],
           ),

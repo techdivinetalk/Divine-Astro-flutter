@@ -19,12 +19,12 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
       appBar: AppBar(
         centerTitle: false,
         forceMaterialTransparency: true,
-        backgroundColor: AppColors.white,
+        backgroundColor: appColors.white,
         title: Text("importantNumbers".tr,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
-              color: AppColors.darkBlue,
+              color: appColors.darkBlue,
             )),
       ),
       body: GetBuilder<ImportantNumbersController>(builder: (context) {
@@ -52,13 +52,13 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                                 offset: const Offset(0.0, 3.0)),
                           ],
                           border:
-                              Border.all(width: 1, color: AppColors.redColor),
+                              Border.all(width: 1, color: appColors.redColor),
                           borderRadius: BorderRadius.circular(12)),
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Text("importNumText".tr,
                             style: TextStyle(
-                              color: AppColors.redColor,
+                              color: appColors.redColor,
                               fontWeight: FontWeight.w400,
                               fontSize: 13.sp,
                             )),
@@ -88,13 +88,13 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                                         Text(
                                           phoneNumber.title ?? "",
                                           style: AppTextStyle.textStyle16(
-                                              fontColor: AppColors.darkBlue),
+                                              fontColor: appColors.darkBlue),
                                         ),
                                         SizedBox(height: 5.h),
                                         Text(
                                           phoneNumber.mobileNumber ?? "",
                                           style: AppTextStyle.textStyle12(
-                                              fontColor: AppColors.darkBlue),
+                                              fontColor: appColors.darkBlue),
                                         ),
                                       ],
                                     ),
@@ -119,8 +119,8 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                                         decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(20),
                                             color: exist
-                                                ? AppColors.grey
-                                                : AppColors.lightYellow),
+                                                ? appColors.grey
+                                                : appColors.lightYellow),
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 15.w, vertical: 10.h),
@@ -128,7 +128,7 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                                             exist ? "Added" : "addContact".tr,
                                             style: AppTextStyle.textStyle16(
                                                 fontWeight: FontWeight.w600,
-                                                fontColor: AppColors.brownColour),
+                                                fontColor: appColors.brownColour),
                                           ),
                                         ),
                                       ),
@@ -207,8 +207,8 @@ class _AddContactButtonState extends State<AddContactButton> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: isButtonTap
-                        ? AppColors.grey.withOpacity(0.2)
-                        : AppColors.lightYellow),
+                        ? appColors.grey.withOpacity(0.2)
+                        : appColors.lightYellow),
                 child: Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
@@ -217,8 +217,8 @@ class _AddContactButtonState extends State<AddContactButton> {
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w600,
                         fontColor: isButtonTap
-                            ? AppColors.grey
-                            : AppColors.brownColour),
+                            ? appColors.grey
+                            : appColors.brownColour),
                   ),
                 ),
               ),

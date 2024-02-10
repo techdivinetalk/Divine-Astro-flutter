@@ -52,7 +52,7 @@ class BlockUserController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     blockedUserDataSync.value = true;
@@ -76,7 +76,7 @@ class BlockUserController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     blockedUserDataSync.value = true;

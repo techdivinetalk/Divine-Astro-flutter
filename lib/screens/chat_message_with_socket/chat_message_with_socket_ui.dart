@@ -218,7 +218,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   //  controller.updateReadMessageStatus();
                                 },
                                 child: Badge(
-                                  backgroundColor: AppColors.darkBlue,
+                                  backgroundColor: appColors.darkBlue,
                                   offset: const Offset(4, -2),
                                   isLabelVisible:
                                       (controller.unreadMsgCount.value > 0),
@@ -230,7 +230,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   largeSize: 20.sp,
                                   child: Icon(
                                       Icons.arrow_drop_down_circle_outlined,
-                                      color: AppColors.appYellowColour,
+                                      color: appColors.appYellowColour,
                                       size: 40.h),
                                 ),
                               )
@@ -263,8 +263,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                           .remove();
                                       controller.isCardVisible.value = false;
                                     },
-                                    child: const Icon(Icons.cancel,
-                                        color: AppColors.white),
+                                    child:  Icon(Icons.cancel,
+                                        color: appColors.white),
                                   ),
                                   const Text(
                                     "Chosen cards",
@@ -321,8 +321,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                           textAlign: TextAlign.center,
                                           // Add this line for text alignment
                                           controller.getKeyByPosition(index),
-                                          style: const TextStyle(
-                                            color: AppColors.white,
+                                          style:  TextStyle(
+                                            color: appColors.white,
                                             fontSize:
                                                 12, // Adjust the font size as needed
                                           ),
@@ -375,21 +375,21 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               _onBackspacePressed();
                             },
                             textEditingController: controller.messageController,
-                            config: const Config(
+                            config:  Config(
                                 columns: 7,
                                 emojiSizeMax: 32.0,
                                 verticalSpacing: 0,
                                 horizontalSpacing: 0,
                                 initCategory: Category.RECENT,
                                 bgColor: Color(0xFFF2F2F2),
-                                indicatorColor: AppColors.appRedColour,
+                                indicatorColor: appColors.appRedColour,
                                 iconColor: Colors.grey,
-                                iconColorSelected: AppColors.appRedColour,
+                                iconColorSelected: appColors.appRedColour,
                                 enableSkinTones: true,
                                 recentTabBehavior: RecentTabBehavior.RECENT,
                                 recentsLimit: 28,
                                 replaceEmojiOnLimitExceed: false,
-                                backspaceColor: AppColors.appRedColour,
+                                backspaceColor: appColors.appRedColour,
                                 categoryIcons: CategoryIcons(),
                                 buttonMode: ButtonMode.MATERIAL)),
                       ),
@@ -411,7 +411,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   Widget giftSendUi(
       BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     return Container(
-      color: AppColors.white,
+      color: appColors.white,
       child: Padding(
         padding: EdgeInsets.fromLTRB(15.0, 4.0, 15.0, 4.0),
         child: Row(
@@ -464,9 +464,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         vertical: 8.0,
       ),
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.red, width: 2),
+        border: Border.all(color: appColors.red, width: 2),
         borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-        color: AppColors.white,
+        color: appColors.white,
       ),
       child: ListTile(
         dense: true,
@@ -479,10 +479,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
             vertical: 8.0,
           ),
         ),
-        title: const Text(
+        title:  Text(
           "Enable required settings before initiating or accepting the call.",
           style: TextStyle(
-            color: AppColors.red,
+            color: appColors.red,
             fontSize: 12,
             fontWeight: FontWeight.w400,
           ),
@@ -498,12 +498,12 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
               padding: const EdgeInsets.symmetric(
                 horizontal: 8.0,
               ),
-              side: const BorderSide(color: AppColors.red, width: 1),
+              side:  BorderSide(color: appColors.red, width: 1),
             ),
-            child: const Text(
+            child:  Text(
               "Open Settings",
               style: TextStyle(
-                color: AppColors.red,
+                color: appColors.red,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
@@ -547,9 +547,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   Widget giftDisplayText(ChatMessage chatMessage) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(18)),
-        color: AppColors.white,
+      decoration:  BoxDecoration(
+        borderRadius:const BorderRadius.all(Radius.circular(18)),
+        color: appColors.white,
       ),
       child: Row(
         children: [
@@ -567,7 +567,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
           SizedBox(width: 2.w),
           Text(
             '${controller.customerName} has sent you ${chatMessage.message}',
-            style: AppTextStyle.textStyle12(fontColor: AppColors.red),
+            style: AppTextStyle.textStyle12(fontColor: appColors.red),
           ),
         ],
       ),
@@ -593,14 +593,14 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   child: Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: const BoxDecoration(
-                      color: AppColors.red,
-                      borderRadius: BorderRadius.all(Radius.circular(18)),
+                    decoration:  BoxDecoration(
+                      color: appColors.red,
+                      borderRadius:const BorderRadius.all(Radius.circular(18)),
                     ),
                     child: Text(
                       '+ Add',
                       style:
-                          AppTextStyle.textStyle12(fontColor: AppColors.white),
+                          AppTextStyle.textStyle12(fontColor: appColors.white),
                     ),
                   ),
                 )
@@ -612,14 +612,14 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   child: Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: const BoxDecoration(
-                      color: AppColors.brownColour,
-                      borderRadius: BorderRadius.all(Radius.circular(18)),
+                    decoration:  BoxDecoration(
+                      color: appColors.brownColour,
+                      borderRadius:const BorderRadius.all(Radius.circular(18)),
                     ),
                     child: Text(
                       '${controller.messageTemplates[index - 1].message}',
                       style:
-                          AppTextStyle.textStyle12(fontColor: AppColors.white),
+                          AppTextStyle.textStyle12(fontColor: appColors.white),
                     ),
                   ),
                 );
@@ -722,10 +722,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 hintText: "message".tr,
                                 isDense: true,
                                 helperStyle: AppTextStyle.textStyle16(),
-                                fillColor: AppColors.white,
+                                fillColor: appColors.white,
                                 hintStyle: AppTextStyle.textStyle16(
-                                    fontColor: AppColors.grey),
-                                hoverColor: AppColors.white,
+                                    fontColor: appColors.grey),
+                                hoverColor: appColors.white,
                                 prefixIcon: InkWell(
                                   onTap: () async {
                                     FocusManager.instance.primaryFocus
@@ -750,7 +750,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
                                     //   } else {
                                     //     divineSnackBar(
-                                    //         data: "${'chatEnded'.tr}.", color: AppColors.appYellowColour);
+                                    //         data: "${'chatEnded'.tr}.", color: appColors.appYellowColour);
                                     //   }
                                   },
                                   child: Padding(
@@ -763,15 +763,15 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.circular(30.0.sp),
-                                    borderSide: const BorderSide(
-                                      color: AppColors.white,
+                                    borderSide:  BorderSide(
+                                      color: appColors.white,
                                       width: 1.0,
                                     )),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.circular(30.0.sp),
-                                    borderSide: const BorderSide(
-                                      color: AppColors.appYellowColour,
+                                    borderSide:  BorderSide(
+                                      color: appColors.appYellowColour,
                                       width: 1.0,
                                     )),
                               ),
@@ -811,13 +811,13 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   controller.isRecording.value = false);
                         },
                         child: SocialMediaRecorder(
-                          backGroundColor: AppColors.yellow,
+                          backGroundColor: appColors.yellow,
                           cancelTextBackGroundColor: Colors.white,
-                          recordIconBackGroundColor: AppColors.yellow,
+                          recordIconBackGroundColor: appColors.yellow,
                           radius: BorderRadius.circular(30),
                           initRecordPackageWidth:
                               kToolbarHeight - Get.width * 0.010,
-                          recordIconWhenLockBackGroundColor: AppColors.yellow,
+                          recordIconWhenLockBackGroundColor: appColors.yellow,
                           maxRecordTimeInSecond: 30,
                           startRecording: () {
                             controller.isRecording.value = true;
@@ -952,9 +952,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(40)),
-              border: Border.all(width: 2, color: AppColors.appColorDark),
-              gradient: const LinearGradient(
-                colors: [AppColors.white, AppColors.appColorDark],
+              border: Border.all(width: 2, color: appColors.appColorDark),
+              gradient:  LinearGradient(
+                colors: [appColors.white, appColors.appColorDark],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -1009,16 +1009,16 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: AppColors.yellow,
+                  color: appColors.yellow,
                 ),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: AppColors.red,
+                  backgroundColor: appColors.red,
                   child: CustomText(
                     temp[0][0],
-                    fontColor: AppColors.white,
+                    fontColor: appColors.white,
                   ), // Display the first letter of the name
                 ),
                 title: CustomText(
@@ -1092,7 +1092,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       Text(
                         messageDateTime(chatMessage.time ?? 0),
                         style: AppTextStyle.textStyle10(
-                          fontColor: AppColors.darkBlue,
+                          fontColor: appColors.darkBlue,
                         ),
                       ),
                       if (yourMessage) SizedBox(width: 8.w),
@@ -1101,8 +1101,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             ? Assets.images.icSingleTick.svg()
                             : msgType.value == 1
                                 ? Assets.images.icDoubleTick.svg(
-                                    colorFilter: const ColorFilter.mode(
-                                        AppColors.greyColor, BlendMode.srcIn))
+                                    colorFilter:  ColorFilter.mode(
+                                        appColors.greyColor, BlendMode.srcIn))
                                 : msgType.value == 3
                                     ? Assets.images.icDoubleTick.svg()
                                     : Assets.images.icSingleTick.svg())
@@ -1160,7 +1160,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       Text(
                         messageDateTime(chatDetail.time ?? 0),
                         style: AppTextStyle.textStyle10(
-                            fontColor: AppColors.black),
+                            fontColor: appColors.black),
                       ),
                       if (yourMessage) SizedBox(width: 8.w),
                       if (yourMessage)
@@ -1168,8 +1168,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             ? Assets.images.icSingleTick.svg()
                             : msgType.value == 1
                                 ? Assets.images.icDoubleTick.svg(
-                                    colorFilter: const ColorFilter.mode(
-                                        AppColors.lightGrey, BlendMode.srcIn))
+                                    colorFilter:  ColorFilter.mode(
+                                        appColors.lightGrey, BlendMode.srcIn))
                                 : msgType.value == 3
                                     ? Assets.images.icDoubleTick.svg()
                                     : Assets.images.icSingleTick.svg()
@@ -1230,9 +1230,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   bottomRight: Radius.circular(10.r)),
                               gradient: LinearGradient(
                                 colors: [
-                                  AppColors.darkBlue.withOpacity(0.0),
-                                  AppColors.darkBlue.withOpacity(0.0),
-                                  AppColors.darkBlue.withOpacity(0.5),
+                                  appColors.darkBlue.withOpacity(0.0),
+                                  appColors.darkBlue.withOpacity(0.0),
+                                  appColors.darkBlue.withOpacity(0.5),
                                 ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomCenter,
@@ -1244,7 +1244,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 Text(
                                   messageDateTime(chatDetail.time ?? 0),
                                   style: AppTextStyle.textStyle10(
-                                      fontColor: AppColors.white),
+                                      fontColor: appColors.white),
                                 ),
                                 if (yourMessage) SizedBox(width: 8.w),
                                 if (yourMessage)
@@ -1253,8 +1253,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                       : msgType.value == 1
                                           ? Assets.images.icDoubleTick.svg(
                                               colorFilter:
-                                                  const ColorFilter.mode(
-                                                      AppColors.greyColor,
+                                                   ColorFilter.mode(
+                                                      appColors.greyColor,
                                                       BlendMode.srcIn))
                                           : msgType.value == 3
                                               ? Assets.images.icDoubleTick.svg()
@@ -1291,11 +1291,11 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               child: Container(
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  color: AppColors.darkBlue.withOpacity(0.3),
+                                  color: appColors.darkBlue.withOpacity(0.3),
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Icon(Icons.download_rounded,
-                                    color: AppColors.white),
+                                child:  Icon(Icons.download_rounded,
+                                    color: appColors.white),
                               ),
                             ),
                             Positioned(
@@ -1313,9 +1313,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                           bottomRight: Radius.circular(10.r)),
                                       gradient: LinearGradient(
                                         colors: [
-                                          AppColors.darkBlue.withOpacity(0.0),
-                                          AppColors.darkBlue.withOpacity(0.0),
-                                          AppColors.darkBlue.withOpacity(0.5),
+                                          appColors.darkBlue.withOpacity(0.0),
+                                          appColors.darkBlue.withOpacity(0.0),
+                                          appColors.darkBlue.withOpacity(0.5),
                                         ],
                                         begin: Alignment.topLeft,
                                         end: Alignment.bottomCenter,
@@ -1324,7 +1324,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                     child: Text(
                                       messageDateTime(chatDetail.time ?? 0),
                                       style: AppTextStyle.textStyle10(
-                                          fontColor: AppColors.white),
+                                          fontColor: appColors.white),
                                     ),
                                   ),
                                   SizedBox(width: 8.w),
@@ -1401,9 +1401,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   //                             borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.r)),
   //                             gradient: LinearGradient(
   //                               colors: [
-  //                                 AppColors.darkBlue.withOpacity(0.0),
-  //                                 AppColors.darkBlue.withOpacity(0.0),
-  //                                 AppColors.darkBlue.withOpacity(0.5),
+  //                                 appColors.darkBlue.withOpacity(0.0),
+  //                                 appColors.darkBlue.withOpacity(0.0),
+  //                                 appColors.darkBlue.withOpacity(0.5),
   //                               ],
   //                               begin: Alignment.topLeft,
   //                               end: Alignment.bottomCenter,
@@ -1414,7 +1414,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   //                             children: [
   //                               Text(
   //                                 messageDateTime(chatDetail.time ?? 0),
-  //                                 style: AppTextStyle.textStyle10(fontColor: AppColors.white),
+  //                                 style: AppTextStyle.textStyle10(fontColor: appColors.white),
   //                               ),
   //                               if (yourMessage) SizedBox(width: 8.w),
   //                               if (yourMessage)
@@ -1423,7 +1423,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   //                                     : msgType.value == 1
   //                                         ? Assets.images.icDoubleTick.svg(
   //                                             colorFilter: const ColorFilter.mode(
-  //                                                 AppColors.greyColor, BlendMode.srcIn))
+  //                                                 appColors.greyColor, BlendMode.srcIn))
   //                                         : msgType.value == 2
   //                                             ? Assets.images.icDoubleTick.svg()
   //                                             : Assets.images.icSingleTick.svg()
@@ -1455,10 +1455,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   //                       child: Container(
   //                         padding: const EdgeInsets.all(10),
   //                         decoration: BoxDecoration(
-  //                           color: AppColors.darkBlue.withOpacity(0.3),
+  //                           color: appColors.darkBlue.withOpacity(0.3),
   //                           shape: BoxShape.circle,
   //                         ),
-  //                         child: const Icon(Icons.download_rounded, color: AppColors.white),
+  //                         child: const Icon(Icons.download_rounded, color: appColors.white),
   //                       ),
   //                     ),
   //                     Positioned(
@@ -1473,9 +1473,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   //                               borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.r)),
   //                               gradient: LinearGradient(
   //                                 colors: [
-  //                                   AppColors.darkBlue.withOpacity(0.0),
-  //                                   AppColors.darkBlue.withOpacity(0.0),
-  //                                   AppColors.darkBlue.withOpacity(0.5),
+  //                                   appColors.darkBlue.withOpacity(0.0),
+  //                                   appColors.darkBlue.withOpacity(0.0),
+  //                                   appColors.darkBlue.withOpacity(0.5),
   //                                 ],
   //                                 begin: Alignment.topLeft,
   //                                 end: Alignment.bottomCenter,
@@ -1483,7 +1483,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   //                             ),
   //                             child: Text(
   //                               messageDateTime(chatDetail.time ?? 0),
-  //                               style: AppTextStyle.textStyle10(fontColor: AppColors.white),
+  //                               style: AppTextStyle.textStyle10(fontColor: appColors.white),
   //                             ),
   //                           ),
   //                           SizedBox(width: 8.w),
@@ -1511,8 +1511,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         debugPrint("KundliId : ${chatDetail.kundliId}");
       },
       child: Card(
-        color: AppColors.white,
-        surfaceTintColor: AppColors.white,
+        color: appColors.white,
+        surfaceTintColor: appColors.white,
         child: Container(
           padding: EdgeInsets.all(12.h),
           child: Row(
@@ -1520,14 +1520,14 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                decoration: const BoxDecoration(
-                    shape: BoxShape.circle, color: AppColors.extraLightGrey),
+                decoration:  BoxDecoration(
+                    shape: BoxShape.circle, color: appColors.extraLightGrey),
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Text(
                     chatDetail.kundliName?[0] ?? "",
                     style: AppTextStyle.textStyle24(
-                        fontColor: AppColors.white,
+                        fontColor: appColors.white,
                         fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -1542,7 +1542,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16.sp,
-                        color: AppColors.darkBlue,
+                        color: appColors.darkBlue,
                       ),
                     ),
                     SizedBox(height: 5.h),
@@ -1551,7 +1551,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 10.sp,
-                        color: AppColors.lightGrey,
+                        color: appColors.lightGrey,
                       ),
                     ),
                     SizedBox(height: 5.h),
@@ -1560,7 +1560,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 10.sp,
-                        color: AppColors.lightGrey,
+                        color: appColors.lightGrey,
                       ),
                     ),
                   ],
@@ -1592,7 +1592,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                 blurRadius: 1.0,
                 offset: const Offset(0.0, 3.0)),
           ],
-          color: AppColors.white,
+          color: appColors.white,
           borderRadius: const BorderRadius.all(Radius.circular(20)),
         ),
         child: Text("unreadMessages".tr),
@@ -1668,7 +1668,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                                   style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 14.sp,
-                                      color: AppColors.darkBlue),
+                                      color: appColors.darkBlue),
                                 ),
                               ),
                               Obx(() => AnimatedCrossFade(
@@ -1687,7 +1687,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                                           style: TextStyle(
                                               fontWeight: FontWeight.w500,
                                               fontSize: 10.sp,
-                                              color: AppColors.brownColour),
+                                              color: appColors.brownColour),
                                         ),
                                         Text(
                                           controller.chatStatus.value,
@@ -1697,8 +1697,8 @@ class AstrologerChatAppBar extends StatelessWidget {
                                               color:
                                                   controller.chatStatus.value !=
                                                           "Offline"
-                                                      ? AppColors.darkGreen
-                                                      : AppColors.redColor),
+                                                      ? appColors.darkGreen
+                                                      : appColors.redColor),
                                         ),
                                       ],
                                     ),
@@ -1786,7 +1786,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                               //
                               // showCupertinoModalPopup(
                               //   barrierColor:
-                              //   AppColors.darkBlue.withOpacity(0.5),
+                              //   appColors.darkBlue.withOpacity(0.5),
                               //   context: context,
                               //   builder: (context) => ReportPostReasons(
                               //       reviewData?.id.toString() ?? ''),
@@ -1842,7 +1842,7 @@ class LoadingIndicatorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return  Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(width: double.maxFinite),
@@ -1850,7 +1850,7 @@ class LoadingIndicatorWidget extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(8.0),
             child: CircularProgressIndicator(
-              color: AppColors.appYellowColour,
+              color: appColors.appYellowColour,
             ),
           ),
         ),

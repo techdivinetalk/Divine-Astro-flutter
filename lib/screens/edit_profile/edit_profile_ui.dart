@@ -29,8 +29,8 @@ class EditProfileUI extends GetView<EditProfileController> {
       ),
       appBar: AppBar(
         leading: IconButton(
-          highlightColor: AppColors.transparent,
-          splashColor: AppColors.transparent,
+          highlightColor: appColors.transparent,
+          splashColor: appColors.transparent,
           onPressed: () => Get.back(),
           icon: const Icon(Icons.arrow_back_ios_new),
         ),
@@ -118,8 +118,8 @@ class EditProfileUI extends GetView<EditProfileController> {
                                           begin: Alignment.bottomCenter,
                                           end: Alignment.topCenter,
                                           colors: [
-                                            AppColors.appYellowColour,
-                                            AppColors.gradientBottom
+                                            appColors.appYellowColour,
+                                            appColors.gradientBottom
                                           ],
                                         ),
                                         borderRadius: const BorderRadius.all(
@@ -131,7 +131,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                                         child: Text(
                                           element.name.toString(),
                                           style: AppTextStyle.textStyle14(
-                                              fontColor: AppColors.darkBlue),
+                                              fontColor: appColors.darkBlue),
                                         ),
                                       ),
                                     ),
@@ -199,9 +199,9 @@ class EditProfileUI extends GetView<EditProfileController> {
                                           selectedStyle: C2ChipStyle(
                                             foregroundStyle:
                                                 AppTextStyle.textStyle16(
-                                                    fontColor: AppColors.white),
+                                                    fontColor: appColors.white),
                                             borderWidth: 1,
-                                            backgroundColor: AppColors.darkBlue,
+                                            backgroundColor: appColors.darkBlue,
                                             borderStyle: BorderStyle.solid,
                                             borderRadius:
                                                 const BorderRadius.all(
@@ -210,7 +210,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                                         ),
                                         borderWidth: 1,
                                         borderStyle: BorderStyle.solid,
-                                        borderColor: AppColors.darkBlue,
+                                        borderColor: appColors.darkBlue,
                                         borderRadius: const BorderRadius.all(
                                           Radius.circular(20),
                                         ),
@@ -229,7 +229,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
                                   border: Border.all(
-                                      width: 1, color: AppColors.darkBlue)),
+                                      width: 1, color: appColors.darkBlue)),
                               child: Padding(
                                 padding: EdgeInsets.only(top: 9.h, bottom: 9.h),
                                 child: Row(
@@ -239,14 +239,14 @@ class EditProfileUI extends GetView<EditProfileController> {
                                   children: [
                                     Icon(
                                       Icons.add,
-                                      color: AppColors.darkBlue,
+                                      color: appColors.darkBlue,
                                       size: 19.sp,
                                     ),
                                     SizedBox(width: 5.w),
                                     Text(
                                       "Add Category".tr,
                                       style: AppTextStyle.textStyle12(
-                                          fontColor: AppColors.darkBlue,
+                                          fontColor: appColors.darkBlue,
                                           fontWeight: FontWeight.w400),
                                     ),
                                   ],
@@ -295,12 +295,12 @@ class EditProfileUI extends GetView<EditProfileController> {
                                       blurRadius: 1.0,
                                       offset: const Offset(0.0, 3.0)),
                                 ],
-                                gradient: const LinearGradient(
+                                gradient:  LinearGradient(
                                   begin: Alignment.bottomCenter,
                                   end: Alignment.topCenter,
                                   colors: [
-                                    AppColors.appYellowColour,
-                                    AppColors.gradientBottom
+                                    appColors.appYellowColour,
+                                    appColors.gradientBottom
                                   ],
                                 ),
                                 borderRadius: const BorderRadius.all(
@@ -312,7 +312,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                                 child: Text(
                                   element.name.toString(),
                                   style: AppTextStyle.textStyle14(
-                                      fontColor: AppColors.darkBlue),
+                                      fontColor: appColors.darkBlue),
                                 ),
                               ),
                             ),
@@ -380,9 +380,9 @@ class EditProfileUI extends GetView<EditProfileController> {
                                           selectedStyle: C2ChipStyle(
                                             foregroundStyle:
                                             AppTextStyle.textStyle16(
-                                                fontColor: AppColors.white),
+                                                fontColor: appColors.white),
                                             borderWidth: 1,
-                                            backgroundColor: AppColors.darkBlue,
+                                            backgroundColor: appColors.darkBlue,
                                             borderStyle: BorderStyle.solid,
                                             borderRadius:
                                             const BorderRadius.all(
@@ -391,7 +391,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                                         ),
                                         borderWidth: 1,
                                         borderStyle: BorderStyle.solid,
-                                        borderColor: AppColors.darkBlue,
+                                        borderColor: appColors.darkBlue,
                                         borderRadius: const BorderRadius.all(
                                           Radius.circular(20),
                                         ),
@@ -410,7 +410,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
                                   border: Border.all(
-                                      width: 1, color: AppColors.darkBlue)),
+                                      width: 1, color: appColors.darkBlue)),
                               child: Padding(
                                 padding: EdgeInsets.only(top: 9.h, bottom: 9.h),
                                 child: Row(
@@ -420,14 +420,14 @@ class EditProfileUI extends GetView<EditProfileController> {
                                   children: [
                                     Icon(
                                       Icons.add,
-                                      color: AppColors.darkBlue,
+                                      color: appColors.darkBlue,
                                       size: 19.sp,
                                     ),
                                     SizedBox(width: 5.w),
                                     Text(
                                       "addSpeciality".tr,
                                       style: AppTextStyle.textStyle12(
-                                          fontColor: AppColors.darkBlue,
+                                          fontColor: appColors.darkBlue,
                                           fontWeight: FontWeight.w400),
                                     ),
                                   ],

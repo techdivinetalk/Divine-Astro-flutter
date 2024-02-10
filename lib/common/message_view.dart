@@ -89,9 +89,9 @@ class MessageView extends StatelessWidget {
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(40)),
-              border: Border.all(width: 2, color: AppColors.appColorDark),
-              gradient: const LinearGradient(
-                colors: [AppColors.white, AppColors.appColorDark],
+              border: Border.all(width: 2, color: appColors.appColorDark),
+              gradient:  LinearGradient(
+                colors: [appColors.white, appColors.appColorDark],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -146,16 +146,16 @@ class MessageView extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: AppColors.yellow,
+                  color: appColors.yellow,
                 ),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: AppColors.red,
+                  backgroundColor: appColors.red,
                   child: CustomText(
                     temp[0][0],
-                    fontColor: AppColors.white,
+                    fontColor: appColors.white,
                   ), // Display the first letter of the name
                 ),
                 title: CustomText(
@@ -229,7 +229,7 @@ class MessageView extends StatelessWidget {
                       Text(
                         messageDateTime(chatMessage.time ?? 0),
                         style: AppTextStyle.textStyle10(
-                          fontColor: AppColors.darkBlue,
+                          fontColor: appColors.darkBlue,
                         ),
                       ),
                       if (yourMessage) SizedBox(width: 8.w),
@@ -238,8 +238,8 @@ class MessageView extends StatelessWidget {
                             ? Assets.images.icSingleTick.svg()
                             : msgType.value == 1
                                 ? Assets.images.icDoubleTick.svg(
-                                    colorFilter: const ColorFilter.mode(
-                                        AppColors.greyColor, BlendMode.srcIn))
+                                    colorFilter:  ColorFilter.mode(
+                                        appColors.greyColor, BlendMode.srcIn))
                                 : msgType.value == 3
                                     ? Assets.images.icDoubleTick.svg()
                                     : Assets.images.icSingleTick.svg())
@@ -297,7 +297,7 @@ class MessageView extends StatelessWidget {
                       Text(
                         messageDateTime(chatDetail.time ?? 0),
                         style: AppTextStyle.textStyle10(
-                            fontColor: AppColors.black),
+                            fontColor: appColors.black),
                       ),
                       if (yourMessage) SizedBox(width: 8.w),
                       if (yourMessage)
@@ -305,8 +305,8 @@ class MessageView extends StatelessWidget {
                             ? Assets.images.icSingleTick.svg()
                             : msgType.value == 1
                                 ? Assets.images.icDoubleTick.svg(
-                                    colorFilter: const ColorFilter.mode(
-                                        AppColors.lightGrey, BlendMode.srcIn))
+                                    colorFilter:  ColorFilter.mode(
+                                        appColors.lightGrey, BlendMode.srcIn))
                                 : msgType.value == 3
                                     ? Assets.images.icDoubleTick.svg()
                                     : Assets.images.icSingleTick.svg()
@@ -368,9 +368,9 @@ class MessageView extends StatelessWidget {
                                   bottomRight: Radius.circular(10.r)),
                               gradient: LinearGradient(
                                 colors: [
-                                  AppColors.darkBlue.withOpacity(0.0),
-                                  AppColors.darkBlue.withOpacity(0.0),
-                                  AppColors.darkBlue.withOpacity(0.5),
+                                  appColors.darkBlue.withOpacity(0.0),
+                                  appColors.darkBlue.withOpacity(0.0),
+                                  appColors.darkBlue.withOpacity(0.5),
                                 ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomCenter,
@@ -382,7 +382,7 @@ class MessageView extends StatelessWidget {
                                 Text(
                                   messageDateTime(chatDetail.time ?? 0),
                                   style: AppTextStyle.textStyle10(
-                                      fontColor: AppColors.white),
+                                      fontColor: appColors.white),
                                 ),
                                 if (yourMessage) SizedBox(width: 8.w),
                                 if (yourMessage)
@@ -391,8 +391,8 @@ class MessageView extends StatelessWidget {
                                       : msgType.value == 1
                                           ? Assets.images.icDoubleTick.svg(
                                               colorFilter:
-                                                  const ColorFilter.mode(
-                                                      AppColors.greyColor,
+                                                   ColorFilter.mode(
+                                                      appColors.greyColor,
                                                       BlendMode.srcIn))
                                           : msgType.value == 3
                                               ? Assets.images.icDoubleTick.svg()
@@ -429,11 +429,11 @@ class MessageView extends StatelessWidget {
                               child: Container(
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  color: AppColors.darkBlue.withOpacity(0.3),
+                                  color: appColors.darkBlue.withOpacity(0.3),
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Icon(Icons.download_rounded,
-                                    color: AppColors.white),
+                                child:  Icon(Icons.download_rounded,
+                                    color: appColors.white),
                               ),
                             ),
                             Positioned(
@@ -451,9 +451,9 @@ class MessageView extends StatelessWidget {
                                           bottomRight: Radius.circular(10.r)),
                                       gradient: LinearGradient(
                                         colors: [
-                                          AppColors.darkBlue.withOpacity(0.0),
-                                          AppColors.darkBlue.withOpacity(0.0),
-                                          AppColors.darkBlue.withOpacity(0.5),
+                                          appColors.darkBlue.withOpacity(0.0),
+                                          appColors.darkBlue.withOpacity(0.0),
+                                          appColors.darkBlue.withOpacity(0.5),
                                         ],
                                         begin: Alignment.topLeft,
                                         end: Alignment.bottomCenter,
@@ -462,7 +462,7 @@ class MessageView extends StatelessWidget {
                                     child: Text(
                                       messageDateTime(chatDetail.time ?? 0),
                                       style: AppTextStyle.textStyle10(
-                                          fontColor: AppColors.white),
+                                          fontColor: appColors.white),
                                     ),
                                   ),
                                   SizedBox(width: 8.w),
@@ -507,8 +507,8 @@ class MessageView extends StatelessWidget {
         debugPrint("KundliId : ${chatDetail.kundliId}");
       },
       child: Card(
-        color: AppColors.white,
-        surfaceTintColor: AppColors.white,
+        color: appColors.white,
+        surfaceTintColor: appColors.white,
         child: Container(
           padding: EdgeInsets.all(12.h),
           child: Row(
@@ -516,14 +516,14 @@ class MessageView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                decoration: const BoxDecoration(
-                    shape: BoxShape.circle, color: AppColors.extraLightGrey),
+                decoration:  BoxDecoration(
+                    shape: BoxShape.circle, color: appColors.extraLightGrey),
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Text(
                     chatDetail.kundliName?[0] ?? "",
                     style: AppTextStyle.textStyle24(
-                        fontColor: AppColors.white,
+                        fontColor: appColors.white,
                         fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -538,7 +538,7 @@ class MessageView extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16.sp,
-                        color: AppColors.darkBlue,
+                        color: appColors.darkBlue,
                       ),
                     ),
                     SizedBox(height: 5.h),
@@ -547,7 +547,7 @@ class MessageView extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 10.sp,
-                        color: AppColors.lightGrey,
+                        color: appColors.lightGrey,
                       ),
                     ),
                     SizedBox(height: 5.h),
@@ -556,7 +556,7 @@ class MessageView extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 10.sp,
-                        color: AppColors.lightGrey,
+                        color: appColors.lightGrey,
                       ),
                     ),
                   ],
@@ -588,7 +588,7 @@ class MessageView extends StatelessWidget {
                 blurRadius: 1.0,
                 offset: const Offset(0.0, 3.0)),
           ],
-          color: AppColors.white,
+          color: appColors.white,
           borderRadius: const BorderRadius.all(Radius.circular(20)),
         ),
         child: Text("unreadMessages".tr),

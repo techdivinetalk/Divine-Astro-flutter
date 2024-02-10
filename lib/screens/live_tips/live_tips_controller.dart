@@ -191,7 +191,7 @@ class LiveTipsController extends GetxController {
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-              color: AppColors.white,
+              color: appColors.white,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,7 +211,7 @@ class LiveTipsController extends GetxController {
                     "congratulations".tr,
                     style: TextStyle(
                       fontSize: 24.sp,
-                      color: AppColors.darkBlue,
+                      color: appColors.darkBlue,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -252,12 +252,12 @@ class LiveTipsController extends GetxController {
                                   Text(
                                     "Rahul",
                                     style: AppTextStyle.textStyle16(
-                                        fontColor: AppColors.darkBlue),
+                                        fontColor: appColors.darkBlue),
                                   ),
                                   Text(
                                     "has given you 3 hearts",
                                     style: AppTextStyle.textStyle12(
-                                        fontColor: AppColors.darkBlue),
+                                        fontColor: appColors.darkBlue),
                                   ),
                                 ],
                               ),
@@ -268,7 +268,7 @@ class LiveTipsController extends GetxController {
                                     "₹15",
                                     style: AppTextStyle.textStyle16(
                                         fontWeight: FontWeight.w600,
-                                        fontColor: AppColors.darkBlue),
+                                        fontColor: appColors.darkBlue),
                                   ),
                                   SizedBox(
                                     width: 5.w,
@@ -297,13 +297,13 @@ class LiveTipsController extends GetxController {
                     Text(
                       "totalEarning".tr,
                       style: AppTextStyle.textStyle16(
-                          fontColor: AppColors.darkBlue,
+                          fontColor: appColors.darkBlue,
                           fontWeight: FontWeight.w600),
                     ),
                     Text(
                       "₹2115",
                       style: AppTextStyle.textStyle16(
-                          fontColor: AppColors.darkBlue,
+                          fontColor: appColors.darkBlue,
                           fontWeight: FontWeight.w600),
                     ),
                   ],

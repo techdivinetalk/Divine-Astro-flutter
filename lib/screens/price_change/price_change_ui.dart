@@ -49,7 +49,7 @@ class PriceChangeReqUI extends GetView<PriceChangeReqController> {
                           blurRadius: 1.0,
                           offset: const Offset(0.0, 3.0)),
                     ],
-                    color: AppColors.white,
+                    color: appColors.white,
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                   ),
                   child: Row(
@@ -59,19 +59,19 @@ class PriceChangeReqUI extends GetView<PriceChangeReqController> {
                         "customerPrice".tr,
                         style: AppTextStyle.textStyle16(
                             fontWeight: FontWeight.w400,
-                            fontColor: AppColors.darkBlue),
+                            fontColor: appColors.darkBlue),
                       ),
                       const Expanded(child: SizedBox()),
                       Container(
                         padding: EdgeInsets.all(8.h),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: AppColors.darkBlue)),
+                            border: Border.all(color: appColors.darkBlue)),
                         child: Text(
                           "₹18.0",
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w400,
-                              fontColor: AppColors.darkBlue),
+                              fontColor: appColors.darkBlue),
                         ),
                       ),
                       SizedBox(width: 10.w),
@@ -105,7 +105,7 @@ class PriceChangeReqUI extends GetView<PriceChangeReqController> {
                                   blurRadius: 1.0,
                                   offset: const Offset(0.0, 3.0)),
                             ],
-                            color: AppColors.white,
+                            color: appColors.white,
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(10)),
                           ),
@@ -123,7 +123,7 @@ class PriceChangeReqUI extends GetView<PriceChangeReqController> {
                                     child: Text(
                                       "${item.priceTag}",
                                       style: AppTextStyle.textStyle16(
-                                          fontColor: AppColors.darkBlue),
+                                          fontColor: appColors.darkBlue),
                                     ),
                                   ),
                                   Container(
@@ -132,8 +132,8 @@ class PriceChangeReqUI extends GetView<PriceChangeReqController> {
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         color: item.amount == "Not Eligible"
-                                            ? AppColors.appRedColour
-                                            : AppColors.darkGreen
+                                            ? appColors.appRedColour
+                                            : appColors.darkGreen
                                                 .withOpacity(0.5)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -142,8 +142,8 @@ class PriceChangeReqUI extends GetView<PriceChangeReqController> {
                                         style: AppTextStyle.textStyle16(
                                             fontColor:
                                                 item.amount == "Not Eligible"
-                                                    ? AppColors.white
-                                                    : AppColors.darkBlue),
+                                                    ? appColors.white
+                                                    : appColors.darkBlue),
                                       ),
                                     ),
                                   ),
@@ -153,7 +153,7 @@ class PriceChangeReqUI extends GetView<PriceChangeReqController> {
                                 Text(
                                   "${item.description}",
                                   style: AppTextStyle.textStyle12(
-                                      fontColor: AppColors.blackColor),
+                                      fontColor: appColors.blackColor),
                                 )
                               ],
                             ),

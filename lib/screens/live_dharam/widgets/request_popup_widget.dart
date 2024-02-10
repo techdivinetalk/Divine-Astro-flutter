@@ -42,7 +42,7 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     return Material(
-//       color: AppColors.transparent,
+//       color: appColors.transparent,
 //       child: Center(
 //         child: Column(
 //           mainAxisSize: MainAxisSize.min,
@@ -63,10 +63,10 @@
 //           width: 48,
 //           decoration: BoxDecoration(
 //             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-//             border: Border.all(color: AppColors.white),
-//             color: AppColors.white.withOpacity(0.2),
+//             border: Border.all(color: appColors.white),
+//             color: appColors.white.withOpacity(0.2),
 //           ),
-//           child: const Icon(Icons.close, color: AppColors.white),
+//           child: const Icon(Icons.close, color: appColors.white),
 //         ),
 //       ),
 //     );
@@ -83,8 +83,8 @@
 //           margin: const EdgeInsets.all(16.0),
 //           decoration: BoxDecoration(
 //             borderRadius: const BorderRadius.all(Radius.circular(25.0)),
-//             border: Border.all(color: AppColors.yellow),
-//             color: AppColors.white,
+//             border: Border.all(color: appColors.yellow),
+//             color: appColors.white,
 //           ),
 //           child: grid(),
 //         ),
@@ -112,7 +112,7 @@
 //             widget.details.data?.name ?? "",
 //             style: const TextStyle(
 //               fontSize: 24,
-//               color: AppColors.yellow,
+//               color: appColors.yellow,
 //             ),
 //           ),
 //           const SizedBox(height: 0),
@@ -120,7 +120,7 @@
 //             "Requested for ${requestedString()}",
 //             style: const TextStyle(
 //               fontSize: 20,
-//               color: AppColors.black,
+//               color: appColors.black,
 //             ),
 //           ),
 //           const SizedBox(height: 16),
@@ -264,7 +264,7 @@
 //         child: ElevatedButton(
 //           style: ButtonStyle(
 //             elevation: MaterialStateProperty.all(4),
-//             backgroundColor: MaterialStateProperty.all(AppColors.yellow),
+//             backgroundColor: MaterialStateProperty.all(appColors.yellow),
 //             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
 //               const RoundedRectangleBorder(
 //                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -283,7 +283,7 @@
 //               const SizedBox(width: 16),
 //               Text(
 //                 buttonText,
-//                 style: const TextStyle(color: AppColors.black),
+//                 style: const TextStyle(color: appColors.black),
 //               ),
 //             ],
 //           ),

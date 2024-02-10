@@ -28,16 +28,16 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
       autocorrect: true,
       decoration: InputDecoration(
         hintText: widget.hintText,
-        hintStyle: const TextStyle(color: AppColors.greyColor),
+        hintStyle:  TextStyle(color: appColors.greyColor),
         filled: true,
         fillColor: Colors.white70,
-        enabledBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30.0)),
-          borderSide: BorderSide(color: AppColors.appYellowColour, width: 1),
+        enabledBorder:  OutlineInputBorder(
+          borderRadius:const BorderRadius.all(Radius.circular(30.0)),
+          borderSide: BorderSide(color: appColors.appYellowColour, width: 1),
         ),
-        focusedBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30.0)),
-          borderSide: BorderSide(color: AppColors.appYellowColour),
+        focusedBorder:  OutlineInputBorder(
+          borderRadius:const BorderRadius.all(Radius.circular(30.0)),
+          borderSide: BorderSide(color: appColors.appYellowColour),
         ),
       ),
     );
@@ -109,22 +109,22 @@ class _WhiteTextFieldState extends State<WhiteTextField> {
           isDense: widget.isDense,
           contentPadding: widget.contentPadding,
           helperStyle: AppTextStyle.textStyle16(),
-          fillColor: AppColors.white,
-          hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.greyColor),
-          hoverColor: AppColors.white,
+          fillColor: appColors.white,
+          hintStyle: AppTextStyle.textStyle16(fontColor: appColors.greyColor),
+          hoverColor: appColors.white,
           prefixIcon: widget.icon,
           suffixIcon: widget.suffixIcon,
           filled: true,
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(
-                color: widget.errorBorder ?? AppColors.white,
+                color: widget.errorBorder ?? appColors.white,
                 width: 1.0,
               )),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: const BorderSide(
-                color: AppColors.appYellowColour,
+              borderSide:  BorderSide(
+                color: appColors.appYellowColour,
                 width: 1.0,
               )),
         ),
@@ -160,7 +160,7 @@ class AppTextField extends StatelessWidget {
       style: TextStyle(
         fontWeight: FontWeight.w400,
         fontSize: 16.sp,
-        color: AppColors.darkBlue,
+        color: appColors.darkBlue,
       ),
       readOnly: readOnly ?? false,
       onTap: () {
@@ -171,17 +171,17 @@ class AppTextField extends StatelessWidget {
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
-              color: AppColors.darkBlue.withOpacity(.15),
+              color: appColors.darkBlue.withOpacity(.15),
             )),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
-              color: AppColors.darkBlue.withOpacity(.15),
+              color: appColors.darkBlue.withOpacity(.15),
             )),
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
-              color: AppColors.darkBlue.withOpacity(.15),
+              color: appColors.darkBlue.withOpacity(.15),
             )),
         isDense: true,
         hintText: hintText,
@@ -203,7 +203,7 @@ class AppTextField extends StatelessWidget {
         hintStyle: TextStyle(
           fontWeight: FontWeight.w400,
           fontSize: 16.sp,
-          color: AppColors.darkBlue.withOpacity(.5),
+          color: appColors.darkBlue.withOpacity(.5),
         ),
       ),
     );

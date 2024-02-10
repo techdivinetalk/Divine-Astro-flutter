@@ -21,8 +21,8 @@ class AcceptChatWidget extends StatelessWidget {
       padding: EdgeInsets.all(16.h),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.r),
-        gradient: const LinearGradient(
-            colors: [AppColors.white, AppColors.yellow],
+        gradient:  LinearGradient(
+            colors: [appColors.white, appColors.yellow],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter),
       ),
@@ -32,7 +32,7 @@ class AcceptChatWidget extends StatelessWidget {
             flex: 6,
             child: Wrap(direction: Axis.horizontal, children: [
               CustomText(data['orderData']['customerName'],
-                  fontSize: 10.sp, fontColor: AppColors.brown, fontWeight: FontWeight.w700),
+                  fontSize: 10.sp, fontColor: appColors.brown, fontWeight: FontWeight.w700),
               CustomText(' requested to start a\nconsultation with you via chat.', fontSize: 10.sp),
               SizedBox(width: 8.w),
             ]),
@@ -41,14 +41,14 @@ class AcceptChatWidget extends StatelessWidget {
             onTap: onTap,
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 6),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColors.yellow),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: appColors.yellow),
               child: Row(
                 children: [
                   Text(' Accept Chat Now',
                       style: TextStyle(
                           fontSize: 10.sp,
                           fontWeight: FontWeight.w400,
-                          color: AppColors.brown,
+                          color: appColors.brown,
                           fontFamily: FontFamily.poppins)),
                   SizedBox(width: 5.w,),
                   Assets.svg.forwardIcon.svg()

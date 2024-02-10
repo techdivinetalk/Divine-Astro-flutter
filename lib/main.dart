@@ -48,6 +48,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   initMessaging();
+  Get.put(AppColors());
+
+
+  // await RemoteConfigService.instance.initFirebaseRemoteConfig();
+
   final remoteConfig = FirebaseRemoteConfig.instance;
   final remoteConfigHelper = RemoteConfigHelper(remoteConfig: remoteConfig);
   await remoteConfigHelper.initialize();
@@ -208,7 +213,7 @@ class MyApp extends StatelessWidget {
                 ],
                 defaultTransition: Transition.fadeIn,
                 navigatorKey: navigatorKey,
-                color: AppColors.white,
+                color: appColors.white,
                 debugShowCheckedModeBanner: false,
                 initialRoute: RouteName.initial,
                 getPages: Routes.routes,
@@ -218,16 +223,16 @@ class MyApp extends StatelessWidget {
                 fallbackLocale: AppTranslations.fallbackLocale,
                 translations: AppTranslations(),
                 theme: ThemeData(
-                  splashColor: AppColors.transparent,
+                  splashColor: appColors.transparent,
                   highlightColor: Colors.transparent,
                   colorScheme: ColorScheme.fromSeed(
                       seedColor: Colors.white,
-                      background: AppColors.white,
-                      surfaceTint: AppColors.white),
+                      background: appColors.white,
+                      surfaceTint: appColors.white),
                   useMaterial3: true,
                   fontFamily: FontFamily.poppins,
                   // cardTheme: const CardTheme(
-                  //     color: AppColors.white, surfaceTintColor: AppColors.white),
+                  //     color: appColors.white, surfaceTintColor: appColors.white),
                 ),
                 localizationsDelegates: const [
                   DefaultMaterialLocalizations.delegate,

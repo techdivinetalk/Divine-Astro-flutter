@@ -23,11 +23,11 @@ Future toolInfoBottomSheet(BuildContext context,
             padding: const EdgeInsets.all(15.0),
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                border: Border.all(color: AppColors.white),
-                color: AppColors.transparent),
-            child: const Icon(
+                border: Border.all(color: appColors.white),
+                color: appColors.transparent),
+            child:  Icon(
               Icons.close_rounded,
-              color: AppColors.white,
+              color: appColors.white,
             ),
           ),
         ),
@@ -47,12 +47,12 @@ Future toolInfoBottomSheet(BuildContext context,
                 Text(
                   title,
                   style: AppTextStyle.textStyle20(
-                      fontWeight: FontWeight.w600, fontColor: AppColors.black),
+                      fontWeight: FontWeight.w600, fontColor: appColors.black),
                 ),
               SizedBox(height: 16.h),
               if(subTitle != null) Text(
                 subTitle,
-                style: AppTextStyle.textStyle13(fontColor: AppColors.black),
+                style: AppTextStyle.textStyle13(fontColor: appColors.black),
                 textAlign: TextAlign.center,
               ),
               if(functionalityWidget != null) Padding(
@@ -68,7 +68,7 @@ Future toolInfoBottomSheet(BuildContext context,
                     padding:  EdgeInsets.symmetric(vertical: 12.5.h),
                     width: Get.width,
                     decoration: BoxDecoration(
-                      color: AppColors.lightYellow,
+                      color: appColors.lightYellow,
                       borderRadius: BorderRadius.circular(10.w),
                     ),
                     child: Center(
@@ -76,7 +76,7 @@ Future toolInfoBottomSheet(BuildContext context,
                         btnTitle,
                         style: AppTextStyle.textStyle16(
                           fontWeight: FontWeight.w500,
-                          fontColor: AppColors.black,
+                          fontColor: appColors.black,
                         ),
                       ),
                     ),
@@ -92,12 +92,12 @@ Future toolInfoBottomSheet(BuildContext context,
               //       Navigator.pop(context);
               //       // Get.back();
               //     },
-              //     //color: AppColors.lightYellow,
+              //     //color: appColors.lightYellow,
               //     child: Text(
               //       'submit'.tr,
               //       style: AppTextStyle.textStyle20(
               //         fontWeight: FontWeight.w600,
-              //         fontColor: AppColors.red,
+              //         fontColor: appColors.red,
               //       ),
               //     )),
               const SizedBox(height: 30),

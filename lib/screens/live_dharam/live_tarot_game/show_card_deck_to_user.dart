@@ -27,7 +27,7 @@ class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[top(), const SizedBox(height: 16), bottom()],
@@ -46,10 +46,10 @@ class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
           width: 48,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-            border: Border.all(color: AppColors.white),
-            color: AppColors.white.withOpacity(0.2),
+            border: Border.all(color: appColors.white),
+            color: appColors.white.withOpacity(0.2),
           ),
-          child: const Icon(Icons.close, color: AppColors.white),
+          child:  Icon(Icons.close, color: appColors.white),
         ),
       ),
     );
@@ -71,8 +71,8 @@ class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: AppColors.yellow),
-            color: AppColors.white.withOpacity(0.2),
+            border: Border.all(color: appColors.yellow),
+            color: appColors.white.withOpacity(0.2),
           ),
           child: grid(),
         ),
@@ -87,9 +87,9 @@ class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const SizedBox(height: 16),
-          const Text(
+           Text(
             "Show Card Deck to User",
-            style: TextStyle(fontSize: 20, color: AppColors.white),
+            style: TextStyle(fontSize: 20, color: appColors.white),
           ),
           // const SizedBox(height: 16),
           ListView.builder(
@@ -103,28 +103,28 @@ class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
                 onChanged: (ind) => setState(() => value = ind),
                 title: Text(
                   "Ask user to choose ${numList[index]} cards",
-                  style: const TextStyle(color: AppColors.white),
+                  style:  TextStyle(color: appColors.white),
                 ),
                 controlAffinity: ListTileControlAffinity.trailing,
                 toggleable: true,
-                activeColor: AppColors.yellow,
+                activeColor: appColors.yellow,
               );
             },
           ),
           const SizedBox(height: 16),
           Container(
             decoration: BoxDecoration(
-              border: Border.all(color: AppColors.white),
+              border: Border.all(color: appColors.white),
               borderRadius: const BorderRadius.all(Radius.circular(20.0)),
             ),
             child: ListTile(
               title: Text(
                 widget.userName,
-                style: const TextStyle(fontSize: 20, color: AppColors.white),
+                style:  TextStyle(fontSize: 20, color: appColors.white),
               ),
-              subtitle: const Text(
+              subtitle: Text(
                 "05 M 30 S",
-                style: TextStyle(color: AppColors.white),
+                style: TextStyle(color: appColors.white),
               ),
               trailing: SizedBox(height: 50, width: 100, child: button()),
             ),
@@ -140,7 +140,7 @@ class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
       style: ButtonStyle(
         elevation: MaterialStateProperty.all(4),
         backgroundColor: MaterialStateProperty.all(
-          value == null ? AppColors.grey : AppColors.yellow,
+          value == null ? appColors.grey : appColors.yellow,
         ),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           const RoundedRectangleBorder(
@@ -156,7 +156,7 @@ class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
       child: Text(
         'Send',
         style: TextStyle(
-          color: value == null ? AppColors.white : AppColors.black,
+          color: value == null ? appColors.white : appColors.black,
         ),
       ),
     );

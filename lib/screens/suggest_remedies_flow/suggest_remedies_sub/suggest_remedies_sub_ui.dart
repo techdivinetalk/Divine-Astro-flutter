@@ -16,15 +16,15 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors.white,
+        backgroundColor: appColors.white,
         appBar: commonAppbar(
             title: "suggestRemedy".tr,
             trailingWidget: InkWell(
               child: Padding(
                   padding: EdgeInsets.only(right: 20.w),
                   child: Assets.images.icSearch.svg(
-                      colorFilter: const ColorFilter.mode(
-                          AppColors.darkBlue, BlendMode.srcIn))),
+                      colorFilter:  ColorFilter.mode(
+                          appColors.darkBlue, BlendMode.srcIn))),
             )),
         body: Column(
           children: [
@@ -91,7 +91,7 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: 12.sp,
-                                                color: AppColors.blackColor,
+                                                color: appColors.blackColor,
                                               )),
                                         ),
                                         SizedBox(height: 8.h),
@@ -99,7 +99,7 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
                                             style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               fontSize: 12.sp,
-                                              color: AppColors.lightGrey,
+                                              color: appColors.lightGrey,
                                             )),
                                       ],
                                     ),

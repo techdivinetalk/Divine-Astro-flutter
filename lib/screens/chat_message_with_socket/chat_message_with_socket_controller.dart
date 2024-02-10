@@ -311,7 +311,7 @@ class ChatMessageWithSocketController extends GetxController
       //loading = Loading.loaded;
       update();
     } catch (error) {
-      divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      divineSnackBar(data: error.toString(), color: appColors.redColor);
     }
   }
 
@@ -333,7 +333,7 @@ class ChatMessageWithSocketController extends GetxController
                   .toJson());
           if (response.statusCode == 200) {
             divineSnackBar(
-                data: "Chat ended.", color: AppColors.appYellowColour);
+                data: "Chat ended.", color: appColors.appYellowColour);
             Get.back();
           }
         }
@@ -530,8 +530,8 @@ class ChatMessageWithSocketController extends GetxController
       uiSettings: <PlatformUiSettings>[
         AndroidUiSettings(
           toolbarTitle: "Update image",
-          toolbarColor: AppColors.white,
-          toolbarWidgetColor: AppColors.blackColor,
+          toolbarColor: appColors.white,
+          toolbarWidgetColor: appColors.blackColor,
           initAspectRatio: CropAspectRatioPreset.original,
           lockAspectRatio: false,
         ),

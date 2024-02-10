@@ -29,8 +29,8 @@ class RejoinWidget extends StatelessWidget {
                 blurRadius: 3.0,
                 offset: const Offset(3, 0)),
           ],
-          gradient: const LinearGradient(
-              colors: [AppColors.white, AppColors.yellow],
+          gradient:  LinearGradient(
+              colors: [appColors.white, appColors.yellow],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter),
         ),
@@ -41,14 +41,14 @@ class RejoinWidget extends StatelessWidget {
               child: Wrap(direction: Axis.horizontal, children: [
                 CustomText('Your Customer ', fontSize: 10.sp),
                 CustomText(data['orderData']['customerName'],
-                    fontSize: 10.sp, fontColor: AppColors.brown, fontWeight: FontWeight.w700),
+                    fontSize: 10.sp, fontColor: appColors.brown, fontWeight: FontWeight.w700),
                 CustomText('already joined', fontSize: 10.sp),
                 SizedBox(width: 8.w),
               ]),
             ),
             CustomButton(
               onTap: () => Get.toNamed(RouteName.chatMessageWithSocketUI, arguments: data),
-              color: AppColors.appYellowColour,
+              color: appColors.appYellowColour,
               radius: 10.r,
               child: Assets.svg.rejoinChatIcon.svg(),
             ),

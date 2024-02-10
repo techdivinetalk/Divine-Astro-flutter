@@ -143,7 +143,7 @@ class PersonalDetailUi extends StatelessWidget {
               child: CustomText(
                 title,
                 fontSize: 14.sp,
-                fontColor: AppColors.darkBlue.withOpacity(0.5),
+                fontColor: appColors.darkBlue.withOpacity(0.5),
               ),
             ),
             SizedBox(

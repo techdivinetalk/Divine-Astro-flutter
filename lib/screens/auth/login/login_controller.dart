@@ -92,7 +92,7 @@ class LoginController extends GetxController {
       } else {
         divineSnackBar(
             data: error.toString(),
-            color: AppColors.redColor,
+            color: appColors.redColor,
             duration: const Duration(milliseconds: 200));
       }
     }

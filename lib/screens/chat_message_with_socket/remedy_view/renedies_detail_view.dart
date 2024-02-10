@@ -22,8 +22,8 @@ class RemediesDetailPage extends GetView<RemediesDetailController> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.white,
-        surfaceTintColor: AppColors.white,
+        backgroundColor: appColors.white,
+        surfaceTintColor: appColors.white,
         leading: IconButton(
           onPressed: () => Get.back(),
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
@@ -36,16 +36,16 @@ class RemediesDetailPage extends GetView<RemediesDetailController> {
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(
-                color:  AppColors.yellow ,
+                color:  appColors.yellow ,
               ),
               borderRadius: BorderRadius.circular(8.0),
             ),
             child: ListTile(
               leading: CircleAvatar(
-                backgroundColor: AppColors.red,
+                backgroundColor: appColors.red,
                 child: CustomText(
                   controller.title.value[0],
-                  fontColor: AppColors.white,
+                  fontColor: appColors.white,
                 ), // Display the first letter of the name
               ),
               title: CustomText(

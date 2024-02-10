@@ -20,12 +20,12 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
       appBar: AppBar(
         centerTitle: false,
         forceMaterialTransparency: true,
-        backgroundColor: AppColors.white,
+        backgroundColor: appColors.white,
         title: Text("Template",
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
-              color: AppColors.darkBlue,
+              color: appColors.darkBlue,
             )),
       ),
       body: Padding(
@@ -37,7 +37,7 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
               'Message Template',
               style: AppTextStyle.textStyle20().copyWith(
                 decoration: TextDecoration.underline,
-                decorationColor: AppColors.appColorDark,
+                decorationColor: appColors.appColorDark,
                 decorationThickness: 2,
               ),
             ),
@@ -51,7 +51,7 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                 width: Get.width,
                 padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 10.w),
                 decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: AppColors.darkBlue),
+                  border: Border.all(width: 1, color: appColors.darkBlue),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Center(
@@ -92,7 +92,7 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 20),
                             decoration: BoxDecoration(
-                              color: AppColors.white,
+                              color: appColors.white,
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(20)),
                               boxShadow: [

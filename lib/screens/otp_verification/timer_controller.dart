@@ -32,8 +32,8 @@ class TimerController extends GetxController {
         if (isDialogVisible.value) {
           return Center(
             child: Container(
-              decoration: const BoxDecoration(
-                color: AppColors.white,
+              decoration:  BoxDecoration(
+                color: appColors.white,
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
               padding: const EdgeInsets.all(25.0),
@@ -61,10 +61,10 @@ class TimerController extends GetxController {
                         Get.back();
                         //Get.toNamed(RouteName.kundliDetailPage);
                       },
-                      color: AppColors.yellow,
+                      color: appColors.yellow,
                       child: Text("Okay",
                           style: AppTextStyle.textStyle16(
-                            fontColor: AppColors.brown,
+                            fontColor: appColors.brown,
                             fontWeight: FontWeight.w600,
                           ))),
                 ],

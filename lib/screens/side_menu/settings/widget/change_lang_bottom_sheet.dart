@@ -28,9 +28,9 @@ class LanguageBottomSheetWidget extends StatelessWidget {
           },
           child: Container(
             decoration: BoxDecoration(
-                border: Border.all(color: AppColors.white, width: 1.5),
+                border: Border.all(color: appColors.white, width: 1.5),
                 borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                color: AppColors.white.withOpacity(0.1)),
+                color: appColors.white.withOpacity(0.1)),
             child: const Icon(
               Icons.close,
               color: Colors.white,
@@ -40,9 +40,9 @@ class LanguageBottomSheetWidget extends StatelessWidget {
         Container(
           width: double.maxFinite,
           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 0.h),
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
-            color: AppColors.white,
+          decoration:  BoxDecoration(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(50.0)),
+            color: appColors.white,
           ),
           child: Column(
             children: [
@@ -135,7 +135,7 @@ class LanguageBottomSheetWidget extends StatelessWidget {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                            color: AppColors.lightYellow,
+                            color: appColors.lightYellow,
                             borderRadius: BorderRadius.circular(10)),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 15.0),
@@ -144,7 +144,7 @@ class LanguageBottomSheetWidget extends StatelessWidget {
                               'okay'.tr,
                               style: AppTextStyle.textStyle16(
                                   fontWeight: FontWeight.w600,
-                                  fontColor: AppColors.brownColour),
+                                  fontColor: appColors.brownColour),
                             ),
                           ),
                         ),

@@ -63,12 +63,11 @@ class LiveGiftsHistory extends StatelessWidget {
   }
 
   Widget orderDetailView(List<GiftDataList> data, int index) {
-
     return InkWell(
       onTap: () {},
       child: Container(
         padding: const EdgeInsets.all(12.0),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColors.white, boxShadow: [
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: appColors.white, boxShadow: [
           BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 3.0, offset: const Offset(0.3, 3.0)),
         ]),
         child: Column(
@@ -100,9 +99,9 @@ class LiveGiftsHistory extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("${'orderId'.tr} : ${data[index].orderId}",
-                            style: AppTextStyle.textStyle9(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                            style: AppTextStyle.textStyle9(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue)),
                         Text("${data[index].getCustomers != null ? data[index].getCustomers?.name : "UserName"}",
-                            style: AppTextStyle.textStyle20(fontWeight: FontWeight.w600, fontColor: AppColors.darkBlue))
+                            style: AppTextStyle.textStyle20(fontWeight: FontWeight.w600, fontColor: appColors.darkBlue))
                       ],
                     )
                   ],
@@ -111,7 +110,7 @@ class LiveGiftsHistory extends StatelessWidget {
                   width: 70,
                   height: 32,
                   decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.lightGreen, width: 1.0),
+                    border: Border.all(color: appColors.lightGreen, width: 1.0),
                     borderRadius: BorderRadius.circular(22.0),
                   ),
                   child: Row(
@@ -119,7 +118,7 @@ class LiveGiftsHistory extends StatelessWidget {
                     children: [
                       Text(
                         "${data[index].status}",
-                        style: AppTextStyle.textStyle10(fontWeight: FontWeight.w500, fontColor: AppColors.lightGreen),
+                        style: AppTextStyle.textStyle10(fontWeight: FontWeight.w500, fontColor: appColors.lightGreen),
                       ),
                     ],
                   ),
@@ -131,10 +130,10 @@ class LiveGiftsHistory extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("${'dateTime'.tr} :",
-                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue)),
                 Text(
                   DateFormat("dd MMM, hh:mm aa").format(data[index].createdAt!),
-                  style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                  style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
                 ),
               ],
             ),
@@ -143,9 +142,9 @@ class LiveGiftsHistory extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("${'giftName'.tr} :",
-                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue)),
                 Text("${data[index].getGift?.giftName}",
-                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
@@ -153,9 +152,9 @@ class LiveGiftsHistory extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("${'giftPrice'.tr} :",
-                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue)),
                 Text("₹${data[index].getGift?.giftPrice}",
-                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
@@ -163,12 +162,12 @@ class LiveGiftsHistory extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("${'quantity'.tr} :",
-                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
-                Text("${data[index].quantity}", style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue)),
+                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue)),
+                Text("${data[index].quantity}", style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
-            Container(height: 1, color: AppColors.greyColor),
+            Container(height: 1, color: appColors.greyColor),
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -191,7 +190,7 @@ class LiveGiftsHistory extends StatelessWidget {
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: AppColors.white,
+            color: appColors.white,
             boxShadow: [
               BoxShadow(
                   color: Colors.black.withOpacity(0.3),
@@ -211,7 +210,7 @@ class LiveGiftsHistory extends StatelessWidget {
                 const Icon(
                   Icons.help_outline,
                   size: 20,
-                  color: AppColors.darkBlue,
+                  color: appColors.darkBlue,
                 )
               ],
             ),
@@ -224,14 +223,14 @@ class LiveGiftsHistory extends StatelessWidget {
                   style: AppTextStyle.textStyle12(
                       fontWeight: FontWeight.w400,
                       fontColor:
-                          "$type" == "PENALTY" ? AppColors.appRedColour : AppColors.darkBlue),
+                          "$type" == "PENALTY" ? appColors.appRedColour : appColors.darkBlue),
                 ),
                 Text(
                   "$amount",
                   style: AppTextStyle.textStyle12(
                       fontWeight: FontWeight.w400,
                       fontColor:
-                          amount!.contains("+") ? AppColors.lightGreen : AppColors.appRedColour),
+                          amount!.contains("+") ? appColors.lightGreen : appColors.appRedColour),
                 )
               ],
             ),
@@ -239,7 +238,7 @@ class LiveGiftsHistory extends StatelessWidget {
               "$details ",
               textAlign: TextAlign.start,
               style: AppTextStyle.textStyle12(
-                  fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                  fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
             ),
             const SizedBox(height: 8),
             Row(
@@ -249,7 +248,7 @@ class LiveGiftsHistory extends StatelessWidget {
                   "$time",
                   textAlign: TextAlign.end,
                   style: AppTextStyle.textStyle12(
-                      fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                      fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
                 ),
               ],
             ),

@@ -33,7 +33,7 @@ class _AskForGiftState extends State<AskForGiftBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -45,11 +45,11 @@ class _AskForGiftState extends State<AskForGiftBottomSheet> {
               padding: const EdgeInsets.all(15.0),
               decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                  border: Border.all(color: AppColors.white),
-                  color: AppColors.transparent),
-              child: const Icon(
+                  border: Border.all(color: appColors.white),
+                  color: appColors.transparent),
+              child:  Icon(
                 Icons.close_rounded,
-                color: AppColors.white,
+                color: appColors.white,
               ),
             ),
           ),
@@ -155,8 +155,8 @@ class _AskForGiftState extends State<AskForGiftBottomSheet> {
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-            border: Border.all(color: AppColors.yellow),
-            color: AppColors.white.withOpacity(0.2),
+            border: Border.all(color: appColors.yellow),
+            color: appColors.white.withOpacity(0.2),
           ),
           child: Row(
             children: <Widget>[
@@ -217,9 +217,9 @@ class _AskForGiftState extends State<AskForGiftBottomSheet> {
       child: Container(
         height: 24,
         width: 24,
-        decoration: const BoxDecoration(
+        decoration:  BoxDecoration(
           shape: BoxShape.circle,
-          color: AppColors.yellow,
+          color: appColors.yellow,
         ),
         child: Icon(iconData),
       ),

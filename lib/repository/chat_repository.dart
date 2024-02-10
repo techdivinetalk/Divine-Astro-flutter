@@ -95,7 +95,7 @@ class ChatRepository extends ApiProvider {
           // } else {
           //   divineSnackBar(
           //       data: json.decode(response.body)["message"],
-          //       color: AppColors.redColor);
+          //       color: appColors.redColor);
           // }
         }
       } else {

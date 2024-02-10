@@ -105,7 +105,10 @@ class SharedPreferenceService extends GetxService {
 
   LoginImages? getLoginImages() {
     String? images = prefs!.getString(loginImages);
-    return loginImagesFromJson(images!);
+    if(images != null){
+      return loginImagesFromJson(images);
+    }
+
     return null;
   }
 

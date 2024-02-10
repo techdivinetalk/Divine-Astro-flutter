@@ -1,10 +1,10 @@
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/cached_network_image.dart';
-import 'package:divine_astrologer/common/common_image_view.dart';
+
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
-import 'package:divine_astrologer/tarotCard/widget/custom_image_view.dart';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,7 @@ class ProfileUI extends GetView<ProfilePageController> {
   Widget build(BuildContext context) {
     Get.put(ProfilePageController(Get.put(UserRepository())));
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: appColors.white,
       appBar: commonAppbar(
           title: "profile".tr, trailingWidget: const SizedBox.shrink()),
       drawer: const SideMenuDrawer(),
@@ -69,7 +69,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                           width: 6,
-                                          color: AppColors.appYellowColour),
+                                          color: appColors.appYellowColour),
                                       borderRadius: BorderRadius.circular(80),
                                     ),
                                     child: InkWell(
@@ -121,7 +121,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                 softWrap: true,
                                                 style: AppTextStyle.textStyle20(
                                                     fontWeight: FontWeight.w600,
-                                                    fontColor: AppColors
+                                                    fontColor: appColors
                                                         .darkBlue),
                                               ),
                                             ),
@@ -138,13 +138,13 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                       .textStyle10(
                                                       fontWeight: FontWeight
                                                           .w500,
-                                                      fontColor: AppColors
+                                                      fontColor: appColors
                                                           .appYellowColour),
                                                 ),
                                                 Icon(
                                                   Icons.arrow_right,
                                                   size: 18.h,
-                                                  color: AppColors
+                                                  color: appColors
                                                       .appYellowColour,
                                                 )
                                               ]),
@@ -156,14 +156,14 @@ class ProfileUI extends GetView<ProfilePageController> {
                                             ""}',
                                         style: AppTextStyle.textStyle14(
                                             fontWeight: FontWeight.w400,
-                                            fontColor: AppColors.darkBlue),
+                                            fontColor: appColors.darkBlue),
                                       ),
                                       SizedBox(height: 3.h),
                                       Row(children: [
                                         Text("${"astrologerId".tr}-",
                                             style: AppTextStyle.textStyle14(
                                                 fontWeight: FontWeight.w400,
-                                                fontColor: AppColors.darkBlue)),
+                                                fontColor: appColors.darkBlue)),
                                         SizedBox(width: 5.h),
                                         Expanded(
                                           child: Text(
@@ -171,7 +171,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                   ""}",
                                               style: AppTextStyle.textStyle14(
                                                   fontWeight: FontWeight.w400,
-                                                  fontColor: AppColors
+                                                  fontColor: appColors
                                                       .darkBlue)),
                                         ),
                                       ]),
@@ -185,7 +185,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                   "profileOptions".tr,
                   style: AppTextStyle.textStyle16(
                       fontWeight: FontWeight.w500,
-                      fontColor: AppColors.darkBlue),
+                      fontColor: appColors.darkBlue),
                 ),
               ),
               profileOptions(),
@@ -210,11 +210,11 @@ class ProfileUI extends GetView<ProfilePageController> {
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                        color: AppColors.blackColor.withOpacity(0.2),
+                        color: appColors.blackColor.withOpacity(0.2),
                         blurRadius: 1.0,
                         offset: const Offset(0.0, 3.0)),
                   ],
-                  color: AppColors.white,
+                  color: appColors.white,
                   borderRadius:
                   const BorderRadius.all(Radius.circular(10)),
                 ),
@@ -273,7 +273,7 @@ class ProfileUI extends GetView<ProfilePageController> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20.r),
                 child: Material(
-                  color: AppColors.transparent,
+                  color: appColors.transparent,
                   child: InkWell(
                     onTap: () async {
                       if (index == 4) {
@@ -289,10 +289,10 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                       border: Border.all(
-                                          color: AppColors.white, width: 1.5),
+                                          color: appColors.white, width: 1.5),
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(50.0)),
-                                      color: AppColors.white.withOpacity(0.1)),
+                                      color: appColors.white.withOpacity(0.1)),
                                   child: const Icon(
                                     Icons.close,
                                     color: Colors.transparent,
@@ -303,10 +303,10 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 width: double.maxFinite,
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 24.w, vertical: 0.h),
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.vertical(
+                                decoration:  BoxDecoration(
+                                  borderRadius: const BorderRadius.vertical(
                                       top: Radius.circular(50.0)),
-                                  color: AppColors.white,
+                                  color: appColors.white,
                                 ),
                                 child: Column(
                                   children: [
@@ -435,7 +435,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                   .size
                                                   .width,
                                               decoration: BoxDecoration(
-                                                  color: AppColors.lightYellow,
+                                                  color: appColors.lightYellow,
                                                   borderRadius:
                                                   BorderRadius.circular(
                                                       10)),
@@ -450,7 +450,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                         .textStyle16(
                                                         fontWeight:
                                                         FontWeight.w600,
-                                                        fontColor: AppColors
+                                                        fontColor: appColors
                                                             .brownColour),
                                                   ),
                                                 ),
@@ -508,7 +508,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                             textAlign: TextAlign.center,
                             style: AppTextStyle.textStyle10(
                                 fontWeight: FontWeight.w500,
-                                fontColor: AppColors.darkBlue),
+                                fontColor: appColors.darkBlue),
                           ),
                         ],
                       ),
@@ -529,11 +529,11 @@ class ProfileUI extends GetView<ProfilePageController> {
       decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-                color: AppColors.blackColor.withOpacity(0.2),
+                color: appColors.blackColor.withOpacity(0.2),
                 blurRadius: 1.0,
                 offset: const Offset(0.0, 3.0)),
           ],
-          color: AppColors.white,
+          color: appColors.white,
           borderRadius: BorderRadius.all(Radius.circular(10.h))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -566,8 +566,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                         Assets.images.icUser.svg(
                           height: 20.h,
                           width: 20.h,
-                          colorFilter: const ColorFilter.mode(
-                              AppColors.appYellowColour, BlendMode.srcIn),
+                          colorFilter:  ColorFilter.mode(
+                              appColors.appYellowColour, BlendMode.srcIn),
                         ),
                         SizedBox(width: 8.w),
                         Text(
@@ -602,8 +602,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                             ((controller.ratingsData?.data?.totalReviews ??
                                 0)
                                 .toDouble())),
-                        backgroundColor: AppColors.lightYellow.withOpacity(0.4),
-                        progressColor: AppColors.lightYellow,
+                        backgroundColor: appColors.lightYellow.withOpacity(0.4),
+                        progressColor: appColors.lightYellow,
                       ),
                     ],
                   ),
@@ -625,8 +625,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                             (controller.ratingsData?.data?.totalReviews ??
                                 0)
                                 .toDouble()),
-                        backgroundColor: AppColors.lightYellow.withOpacity(0.4),
-                        progressColor: AppColors.lightYellow,
+                        backgroundColor: appColors.lightYellow.withOpacity(0.4),
+                        progressColor: appColors.lightYellow,
                       ),
                     ],
                   ),
@@ -648,8 +648,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                             (controller.ratingsData?.data?.totalReviews ??
                                 0)
                                 .toDouble()),
-                        backgroundColor: AppColors.lightYellow.withOpacity(0.4),
-                        progressColor: AppColors.lightYellow,
+                        backgroundColor: appColors.lightYellow.withOpacity(0.4),
+                        progressColor: appColors.lightYellow,
                       ),
                     ],
                   ),
@@ -671,8 +671,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                             (controller.ratingsData?.data?.totalReviews ??
                                 0)
                                 .toDouble()),
-                        backgroundColor: AppColors.lightYellow.withOpacity(0.4),
-                        progressColor: AppColors.lightYellow,
+                        backgroundColor: appColors.lightYellow.withOpacity(0.4),
+                        progressColor: appColors.lightYellow,
                       ),
                     ],
                   ),
@@ -694,8 +694,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                             (controller.ratingsData?.data?.totalReviews ??
                                 0)
                                 .toDouble()),
-                        backgroundColor: AppColors.lightYellow.withOpacity(0.4),
-                        progressColor: AppColors.lightYellow,
+                        backgroundColor: appColors.lightYellow.withOpacity(0.4),
+                        progressColor: appColors.lightYellow,
                       ),
                     ],
                   ),
@@ -720,7 +720,7 @@ class ProfileUI extends GetView<ProfilePageController> {
           separatorBuilder: (context, index) =>
               Padding(
                 padding: EdgeInsets.all(8.h),
-                child: const Divider(color: AppColors.extraLightGrey),
+                child:  Divider(color: appColors.extraLightGrey),
               ),
           itemBuilder: (context, index) {
             TextEditingController replyController = TextEditingController();
@@ -761,8 +761,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 filledIcon: Icons.star,
                                 emptyIcon: Icons.star,
                                 emptyColor:
-                                AppColors.appYellowColour.withOpacity(0.3),
-                                filledColor: AppColors.appYellowColour,
+                                appColors.appYellowColour.withOpacity(0.3),
+                                filledColor: appColors.appYellowColour,
                                 initialRating:
                                 double.tryParse("${reviewData?.rating}") ?? 0,
                                 size: 15.h,
@@ -781,7 +781,7 @@ class ProfileUI extends GetView<ProfilePageController> {
 
                                           showCupertinoModalPopup(
                                             barrierColor:
-                                            AppColors.darkBlue.withOpacity(0.5),
+                                            appColors.darkBlue.withOpacity(0.5),
                                             context: context,
                                             builder: (context) =>
                                                 ReportPostReasons(
@@ -836,8 +836,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                             ),
                             Visibility(
                               visible: controller.isLoading.value,
-                              child: const CircularProgressIndicator(
-                                  color: AppColors.yellow),
+                              child:  CircularProgressIndicator(
+                                  color: appColors.yellow),
                             ),
                           ],
                         ),
@@ -909,9 +909,9 @@ class ProfileUI extends GetView<ProfilePageController> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: appColors.white,
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: AppColors.darkBlue.withOpacity(0.10)),
+        border: Border.all(color: appColors.darkBlue.withOpacity(0.10)),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Row(
@@ -928,16 +928,16 @@ class ProfileUI extends GetView<ProfilePageController> {
                 hintText: "${'replyHere'.tr}...",
                 isDense: true,
                 hintStyle:
-                TextStyle(color: AppColors.greyColor, fontSize: 12.sp),
+                TextStyle(color: appColors.greyColor, fontSize: 12.sp),
                 border: InputBorder.none,
               ),
             ),
           ),
           IconButton(
-            icon: const Icon(
+            icon:  Icon(
               Icons.send,
               size: 20,
-              color: AppColors.black,
+              color: appColors.black,
             ),
             onPressed: onSendPressed,
           ),
@@ -960,7 +960,7 @@ class _ReportPostReasonsState extends State<ReportPostReasons> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -971,9 +971,9 @@ class _ReportPostReasonsState extends State<ReportPostReasons> {
             child: Container(
               padding: const EdgeInsets.all(15.0),
               decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.white, width: 1.5),
+                  border: Border.all(color: appColors.white, width: 1.5),
                   borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                  color: AppColors.white.withOpacity(0.1)),
+                  color: appColors.white.withOpacity(0.1)),
               child: const Icon(
                 Icons.close,
                 color: Colors.white,
@@ -985,9 +985,9 @@ class _ReportPostReasonsState extends State<ReportPostReasons> {
             return Container(
               width: double.maxFinite,
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
-                color: AppColors.white,
+              decoration:  BoxDecoration(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(50.0)),
+                color: appColors.white,
               ),
               child: Column(
                 children: [
@@ -996,7 +996,7 @@ class _ReportPostReasonsState extends State<ReportPostReasons> {
                   CustomText("${'reportingQue'.tr}?",
                       fontSize: 20.sp,
                       fontWeight: FontWeight.w700,
-                      fontColor: AppColors.darkBlue),
+                      fontColor: appColors.darkBlue),
                   SizedBox(height: 20.h),
                   MediaQuery.removePadding(
                     context: context,
@@ -1024,7 +1024,7 @@ class _ReportPostReasonsState extends State<ReportPostReasons> {
                                     report.first.tr,
                                     textAlign: TextAlign.center,
                                     style: AppTextStyle.textStyle15(
-                                        fontColor: AppColors.darkBlue,
+                                        fontColor: appColors.darkBlue,
                                         fontWeight: FontWeight.w400),
                                   )),
                             ],
@@ -1055,7 +1055,7 @@ class ThankYouReportUI extends GetView<ProfilePageController> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -1066,9 +1066,9 @@ class ThankYouReportUI extends GetView<ProfilePageController> {
             child: Container(
               padding: const EdgeInsets.all(15.0),
               decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.white, width: 1.5),
+                  border: Border.all(color: appColors.white, width: 1.5),
                   borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                  color: AppColors.white.withOpacity(0.1)),
+                  color: appColors.white.withOpacity(0.1)),
               child: const Icon(
                 Icons.close,
                 color: Colors.white,
@@ -1079,9 +1079,9 @@ class ThankYouReportUI extends GetView<ProfilePageController> {
           Container(
             width: double.maxFinite,
             padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
-              color: AppColors.white,
+            decoration:  BoxDecoration(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(50.0)),
+              color: appColors.white,
             ),
             child: Column(
               children: [
@@ -1089,7 +1089,7 @@ class ThankYouReportUI extends GetView<ProfilePageController> {
                 CustomText("thankYouForReporting".tr,
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w700,
-                    fontColor: AppColors.darkBlue),
+                    fontColor: appColors.darkBlue),
                 SizedBox(height: 20.h),
                 Text(
                   "thankYouDes".tr,
@@ -1105,13 +1105,13 @@ class ThankYouReportUI extends GetView<ProfilePageController> {
                       borderRadius: BorderRadius.all(Radius.circular(30)),
                     ),
                     onPressed: onPressed,
-                    color: AppColors.lightYellow,
+                    color: appColors.lightYellow,
                     child: Text(
                       "okay".tr,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16.sp,
-                        color: AppColors.brownColour,
+                        color: appColors.brownColour,
                       ),
                     ))
               ],

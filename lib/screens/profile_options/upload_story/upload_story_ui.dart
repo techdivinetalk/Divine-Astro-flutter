@@ -16,7 +16,7 @@ class UploadStoryUi extends GetView<UploadStoryController> {
   Widget build(BuildContext context) {
     Get.put(UploadStoryController());
     return Scaffold(
-      backgroundColor: AppColors.blackColor,
+      backgroundColor: appColors.blackColor,
       appBar: commonDetailAppbar(
           title: "uploadStory".tr,
           trailingWidget: Padding(

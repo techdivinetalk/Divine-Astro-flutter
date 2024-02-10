@@ -39,16 +39,16 @@ class NumberChangeReqUI extends GetView<NumberChangeReqController> {
                         style: TextStyle(
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w400,
-                          color: AppColors.greyColor,
+                          color: appColors.greyColor,
                           decoration: TextDecoration.underline,
-                          decorationColor: AppColors.greyColor,
+                          decorationColor: appColors.greyColor,
                         ),
                       ),
                       SizedBox(height: 20.h),
                       Text(
                         "primaryPhoneNumber".tr,
                         style: AppTextStyle.textStyle20(
-                          fontColor: AppColors.darkBlue,
+                          fontColor: appColors.darkBlue,
                         ),
                       ),
                       SizedBox(height: 5.h),
@@ -66,7 +66,7 @@ class NumberChangeReqUI extends GetView<NumberChangeReqController> {
                                 child: Text(
                                   controller.countryCode.value,
                                   style: AppTextStyle.textStyle20(
-                                    fontColor: AppColors.darkBlue,
+                                    fontColor: appColors.darkBlue,
                                   ).copyWith(
                                       decoration: TextDecoration.underline),
                                 ),
@@ -78,7 +78,7 @@ class NumberChangeReqUI extends GetView<NumberChangeReqController> {
                             child: TextField(
                               controller: controller.controller,
                               style: AppTextStyle.textStyle20(
-                                fontColor: AppColors.darkBlue,
+                                fontColor: appColors.darkBlue,
                               ),
                               maxLength: 10,
                               textInputAction: TextInputAction.done,
@@ -87,16 +87,16 @@ class NumberChangeReqUI extends GetView<NumberChangeReqController> {
                               inputFormatters: <TextInputFormatter>[
                                 FilteringTextInputFormatter.digitsOnly
                               ],
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                 counterText: '',
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                    color: AppColors.greyColor,
+                                    color: appColors.greyColor,
                                   ),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                    color: AppColors.greyColor,
+                                    color: appColors.greyColor,
                                   ),
                                 ),
                               ),
@@ -109,8 +109,8 @@ class NumberChangeReqUI extends GetView<NumberChangeReqController> {
                               child: Obx(
                                 () => Material(
                                   color: controller.enableUpdateButton.value
-                                      ? AppColors.lightYellow
-                                      : AppColors.greyColor,
+                                      ? appColors.lightYellow
+                                      : appColors.greyColor,
                                   child: InkWell(
                                     onTap: controller.enableUpdateButton.value
                                         ? () {
@@ -139,7 +139,7 @@ class NumberChangeReqUI extends GetView<NumberChangeReqController> {
                                           child: Text(
                                             "update".tr,
                                             style: AppTextStyle.textStyle16(
-                                              fontColor: AppColors.white,
+                                              fontColor: appColors.white,
                                             ),
                                           ),
                                         ),

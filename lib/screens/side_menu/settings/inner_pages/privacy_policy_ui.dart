@@ -14,17 +14,17 @@ class PrivacyPolicyUI extends GetView<SettingsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.white,
-        surfaceTintColor: AppColors.white,
+        backgroundColor: appColors.white,
+        surfaceTintColor: appColors.white,
         title: Text("privacyPolicy".tr,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
-              color: AppColors.darkBlue,
+              color: appColors.darkBlue,
             )),
         leading: IconButton(
-          highlightColor: AppColors.transparent,
-          splashColor: AppColors.transparent,
+          highlightColor: appColors.transparent,
+          splashColor: appColors.transparent,
           onPressed: () => Get.back(),
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
