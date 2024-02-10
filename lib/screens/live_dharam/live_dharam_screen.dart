@@ -57,7 +57,6 @@ import 'package:random_name_generator/random_name_generator.dart';
 //
 //
 //
-//
 
 const int appID = 696414715;
 const String appSign =
@@ -289,8 +288,9 @@ class _LivePage extends State<LiveDharamScreen>
           final bool cond3 = currentCaller.id.isNotEmpty;
           final bool cond4 = !currentCaller.isEngaded;
           final bool cond5 = !currentCaller.isRequest;
+          final bool cond6 = currentCaller.callStatus == 0;
 
-          if (cond1 && cond2 && cond3 && cond4 && cond5) {
+          if (cond1 && cond2 && cond3 && cond4 && cond5 && cond6) {
             final String id = currentCaller.id;
             final String name = currentCaller.userName;
             final String avatar = currentCaller.avatar;
@@ -2047,11 +2047,15 @@ class _LivePage extends State<LiveDharamScreen>
         return EndSessionWidget(
           onClose: Get.back,
           continueLive: Get.back,
-          endLive: () async {
-            endLive();
-            await Future.delayed(const Duration(milliseconds: 300));
-            print("after they delayed");
+          // endLive: () async {
+          //   endLive();
+          //   await Future.delayed(const Duration(milliseconds: 300));
+          //   print("after they delayed");
+          //   Get.back();
+          // },
+          endLive: () {
             Get.back();
+            endLive();
           },
         );
       },
@@ -2174,6 +2178,7 @@ class _LivePage extends State<LiveDharamScreen>
   //         callType: type,
   //         isEngaded: false,
   //         isRequest: false,
+  //         callStatus: 0,
   //       );
   //     } else {}
   //   }
@@ -3039,7 +3044,6 @@ class _LivePage extends State<LiveDharamScreen>
 
   // temporary purpose
   bool extendTimeWidgetVisible = false;
-
   //
 
   Future<void> extendTimeWidgetPopup() async {
@@ -3819,7 +3823,6 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> exitFunc() async {
-
     final bool isEngaded = _controller.currentCaller.isEngaded;
     // final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
     if (isEngaded) {
@@ -4117,8 +4120,15 @@ class _LivePage extends State<LiveDharamScreen>
           onActionRefuseRequest: () {
             showNotifOverlay(user: null, msg: "onActionRefuseCoHostRequest");
           },
-          onInvitationSent: (ZegoUIKitUser user) {
+          onInvitationSent: (ZegoUIKitUser user) async {
             showNotifOverlay(user: user, msg: "onCoHostInvitationSent");
+            await _controller.addUpdateToWaitList(
+              userId: user.id,
+              callType: "",
+              isEngaded: false,
+              isRequest: false,
+              callStatus: 1,
+            );
           },
           onInvitationTimeout: (ZegoUIKitUser user) {
             showNotifOverlay(user: user, msg: "onCoHostInvitationTimeout");
