@@ -16,7 +16,7 @@
 //   Widget build(BuildContext context) {
 //     return GetBuilder<LiveController>(builder: (controller) {
 //       return Material(
-//         color: AppColors.transparent,
+//         color: appColors.transparent,
 //         child: Column(
 //           mainAxisSize: MainAxisSize.min,
 //           children: [
@@ -27,11 +27,11 @@
 //               child: Container(
 //                 padding: const EdgeInsets.all(15.0),
 //                 decoration: BoxDecoration(
-//                   border: Border.all(color: AppColors.white),
+//                   border: Border.all(color: appColors.white),
 //                   borderRadius: const BorderRadius.all(
 //                     Radius.circular(50.0),
 //                   ),
-//                   color: AppColors.white.withOpacity(0.2),
+//                   color: appColors.white.withOpacity(0.2),
 //                 ),
 //                 child: const Icon(
 //                   Icons.close,
@@ -49,7 +49,7 @@
 //                   decoration: BoxDecoration(
 //                     borderRadius:
 //                     const BorderRadius.vertical(top: Radius.circular(50.0)),
-//                     color: AppColors.white.withOpacity(0.1),
+//                     color: appColors.white.withOpacity(0.1),
 //                   ),
 //                   child: Obx(
 //                     ()=> ListView.separated(
@@ -62,8 +62,8 @@
 //                         return Container(
 //                           decoration: BoxDecoration(
 //                               borderRadius: BorderRadius.circular(40),
-//                               border: Border.all(color: AppColors.appYellowColour),
-//                               color: AppColors.white),
+//                               border: Border.all(color: appColors.appYellowColour),
+//                               color: appColors.white),
 //                           height: 80.h,
 //                           child: Row(
 //                             children: [
@@ -91,11 +91,11 @@
 //                                 children: [
 //                                   CustomText('${model.userName}',
 //                                       fontSize: 16.sp,
-//                                       fontColor: AppColors.darkBlue,
+//                                       fontColor: appColors.darkBlue,
 //                                       fontWeight: FontWeight.bold),
 //                                   CustomText("₹ ${model.price}",
 //                                       fontSize: 18.sp,
-//                                       fontColor: AppColors.darkBlue),
+//                                       fontColor: appColors.darkBlue),
 //                                 ],
 //                               ),
 //                             ],
@@ -128,7 +128,7 @@
 //           width: 32.w,
 //           child: CustomText(
 //             index.toString(),
-//             fontColor: AppColors.darkBlue,
+//             fontColor: appColors.darkBlue,
 //             fontSize: 32.sp,
 //           ));
 //     }

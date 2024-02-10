@@ -113,9 +113,9 @@ class _TrainingVideoUIState extends State<TrainingVideoUI> {
               isExpanded: true,
               controller: _controller,
               colors: ProgressBarColors(
-                handleColor: AppColors.white,
-                playedColor: AppColors.white,
-                backgroundColor: AppColors.white.withOpacity(0.5),
+                handleColor: appColors.white,
+                playedColor: appColors.white,
+                backgroundColor: appColors.white.withOpacity(0.5),
               ),
             ),
             FullScreenButton(controller: _controller),

@@ -19,9 +19,9 @@ class OtpVerificationUI extends GetView<OtpVerificationController> {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
+      value:  SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.dark,
-        statusBarColor: AppColors.transparent,
+        statusBarColor: appColors.transparent,
       ),
       child: Scaffold(
         body: SafeArea(
@@ -50,8 +50,8 @@ class OtpVerificationUI extends GetView<OtpVerificationController> {
                             ? SizedBox(
                                 height: 30.h,
                                 width: 30.h,
-                                child: const CircularProgressIndicator(
-                                    strokeWidth: 3, color: AppColors.brown),
+                                child:  CircularProgressIndicator(
+                                    strokeWidth: 3, color: appColors.brown),
                               )
                             : NotReceiveOtpText(
                                 onResend: () => controller.resendOtp(),
@@ -62,9 +62,9 @@ class OtpVerificationUI extends GetView<OtpVerificationController> {
                             ? CustomMaterialButton(
                                 buttonName: "submit".tr,
                                 radius: 10.sp,
-                                textColor: AppColors.brown,
+                                textColor: appColors.brown,
                                 disabledColor:
-                                    AppColors.yellow.withOpacity(0.5),
+                                    appColors.yellow.withOpacity(0.5),
                                 onPressed: controller.otpLength.value == 6
                                     ? () {
                                         if (controller.attempts.value == 0) {
@@ -83,7 +83,7 @@ class OtpVerificationUI extends GetView<OtpVerificationController> {
                                     Expanded(
                                       child: MaterialButton(
                                         height: 55.h,
-                                        disabledColor: AppColors.yellow,
+                                        disabledColor: appColors.yellow,
                                         highlightElevation: 0,
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
@@ -93,9 +93,9 @@ class OtpVerificationUI extends GetView<OtpVerificationController> {
                                             height: 30.h,
                                             width: 30.h,
                                             child:
-                                                const CircularProgressIndicator(
+                                                 CircularProgressIndicator(
                                                     strokeWidth: 3,
-                                                    color: AppColors.brown)),
+                                                    color: appColors.brown)),
                                       ),
                                     ),
                                   ],
@@ -123,12 +123,12 @@ class OtpVerificationField extends StatelessWidget {
   TextStyle get descriptionTextStyle => TextStyle(
       fontWeight: FontWeight.w400,
       fontFamily: FontFamily.notoSans,
-      color: AppColors.darkBlue,
+      color: appColors.darkBlue,
       fontSize: 16.sp);
 
   TextStyle get mobileNumberTextStyle => TextStyle(
       fontWeight: FontWeight.w700,
-      color: AppColors.darkBlue,
+      color: appColors.darkBlue,
       fontFamily: FontFamily.notoSans,
       fontSize: 16.sp);
 
@@ -160,13 +160,13 @@ class NotReceiveOtpText extends StatelessWidget {
   TextStyle get textStyle => TextStyle(
       fontSize: 16.sp,
       fontWeight: FontWeight.w500,
-      color: AppColors.darkBlue,
+      color: appColors.darkBlue,
       fontFamily: FontFamily.notoSans);
 
   TextStyle get resendTextStyle => TextStyle(
       fontSize: 16.sp,
       fontWeight: FontWeight.w700,
-      color: AppColors.darkBlue,
+      color: appColors.darkBlue,
       fontFamily: FontFamily.notoSans,
       decoration: TextDecoration.underline);
 
@@ -212,14 +212,14 @@ class OtpFieldView extends StatelessWidget {
       width: 50.w,
       height: 52.w,
       textStyle: TextStyle(
-          color: contro.isWrongOtp.isTrue ? AppColors.red : AppColors.darkBlue,
+          color: contro.isWrongOtp.isTrue ? appColors.red : appColors.darkBlue,
           fontSize: 20.sp,
           fontWeight: FontWeight.w600),
       decoration: BoxDecoration(
         border: Border.all(
             color: contro.isWrongOtp.isTrue
-                ? AppColors.red.withOpacity(0.5)
-                : AppColors.yellow.withOpacity(0.5),
+                ? appColors.red.withOpacity(0.5)
+                : appColors.yellow.withOpacity(0.5),
             width: 2),
         borderRadius: BorderRadius.circular(10),
       ),
@@ -227,13 +227,13 @@ class OtpFieldView extends StatelessWidget {
 
     final focusedPinTheme = defaultPinTheme.copyDecorationWith(
         border: Border.all(
-            color: contro.isWrongOtp.isTrue ? AppColors.red : AppColors.yellow,
+            color: contro.isWrongOtp.isTrue ? appColors.red : appColors.yellow,
             width: 2),
         borderRadius: BorderRadius.circular(10));
 
     final submittedPinTheme = defaultPinTheme.copyDecorationWith(
         border: Border.all(
-            color: contro.isWrongOtp.isTrue ? AppColors.red : AppColors.yellow,
+            color: contro.isWrongOtp.isTrue ? appColors.red : appColors.yellow,
             width: 2),
         borderRadius: BorderRadius.circular(10));
     return Padding(
@@ -265,20 +265,20 @@ class OtpFieldView extends StatelessWidget {
           //     controller: controller,
           //     focusNode: focusNode,
           //     tapRegionCallback: (event) => FocusScope.of(context).unfocus(),
-          //     cursor: Cursor(enabled: true, color: AppColors.yellow, width: 2, height: 20),
+          //     cursor: Cursor(enabled: true, color: appColors.yellow, width: 2, height: 20),
           //     inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
           //     textInputAction: TextInputAction.done,
           //     decoration: BoxLooseDecoration(
           //         textStyle: TextStyle(
-          //             color: contro.isWrongOtp.isTrue ? AppColors.red : AppColors.darkBlue,
+          //             color: contro.isWrongOtp.isTrue ? appColors.red : appColors.darkBlue,
           //             fontSize: 20.sp,
           //             fontWeight: FontWeight.w600),
           //         strokeWidth: 2.sp,
           //         strokeColorBuilder: PinListenColorBuilder(
-          //             contro.isWrongOtp.isTrue ? AppColors.red : AppColors.yellow,
+          //             contro.isWrongOtp.isTrue ? appColors.red : appColors.yellow,
           //             contro.isWrongOtp.isTrue
-          //                 ? AppColors.red.withOpacity(0.5)
-          //                 : AppColors.yellow.withOpacity(0.5))),
+          //                 ? appColors.red.withOpacity(0.5)
+          //                 : appColors.yellow.withOpacity(0.5))),
           //     onChanged: onChanged,
           //     onSubmit: onSubmit),
         ],
@@ -297,7 +297,7 @@ class OtpSheet extends StatelessWidget {
   const OtpSheet({Key? key}) : super(key: key);
 
   TextStyle get textStyle => TextStyle(
-      fontWeight: FontWeight.w600, fontSize: 16.sp, color: AppColors.red);
+      fontWeight: FontWeight.w600, fontSize: 16.sp, color: appColors.red);
 
   @override
   Widget build(BuildContext context) {
@@ -338,14 +338,14 @@ class InCorrectOtpWidget extends StatelessWidget {
   TextStyle get currentOtpStyle => TextStyle(
         fontWeight: FontWeight.w400,
         fontSize: 12.sp,
-        color: AppColors.red,
+        color: appColors.red,
         fontFamily: FontFamily.notoSans,
       );
 
   TextStyle get attemptsStyle => TextStyle(
         fontWeight: FontWeight.w700,
         fontSize: 12.sp,
-        color: AppColors.darkBlue,
+        color: appColors.darkBlue,
         fontFamily: FontFamily.notoSans,
       );
 

@@ -73,7 +73,7 @@ class OtpVerificationController extends GetxController {
       } else if (error is OtpInvalidTimerException) {
         timerController.extractTimerValue(error.message);
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.red);
+        divineSnackBar(data: error.toString(), color: appColors.red);
       }
     }
   }
@@ -110,7 +110,7 @@ class OtpVerificationController extends GetxController {
         removeAttempts();
         validationMsg.value = (error as CustomException).message;
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.red);
+        divineSnackBar(data: error.toString(), color: appColors.red);
       }
     }
   }
@@ -124,13 +124,15 @@ class OtpVerificationController extends GetxController {
     };
     try {
       ResLogin data = await userRepository.userLogin(params);
+      print(data.data!.image);
+      print("datadatadatadata");
       await updateLoginDataInFirebase(data);
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
   }

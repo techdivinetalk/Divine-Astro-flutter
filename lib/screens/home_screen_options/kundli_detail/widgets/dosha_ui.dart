@@ -102,13 +102,13 @@ class DoshaUi extends StatelessWidget {
         Text(title.tr,
             style: AppTextStyle.textStyle20(
                 fontWeight: FontWeight.w500,
-                fontColor: AppColors.appYellowColour)),
+                fontColor: appColors.appYellowColour)),
         SizedBox(height: 5.h),
         Text(
           details,
           style: AppTextStyle.textStyle12(
               fontWeight: FontWeight.w500,
-              fontColor: AppColors.blackColor.withOpacity(.5)),
+              fontColor: appColors.blackColor.withOpacity(.5)),
         ),
         SizedBox(height: 16.h)
       ],

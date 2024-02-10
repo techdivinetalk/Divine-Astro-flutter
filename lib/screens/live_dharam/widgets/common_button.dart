@@ -19,7 +19,7 @@ class CommonButton extends StatelessWidget {
       child: ElevatedButton(
         style: ButtonStyle(
           elevation: MaterialStateProperty.all(4),
-          backgroundColor: MaterialStateProperty.all(AppColors.yellow),
+          backgroundColor: MaterialStateProperty.all(appColors.yellow),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -27,7 +27,7 @@ class CommonButton extends StatelessWidget {
           ),
         ),
         onPressed: buttonCallback,
-        child: Text(buttonText, style: const TextStyle(color: AppColors.black)),
+        child: Text(buttonText, style:  TextStyle(color: appColors.black)),
       ),
     );
   }
@@ -51,7 +51,7 @@ class CommonButtonGrey extends StatelessWidget {
       child: ElevatedButton(
         style: ButtonStyle(
           elevation: MaterialStateProperty.all(4),
-          backgroundColor: MaterialStateProperty.all(AppColors.lightGrey),
+          backgroundColor: MaterialStateProperty.all(appColors.lightGrey),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -59,7 +59,7 @@ class CommonButtonGrey extends StatelessWidget {
           ),
         ),
         onPressed: buttonCallback,
-        child: Text(buttonText, style: const TextStyle(color: AppColors.white)),
+        child: Text(buttonText, style:  TextStyle(color: appColors.white)),
       ),
     );
   }

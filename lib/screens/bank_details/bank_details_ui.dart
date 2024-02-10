@@ -17,7 +17,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
         data,
         style: AppTextStyle.textStyle16(
           fontWeight: FontWeight.w400,
-          fontColor: AppColors.darkBlue,
+          fontColor: appColors.darkBlue,
         ),
       );
 
@@ -26,13 +26,13 @@ class BankDetailsUI extends GetView<BankDetailController> {
     return Theme(
       data: ThemeData(useMaterial3: false),
       child: Scaffold(
-        backgroundColor: AppColors.white,
+        backgroundColor: appColors.white,
         bottomNavigationBar: Container(
           margin: EdgeInsets.symmetric(horizontal: 12.w),
           child: CustomMaterialButton(
             height: 50.h,
             buttonName: "submit".tr,
-            textColor: AppColors.brownColour,
+            textColor: appColors.brownColour,
             onPressed: () => controller.submit(),
           ),
         ),

@@ -69,7 +69,7 @@ class UserRepository extends ApiProvider {
             SendOtpModel.fromJson(jsonDecode(response.body));
         if (sendOtpModel.statusCode == 429) {
           showCupertinoModalPopup(
-            barrierColor: AppColors.darkBlue.withOpacity(0.5),
+            barrierColor: appColors.darkBlue.withOpacity(0.5),
             context: Get.context!,
             builder: (context) =>
                 ManyTimeExException(message: sendOtpModel.message),

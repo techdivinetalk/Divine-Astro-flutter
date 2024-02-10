@@ -140,11 +140,11 @@ class _OneCardViewState extends State<OneCardView> {
               child: Container(
                 padding: const EdgeInsets.all(15.0),
                 decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.white),
+                  border: Border.all(color: appColors.white),
                   borderRadius: const BorderRadius.all(
                     Radius.circular(50.0),
                   ),
-                  color: AppColors.white.withOpacity(0.2),
+                  color: appColors.white.withOpacity(0.2),
                 ),
                 child: const Icon(
                   Icons.close,
@@ -296,12 +296,12 @@ class _OneCardViewState extends State<OneCardView> {
                             onPressed: () {
                               if (cardData.length == 1) {}
                             },
-                            child: const Text(
+                            child:  Text(
                               'Send Cards',
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 20,
-                                color: AppColors.brown,
+                                color: appColors.brown,
                               ),
                             ),
                           ),
@@ -416,11 +416,11 @@ class _ThreeCardWidgetState extends State<ThreeCardWidget> {
               child: Container(
                 padding: const EdgeInsets.all(15.0),
                 decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.white),
+                  border: Border.all(color: appColors.white),
                   borderRadius: const BorderRadius.all(
                     Radius.circular(50.0),
                   ),
-                  color: AppColors.white.withOpacity(0.2),
+                  color: appColors.white.withOpacity(0.2),
                 ),
                 child: const Icon(
                   Icons.close,
@@ -572,12 +572,12 @@ class _ThreeCardWidgetState extends State<ThreeCardWidget> {
                             onPressed: () {
                               if (cardData.length == 2) {}
                             },
-                            child: const Text(
+                            child:  Text(
                               'Send Cards',
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 20,
-                                color: AppColors.brown,
+                                color: appColors.brown,
                               ),
                             ),
                           ),
@@ -696,11 +696,11 @@ class _FiveCardWidgetState extends State<FiveCardWidget> {
               child: Container(
                 padding: const EdgeInsets.all(15.0),
                 decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.white),
+                  border: Border.all(color: appColors.white),
                   borderRadius: const BorderRadius.all(
                     Radius.circular(50.0),
                   ),
-                  color: AppColors.white.withOpacity(0.2),
+                  color: appColors.white.withOpacity(0.2),
                 ),
                 child: const Icon(
                   Icons.close,
@@ -852,12 +852,12 @@ class _FiveCardWidgetState extends State<FiveCardWidget> {
                             onPressed: () {
                               if (cardData.length == 4) {}
                             },
-                            child: const Text(
+                            child:  Text(
                               'Send Cards',
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 20,
-                                color: AppColors.brown,
+                                color: appColors.brown,
                               ),
                             ),
                           ),
@@ -996,7 +996,7 @@ class _CardChoiceBottomSheetState extends State<CardChoiceBottomSheet> {
                         : null, // Button is disabled if _choice is null
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _choice != null
-                          ? AppColors.appColorDark
+                          ? appColors.appColorDark
                           : Colors
                               .grey, // Button color changes based on selection
                     ),
@@ -1024,9 +1024,9 @@ class _CardChoiceBottomSheetState extends State<CardChoiceBottomSheet> {
 //           },
 //           child: Container(
 //             decoration: BoxDecoration(
-//                 border: Border.all(color: AppColors.white, width: 1.5),
+//                 border: Border.all(color: appColors.white, width: 1.5),
 //                 borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-//                 color: AppColors.transparent),
+//                 color: appColors.transparent),
 //             child: const Icon(
 //               Icons.close,
 //               color: Colors.white,
@@ -1038,7 +1038,7 @@ class _CardChoiceBottomSheetState extends State<CardChoiceBottomSheet> {
 //           padding: EdgeInsets.symmetric(horizontal: 24.w),
 //           decoration: const BoxDecoration(
 //             borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
-//             color: AppColors.white,
+//             color: appColors.white,
 //           ),
 //           child: Column(
 //             children: [

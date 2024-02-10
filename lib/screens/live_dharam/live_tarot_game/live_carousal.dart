@@ -48,7 +48,7 @@ class _LiveCarousalState extends State<LiveCarousal> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[top(), const SizedBox(height: 16), bottom()],
@@ -67,10 +67,10 @@ class _LiveCarousalState extends State<LiveCarousal> {
           width: 48,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-            border: Border.all(color: AppColors.white),
-            color: AppColors.white.withOpacity(0.2),
+            border: Border.all(color: appColors.white),
+            color: appColors.white.withOpacity(0.2),
           ),
-          child: const Icon(Icons.close, color: AppColors.white),
+          child:  Icon(Icons.close, color: appColors.white),
         ),
       ),
     );
@@ -92,8 +92,8 @@ class _LiveCarousalState extends State<LiveCarousal> {
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: AppColors.yellow),
-            color: AppColors.white.withOpacity(0.2),
+            border: Border.all(color: appColors.yellow),
+            color: appColors.white.withOpacity(0.2),
           ),
           child: grid(),
         ),
@@ -108,9 +108,9 @@ class _LiveCarousalState extends State<LiveCarousal> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const SizedBox(height: 16),
-          const Text(
+           Text(
             "Scroll and Pick Your Cards",
-            style: TextStyle(fontSize: 20, color: AppColors.yellow),
+            style: TextStyle(fontSize: 20, color: appColors.yellow),
           ),
           const SizedBox(height: 16),
           CarouselSlider.builder(
@@ -190,8 +190,8 @@ class _LiveCarousalState extends State<LiveCarousal> {
                                     removeAt(index);
                                     setState(() {});
                                   },
-                                  child: const CircleAvatar(
-                                    backgroundColor: AppColors.yellow,
+                                  child:  CircleAvatar(
+                                    backgroundColor: appColors.yellow,
                                     child: Icon(Icons.close),
                                   ),
                                 ),
@@ -202,8 +202,8 @@ class _LiveCarousalState extends State<LiveCarousal> {
                     const SizedBox(height: 8),
                     Text(
                       model.name ?? "Not Selected",
-                      style: const TextStyle(
-                        color: AppColors.white,
+                      style:  TextStyle(
+                        color: appColors.white,
                         fontSize: 10,
                       ),
                     ),
@@ -213,10 +213,10 @@ class _LiveCarousalState extends State<LiveCarousal> {
             },
           ),
           const SizedBox(height: 16),
-          const Text(
+           Text(
             "Note : We'll send the chosen tarot cards to our live astrologer and they will do a live tarot card reading for you.",
             style: TextStyle(
-              color: AppColors.white,
+              color: appColors.white,
               fontSize: 10,
             ),
           ),
@@ -247,7 +247,7 @@ class _LiveCarousalState extends State<LiveCarousal> {
       style: ButtonStyle(
         elevation: MaterialStateProperty.all(4),
         backgroundColor: MaterialStateProperty.all(
-          condition() ? AppColors.grey : AppColors.yellow,
+          condition() ? appColors.grey : appColors.yellow,
         ),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           const RoundedRectangleBorder(
@@ -261,7 +261,7 @@ class _LiveCarousalState extends State<LiveCarousal> {
       child: Text(
         'Send',
         style: TextStyle(
-          color: condition() ? AppColors.white : AppColors.black,
+          color: condition() ? appColors.white : appColors.black,
         ),
       ),
     );

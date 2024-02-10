@@ -79,7 +79,7 @@ class SplashController extends GetxController {
     } catch (error) {
       print("Error: ${error.toString()}");
       // Show an error message if something goes wrong
-      divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      divineSnackBar(data: error.toString(), color: appColors.redColor);
     }
   }
 

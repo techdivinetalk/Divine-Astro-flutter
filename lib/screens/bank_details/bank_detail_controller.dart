@@ -70,7 +70,7 @@ class BankDetailController extends GetxController {
     if (formKey.currentState!.validate()) {
       updateDetails();
     } else {
-      divineSnackBar(data: "Please Fill All Data", color: AppColors.redColor);
+      divineSnackBar(data: "Please Fill All Data", color: appColors.redColor);
     }
   }
 

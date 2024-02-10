@@ -51,8 +51,8 @@ class KundliUi extends GetView<KundliController> {
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                              AppColors.appColorLite.withOpacity(0.35),
-                              AppColors.appYellowColour.withOpacity(0.5),
+                              appColors.appColorLite.withOpacity(0.35),
+                              appColors.appYellowColour.withOpacity(0.5),
                             ],
                           ),
                         ),
@@ -67,8 +67,8 @@ class KundliUi extends GetView<KundliController> {
                         ),
                       ),
                     ),
-                    backgroundColor: AppColors.white,
-                    surfaceTintColor: AppColors.white,
+                    backgroundColor: appColors.white,
+                    surfaceTintColor: appColors.white,
                     expandedHeight: 278.h,
                     pinned: true,
                     title: CustomText(
@@ -87,7 +87,7 @@ class KundliUi extends GetView<KundliController> {
                     'Add Kundali',
                     style: AppTextStyle.textStyle24(
                       fontWeight: FontWeight.w600,
-                      fontColor: AppColors.red,
+                      fontColor: appColors.red,
                     ),
                   ),
                   SizedBox(height: 8.h),
@@ -107,9 +107,9 @@ class KundliUi extends GetView<KundliController> {
                   //     child: TabBar(
                   //       indicatorWeight: 0.0,
                   //       isScrollable: false,
-                  //       labelColor: AppColors.brown,
-                  //       unselectedLabelColor: AppColors.black,
-                  //       dividerColor: AppColors.transparent,
+                  //       labelColor: appColors.brown,
+                  //       unselectedLabelColor: appColors.black,
+                  //       dividerColor: appColors.transparent,
                   //       labelPadding: EdgeInsets.zero,
                   //       splashBorderRadius: BorderRadius.circular(28),
                   //       padding: EdgeInsets.symmetric(
@@ -117,12 +117,12 @@ class KundliUi extends GetView<KundliController> {
                   //       labelStyle: TextStyle(
                   //         fontWeight: FontWeight.w500,
                   //         fontSize: 14.sp,
-                  //         color: AppColors.darkBlue,
+                  //         color: appColors.darkBlue,
                   //         fontFamily: FontFamily.poppins,
                   //       ),
                   //       indicatorSize: TabBarIndicatorSize.tab,
                   //       indicator: BoxDecoration(
-                  //         color: AppColors.yellow,
+                  //         color: appColors.yellow,
                   //         borderRadius: BorderRadius.circular(28),
                   //       ),
                   //       tabs: [
@@ -245,7 +245,7 @@ class CheckYours extends GetView<KundliController> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16.sp,
-                                  color: AppColors.darkBlue,
+                                  color: appColors.darkBlue,
                                 ),
                               )
                             ],
@@ -268,7 +268,7 @@ class CheckYours extends GetView<KundliController> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16.sp,
-                                  color: AppColors.darkBlue,
+                                  color: appColors.darkBlue,
                                 ),
                               )
                             ],
@@ -411,7 +411,7 @@ class CheckYours extends GetView<KundliController> {
               Expanded(
                 child: FilledButton(
                   style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.yellow,
+                    backgroundColor: appColors.yellow,
                     padding: EdgeInsets.symmetric(vertical: 16.h),
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -430,7 +430,7 @@ class CheckYours extends GetView<KundliController> {
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 20.sp,
-                      color: AppColors.brown,
+                      color: appColors.brown,
                     ),
                   ),
                 ),
@@ -530,7 +530,7 @@ class CheckOther extends GetView<KundliController> {
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 16.sp,
-                                color: AppColors.darkBlue,
+                                color: appColors.darkBlue,
                               ),
                             )
                           ],
@@ -553,7 +553,7 @@ class CheckOther extends GetView<KundliController> {
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 16.sp,
-                                color: AppColors.darkBlue,
+                                color: appColors.darkBlue,
                               ),
                             )
                           ],
@@ -709,7 +709,7 @@ class CheckOther extends GetView<KundliController> {
               Expanded(
                 child: FilledButton(
                   style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.yellow,
+                    backgroundColor: appColors.yellow,
                     padding: EdgeInsets.symmetric(vertical: 16.h),
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -728,7 +728,7 @@ class CheckOther extends GetView<KundliController> {
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 20.sp,
-                      color: AppColors.brown,
+                      color: appColors.brown,
                     ),
                   ),
                 ),

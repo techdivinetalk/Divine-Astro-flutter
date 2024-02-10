@@ -33,7 +33,7 @@ class ChatSuggestRemedyController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.red);
+        divineSnackBar(data: error.toString(), color: appColors.red);
       }
       loading = Loading.loaded;
     }

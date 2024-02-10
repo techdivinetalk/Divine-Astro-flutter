@@ -34,7 +34,7 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[top(), const SizedBox(height: 16), bottom()],
@@ -53,10 +53,10 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
           width: 48,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-            border: Border.all(color: AppColors.white),
-            color: AppColors.white.withOpacity(0.2),
+            border: Border.all(color: appColors.white),
+            color: appColors.white.withOpacity(0.2),
           ),
-          child: const Icon(Icons.close, color: AppColors.white),
+          child:  Icon(Icons.close, color: appColors.white),
         ),
       ),
     );
@@ -78,8 +78,8 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: AppColors.yellow),
-            color: AppColors.white,
+            border: Border.all(color: appColors.yellow),
+            color: appColors.white,
           ),
           child: grid(),
         ),
@@ -141,7 +141,7 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
         child: ElevatedButton(
           style: ButtonStyle(
             elevation: MaterialStateProperty.all(4),
-            backgroundColor: MaterialStateProperty.all(AppColors.yellow),
+            backgroundColor: MaterialStateProperty.all(appColors.yellow),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -160,7 +160,7 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
               const SizedBox(width: 16),
               Text(
                 buttonText,
-                style: const TextStyle(color: AppColors.black),
+                style:  TextStyle(color: appColors.black),
               ),
             ],
           ),
@@ -182,11 +182,11 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
         child: ElevatedButton(
           style: ButtonStyle(
             elevation: MaterialStateProperty.all(4),
-            backgroundColor: MaterialStateProperty.all(AppColors.white),
+            backgroundColor: MaterialStateProperty.all(appColors.white),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              const RoundedRectangleBorder(
+               RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                side: BorderSide(width: 1, color: AppColors.red),
+                side: BorderSide(width: 1, color: appColors.red),
               ),
             ),
           ),
@@ -202,7 +202,7 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
               const SizedBox(width: 16),
               Text(
                 buttonText,
-                style: const TextStyle(color: AppColors.red),
+                style:  TextStyle(color: appColors.red),
               ),
             ],
           ),

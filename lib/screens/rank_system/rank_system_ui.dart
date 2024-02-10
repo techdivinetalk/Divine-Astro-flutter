@@ -50,14 +50,14 @@ class RankSystemUI extends GetView<RankSystemController> {
                                 textAlign: TextAlign.center,
                                 style: AppTextStyle.textStyle12(
                                     fontWeight: FontWeight.w700,
-                                    fontColor: AppColors.darkBlue),
+                                    fontColor: appColors.darkBlue),
                               ),
                               Text(
                                 "(in % Percentage)",
                                 textAlign: TextAlign.center,
                                 style: AppTextStyle.textStyle12(
                                     fontWeight: FontWeight.w400,
-                                    fontColor: AppColors.darkBlue),
+                                    fontColor: appColors.darkBlue),
                               ),
                               SizedBox(
                                 height: 10.h,
@@ -73,7 +73,7 @@ class RankSystemUI extends GetView<RankSystemController> {
                                 textAlign: TextAlign.center,
                                 style: AppTextStyle.textStyle12(
                                     fontWeight: FontWeight.w700,
-                                    fontColor: AppColors.darkBlue),
+                                    fontColor: appColors.darkBlue),
                               ),
                               SizedBox(
                                 height: 10.h,
@@ -100,20 +100,20 @@ class RankSystemUI extends GetView<RankSystemController> {
                                       textAlign: TextAlign.center,
                                       style: AppTextStyle.textStyle12(
                                           fontWeight: FontWeight.w400,
-                                          fontColor: AppColors.darkBlue),
+                                          fontColor: appColors.darkBlue),
                                     ) : item?.max == '0' || item?.max == null ?
                                         Text('${item?.min}${item?.text}+',
                                           textAlign: TextAlign.center,
                                           style: AppTextStyle.textStyle12(
                                               fontWeight: FontWeight.w400,
-                                              fontColor: AppColors.darkBlue),
+                                              fontColor: appColors.darkBlue),
                                         ):
                                     Text(
                                       '${item?.max}-${item?.min}${item?.text}',
                                       textAlign: TextAlign.center,
                                       style: AppTextStyle.textStyle12(
                                           fontWeight: FontWeight.w400,
-                                          fontColor: AppColors.darkBlue),
+                                          fontColor: appColors.darkBlue),
                                     ),
                                     SizedBox(
                                       height: 10.h,
@@ -140,7 +140,7 @@ class RankSystemUI extends GetView<RankSystemController> {
                                           textAlign: TextAlign.center,
                                           style: AppTextStyle.textStyle12(
                                               fontWeight: FontWeight.w400,
-                                              fontColor: AppColors.darkBlue),
+                                              fontColor: appColors.darkBlue),
                                         ),
                                       ],
                                     ),
@@ -165,12 +165,12 @@ class RankSystemUI extends GetView<RankSystemController> {
                     TextSpan(
                         text: 'noteText'.tr,
                         style: AppTextStyle.textStyle12(
-                            fontColor: AppColors.greyColor,
+                            fontColor: appColors.greyColor,
                             fontWeight: FontWeight.w600)),
                     TextSpan(
                         text: ' 10 ${'day'.tr}.',
                         style: AppTextStyle.textStyle12(
-                            fontColor: AppColors.darkBlue,
+                            fontColor: appColors.darkBlue,
                             fontWeight: FontWeight.w600)),
                   ],
                 ),

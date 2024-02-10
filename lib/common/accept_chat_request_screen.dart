@@ -109,15 +109,15 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration:  BoxDecoration(
         gradient: LinearGradient(
             stops: [0.7, 1.0],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [AppColors.white, AppColors.appYellowColour]),
+            colors: [appColors.white, appColors.appYellowColour]),
       ),
       child: Scaffold(
-          backgroundColor: AppColors.transparent,
+          backgroundColor: appColors.transparent,
           body: StatefulBuilder(builder: (context, setState) {
             return Stack(
               children: [
@@ -143,15 +143,15 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                     fontWeight: FontWeight.w600,
                                     fontFamily: FontFamily.metropolis,
                                     fontSize: 20.sp,
-                                    color: AppColors.appYellowColour)),
+                                    color: appColors.appYellowColour)),
                             Text("Ready to chat with you!",
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontFamily: FontFamily.metropolis,
                                     fontSize: 20.sp,
-                                    color: AppColors.darkBlue)),
+                                    color: appColors.darkBlue)),
                             SizedBox(height: 10.w),
-                            Divider(color: AppColors.darkBlue.withOpacity(0.1)),
+                            Divider(color: appColors.darkBlue.withOpacity(0.1)),
                             SizedBox(height: 2.w),
                             Expanded(
                               child: Column(
@@ -166,14 +166,14 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                 fontWeight: FontWeight.w400,
                                                 fontFamily: FontFamily.metropolis,
                                                 fontSize: 16.sp,
-                                                color: AppColors.darkBlue)),
+                                                color: appColors.darkBlue)),
                                       ),
                                       Text("-".tr,
                                           style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               fontFamily: FontFamily.metropolis,
                                               fontSize: 16.sp,
-                                              color: AppColors.darkBlue)),
+                                              color: appColors.darkBlue)),
                                       Expanded(
                                         flex: 4,
                                         child: Align(
@@ -183,7 +183,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                   fontWeight: FontWeight.w400,
                                                   fontFamily: FontFamily.metropolis,
                                                   fontSize: 16.sp,
-                                                  color: AppColors.darkBlue)),
+                                                  color: appColors.darkBlue)),
                                         ),
                                       ),
                                     ],
@@ -197,14 +197,14 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                 fontWeight: FontWeight.w400,
                                                 fontFamily: FontFamily.metropolis,
                                                 fontSize: 16.sp,
-                                                color: AppColors.darkBlue)),
+                                                color: appColors.darkBlue)),
                                       ),
                                       Text("-".tr,
                                           style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               fontFamily: FontFamily.metropolis,
                                               fontSize: 16.sp,
-                                              color: AppColors.darkBlue)),
+                                              color: appColors.darkBlue)),
                                       Expanded(
                                         flex: 4,
                                         child: Align(
@@ -214,7 +214,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                   fontWeight: FontWeight.w400,
                                                   fontFamily: FontFamily.metropolis,
                                                   fontSize: 16.sp,
-                                                  color: AppColors.darkBlue)),
+                                                  color: appColors.darkBlue)),
                                         ),
                                       ),
                                     ],
@@ -228,14 +228,14 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                 fontWeight: FontWeight.w400,
                                                 fontFamily: FontFamily.metropolis,
                                                 fontSize: 16.sp,
-                                                color: AppColors.darkBlue)),
+                                                color: appColors.darkBlue)),
                                       ),
                                       Text("-",
                                           style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               fontFamily: FontFamily.metropolis,
                                               fontSize: 16.sp,
-                                              color: AppColors.darkBlue)),
+                                              color: appColors.darkBlue)),
                                       Expanded(
                                         flex: 4,
                                         child: Align(
@@ -245,7 +245,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                   fontWeight: FontWeight.w400,
                                                   fontFamily: FontFamily.metropolis,
                                                   fontSize: 16.sp,
-                                                  color: AppColors.darkBlue)),
+                                                  color: appColors.darkBlue)),
                                         ),
                                       ),
                                     ],
@@ -259,14 +259,14 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                 fontWeight: FontWeight.w400,
                                                 fontFamily: FontFamily.metropolis,
                                                 fontSize: 16.sp,
-                                                color: AppColors.darkBlue)),
+                                                color: appColors.darkBlue)),
                                       ),
                                       Text("-",
                                           style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               fontFamily: FontFamily.metropolis,
                                               fontSize: 16.sp,
-                                              color: AppColors.darkBlue)),
+                                              color: appColors.darkBlue)),
                                       Expanded(
                                         flex: 4,
                                         child: Align(
@@ -276,7 +276,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                   fontWeight: FontWeight.w400,
                                                   fontFamily: FontFamily.metropolis,
                                                   fontSize: 16.sp,
-                                                  color: AppColors.darkBlue)),
+                                                  color: appColors.darkBlue)),
                                         ),
                                       ),
                                     ],
@@ -290,14 +290,14 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                 fontWeight: FontWeight.w400,
                                                 fontFamily: FontFamily.metropolis,
                                                 fontSize: 16.sp,
-                                                color: AppColors.darkBlue)),
+                                                color: appColors.darkBlue)),
                                       ),
                                       Text("-",
                                           style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               fontFamily: FontFamily.metropolis,
                                               fontSize: 16.sp,
-                                              color: AppColors.darkBlue)),
+                                              color: appColors.darkBlue)),
                                       Expanded(
                                         flex: 4,
                                         child: Align(
@@ -307,7 +307,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                   fontWeight: FontWeight.w400,
                                                   fontFamily: FontFamily.metropolis,
                                                   fontSize: 16.sp,
-                                                  color: AppColors.darkBlue)),
+                                                  color: appColors.darkBlue)),
                                         ),
                                       ),
                                     ],
@@ -321,7 +321,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                 fontWeight: FontWeight.w400,
                                                 fontFamily: FontFamily.metropolis,
                                                 fontSize: 16.sp,
-                                                color: AppColors.darkBlue)),
+                                                color: appColors.darkBlue)),
                                       ),
                                       Expanded(
                                           flex: 1,
@@ -330,7 +330,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                   fontWeight: FontWeight.w400,
                                                   fontFamily: FontFamily.metropolis,
                                                   fontSize: 16.sp,
-                                                  color: AppColors.darkBlue))),
+                                                  color: appColors.darkBlue))),
                                       Expanded(
                                           flex: 3,
                                           child: Align(
@@ -340,7 +340,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                       fontWeight: FontWeight.w400,
                                                       fontFamily: FontFamily.metropolis,
                                                       fontSize: 16.sp,
-                                                      color: AppColors.darkBlue))))
+                                                      color: appColors.darkBlue))))
                                     ],
                                   ),
                                 ],
@@ -354,14 +354,14 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                         decoration: const BoxDecoration(color: Colors.transparent),
                         child: Column(
                           children: [
-                            Divider(thickness: 1, color: AppColors.darkBlue.withOpacity(0.1)),
+                            Divider(thickness: 1, color: appColors.darkBlue.withOpacity(0.1)),
                             SizedBox(height: 5.w),
                             Text("orderDetails".tr,
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontFamily: FontFamily.metropolis,
                                     fontSize: 17.sp,
-                                    color: AppColors.brownColour)),
+                                    color: appColors.brownColour)),
                             SizedBox(height: 15.w),
                             Row(
                               children: [
@@ -376,13 +376,13 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                 fontWeight: FontWeight.w400,
                                                 fontFamily: FontFamily.metropolis,
                                                 fontSize: 16.sp,
-                                                color: AppColors.darkBlue)),
+                                                color: appColors.darkBlue)),
                                         Text("PAID",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600,
                                                 fontFamily: FontFamily.metropolis,
                                                 fontSize: 16.sp,
-                                                color: AppColors.redColor))
+                                                color: appColors.redColor))
                                       ])
                                     ],
                                   ),
@@ -400,13 +400,13 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                   fontWeight: FontWeight.w400,
                                                   fontFamily: FontFamily.metropolis,
                                                   fontSize: 16.sp,
-                                                  color: AppColors.darkBlue)),
+                                                  color: appColors.darkBlue)),
                                           Text("₹${widget.walletBalance}",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   fontFamily: FontFamily.metropolis,
                                                   fontSize: 16.sp,
-                                                  color: AppColors.brownColour)),
+                                                  color: appColors.brownColour)),
                                         ],
                                       ),
                                     ],
@@ -427,13 +427,13 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                             fontWeight: FontWeight.w400,
                                             fontFamily: FontFamily.metropolis,
                                             fontSize: 16.sp,
-                                            color: AppColors.darkBlue)),
+                                            color: appColors.darkBlue)),
                                     Text(formatTime((AppFirebaseService().orderData.value["max_order_time"] * 1000 * 60) ?? 0),
                                         style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontFamily: FontFamily.metropolis,
                                             fontSize: 16.sp,
-                                            color: AppColors.brownColour)),
+                                            color: appColors.brownColour)),
                                   ],
                                 ),
                               ],
@@ -444,7 +444,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                     height: kToolbarHeight,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
-                                        border: Border.all(color: AppColors.brown),
+                                        border: Border.all(color: appColors.brown),
                                         borderRadius: BorderRadius.circular(5.r)),
                                     child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                                       Text("Waiting for user to connect",
@@ -452,7 +452,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                               fontWeight: FontWeight.w600,
                                               fontFamily: FontFamily.metropolis,
                                               fontSize: 16.sp,
-                                              color: AppColors.brownColour)),
+                                              color: appColors.brownColour)),
                                       Assets.lottie.loadingDots.lottie(
                                           width: 45,
                                           height: 30,
@@ -465,7 +465,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                         showBorder: false,
                                         width: double.infinity,
                                         borderRadius: 5.r,
-                                        backgroundColor: AppColors.brownColour,
+                                        backgroundColor: appColors.brownColour,
                                         text: "acceptChatRequest".tr,
                                         onPressed: () async {
                                           try {
@@ -496,7 +496,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                     ],
                   ),
                 ),
-                if (isLoader) const Center(child: CircularProgressIndicator(color: AppColors.yellow))
+                if (isLoader)  Center(child: CircularProgressIndicator(color: appColors.yellow))
               ],
             );
           })),

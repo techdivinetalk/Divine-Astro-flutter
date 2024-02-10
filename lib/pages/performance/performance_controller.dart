@@ -92,7 +92,7 @@ class PerformanceController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     loading.value = Loading.loaded;
@@ -123,7 +123,7 @@ class PerformanceController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     loading.value = Loading.loaded;

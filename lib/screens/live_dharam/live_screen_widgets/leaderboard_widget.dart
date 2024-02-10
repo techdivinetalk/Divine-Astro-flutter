@@ -30,21 +30,21 @@ class LeaderBoardWidget extends StatelessWidget {
             height: 32,
             child: DecoratedBox(
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
+                gradient:  LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    AppColors.white,
-                    AppColors.yellow,
+                    appColors.white,
+                    appColors.yellow,
                   ],
                 ),
                 borderRadius: const BorderRadius.all(
                   Radius.circular(50.0),
                 ),
                 border: Border.all(
-                  color: AppColors.yellow,
+                  color: appColors.yellow,
                 ),
-                color: AppColors.yellow,
+                color: appColors.yellow,
               ),
               child: Row(
                 children: <Widget>[
@@ -58,9 +58,9 @@ class LeaderBoardWidget extends StatelessWidget {
                           Radius.circular(50.0),
                         ),
                         border: Border.all(
-                          color: AppColors.yellow,
+                          color: appColors.yellow,
                         ),
-                        color: AppColors.black.withOpacity(0.2),
+                        color: appColors.black.withOpacity(0.2),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(0.0),
@@ -118,9 +118,9 @@ class LeaderBoardWidget extends StatelessWidget {
                           Radius.circular(50.0),
                         ),
                         border: Border.all(
-                          color: AppColors.transparent,
+                          color: appColors.transparent,
                         ),
-                        color: AppColors.transparent,
+                        color: appColors.transparent,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(0.0),

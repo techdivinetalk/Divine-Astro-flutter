@@ -24,7 +24,7 @@ class _AlreadyInWaitlistWidgetState extends State<AlreadyInWaitlistWidget> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[top(), const SizedBox(height: 16), bottom()],
@@ -43,10 +43,10 @@ class _AlreadyInWaitlistWidgetState extends State<AlreadyInWaitlistWidget> {
           width: 48,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-            border: Border.all(color: AppColors.white),
-            color: AppColors.white.withOpacity(0.2),
+            border: Border.all(color: appColors.white),
+            color: appColors.white.withOpacity(0.2),
           ),
-          child: const Icon(Icons.close, color: AppColors.white),
+          child:  Icon(Icons.close, color: appColors.white),
         ),
       ),
     );
@@ -68,8 +68,8 @@ class _AlreadyInWaitlistWidgetState extends State<AlreadyInWaitlistWidget> {
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: AppColors.yellow),
-            color: AppColors.white,
+            border: Border.all(color: appColors.yellow),
+            color: appColors.white,
           ),
           child: grid(),
         ),

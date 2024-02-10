@@ -52,7 +52,7 @@ class UploadYourPhotosUi extends GetView<UploadYourPhotosController> {
                                         offset: const Offset(0.0, 3.0),
                                       ),
                                     ],
-                                    color: AppColors.white,
+                                    color: appColors.white,
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(20)),
                                   ),
@@ -77,7 +77,7 @@ class UploadYourPhotosUi extends GetView<UploadYourPhotosController> {
                                               blurRadius: 1.0,
                                               offset: const Offset(0.0, 3.0)),
                                         ],
-                                        color: AppColors.white,
+                                        color: appColors.white,
                                         borderRadius: const BorderRadius.all(
                                           Radius.circular(20),
                                         ),
@@ -101,14 +101,14 @@ class UploadYourPhotosUi extends GetView<UploadYourPhotosController> {
                                       child: Align(
                                         alignment: Alignment.topRight,
                                         child: Container(
-                                          decoration: const BoxDecoration(
+                                          decoration:  BoxDecoration(
                                               shape: BoxShape.circle,
-                                              color: AppColors.blackColor),
-                                          child: const Padding(
+                                              color: appColors.blackColor),
+                                          child:  Padding(
                                             padding: EdgeInsets.all(3.0),
                                             child: Icon(
                                               Icons.close,
-                                              color: AppColors.white,
+                                              color: appColors.white,
                                             ),
                                           ),
                                         ),

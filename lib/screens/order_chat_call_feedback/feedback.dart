@@ -32,12 +32,12 @@ class FeedBack extends GetView<FeedbackController> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(20.r)),
-              border: Border.all(color: AppColors.red, width: 1),
+              border: Border.all(color: appColors.red, width: 1),
             ),
             child: Text(
               'Need Help ?',
               style: AppTextStyle.textStyle12(
-                fontColor: AppColors.red,
+                fontColor: appColors.red,
               ),
             ),
           ),
@@ -63,7 +63,7 @@ class FeedBack extends GetView<FeedbackController> {
                         'ID : ${controller.order?.id ?? "N/A"}',
                         style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
-                          fontColor: AppColors.darkBlue,
+                          fontColor: appColors.darkBlue,
                         ),
                       ),
                     ],
@@ -78,7 +78,7 @@ class FeedBack extends GetView<FeedbackController> {
                             : "N/A",
                         style: AppTextStyle.textStyle10(
                           fontWeight: FontWeight.w400,
-                          fontColor: AppColors.darkBlue.withOpacity(.5),
+                          fontColor: appColors.darkBlue.withOpacity(.5),
                         ),
                       )
                     ],
@@ -126,7 +126,7 @@ class FeedBack extends GetView<FeedbackController> {
                                       width: 60,
                                       height: 25,
                                       decoration: BoxDecoration(
-                                        color: AppColors.brown,
+                                        color: appColors.brown,
                                         borderRadius: BorderRadius.circular(15),
                                       ),
                                       child: Center(
@@ -137,7 +137,7 @@ class FeedBack extends GetView<FeedbackController> {
                                                       data.createdAt!))
                                               : 'Na',
                                           style: AppTextStyle.textStyle10(
-                                            fontColor: AppColors.white,
+                                            fontColor: appColors.white,
                                           ),
                                         ),
                                       ),
@@ -212,9 +212,9 @@ class FeedBack extends GetView<FeedbackController> {
                                                               (data.msgType ??
                                                                           0) ==
                                                                       1
-                                                                  ? AppColors
+                                                                  ? appColors
                                                                       .darkBlue
-                                                                  : AppColors
+                                                                  : appColors
                                                                       .darkBlue,
                                                         ),
                                                       ),
@@ -237,7 +237,7 @@ class FeedBack extends GetView<FeedbackController> {
                                                       style: AppTextStyle
                                                           .textStyle10(
                                                         fontColor:
-                                                            AppColors.darkBlue,
+                                                            appColors.darkBlue,
                                                       ),
                                                     ),
                                                     (data.seenStatus ?? 0) == 0
@@ -277,7 +277,7 @@ class FeedBack extends GetView<FeedbackController> {
                                       width: 60,
                                       height: 25,
                                       decoration: BoxDecoration(
-                                        color: AppColors.brown,
+                                        color: appColors.brown,
                                         borderRadius: BorderRadius.circular(15),
                                       ),
                                       child: Center(
@@ -285,7 +285,7 @@ class FeedBack extends GetView<FeedbackController> {
                                           DateFormat('dd MMM').format(
                                               DateTime.parse(data.createdAt!)),
                                           style: AppTextStyle.textStyle10(
-                                            fontColor: AppColors.white,
+                                            fontColor: appColors.white,
                                           ),
                                         ),
                                       ),
@@ -322,7 +322,7 @@ class FeedBack extends GetView<FeedbackController> {
                                 TextSpan(
                                   text:
                                       '${controller.astroFeedbackDetailData?.totalProblem ?? 0}',
-                                  style: const TextStyle(color: AppColors.red),
+                                  style:  TextStyle(color: appColors.red),
                                 ),
                               ],
                             ),
@@ -337,7 +337,7 @@ class FeedBack extends GetView<FeedbackController> {
                                 TextSpan(
                                   text:
                                       '-₹ ${controller.astroFeedbackDetailData?.fineAmounts ?? 0}',
-                                  style: const TextStyle(color: AppColors.red),
+                                  style:  TextStyle(color: appColors.red),
                                 ),
                               ],
                             ),
@@ -398,16 +398,16 @@ class FeedBack extends GetView<FeedbackController> {
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color:  AppColors.yellow ,
+                  color:  appColors.yellow ,
                 ),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: AppColors.red,
+                  backgroundColor: appColors.red,
                   child: CustomText(
                     temp[0][0],
-                    fontColor: AppColors.white,
+                    fontColor: appColors.white,
                   ), // Display the first letter of the name
                 ),
                 title: CustomText(

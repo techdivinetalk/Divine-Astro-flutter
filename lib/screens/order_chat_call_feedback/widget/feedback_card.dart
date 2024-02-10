@@ -26,12 +26,12 @@ class FeedbackCallChatCardWidget extends StatelessWidget {
         SizedBox(height: 10.h),*/
         Text(
           'Problem: ${feedbackProblem?.problem}',
-          style: AppTextStyle.textStyle14(fontColor: AppColors.red),
+          style: AppTextStyle.textStyle14(fontColor: appColors.red),
         ),
         SizedBox(height: 10.h),
         Text(
           'Solution: ${feedbackProblem?.solution}',
-          style: AppTextStyle.textStyle14(fontColor: AppColors.darkGreen),
+          style: AppTextStyle.textStyle14(fontColor: appColors.darkGreen),
         ),
       ],
     );

@@ -22,7 +22,7 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     return Material(
-//       color: AppColors.transparent,
+//       color: appColors.transparent,
 //       child: Column(
 //         mainAxisSize: MainAxisSize.min,
 //         children: [
@@ -33,11 +33,11 @@
 //             child: Container(
 //               padding: const EdgeInsets.all(15.0),
 //               decoration: BoxDecoration(
-//                 border: Border.all(color: AppColors.white),
+//                 border: Border.all(color: appColors.white),
 //                 borderRadius: const BorderRadius.all(
 //                   Radius.circular(50.0),
 //                 ),
-//                 color: AppColors.white.withOpacity(0.2),
+//                 color: appColors.white.withOpacity(0.2),
 //               ),
 //               child: const Icon(
 //                 Icons.close,
@@ -56,14 +56,14 @@
 //                 decoration: BoxDecoration(
 //                   borderRadius:
 //                       const BorderRadius.vertical(top: Radius.circular(50.0)),
-//                   color: AppColors.white.withOpacity(0.1),
+//                   color: appColors.white.withOpacity(0.1),
 //                 ),
 //                 child: Column(
 //                   children: [
 //                     SizedBox(height: 20.h),
 //                     CustomText("Blocked User",
 //                         fontSize: 16.sp,
-//                         fontColor: AppColors.white,
+//                         fontColor: appColors.white,
 //                         fontWeight: FontWeight.bold),
 //                     SizedBox(height: 20.h),
 //                     StreamBuilder<DatabaseEvent>(
@@ -95,8 +95,8 @@
 //                                   decoration: BoxDecoration(
 //                                       borderRadius: BorderRadius.circular(40),
 //                                       border: Border.all(
-//                                           color: AppColors.appYellowColour),
-//                                       color: AppColors.white),
+//                                           color: appColors.appYellowColour),
+//                                       color: appColors.white),
 //                                   height: 50.h,
 //                                   child: Row(
 //                                     children: [
@@ -105,7 +105,7 @@
 //                                           width: 20.w,
 //                                           child: CustomText(
 //                                             (index + 1).toString(),
-//                                             fontColor: AppColors.darkBlue,
+//                                             fontColor: appColors.darkBlue,
 //                                             fontWeight: FontWeight.bold,
 //                                             fontSize: 16.sp,
 //                                           )),
@@ -116,7 +116,7 @@
 //                                         clipBehavior: Clip.antiAlias,
 //                                         decoration: const BoxDecoration(
 //                                             shape: BoxShape.circle,
-//                                             color: AppColors.blackColor),
+//                                             color: appColors.blackColor),
 //                                         child: const CachedNetworkPhoto(
 //                                           url: "",
 //                                         ),
@@ -124,7 +124,7 @@
 //                                       SizedBox(width: 16.w),
 //                                       CustomText(value["name"],
 //                                           fontSize: 16.sp,
-//                                           fontColor: AppColors.darkBlue,
+//                                           fontColor: appColors.darkBlue,
 //                                           fontWeight: FontWeight.w600),
 //                                       const Spacer(),
 //                                       IconButton(

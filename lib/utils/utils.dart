@@ -53,7 +53,7 @@ class Utils {
     content: Column(mainAxisSize: MainAxisSize.min, children: [
       Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.w), color: AppColors.white),
+            borderRadius: BorderRadius.circular(10.w), color: appColors.white),
         padding: EdgeInsets.all(10.w),
         child: Row(
           children: [
@@ -61,7 +61,7 @@ class Utils {
             SizedBox(width: 4.w),
             Text(
               'raiseTechnicalIssues'.tr,
-              style: AppTextStyle.textStyle14(fontColor: AppColors.black),
+              style: AppTextStyle.textStyle14(fontColor: appColors.black),
             ),
             const Spacer(),
             const Icon(Icons.arrow_right)
@@ -71,7 +71,7 @@ class Utils {
       SizedBox(height: 7.h),
       Container(
         decoration: BoxDecoration(
-            color: AppColors.white, borderRadius: BorderRadius.circular(10.w)),
+            color: appColors.white, borderRadius: BorderRadius.circular(10.w)),
         padding: EdgeInsets.all(10.w),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,12 +85,12 @@ class Utils {
                     Text(
                       '${'internetSpeed'.tr} :',
                       style:
-                          AppTextStyle.textStyle14(fontColor: AppColors.black),
+                          AppTextStyle.textStyle14(fontColor: appColors.black),
                     ),
                     Text(
                       'poor'.tr,
                       style: AppTextStyle.textStyle16(
-                          fontColor: AppColors.red,
+                          fontColor: appColors.red,
                           fontWeight: FontWeight.w600),
                     ),
                   ],
@@ -98,11 +98,11 @@ class Utils {
                 Text(
                   'badInternetConnection'.tr,
                   style: AppTextStyle.textStyle14(
-                      fontColor: AppColors.red, fontWeight: FontWeight.w500),
+                      fontColor: appColors.red, fontWeight: FontWeight.w500),
                 ),
               ],
             ),
-            Assets.images.group.svg(color: AppColors.red)
+            Assets.images.group.svg(color: appColors.red)
           ],
         ),
       )
@@ -136,11 +136,11 @@ double viewBottomPadding(double padding) {
 //       content: Text(
 //         data,
 //         style: TextStyle(
-//             color: color != null ? AppColors.white : AppColors.blackColor),
+//             color: color != null ? appColors.white : appColors.blackColor),
 //       ),
-//       backgroundColor: color ?? AppColors.lightYellow,
+//       backgroundColor: color ?? appColors.lightYellow,
 //       showCloseIcon: true,
-//       closeIconColor: color != null ? AppColors.white : AppColors.blackColor,
+//       closeIconColor: color != null ? appColors.white : appColors.blackColor,
 //     );
 //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
 //   }

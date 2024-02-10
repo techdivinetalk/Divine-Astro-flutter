@@ -91,7 +91,7 @@
 //       child: Container(
 //         height: 120.h,
 //         decoration: BoxDecoration(
-//           color: AppColors.darkBlue,
+//           color: appColors.darkBlue,
 //           borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
 //         ),
 //         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
@@ -108,12 +108,12 @@
 //                 radius: 50.r,
 //                 padding: EdgeInsets.all(17.h),
 //                 color: controller.muteValue.value
-//                     ? AppColors.white.withOpacity(0.2)
-//                     : AppColors.transparent,
+//                     ? appColors.white.withOpacity(0.2)
+//                     : appColors.transparent,
 //                 child: Assets.svg.mute.svg(
 //                     width: 30,
 //                     colorFilter: const ColorFilter.mode(
-//                         AppColors.white, BlendMode.srcIn)),
+//                         appColors.white, BlendMode.srcIn)),
 //               ),
 //             ),
 //             Obx(
@@ -125,29 +125,29 @@
 //                 radius: 50.r,
 //                 padding: EdgeInsets.all(17.h),
 //                 color: controller.videoValue.value
-//                     ? AppColors.white.withOpacity(0.2)
-//                     : AppColors.transparent,
+//                     ? appColors.white.withOpacity(0.2)
+//                     : appColors.transparent,
 //                 child: Assets.svg.videoMute.svg(
 //                     width: 30,
 //                     colorFilter: const ColorFilter.mode(
-//                         AppColors.white, BlendMode.srcIn)),
+//                         appColors.white, BlendMode.srcIn)),
 //               ),
 //             ),
 //             CustomButton(
 //               onTap: () {},
 //               radius: 50.r,
 //               padding: EdgeInsets.all(17.h),
-//               child: Assets.images.icKundliShare.image(color: AppColors.white),
+//               child: Assets.images.icKundliShare.image(color: appColors.white),
 //             ),
 //             CustomButton(
 //               onTap: () => controller.onHangUp(),
 //               radius: 50.r,
 //               padding: EdgeInsets.all(17.h),
-//               color: AppColors.darkRed,
+//               color: appColors.darkRed,
 //               child: const Icon(
 //                 Icons.call_end,
 //                 size: 32,
-//                 color: AppColors.white,
+//                 color: appColors.white,
 //               ),
 //             ),
 //           ],
@@ -163,8 +163,8 @@
 //       decoration: BoxDecoration(
 //         gradient: LinearGradient(
 //           colors: [
-//             AppColors.blackColor,
-//             AppColors.blackColor.withOpacity(0),
+//             appColors.blackColor,
+//             appColors.blackColor.withOpacity(0),
 //           ],
 //           begin: Alignment.topCenter,
 //           end: Alignment.bottomCenter,
@@ -174,7 +174,7 @@
 //         child: SizedBox(
 //           height: AppBar().preferredSize.height,
 //           child: Material(
-//             color: AppColors.transparent,
+//             color: appColors.transparent,
 //             child: Row(
 //               children: [
 //                 CustomButton(
@@ -182,13 +182,13 @@
 //                   padding: EdgeInsets.all(10.w),
 //                   radius: 50.r,
 //                   child: const Icon(Icons.arrow_back_ios_new_rounded,
-//                       color: AppColors.white),
+//                       color: appColors.white),
 //                 ),
 //                 Obx(
 //                   () => CustomText(
 //                     '${formattedTime()} Remaining',
 //                     fontSize: 16.sp,
-//                     fontColor: AppColors.white,
+//                     fontColor: appColors.white,
 //                     fontWeight: FontWeight.w700,
 //                   ),
 //                 ),
@@ -203,12 +203,12 @@
 //                   radius: 50.r,
 //                   padding: EdgeInsets.all(10.h),
 //                   color: controller.videoValue.value
-//                       ? AppColors.white.withOpacity(0.2)
-//                       : AppColors.transparent,
+//                       ? appColors.white.withOpacity(0.2)
+//                       : appColors.transparent,
 //                   child: Assets.svg.switchCamera.svg(
 //                       height: 26,
 //                       colorFilter: const ColorFilter.mode(
-//                           AppColors.white, BlendMode.srcIn)),
+//                           appColors.white, BlendMode.srcIn)),
 //                 ),
 //               ],
 //             ),

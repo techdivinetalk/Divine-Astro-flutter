@@ -215,7 +215,7 @@ class AppPermissionService {
   Future<void> showAlertDialog(String module, List<String> perms) async {
     await showDialog(
       context: Get.context!,
-      barrierColor: AppColors.darkBlue.withOpacity(0.5),
+      barrierColor: appColors.darkBlue.withOpacity(0.5),
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Permission need for use $module"),
@@ -263,7 +263,7 @@ class AppPermissionService {
   }) async {
     await showCupertinoModalPopup(
       context: Get.context!,
-      barrierColor: AppColors.darkBlue.withOpacity(0.5),
+      barrierColor: appColors.darkBlue.withOpacity(0.5),
       builder: (BuildContext context) {
         return PermissionDialog(
           permissionName: permissionName,

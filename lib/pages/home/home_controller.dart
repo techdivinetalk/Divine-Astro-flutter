@@ -100,11 +100,12 @@ class HomeController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    getColors();
+
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {
       debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
       if (event.name == "giftCount") {
+        print("giftcount-----giftCount");
         showGiftBottomSheet(event.data?["giftCount"], contextDetail);
       }
     });
@@ -119,16 +120,8 @@ class HomeController extends GetxController {
     tarotCardData();
   }
 
-  RemoteConfigHelper? remoteConfigHelper;
-  getColors() async {
-    // final remoteConfig = FirebaseRemoteConfig.instance;
-    // remoteConfigHelper = RemoteConfigHelper(remoteConfig: remoteConfig);
-    // await remoteConfigHelper!.initialize();
-    // print(remoteConfigHelper!.getString("background"));
-    // print("get color here");
-    print(remoteConfigData);
-    print("remoteConfigData");
-  }
+
+
 
   fetchImportantNumbers() async {
     try {
@@ -139,7 +132,7 @@ class HomeController extends GetxController {
       isAllNumbersExist = checkForALlContact(importantNumbers);
       importantNumberBottomsheet();
     } catch (error) {
-      divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      divineSnackBar(data: error.toString(), color: appColors.redColor);
     }
   }
 
@@ -269,7 +262,7 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
   }
@@ -289,7 +282,7 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
   }
@@ -310,7 +303,7 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
   }
@@ -336,7 +329,7 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
   }
@@ -366,7 +359,7 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
   }
@@ -380,7 +373,7 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
   }
@@ -454,7 +447,7 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
   }
@@ -567,7 +560,7 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     sessionTypeLoading.value = Loading.loaded;
@@ -602,7 +595,7 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     offerTypeLoading.value = Loading.loaded;
@@ -704,7 +697,7 @@ class HomeController extends GetxController {
           DateTime.now().millisecondsSinceEpoch);
       showDialog(
         context: Get.context!,
-        barrierColor: AppColors.darkBlue.withOpacity(0.5),
+        barrierColor: appColors.darkBlue.withOpacity(0.5),
         builder: (_) => PerformanceDialog(),
       );
     }

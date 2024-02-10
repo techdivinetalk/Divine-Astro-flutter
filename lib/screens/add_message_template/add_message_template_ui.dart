@@ -17,12 +17,12 @@ class AddMessageTemplateUI extends GetView<AddMessageTemplateController> {
       appBar: AppBar(
         centerTitle: false,
         forceMaterialTransparency: true,
-        backgroundColor: AppColors.white,
+        backgroundColor: appColors.white,
         title: Text("Template",
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
-              color: AppColors.darkBlue,
+              color: appColors.darkBlue,
             )),
       ),
       body: Padding(
@@ -44,12 +44,12 @@ class AddMessageTemplateUI extends GetView<AddMessageTemplateController> {
                 inputType: TextInputType.text,
                 inputAction: TextInputAction.next,
                 hintText: "Enter Template Name",
-                errorBorder: AppColors.white,
+                errorBorder: appColors.white,
                 suffixIcon: Padding(
                   padding: const EdgeInsets.only(top: 12),
                   child: Text(
                     '${controller.nameLenght}/15',
-                    style: AppTextStyle.textStyle12(fontColor: AppColors.darkBlue),
+                    style: AppTextStyle.textStyle12(fontColor: appColors.darkBlue),
                   ),
                 ),
               ),
@@ -58,7 +58,7 @@ class AddMessageTemplateUI extends GetView<AddMessageTemplateController> {
             Obx(() => controller.nameErrorText.isNotEmpty
                 ? Text(
                     controller.nameErrorText.value,
-                    style: AppTextStyle.textStyle12(fontColor: AppColors.red),
+                    style: AppTextStyle.textStyle12(fontColor: appColors.red),
                   )
                 : const SizedBox()),
             SizedBox(height: 20.h),
@@ -73,14 +73,14 @@ class AddMessageTemplateUI extends GetView<AddMessageTemplateController> {
               inputType: TextInputType.text,
               inputAction: TextInputAction.next,
               hintText: "Enter Default Message",
-              errorBorder: AppColors.white,
+              errorBorder: appColors.white,
               maxLines: 4,
             ),
             SizedBox(height: 2.h),
             Obx(() => controller.messageErrorText.isNotEmpty
                 ? Text(
                     controller.messageErrorText.value,
-                    style: AppTextStyle.textStyle12(fontColor: AppColors.red),
+                    style: AppTextStyle.textStyle12(fontColor: appColors.red),
                   )
                 : const SizedBox()),
             SizedBox(height: 26.h),

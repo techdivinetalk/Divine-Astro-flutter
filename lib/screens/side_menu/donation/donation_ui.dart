@@ -25,13 +25,13 @@ class DonationUi extends GetView<DonationController> {
               width: 47.w,
               height: 26.h,
               decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.greyColor, width: 1), borderRadius: BorderRadius.circular(10)),
+                  border: Border.all(color: appColors.greyColor, width: 1), borderRadius: BorderRadius.circular(10)),
               child: Center(
                 child: Text("₹500",
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 12.sp,
-                      color: AppColors.darkBlue,
+                      color: appColors.darkBlue,
                     )),
               ),
             ),
@@ -47,13 +47,13 @@ class DonationUi extends GetView<DonationController> {
             itemBuilder: (BuildContext context, int index) {
               var item = controller.item[index];
               return Card(
-                color: AppColors.white,
-                surfaceTintColor: AppColors.white,
+                color: appColors.white,
+                surfaceTintColor: appColors.white,
                 elevation: 2.0,
                 clipBehavior: Clip.antiAlias,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 child: Material(
-                  color: AppColors.transparent,
+                  color: appColors.transparent,
                   child: InkWell(
                     onTap: () {
                       Get.toNamed(RouteName.donationDetailPage, arguments: item);
@@ -76,7 +76,7 @@ class DonationUi extends GetView<DonationController> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 20.sp,
-                                  color: AppColors.darkBlue,
+                                  color: appColors.darkBlue,
                                 ),
                               ),
                               item.last.isNotEmpty
@@ -85,7 +85,7 @@ class DonationUi extends GetView<DonationController> {
                                       style: TextStyle(
                                         fontWeight: FontWeight.w400,
                                         fontSize: 16.sp,
-                                        color: AppColors.grey,
+                                        color: appColors.grey,
                                       ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -118,8 +118,8 @@ class DonationUi extends GetView<DonationController> {
                   height: 254.h,
                   width: 172.w,
                   child: Card(
-                    color: AppColors.white,
-                    surfaceTintColor: AppColors.white,
+                    color: appColors.white,
+                    surfaceTintColor: appColors.white,
                     elevation: 2.0,
                     clipBehavior: Clip.antiAlias,
                     shape: RoundedRectangleBorder(
@@ -145,14 +145,14 @@ class DonationUi extends GetView<DonationController> {
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 20.sp,
-                                    color: AppColors.darkBlue,
+                                    color: appColors.darkBlue,
                                   )),
                               //SizedBox(height: 4.h),
                               Text(item.last,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w400,
                                     fontSize: 16.sp,
-                                    color: AppColors.darkBlue,
+                                    color: appColors.darkBlue,
                                   ))
                             ],
                           ),

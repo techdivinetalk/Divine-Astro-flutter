@@ -37,11 +37,11 @@ class CountryPickerSheetWidget extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(15.0),
               decoration: BoxDecoration(
-                border: Border.all(color: AppColors.white),
+                border: Border.all(color: appColors.white),
                 borderRadius: const BorderRadius.all(
                   Radius.circular(50.0),
                 ),
-                color: AppColors.white.withOpacity(0.2),
+                color: appColors.white.withOpacity(0.2),
               ),
               child: const Icon(
                 Icons.close,
@@ -53,9 +53,9 @@ class CountryPickerSheetWidget extends StatelessWidget {
           Container(
             width: context.width,
             height: context.height / 2,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
-              color: AppColors.white,
+            decoration:  BoxDecoration(
+              borderRadius:const BorderRadius.vertical(top: Radius.circular(50.0)),
+              color: appColors.white,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -74,7 +74,7 @@ class CountryPickerSheetWidget extends StatelessWidget {
                     "selectCountry".tr,
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
-                      color: AppColors.darkBlue,
+                      color: appColors.darkBlue,
                       fontSize: 20.0.sp,
                     ),
                   ),
@@ -121,7 +121,7 @@ class _AllCountryListState extends State<AllCountryList> {
 
   OutlineInputBorder get border => OutlineInputBorder(
         borderSide: BorderSide(
-          color: AppColors.darkBlue.withOpacity(0.5),
+          color: appColors.darkBlue.withOpacity(0.5),
         ),
         borderRadius: BorderRadius.circular(10.sp),
       );
@@ -129,7 +129,7 @@ class _AllCountryListState extends State<AllCountryList> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.white,
+      color: appColors.white,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -145,7 +145,7 @@ class _AllCountryListState extends State<AllCountryList> {
               autofocus: true,
               controller: controller,
               onChanged: (value) => setState(() {}),
-              cursorColor: AppColors.darkBlue.withOpacity(0.2),
+              cursorColor: appColors.darkBlue.withOpacity(0.2),
               decoration: InputDecoration(
                 prefixIcon: Container(
                   margin: EdgeInsets.symmetric(
@@ -155,7 +155,7 @@ class _AllCountryListState extends State<AllCountryList> {
                   child: Assets.images.icLocation.svg(),
                 ),
                 hintStyle: TextStyle(
-                  color: AppColors.darkBlue.withOpacity(0.2),
+                  color: appColors.darkBlue.withOpacity(0.2),
                   fontWeight: FontWeight.w400,
                   fontSize: 16.sp,
                 ),
@@ -187,7 +187,7 @@ class _AllCountryListState extends State<AllCountryList> {
                                   "${element.flag} ${element.phoneCode.contains("+") ? element.phoneCode : "+${element.phoneCode}"} ${element.name}",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w400,
-                                    color: AppColors.darkBlue,
+                                    color: appColors.darkBlue,
                                     fontSize: 16.sp,
                                   ),
                                 ),
@@ -202,7 +202,7 @@ class _AllCountryListState extends State<AllCountryList> {
                   child: CircularProgressIndicator.adaptive(
                     strokeWidth: 2.sp,
                     valueColor:
-                        const AlwaysStoppedAnimation(AppColors.lightYellow),
+                         AlwaysStoppedAnimation(appColors.lightYellow),
                   ),
                 );
               },

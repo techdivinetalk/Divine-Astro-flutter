@@ -26,7 +26,7 @@ class PerformanceUI extends GetView<PerformanceController> {
   Widget build(BuildContext context) {
     Get.put(PerformanceController());
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: appColors.white,
       appBar:
           commonAppbar(title: "performance".tr, trailingWidget: Container()),
       drawer: const SideMenuDrawer(),
@@ -166,7 +166,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                   Text(
                                     "Your Score",
                                     style: AppTextStyle.textStyle10(
-                                        fontColor: AppColors.darkBlue),
+                                        fontColor: appColors.darkBlue),
                                   ),
                                   SizedBox(height: 5.h),
                                   Text(
@@ -176,7 +176,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                     //     : "0",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w700,
-                                        color: AppColors.darkBlue,
+                                        color: appColors.darkBlue,
                                         fontSize: 20.sp),
                                   ),
                                   SizedBox(height: 5.h),
@@ -187,7 +187,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                     //     : "Out of 0",
                                     // "Out of 100",
                                     style: AppTextStyle.textStyle10(
-                                        fontColor: AppColors.darkBlue),
+                                        fontColor: appColors.darkBlue),
                                   ),
                                 ],
                               ),
@@ -211,7 +211,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                             Text(
                                               "${item?.label} ( Percentage vs Marks )",
                                               style: AppTextStyle.textStyle16(
-                                                  fontColor: AppColors.darkBlue,
+                                                  fontColor: appColors.darkBlue,
                                                   fontWeight: FontWeight.w700),
                                             ),
                                             SizedBox(
@@ -220,7 +220,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                             Text(
                                               model.scoreName.toString(),
                                               style: AppTextStyle.textStyle14(
-                                                  fontColor: AppColors.darkBlue,
+                                                  fontColor: appColors.darkBlue,
                                                   fontWeight: FontWeight.w400),
                                             ),
                                             SizedBox(
@@ -266,7 +266,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                                         FontWeight
                                                                             .w700,
                                                                     fontColor:
-                                                                        AppColors
+                                                                        appColors
                                                                             .darkBlue),
                                                               ),
                                                               SizedBox(
@@ -288,7 +288,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                                         FontWeight
                                                                             .w700,
                                                                     fontColor:
-                                                                        AppColors
+                                                                        appColors
                                                                             .darkBlue),
                                                               ),
                                                               SizedBox(
@@ -330,19 +330,19 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                                             textAlign:
                                                                                 TextAlign.center,
                                                                             style:
-                                                                                AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                                                                                AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
                                                                           )
                                                                         : model?.max == '0' ||
                                                                                 model?.max == null
                                                                             ? Text(
                                                                                 '${model?.min}${model?.text}+',
                                                                                 textAlign: TextAlign.center,
-                                                                                style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                                                                                style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
                                                                               )
                                                                             : Text(
                                                                                 '${model?.min}${model?.text}-${model?.max}${model?.text}',
                                                                                 textAlign: TextAlign.center,
-                                                                                style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                                                                                style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
                                                                               ),
                                                                     SizedBox(
                                                                       height:
@@ -365,7 +365,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                                                           fontWeight: FontWeight
                                                                               .w700,
                                                                           fontColor:
-                                                                              AppColors.darkBlue),
+                                                                              appColors.darkBlue),
                                                                     ),
                                                                     SizedBox(
                                                                       height:
@@ -395,14 +395,14 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                               blurRadius: 3.0,
                                               offset: const Offset(0.0, 3.0)),
                                         ],
-                                        color: AppColors.white,
+                                        color: appColors.white,
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(10))),
                                     child: Text(
                                       item?.label ?? '',
                                       textAlign: TextAlign.center,
                                       style: AppTextStyle.textStyle12(
-                                          fontColor: AppColors.darkBlue),
+                                          fontColor: appColors.darkBlue),
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 2,
                                     )),
@@ -452,7 +452,7 @@ class LastAvailabilityWidget extends StatelessWidget {
               Text(
                 "${'last30DaysAvailability'.tr} (${'inMins'.tr})",
                 style: AppTextStyle.textStyle12(
-                    fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+                    fontWeight: FontWeight.w700, fontColor: appColors.darkBlue),
               ),
               const Expanded(child: SizedBox()),
               GestureDetector(
@@ -478,7 +478,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                       "date".tr,
                       style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                   ),
                   SizedBox(
@@ -490,7 +490,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                       "availableChat".tr,
                       style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                   ),
                   SizedBox(
@@ -502,7 +502,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                       "availableCall".tr,
                       style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                   ),
                   SizedBox(
@@ -514,7 +514,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                       "busyChat".tr,
                       style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                   ),
                   SizedBox(
@@ -526,7 +526,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                       "busyCall".tr,
                       style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                   ),
                   SizedBox(
@@ -538,7 +538,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                       "availableLive".tr,
                       style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                   ),
                 ],
@@ -556,7 +556,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                       "20-06-23",
                       style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                   ),
                   Expanded(
@@ -565,7 +565,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                       "${last30DaysAvailiblity?.availableChat ?? "0"}",
                       style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w400,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                   ),
                   Expanded(
@@ -574,7 +574,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                       "${last30DaysAvailiblity?.availableCall ?? "0"}",
                       style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w400,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                   ),
                   Expanded(
@@ -583,7 +583,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                       "${last30DaysAvailiblity?.busyChat ?? "0"}",
                       style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w400,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                   ),
                   Expanded(
@@ -592,7 +592,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                       "${last30DaysAvailiblity?.busyCall ?? "0"}",
                       style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w400,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                   ),
                   Expanded(
@@ -601,7 +601,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                       "${last30DaysAvailiblity?.availableLive ?? "0"}",
                       style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w400,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                   ),
                 ],
@@ -643,7 +643,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
               Text(
                 "availabilityTitle".tr,
                 style: AppTextStyle.textStyle12(
-                    fontWeight: FontWeight.w700, fontColor: AppColors.darkBlue),
+                    fontWeight: FontWeight.w700, fontColor: appColors.darkBlue),
               ),
               const Expanded(child: SizedBox()),
               GestureDetector(
@@ -672,7 +672,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                       "sessionType".tr,
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                     SizedBox(
                       height: 10.h,
@@ -681,7 +681,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                       "chat".tr.toUpperCase(),
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w700,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                     SizedBox(
                       height: 10.h,
@@ -690,7 +690,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                       "call".tr.toUpperCase(),
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w700,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                     SizedBox(
                       height: 10.h,
@@ -699,7 +699,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                       "live".tr.toUpperCase(),
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w700,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                   ],
                 ),
@@ -716,7 +716,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                       "available".tr,
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                     SizedBox(
                       height: 10.h,
@@ -725,7 +725,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                       "${todaysAvailiblity?.availableChat ?? "0"} mins",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                     SizedBox(
                       height: 10.h,
@@ -734,7 +734,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                       "${todaysAvailiblity?.availableCall ?? "0"} mins",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                     SizedBox(
                       height: 10.h,
@@ -743,7 +743,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                       "${todaysAvailiblity?.availableLive ?? "0"} mins",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                   ],
                 ),
@@ -761,7 +761,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                       "busy".tr,
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                     SizedBox(
                       height: 10.h,
@@ -771,7 +771,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                       "${todaysAvailiblity?.busyChat ?? "0"} mins",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                     SizedBox(
                       height: 10.h,
@@ -780,7 +780,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                       "${todaysAvailiblity?.busyCall ?? "0"} mins",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                     SizedBox(
                       height: 10.h,
@@ -789,7 +789,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                       "${todaysAvailiblity?.busyLive} mins",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                     ),
                   ],
                 ),
@@ -844,7 +844,7 @@ class OverAllScoreData extends GetView<PerformanceController> {
                         "overallScore".tr,
                         style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w700,
-                            fontColor: AppColors.darkBlue),
+                            fontColor: appColors.darkBlue),
                       ),
                       SizedBox(
                         height: 10.h,
@@ -854,7 +854,7 @@ class OverAllScoreData extends GetView<PerformanceController> {
                         "${performanceFilterResponse?.data?.score ?? '-'}/${performanceFilterResponse?.data?.totalScore ?? '-'} (${performanceFilterResponse?.data?.scorePrecentage ?? 0}%)",
                         style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w400,
-                            fontColor: AppColors.darkBlue),
+                            fontColor: appColors.darkBlue),
                       ),
                     ],
                   ),
@@ -867,7 +867,7 @@ class OverAllScoreData extends GetView<PerformanceController> {
                         "rank".tr,
                         style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w700,
-                            fontColor: AppColors.darkBlue),
+                            fontColor: appColors.darkBlue),
                       ),
                       SizedBox(
                         height: 10.h,
@@ -888,7 +888,7 @@ class OverAllScoreData extends GetView<PerformanceController> {
                             performanceFilterResponse?.data?.rank ?? '-',
                             style: AppTextStyle.textStyle12(
                                 fontWeight: FontWeight.w400,
-                                fontColor: AppColors.darkBlue),
+                                fontColor: appColors.darkBlue),
                           ),
                           const Expanded(child: SizedBox()),
                           GestureDetector(
@@ -943,7 +943,7 @@ class DurationUI extends StatelessWidget {
               blurRadius: 3.0,
               offset: const Offset(0.0, 3.0)),
         ],
-        color: AppColors.white,
+        color: appColors.white,
         borderRadius: const BorderRadius.all(Radius.circular(20)),
       ),
       child: GetBuilder<PerformanceController>(builder: (controller) {
@@ -954,7 +954,7 @@ class DurationUI extends StatelessWidget {
               hint: Text(
                 "select".tr,
                 style: AppTextStyle.textStyle16(
-                    fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                    fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
               ),
               items: controller.durationOptions
                   .map((String item) => DropdownMenuItem<String>(
@@ -965,21 +965,21 @@ class DurationUI extends StatelessWidget {
                             item.tr,
                             style: AppTextStyle.textStyle16(
                                 fontWeight: FontWeight.w400,
-                                fontColor: AppColors.darkBlue),
+                                fontColor: appColors.darkBlue),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ))
                   .toList(),
               style: AppTextStyle.textStyle16(
-                  fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                  fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
               value: controller.selectedOption.value,
               onChanged: (String? value) {
                 // if(value == controller.durationOptions.last){
                 //   showCupertinoModalPopup(
                 //     context: Get.context!,
                 //     barrierColor:
-                //     AppColors.darkBlue.withOpacity(0.5),
+                //     appColors.darkBlue.withOpacity(0.5),
                 //     builder: (context) => const DateSelection(),
                 //   );
                 // }
@@ -987,18 +987,18 @@ class DurationUI extends StatelessWidget {
                 controller.updateDurationValue(value!);
                 // }
               },
-              iconStyleData: const IconStyleData(
-                icon: Icon(
+              iconStyleData:  IconStyleData(
+                icon: const Icon(
                   Icons.keyboard_arrow_down,
                 ),
                 iconSize: 35,
-                iconEnabledColor: AppColors.blackColor,
+                iconEnabledColor: appColors.blackColor,
               ),
               dropdownStyleData: DropdownStyleData(
                 width: ScreenUtil().screenWidth * 0.95,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(14),
-                  color: AppColors.white,
+                  color: appColors.white,
                 ),
                 offset: const Offset(-10, -17),
                 scrollbarTheme: ScrollbarThemeData(

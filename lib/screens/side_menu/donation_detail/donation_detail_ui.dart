@@ -27,13 +27,13 @@ class DonationDetailUi extends GetView<DonationDetailController> {
                 borderRadius: BorderRadius.all(Radius.circular(25.0)),
               ),
               onPressed: () {},
-              color: AppColors.lightYellow,
+              color: appColors.lightYellow,
               child: Text(
                 "donateNow".tr,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 20.sp,
-                  color: AppColors.brownColour,
+                  color: appColors.brownColour,
                 ),
               )),
         ),
@@ -49,14 +49,14 @@ class DonationDetailUi extends GetView<DonationDetailController> {
               width: 47.w,
               height: 26.h,
               decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.darkBlue, width: 1),
+                  border: Border.all(color: appColors.darkBlue, width: 1),
                   borderRadius: BorderRadius.circular(10)),
               child: Center(
                 child: Text("₹500",
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 12.sp,
-                      color: AppColors.darkBlue,
+                      color: appColors.darkBlue,
                     )),
               ),
             ),
@@ -74,7 +74,7 @@ class DonationDetailUi extends GetView<DonationDetailController> {
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 20.sp,
-                    color: AppColors.darkBlue,
+                    color: appColors.darkBlue,
                   )),
               SizedBox(height: 20.h),
               Row(
@@ -87,13 +87,13 @@ class DonationDetailUi extends GetView<DonationDetailController> {
                           alignment: Alignment.center,
                           height: 68,
                           decoration:  BoxDecoration(
-                              color: AppColors.white,
+                              color: appColors.white,
                               borderRadius: const BorderRadius.all(
                                 Radius.circular(15.0),
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppColors.darkBlue.withOpacity(0.15),
+                                  color: appColors.darkBlue.withOpacity(0.15),
                                   offset: const Offset(0, 1),
                                   blurRadius: 3,
                                 )
@@ -107,7 +107,7 @@ class DonationDetailUi extends GetView<DonationDetailController> {
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 24.sp,
-                              color: AppColors.darkBlue,
+                              color: appColors.darkBlue,
                             ),
                           )),
                     ),
@@ -122,7 +122,7 @@ class DonationDetailUi extends GetView<DonationDetailController> {
                     child: Container(
                       height: 1.h,
                       width: Get.width,
-                      color: AppColors.darkBlue.withOpacity(.2),
+                      color: appColors.darkBlue.withOpacity(.2),
                     ),
                   ),
                   SizedBox(width: 16.w),
@@ -131,7 +131,7 @@ class DonationDetailUi extends GetView<DonationDetailController> {
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 24.sp,
-                      color: AppColors.darkBlue,
+                      color: appColors.darkBlue,
                     ),
                   ),
                   SizedBox(width: 16.w),
@@ -139,7 +139,7 @@ class DonationDetailUi extends GetView<DonationDetailController> {
                     child: Container(
                       height: 1.h,
                       width: Get.width,
-                      color: AppColors.darkBlue.withOpacity(.2),
+                      color: appColors.darkBlue.withOpacity(.2),
                     ),
                   ),
                 ],
@@ -149,7 +149,7 @@ class DonationDetailUi extends GetView<DonationDetailController> {
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 20.sp,
-                    color: AppColors.darkBlue,
+                    color: appColors.darkBlue,
                   )),
               SizedBox(height: 20.h),
               AppTextField(
@@ -159,7 +159,7 @@ class DonationDetailUi extends GetView<DonationDetailController> {
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 20.sp,
-                      color: AppColors.darkBlue,
+                      color: appColors.darkBlue,
                     )),
                 onTap: () {},
               ),
@@ -169,7 +169,7 @@ class DonationDetailUi extends GetView<DonationDetailController> {
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 14.sp,
-                    color: AppColors.darkBlue,
+                    color: appColors.darkBlue,
                   )),
               SizedBox(height: 20.h),
             ],

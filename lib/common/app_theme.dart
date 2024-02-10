@@ -36,7 +36,7 @@ class AppThemeState extends State<AppTheme> {
   ///
   /// Define All your colors here which are used in whole application
   ///
-  Color get whiteColor =>  AppColors.white;
+  Color get whiteColor =>  appColors.white;
 
   Color get redColor => Colors.red;
 
