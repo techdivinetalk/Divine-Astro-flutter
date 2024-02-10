@@ -19,6 +19,7 @@ class AllOrderHistoryUi extends StatelessWidget {
         builder: (controller) {
       return ListView.separated(
         // controller: controller,
+        physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemCount: controller.allHistoryList.length,

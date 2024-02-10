@@ -27,7 +27,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
       data: ThemeData(useMaterial3: false),
       child: Scaffold(
         backgroundColor: appColors.white,
-        bottomNavigationBar: Container(
+        bottomNavigationBar: controller.state.status == "" ? Container(
           margin: EdgeInsets.symmetric(horizontal: 12.w),
           child: CustomMaterialButton(
             height: 50.h,
@@ -35,7 +35,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
             textColor: appColors.brownColour,
             onPressed: () => controller.submit(),
           ),
-        ),
+        ):const SizedBox(),
         body: SafeArea(
           child: Column(
             children: [

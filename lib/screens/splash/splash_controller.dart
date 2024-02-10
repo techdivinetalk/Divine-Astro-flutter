@@ -1,12 +1,17 @@
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:call_log/call_log.dart';
 import 'package:contacts_service/contacts_service.dart';
+import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
+import 'package:random_name_generator/random_name_generator.dart';
 
 import '../../common/permission_handler.dart';
 import '../../common/routes.dart';

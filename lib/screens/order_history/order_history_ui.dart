@@ -35,7 +35,7 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
             )),
         body: Container(
           color: appColors.white,
-          child: Column(
+          child: const Column(
             mainAxisSize: MainAxisSize.min,
             children: [
 
@@ -55,7 +55,7 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
               //   child: durationOptions(),
               // ),
               // const SizedBox(height: 20),
-              const OrderTab(),
+              OrderTab(),
             ],
           ),
         ),

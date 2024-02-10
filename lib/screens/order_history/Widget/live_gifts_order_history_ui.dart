@@ -176,7 +176,7 @@ class LiveGiftsHistory extends StatelessWidget {
                   "totalEarning".tr,
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600),
                 ),
-                Text("₹${data[index].amount}", style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600, fontColor: AppColors.lightGreen)),
+                Text("₹${data[index].amount}", style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600, fontColor: appColors.lightGreen)),
               ],
             ),
             const SizedBox(height: 8),

@@ -104,6 +104,9 @@ class BankDetailState {
   BankDetailState() {
     service = Get.find<SharedPreferenceService>();
     final userData = service.getUserDetail();
+
+
+    Future.delayed(const Duration(milliseconds: 300));
     userId = userData!.id!;
   }
 

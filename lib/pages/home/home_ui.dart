@@ -15,6 +15,7 @@ import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/load_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -220,7 +221,7 @@ class HomeUI extends GetView<HomeController> {
                                     ],
                                   ),
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
+                                      const BorderRadius.all(Radius.circular(10)),
                                 ),
                                 padding: EdgeInsets.symmetric(horizontal: 15.w),
                                 // alignment: Alignment.center,
@@ -1532,6 +1533,11 @@ class HomeUI extends GetView<HomeController> {
                   children: [
                     GestureDetector(
                       onTap: () {
+                        SystemChrome.setPreferredOrientations([
+                          DeviceOrientation.portraitUp,
+                          DeviceOrientation.landscapeLeft,
+                          DeviceOrientation.landscapeRight,
+                        ]);
                         Get.to(() {
                           return TrainingVideoUI(
                             video: controller.homeData?.trainingVideo?[index],
