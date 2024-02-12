@@ -42,7 +42,7 @@ class SuggestRemedies extends StatelessWidget {
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: AppColors.white,
+            color: appColors.white,
             boxShadow: [
               BoxShadow(
                   color: Colors.black.withOpacity(0.3),
@@ -80,12 +80,12 @@ class SuggestRemedies extends StatelessWidget {
                         Text("Order Id : ${data[index].orderId}",
                             style: AppTextStyle.textStyle12(
                                 fontWeight: FontWeight.w400,
-                                fontColor: AppColors.darkBlue)),
+                                fontColor: appColors.darkBlue)),
                         Text(
                             "${data[index].getCustomers != null ? data[index].getCustomers!.name : "Username"}",
                             style: AppTextStyle.textStyle20(
                                 fontWeight: FontWeight.w600,
-                                fontColor: AppColors.darkBlue))
+                                fontColor: appColors.darkBlue))
                       ],
                     )
                   ],
@@ -97,7 +97,7 @@ class SuggestRemedies extends StatelessWidget {
                     height: 37,
                     decoration: BoxDecoration(
                       border:
-                          Border.all(color: AppColors.lightGreen, width: 1.0),
+                          Border.all(color: appColors.lightGreen, width: 1.0),
                       borderRadius: BorderRadius.circular(22.0),
                     ),
                     child: Row(
@@ -107,7 +107,7 @@ class SuggestRemedies extends StatelessWidget {
                           "${data[index].status}",
                           style: AppTextStyle.textStyle14(
                               fontWeight: FontWeight.w500,
-                              fontColor: AppColors.lightGreen),
+                              fontColor: appColors.lightGreen),
                         ),
                       ],
                     ),
@@ -122,13 +122,13 @@ class SuggestRemedies extends StatelessWidget {
                 Text("Date Time :",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue)),
+                        fontColor: appColors.darkBlue)),
                 Text(
                     DateFormat("dd MMM, hh:mm aa")
                         .format(data[index].createdAt!),
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue)),
+                        fontColor: appColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
@@ -139,14 +139,14 @@ class SuggestRemedies extends StatelessWidget {
                   child: Text("Remedy Suggested :",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
-                          fontColor: AppColors.darkBlue)),
+                          fontColor: appColors.darkBlue)),
                 ),
                 Expanded(
                   child: Text("${data[index].productDetails?.prodName}",
                       textAlign: TextAlign.end,
                       style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue,
+                        fontColor: appColors.darkBlue,
                       )),
                 ),
               ],
@@ -158,11 +158,11 @@ class SuggestRemedies extends StatelessWidget {
                 Text("${"clientPaid".tr} :",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue)),
+                        fontColor: appColors.darkBlue)),
                 Text("₹1000",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue)),
+                        fontColor: appColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
@@ -172,15 +172,15 @@ class SuggestRemedies extends StatelessWidget {
                 Text("Referral Bonus :",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue)),
+                        fontColor: appColors.darkBlue)),
                 Text("30%",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue)),
+                        fontColor: appColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
-            Container(height: 1, color: AppColors.greyColor),
+            Container(height: 1, color: appColors.greyColor),
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -192,7 +192,7 @@ class SuggestRemedies extends StatelessWidget {
                 Text("₹${data[index].getOrder?.amount}",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w600,
-                        fontColor: AppColors.lightGreen)),
+                        fontColor: appColors.lightGreen)),
               ],
             ),
             const SizedBox(height: 8),

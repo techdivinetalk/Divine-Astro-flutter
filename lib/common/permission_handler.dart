@@ -116,7 +116,7 @@ class PermissionHelper {
   askPermissionDialog(Permission permission, String permissionName) {
     showCupertinoModalPopup(
       context: Get.context!,
-      barrierColor: AppColors.darkBlue.withOpacity(0.5),
+      barrierColor: appColors.darkBlue.withOpacity(0.5),
       builder: (context) => AskPermissionDialog(
           permission: permission, permissionName: permissionName),
     );
@@ -125,7 +125,7 @@ class PermissionHelper {
   showPermissionDialog(String permissionName) {
     showCupertinoModalPopup(
       context: Get.context!,
-      barrierColor: AppColors.darkBlue.withOpacity(0.5),
+      barrierColor: appColors.darkBlue.withOpacity(0.5),
       builder: (context) => PermissionDialog(permissionName: permissionName),
     );
   }
@@ -159,7 +159,7 @@ class AskPermissionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Padding(
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -173,11 +173,11 @@ class AskPermissionDialog extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(15.0),
                 decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.white),
+                  border: Border.all(color: appColors.white),
                   borderRadius: const BorderRadius.all(
                     Radius.circular(50.0),
                   ),
-                  color: AppColors.white.withOpacity(0.2),
+                  color: appColors.white.withOpacity(0.2),
                 ),
                 child: const Icon(
                   Icons.close,
@@ -191,7 +191,7 @@ class AskPermissionDialog extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-                color: AppColors.white,
+                color: appColors.white,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -199,7 +199,7 @@ class AskPermissionDialog extends StatelessWidget {
                   SizedBox(height: 10.h),
                   Icon(
                     Icons.query_builder_rounded,
-                    color: AppColors.redColor,
+                    color: appColors.redColor,
                     size: 60.h,
                   ),
                   SizedBox(height: 20.h),
@@ -233,12 +233,12 @@ class AskPermissionDialog extends StatelessWidget {
                             },
                             radius: 100.r,
                             padding: EdgeInsets.symmetric(vertical: 16.h),
-                            color: AppColors.lightYellow,
+                            color: appColors.lightYellow,
                             child: Center(
                               child: CustomText(
                                 'Grant Permission',
                                 fontSize: 20.sp,
-                                fontColor: AppColors.brownColour,
+                                fontColor: appColors.brownColour,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -267,7 +267,7 @@ class PermissionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Padding(
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -280,11 +280,11 @@ class PermissionDialog extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(15.0),
                 decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.white),
+                  border: Border.all(color: appColors.white),
                   borderRadius: const BorderRadius.all(
                     Radius.circular(50.0),
                   ),
-                  color: AppColors.white.withOpacity(0.2),
+                  color: appColors.white.withOpacity(0.2),
                 ),
                 child: const Icon(
                   Icons.close,
@@ -298,7 +298,7 @@ class PermissionDialog extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-                color: AppColors.white,
+                color: appColors.white,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -306,7 +306,7 @@ class PermissionDialog extends StatelessWidget {
                   SizedBox(height: 10.h),
                   Icon(
                     Icons.query_builder_rounded,
-                    color: AppColors.redColor,
+                    color: appColors.redColor,
                     size: 60.h,
                   ),
                   SizedBox(height: 20.h),
@@ -342,12 +342,12 @@ class PermissionDialog extends StatelessWidget {
                             },
                             radius: 100.r,
                             padding: EdgeInsets.symmetric(vertical: 16.h),
-                            color: AppColors.lightYellow,
+                            color: appColors.lightYellow,
                             child: Center(
                               child: CustomText(
                                 'Open Settings',
                                 fontSize: 20.sp,
-                                fontColor: AppColors.brownColour,
+                                fontColor: appColors.brownColour,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),

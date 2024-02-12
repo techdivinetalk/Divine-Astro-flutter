@@ -18,7 +18,7 @@ class WalletUI extends GetView<WalletController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: appColors.white,
       appBar: commonAppbar(
           title: "wallet".tr,
           trailingWidget: InkWell(
@@ -39,7 +39,7 @@ class WalletUI extends GetView<WalletController> {
               balanceView(),
               const SizedBox(height: 20),
               Container(
-                  height: 1.h, color: AppColors.darkBlue.withOpacity(0.5)),
+                  height: 1.h, color: appColors.darkBlue.withOpacity(0.5)),
               const SizedBox(height: 20),
               ListView.builder(
                 controller: controller.orderScrollController,
@@ -96,7 +96,7 @@ class WalletUI extends GetView<WalletController> {
                   blurRadius: 3.0,
                   offset: const Offset(0.0, 3.0)),
             ],
-            color: AppColors.white,
+            color: appColors.white,
             borderRadius: const BorderRadius.all(Radius.circular(20))),
         child: durationOptions());
   }
@@ -149,7 +149,7 @@ class WalletUI extends GetView<WalletController> {
               textAlign: TextAlign.center,
               maxLines: 2,
               style: AppTextStyle.textStyle12(
-                  fontColor: AppColors.darkBlue,
+                  fontColor: appColors.darkBlue,
                   fontWeight:
                       boldTextStyle ? FontWeight.w700 : FontWeight.w400)),
         if (!is2linesRequired)
@@ -159,7 +159,7 @@ class WalletUI extends GetView<WalletController> {
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 style: AppTextStyle.textStyle12(
-                    fontColor: AppColors.darkBlue,
+                    fontColor: appColors.darkBlue,
                     fontWeight: FontWeight.w400)),
           ),
         const SizedBox(height: 10),
@@ -167,7 +167,7 @@ class WalletUI extends GetView<WalletController> {
             maxLines: 2,
             textAlign: TextAlign.center,
             style: AppTextStyle.textStyle10(
-                fontColor: AppColors.darkBlue,
+                fontColor: appColors.darkBlue,
                 fontWeight: boldTextStyle ? FontWeight.w700 : FontWeight.w400)),
       ],
     );
@@ -198,7 +198,7 @@ class WalletUI extends GetView<WalletController> {
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: AppColors.white,
+            color: appColors.white,
             boxShadow: [
               BoxShadow(
                   color: Colors.black.withOpacity(0.3),
@@ -218,7 +218,7 @@ class WalletUI extends GetView<WalletController> {
                 Icon(
                   Icons.help_outline,
                   size: 20,
-                  color: AppColors.darkBlue.withOpacity(0.5),
+                  color: appColors.darkBlue.withOpacity(0.5),
                 )
               ],
             ),
@@ -231,16 +231,16 @@ class WalletUI extends GetView<WalletController> {
                   style: AppTextStyle.textStyle12(
                       fontWeight: FontWeight.w400,
                       fontColor: "$type" == "PENALTY"
-                          ? AppColors.appRedColour
-                          : AppColors.darkBlue),
+                          ? appColors.appRedColour
+                          : appColors.darkBlue),
                 ),
                 Text(
                   "$amount",
                   style: AppTextStyle.textStyle12(
                       fontWeight: FontWeight.w400,
                       fontColor: amount!.contains("+")
-                          ? AppColors.lightGreen
-                          : AppColors.appRedColour),
+                          ? appColors.lightGreen
+                          : appColors.appRedColour),
                 )
               ],
             ),
@@ -249,7 +249,7 @@ class WalletUI extends GetView<WalletController> {
               textAlign: TextAlign.start,
               style: AppTextStyle.textStyle12(
                   fontWeight: FontWeight.w400,
-                  fontColor: AppColors.darkBlue.withOpacity(0.5)),
+                  fontColor: appColors.darkBlue.withOpacity(0.5)),
             ),
             const SizedBox(height: 8),
             Row(
@@ -260,7 +260,7 @@ class WalletUI extends GetView<WalletController> {
                   textAlign: TextAlign.end,
                   style: AppTextStyle.textStyle12(
                       fontWeight: FontWeight.w400,
-                      fontColor: AppColors.darkBlue.withOpacity(0.5)),
+                      fontColor: appColors.darkBlue.withOpacity(0.5)),
                 ),
               ],
             ),
@@ -427,7 +427,7 @@ class WalletUI extends GetView<WalletController> {
             hint: Text(
               "June - 2023 ",
               style: AppTextStyle.textStyle16(
-                  fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                  fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
             ),
             items: controller.durationOptions
                 .map((String item) => DropdownMenuItem<String>(
@@ -438,30 +438,30 @@ class WalletUI extends GetView<WalletController> {
                           item.tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w400,
-                              fontColor: AppColors.darkBlue),
+                              fontColor: appColors.darkBlue),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ))
                 .toList(),
             style: AppTextStyle.textStyle16(
-                fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
             value: controller.selectedValue.value,
             onChanged: (String? value) {
               controller.selectedValue.value = value ?? "daily".tr;
             },
-            iconStyleData: const IconStyleData(
-              icon: Icon(
+            iconStyleData:  IconStyleData(
+              icon: const Icon(
                 Icons.keyboard_arrow_down,
               ),
               iconSize: 35,
-              iconEnabledColor: AppColors.blackColor,
+              iconEnabledColor: appColors.blackColor,
             ),
             dropdownStyleData: DropdownStyleData(
               width: ScreenUtil().screenWidth * 0.9,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(14),
-                color: AppColors.white,
+                color: appColors.white,
               ),
               offset: const Offset(-8, -17),
               scrollbarTheme: ScrollbarThemeData(

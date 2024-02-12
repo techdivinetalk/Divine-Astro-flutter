@@ -12,7 +12,7 @@ class WaitingPeriodPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -23,9 +23,9 @@ class WaitingPeriodPopup extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(15.0),
               decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.white, width: 1.5),
+                  border: Border.all(color: appColors.white, width: 1.5),
                   borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                  color: AppColors.white.withOpacity(0.1)),
+                  color: appColors.white.withOpacity(0.1)),
               child: const Icon(
                 Icons.close,
                 color: Colors.white,
@@ -38,7 +38,7 @@ class WaitingPeriodPopup extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-              color: AppColors.white,
+              color: appColors.white,
             ),
             child: Column(
               children: [
@@ -46,7 +46,7 @@ class WaitingPeriodPopup extends StatelessWidget {
                 CustomText(
                   'Time Mismatch Error!',
                   fontSize: 24.sp,
-                  fontColor: AppColors.red,
+                  fontColor: appColors.red,
                   fontWeight: FontWeight.w600,
                 ),
                 SizedBox(height: 20.h),
@@ -63,14 +63,14 @@ class WaitingPeriodPopup extends StatelessWidget {
                       child: FilledButton(
                         onPressed: () => AppSettings.openAppSettings(type: AppSettingsType.date ),
                         style: FilledButton.styleFrom(
-                          backgroundColor: AppColors.yellow,
+                          backgroundColor: appColors.yellow,
                           padding: EdgeInsets.symmetric(vertical: 16.h),
                           minimumSize: Size.zero,
                         ),
                         child: CustomText(
                           'Check Settings'.tr,
                           fontSize: 16.sp,
-                          fontColor: AppColors.brown,
+                          fontColor: appColors.brown,
                           fontWeight: FontWeight.w600,
                         ),
                       ),

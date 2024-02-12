@@ -16,7 +16,7 @@ class ImagePreviewUi extends GetView<ImagePreviewController> {
     String? filePath = controller.selectedImageFile;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.lightYellow,
+        backgroundColor: appColors.lightYellow,
         centerTitle: false,
       ),
       body: PhotoView(

@@ -41,8 +41,8 @@ class _LiveKeyboardState extends State<LiveKeyboard> {
           onSubmitted: (String value) {
             sendKeyboardMesage();
           },
-          cursorColor: AppColors.yellow,
-          style: const TextStyle(color: AppColors.yellow),
+          cursorColor: appColors.yellow,
+          style:  TextStyle(color: appColors.yellow),
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
             suffixIcon: _editingController.value.text == ""
@@ -51,32 +51,32 @@ class _LiveKeyboardState extends State<LiveKeyboard> {
                     onPressed: sendKeyboardMesage,
                     icon: Image.asset(
                       "assets/images/live_send_message_new.png",
-                      color: AppColors.yellow,
+                      color: appColors.yellow,
                     ),
                   ),
             floatingLabelBehavior: FloatingLabelBehavior.never,
             filled: true,
-            fillColor: AppColors.white,
+            fillColor: appColors.white,
             hintText: "Say Hi",
-            hintStyle: const TextStyle(color: AppColors.yellow),
+            hintStyle:  TextStyle(color: appColors.yellow),
             border: OutlineInputBorder(
-              borderSide: const BorderSide(
+              borderSide:  BorderSide(
                 width: 2,
-                color: AppColors.yellow,
+                color: appColors.yellow,
               ),
               borderRadius: BorderRadius.circular(50.0),
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
+              borderSide:  BorderSide(
                 width: 2,
-                color: AppColors.yellow,
+                color: appColors.yellow,
               ),
               borderRadius: BorderRadius.circular(50.0),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
+              borderSide: BorderSide(
                 width: 2,
-                color: AppColors.yellow,
+                color: appColors.yellow,
               ),
               borderRadius: BorderRadius.circular(50.0),
             ),

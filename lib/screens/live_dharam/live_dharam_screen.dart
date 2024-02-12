@@ -57,7 +57,6 @@ import 'package:random_name_generator/random_name_generator.dart';
 //
 //
 //
-//
 
 const int appID = 696414715;
 const String appSign =
@@ -225,7 +224,7 @@ class _LivePage extends State<LiveDharamScreen>
               style: const TextStyle(fontSize: 10, color: Colors.black),
               overflow: TextOverflow.ellipsis,
             ),
-            backgroundColor: AppColors.yellow,
+            backgroundColor: appColors.yellow,
             behavior: SnackBarBehavior.floating,
           );
           if (isForSuccess) {
@@ -289,8 +288,9 @@ class _LivePage extends State<LiveDharamScreen>
           final bool cond3 = currentCaller.id.isNotEmpty;
           final bool cond4 = !currentCaller.isEngaded;
           final bool cond5 = !currentCaller.isRequest;
+          final bool cond6 = currentCaller.callStatus == 0;
 
-          if (cond1 && cond2 && cond3 && cond4 && cond5) {
+          if (cond1 && cond2 && cond3 && cond4 && cond5 && cond6) {
             final String id = currentCaller.id;
             final String name = currentCaller.userName;
             final String avatar = currentCaller.avatar;
@@ -620,9 +620,9 @@ class _LivePage extends State<LiveDharamScreen>
                           //             Radius.circular(50.0),
                           //           ),
                           //           border: Border.all(
-                          //             color: AppColors.yellow,
+                          //             color: appColors.yellow,
                           //           ),
-                          //           color: AppColors.black.withOpacity(0.2),
+                          //           color: appColors.black.withOpacity(0.2),
                           //         ),
                           //         child: Padding(
                           //           padding: const EdgeInsets.symmetric(
@@ -850,9 +850,9 @@ class _LivePage extends State<LiveDharamScreen>
                         Radius.circular(10.0),
                       ),
                       border: Border.all(
-                        color: AppColors.yellow,
+                        color: appColors.yellow,
                       ),
-                      color: AppColors.black.withOpacity(0.2),
+                      color: appColors.black.withOpacity(0.2),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -937,17 +937,17 @@ class _LivePage extends State<LiveDharamScreen>
   //                   begin: Alignment.topCenter,
   //                   end: Alignment.bottomCenter,
   //                   colors: [
-  //                     AppColors.white,
-  //                     AppColors.yellow,
+  //                     appColors.white,
+  //                     appColors.yellow,
   //                   ],
   //                 ),
   //                 borderRadius: const BorderRadius.all(
   //                   Radius.circular(50.0),
   //                 ),
   //                 border: Border.all(
-  //                   color: AppColors.yellow,
+  //                   color: appColors.yellow,
   //                 ),
-  //                 color: AppColors.yellow,
+  //                 color: appColors.yellow,
   //               ),
   //               child: Padding(
   //                 padding: const EdgeInsets.all(4.0),
@@ -963,9 +963,9 @@ class _LivePage extends State<LiveDharamScreen>
   //                             Radius.circular(50.0),
   //                           ),
   //                           border: Border.all(
-  //                             color: AppColors.transparent,
+  //                             color: appColors.transparent,
   //                           ),
-  //                           color: AppColors.transparent,
+  //                           color: appColors.transparent,
   //                         ),
   //                         child: Padding(
   //                           padding: const EdgeInsets.all(0.0),
@@ -1144,9 +1144,9 @@ class _LivePage extends State<LiveDharamScreen>
   //                           Radius.circular(10.0),
   //                         ),
   //                         border: Border.all(
-  //                           color: AppColors.yellow,
+  //                           color: appColors.yellow,
   //                         ),
-  //                         color: AppColors.black.withOpacity(0.2),
+  //                         color: appColors.black.withOpacity(0.2),
   //                       ),
   //                       child: Row(
   //                         children: <Widget>[
@@ -1212,7 +1212,7 @@ class _LivePage extends State<LiveDharamScreen>
   //                                             "₹${offerData.offer_amount ?? 0}",
   //                                             style: const TextStyle(
   //                                               fontSize: 10,
-  //                                               color: AppColors.yellow,
+  //                                               color: appColors.yellow,
   //                                               fontWeight: FontWeight.bold,
   //                                             ),
   //                                             overflow: TextOverflow.ellipsis,
@@ -1270,7 +1270,7 @@ class _LivePage extends State<LiveDharamScreen>
   //                                     "Follow",
   //                                     style: TextStyle(
   //                                       fontSize: 10,
-  //                                       color: AppColors.white,
+  //                                       color: appColors.white,
   //                                     ),
   //                                   ),
   //                                 ],
@@ -1305,7 +1305,7 @@ class _LivePage extends State<LiveDharamScreen>
   //                             "₹${item.giftPrice}",
   //                             style: const TextStyle(
   //                               fontSize: 10,
-  //                               color: AppColors.white,
+  //                               color: appColors.white,
   //                             ),
   //                           ),
   //                         ],
@@ -1487,7 +1487,7 @@ class _LivePage extends State<LiveDharamScreen>
                                         color: isBlocked
                                             ? Colors.red
                                             : isLiveMonitoringTeam
-                                                ? AppColors.yellow
+                                                ? appColors.yellow
                                                 : Colors.white,
                                         shadows: const [
                                           Shadow(
@@ -1506,7 +1506,7 @@ class _LivePage extends State<LiveDharamScreen>
                                         color: isBlocked
                                             ? Colors.red
                                             : isLiveMonitoringTeam
-                                                ? AppColors.yellow
+                                                ? appColors.yellow
                                                 : Colors.white,
                                         shadows: const [
                                           Shadow(
@@ -1529,10 +1529,10 @@ class _LivePage extends State<LiveDharamScreen>
                                       height: 24,
                                       width: 24,
                                       child: IconButton(
-                                        icon: const Icon(
+                                        icon:  Icon(
                                           Icons.more_vert,
                                           size: 16,
-                                          color: AppColors.yellow,
+                                          color: appColors.yellow,
                                         ),
                                         onPressed: () async {
                                           await moreOptionsPopup(
@@ -2047,11 +2047,15 @@ class _LivePage extends State<LiveDharamScreen>
         return EndSessionWidget(
           onClose: Get.back,
           continueLive: Get.back,
-          endLive: () async {
-            endLive();
-            await Future.delayed(const Duration(milliseconds: 300));
-            print("after they delayed");
+          // endLive: () async {
+          //   endLive();
+          //   await Future.delayed(const Duration(milliseconds: 300));
+          //   print("after they delayed");
+          //   Get.back();
+          // },
+          endLive: () {
             Get.back();
+            endLive();
           },
         );
       },
@@ -2174,6 +2178,7 @@ class _LivePage extends State<LiveDharamScreen>
   //         callType: type,
   //         isEngaded: false,
   //         isRequest: false,
+  //         callStatus: 0,
   //       );
   //     } else {}
   //   }
@@ -2340,14 +2345,14 @@ class _LivePage extends State<LiveDharamScreen>
       width: Get.width / 1.5,
       content: Text(
         "$type Request Sent",
-        style: const TextStyle(
+        style:  TextStyle(
           fontSize: 16,
-          color: AppColors.black,
+          color: appColors.black,
           fontWeight: FontWeight.bold,
         ),
         textAlign: TextAlign.center,
       ),
-      backgroundColor: AppColors.yellow,
+      backgroundColor: appColors.yellow,
       behavior: SnackBarBehavior.floating,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(50.0)),
@@ -2780,9 +2785,9 @@ class _LivePage extends State<LiveDharamScreen>
               Radius.circular(50.0),
             ),
             border: Border.all(
-              color: AppColors.yellow,
+              color: appColors.yellow,
             ),
-            color: AppColors.black.withOpacity(0.2),
+            color: appColors.black.withOpacity(0.2),
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -2805,9 +2810,9 @@ class _LivePage extends State<LiveDharamScreen>
               Radius.circular(50.0),
             ),
             border: Border.all(
-              color: AppColors.yellow,
+              color: appColors.yellow,
             ),
-            color: AppColors.black.withOpacity(0.2),
+            color: appColors.black.withOpacity(0.2),
           ),
           child: Row(
             children: <Widget>[
@@ -2885,9 +2890,9 @@ class _LivePage extends State<LiveDharamScreen>
               //                           Radius.circular(50.0),
               //                         ),
               //                         border: Border.all(
-              //                           color: AppColors.yellow,
+              //                           color: appColors.yellow,
               //                         ),
-              //                         color: AppColors.black.withOpacity(0.2),
+              //                         color: appColors.black.withOpacity(0.2),
               //                       ),
               //                       child: Padding(
               //                         padding: const EdgeInsets.all(0.0),
@@ -2921,9 +2926,9 @@ class _LivePage extends State<LiveDharamScreen>
               Radius.circular(50.0),
             ),
             border: Border.all(
-              color: AppColors.yellow,
+              color: appColors.yellow,
             ),
-            color: AppColors.black.withOpacity(0.2),
+            color: appColors.black.withOpacity(0.2),
           ),
           child: Row(
             children: <Widget>[
@@ -2995,9 +3000,9 @@ class _LivePage extends State<LiveDharamScreen>
               Radius.circular(50.0),
             ),
             border: Border.all(
-              color: AppColors.yellow,
+              color: appColors.yellow,
             ),
-            color: AppColors.black.withOpacity(0.2),
+            color: appColors.black.withOpacity(0.2),
           ),
           child: Padding(
             padding: const EdgeInsets.all(0.0),
@@ -3039,7 +3044,6 @@ class _LivePage extends State<LiveDharamScreen>
 
   // temporary purpose
   bool extendTimeWidgetVisible = false;
-
   //
 
   Future<void> extendTimeWidgetPopup() async {
@@ -3126,9 +3130,9 @@ class _LivePage extends State<LiveDharamScreen>
                       Radius.circular(50.0),
                     ),
                     border: Border.all(
-                      color: AppColors.yellow,
+                      color: appColors.yellow,
                     ),
-                    color: AppColors.black.withOpacity(0.2),
+                    color: appColors.black.withOpacity(0.2),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -3157,9 +3161,9 @@ class _LivePage extends State<LiveDharamScreen>
                       Radius.circular(50.0),
                     ),
                     border: Border.all(
-                      color: AppColors.yellow,
+                      color: appColors.yellow,
                     ),
-                    color: AppColors.black.withOpacity(0.2),
+                    color: appColors.black.withOpacity(0.2),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -3188,9 +3192,9 @@ class _LivePage extends State<LiveDharamScreen>
                       Radius.circular(50.0),
                     ),
                     border: Border.all(
-                      color: AppColors.yellow,
+                      color: appColors.yellow,
                     ),
-                    color: AppColors.black.withOpacity(0.2),
+                    color: appColors.black.withOpacity(0.2),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -3279,9 +3283,9 @@ class _LivePage extends State<LiveDharamScreen>
                               Radius.circular(50.0),
                             ),
                             border: Border.all(
-                              color: AppColors.yellow,
+                              color: appColors.yellow,
                             ),
-                            color: AppColors.black.withOpacity(0.2),
+                            color: appColors.black.withOpacity(0.2),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(0.0),
@@ -3320,9 +3324,9 @@ class _LivePage extends State<LiveDharamScreen>
                               Radius.circular(50.0),
                             ),
                             border: Border.all(
-                              color: AppColors.yellow,
+                              color: appColors.yellow,
                             ),
-                            color: AppColors.black.withOpacity(0.2),
+                            color: appColors.black.withOpacity(0.2),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -3361,9 +3365,9 @@ class _LivePage extends State<LiveDharamScreen>
                               Radius.circular(50.0),
                             ),
                             border: Border.all(
-                              color: AppColors.yellow,
+                              color: appColors.yellow,
                             ),
-                            color: AppColors.black.withOpacity(0.2),
+                            color: appColors.black.withOpacity(0.2),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -3403,9 +3407,9 @@ class _LivePage extends State<LiveDharamScreen>
                               Radius.circular(50.0),
                             ),
                             border: Border.all(
-                              color: AppColors.yellow,
+                              color: appColors.yellow,
                             ),
-                            color: AppColors.black.withOpacity(0.2),
+                            color: appColors.black.withOpacity(0.2),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -3452,9 +3456,9 @@ class _LivePage extends State<LiveDharamScreen>
         //                           Radius.circular(50.0),
         //                         ),
         //                         border: Border.all(
-        //                           color: AppColors.yellow,
+        //                           color: appColors.yellow,
         //                         ),
-        //                         color: AppColors.black.withOpacity(0.2),
+        //                         color: appColors.black.withOpacity(0.2),
         //                       ),
         //                       child: Padding(
         //                         padding: const EdgeInsets.all(0.0),
@@ -3501,15 +3505,15 @@ class _LivePage extends State<LiveDharamScreen>
                                   Radius.circular(50.0),
                                 ),
                                 border: Border.all(
-                                  color: AppColors.yellow,
+                                  color: appColors.yellow,
                                 ),
-                                color: AppColors.black.withOpacity(0.2),
+                                color: appColors.black.withOpacity(0.2),
                               ),
-                              child: const Padding(
+                              child:  Padding(
                                 padding: EdgeInsets.all(0.0),
                                 child: Icon(
                                   Icons.category,
-                                  color: AppColors.yellow,
+                                  color: appColors.yellow,
                                 ),
                               ),
                             ),
@@ -3548,9 +3552,9 @@ class _LivePage extends State<LiveDharamScreen>
                                   Radius.circular(50.0),
                                 ),
                                 border: Border.all(
-                                  color: AppColors.yellow,
+                                  color: appColors.yellow,
                                 ),
-                                color: AppColors.black.withOpacity(0.2),
+                                color: appColors.black.withOpacity(0.2),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -3570,7 +3574,7 @@ class _LivePage extends State<LiveDharamScreen>
                                               width: 20,
                                               child: CircleAvatar(
                                                 backgroundColor:
-                                                    AppColors.yellow,
+                                                    appColors.yellow,
                                                 child: Text(
                                                   _controller
                                                       .waitListModel.length
@@ -3617,9 +3621,9 @@ class _LivePage extends State<LiveDharamScreen>
                                   Radius.circular(50.0),
                                 ),
                                 border: Border.all(
-                                  color: AppColors.yellow,
+                                  color: appColors.yellow,
                                 ),
-                                color: AppColors.black.withOpacity(0.2),
+                                color: appColors.black.withOpacity(0.2),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -3662,9 +3666,9 @@ class _LivePage extends State<LiveDharamScreen>
                                         Radius.circular(50.0),
                                       ),
                                       border: Border.all(
-                                        color: AppColors.yellow,
+                                        color: appColors.yellow,
                                       ),
-                                      color: AppColors.black.withOpacity(0.2),
+                                      color: appColors.black.withOpacity(0.2),
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.all(0.0),
@@ -3763,9 +3767,9 @@ class _LivePage extends State<LiveDharamScreen>
                   Radius.circular(50.0),
                 ),
                 border: Border.all(
-                  color: AppColors.yellow,
+                  color: appColors.yellow,
                 ),
-                color: AppColors.black.withOpacity(0.2),
+                color: appColors.black.withOpacity(0.2),
               ),
               child: const Padding(
                 padding: EdgeInsets.all(8.0),
@@ -3819,7 +3823,6 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> exitFunc() async {
-
     final bool isEngaded = _controller.currentCaller.isEngaded;
     // final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
     if (isEngaded) {
@@ -4117,8 +4120,15 @@ class _LivePage extends State<LiveDharamScreen>
           onActionRefuseRequest: () {
             showNotifOverlay(user: null, msg: "onActionRefuseCoHostRequest");
           },
-          onInvitationSent: (ZegoUIKitUser user) {
+          onInvitationSent: (ZegoUIKitUser user) async {
             showNotifOverlay(user: user, msg: "onCoHostInvitationSent");
+            await _controller.addUpdateToWaitList(
+              userId: user.id,
+              callType: "",
+              isEngaded: false,
+              isRequest: false,
+              callStatus: 1,
+            );
           },
           onInvitationTimeout: (ZegoUIKitUser user) {
             showNotifOverlay(user: user, msg: "onCoHostInvitationTimeout");

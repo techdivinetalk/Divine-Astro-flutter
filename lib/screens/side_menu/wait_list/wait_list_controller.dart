@@ -31,7 +31,7 @@ class WaitListUIController extends GetxController {
       loading = Loading.loaded;
       update();
     } catch (err) {
-      divineSnackBar(data: err.toString(), color: AppColors.redColor);
+      divineSnackBar(data: err.toString(), color: appColors.redColor);
     }
   }
 }

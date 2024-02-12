@@ -87,7 +87,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                                                 style: AppTextStyle.textStyle20(
                                                     fontWeight: FontWeight.w700,
                                                     fontColor:
-                                                        AppColors.darkBlue),
+                                                        appColors.darkBlue),
                                               ),
                                               SizedBox(height: 10.h),
                                               Center(
@@ -98,7 +98,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                                                       AppTextStyle.textStyle16(
                                                           fontWeight:
                                                               FontWeight.w400,
-                                                          fontColor: AppColors
+                                                          fontColor: appColors
                                                               .blackColor),
                                                 ),
                                               ),
@@ -115,7 +115,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                                         ));
                                   },
                                   radius: 20.r,
-                                  border: Border.all(color: AppColors.darkBlue),
+                                  border: Border.all(color: appColors.darkBlue),
                                   padding: EdgeInsets.symmetric(
                                     horizontal: 20.w,
                                     vertical: 8.h,
@@ -138,7 +138,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                   //         ),
                   //         leading: CircleAvatar(
                   //           radius: 25.sp,
-                  //           backgroundColor: AppColors.white,
+                  //           backgroundColor: appColors.white,
                   //           child: ClipRRect(
                   //             borderRadius: BorderRadius.circular(100),
                   //             child: LoadImage(
@@ -178,7 +178,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                   //                         AppTextStyle.textStyle20(
                   //                             fontWeight:
                   //                             FontWeight.w700,
-                  //                             fontColor: AppColors
+                  //                             fontColor: appColors
                   //                                 .darkBlue),
                   //                       ),
                   //                       SizedBox(height: 10.h),
@@ -190,7 +190,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                   //                               .textStyle16(
                   //                               fontWeight:
                   //                               FontWeight.w400,
-                  //                               fontColor: AppColors
+                  //                               fontColor: appColors
                   //                                   .blackColor),
                   //                         ),
                   //                       ),
@@ -215,7 +215,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                   //           },
                   //           radius: 20.r,
                   //           border:
-                  //           Border.all(color: AppColors.darkBlue),
+                  //           Border.all(color: appColors.darkBlue),
                   //           padding: EdgeInsets.symmetric(
                   //             horizontal: 20.w,
                   //             vertical: 8.h,
@@ -237,7 +237,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                   //   //             child: CustomText(
                   //   //               "noResultFound".tr,
                   //   //               fontWeight: FontWeight.w500,
-                  //   //               fontColor: AppColors.blackColor,
+                  //   //               fontColor: appColors.blackColor,
                   //   //             ),
                   //   //           ),
                   //   //         )
@@ -250,7 +250,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                   //   //               ),
                   //   //               leading: CircleAvatar(
                   //   //                 radius: 25.sp,
-                  //   //                 backgroundColor: AppColors.white,
+                  //   //                 backgroundColor: appColors.white,
                   //   //                 child: ClipRRect(
                   //   //                   borderRadius: BorderRadius.circular(100),
                   //   //                   child: LoadImage(
@@ -290,7 +290,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                   //   //                                   AppTextStyle.textStyle20(
                   //   //                                       fontWeight:
                   //   //                                           FontWeight.w700,
-                  //   //                                       fontColor: AppColors
+                  //   //                                       fontColor: appColors
                   //   //                                           .darkBlue),
                   //   //                             ),
                   //   //                             SizedBox(height: 10.h),
@@ -302,7 +302,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                   //   //                                     .textStyle16(
                   //   //                                         fontWeight:
                   //   //                                             FontWeight.w400,
-                  //   //                                         fontColor: AppColors
+                  //   //                                         fontColor: appColors
                   //   //                                             .blackColor),
                   //   //                               ),
                   //   //                             ),
@@ -327,7 +327,7 @@ class BlockedUserUI extends GetView<BlockUserController> {
                   //   //                 },
                   //   //                 radius: 20.r,
                   //   //                 border:
-                  //   //                     Border.all(color: AppColors.darkBlue),
+                  //   //                     Border.all(color: appColors.darkBlue),
                   //   //                 padding: EdgeInsets.symmetric(
                   //   //                   horizontal: 20.w,
                   //   //                   vertical: 8.h,

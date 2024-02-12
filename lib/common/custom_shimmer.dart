@@ -13,7 +13,7 @@ class CustomShimmer{
         width: width?? 100.w,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(borderRadius?? 10.w),
-            color: AppColors.grey.withOpacity(0.25)
+            color: appColors.grey.withOpacity(0.25)
         ),
       
       ),

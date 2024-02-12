@@ -21,7 +21,7 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
 
     return Scaffold(
         drawer: const SideMenuDrawer(),
-        backgroundColor: AppColors.white,
+        backgroundColor: appColors.white,
         appBar: Get.currentRoute == RouteName.dashboard
             ? commonAppbar(
                 title: "suggestRemedy".tr,
@@ -29,8 +29,8 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
                   child: Padding(
                       padding: EdgeInsets.only(right: 20.w),
                       child: Assets.images.icSearch.svg(
-                          colorFilter: const ColorFilter.mode(
-                              AppColors.darkBlue, BlendMode.srcIn))),
+                          colorFilter:  ColorFilter.mode(
+                              appColors.darkBlue, BlendMode.srcIn))),
                 ))
             : commonDetailAppbar(
                 title: "suggestRemedy".tr,
@@ -38,8 +38,8 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
                     child: Padding(
                         padding: EdgeInsets.only(right: 20.w),
                         child: Assets.images.icSearch.svg(
-                            colorFilter: const ColorFilter.mode(
-                                AppColors.darkBlue, BlendMode.srcIn))))),
+                            colorFilter:  ColorFilter.mode(
+                                appColors.darkBlue, BlendMode.srcIn))))),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 5.h),
           child: Column(
@@ -72,12 +72,12 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
               //               TextSpan(
               //                   text: '10  ',
               //                   style: AppTextStyle.textStyle16(
-              //                       fontColor: AppColors.redColor,
+              //                       fontColor: appColors.redColor,
               //                       fontWeight: FontWeight.w400)),
               //               TextSpan(
               //                   text: "remediesLeft".tr,
               //                   style: AppTextStyle.textStyle16(
-              //                       fontColor: AppColors.darkBlue,
+              //                       fontColor: appColors.darkBlue,
               //                       fontWeight: FontWeight.w400)),
               //             ],
               //           ),
@@ -85,7 +85,7 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
               //         Icon(
               //           Icons.help_outline,
               //           size: 20.sp,
-              //           color: AppColors.greyColor,
+              //           color: appColors.greyColor,
               //         )
               //       ],
               //     ),
@@ -141,7 +141,7 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
                                         style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 12.sp,
-                                          color: AppColors.darkBlue,
+                                          color: appColors.darkBlue,
                                         )),
                                   ],
                                 ),

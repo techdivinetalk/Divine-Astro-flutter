@@ -16,8 +16,8 @@ class ChatSuggestRemediesDetailsPage
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.white,
-        surfaceTintColor: AppColors.white,
+        backgroundColor: appColors.white,
+        surfaceTintColor: appColors.white,
         leading: IconButton(
           onPressed: () => Get.back(),
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
@@ -55,7 +55,7 @@ class ChatSuggestRemediesDetailsPage
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                        color: AppColors.lightYellow,
+                        color: appColors.lightYellow,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Padding(
@@ -65,7 +65,7 @@ class ChatSuggestRemediesDetailsPage
                             "Send Remedy",
                             style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w600,
-                              fontColor: AppColors.brownColour,
+                              fontColor: appColors.brownColour,
                             ),
                           ),
                         ),
@@ -87,17 +87,17 @@ class ChatSuggestRemediesDetailsPage
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            color: controller.selectedIndex.value == index ? AppColors.yellow : Colors.transparent,
+            color: controller.selectedIndex.value == index ? appColors.yellow : Colors.transparent,
           ),
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: ListTile(
-          //tileColor: controller.selectedIndex == index ? AppColors.yellow : null,
+          //tileColor: controller.selectedIndex == index ? appColors.yellow : null,
           leading: CircleAvatar(
-            backgroundColor: AppColors.red,
+            backgroundColor: appColors.red,
             child: CustomText(
               remedy.name[0].upperCamelCase,
-              fontColor: AppColors.white,
+              fontColor: appColors.white,
             ), // Display the first letter of the name
           ),
           title: CustomText(

@@ -32,7 +32,7 @@ class _ShowAllAvailAstroWidgetState extends State<ShowAllAvailAstroWidget> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[top(), const SizedBox(height: 16), bottom()],
@@ -51,10 +51,10 @@ class _ShowAllAvailAstroWidgetState extends State<ShowAllAvailAstroWidget> {
           width: 48,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-            border: Border.all(color: AppColors.white),
-            color: AppColors.white.withOpacity(0.2),
+            border: Border.all(color: appColors.white),
+            color: appColors.white.withOpacity(0.2),
           ),
-          child: const Icon(Icons.close, color: AppColors.white),
+          child:  Icon(Icons.close, color: appColors.white),
         ),
       ),
     );
@@ -76,8 +76,8 @@ class _ShowAllAvailAstroWidgetState extends State<ShowAllAvailAstroWidget> {
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: AppColors.yellow),
-            color: AppColors.white,
+            border: Border.all(color: appColors.yellow),
+            color: appColors.white,
           ),
           child: grid(),
         ),
@@ -150,8 +150,8 @@ class _ShowAllAvailAstroWidgetState extends State<ShowAllAvailAstroWidget> {
                   width: 84,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                    border: Border.all(color: AppColors.yellow, width: 4),
-                    color: AppColors.yellow.withOpacity(0.2),
+                    border: Border.all(color: appColors.yellow, width: 4),
+                    color: appColors.yellow.withOpacity(0.2),
                   ),
                   child: CustomImageWidget(
                     imageUrl: image,
@@ -177,7 +177,7 @@ class _ShowAllAvailAstroWidgetState extends State<ShowAllAvailAstroWidget> {
       width: 60,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-        border: Border.all(color: AppColors.white),
+        border: Border.all(color: appColors.white),
         color: const Color(0xFFDEFFE1),
       ),
       child: const Row(

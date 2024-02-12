@@ -70,7 +70,7 @@ class BankDetailController extends GetxController {
     if (formKey.currentState!.validate()) {
       updateDetails();
     } else {
-      divineSnackBar(data: "Please Fill All Data", color: AppColors.redColor);
+      divineSnackBar(data: "Please Fill All Data", color: appColors.redColor);
     }
   }
 
@@ -104,6 +104,9 @@ class BankDetailState {
   BankDetailState() {
     service = Get.find<SharedPreferenceService>();
     final userData = service.getUserDetail();
+
+
+    Future.delayed(const Duration(milliseconds: 300));
     userId = userData!.id!;
   }
 

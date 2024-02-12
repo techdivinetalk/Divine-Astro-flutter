@@ -39,7 +39,7 @@ Future importantNumberBottomSheet(BuildContext context,) {
                   ),
                 SizedBox(height: 8.h),
                 Text('Save these contact numbers for call and chat alerts to avoid confusion before starting the app.',
-                style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: AppColors.red),
+                style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.red),
                 ),
                 SizedBox(height: 36.h),
                 ListView.builder(
@@ -65,13 +65,13 @@ Future importantNumberBottomSheet(BuildContext context,) {
                                     Text(
                                       phoneNumber.title ?? "",
                                       style: AppTextStyle.textStyle16(
-                                          fontColor: AppColors.darkBlue),
+                                          fontColor: appColors.darkBlue),
                                     ),
                                     SizedBox(height: 5.h),
                                     Text(
                                       phoneNumber.mobileNumber ?? "",
                                       style: AppTextStyle.textStyle12(
-                                          fontColor: AppColors.darkBlue),
+                                          fontColor: appColors.darkBlue),
                                     ),
                                   ],
                                 ),
@@ -146,8 +146,8 @@ class _AddContactButtonState extends State<AddContactButton> {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 color: isButtonTap
-                    ? AppColors.grey.withOpacity(0.2)
-                    : AppColors.lightYellow),
+                    ? appColors.grey.withOpacity(0.2)
+                    : appColors.lightYellow),
             child: Padding(
               padding:
               EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
@@ -156,8 +156,8 @@ class _AddContactButtonState extends State<AddContactButton> {
                 style: AppTextStyle.textStyle16(
                     fontWeight: FontWeight.w600,
                     fontColor: isButtonTap
-                        ? AppColors.grey
-                        : AppColors.brownColour),
+                        ? appColors.grey
+                        : appColors.brownColour),
               ),
             ),
           ),

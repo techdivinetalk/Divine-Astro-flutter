@@ -38,7 +38,7 @@ class DashboardScreen extends GetView<DashboardController> {
                 return Stack(
                   children: [
                     Scaffold(
-                        backgroundColor: AppColors.white,
+                        backgroundColor: appColors.white,
                         key: controller.scaffoldkey,
                         body: Obx(
                               () =>
@@ -59,17 +59,17 @@ class DashboardScreen extends GetView<DashboardController> {
                                   Container(
                                     width: ScreenUtil().screenWidth * 0.9,
                                     height: 1,
-                                    color: AppColors.lightGrey.withOpacity(
+                                    color: appColors.lightGrey.withOpacity(
                                         0.50),
                                   ),
                                   const SizedBox(height: 10),
                                   BottomNavigationBar(
-                                    backgroundColor: AppColors.white,
+                                    backgroundColor: appColors.white,
                                     type: BottomNavigationBarType.fixed,
                                     selectedFontSize: 10,
                                     unselectedFontSize: 10,
-                                    selectedItemColor: AppColors.darkBlue,
-                                    unselectedItemColor: AppColors.lightGrey,
+                                    selectedItemColor: appColors.darkBlue,
+                                    unselectedItemColor: appColors.lightGrey,
                                     items: <BottomNavigationBarItem>[
                                       BottomNavigationBarItem(
                                         icon: Column(
@@ -80,8 +80,8 @@ class DashboardScreen extends GetView<DashboardController> {
                                                     controller.selectedIndex
                                                         .value ==
                                                         0
-                                                        ? AppColors.darkBlue
-                                                        : AppColors.lightGrey,
+                                                        ? appColors.darkBlue
+                                                        : appColors.lightGrey,
                                                     BlendMode.srcIn)),
                                             const SizedBox(height: 5),
                                           ],
@@ -97,8 +97,8 @@ class DashboardScreen extends GetView<DashboardController> {
                                                     controller.selectedIndex
                                                         .value ==
                                                         1
-                                                        ? AppColors.darkBlue
-                                                        : AppColors.lightGrey,
+                                                        ? appColors.darkBlue
+                                                        : appColors.lightGrey,
                                                     BlendMode.srcIn)),
                                             const SizedBox(height: 5),
                                           ],
@@ -114,8 +114,8 @@ class DashboardScreen extends GetView<DashboardController> {
                                                     controller.selectedIndex
                                                         .value ==
                                                         2
-                                                        ? AppColors.darkBlue
-                                                        : AppColors.lightGrey,
+                                                        ? appColors.darkBlue
+                                                        : appColors.lightGrey,
                                                     BlendMode.srcIn)),
                                             const SizedBox(height: 5),
                                           ],
@@ -135,8 +135,8 @@ class DashboardScreen extends GetView<DashboardController> {
                                                     controller.selectedIndex
                                                         .value ==
                                                         3
-                                                        ? AppColors.darkBlue
-                                                        : AppColors.lightGrey,
+                                                        ? appColors.darkBlue
+                                                        : appColors.lightGrey,
                                                     BlendMode.srcIn)),
                                             const SizedBox(height: 5),
                                           ],

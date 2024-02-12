@@ -25,7 +25,7 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     return Material(
-//       color: AppColors.transparent,
+//       color: appColors.transparent,
 //       child: Column(
 //         mainAxisSize: MainAxisSize.min,
 //         children: <Widget>[top(), const SizedBox(height: 16), bottom()],
@@ -44,10 +44,10 @@
 //           width: 48,
 //           decoration: BoxDecoration(
 //             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-//             border: Border.all(color: AppColors.white),
-//             color: AppColors.white.withOpacity(0.2),
+//             border: Border.all(color: appColors.white),
+//             color: appColors.white.withOpacity(0.2),
 //           ),
-//           child: const Icon(Icons.close, color: AppColors.white),
+//           child: const Icon(Icons.close, color: appColors.white),
 //         ),
 //       ),
 //     );
@@ -69,8 +69,8 @@
 //               topLeft: Radius.circular(50.0),
 //               topRight: Radius.circular(50.0),
 //             ),
-//             border: Border.all(color: AppColors.yellow),
-//             color: AppColors.white.withOpacity(0.2),
+//             border: Border.all(color: appColors.yellow),
+//             color: appColors.white.withOpacity(0.2),
 //           ),
 //           child: grid(),
 //         ),
@@ -88,8 +88,8 @@
 //           margin: const EdgeInsets.all(16.0),
 //           decoration: BoxDecoration(
 //             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-//             border: Border.all(color: AppColors.yellow),
-//             color: AppColors.white,
+//             border: Border.all(color: appColors.yellow),
+//             color: appColors.white,
 //           ),
 //           child: ListTile(
 //             // dense: true,
@@ -97,7 +97,7 @@
 //               mainAxisSize: MainAxisSize.min,
 //               children: <Widget>[
 //                 CircleAvatar(
-//                   backgroundColor: AppColors.white,
+//                   backgroundColor: appColors.white,
 //                   foregroundImage: (index == 0 || index == 1 || index == 2)
 //                       ? AssetImage(
 //                           index == 0
@@ -177,7 +177,7 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[top(), const SizedBox(height: 16), bottom()],
@@ -196,10 +196,10 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
           width: 48,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-            border: Border.all(color: AppColors.white),
-            color: AppColors.white.withOpacity(0.2),
+            border: Border.all(color: appColors.white),
+            color: appColors.white.withOpacity(0.2),
           ),
-          child: const Icon(Icons.close, color: AppColors.white),
+          child:  Icon(Icons.close, color: appColors.white),
         ),
       ),
     );
@@ -221,8 +221,8 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: AppColors.yellow),
-            color: AppColors.white.withOpacity(0.2),
+            border: Border.all(color: appColors.yellow),
+            color: appColors.white.withOpacity(0.2),
           ),
           child: grid(),
         ),
@@ -253,8 +253,8 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
                       borderRadius: const BorderRadius.all(
                         Radius.circular(50.0),
                       ),
-                      border: Border.all(color: AppColors.yellow),
-                      color: AppColors.white,
+                      border: Border.all(color: appColors.yellow),
+                      color: appColors.white,
                     ),
                     child: ListTile(
                       // dense: true,
@@ -262,7 +262,7 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           CircleAvatar(
-                            backgroundColor: AppColors.white,
+                            backgroundColor: appColors.white,
                             foregroundImage: (index == 0 ||
                                     index == 1 ||
                                     index == 2)

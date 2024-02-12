@@ -25,12 +25,12 @@ class OrderFeedbackUI extends GetView<OrderFeedbackController> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(20.r)),
-              border: Border.all(color: AppColors.red, width: 1),
+              border: Border.all(color: appColors.red, width: 1),
             ),
             child: Text(
               'Need Help ?',
               style: AppTextStyle.textStyle12(
-                fontColor: AppColors.red,
+                fontColor: appColors.red,
               ),
             )
           ),

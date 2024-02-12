@@ -10,21 +10,21 @@ class EndSession extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColors.white,
-      surfaceTintColor: AppColors.white,
+      backgroundColor: appColors.white,
+      surfaceTintColor: appColors.white,
       shape: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.appYellowColour),
+        borderSide:  BorderSide(color: appColors.appYellowColour),
         borderRadius: BorderRadius.circular(20),
       ),
       title: Text.rich(TextSpan(children: <InlineSpan>[
         TextSpan(
             text: "Are you sure you want to end the ",
-            style: TextStyle(fontSize: 16.sp, color: AppColors.darkBlue)),
+            style: TextStyle(fontSize: 16.sp, color: appColors.darkBlue)),
         TextSpan(
             text: "Live Session?",
             style: TextStyle(
                 fontSize: 16.sp,
-                color: AppColors.darkBlue,
+                color: appColors.darkBlue,
                 fontWeight: FontWeight.bold))
       ])),
       actions: [
@@ -32,7 +32,7 @@ class EndSession extends StatelessWidget {
           child: Text("Yes",
               style: TextStyle(
                   fontSize: 16.sp,
-                  color: AppColors.darkBlue,
+                  color: appColors.darkBlue,
                   fontWeight: FontWeight.bold)),
           onPressed: () async {
             onYes!();
@@ -43,7 +43,7 @@ class EndSession extends StatelessWidget {
           child: Text("No",
               style: TextStyle(
                   fontSize: 16.sp,
-                  color: AppColors.darkBlue,
+                  color: appColors.darkBlue,
                   fontWeight: FontWeight.bold)),
           onPressed: () async {
             onNo!();

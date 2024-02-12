@@ -16,8 +16,8 @@ class ChatSuggestRemedyPage extends GetView<ChatSuggestRemedyController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.white,
-        surfaceTintColor: AppColors.white,
+        backgroundColor: appColors.white,
+        surfaceTintColor: appColors.white,
         leading: IconButton(
           onPressed: () => Get.back(),
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
@@ -46,7 +46,7 @@ class ChatSuggestRemedyPage extends GetView<ChatSuggestRemedyController> {
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
-                    side: BorderSide(color: isLeftSide ? AppColors.lightBlack : AppColors.black,),
+                    side: BorderSide(color: isLeftSide ? appColors.lightBlack : appColors.black,),
                   ),
                 ),
                 child: CustomText(

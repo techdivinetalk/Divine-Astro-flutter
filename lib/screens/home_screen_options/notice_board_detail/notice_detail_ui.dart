@@ -81,7 +81,7 @@ class NoticeDetailUi extends GetView<NoticeDetailController> {
           borderRadius: const BorderRadius.all(
             Radius.circular(20),
           ),
-          border: Border.all(color: AppColors.lightYellow)),
+          border: Border.all(color: appColors.lightYellow)),
       child: Column(
         children: [
           Row(
@@ -89,11 +89,11 @@ class NoticeDetailUi extends GetView<NoticeDetailController> {
             children: [
               Text(
                 title ?? "",
-                style: AppTextStyle.textStyle16(fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                style: AppTextStyle.textStyle16(fontWeight: FontWeight.w500, fontColor: appColors.darkBlue),
               ),
               Text(
                 date ?? "",
-                style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
               )
             ],
           ),
@@ -101,19 +101,19 @@ class NoticeDetailUi extends GetView<NoticeDetailController> {
           ReadMoreText(
             description ?? "",
             trimLines: 4,
-            colorClickableText: AppColors.blackColor,
+            colorClickableText: appColors.blackColor,
             trimMode: TrimMode.Line,
             trimCollapsedText: "readMore".tr,
             trimExpandedText: "showLess".tr,
             moreStyle: TextStyle(
               fontSize: 12.sp,
               fontWeight: FontWeight.w700,
-              color: AppColors.blackColor,
+              color: appColors.blackColor,
             ),
             lessStyle: TextStyle(
               fontSize: 12.sp,
               fontWeight: FontWeight.w700,
-              color: AppColors.blackColor,
+              color: appColors.blackColor,
             ),
           ),
         ],

@@ -31,9 +31,9 @@ class DateSelection extends GetView<OrderHistoryController> {
               child: Container(
                 padding: const EdgeInsets.all(15.0),
                 decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.white, width: 1.5),
+                    border: Border.all(color: appColors.white, width: 1.5),
                     borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                    color: AppColors.white.withOpacity(0.1)),
+                    color: appColors.white.withOpacity(0.1)),
                 child: const Icon(
                   Icons.close,
                   color: Colors.white,
@@ -46,7 +46,7 @@ class DateSelection extends GetView<OrderHistoryController> {
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(35.r)),
-                color: AppColors.white,
+                color: appColors.white,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,11 +190,11 @@ class DateSelection extends GetView<OrderHistoryController> {
                         if (controller.startDate.isEmpty) {
                           divineSnackBar(
                               data: "Please select start date",
-                              color: AppColors.redColor);
+                              color: appColors.redColor);
                         } else if (controller.endDate.isEmpty) {
                           divineSnackBar(
                               data: "Please select end date",
-                              color: AppColors.redColor);
+                              color: appColors.redColor);
                         } else {
                           Get.back(result: {
                             "start_date": controller.startDate,
@@ -202,10 +202,10 @@ class DateSelection extends GetView<OrderHistoryController> {
                           });
                         }
                       },
-                      color: AppColors.appYellowColour,
+                      color: appColors.appYellowColour,
                       child: Text(
                         "submit".tr,
-                        style: const TextStyle(color: AppColors.brownColour),
+                        style:  TextStyle(color: appColors.brownColour),
                       )),
                   // const SizedBox(height: 20),
                 ],

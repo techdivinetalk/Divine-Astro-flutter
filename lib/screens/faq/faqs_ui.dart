@@ -14,8 +14,8 @@ class FAQsUI extends GetView<FAQsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: AppColors.white,
-          surfaceTintColor: AppColors.white,
+          backgroundColor: appColors.white,
+          surfaceTintColor: appColors.white,
           leading:
               IconButton(onPressed: () => Get.back(), icon: const Icon(Icons.arrow_back_ios_new_rounded)),
           title: const CustomText('FAQ')),
@@ -36,7 +36,7 @@ class FAQsUI extends GetView<FAQsController> {
                     return ClipRRect(
                       borderRadius: BorderRadius.circular(10.r),
                       child: Material(
-                        color: AppColors.transparent,
+                        color: appColors.transparent,
                         child: Card(
                           clipBehavior: Clip.hardEdge,
                           child: Theme(
@@ -47,7 +47,7 @@ class FAQsUI extends GetView<FAQsController> {
                               childrenPadding: EdgeInsets.symmetric(horizontal: 16.w).copyWith(bottom: 8.h),
                               expandedCrossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Divider(height: 1, color: AppColors.darkBlue.withOpacity(0.1)),
+                                Divider(height: 1, color: appColors.darkBlue.withOpacity(0.1)),
                                 SizedBox(height: 8.h),
                                 CustomText(controller.faqsResponse.value.data?[index].answer ?? '')
                               ],
@@ -69,8 +69,8 @@ class FAQsUI extends GetView<FAQsController> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Padding(
-              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator(color: AppColors.yellow)),
+           Padding(
+              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator(color: appColors.yellow)),
           SizedBox(height: 8.h),
           CustomText('gettingData'.tr)
         ],

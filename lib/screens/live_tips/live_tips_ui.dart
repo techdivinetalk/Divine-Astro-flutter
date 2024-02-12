@@ -67,7 +67,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                           },
                           child: Icon(
                             Icons.chevron_left_outlined,
-                            color: AppColors.white,
+                            color: appColors.white,
                             size: 45.sp,
                           ),
                         ),
@@ -88,7 +88,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                               controller.isFrontCamera.value
                                   ? Icons.camera_front
                                   : Icons.camera_alt,
-                              color: AppColors.white,
+                              color: appColors.white,
                               size: 28.sp,
                             ),
                           ),
@@ -104,7 +104,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                     "tips".tr,
                     style: TextStyle(
                         fontSize: 32.sp,
-                        color: AppColors.white,
+                        color: appColors.white,
                         fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -116,7 +116,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                   child: Text(
                     "Please make sure you and your background environment are ready to start a live check   your video and audio.",
                     style: AppTextStyle.textStyle16(
-                        fontColor: AppColors.white,
+                        fontColor: appColors.white,
                         fontWeight: FontWeight.w500),
                   ),
                 ),
@@ -128,7 +128,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                   child: Text(
                     "To guarantee the user experience, please make sure you can live for 30 mins at least.",
                     style: AppTextStyle.textStyle16(
-                        fontColor: AppColors.white,
+                        fontColor: appColors.white,
                         fontWeight: FontWeight.w500),
                   ),
                 ),
@@ -143,7 +143,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                 //       width: double.infinity,
                 //       decoration: BoxDecoration(
                 //         borderRadius: BorderRadius.circular(50),
-                //         color: AppColors.lightYellow,
+                //         color: appColors.lightYellow,
                 //       ),
                 //       child: Center(
                 //         child: Padding(
@@ -152,7 +152,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                 //             "startLive".tr,
                 //             style: TextStyle(
                 //               fontSize: 20.sp,
-                //               color: AppColors.brownColour,
+                //               color: appColors.brownColour,
                 //               fontWeight: FontWeight.w600,
                 //             ),
                 //           ),
@@ -199,7 +199,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
   Future<void> furtherProcedure() async {
     // showCupertinoModalPopup(
     //   context: context,
-    //   barrierColor: AppColors.darkBlue.withOpacity(0.5),
+    //   barrierColor: appColors.darkBlue.withOpacity(0.5),
     //   builder: (context) => const GiftPopup(),
     // );
     //controller.giftPopup(Get.context!);

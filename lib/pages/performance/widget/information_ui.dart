@@ -13,7 +13,7 @@ class InformationUI extends GetView<PerformanceController> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -24,9 +24,9 @@ class InformationUI extends GetView<PerformanceController> {
             child: Container(
               padding: const EdgeInsets.all(15.0),
               decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.white, width: 1.5),
+                  border: Border.all(color: appColors.white, width: 1.5),
                   borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                  color: AppColors.white.withOpacity(0.1)),
+                  color: appColors.white.withOpacity(0.1)),
               child: const Icon(
                 Icons.close,
                 color: Colors.white,
@@ -39,7 +39,7 @@ class InformationUI extends GetView<PerformanceController> {
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.vertical(top: Radius.circular(35.r)),
-              color: AppColors.white,
+              color: appColors.white,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,14 +62,14 @@ class InformationUI extends GetView<PerformanceController> {
                       child: FilledButton(
                         onPressed: () {},
                         style: FilledButton.styleFrom(
-                          backgroundColor: AppColors.lightYellow,
+                          backgroundColor: appColors.lightYellow,
                           padding: EdgeInsets.symmetric(vertical: 16.h),
                           minimumSize: Size.zero,
                         ),
                         child: CustomText(
                           'gotIt'.tr,
                           fontSize: 16.sp,
-                          fontColor: AppColors.brownColour,
+                          fontColor: appColors.brownColour,
                           fontWeight: FontWeight.w600,
                         ),
                       ),

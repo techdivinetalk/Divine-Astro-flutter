@@ -19,6 +19,7 @@ class AllOrderHistoryUi extends StatelessWidget {
         builder: (controller) {
       return ListView.separated(
         // controller: controller,
+        physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemCount: controller.allHistoryList.length,
@@ -38,7 +39,7 @@ class AllOrderHistoryUi extends StatelessWidget {
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: AppColors.white,
+            color: appColors.white,
             boxShadow: [
               BoxShadow(
                   color: Colors.black.withOpacity(0.3),
@@ -55,10 +56,10 @@ class AllOrderHistoryUi extends StatelessWidget {
                   "${"orderId".tr} : ${data[index].orderId}",
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500),
                 ),
-                const Icon(
+                 Icon(
                   Icons.help_outline,
                   size: 20,
-                  color: AppColors.darkBlue,
+                  color: appColors.darkBlue,
                 )
               ],
             ),
@@ -72,8 +73,8 @@ class AllOrderHistoryUi extends StatelessWidget {
                   style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w400,
                     /*fontColor: "$type" == "PENALTY"
-                          ? AppColors.appRedColour
-                          : AppColors.darkBlue*/
+                          ? appColors.appRedColour
+                          : appColors.darkBlue*/
                   ),
                 ),
                 Text(
@@ -82,8 +83,8 @@ class AllOrderHistoryUi extends StatelessWidget {
                   style: AppTextStyle.textStyle12(
                       fontWeight: FontWeight.w400,
                       fontColor: data[index].amount.toString().contains("+")
-                          ? AppColors.lightGreen
-                          : AppColors.appRedColour),
+                          ? appColors.lightGreen
+                          : appColors.appRedColour),
                 )
               ],
             ),
@@ -92,7 +93,7 @@ class AllOrderHistoryUi extends StatelessWidget {
               "with ${data[index].getCustomers?.name}(${data[index].getCustomers?.id}) for ${data[index].duration} minutes",
               textAlign: TextAlign.start,
               style: AppTextStyle.textStyle12(
-                  fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                  fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
             ),
             const SizedBox(height: 8),
             Row(
@@ -103,7 +104,7 @@ class AllOrderHistoryUi extends StatelessWidget {
                   DateFormat("dd MMM, hh:mm aa").format(data[index].createdAt!),
                   textAlign: TextAlign.end,
                   style: AppTextStyle.textStyle12(
-                      fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                      fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
                 ),
               ],
             ),

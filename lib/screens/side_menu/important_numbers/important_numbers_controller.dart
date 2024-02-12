@@ -92,7 +92,7 @@ class ImportantNumbersController extends GetxController {
       loading = Loading.loaded;
       update();
     } catch (error) {
-      divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      divineSnackBar(data: error.toString(), color: appColors.redColor);
     }
   }
 }

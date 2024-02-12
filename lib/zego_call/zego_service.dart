@@ -96,8 +96,8 @@ class ZegoService {
           );
         } else {}
         final Color color = data.type == ZegoCallType.videoCall
-            ? AppColors.white
-            : AppColors.brown;
+            ? appColors.white
+            : appColors.brown;
         ZegoUIKitPrebuiltCallConfig config = data.type == ZegoCallType.videoCall
             ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
             : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
@@ -271,9 +271,9 @@ class ZegoService {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          border: Border.all(color: AppColors.red, width: 2),
+          border: Border.all(color: appColors.red, width: 2),
           borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-          color: AppColors.white,
+          color: appColors.white,
         ),
         child: ListTile(
           dense: true,
@@ -294,16 +294,16 @@ class ZegoService {
                 TextSpan(
                   text:
                       '${onTickDuration.value.inHours}:${onTickDuration.value.inMinutes}:${onTickDuration.value.inSeconds}',
-                  style: const TextStyle(color: AppColors.red, fontSize: 12),
+                  style:  TextStyle(color: appColors.red, fontSize: 12),
                 ),
-                const TextSpan(
+                 TextSpan(
                   text:
                       ' are remaining! Please recharge to continue the chat and get Offer% + ',
-                  style: TextStyle(color: AppColors.black, fontSize: 12),
+                  style: TextStyle(color: appColors.black, fontSize: 12),
                 ),
-                const TextSpan(
+                 TextSpan(
                   text: '5% Extra!',
-                  style: TextStyle(color: AppColors.red, fontSize: 12),
+                  style: TextStyle(color: appColors.red, fontSize: 12),
                 ),
               ],
             ),
