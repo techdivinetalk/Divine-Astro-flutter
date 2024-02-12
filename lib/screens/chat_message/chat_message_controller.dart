@@ -41,7 +41,7 @@ class ChatMessageController extends GetxController {
           print("responseMsg ${args!.id}");
           if (responseMsg["sender_id"].toString() == args!.id.toString()) {
             print("responseMsg id match");
-            chatMessageList.add(ChatAssistData(
+            chatMessageList.add(AssistChatData(
                 message: responseMsg["message"],
                 astrologerId: args!.id,
                 createdAt: DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ")
@@ -88,7 +88,7 @@ class ChatMessageController extends GetxController {
         : ();
   }
 
-  reArrangeChatList(List chatList) {
+  reArrangeChatList() {
     //to remove duplicacy of messages
     // chatMessageList(chatMessageList
     //     .groupBy((chat) => chat.createdAt)
@@ -98,7 +98,7 @@ class ChatMessageController extends GetxController {
 
     //
     chatMessageList.sort((a, b) {
-      if (a is ChatAssistData && b is ChatAssistData) {
+      if (a is AssistChatData && b is AssistChatData) {
         return a.createdAt?.compareTo(b.createdAt ?? '0') ?? 1;
       }
       return 0;
@@ -128,12 +128,12 @@ class ChatMessageController extends GetxController {
     } catch (e, s) {
       debugPrint("Error fetching chat messages: $e $s");
     }
-    reArrangeChatList(chatMessageList.value);
+    reArrangeChatList();
   }
 
   void sendMsg() {
     if (messageController.text.isNotEmpty) {
-      final msgData = ChatAssistData(
+      final msgData = AssistChatData(
           message: messageController.text,
           astrologerId: args!.id,
           createdAt: DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ")

@@ -5,6 +5,7 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/repository/chat_repository.dart';
 import 'package:divine_astrologer/repository/kundli_repository.dart';
+import 'package:divine_astrologer/screens/chat_message/widgets/assist_message_widget.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -79,6 +80,15 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         final data = controller.chatMessageList[index];
+                        return AssistMessageView(
+                          index: index,
+                          chatMessage: data,
+                          nextMessage:
+                              controller.chatMessageList.length - 1 == index
+                                  ? data
+                                  : controller.chatMessageList[index + 1],
+                          yourMessage: data.msgType == 1,
+                        );
                         return SizedBox(
                           width: double.maxFinite,
                           child: Padding(

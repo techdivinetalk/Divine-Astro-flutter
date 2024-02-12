@@ -24,7 +24,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
   ChatAssistancePage({super.key});
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  Rx<bool> isUSerTabSelected = true.obs;
+  final Rx<bool> isUSerTabSelected = true.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -152,17 +152,20 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                       } else {
                         return ListView.builder(
                           padding: EdgeInsets.symmetric(vertical: 10.h),
-                          itemCount: controller
-                              .chatAssistantAstrologerListResponse!
-                              .data!
-                              .data!
-                              .length,
+                          itemCount: (controller.searchData).isNotEmpty ||
+                              controller.searchController.text.isNotEmpty
+                              ? controller.searchData.length
+                              : controller.chatAssistantAstrologerListResponse!
+                                  .data!.data!.length,
                           itemBuilder: (context, index) {
                             return ChatAssistanceTile(
-                              data: controller
-                                  .chatAssistantAstrologerListResponse!
-                                  .data!
-                                  .data![index],
+                              data: (controller.searchData).isNotEmpty ||
+                                  controller.searchController.text.isNotEmpty
+                                  ? controller.searchData[index]
+                                  : controller
+                                      .chatAssistantAstrologerListResponse!
+                                      .data!
+                                      .data![index],
                             );
                           },
                         );
@@ -184,16 +187,22 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                       } else {
                         return ListView.builder(
                           padding: EdgeInsets.symmetric(vertical: 10.h),
-                          itemCount:
-                              controller.customerDetailsResponse!.data!.length,
+                          itemCount: (controller.filteredUserData).isNotEmpty ||
+                                  controller.searchController.text.isNotEmpty
+                              ? controller.filteredUserData.length
+                              : controller
+                                      .customerDetailsResponse?.data.length ??
+                                  0,
                           itemBuilder: (context, index) {
                             return ChatAssistanceDataTile(
-                              data: controller
-                                  .customerDetailsResponse!.data![index],
+                              data: (controller.filteredUserData).isNotEmpty ||
+                                  controller.searchController.text.isNotEmpty
+                                  ? controller.filteredUserData[index]
+                                  : controller
+                                      .customerDetailsResponse!.data[index],
                             );
                           },
                         );
-                        ;
                       }
                     }
                   }),
@@ -208,25 +217,85 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
   PreferredSize appBar({Color backgroundColor = AppColors.yellow}) {
     return PreferredSize(
         preferredSize: AppBar().preferredSize,
-        child: AppBar(
-          surfaceTintColor: AppColors.yellow,
-          title: Text(
-            "chatAssistance".tr,
-            style: const TextStyle(
-              fontSize: 14.0,
-            ),
+        child: Obx(() => controller.isSearchEnable.value
+            ? searchWidget(backgroundColor)
+            : AppBar(
+                surfaceTintColor: AppColors.yellow,
+                title: Text(
+                  "chatAssistance".tr,
+                  style: const TextStyle(
+                    fontSize: 14.0,
+                  ),
+                ),
+                leading: IconButton(
+                  onPressed: () {
+                    controller.isSearchEnable(false);
+                    _scaffoldKey.currentState?.openDrawer();
+                  },
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    size: 32.sp,
+                    color: AppColors.blackColor,
+                  ),
+                ),
+                actions: [
+                  SvgIconButton(
+                      onPressed: () {
+                        controller.isSearchEnable(true);
+                      },
+                      svg: Assets.images.searchIcon.svg()),
+                  SizedBox(width: 10.w)
+                ],
+                backgroundColor: backgroundColor,
+                elevation: 0,
+              )));
+  }
+
+  Widget searchWidget(Color backgroundColor) {
+    return Container(
+      color: backgroundColor,
+      child: SafeArea(
+        child: SizedBox(
+          height: AppBar().preferredSize.height,
+          child: Row(
+            children: [
+              IconButton(
+                onPressed: () {
+                  controller.isSearchEnable(false);
+                  controller.searchController.clear();
+                  controller.searchData.clear();
+                },
+                icon: const Icon(Icons.arrow_back_ios_new_rounded),
+              ),
+              Expanded(
+                child: Card(
+                  child: CustomTextField(
+                    autoFocus: true,
+                    align: TextAlignVertical.center,
+                    height: 40,
+                    onChanged: (value) {
+                      controller.searchCall(value);
+                    },
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 10.0),
+                    controller: controller.searchController,
+                    inputBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(10.sp)),
+                    prefixIcon: null,
+                    suffixIcon: InkWell(
+                        onTap: () {}, child: Assets.images.searchIcon.svg()),
+                    hintText: '${'search'.tr}...',
+                    suffixIconPadding: 0,
+                  ),
+                ),
+              ),
+              SizedBox(width: 20.w)
+            ],
           ),
-          leading: IconButton(
-            onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-            icon: Icon(
-              Icons.arrow_back_ios,
-              size: 32.sp,
-              color: AppColors.blackColor,
-            ),
-          ),
-          backgroundColor: backgroundColor,
-          elevation: 0,
-        ));
+        ),
+      ),
+    );
   }
 }
 
@@ -257,7 +326,7 @@ class ChatAssistanceTile extends StatelessWidget {
                     loadingIndicator: SizedBox(
                         height: 25.h,
                         width: 25.w,
-                        child:  CircularProgressIndicator(
+                        child: CircularProgressIndicator(
                             color: AppColors.yellow, strokeWidth: 2)))),
           )),
       title: CustomText(
@@ -363,12 +432,15 @@ class ChatAssistanceDataTile extends StatelessWidget {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                            border: Border.all(color: AppColors.white, width: 1.5),
-                            borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+                            border:
+                                Border.all(color: AppColors.white, width: 1.5),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(50.0)),
                             color: AppColors.darkGreen),
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(8,4,8,4),
-                          child:  CustomText("Connect",fontColor: Colors.white,fontSize: 12.sp),
+                          padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                          child: CustomText("Connect",
+                              fontColor: Colors.white, fontSize: 12.sp),
                         ),
                       )
                     ],
@@ -376,32 +448,32 @@ class ChatAssistanceDataTile extends StatelessWidget {
                   CustomText(
                     "Total Consultation : ${data.totalConsultation}",
                     fontColor:
-                    // (index == 0) ? AppColors.darkBlue:
-                    AppColors.grey,
+                        // (index == 0) ? AppColors.darkBlue:
+                        AppColors.grey,
                     fontSize: 12.sp,
                     fontWeight:
-                    //(index == 0) ? FontWeight.w600 :
-                    FontWeight.normal,
+                        //(index == 0) ? FontWeight.w600 :
+                        FontWeight.normal,
                   ),
                   CustomText(
                     "Last Consulted : ${data.lastConsulted}",
                     fontColor:
-                    // (index == 0) ? AppColors.darkBlue:
-                    AppColors.grey,
+                        // (index == 0) ? AppColors.darkBlue:
+                        AppColors.grey,
                     fontSize: 12.sp,
                     fontWeight:
-                    //(index == 0) ? FontWeight.w600 :
-                    FontWeight.normal,
+                        //(index == 0) ? FontWeight.w600 :
+                        FontWeight.normal,
                   ),
                   CustomText(
                     "Days Since Last Consulted : ${data.daySinceLastConsulted}",
                     fontColor:
-                    // (index == 0) ? AppColors.darkBlue:
-                    AppColors.grey,
+                        // (index == 0) ? AppColors.darkBlue:
+                        AppColors.grey,
                     fontSize: 12.sp,
                     fontWeight:
-                    //(index == 0) ? FontWeight.w600 :
-                    FontWeight.normal,
+                        //(index == 0) ? FontWeight.w600 :
+                        FontWeight.normal,
                   )
                 ],
               ),

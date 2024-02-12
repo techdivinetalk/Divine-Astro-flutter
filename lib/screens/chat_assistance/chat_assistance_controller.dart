@@ -13,6 +13,8 @@ class ChatAssistanceController extends GetxController {
   ChatAssistantAstrologerListResponse? chatAssistantAstrologerListResponse;
   CustomerDetailsResponse? customerDetailsResponse;
   Loading loading = Loading.initial;
+  RxList searchData = [].obs;
+  RxList filteredUserData = [].obs;
   final appSocket = AppSocket();
 
   RxBool isSearchEnable = RxBool(false);
@@ -55,4 +57,29 @@ Future<void> getConsulation() async {
     }
     update();
   }
+  void searchCall(String value) {
+    searchData.clear();
+    filteredUserData.clear();
+
+    if (value.isEmpty) {
+      return;
+    }
+    if (chatAssistantAstrologerListResponse != null ||
+        chatAssistantAstrologerListResponse!.data != null ||
+        chatAssistantAstrologerListResponse!.data!.data!.isNotEmpty) {
+      for (var userDetail in chatAssistantAstrologerListResponse!.data!.data!) {
+
+        if (userDetail.name!.toLowerCase().contains(value.toLowerCase())) {
+          searchData.add(userDetail);
+        }
+      }
+      for (var userDetail in customerDetailsResponse?.data??<ConsultationData>[]) {
+        if (userDetail.customerName.toLowerCase().contains(value.toLowerCase())) {
+          filteredUserData.add(userDetail);
+        }
+      }
+    }
+    update();
+  }
+
 }

@@ -155,7 +155,7 @@ class AppSocket {
   void sendAssistantMessage(
       {required String message,
       required String astroId,
-        required ChatAssistData msgData,
+        required AssistChatData msgData,
       required String customerId}) {
     socket?.emit(ApiProvider().sendChatAssistMessage, {
       'userType': 'astrologer',
