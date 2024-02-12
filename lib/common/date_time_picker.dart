@@ -37,11 +37,11 @@ class DateTimePicker extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(15.0),
             decoration: BoxDecoration(
-              border: Border.all(color: AppColors.white),
+              border: Border.all(color: appColors.white),
               borderRadius: const BorderRadius.all(
                 Radius.circular(50.0),
               ),
-              color: AppColors.white.withOpacity(0.2),
+              color: appColors.white.withOpacity(0.2),
             ),
             child: const Icon(
               Icons.close,
@@ -51,9 +51,9 @@ class DateTimePicker extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Container(
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
-            color: AppColors.white,
+          decoration:  BoxDecoration(
+            borderRadius:const BorderRadius.vertical(top: Radius.circular(50.0)),
+            color: appColors.white,
           ),
           child: Column(
             children: [
@@ -65,16 +65,16 @@ class DateTimePicker extends StatelessWidget {
                         ? Icons.calendar_month
                         : Icons.access_time_rounded,
                     size: 50,
-                    color: AppColors.yellow,
+                    color: appColors.yellow,
                   )),
               const SizedBox(height: 20),
               Material(
-                color: AppColors.transparent,
+                color: appColors.transparent,
                 child: Text(
                   title,
-                  style: const TextStyle(
+                  style:  TextStyle(
                       fontWeight: FontWeight.w700,
-                      color: AppColors.darkBlue,
+                      color: appColors.darkBlue,
                       fontSize: 20.0),
                 ),
               ),
@@ -114,9 +114,9 @@ class DateTimePicker extends StatelessWidget {
                   pickerTheme: DateTimePickerTheme(
                     pickerHeight: 180,
                     itemHeight: 44,
-                    backgroundColor: AppColors.white,
-                    itemTextStyle: const TextStyle(
-                        color: AppColors.darkBlue,
+                    backgroundColor: appColors.white,
+                    itemTextStyle:  TextStyle(
+                        color: appColors.darkBlue,
                         fontSize: 20,
                         fontWeight: FontWeight.w700),
                     dividerColor: Colors.black.withOpacity(0.5),
@@ -135,12 +135,12 @@ class DateTimePicker extends StatelessWidget {
                 onPressed: () {
                   Get.back();
                 },
-                color: AppColors.yellow,
+                color: appColors.yellow,
                 child: Text(
                   buttonTitle,
                   style: TextStyle(
                     fontSize: 18.sp,
-                    color: AppColors.brown,
+                    color: appColors.brown,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

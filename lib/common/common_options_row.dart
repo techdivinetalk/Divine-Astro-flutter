@@ -30,7 +30,7 @@ class CommonOptionRow extends StatelessWidget {
           child: Container(
             height: 37,
             decoration: BoxDecoration(
-              border: Border.all(color: AppColors.red, width: 1.0),
+              border: Border.all(color: appColors.red, width: 1.0),
               borderRadius: BorderRadius.circular(22.0),
             ),
             child: Row(
@@ -39,13 +39,13 @@ class CommonOptionRow extends StatelessWidget {
                 Text(
                   leftBtnTitle,
                   style: AppTextStyle.textStyle12(
-                      fontWeight: FontWeight.w500, fontColor: AppColors.red),
+                      fontWeight: FontWeight.w500, fontColor: appColors.red),
                 ),
                 SizedBox(width: 8.w),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 5.0.h,),
                   decoration: BoxDecoration(
-                    color: AppColors.red, // Set the background color
+                    color: appColors.red, // Set the background color
                     borderRadius: BorderRadius.circular(20.0), // Set the border radius
                   ),
                   child: Text(
@@ -72,10 +72,10 @@ class CommonOptionRow extends StatelessWidget {
                     blurRadius: 1.0,
                     offset: const Offset(0.0, 3.0)),
               ],
-              gradient: const LinearGradient(
+              gradient:  LinearGradient(
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,
-                colors: [AppColors.appYellowColour, AppColors.gradientBottom],
+                colors: [appColors.appYellowColour, appColors.gradientBottom],
               ),
               borderRadius: BorderRadius.circular(22.0),
             ),
@@ -83,7 +83,7 @@ class CommonOptionRow extends StatelessWidget {
               child: Text(
                 "suggestRemedies".tr,
                 style: AppTextStyle.textStyle12(
-                    fontColor: AppColors.brownColour,
+                    fontColor: appColors.brownColour,
                     fontWeight: FontWeight.w500),
               ),
             ),

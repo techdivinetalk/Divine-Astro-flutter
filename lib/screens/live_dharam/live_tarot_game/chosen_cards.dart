@@ -28,7 +28,7 @@ class _ChosenCardsState extends State<ChosenCards> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[top(), const SizedBox(height: 16), bottom()],
@@ -47,10 +47,10 @@ class _ChosenCardsState extends State<ChosenCards> {
           width: 48,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-            border: Border.all(color: AppColors.white),
-            color: AppColors.white.withOpacity(0.2),
+            border: Border.all(color: appColors.white),
+            color: appColors.white.withOpacity(0.2),
           ),
-          child: const Icon(Icons.close, color: AppColors.white),
+          child:  Icon(Icons.close, color: appColors.white),
         ),
       ),
     );
@@ -72,8 +72,8 @@ class _ChosenCardsState extends State<ChosenCards> {
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: AppColors.yellow),
-            color: AppColors.white.withOpacity(0.2),
+            border: Border.all(color: appColors.yellow),
+            color: appColors.white.withOpacity(0.2),
           ),
           child: grid(),
         ),
@@ -88,9 +88,9 @@ class _ChosenCardsState extends State<ChosenCards> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const SizedBox(height: 16),
-          const Text(
+           Text(
             "Chosen Cards",
-            style: TextStyle(fontSize: 20, color: AppColors.white),
+            style: TextStyle(fontSize: 20, color: appColors.white),
           ),
           // const SizedBox(height: 16),
           DynamicHeightGridView(
@@ -119,7 +119,7 @@ class _ChosenCardsState extends State<ChosenCards> {
                     const SizedBox(height: 8),
                     Text(
                       model.name ?? "",
-                      style: const TextStyle(color: AppColors.white),
+                      style:  TextStyle(color: appColors.white),
                     ),
                   ],
                 ),

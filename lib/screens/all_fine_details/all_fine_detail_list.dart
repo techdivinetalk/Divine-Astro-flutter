@@ -14,8 +14,8 @@ class AllFineDetailsList extends GetView<AllFineDetailsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: AppColors.white,
-          surfaceTintColor: AppColors.white,
+          backgroundColor: appColors.white,
+          surfaceTintColor: appColors.white,
           leading: IconButton(
               onPressed: () => Get.back(),
               icon: const Icon(Icons.arrow_back_ios_new_rounded)),
@@ -40,7 +40,7 @@ class AllFineDetailsList extends GetView<AllFineDetailsController> {
                     return ClipRRect(
                       borderRadius: BorderRadius.circular(10.r),
                       child: Material(
-                        color: AppColors.transparent,
+                        color: appColors.transparent,
                         child: Card(
                           clipBehavior: Clip.hardEdge,
                           child: Theme(
@@ -59,7 +59,7 @@ class AllFineDetailsList extends GetView<AllFineDetailsController> {
                               children: [
                                 Divider(
                                     height: 1,
-                                    color: AppColors.darkBlue.withOpacity(0.1)),
+                                    color: appColors.darkBlue.withOpacity(0.1)),
                                 SizedBox(height: 8.h),
                                 CustomText(controller.faqsResponse.value
                                         .data?[index].answer ??
@@ -83,9 +83,9 @@ class AllFineDetailsList extends GetView<AllFineDetailsController> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: CircularProgressIndicator(color: AppColors.yellow)),
+           Padding(
+              padding:const EdgeInsets.all(8.0),
+              child: CircularProgressIndicator(color: appColors.yellow)),
           SizedBox(height: 8.h),
           CustomText('gettingData'.tr)
         ],

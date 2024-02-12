@@ -31,7 +31,7 @@ class DiscountOfferUI extends GetView<DiscountOffersController> {
                 width: 125.w,
                 height: 2.h,
                 decoration: BoxDecoration(
-                    color: AppColors.appColorDark,
+                    color: appColors.appColorDark,
                     borderRadius: BorderRadius.circular(10.w)),
               ),
               GetBuilder<DiscountOffersController>(
@@ -52,7 +52,7 @@ class DiscountOfferUI extends GetView<DiscountOffersController> {
                             padding: EdgeInsets.all(20.w),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15.w),
-                                color: AppColors.white,
+                                color: appColors.white,
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.grey,
@@ -98,7 +98,7 @@ class DiscountOfferUI extends GetView<DiscountOffersController> {
                                       ' ${offer.offerPercentage ?? ''}% off',
                                       style: TextStyle(
                                           fontSize: 15.sp,
-                                          color: AppColors.lightGreen,
+                                          color: appColors.lightGreen,
                                           fontWeight: FontWeight.w600),
                                     ),
                                   ],
@@ -114,7 +114,7 @@ class DiscountOfferUI extends GetView<DiscountOffersController> {
                                       ' ${offer.offerName ?? ''}',
                                       style: TextStyle(
                                           fontSize: 15.sp,
-                                          color: AppColors.lightGreen,
+                                          color: appColors.lightGreen,
                                           fontWeight: FontWeight.w600),
                                     ),
                                   ],
@@ -126,7 +126,7 @@ class DiscountOfferUI extends GetView<DiscountOffersController> {
                                       'India : ',
                                       style: TextStyle(
                                           fontSize: 15.sp,
-                                          color: AppColors.lightGreen,
+                                          color: appColors.lightGreen,
                                           fontWeight: FontWeight.w600),
                                     ),
                                     Text(
@@ -137,7 +137,7 @@ class DiscountOfferUI extends GetView<DiscountOffersController> {
                                       ' ₹100 | ',
                                       style: TextStyle(
                                           fontSize: 15.sp,
-                                          color: AppColors.lightGreen,
+                                          color: appColors.lightGreen,
                                           fontWeight: FontWeight.w600),
                                     ),
                                     Text(
@@ -148,7 +148,7 @@ class DiscountOfferUI extends GetView<DiscountOffersController> {
                                       '₹${100 % (offer.offerPercentage ?? 0)}',
                                       style: TextStyle(
                                           fontSize: 15.sp,
-                                          color: AppColors.lightGreen,
+                                          color: appColors.lightGreen,
                                           fontWeight: FontWeight.w600),
                                     ),
                                   ],
@@ -181,7 +181,7 @@ class DiscountOfferUI extends GetView<DiscountOffersController> {
           padding: EdgeInsets.all(20.w),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(3.w),
-              color: AppColors.white,
+              color: appColors.white,
               boxShadow: const [
                 BoxShadow(
                   color: Colors.grey,

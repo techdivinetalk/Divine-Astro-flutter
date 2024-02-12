@@ -85,7 +85,7 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
               ],
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(20.r)),
-              border: Border.all(color: AppColors.lightYellow)),
+              border: Border.all(color: appColors.lightYellow)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -96,14 +96,14 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
                     title ?? "",
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w500,
-                        fontColor: AppColors.darkBlue),
+                        fontColor: appColors.darkBlue),
                   ),
                   Text(
                     '${dateToString(date ?? DateTime.now(), format: "h:mm a")}  '
                     '${formatDateTime(date ?? DateTime.now())} ',
                     style: AppTextStyle.textStyle10(
                         fontWeight: FontWeight.w400,
-                        fontColor: AppColors.darkBlue),
+                        fontColor: appColors.darkBlue),
                   ),
                 ],
               ),
@@ -163,7 +163,7 @@ class _ExpandableHtmlState extends State<ExpandableHtml> {
                     style: TextStyle(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.blackColor,
+                      color: appColors.blackColor,
                     ),
                   ),
                 ),

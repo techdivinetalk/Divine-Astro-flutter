@@ -9,7 +9,7 @@ class AppTextStyle {
     return TextStyle(
         fontSize: 9.sp,
         fontWeight: fontWeight ?? FontWeight.w400,
-        color: fontColor ?? AppColors.darkBlue,
+        color: fontColor ?? appColors.darkBlue,
         overflow: TextOverflow.ellipsis);
   }
 
@@ -17,7 +17,7 @@ class AppTextStyle {
     return TextStyle(
         fontSize: 10.sp,
         fontWeight: fontWeight ?? FontWeight.w400,
-        color: fontColor ?? AppColors.darkBlue,
+        color: fontColor ?? appColors.darkBlue,
         overflow: TextOverflow.ellipsis);
   }
 
@@ -25,7 +25,7 @@ class AppTextStyle {
     return TextStyle(
         fontSize: 12.sp,
         fontWeight: fontWeight ?? FontWeight.w400,
-        color: fontColor ?? AppColors.darkBlue,
+        color: fontColor ?? appColors.darkBlue,
         overflow: TextOverflow.ellipsis);
   }
 
@@ -33,7 +33,7 @@ class AppTextStyle {
     return TextStyle(
         fontSize: 13.sp,
         fontWeight: fontWeight ?? FontWeight.w400,
-        color: fontColor ?? AppColors.darkBlue,
+        color: fontColor ?? appColors.darkBlue,
         overflow: TextOverflow.ellipsis);
   }
 
@@ -41,7 +41,7 @@ class AppTextStyle {
     return TextStyle(
         fontSize: 14.sp,
         fontWeight: fontWeight ?? FontWeight.w400,
-        color: fontColor ?? AppColors.darkBlue,
+        color: fontColor ?? appColors.darkBlue,
         overflow: TextOverflow.ellipsis);
   }
 
@@ -49,7 +49,7 @@ class AppTextStyle {
     return TextStyle(
         fontSize: 15.sp,
         fontWeight: fontWeight ?? FontWeight.w700,
-        color: fontColor ?? AppColors.darkBlue,
+        color: fontColor ?? appColors.darkBlue,
         overflow: TextOverflow.ellipsis);
   }
 
@@ -57,7 +57,7 @@ class AppTextStyle {
     return TextStyle(
         fontSize: 16.sp,
         fontWeight: fontWeight ?? FontWeight.w400,
-        color: fontColor ?? AppColors.darkBlue,
+        color: fontColor ?? appColors.darkBlue,
         overflow: TextOverflow.ellipsis);
   }
 
@@ -65,7 +65,7 @@ class AppTextStyle {
     return TextStyle(
         fontSize: 24.sp,
         fontWeight: fontWeight ?? FontWeight.w700,
-        color: fontColor ?? AppColors.darkBlue,
+        color: fontColor ?? appColors.darkBlue,
         overflow: TextOverflow.ellipsis);
   }
 
@@ -73,7 +73,7 @@ class AppTextStyle {
     return TextStyle(
         fontSize: 20.sp,
         fontWeight: fontWeight ?? FontWeight.w400,
-        color: fontColor ?? AppColors.darkBlue,
+        color: fontColor ?? appColors.darkBlue,
         overflow: TextOverflow.ellipsis);
   }
 
@@ -82,7 +82,7 @@ class AppTextStyle {
     return TextStyle(
         fontSize: 20.sp,
         fontWeight: fontWeight ?? FontWeight.w400,
-        color: fontColor ?? AppColors.darkBlue,
+        color: fontColor ?? appColors.darkBlue,
         overflow: TextOverflow.ellipsis);
   }
 
@@ -90,7 +90,7 @@ class AppTextStyle {
     return TextStyle(
       fontSize: 16.sp,
       fontWeight: fontWeight ?? FontWeight.w700,
-      color: fontColor ?? AppColors.darkBlue,
+      color: fontColor ?? appColors.darkBlue,
     );
   }
 
@@ -99,17 +99,17 @@ class AppTextStyle {
         fontSize: 20.sp,
         fontWeight: FontWeight.w700,
         fontStyle: FontStyle.italic,
-        color: fontColor ?? AppColors.darkBlue,
+        color: fontColor ?? appColors.darkBlue,
         overflow: TextOverflow.ellipsis);
   }
 
   static TextStyle textStyleUtilsUnderLine14(
       {Color? color, FontWeight? fontWeight, double? thickness}) {
     return TextStyle(
-        color: color ?? AppColors.darkBlue,
+        color: color ?? appColors.darkBlue,
         decoration: TextDecoration.underline,
         decorationThickness: thickness ?? 1.5,
-        decorationColor: color ?? AppColors.darkBlue,
+        decorationColor: color ?? appColors.darkBlue,
         fontSize: 14.sp,
         fontWeight: fontWeight ?? FontWeight.w700,
         overflow: TextOverflow.ellipsis);
@@ -118,10 +118,10 @@ class AppTextStyle {
   static TextStyle textStyle20lineThrough(
       {Color? color, FontWeight? fontWeight, double? thickness}) {
     return TextStyle(
-        color: color ?? AppColors.darkBlue,
+        color: color ?? appColors.darkBlue,
         decoration: TextDecoration.lineThrough,
         decorationThickness: thickness ?? 1.5,
-        decorationColor: color ?? AppColors.appRedColour,
+        decorationColor: color ?? appColors.appRedColour,
         fontSize: 20.sp,
         fontWeight: fontWeight ?? FontWeight.w700,
         overflow: TextOverflow.ellipsis);

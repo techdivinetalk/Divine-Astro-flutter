@@ -188,11 +188,11 @@ void divineSnackBar({required String data, Color? color, Duration? duration}) {
       duration: duration ?? const Duration(milliseconds: 4000),
       content: Text(
         data,
-        style: TextStyle(color: color != null ? AppColors.white : AppColors.blackColor),
+        style: TextStyle(color: color != null ? appColors.white : appColors.blackColor),
       ),
-      backgroundColor: color ?? AppColors.lightYellow,
+      backgroundColor: color ?? appColors.lightYellow,
       showCloseIcon: true,
-      closeIconColor: color != null ? AppColors.white : AppColors.blackColor,
+      closeIconColor: color != null ? appColors.white : appColors.blackColor,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }

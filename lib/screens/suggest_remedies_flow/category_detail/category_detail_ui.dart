@@ -30,13 +30,13 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
               width: 47.w,
               height: 26.h,
               decoration:
-                  BoxDecoration(border: Border.all(color: AppColors.darkBlue, width: 1), borderRadius: BorderRadius.circular(10)),
+                  BoxDecoration(border: Border.all(color: appColors.darkBlue, width: 1), borderRadius: BorderRadius.circular(10)),
               child: Center(
                 child: Text("₹500",
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 12.sp,
-                      color: AppColors.darkBlue,
+                      color: appColors.darkBlue,
                     )),
               ),
             ),
@@ -67,7 +67,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                 padding: EdgeInsets.only(right: 11.w),
                                 child: Text(
                                   "Select Quantity",
-                                  style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                                  style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
                                 ),
                               ),
                               SizedBox(height: 4.h),
@@ -87,12 +87,12 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                     ),
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                        border: Border.all(color: AppColors.darkBlue), borderRadius: BorderRadius.circular(10.h)),
+                                        border: Border.all(color: appColors.darkBlue), borderRadius: BorderRadius.circular(10.h)),
                                     child: Row(
                                       children: [
                                         GestureDetector(
                                             onTap: controller.decrementQuantity,
-                                            child: Icon(Icons.remove_rounded, color: AppColors.darkBlue)),
+                                            child: Icon(Icons.remove_rounded, color: appColors.darkBlue)),
                                         SizedBox(width: 8.w),
                                         Text(
                                           "${controller.selectedQuantity}",
@@ -103,7 +103,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                         SizedBox(width: 8.w),
                                         GestureDetector(
                                             onTap: controller.incrementQuantity,
-                                            child: Icon(Icons.add_rounded, color: AppColors.darkBlue)),
+                                            child: Icon(Icons.add_rounded, color: appColors.darkBlue)),
                                       ],
                                     ),
                                   ),
@@ -112,10 +112,10 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                             ],
                           ),
                           Html(
-                            data: controller.productDetail?.productLongDesc,
+                            data:controller.productDetail!.productLongDesc ?? "",
                             onLinkTap: (url, attributes, element) {
                               launchUrl(Uri.parse(url ?? ''));
-                            },
+                            }, 
                           ),
                           SizedBox(height: 10.h),
                           ...List.generate(
@@ -152,13 +152,13 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                             data.title ?? "",
                                             style: AppTextStyle.textStyle12(
                                               fontWeight: FontWeight.w400,
-                                              fontColor: AppColors.darkBlue,
+                                              fontColor: appColors.darkBlue,
                                             ),
                                           ),
                                           Icon(
                                             data.isExpand! ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
                                             size: 30.h,
-                                            color: AppColors.darkBlue,
+                                            color: appColors.darkBlue,
                                           ),
                                         ],
                                       ),
@@ -167,7 +167,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                               data.description ?? "",
                                               style: AppTextStyle.textStyle12(
                                                 fontWeight: FontWeight.w400,
-                                                fontColor: AppColors.lightGrey,
+                                                fontColor: appColors.lightGrey,
                                               ),
                                             )
                                           : SizedBox(),
@@ -211,7 +211,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                             Text(
                               "On purchase 30% referral bonus will be added in your wallet",
                               style: AppTextStyle.textStyle12(
-                                  fontWeight: FontWeight.w600, fontColor: AppColors.darkBlue.withOpacity(0.5)),
+                                  fontWeight: FontWeight.w600, fontColor: appColors.darkBlue.withOpacity(0.5)),
                             ),
                             CustomLightYellowCurveButton(
                               name: "suggestNow".tr,
@@ -226,13 +226,13 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                       ),
                     );
                   },
-                  color: AppColors.lightYellow,
+                  color: appColors.lightYellow,
                   child: Text(
                     "suggestNow".tr,
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 20.sp,
-                      color: AppColors.brownColour,
+                      color: appColors.brownColour,
                     ),
                   )),
             ),

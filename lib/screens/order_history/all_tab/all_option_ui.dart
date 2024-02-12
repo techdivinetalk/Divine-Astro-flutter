@@ -66,7 +66,7 @@ class AllTabInfo extends GetView<AllOptionController> {
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: AppColors.white,
+            color: appColors.white,
             boxShadow: [
               BoxShadow(
                   color: Colors.black.withOpacity(0.3),
@@ -83,10 +83,10 @@ class AllTabInfo extends GetView<AllOptionController> {
                   "${"orderId".tr} : $orderId",
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500),
                 ),
-                const Icon(
+                 Icon(
                   Icons.help_outline,
                   size: 20,
-                  color: AppColors.darkBlue,
+                  color: appColors.darkBlue,
                 )
               ],
             ),
@@ -99,12 +99,12 @@ class AllTabInfo extends GetView<AllOptionController> {
                   style: AppTextStyle.textStyle12(
                       fontWeight: FontWeight.w400,
                       fontColor:
-                          "$type" == "PENALTY" ? AppColors.appRedColour : AppColors.darkBlue),
+                          "$type" == "PENALTY" ? appColors.appRedColour : appColors.darkBlue),
                 ),
                 Text(
                   "+ $amount",
                   style: AppTextStyle.textStyle12(
-                      fontWeight: FontWeight.w400, fontColor: AppColors.lightGreen),
+                      fontWeight: FontWeight.w400, fontColor: appColors.lightGreen),
                 )
               ],
             ),
@@ -112,7 +112,7 @@ class AllTabInfo extends GetView<AllOptionController> {
               "with $customerName ($customerId) for ${controller.getDuration(duration: duration??'')}",
               textAlign: TextAlign.start,
               style: AppTextStyle.textStyle12(
-                  fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                  fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
             ),
             const SizedBox(height: 8),
             Row(
@@ -122,7 +122,7 @@ class AllTabInfo extends GetView<AllOptionController> {
                   "$time",
                   textAlign: TextAlign.end,
                   style: AppTextStyle.textStyle12(
-                      fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                      fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
                 ),
               ],
             ),
@@ -144,10 +144,10 @@ class AllTabInfo extends GetView<AllOptionController> {
                             blurRadius: 1.0,
                             offset: const Offset(0.0, 3.0)),
                       ],
-                      gradient: const LinearGradient(
+                      gradient:  LinearGradient(
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
-                        colors: [AppColors.appYellowColour, AppColors.gradientBottom],
+                        colors: [appColors.appYellowColour, appColors.gradientBottom],
                       ),
                       borderRadius: BorderRadius.circular(22.0),
                     ),
@@ -155,7 +155,7 @@ class AllTabInfo extends GetView<AllOptionController> {
                       child: Text(
                         "suggestRemedies".tr,
                         style: AppTextStyle.textStyle14(
-                            fontColor: AppColors.brownColour, fontWeight: FontWeight.w500),
+                            fontColor: appColors.brownColour, fontWeight: FontWeight.w500),
                       ),
                     ),
                   ),

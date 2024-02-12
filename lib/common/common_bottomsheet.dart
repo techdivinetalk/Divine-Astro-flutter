@@ -28,11 +28,11 @@ Future openBottomSheet(BuildContext context,
             padding: const EdgeInsets.all(15.0),
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                border: Border.all(color: AppColors.darkBlue),
-                color: AppColors.darkBlue),
-            child: const Icon(
+                border: Border.all(color: appColors.darkBlue),
+                color: appColors.darkBlue),
+            child:  Icon(
               Icons.close_rounded,
-              color: AppColors.white,
+              color: appColors.white,
             ),
           ),
         ),
@@ -67,10 +67,10 @@ Future openBottomSheet(BuildContext context,
                       Navigator.pop(context);
                       // Get.back();
                     },
-                    color: AppColors.lightYellow,
+                    color: appColors.lightYellow,
                     child: Text(
                       btnTitle,
-                      style: const TextStyle(color: AppColors.brownColour),
+                      style:  TextStyle(color: appColors.brownColour),
                     )),
               const SizedBox(height: 10),
             ],
@@ -112,8 +112,8 @@ selectDateOrTime(
             padding: const EdgeInsets.all(15.0),
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                border: Border.all(color: AppColors.darkBlue),
-                color: AppColors.darkBlue),
+                border: Border.all(color: appColors.darkBlue),
+                color: appColors.darkBlue),
             child: Assets.images.icClose.svg(height: 12.h, width: 12.h),
           ),
         ),
@@ -122,8 +122,8 @@ selectDateOrTime(
           decoration: BoxDecoration(
             borderRadius:
                 const BorderRadius.vertical(top: Radius.circular(50.0)),
-            border: Border.all(color: AppColors.white, width: 2),
-            color: AppColors.white,
+            border: Border.all(color: appColors.white, width: 2),
+            color: appColors.white,
           ),
           child: Column(
             children: [
@@ -135,15 +135,15 @@ selectDateOrTime(
                         ? Icons.calendar_month
                         : Icons.access_time_rounded,
                     size: 50,
-                    color: AppColors.darkBlue,
+                    color: appColors.darkBlue,
                   )),
               const SizedBox(height: 20),
               Material(
                 child: Text(
                   title,
-                  style: const TextStyle(
+                  style:  TextStyle(
                       fontWeight: FontWeight.w700,
-                      color: AppColors.darkBlue,
+                      color: appColors.darkBlue,
                       fontSize: 20.0),
                 ),
               ),
@@ -184,9 +184,9 @@ selectDateOrTime(
                   pickerTheme: DateTimePickerTheme(
                     pickerHeight: 180,
                     itemHeight: 44,
-                    backgroundColor: AppColors.white,
-                    itemTextStyle: const TextStyle(
-                        color: AppColors.darkBlue,
+                    backgroundColor: appColors.white,
+                    itemTextStyle:  TextStyle(
+                        color: appColors.darkBlue,
                         fontSize: 20,
                         fontWeight: FontWeight.w700),
                     dividerColor: Colors.black.withOpacity(0.5),
@@ -214,10 +214,10 @@ selectDateOrTime(
                     }
                     // Get.back();
                   },
-                  color: AppColors.appYellowColour,
+                  color: appColors.appYellowColour,
                   child: Text(
                     btnTitle,
-                    style: const TextStyle(color: AppColors.brownColour),
+                    style:  TextStyle(color: appColors.brownColour),
                   )),
               const SizedBox(height: 30),
             ],

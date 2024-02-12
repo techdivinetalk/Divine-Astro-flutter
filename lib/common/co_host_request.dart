@@ -17,7 +17,7 @@ class CoHostRequest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -26,13 +26,13 @@ class CoHostRequest extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(50.0)),
-                color: AppColors.white,
-                border: Border.all(color: AppColors.appYellowColour)),
+                color: appColors.white,
+                border: Border.all(color: appColors.appYellowColour)),
             child: Column(
               children: [
                 SizedBox(height: 20.h),
                 Container(
-                  decoration: const BoxDecoration(color: AppColors.white),
+                  decoration:  BoxDecoration(color: appColors.white),
                   child: Row(
                     children: [
                       SizedBox(width: 32.w),
@@ -47,15 +47,15 @@ class CoHostRequest extends StatelessWidget {
                       CustomText(name ?? "",
                           fontSize: 20.sp,
                           fontWeight: FontWeight.w500,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                       const Spacer(),
-                      const Icon(Icons.call,
-                          color: AppColors.darkBlue, size: 16),
+                       Icon(Icons.call,
+                          color: appColors.darkBlue, size: 16),
                       SizedBox(width: 10.w),
                       CustomText(intToTimeLeft(duration ?? 0),
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
-                          fontColor: AppColors.darkBlue),
+                          fontColor: appColors.darkBlue),
                       SizedBox(width: 32.w),
                     ],
                   ),
@@ -72,13 +72,13 @@ class CoHostRequest extends StatelessWidget {
                             onTap: () {
                               onAccept!.call();
                             },
-                            color: AppColors.appYellowColour,
+                            color: appColors.appYellowColour,
                             radius: 28,
                             child: Center(
                               child: CustomText("Accept",
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.bold,
-                                  fontColor: AppColors.brownColour),
+                                  fontColor: appColors.brownColour),
                             )),
                       ),
                     ),

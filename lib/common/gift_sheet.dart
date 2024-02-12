@@ -17,7 +17,7 @@
 //   Widget build(BuildContext context) {
 //     return GetBuilder<LiveController>(builder: (controller) {
 //       return Material(
-//         color: AppColors.transparent,
+//         color: appColors.transparent,
 //         child: Column(
 //           mainAxisSize: MainAxisSize.min,
 //           children: [
@@ -28,11 +28,11 @@
 //               child: Container(
 //                 padding: const EdgeInsets.all(15.0),
 //                 decoration: BoxDecoration(
-//                   border: Border.all(color: AppColors.white),
+//                   border: Border.all(color: appColors.white),
 //                   borderRadius: const BorderRadius.all(
 //                     Radius.circular(50.0),
 //                   ),
-//                   color: AppColors.white.withOpacity(0.2),
+//                   color: appColors.white.withOpacity(0.2),
 //                 ),
 //                 child: const Icon(
 //                   Icons.close,
@@ -49,7 +49,7 @@
 //                   decoration: const BoxDecoration(
 //                     borderRadius:
 //                         BorderRadius.vertical(top: Radius.circular(50.0)),
-//                     color: AppColors.white,
+//                     color: appColors.white,
 //                   ),
 //                   child: Column(
 //                     mainAxisSize: MainAxisSize.min,
@@ -59,18 +59,18 @@
 //                           style: TextStyle(
 //                               fontSize: 16.sp,
 //                               fontWeight: FontWeight.bold,
-//                               color: AppColors.darkBlue)),
+//                               color: appColors.darkBlue)),
 //                       SizedBox(height: 8.h),
 //                       Text("Congratulations!",
 //                           style: TextStyle(
 //                               fontSize: 20.sp,
 //                               fontWeight: FontWeight.bold,
-//                               color: AppColors.darkBlue)),
+//                               color: appColors.darkBlue)),
 //                       SizedBox(height: 4.h),
 //                       Text(
 //                           "You've Have Received ${controller.allGiftList.value.giftDetails?.length.toString()} Gifts",
 //                           style: TextStyle(
-//                               fontSize: 14.sp, color: AppColors.darkBlue)),
+//                               fontSize: 14.sp, color: appColors.darkBlue)),
 //                       SizedBox(height: 25.h),
 //                       Obx(
 //                         ()=> MediaQuery.removePadding(
@@ -120,11 +120,11 @@
 //                                           style: TextStyle(
 //                                               fontSize: 20.sp,
 //                                               fontWeight: FontWeight.w600,
-//                                               color: AppColors.darkBlue)),
+//                                               color: appColors.darkBlue)),
 //                                       // Text("Has given 3 hears",
 //                                       //     style: TextStyle(
 //                                       //         fontSize: 16.sp,
-//                                       //         color: AppColors.darkBlue)),
+//                                       //         color: appColors.darkBlue)),
 //                                     ],
 //                                   ),
 //                                   const Spacer(),
@@ -135,7 +135,7 @@
 //                                       style: TextStyle(
 //                                           fontSize: 20.sp,
 //                                           fontWeight: FontWeight.bold,
-//                                           color: AppColors.darkBlue)),
+//                                           color: appColors.darkBlue)),
 //                                   SizedBox(width: 10.w),
 //                                   SizedBox(
 //                                     width: 34.w,
@@ -161,13 +161,13 @@
 //                             SizedBox(width: 32.w),
 //                             Text("Total Recieved",
 //                                 style: TextStyle(
-//                                     fontSize: 20.sp, color: AppColors.darkBlue)),
+//                                     fontSize: 20.sp, color: appColors.darkBlue)),
 //                             const Spacer(),
 //                             Text("₹${controller.getTotalGiftPrice()}",
 //                                 style: TextStyle(
 //                                     fontSize: 20.sp,
 //                                     fontWeight: FontWeight.bold,
-//                                     color: AppColors.darkBlue)),
+//                                     color: appColors.darkBlue)),
 //                             SizedBox(width: 10.w),
 //                             SizedBox(
 //                               width: 34.w,
@@ -210,7 +210,7 @@
 //                           decoration: BoxDecoration(
 //                             shape: BoxShape.circle,
 //                             border: Border.all(
-//                                 color: AppColors.appYellowColour, width: 2),
+//                                 color: appColors.appYellowColour, width: 2),
 //                           ),
 //                         )
 //                       ],

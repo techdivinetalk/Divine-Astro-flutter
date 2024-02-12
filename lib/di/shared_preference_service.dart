@@ -38,6 +38,7 @@ class SharedPreferenceService extends GetxService {
     // log("userData:: $userData");
     if (userData.isNotEmpty) {
       log(userData);
+      log("userDatauserDatauserDatauserData");
       var jsonDecoded = jsonDecode(userData);
       userDetail = UserData.fromJson(jsonDecoded);
     }
@@ -105,7 +106,10 @@ class SharedPreferenceService extends GetxService {
 
   LoginImages? getLoginImages() {
     String? images = prefs!.getString(loginImages);
-    return loginImagesFromJson(images!);
+    if(images != null){
+      return loginImagesFromJson(images);
+    }
+
     return null;
   }
 

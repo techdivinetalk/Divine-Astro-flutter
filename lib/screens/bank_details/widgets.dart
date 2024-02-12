@@ -46,8 +46,8 @@ class BackNavigationWidget extends StatelessWidget {
                       children: [
                         SizedBox(width: 16.w),
                         IconButton(
-                          splashColor: AppColors.transparent,
-                          highlightColor: AppColors.transparent,
+                          splashColor: appColors.transparent,
+                          highlightColor: appColors.transparent,
                           onPressed: onPressedBack,
                           icon: const Icon(Icons.arrow_back_ios_new_rounded),
                         ),
@@ -118,7 +118,7 @@ class CustomMaterialButton extends StatelessWidget {
           Expanded(
             child: MaterialButton(
               height: height ?? 55.h,
-              color: color ?? AppColors.yellow,
+              color: color ?? appColors.yellow,
               disabledColor: disabledColor,
               highlightElevation: 0,
               shape: RoundedRectangleBorder(
@@ -131,7 +131,7 @@ class CustomMaterialButton extends StatelessWidget {
                 style: style ??
                     TextStyle(
                       fontSize: fontSize ?? 20.sp,
-                      color: textColor ?? AppColors.black,
+                      color: textColor ?? appColors.black,
                       fontWeight: fontWeight ?? FontWeight.w500,
                     ),
               ),
@@ -236,37 +236,37 @@ class BankDetailsField extends StatelessWidget {
           errorStyle: const TextStyle(height: 0),
           hintText: hintText,
           helperStyle: AppTextStyle.textStyle16(),
-          fillColor: AppColors.white,
-          hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.grey),
-          hoverColor: AppColors.white,
+          fillColor: appColors.white,
+          hintStyle: AppTextStyle.textStyle16(fontColor: appColors.grey),
+          hoverColor: appColors.white,
           prefixIcon: icon,
           suffixIcon: suffixIcon,
           filled: true,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: errorBorder ?? AppColors.white,
+              color: errorBorder ?? appColors.white,
               width: 1.0,
             ),
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: errorBorder ?? AppColors.white,
+              color: errorBorder ?? appColors.white,
               width: 1.0,
             ),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide: const BorderSide(
-              color: AppColors.redColor,
+            borderSide: BorderSide(
+              color: appColors.redColor,
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide: const BorderSide(
-              color: AppColors.lightYellow,
+            borderSide: BorderSide(
+              color: appColors.lightYellow,
               width: 1.0,
             ),
           ),

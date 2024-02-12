@@ -49,6 +49,7 @@ class RemedySuggestedDataList {
   DateTime? updatedAt;
   GetCustomers? getCustomers;
   ProductDetails? productDetails;
+  GetOrder? getOrder;
 
   RemedySuggestedDataList({
     this.id,
@@ -145,6 +146,32 @@ class ProductDetails {
     "id": id,
     "prod_name": prodName,
     "prod_image": prodImage,
+  };
+}
+
+class GetOrder {
+  int? id;
+  int? amount;
+  String? status;
+  String? orderId;
+  String? createdAt;
+
+  GetOrder({this.id, this.amount, this.status, this.orderId, this.createdAt});
+
+  factory GetOrder.fromJson(Map<String, dynamic> json) => GetOrder(
+    id: json['id'],
+    amount: json['amount'],
+    status: json['status'],
+    orderId: json['order_id'],
+    createdAt: json['created_at']
+  );
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'amount': amount,
+    'status':  status,
+    'order_id':  orderId,
+    'created_at': createdAt,
   };
 }
 

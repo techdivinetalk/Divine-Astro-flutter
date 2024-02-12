@@ -29,7 +29,7 @@ class NoInternetException extends AppException {
       Function()? onDismissClick,
       String buttonText = "",
       String dismissButtonText = ""}) {
-    divineSnackBar(data: message, color: AppColors.redColor);
+    divineSnackBar(data: message, color: appColors.redColor);
   }
 }
 
@@ -47,7 +47,7 @@ class CustomException extends AppException {
       String? dismissButtonText,
       shouldShowFlushBar = true}) {
     if (shouldShowFlushBar) {
-      divineSnackBar(data: message, color: AppColors.redColor);
+      divineSnackBar(data: message, color: appColors.redColor);
     } else {
       debugPrint(message);
     }
@@ -73,16 +73,16 @@ class ManyTimeExException extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Container(
             width: double.maxFinite,
             padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
-              color: AppColors.white,
+            decoration:  BoxDecoration(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(50.0)),
+              color: appColors.white,
             ),
             child: Column(
               children: [
@@ -92,7 +92,7 @@ class ManyTimeExException extends StatelessWidget {
                 CustomText("${message!.split(".").first}!",
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w700,
-                    fontColor: AppColors.appRedColour),
+                    fontColor: appColors.appRedColour),
                 SizedBox(height: 10.h),
                 Text(
                   "${message!.split(".").last}",
@@ -110,13 +110,13 @@ class ManyTimeExException extends StatelessWidget {
                     onPressed: () {
                       Get.back();
                     },
-                    color: AppColors.lightYellow,
+                    color: appColors.lightYellow,
                     child: Text(
                       "okay".tr,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16.sp,
-                        color: AppColors.brownColour,
+                        color: appColors.brownColour,
                       ),
                     ))
               ],

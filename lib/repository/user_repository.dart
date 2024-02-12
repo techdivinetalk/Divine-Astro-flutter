@@ -69,7 +69,7 @@ class UserRepository extends ApiProvider {
             SendOtpModel.fromJson(jsonDecode(response.body));
         if (sendOtpModel.statusCode == 429) {
           showCupertinoModalPopup(
-            barrierColor: AppColors.darkBlue.withOpacity(0.5),
+            barrierColor: appColors.darkBlue.withOpacity(0.5),
             context: Get.context!,
             builder: (context) =>
                 ManyTimeExException(message: sendOtpModel.message),
@@ -718,5 +718,36 @@ class UserRepository extends ApiProvider {
       debugPrint("we got $e $s");
       rethrow;
     }
+  }
+
+  Future<UpdateSessionTypeResponse> astroOnlineAPIForLive({
+    required Map<String, dynamic> params,
+    required Function(String message) successCallBack,
+    required Function(String message) failureCallBack,
+  }) async {
+    UpdateSessionTypeResponse data = UpdateSessionTypeResponse();
+    try {
+      final String requestBody = jsonEncode(params);
+      final response = await post(astroOnline, body: requestBody);
+      final Map<String, dynamic> responseBody = json.decode(response.body);
+      if (response.statusCode == HttpStatus.ok) {
+        if (responseBody["status_code"] == HttpStatus.ok) {
+          data = UpdateSessionTypeResponse.fromJson(responseBody);
+          successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
+          await preferenceService.erase();
+          await Get.offAllNamed(RouteName.login);
+        } else {
+          failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
+        }
+      } else {
+        failureCallBack(response.reasonPhrase ?? "Unknown Error Occurred");
+      }
+    } on Exception catch (error, stack) {
+      debugPrint("astroOnlineAPIForLive(): Exception caught: error: $error");
+      debugPrint("astroOnlineAPIForLive(): Exception caught: stack: $stack");
+      failureCallBack("Unknown Error Occurred");
+    }
+    return Future<UpdateSessionTypeResponse>.value(data);
   }
 }

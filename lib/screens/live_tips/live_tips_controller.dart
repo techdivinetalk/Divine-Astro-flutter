@@ -5,6 +5,7 @@ import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/live/blocked_customer_list_res.dart';
 import 'package:divine_astrologer/repository/astrologer_profile_repository.dart';
+import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_screen_recording/flutter_screen_recording.dart';
@@ -29,6 +30,9 @@ class LiveTipsController extends GetxController {
   final StreamController<bool> streamController = StreamController<bool>()
     ..add(false);
 
+  final UserRepository _userRepository = Get.put(UserRepository());
+  // final SharedPreferenceService _pref = Get.put(SharedPreferenceService());
+
   @override
   void dispose() {
     streamController.close();
@@ -42,6 +46,25 @@ class LiveTipsController extends GetxController {
     name = data.name ?? "";
     image = data.image ?? "";
     super.onReady();
+  }
+
+  Future<void> astroOnlineAPI({
+    required bool entering,
+    required Function(String message) successCallBack,
+    required Function(String message) failureCallBack,
+  }) async {
+    Map<String, dynamic> param = {
+      "type": 3,
+      "role_id": 7,
+      "device_token": pref.getDeviceToken() ?? "",
+    };
+    entering == true ? param["check_in"] = 1 : param["check_out"] = 1;
+    await _userRepository.astroOnlineAPIForLive(
+      params: param,
+      successCallBack: successCallBack,
+      failureCallBack: failureCallBack,
+    );
+    return Future<void>.value();
   }
 
   Future<void> furtherProcedure() async {
@@ -168,7 +191,7 @@ class LiveTipsController extends GetxController {
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-              color: AppColors.white,
+              color: appColors.white,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,7 +211,7 @@ class LiveTipsController extends GetxController {
                     "congratulations".tr,
                     style: TextStyle(
                       fontSize: 24.sp,
-                      color: AppColors.darkBlue,
+                      color: appColors.darkBlue,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -229,12 +252,12 @@ class LiveTipsController extends GetxController {
                                   Text(
                                     "Rahul",
                                     style: AppTextStyle.textStyle16(
-                                        fontColor: AppColors.darkBlue),
+                                        fontColor: appColors.darkBlue),
                                   ),
                                   Text(
                                     "has given you 3 hearts",
                                     style: AppTextStyle.textStyle12(
-                                        fontColor: AppColors.darkBlue),
+                                        fontColor: appColors.darkBlue),
                                   ),
                                 ],
                               ),
@@ -245,7 +268,7 @@ class LiveTipsController extends GetxController {
                                     "₹15",
                                     style: AppTextStyle.textStyle16(
                                         fontWeight: FontWeight.w600,
-                                        fontColor: AppColors.darkBlue),
+                                        fontColor: appColors.darkBlue),
                                   ),
                                   SizedBox(
                                     width: 5.w,
@@ -274,13 +297,13 @@ class LiveTipsController extends GetxController {
                     Text(
                       "totalEarning".tr,
                       style: AppTextStyle.textStyle16(
-                          fontColor: AppColors.darkBlue,
+                          fontColor: appColors.darkBlue,
                           fontWeight: FontWeight.w600),
                     ),
                     Text(
                       "₹2115",
                       style: AppTextStyle.textStyle16(
-                          fontColor: AppColors.darkBlue,
+                          fontColor: appColors.darkBlue,
                           fontWeight: FontWeight.w600),
                     ),
                   ],

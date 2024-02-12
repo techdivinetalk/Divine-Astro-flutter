@@ -35,7 +35,7 @@ class _GiftWidgetState extends State<GiftWidget> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[top(), const SizedBox(height: 16), bottom()],
@@ -54,10 +54,10 @@ class _GiftWidgetState extends State<GiftWidget> {
           width: 48,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-            border: Border.all(color: AppColors.white),
-            color: AppColors.white.withOpacity(0.2),
+            border: Border.all(color: appColors.white),
+            color: appColors.white.withOpacity(0.2),
           ),
-          child: const Icon(Icons.close, color: AppColors.white),
+          child:  Icon(Icons.close, color: appColors.white),
         ),
       ),
     );
@@ -79,8 +79,8 @@ class _GiftWidgetState extends State<GiftWidget> {
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: AppColors.yellow),
-            color: AppColors.white.withOpacity(0.2),
+            border: Border.all(color: appColors.yellow),
+            color: appColors.white.withOpacity(0.2),
           ),
           child: Column(
             children: <Widget>[
@@ -110,11 +110,11 @@ class _GiftWidgetState extends State<GiftWidget> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const Text(
+         Text(
           "Quantity:",
           style: TextStyle(
             fontSize: 16,
-            color: AppColors.white,
+            color: appColors.white,
           ),
         ),
         const SizedBox(width: 8),
@@ -122,8 +122,8 @@ class _GiftWidgetState extends State<GiftWidget> {
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-            border: Border.all(color: AppColors.yellow),
-            color: AppColors.white.withOpacity(0.2),
+            border: Border.all(color: appColors.yellow),
+            color: appColors.white.withOpacity(0.2),
           ),
           child: Row(
             children: <Widget>[
@@ -138,9 +138,9 @@ class _GiftWidgetState extends State<GiftWidget> {
               const SizedBox(width: 8),
               Text(
                 quantity.toString(),
-                style: const TextStyle(
+                style:  TextStyle(
                   fontSize: 16,
-                  color: AppColors.white,
+                  color: appColors.white,
                 ),
               ),
               const SizedBox(width: 8),
@@ -161,21 +161,21 @@ class _GiftWidgetState extends State<GiftWidget> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const Text(
+         Text(
           // "Amount:",
           "Wallet Balance:",
           style: TextStyle(
             fontSize: 16,
-            color: AppColors.white,
+            color: appColors.white,
           ),
         ),
         const SizedBox(width: 8),
         Text(
           // "₹ $amount",
           "${widget.walletBalance}",
-          style: const TextStyle(
+          style:  TextStyle(
             fontSize: 16,
-            color: AppColors.yellow,
+            color: appColors.yellow,
           ),
         ),
       ],
@@ -189,9 +189,9 @@ class _GiftWidgetState extends State<GiftWidget> {
       child: Container(
         height: 24,
         width: 24,
-        decoration: const BoxDecoration(
+        decoration:  BoxDecoration(
           shape: BoxShape.circle,
-          color: AppColors.yellow,
+          color: appColors.yellow,
         ),
         child: Icon(iconData),
       ),
@@ -227,9 +227,9 @@ class _GiftWidgetState extends State<GiftWidget> {
                   const SizedBox(height: 4),
                   Text(
                     "₹${item.giftPrice}",
-                    style: const TextStyle(
+                    style:  TextStyle(
                       fontSize: 12,
-                      color: AppColors.white,
+                      color: appColors.white,
                     ),
                   ),
                 ],

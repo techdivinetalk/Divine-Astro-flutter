@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:divine_astrologer/common/cached_network_image.dart';
+
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/repository/chat_repository.dart';
@@ -27,7 +27,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
     Get.put(ChatMessageController(KundliRepository(), ChatRepository()));
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.yellow,
+        backgroundColor: appColors.yellow,
         centerTitle: false,
         title: Row(
           children: [
@@ -43,15 +43,15 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                         placeHolderPath: Assets.images.defaultProfile.path,
                         imagePath:
                             "${globalConstantModel.data?.awsCredentails.baseurl}/${controller.args!.name ?? ''}",
-                        loadingIndicator: const SizedBox(
+                        loadingIndicator:  SizedBox(
                             child: CircularProgressIndicator(
-                                color: AppColors.yellow, strokeWidth: 2))),
+                                color: appColors.yellow, strokeWidth: 2))),
                   )),
             ),
             SizedBox(width: 10.w),
             Text(controller.args!.name ?? '',
                 style: AppTextStyle.textStyle16(
-                    fontWeight: FontWeight.w500, fontColor: AppColors.brown))
+                    fontWeight: FontWeight.w500, fontColor: appColors.brown))
           ],
         ),
       ),
@@ -136,9 +136,9 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                                                             (data.msgType ??
                                                                         0) ==
                                                                     1
-                                                                ? AppColors
+                                                                ? appColors
                                                                     .darkBlue
-                                                                : AppColors
+                                                                : appColors
                                                                     .darkBlue))
                                               ]),
                                           SizedBox(height: 20.h)
@@ -155,7 +155,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                                                         data.createdAt ?? '')),
                                                 style: AppTextStyle.textStyle10(
                                                     fontColor:
-                                                        AppColors.darkBlue)),
+                                                        appColors.darkBlue)),
                                             if (data.msgType == 1)
                                               (data.seenStatus ?? 0) == 0
                                                   ? SizedBox(width: 8.w)
@@ -206,14 +206,14 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
               //                 horizontalSpacing: 0,
               //                 initCategory: Category.RECENT,
               //                 bgColor: Color(0xFFF2F2F2),
-              //                 indicatorColor: AppColors.red,
+              //                 indicatorColor: appColors.red,
               //                 iconColor: Colors.grey,
-              //                 iconColorSelected: AppColors.red,
+              //                 iconColorSelected: appColors.red,
               //                 enableSkinTones: true,
               //                 recentTabBehavior: RecentTabBehavior.RECENT,
               //                 recentsLimit: 28,
               //                 replaceEmojiOnLimitExceed: false,
-              //                 backspaceColor: AppColors.red,
+              //                 backspaceColor: appColors.red,
               //                 categoryIcons: CategoryIcons(),
               //                 buttonMode: ButtonMode.MATERIAL)),
               //       ),
@@ -236,14 +236,14 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
           //           child: badges.Badge(
           //             showBadge: controller.unreadMsgCount.value > 0,
           //             badgeStyle: const badges.BadgeStyle(
-          //               badgeColor: AppColors.appColorDark,
+          //               badgeColor: appColors.appColorDark,
           //             ),
           //             badgeContent: Padding(
           //               padding: const EdgeInsets.all(8.0),
           //               child: Text("${controller.unreadMsgCount.value}"),
           //             ),
           //             child: Icon(Icons.arrow_drop_down_circle_outlined,
-          //                 color: AppColors.appColorDark, size: 50.h),
+          //                 color: appColors.appColorDark, size: 50.h),
           //           ),
           //         )
           //       : const SizedBox()),
@@ -291,10 +291,10 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                         hintText: "message".tr,
                         isDense: true,
                         helperStyle: AppTextStyle.textStyle16(),
-                        fillColor: AppColors.white,
+                        fillColor: appColors.white,
                         hintStyle:
-                            AppTextStyle.textStyle16(fontColor: AppColors.grey),
-                        hoverColor: AppColors.white,
+                            AppTextStyle.textStyle16(fontColor: appColors.grey),
+                        hoverColor: appColors.white,
                         // prefixIcon: InkWell(
                         //   onTap: () async {
                         //     controller.isEmojiShowing.value =
@@ -333,12 +333,12 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                         filled: true,
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0.sp),
-                            borderSide: const BorderSide(
-                                color: AppColors.white, width: 1.0)),
+                            borderSide:  BorderSide(
+                                color: appColors.white, width: 1.0)),
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0.sp),
-                            borderSide: const BorderSide(
-                                color: AppColors.appColorLite, width: 1.0)),
+                            borderSide:  BorderSide(
+                                color: appColors.appColorLite, width: 1.0)),
                       ),
                     ),
                   ),
@@ -390,7 +390,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
 //                       Text(
 //                         chatMessage.message ?? "",
 //                         style: AppTextStyle.textStyle14(
-//                             fontColor: yourMessage ? AppColors.darkBlue : AppColors.red),
+//                             fontColor: yourMessage ? appColors.darkBlue : appColors.red),
 //                       ),
 //                     ],
 //                   ),
@@ -405,7 +405,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
 //                     Text(
 //                       messageDateTime(chatMessage.time ?? 0),
 //                       style: AppTextStyle.textStyle10(
-//                         fontColor: AppColors.darkBlue,
+//                         fontColor: appColors.darkBlue,
 //                       ),
 //                     ),
 //                     if (yourMessage) SizedBox(width: 8.w),
@@ -413,7 +413,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
 //                       Obx(() => msgType.value == 0
 //                           ? Assets.images.icSingleTick.svg()
 //                           : msgType.value == 1
-//                               ? Assets.images.icDoubleTick.svg(color: AppColors.disabledGrey)
+//                               ? Assets.images.icDoubleTick.svg(color: appColors.disabledGrey)
 //                               : msgType.value == 2
 //                                   ? Assets.images.icDoubleTick.svg()
 //                                   : Assets.images.icSingleTick.svg())
@@ -473,7 +473,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
 //                             Text(
 //                               messageDateTime(chatDetail.time ?? 0),
 //                               style: AppTextStyle.textStyle10(
-//                                 fontColor: AppColors.darkBlue,
+//                                 fontColor: appColors.darkBlue,
 //                               ),
 //                             ),
 //                             SizedBox(width: 8.w),
@@ -481,7 +481,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
 //                               msgType == 0
 //                                   ? Assets.images.icSingleTick.svg()
 //                                   : msgType == 1
-//                                       ? Assets.images.icDoubleTick.svg(color: AppColors.disabledGrey)
+//                                       ? Assets.images.icDoubleTick.svg(color: appColors.disabledGrey)
 //                                       : msgType == 2
 //                                           ? Assets.images.icDoubleTick.svg()
 //                                           : Assets.images.icSingleTick.svg()
@@ -523,7 +523,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
 //                           Text(
 //                             messageDateTime(chatDetail.time ?? 0),
 //                             style: AppTextStyle.textStyle10(
-//                               fontColor: AppColors.darkBlue,
+//                               fontColor: appColors.darkBlue,
 //                             ),
 //                           ),
 //                           SizedBox(width: 8.w),
@@ -554,12 +554,12 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
 //           mainAxisAlignment: MainAxisAlignment.center,
 //           children: [
 //             Container(
-//               decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.buttonDisableColor),
+//               decoration: const BoxDecoration(shape: BoxShape.circle, color: appColors.buttonDisableColor),
 //               child: Padding(
 //                 padding: const EdgeInsets.all(15.0),
 //                 child: Text(
 //                   chatDetail.kundliName?[0] ?? "",
-//                   style: AppTextStyle.textStyle24(fontColor: AppColors.white, fontWeight: FontWeight.w600),
+//                   style: AppTextStyle.textStyle24(fontColor: appColors.white, fontWeight: FontWeight.w600),
 //                 ),
 //               ),
 //             ),
@@ -573,7 +573,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
 //                     style: TextStyle(
 //                       fontWeight: FontWeight.w600,
 //                       fontSize: 16.sp,
-//                       color: AppColors.darkBlue,
+//                       color: appColors.darkBlue,
 //                     ),
 //                   ),
 //                   SizedBox(height: 5.h),
@@ -582,7 +582,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
 //                     style: TextStyle(
 //                       fontWeight: FontWeight.w400,
 //                       fontSize: 10.sp,
-//                       color: AppColors.disabledGrey,
+//                       color: appColors.disabledGrey,
 //                     ),
 //                   ),
 //                   SizedBox(height: 5.h),
@@ -591,7 +591,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
 //                     style: TextStyle(
 //                       fontWeight: FontWeight.w400,
 //                       fontSize: 10.sp,
-//                       color: AppColors.disabledGrey,
+//                       color: appColors.disabledGrey,
 //                     ),
 //                   ),
 //                 ],
@@ -620,7 +620,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
 //         boxShadow: [
 //           BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 1.0, offset: const Offset(0.0, 3.0)),
 //         ],
-//         color: AppColors.white,
+//         color: appColors.white,
 //         borderRadius: const BorderRadius.all(Radius.circular(20)),
 //       ),
 //       child: Text("unreadMessages".tr),

@@ -18,9 +18,9 @@ class OtpVerificationForNumberChange
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
+      value:  SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.dark,
-        statusBarColor: AppColors.transparent,
+        statusBarColor: appColors.transparent,
       ),
       child: WillPopScope(
         onWillPop: () async {
@@ -54,7 +54,7 @@ class OtpVerificationForNumberChange
                       ),
                       CustomMaterialButton(
                         buttonName: "submit".tr,
-                        textColor: AppColors.brownColour,
+                        textColor: appColors.brownColour,
                         onPressed: () {
                           controller.verifyOtpForNumberChange();
                         },
@@ -79,13 +79,13 @@ class OtpVerificationField extends GetView<NumberChangeReqController> {
   TextStyle get descriptionTextStyle => TextStyle(
         fontWeight: FontWeight.w400,
         fontFamily: FontFamily.poppins,
-        color: AppColors.darkBlue,
+        color: appColors.darkBlue,
         fontSize: 16.sp,
       );
 
   TextStyle get mobileNumberTextStyle => TextStyle(
         fontWeight: FontWeight.w700,
-        color: AppColors.darkBlue,
+        color: appColors.darkBlue,
         fontFamily: FontFamily.poppins,
         fontSize: 16.sp,
       );
@@ -117,14 +117,14 @@ class NotReceiveOtpText extends StatelessWidget {
   TextStyle get textStyle => TextStyle(
         fontSize: 16.sp,
         fontWeight: FontWeight.w500,
-        color: AppColors.darkBlue,
+        color: appColors.darkBlue,
         fontFamily: FontFamily.poppins,
       );
 
   TextStyle get resendTextStyle => TextStyle(
         fontSize: 16.sp,
         fontWeight: FontWeight.w700,
-        color: AppColors.darkBlue,
+        color: appColors.darkBlue,
         fontFamily: FontFamily.poppins,
         decoration: TextDecoration.underline,
       );
@@ -179,8 +179,8 @@ class OtpFieldView extends StatelessWidget {
         decoration: CirclePinDecoration(
           strokeWidth: 2.sp,
           strokeColorBuilder: PinListenColorBuilder(
-            AppColors.lightYellow,
-            AppColors.lightYellow,
+            appColors.lightYellow,
+            appColors.lightYellow,
           ),
         ),
         onChanged: onChanged,
@@ -205,7 +205,7 @@ class OtpSheet extends StatelessWidget {
   TextStyle get textStyle => TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 16.sp,
-        color: AppColors.redColor,
+        color: appColors.redColor,
       );
 
   @override
@@ -263,14 +263,14 @@ class InCorrectOtpWidget extends StatelessWidget {
   TextStyle get currentOtpStyle => TextStyle(
         fontWeight: FontWeight.w400,
         fontSize: 12.sp,
-        color: AppColors.redColor,
+        color: appColors.redColor,
         fontFamily: FontFamily.poppins,
       );
 
   TextStyle get attemptsStyle => TextStyle(
         fontWeight: FontWeight.w700,
         fontSize: 12.sp,
-        color: AppColors.darkBlue,
+        color: appColors.darkBlue,
         fontFamily: FontFamily.poppins,
       );
 

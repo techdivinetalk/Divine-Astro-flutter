@@ -48,6 +48,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   initMessaging();
+  Get.put(AppColors());
+
+
+  // await RemoteConfigService.instance.initFirebaseRemoteConfig();
+
   final remoteConfig = FirebaseRemoteConfig.instance;
   final remoteConfigHelper = RemoteConfigHelper(remoteConfig: remoteConfig);
   await remoteConfigHelper.initialize();
@@ -63,6 +68,13 @@ Future<void> main() async {
         MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
       showNotification(message.data["title"], message.data["message"],
           message.data['type'], message.data);
+        HashMap<String, dynamic> updateData = HashMap();
+        updateData[message.data["chatId"]] = 1;
+        FirebaseDatabase.instance
+            .ref("astrologer")
+            .child(
+            "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}")
+            .update(updateData);
     } else if (message.data["type"] == "3") {
       print('Message data:- ${MiddleWare.instance.currentPage}');
       if (MiddleWare.instance.currentPage == RouteName.chatMessageUI) {
@@ -208,7 +220,7 @@ class MyApp extends StatelessWidget {
                 ],
                 defaultTransition: Transition.fadeIn,
                 navigatorKey: navigatorKey,
-                color: AppColors.white,
+                color: appColors.white,
                 debugShowCheckedModeBanner: false,
                 initialRoute: RouteName.initial,
                 getPages: Routes.routes,
@@ -218,16 +230,16 @@ class MyApp extends StatelessWidget {
                 fallbackLocale: AppTranslations.fallbackLocale,
                 translations: AppTranslations(),
                 theme: ThemeData(
-                  splashColor: AppColors.transparent,
+                  splashColor: appColors.transparent,
                   highlightColor: Colors.transparent,
                   colorScheme: ColorScheme.fromSeed(
                       seedColor: Colors.white,
-                      background: AppColors.white,
-                      surfaceTint: AppColors.white),
+                      background: appColors.white,
+                      surfaceTint: appColors.white),
                   useMaterial3: true,
                   fontFamily: FontFamily.poppins,
                   // cardTheme: const CardTheme(
-                  //     color: AppColors.white, surfaceTintColor: AppColors.white),
+                  //     color: appColors.white, surfaceTintColor: appColors.white),
                 ),
                 localizationsDelegates: const [
                   DefaultMaterialLocalizations.delegate,

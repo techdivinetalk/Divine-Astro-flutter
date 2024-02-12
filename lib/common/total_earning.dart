@@ -13,7 +13,7 @@ class TotalEarning extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -23,11 +23,11 @@ class TotalEarning extends StatelessWidget {
             },
             child: Container(
               padding: const EdgeInsets.all(15.0),
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(
+              decoration:  BoxDecoration(
+                borderRadius:const BorderRadius.all(
                   Radius.circular(50.0),
                 ),
-                color: AppColors.darkBlue,
+                color: appColors.darkBlue,
               ),
               child: const Icon(
                 Icons.close,
@@ -38,9 +38,9 @@ class TotalEarning extends StatelessWidget {
           Container(
             width: Get.width,
             margin: EdgeInsets.only(top: 15.h),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
-              color: AppColors.white,
+            decoration:  BoxDecoration(
+              borderRadius:const BorderRadius.vertical(top: Radius.circular(50.0)),
+              color: appColors.white,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -68,7 +68,7 @@ class TotalEarning extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 24.sp,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.appYellowColour)),
+                        color: appColors.appYellowColour)),
                 Text(
                     "YouHaveEarnedFromYourLastSession"
                         .trParams({"price": "2115"}),
@@ -76,7 +76,7 @@ class TotalEarning extends StatelessWidget {
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 20.sp,
-                        color: AppColors.darkBlue)),
+                        color: appColors.darkBlue)),
                 SizedBox(height: 18.h),
                 Divider(height: 1.h, endIndent: 20.w, indent: 20.w),
                 SizedBox(height: 18.h),
@@ -110,13 +110,13 @@ class TotalEarning extends StatelessWidget {
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16.sp,
-                            color: AppColors.darkBlue)),
+                            color: appColors.darkBlue)),
                     const Spacer(),
                     Text("₹2115",
                         style: TextStyle(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.darkBlue)),
+                            color: appColors.darkBlue)),
                     SizedBox(width: 20.w),
                   ],
                 ),
@@ -130,11 +130,11 @@ class TotalEarning extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(40.0)),
                       ),
                       onPressed: () {},
-                      color: AppColors.lightYellow,
+                      color: appColors.lightYellow,
                       child: Text(
                         "orderHistory".tr,
                         style: TextStyle(
-                            color: AppColors.brownColour,
+                            color: appColors.brownColour,
                             fontWeight: FontWeight.w600,
                             fontSize: 20.sp),
                       )),
@@ -157,8 +157,8 @@ class TotalEarning extends StatelessWidget {
           width: 48.w,
           height: 48.w,
           clipBehavior: Clip.antiAlias,
-          decoration: const BoxDecoration(
-              color: AppColors.lightYellow, shape: BoxShape.circle),
+          decoration:  BoxDecoration(
+              color: appColors.lightYellow, shape: BoxShape.circle),
           child: Center(
             child: svg,
           ),
@@ -171,12 +171,12 @@ class TotalEarning extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w400,
-                    color: AppColors.darkBlue)),
+                    color: appColors.darkBlue)),
             Text(discription,
                 style: TextStyle(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w400,
-                    color: AppColors.darkBlue)),
+                    color: appColors.darkBlue)),
           ],
         ),
         const Spacer(),
@@ -184,7 +184,7 @@ class TotalEarning extends StatelessWidget {
             style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.darkBlue)),
+                color: appColors.darkBlue)),
         SizedBox(width: 20.w),
       ],
     );

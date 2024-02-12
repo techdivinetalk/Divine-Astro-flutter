@@ -29,11 +29,11 @@ Future feedbackBottomSheet(BuildContext context,
             padding: const EdgeInsets.all(15.0),
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                border: Border.all(color: AppColors.white),
-                color: AppColors.transparent),
-            child: const Icon(
+                border: Border.all(color: appColors.white),
+                color: appColors.transparent),
+            child:  Icon(
               Icons.close_rounded,
-              color: AppColors.white,
+              color: appColors.white,
             ),
           ),
         ),
@@ -52,12 +52,12 @@ Future feedbackBottomSheet(BuildContext context,
                 Text(
                   title,
                   style: AppTextStyle.textStyle20(
-                      fontWeight: FontWeight.w600, fontColor: AppColors.red),
+                      fontWeight: FontWeight.w600, fontColor: appColors.red),
                 ),
               SizedBox(height: 16.h),
               if(subTitle != null) Text(
                 subTitle,
-                style: AppTextStyle.textStyle13(fontColor: AppColors.black),
+                style: AppTextStyle.textStyle13(fontColor: appColors.black),
                 textAlign: TextAlign.center,
               ),
               if(functionalityWidget != null) Padding(
@@ -73,7 +73,7 @@ Future feedbackBottomSheet(BuildContext context,
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     width: Get.width,
                     decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.red, width: 2,),
+                      border: Border.all(color: appColors.red, width: 2,),
                       borderRadius: BorderRadius.circular(32),
                     ),
                     child: Center(
@@ -81,7 +81,7 @@ Future feedbackBottomSheet(BuildContext context,
                         btnTitle,
                         style: AppTextStyle.textStyle20(
                           fontWeight: FontWeight.w600,
-                          fontColor: AppColors.red,
+                          fontColor: appColors.red,
                         ),
                       ),
                     ),
@@ -97,12 +97,12 @@ Future feedbackBottomSheet(BuildContext context,
                 //       Navigator.pop(context);
                 //       // Get.back();
                 //     },
-                //     //color: AppColors.lightYellow,
+                //     //color: appColors.lightYellow,
                 //     child: Text(
                 //       btnTitle,
                 //       style: AppTextStyle.textStyle20(
                 //         fontWeight: FontWeight.w600,
-                //         fontColor: AppColors.red,
+                //         fontColor: appColors.red,
                 //       ),
                 //     )),
               const SizedBox(height: 30),
@@ -142,11 +142,11 @@ selectDateOrTime(
             Get.back();
           },
           child: Container(
-            padding: const EdgeInsets.all(15.0),
+            padding:  EdgeInsets.all(15.0),
             decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                border: Border.all(color: AppColors.darkBlue),
-                color: AppColors.darkBlue),
+                borderRadius:  BorderRadius.all(Radius.circular(50.0)),
+                border: Border.all(color: appColors.darkBlue),
+                color: appColors.darkBlue),
             child: Assets.images.icClose.svg(height: 12.h, width: 12.h),
           ),
         ),
@@ -155,8 +155,8 @@ selectDateOrTime(
           decoration: BoxDecoration(
             borderRadius:
                 const BorderRadius.vertical(top: Radius.circular(50.0)),
-            border: Border.all(color: AppColors.white, width: 2),
-            color: AppColors.white,
+            border: Border.all(color: appColors.white, width: 2),
+            color: appColors.white,
           ),
           child: Column(
             children: [
@@ -168,15 +168,15 @@ selectDateOrTime(
                         ? Icons.calendar_month
                         : Icons.access_time_rounded,
                     size: 50,
-                    color: AppColors.darkBlue,
+                    color: appColors.darkBlue,
                   )),
               const SizedBox(height: 20),
               Material(
                 child: Text(
                   title,
-                  style: const TextStyle(
+                  style:  TextStyle(
                       fontWeight: FontWeight.w700,
-                      color: AppColors.darkBlue,
+                      color: appColors.darkBlue,
                       fontSize: 20.0),
                 ),
               ),
@@ -217,9 +217,9 @@ selectDateOrTime(
                   pickerTheme: DateTimePickerTheme(
                     pickerHeight: 180,
                     itemHeight: 44,
-                    backgroundColor: AppColors.white,
-                    itemTextStyle: const TextStyle(
-                        color: AppColors.darkBlue,
+                    backgroundColor: appColors.white,
+                    itemTextStyle:  TextStyle(
+                        color: appColors.darkBlue,
                         fontSize: 20,
                         fontWeight: FontWeight.w700),
                     dividerColor: Colors.black.withOpacity(0.5),
@@ -247,10 +247,10 @@ selectDateOrTime(
                     }
                     // Get.back();
                   },
-                  color: AppColors.appYellowColour,
+                  color: appColors.appYellowColour,
                   child: Text(
                     btnTitle,
-                    style: const TextStyle(color: AppColors.brownColour),
+                    style:  TextStyle(color: appColors.brownColour),
                   )),
               const SizedBox(height: 30),
             ],

@@ -63,28 +63,28 @@ class ProfilePageController extends GetxController {
     ChangeLanguageModelClass(
         'English',
         'Eng',
-        AppColors.appYellowColour,
+        appColors.appYellowColour,
         (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "en_US"
             ? true
             : false),
     ChangeLanguageModelClass(
         'Hindi',
         'हिन्दी',
-        AppColors.teal,
+        appColors.teal,
         (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "hi_IN"
             ? true
             : false),
     ChangeLanguageModelClass(
         'Marathi',
         'मराठी',
-        AppColors.appRedColour,
+        appColors.appRedColour,
         (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "mr_IN"
             ? true
             : false),
     ChangeLanguageModelClass(
         'Gujarati',
         'ગુજરાતી',
-        AppColors.appRedColour,
+        appColors.appRedColour,
         (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "gu_IN"
             ? true
             : false),
@@ -233,7 +233,7 @@ class ProfilePageController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
   }
@@ -250,7 +250,7 @@ update();
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     reviewDataSync.value = true;
@@ -269,7 +269,7 @@ update();
     if (response.statusCode == 200) {
       // Get.back();
       showCupertinoModalPopup(
-        barrierColor: AppColors.darkBlue.withOpacity(0.5),
+        barrierColor: appColors.darkBlue.withOpacity(0.5),
         context: Get.context!,
         builder: (context) => ThankYouReportUI(
           onPressed: () {
@@ -279,7 +279,7 @@ update();
       );
     } else {
       Get.back();
-      divineSnackBar(data: "${response.message}", color: AppColors.redColor);
+      divineSnackBar(data: "${response.message}", color: appColors.redColor);
     }
   }
 
@@ -306,7 +306,7 @@ update();
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     } finally {
       // Set loading state to false regardless of success or failure
@@ -322,10 +322,10 @@ update();
   updateProfileImage() {
     showCupertinoModalPopup(
       context: Get.context!,
-      barrierColor: AppColors.darkBlue.withOpacity(0.5),
+      barrierColor: appColors.darkBlue.withOpacity(0.5),
       builder: (BuildContext context) {
         return Material(
-          color: AppColors.transparent,
+          color: appColors.transparent,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -336,10 +336,10 @@ update();
                 child: Container(
                   padding: const EdgeInsets.all(15.0),
                   decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.white, width: 1.5),
+                      border: Border.all(color: appColors.white, width: 1.5),
                       borderRadius:
                           const BorderRadius.all(Radius.circular(50.0)),
-                      color: AppColors.white.withOpacity(0.1)),
+                      color: appColors.white.withOpacity(0.1)),
                   child: const Icon(
                     Icons.close,
                     color: Colors.white,
@@ -353,7 +353,7 @@ update();
                 decoration: BoxDecoration(
                   borderRadius:
                       BorderRadius.vertical(top: Radius.circular(20.r)),
-                  color: AppColors.white,
+                  color: appColors.white,
                 ),
                 child: Column(
                   children: [
@@ -366,7 +366,7 @@ update();
                     CustomText(
                       'shareOptions'.tr,
                       fontSize: 16.sp,
-                      fontColor: AppColors.grey,
+                      fontColor: appColors.grey,
                     ),
                     const SizedBox(height: 32),
                     Row(
@@ -443,8 +443,8 @@ update();
       uiSettings: [
         AndroidUiSettings(
             toolbarTitle: 'Update image',
-            toolbarColor: AppColors.white,
-            toolbarWidgetColor: AppColors.blackColor,
+            toolbarColor: appColors.white,
+            toolbarWidgetColor: appColors.blackColor,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),
         IOSUiSettings(

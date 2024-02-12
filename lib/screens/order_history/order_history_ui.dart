@@ -34,8 +34,8 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
                   child: Assets.images.icOrderHistory.svg()),
             )),
         body: Container(
-          color: AppColors.white,
-          child: Column(
+          color: appColors.white,
+          child: const Column(
             mainAxisSize: MainAxisSize.min,
             children: [
 
@@ -50,12 +50,12 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
               //             blurRadius: 3.0,
               //             offset: const Offset(0.0, 3.0)),
               //       ],
-              //       color: AppColors.white,
+              //       color: appColors.white,
               //       borderRadius: const BorderRadius.all(Radius.circular(20))),
               //   child: durationOptions(),
               // ),
               // const SizedBox(height: 20),
-              const OrderTab(),
+              OrderTab(),
             ],
           ),
         ),
@@ -70,7 +70,7 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
             hint: Text(
               "June - 2023 ",
               style: AppTextStyle.textStyle16(
-                  fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                  fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
             ),
             items: controller.durationOptions
                 .map((String item) => DropdownMenuItem<String>(
@@ -81,31 +81,31 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
                           item.tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w400,
-                              fontColor: AppColors.darkBlue),
+                              fontColor: appColors.darkBlue),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ))
                 .toList(),
             style: AppTextStyle.textStyle16(
-                fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
             value: controller.selectedValue.value,
             onChanged: (String? value) {
               controller.selectedValue.value = value ?? "daily".tr;
               controller.getFilterDate(type:controller.selectedValue.value );
             },
-            iconStyleData: const IconStyleData(
-              icon: Icon(
+            iconStyleData:  IconStyleData(
+              icon: const Icon(
                 Icons.keyboard_arrow_down,
               ),
               iconSize: 35,
-              iconEnabledColor: AppColors.blackColor,
+              iconEnabledColor: appColors.blackColor,
             ),
             dropdownStyleData: DropdownStyleData(
               width: ScreenUtil().screenWidth * 0.88,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(14),
-                color: AppColors.white,
+                color: appColors.white,
               ),
               offset: const Offset(-10, -17),
               scrollbarTheme: ScrollbarThemeData(
@@ -154,16 +154,16 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
               isScrollable: true,
               tabAlignment: TabAlignment.start,
               controller: controller.tabbarController,
-              labelColor: AppColors.blackColor,
-              unselectedLabelColor: AppColors.blackColor,
+              labelColor: appColors.blackColor,
+              unselectedLabelColor: appColors.blackColor,
               labelStyle: AppTextStyle.textStyle16(fontWeight: FontWeight.w700),
               onTap: (index) {
                 debugPrint("$index");
                 //  (index) => onSelection(enumValue[index])
               },
-              indicatorColor: AppColors.blackColor,
+              indicatorColor: appColors.blackColor,
               indicatorWeight: 4,
-              dividerColor: AppColors.blackColor,
+              dividerColor: appColors.blackColor,
               unselectedLabelStyle:
                   AppTextStyle.textStyle16(fontWeight: FontWeight.w400),
               tabs: [

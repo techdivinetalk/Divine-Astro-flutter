@@ -14,7 +14,7 @@ class SideMenuDrawer extends GetView<HomeController> {
   Widget build(BuildContext context) {
     checkInternetSpeed(true,context);
     return Drawer(
-      backgroundColor: AppColors.white,
+      backgroundColor: appColors.white,
       surfaceTintColor: Colors.transparent,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       child: SafeArea(
@@ -27,7 +27,7 @@ class SideMenuDrawer extends GetView<HomeController> {
               children: [
                 Text(
                   "${'version'.tr} 0.0.0.0.0",
-                  style: const TextStyle(fontSize: 16, color: AppColors.grey),
+                  style:  TextStyle(fontSize: 16, color: appColors.grey),
                 ),
                 InkWell(
                   onTap: () => Navigator.pop(context),

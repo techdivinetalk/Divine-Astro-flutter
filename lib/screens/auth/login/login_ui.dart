@@ -71,18 +71,18 @@ class LoginUI extends GetView<LoginController> {
                         height: 50.h,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: AppColors.lightYellow,
+                          color: appColors.lightYellow,
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: !controller.isLoading.value ? Text(
                           "verify".tr,
                           style: AppTextStyle.textStyle16(
                             fontWeight: FontWeight.w600,
-                            fontColor: AppColors.brownColour,
+                            fontColor: appColors.brownColour,
                           ),
-                        ): const CircularProgressIndicator(
+                        ):  CircularProgressIndicator(
                           strokeWidth: 3,
-                          color: AppColors.brown),
+                          color: appColors.brown),
                       ) ,
                     );
                   }),
@@ -194,9 +194,9 @@ class LoginUI extends GetView<LoginController> {
                 decoration: InputDecoration(
                   counterText: '',
                   hintText: "enterRegisteredNumber".tr,
-                  fillColor: AppColors.white,
+                  fillColor: appColors.white,
                   hintStyle:
-                  AppTextStyle.textStyle16(fontColor: AppColors.greyColor),
+                  AppTextStyle.textStyle16(fontColor: appColors.greyColor),
                   prefixIcon: InkWell(
                     onTap: () =>
                         countryPickerSheet(Get.context!, (value) {
@@ -213,29 +213,29 @@ class LoginUI extends GetView<LoginController> {
                   ),
                   filled: true,
                   errorStyle:
-                  AppTextStyle.textStyle16(fontColor: AppColors.appRedColour),
+                  AppTextStyle.textStyle16(fontColor: appColors.appRedColour),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
-                      borderSide: const BorderSide(
-                        color: AppColors.appYellowColour,
+                      borderSide:  BorderSide(
+                        color: appColors.appYellowColour,
                         width: 1.0,
                       )),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
-                      borderSide: const BorderSide(
-                        color: AppColors.appYellowColour,
+                      borderSide: BorderSide(
+                        color: appColors.appYellowColour,
                         width: 1.0,
                       )),
                   errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
-                      borderSide: const BorderSide(
-                        color: AppColors.redColor,
+                      borderSide:  BorderSide(
+                        color: appColors.redColor,
                         width: 1.0,
                       )),
                   focusedErrorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
-                      borderSide: const BorderSide(
-                        color: AppColors.redColor,
+                      borderSide:  BorderSide(
+                        color: appColors.redColor,
                         width: 1.0,
                       )),
                 ),
@@ -293,8 +293,8 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
                   margin: EdgeInsets.symmetric(vertical: 20.h, horizontal: 2.w),
                   child: e.key == swipeIndex
                       ? Assets.svg.pinkSlider.svg(
-                      colorFilter: const ColorFilter.mode(
-                          AppColors.appYellowColour, BlendMode.srcIn))
+                      colorFilter: ColorFilter.mode(
+                          appColors.appYellowColour, BlendMode.srcIn))
                       : Assets.svg.blackDot.svg(),
                 ),
           )

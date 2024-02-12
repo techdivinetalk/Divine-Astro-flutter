@@ -23,7 +23,7 @@ class FeedbackCardWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.all(Radius.circular(14.r)),
       child: Material(
-        color: AppColors.transparent,
+        color: appColors.transparent,
         child: Container(
           padding: EdgeInsets.all(20.h).copyWith(bottom: 14.h),
           decoration: BoxDecoration(
@@ -35,7 +35,7 @@ class FeedbackCardWidget extends StatelessWidget {
               ],
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(14.r)),
-              border: Border.all(color: AppColors.red, width: 2)),
+              border: Border.all(color: appColors.red, width: 2)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -45,13 +45,13 @@ class FeedbackCardWidget extends StatelessWidget {
                   Text(
                     'Feedback Available',
                     style: AppTextStyle.textStyle16(
-                        fontWeight: FontWeight.w500, fontColor: AppColors.red),
+                        fontWeight: FontWeight.w500, fontColor: appColors.red),
                   ),
                   Text(
                     'New',
                     style: AppTextStyle.textStyle12(
                       fontWeight: FontWeight.w500,
-                      fontColor: AppColors.red,
+                      fontColor: appColors.red,
                     ),
                   ),
                 ],
@@ -68,7 +68,7 @@ class FeedbackCardWidget extends StatelessWidget {
                         'ID : ${feedback.orderId ?? 'NA'}',
                         style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
-                          fontColor: AppColors.darkBlue,
+                          fontColor: appColors.darkBlue,
                         ),
                       ),
                     ],
@@ -79,7 +79,7 @@ class FeedbackCardWidget extends StatelessWidget {
                         feedback.createdAt != null ? "${dateToString(feedback.createdAt!, format: "h:mm a")} ${formatDateTime(feedback.createdAt!)}" : "NA",
                         style: AppTextStyle.textStyle10(
                           fontWeight: FontWeight.w400,
-                          fontColor: AppColors.darkBlue.withOpacity(.5),
+                          fontColor: appColors.darkBlue.withOpacity(.5),
                         ),
                       ),
                     ],
@@ -104,7 +104,7 @@ class FeedbackCardWidget extends StatelessWidget {
                 child: Text('Read More',
                   style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w600,
-                    fontColor: AppColors.red,
+                    fontColor: appColors.red,
                   ).copyWith(decoration: TextDecoration.underline),
 
                 ),

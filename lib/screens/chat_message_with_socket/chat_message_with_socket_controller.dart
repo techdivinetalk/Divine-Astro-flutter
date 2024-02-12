@@ -98,17 +98,18 @@ class ChatMessageWithSocketController extends GetxController
   final AppSocket socket = AppSocket();
 
   Timer? _timer;
+  Timer? _timer2;
 
   Rx<bool> isRecording = false.obs;
   Rx<bool> hasMessage = false.obs;
 
   void startTimer() {
     int _start = 5;
-    if (_timer != null) {
-      _timer!.cancel();
+    if (_timer2 != null) {
+      _timer2!.cancel();
     }
     const Duration oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(
+    _timer2 = Timer.periodic(
       oneSec,
       (Timer timer) {
         if (_start == 0) {
@@ -311,7 +312,7 @@ class ChatMessageWithSocketController extends GetxController
       //loading = Loading.loaded;
       update();
     } catch (error) {
-      divineSnackBar(data: error.toString(), color: AppColors.redColor);
+      divineSnackBar(data: error.toString(), color: appColors.redColor);
     }
   }
 
@@ -333,7 +334,7 @@ class ChatMessageWithSocketController extends GetxController
                   .toJson());
           if (response.statusCode == 200) {
             divineSnackBar(
-                data: "Chat ended.", color: AppColors.appYellowColour);
+                data: "Chat ended.", color: appColors.appYellowColour);
             Get.back();
           }
         }
@@ -408,7 +409,26 @@ class ChatMessageWithSocketController extends GetxController
       chatStatus.value = "Chat in - Progress";
     });
   }
-
+  Future<void> updateReadMessage() async {
+    var filteredMessages = chatMessages.where((chatMessage) => chatMessage.type.toString() == "1" || chatMessage.type.toString() == "0").toList();
+    debugPrint("astrojoined1 ${filteredMessages.length}");
+    for (int i = 0; i < filteredMessages.length; i++) {
+      ChatMessage message = filteredMessages[i];
+      debugPrint("astrojoined2 ${message.message}");
+      var index = chatMessages.indexWhere((element) {
+        return element.time.toString() ==
+            message.time.toString();
+      });
+      debugPrint("astrojoined3 ${index}");
+      if (index != -1) {
+        chatMessages[index].type = 3;
+        chatMessages.refresh();
+      }
+    }
+    await hiveServices.addData(
+        key: userDataKey,
+        data: jsonEncode(databaseMessage.value.toOfflineJson()));
+  }
   void typingListenerSocket() {
     socket.typingListenerSocket((data) {
       debugPrint('data ........ ${data}');
@@ -418,12 +438,24 @@ class ChatMessageWithSocketController extends GetxController
           AppFirebaseService().orderData.value["userId"].toString()) {
         isTyping.value = true;
         chatStatus.value = "Typing";
-        //  scrollToBottomFunc();
-        // startTimer();
+        if(isScrollAtBottom()) {
+          scrollToBottomFunc();
+        }
+         startTimer();
       }
     });
   }
+  bool isScrollAtBottom() {
+    // Ensure we have a scroll position to check against
+    if (!messgeScrollController.hasClients) return false;
 
+    // The current scroll position is at the bottom if the current offset is equal
+    // or greater than the maximum scroll extent. A small threshold is used for
+    // ensuring a smoother detection, considering floating-point rounding issues or
+    // cases where the scroll physics allow slight overscrolling.
+    final threshold = 10.0; // Pixels tolerance
+    return messgeScrollController.offset >= (messgeScrollController.position.maxScrollExtent - threshold);
+  }
   void sendMessageSocketListenerSocket() {
     socket.sendMessageSocketListenerSocket((data) {
       debugPrint("sendMessageSocketListenerSocket $data");
@@ -530,8 +562,8 @@ class ChatMessageWithSocketController extends GetxController
       uiSettings: <PlatformUiSettings>[
         AndroidUiSettings(
           toolbarTitle: "Update image",
-          toolbarColor: AppColors.white,
-          toolbarWidgetColor: AppColors.blackColor,
+          toolbarColor: appColors.white,
+          toolbarWidgetColor: appColors.blackColor,
           initAspectRatio: CropAspectRatioPreset.original,
           lockAspectRatio: false,
         ),
@@ -640,7 +672,7 @@ class ChatMessageWithSocketController extends GetxController
     String? giftId,
   }) async {
     final ChatMessage newMessage = ChatMessage(
-      orderId: int.parse(AppFirebaseService().orderData.value["orderId"].toString()),
+      orderId: AppFirebaseService().orderData.value["orderId"],
       id: int.parse(time),
       message: messageText,
       receiverId: int.parse(AppFirebaseService().orderData.value["userId"].toString()),
@@ -656,6 +688,8 @@ class ChatMessageWithSocketController extends GetxController
       userType: "astrologer",
     );
     socket.sendMessageSocket(newMessage);
+    print("newMessage1");
+    print(newMessage.toOfflineJson());
     updateChatMessages(newMessage, false, isSendMessage: true);
     isDataLoad.value = true;
   }
@@ -663,7 +697,7 @@ class ChatMessageWithSocketController extends GetxController
   updateChatMessages(ChatMessage newMessage, bool isFromNotification,
       {bool isSendMessage = false}) async {
     final int index = chatMessages
-        .indexWhere((ChatMessage element) => newMessage.id == element.id);
+        .indexWhere((ChatMessage element) => newMessage.time == element.time);
     if (index >= 0) {
       chatMessages[index].type = newMessage.type;
       chatMessages.refresh();

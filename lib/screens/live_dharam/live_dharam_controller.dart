@@ -59,6 +59,7 @@ class LiveDharamController extends GetxController {
     id: "",
     generatedOrderId: 0,
     offerId: 0,
+    callStatus: 0,
   ).obs;
   final RxBool _showTopBanner = false.obs;
   // final Rx<InsufficientBalModel> _insufficientBalModel =
@@ -131,6 +132,7 @@ class LiveDharamController extends GetxController {
       id: "",
       generatedOrderId: 0,
       offerId: 0,
+      callStatus: 0,
     );
     showTopBanner = false;
     // insufficientBalModel = InsufficientBalModel();
@@ -445,6 +447,7 @@ class LiveDharamController extends GetxController {
           id: "",
           generatedOrderId: 0,
           offerId: 0,
+          callStatus: 0,
         );
       }
     } else {
@@ -458,6 +461,7 @@ class LiveDharamController extends GetxController {
         id: "",
         generatedOrderId: 0,
         offerId: 0,
+        callStatus: 0,
       );
     }
   }
@@ -475,6 +479,7 @@ class LiveDharamController extends GetxController {
     String id = "";
     int generatedOrderId = 0;
     int offerId = 0;
+    int callStatus = 0;
 
     if (map != null) {
       if (map.isNotEmpty) {
@@ -492,6 +497,7 @@ class LiveDharamController extends GetxController {
             id = value["id"] ?? "";
             generatedOrderId = value["generatedOrderId"] ?? 0;
             offerId = value["offerId"] ?? 0;
+            callStatus = value["callStatus"] ?? 0;
           },
         );
       } else {}
@@ -506,6 +512,7 @@ class LiveDharamController extends GetxController {
       id: id,
       generatedOrderId: generatedOrderId,
       offerId: offerId,
+      callStatus: callStatus,
     );
   }
 
@@ -949,6 +956,7 @@ class LiveDharamController extends GetxController {
     required String callType,
     required bool isEngaded,
     required bool isRequest,
+    required int callStatus,
   }) async {
     String previousType = callType != "" ? callType : "";
     final DataSnapshot dataSnapshot = await FirebaseDatabase.instance
@@ -983,6 +991,7 @@ class LiveDharamController extends GetxController {
         // "generatedOrderId": (orderGenerate.data?.generatedOrderId ?? 0),
         // "offerId": (details.data?.offerDetails?.offerId ?? 0)
         //
+        "callStatus": callStatus,
       },
     );
     return Future<void>.value();
@@ -1029,6 +1038,8 @@ class LiveDharamController extends GetxController {
                   generatedOrderId: value["generatedOrderId"] ?? 0,
                   // ignore:  avoid_dynamic_calls
                   offerId: value["offerId"] ?? 0,
+                  // ignore:  avoid_dynamic_calls
+                  callStatus: value["callStatus"] ?? 0,
                 ),
               );
             },
@@ -1515,6 +1526,7 @@ class WaitListModel {
     required this.id,
     required this.generatedOrderId,
     required this.offerId,
+    required this.callStatus,
   });
 
   final bool isRequest;
@@ -1526,6 +1538,7 @@ class WaitListModel {
   final String id;
   final int generatedOrderId;
   final int offerId;
+  final int callStatus;
 }
 
 class ZegoCustomMessage {

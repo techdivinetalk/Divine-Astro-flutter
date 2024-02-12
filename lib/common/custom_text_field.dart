@@ -61,7 +61,7 @@ class CustomTextField extends StatelessWidget {
 
   OutlineInputBorder get border => OutlineInputBorder(
     borderSide: BorderSide(
-      color: AppColors.darkBlue.withOpacity(0.15),
+      color: appColors.darkBlue.withOpacity(0.15),
     ),
     borderRadius: BorderRadius.circular(10.sp),
   );
@@ -87,12 +87,12 @@ class CustomTextField extends StatelessWidget {
           autofocus: autoFocus ?? false,
           readOnly: readOnly ?? false,
           inputFormatters: textInputFormatter ?? [],
-          cursorColor: AppColors.darkBlue.withOpacity(0.15),
+          cursorColor: appColors.darkBlue.withOpacity(0.15),
           style: style,
           decoration: InputDecoration(
             filled: true,
             contentPadding: contentPadding,
-            fillColor: fillColor ?? AppColors.transparent,
+            fillColor: fillColor ?? appColors.transparent,
             hintText: hintText,
             isDense: isDense,
             prefixIcon: prefixIcon != null
@@ -117,7 +117,7 @@ class CustomTextField extends StatelessWidget {
               fontSize: 16.sp,
               fontWeight: FontWeight.w400,
               fontFamily: FontFamily.poppins,
-              color: hintColor ?? AppColors.darkBlue.withOpacity(0.5),
+              color: hintColor ?? appColors.darkBlue.withOpacity(0.5),
             ),
             enabledBorder: inputBorder ?? border,
             focusedBorder: inputBorder ?? border,

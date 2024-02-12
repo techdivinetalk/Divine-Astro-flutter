@@ -24,7 +24,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
   ChatAssistancePage({super.key});
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final Rx<bool> isUSerTabSelected = true.obs;
+  Rx<bool> isUSerTabSelected = true.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -139,12 +139,12 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                               null ||
                           controller.chatAssistantAstrologerListResponse!.data!
                               .data!.isEmpty) {
-                        return const Center(
+                        return  Center(
                           child: Text(
                             'No Data found',
                             style: TextStyle(
                               fontWeight: FontWeight.w400,
-                              color: AppColors.black,
+                              color: appColors.black,
                               fontFamily: FontFamily.metropolis,
                             ),
                           ),
@@ -174,12 +174,12 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                       if (controller.customerDetailsResponse == null ||
                           controller.customerDetailsResponse!.data == null ||
                           controller.customerDetailsResponse!.data!.isEmpty) {
-                        return const Center(
+                        return  Center(
                           child: Text(
                             'No Data found',
                             style: TextStyle(
                               fontWeight: FontWeight.w400,
-                              color: AppColors.black,
+                              color: appColors.black,
                               fontFamily: FontFamily.metropolis,
                             ),
                           ),
@@ -214,13 +214,13 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
     });
   }
 
-  PreferredSize appBar({Color backgroundColor = AppColors.yellow}) {
+  PreferredSize appBar() {
     return PreferredSize(
         preferredSize: AppBar().preferredSize,
         child: Obx(() => controller.isSearchEnable.value
-            ? searchWidget(backgroundColor)
+            ? searchWidget(appColors.yellow)
             : AppBar(
-                surfaceTintColor: AppColors.yellow,
+                surfaceTintColor: appColors.yellow,
                 title: Text(
                   "chatAssistance".tr,
                   style: const TextStyle(
@@ -235,7 +235,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                   icon: Icon(
                     Icons.arrow_back_ios,
                     size: 32.sp,
-                    color: AppColors.blackColor,
+                    color: appColors.blackColor,
                   ),
                 ),
                 actions: [
@@ -246,7 +246,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                       svg: Assets.images.searchIcon.svg()),
                   SizedBox(width: 10.w)
                 ],
-                backgroundColor: backgroundColor,
+                backgroundColor: appColors.yellow,
                 elevation: 0,
               )));
   }
@@ -313,8 +313,8 @@ class ChatAssistanceTile extends StatelessWidget {
       leading: ClipRRect(
           borderRadius: BorderRadius.circular(50.r),
           child: Container(
-            decoration: const BoxDecoration(
-                shape: BoxShape.circle, color: AppColors.yellow),
+            decoration: BoxDecoration(
+                shape: BoxShape.circle, color: appColors.yellow),
             height: 50.w,
             width: 50.w,
             child: LoadImage(
@@ -326,8 +326,8 @@ class ChatAssistanceTile extends StatelessWidget {
                     loadingIndicator: SizedBox(
                         height: 25.h,
                         width: 25.w,
-                        child: CircularProgressIndicator(
-                            color: AppColors.yellow, strokeWidth: 2)))),
+                        child:  CircularProgressIndicator(
+                            color: appColors.yellow, strokeWidth: 2)))),
           )),
       title: CustomText(
         data.name ?? '',
@@ -340,8 +340,8 @@ class ChatAssistanceTile extends StatelessWidget {
             child: CustomText(
               data.lastMessage ?? '',
               fontColor:
-                  // (index == 0) ? AppColors.darkBlue:
-                  AppColors.grey,
+                  // (index == 0) ? appColors.darkBlue:
+                  appColors.grey,
               fontSize: 12.sp,
               fontWeight:
                   //(index == 0) ? FontWeight.w600 :
@@ -363,12 +363,12 @@ class ChatAssistanceTile extends StatelessWidget {
           // if (index == 0)
           CircleAvatar(
             radius: 10.r,
-            backgroundColor: AppColors.yellow,
+            backgroundColor: appColors.yellow,
             child: CustomText(
               '2',
               fontSize: 10.sp,
               fontWeight: FontWeight.w700,
-              fontColor: AppColors.brown,
+              fontColor: appColors.brown,
             ),
           ),
         ],
@@ -398,8 +398,8 @@ class ChatAssistanceDataTile extends StatelessWidget {
             ClipRRect(
                 borderRadius: BorderRadius.circular(50.r),
                 child: Container(
-                  decoration: const BoxDecoration(
-                      shape: BoxShape.circle, color: AppColors.yellow),
+                  decoration:  BoxDecoration(
+                      shape: BoxShape.circle, color: appColors.yellow),
                   height: 50.w,
                   width: 50.w,
                   child: LoadImage(
@@ -411,8 +411,8 @@ class ChatAssistanceDataTile extends StatelessWidget {
                           loadingIndicator: SizedBox(
                               height: 25.h,
                               width: 25.w,
-                              child: const CircularProgressIndicator(
-                                  color: AppColors.yellow, strokeWidth: 2)))),
+                              child:  CircularProgressIndicator(
+                                  color: appColors.yellow, strokeWidth: 2)))),
                 )),
             const SizedBox(
               width: 10,
@@ -432,11 +432,9 @@ class ChatAssistanceDataTile extends StatelessWidget {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                            border:
-                                Border.all(color: AppColors.white, width: 1.5),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(50.0)),
-                            color: AppColors.darkGreen),
+                            border: Border.all(color: appColors.white, width: 1.5),
+                            borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+                            color: appColors.darkGreen),
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                           child: CustomText("Connect",
@@ -448,8 +446,8 @@ class ChatAssistanceDataTile extends StatelessWidget {
                   CustomText(
                     "Total Consultation : ${data.totalConsultation}",
                     fontColor:
-                        // (index == 0) ? AppColors.darkBlue:
-                        AppColors.grey,
+                    // (index == 0) ? appColors.darkBlue:
+                    appColors.grey,
                     fontSize: 12.sp,
                     fontWeight:
                         //(index == 0) ? FontWeight.w600 :
@@ -458,8 +456,8 @@ class ChatAssistanceDataTile extends StatelessWidget {
                   CustomText(
                     "Last Consulted : ${data.lastConsulted}",
                     fontColor:
-                        // (index == 0) ? AppColors.darkBlue:
-                        AppColors.grey,
+                    // (index == 0) ? appColors.darkBlue:
+                    appColors.grey,
                     fontSize: 12.sp,
                     fontWeight:
                         //(index == 0) ? FontWeight.w600 :
@@ -468,8 +466,8 @@ class ChatAssistanceDataTile extends StatelessWidget {
                   CustomText(
                     "Days Since Last Consulted : ${data.daySinceLastConsulted}",
                     fontColor:
-                        // (index == 0) ? AppColors.darkBlue:
-                        AppColors.grey,
+                    // (index == 0) ? appColors.darkBlue:
+                    appColors.grey,
                     fontSize: 12.sp,
                     fontWeight:
                         //(index == 0) ? FontWeight.w600 :

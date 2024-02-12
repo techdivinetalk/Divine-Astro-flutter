@@ -10,6 +10,7 @@ import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_servic
 import 'package:divine_astrologer/screens/live_dharam/widgets/common_button.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 // import 'package:flutter_screen_recording/flutter_screen_recording.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -66,7 +67,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                           },
                           child: Icon(
                             Icons.chevron_left_outlined,
-                            color: AppColors.white,
+                            color: appColors.white,
                             size: 45.sp,
                           ),
                         ),
@@ -87,7 +88,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                               controller.isFrontCamera.value
                                   ? Icons.camera_front
                                   : Icons.camera_alt,
-                              color: AppColors.white,
+                              color: appColors.white,
                               size: 28.sp,
                             ),
                           ),
@@ -103,7 +104,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                     "tips".tr,
                     style: TextStyle(
                         fontSize: 32.sp,
-                        color: AppColors.white,
+                        color: appColors.white,
                         fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -115,7 +116,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                   child: Text(
                     "Please make sure you and your background environment are ready to start a live check   your video and audio.",
                     style: AppTextStyle.textStyle16(
-                        fontColor: AppColors.white,
+                        fontColor: appColors.white,
                         fontWeight: FontWeight.w500),
                   ),
                 ),
@@ -127,7 +128,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                   child: Text(
                     "To guarantee the user experience, please make sure you can live for 30 mins at least.",
                     style: AppTextStyle.textStyle16(
-                        fontColor: AppColors.white,
+                        fontColor: appColors.white,
                         fontWeight: FontWeight.w500),
                   ),
                 ),
@@ -142,7 +143,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                 //       width: double.infinity,
                 //       decoration: BoxDecoration(
                 //         borderRadius: BorderRadius.circular(50),
-                //         color: AppColors.lightYellow,
+                //         color: appColors.lightYellow,
                 //       ),
                 //       child: Center(
                 //         child: Padding(
@@ -151,7 +152,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                 //             "startLive".tr,
                 //             style: TextStyle(
                 //               fontSize: 20.sp,
-                //               color: AppColors.brownColour,
+                //               color: appColors.brownColour,
                 //               fontWeight: FontWeight.w600,
                 //             ),
                 //           ),
@@ -198,7 +199,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
   Future<void> furtherProcedure() async {
     // showCupertinoModalPopup(
     //   context: context,
-    //   barrierColor: AppColors.darkBlue.withOpacity(0.5),
+    //   barrierColor: appColors.darkBlue.withOpacity(0.5),
     //   builder: (context) => const GiftPopup(),
     // );
     //controller.giftPopup(Get.context!);
@@ -227,9 +228,38 @@ class LiveTipsUI extends GetView<LiveTipsController> {
       );
 
       if (hasAllPerm) {
-        final int userId = controller.pref.getUserDetail()?.id ?? 0;
-        AppSocket().joinLive(userType: "astrologer", userId: userId);
-        await controller.furtherProcedure();
+        bool canEnter = false;
+
+        await controller.astroOnlineAPI(
+          entering: true,
+          successCallBack: (message) {
+            canEnter = true;
+            divineSnackBar(data: message);
+          },
+          failureCallBack: (message) {
+            canEnter = false;
+            divineSnackBar(data: message);
+          },
+        );
+
+        if (canEnter) {
+          final int userId = controller.pref.getUserDetail()?.id ?? 0;
+          AppSocket().joinLive(userType: "astrologer", userId: userId);
+
+          await controller.furtherProcedure();
+
+          await controller.astroOnlineAPI(
+            entering: false,
+            successCallBack: (message) {
+              divineSnackBar(data: message);
+            },
+            failureCallBack: (message) {
+              divineSnackBar(data: message);
+            },
+          );
+        } else {
+          divineSnackBar(data: "Something went wrong, please try again later");
+        }
       } else {
         divineSnackBar(data: "Insufficient Permission");
       }
