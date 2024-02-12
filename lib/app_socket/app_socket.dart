@@ -143,19 +143,19 @@ class AppSocket {
   }
 
   void listenForAssistantChatMessage(void Function(dynamic) callback) {
-    print("function called 123");
-      socket?.on(ApiProvider().sendConnectRequest, (data) {
-        print("socket called");
+    socket?.on(
+      ApiProvider().listenChatAssistMessage,
+      (data) {
         callback(data);
-        print("socket executed");
-      },);
+      },
+    );
     print("socket finished");
   }
 
   void sendAssistantMessage(
       {required String message,
       required String astroId,
-        required AssistChatData msgData,
+      required AssistChatData msgData,
       required String customerId}) {
     socket?.emit(ApiProvider().sendChatAssistMessage, {
       'userType': 'astrologer',

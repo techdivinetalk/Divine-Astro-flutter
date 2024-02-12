@@ -38,15 +38,18 @@ class AssistMessageView extends StatelessWidget {
   Widget buildMessageView(
       BuildContext context, AssistChatData chatMessage, bool yourMessage) {
     Widget messageWidget;
-    print("Message Type:: ${chatMessage.chatType}");
-    switch (chatMessage.chatType) {
-      case ChatType.Gift:
+    print("Message Type:: ${chatMessage.chatType} ${chatMessage.message}");
+    switch (chatMessage.msgType) {
+      case 3:
         messageWidget = giftMsgView(context, chatMessage, yourMessage);
         break;
     // case "Remedies" || 0:
     //   messageWidget = remediesMsgView(context, chatMessage, yourMessage);
     //   break;
-      case ChatType.text:
+      case 0:
+        messageWidget = textMsgView(context, chatMessage, yourMessage);
+        break;
+      case 1:
         messageWidget = textMsgView(context, chatMessage, yourMessage);
         break;
     // case "audio":
@@ -86,7 +89,7 @@ class AssistMessageView extends StatelessWidget {
       width: double.maxFinite,
       child: Column(
         crossAxisAlignment:
-        yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        CrossAxisAlignment.center,
         children: [
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
@@ -104,7 +107,7 @@ class AssistMessageView extends StatelessWidget {
                 maxWidth: ScreenUtil().screenWidth * 0.8,
                 minWidth: ScreenUtil().screenWidth * 0.27),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // SizedBox(
                 //   height: 32,
@@ -217,20 +220,21 @@ class AssistMessageView extends StatelessWidget {
                   maxWidth: ScreenUtil().screenWidth * 0.7,
                   minWidth: ScreenUtil().screenWidth * 0.27),
               child: Stack(
-                alignment: (currentMsg.msgType ?? 0) == 1
+                alignment: (currentMsg.msgType ?? 1) == 1
                     ? Alignment.centerRight
                     : Alignment.centerLeft,
                 children: [
                   Column(
                     children: [
                       Wrap(
-                          alignment: currentMsg.msgType == 0
+                          alignment: currentMsg.msgType == 1
                               ? WrapAlignment.end
                               : WrapAlignment.start,
                           children: [
                             Text(currentMsg.message ?? "",
+                                maxLines: 30,
                                 style: AppTextStyle.textStyle14(
-                                    fontColor: (currentMsg.msgType ?? 0) == 0
+                                    fontColor: (currentMsg.msgType ?? 1) == 1
                                         ? appColors.darkBlue
                                         : appColors.darkBlue))
                           ]),

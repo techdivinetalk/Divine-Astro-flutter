@@ -141,6 +141,7 @@ class ApiProvider {
   final String getChatAssistAstrologers = "getChatAssistCustomers";
   final String getConsulationData = "getConsulationData";
   final String sendChatAssistMessage = "send-chat-assist-message";
+  final String listenChatAssistMessage = "listen-chat-assist-message";
 
   // Added By: divine-dharam
   final String joinLive = "join-live";

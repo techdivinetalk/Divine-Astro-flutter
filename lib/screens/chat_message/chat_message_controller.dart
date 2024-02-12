@@ -116,6 +116,8 @@ class ChatMessageController extends GetxController {
       if (response.data != null) {
         if (response.data!.chatAssistMsgList?.isNotEmpty == true) {
           chatMessageList.addAll(response.data!.chatAssistMsgList!);
+          print("---------------------chatAssistMsgList--------------------");
+          print(response.data?.toJson());
           if (response.data!.nextPageUrl != null) {
             currentPage++;
           } else {
