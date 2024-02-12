@@ -63,6 +63,13 @@ Future<void> main() async {
         MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
       showNotification(message.data["title"], message.data["message"],
           message.data['type'], message.data);
+        HashMap<String, dynamic> updateData = HashMap();
+        updateData[message.data["chatId"]] = 1;
+        FirebaseDatabase.instance
+            .ref("astrologer")
+            .child(
+            "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}")
+            .update(updateData);
     } else if (message.data["type"] == "3") {
       print('Message data:- ${MiddleWare.instance.currentPage}');
       if (MiddleWare.instance.currentPage == RouteName.chatMessageUI) {
