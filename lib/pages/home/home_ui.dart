@@ -354,7 +354,7 @@ class HomeUI extends GetView<HomeController> {
                       InkWell(
                         onTap: () async {
                           bool hasOpenOrder = false;
-                          hasOpenOrder = await controller.hasOpenOrder();
+                          // hasOpenOrder = await controller.hasOpenOrder();
                           if (hasOpenOrder) {
                             divineSnackBar(
                               data:

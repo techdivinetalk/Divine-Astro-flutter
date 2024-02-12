@@ -6,84 +6,88 @@ import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/gen/assets.gen.dart";
 import "package:divine_astrologer/gen/fonts.gen.dart";
+import "package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart";
 import "package:flutter/material.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:get/get.dart";
 import "package:lottie/lottie.dart";
 
-acceptChatRequestBottomSheet(BuildContext context,
-    {required void Function() onPressed,
-    required orderStatus,
-    required customerName,
-    required dob,
-    required placeOfBirth,
-    required timeOfBirth,
-    required maritalStatus,
-    required problemArea,
-    required walletBalance,
-    required Map<String, dynamic> orderData}) {
-  showModalBottomSheet(
-      backgroundColor: Colors.transparent,
-      context: context,
-      isScrollControlled: true,
-      enableDrag: false,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-      constraints:
-          BoxConstraints(minHeight: context.mediaQuerySize.height, maxHeight: context.mediaQuerySize.height),
-      isDismissible: true,
-      builder: (BuildContext context) {
-        return FractionallySizedBox(
-            widthFactor: 1.0,
-            heightFactor: 1.0,
-            child: AcceptChatRequestScreen(
-                onPressed: onPressed,
-                orderStatus: orderStatus,
-                customerName: customerName,
-                dob: dob,
-                placeOfBirth: placeOfBirth,
-                timeOfBirth: timeOfBirth,
-                maritalStatus: maritalStatus,
-                problemArea: problemArea,
-                orderData: orderData,
-                walletBalance: walletBalance));
-      });
-}
+// acceptChatRequestBottomSheet(BuildContext context,
+//     {required void Function() onPressed,
+//     required orderStatus,
+//     required customerName,
+//     required dob,
+//     required placeOfBirth,
+//     required timeOfBirth,
+//     required maritalStatus,
+//     required problemArea,
+//     required walletBalance,
+//     required Map<String, dynamic> orderData}) {
+//   showModalBottomSheet(
+//       backgroundColor: Colors.transparent,
+//       context: context,
+//       isScrollControlled: true,
+//       enableDrag: false,
+//       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+//       constraints:
+//           BoxConstraints(minHeight: context.mediaQuerySize.height, maxHeight: context.mediaQuerySize.height),
+//       isDismissible: true,
+//       builder: (BuildContext context) {
+//         return FractionallySizedBox(
+//             widthFactor: 1.0,
+//             heightFactor: 1.0,
+//             child: AcceptChatRequestScreen(
+//                 onPressed: onPressed,
+//                 orderStatus: orderStatus,
+//                 customerName: customerName,
+//                 dob: dob,
+//                 placeOfBirth: placeOfBirth,
+//                 timeOfBirth: timeOfBirth,
+//                 maritalStatus: maritalStatus,
+//                 problemArea: problemArea,
+//                 orderData: orderData,
+//                 walletBalance: walletBalance));
+//       });
+// }
 
 class AcceptChatRequestScreen extends StatefulWidget {
-  final void Function() onPressed;
-  final String orderStatus;
-  final String customerName;
-  final String dob;
-  final String placeOfBirth;
-  final String timeOfBirth;
-  final String maritalStatus;
-  final String problemArea;
-  final String walletBalance;
-  final Map<String, dynamic> orderData;
+  // final void Function() onPressed;
+  // final String orderStatus;
+  // final String customerName;
+  // final String dob;
+  // final String placeOfBirth;
+  // final String timeOfBirth;
+  // final String maritalStatus;
+  // final String problemArea;
+  // final String walletBalance;
+  // final Map<String, dynamic> orderData;
 
-  const AcceptChatRequestScreen(
-      {super.key,
-      required this.onPressed,
-      required this.orderStatus,
-      required this.customerName,
-      required this.dob,
-      required this.placeOfBirth,
-      required this.timeOfBirth,
-      required this.maritalStatus,
-      required this.problemArea,
-      required this.walletBalance,
-      required this.orderData});
+  const AcceptChatRequestScreen({
+    super.key,
+    // required this.onPressed,
+    // required this.orderStatus,
+    // required this.customerName,
+    // required this.dob,
+    // required this.placeOfBirth,
+    // required this.timeOfBirth,
+    // required this.maritalStatus,
+    // required this.problemArea,
+    // required this.walletBalance,
+    // required this.orderData
+  });
 
   @override
-  State<AcceptChatRequestScreen> createState() => _AcceptChatRequestScreenState();
+  State<AcceptChatRequestScreen> createState() =>
+      _AcceptChatRequestScreenState();
 }
 
 class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
   final appFirebaseService = AppFirebaseService();
   final appSocket = AppSocket();
-  bool isBottomSheetOpen = false;
-  BroadcastReceiver broadcastReceiver = BroadcastReceiver(names: <String>["EndChat","backReq"]);
+  // bool isBottomSheetOpen = false;
+  BroadcastReceiver broadcastReceiver =
+      BroadcastReceiver(names: <String>["EndChat", "backReq"]);
   bool isLoader = false;
 
   @override
@@ -91,417 +95,556 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {
       if (event.name == "backReq") {
-        Navigator.pop(context);
-      }else if (event.name == "EndChat") {
+        // Navigator.pop(context);
+        WidgetsBinding.instance.endOfFrame.then(
+          (_) async {
+            if (mounted) {
+              Navigator.pop(context);
+            } else {}
+          },
+        );
+      } else if (event.name == "EndChat") {
         Get.offAllNamed(RouteName.dashboard);
         broadcastReceiver.stop();
       }
     });
 
-    appFirebaseService.acceptBottomWatcher.nameStream.listen((event) {
-      debugPrint('event .... $event');
-      isBottomSheetOpen = event == "1";
-      setState(() {});
-    });
+    // appFirebaseService.acceptBottomWatcher.nameStream.listen((event) {
+    //   debugPrint('event .... $event');
+    //   // isBottomSheetOpen = event == "1";
+    //   setState(() {});
+    // });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration:  BoxDecoration(
-        gradient: LinearGradient(
-            stops: [0.7, 1.0],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [appColors.white, appColors.appYellowColour]),
-      ),
-      child: Scaffold(
-          backgroundColor: appColors.transparent,
-          body: StatefulBuilder(builder: (context, setState) {
-            return Stack(
-              children: [
-                Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  decoration: const BoxDecoration(color: Colors.transparent),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            SizedBox(height: 50.w),
-                            SizedBox(
-                                height: 90.w,
-                                width: 90.w,
-                                child:
-                                    CircleAvatar(child: Assets.images.avatar.svg(height: 60.w, width: 60.w))),
-                            SizedBox(height: 10.w),
-                            Text(widget.customerName,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: FontFamily.metropolis,
-                                    fontSize: 20.sp,
-                                    color: appColors.appYellowColour)),
-                            Text("Ready to chat with you!",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: FontFamily.metropolis,
-                                    fontSize: 20.sp,
-                                    color: appColors.darkBlue)),
-                            SizedBox(height: 10.w),
-                            Divider(color: appColors.darkBlue.withOpacity(0.1)),
-                            SizedBox(height: 2.w),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 6,
-                                        child: Text("name".tr,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w400,
-                                                fontFamily: FontFamily.metropolis,
-                                                fontSize: 16.sp,
-                                                color: appColors.darkBlue)),
-                                      ),
-                                      Text("-".tr,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: FontFamily.metropolis,
-                                              fontSize: 16.sp,
-                                              color: appColors.darkBlue)),
-                                      Expanded(
-                                        flex: 4,
-                                        child: Align(
-                                          alignment: Alignment.topRight,
-                                          child: Text(widget.customerName,
+    return PopScope(
+      canPop: false,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              stops: [0.7, 1.0],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [appColors.white, appColors.appYellowColour]),
+        ),
+        child: Scaffold(
+            backgroundColor: appColors.transparent,
+            body: StatefulBuilder(builder: (context, setState) {
+              return Stack(
+                children: [
+                  Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    decoration: const BoxDecoration(color: Colors.transparent),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 50.w),
+                              SizedBox(
+                                  height: 90.w,
+                                  width: 90.w,
+                                  child: CircleAvatar(
+                                      child: Assets.images.avatar
+                                          .svg(height: 60.w, width: 60.w))),
+                              SizedBox(height: 10.w),
+                              Text(
+                                  AppFirebaseService()
+                                          .orderData
+                                          .value["customerName"] ??
+                                      "",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: FontFamily.metropolis,
+                                      fontSize: 20.sp,
+                                      color: appColors.appYellowColour)),
+                              Text("Ready to chat with you!",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: FontFamily.metropolis,
+                                      fontSize: 20.sp,
+                                      color: appColors.darkBlue)),
+                              SizedBox(height: 10.w),
+                              Divider(
+                                  color: appColors.darkBlue.withOpacity(0.1)),
+                              SizedBox(height: 2.w),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 6,
+                                          child: Text("name".tr,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w400,
-                                                  fontFamily: FontFamily.metropolis,
+                                                  fontFamily:
+                                                      FontFamily.metropolis,
                                                   fontSize: 16.sp,
                                                   color: appColors.darkBlue)),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 6,
-                                        child: Text("Date of Birth",
+                                        Text("-".tr,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400,
-                                                fontFamily: FontFamily.metropolis,
+                                                fontFamily:
+                                                    FontFamily.metropolis,
                                                 fontSize: 16.sp,
                                                 color: appColors.darkBlue)),
-                                      ),
-                                      Text("-".tr,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: FontFamily.metropolis,
-                                              fontSize: 16.sp,
-                                              color: appColors.darkBlue)),
-                                      Expanded(
-                                        flex: 4,
-                                        child: Align(
-                                          alignment: Alignment.topRight,
-                                          child: Text(widget.dob,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontFamily: FontFamily.metropolis,
-                                                  fontSize: 16.sp,
-                                                  color: appColors.darkBlue)),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 6,
-                                        child: Text("Place of Birth",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w400,
-                                                fontFamily: FontFamily.metropolis,
-                                                fontSize: 16.sp,
-                                                color: appColors.darkBlue)),
-                                      ),
-                                      Text("-",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: FontFamily.metropolis,
-                                              fontSize: 16.sp,
-                                              color: appColors.darkBlue)),
-                                      Expanded(
-                                        flex: 4,
-                                        child: Align(
-                                          alignment: Alignment.topRight,
-                                          child: Text(widget.placeOfBirth,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontFamily: FontFamily.metropolis,
-                                                  fontSize: 16.sp,
-                                                  color: appColors.darkBlue)),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 6,
-                                        child: Text("Time of Birth",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w400,
-                                                fontFamily: FontFamily.metropolis,
-                                                fontSize: 16.sp,
-                                                color: appColors.darkBlue)),
-                                      ),
-                                      Text("-",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: FontFamily.metropolis,
-                                              fontSize: 16.sp,
-                                              color: appColors.darkBlue)),
-                                      Expanded(
-                                        flex: 4,
-                                        child: Align(
-                                          alignment: Alignment.topRight,
-                                          child: Text(widget.timeOfBirth,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontFamily: FontFamily.metropolis,
-                                                  fontSize: 16.sp,
-                                                  color: appColors.darkBlue)),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 6,
-                                        child: Text("Marital Status",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w400,
-                                                fontFamily: FontFamily.metropolis,
-                                                fontSize: 16.sp,
-                                                color: appColors.darkBlue)),
-                                      ),
-                                      Text("-",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: FontFamily.metropolis,
-                                              fontSize: 16.sp,
-                                              color: appColors.darkBlue)),
-                                      Expanded(
-                                        flex: 4,
-                                        child: Align(
-                                          alignment: Alignment.topRight,
-                                          child: Text(widget.maritalStatus,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontFamily: FontFamily.metropolis,
-                                                  fontSize: 16.sp,
-                                                  color: appColors.darkBlue)),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 6,
-                                        child: Text("Problem Area",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w400,
-                                                fontFamily: FontFamily.metropolis,
-                                                fontSize: 16.sp,
-                                                color: appColors.darkBlue)),
-                                      ),
-                                      Expanded(
-                                          flex: 1,
-                                          child: Text("-",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontFamily: FontFamily.metropolis,
-                                                  fontSize: 16.sp,
-                                                  color: appColors.darkBlue))),
-                                      Expanded(
-                                          flex: 3,
+                                        Expanded(
+                                          flex: 4,
                                           child: Align(
-                                              alignment: Alignment.topRight,
-                                              child: Text(widget.problemArea,
+                                            alignment: Alignment.topRight,
+                                            child: Text(
+                                                AppFirebaseService()
+                                                            .orderData
+                                                            .value[
+                                                        "customerName"] ??
+                                                    "",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily:
+                                                        FontFamily.metropolis,
+                                                    fontSize: 16.sp,
+                                                    color: appColors.darkBlue)),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 6,
+                                          child: Text("Date of Birth",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily:
+                                                      FontFamily.metropolis,
+                                                  fontSize: 16.sp,
+                                                  color: appColors.darkBlue)),
+                                        ),
+                                        Text("-".tr,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily:
+                                                    FontFamily.metropolis,
+                                                fontSize: 16.sp,
+                                                color: appColors.darkBlue)),
+                                        Expanded(
+                                          flex: 4,
+                                          child: Align(
+                                            alignment: Alignment.topRight,
+                                            child: Text(
+                                                AppFirebaseService()
+                                                        .orderData
+                                                        .value["dob"] ??
+                                                    "",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily:
+                                                        FontFamily.metropolis,
+                                                    fontSize: 16.sp,
+                                                    color: appColors.darkBlue)),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 6,
+                                          child: Text("Place of Birth",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily:
+                                                      FontFamily.metropolis,
+                                                  fontSize: 16.sp,
+                                                  color: appColors.darkBlue)),
+                                        ),
+                                        Text("-",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily:
+                                                    FontFamily.metropolis,
+                                                fontSize: 16.sp,
+                                                color: appColors.darkBlue)),
+                                        Expanded(
+                                          flex: 4,
+                                          child: Align(
+                                            alignment: Alignment.topRight,
+                                            child: Text(
+                                                AppFirebaseService()
+                                                            .orderData
+                                                            .value[
+                                                        "placeOfBirth"] ??
+                                                    "",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily:
+                                                        FontFamily.metropolis,
+                                                    fontSize: 16.sp,
+                                                    color: appColors.darkBlue)),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 6,
+                                          child: Text("Time of Birth",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily:
+                                                      FontFamily.metropolis,
+                                                  fontSize: 16.sp,
+                                                  color: appColors.darkBlue)),
+                                        ),
+                                        Text("-",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily:
+                                                    FontFamily.metropolis,
+                                                fontSize: 16.sp,
+                                                color: appColors.darkBlue)),
+                                        Expanded(
+                                          flex: 4,
+                                          child: Align(
+                                            alignment: Alignment.topRight,
+                                            child: Text(
+                                                AppFirebaseService()
+                                                        .orderData
+                                                        .value["timeOfBirth"] ??
+                                                    "",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily:
+                                                        FontFamily.metropolis,
+                                                    fontSize: 16.sp,
+                                                    color: appColors.darkBlue)),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 6,
+                                          child: Text("Marital Status",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily:
+                                                      FontFamily.metropolis,
+                                                  fontSize: 16.sp,
+                                                  color: appColors.darkBlue)),
+                                        ),
+                                        Text("-",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily:
+                                                    FontFamily.metropolis,
+                                                fontSize: 16.sp,
+                                                color: appColors.darkBlue)),
+                                        Expanded(
+                                          flex: 4,
+                                          child: Align(
+                                            alignment: Alignment.topRight,
+                                            child: Text(
+                                                AppFirebaseService()
+                                                            .orderData
+                                                            .value[
+                                                        "maritalStatus"] ??
+                                                    "",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily:
+                                                        FontFamily.metropolis,
+                                                    fontSize: 16.sp,
+                                                    color: appColors.darkBlue)),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 6,
+                                          child: Text("Problem Area",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily:
+                                                      FontFamily.metropolis,
+                                                  fontSize: 16.sp,
+                                                  color: appColors.darkBlue)),
+                                        ),
+                                        Expanded(
+                                            flex: 1,
+                                            child: Text("-",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily:
+                                                        FontFamily.metropolis,
+                                                    fontSize: 16.sp,
+                                                    color:
+                                                        appColors.darkBlue))),
+                                        Expanded(
+                                            flex: 3,
+                                            child: Align(
+                                                alignment: Alignment.topRight,
+                                                child: Text(
+                                                    AppFirebaseService()
+                                                                .orderData
+                                                                .value[
+                                                            "problemArea"] ??
+                                                        "",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontFamily: FontFamily
+                                                            .metropolis,
+                                                        fontSize: 16.sp,
+                                                        color: appColors
+                                                            .darkBlue))))
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(vertical: 10.w),
+                          decoration:
+                              const BoxDecoration(color: Colors.transparent),
+                          child: Column(
+                            children: [
+                              Divider(
+                                  thickness: 1,
+                                  color: appColors.darkBlue.withOpacity(0.1)),
+                              SizedBox(height: 5.w),
+                              Text("orderDetails".tr,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: FontFamily.metropolis,
+                                      fontSize: 17.sp,
+                                      color: appColors.brownColour)),
+                              SizedBox(height: 15.w),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Row(
+                                      children: [
+                                        Assets.svg.orderTypeIcon
+                                            .svg(height: 30.w, width: 30.w),
+                                        SizedBox(width: 8.w),
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text("orderType".tr,
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: FontFamily.metropolis,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontFamily:
+                                                          FontFamily.metropolis,
                                                       fontSize: 16.sp,
-                                                      color: appColors.darkBlue))))
-                                    ],
+                                                      color:
+                                                          appColors.darkBlue)),
+                                              Text("PAID",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontFamily:
+                                                          FontFamily.metropolis,
+                                                      fontSize: 16.sp,
+                                                      color:
+                                                          appColors.redColor))
+                                            ])
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Row(
+                                      children: [
+                                        Assets.svg.walletBalanceIcon
+                                            .svg(height: 30.w, width: 30.w),
+                                        SizedBox(width: 8.w),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text("walletBalance".tr,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontFamily:
+                                                          FontFamily.metropolis,
+                                                      fontSize: 16.sp,
+                                                      color:
+                                                          appColors.darkBlue)),
+                                              Text(
+                                                  AppFirebaseService()
+                                                              .orderData
+                                                              .value[
+                                                          "walletBalance"] ??
+                                                      "",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontFamily:
+                                                          FontFamily.metropolis,
+                                                      fontSize: 16.sp,
+                                                      color: appColors
+                                                          .brownColour)),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 10.w),
-                        decoration: const BoxDecoration(color: Colors.transparent),
-                        child: Column(
-                          children: [
-                            Divider(thickness: 1, color: appColors.darkBlue.withOpacity(0.1)),
-                            SizedBox(height: 5.w),
-                            Text("orderDetails".tr,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: FontFamily.metropolis,
-                                    fontSize: 17.sp,
-                                    color: appColors.brownColour)),
-                            SizedBox(height: 15.w),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Assets.svg.orderTypeIcon.svg(height: 30.w, width: 30.w),
-                                      SizedBox(width: 8.w),
-                                      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                        Text("orderType".tr,
+                              SizedBox(height: 25.w),
+                              Row(
+                                children: [
+                                  Assets.svg.maximumOrderTimeIcon
+                                      .svg(height: 30.w, width: 30.w),
+                                  SizedBox(width: 8.w),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text("maximumOrderTime".tr,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400,
-                                                fontFamily: FontFamily.metropolis,
+                                                fontFamily:
+                                                    FontFamily.metropolis,
                                                 fontSize: 16.sp,
                                                 color: appColors.darkBlue)),
-                                        Text("PAID",
+                                        Text(
+                                            formatMinutesToHoursMinutes(
+                                                (AppFirebaseService()
+                                                            .orderData
+                                                            .value[
+                                                        "max_order_time"]) ??
+                                                    0),
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600,
-                                                fontFamily: FontFamily.metropolis,
+                                                fontFamily:
+                                                    FontFamily.metropolis,
                                                 fontSize: 16.sp,
-                                                color: appColors.redColor))
-                                      ])
-                                    ],
+                                                color: appColors.brownColour)),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Assets.svg.walletBalanceIcon.svg(height: 30.w, width: 30.w),
-                                      SizedBox(width: 8.w),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text("walletBalance".tr,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontFamily: FontFamily.metropolis,
-                                                  fontSize: 16.sp,
-                                                  color: appColors.darkBlue)),
-                                          Text("₹${widget.walletBalance}",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily: FontFamily.metropolis,
-                                                  fontSize: 16.sp,
-                                                  color: appColors.brownColour)),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 25.w),
-                            Row(
-                              children: [
-                                Assets.svg.maximumOrderTimeIcon.svg(height: 30.w, width: 30.w),
-                                SizedBox(width: 8.w),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("maximumOrderTime".tr,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: FontFamily.metropolis,
-                                            fontSize: 16.sp,
-                                            color: appColors.darkBlue)),
-                                    Text(formatMinutesToHoursMinutes((AppFirebaseService().orderData.value["max_order_time"]) ?? 0),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: FontFamily.metropolis,
-                                            fontSize: 16.sp,
-                                            color: appColors.brownColour)),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 25.w),
-                            isBottomSheetOpen
-                                ? Container(
-                                    height: kToolbarHeight,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(color: appColors.brown),
-                                        borderRadius: BorderRadius.circular(5.r)),
-                                    child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                      Text("Waiting for user to connect",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontFamily: FontFamily.metropolis,
-                                              fontSize: 16.sp,
-                                              color: appColors.brownColour)),
-                                      Assets.lottie.loadingDots.lottie(
-                                          width: 45,
-                                          height: 30,
-                                          repeat: true,
-                                          frameRate: FrameRate(120),
-                                          animate: true)
-                                    ]))
-                                : !isBottomSheetOpen
-                                    ? CommonElevatedButton(
-                                        showBorder: false,
-                                        width: double.infinity,
-                                        borderRadius: 5.r,
-                                        backgroundColor: appColors.brownColour,
-                                        text: "acceptChatRequest".tr,
-                                        onPressed: () async {
-                                          try {
-                                            isLoader = true;
-                                            if (await acceptOrRejectChat(
-                                                orderId: int.parse(widget.orderData["orderId"].toString()),
-                                                queueId: widget.orderData["queue_id"])) {
+                                ],
+                              ),
+                              SizedBox(height: 25.w),
+                              (AppFirebaseService().orderData.value["status"] ??
+                                          "-1") ==
+                                      "1"
+                                  ? Container(
+                                      height: kToolbarHeight,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: appColors.brown),
+                                          borderRadius:
+                                              BorderRadius.circular(5.r)),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text("Waiting for user to connect",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily:
+                                                        FontFamily.metropolis,
+                                                    fontSize: 16.sp,
+                                                    color:
+                                                        appColors.brownColour)),
+                                            Assets.lottie.loadingDots.lottie(
+                                                width: 45,
+                                                height: 30,
+                                                repeat: true,
+                                                frameRate: FrameRate(120),
+                                                animate: true)
+                                          ]))
+                                  : (AppFirebaseService()
+                                                  .orderData
+                                                  .value["status"] ??
+                                              "-1") ==
+                                          "0"
+                                      ? CommonElevatedButton(
+                                          showBorder: false,
+                                          width: double.infinity,
+                                          borderRadius: 5.r,
+                                          backgroundColor:
+                                              appColors.brownColour,
+                                          text: "acceptChatRequest".tr,
+                                          onPressed: () async {
+                                            try {
+                                              isLoader = true;
+                                              if (await acceptOrRejectChat(
+                                                  orderId: int.parse(
+                                                      AppFirebaseService()
+                                                          .orderData
+                                                          .value["orderId"]
+                                                          .toString()),
+                                                  queueId: AppFirebaseService()
+                                                      .orderData
+                                                      .value["queue_id"])) {
+                                                isLoader = false;
+                                                appFirebaseService
+                                                    .acceptBottomWatcher
+                                                    .strValue = "1";
+                                                appFirebaseService.writeData(
+                                                    "order/${AppFirebaseService().orderData.value["orderId"]}",
+                                                    {"status": "1",
+                                                    "astrologer_permission": await AppPermissionService.instance.hasAllPermissions()});
+                                                appSocket.sendConnectRequest(
+                                                    astroId:
+                                                        AppFirebaseService()
+                                                            .orderData
+                                                            .value["astroId"],
+                                                    custId: AppFirebaseService()
+                                                        .orderData
+                                                        .value["userId"]);
+                                              }
+                                            } on Exception catch (e) {
                                               isLoader = false;
-                                              appFirebaseService.acceptBottomWatcher.strValue = "1";
-                                              appFirebaseService.writeData(
-                                                  "order/${widget.orderData["orderId"]}", {"status": "1"});
-                                              appSocket.sendConnectRequest(
-                                                  astroId: widget.orderData["astroId"],
-                                                  custId: widget.orderData["userId"]);
+                                              debugPrint(e.toString());
                                             }
-                                          } on Exception catch (e) {
-                                            isLoader = false;
-                                            debugPrint(e.toString());
-                                          }
-                                          setState(() {});
-                                        },
-                                        // widget.onPressed
-                                      )
-                                    : const SizedBox()
-                          ],
+                                            setState(() {});
+                                          },
+                                          // widget.onPressed
+                                        )
+                                      : const SizedBox()
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                if (isLoader)  Center(child: CircularProgressIndicator(color: appColors.yellow))
-              ],
-            );
-          })),
+                  if (isLoader)
+                    Center(
+                        child:
+                            CircularProgressIndicator(color: appColors.yellow))
+                ],
+              );
+            })),
+      ),
     );
   }
+
   String formatMinutesToHoursMinutes(int minutes) {
     final hours = minutes ~/ 60;
     final remainingMinutes = minutes % 60;

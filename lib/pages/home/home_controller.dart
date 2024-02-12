@@ -91,7 +91,7 @@ class HomeController extends GetxController {
   }
 
   BroadcastReceiver broadcastReceiver =
-        BroadcastReceiver(names: <String>["callKundli", "giftCount"]);
+      BroadcastReceiver(names: <String>["callKundli", "giftCount"]);
 
   List<MobileNumber> importantNumbers = <MobileNumber>[];
   List<Contact> allContacts = <Contact>[].obs;
@@ -106,7 +106,9 @@ class HomeController extends GetxController {
       debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
       if (event.name == "giftCount") {
         print("giftcount-----giftCount");
-        showGiftBottomSheet(event.data?["giftCount"], contextDetail);
+        if(event.data?["giftCount"] > 0){
+          showGiftBottomSheet(event.data?["giftCount"], contextDetail);
+        }
       }
     });
     userData = preferenceService.getUserDetail();
@@ -119,9 +121,6 @@ class HomeController extends GetxController {
     getFeedbackData();
     tarotCardData();
   }
-
-
-
 
   fetchImportantNumbers() async {
     try {
@@ -320,7 +319,7 @@ class HomeController extends GetxController {
         //print(" Dharam::${response.data?[0].order?.orderId}");
         feedbackResponse = response.data?[0];
         feedbacksList = response.data;
-        if(feedbackResponse?.id != null  && !isFeedbackAvailable.value ){
+        if (feedbackResponse?.id != null && !isFeedbackAvailable.value) {
           showFeedbackBottomSheet();
           debugPrint('feed id: ${feedbackResponse?.id}');
         }
@@ -776,7 +775,7 @@ class HomeController extends GetxController {
         if (map.isEmpty) {
         } else if (map.isNotEmpty) {
           hasOpenOrder = map["order_id"] != null;
-        } else { }
+        } else {}
       } else {}
     } else {}
     return Future<bool>.value(hasOpenOrder);

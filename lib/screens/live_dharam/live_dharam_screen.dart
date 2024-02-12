@@ -57,6 +57,8 @@ import 'package:random_name_generator/random_name_generator.dart';
 //
 //
 //
+//
+//
 
 const int appID = 696414715;
 const String appSign =
@@ -1210,7 +1212,7 @@ class _LivePage extends State<LiveDharamScreen>
   //                                           ),
   //                                           Text(
   //                                             "₹${offerData.offer_amount ?? 0}",
-  //                                             style: const TextStyle(
+  //                                             style:  TextStyle(
   //                                               fontSize: 10,
   //                                               color: appColors.yellow,
   //                                               fontWeight: FontWeight.bold,
@@ -1266,7 +1268,7 @@ class _LivePage extends State<LiveDharamScreen>
   //                                         : "assets/images/live_new_follower_button.png",
   //                                   ),
   //                                   const SizedBox(height: 4),
-  //                                   const Text(
+  //                                    Text(
   //                                     "Follow",
   //                                     style: TextStyle(
   //                                       fontSize: 10,
@@ -1286,7 +1288,10 @@ class _LivePage extends State<LiveDharamScreen>
   //                     ),
   //                     child: InkWell(
   //                       onTap: () async {
-  //                         await sendGiftFunc(ctx: ctx, item: item, quantity: 1);
+  //                         isEngagedStatus.value == 2
+  //                             ? CustomToasts.inACallToast()
+  //                             : await sendGiftFunc(
+  //                                 ctx: ctx, item: item, quantity: 1);
   //                       },
   //                       child: Column(
   //                         mainAxisSize: MainAxisSize.min,
@@ -1303,7 +1308,7 @@ class _LivePage extends State<LiveDharamScreen>
   //                           const SizedBox(height: 4),
   //                           Text(
   //                             "₹${item.giftPrice}",
-  //                             style: const TextStyle(
+  //                             style:  TextStyle(
   //                               fontSize: 10,
   //                               color: appColors.white,
   //                             ),
@@ -1529,7 +1534,7 @@ class _LivePage extends State<LiveDharamScreen>
                                       height: 24,
                                       width: 24,
                                       child: IconButton(
-                                        icon:  Icon(
+                                        icon: Icon(
                                           Icons.more_vert,
                                           size: 16,
                                           color: appColors.yellow,
@@ -2345,7 +2350,7 @@ class _LivePage extends State<LiveDharamScreen>
       width: Get.width / 1.5,
       content: Text(
         "$type Request Sent",
-        style:  TextStyle(
+        style: TextStyle(
           fontSize: 16,
           color: appColors.black,
           fontWeight: FontWeight.bold,
@@ -2861,15 +2866,17 @@ class _LivePage extends State<LiveDharamScreen>
               //   stream: null,
               //   builder: (context, snapshot) {
               //     return AnimatedOpacity(
-              //       opacity:
-              //           !_controller.isHost && !_controller.isHostAvailable ||
-              //                   _controller.hasMyIdInWaitList()
-              //               ? 0.0
-              //               : 1.0,
+              //       // opacity:
+              //       //     !_controller.isHost && !_controller.isHostAvailable ||
+              //       //             _controller.hasMyIdInWaitList()
+              //       //         ? 0.0
+              //       //         : 1.0,
+              //       opacity: !callButtonVisibility() ? 0.0 : 1.0,
               //       duration: const Duration(seconds: 1),
-              //       child: !_controller.isHost &&
-              //                   !_controller.isHostAvailable ||
-              //               _controller.hasMyIdInWaitList()
+              //       // child: !_controller.isHost &&
+              //       //             !_controller.isHostAvailable ||
+              //       //         _controller.hasMyIdInWaitList()
+              //       child: !callButtonVisibility()
               //           ? const SizedBox()
               //           : Row(
               //               children: [
@@ -2914,6 +2921,22 @@ class _LivePage extends State<LiveDharamScreen>
         ),
       ),
     );
+  }
+
+  bool callButtonVisibility() {
+    // final Data data = _controller.details.data ?? Data();
+    // final bool isLiveVideo = (data.is_live_video_call ?? 0) == 1;
+    // final bool isLiveAudio = (data.is_live_audio_call ?? 0) == 1;
+    // final bool isLiveAnonymous = (data.is_live_anonymous_call ?? 0) == 1;
+
+    // final bool cond1 = !_controller.isHost;
+    // final bool cond2 = _controller.isHostAvailable;
+    // final bool cond3 = !_controller.hasMyIdInWaitList();
+    // final bool cond4 = isLiveVideo || isLiveAudio || isLiveAnonymous;
+
+    // final bool result = cond1 && cond2 && cond3 && cond4;
+    // return result;
+    return false;
   }
 
   Widget newAppBarCenterWithCall() {
@@ -3509,7 +3532,7 @@ class _LivePage extends State<LiveDharamScreen>
                                 ),
                                 color: appColors.black.withOpacity(0.2),
                               ),
-                              child:  Padding(
+                              child: Padding(
                                 padding: EdgeInsets.all(0.0),
                                 child: Icon(
                                   Icons.category,
@@ -3696,8 +3719,10 @@ class _LivePage extends State<LiveDharamScreen>
                         : 1.0,
                     //
                     //
+                    //
                     duration: const Duration(seconds: 1),
                     child: !_controller.isHost && !_controller.isHostAvailable
+                        //
                         //
                         //
                         ? const SizedBox()

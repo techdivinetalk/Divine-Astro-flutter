@@ -15,7 +15,9 @@ import "package:get/get.dart";
 
 import "../model/chat_offline_model.dart";
 import "../screens/live_page/constant.dart";
+
 bool isLogOut = false;
+
 class AppFirebaseService {
   AppFirebaseService._privateConstructor();
 
@@ -164,44 +166,61 @@ class AppFirebaseService {
                 sendBroadcast(BroadcastMessage(
                     name: "AcceptChat",
                     data: {"orderId": value, "orderData": orderData}));
-                acceptChatRequestBottomSheet(Get.context!, onPressed: () async {
-                  try {
-                    if (await acceptOrRejectChat(
-                        orderId: int.parse(value.toString()),
-                        queueId: orderData["queue_id"])) {
-                      acceptBottomWatcher.strValue = "1";
-                      writeData("order/$value", {"status": "1"});
-                      appSocket.sendConnectRequest(
-                          astroId: orderData["astroId"],
-                          custId: orderData["userId"]);
-                    }
-                  } on Exception catch (e) {
-                    debugPrint(e.toString());
-                  } finally {}
-                },
-                    orderStatus: orderData["status"],
-                    customerName: orderData["customerName"].toString(),
-                    dob: orderData["dob"].toString(),
-                    placeOfBirth: orderData["placeOfBirth"].toString(),
-                    timeOfBirth: orderData["timeOfBirth"].toString(),
-                    maritalStatus: orderData["maritalStatus"].toString(),
-                    walletBalance: orderData["walletBalance"].toString(),
-                    problemArea: orderData["problemArea"].toString(),
-                    orderData: orderData);
+                // acceptChatRequestBottomSheet(Get.context!,
+                // onPressed: () async {
+                //   try {
+                //     if (await acceptOrRejectChat(
+                //         orderId: int.parse(value.toString()),
+                //         queueId: orderData["queue_id"])) {
+                //       acceptBottomWatcher.strValue = "1";
+                //       writeData("order/$value", {"status": "1"});
+                //       appSocket.sendConnectRequest(
+                //           astroId: orderData["astroId"],
+                //           custId: orderData["userId"]);
+                //     }
+                //   } on Exception catch (e) {
+                //     debugPrint(e.toString());
+                //   } finally {}
+                // },
+                //     orderStatus: orderData["status"],
+                //     customerName: orderData["customerName"].toString(),
+                //     dob: orderData["dob"].toString(),
+                //     placeOfBirth: orderData["placeOfBirth"].toString(),
+                //     timeOfBirth: orderData["timeOfBirth"].toString(),
+                //     maritalStatus: orderData["maritalStatus"].toString(),
+                //     walletBalance: orderData["walletBalance"].toString(),
+                //     problemArea: orderData["problemArea"].toString(),
+                //     orderData: orderData);
+
+                await Navigator.of(Get.context!).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const AcceptChatRequestScreen();
+                    },
+                  ),
+                );
               } else if (orderData["status"] == "1") {
                 if (acceptBottomWatcher.currentName != "1") {
                   acceptBottomWatcher.strValue = "1";
-                  acceptChatRequestBottomSheet(Get.context!,
-                      onPressed: () {},
-                      orderStatus: orderData["status"],
-                      customerName: orderData["customerName"].toString(),
-                      dob: orderData["dob"].toString(),
-                      walletBalance: orderData["walletBalance"].toString(),
-                      placeOfBirth: orderData["placeOfBirth"].toString(),
-                      timeOfBirth: orderData["timeOfBirth"].toString(),
-                      maritalStatus: orderData["maritalStatus"].toString(),
-                      problemArea: orderData["problemArea"].toString(),
-                      orderData: orderData);
+                  // acceptChatRequestBottomSheet(Get.context!,
+                  //     onPressed: () {},
+                  //     orderStatus: orderData["status"],
+                  //     customerName: orderData["customerName"].toString(),
+                  //     dob: orderData["dob"].toString(),
+                  //     walletBalance: orderData["walletBalance"].toString(),
+                  //     placeOfBirth: orderData["placeOfBirth"].toString(),
+                  //     timeOfBirth: orderData["timeOfBirth"].toString(),
+                  //     maritalStatus: orderData["maritalStatus"].toString(),
+                  //     problemArea: orderData["problemArea"].toString(),
+                  //     orderData: orderData);
+
+                  await Navigator.of(Get.context!).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const AcceptChatRequestScreen();
+                      },
+                    ),
+                  );
                 }
               } else if (orderData["status"] == "2") {
                 sendBroadcast(BroadcastMessage(name: "backReq", data: null));
@@ -210,8 +229,12 @@ class AppFirebaseService {
                     name: "ReJoinChat",
                     data: {"orderId": value, "orderData": orderData}));
 
-                Get.toNamed(RouteName.chatMessageWithSocketUI,
-                    arguments: {"orderData": orderData});
+                WidgetsBinding.instance.endOfFrame.then(
+                  (_) async {
+                    await Get.toNamed(RouteName.chatMessageWithSocketUI,
+                        arguments: {"orderData": orderData});
+                  },
+                );
               }
             } else {
               preferenceService.remove(SharedPreferenceService.talkTime);

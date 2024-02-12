@@ -39,6 +39,7 @@ class ZegoService {
   Rx<Duration> onTickDuration = Duration.zero.obs;
   RxBool isCardVisible = false.obs;
   RxBool isAstrologer = true.obs;
+  RxBool isInCallScreen = true.obs;
 
   Future<void> zegoLogin() async {
     await ZegoUIKitPrebuiltCallInvitationService().init(
@@ -61,6 +62,17 @@ class ZegoService {
         },
         onOutgoingCallAccepted: (String callID, ZegoCallUser callee) {
           endTime(DateTime(1970, 01, 01));
+        },
+      ),
+      events: ZegoUIKitPrebuiltCallEvents(
+        onCallEnd: (
+          ZegoUIKitCallEndEvent event,
+          VoidCallback defaultAction,
+        ) {
+          debugPrint('onCallEnd, do whatever you want');
+          if (isInCallScreen.value) {
+            defaultAction();
+          } else {}
         },
       ),
       uiConfig: ZegoCallInvitationUIConfig(
@@ -253,11 +265,13 @@ class ZegoService {
         if (endTime.value != DateTime(1970, 01, 01)) {
           endTime(DateTime.now().add(duration));
         } else {}
-        isCardVisible(duration <= const Duration(seconds: 30));
+        isCardVisible(duration <= const Duration(seconds: 10));
       },
       endTime: endTime.value,
       onEnd: () async {
-        await controller.hangUp(Get.context!);
+        if (isInCallScreen.value) {
+          await controller.hangUp(Get.context!);
+        } else {}
       },
     );
   }
@@ -294,14 +308,14 @@ class ZegoService {
                 TextSpan(
                   text:
                       '${onTickDuration.value.inHours}:${onTickDuration.value.inMinutes}:${onTickDuration.value.inSeconds}',
-                  style:  TextStyle(color: appColors.red, fontSize: 12),
+                  style: TextStyle(color: appColors.red, fontSize: 12),
                 ),
-                 TextSpan(
+                TextSpan(
                   text:
                       ' are remaining! Please recharge to continue the chat and get Offer% + ',
                   style: TextStyle(color: appColors.black, fontSize: 12),
                 ),
-                 TextSpan(
+                TextSpan(
                   text: '5% Extra!',
                   style: TextStyle(color: appColors.red, fontSize: 12),
                 ),
@@ -310,10 +324,11 @@ class ZegoService {
           ),
           trailing: InkWell(
             onTap: () async {
+              // isInCallScreen(false);
               // await Get.toNamed(RouteName.wallet);
+              // isInCallScreen(true);
               // if (onTickDuration.value == Duration.zero) {
               //   await controller.hangUp(Get.context!);
-              //   Get.back();
               // } else {}
             },
             child: Padding(
@@ -530,30 +545,18 @@ class ZegoService {
   Future<void> addUpdatePermission() async {
     final bool value = await AppPermissionService.instance.hasAllPermissions();
     final int orderId = AppFirebaseService().orderData.value["orderId"] ?? 0;
-    if (orderId == 0) {
-    } else {
+    if (orderId != 0) {
       final DatabaseReference ref = FirebaseDatabase.instance.ref();
-      await ref.child("order/$orderId").update({"astrologer_permission": value});
-    }
+      await ref.child("order/$orderId").update(
+        {"astrologer_permission": value},
+      );
+    } else {}
     return Future<void>.value();
   }
 
   Future<bool> checkOppositeSidePermission() async {
-    final int orderId = AppFirebaseService().orderData.value["orderId"] ?? 0;
-    bool hasPermission = false;
-    if (orderId == 0) {
-    } else {
-      final DatabaseReference ref = FirebaseDatabase.instance.ref();
-      final DataSnapshot dataSnapshot = await ref.child("order/$orderId").get();
-      if (dataSnapshot.exists) {
-        if (dataSnapshot.value is Map<dynamic, dynamic>) {
-          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
-          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-              as Map<dynamic, dynamic>;
-          hasPermission = map["customer_permission"] ?? false;
-        } else {}
-      } else {}
-    }
+    bool hasPermission =
+        AppFirebaseService().orderData.value["customer_permission"] ?? false;
     return Future<bool>.value(hasPermission);
   }
 

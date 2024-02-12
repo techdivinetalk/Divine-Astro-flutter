@@ -345,8 +345,12 @@ class LiveDharamController extends GetxController {
                   // isHostAvailable = checkIfAstrologerAvailable(map);
                   var liveIdNode = data[liveId];
 
-                  var blockListNode = liveIdNode["blockList"] ?? [];
-                  firebaseBlockUsersIds = blockListNode;
+                  List<dynamic> blockListNode = liveIdNode["blockList"] ?? [];
+                  if (blockListNode.isEmpty) {
+                    firebaseBlockUsersIds = [];
+                  } else {
+                    firebaseBlockUsersIds = blockListNode;
+                  }
 
                   var waitListNode = liveIdNode["waitList"];
                   currentCaller = isEngadedNew(waitListNode, isForMe: false);
@@ -1208,16 +1212,15 @@ class LiveDharamController extends GetxController {
   // }
 
   Future<void> addUpdateToBlockList() async {
-    final List<String> temp = [];
+    final List<dynamic> temp = [];
     blockedCustomerList.data?.forEach(
       (element) {
         temp.add((element.customerId ?? 0).toString());
       },
     );
-    print("blockList:: $temp");
     await FirebaseDatabase.instance.ref().child("live/$liveId").update(
       <String, Object?>{
-        "blockList": temp,
+        "blockList": temp ?? [],
       },
     );
     return Future<void>.value();
@@ -1237,9 +1240,9 @@ class LiveDharamController extends GetxController {
           if (list.contains(userId)) {
             list = list.where((dynamic element) => element != userId).toList();
           } else {}
-          blockList = list;
+          blockList = list ?? <dynamic>[];
           await FirebaseDatabase.instance.ref().child("live/$liveId").update(
-            <String, Object?>{"blockList": blockList},
+            <String, Object?>{"blockList": blockList ?? <dynamic>[]},
           );
         } else {}
       } else {

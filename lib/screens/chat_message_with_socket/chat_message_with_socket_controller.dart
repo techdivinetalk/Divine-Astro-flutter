@@ -50,7 +50,7 @@ class ChatMessageWithSocketController extends GetxController
     this.context = context;
     return;
   }
-
+  var pref = Get.find<SharedPreferenceService>();
   final UserRepository userRepository = Get.find<UserRepository>();
   final MessageTemplateRepo messageTemplateRepository =
       Get.put(MessageTemplateRepo());
@@ -97,7 +97,7 @@ class ChatMessageWithSocketController extends GetxController
 
   final AppSocket socket = AppSocket();
 
-  Timer? _timer;
+  Timer? chatTimer;
   Timer? _timer2;
 
   Rx<bool> isRecording = false.obs;
@@ -319,14 +319,14 @@ class ChatMessageWithSocketController extends GetxController
   void talkTimeStartTimer(int futureTimeInEpochMillis) {
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
     print("futureTime.minute");
-    if (_timer != null) {
-      _timer?.cancel();
+    if (chatTimer != null) {
+      chatTimer?.cancel();
     }
-    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
+    chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
       timeDifference = dateTime.difference(DateTime.now());
       if (timeDifference.isNegative || timeDifference.inSeconds == 0) {
         if(timeDifference.inSeconds == -60) {
-          _timer?.cancel();
+          chatTimer?.cancel();
           final ReqEndChat response = await ChatRepository().endChat(
               ReqCommonChat(
                   orderId: AppFirebaseService().orderData.value["orderId"],
