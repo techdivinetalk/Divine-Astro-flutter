@@ -93,9 +93,9 @@ class AssistMessageView extends StatelessWidget {
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(40)),
-              border: Border.all(width: 2, color: AppColors.appColorDark),
+              border: Border.all(width: 2, color: appColors.appColorDark),
               gradient: LinearGradient(
-                colors: [AppColors.white, AppColors.appColorDark],
+                colors: [appColors.white, appColors.appColorDark],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -231,8 +231,8 @@ class AssistMessageView extends StatelessWidget {
                             Text(currentMsg.message ?? "",
                                 style: AppTextStyle.textStyle14(
                                     fontColor: (currentMsg.msgType ?? 0) == 0
-                                        ? AppColors.darkBlue
-                                        : AppColors.darkBlue))
+                                        ? appColors.darkBlue
+                                        : appColors.darkBlue))
                           ]),
                       SizedBox(height: 20.h)
                     ],
@@ -246,7 +246,7 @@ class AssistMessageView extends StatelessWidget {
                             DateFormat.jm().format(
                                 DateTime.parse(currentMsg.createdAt ?? '')),
                             style: AppTextStyle.textStyle10(
-                                fontColor: AppColors.darkBlue)),
+                                fontColor: appColors.darkBlue)),
                         SizedBox(width: 3.w),
                         if (currentMsg.msgType == 1)
                           chatSeenStatusWidget(
@@ -282,10 +282,10 @@ class AssistMessageView extends StatelessWidget {
     switch (msgStatus) {
       case MsgStatus.sent:
         return Assets.images.icSingleTick
-            .svg(theme: SvgTheme(currentColor: AppColors.grey));
+            .svg(theme: SvgTheme(currentColor: appColors.grey));
       case MsgStatus.delivered:
         return Assets.images.icDoubleTick
-            .svg(theme: SvgTheme(currentColor: AppColors.grey));
+            .svg(theme: SvgTheme(currentColor: appColors.grey));
       case MsgStatus.received:
         return Assets.images.icDoubleTick.svg();
       default:
@@ -626,7 +626,7 @@ class AssistMessageView extends StatelessWidget {
                 blurRadius: 1.0,
                 offset: const Offset(0.0, 3.0)),
           ],
-          color: AppColors.white,
+          color: appColors.white,
           borderRadius: const BorderRadius.all(Radius.circular(20)),
         ),
         child: Text("unreadMessages".tr),
