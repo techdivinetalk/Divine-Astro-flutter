@@ -43,6 +43,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   Widget build(BuildContext context) {
     controller.setContext(context);
 
+    var pref = Get.find<SharedPreferenceService>();
     return Scaffold(
       body: GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
         return Stack(
@@ -361,14 +362,14 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         height: 300,
                         child: EmojiPicker(
                             onEmojiSelected: (category, emoji) {
-                              controller.typingScrollController.hasClients
-                                  ? controller.typingScrollController.animateTo(
-                                      controller.typingScrollController.position
-                                          .maxScrollExtent,
-                                      duration:
-                                          const Duration(milliseconds: 100),
-                                      curve: Curves.easeOut)
-                                  : null;
+                              // controller.typingScrollController.hasClients
+                              //     ? controller.typingScrollController.animateTo(
+                              //         controller.typingScrollController.position
+                              //             .maxScrollExtent,
+                              //         duration:
+                              //             const Duration(milliseconds: 100),
+                              //         curve: Curves.easeOut)
+                              //     : null;
                             },
                             onBackspacePressed: () {
                               _onBackspacePressed();
