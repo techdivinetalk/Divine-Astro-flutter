@@ -159,6 +159,11 @@ class AppFirebaseService {
                 sendBroadcast(
                     BroadcastMessage(name: "displayCard", data: null));
               }
+              if (orderData["end_time"] != null) {
+                print("endTime");
+                sendBroadcast(BroadcastMessage(
+                    name: "endTime", data: null));
+              }
               if (orderData["status"] == "0") {
                 acceptBottomWatcher.strValue = "0";
                 sendBroadcast(BroadcastMessage(
