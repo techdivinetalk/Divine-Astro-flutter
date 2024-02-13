@@ -346,8 +346,9 @@ class ChatMessageWithSocketController extends GetxController
         print('Countdown finished');
       } else {
         showTalkTime.value =
-        "${timeDifference.inHours}:${timeDifference.inMinutes.remainder(60)}:${timeDifference.inSeconds.remainder(60)}"; // Update the reactive variable
-        print('Countdown working');
+        "${timeDifference.inHours.toString().padLeft(2, '0')}:"
+            "${timeDifference.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
+            "${timeDifference.inSeconds.remainder(60).toString().padLeft(2, '0')}"; //         print('Countdown working');
         print(
             '${timeDifference.inHours}:${timeDifference.inMinutes.remainder(60)}:${timeDifference.inSeconds.remainder(60)}');
       }
