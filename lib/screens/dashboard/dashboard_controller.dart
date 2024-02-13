@@ -25,7 +25,7 @@ class DashboardController extends GetxController
   DashboardController(this.repository);
 
   RxInt selectedIndex = 0.obs;
-  RxString userProfileImage = " ".obs;
+  RxString userProfileImage = "".obs;
   final GlobalKey<ScaffoldState> scaffoldkey = GlobalKey();
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();

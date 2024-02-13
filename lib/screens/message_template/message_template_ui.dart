@@ -39,8 +39,8 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                 decoration: TextDecoration.underline,
                 decorationColor: appColors.appColorDark,
                 decorationThickness: 2,
-              ),
-            ),
+              ), 
+            ), 
             SizedBox(height: 24.h),
             GestureDetector(
               onTap: () {

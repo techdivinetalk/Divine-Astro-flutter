@@ -70,6 +70,7 @@ class EditProfileController extends GetxController {
         Get.find<ProfilePageController>()
             .setUserData(state.preferenceService.getUserDetail());
         divineSnackBar(data: "${'profileUpdatedSuccessfully'.tr}.");
+
       }
       if (response.statusCode == 400) {
         Fluttertoast.showToast(msg: response.statusCode.toString());

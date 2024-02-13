@@ -6,6 +6,7 @@ import 'package:aws_s3_upload/aws_s3_upload.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
+import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/res_reply_review.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
@@ -243,7 +245,7 @@ class ProfilePageController extends GetxController {
       Map<String, dynamic> params = {"role_id": userData?.roleId, "page": 1};
       var response = await userRepository.getReviewRatings(params);
       ratingsData = response;
-update();
+      update();
       log("Data==>${jsonEncode(ratingsData!.data)}");
     } catch (error) {
       debugPrint("error $error");
@@ -438,15 +440,16 @@ update();
         CropAspectRatioPreset.ratio3x2,
         CropAspectRatioPreset.original,
         CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9
+        CropAspectRatioPreset.ratio16x9,
       ],
       uiSettings: [
         AndroidUiSettings(
-            toolbarTitle: 'Update image',
-            toolbarColor: appColors.white,
-            toolbarWidgetColor: appColors.blackColor,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
+          toolbarTitle: 'Update image',
+          toolbarColor: appColors.white,
+          toolbarWidgetColor: appColors.blackColor,
+          initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: false,
+        ),
         IOSUiSettings(
           title: 'Update image',
         ),
@@ -466,12 +469,15 @@ update();
         minWidth: 500,
       );
       if (result != null) {
-        uploadImageToS3Bucket(File(result.path));
+        // uploadImageToS3Bucket(File(result.path));
+        uploadImage(File(result.path));
       }
     } else {
       debugPrint("Image is not cropped.");
     }
   }
+
+
 
   uploadImageToS3Bucket(File? selectedFile) async {
     var commonConstants = await userRepository.constantDetailsData();
@@ -488,17 +494,51 @@ update();
       region: dataString[2],
     );
     if (response != null) {
-      print(dashboardController.userProfileImage.value);
-      print("dashboardController.userProfileImage.value");
       dashboardController.userProfileImage.value = response;
       userProfileImage.value = response;
       userData?.image = response;
-      print(userData?.image);
-      print("userData?.image");
       preference.setUserDetail(userData!);
+      update();
       divineSnackBar(data: "Profile image update successfully");
     } else {
       CustomException("Something went wrong");
+    }
+  }
+
+  Future<void> uploadImage( File imageFile) async {
+    var token = preferenceService.getToken();
+    // Create a Uri from the URL string
+    var uri = Uri.parse("https://wakanda-api.divinetalk.live/api/astro/v7/uploadAstroImage");
+
+    // Create a MultipartRequest
+    var request = http.MultipartRequest('POST', uri);
+
+    // Add headers to the request
+    request.headers.addAll({
+      'Authorization': 'Bearer $token',
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    });
+
+    // Attach the image file to the request
+    request.files.add(await http.MultipartFile.fromPath(
+      'profile_image',
+      imageFile.path,
+    ));
+
+
+    var response = await request.send();
+
+    // Listen for the response
+    response.stream.transform(utf8.decoder).listen((value) {
+      print(value); // Handle the response from the server
+      print("valuevaluevaluevaluevaluevaluevalue"); // Handle the response from the server
+    });
+
+    if (response.statusCode == 200) {
+      print("Image uploaded successfully.");
+    } else {
+      print("Failed to upload image.");
     }
   }
 }

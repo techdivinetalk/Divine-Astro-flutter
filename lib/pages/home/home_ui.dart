@@ -7,6 +7,7 @@ import 'package:divine_astrologer/common/switch_component.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
+import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_ui.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
@@ -244,7 +245,7 @@ class HomeUI extends GetView<HomeController> {
                             ? controller.feedbackResponse == null
                                 ? const SizedBox.shrink()
                                 : Column(
-                                    children: [
+                                    children: [ 
                                       GestureDetector(
                                         onTap: () {
                                           Get.toNamed(RouteName.orderFeedback,
@@ -2230,7 +2231,8 @@ class PerformanceDialog extends StatelessWidget {
                                       (controller.performanceScoreList[
                                           controller.scoreIndex])) {
                                     Navigator.pop(context);
-                                    Get.find<DashboardController>().selectedIndex.value = 1;
+                                    Get.put(DashboardController(Get.put(PreDefineRepository()))).selectedIndex.value = 1;
+                                    Get.put(DashboardController(Get.put(PreDefineRepository()))).update();
                                   }
                                 },
                                 child: Container(
