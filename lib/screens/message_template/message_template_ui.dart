@@ -39,8 +39,8 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                 decoration: TextDecoration.underline,
                 decorationColor: appColors.appColorDark,
                 decorationThickness: 2,
-              ), 
-            ), 
+              ),
+            ),
             SizedBox(height: 24.h),
             GestureDetector(
               onTap: () {
@@ -131,7 +131,7 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                                       children: [
                                         SizedBox(width: 6.w),
                                         SwitchWidget(
-                                          onTap: () {
+                                          onTap: () async {
                                             // if (controller.offerTypeLoading.value !=
                                             //     Loading.loading) {
                                             // }
@@ -141,11 +141,32 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                                             //   offerType: 1,
                                             //   value: !controller.orderOfferSwitch[index],
                                             // );
-                                            messageTemplate.isOn =
-                                                !messageTemplate.isOn!;
-                                            controller.update();
+                                            // controller.messageTemplates[index]
+                                            //     .isOn = !(controller
+                                            //         .messageTemplates[index]
+                                            //         .isOn ??
+                                            //     true);
+print("1");
+                                            if (controller.messageLocalTemplates
+                                                .contains(messageTemplate)) {
+                                              print("2");
+                                              controller.messageLocalTemplates
+                                                  .removeWhere((element) =>
+                                                      element.id ==
+                                                      messageTemplate.id);
+                                            } else {
+                                              print("3");
+                                              controller.messageLocalTemplates
+                                                  .add(messageTemplate);
+                                            }
+                                            await controller
+                                                .updateMessageTemplateLocally();
+                                            controller.refresh();
+
                                           },
-                                          switchValue: messageTemplate.isOn,
+                                          switchValue: controller
+                                              .messageLocalTemplates
+                                              .contains(messageTemplate),
                                         ),
                                       ],
                                     ),

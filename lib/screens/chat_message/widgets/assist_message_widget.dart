@@ -193,7 +193,7 @@ class AssistMessageView extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
         child: Column(
-          crossAxisAlignment: (currentMsg.msgType ?? 0) == 1
+          crossAxisAlignment: (currentMsg.sendBy) == SendBy.astrologer
               ? CrossAxisAlignment.end
               : CrossAxisAlignment.start,
           children: [
@@ -214,23 +214,24 @@ class AssistMessageView extends StatelessWidget {
                   maxWidth: ScreenUtil().screenWidth * 0.7,
                   minWidth: ScreenUtil().screenWidth * 0.27),
               child: Stack(
-                alignment: (currentMsg.msgType ?? 1) == 1
+                alignment: (currentMsg.sendBy) == SendBy.astrologer
                     ? Alignment.centerRight
                     : Alignment.centerLeft,
                 children: [
                   Column(
                     children: [
                       Wrap(
-                          alignment: currentMsg.msgType == 1
+                          alignment: (currentMsg.sendBy) == SendBy.astrologer
                               ? WrapAlignment.end
                               : WrapAlignment.start,
                           children: [
                             Text(currentMsg.message ?? "",
                                 maxLines: 30,
                                 style: AppTextStyle.textStyle14(
-                                    fontColor: (currentMsg.msgType ?? 1) == 1
-                                        ? appColors.darkBlue
-                                        : appColors.darkBlue))
+                                    fontColor:
+                                        (currentMsg.sendBy) == SendBy.astrologer
+                                            ? appColors.darkBlue
+                                            : appColors.darkBlue))
                           ]),
                       SizedBox(height: 20.h)
                     ],
@@ -246,7 +247,7 @@ class AssistMessageView extends StatelessWidget {
                             style: AppTextStyle.textStyle10(
                                 fontColor: appColors.darkBlue)),
                         SizedBox(width: 3.w),
-                        if (currentMsg.msgType == 1)
+                        if ((currentMsg.sendBy) == SendBy.astrologer)
                           chatSeenStatusWidget(
                               msgStatus: currentMsg.msgStatus ?? MsgStatus.sent)
 

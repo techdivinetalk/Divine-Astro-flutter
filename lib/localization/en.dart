@@ -2,6 +2,7 @@ Map<String, String> en() {
   return {
     "contactSaved": "Contact saved successfully",
     "Saved": "Saved",
+    "errorLine1": "Something went wrong, please try again later",
     "contactPermissionRequired": "Contact permission is required",
     "noInternetConnection": "Please check your Internet connection",
     "internetSpeed": "Your Internet speed",

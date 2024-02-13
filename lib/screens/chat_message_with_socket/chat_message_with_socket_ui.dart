@@ -33,6 +33,7 @@ import "package:social_media_recorder/audio_encoder_type.dart";
 import "package:social_media_recorder/screen/social_media_recorder.dart";
 import "package:voice_message_package/voice_message_package.dart";
 
+import "../../model/message_template_response.dart";
 import "../live_dharam/widgets/custom_image_widget.dart";
 import "chat_message_with_socket_controller.dart";
 
@@ -583,7 +584,12 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         itemCount: controller.messageTemplates.length + 1,
         separatorBuilder: (_, index) => SizedBox(width: 10.w),
         itemBuilder: (context, index) {
-          //MessageTemplates msg = controller.messageTemplates[index];
+          late final MessageTemplates msg;
+          if (index == 0) {
+            msg = MessageTemplates();
+          } else {
+            msg = controller.messageTemplates[index - 1];
+          }
           return index == 0
               ? GestureDetector(
                   onTap: () {
@@ -604,25 +610,28 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     ),
                   ),
                 )
-              : GestureDetector(
-                  onTap: () {
-                    controller.sendMsgTemplate(
-                        controller.messageTemplates[index - 1]);
-                  },
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: appColors.brownColour,
-                      borderRadius: const BorderRadius.all(Radius.circular(18)),
-                    ),
-                    child: Text(
-                      '${controller.messageTemplates[index - 1].message}',
-                      style:
-                          AppTextStyle.textStyle12(fontColor: appColors.white),
-                    ),
-                  ),
-                );
+              : msg.isOn ?? true
+                  ? GestureDetector(
+                      onTap: () {
+                        controller.sendMsgTemplate(
+                            controller.messageTemplates[index - 1]);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: appColors.brownColour,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(18)),
+                        ),
+                        child: Text(
+                          '${controller.messageTemplates[index - 1].message}',
+                          style: AppTextStyle.textStyle12(
+                              fontColor: appColors.white),
+                        ),
+                      ),
+                    )
+                  : SizedBox();
         },
       ),
     );
@@ -843,7 +852,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       },
     );
   }
-  
 
   void showCurvedBottomSheet(context) {
     List<SvgPicture> itemList = [
