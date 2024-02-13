@@ -33,6 +33,7 @@ import "package:social_media_recorder/audio_encoder_type.dart";
 import "package:social_media_recorder/screen/social_media_recorder.dart";
 import "package:voice_message_package/voice_message_package.dart";
 
+import "../../model/message_template_response.dart";
 import "../live_dharam/widgets/custom_image_widget.dart";
 import "chat_message_with_socket_controller.dart";
 
@@ -43,6 +44,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   Widget build(BuildContext context) {
     controller.setContext(context);
 
+    var pref = Get.find<SharedPreferenceService>();
     return Scaffold(
       body: GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
         return Stack(
@@ -361,14 +363,14 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         height: 300,
                         child: EmojiPicker(
                             onEmojiSelected: (category, emoji) {
-                              controller.typingScrollController.hasClients
-                                  ? controller.typingScrollController.animateTo(
-                                      controller.typingScrollController.position
-                                          .maxScrollExtent,
-                                      duration:
-                                          const Duration(milliseconds: 100),
-                                      curve: Curves.easeOut)
-                                  : null;
+                              // controller.typingScrollController.hasClients
+                              //     ? controller.typingScrollController.animateTo(
+                              //         controller.typingScrollController.position
+                              //             .maxScrollExtent,
+                              //         duration:
+                              //             const Duration(milliseconds: 100),
+                              //         curve: Curves.easeOut)
+                              //     : null;
                             },
                             onBackspacePressed: () {
                               _onBackspacePressed();
@@ -582,7 +584,12 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         itemCount: controller.messageTemplates.length + 1,
         separatorBuilder: (_, index) => SizedBox(width: 10.w),
         itemBuilder: (context, index) {
-          //MessageTemplates msg = controller.messageTemplates[index];
+          late final MessageTemplates msg;
+          if (index == 0) {
+            msg = MessageTemplates();
+          } else {
+            msg = controller.messageTemplates[index - 1];
+          }
           return index == 0
               ? GestureDetector(
                   onTap: () {
@@ -603,25 +610,28 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     ),
                   ),
                 )
-              : GestureDetector(
-                  onTap: () {
-                    controller.sendMsgTemplate(
-                        controller.messageTemplates[index - 1]);
-                  },
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: appColors.brownColour,
-                      borderRadius: const BorderRadius.all(Radius.circular(18)),
-                    ),
-                    child: Text(
-                      '${controller.messageTemplates[index - 1].message}',
-                      style:
-                          AppTextStyle.textStyle12(fontColor: appColors.white),
-                    ),
-                  ),
-                );
+              : msg.isOn ?? true
+                  ? GestureDetector(
+                      onTap: () {
+                        controller.sendMsgTemplate(
+                            controller.messageTemplates[index - 1]);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: appColors.brownColour,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(18)),
+                        ),
+                        child: Text(
+                          '${controller.messageTemplates[index - 1].message}',
+                          style: AppTextStyle.textStyle12(
+                              fontColor: appColors.white),
+                        ),
+                      ),
+                    )
+                  : SizedBox();
         },
       ),
     );
@@ -1795,33 +1805,33 @@ class AstrologerChatAppBar extends StatelessWidget {
                           },
                         ),
                         SizedBox(width: 5.w),
-                        PopupMenuButton(
-                          surfaceTintColor: Colors.transparent,
-                          color: Colors.white,
-                          itemBuilder: (context) => [
-                            PopupMenuItem(
-                                child: InkWell(
-                              onTap: () {
-                                // Navigator.pop(context);
-                                //
-                                // showCupertinoModalPopup(
-                                //   barrierColor:
-                                //   appColors.darkBlue.withOpacity(0.5),
-                                //   context: context,
-                                //   builder: (context) => ReportPostReasons(
-                                //       reviewData?.id.toString() ?? ''),
-                                //
-                                //   // builder: (context) => ReportPostReasons(reviewData?.id.),
-                                // );
-                              },
-                              child: Text(
-                                "Chat History",
-                                style: AppTextStyle.textStyle13(),
-                              ),
-                            )),
-                          ],
-                          child: const Icon(Icons.more_vert_rounded),
-                        ),
+                        // PopupMenuButton(
+                        //   surfaceTintColor: Colors.transparent,
+                        //   color: Colors.white,
+                        //   itemBuilder: (context) => [
+                        //     PopupMenuItem(
+                        //         child: InkWell(
+                        //       onTap: () {
+                        //         // Navigator.pop(context);
+                        //         //
+                        //         // showCupertinoModalPopup(
+                        //         //   barrierColor:
+                        //         //   appColors.darkBlue.withOpacity(0.5),
+                        //         //   context: context,
+                        //         //   builder: (context) => ReportPostReasons(
+                        //         //       reviewData?.id.toString() ?? ''),
+                        //         //
+                        //         //   // builder: (context) => ReportPostReasons(reviewData?.id.),
+                        //         // );
+                        //       },
+                        //       child: Text(
+                        //         "Chat History",
+                        //         style: AppTextStyle.textStyle13(),
+                        //       ),
+                        //     )),
+                        //   ],
+                        //   child: const Icon(Icons.more_vert_rounded),
+                        // ),
                         SizedBox(width: 10.w),
                       ],
                     ),

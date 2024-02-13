@@ -258,7 +258,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
             },
           );
         } else {
-          divineSnackBar(data: "Something went wrong, please try again later");
+          divineSnackBar(data: "errorLine1".tr);
         }
       } else {
         divineSnackBar(data: "Insufficient Permission");

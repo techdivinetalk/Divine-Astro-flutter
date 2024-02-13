@@ -1,10 +1,11 @@
 import 'dart:ui';
 
-
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
+import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:divine_astrologer/repository/chat_repository.dart';
 import 'package:divine_astrologer/repository/kundli_repository.dart';
+import 'package:divine_astrologer/screens/chat_message/widgets/assist_message_widget.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,7 +43,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                         placeHolderPath: Assets.images.defaultProfile.path,
                         imagePath:
                             "${globalConstantModel.data?.awsCredentails.baseurl}/${controller.args!.name ?? ''}",
-                        loadingIndicator:  SizedBox(
+                        loadingIndicator: SizedBox(
                             child: CircularProgressIndicator(
                                 color: appColors.yellow, strokeWidth: 2))),
                   )),
@@ -78,7 +79,17 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                       reverse: false,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        final data = controller.chatMessageList[index];
+                        final data =
+                            controller.chatMessageList[index] as AssistChatData;
+                        return AssistMessageView(
+                          index: index,
+                          chatMessage: data,
+                          nextMessage:
+                              controller.chatMessageList.length - 1 == index
+                                  ? data
+                                  : controller.chatMessageList[index + 1],
+                          yourMessage: data.sendBy == SendBy.astrologer,
+                        );
                         return SizedBox(
                           width: double.maxFinite,
                           child: Padding(
@@ -323,11 +334,11 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                         filled: true,
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0.sp),
-                            borderSide:  BorderSide(
-                                color: appColors.white, width: 1.0)),
+                            borderSide:
+                                BorderSide(color: appColors.white, width: 1.0)),
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0.sp),
-                            borderSide:  BorderSide(
+                            borderSide: BorderSide(
                                 color: appColors.appColorLite, width: 1.0)),
                       ),
                     ),

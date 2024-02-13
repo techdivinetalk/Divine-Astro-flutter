@@ -17,7 +17,7 @@ import 'package:divine_astrologer/model/upload_story_response.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide FormData;
 import 'package:get/get_connect/http/src/status/http_status.dart';
 
 import '../common/app_exception.dart';
@@ -194,6 +194,27 @@ class UserRepository extends ApiProvider {
       rethrow;
     }
   }
+  /*Future<ResLogin> uploadAstroImageUpload(Map<String, dynamic> param) async {
+    try {
+      final response = await post(uploadAstroImage, body: FormData);
+
+      if (response.statusCode == 200) {
+        final astrologerLoginModel =
+            ResLogin.fromJson(json.decode(response.body));
+        if (astrologerLoginModel.statusCode == successResponse &&
+            astrologerLoginModel.success!) {
+          return astrologerLoginModel;
+        } else {
+          throw CustomException("Unknown Error");
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }*/
 
   //
   Future<ResLogin> astrologerLoginWithTrueCaller({

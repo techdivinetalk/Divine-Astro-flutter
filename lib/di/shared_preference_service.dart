@@ -106,7 +106,7 @@ class SharedPreferenceService extends GetxService {
 
   LoginImages? getLoginImages() {
     String? images = prefs!.getString(loginImages);
-    if(images != null){
+    if (images != null) {
       return loginImagesFromJson(images);
     }
 
@@ -125,14 +125,16 @@ class SharedPreferenceService extends GetxService {
 
   Future<void> saveMessageTemplates(String json) async {
     debugPrint('ress1: ${json}');
-    await prefs!.setString(messageTemplate, json);
-    debugPrint('ress2: ${json}');
+    final result = await prefs?.setString(messageTemplate, json);
+    final data = prefs?.getString(messageTemplate);
+    debugPrint('ress2: ${json} $data');
+    debugPrint('ress2: ${json} $result');
   }
 
   MessageTemplateResponse? getMessageTemplates() {
     debugPrint('get tamplte func');
-    String? data = prefs!.getString(messageTemplate);
-    debugPrint('get tamplte func 2: $data');
+    String? data = prefs?.getString(messageTemplate);
+    debugPrint('get tamplte func 2: ');
     return messageTemplateResponseFromJson(data!);
     debugPrint('get tamplte func 3: $data');
     return null;

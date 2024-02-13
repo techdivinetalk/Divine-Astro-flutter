@@ -41,17 +41,15 @@ class DashboardScreen extends GetView<DashboardController> {
                         backgroundColor: appColors.white,
                         key: controller.scaffoldkey,
                         body: Obx(
-                              () =>
-                              AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 250),
-                                child: widgetOptions
-                                    .elementAt(controller.selectedIndex.value),
-                                transitionBuilder: (child, anim) =>
-                                    FadeTransition(opacity: anim, child: child),
-                              ),
+                          () => AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 250),
+                            child: widgetOptions
+                                .elementAt(controller.selectedIndex.value),
+                            transitionBuilder: (child, anim) =>
+                                FadeTransition(opacity: anim, child: child),
+                          ),
                         ),
-                        bottomNavigationBar: Obx(() =>
-                            SafeArea(
+                        bottomNavigationBar: Obx(() => SafeArea(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 mainAxisSize: MainAxisSize.min,
@@ -59,8 +57,8 @@ class DashboardScreen extends GetView<DashboardController> {
                                   Container(
                                     width: ScreenUtil().screenWidth * 0.9,
                                     height: 1,
-                                    color: appColors.lightGrey.withOpacity(
-                                        0.50),
+                                    color:
+                                        appColors.lightGrey.withOpacity(0.50),
                                   ),
                                   const SizedBox(height: 10),
                                   BottomNavigationBar(
@@ -78,8 +76,8 @@ class DashboardScreen extends GetView<DashboardController> {
                                                 height: 22.h,
                                                 colorFilter: ColorFilter.mode(
                                                     controller.selectedIndex
-                                                        .value ==
-                                                        0
+                                                                .value ==
+                                                            0
                                                         ? appColors.darkBlue
                                                         : appColors.lightGrey,
                                                     BlendMode.srcIn)),
@@ -95,8 +93,8 @@ class DashboardScreen extends GetView<DashboardController> {
                                                 height: 22.h,
                                                 colorFilter: ColorFilter.mode(
                                                     controller.selectedIndex
-                                                        .value ==
-                                                        1
+                                                                .value ==
+                                                            1
                                                         ? appColors.darkBlue
                                                         : appColors.lightGrey,
                                                     BlendMode.srcIn)),
@@ -112,8 +110,8 @@ class DashboardScreen extends GetView<DashboardController> {
                                                 height: 22.h,
                                                 colorFilter: ColorFilter.mode(
                                                     controller.selectedIndex
-                                                        .value ==
-                                                        2
+                                                                .value ==
+                                                            2
                                                         ? appColors.darkBlue
                                                         : appColors.lightGrey,
                                                     BlendMode.srcIn)),
@@ -125,16 +123,16 @@ class DashboardScreen extends GetView<DashboardController> {
                                       BottomNavigationBarItem(
                                         icon: Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                              CrossAxisAlignment.center,
                                           mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                              MainAxisAlignment.center,
                                           children: [
                                             Assets.images.icChatBottom.svg(
                                                 height: 22.h,
                                                 colorFilter: ColorFilter.mode(
                                                     controller.selectedIndex
-                                                        .value ==
-                                                        3
+                                                                .value ==
+                                                            3
                                                         ? appColors.darkBlue
                                                         : appColors.lightGrey,
                                                     BlendMode.srcIn)),
@@ -146,17 +144,24 @@ class DashboardScreen extends GetView<DashboardController> {
                                       BottomNavigationBarItem(
                                         icon: Column(
                                           children: [
-                                            ClipRRect(
-                                              borderRadius: BorderRadius
-                                                  .circular(22),
-                                              child: CachedNetworkPhoto(
-                                                url: "${controller
-                                                    .userProfileImage}",
-                                                fit: BoxFit.cover,
-                                                height: 30,
-                                                width: 30,
-                                              ),
-                                            ),
+                                            controller.userProfileImage.value
+                                                    .isEmpty
+                                                ? SizedBox(
+                                                    height: 30.h,
+                                                    width: 30.h,
+                                                  )
+                                                : CommonImageView(
+                                                    imagePath: controller
+                                                        .userProfileImage.value,
+                                                    fit: BoxFit.cover,
+                                                    height: 30.h,
+                                                    width: 30.h,
+                                                    placeHolder:
+                                                        "assets/images/default_profile.png",
+                                                    radius:
+                                                        BorderRadius.circular(
+                                                            100.h),
+                                                  ),
                                             /*    CommonImageView(
                                           imagePath:
                                               "${controller.userProfileImage}",
@@ -172,8 +177,8 @@ class DashboardScreen extends GetView<DashboardController> {
                                       ),
                                     ],
                                     elevation: 0,
-                                    currentIndex: controller.selectedIndex
-                                        .value,
+                                    currentIndex:
+                                        controller.selectedIndex.value,
                                     onTap: (value) {
                                       _onItemTapped(value);
                                     },
@@ -202,8 +207,7 @@ class DashboardScreen extends GetView<DashboardController> {
                             onTap: () {
                               debugPrint('AcceptChatWidget onTap');
                               controller.appFirebaseService.writeData(
-                                  'order/${broadcastSnapshot.data!
-                                      .data!['orderId']}',
+                                  'order/${broadcastSnapshot.data!.data!['orderId']}',
                                   {'status': '1'});
                               controller.appFirebaseService.acceptBottomWatcher
                                   .strValue = '1';

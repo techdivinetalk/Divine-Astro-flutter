@@ -8,10 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../model/feedback_response.dart';
 
-class OrderFeedbackController extends GetxController{
-
-  var isFeedbackAvailable = false.obs;
-  Loading loading = Loading.initial;
+class OrderFeedbackController extends GetxController {
+  bool loading = true;
   FeedbackData? feedbackResponse;
   var homeController = Get.find<HomeController>();
   final HomePageRepository homePageRepository = Get.put(HomePageRepository());
@@ -20,7 +18,7 @@ class OrderFeedbackController extends GetxController{
   @override
   void onInit() {
     var arguments = Get.arguments;
-    if(arguments == null){
+    if (arguments == null) {
       if (arguments != null && arguments is List != null) {
         feedbacks.value = arguments.first;
       }
@@ -30,24 +28,24 @@ class OrderFeedbackController extends GetxController{
   }
 
   getFeedbackData() async {
-    loading = Loading.initial;
+    loading = true;
     update();
     try {
       var response = await homePageRepository.getFeedbackDataList();
-      isFeedbackAvailable.value = response.success ?? false;
-      debugPrint('val: $isFeedbackAvailable');
-      if (isFeedbackAvailable.value) {
-        feedbackResponse = response.data?[0];
-        feedbacks.addAll(response.data ?? []);
-        debugPrint('feed id: ${feedbackResponse?.id}');
-      }
+
+      feedbacks.addAll(response.data!);
+      // loading = Loading.loaded;
+      loading = false;
+      debugPrint('feed id: ${feedbackResponse?.id}');
+      update();
     } catch (error) {
       if (error is AppException) {
         error.onException();
       } else {
         divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
+      loading = false;
+      update();
     }
   }
-
 }
