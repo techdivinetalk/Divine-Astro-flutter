@@ -40,27 +40,24 @@ class AssistMessageView extends StatelessWidget {
     Widget messageWidget;
     print("Message Type:: ${chatMessage.chatType} ${chatMessage.message}");
     switch (chatMessage.msgType) {
-      case 3:
+      case 1:
         messageWidget = giftMsgView(context, chatMessage, yourMessage);
         break;
-    // case "Remedies" || 0:
-    //   messageWidget = remediesMsgView(context, chatMessage, yourMessage);
-    //   break;
+      // case "Remedies" || 0:
+      //   messageWidget = remediesMsgView(context, chatMessage, yourMessage);
+      //   break;
       case 0:
         messageWidget = textMsgView(context, chatMessage, yourMessage);
         break;
-      case 1:
-        messageWidget = textMsgView(context, chatMessage, yourMessage);
-        break;
-    // case "audio":
-    //   messageWidget = audioView(context, chatDetail: chatMessage, yourMessage: yourMessage);
-    //   break;
-    // case "image":
-    //   messageWidget = imageMsgView(chatMessage.base64Image!, yourMessage, chatDetail: chatMessage, index: index);
-    //   break;
-    // case "kundli":
-    //   messageWidget = kundliView(chatDetail: chatMessage, index: 0);
-    //   break;
+      // case "audio":
+      //   messageWidget = audioView(context, chatDetail: chatMessage, yourMessage: yourMessage);
+      //   break;
+      // case "image":
+      //   messageWidget = imageMsgView(chatMessage.base64Image!, yourMessage, chatDetail: chatMessage, index: index);
+      //   break;
+      // case "kundli":
+      //   messageWidget = kundliView(chatDetail: chatMessage, index: 0);
+      //   break;
       default:
         messageWidget = const SizedBox.shrink();
     }
@@ -88,8 +85,7 @@ class AssistMessageView extends StatelessWidget {
     return SizedBox(
       width: double.maxFinite,
       child: Column(
-        crossAxisAlignment:
-        CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
@@ -121,9 +117,7 @@ class AssistMessageView extends StatelessWidget {
                 //   ),
                 // ),
                 SizedBox(width: 6.w),
-                Flexible(
-                    child: Text(
-                        chatMessage.message??''))
+                Flexible(child: Text(chatMessage.message ?? ''))
               ],
             ),
           ),

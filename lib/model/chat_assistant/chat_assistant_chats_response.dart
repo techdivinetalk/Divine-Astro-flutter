@@ -111,8 +111,11 @@ class AssistChatData {
   int? customerId;
   int? astrologerId;
   int? msgType;
+  SendBy? sendBy;
   ChatType? chatType;
   MsgStatus? msgStatus;
+  // String? awsUrl;
+  // int? giftId;
   String? createdAt;
   int? seenStatus;
   int? isSuspicious;
@@ -125,7 +128,10 @@ class AssistChatData {
       this.msgStatus,
       this.msgType,
       this.chatType,
+      this.sendBy,
       this.createdAt,
+      // this.awsUrl,
+      // this.giftId,
       this.isSuspicious,
       this.seenStatus});
 
@@ -135,12 +141,17 @@ class AssistChatData {
     customerId = json['customer_id'];
     astrologerId = json['astrologer_id'];
     msgType = json['msg_type'];
+    sendBy = json['send_by'] != null
+        ? sendByValue.map[json["chat_type"]]
+        : SendBy.customer;
     chatType = json['chat_type'] != null
         ? chatTypeValues.map[json["chat_type"]]
         : ChatType.text;
     msgStatus = json['msg_status'] != null
         ? msgStatusValues.map[json["msg_status"]]
-        : MsgStatus.delivered;
+        : MsgStatus.sent;
+    // awsUrl = json['awsUrl'];
+    // giftId = json['gift_id'];
     createdAt = json['created_at'];
     isSuspicious = json['is_suspicious'];
     seenStatus = json['seen_status'];
@@ -153,14 +164,24 @@ class AssistChatData {
     data['customer_id'] = customerId;
     data['astrologer_id'] = astrologerId;
     data['msg_type'] = msgType;
+    data['send_by'] = sendByValue.reverse[sendBy];
     data['chat_type'] = chatTypeValues.reverse[chatType];
     data['msg_status'] = msgStatusValues.reverse[msgStatus];
     data['created_at'] = createdAt;
+    // data['awsUrl'] = awsUrl;
+    // data['gift_id'] = giftId;
     data['is_suspicious'] = isSuspicious;
     data['seen_status'] = seenStatus;
     return data;
   }
 }
+
+enum SendBy { customer, astrologer }
+
+final sendByValue = EnumValues({
+  'customer': SendBy.customer,
+  'astrologer': SendBy.astrologer,
+});
 
 enum ChatType { text, Gift }
 

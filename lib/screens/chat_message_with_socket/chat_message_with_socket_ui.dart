@@ -843,6 +843,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       },
     );
   }
+  
 
   void showCurvedBottomSheet(context) {
     List<SvgPicture> itemList = [
@@ -1796,33 +1797,33 @@ class AstrologerChatAppBar extends StatelessWidget {
                           },
                         ),
                         SizedBox(width: 5.w),
-                        PopupMenuButton(
-                          surfaceTintColor: Colors.transparent,
-                          color: Colors.white,
-                          itemBuilder: (context) => [
-                            PopupMenuItem(
-                                child: InkWell(
-                              onTap: () {
-                                // Navigator.pop(context);
-                                //
-                                // showCupertinoModalPopup(
-                                //   barrierColor:
-                                //   appColors.darkBlue.withOpacity(0.5),
-                                //   context: context,
-                                //   builder: (context) => ReportPostReasons(
-                                //       reviewData?.id.toString() ?? ''),
-                                //
-                                //   // builder: (context) => ReportPostReasons(reviewData?.id.),
-                                // );
-                              },
-                              child: Text(
-                                "Chat History",
-                                style: AppTextStyle.textStyle13(),
-                              ),
-                            )),
-                          ],
-                          child: const Icon(Icons.more_vert_rounded),
-                        ),
+                        // PopupMenuButton(
+                        //   surfaceTintColor: Colors.transparent,
+                        //   color: Colors.white,
+                        //   itemBuilder: (context) => [
+                        //     PopupMenuItem(
+                        //         child: InkWell(
+                        //       onTap: () {
+                        //         // Navigator.pop(context);
+                        //         //
+                        //         // showCupertinoModalPopup(
+                        //         //   barrierColor:
+                        //         //   appColors.darkBlue.withOpacity(0.5),
+                        //         //   context: context,
+                        //         //   builder: (context) => ReportPostReasons(
+                        //         //       reviewData?.id.toString() ?? ''),
+                        //         //
+                        //         //   // builder: (context) => ReportPostReasons(reviewData?.id.),
+                        //         // );
+                        //       },
+                        //       child: Text(
+                        //         "Chat History",
+                        //         style: AppTextStyle.textStyle13(),
+                        //       ),
+                        //     )),
+                        //   ],
+                        //   child: const Icon(Icons.more_vert_rounded),
+                        // ),
                         SizedBox(width: 10.w),
                       ],
                     ),
