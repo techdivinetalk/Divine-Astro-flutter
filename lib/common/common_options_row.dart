@@ -60,7 +60,7 @@ class CommonOptionRow extends StatelessWidget {
             ),
           ),
         ).expand(),
-        SizedBox(width: 15.w),
+        /*SizedBox(width: 15.w),
         InkWell(
           onTap: onRightTap,
           child: Container(
@@ -88,7 +88,7 @@ class CommonOptionRow extends StatelessWidget {
               ),
             ),
           ),
-        ).expand()
+        ).expand()*/
       ],
     );
   }

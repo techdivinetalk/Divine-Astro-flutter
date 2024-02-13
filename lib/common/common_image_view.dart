@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../gen/assets.gen.dart';
+
 
 class CommonImageView extends StatelessWidget {
   final String? imagePath;
@@ -36,6 +36,7 @@ class CommonImageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return alignment != null
         ? Align(
             alignment: alignment!,
@@ -83,7 +84,9 @@ class CommonImageView extends StatelessWidget {
 
   Widget _buildImageView() {
     if (imagePath != null) {
+
       switch (imagePath!.imageType) {
+
         case ImageType.svg:
           return SizedBox(
             height: height,
@@ -98,7 +101,7 @@ class CommonImageView extends StatelessWidget {
           );
         case ImageType.file:
           return Image.file(
-            File(imagePath!),
+            File(imagePath!.replaceAll("file://", "")),
             height: height,
             width: width,
             fit: BoxFit.cover,
@@ -127,10 +130,11 @@ class CommonImageView extends StatelessWidget {
               ),
             ),
             errorWidget: (context, url, error) => Center(
-              child: SvgPicture.asset(
-                "assets/svg/caution.svg",
-                height: height,
-                width: width,
+              child:placeHolder.contains("images") ? Image.asset(placeHolder, height: height,
+                width: width,): SvgPicture.asset(
+                placeHolder ,
+                // height: height,
+                // width: width,
                 fit: BoxFit.cover,
               ),
             ),

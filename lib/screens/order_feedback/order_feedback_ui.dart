@@ -15,40 +15,44 @@ class OrderFeedbackUI extends GetView<OrderFeedbackController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: commonDetailAppbar(
-        title: "All Order Feedback",
-        trailingWidget: InkWell(
-          onTap: () => controller.homeController.whatsapp(),
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(20.r)),
-              border: Border.all(color: appColors.red, width: 1),
+    return GetBuilder<OrderFeedbackController>(
+      assignId: true,
+      init: OrderFeedbackController(),
+      builder: (controller) {
+        return Scaffold(
+          appBar: commonDetailAppbar(
+            title: "All Order Feedback",
+            trailingWidget: InkWell(
+              onTap: () => controller.homeController.whatsapp(),
+              child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20.r)),
+                    border: Border.all(color: appColors.red, width: 1),
+                  ),
+                  child: Text(
+                    'Need Help ?',
+                    style: AppTextStyle.textStyle12(
+                      fontColor: appColors.red,
+                    ),
+                  )),
             ),
-            child: Text(
-              'Need Help ?',
-              style: AppTextStyle.textStyle12(
-                fontColor: appColors.red,
-              ),
-            )
           ),
-        ),
-      ),
-
-      body: Obx((){
-        return controller.feedbacks.isEmpty ? const GenericLoadingWidget() :
-        ListView.separated(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-          itemBuilder: (context, index) {
-            FeedbackData feedback = controller.feedbacks[index];
-            return FeedbackCardWidget(feedback: feedback);
-          },
-          itemCount: controller.feedbacks.length,
-          separatorBuilder: (context, index) => SizedBox(height: 20.h),
+          body: controller.loading
+              ? const GenericLoadingWidget()
+              : ListView.separated(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+            itemBuilder: (context, index) {
+              FeedbackData feedback = controller.feedbacks[index];
+              return FeedbackCardWidget(feedback: feedback);
+            },
+            itemCount: controller.feedbacks.length,
+            separatorBuilder: (context, index) => SizedBox(height: 20.h),
+          ),
         );
-      }),
+      },
     );
   }
 }

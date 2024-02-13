@@ -6,6 +6,9 @@ import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/di/hive_services.dart";
 import "package:divine_astrologer/di/shared_preference_service.dart";
+import "package:divine_astrologer/model/res_login.dart";
+import "package:divine_astrologer/repository/pre_defind_repository.dart";
+import "package:divine_astrologer/screens/dashboard/dashboard_controller.dart";
 import "package:divine_astrologer/screens/side_menu/settings/settings_controller.dart";
 import "package:divine_astrologer/watcher/real_time_watcher.dart";
 import "package:firebase_database/firebase_database.dart";
@@ -69,6 +72,13 @@ class AppFirebaseService {
               Get.put(SettingsController()).logOut();
             }
           }
+          if(realTimeData["profilePhoto"] != null){
+            UserData?  userData = Get.find<SharedPreferenceService>().getUserDetail();
+            userData!.image = realTimeData["profilePhoto"];
+            Get.find<SharedPreferenceService>().setUserDetail(userData);
+            Get.put(DashboardController(Get.put(PreDefineRepository()))).userProfileImage.value = userData.image!;
+            Get.put(DashboardController(Get.put(PreDefineRepository()))).update();
+          } 
           if (realTimeData["engageId"] != null) {
             tableName = "chat_${realTimeData["engageId"]}";
             debugPrint("tableName ${tableName}");

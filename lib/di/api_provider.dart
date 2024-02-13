@@ -46,6 +46,7 @@ class ApiProvider {
   final String getReviewRatingUrl = "getReviewRating";
   final String blockCustomerlistUrl = "blockCustomerlist";
   final String blockCustomerUrl = "blockCustomer";
+  final String uploadAstroImage = "uploadAstroImage";
   final String getShopUrl = "getShop";
   final String getProductListUrl = "getProductList";
   final String getProductDetailsUrl = "getProductDetails";
@@ -359,7 +360,7 @@ class ApiProvider {
       log("headers: $headers");
       var response = await http
           .post(Uri.parse(endPoint + url),
-              headers: headers, body: body, encoding: encoding)
+              headers: headers, body: body, encoding: encoding,)
           .timeout(const Duration(seconds: 15), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
