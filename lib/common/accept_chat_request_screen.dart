@@ -104,7 +104,9 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
           },
         );
       } else if (event.name == "EndChat") {
-        Get.offAllNamed(RouteName.dashboard);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Get.offAllNamed(RouteName.dashboard);
+        });
         broadcastReceiver.stop();
       }
     });
