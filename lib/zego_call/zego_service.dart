@@ -49,7 +49,7 @@ class ZegoService {
       userName: _pref.getUserDetail()?.name ?? "",
       plugins: [ZegoUIKitSignalingPlugin()],
       notificationConfig: ZegoCallInvitationNotificationConfig(
-        androidNotificationConfig: ZegoAndroidNotificationConfig(
+        androidNotificationConfig: ZegoCallAndroidNotificationConfig(
           channelID: "ZegoUIKit",
           channelName: "Call Notifications",
           sound: "accept_ring",
@@ -64,17 +64,6 @@ class ZegoService {
           endTime(DateTime(1970, 01, 01));
         },
       ),
-      events: ZegoUIKitPrebuiltCallEvents(
-        onCallEnd: (
-          ZegoUIKitCallEndEvent event,
-          VoidCallback defaultAction,
-        ) {
-          debugPrint('onCallEnd, do whatever you want');
-          if (isInCallScreen.value) {
-            defaultAction();
-          } else {}
-        },
-      ),
       uiConfig: ZegoCallInvitationUIConfig(
         prebuiltWithSafeArea: false,
         callingBackgroundBuilder: (
@@ -87,6 +76,19 @@ class ZegoService {
               : null;
         },
       ),
+      // events: ZegoUIKitPrebuiltCallEvents(
+      //   onCallEnd: (
+      //     ZegoCallEndEvent event,
+      //     VoidCallback defaultAction,
+      //   ) {
+      //     print("event:: ${event.reason.name}");
+      //     print('event:: onCallEnd, do whatever you want');
+      //     print('event:: ${isInCallScreen.value}');
+      //     if (isInCallScreen.value) {
+      //       defaultAction.call();
+      //     } else {}
+      //   },
+      // ),
       requireConfig: (ZegoCallInvitationData data) {
         final Map map = json.decode(data.customData);
         // final String astrId = map["astr_id"];
