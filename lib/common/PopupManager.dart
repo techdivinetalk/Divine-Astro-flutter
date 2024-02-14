@@ -73,7 +73,7 @@ class PopupManager {
                       print("Clicked order history");
                       Get.back();
 
-                      Get.toNamed(RouteName.orderHistory);
+                      Get.toNamed(RouteName.orderHistory,arguments: 3);
                     },
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 20),

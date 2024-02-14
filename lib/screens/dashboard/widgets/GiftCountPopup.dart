@@ -62,7 +62,7 @@ Future GiftCountPopup(BuildContext context,
                 if (btnTitle != null)
                   GestureDetector(
                     onTap: () {
-                      print("Clicked order history");
+
                       Get.toNamed(RouteName.orderHistory);
                     },
                     child: Container(

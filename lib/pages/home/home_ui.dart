@@ -9,6 +9,7 @@ import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
+import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_controller.dart';
 import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_ui.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/screens/order_feedback/widget/feedback_card_widget.dart';
@@ -22,6 +23,7 @@ import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';
@@ -633,7 +635,24 @@ class HomeUI extends GetView<HomeController> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              DateTime time =
+                                  DateFormat('d MMMM yyyy').parse(data?["dob"]);
+
+                              Get.toNamed(RouteName.kundliDetail, arguments: {
+                                "kundli_id": 0,
+                                "from_kundli": false,
+                                "params": Params(
+                                    name: data?["userName"],
+                                    day: time.day,
+                                    hour: time.hour,
+                                    location: data?["pob"],
+                                    min: time.minute,
+                                    year: time.year,
+                                    month: time.month),
+                                "gender": data?["gender"],
+                              });
+                            },
                             child: Container(
                               height: 54.h,
                               decoration: BoxDecoration(
@@ -646,7 +665,7 @@ class HomeUI extends GetView<HomeController> {
                                   ],
                                 ),
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(30)),
+                                    const BorderRadius.all(Radius.circular(30)),
                               ),
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 8),
@@ -1971,74 +1990,70 @@ class PerformanceDialog extends StatelessWidget {
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(15.0))),
-      child: Builder(
-        builder: (context) {
-          return GetBuilder<HomeController>(
-              id: "score_update",
-              builder: (controller) {
-                return Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15)),
-                  child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Center(
-                          child: Text(
-                            "${'payAttention'.tr}!",
-                            style: AppTextStyle.textStyle20(
-                                fontColor: appColors.redColor,
-                                fontWeight: FontWeight.w600),
-                          ),
+      child: GetBuilder<HomeController>(
+          id: "score_update",
+          builder: (controller) {
+            return Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(15)),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Center(
+                      child: Text(
+                        "${'payAttention'.tr}!",
+                        style: AppTextStyle.textStyle20(
+                            fontColor: appColors.redColor,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    SizedBox(height: 20.h),
+                    Center(
+                      child: Container(
+                        width: 230.h,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 3.0,
+                                offset: const Offset(0.0, 3.0)),
+                          ],
+                          color: Colors.white,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(20)),
                         ),
-                        SizedBox(height: 20.h),
-                        Center(
-                          child: Container(
-                            width: 230.h,
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    blurRadius: 3.0,
-                                    offset: const Offset(0.0, 3.0)),
-                              ],
-                              color: Colors.white,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(20)),
-                            ),
-                            child: Column(
-                              children: [
-                                SizedBox(height: 16.h),
-                                Center(
-                                  child: Text(
-                                    controller.getLabel(),
-                                    // "",
-                                    // controller
-                                    //         .performanceScoreList[
-                                    //             controller.scoreIndex]
-                                    //         ?.label ??
-                                    //     '',
+                        child: Column(
+                          children: [
+                            SizedBox(height: 16.h),
+                            Center(
+                              child: Text(
+                                controller.getLabel(),
+                                // "",
+                                // controller
+                                //         .performanceScoreList[
+                                //             controller.scoreIndex]
+                                //         ?.label ??
+                                //     '',
 
-                                    // controller.yourScore[controller.scoreIndex]
-                                    //     ['title'],
-                                    style: AppTextStyle.textStyle14(
-                                        fontColor: appColors.blackColor,
-                                        fontWeight: FontWeight.w400),
+                                // controller.yourScore[controller.scoreIndex]
+                                //     ['title'],
+                                style: AppTextStyle.textStyle14(
+                                    fontColor: appColors.blackColor,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 190.h,
+                              child: Stack(
+                                children: [
+                                  Assets.images.bgMeterFinal.svg(
+                                    height: 135.h,
+                                    width: 135.h,
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 190.h,
-                                  child: Stack(
-                                    children: [
-                                      Assets.images.bgMeterFinal.svg(
-                                        height: 135.h,
-                                        width: 135.h,
-                                      ),
-                                      /*Positioned(
+                                  /*Positioned(
                                         left: 32.h,
                                         top: 40.h,
                                         child: CustomText(
@@ -2075,188 +2090,179 @@ class PerformanceDialog extends StatelessWidget {
                                           fontSize: 8.sp,
                                         ),
                                       ),*/
-                                      SizedBox(
-                                        height: 135.h,
-                                        width: 270.h,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            SizedBox(height: 25.h),
-                                            Text(
-                                              "Your Score",
-                                              style: AppTextStyle.textStyle10(
-                                                  fontColor:
-                                                      appColors.darkBlue),
-                                            ),
-                                            SizedBox(height: 5.h),
-                                            Text(
-                                              '${controller.performanceScoreList[controller.scoreIndex]?.performance?.marksObtains ?? 0}',
-                                              // item?.performance?.isNotEmpty ?? false
-                                              //     ? '${item?.performance?[0].value ?? 0}'
-                                              //     : "0",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w700,
-                                                  color: appColors.darkBlue,
-                                                  fontSize: 20.sp),
-                                            ),
-                                            SizedBox(height: 5.h),
-                                            Text(
-                                              'Out of ${controller.performanceScoreList[controller.scoreIndex]?.performance?.totalMarks ?? 0}',
-                                              // item?.performance?.isNotEmpty ?? false
-                                              //     ? 'Out of ${item?.performance?[0].valueOutOff ?? 0}'
-                                              //     : "Out of 0",
-                                              // "Out of 100",
-                                              style: AppTextStyle.textStyle10(
-                                                  fontColor:
-                                                      appColors.darkBlue),
-                                            ),
-                                          ],
+                                  SizedBox(
+                                    height: 135.h,
+                                    width: 270.h,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        SizedBox(height: 25.h),
+                                        Text(
+                                          "Your Score",
+                                          style: AppTextStyle.textStyle10(
+                                              fontColor: appColors.darkBlue),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 20.h),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 20.h),
-                        controller.performanceScoreList.length == 1
-                            ? const SizedBox()
-                            : Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        controller.onPreviousTap();
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(width: 1),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Center(
-                                            child: Text(
-                                              "previous".tr,
-                                              style: AppTextStyle.textStyle16(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontColor:
-                                                      appColors.darkBlue),
-                                            ),
-                                          ),
+                                        SizedBox(height: 5.h),
+                                        Text(
+                                          '${controller.performanceScoreList[controller.scoreIndex]?.performance?.marksObtains ?? 0}',
+                                          // item?.performance?.isNotEmpty ?? false
+                                          //     ? '${item?.performance?[0].value ?? 0}'
+                                          //     : "0",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              color: appColors.darkBlue,
+                                              fontSize: 20.sp),
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(width: 20.w),
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        controller.onNextTap();
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(width: 1),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Center(
-                                            child: Text(
-                                              "next".tr,
-                                              style: AppTextStyle.textStyle16(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontColor:
-                                                      appColors.darkBlue),
-                                            ),
-                                          ),
+                                        SizedBox(height: 5.h),
+                                        Text(
+                                          'Out of ${controller.performanceScoreList[controller.scoreIndex]?.performance?.totalMarks ?? 0}',
+                                          // item?.performance?.isNotEmpty ?? false
+                                          //     ? 'Out of ${item?.performance?[0].valueOutOff ?? 0}'
+                                          //     : "Out of 0",
+                                          // "Out of 100",
+                                          style: AppTextStyle.textStyle10(
+                                              fontColor: appColors.darkBlue),
                                         ),
-                                      ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
-                        controller.performanceScoreList.length == 1
-                            ? const SizedBox()
-                            : SizedBox(height: 15.h),
-                        controller.scoreIndex == controller.yourScore.length - 1
-                            ? GestureDetector(
-                                onTap: () => Navigator.pop(context),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.bottomCenter,
-                                        end: Alignment.topCenter,
-                                        colors: [
-                                          appColors.appYellowColour,
-                                          appColors.gradientBottom
-                                        ],
-                                      ),
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Center(
-                                      child: Text(
-                                        "close".tr,
-                                        style: AppTextStyle.textStyle16(
-                                            fontWeight: FontWeight.w600,
-                                            fontColor: appColors.brownColour),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : GestureDetector(
-                                onTap: () {
-                                  if (controller.performanceScoreList.last ==
-                                      (controller.performanceScoreList[
-                                          controller.scoreIndex])) {
-                                    Get.put(DashboardController(
-                                            Get.put(PreDefineRepository())))
-                                        .selectedIndex
-                                        .value = 1;
-                                    Get.put(DashboardController(
-                                            Get.put(PreDefineRepository())))
-                                        .update();
-                                    Navigator.pop(context);
-                                  }
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: controller
-                                                  .performanceScoreList.last ==
-                                              controller.performanceScoreList[
-                                                  controller.scoreIndex]
-                                          ? appColors.yellow
-                                          : appColors.lightGrey,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Center(
-                                      child: Text(
-                                        "viewScore".tr,
-                                        style: AppTextStyle.textStyle16(
-                                            fontWeight: FontWeight.w600,
-                                            fontColor: appColors.white),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                      ],
+                            ),
+                            SizedBox(height: 20.h),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                );
-              });
-        },
-      ),
+                    SizedBox(height: 20.h),
+                    controller.performanceScoreList.length == 1
+                        ? const SizedBox()
+                        : Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    controller.onPreviousTap();
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(width: 1),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: Text(
+                                          "previous".tr,
+                                          style: AppTextStyle.textStyle16(
+                                              fontWeight: FontWeight.w600,
+                                              fontColor: appColors.darkBlue),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 20.w),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    controller.onNextTap();
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(width: 1),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: Text(
+                                          "next".tr,
+                                          style: AppTextStyle.textStyle16(
+                                              fontWeight: FontWeight.w600,
+                                              fontColor: appColors.darkBlue),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                    controller.performanceScoreList.length == 1
+                        ? const SizedBox()
+                        : SizedBox(height: 15.h),
+                    controller.scoreIndex == controller.yourScore.length - 1
+                        ? GestureDetector(
+                            onTap: () => Navigator.pop(context),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.bottomCenter,
+                                    end: Alignment.topCenter,
+                                    colors: [
+                                      appColors.appYellowColour,
+                                      appColors.gradientBottom
+                                    ],
+                                  ),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(
+                                    "close".tr,
+                                    style: AppTextStyle.textStyle16(
+                                        fontWeight: FontWeight.w600,
+                                        fontColor: appColors.brownColour),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              if (controller.performanceScoreList.last ==
+                                  (controller.performanceScoreList[
+                                      controller.scoreIndex])) {
+                                // Get.put(DashboardController(
+                                //         Get.put(PreDefineRepository())))
+                                //     .selectedIndex
+                                //     .value = 1;
+                                // Get.put(DashboardController(
+                                //         Get.put(PreDefineRepository())))
+                                //     .update();
+                                Navigator.pop(context);
+                              }
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: controller.performanceScoreList.last ==
+                                          controller.performanceScoreList[
+                                              controller.scoreIndex]
+                                      ? appColors.yellow
+                                      : appColors.lightGrey,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(
+                                    "viewScore".tr,
+                                    style: AppTextStyle.textStyle16(
+                                        fontWeight: FontWeight.w600,
+                                        fontColor: appColors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                  ],
+                ),
+              ),
+            );
+          }),
     );
   }
 }
