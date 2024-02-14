@@ -35,14 +35,9 @@ class BankDetailController extends GetxController {
     userId = userData!.id!;
     setUserData();
     super.onInit();
-
   }
 
-  @override
-  void dispose() {
-    super.dispose();
 
-  }
 
   Future<File?> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -115,6 +110,8 @@ class BankDetailController extends GetxController {
         );
     final response =
         await userRepository.updateBankDetailsApi(request.toJson());
+    status = response.data.status!;
+    update();
     await saveUpdatedBankDetails(response.toPrettyString());
     divineSnackBar(data: response.message);
   }

@@ -75,9 +75,10 @@ class DashboardController extends GetxController
     Get.find<SharedPreferenceService>()
         .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
     //
+ String?   baseAmazonUrl = preference.getBaseImageURL();
     userData = preference.getUserDetail();
     userProfileImage.value =
-        userData?.image != null ? "${userData?.image}" : "";
+        userData?.image != null ? "$baseAmazonUrl/${userData?.image}" : "";
     print(userData?.image);
     print(userProfileImage.value);
     print("userProfileImage.value");

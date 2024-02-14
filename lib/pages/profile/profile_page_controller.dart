@@ -204,7 +204,7 @@ class ProfilePageController extends GetxController {
     super.onInit();
     userData = preference.getUserDetail();
     baseAmazonUrl = preference.getBaseImageURL();
-    userProfileImage.value = "${userData?.image}";
+    userProfileImage.value = "$baseAmazonUrl/${userData?.image}";
     print(userProfileImage.value);
     print("userProfileImage.value");
     getUserProfileDetails();
@@ -423,7 +423,7 @@ class ProfilePageController extends GetxController {
     pickedFile = await picker.pickImage(
         source: isCamera ? ImageSource.camera : ImageSource.gallery,
         imageQuality: 90,
-        maxWidth: 250);
+        maxWidth: 250,);
 
     if (pickedFile != null) {
       image = File(pickedFile!.path);

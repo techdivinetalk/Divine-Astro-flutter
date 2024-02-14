@@ -234,6 +234,7 @@ class Assets {
   static const String notoSansNotoSansThin = 'assets/fonts/noto_sans/NotoSans-Thin.ttf';
   static const String svgBlackDot = 'assets/svg/black_dot.svg';
   static const String svgBlock = 'assets/svg/block.svg';
+  static const String accessBlocked = 'assets/svg/access_blocked.svg';
   static const String svgBlockUser = 'assets/svg/block_user.svg';
   static const String svgCallEarning = 'assets/svg/call_earning.svg';
   static const String svgCamera = 'assets/svg/camera.svg';
