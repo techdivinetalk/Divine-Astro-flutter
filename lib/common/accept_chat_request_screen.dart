@@ -104,10 +104,18 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
           },
         );
       } else if (event.name == "EndChat") {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Get.offAllNamed(RouteName.dashboard);
-        });
-        broadcastReceiver.stop();
+        // WidgetsBinding.instance.addPostFrameCallback((_) {
+        //   Get.offAllNamed(RouteName.dashboard);
+        // });
+        WidgetsBinding.instance.endOfFrame.then(
+          (_) async {
+            if (mounted) {
+              broadcastReceiver.stop();
+              Navigator.pop(context);
+            } else {}
+          },
+        );
+        
       }
     });
 

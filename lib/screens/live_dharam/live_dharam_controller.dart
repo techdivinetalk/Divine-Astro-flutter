@@ -91,6 +91,7 @@ class LiveDharamController extends GetxController {
     ),
     giftCount: 0,
   ).obs;
+  final RxBool _isProcessing = false.obs;
 
   @override
   void onInit() {
@@ -162,6 +163,7 @@ class LiveDharamController extends GetxController {
       ),
       giftCount: 0,
     );
+    isProcessing = false;
 
     return;
   }
@@ -202,6 +204,7 @@ class LiveDharamController extends GetxController {
     _hasCallAcceptRejectPopupOpen.close();
     _openAceeptRejectDialogForId.close();
     _requestClass.close();
+    _isProcessing.close();
 
     super.onClose();
   }
@@ -315,6 +318,9 @@ class LiveDharamController extends GetxController {
 
   RequestClass get requestClass => _requestClass.value;
   set requestClass(RequestClass value) => _requestClass(value);
+
+  bool get isProcessing => _isProcessing.value;
+  set isProcessing(bool value) => _isProcessing(value);
 
   Future<void> eventListner({
     // required DatabaseEvent event,
@@ -531,11 +537,18 @@ class LiveDharamController extends GetxController {
   //   }
   // }
 
-  // String requirePreviousLiveID({required Function() acknowledgement}) {
+  // String requirePreviousLiveID({
+  //   required Function() acknowledgement,
+  //   required Function() stillProcessing,
+  // }) {
   //   print("requirePreviousLiveID");
+  //   final processing = isProcessing;
   //   final bool has =
   //       hasMyIdInWaitList() || isWaitingForCallAstrologerPopupResponse;
-  //   if (has) {
+  //   if (processing) {
+  //     stillProcessing();
+  //     return "";
+  //   } else if (has) {
   //     acknowledgement();
   //     return "";
   //   } else {
@@ -555,11 +568,18 @@ class LiveDharamController extends GetxController {
   //   }
   // }
 
-  // String requireNextLiveID({required Function() acknowledgement}) {
+  // String requireNextLiveID({
+  //   required Function() acknowledgement,
+  //   required Function() stillProcessing,
+  // }) {
   //   print("requireNextLiveID");
+  //   final processing = isProcessing;
   //   final bool has =
   //       hasMyIdInWaitList() || isWaitingForCallAstrologerPopupResponse;
-  //   if (has) {
+  //   if (processing) {
+  //     stillProcessing();
+  //     return "";
+  //   } else if (has) {
   //     acknowledgement();
   //     return "";
   //   } else {
