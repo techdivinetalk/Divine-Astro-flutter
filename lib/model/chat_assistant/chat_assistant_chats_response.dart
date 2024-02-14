@@ -110,9 +110,8 @@ class AssistChatData {
   String? message;
   int? customerId;
   int? astrologerId;
-  int? msgType;
+  MsgType? msgType;
   SendBy? sendBy;
-  ChatType? chatType;
   MsgStatus? msgStatus;
   // String? awsUrl;
   // int? giftId;
@@ -122,31 +121,29 @@ class AssistChatData {
 
   AssistChatData(
       {this.id,
-      this.message,
-      this.customerId,
-      this.astrologerId,
-      this.msgStatus,
-      this.msgType,
-      this.chatType,
-      this.sendBy,
-      this.createdAt,
-      // this.awsUrl,
-      // this.giftId,
-      this.isSuspicious,
-      this.seenStatus});
+        this.message,
+        this.customerId,
+        this.astrologerId,
+        this.msgStatus,
+        this.msgType,
+        this.sendBy,
+        this.createdAt,
+        // this.awsUrl,
+        // this.giftId,
+        this.isSuspicious,
+        this.seenStatus});
 
   AssistChatData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     message = json['message'];
     customerId = json['customer_id'];
     astrologerId = json['astrologer_id'];
-    msgType = json['msg_type'];
     sendBy = json['send_by'] != null
-        ? sendByValue.map[json["chat_type"]]
+        ? sendByValue.map[json["send_by"]]
         : SendBy.customer;
-    chatType = json['chat_type'] != null
-        ? chatTypeValues.map[json["chat_type"]]
-        : ChatType.text;
+    msgType = json['msg_type'] != null
+        ? msgTypeValues.map[json["msg_type"]]
+        : MsgType.text;
     msgStatus = json['msg_status'] != null
         ? msgStatusValues.map[json["msg_status"]]
         : MsgStatus.sent;
@@ -163,9 +160,8 @@ class AssistChatData {
     data['message'] = message;
     data['customer_id'] = customerId;
     data['astrologer_id'] = astrologerId;
-    data['msg_type'] = msgType;
     data['send_by'] = sendByValue.reverse[sendBy];
-    data['chat_type'] = chatTypeValues.reverse[chatType];
+    data['msg_type'] = msgTypeValues.reverse[msgType];
     data['msg_status'] = msgStatusValues.reverse[msgStatus];
     data['created_at'] = createdAt;
     // data['awsUrl'] = awsUrl;
@@ -179,15 +175,15 @@ class AssistChatData {
 enum SendBy { customer, astrologer }
 
 final sendByValue = EnumValues({
-  'customer': SendBy.customer,
-  'astrologer': SendBy.astrologer,
+  '0': SendBy.customer,
+  '1': SendBy.astrologer,
 });
 
-enum ChatType { text, Gift }
+enum MsgType { text, Gift }
 
-final chatTypeValues = EnumValues({
-  "textChat": ChatType.text,
-  "giftChat": ChatType.Gift,
+final msgTypeValues = EnumValues({
+  "0": MsgType.text,
+  "8": MsgType.Gift,
 });
 
 enum MsgStatus { sent, delivered, received }

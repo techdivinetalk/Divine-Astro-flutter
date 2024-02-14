@@ -124,20 +124,23 @@ class SharedPreferenceService extends GetxService {
   }
 
   Future<void> saveMessageTemplates(String json) async {
-    debugPrint('ress1: ${json}');
-    final result = await prefs?.setString(messageTemplate, json);
-    final data = prefs?.getString(messageTemplate);
-    debugPrint('ress2: ${json} $data');
-    debugPrint('ress2: ${json} $result');
+    final SharedPreferences sharedInstance =
+        await SharedPreferences.getInstance();
+
+    // sharedInstance.remove(messageTemplate);
+    final result = await sharedInstance.setString(messageTemplate, json);
+
   }
 
-  MessageTemplateResponse? getMessageTemplates() {
-    debugPrint('get tamplte func');
-    String? data = prefs?.getString(messageTemplate);
-    debugPrint('get tamplte func 2: ');
-    return messageTemplateResponseFromJson(data!);
-    debugPrint('get tamplte func 3: $data');
-    return null;
+  Future<List<MessageTemplates>> getMessageTemplates() async {
+    final SharedPreferences sharedInstance =
+        await SharedPreferences.getInstance();
+    String data = sharedInstance.getString(messageTemplate) ?? 'dharam';
+    final list = (json.decode(data));
+    return list
+        .map<MessageTemplates>((element) => MessageTemplates.fromJson(element))
+        .toList();
+    // return null;
   }
 
   String? getBaseImageURL() {

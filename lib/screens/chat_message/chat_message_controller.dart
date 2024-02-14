@@ -48,7 +48,9 @@ class ChatMessageController extends GetxController {
                     .format(DateTime.now()),
                 id: DateTime.now().millisecondsSinceEpoch,
                 isSuspicious: 0,
-                msgType: 0,
+                msgType: responseMsg['msg_type'] != null
+                    ? msgTypeValues.map[responseMsg["msg_type"]]
+                    : MsgType.text,
                 seenStatus: 2,
                 customerId: int.parse(responseMsg["sender_id"] ?? 0)));
             scrollToBottomFunc();
@@ -75,6 +77,21 @@ class ChatMessageController extends GetxController {
     super.onReady();
     Future.delayed(const Duration(milliseconds: 600)).then((value) {
       scrollToBottomFunc();
+    });
+  }
+
+  void listenSocket() {
+    appSocket.listenForAssistantChatMessage((chatData) {
+      print("data from chatAssist message $chatData");
+      final newChatData = AssistChatData.fromJson(chatData['msgData']);
+      final updateAtIndex = chatMessageList
+          .indexWhere((oldChatData) => oldChatData.id == newChatData.id);
+      if (updateAtIndex == -1) {
+        chatMessageList.add(newChatData);
+      } else {
+        chatMessageList[updateAtIndex] = newChatData;
+      }
+      update();
     });
   }
 
@@ -142,11 +159,10 @@ class ChatMessageController extends GetxController {
               .format(DateTime.now()),
           id: DateTime.now().millisecondsSinceEpoch,
           isSuspicious: 0,
-          msgType: 0,
-          sendBy: SendBy.customer,
+          msgType: MsgType.text,
+          sendBy: SendBy.astrologer,
           seenStatus: 0,
           msgStatus: MsgStatus.sent,
-          chatType: ChatType.text,
           customerId: preferenceService.getUserDetail()!.id);
       appSocket.sendAssistantMessage(
           customerId: args!.id.toString(),

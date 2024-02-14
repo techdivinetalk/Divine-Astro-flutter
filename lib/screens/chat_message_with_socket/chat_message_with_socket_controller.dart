@@ -17,6 +17,7 @@ import "package:divine_astrologer/repository/user_repository.dart";
 import "package:divine_astrologer/screens/dashboard/dashboard_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
+import "package:divine_astrologer/screens/message_template/message_template_controller.dart";
 import "package:divine_astrologer/zego_call/zego_service.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
@@ -89,6 +90,7 @@ class ChatMessageWithSocketController extends GetxController
   RxBool isOngoingChat = false.obs;
   RxString chatStatus = "Offline".obs;
   DashboardController dashboardController = Get.find<DashboardController>();
+  MessageTemplateController messageTemplateController = Get.find<MessageTemplateController>();
   RxBool isTyping = false.obs;
   BroadcastReceiver broadcastReceiver = BroadcastReceiver(
       names: <String>["EndChat", "deliveredMsg", "updateTime", "displayCard"]);

@@ -146,27 +146,39 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                                             //         .messageTemplates[index]
                                             //         .isOn ??
                                             //     true);
-print("1");
-                                            if (controller.messageLocalTemplates
-                                                .contains(messageTemplate)) {
+                                            print("1");
+                                            final result = controller
+                                                .messageLocalTemplates
+                                                .indexWhere(
+                                              (element) =>
+                                                  element.id ==
+                                                  messageTemplate.id,
+                                            );
+
+                                            if (result != -1) {
                                               print("2");
                                               controller.messageLocalTemplates
                                                   .removeWhere((element) =>
                                                       element.id ==
                                                       messageTemplate.id);
                                             } else {
-                                              print("3");
                                               controller.messageLocalTemplates
                                                   .add(messageTemplate);
                                             }
                                             await controller
                                                 .updateMessageTemplateLocally();
-                                            controller.refresh();
-
+                                            controller.update();
                                           },
                                           switchValue: controller
-                                              .messageLocalTemplates
-                                              .contains(messageTemplate),
+                                                      .messageLocalTemplates
+                                                      .indexWhere(
+                                                    (element) =>
+                                                        element.id ==
+                                                        messageTemplate.id,
+                                                  ) ==
+                                                  -1
+                                              ? false
+                                              : true,
                                         ),
                                       ],
                                     ),
@@ -193,11 +205,11 @@ print("1");
                                           text: 'Created On: ',
                                           style: AppTextStyle.textStyle14(
                                               fontWeight: FontWeight.w600)),
-                                      TextSpan(
-                                          text:
-                                              '${formatDateTime(messageTemplate.createdAt ?? DateTime.now())} ',
-                                          //'${messageTemplate.createdAt}',
-                                          style: AppTextStyle.textStyle14()),
+                                      // TextSpan(
+                                      //     text:
+                                      //         '${formatDateTime(messageTemplate.createdAt ?? DateTime.now())} ',
+                                      //     //'${messageTemplate.createdAt}',
+                                      //     style: AppTextStyle.textStyle14()),
                                     ])),
                               ],
                             ),
