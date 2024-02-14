@@ -126,7 +126,7 @@ class DiscountOfferUI extends GetView<DiscountOffersController> {
                                       'India : ',
                                       style: TextStyle(
                                           fontSize: 15.sp,
-                                          color: appColors.lightGreen,
+                                          color: appColors.blackColor,
                                           fontWeight: FontWeight.w600),
                                     ),
                                     Text(
@@ -134,25 +134,31 @@ class DiscountOfferUI extends GetView<DiscountOffersController> {
                                       style: TextStyle(fontSize: 15.sp),
                                     ),
                                     Text(
-                                      ' ₹100 | ',
+                                      ' ₹100',
                                       style: TextStyle(
                                           fontSize: 15.sp,
                                           color: appColors.lightGreen,
                                           fontWeight: FontWeight.w600),
                                     ),
+
+                                  ],
+                                ),
+                                SizedBox(height: 5.h),
+                                Row(
+                                  children: [
                                     Text(
                                       '${'discountedPrice'.tr}:',
                                       style: TextStyle(fontSize: 15.sp),
                                     ),
                                     Text(
-                                      '₹${100 % (offer.offerPercentage ?? 0)}',
+                                      ' ₹${100 % (offer.offerPercentage ?? 0)}',
                                       style: TextStyle(
                                           fontSize: 15.sp,
                                           color: appColors.lightGreen,
                                           fontWeight: FontWeight.w600),
                                     ),
                                   ],
-                                ),
+                                )
                               ],
                             ),
                           );

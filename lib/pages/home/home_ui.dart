@@ -130,7 +130,6 @@ class HomeUI extends GetView<HomeController> {
                                         Text(
                                           "today".tr,
                                           style: AppTextStyle.textStyle16(
-
                                               fontColor: appColors.darkBlue,
                                               fontWeight: FontWeight.w400),
                                         ),
@@ -212,7 +211,7 @@ class HomeUI extends GetView<HomeController> {
                               },
                               child: Ink(
                                 height: 54.h,
-                                decoration:  BoxDecoration(
+                                decoration: BoxDecoration(
                                   gradient: LinearGradient(
                                     begin: Alignment.bottomCenter,
                                     end: Alignment.topCenter,
@@ -221,8 +220,8 @@ class HomeUI extends GetView<HomeController> {
                                       appColors.gradientBottom
                                     ],
                                   ),
-                                  borderRadius:
-                                      const BorderRadius.all(Radius.circular(10)),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
                                 ),
                                 padding: EdgeInsets.symmetric(horizontal: 15.w),
                                 // alignment: Alignment.center,
@@ -245,7 +244,7 @@ class HomeUI extends GetView<HomeController> {
                             ? controller.feedbackResponse == null
                                 ? const SizedBox.shrink()
                                 : Column(
-                                    children: [ 
+                                    children: [
                                       GestureDetector(
                                         onTap: () {
                                           Get.toNamed(RouteName.orderFeedback,
@@ -253,7 +252,7 @@ class HomeUI extends GetView<HomeController> {
                                                 controller.feedbacksList
                                               ]);
                                         },
-                                        child: Row( 
+                                        child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
@@ -393,7 +392,7 @@ class HomeUI extends GetView<HomeController> {
                               ),
                             ],
                             borderRadius: BorderRadius.circular(10.0),
-                            gradient:  LinearGradient(
+                            gradient: LinearGradient(
                               begin: Alignment.bottomCenter,
                               end: Alignment.topCenter,
                               colors: [
@@ -496,7 +495,7 @@ class HomeUI extends GetView<HomeController> {
                             decoration: BoxDecoration(
                               color: appColors.lightYellow,
                               borderRadius: BorderRadius.circular(25.0),
-                              gradient:  LinearGradient(
+                              gradient: LinearGradient(
                                 begin: Alignment.bottomCenter,
                                 end: Alignment.topCenter,
                                 colors: [
@@ -637,7 +636,7 @@ class HomeUI extends GetView<HomeController> {
                             onTap: () {},
                             child: Container(
                               height: 54.h,
-                              decoration:  BoxDecoration(
+                              decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                   begin: Alignment.bottomCenter,
                                   end: Alignment.topCenter,
@@ -936,7 +935,7 @@ class HomeUI extends GetView<HomeController> {
                         child: Container(
                           width: 128.w,
                           height: 31.h,
-                          decoration:  BoxDecoration(
+                          decoration: BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.bottomCenter,
                               end: Alignment.topCenter,
@@ -1001,7 +1000,7 @@ class HomeUI extends GetView<HomeController> {
                         child: Container(
                           width: 128.w,
                           height: 31.h,
-                          decoration:  BoxDecoration(
+                          decoration: BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.bottomCenter,
                               end: Alignment.topCenter,
@@ -1065,7 +1064,7 @@ class HomeUI extends GetView<HomeController> {
                         child: Container(
                           width: 128.w,
                           height: 31.h,
-                          decoration:  BoxDecoration(
+                          decoration: BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.bottomCenter,
                               end: Alignment.topCenter,
@@ -1560,7 +1559,7 @@ class HomeUI extends GetView<HomeController> {
                               imagePath: getYoutubeThumbnail(controller
                                       .homeData?.trainingVideo?[index].url ??
                                   ''),
-                              loadingIndicator:  SizedBox(
+                              loadingIndicator: SizedBox(
                                 child: CircularProgressIndicator(
                                   color: appColors.yellow,
                                   strokeWidth: 2,
@@ -1625,7 +1624,7 @@ class HomeUI extends GetView<HomeController> {
                 onTapOutside: (value) => FocusScope.of(Get.context!).unfocus(),
                 decoration: InputDecoration(
                   hintText: "feedbackHintText".tr,
-                  hintStyle:  TextStyle(
+                  hintStyle: TextStyle(
                     fontSize: 12,
                     color: appColors.lightGrey,
                   ),
@@ -1635,13 +1634,13 @@ class HomeUI extends GetView<HomeController> {
                   filled: true,
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
-                      borderSide:  BorderSide(
+                      borderSide: BorderSide(
                         color: appColors.white,
                         width: 1.0,
                       )),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
-                      borderSide:  BorderSide(
+                      borderSide: BorderSide(
                         color: appColors.appYellowColour,
                         width: 1.0,
                       )),
@@ -1695,13 +1694,13 @@ class HomeUI extends GetView<HomeController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Actual Payment:",
+                    "Total Payment:",
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w500,
                         fontColor: appColors.appRedColour),
                   ),
                   Text(
-                    "${controller.homeData?.payoutPending.toString()}",
+                    "₹${controller.homeData?.totalEarning?.toStringAsFixed(2)}",
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w500,
                         fontColor: appColors.appRedColour),
@@ -1711,9 +1710,9 @@ class HomeUI extends GetView<HomeController> {
             ),
             SizedBox(height: 10.h),
             ExpandedTile(
-              theme:  ExpandedTileThemeData(
-                headerPadding: EdgeInsets.only(left: 8.0, right: 0.0),
-                contentPadding: EdgeInsets.only(left: 25.0, right: 25.0),
+              theme: ExpandedTileThemeData(
+                headerPadding: const EdgeInsets.only(left: 8.0, right: 0.0),
+                contentPadding: const EdgeInsets.only(left: 25.0, right: 25.0),
                 contentBackgroundColor: appColors.white,
                 headerColor: appColors.white,
               ),
@@ -1741,13 +1740,50 @@ class HomeUI extends GetView<HomeController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '-${'amount'.tr}:',
+                        '-${'order Amount'.tr}:',
                         style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w500,
                             fontColor: appColors.darkBlue.withOpacity(0.5)),
                       ),
                       Text(
-                        "₹1000000000",
+                        "₹${controller.homeData?.totalOrderPayout?.toStringAsFixed(2)}",
+                        style: AppTextStyle.textStyle12(
+                            fontWeight: FontWeight.w500,
+                            fontColor: appColors.darkBlue.withOpacity(0.5)),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "-${'Divine Amount'.tr}",
+                        style: AppTextStyle.textStyle12(
+                            fontWeight: FontWeight.w500,
+                            fontColor: appColors.darkBlue.withOpacity(0.5)),
+                      ),
+                      Text(
+                        "₹${controller.homeData?.totalDivineWalletPayout?.toStringAsFixed(2)}",
+                        style: AppTextStyle.textStyle12(
+                            fontWeight: FontWeight.w500,
+                            fontColor: appColors.darkBlue.withOpacity(0.5)),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10.h),
+                  Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "-${'refund'.tr}:",
+                        style: AppTextStyle.textStyle12(
+                            fontWeight: FontWeight.w500,
+                            fontColor: appColors.darkBlue.withOpacity(0.5)),
+                      ),
+                      const Spacer(),
+                      Text(
+                        "₹${controller.homeData?.totalRefundPayout?.toStringAsFixed(2)}",
                         style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w500,
                             fontColor: appColors.darkBlue.withOpacity(0.5)),
@@ -1759,56 +1795,13 @@ class HomeUI extends GetView<HomeController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "-${'lastBillingCycle'.tr}",
+                        "-Fine:",
                         style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w500,
                             fontColor: appColors.darkBlue.withOpacity(0.5)),
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 10.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          SizedBox(width: 12.h),
-                          Text(
-                            "${'refund'.tr}:",
-                            style: AppTextStyle.textStyle12(
-                                fontWeight: FontWeight.w500,
-                                fontColor: appColors.darkBlue.withOpacity(0.5)),
-                          ),
-                        ],
-                      ),
                       Text(
-                        "₹1000000000",
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w500,
-                            fontColor: appColors.darkBlue.withOpacity(0.5)),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            SizedBox(width: 12.h),
-                            Text(
-                              "Supplement:",
-                              style: AppTextStyle.textStyle12(
-                                  fontWeight: FontWeight.w500,
-                                  fontColor:
-                                      appColors.darkBlue.withOpacity(0.5)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Text(
-                        "₹1000000000",
+                        "₹${controller.homeData?.totalFinePayout?.toStringAsFixed(2)}",
                         style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w500,
                             fontColor: appColors.darkBlue.withOpacity(0.5)),
@@ -1821,9 +1814,10 @@ class HomeUI extends GetView<HomeController> {
             ),
             ExpandedTile(
                 controller: controller.expandedTile2Controller!,
-                theme:  ExpandedTileThemeData(
+                theme: ExpandedTileThemeData(
                   headerPadding: const EdgeInsets.only(left: 8.0, right: 0.0),
-                  contentPadding: const EdgeInsets.only(left: 25.0, right: 25.0),
+                  contentPadding:
+                      const EdgeInsets.only(left: 25.0, right: 25.0),
                   contentBackgroundColor: appColors.white,
                   headerColor: appColors.white,
                 ),
@@ -1837,7 +1831,7 @@ class HomeUI extends GetView<HomeController> {
                           fontColor: appColors.darkBlue),
                     ),
                     Text(
-                      "₹1000000000",
+                      "₹${controller.homeData?.totalTax?.toStringAsFixed(2)}",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w500,
                           fontColor: appColors.darkBlue),
@@ -1849,16 +1843,14 @@ class HomeUI extends GetView<HomeController> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          child: Text(
-                            "-TDS:",
-                            style: AppTextStyle.textStyle12(
-                                fontWeight: FontWeight.w500,
-                                fontColor: appColors.darkBlue.withOpacity(0.5)),
-                          ),
+                        Text(
+                          "-TDS:",
+                          style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w500,
+                              fontColor: appColors.darkBlue.withOpacity(0.5)),
                         ),
                         Text(
-                          "₹1000000000",
+                          "₹${controller.homeData?.tds?.toStringAsFixed(2)}",
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,
                               fontColor: appColors.darkBlue.withOpacity(0.5)),
@@ -1869,16 +1861,14 @@ class HomeUI extends GetView<HomeController> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          child: Text(
-                            "-${'paymentGateway'.tr}:",
-                            style: AppTextStyle.textStyle12(
-                                fontWeight: FontWeight.w500,
-                                fontColor: appColors.darkBlue.withOpacity(0.5)),
-                          ),
+                        Text(
+                          "-${'paymentGateway'.tr}:",
+                          style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w500,
+                              fontColor: appColors.darkBlue.withOpacity(0.5)),
                         ),
                         Text(
-                          "₹1000000000",
+                          "₹${controller.homeData?.totalPaymentGatewayCharges?.toStringAsFixed(2)}",
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,
                               fontColor: appColors.darkBlue.withOpacity(0.5)),
@@ -1888,7 +1878,7 @@ class HomeUI extends GetView<HomeController> {
                     SizedBox(height: 10.h),
                   ],
                 )),
-            Padding(
+            /*Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1932,8 +1922,8 @@ class HomeUI extends GetView<HomeController> {
                   ),
                 ],
               ),
-            ),
-            SizedBox(height: 10.h),
+            ),*/
+            // SizedBox(height: 10.h),
           ],
         ));
   }
@@ -1974,8 +1964,6 @@ class SelectedTimeForChat extends GetView<HomeController> {
 
 class PerformanceDialog extends StatelessWidget {
   PerformanceDialog({super.key});
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -2203,7 +2191,7 @@ class PerformanceDialog extends StatelessWidget {
                                 onTap: () => Navigator.pop(context),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                      gradient:  LinearGradient(
+                                      gradient: LinearGradient(
                                         begin: Alignment.bottomCenter,
                                         end: Alignment.topCenter,
                                         colors: [
@@ -2230,9 +2218,14 @@ class PerformanceDialog extends StatelessWidget {
                                   if (controller.performanceScoreList.last ==
                                       (controller.performanceScoreList[
                                           controller.scoreIndex])) {
+                                    Get.put(DashboardController(
+                                            Get.put(PreDefineRepository())))
+                                        .selectedIndex
+                                        .value = 1;
+                                    Get.put(DashboardController(
+                                            Get.put(PreDefineRepository())))
+                                        .update();
                                     Navigator.pop(context);
-                                    Get.put(DashboardController(Get.put(PreDefineRepository()))).selectedIndex.value = 1;
-                                    Get.put(DashboardController(Get.put(PreDefineRepository()))).update();
                                   }
                                 },
                                 child: Container(

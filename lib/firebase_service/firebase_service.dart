@@ -7,7 +7,9 @@ import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/di/hive_services.dart";
 import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/model/res_login.dart";
+import "package:divine_astrologer/pages/profile/profile_page_controller.dart";
 import "package:divine_astrologer/repository/pre_defind_repository.dart";
+import "package:divine_astrologer/repository/user_repository.dart";
 import "package:divine_astrologer/screens/dashboard/dashboard_controller.dart";
 import "package:divine_astrologer/screens/side_menu/settings/settings_controller.dart";
 import "package:divine_astrologer/watcher/real_time_watcher.dart";
@@ -75,10 +77,13 @@ class AppFirebaseService {
           if(realTimeData["profilePhoto"] != null){
             UserData?  userData = Get.find<SharedPreferenceService>().getUserDetail();
             userData!.image = realTimeData["profilePhoto"];
+           String? baseAmazonUrl = Get.find<SharedPreferenceService>().getBaseImageURL();
             Get.find<SharedPreferenceService>().setUserDetail(userData);
-            Get.put(DashboardController(Get.put(PreDefineRepository()))).userProfileImage.value = userData.image!;
+            Get.put(DashboardController(Get.put(PreDefineRepository()))).userProfileImage.value = "$baseAmazonUrl/${userData.image!}";
+            Get.put(ProfilePageController(Get.put(UserRepository()))).userProfileImage.value = "$baseAmazonUrl/${userData.image!}";
             Get.put(DashboardController(Get.put(PreDefineRepository()))).update();
-          } 
+            Get.put(ProfilePageController(Get.put(UserRepository()))).update();
+          }
           if (realTimeData["engageId"] != null) {
             tableName = "chat_${realTimeData["engageId"]}";
             debugPrint("tableName ${tableName}");
