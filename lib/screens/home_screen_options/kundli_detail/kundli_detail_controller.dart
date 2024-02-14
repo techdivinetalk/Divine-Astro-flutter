@@ -132,17 +132,17 @@ class KundliDetailController extends GetxController {
           Assets.images.icBoyKundli.svg(width: 87.w, height: 87.h);
     }
     kundliParams.value = Params(
-      name: args['params'].name,
-      day: args['params'].day,
-      month: args['params'].month,
-      year: args['params'].year,
-      hour: args['params'].hour,
-      min: args['params'].min,
-      lat: args['params'].lat,
-      long: args['params'].long,
+      name: args['params'].name ?? "",
+      day: args['params'].day ?? 0,
+      month: args['params'].month ?? 0 ,
+      year: args['params'].year ?? 0,
+      hour: args['params'].hour ?? 0,
+      min: args['params'].min ?? 0,
+      lat: args['params'].lat ?? 0.0,
+      long: args['params'].long ?? 0.0,
       tzone: 5.5,
       // tzone: args['params'].tzone,
-      location: args['params'].location,
+      location: args['params'].location ?? "",
     );
     params = {
       "day": args['params'].day,
