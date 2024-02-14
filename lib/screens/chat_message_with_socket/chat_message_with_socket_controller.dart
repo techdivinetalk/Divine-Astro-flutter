@@ -213,8 +213,9 @@ class ChatMessageWithSocketController extends GetxController
       }
     });
     messageController.addListener(_onMessageChanged);
-    getMessageTemplates();
+    // getMessageTemplates();
     isAstroJoinedChat();
+    getMessageTemplatesLocally();
     checkIsCustomerJoinedPrivateChat();
     typingListenerSocket();
     sendMessageSocketListenerSocket();
@@ -277,6 +278,13 @@ class ChatMessageWithSocketController extends GetxController
   navigateToOtherScreen() async {
     await Future.delayed(Duration(milliseconds: 300));
     Get.offAllNamed(RouteName.dashboard);
+  }
+
+  getMessageTemplatesLocally() async {
+    final sharedPreferencesInstance = SharedPreferenceService();
+    final data = await sharedPreferencesInstance.getMessageTemplates();
+    messageTemplates(data);
+    update();
   }
 
   updateTime(int? talk, bool isTimeUpdate) {

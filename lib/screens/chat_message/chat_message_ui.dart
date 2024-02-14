@@ -79,16 +79,20 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                       reverse: false,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        final data =
+                        final currentMsg =
                             controller.chatMessageList[index] as AssistChatData;
+                        final nextIndex =
+                            controller.chatMessageList.length - 1 == index
+                                ? index
+                                : index + 1;
+                        print("send by ${currentMsg.sendBy}");
+                        print(" msg type ${currentMsg.msgType}");
+                        print(" msg status ${currentMsg.seenStatus}");
                         return AssistMessageView(
                           index: index,
-                          chatMessage: data,
-                          nextMessage:
-                              controller.chatMessageList.length - 1 == index
-                                  ? data
-                                  : controller.chatMessageList[index + 1],
-                          yourMessage: data.sendBy == SendBy.astrologer,
+                          chatMessage: currentMsg,
+                          nextMessage: controller.chatMessageList[nextIndex],
+                          yourMessage: currentMsg.sendBy == SendBy.astrologer,
                         );
                         return SizedBox(
                           width: double.maxFinite,
@@ -96,7 +100,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 12.w, vertical: 4.h),
                             child: Column(
-                              crossAxisAlignment: (data.msgType ?? 0) == 1
+                              crossAxisAlignment: (currentMsg.msgType ?? 0) == 1
                                   ? CrossAxisAlignment.end
                                   : CrossAxisAlignment.start,
                               children: [
@@ -120,21 +124,21 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                                       minWidth:
                                           ScreenUtil().screenWidth * 0.27),
                                   child: Stack(
-                                    alignment: (data.msgType ?? 0) == 1
+                                    alignment: (currentMsg.msgType ?? 0) == 1
                                         ? Alignment.centerRight
                                         : Alignment.centerLeft,
                                     children: [
                                       Column(
                                         children: [
                                           Wrap(
-                                              alignment: data.msgType == 1
+                                              alignment: currentMsg.msgType == 1
                                                   ? WrapAlignment.end
                                                   : WrapAlignment.start,
                                               children: [
-                                                Text(data.message ?? "",
+                                                Text(currentMsg.message ?? "",
                                                     style: AppTextStyle.textStyle14(
                                                         fontColor:
-                                                            (data.msgType ??
+                                                            (currentMsg.msgType ??
                                                                         0) ==
                                                                     1
                                                                 ? appColors
@@ -153,18 +157,21 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                                             Text(
                                                 DateFormat.jm().format(
                                                     DateTime.parse(
-                                                        data.createdAt ?? '')),
+                                                        currentMsg.createdAt ??
+                                                            '')),
                                                 style: AppTextStyle.textStyle10(
                                                     fontColor:
                                                         appColors.darkBlue)),
-                                            if (data.msgType == 1)
-                                              (data.seenStatus ?? 0) == 0
+                                            if (currentMsg.msgType == 1)
+                                              (currentMsg.seenStatus ?? 0) == 0
                                                   ? SizedBox(width: 8.w)
-                                                  : (data.seenStatus ?? 0) == 1
+                                                  : (currentMsg.seenStatus ??
+                                                              0) ==
+                                                          1
                                                       ? Assets
                                                           .images.icSingleTick
                                                           .svg()
-                                                      : (data.seenStatus ??
+                                                      : (currentMsg.seenStatus ??
                                                                   0) ==
                                                               2
                                                           ? Assets.images

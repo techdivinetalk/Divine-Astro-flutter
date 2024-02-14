@@ -82,45 +82,28 @@ class AssistMessageView extends StatelessWidget {
 
   Widget giftMsgView(
       BuildContext context, AssistChatData chatMessage, bool yourMessage) {
-    return SizedBox(
-      width: double.maxFinite,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      margin: EdgeInsets.symmetric(horizontal:  20,vertical: 10),
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(40)),
+        border: Border.all(width: 2, color: appColors.appColorDark),
+        gradient: LinearGradient(
+          colors: [appColors.white, appColors.appColorDark],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      constraints: BoxConstraints(
+          maxWidth: ScreenUtil().screenWidth * 0.8,
+          minWidth: ScreenUtil().screenWidth * 0.27),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(40)),
-              border: Border.all(width: 2, color: appColors.appColorDark),
-              gradient: LinearGradient(
-                colors: [appColors.white, appColors.appColorDark],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-            constraints: BoxConstraints(
-                maxWidth: ScreenUtil().screenWidth * 0.8,
-                minWidth: ScreenUtil().screenWidth * 0.27),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // SizedBox(
-                //   height: 32,
-                //   width: 32,
-                //   child: CustomImageWidget(
-                //     imageUrl: chatMessage.awsUrl ?? '',
-                //     rounded: true,
-                //     // added by divine-dharam
-                //     typeEnum: TypeEnum.gift,
-                //     //
-                //   ),
-                // ),
-                SizedBox(width: 6.w),
-                Flexible(child: Text(chatMessage.message ?? ''))
-              ],
-            ),
-          ),
+          const Icon(Icons.card_giftcard,size: 15),
+          SizedBox(width: 6.w),
+          Flexible(child: Text("You have Received ${chatMessage.message}" ?? ''))
         ],
       ),
     );
@@ -249,7 +232,8 @@ class AssistMessageView extends StatelessWidget {
                         SizedBox(width: 3.w),
                         if ((currentMsg.sendBy) == SendBy.astrologer)
                           chatSeenStatusWidget(
-                              msgStatus: currentMsg.msgStatus ?? MsgStatus.sent)
+                              seenStatus:
+                                  currentMsg.seenStatus ?? SeenStatus.sent)
 
                         // (data.seenStatus ?? 0) == 0
                         //     ? SizedBox(width: 8.w)
@@ -276,16 +260,18 @@ class AssistMessageView extends StatelessWidget {
     );
   }
 
-  Widget chatSeenStatusWidget({required MsgStatus msgStatus}) {
-    print('msg status ${msgStatus}');
-    switch (msgStatus) {
-      case MsgStatus.sent:
+  Widget chatSeenStatusWidget({required SeenStatus seenStatus}) {
+    print('msg status ${seenStatus}');
+    switch (seenStatus) {
+      case SeenStatus.notSent:
+        return const SizedBox();
+      case SeenStatus.sent:
         return Assets.images.icSingleTick
             .svg(theme: SvgTheme(currentColor: appColors.grey));
-      case MsgStatus.delivered:
+      case SeenStatus.delivered:
         return Assets.images.icDoubleTick
             .svg(theme: SvgTheme(currentColor: appColors.grey));
-      case MsgStatus.received:
+      case SeenStatus.received:
         return Assets.images.icDoubleTick.svg();
       default:
         return const SizedBox();

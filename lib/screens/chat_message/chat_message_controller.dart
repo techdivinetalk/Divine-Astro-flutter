@@ -30,7 +30,7 @@ class ChatMessageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
+    listenSocket();
     if (Get.arguments != null) {
       args = Get.arguments;
       getAssistantChatList();
@@ -51,7 +51,7 @@ class ChatMessageController extends GetxController {
                 msgType: responseMsg['msg_type'] != null
                     ? msgTypeValues.map[responseMsg["msg_type"]]
                     : MsgType.text,
-                seenStatus: 2,
+                seenStatus: SeenStatus.delivered,
                 customerId: int.parse(responseMsg["sender_id"] ?? 0)));
             scrollToBottomFunc();
           }
@@ -161,8 +161,8 @@ class ChatMessageController extends GetxController {
           isSuspicious: 0,
           msgType: MsgType.text,
           sendBy: SendBy.astrologer,
-          seenStatus: 0,
-          msgStatus: MsgStatus.sent,
+          seenStatus: SeenStatus.notSent,
+          // msgStatus: MsgStatus.sent,
           customerId: preferenceService.getUserDetail()!.id);
       appSocket.sendAssistantMessage(
           customerId: args!.id.toString(),
