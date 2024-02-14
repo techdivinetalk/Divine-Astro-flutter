@@ -21,45 +21,49 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(OrderHistoryController());
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
-      child: Scaffold(
-        drawer: const SideMenuDrawer(),
-        appBar: commonDetailAppbar(
-            title: "orderHistory".tr,
-            trailingWidget: InkWell(
-              child: Padding(
-                  padding: EdgeInsets.only(right: 20.w),
-                  child: Assets.images.icOrderHistory.svg()),
-            )),
-        body: Container(
-          color: appColors.white,
-          child: const Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-
-              /// remove filter ui
-              // Container(
-              //   margin: const EdgeInsets.only(left: 20, right: 20),
-              //   padding: EdgeInsets.all(12.h),
-              //   decoration: BoxDecoration(
-              //       boxShadow: [
-              //         BoxShadow(
-              //             color: Colors.black.withOpacity(0.2),
-              //             blurRadius: 3.0,
-              //             offset: const Offset(0.0, 3.0)),
-              //       ],
-              //       color: appColors.white,
-              //       borderRadius: const BorderRadius.all(Radius.circular(20))),
-              //   child: durationOptions(),
-              // ),
-              // const SizedBox(height: 20),
-              OrderTab(),
-            ],
+    return GetBuilder<OrderHistoryController>(
+      init: OrderHistoryController(),
+      assignId: true,
+      builder: (controller) {
+        return AnnotatedRegion<SystemUiOverlayStyle>(
+          value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+          child: Scaffold(
+            drawer: const SideMenuDrawer(),
+            appBar: commonDetailAppbar(
+                title: "orderHistory".tr,
+                trailingWidget: InkWell(
+                  child: Padding(
+                      padding: EdgeInsets.only(right: 20.w),
+                      child: Assets.images.icOrderHistory.svg()),
+                )),
+            body: Container(
+              color: appColors.white,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  /// remove filter ui
+                  // Container(
+                  //   margin: const EdgeInsets.only(left: 20, right: 20),
+                  //   padding: EdgeInsets.all(12.h),
+                  //   decoration: BoxDecoration(
+                  //       boxShadow: [
+                  //         BoxShadow(
+                  //             color: Colors.black.withOpacity(0.2),
+                  //             blurRadius: 3.0,
+                  //             offset: const Offset(0.0, 3.0)),
+                  //       ],
+                  //       color: appColors.white,
+                  //       borderRadius: const BorderRadius.all(Radius.circular(20))),
+                  //   child: durationOptions(),
+                  // ),
+                  // const SizedBox(height: 20),
+                  OrderTab(initialPage: controller.initialPage),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -92,9 +96,9 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
             value: controller.selectedValue.value,
             onChanged: (String? value) {
               controller.selectedValue.value = value ?? "daily".tr;
-              controller.getFilterDate(type:controller.selectedValue.value );
+              // controller.getFilterDate(type: controller.selectedValue.value);
             },
-            iconStyleData:  IconStyleData(
+            iconStyleData: IconStyleData(
               icon: const Icon(
                 Icons.keyboard_arrow_down,
               ),
@@ -124,7 +128,9 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
 }
 
 class OrderTab extends StatefulWidget {
-  const OrderTab({Key? key}) : super(key: key);
+  final int? initialPage;
+
+  const OrderTab({Key? key, this.initialPage}) : super(key: key);
 
   @override
   State<OrderTab> createState() => _OrderTabState();
@@ -138,8 +144,28 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     controller = Get.find<OrderHistoryController>();
-    controller.tabbarController = TabController(length: 5, vsync: this);
+    controller.tabbarController = TabController(
+        length: 5, vsync: this, initialIndex: widget.initialPage ?? 0);
     scrollController = ScrollController();
+    /*controller.tabbarController!.addListener(() {
+      if (controller.tabbarController!.index == 0) {
+        controller.getOrderHistory(
+            type: 0, page: controller.allPageCount); //wallet
+      } else if (controller.tabbarController!.index == 1) {
+        controller.getOrderHistory(
+            type: 1, page: controller.chatPageCount); //chat
+      } else if (controller.tabbarController!.index == 2) {
+        controller.getOrderHistory(
+            type: 2, page: controller.callPageCount); //call
+      } else if (controller.tabbarController!.index == 3) {
+        controller.getOrderHistory(
+            type: 3,
+            page: controller.liveGiftPageCount); // liveGiftPageCount
+      } else if (controller.tabbarController!.index == 4) {
+        controller.getOrderHistory(
+            type: 4, page: controller.remedyPageCount); // shop
+      }
+    });*/
   }
 
   @override
@@ -157,9 +183,24 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
               labelColor: appColors.blackColor,
               unselectedLabelColor: appColors.blackColor,
               labelStyle: AppTextStyle.textStyle16(fontWeight: FontWeight.w700),
-              onTap: (index) {
-                debugPrint("$index");
-                //  (index) => onSelection(enumValue[index])
+              onTap: (value) {
+                if (value == 0) {
+                  controller.getOrderHistory(
+                      type: 0, page: controller.allPageCount); //wallet
+                } else if (value == 1) {
+                  controller.getOrderHistory(
+                      type: 1, page: controller.chatPageCount); //chat
+                } else if (value == 2) {
+                  controller.getOrderHistory(
+                      type: 2, page: controller.callPageCount); //call
+                } else if (value == 3) {
+                  controller.getOrderHistory(
+                      type: 3,
+                      page: controller.liveGiftPageCount); // liveGiftPageCount
+                } else if (value == 4) {
+                  controller.getOrderHistory(
+                      type: 4, page: controller.remedyPageCount); // shop
+                }
               },
               indicatorColor: appColors.blackColor,
               indicatorWeight: 4,
@@ -177,6 +218,7 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
           ),
           Expanded(
             child: TabBarView(
+              physics: const NeverScrollableScrollPhysics(),
               controller: controller.tabbarController,
               children: [
                 const AllOrderHistoryUi(), //done

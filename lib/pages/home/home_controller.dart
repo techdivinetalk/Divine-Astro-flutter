@@ -106,7 +106,7 @@ class HomeController extends GetxController {
       debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
       if (event.name == "giftCount") {
         print("giftcount-----giftCount");
-        if(event.data?["giftCount"] > 0){
+        if(int.parse(event.data!["giftCount"].toString()) > 0){
           showGiftBottomSheet(event.data?["giftCount"], contextDetail);
         }
       }

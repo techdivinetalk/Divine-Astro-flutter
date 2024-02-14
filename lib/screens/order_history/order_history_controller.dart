@@ -17,6 +17,7 @@ import '../../model/order_history_model/remedy_suggested_order_history.dart';
 import '../../repository/order_history_repository.dart';
 
 class OrderHistoryController extends GetxController {
+  int initialPage = 0;
   Rx<DateTime> selectedChatDate = DateTime.now().obs;
   ScrollController orderScrollController = ScrollController();
   ScrollController orderAllScrollController = ScrollController();
@@ -45,56 +46,34 @@ class OrderHistoryController extends GetxController {
 
   @override
   void onInit() {
+    if (Get.arguments != null) {
+      initialPage = Get.arguments;
+      print(initialPage);
+
+      getOrderHistory(type: 3, page: liveGiftPageCount);
+      update();
+    }
     super.onInit();
-    fetchData();
+    getOrderHistory(type: 0, page: allPageCount);
   }
 
   void selectChatDate(String value) {
     selectedChatDate(value.toDate());
   }
-  String startDate= "";
-  String endDate= "";
 
-  fetchData({String? startDate, endDate}) async {
-    Future.wait([
-      getOrderHistory(
-          type: 0,
-          page: allPageCount,
-          startDate:
-              startDate ?? DateFormat("yyyy-MM-dd").format(DateTime.now()),
-          endDate: endDate ??
-              DateFormat("yyyy-MM-dd").format(DateTime.now())), //wallet
-      getOrderHistory(
-          type: 1,
-          page: chatPageCount,
-          startDate:
-              startDate ?? DateFormat("yyyy-MM-dd").format(DateTime.now()),
-          endDate: endDate ??
-              DateFormat("yyyy-MM-dd").format(DateTime.now())), //chat
-      getOrderHistory(
-          type: 2,
-          page: callPageCount,
-          startDate:
-              startDate ?? DateFormat("yyyy-MM-dd").format(DateTime.now()),
-          endDate: endDate ??
-              DateFormat("yyyy-MM-dd").format(DateTime.now())), //call
-      getOrderHistory(
-          type: 3,
-          page: liveGiftPageCount,
-          startDate:
-              startDate ?? DateFormat("yyyy-MM-dd").format(DateTime.now()),
-          endDate: endDate ??
-              DateFormat("yyyy-MM-dd").format(DateTime.now())), //liveGifts
-      getOrderHistory(
-          type: 4,
-          page: remedyPageCount,
-          startDate:
-              startDate ?? DateFormat("yyyy-MM-dd").format(DateTime.now()),
-          endDate: endDate ??
-              DateFormat("yyyy-MM-dd").format(DateTime.now())), //shop
-    ]);
-    update();
-  }
+  String startDate = "";
+  String endDate = "";
+
+  // fetchData({String? startDate, endDate}) async {
+  //   Future.wait([
+  //     getOrderHistory(type: 0, page: allPageCount), //wallet
+  //     getOrderHistory(type: 1, page: chatPageCount), //chat
+  //     getOrderHistory(type: 2, page: callPageCount), //call
+  //     getOrderHistory(type: 3, page: liveGiftPageCount), //liveGifts
+  //     getOrderHistory(type: 4, page: remedyPageCount), //shop
+  //   ]);
+  //   update();
+  // }
 
   var preferences = Get.find<SharedPreferenceService>();
 
@@ -141,6 +120,7 @@ class OrderHistoryController extends GetxController {
           emptyMsg.value = data.message ?? "No data found!";
         }
         update(['allOrders']);
+
       } else if (type == 1) {
         CallOrderHistoryModelClass data =
             await OrderHistoryRepository().getCallOrderHistory(params);
@@ -155,6 +135,7 @@ class OrderHistoryController extends GetxController {
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
+        update();
       } else if (type == 2) {
         ChatOrderHistoryModelClass data =
             await OrderHistoryRepository().getChatOrderHistory(params);
@@ -199,6 +180,7 @@ class OrderHistoryController extends GetxController {
           emptyMsg.value = data.message ?? "No data found!";
         }
       }
+      update();
     } catch (error) {
       apiCalling.value = false;
       debugPrint("error $error");
@@ -210,7 +192,7 @@ class OrderHistoryController extends GetxController {
     }
   }
 
-  getFilterDate({String? type}) {
+  /*getFilterDate({String? type}) {
     String startDate = "";
     String endDate = "";
     DateTime now = DateTime.now();
@@ -246,12 +228,12 @@ class OrderHistoryController extends GetxController {
       update();
     } else {
       Get.bottomSheet(const DateSelection()).then((value) {
-        if(value != null){
+        if (value != null) {
           fetchData(endDate: value["end_date"], startDate: value["start_date"]);
           durationOptions[4] = "${value["start_date"]} - ${value["end_date"]}";
           update();
         }
       });
     }
-  }
+  }*/
 }

@@ -17,11 +17,11 @@ class BankDetailsUI extends GetView<BankDetailController> {
 
   Widget get sizedBox5 => SizedBox(height: 8.w);
 
-  Widget title(String data) => Text(
+  Widget title(String data, {Color? color}) => Text(
         data,
         style: AppTextStyle.textStyle16(
           fontWeight: FontWeight.w400,
-          fontColor: appColors.darkBlue,
+          fontColor: color ??appColors.darkBlue,
         ),
       );
 
@@ -35,7 +35,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
           data: ThemeData(useMaterial3: false),
           child: Scaffold(
             backgroundColor: appColors.white,
-            bottomNavigationBar: controller.status == ""
+            bottomNavigationBar: controller.status == "" || controller.status == "Approved"
                 ? Container(
                     margin: EdgeInsets.symmetric(horizontal: 12.w),
                     child: CustomMaterialButton(
@@ -125,6 +125,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                                 "status".tr +
                                                     " : " +
                                                     controller.status,
+                                          color: controller.status == "Approved" ?appColors.lightGreen:appColors.yellow
                                               )
                                             : SizedBox()
                                       ],

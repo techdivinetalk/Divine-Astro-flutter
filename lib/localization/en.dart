@@ -227,7 +227,7 @@ Map<String, String> en() {
     "reportEarning": "Report Earning",
     "suggestedRemediesEarning": "Suggested Remedies Earning",
     "help": "Help ",
-    "poor": "poor",
+    "poor": "Poor",
     "veryGood": "Very Good",
     "verify": "Verify",
     "enterRegisteredNumber": "Enter Registered Number",
