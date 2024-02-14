@@ -144,7 +144,7 @@ class AppSocket {
 
   void listenForAssistantChatMessage(void Function(dynamic) callback) {
     socket?.on(
-      ApiProvider().listenChatAssistMessage,
+      ApiProvider().chatAssistMessageSent,
       (data) {
         callback(data);
       },

@@ -38,15 +38,15 @@ class AssistMessageView extends StatelessWidget {
   Widget buildMessageView(
       BuildContext context, AssistChatData chatMessage, bool yourMessage) {
     Widget messageWidget;
-    print("Message Type:: ${chatMessage.chatType} ${chatMessage.message}");
+    print("Message Type:: ${chatMessage.msgType} ${chatMessage.message}");
     switch (chatMessage.msgType) {
-      case 8:
+      case MsgType.Gift:
         messageWidget = giftMsgView(context, chatMessage, yourMessage);
         break;
       // case "Remedies" || 0:
       //   messageWidget = remediesMsgView(context, chatMessage, yourMessage);
       //   break;
-      case 0:
+      case MsgType.text:
         messageWidget = textMsgView(context, chatMessage, yourMessage);
         break;
       // case "audio":

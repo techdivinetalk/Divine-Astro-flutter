@@ -45,7 +45,7 @@ class MessageTemplates {
   int? id;
   String? message;
   String? description;
-  DateTime? createdAt;
+  // DateTime? createdAt;
   int? astrologerId;
   int? type;
   bool? isOn;
@@ -54,7 +54,7 @@ class MessageTemplates {
       {this.id,
       this.message,
       this.description,
-      this.createdAt,
+      // this.createdAt,
       this.astrologerId,
       this.type});
 
@@ -62,7 +62,7 @@ class MessageTemplates {
     id = json['id'];
     message = json['message'];
     description = json['description'];
-    createdAt = DateTime.parse(json["created_at"]);
+    // createdAt = DateTime.parse(json["created_at"]);
     astrologerId = json['astrologer_id'];
     type = json['type'];
     isOn = json['isOn'] ?? false;

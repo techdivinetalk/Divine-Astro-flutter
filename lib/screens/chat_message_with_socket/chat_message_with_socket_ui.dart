@@ -581,15 +581,12 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         scrollDirection: Axis.horizontal,
-        itemCount: controller.messageTemplates.length + 1,
+        itemCount:
+            controller.messageTemplateController.messageLocalTemplates.length +
+                1,
         separatorBuilder: (_, index) => SizedBox(width: 10.w),
         itemBuilder: (context, index) {
           late final MessageTemplates msg;
-          if (index == 0) {
-            msg = MessageTemplates();
-          } else {
-            msg = controller.messageTemplates[index - 1];
-          }
           return index == 0
               ? GestureDetector(
                   onTap: () {
@@ -610,28 +607,25 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     ),
                   ),
                 )
-              : msg.isOn ?? true
-                  ? GestureDetector(
-                      onTap: () {
-                        controller.sendMsgTemplate(
-                            controller.messageTemplates[index - 1]);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: appColors.brownColour,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(18)),
-                        ),
-                        child: Text(
-                          '${controller.messageTemplates[index - 1].message}',
-                          style: AppTextStyle.textStyle12(
-                              fontColor: appColors.white),
-                        ),
-                      ),
-                    )
-                  : SizedBox();
+              : GestureDetector(
+                  onTap: () {
+                    controller.sendMsgTemplate(
+                        controller.messageTemplates[index - 1]);
+                  },
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: appColors.brownColour,
+                      borderRadius: const BorderRadius.all(Radius.circular(18)),
+                    ),
+                    child: Text(
+                      '${controller.messageTemplates[index - 1].message}',
+                      style:
+                          AppTextStyle.textStyle12(fontColor: appColors.white),
+                    ),
+                  ),
+                );
         },
       ),
     );
