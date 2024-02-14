@@ -550,87 +550,66 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                 ],
                               ),
                               SizedBox(height: 25.w),
-                              (AppFirebaseService().orderData.value["status"] ??
-                                          "-1") ==
-                                      "1"
-                                  ? Container(
-                                      height: kToolbarHeight,
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: appColors.brown),
-                                          borderRadius:
-                                              BorderRadius.circular(5.r)),
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text("Waiting for user to connect",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontFamily:
-                                                        FontFamily.metropolis,
-                                                    fontSize: 16.sp,
-                                                    color:
-                                                        appColors.brownColour)),
-                                            Assets.lottie.loadingDots.lottie(
-                                                width: 45,
-                                                height: 30,
-                                                repeat: true,
-                                                frameRate: FrameRate(120),
-                                                animate: true)
-                                          ]))
-                                  : (AppFirebaseService()
+                              Obx(
+                                () {
+                                  return (AppFirebaseService()
                                                   .orderData
                                                   .value["status"] ??
                                               "-1") ==
-                                          "0"
-                                      ? CommonElevatedButton(
-                                          showBorder: false,
+                                          "1"
+                                      ? Container(
+                                          height: kToolbarHeight,
                                           width: double.infinity,
-                                          borderRadius: 5.r,
-                                          backgroundColor:
-                                              appColors.brownColour,
-                                          text: "acceptChatRequest".tr,
-                                          onPressed: () async {
-                                            print("onPressed acceptChatRequest");
-                                            try {
-                                              isLoader = true;
-                                              if (await acceptOrRejectChat(
-                                                  orderId: int.parse(
-                                                      AppFirebaseService()
-                                                          .orderData
-                                                          .value["orderId"]
-                                                          .toString()),
-                                                  queueId: AppFirebaseService()
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: appColors.brown),
+                                              borderRadius:
+                                                  BorderRadius.circular(5.r)),
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                    "Waiting for user to connect",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontFamily: FontFamily
+                                                            .metropolis,
+                                                        fontSize: 16.sp,
+                                                        color: appColors
+                                                            .brownColour)),
+                                                Assets.lottie.loadingDots
+                                                    .lottie(
+                                                        width: 45,
+                                                        height: 30,
+                                                        repeat: true,
+                                                        frameRate:
+                                                            FrameRate(120),
+                                                        animate: true)
+                                              ]))
+                                      : (AppFirebaseService()
                                                       .orderData
-                                                      .value["queue_id"])) {
-                                                isLoader = false;
-                                                appFirebaseService
-                                                    .acceptBottomWatcher
-                                                    .strValue = "1";
-                                                appFirebaseService.writeData(
-                                                    "order/${AppFirebaseService().orderData.value["orderId"]}",
-                                                    {"status": "1",
-                                                    "astrologer_permission": await AppPermissionService.instance.hasAllPermissions()});
-                                                appSocket.sendConnectRequest(
-                                                    astroId:
-                                                        AppFirebaseService()
-                                                            .orderData
-                                                            .value["astroId"],
-                                                    custId: AppFirebaseService()
-                                                        .orderData
-                                                        .value["userId"]);
-                                              }
-                                            } on Exception catch (e) {
-                                              isLoader = false;
-                                              debugPrint(e.toString());
-                                            }
-                                            setState(() {});
-                                          },
-                                          // widget.onPressed
-                                        )
-                                      : const SizedBox()
+                                                      .value["status"] ??
+                                                  "-1") ==
+                                              "0"
+                                          ? CommonElevatedButton(
+                                              showBorder: false,
+                                              width: double.infinity,
+                                              borderRadius: 5.r,
+                                              backgroundColor:
+                                                  appColors.brownColour,
+                                              text: "acceptChatRequest".tr,
+                                              onPressed: () async {
+                                                await onPressed();
+
+                                                setState(() {});
+                                              },
+                                              // widget.onPressed
+                                            )
+                                          : const SizedBox();
+                                },
+                              )
                             ],
                           ),
                         ),
@@ -646,6 +625,46 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
             })),
       ),
     );
+  }
+
+  Future<void> onPressed() async {
+    isLoader = true;
+    try {
+      await onPressedFunction();
+      print("onPressed(): onPressedFunction: completed");
+    } on Exception catch (e) {
+      print("onPressed(): on Exception catch: $e");
+    } finally {}
+    isLoader = false;
+    return Future<void>.value();
+  }
+
+  Future<void> onPressedFunction() async {
+    final bool isAccepted = await acceptOrRejectChat(
+      orderId: AppFirebaseService().orderData.value["orderId"] ?? 0,
+      queueId: AppFirebaseService().orderData.value["queue_id"] ?? 0,
+    );
+    print("onPressedFunction() isAccepted: $isAccepted");
+
+    appFirebaseService.acceptBottomWatcher.strValue = "1";
+    print(
+        "onPressedFunction() acceptBottomWatcher: ${appFirebaseService.acceptBottomWatcher.currentName}");
+
+    final bool perm = await AppPermissionService.instance.hasAllPermissions();
+    print("onPressedFunction() perm: ${perm}");
+
+    await appFirebaseService.writeData(
+      "order/${AppFirebaseService().orderData.value["orderId"] ?? 0}",
+      {"status": "1", "astrologer_permission": perm},
+    );
+    print("onPressedFunction() writeData: Done");
+
+    appSocket.sendConnectRequest(
+      astroId: AppFirebaseService().orderData.value["astroId"] ?? "",
+      custId: AppFirebaseService().orderData.value["userId"] ?? "",
+    );
+    print("onPressedFunction() sendConnectRequest: Done");
+    return Future<void>.value();
   }
 
   String formatMinutesToHoursMinutes(int minutes) {
