@@ -78,6 +78,7 @@ Future<void> main() async {
     } else if (message.data["type"] == "3") {
       print('Message data:- ${MiddleWare.instance.currentPage}');
       if (MiddleWare.instance.currentPage == RouteName.chatMessageUI) {
+        print("msg data ${message.data}");
         sendBroadcast(
             BroadcastMessage(name: "chatAssist", data: {'msg': message.data}));
       } else {
