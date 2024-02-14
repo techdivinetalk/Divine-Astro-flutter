@@ -582,7 +582,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         scrollDirection: Axis.horizontal,
         itemCount:
-            controller.messageTemplateController.messageLocalTemplates.length +
+            controller.messageTemplates.length +
                 1,
         separatorBuilder: (_, index) => SizedBox(width: 10.w),
         itemBuilder: (context, index) {

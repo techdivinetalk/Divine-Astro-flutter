@@ -89,8 +89,8 @@ class ChatMessageWithSocketController extends GetxController
   RxBool isDataLoad = false.obs;
   RxBool isOngoingChat = false.obs;
   RxString chatStatus = "Offline".obs;
-  DashboardController dashboardController = Get.find<DashboardController>();
-  MessageTemplateController messageTemplateController = Get.find<MessageTemplateController>();
+  // DashboardController dashboardController = Get.find<DashboardController>();
+  // MessageTemplateController messageTemplateController = Get.find<MessageTemplateController>();
   RxBool isTyping = false.obs;
   BroadcastReceiver broadcastReceiver = BroadcastReceiver(
       names: <String>["EndChat", "deliveredMsg", "updateTime", "displayCard"]);
