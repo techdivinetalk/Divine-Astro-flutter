@@ -144,8 +144,8 @@ class DashboardScreen extends GetView<DashboardController> {
                                       BottomNavigationBarItem(
                                         icon: Column(
                                           children: [
-                                            controller.userProfileImage.value
-                                                    .isEmpty
+                                            controller.userProfileImage.value.contains("null") ||  controller.userProfileImage.value
+                                                    .isEmpty || controller.userProfileImage.value ==""
                                                 ? SizedBox(
                                                     height: 30.h,
                                                     width: 30.h,

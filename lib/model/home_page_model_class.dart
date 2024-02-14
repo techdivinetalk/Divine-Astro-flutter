@@ -37,7 +37,7 @@ class HomePageModelClass {
 
 class HomeData {
   NoticeBoard? noticeBoard;
-  double? totalEarning;
+  dynamic totalEarning;
   num? todaysEarning;
   OnGoingCall? onGoingCall;
   SessionType? sessionType;
@@ -46,12 +46,17 @@ class HomeData {
   Offers? offers;
   Wallet? wallet;
   double? payoutPending;
+  dynamic totalOrderPayout;
+  dynamic totalFinePayout;
   double? tds;
   dynamic totalPaymentGatewayCharges;
   //
   dynamic inAppChatPrevStatus;
   dynamic audioCallPrevStatus;
   dynamic videoCallPrevStatus;
+  dynamic totalDivineWalletPayout;
+  dynamic totalRefundPayout;
+  dynamic totalTax;
   //
 
   HomeData({
@@ -63,6 +68,11 @@ class HomeData {
     this.offerType,
     this.trainingVideo,
     this.offers,
+    this.totalOrderPayout,
+    this.totalFinePayout,
+    this.totalDivineWalletPayout,
+    this.totalRefundPayout,
+    this.totalTax,
 
     //
     this.inAppChatPrevStatus,
@@ -87,7 +97,12 @@ class HomeData {
         wallet: Wallet.fromJson(json["wallet"]),
         payoutPending: json["payout_pending"]?.toDouble(),
         tds: json["tds"]?.toDouble(),
-        totalPaymentGatewayCharges: json["total_payment_gateway_charges"],
+        totalPaymentGatewayCharges: json["total_payment_gateway_charges"] ?? 0,
+    totalOrderPayout: json["total_order_payout"] ?? 0,
+    totalFinePayout: json["total_fine_payout"] ?? 0,
+    totalDivineWalletPayout: json["total_divine_wallet_payout"] ?? 0,
+    totalRefundPayout: json["total_refund_payout"] ?? 0,
+    totalTax: json["total_tax"] ?? 0,
         sessionType: json["session_type"] == null
             ? null
             : SessionType.fromJson(json["session_type"]),
@@ -112,11 +127,16 @@ class HomeData {
         "notice_board": noticeBoard?.toJson(),
         "total_earning": totalEarning,
         "todays_earning": todaysEarning,
+        "total_fine_payout": totalFinePayout,
         "on_going_call": onGoingCall?.toJson(),
         "session_type": sessionType?.toJson(),
         "wallet": wallet?.toJson(),
         "payout_pending": payoutPending,
+        "total_order_payout": totalOrderPayout,
         "tds": tds,
+        "total_divine_wallet_payout": totalDivineWalletPayout,
+        "total_refund_payout": totalRefundPayout,
+        "total_tax": totalTax,
         "total_payment_gateway_charges": totalPaymentGatewayCharges,
         "offer_type": offerType == null
             ? []

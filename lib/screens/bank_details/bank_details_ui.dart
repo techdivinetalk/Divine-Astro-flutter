@@ -134,18 +134,9 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                 )),
                             GetBuilder<BankDetailController>(
                               builder: (controller) => Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // ImagePickerButton(
-                                  //   title: "passBook".tr,
-                                  //   file: controller.passBook,
-                                  //   onTap: () {
-                                  //     controller.pickFile().then((value) {
-                                  //       if (value != null) {
-                                  //         controller.addPassBook(value);
-                                  //       }
-                                  //     });
-                                  //   },
-                                  // ),
+
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
@@ -200,16 +191,15 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                                         BorderRadius.circular(
                                                             10.h),
                                                   ),
+                                        SizedBox(
+                                          height: 5.h
+                                        ),
                                         Text("passBook".tr),
                                       ],
                                     ),
                                   ),
                                   SizedBox(width: 12.w),
-                                  // ImagePickerButton(
-                                  //   file: controller.cancelledCheque,
-                                  //   title: "cancelledCheque".tr,
-                                  //   onTap: () {},
-                                  // ),
+
                                   Expanded(
                                     child:controller.cancelledCheque == null && controller.cancelledChequeUrl.isEmpty
                                         ? GestureDetector(
@@ -256,7 +246,11 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                                       }
                                                     });
                                                   }),
+                                              SizedBox(
+                                                  height: 5.h
+                                              ),
                                               Text("cancelledCheque".tr),
+
                                             ],
                                           ),
                                   ),

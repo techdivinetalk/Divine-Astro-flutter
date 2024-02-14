@@ -76,31 +76,33 @@ class Utils {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${'internetSpeed'.tr} :',
-                      style:
-                          AppTextStyle.textStyle14(fontColor: appColors.black),
-                    ),
-                    Text(
-                      'poor'.tr,
-                      style: AppTextStyle.textStyle16(
-                          fontColor: appColors.red,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-                Text(
-                  'badInternetConnection'.tr,
-                  style: AppTextStyle.textStyle14(
-                      fontColor: appColors.red, fontWeight: FontWeight.w500),
-                ),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${'internetSpeed'.tr} :',
+                        style:
+                            AppTextStyle.textStyle14(fontColor: appColors.black),
+                      ),
+                      Text(
+                        'poor'.tr,
+                        style: AppTextStyle.textStyle16(
+                            fontColor: appColors.red,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    'badInternetConnection'.tr,
+                    style: AppTextStyle.textStyle14(
+                        fontColor: appColors.red, fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
             ),
             Assets.images.group.svg(color: appColors.red)
           ],
