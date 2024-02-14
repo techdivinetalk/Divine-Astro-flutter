@@ -593,6 +593,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                               appColors.brownColour,
                                           text: "acceptChatRequest".tr,
                                           onPressed: () async {
+                                            print("onPressed acceptChatRequest");
                                             try {
                                               isLoader = true;
                                               if (await acceptOrRejectChat(
