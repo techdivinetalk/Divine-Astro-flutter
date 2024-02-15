@@ -247,7 +247,9 @@ class MyApp extends StatelessWidget {
                   DefaultWidgetsLocalizations.delegate,
                 ],
                 builder: (context, widget) {
-                  return Stack(
+                  return
+                   // Container();
+                    Stack(
                     children: <Widget>[
                       // Obx(() => IgnorePointer(
                       //     ignoring:

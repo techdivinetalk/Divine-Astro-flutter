@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/custom_shimmer.dart';
+import 'package:divine_astrologer/common/switch_component.dart';
 import 'package:divine_astrologer/common/text_field_custom.dart';
+import 'package:divine_astrologer/model/home_page_model_class.dart';
 import 'package:divine_astrologer/screens/home_screen_options/discount_offers/discount_offers_controller.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:flutter/material.dart';
@@ -42,11 +47,12 @@ class DiscountOfferUI extends GetView<DiscountOffersController> {
                   }
                   if (controller.loading == Loading.loaded) {
                     return ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: controller.discountOffers.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          final offer = controller.discountOffers[index];
+                          DiscountOffer offer = controller.discountOffers[index];
+ print(jsonEncode(offer));
                           return Container(
                             margin: EdgeInsets.symmetric(vertical: 10.w),
                             padding: EdgeInsets.all(20.w),
@@ -78,12 +84,28 @@ class DiscountOfferUI extends GetView<DiscountOffersController> {
                                           fontWeight: FontWeight.w600),
                                     ),
                                     Spacer(),
-                                    SizedBox(
-                                      height: 0,
-                                      child: Switch(
-                                        value: false,
-                                        onChanged: (value) {},
-                                      ),
+                                    SwitchWidget(
+                                      switchValue:  offer.isOn!,
+
+                                      onTap: () {
+                                        if(offer.isOn!){
+                                          offer.isOn = !offer.isOn!;
+                                          controller.updateOfferType(value: offer.isOn!,index: index,offerId:offer.id!,  offerType:  2);
+                                        }else
+                                        if(controller.discountOffers
+                                            .any((element) => element.isOn!)){
+                                          divineSnackBar(
+                                              data:
+                                              "Only 1 custom offer is allowed at once",
+                                              color: appColors.redColor);
+                                        }else{
+                                          offer.isOn = !offer.isOn!;
+                                          controller.updateOfferType(value: offer.isOn!,index: index,offerId:offer.id!,  offerType:  2);
+                                        }
+
+
+                                        controller.update();
+                                      },
                                     )
                                   ],
                                 ),

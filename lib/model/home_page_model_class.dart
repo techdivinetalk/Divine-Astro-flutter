@@ -241,22 +241,25 @@ class DiscountOffer {
   String? offerName;
   int? offerPercentage;
   int? toggle;
+  bool? isOn;
 
-  DiscountOffer({this.id, this.offerName, this.offerPercentage, this.toggle});
+  DiscountOffer({this.id, this.offerName, this.offerPercentage, this.toggle, this.isOn});
 
   DiscountOffer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     offerName = json['offer_name'];
     offerPercentage = json['offer_percentage'];
     toggle = json['toggle'];
+    isOn = json['isOn'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['offer_name'] = this.offerName;
     data['offer_percentage'] = this.offerPercentage;
     data['toggle'] = this.toggle;
+    data['isOn'] = this.isOn;
     return data;
   }
 }

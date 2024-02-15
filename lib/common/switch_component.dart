@@ -10,10 +10,12 @@ class SwitchWidget extends StatelessWidget {
   String? onText, offText;
   double? width;
   double? height;
+  Color? activeTextColor;
   SwitchWidget(
       {super.key,
       this.switchValue,
       this.onTap,
+      this.activeTextColor,
       this.onText,
       this.offText,
       this.width,
@@ -23,7 +25,7 @@ class SwitchWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlutterSwitch(
       inactiveTextColor: appColors.darkBlue,
-      activeTextColor: appColors.darkBlue,
+      activeTextColor:activeTextColor ?? appColors.darkBlue,
       width: width ?? 58.0,
       height: height ?? 28.0,
       toggleSize: 20.0,
