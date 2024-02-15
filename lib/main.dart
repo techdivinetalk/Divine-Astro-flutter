@@ -247,15 +247,11 @@ class MyApp extends StatelessWidget {
                   DefaultWidgetsLocalizations.delegate,
                 ],
                 builder: (context, widget) {
-                  return Stack(
+                  return
+                   // Container();
+                    Stack(
                     children: <Widget>[
-                      Obx(() => SizedBox()
-
-                          // IgnorePointer(
-                          // ignoring:
-                          //     Get.find<ProgressService>().showProgress.value,
-                          // child: widget)
-                      ),
+                      widget ?? Container(), // Fallback to an empty Container if widget is null
                       StreamBuilder<bool?>(
                         initialData: true,
                         stream: Get.find<FirebaseNetworkService>()
@@ -282,9 +278,9 @@ class MyApp extends StatelessWidget {
                           );
                         },
                       ),
-                      Obx(() => Get.find<ProgressService>().showProgress.isTrue
-                          ? Center(child: CustomProgressDialog())
-                          : const Offstage())
+                      // Obx(() => Get.find<ProgressService>().showProgress.isTrue
+                      //     ? Center(child: CustomProgressDialog())
+                      //     : const Offstage())
                     ],
                   );
                 },
