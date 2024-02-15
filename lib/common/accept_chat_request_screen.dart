@@ -3,10 +3,12 @@ import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/common_elevated_button.dart";
 import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/common/routes.dart";
+import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/gen/assets.gen.dart";
 import "package:divine_astrologer/gen/fonts.gen.dart";
 import "package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:flutter/material.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -89,6 +91,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
   BroadcastReceiver broadcastReceiver =
       BroadcastReceiver(names: <String>["EndChat", "backReq"]);
   bool isLoader = false;
+  final SharedPreferenceService pref = Get.put(SharedPreferenceService());
 
   @override
   void initState() {
@@ -115,7 +118,6 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
             } else {}
           },
         );
-        
       }
     });
 
@@ -155,12 +157,32 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                           child: Column(
                             children: [
                               SizedBox(height: 50.w),
-                              SizedBox(
-                                  height: 90.w,
-                                  width: 90.w,
-                                  child: CircleAvatar(
-                                      child: Assets.images.avatar
-                                          .svg(height: 60.w, width: 60.w))),
+                              // SizedBox(
+                              //     height: 90.w,
+                              //     width: 90.w,
+                              //     child: CircleAvatar(
+                              //         child: Assets.images.avatar
+                              //             .svg(height: 60.w, width: 60.w))),
+
+                              Obx(
+                                () {
+                                  Map<String, dynamic> order = {};
+                                  order = AppFirebaseService().orderData.value;
+                                  String imageURL = order["customerImage"] ?? "";
+                                  String appended = "${pref.getAmazonUrl()}/$imageURL";
+                                  print("img:: $appended");
+                                  return SizedBox(
+                                    height: 100,
+                                    width: 100,
+                                    child: CustomImageWidget(
+                                      imageUrl: appended,
+                                      rounded: true,
+                                      typeEnum: TypeEnum.user,
+                                    ),
+                                  );
+                                },
+                              ),
+
                               SizedBox(height: 10.w),
                               Text(
                                   AppFirebaseService()

@@ -1,5 +1,7 @@
 import 'package:divine_astrologer/common/routes.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -29,7 +31,7 @@ class RejoinWidget extends StatelessWidget {
                 blurRadius: 3.0,
                 offset: const Offset(3, 0)),
           ],
-          gradient:  LinearGradient(
+          gradient: LinearGradient(
               colors: [appColors.white, appColors.yellow],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter),
@@ -41,26 +43,48 @@ class RejoinWidget extends StatelessWidget {
               child: Wrap(direction: Axis.horizontal, children: [
                 CustomText('Your Customer ', fontSize: 10.sp),
                 CustomText(data['orderData']['customerName'],
-                    fontSize: 10.sp, fontColor: appColors.brown, fontWeight: FontWeight.w700),
+                    fontSize: 10.sp,
+                    fontColor: appColors.brown,
+                    fontWeight: FontWeight.w700),
                 CustomText('already joined', fontSize: 10.sp),
                 SizedBox(width: 8.w),
               ]),
             ),
             CustomButton(
-              onTap: () => Get.toNamed(RouteName.chatMessageWithSocketUI, arguments: data),
+              onTap: () => Get.toNamed(RouteName.chatMessageWithSocketUI,
+                  arguments: data),
               color: appColors.appYellowColour,
               radius: 10.r,
               child: Assets.svg.rejoinChatIcon.svg(),
             ),
             SizedBox(width: 20.w),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10.r),
-              child: SizedBox(
-                height: 32.h,
-                width: 32.h,
-                child: CachedNetworkPhoto(
-                    url: "${preferenceService.getAmazonUrl()}${data['orderData']['customerImage']}"),
-              ),
+            // ClipRRect(
+            //   borderRadius: BorderRadius.circular(10.r),
+            //   child: SizedBox(
+            //     height: 32.h,
+            //     width: 32.h,
+            //     child: CachedNetworkPhoto(
+            //         url: "${preferenceService.getAmazonUrl()}${data['orderData']['customerImage']}"),
+            //   ),
+            // ),
+            Obx(
+              () {
+                Map<String, dynamic> order = {};
+                order = AppFirebaseService().orderData.value;
+                String imageURL = order["customerImage"] ?? "";
+                String appended =
+                    "${preferenceService.getAmazonUrl()}/$imageURL";
+                print("img:: $appended");
+                return SizedBox(
+                  height: 32,
+                  width: 32,
+                  child: CustomImageWidget(
+                    imageUrl: appended,
+                    rounded: true,
+                    typeEnum: TypeEnum.user,
+                  ),
+                );
+              },
             ),
           ],
         ),

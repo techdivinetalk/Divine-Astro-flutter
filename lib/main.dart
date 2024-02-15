@@ -249,10 +249,14 @@ class MyApp extends StatelessWidget {
                 builder: (context, widget) {
                   return Stack(
                     children: <Widget>[
-                      Obx(() => IgnorePointer(
-                          ignoring:
-                              Get.find<ProgressService>().showProgress.value,
-                          child: widget)),
+                      // Obx(() => IgnorePointer(
+                      //     ignoring:
+                      //         Get.find<ProgressService>().showProgress.value,
+                      //     child: widget)),
+                     
+                      //
+                      widget ?? SizedBox(),
+                      //
                       StreamBuilder<bool?>(
                         initialData: true,
                         stream: Get.find<FirebaseNetworkService>()
@@ -279,9 +283,9 @@ class MyApp extends StatelessWidget {
                           );
                         },
                       ),
-                      Obx(() => Get.find<ProgressService>().showProgress.isTrue
-                          ? Center(child: CustomProgressDialog())
-                          : const Offstage())
+                      // Obx(() => Get.find<ProgressService>().showProgress.isTrue
+                      //     ? Center(child: CustomProgressDialog())
+                      //     : const Offstage())
                     ],
                   );
                 },

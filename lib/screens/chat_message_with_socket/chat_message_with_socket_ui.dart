@@ -581,9 +581,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         scrollDirection: Axis.horizontal,
-        itemCount:
-            controller.messageTemplates.length +
-                1,
+        itemCount: controller.messageTemplates.length + 1,
         separatorBuilder: (_, index) => SizedBox(width: 10.w),
         itemBuilder: (context, index) {
           late final MessageTemplates msg;
@@ -1672,10 +1670,30 @@ class AstrologerChatAppBar extends StatelessWidget {
                         //SizedBox(width: 8.w),
                         Row(
                           children: [
-                            CachedNetworkPhoto(
-                                height: 45.h,
-                                width: 45.w,
-                                url: controller.profileImage.value),
+                            // CachedNetworkPhoto(
+                            //     height: 45.h,
+                            //     width: 45.w,
+                            //     url: controller.profileImage.value),
+
+                            Obx(
+                                () {
+                                  Map<String, dynamic> order = {};
+                                  order = AppFirebaseService().orderData.value;
+                                  String imageURL = order["customerImage"] ?? "";
+                                  String appended = "${controller.preference.getAmazonUrl()}/$imageURL";
+                                  print("img:: $appended");
+                                  return SizedBox(
+                                    height: 50,
+                                    width: 50,
+                                    child: CustomImageWidget(
+                                      imageUrl: appended,
+                                      rounded: true,
+                                      typeEnum: TypeEnum.user,
+                                    ),
+                                  );
+                                },
+                              ),
+
                             SizedBox(width: 12.w),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1735,10 +1753,16 @@ class AstrologerChatAppBar extends StatelessWidget {
                           builder: (context) {
                             Map orderData =
                                 AppFirebaseService().orderData.value;
-                            String astrImage =
-                                "${controller.preference.getAmazonUrl()}${orderData["astroImage"] ?? ""}";
-                            String custImage =
-                                "${controller.preference.getAmazonUrl()}${orderData["customer_image"] ?? ""}";
+                            final String astrImage =
+                                orderData["astroImage"] ?? "";
+                            final String custImage =
+                                orderData["customerImage"] ?? "";
+
+                            String appendedAstrImage =
+                                "${controller.preference.getAmazonUrl()}/$astrImage";
+                            String appendedCustImage =
+                                "${controller.preference.getAmazonUrl()}/$custImage";
+
                             return ZegoService().buttonUI(
                               isVideoCall: false,
                               targetUserID: orderData["userId"] ?? "",
@@ -1755,10 +1779,10 @@ class AstrologerChatAppBar extends StatelessWidget {
                               customData: {
                                 "astr_id": orderData["astroId"] ?? "",
                                 "astr_name": orderData["astrologerName"] ?? "",
-                                "astr_image": astrImage,
+                                "astr_image": appendedAstrImage,
                                 "cust_id": orderData["userId"] ?? "",
                                 "cust_name": orderData["customerName"] ?? "",
-                                "cust_image": custImage,
+                                "cust_image": appendedCustImage,
                                 "time": "00:00:20",
                               },
                             );
@@ -1769,10 +1793,16 @@ class AstrologerChatAppBar extends StatelessWidget {
                           builder: (context) {
                             Map orderData =
                                 AppFirebaseService().orderData.value;
-                            String astrImage =
-                                "${controller.preference.getAmazonUrl()}${orderData["astroImage"] ?? ""}";
-                            String custImage =
-                                "${controller.preference.getAmazonUrl()}${orderData["customer_image"] ?? ""}";
+                            final String astrImage =
+                                orderData["astroImage"] ?? "";
+                            final String custImage =
+                                orderData["customerImage"] ?? "";
+
+                            String appendedAstrImage =
+                                "${controller.preference.getAmazonUrl()}/$astrImage";
+                            String appendedCustImage =
+                                "${controller.preference.getAmazonUrl()}/$custImage";
+
                             return ZegoService().buttonUI(
                               isVideoCall: true,
                               targetUserID: orderData["userId"] ?? "",
@@ -1789,10 +1819,10 @@ class AstrologerChatAppBar extends StatelessWidget {
                               customData: {
                                 "astr_id": orderData["astroId"] ?? "",
                                 "astr_name": orderData["astrologerName"] ?? "",
-                                "astr_image": astrImage,
+                                "astr_image": appendedAstrImage,
                                 "cust_id": orderData["userId"] ?? "",
                                 "cust_name": orderData["customerName"] ?? "",
-                                "cust_image": custImage,
+                                "cust_image": appendedCustImage,
                                 "time": "00:00:20",
                               },
                             );

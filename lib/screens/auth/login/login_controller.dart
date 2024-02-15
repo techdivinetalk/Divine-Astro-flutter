@@ -291,7 +291,8 @@ class LoginController extends GetxController {
     return Future<void>.value();
   }
 
-  Future<void> updateLoginDataInFirebase(ResLogin data) async {
+
+   Future<void> updateLoginDataInFirebase(ResLogin data) async {
     final String uniqueId = await getDeviceId() ?? '';
     final String firebaseNodeUrl = 'astrologer/${data.data?.id}';
     final FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
@@ -320,10 +321,7 @@ class LoginController extends GetxController {
           navigateToDashboard(data);
         }
         final appFirebaseService = AppFirebaseService();
-
-          appFirebaseService.readData('$firebaseNodeUrl/realTime');
-
-
+        appFirebaseService.readData('$firebaseNodeUrl/realTime');
       },
     );
   }
