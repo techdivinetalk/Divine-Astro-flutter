@@ -49,7 +49,7 @@ class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
             border: Border.all(color: appColors.white),
             color: appColors.white.withOpacity(0.2),
           ),
-          child:  Icon(Icons.close, color: appColors.white),
+          child: Icon(Icons.close, color: appColors.white),
         ),
       ),
     );
@@ -87,7 +87,7 @@ class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const SizedBox(height: 16),
-           Text(
+          Text(
             "Show Card Deck to User",
             style: TextStyle(fontSize: 20, color: appColors.white),
           ),
@@ -103,7 +103,7 @@ class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
                 onChanged: (ind) => setState(() => value = ind),
                 title: Text(
                   "Ask user to choose ${numList[index]} cards",
-                  style:  TextStyle(color: appColors.white),
+                  style: TextStyle(color: appColors.white),
                 ),
                 controlAffinity: ListTileControlAffinity.trailing,
                 toggleable: true,
@@ -120,7 +120,7 @@ class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
             child: ListTile(
               title: Text(
                 widget.userName,
-                style:  TextStyle(fontSize: 20, color: appColors.white),
+                style: TextStyle(fontSize: 20, color: appColors.white),
               ),
               subtitle: Text(
                 "05 M 30 S",
@@ -150,6 +150,8 @@ class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
       ),
       onPressed: () {
         if (value != null) {
+          print(value);
+          print("valuevaluevaluevaluevalue");
           widget.onSelect(numList[value ?? 0]);
         } else {}
       },

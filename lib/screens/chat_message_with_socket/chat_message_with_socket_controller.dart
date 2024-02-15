@@ -856,6 +856,7 @@ class ChatMessageWithSocketController extends GetxController
           .ref()
           .child("order/$orderId/card")
           .set(hsMap);
+
     }
   }
 

@@ -423,11 +423,7 @@ class HomeController extends GetxController {
     ///Customer Offer data
     if (homeData?.offers?.customOffer != null &&
         homeData?.offers?.customOffer != []) {
-      for (int i = 0; i < homeData!.offers!.customOffer!.length; i++) {
-        bool value = homeData?.offers?.customOffer![i].toggle == 1;
 
-        customOfferSwitch.add(value);
-      }
     }
 
     update();
@@ -582,11 +578,8 @@ class HomeController extends GetxController {
       UpdateOfferResponse response =
           await userRepository.updateOfferTypeApi(params);
       if (response.statusCode == 200) {
-        if (offerType == 1) {
-          orderOfferSwitch[index] = value;
-        } else if (offerType == 2) {
-          customOfferSwitch[index] = value;
-        }
+        homeData!.offers!.customOffer![index].isOn = value;
+
       }
       update();
     } catch (error) {
