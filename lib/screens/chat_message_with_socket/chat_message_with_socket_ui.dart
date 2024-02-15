@@ -796,7 +796,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           maintainState: true,
                           child: InkWell(
                               onTap: () => controller.sendMsg(),
-                              child: Assets.images.icSendMsg.svg(height: 48.h)),
+                              child: Assets.images.icSendMsg.svg(
+                                  height: kToolbarHeight - Get.width * 0.010)),
                         )
                       ],
                     ),
