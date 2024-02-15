@@ -53,7 +53,7 @@ class ChatMessageController extends GetxController {
                     : MsgType.text,
                 seenStatus: SeenStatus.delivered,
                 customerId: int.parse(responseMsg["sender_id"] ?? 0)));
-            scrollToBottomFunc();
+
           }
         }
       });
@@ -69,6 +69,7 @@ class ChatMessageController extends GetxController {
         }
       });
       // getAssistantChatList();
+      scrollToBottomFunc();
     }
   }
 
@@ -154,7 +155,7 @@ class ChatMessageController extends GetxController {
     if (messageController.text.isNotEmpty) {
       final msgData = AssistChatData(
           message: messageController.text,
-          astrologerId: args!.id,
+          astrologerId: preferenceService.getUserDetail()!.id,
           createdAt: DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ")
               .format(DateTime.now()),
           id: DateTime.now().millisecondsSinceEpoch,
@@ -163,7 +164,7 @@ class ChatMessageController extends GetxController {
           sendBy: SendBy.astrologer,
           seenStatus: SeenStatus.notSent,
           // msgStatus: MsgStatus.sent,
-          customerId: preferenceService.getUserDetail()!.id);
+          customerId: args?.id);
       appSocket.sendAssistantMessage(
           customerId: args!.id.toString(),
           msgData: msgData,
