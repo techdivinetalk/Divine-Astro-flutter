@@ -24,7 +24,7 @@ PreferredSizeWidget commonAppbar(
 }
 
 PreferredSizeWidget commonDetailAppbar(
-    {String? title = "", Widget? trailingWidget}) {
+    {String? title = "", Widget? trailingWidget,Function()? onTap}) {
   return AppBar(
     surfaceTintColor: Colors.transparent,
     backgroundColor: appColors.white,
@@ -32,7 +32,7 @@ PreferredSizeWidget commonDetailAppbar(
     titleSpacing: 0,
     centerTitle: false,
     leading: InkWell(
-        onTap: () => Get.back(),
+        onTap: onTap ??() => Get.back(),
         child: const Icon(Icons.arrow_back_ios)),
     iconTheme:  IconThemeData(color: appColors.blackColor),
     title: Text(

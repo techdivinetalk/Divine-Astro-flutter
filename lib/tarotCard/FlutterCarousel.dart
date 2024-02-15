@@ -982,7 +982,7 @@ class _CardChoiceBottomSheetState extends State<CardChoiceBottomSheet> {
                   Text(AppFirebaseService().orderData.value["customerName"]),
                   Spacer(), // This will create the gap in the middle
                   ElevatedButton(
-                    onPressed: _choice != null
+                    onPressed: _choice != null && !isVisible
                         ? () {
                             isVisible = true;
                             //Get.back();
