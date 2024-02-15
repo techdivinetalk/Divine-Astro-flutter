@@ -249,10 +249,13 @@ class MyApp extends StatelessWidget {
                 builder: (context, widget) {
                   return Stack(
                     children: <Widget>[
-                      Obx(() => IgnorePointer(
-                          ignoring:
-                              Get.find<ProgressService>().showProgress.value,
-                          child: widget)),
+                      Obx(() => SizedBox()
+
+                          // IgnorePointer(
+                          // ignoring:
+                          //     Get.find<ProgressService>().showProgress.value,
+                          // child: widget)
+                      ),
                       StreamBuilder<bool?>(
                         initialData: true,
                         stream: Get.find<FirebaseNetworkService>()
