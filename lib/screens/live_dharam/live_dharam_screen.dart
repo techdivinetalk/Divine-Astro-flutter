@@ -7,7 +7,6 @@ import "dart:math" as math;
 
 import "package:after_layout/after_layout.dart";
 import "package:divine_astrologer/common/colors.dart";
-import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/model/live/deck_card_model.dart";
 import "package:divine_astrologer/model/live/notice_board_res.dart";
@@ -32,7 +31,6 @@ import "package:divine_astrologer/screens/live_dharam/widgets/gift_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
-import "package:divine_astrologer/screens/live_dharam/you_are_blocked_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
@@ -50,6 +48,8 @@ import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_ast
 import "package:divine_astrologer/screens/live_dharam/widgets/extend_time_widget.dart";
 import 'package:random_name_generator/random_name_generator.dart';
 
+//
+//
 //
 //
 //
@@ -363,7 +363,7 @@ class _LivePage extends State<LiveDharamScreen>
             duration,
             (Timer timer) async {
               if (timer.tick % 5 == 0) {
-                math.Random.secure().nextInt(50).isEven
+                math.Random.secure().nextInt(25).isEven
                     ? await manMessage()
                     : await womanMessage();
               } else {}
@@ -399,7 +399,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> manMessage() async {
-    var num = math.Random.secure().nextInt(50);
+    var num = math.Random.secure().nextInt(25);
     var url = "https://xsgames.co/randomusers/assets/avatars/male/$num.jpg";
     final String fullName = RandomNames(Zone.india).manFullName();
     final ZegoCustomMessage model = ZegoCustomMessage(
@@ -418,7 +418,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> womanMessage() async {
-    var num = math.Random.secure().nextInt(50);
+    var num = math.Random.secure().nextInt(25);
     var url = "https://xsgames.co/randomusers/assets/avatars/female/$num.jpg";
     final String fullName = RandomNames(Zone.india).womanFullName();
     final ZegoCustomMessage model = ZegoCustomMessage(
@@ -750,11 +750,25 @@ class _LivePage extends State<LiveDharamScreen>
     return _controller.isHost
         ? null
         : ZegoLiveStreamingSwipingConfig(
-            //
             requirePreviousLiveID: () => "",
             //
             //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
             requireNextLiveID: () => "",
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
             //
           );
   }
@@ -1327,6 +1341,7 @@ class _LivePage extends State<LiveDharamScreen>
   //   required GiftData item,
   //   required num quantity,
   // }) async {
+  //   _controller.isProcessing = true;
   //   final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
   //   if (hasMyIdInWaitList) {
   //     // await alreadyInTheWaitListDialog();
@@ -1354,19 +1369,19 @@ class _LivePage extends State<LiveDharamScreen>
   //         );
   //       },
   //       successCallBack: (String message) async {
-  //           await eventListnerSuccessAndFailureCallBack(
-  //             message: message,
-  //             isForSuccess: true,
-  //             isForFailure: false,
-  //           );
-  //         },
-  //         failureCallBack: (String message) async {
-  //           await eventListnerSuccessAndFailureCallBack(
-  //             message: message,
-  //             isForSuccess: false,
-  //             isForFailure: true,
-  //           );
-  //         },
+  //         await successAndFailureCallBack(
+  //           message: message,
+  //           isForSuccess: true,
+  //           isForFailure: false,
+  //         );
+  //       },
+  //       failureCallBack: (String message) async {
+  //         await successAndFailureCallBack(
+  //           message: message,
+  //           isForSuccess: false,
+  //           isForFailure: true,
+  //         );
+  //       },
   //     );
   //     if (hasBal) {
   //       if (mounted) {
@@ -1427,6 +1442,7 @@ class _LivePage extends State<LiveDharamScreen>
   //       // await Future.delayed(const Duration(seconds: 1));
   //     } else {}
   //   }
+  //   _controller.isProcessing = false;
   //   return Future<void>.value();
   // }
 
