@@ -133,7 +133,7 @@ class ChatMessage {
     roleId = json['role_id'];
     customerId = json['customer_id'];
     msgSequence = json['msg_sequence'];
-    msgType = json['msg_type'];
+    msgType = json['msgType'];
     message = json['message'];
     multiImage = json['multiimage'];
     msgTime = json['msg_time'];
@@ -189,7 +189,7 @@ class ChatMessage {
     data['role_id'] = roleId;
     data['customer_id'] = customerId;
     data['msg_sequence'] = msgSequence;
-    data['msg_type'] = msgType;
+    data['msgType'] = msgType;
     data['message'] = message;
     data['multiimage'] = multiImage;
     data['msg_time'] = msgTime;

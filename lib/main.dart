@@ -50,7 +50,6 @@ Future<void> main() async {
   initMessaging();
   Get.put(AppColors());
 
-
   // await RemoteConfigService.instance.initFirebaseRemoteConfig();
 
   final remoteConfig = FirebaseRemoteConfig.instance;
@@ -69,13 +68,13 @@ Future<void> main() async {
         MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
       showNotification(message.data["title"], message.data["message"],
           message.data['type'], message.data);
-        HashMap<String, dynamic> updateData = HashMap();
-        updateData[message.data["chatId"]] = 1;
-        FirebaseDatabase.instance
-            .ref("astrologer")
-            .child(
-            "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}")
-            .update(updateData);
+      HashMap<String, dynamic> updateData = HashMap();
+      updateData[message.data["chatId"]] = 1;
+      FirebaseDatabase.instance
+          .ref("astrologer")
+          .child(
+              "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}")
+          .update(updateData);
     } else if (message.data["type"] == "3") {
       print('Message data:- ${MiddleWare.instance.currentPage}');
       if (MiddleWare.instance.currentPage == RouteName.chatMessageUI) {
@@ -86,7 +85,7 @@ Future<void> main() async {
         showNotification(message.data["title"], message.data["message"],
             message.data['type'], message.data);
       }
-    }else{
+    } else {
       showNotification(message.data["title"], message.data["message"],
           message.data['type'], message.data);
     }
@@ -101,7 +100,6 @@ Future<void> main() async {
   preferenceService.setConstantDetails(data);*/
 
   GiftsSingleton().init();
-
 
   // final navigatorKey = GlobalKey<NavigatorState>();
   // ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
@@ -146,7 +144,7 @@ Future<void> initServices() async {
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
- print("pushNotification");
+  print("pushNotification");
   FirebaseDatabase.instance.ref().child("pushR").set(DateTime.now());
   showNotification(message.data["title"], message.data["message"],
       message.data['type'], message.data);
@@ -252,49 +250,49 @@ class MyApp extends StatelessWidget {
                   DefaultWidgetsLocalizations.delegate,
                 ],
                 builder: (context, widget) {
-                  return
+                  return widget ?? SizedBox();
                    // Container();
-                    Stack(
-                    children: <Widget>[
-                      // Obx(() => IgnorePointer(
-                      //     ignoring:
-                      //         Get.find<ProgressService>().showProgress.value,
-                      //     child: widget)),
+                  //   Stack(
+                  //   children: <Widget>[
+                  //     // Obx(() => IgnorePointer(
+                  //     //     ignoring:
+                  //     //         Get.find<ProgressService>().showProgress.value,
+                  //     //     child: widget)),
                      
-                      //
-                      widget ?? SizedBox(),
-                      //
-                      StreamBuilder<bool?>(
-                        initialData: true,
-                        stream: Get.find<FirebaseNetworkService>()
-                            .databaseConnectionStream,
-                        builder: (context, snapshot) {
-                          final appTheme = AppTheme.of(context);
-                          return SafeArea(
-                            child: AnimatedContainer(
-                              height: snapshot.data as bool
-                                  ? 0
-                                  : appTheme.getHeight(36),
-                              duration: Utils.animationDuration,
-                              color: appTheme.redColor,
-                              child: Material(
-                                type: MaterialType.transparency,
-                                child: Center(
-                                    child: Text(AppString.noInternetConnection,
-                                        style: appTheme.customTextStyle(
-                                          fontSize: 16.sp,
-                                          color: appTheme.whiteColor,
-                                        ))),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      // Obx(() => Get.find<ProgressService>().showProgress.isTrue
-                      //     ? Center(child: CustomProgressDialog())
-                      //     : const Offstage())
-                    ],
-                  );
+                  //     //
+                  //     widget ?? SizedBox(),
+                  //     //
+                  //     // StreamBuilder<bool?>(
+                  //     //   initialData: true,
+                  //     //   stream: Get.find<FirebaseNetworkService>()
+                  //     //       .databaseConnectionStream,
+                  //     //   builder: (context, snapshot) {
+                  //     //     final appTheme = AppTheme.of(context);
+                  //     //     return SafeArea(
+                  //     //       child: AnimatedContainer(
+                  //     //         height: snapshot.data as bool
+                  //     //             ? 0
+                  //     //             : appTheme.getHeight(36),
+                  //     //         duration: Utils.animationDuration,
+                  //     //         color: appTheme.redColor,
+                  //     //         child: Material(
+                  //     //           type: MaterialType.transparency,
+                  //     //           child: Center(
+                  //     //               child: Text(AppString.noInternetConnection,
+                  //     //                   style: appTheme.customTextStyle(
+                  //     //                     fontSize: 16.sp,
+                  //     //                     color: appTheme.whiteColor,
+                  //     //                   ))),
+                  //     //         ),
+                  //     //       ),
+                  //     //     );
+                  //     //   },
+                  //     // ),
+                  //     // Obx(() => Get.find<ProgressService>().showProgress.isTrue
+                  //     //     ? Center(child: CustomProgressDialog())
+                  //     //     : const Offstage())
+                  //   ],
+                  // );
                 },
               ),
             );

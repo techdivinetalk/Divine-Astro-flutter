@@ -150,6 +150,7 @@ class FeedBack extends GetView<FeedbackController> {
                                       horizontal: 12.w, vertical: 4.h),
                                   child: MessageView(
                                     index: index,
+                                    userName: '',
                                     chatMessage: data,
                                     yourMessage:
                                     data.senderId ==

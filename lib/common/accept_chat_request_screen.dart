@@ -88,45 +88,81 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
   final appFirebaseService = AppFirebaseService();
   final appSocket = AppSocket();
   // bool isBottomSheetOpen = false;
-  BroadcastReceiver broadcastReceiver =
-      BroadcastReceiver(names: <String>["EndChat", "backReq"]);
+  // BroadcastReceiver broadcastReceiver =
+  //     BroadcastReceiver(names: <String>["EndChat", "backReq"]);
   bool isLoader = false;
   final SharedPreferenceService pref = Get.put(SharedPreferenceService());
 
   @override
   void initState() {
-    broadcastReceiver.start();
-    broadcastReceiver.messages.listen((event) {
-      if (event.name == "backReq") {
-        // Navigator.pop(context);
-        WidgetsBinding.instance.endOfFrame.then(
-          (_) async {
-            if (mounted) {
-              Navigator.pop(context);
-            } else {}
-          },
-        );
-      } else if (event.name == "EndChat") {
-        // WidgetsBinding.instance.addPostFrameCallback((_) {
-        //   Get.offAllNamed(RouteName.dashboard);
-        // });
-        WidgetsBinding.instance.endOfFrame.then(
-          (_) async {
-            if (mounted) {
-              broadcastReceiver.stop();
-              Navigator.pop(context);
-            } else {}
-          },
-        );
-      }
-    });
+    super.initState();
+    
+    AppFirebaseService().orderData.listen(
+      (Map<String, dynamic> p0) {
+        print("AppFirebaseService().orderData listner working");
+
+        final dynamic? cond = p0["status"];
+
+        print("AppFirebaseService().orderData listner working cond:: $cond");
+
+        if (cond == "0" ||
+            cond == 0 ||
+            cond == "1" ||
+            cond == 1 ||
+            cond == "2" ||
+            cond == 2) {
+        } else {
+          WidgetsBinding.instance.endOfFrame.then(
+            (_) async {
+              if (mounted) {
+                bool canPop = Navigator.canPop(context);
+                if (canPop) {
+                  Navigator.pop(context);
+                } else {}
+              } else {}
+            },
+          );
+        }
+      },
+    );
+
+    // broadcastReceiver.start();
+    // broadcastReceiver.messages.listen(
+    //   (event) {
+    //     if (event.name == "backReq") {
+    //       // Navigator.pop(context);
+    //       WidgetsBinding.instance.endOfFrame.then(
+    //         (_) async {
+    //           if (mounted) {
+    //             bool canPop = Navigator.canPop(context);
+    //             if (canPop) {
+    //               Navigator.pop(context);
+    //             } else {}
+    //           } else {}
+    //         },
+    //       );
+    //     } else if (event.name == "EndChat") {
+    //       WidgetsBinding.instance.endOfFrame.then(
+    //         (_) async {
+    //           if (mounted) {
+    //             bool canPop = Navigator.canPop(context);
+    //             if (canPop) {
+    //               broadcastReceiver.stop();
+    //               Navigator.pop(context);
+    //             } else {}
+    //           } else {}
+    //         },
+    //       );
+    //     }
+    //   },
+    // );
 
     // appFirebaseService.acceptBottomWatcher.nameStream.listen((event) {
     //   debugPrint('event .... $event');
     //   // isBottomSheetOpen = event == "1";
     //   setState(() {});
     // });
-    super.initState();
+    
   }
 
   @override
@@ -168,8 +204,10 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                 () {
                                   Map<String, dynamic> order = {};
                                   order = AppFirebaseService().orderData.value;
-                                  String imageURL = order["customerImage"] ?? "";
-                                  String appended = "${pref.getAmazonUrl()}/$imageURL";
+                                  String imageURL =
+                                      order["customerImage"] ?? "";
+                                  String appended =
+                                      "${pref.getAmazonUrl()}/$imageURL";
                                   print("img:: $appended");
                                   return SizedBox(
                                     height: 100,
@@ -633,7 +671,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                               onPressed: () async {
                                                 await onPressed();
 
-                                                setState(() {});
+                                                // setState(() {});
                                               },
                                               // widget.onPressed
                                             )

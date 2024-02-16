@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
 import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/screens/order_history/order_history_ui.dart';
 import 'package:divine_astrologer/screens/dashboard/widgets/accept_chat_widget.dart';
@@ -27,7 +28,6 @@ class DashboardScreen extends GetView<DashboardController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<DashboardController>(
-      init: DashboardController(Get.put(PreDefineRepository())),
       assignId: true,
       builder: (controller) {
         return Material(
@@ -35,6 +35,11 @@ class DashboardScreen extends GetView<DashboardController> {
               initialData: BroadcastMessage(name: '', data: {}),
               stream: controller.broadcastReceiver.messages,
               builder: (context, broadcastSnapshot) {
+                final isDataNull = broadcastSnapshot.data != null &&
+                    broadcastSnapshot.data?.data != null &&
+                    broadcastSnapshot.data?.data?['orderData'] != null &&
+                    broadcastSnapshot.data?.data?['orderData']['status'] !=
+                        null;
                 return Stack(
                   children: [
                     Scaffold(
@@ -144,8 +149,14 @@ class DashboardScreen extends GetView<DashboardController> {
                                       BottomNavigationBarItem(
                                         icon: Column(
                                           children: [
-                                            controller.userProfileImage.value.contains("null") ||  controller.userProfileImage.value
-                                                    .isEmpty || controller.userProfileImage.value ==""
+                                          
+                                            controller.userProfileImage.value
+                                                        .contains("null") ||
+                                                    controller.userProfileImage
+                                                        .value.isEmpty ||
+                                                    controller.userProfileImage
+                                                            .value ==
+                                                        ""
                                                 ? SizedBox(
                                                     height: 30.h,
                                                     width: 30.h,
@@ -180,43 +191,63 @@ class DashboardScreen extends GetView<DashboardController> {
                                     currentIndex:
                                         controller.selectedIndex.value,
                                     onTap: (value) {
+
+                                      print("tap working");
                                       _onItemTapped(value);
                                     },
                                   ),
                                 ],
                               ),
                             ))),
-                    if (broadcastSnapshot.data!.name == 'ReJoinChat' &&
-                        broadcastSnapshot.data!.data!['orderData']['status'] ==
-                            '3')
-                      Positioned(
-                          bottom: kToolbarHeight + 20.w,
-                          left: 0,
-                          right: 0,
-                          child: RejoinWidget(
-                              data: broadcastSnapshot.data!.data!)),
-                    if (broadcastSnapshot.data!.name == 'AcceptChat' &&
-                        broadcastSnapshot.data!.data!['orderData']['status'] ==
-                            '0')
-                      Positioned(
-                          bottom: kToolbarHeight + 20.w,
-                          left: 0,
-                          right: 0,
-                          child: AcceptChatWidget(
-                            data: broadcastSnapshot.data!.data!,
-                            onTap: () {
-                              debugPrint('AcceptChatWidget onTap');
-                              controller.appFirebaseService.writeData(
-                                  'order/${broadcastSnapshot.data!.data!['orderId']}',
-                                  {'status': '1'});
-                              controller.appFirebaseService.acceptBottomWatcher
-                                  .strValue = '1';
-                            },
-                          ))
+
+                    rejoinVisibility(),
+                    // if (broadcastSnapshot.data!.name == 'ReJoinChat' &&
+                    //     broadcastSnapshot.data!.data!['orderData']['status'] ==
+                    //         '3')
+                    //   Positioned(
+                    //       bottom: kToolbarHeight + 20.w,
+                    //       left: 0,
+                    //       right: 0,
+                    //       child: RejoinWidget(
+                    //           data: broadcastSnapshot.data!.data!)),
+                    // if (broadcastSnapshot.data!.name == 'AcceptChat' &&
+                    //     broadcastSnapshot.data!.data!['orderData']['status'] ==
+                    //         '0')
+                    //   Positioned(
+                    //       bottom: kToolbarHeight + 20.w,
+                    //       left: 0,
+                    //       right: 0,
+                    //       child: AcceptChatWidget(
+                    //         data: broadcastSnapshot.data!.data!,
+                    //         onTap: () {
+                    //           debugPrint('AcceptChatWidget onTap');
+                    //           controller.appFirebaseService.writeData(
+                    //               'order/${broadcastSnapshot.data!.data!['orderId']}',
+                    //               {'status': '1'});
+                    //           controller.appFirebaseService.acceptBottomWatcher
+                    //               .strValue = '1';
+                    //         },
+                    //       ))
                   ],
                 );
               }),
         );
+      },
+    );
+  }
+
+  Widget rejoinVisibility() {
+    return Obx(
+      () {
+        final dynamic? cond = AppFirebaseService().orderData.value["status"];
+        return cond == "3" || cond == 3
+            ? Positioned(
+                bottom: kToolbarHeight + 20.w,
+                left: 0,
+                right: 0,
+                child: const RejoinWidget(),
+              )
+            : const SizedBox();
       },
     );
   }

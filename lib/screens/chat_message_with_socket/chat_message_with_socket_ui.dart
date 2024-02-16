@@ -102,8 +102,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   reverse: false,
                                   padding: EdgeInsets.only(bottom: 10.h),
                                   itemBuilder: (context, index) {
+
                                     var chatMessage =
                                         controller.chatMessages[index];
+                                    print("value of chatmessage length ${chatMessage.toOfflineJson()}");
                                     return Column(
                                       children: [
                                         Padding(
@@ -194,6 +196,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                           preferenceService
                                                               .getUserDetail()!
                                                               .id,
+                                                  userName: controller.customerName.value,
                                                   unreadMessage: controller
                                                       .unreadMessageIndex
                                                       .value),
@@ -279,7 +282,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: List.generate(
-                                    controller.getListOfCardLength(),
+                                    controller.getListOfCardLength(context),
                                     (index) => Expanded(
                                       flex: 1,
                                       child: Padding(
@@ -311,7 +314,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: List.generate(
-                                    controller.getListOfCardLength(),
+                                    controller.getListOfCardLength(context),
                                     (index) => Expanded(
                                       flex: 1,
                                       child: Padding(
@@ -452,7 +455,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         return AnimatedOpacity(
           opacity: astPerm ? 0.0 : 1.0,
           duration: const Duration(seconds: 1),
-          child: astPerm ? const SizedBox() : commonRedContainer(),
+          child: astPerm ? const SizedBox.shrink() : commonRedContainer(),
         );
       },
     );
@@ -1677,23 +1680,24 @@ class AstrologerChatAppBar extends StatelessWidget {
                             //     url: controller.profileImage.value),
 
                             Obx(
-                                () {
-                                  Map<String, dynamic> order = {};
-                                  order = AppFirebaseService().orderData.value;
-                                  String imageURL = order["customerImage"] ?? "";
-                                  String appended = "${controller.preference.getAmazonUrl()}/$imageURL";
-                                  print("img:: $appended");
-                                  return SizedBox(
-                                    height: 50,
-                                    width: 50,
-                                    child: CustomImageWidget(
-                                      imageUrl: appended,
-                                      rounded: true,
-                                      typeEnum: TypeEnum.user,
-                                    ),
-                                  );
-                                },
-                              ),
+                              () {
+                                Map<String, dynamic> order = {};
+                                order = AppFirebaseService().orderData.value;
+                                String imageURL = order["customerImage"] ?? "";
+                                String appended =
+                                    "${controller.preference.getAmazonUrl()}/$imageURL";
+                                print("img:: $appended");
+                                return SizedBox(
+                                  height: 50,
+                                  width: 50,
+                                  child: CustomImageWidget(
+                                    imageUrl: appended,
+                                    rounded: true,
+                                    typeEnum: TypeEnum.user,
+                                  ),
+                                );
+                              },
+                            ),
 
                             SizedBox(width: 12.w),
                             Column(
@@ -1750,8 +1754,8 @@ class AstrologerChatAppBar extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Builder(
-                          builder: (context) {
+                        Obx(
+                          () {
                             Map orderData =
                                 AppFirebaseService().orderData.value;
                             final String astrImage =
@@ -1784,14 +1788,15 @@ class AstrologerChatAppBar extends StatelessWidget {
                                 "cust_id": orderData["userId"] ?? "",
                                 "cust_name": orderData["customerName"] ?? "",
                                 "cust_image": appendedCustImage,
-                                "time": "00:00:20",
+                                // "time": "00:20:00",
+                                "time": controller.showTalkTime.value,
                               },
                             );
                           },
                         ),
                         SizedBox(width: 10.w),
-                        Builder(
-                          builder: (context) {
+                        Obx(
+                          () {
                             Map orderData =
                                 AppFirebaseService().orderData.value;
                             final String astrImage =
@@ -1824,7 +1829,8 @@ class AstrologerChatAppBar extends StatelessWidget {
                                 "cust_id": orderData["userId"] ?? "",
                                 "cust_name": orderData["customerName"] ?? "",
                                 "cust_image": appendedCustImage,
-                                "time": "00:00:20",
+                                // "time": "00:20:00",
+                                "time": controller.showTalkTime.value,
                               },
                             );
                           },
