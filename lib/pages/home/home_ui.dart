@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
@@ -5,6 +7,7 @@ import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/common/switch_component.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/model/home_page_model_class.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
@@ -638,19 +641,15 @@ class HomeUI extends GetView<HomeController> {
                             onTap: () {
                               DateTime time =
                                   DateFormat('d MMMM yyyy').parse(data?["dob"]);
+                              print(data);
+                              print("datadatadatadatadata");
 
                               Get.toNamed(RouteName.kundliDetail, arguments: {
-                                "kundli_id": 0,
-                                "from_kundli": false,
-                                "params": Params(
-                                    name: data?["userName"],
-                                    day: time.day,
-                                    hour: time.hour,
-                                    location: data?["pob"],
-                                    min: time.minute,
-                                    year: time.year,
-                                    month: time.month),
+                                "kundli_id": data?["orderId"],
+                                "from_kundli": true,
+                                "birth_place": data?["pob"],
                                 "gender": data?["gender"],
+                                "name": data?["userName"],
                               });
                             },
                             child: Container(
@@ -1236,7 +1235,11 @@ class HomeUI extends GetView<HomeController> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, RouteName.discountOffers);
+
+                  Get.toNamed(RouteName.discountOffers)!.then((value) {
+                    controller.homeData?.offers?.customOffer = value;
+                    controller.update();
+                  });
                 },
                 child: Text(
                   "viewAll".tr,
@@ -1255,6 +1258,8 @@ class HomeUI extends GetView<HomeController> {
             itemCount: controller.homeData?.offers?.customOffer?.length ?? 0,
             separatorBuilder: (context, _) => SizedBox(height: 10.h),
             itemBuilder: (context, index) {
+              DiscountOffer data =
+                  controller.homeData!.offers!.customOffer![index];
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1263,8 +1268,7 @@ class HomeUI extends GetView<HomeController> {
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Text(
-                        "${controller.homeData?.offers?.customOffer?[index].offerName}"
-                            .toUpperCase(),
+                        "${data.offerName}".toUpperCase(),
                         style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w700,
                         ),
@@ -1280,9 +1284,9 @@ class HomeUI extends GetView<HomeController> {
                       //   ),
                     ],
                   ),
-                  Obx(
-                    () => SwitchWidget(
-                      onTap: () {
+                  SwitchWidget(
+                    onTap:
+                        () /*{
                         if (controller.offerTypeLoading.value !=
                             Loading.loading) {
                           if (controller.customOfferSwitch[index]) {
@@ -1313,10 +1317,33 @@ class HomeUI extends GetView<HomeController> {
                             }
                           }
                         }
-                      },
-                      switchValue: controller.customOfferSwitch[index],
-                    ),
-                  ),
+                      }*/
+                    {
+                      if (data.isOn!) {
+                        data.isOn = !data.isOn!;
+                        controller.updateOfferType(
+                            value: data.isOn!,
+                            index: index,
+                            offerId: data.id!,
+                            offerType: 2);
+                      } else if (controller.homeData!.offers!.customOffer!
+                          .any((element) => element.isOn!)) {
+                        divineSnackBar(
+                            data: "Only 1 custom offer is allowed at once",
+                            color: appColors.redColor);
+                      } else {
+                        data.isOn = !data.isOn!;
+                        controller.updateOfferType(
+                            value: data.isOn!,
+                            index: index,
+                            offerId: data.id!,
+                            offerType: 2);
+                      }
+
+                      controller.update();
+                    },
+                    switchValue: data.isOn,
+                  )
                 ],
               );
             },
