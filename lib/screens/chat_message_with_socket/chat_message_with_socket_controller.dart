@@ -633,6 +633,7 @@ print("oninir");
     final String uploadFile =
         await uploadImageToS3Bucket(File(fileData.path), time);
     if (uploadFile != "") {
+      print("image message upload file ${uploadFile} ${base64Image}");
       addNewMessage(time, "image",
           awsUrl: uploadFile, base64Image: base64Image, downloadedPath: '');
     }

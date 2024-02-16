@@ -18,6 +18,7 @@ import '../../../common/common_functions.dart';
 import '../../../common/custom_widgets.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../model/chat_assistant/chat_assistant_chats_response.dart';
+import '../../../utils/custom_extension.dart';
 
 class AssistMessageView extends StatelessWidget {
   final int index;
@@ -43,21 +44,9 @@ class AssistMessageView extends StatelessWidget {
       case MsgType.Gift:
         messageWidget = giftMsgView(context, chatMessage, yourMessage);
         break;
-      // case "Remedies" || 0:
-      //   messageWidget = remediesMsgView(context, chatMessage, yourMessage);
-      //   break;
       case MsgType.text:
         messageWidget = textMsgView(context, chatMessage, yourMessage);
         break;
-      // case "audio":
-      //   messageWidget = audioView(context, chatDetail: chatMessage, yourMessage: yourMessage);
-      //   break;
-      // case "image":
-      //   messageWidget = imageMsgView(chatMessage.base64Image!, yourMessage, chatDetail: chatMessage, index: index);
-      //   break;
-      // case "kundli":
-      //   messageWidget = kundliView(chatDetail: chatMessage, index: 0);
-      //   break;
       default:
         messageWidget = const SizedBox.shrink();
     }
@@ -165,12 +154,12 @@ class AssistMessageView extends StatelessWidget {
   Widget textMsgView(
       BuildContext context, AssistChatData currentMsg, bool yourMessage) {
     // RxInt msgType = (chatMessage.msgType ?? 0).obs;
-    final currentMsgDate = DateFormat('yyyy-MM-dd')
-        .format(DateTime.parse(currentMsg.createdAt ?? ''));
-    final nextMsgDate = DateFormat('yyyy-MM-dd')
-        .format(DateTime.parse(nextMessage.createdAt ?? ''));
-    print(
-        "is yesterday message ${DateTime.now().compareTo(DateTime.parse(nextMessage.createdAt ?? '')).days}");
+    final currentMsgDate = DateTime.parse(currentMsg.createdAt ?? '');
+    final nextMsgDate = DateTime.parse(nextMessage.createdAt ?? '');
+    final differenceOfDays = nextMsgDate.day - currentMsgDate.day;
+    final isToday = DateFormat('yyyy MM dd').format(nextMsgDate) ==
+        DateFormat('yyyy MM dd').format(DateTime.now());
+    final isYesterday = (DateTime.now().day- currentMsgDate.day)==2;
     return SizedBox(
       width: double.maxFinite,
       child: Padding(
@@ -209,12 +198,8 @@ class AssistMessageView extends StatelessWidget {
                               : WrapAlignment.start,
                           children: [
                             Text(currentMsg.message ?? "",
-                                maxLines: 30,
                                 style: AppTextStyle.textStyle14(
-                                    fontColor:
-                                        (currentMsg.sendBy) == SendBy.astrologer
-                                            ? appColors.darkBlue
-                                            : appColors.darkBlue))
+                                    fontColor: appColors.darkBlue))
                           ]),
                       SizedBox(height: 20.h)
                     ],
@@ -224,36 +209,40 @@ class AssistMessageView extends StatelessWidget {
                     right: 0,
                     child: Row(
                       children: [
-                        Text(
-                            DateFormat.jm().format(
-                                DateTime.parse(currentMsg.createdAt ?? '')),
+                        Text(msgTimeFormat(currentMsg.createdAt),
                             style: AppTextStyle.textStyle10(
                                 fontColor: appColors.darkBlue)),
                         SizedBox(width: 3.w),
                         if ((currentMsg.sendBy) == SendBy.astrologer)
                           chatSeenStatusWidget(
                               seenStatus:
-                                  currentMsg.seenStatus ?? SeenStatus.sent)
-
-                        // (data.seenStatus ?? 0) == 0
-                        //     ? SizedBox(width: 8.w)
-                        //     : (data.seenStatus ?? 0) == 1
-                        //         ? Assets
-                        //             .images.icSingleTick
-                        //             .svg()
-                        //         : (data.seenStatus ??
-                        //                     0) ==
-                        //                 2
-                        //             ? Assets.images
-                        //                 .icDoubleTick
-                        //                 .svg()
-                        //             : const SizedBox()
+                              currentMsg.seenStatus ?? SeenStatus.sent)
                       ],
                     ),
                   ),
                 ],
               ),
-            )
+            ),
+            if (differenceOfDays >= 1)
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: appColors.yellow),
+                  child: Text(
+                    isToday?'Today':
+                    isYesterday
+                        ? 'Yesterday'
+                        : '${DateFormat('EEEE ,dd MMMM').format(nextMsgDate)}',
+                    style: const TextStyle(
+                        fontSize: 12, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
           ],
         ),
       ),

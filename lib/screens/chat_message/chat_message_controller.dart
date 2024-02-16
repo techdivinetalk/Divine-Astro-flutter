@@ -38,23 +38,24 @@ class ChatMessageController extends GetxController {
       broadcastReceiver.messages.listen((broadCastEvent) {
         if (broadCastEvent.name == 'chatAssist') {
           var responseMsg = broadCastEvent.data?['msg'];
-          print("responseMsg ${args!.id}");
+
           if (responseMsg["sender_id"].toString() == args!.id.toString()) {
-            print("responseMsg id match");
+            print("responseMsg id match " + responseMsg);
             chatMessageList.add(AssistChatData(
                 message: responseMsg["message"],
                 astrologerId: args!.id,
-                createdAt: DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ")
-                    .format(DateTime.now()),
+                createdAt: responseMsg["created_at"],
                 id: DateTime.now().millisecondsSinceEpoch,
                 isSuspicious: 0,
+                sendBy: SendBy.customer,
                 msgType: responseMsg['msg_type'] != null
                     ? msgTypeValues.map[responseMsg["msg_type"]]
                     : MsgType.text,
-                seenStatus: SeenStatus.delivered,
+                seenStatus: SeenStatus.received,
                 customerId: int.parse(responseMsg["sender_id"] ?? 0)));
-
           }
+          scrollToBottomFunc();
+          reArrangeChatList();
         }
       });
       //to check if the list has enough number of elements to scroll
@@ -156,8 +157,7 @@ class ChatMessageController extends GetxController {
       final msgData = AssistChatData(
           message: messageController.text,
           astrologerId: preferenceService.getUserDetail()!.id,
-          createdAt: DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ")
-              .format(DateTime.now()),
+          createdAt: DateTime.now().toString(),
           id: DateTime.now().millisecondsSinceEpoch,
           isSuspicious: 0,
           msgType: MsgType.text,

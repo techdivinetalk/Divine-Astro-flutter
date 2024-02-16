@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
 import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
@@ -193,7 +195,12 @@ class DashboardScreen extends GetView<DashboardController> {
                                     onTap: (value) {
 
                                       print("tap working");
-                                      _onItemTapped(value);
+
+                                      if (controller.selectedIndex.value == 2) {
+                                        Get.toNamed(RouteName.orderHistory);
+                                      } else {
+                                        controller.selectedIndex.value = value;
+                                      }
                                     },
                                   ),
                                 ],

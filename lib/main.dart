@@ -78,7 +78,6 @@ Future<void> main() async {
     } else if (message.data["type"] == "3") {
       print('Message data:- ${MiddleWare.instance.currentPage}');
       if (MiddleWare.instance.currentPage == RouteName.chatMessageUI) {
-        print("msg data ${message.data}");
         sendBroadcast(
             BroadcastMessage(name: "chatAssist", data: {'msg': message.data}));
       } else {
@@ -249,51 +248,51 @@ class MyApp extends StatelessWidget {
                   DefaultMaterialLocalizations.delegate,
                   DefaultWidgetsLocalizations.delegate,
                 ],
-                builder: (context, widget) {
-                  return widget ?? SizedBox();
-                   // Container();
-                  //   Stack(
-                  //   children: <Widget>[
-                  //     // Obx(() => IgnorePointer(
-                  //     //     ignoring:
-                  //     //         Get.find<ProgressService>().showProgress.value,
-                  //     //     child: widget)),
-                     
-                  //     //
-                  //     widget ?? SizedBox(),
-                  //     //
-                  //     // StreamBuilder<bool?>(
-                  //     //   initialData: true,
-                  //     //   stream: Get.find<FirebaseNetworkService>()
-                  //     //       .databaseConnectionStream,
-                  //     //   builder: (context, snapshot) {
-                  //     //     final appTheme = AppTheme.of(context);
-                  //     //     return SafeArea(
-                  //     //       child: AnimatedContainer(
-                  //     //         height: snapshot.data as bool
-                  //     //             ? 0
-                  //     //             : appTheme.getHeight(36),
-                  //     //         duration: Utils.animationDuration,
-                  //     //         color: appTheme.redColor,
-                  //     //         child: Material(
-                  //     //           type: MaterialType.transparency,
-                  //     //           child: Center(
-                  //     //               child: Text(AppString.noInternetConnection,
-                  //     //                   style: appTheme.customTextStyle(
-                  //     //                     fontSize: 16.sp,
-                  //     //                     color: appTheme.whiteColor,
-                  //     //                   ))),
-                  //     //         ),
-                  //     //       ),
-                  //     //     );
-                  //     //   },
-                  //     // ),
-                  //     // Obx(() => Get.find<ProgressService>().showProgress.isTrue
-                  //     //     ? Center(child: CustomProgressDialog())
-                  //     //     : const Offstage())
-                  //   ],
-                  // );
-                },
+                // builder: (context, widget) {
+                //   return widget ?? const SizedBox();
+                //   // Container();
+                //   //   Stack(
+                //   //   children: <Widget>[
+                //   //     // Obx(() => IgnorePointer(
+                //   //     //     ignoring:
+                //   //     //         Get.find<ProgressService>().showProgress.value,
+                //   //     //     child: widget)),
+                //   //
+                //   //     //
+                //   //     widget ?? SizedBox(),
+                //   //     //
+                //   //     // StreamBuilder<bool?>(
+                //   //     //   initialData: true,
+                //   //     //   stream: Get.find<FirebaseNetworkService>()
+                //   //     //       .databaseConnectionStream,
+                //   //     //   builder: (context, snapshot) {
+                //   //     //     final appTheme = AppTheme.of(context);
+                //   //     //     return SafeArea(
+                //   //     //       child: AnimatedContainer(
+                //   //     //         height: snapshot.data as bool
+                //   //     //             ? 0
+                //   //     //             : appTheme.getHeight(36),
+                //   //     //         duration: Utils.animationDuration,
+                //   //     //         color: appTheme.redColor,
+                //   //     //         child: Material(
+                //   //     //           type: MaterialType.transparency,
+                //   //     //           child: Center(
+                //   //     //               child: Text(AppString.noInternetConnection,
+                //   //     //                   style: appTheme.customTextStyle(
+                //   //     //                     fontSize: 16.sp,
+                //   //     //                     color: appTheme.whiteColor,
+                //   //     //                   ))),
+                //   //     //         ),
+                //   //     //       ),
+                //   //     //     );
+                //   //     //   },
+                //   //     // ),
+                //   //     // Obx(() => Get.find<ProgressService>().showProgress.isTrue
+                //   //     //     ? Center(child: CustomProgressDialog())
+                //   //     //     : const Offstage())
+                //   //   ],
+                //   // );
+                // },
               ),
             );
           }),

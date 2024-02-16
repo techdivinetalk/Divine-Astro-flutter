@@ -297,6 +297,7 @@ class Routes {
     GetPage(page: () => const UploadStoryUi(), name: RouteName.uploadStoryUi),
     GetPage(
       page: () => const ImagePreviewUi(),
+
       name: RouteName.imagePreviewUi,
     ),
     GetPage(

@@ -31,6 +31,9 @@ extension StringToDate on String {
   }
 }
 
+String msgTimeFormat(String? value) => DateFormat('hh:mm a').format(
+    DateTime.parse(value ?? ''));
+
 extension DateToString on DateTime {
   String toFormattedString() {
     final format = DateFormat("dd-MM-yyyy");
@@ -41,6 +44,7 @@ extension DateToString on DateTime {
     final format = DateFormat("d'' MMM yyyy", locale);
     return format.format(this);
   }
+
 
   String toCustomFormat() {
     String day = this.day.toString();

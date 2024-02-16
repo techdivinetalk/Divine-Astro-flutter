@@ -14,13 +14,14 @@ class ImagePreviewUi extends GetView<ImagePreviewController> {
   Widget build(BuildContext context) {
     Get.put(ImagePreviewController());
     String? filePath = controller.selectedImageFile;
+    print('image file path: ' + filePath.toString());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: appColors.lightYellow,
         centerTitle: false,
       ),
       body: PhotoView(
-        imageProvider: FileImage(File(filePath!)),
+        imageProvider: FileImage(File(filePath??'')),
       ),
     );
   }

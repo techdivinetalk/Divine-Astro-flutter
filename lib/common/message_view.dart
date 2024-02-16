@@ -54,7 +54,7 @@ class MessageView extends StatelessWidget {
             chatDetail: chatMessage, yourMessage: yourMessage);
         break;
       case "image":
-        messageWidget = imageMsgView(chatMessage.base64Image!, yourMessage,
+        messageWidget = imageMsgView(chatMessage.base64Image??"", yourMessage,
             chatDetail: chatMessage, index: index);
         break;
       case "kundli":
@@ -329,34 +329,41 @@ class MessageView extends StatelessWidget {
 
   Widget giftSendUi(BuildContext context, ChatMessage chatMessage,
       bool yourMessage, String customerName) {
-    return Container(
-      color: appColors.white,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(15.0, 4.0, 15.0, 4.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 32,
-                width: 32,
-                child: CustomImageWidget(
-                  imageUrl: chatMessage.awsUrl ?? '',
-                  rounded: true,
-                  // added by divine-dharam
-                  typeEnum: TypeEnum.gift,
-                  //
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        decoration: BoxDecoration(
+          color: appColors.white,
+          borderRadius: BorderRadius.circular(10),
+
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(15.0, 4.0, 15.0, 4.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 32,
+                  width: 32,
+                  child: CustomImageWidget(
+                    imageUrl: chatMessage.awsUrl ?? '',
+                    rounded: true,
+                    // added by divine-dharam
+                    typeEnum: TypeEnum.gift,
+                    //
+                  ),
                 ),
-              ),
-              Text(
-                " $customerName have sent ${chatMessage.message}",
-                textAlign: TextAlign.start,
-                softWrap: true,
-                maxLines: 5,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(color: Colors.red),
-              ),
-            ],
+                Text(
+                  " $customerName have sent ${chatMessage.message}",
+                  textAlign: TextAlign.start,
+                  softWrap: true,
+                  maxLines: 5,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -367,6 +374,7 @@ class MessageView extends StatelessWidget {
       {required ChatMessage chatDetail, required int index}) {
     // Uint8List bytesImage = const Base64Decoder().convert(image);
     Uint8List bytesImage = base64.decode(image);
+    // final localImagefile = File.fromRawPath(bytesImage);
     RxInt msgType = (chatDetail.type ?? 0).obs;
     var chatController = Get.find<ChatMessageWithSocketController>();
     return SizedBox(
@@ -394,10 +402,17 @@ class MessageView extends StatelessWidget {
               child: yourMessage
                   ? Stack(
                       children: [
-                        Image.memory(
-                          bytesImage,
-                          fit: BoxFit.cover,
-                          height: 200.h,
+                        GestureDetector(
+                          onTap: () {
+                            File imageFile = File.fromRawPath(bytesImage);
+                            Get.toNamed(RouteName.imagePreviewUi,
+                                arguments: imageFile.path);
+                          },
+                          child: Image.memory(
+                            bytesImage,
+                            fit: BoxFit.cover,
+                            height: 200.h,
+                          ),
                         ),
                         Positioned(
                           bottom: 0,
