@@ -537,7 +537,10 @@ class HomeUI extends GetView<HomeController> {
       initialData: BroadcastMessage(name: '', data: {}),
       stream: controller.broadcastReceiver.messages,
       builder: (context, broadcastSnapshot) {
+
+
         Map<String, dynamic>? data = broadcastSnapshot.data?.data;
+
 
         return data?["userName"] == null
             ? const SizedBox()
@@ -636,7 +639,7 @@ class HomeUI extends GetView<HomeController> {
                                 ),
                               ],
                             ),
-                          ),
+                          ), 
                           GestureDetector(
                             onTap: () {
                               DateTime time =
@@ -645,7 +648,7 @@ class HomeUI extends GetView<HomeController> {
                               print("datadatadatadatadata");
 
                               Get.toNamed(RouteName.kundliDetail, arguments: {
-                                "kundli_id": data?["orderId"],
+                                "kundli_id": data?["kundli_id"],
                                 "from_kundli": true,
                                 "birth_place": data?["pob"],
                                 "gender": data?["gender"],
