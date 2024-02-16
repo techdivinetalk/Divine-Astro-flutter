@@ -10,7 +10,7 @@ import '../../../common/common_options_row.dart';
 import '../../../common/routes.dart';
 
 class ChatOrderHistory extends StatelessWidget {
-  const ChatOrderHistory({Key? key, this.controller}) : super(key: key);
+  const ChatOrderHistory({super.key, this.controller});
 
   final ScrollController? controller;
 

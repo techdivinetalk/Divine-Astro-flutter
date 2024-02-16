@@ -105,8 +105,10 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                 fit: BoxFit.cover,
                                                 height: 70.h,
                                                 width: 70.h,
-                                                placeHolder:
-                                                    "assets/images/default_profile.png",
+                                                placeHolder: Assets
+                                                    .images
+                                                    .defaultProfile
+                                                    .path,
                                                 radius: BorderRadius.circular(
                                                     100.h),
                                               )),

@@ -31,7 +31,7 @@ class CommonImageView extends StatelessWidget {
     this.radius,
     this.margin,
     this.border,
-    this.placeHolder = 'assets/svg/caution.svg',
+    this.placeHolder = 'assets/images/default_profile.png',
   });
 
   @override

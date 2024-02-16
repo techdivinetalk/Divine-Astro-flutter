@@ -26,6 +26,35 @@ class CommonOptionRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         InkWell(
+          onTap: /*onRightTap*/ () {},
+          child: /*Container(
+            height: 37,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 1.0,
+                    offset: const Offset(0.0, 3.0)),
+              ],
+              gradient:  LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [appColors.appYellowColour, appColors.gradientBottom],
+              ),
+              borderRadius: BorderRadius.circular(22.0),
+            ),
+            child: Center(
+              child: Text(
+                "suggestRemedies".tr,
+                style: AppTextStyle.textStyle12(
+                    fontColor: appColors.brownColour,
+                    fontWeight: FontWeight.w500),
+              ),
+            ),
+          )*/ Container(height: 37),
+        ).expand(),
+        SizedBox(width: 15.w),
+        InkWell(
           onTap: onLeftTap,
           child: Container(
             height: 37,
@@ -60,35 +89,6 @@ class CommonOptionRow extends StatelessWidget {
             ),
           ),
         ).expand(),
-        /*SizedBox(width: 15.w),
-        InkWell(
-          onTap: onRightTap,
-          child: Container(
-            height: 37,
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 1.0,
-                    offset: const Offset(0.0, 3.0)),
-              ],
-              gradient:  LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [appColors.appYellowColour, appColors.gradientBottom],
-              ),
-              borderRadius: BorderRadius.circular(22.0),
-            ),
-            child: Center(
-              child: Text(
-                "suggestRemedies".tr,
-                style: AppTextStyle.textStyle12(
-                    fontColor: appColors.brownColour,
-                    fontWeight: FontWeight.w500),
-              ),
-            ),
-          ),
-        ).expand()*/
       ],
     );
   }
