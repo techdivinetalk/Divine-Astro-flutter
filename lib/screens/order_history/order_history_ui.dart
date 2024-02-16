@@ -211,7 +211,7 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
                 ("all".tr),
                 "chat".tr,
                 "call".tr,
-                "liveGifts".tr,
+                "Gifts".tr,
                 ("remedySuggested".tr),
               ].map((e) => Tab(text: e)).toList(),
             ),

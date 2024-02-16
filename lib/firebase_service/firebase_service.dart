@@ -134,7 +134,7 @@ class AppFirebaseService {
                 realTimeData['callKundli'] as Map<Object?, Object?>);
             sendBroadcast(
                 BroadcastMessage(name: "callKundli", data: callKundli));
-            FirebaseDatabase.instance.ref("$path/callKundli").remove();
+            // FirebaseDatabase.instance.ref("$path/callKundli").remove();
           }
           if (realTimeData["deliveredMsg"] != null) {
             sendBroadcast(BroadcastMessage(

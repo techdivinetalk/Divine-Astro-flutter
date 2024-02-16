@@ -20,6 +20,37 @@ class KundliUi extends GetView<KundliController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h)
+            .copyWith(bottom: viewBottomPadding(15.h)),
+        child: Expanded(
+          child: FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: appColors.yellow,
+              padding: EdgeInsets.symmetric(vertical: 16.h),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+            ),
+            onPressed: () {
+              if (controller.yourFormKey.currentState!.validate()) {
+                controller.yourParams.value.name =
+                    controller.yourNameController.text.trim();
+                controller.submitDetails(controller.yourParams.value,
+                    controller.yourGender.value);
+              }
+            },
+            child: Text(
+              'Check Kundali',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 20.sp,
+                color: appColors.brown,
+              ),
+            ),
+          ),
+        ),
+      ),
       body: NestedScrollView(
           headerSliverBuilder: (context, value) {
             return [
@@ -356,41 +387,7 @@ class CheckYours extends GetView<KundliController> {
             ),
           ),
         ),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h)
-              .copyWith(bottom: viewBottomPadding(15.h)),
-          child: Row(
-            children: [
-              Expanded(
-                child: FilledButton(
-                  style: FilledButton.styleFrom(
-                    backgroundColor: appColors.yellow,
-                    padding: EdgeInsets.symmetric(vertical: 16.h),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                  ),
-                  onPressed: () {
-                    if (controller.yourFormKey.currentState!.validate()) {
-                      controller.yourParams.value.name =
-                          controller.yourNameController.text.trim();
-                      controller.submitDetails(controller.yourParams.value,
-                          controller.yourGender.value);
-                    }
-                  },
-                  child: Text(
-                    'Check Kundali',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20.sp,
-                      color: appColors.brown,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+
       ],
     );
   }

@@ -13,7 +13,7 @@ class CustomGetPage<T> extends GetPage<T> {
   }) : super(
     name: name,
     page: () {
-      checkInternetSpeed(true, navigatorKey.currentContext!);
+      // checkInternetSpeed(true, navigatorKey.currentContext!);
       return page();
     },
   );
