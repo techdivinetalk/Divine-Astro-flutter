@@ -16,27 +16,32 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
-
 class MessageView extends StatelessWidget {
   final int index;
   final ChatMessage chatMessage;
+  final String userName;
   final bool yourMessage;
   final int? unreadMessage;
 
   const MessageView({
     super.key,
     required this.index,
+    required this.userName,
     required this.chatMessage,
     required this.yourMessage,
-     this.unreadMessage,
+    this.unreadMessage,
   });
 
-  Widget buildMessageView(BuildContext context, ChatMessage chatMessage, bool yourMessage) {
+  Widget buildMessageView(
+      BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     Widget messageWidget;
     print("chat Message:: ${chatMessage.msgType}");
     switch (chatMessage.msgType) {
-      case "gift" :
+      case "gift":
         messageWidget = giftMsgView(context, chatMessage, yourMessage);
+        break;
+      case "sendGifts":
+        messageWidget = giftSendUi(context, chatMessage, yourMessage, userName);
         break;
       case "Remedies" || 0:
         messageWidget = remediesMsgView(context, chatMessage, yourMessage);
@@ -45,10 +50,12 @@ class MessageView extends StatelessWidget {
         messageWidget = textMsgView(context, chatMessage, yourMessage);
         break;
       case "audio":
-        messageWidget = audioView(context, chatDetail: chatMessage, yourMessage: yourMessage);
+        messageWidget = audioView(context,
+            chatDetail: chatMessage, yourMessage: yourMessage);
         break;
       case "image":
-        messageWidget = imageMsgView(chatMessage.base64Image!, yourMessage, chatDetail: chatMessage, index: index);
+        messageWidget = imageMsgView(chatMessage.base64Image!, yourMessage,
+            chatDetail: chatMessage, index: index);
         break;
       case "kundli":
         messageWidget = kundliView(chatDetail: chatMessage, index: 0);
@@ -70,10 +77,9 @@ class MessageView extends StatelessWidget {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return buildMessageView(context, chatMessage,yourMessage);
+    return buildMessageView(context, chatMessage, yourMessage);
   }
 
   Widget giftMsgView(
@@ -90,7 +96,7 @@ class MessageView extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(40)),
               border: Border.all(width: 2, color: appColors.appColorDark),
-              gradient:  LinearGradient(
+              gradient: LinearGradient(
                 colors: [appColors.white, appColors.appColorDark],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -238,7 +244,7 @@ class MessageView extends StatelessWidget {
                             ? Assets.images.icSingleTick.svg()
                             : msgType.value == 1
                                 ? Assets.images.icDoubleTick.svg(
-                                    colorFilter:  ColorFilter.mode(
+                                    colorFilter: ColorFilter.mode(
                                         appColors.greyColor, BlendMode.srcIn))
                                 : msgType.value == 3
                                     ? Assets.images.icDoubleTick.svg()
@@ -305,7 +311,7 @@ class MessageView extends StatelessWidget {
                             ? Assets.images.icSingleTick.svg()
                             : msgType.value == 1
                                 ? Assets.images.icDoubleTick.svg(
-                                    colorFilter:  ColorFilter.mode(
+                                    colorFilter: ColorFilter.mode(
                                         appColors.lightGrey, BlendMode.srcIn))
                                 : msgType.value == 3
                                     ? Assets.images.icDoubleTick.svg()
@@ -317,6 +323,42 @@ class MessageView extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  Widget giftSendUi(BuildContext context, ChatMessage chatMessage,
+      bool yourMessage, String customerName) {
+    return Container(
+      color: appColors.white,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(15.0, 4.0, 15.0, 4.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 32,
+                width: 32,
+                child: CustomImageWidget(
+                  imageUrl: chatMessage.awsUrl ?? '',
+                  rounded: true,
+                  // added by divine-dharam
+                  typeEnum: TypeEnum.gift,
+                  //
+                ),
+              ),
+              Text(
+                " $customerName have sent ${chatMessage.message}",
+                textAlign: TextAlign.start,
+                softWrap: true,
+                maxLines: 5,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(color: Colors.red),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -390,10 +432,9 @@ class MessageView extends StatelessWidget {
                                       ? Assets.images.icSingleTick.svg()
                                       : msgType.value == 1
                                           ? Assets.images.icDoubleTick.svg(
-                                              colorFilter:
-                                                   ColorFilter.mode(
-                                                      appColors.greyColor,
-                                                      BlendMode.srcIn))
+                                              colorFilter: ColorFilter.mode(
+                                                  appColors.greyColor,
+                                                  BlendMode.srcIn))
                                           : msgType.value == 3
                                               ? Assets.images.icDoubleTick.svg()
                                               : Assets.images.icSingleTick.svg()
@@ -432,7 +473,7 @@ class MessageView extends StatelessWidget {
                                   color: appColors.darkBlue.withOpacity(0.3),
                                   shape: BoxShape.circle,
                                 ),
-                                child:  Icon(Icons.download_rounded,
+                                child: Icon(Icons.download_rounded,
                                     color: appColors.white),
                               ),
                             ),
@@ -516,7 +557,7 @@ class MessageView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                decoration:  BoxDecoration(
+                decoration: BoxDecoration(
                     shape: BoxShape.circle, color: appColors.extraLightGrey),
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),

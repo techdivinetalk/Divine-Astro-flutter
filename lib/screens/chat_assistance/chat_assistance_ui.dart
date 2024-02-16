@@ -173,7 +173,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                     } else {
                       if (controller.customerDetailsResponse == null ||
                           controller.customerDetailsResponse!.data == null ||
-                          controller.customerDetailsResponse!.data!.isEmpty) {
+                          controller.customerDetailsResponse!.data.isEmpty) {
                         return  Center(
                           child: Text(
                             'No Data found',
