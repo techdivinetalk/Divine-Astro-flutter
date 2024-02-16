@@ -109,6 +109,8 @@ class OrderHistoryRepository extends ApiProvider {
       final response = await post(getOrderHistoryUrl,
           body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
 
+      print("Body :: ${jsonEncode(param)}");
+
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
           preferenceService.erase();

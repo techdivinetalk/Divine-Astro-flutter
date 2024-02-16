@@ -30,7 +30,7 @@ class NumberChangeReqController extends GetxController {
   void onInit() {
     super.onInit();
     userData = pref.getUserDetail()!;
-    controller = TextEditingController(text: userData.mobileNumber);
+    controller = TextEditingController(/*text: userData.mobileNumber*/);
     controller.addListener(listenerForNumberChange);
     pinController = TextEditingController();
   }
