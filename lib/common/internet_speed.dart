@@ -7,7 +7,7 @@ import 'package:speed_test_dart/speed_test_dart.dart';
 
 void _onPageBuilderStarted(String to, BuildContext context, Route route) {
   // Your function here
- checkInternetSpeed(true, context);
+ // checkInternetSpeed(true, context);
 }
 
 

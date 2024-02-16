@@ -3549,7 +3549,7 @@ class _LivePage extends State<LiveDharamScreen>
                                 color: appColors.black.withOpacity(0.2),
                               ),
                               child: Padding(
-                                padding: EdgeInsets.all(0.0),
+                                padding: const EdgeInsets.all(0.0),
                                 child: Icon(
                                   Icons.category,
                                   color: appColors.yellow,
