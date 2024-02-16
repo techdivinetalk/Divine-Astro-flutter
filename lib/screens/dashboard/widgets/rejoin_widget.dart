@@ -12,13 +12,10 @@ import '../../../common/common_functions.dart';
 import '../../../common/custom_widgets.dart';
 
 class RejoinWidget extends StatelessWidget {
-  final Map<String, dynamic> data;
-
-  const RejoinWidget({super.key, required this.data});
+  const RejoinWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('rejoin data --- $data');
     return InkWell(
       onTap: () {},
       child: Container(
@@ -42,7 +39,7 @@ class RejoinWidget extends StatelessWidget {
               flex: 6,
               child: Wrap(direction: Axis.horizontal, children: [
                 CustomText('Your Customer ', fontSize: 10.sp),
-                CustomText(data['orderData']['customerName'],
+                CustomText(AppFirebaseService().orderData.value['customerName'],
                     fontSize: 10.sp,
                     fontColor: appColors.brown,
                     fontWeight: FontWeight.w700),
@@ -51,8 +48,9 @@ class RejoinWidget extends StatelessWidget {
               ]),
             ),
             CustomButton(
-              onTap: () => Get.toNamed(RouteName.chatMessageWithSocketUI,
-                  arguments: data),
+              onTap: () => Get.toNamed(
+                RouteName.chatMessageWithSocketUI,
+              ),
               color: appColors.appYellowColour,
               radius: 10.r,
               child: Assets.svg.rejoinChatIcon.svg(),

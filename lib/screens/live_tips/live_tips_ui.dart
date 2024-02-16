@@ -234,7 +234,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
           entering: true,
           successCallBack: (message) {
             canEnter = true;
-            divineSnackBar(data: message);
+            // divineSnackBar(data: message);
           },
           failureCallBack: (message) {
             canEnter = false;
@@ -251,7 +251,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
           await controller.astroOnlineAPI(
             entering: false,
             successCallBack: (message) {
-              divineSnackBar(data: message);
+              // divineSnackBar(data: message);
             },
             failureCallBack: (message) {
               divineSnackBar(data: message);

@@ -1677,23 +1677,24 @@ class AstrologerChatAppBar extends StatelessWidget {
                             //     url: controller.profileImage.value),
 
                             Obx(
-                                () {
-                                  Map<String, dynamic> order = {};
-                                  order = AppFirebaseService().orderData.value;
-                                  String imageURL = order["customerImage"] ?? "";
-                                  String appended = "${controller.preference.getAmazonUrl()}/$imageURL";
-                                  print("img:: $appended");
-                                  return SizedBox(
-                                    height: 50,
-                                    width: 50,
-                                    child: CustomImageWidget(
-                                      imageUrl: appended,
-                                      rounded: true,
-                                      typeEnum: TypeEnum.user,
-                                    ),
-                                  );
-                                },
-                              ),
+                              () {
+                                Map<String, dynamic> order = {};
+                                order = AppFirebaseService().orderData.value;
+                                String imageURL = order["customerImage"] ?? "";
+                                String appended =
+                                    "${controller.preference.getAmazonUrl()}/$imageURL";
+                                print("img:: $appended");
+                                return SizedBox(
+                                  height: 50,
+                                  width: 50,
+                                  child: CustomImageWidget(
+                                    imageUrl: appended,
+                                    rounded: true,
+                                    typeEnum: TypeEnum.user,
+                                  ),
+                                );
+                              },
+                            ),
 
                             SizedBox(width: 12.w),
                             Column(
@@ -1750,8 +1751,8 @@ class AstrologerChatAppBar extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Builder(
-                          builder: (context) {
+                        Obx(
+                          () {
                             Map orderData =
                                 AppFirebaseService().orderData.value;
                             final String astrImage =
@@ -1784,14 +1785,15 @@ class AstrologerChatAppBar extends StatelessWidget {
                                 "cust_id": orderData["userId"] ?? "",
                                 "cust_name": orderData["customerName"] ?? "",
                                 "cust_image": appendedCustImage,
-                                "time": "00:00:20",
+                                // "time": "00:20:00",
+                                "time": controller.showTalkTime.value,
                               },
                             );
                           },
                         ),
                         SizedBox(width: 10.w),
-                        Builder(
-                          builder: (context) {
+                        Obx(
+                          () {
                             Map orderData =
                                 AppFirebaseService().orderData.value;
                             final String astrImage =
@@ -1824,7 +1826,8 @@ class AstrologerChatAppBar extends StatelessWidget {
                                 "cust_id": orderData["userId"] ?? "",
                                 "cust_name": orderData["customerName"] ?? "",
                                 "cust_image": appendedCustImage,
-                                "time": "00:00:20",
+                                // "time": "00:20:00",
+                                "time": controller.showTalkTime.value,
                               },
                             );
                           },
