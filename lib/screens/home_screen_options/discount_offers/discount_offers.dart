@@ -20,178 +20,195 @@ class DiscountOfferUI extends GetView<DiscountOffersController> {
   @override
   Widget build(BuildContext context) {
     Get.put(DiscountOffersController());
-    return Scaffold(
-      appBar: commonDetailAppbar(title: 'selectOffer'.tr),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'callAndChat'.tr,
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20.sp),
-              ),
-              Container(
-                width: 125.w,
-                height: 2.h,
-                decoration: BoxDecoration(
-                    color: appColors.appColorDark,
-                    borderRadius: BorderRadius.circular(10.w)),
-              ),
-              GetBuilder<DiscountOffersController>(
-                builder: (controller) {
-                  if (controller.loading == Loading.initial ||
-                      controller.loading == Loading.loading) {
-                    return loadingWidget();
-                  }
-                  if (controller.loading == Loading.loaded) {
-                    return ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: controller.discountOffers.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          DiscountOffer offer = controller.discountOffers[index];
- print(jsonEncode(offer));
-                          return Container(
-                            margin: EdgeInsets.symmetric(vertical: 10.w),
-                            padding: EdgeInsets.all(20.w),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15.w),
-                                color: appColors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    offset: Offset(0, 6.w),
-                                    blurRadius: 5.0,
+    return WillPopScope(
+      onWillPop: () {
+        return controller.backMethod();
+      },
+      child: Scaffold(
+        appBar: commonDetailAppbar(
+            title: 'selectOffer'.tr,
+            onTap: () {
+              controller.backMethod();
+            }),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'callAndChat'.tr,
+                  style:
+                      TextStyle(fontWeight: FontWeight.w600, fontSize: 20.sp),
+                ),
+                Container(
+                  width: 125.w,
+                  height: 2.h,
+                  decoration: BoxDecoration(
+                      color: appColors.appColorDark,
+                      borderRadius: BorderRadius.circular(10.w)),
+                ),
+                GetBuilder<DiscountOffersController>(
+                  builder: (controller) {
+                    if (controller.loading == Loading.initial ||
+                        controller.loading == Loading.loading) {
+                      return loadingWidget();
+                    }
+                    if (controller.loading == Loading.loaded) {
+                      return ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: controller.discountOffers.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            DiscountOffer offer =
+                                controller.discountOffers[index];
+                            print(jsonEncode(offer));
+                            return Container(
+                              margin: EdgeInsets.symmetric(vertical: 10.w),
+                              padding: EdgeInsets.all(20.w),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.w),
+                                  color: appColors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey,
+                                      offset: Offset(0, 6.w),
+                                      blurRadius: 5.0,
+                                    ),
+                                  ]),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '${'offerName'.tr} :',
+                                        style: TextStyle(fontSize: 15.sp),
+                                      ),
+                                      Text(
+                                        '${offer.offerName ?? ''}',
+                                        style: TextStyle(
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      Spacer(),
+                                      SwitchWidget(
+                                        switchValue: offer.isOn!,
+                                        onTap: () {
+                                          if (offer.isOn!) {
+                                            offer.isOn = !offer.isOn!;
+                                            controller.updateOfferType(
+                                                value: offer.isOn!,
+                                                index: index,
+                                                offerId: offer.id!,
+                                                offerType: 2);
+                                          } else if (controller.discountOffers
+                                              .any(
+                                                  (element) => element.isOn!)) {
+                                            divineSnackBar(
+                                                data:
+                                                    "Only 1 custom offer is allowed at once",
+                                                color: appColors.redColor);
+                                          } else {
+                                            offer.isOn = !offer.isOn!;
+                                            controller.updateOfferType(
+                                                value: offer.isOn!,
+                                                index: index,
+                                                offerId: offer.id!,
+                                                offerType: 2);
+                                          }
+
+                                          controller.update();
+                                        },
+                                      )
+                                    ],
                                   ),
-                                ]),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '${'offerName'.tr} :',
-                                      style: TextStyle(fontSize: 15.sp),
-                                    ),
-                                    Text(
-                                      '${offer.offerName ?? ''}',
-                                      style: TextStyle(
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    Spacer(),
-                                    SwitchWidget(
-                                      switchValue:  offer.isOn!,
-
-                                      onTap: () {
-                                        if(offer.isOn!){
-                                          offer.isOn = !offer.isOn!;
-                                          controller.updateOfferType(value: offer.isOn!,index: index,offerId:offer.id!,  offerType:  2);
-                                        }else
-                                        if(controller.discountOffers
-                                            .any((element) => element.isOn!)){
-                                          divineSnackBar(
-                                              data:
-                                              "Only 1 custom offer is allowed at once",
-                                              color: appColors.redColor);
-                                        }else{
-                                          offer.isOn = !offer.isOn!;
-                                          controller.updateOfferType(value: offer.isOn!,index: index,offerId:offer.id!,  offerType:  2);
-                                        }
-
-
-                                        controller.update();
-                                      },
-                                    )
-                                  ],
-                                ),
-                                SizedBox(height: 5.h),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '${'displayName'.tr} :',
-                                      style: TextStyle(fontSize: 15.sp),
-                                    ),
-                                    Text(
-                                      ' ${offer.offerPercentage ?? ''}% off',
-                                      style: TextStyle(
-                                          fontSize: 15.sp,
-                                          color: appColors.lightGreen,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 5.h),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '${'userType'.tr} :',
-                                      style: TextStyle(fontSize: 15.sp),
-                                    ),
-                                    Text(
-                                      ' ${offer.offerName ?? ''}',
-                                      style: TextStyle(
-                                          fontSize: 15.sp,
-                                          color: appColors.lightGreen,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 5.h),
-                                Row(
-                                  children: [
-                                    Text(
-                                      'India : ',
-                                      style: TextStyle(
-                                          fontSize: 15.sp,
-                                          color: appColors.blackColor,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    Text(
-                                      '${'price'.tr} :',
-                                      style: TextStyle(fontSize: 15.sp),
-                                    ),
-                                    Text(
-                                      ' ₹100',
-                                      style: TextStyle(
-                                          fontSize: 15.sp,
-                                          color: appColors.lightGreen,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-
-                                  ],
-                                ),
-                                SizedBox(height: 5.h),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '${'discountedPrice'.tr}:',
-                                      style: TextStyle(fontSize: 15.sp),
-                                    ),
-                                    Text(
-                                      ' ₹${100 % (offer.offerPercentage ?? 0)}',
-                                      style: TextStyle(
-                                          fontSize: 15.sp,
-                                          color: appColors.lightGreen,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          );
-                        });
-                  }
-                  return const Center(
-                    child: Text("Something went wrong"),
-                  );
-                },
-              ),
-            ],
+                                  SizedBox(height: 5.h),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${'displayName'.tr} :',
+                                        style: TextStyle(fontSize: 15.sp),
+                                      ),
+                                      Text(
+                                        ' ${offer.offerPercentage ?? ''}% off',
+                                        style: TextStyle(
+                                            fontSize: 15.sp,
+                                            color: appColors.lightGreen,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${'userType'.tr} :',
+                                        style: TextStyle(fontSize: 15.sp),
+                                      ),
+                                      Text(
+                                        ' ${offer.offerName ?? ''}',
+                                        style: TextStyle(
+                                            fontSize: 15.sp,
+                                            color: appColors.lightGreen,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'India : ',
+                                        style: TextStyle(
+                                            fontSize: 15.sp,
+                                            color: appColors.blackColor,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      Text(
+                                        '${'price'.tr} :',
+                                        style: TextStyle(fontSize: 15.sp),
+                                      ),
+                                      Text(
+                                        ' ₹100',
+                                        style: TextStyle(
+                                            fontSize: 15.sp,
+                                            color: appColors.lightGreen,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${'discountedPrice'.tr}:',
+                                        style: TextStyle(fontSize: 15.sp),
+                                      ),
+                                      Text(
+                                        ' ₹${100 % (offer.offerPercentage ?? 0)}',
+                                        style: TextStyle(
+                                            fontSize: 15.sp,
+                                            color: appColors.lightGreen,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            );
+                          });
+                    }
+                    return const Center(
+                      child: Text("Something went wrong"),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

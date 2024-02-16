@@ -84,7 +84,7 @@ class ChatMessageController extends GetxController {
   void listenSocket() {
     appSocket.listenForAssistantChatMessage((chatData) {
       print("data from chatAssist message $chatData");
-      final newChatData = AssistChatData.fromJson(chatData['msgData']);
+      final newChatData = AssistChatData.fromJson(chatData);
       final updateAtIndex = chatMessageList
           .indexWhere((oldChatData) => oldChatData.id == newChatData.id);
       if (updateAtIndex == -1) {

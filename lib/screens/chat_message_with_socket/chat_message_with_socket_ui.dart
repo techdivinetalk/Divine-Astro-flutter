@@ -102,8 +102,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   reverse: false,
                                   padding: EdgeInsets.only(bottom: 10.h),
                                   itemBuilder: (context, index) {
+
                                     var chatMessage =
                                         controller.chatMessages[index];
+                                    print("value of chatmessage length ${chatMessage.toOfflineJson()}");
                                     return Column(
                                       children: [
                                         Padding(
@@ -194,6 +196,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                           preferenceService
                                                               .getUserDetail()!
                                                               .id,
+                                                  userName: controller.customerName.value,
                                                   unreadMessage: controller
                                                       .unreadMessageIndex
                                                       .value),
@@ -279,7 +282,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: List.generate(
-                                    controller.getListOfCardLength(),
+                                    controller.getListOfCardLength(context),
                                     (index) => Expanded(
                                       flex: 1,
                                       child: Padding(
@@ -311,7 +314,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: List.generate(
-                                    controller.getListOfCardLength(),
+                                    controller.getListOfCardLength(context),
                                     (index) => Expanded(
                                       flex: 1,
                                       child: Padding(
@@ -452,7 +455,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         return AnimatedOpacity(
           opacity: astPerm ? 0.0 : 1.0,
           duration: const Duration(seconds: 1),
-          child: astPerm ? const SizedBox() : commonRedContainer(),
+          child: astPerm ? const SizedBox.shrink() : commonRedContainer(),
         );
       },
     );

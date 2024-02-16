@@ -71,4 +71,8 @@ class DiscountOffersController extends GetxController {
     offerTypeLoading.value = Loading.loaded;
     update();
   }
+
+  backMethod() {
+    Get.back(result: discountOffers);
+  }
 }

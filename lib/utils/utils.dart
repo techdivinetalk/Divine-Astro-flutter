@@ -42,7 +42,7 @@ class Utils {
   }
 }
 
- checkInternetSpeed(bool checkDownloadSpeed, BuildContext context) async {
+ /*checkInternetSpeed(bool checkDownloadSpeed, BuildContext context) async {
   final internetSpeedController =
       Get.put<InternetSpeedController>(InternetSpeedController());
   final speed = checkDownloadSpeed
@@ -120,7 +120,7 @@ class Utils {
         left: 20.w),
   ));
   }
-}
+}*/
 
 double viewBottomPadding(double padding) {
   return Get.mediaQuery.viewPadding.bottom > 0

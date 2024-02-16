@@ -134,7 +134,7 @@ class AppFirebaseService {
                 realTimeData['callKundli'] as Map<Object?, Object?>);
             sendBroadcast(
                 BroadcastMessage(name: "callKundli", data: callKundli));
-            FirebaseDatabase.instance.ref("$path/callKundli").remove();
+            // FirebaseDatabase.instance.ref("$path/callKundli").remove();
           }
           if (realTimeData["deliveredMsg"] != null) {
             sendBroadcast(BroadcastMessage(
@@ -243,18 +243,22 @@ class AppFirebaseService {
                   );
                 }
               } else if (orderData["status"] == "2") {
-                sendBroadcast(BroadcastMessage(name: "backReq", data: null));
+              await sendBroadcast(BroadcastMessage(name: "backReq", data: null));
               } else if (orderData["status"] == "3") {
-                sendBroadcast(BroadcastMessage(
+               await sendBroadcast(BroadcastMessage(
                     name: "ReJoinChat",
                     data: {"orderId": value, "orderData": orderData}));
 
-                WidgetsBinding.instance.endOfFrame.then(
-                  (_) async {
-                    await Get.toNamed(RouteName.chatMessageWithSocketUI,
-                        arguments: {"orderData": orderData});
-                  },
-                );
+                if(Get.context?.mounted??false) {
+                  await Get.toNamed(RouteName.chatMessageWithSocketUI,
+                      arguments: {"orderData": orderData});
+                }
+                // WidgetsBinding.instance.endOfFrame.then(
+                //   (_) async {
+                //     await Get.toNamed(RouteName.chatMessageWithSocketUI,
+                //         arguments: {"orderData": orderData});
+                //   },
+                // );
               }
             } else {
               preferenceService.remove(SharedPreferenceService.talkTime);

@@ -962,6 +962,10 @@ class $AssetsLottieGen {
 class $AssetsSvgGen {
   const $AssetsSvgGen();
 
+  /// File path: assets/svg/access_blocked.svg
+  SvgGenImage get accessBlocked =>
+      const SvgGenImage('assets/svg/access_blocked.svg');
+
   /// File path: assets/svg/black_dot.svg
   SvgGenImage get blackDot => const SvgGenImage('assets/svg/black_dot.svg');
 
@@ -1079,6 +1083,7 @@ class $AssetsSvgGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+        accessBlocked,
         blackDot,
         block,
         blockUser,

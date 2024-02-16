@@ -28,7 +28,6 @@ class DashboardScreen extends GetView<DashboardController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<DashboardController>(
-      init: DashboardController(Get.put(PreDefineRepository())),
       assignId: true,
       builder: (controller) {
         return Material(
@@ -36,6 +35,11 @@ class DashboardScreen extends GetView<DashboardController> {
               initialData: BroadcastMessage(name: '', data: {}),
               stream: controller.broadcastReceiver.messages,
               builder: (context, broadcastSnapshot) {
+                final isDataNull = broadcastSnapshot.data != null &&
+                    broadcastSnapshot.data?.data != null &&
+                    broadcastSnapshot.data?.data?['orderData'] != null &&
+                    broadcastSnapshot.data?.data?['orderData']['status'] !=
+                        null;
                 return Stack(
                   children: [
                     Scaffold(
@@ -145,6 +149,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                       BottomNavigationBarItem(
                                         icon: Column(
                                           children: [
+                                          
                                             controller.userProfileImage.value
                                                         .contains("null") ||
                                                     controller.userProfileImage
@@ -186,6 +191,8 @@ class DashboardScreen extends GetView<DashboardController> {
                                     currentIndex:
                                         controller.selectedIndex.value,
                                     onTap: (value) {
+
+                                      print("tap working");
                                       _onItemTapped(value);
                                     },
                                   ),

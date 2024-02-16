@@ -12,7 +12,7 @@ class SideMenuDrawer extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    checkInternetSpeed(true,context);
+    // checkInternetSpeed(true,context);
     return Drawer(
       backgroundColor: appColors.white,
       surfaceTintColor: Colors.transparent,

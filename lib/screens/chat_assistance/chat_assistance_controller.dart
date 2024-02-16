@@ -27,15 +27,15 @@ class ChatAssistanceController extends GetxController {
     super.onInit();
 
     getAssistantAstrologerList();
-    listenSocket();
+    // listenSocket();
   }
 
-  void listenSocket() {
-    appSocket.listenForAssistantChatMessage((chatData) {
-      print('socket called');
-      print("data from chatAssist message $chatData");
-    });
-  }
+  // void listenSocket() {
+  //   appSocket.listenForAssistantChatMessage((chatData) {
+  //     print('socket called');
+  //     print("data from chatAssist message $chatData");
+  //   });
+  // }
 
   Future<void> getAssistantAstrologerList() async {
     try {

@@ -201,14 +201,18 @@ void divineSnackBar({required String data, Color? color, Duration? duration}) {
 Future<bool> acceptOrRejectChat({required int? orderId, required int? queueId}) async {
 // *accept_or_reject: 1 = accept, 3 = chat reject by timeout
 // * is_timeout: should be 1 when reject by timeout"
-
+print("chat_reject 1");
   ResCommonChatStatus response = await ChatRepository().chatAccept(
       ReqCommonChatParams(queueId: queueId, orderId: orderId, isTimeout: 0, acceptOrReject: 1).toJson());
+print("chat_reject 2");
   if (response.statusCode == 200) {
+    print("chat_reject 3");
     return true;
   } else {
+    print("chat_reject 4");
     return false;
   }
+
 }
 
 Future<String?> getDeviceId() async {

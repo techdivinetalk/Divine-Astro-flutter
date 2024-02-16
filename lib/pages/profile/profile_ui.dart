@@ -13,6 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
@@ -118,6 +119,32 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.end,
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          Get.toNamed(
+                                              RouteName.editProfileUI);
+                                        },
+                                        child: Row(children: [
+                                          Text(
+                                            'editProfile'.tr,
+                                            style: AppTextStyle.textStyle10(
+                                                fontWeight: FontWeight.w500,
+                                                fontColor: appColors
+                                                    .appYellowColour),
+                                          ),
+                                          Icon(
+                                            Icons.arrow_right,
+                                            size: 18.h,
+                                            color: appColors.appYellowColour,
+                                          )
+                                        ]),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
@@ -132,36 +159,16 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                 fontColor: appColors.darkBlue),
                                           ),
                                         ),
-                                        const SizedBox(width: 5),
-                                        InkWell(
-                                          onTap: () {
-                                            Get.toNamed(
-                                                RouteName.editProfileUI);
-                                          },
-                                          child: Row(children: [
-                                            Text(
-                                              'editProfile'.tr,
-                                              style: AppTextStyle.textStyle10(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontColor: appColors
-                                                      .appYellowColour),
-                                            ),
-                                            Icon(
-                                              Icons.arrow_right,
-                                              size: 18.h,
-                                              color: appColors.appYellowColour,
-                                            )
-                                          ]),
-                                        )
+                                       // const SizedBox(width: 5),
                                       ]),
-                                  SizedBox(height: 3.h),
+                                 /* SizedBox(height: 3.h),
                                   Text(
                                     '+91- ${controller.userData?.phoneNo ?? ""}',
                                     style: AppTextStyle.textStyle14(
                                         fontWeight: FontWeight.w400,
                                         fontColor: appColors.darkBlue),
-                                  ),
-                                  SizedBox(height: 3.h),
+                                  ),*/
+                                 // SizedBox(height: 3.h),
                                   Row(children: [
                                     Text("${"astrologerId".tr}-",
                                         style: AppTextStyle.textStyle14(
