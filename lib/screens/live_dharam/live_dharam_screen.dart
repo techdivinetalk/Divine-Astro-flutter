@@ -4396,7 +4396,6 @@ class _LivePage extends State<LiveDharamScreen>
     for (var element in _controller.deckCardModelList) {
       element.image = "${_controller.pref.getAmazonUrl()}/${element.image}";
     }
-
     return Future<void>.value();
   }
 
@@ -4434,7 +4433,23 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
-    await initTarot();
+    // await initTarot();
+    await _controller.getTarotCardAPI(
+      successCallBack: (String message) async {
+        await successAndFailureCallBack(
+          message: message,
+          isForSuccess: true,
+          isForFailure: false,
+        );
+      },
+      failureCallBack: (String message) async {
+        await successAndFailureCallBack(
+          message: message,
+          isForSuccess: false,
+          isForFailure: true,
+        );
+      },
+    );
     return Future<void>.value();
   }
 }

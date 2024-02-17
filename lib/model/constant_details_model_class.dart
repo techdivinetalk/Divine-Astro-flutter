@@ -61,6 +61,7 @@ class Data {
   Map<String, String> notificationType;
   String whatsappNo;
   AwsCredential awsCredentails;
+  String? taroCard;
 
   Data({
     required this.leaderboardRankImage,
@@ -76,6 +77,7 @@ class Data {
     required this.notificationType,
     required this.whatsappNo,
     required this.awsCredentails,
+    this.taroCard
   });
 
   Data copyWith({
@@ -92,6 +94,7 @@ class Data {
     Map<String, String>? notificationType,
     AwsCredential? awsCredential,
     String? whatsappNo,
+    String? taroCard,
   }) =>
       Data(
         leaderboardRankImage: leaderboardRankImage ?? this.leaderboardRankImage,
@@ -107,6 +110,7 @@ class Data {
         notificationType: notificationType ?? this.notificationType,
         awsCredentails: awsCredentails,
         whatsappNo: whatsappNo ?? this.whatsappNo,
+        taroCard: taroCard ?? this.taroCard,
       );
 
   factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
@@ -131,6 +135,7 @@ class Data {
             .map((k, v) => MapEntry<String, String>(k, v)),
         awsCredentails: AwsCredential.fromJson(json["aws_credential"]),
         whatsappNo: json["whatsappNo"],
+        taroCard: json['taro_card'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -151,6 +156,7 @@ class Data {
             .map((k, v) => MapEntry<String, dynamic>(k, v)),
         "aws_credential": awsCredentails.toJson(),
         "whatsappNo": whatsappNo,
+         'taro_card': taroCard,
       };
 }
 

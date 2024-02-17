@@ -150,8 +150,6 @@ class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
       ),
       onPressed: () {
         if (value != null) {
-          print(value);
-          print("valuevaluevaluevaluevalue");
           widget.onSelect(numList[value ?? 0]);
         } else {}
       },

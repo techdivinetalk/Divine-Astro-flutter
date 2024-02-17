@@ -2,11 +2,14 @@ import "dart:ui";
 
 import "package:carousel_slider/carousel_slider.dart";
 import "package:divine_astrologer/common/colors.dart";
+import "package:divine_astrologer/di/shared_preference_service.dart";
+import "package:divine_astrologer/model/constant_details_model_class.dart";
 import "package:divine_astrologer/model/live/deck_card_model.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:dynamic_height_grid_view/dynamic_height_grid_view.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
+import "package:fluttertoast/fluttertoast.dart";
 import "package:get/get.dart";
 
 class LiveCarousal extends StatefulWidget {
@@ -31,6 +34,9 @@ class LiveCarousal extends StatefulWidget {
 
 class _LiveCarousalState extends State<LiveCarousal> {
   final List<DeckCardModel> numList = [];
+  final SharedPreferenceService pref = Get.put(SharedPreferenceService());
+
+  String tarotCard = "";
 
   @override
   void initState() {
@@ -38,6 +44,9 @@ class _LiveCarousalState extends State<LiveCarousal> {
     for (int i = 0; i < widget.numOfSelection; i++) {
       numList.add(DeckCardModel());
     }
+
+    final ConstantDetailsModelClass modelClass = pref.getConstantDetails();
+    tarotCard = modelClass.data?.taroCard ?? "";
   }
 
   @override
@@ -70,7 +79,7 @@ class _LiveCarousalState extends State<LiveCarousal> {
             border: Border.all(color: appColors.white),
             color: appColors.white.withOpacity(0.2),
           ),
-          child:  Icon(Icons.close, color: appColors.white),
+          child: Icon(Icons.close, color: appColors.white),
         ),
       ),
     );
@@ -108,7 +117,7 @@ class _LiveCarousalState extends State<LiveCarousal> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const SizedBox(height: 16),
-           Text(
+          Text(
             "Scroll and Pick Your Cards",
             style: TextStyle(fontSize: 20, color: appColors.yellow),
           ),
@@ -128,9 +137,18 @@ class _LiveCarousalState extends State<LiveCarousal> {
             itemBuilder: (BuildContext context, int index, int realIndex) {
               final DeckCardModel model = widget.allCards[index];
               return InkWell(
-                onTap: () {
-                  autoInsertValue(model);
-                  setState(() {});
+                onTap: () async {
+                  final bool contains = isAlreadyExist(model);
+                  if (contains) {
+                    const String msg = "This card is already selected.";
+                    await Fluttertoast.showToast(
+                      msg: msg,
+                      backgroundColor: Colors.red,
+                    );
+                  } else {
+                    autoInsertValue(model);
+                    setState(() {});
+                  }
                 },
                 child: Container(
                   height: Get.height / 4.80,
@@ -141,7 +159,8 @@ class _LiveCarousalState extends State<LiveCarousal> {
                       Radius.circular(10.0),
                     ),
                     child: CustomImageWidget(
-                      imageUrl: model.image ?? "",
+                      // imageUrl: model.image ?? "",
+                      imageUrl: tarotCard,
                       rounded: false,
                       typeEnum: TypeEnum.user,
                     ),
@@ -174,7 +193,8 @@ class _LiveCarousalState extends State<LiveCarousal> {
                             child: !mapEquals(
                                     DeckCardModel().toJson(), model.toJson())
                                 ? CustomImageWidget(
-                                    imageUrl: model.image ?? "",
+                                    // imageUrl: model.image ?? "",
+                                    imageUrl: tarotCard,
                                     rounded: false,
                                     typeEnum: TypeEnum.user,
                                   )
@@ -190,7 +210,7 @@ class _LiveCarousalState extends State<LiveCarousal> {
                                     removeAt(index);
                                     setState(() {});
                                   },
-                                  child:  CircleAvatar(
+                                  child: CircleAvatar(
                                     backgroundColor: appColors.yellow,
                                     child: Icon(Icons.close),
                                   ),
@@ -202,7 +222,7 @@ class _LiveCarousalState extends State<LiveCarousal> {
                     const SizedBox(height: 8),
                     Text(
                       model.name ?? "Not Selected",
-                      style:  TextStyle(
+                      style: TextStyle(
                         color: appColors.white,
                         fontSize: 10,
                       ),
@@ -213,7 +233,7 @@ class _LiveCarousalState extends State<LiveCarousal> {
             },
           ),
           const SizedBox(height: 16),
-           Text(
+          Text(
             "Note : We'll send the chosen tarot cards to our live astrologer and they will do a live tarot card reading for you.",
             style: TextStyle(
               color: appColors.white,
@@ -226,6 +246,11 @@ class _LiveCarousalState extends State<LiveCarousal> {
         ],
       ),
     );
+  }
+
+  bool isAlreadyExist(DeckCardModel model) {
+    final bool contains = numList.contains(model);
+    return contains;
   }
 
   void autoInsertValue(DeckCardModel model) {

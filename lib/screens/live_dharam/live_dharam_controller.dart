@@ -8,6 +8,7 @@ import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/model/live/blocked_customer_list_res.dart";
 import "package:divine_astrologer/model/live/blocked_customer_res.dart";
 import "package:divine_astrologer/model/live/deck_card_model.dart";
+import "package:divine_astrologer/model/live/new_tarot_card_model.dart";
 import "package:divine_astrologer/model/live/notice_board_res.dart";
 import "package:divine_astrologer/model/res_login.dart";
 import "package:divine_astrologer/repository/astrologer_profile_repository.dart";
@@ -92,6 +93,7 @@ class LiveDharamController extends GetxController {
     giftCount: 0,
   ).obs;
   final RxBool _isProcessing = false.obs;
+  final Rx<NewTarotCardModel> _newTarotCardModel = NewTarotCardModel().obs;
 
   @override
   void onInit() {
@@ -164,6 +166,7 @@ class LiveDharamController extends GetxController {
       giftCount: 0,
     );
     isProcessing = false;
+    newTarotCardModel = NewTarotCardModel();
 
     return;
   }
@@ -205,6 +208,7 @@ class LiveDharamController extends GetxController {
     _openAceeptRejectDialogForId.close();
     _requestClass.close();
     _isProcessing.close();
+    _newTarotCardModel.close();
 
     super.onClose();
   }
@@ -321,6 +325,9 @@ class LiveDharamController extends GetxController {
 
   bool get isProcessing => _isProcessing.value;
   set isProcessing(bool value) => _isProcessing(value);
+
+  NewTarotCardModel get newTarotCardModel => _newTarotCardModel.value;
+  set newTarotCardModel(NewTarotCardModel value) => _newTarotCardModel(value);
 
   Future<void> eventListner({
     // required DatabaseEvent event,
@@ -1503,6 +1510,26 @@ class LiveDharamController extends GetxController {
       giftCount: 0,
     );
     return;
+  }
+
+  Future<void> getTarotCardAPI({
+    required Function(String message) successCallBack,
+    required Function(String message) failureCallBack,
+  }) async {
+    NewTarotCardModel getAstroDetailsRes = NewTarotCardModel();
+    getAstroDetailsRes = await liveRepository.getTarotCardAPI(
+      successCallBack: successCallBack,
+      failureCallBack: failureCallBack,
+    );
+    newTarotCardModel = getAstroDetailsRes.statusCode == HttpStatus.ok
+        ? NewTarotCardModel.fromJson(getAstroDetailsRes.toJson())
+        : NewTarotCardModel.fromJson(NewTarotCardModel().toJson());
+
+    deckCardModelList = [...newTarotCardModel.data ?? []];
+    for (var element in deckCardModelList) {
+      element.image = "${pref.getAmazonUrl()}/${element.image}";
+    }
+    return Future<void>.value();
   }
 }
 

@@ -215,55 +215,153 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                     userId : id of customer or astrologer as per userType
                     */
 
-    final int id = controller.pref.getUserDetail()?.id ?? 0;
-    if (id == 0) {
-      divineSnackBar(data: "Unknown Error Occurred");
-    } else {
-      bool hasAllPerm = false;
+    // final int id = controller.pref.getUserDetail()?.id ?? 0;
+    // if (id == 0) {
+    //   divineSnackBar(data: "Unknown Error Occurred");
+    // } else {
+    //   bool hasAllPerm = false;
 
-      await AppPermissionService.instance.onPressedAstrologerGoLive(
-        () async {
-          hasAllPerm = true;
-        },
-      );
+    //   await AppPermissionService.instance.onPressedAstrologerGoLive(
+    //     () async {
+    //       hasAllPerm = true;
+    //     },
+    //   );
 
-      if (hasAllPerm) {
-        bool canEnter = false;
+    //   if (hasAllPerm) {
+    //     bool canEnter = false;
 
-        await controller.astroOnlineAPI(
-          entering: true,
-          successCallBack: (message) {
-            canEnter = true;
-            // divineSnackBar(data: message);
-          },
-          failureCallBack: (message) {
-            canEnter = false;
-            divineSnackBar(data: message);
-          },
-        );
+    //     await controller.astroOnlineAPI(
+    //       entering: true,
+    //       successCallBack: (message) {
+    //         canEnter = true;
+    //         divineSnackBar(data: message);
+    //       },
+    //       failureCallBack: (message) {
+    //         canEnter = false;
+    //         divineSnackBar(data: message);
+    //       },
+    //     );
 
-        if (canEnter) {
-          final int userId = controller.pref.getUserDetail()?.id ?? 0;
-          AppSocket().joinLive(userType: "astrologer", userId: userId);
+    //     if (canEnter) {
+    //       await controller.furtherProcedure(
+    //         successCallBack: (message) async {
+    //           divineSnackBar(data: message);
 
+    //           await controller.astroOnlineAPI(
+    //             entering: false,
+    //             successCallBack: (message) {
+    //               divineSnackBar(data: message);
+    //             },
+    //             failureCallBack: (message) {
+    //               divineSnackBar(data: message);
+    //             },
+    //           );
+    //         },
+    //         failureCallBack: (message) {
+    //           divineSnackBar(data: message);
+    //         },
+    //       );
+    //     } else {
+    //       divineSnackBar(data: "errorLine1".tr);
+    //     }
+    //   } else {
+    //     divineSnackBar(data: "Insufficient Permission");
+    //   }
+    // }
+
+    final bool hasAllPermission = await permissionCheck();
+    if (hasAllPermission) {
+      final bool hasAllData = await dataCheck();
+      if (hasAllData) {
+        final (bool, String) can1 = await canEnter();
+        if (can1.$1 == true && can1.$2 == "") {
+          connectSocket();
           await controller.furtherProcedure();
-
-          await controller.astroOnlineAPI(
-            entering: false,
-            successCallBack: (message) {
-              // divineSnackBar(data: message);
-            },
-            failureCallBack: (message) {
-              divineSnackBar(data: message);
-            },
-          );
+          final (bool, String) can2 = await canExit();
+          if (can2.$1 == true && can2.$2 == "") {
+          } else {
+            divineSnackBar(data: can2.$2);
+          }
         } else {
-          divineSnackBar(data: "errorLine1".tr);
+          divineSnackBar(data: can1.$2);
         }
       } else {
-        divineSnackBar(data: "Insufficient Permission");
+        divineSnackBar(data: "Insufficient data, Please try to Re-login");
       }
+    } else {
+      divineSnackBar(data: "Insufficient Permissions, allow all Permissions");
     }
+
     return Future<void>.value();
+  }
+
+  Future<bool> permissionCheck() async {
+    bool hasAllPerm = false;
+    await AppPermissionService.instance.onPressedAstrologerGoLive(
+      () async {
+        hasAllPerm = true;
+      },
+    );
+    return Future<bool>.value(hasAllPerm);
+  }
+
+  Future<bool> dataCheck() async {
+    bool hasAllData = false;
+
+    var pref = controller.pref;
+
+    final String userId = (pref.getUserDetail()?.id ?? "").toString();
+    final String userName = pref.getUserDetail()?.name ?? "";
+    final String awsURL = pref.getAmazonUrl() ?? "";
+    final String image = pref.getUserDetail()?.image ?? "";
+
+    final bool cond1 = userId.isNotEmpty;
+    final bool cond2 = userName.isNotEmpty;
+    final bool cond3 = awsURL.isNotEmpty;
+    final bool cond4 = image.isNotEmpty;
+
+    hasAllData = cond1 && cond2 && cond3 && cond4;
+
+    return Future<bool>.value(hasAllData);
+  }
+
+  Future<(bool, String)> canEnter() async {
+    bool returnBool = false;
+    String returnString = "";
+    await controller.astroOnlineAPI(
+      entering: true,
+      successCallBack: (message) {
+        returnBool = true;
+        returnString = "";
+      },
+      failureCallBack: (message) {
+        returnBool = false;
+        returnString = message;
+      },
+    );
+    return Future<(bool, String)>.value((returnBool, returnString));
+  }
+
+  void connectSocket() {
+    final int userId = controller.pref.getUserDetail()?.id ?? 0;
+    AppSocket().joinLive(userType: "astrologer", userId: userId);
+    return;
+  }
+
+  Future<(bool, String)> canExit() async {
+    bool returnBool = false;
+    String returnString = "";
+    await controller.astroOnlineAPI(
+      entering: false,
+      successCallBack: (message) {
+        returnBool = true;
+        returnString = "";
+      },
+      failureCallBack: (message) {
+        returnBool = false;
+        returnString = message;
+      },
+    );
+    return Future<(bool, String)>.value((returnBool, returnString));
   }
 }
