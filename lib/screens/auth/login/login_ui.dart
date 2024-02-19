@@ -16,7 +16,8 @@ import '../../../common/colors.dart';
 import 'login_controller.dart';
 
 class LoginUI extends GetView<LoginController> {
-  LoginUI({Key? key}) : super(key: key);
+  LoginUI({super.key});
+
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -43,49 +44,58 @@ class LoginUI extends GetView<LoginController> {
                   ),
                   SizedBox(height: 10.h),
                   const ImageSliderWidget(),
-                  SizedBox(height: 5.h),
+                  TextWithDivider(
+                    text: 'Log in or Sign up',
+                    textColor: appColors.black,
+                    dividerHeight: 1.0,
+                  ),
+                  SizedBox(height: 20.h),
                   mobileField(),
                   SizedBox(height: 5.h),
                   Text(
-                    "verificationHintText".tr,
-                    style: AppTextStyle.textStyle12(
+                    "By signing up, you agree to our terms of use and privacy policy",
+                    style: AppTextStyle.textStyle10(
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                  SizedBox(height: 10.h),
+                  SizedBox(height: 20.h),
                   Obx(() {
                     return GestureDetector(
                       onTap: !controller.isLoading.value
                           ? () {
-                        if (_formKey.currentState!.validate()) {
-
-                          controller.login();
-                        }
-                      }
+                              if (_formKey.currentState!.validate()) {
+                                controller.login();
+                              }
+                            }
                           : () {},
-                      child:  Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
                         height: 50.h,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: appColors.lightYellow,
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        child: !controller.isLoading.value ? Text(
-                          "verify".tr,
-                          style: AppTextStyle.textStyle16(
-                            fontWeight: FontWeight.w600,
-                            fontColor: appColors.brownColour,
-                          ),
-                        ):  CircularProgressIndicator(
-                          strokeWidth: 3,
-                          color: appColors.brown),
-                      ) ,
+                        child: !controller.isLoading.value
+                            ? Text(
+                                "Send Otp",
+                                style: AppTextStyle.textStyle16(
+                                  fontWeight: FontWeight.w600,
+                                  fontColor: appColors.brownColour,
+                                ),
+                              )
+                            : CircularProgressIndicator(
+                                strokeWidth: 3, color: appColors.brown),
+                      ),
                     );
                   }),
+                  SizedBox(height: 20.h),
+                  TextWithDivider(
+                    text: 'Or',
+                    textColor: appColors.black,
+                    dividerHeight: 1.0,
+                  ),
+                  SizedBox(height: 20.h),
                   Obx(() {
                     return Visibility(
                       visible: controller.showTrueCaller.value,
@@ -107,7 +117,7 @@ class LoginUI extends GetView<LoginController> {
                             onPressed: () async {
                               bool oAuthFlowUsable = false;
                               oAuthFlowUsable =
-                              await TrueCallerService().isOAuthFlowUsable();
+                                  await TrueCallerService().isOAuthFlowUsable();
 
                               oAuthFlowUsable
                                   ? await TrueCallerService().startTrueCaller()
@@ -158,7 +168,7 @@ class LoginUI extends GetView<LoginController> {
       child: Container(
         alignment: Alignment.center,
         decoration:
-        BoxDecoration(borderRadius: BorderRadius.circular(10), boxShadow: [
+            BoxDecoration(borderRadius: BorderRadius.circular(10), boxShadow: [
           BoxShadow(
               color: controller.enable.value
                   ? Colors.white
@@ -167,79 +177,77 @@ class LoginUI extends GetView<LoginController> {
               offset: const Offset(0.3, 3.0)),
         ]),
         child: GetBuilder<LoginController>(
-          builder: (controller) =>
-              TextFormField(
-                focusNode: controller.numberFocus,
-                validator: (value) {
-                  String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-                  RegExp regExp = RegExp(pattern);
-                  if (value!.isEmpty) {
-                    return 'mobileNumberEmptyMsg'.tr;
-                  } else if (value.length != 10) {
-                    return 'mobileNumber10Digits'.tr;
-                  } else if (!regExp.hasMatch(value)) {
-                    return 'validPhoneNumber'.tr;
-                  }
-                  return null;
-                },
-                onTapOutside: (value) => FocusScope.of(Get.context!).unfocus(),
-                controller: controller.mobileNumberController,
-                keyboardType: TextInputType.number,
-                enabled: controller.enable.value,
-                maxLength: 10,
-                showCursor: true,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-                decoration: InputDecoration(
-                  counterText: '',
-                  hintText: "enterRegisteredNumber".tr,
-                  fillColor: appColors.white,
-                  hintStyle:
+          builder: (controller) => TextFormField(
+            focusNode: controller.numberFocus,
+            validator: (value) {
+              String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+              RegExp regExp = RegExp(pattern);
+              if (value!.isEmpty) {
+                return 'mobileNumberEmptyMsg'.tr;
+              } else if (value.length != 10) {
+                return 'mobileNumber10Digits'.tr;
+              } else if (!regExp.hasMatch(value)) {
+                return 'validPhoneNumber'.tr;
+              }
+              return null;
+            },
+            onTapOutside: (value) => FocusScope.of(Get.context!).unfocus(),
+            controller: controller.mobileNumberController,
+            keyboardType: TextInputType.number,
+            enabled: controller.enable.value,
+            maxLength: 10,
+            showCursor: true,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly
+            ],
+            decoration: InputDecoration(
+              counterText: '',
+              hintText: "enterRegisteredNumber".tr,
+              fillColor: appColors.white,
+              hintStyle:
                   AppTextStyle.textStyle16(fontColor: appColors.greyColor),
-                  prefixIcon: InkWell(
-                    onTap: () =>
-                        countryPickerSheet(Get.context!, (value) {
-                          controller.setCode(value.phoneCode);
-                          Get.back();
-                        }),
-                    child: Row(mainAxisSize: MainAxisSize.min, children: [
-                      const SizedBox(width: 15),
-                      Text(
-                        controller.countryCode.value,
-                      ),
-                      const Icon(Icons.arrow_drop_down)
-                    ]),
+              prefixIcon: InkWell(
+                onTap: () => countryPickerSheet(Get.context!, (value) {
+                  controller.setCode(value.phoneCode);
+                  Get.back();
+                }),
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  const SizedBox(width: 15),
+                  Text(
+                    controller.countryCode.value,
                   ),
-                  filled: true,
-                  errorStyle:
-                  AppTextStyle.textStyle16(fontColor: appColors.appRedColour),
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide:  BorderSide(
-                        color: appColors.appYellowColour,
-                        width: 1.0,
-                      )),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide(
-                        color: appColors.appYellowColour,
-                        width: 1.0,
-                      )),
-                  errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide:  BorderSide(
-                        color: appColors.redColor,
-                        width: 1.0,
-                      )),
-                  focusedErrorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide:  BorderSide(
-                        color: appColors.redColor,
-                        width: 1.0,
-                      )),
-                ),
+                  const Icon(Icons.arrow_drop_down)
+                ]),
               ),
+              filled: true,
+              errorStyle:
+                  AppTextStyle.textStyle16(fontColor: appColors.appRedColour),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: appColors.appYellowColour,
+                    width: 1.0,
+                  )),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: appColors.appYellowColour,
+                    width: 1.0,
+                  )),
+              errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: appColors.redColor,
+                    width: 1.0,
+                  )),
+              focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: appColors.redColor,
+                    width: 1.0,
+                  )),
+            ),
+          ),
         ),
       ),
     );
@@ -247,7 +255,7 @@ class LoginUI extends GetView<LoginController> {
 }
 
 class ImageSliderWidget extends StatefulWidget {
-  const ImageSliderWidget({Key? key}) : super(key: key);
+  const ImageSliderWidget({super.key});
 
   @override
   State<ImageSliderWidget> createState() => _ImageSliderWidgetState();
@@ -266,20 +274,21 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
             onPageChanged: (index, reason) {
               setState(() => swipeIndex = index);
             },
-            height: ScreenUtil().screenHeight * 0.464,
+            height: ScreenUtil().screenHeight * 0.350,
             viewportFraction: 1,
             autoPlay: true,
           ),
           items: controller.staticImages
               .asMap()
               .entries
-              .map((item) =>
-              Column(
-                children: [
-                  item.value.expand(),
-                  Text(controller.imageDec[item.key]).centered()
-                ],
-              ))
+              .map((item) => Column(
+                    children: [
+                      item.value.expand(),
+                      Text(controller.imageDec[item.key],
+                              textAlign: TextAlign.center)
+                          .centered()
+                    ],
+                  ))
               .toList(),
         ),
         Row(
@@ -288,18 +297,60 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
               .asMap()
               .entries
               .map(
-                (e) =>
-                Container(
+                (e) => Container(
                   margin: EdgeInsets.symmetric(vertical: 20.h, horizontal: 2.w),
                   child: e.key == swipeIndex
                       ? Assets.svg.pinkSlider.svg(
-                      colorFilter: ColorFilter.mode(
-                          appColors.appYellowColour, BlendMode.srcIn))
+                          colorFilter: ColorFilter.mode(
+                              appColors.appYellowColour, BlendMode.srcIn))
                       : Assets.svg.blackDot.svg(),
                 ),
-          )
+              )
               .toList(),
         )
+      ],
+    );
+  }
+}
+
+/// Test Divider
+class TextWithDivider extends StatelessWidget {
+  final String text;
+  final Color textColor;
+  final double dividerHeight;
+
+  const TextWithDivider({
+    super.key,
+    required this.text,
+    this.textColor = Colors.black,
+    this.dividerHeight = 1.0,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    return Row(
+      children: [
+        Container(
+          height: dividerHeight,
+          color: Colors.grey[300],
+        ).expand(),
+        SizedBox(
+          width: 10.w,
+        ),
+        Center(
+          child: Text(
+            text,
+            style: TextStyle(color: textColor),
+          ),
+        ),
+        SizedBox(
+          width: 10.w,
+        ),
+        Container(
+          height: dividerHeight,
+          color: Colors.grey[300],
+        ).expand(),
       ],
     );
   }

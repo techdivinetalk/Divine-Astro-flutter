@@ -362,7 +362,7 @@ class LoginController extends GetxController {
     Assets.svg.pleaseRegister2.svg(),
   ];
   List<String> imageDec = [
-    "Please Enter your Registered mobile number to proceed as an astrologer to the platform.",
+    "To proceed as an astrologer, enter your registered mobile number.",
     "You will get a call on the registered mobile number for verification."
   ];
 
