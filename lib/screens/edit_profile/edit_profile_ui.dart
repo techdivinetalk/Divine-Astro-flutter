@@ -1,4 +1,5 @@
 import 'package:chips_choice/chips_choice.dart';
+import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,69 +17,73 @@ class EditProfileUI extends GetView<EditProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          CustomLightYellowButton(
-            name: "saveChanges".tr,
-            onTaped: () => controller.editProfile(),
+    return GetBuilder<EditProfileController>(
+      assignId: true,
+      init: EditProfileController(UserRepository()),
+      builder: (controller) {
+        return Scaffold(
+          backgroundColor: Colors.white,
+          bottomNavigationBar: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CustomLightYellowButton(
+                name: "saveChanges".tr,
+                onTaped: () => controller.editProfile(),
+              ),
+            ],
           ),
-        ],
-      ),
-      appBar: AppBar(
-        leading: IconButton(
-          highlightColor: appColors.transparent,
-          splashColor: appColors.transparent,
-          onPressed: () => Get.back(),
-          icon: const Icon(Icons.arrow_back_ios_new),
-        ),
-        titleSpacing: 0,
-        surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.white,
-        centerTitle: false,
-        title: Text(
-          "editProfile".tr,
-          style: AppTextStyle.textStyle16(),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(12.h),
-          child: Form(
-            key: controller.formState,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          appBar: AppBar(
+            leading: IconButton(
+              highlightColor: appColors.transparent,
+              splashColor: appColors.transparent,
+              onPressed: () => Get.back(),
+              icon: const Icon(Icons.arrow_back_ios_new),
+            ),
+            titleSpacing: 0,
+            surfaceTintColor: Colors.transparent,
+            backgroundColor: Colors.white,
+            centerTitle: false,
+            title: Text(
+              "editProfile".tr,
+              style: AppTextStyle.textStyle16(),
+            ),
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(12.h),
+              child: Form(
+                key: controller.formState,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "name".tr,
-                      style: AppTextStyle.textStyle14(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "name".tr,
+                          style: AppTextStyle.textStyle14(),
+                        ),
+                        Assets.images.icEdit.svg(),
+                      ],
                     ),
-                    Assets.images.icEdit.svg(),
-                  ],
-                ),
-                SizedBox(
-                  height: 5.h,
-                ),
-                ReferAstrologerField(
-                    validator: (value) {
-                      if (value! == "") {
-                        return "";
-                      }
-                      return null;
-                    },
-                    hintText: "hintTextName".tr,
-                    controller: controller.state.nameController,
-                    inputAction: TextInputAction.next,
-                    inputType: TextInputType.text),
-                SizedBox(
-                  height: 20.h,
-                ),
-              /*  Text(
+                    SizedBox(
+                      height: 5.h,
+                    ),
+                    ReferAstrologerField(
+                        validator: (value) {
+                          if (value! == "") {
+                            return "";
+                          }
+                          return null;
+                        },
+                        hintText: "hintTextName".tr,
+                        controller: controller.state.nameController,
+                        inputAction: TextInputAction.next,
+                        inputType: TextInputType.text),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    /*  Text(
                   "Select Category".tr,
                   style: AppTextStyle.textStyle14(),
                 ),
@@ -259,247 +264,278 @@ class EditProfileUI extends GetView<EditProfileController> {
                   ),
                 ),
                 SizedBox(height: 20.h),*/
-                Text(
-                  "Select Speciality".tr,
-                  style: AppTextStyle.textStyle14(),
-                ),
-                SizedBox(height: 5.h),
-                Obx(
-                      () => Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
-                              blurRadius: 3.0,
-                              offset: const Offset(0.3, 3.0)),
-                        ]),
-                    child: Wrap(
-                      direction: Axis.horizontal,
-                      children: controller.tags
-                          .map<Widget>((element) => Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 4.w, vertical: 6.h),
-                        child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
+                    Text(
+                      "Select Speciality".tr,
+                      style: AppTextStyle.textStyle14(),
+                    ),
+                    SizedBox(height: 5.h),
+                    Obx(
+                          () =>
+                          Container(
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
                                 boxShadow: [
                                   BoxShadow(
-                                      color:
-                                      Colors.black.withOpacity(0.2),
-                                      blurRadius: 1.0,
-                                      offset: const Offset(0.0, 3.0)),
-                                ],
-                                gradient:  LinearGradient(
-                                  begin: Alignment.bottomCenter,
-                                  end: Alignment.topCenter,
-                                  colors: [
-                                    appColors.appYellowColour,
-                                    appColors.gradientBottom
-                                  ],
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(20)),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 15.w, vertical: 8.h),
-                                child: Text(
-                                  element.name.toString(),
-                                  style: AppTextStyle.textStyle14(
-                                      fontColor: appColors.darkBlue),
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 8.w),
-                            InkWell(
-                              onTap: () {
-                                // controller.tagIndexes.removeAt(
-                                //     controller.tags.indexWhere(
-                                //         (val) => val.id == element.id));
-                                controller.tags.removeWhere(
-                                        (val) => val.id == element.id);
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all()),
-                                child: Icon(
-                                  Icons.close,
-                                  size: 18.sp,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ))
-                          .toList()
-                        ..add(InkWell(
-                          onTap: () {
-                            openBottomSheet(context, functionalityWidget:
-                            StatefulBuilder(builder: (context, state) {
-                              return Padding(
-                                padding: const EdgeInsets.all(20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ChipsChoice<int>.multiple(
-                                      spacing: 10,
-                                      value: controller.tagIndexes,
-                                      onChanged: (val) {
-                                        controller.tagIndexes.clear();
-                                        controller.tags.clear();
-                                        for (int element in val) {
-                                          controller.tagIndexes.add(element);
-                                          controller.tags
-                                              .add(controller.options[element]);
-                                        }
-                                        state(() {});
-                                      },
-                                      choiceItems:
-                                      C2Choice.listFrom<int, String>(
-                                        source: controller.options
-                                            .map((e) => e.name.toString())
-                                            .toList(),
-                                        value: (i, v) => i,
-                                        label: (i, v) => v,
-                                        tooltip: (i, v) => v,
-                                        delete: (i, v) => () {
-                                          controller.options.removeAt(i);
-                                        },
-                                      ),
-                                      choiceStyle: C2ChipStyle.toned(
-                                        iconSize: 0,
-                                        backgroundColor: Colors.white,
-                                        selectedStyle: C2ChipStyle.filled(
-                                          selectedStyle: C2ChipStyle(
-                                            foregroundStyle:
-                                            AppTextStyle.textStyle16(
-                                                fontColor: appColors.white),
-                                            borderWidth: 1,
-                                            backgroundColor: appColors.darkBlue,
-                                            borderStyle: BorderStyle.solid,
-                                            borderRadius:
-                                            const BorderRadius.all(
-                                                Radius.circular(25)),
+                                      color: Colors.black.withOpacity(0.3),
+                                      blurRadius: 3.0,
+                                      offset: const Offset(0.3, 3.0)),
+                                ]),
+                            child: Wrap(
+                              direction: Axis.horizontal,
+                              children: controller.tags
+                                  .map<Widget>((element) =>
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 4.w, vertical: 6.h),
+                                    child: Wrap(
+                                      crossAxisAlignment: WrapCrossAlignment
+                                          .center,
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color:
+                                                  Colors.black.withOpacity(0.2),
+                                                  blurRadius: 1.0,
+                                                  offset: const Offset(
+                                                      0.0, 3.0)),
+                                            ],
+                                            gradient: LinearGradient(
+                                              begin: Alignment.bottomCenter,
+                                              end: Alignment.topCenter,
+                                              colors: [
+                                                appColors.appYellowColour,
+                                                appColors.gradientBottom
+                                              ],
+                                            ),
+                                            borderRadius: const BorderRadius
+                                                .all(
+                                                Radius.circular(20)),
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 15.w,
+                                                vertical: 8.h),
+                                            child: Text(
+                                              element.name.toString(),
+                                              style: AppTextStyle.textStyle14(
+                                                  fontColor: appColors
+                                                      .darkBlue),
+                                            ),
                                           ),
                                         ),
-                                        borderWidth: 1,
-                                        borderStyle: BorderStyle.solid,
-                                        borderColor: appColors.darkBlue,
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(20),
+                                        SizedBox(width: 8.w),
+                                        InkWell(
+                                          onTap: () {
+                                            // controller.tagIndexes.removeAt(
+                                            //     controller.tags.indexWhere(
+                                            //         (val) => val.id == element.id));
+                                            controller.tags.removeWhere(
+                                                    (val) =>
+                                                val.id == element.id);
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                border: Border.all()),
+                                            child: Icon(
+                                              Icons.close,
+                                              size: 18.sp,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ))
+                                  .toList()
+                                ..add(InkWell(
+                                  onTap: () {
+                                    openBottomSheet(
+                                        context, functionalityWidget:
+                                    StatefulBuilder(builder: (context, state) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(20),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment
+                                              .start,
+                                          children: [
+                                            ChipsChoice<int>.multiple(
+                                              spacing: 10,
+                                              value: controller.tagIndexes,
+                                              onChanged: (val) {
+                                                controller.tagIndexes.clear();
+                                                controller.tags.clear();
+                                                for (int element in val) {
+                                                  controller.tagIndexes.add(
+                                                      element);
+                                                  controller.tags
+                                                      .add(controller
+                                                      .options[element]);
+                                                }
+                                                state(() {});
+                                              },
+                                              choiceItems:
+                                              C2Choice.listFrom<int, String>(
+                                                source: controller.options
+                                                    .map((e) =>
+                                                    e.name.toString())
+                                                    .toList(),
+                                                value: (i, v) => i,
+                                                label: (i, v) => v,
+                                                tooltip: (i, v) => v,
+                                                delete: (i, v) =>
+                                                    () {
+                                                  controller.options.removeAt(
+                                                      i);
+                                                },
+                                              ),
+                                              choiceStyle: C2ChipStyle.toned(
+                                                iconSize: 0,
+                                                backgroundColor: Colors.white,
+                                                selectedStyle: C2ChipStyle
+                                                    .filled(
+                                                  selectedStyle: C2ChipStyle(
+                                                    foregroundStyle:
+                                                    AppTextStyle.textStyle16(
+                                                        fontColor: appColors
+                                                            .white),
+                                                    borderWidth: 1,
+                                                    backgroundColor: appColors
+                                                        .darkBlue,
+                                                    borderStyle: BorderStyle
+                                                        .solid,
+                                                    borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(25)),
+                                                  ),
+                                                ),
+                                                borderWidth: 1,
+                                                borderStyle: BorderStyle.solid,
+                                                borderColor: appColors.darkBlue,
+                                                borderRadius: const BorderRadius
+                                                    .all(
+                                                  Radius.circular(20),
+                                                ),
+                                              ),
+                                              wrapped: true,
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }));
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 8.h, top: 4.h),
+                                    child: Container(
+                                      width: ScreenUtil().screenWidth / 2.8,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                              20),
+                                          border: Border.all(
+                                              width: 1,
+                                              color: appColors.darkBlue)),
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                            top: 9.h, bottom: 9.h),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment: CrossAxisAlignment
+                                              .center,
+                                          mainAxisAlignment: MainAxisAlignment
+                                              .center,
+                                          children: [
+                                            Icon(
+                                              Icons.add,
+                                              color: appColors.darkBlue,
+                                              size: 19.sp,
+                                            ),
+                                            SizedBox(width: 5.w),
+                                            Text(
+                                              "addSpeciality".tr,
+                                              style: AppTextStyle.textStyle12(
+                                                  fontColor: appColors.darkBlue,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      wrapped: true,
                                     ),
-                                  ],
-                                ),
-                              );
-                            }));
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 8.h, top: 4.h),
-                            child: Container(
-                              width: ScreenUtil().screenWidth / 2.8,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                      width: 1, color: appColors.darkBlue)),
-                              child: Padding(
-                                padding: EdgeInsets.only(top: 9.h, bottom: 9.h),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.add,
-                                      color: appColors.darkBlue,
-                                      size: 19.sp,
-                                    ),
-                                    SizedBox(width: 5.w),
-                                    Text(
-                                      "addSpeciality".tr,
-                                      style: AppTextStyle.textStyle12(
-                                          fontColor: appColors.darkBlue,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                                  ),
+                                )),
                             ),
                           ),
-                        )),
                     ),
-                  ),
-                ),
-                SizedBox(height: 20.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "experience".tr,
-                      style: AppTextStyle.textStyle14(),
+                    SizedBox(height: 20.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "experience".tr,
+                          style: AppTextStyle.textStyle14(),
+                        ),
+                        Assets.images.icEdit.svg(),
+                      ],
                     ),
-                    Assets.images.icEdit.svg(),
+                    SizedBox(height: 5.h),
+                    ReferAstrologerField(
+                      inputFormatter: [
+                        FilteringTextInputFormatter.allow(RegExp('[0-9.,]')),
+                      ],
+                      validator: (value) {
+                        if (value! == "") {
+                          return "";
+                        }
+                        return null;
+                      },
+                      hintText: "hintExperience".tr,
+                      controller: controller.state.experienceController,
+                      inputAction: TextInputAction.next,
+                      inputType: TextInputType.number,
+                      maxLine: 1,
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "descriptions".tr,
+                          style: AppTextStyle.textStyle14(),
+                        ),
+                        Assets.images.icEdit.svg(),
+                      ],
+                    ),
+                    SizedBox(height: 5.h),
+                    ReferAstrologerField(
+                      height: 100.h,
+                      validator: (value) {
+                        if (value! == "") {
+                          return "";
+                        }
+                        return null;
+                      },
+                      hintText: "descriptions".tr,
+                      controller: controller.state.descriptionController,
+                      inputAction: TextInputAction.next,
+                      inputType: TextInputType.text,
+                      maxLine: 3,
+                    )
                   ],
                 ),
-                SizedBox(height: 5.h),
-                ReferAstrologerField(
-                  inputFormatter: [
-                    FilteringTextInputFormatter.allow(RegExp('[0-9.,]')),
-                  ],
-                  validator: (value) {
-                    if (value! == "") {
-                      return "";
-                    }
-                    return null;
-                  },
-                  hintText: "hintExperience".tr,
-                  controller: controller.state.experienceController,
-                  inputAction: TextInputAction.next,
-                  inputType: TextInputType.number,
-                  maxLine: 1,
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "descriptions".tr,
-                      style: AppTextStyle.textStyle14(),
-                    ),
-                    Assets.images.icEdit.svg(),
-                  ],
-                ),
-                SizedBox(height: 5.h),
-                ReferAstrologerField(
-                  height: 100.h,
-                  validator: (value) {
-                    if (value! == "") {
-                      return "";
-                    }
-                    return null;
-                  },
-                  hintText: "descriptions".tr,
-                  controller: controller.state.descriptionController,
-                  inputAction: TextInputAction.next,
-                  inputType: TextInputType.text,
-                  maxLine: 3,
-                )
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
