@@ -121,13 +121,10 @@ class EditProfileState {
 
   void assignData() {
     userData = preferenceService.getUserDetail();
-
     nameController.text = userData?.name ?? "";
-    experienceController.text = userData?.experiance.toString() ?? "";
-
+    experienceController.text = (userData?.experiance != "null" ? userData?.experiance :"")!;
     Document description = parse(userData?.description ?? "");
     descriptionController.text = description.documentElement!.text;
-
     String specialityString = preferenceService.getSpecialAbility()!;
     specialityList = specialityListFromJson(specialityString);
   }
