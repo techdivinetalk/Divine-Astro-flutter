@@ -640,11 +640,12 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                               backgroundColor:
                                                   appColors.brownColour,
                                               text: "acceptChatRequest".tr,
-                                              onPressed: () async {
-                                                await onPressed();
+                                              // onPressed: () async {
+                                              //   await onPressed();
 
-                                                // setState(() {});
-                                              },
+                                              //   // setState(() {});
+                                              // },
+                                              onPressed: Get.back,
                                               // widget.onPressed
                                             )
                                           : const SizedBox();
@@ -667,17 +668,17 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
     );
   }
 
-  Future<void> onPressed() async {
-    isLoader = true;
-    try {
-      await onPressedFunction();
-      print("onPressed(): onPressedFunction: completed");
-    } on Exception catch (e) {
-      print("onPressed(): on Exception catch: $e");
-    } finally {}
-    isLoader = false;
-    return Future<void>.value();
-  }
+  // Future<void> onPressed() async {
+  //   isLoader = true;
+  //   try {
+  //     await onPressedFunction();
+  //     print("onPressed(): onPressedFunction: completed");
+  //   } on Exception catch (e) {
+  //     print("onPressed(): on Exception catch: $e");
+  //   } finally {}
+  //   isLoader = false;
+  //   return Future<void>.value();
+  // }
 
   Future<void> onPressedFunction() async {
     final bool isAccepted = await acceptOrRejectChat(

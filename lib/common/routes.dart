@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
 import 'package:divine_astrologer/common/custom_get_page.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_binding.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_ui.dart';
@@ -145,12 +146,14 @@ class RouteName {
   static const String liveDharamScreen = "/liveDharamScreen";
   static const String faq = "/faqPage";
   static const String remediesDetail = "/RemediesDetailsView";
+  static const String acceptChatRequestScreen = "/AcceptChatRequestScreen";
 }
 
 final Set<String> validRoutes = {
   RouteName.chatMessageUI,
   RouteName.faq,
-  RouteName.remediesDetail
+  RouteName.remediesDetail,
+  RouteName.acceptChatRequestScreen,
 };
 
 class Routes {
@@ -170,6 +173,9 @@ class Routes {
       name: RouteName.otpVerificationPage,
       binding: OtpVerificationBinding(),
     ),
+     GetPage(
+        page: () => const AcceptChatRequestScreen(),
+        name: RouteName.acceptChatRequestScreen),
     GetPage(
         page: () => const DashboardScreen(),
         name: RouteName.dashboard,
@@ -253,7 +259,7 @@ class Routes {
         page: () => const ChatMessageWithSocketUI(),
         name: RouteName.chatMessageWithSocketUI,
         binding: ChatMessageWithSocketBinding()),
-   /* GetPage(
+    /* GetPage(
         page: () => const SuggestRemediesView(),
         name: RouteName.suggestRemediesView),*/
     GetPage(
@@ -298,7 +304,6 @@ class Routes {
     GetPage(page: () => const UploadStoryUi(), name: RouteName.uploadStoryUi),
     GetPage(
       page: () => const ImagePreviewUi(),
-
       name: RouteName.imagePreviewUi,
     ),
     GetPage(

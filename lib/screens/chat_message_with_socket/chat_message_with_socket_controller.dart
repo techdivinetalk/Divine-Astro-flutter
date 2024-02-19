@@ -262,7 +262,7 @@ class ChatMessageWithSocketController extends GetxController
       }
       //  }
       // }
-      updateTime(AppFirebaseService().orderData.value["talktime"], false);
+      // updateTime(AppFirebaseService().orderData.value["talktime"], false);
       //updateTime(data["orderData"]["talktime"], false);
 
       // if (data["orderData"]["talktime"] != null) {
