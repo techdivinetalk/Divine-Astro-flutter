@@ -16,20 +16,30 @@ class AllOrderHistoryUi extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<OrderHistoryController>(
       id: 'allOrders',
-        builder: (controller) {
-      return ListView.separated(
-        // controller: controller,
-        physics: const BouncingScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: controller.allHistoryList.length,
-        padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(top: 30),
-        separatorBuilder: (context, index) => const SizedBox(height: 20),
-        itemBuilder: (context, index) {
-          return orderDetailView(index, controller.allHistoryList);
-        },
-      );
-    });
+      builder: (controller) {
+        if (controller.allHistoryList.isEmpty) {
+          return const Center(
+            child: Text(
+              'No data found',
+              style: TextStyle(fontSize: 18),
+            ),
+          );
+        }
+
+        return ListView.separated(
+          // controller: controller,
+          physics: const BouncingScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: controller.allHistoryList.length,
+          padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(top: 30),
+          separatorBuilder: (context, index) => const SizedBox(height: 20),
+          itemBuilder: (context, index) {
+            return orderDetailView(index, controller.allHistoryList);
+          },
+        );
+      },
+    );
   }
 
   Widget orderDetailView(int index, List<AllHistoryData> data) {
@@ -69,7 +79,7 @@ class AllOrderHistoryUi extends StatelessWidget {
               children: [
                 Text(
                   // "chat".tr,
-                  "${data[index].productType}",
+                  data[index].productType != 7 ? 'Chat' : 'Call',
                   style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w400,
                     /*fontColor: "$type" == "PENALTY"
@@ -101,7 +111,10 @@ class AllOrderHistoryUi extends StatelessWidget {
               children: [
                 Text(
                   // "$time",
-                  DateFormat("dd MMM, hh:mm aa").format(data[index].createdAt!),
+                  data[index].createdAt != null
+                      ? DateFormat("dd MMM, hh:mm aa")
+                      .format(data[index].createdAt!)
+                      : "N/A",
                   textAlign: TextAlign.end,
                   style: AppTextStyle.textStyle12(
                       fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),

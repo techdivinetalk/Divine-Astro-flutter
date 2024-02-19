@@ -33,6 +33,7 @@ class OrderHistoryController extends GetxController {
   RxList<AllHistoryData> allHistoryList = <AllHistoryData>[].obs;
   RxList<CallHistoryData> callHistoryList = <CallHistoryData>[].obs;
   RxList<ChatDataList> chatHistoryList = <ChatDataList>[].obs;
+  RxList<ChatDataList> feedHistoryList = <ChatDataList>[].obs;
   RxList<GiftDataList> giftHistoryList = <GiftDataList>[].obs;
   RxList<RemedySuggestedDataList> remedySuggestedHistoryList =
       <RemedySuggestedDataList>[].obs;
@@ -123,7 +124,7 @@ class OrderHistoryController extends GetxController {
 
       } else if (type == 1) {
         CallOrderHistoryModelClass data =
-            await OrderHistoryRepository().getCallOrderHistory(params);
+        await OrderHistoryRepository().getCallOrderHistory(params);
         apiCalling.value = false;
         var history = data.data;
 
@@ -136,9 +137,10 @@ class OrderHistoryController extends GetxController {
           emptyMsg.value = data.message ?? "No data found!";
         }
         update();
+
       } else if (type == 2) {
         ChatOrderHistoryModelClass data =
-            await OrderHistoryRepository().getChatOrderHistory(params);
+        await OrderHistoryRepository().getChatOrderHistory(params);
         apiCalling.value = false;
         var history = data.data;
 
@@ -150,6 +152,7 @@ class OrderHistoryController extends GetxController {
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
+        update();
       } else if (type == 3) {
         GiftOrderHistoryModelClass data =
             await OrderHistoryRepository().getGiftOrderHistory(params);
@@ -179,7 +182,21 @@ class OrderHistoryController extends GetxController {
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
-      }
+      } /*else if(type == 5){
+        ChatOrderHistoryModelClass data =
+        await OrderHistoryRepository().getChatOrderHistory(params);
+        apiCalling.value = false;
+        var history = data.data;
+
+        if (history!.isNotEmpty && data.data != null) {
+          emptyMsg.value = "";
+          if (page == 1) chatHistoryList.clear();
+          chatHistoryList.addAll(history);
+          // shopPageCount++;
+        } else {
+          emptyMsg.value = data.message ?? "No data found!";
+        }
+      }*/
       update();
     } catch (error) {
       apiCalling.value = false;

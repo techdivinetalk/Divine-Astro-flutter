@@ -17,6 +17,14 @@ class CallOrderHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<OrderHistoryController>(builder: (controller) {
+      if (controller.callHistoryList.isEmpty) {
+        return const Center(
+          child: Text(
+            'No data found',
+            style: TextStyle(fontSize: 18),
+          ),
+        );
+      }
       return ListView.separated(
         // controller: controller,
         scrollDirection: Axis.vertical,
@@ -84,7 +92,7 @@ class CallOrderHistory extends StatelessWidget {
                   "${"orderId".tr} : ${data[index].orderId}",
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500),
                 ),
-                 Icon(
+                Icon(
                   Icons.help_outline,
                   size: 20,
                   color: appColors.darkBlue,
@@ -97,7 +105,7 @@ class CallOrderHistory extends StatelessWidget {
               children: [
                 Text(
                   // "chat".tr,
-                  "${data[index].productType}",
+                  data[index].productType != 7 ? 'Chat' : 'Call',
                   style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w400,
                     /*fontColor: "$type" == "PENALTY"
@@ -128,7 +136,11 @@ class CallOrderHistory extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  DateFormat("dd MMM, hh:mm aa").format(data[index].createdAt!),
+                  data[index].createdAt != null
+                      ? DateFormat("dd MMM, hh:mm aa")
+                          .format(data[index].createdAt!)
+                      : "N/A",
+                  // DateFormat("dd MMM, hh:mm aa").format(data[index].createdAt!),
                   textAlign: TextAlign.end,
                   style: AppTextStyle.textStyle12(
                       fontWeight: FontWeight.w400,
@@ -146,7 +158,8 @@ class CallOrderHistory extends StatelessWidget {
                 });
               },
               onRightTap: () {
-                Get.toNamed(RouteName.suggestRemediesView, arguments: data[index].id);
+                Get.toNamed(RouteName.suggestRemediesView,
+                    arguments: data[index].id);
               },
               rightBtnTitle: "suggestedRemediesEarning".tr,
             ),

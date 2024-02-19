@@ -17,6 +17,14 @@ class ChatOrderHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<OrderHistoryController>(builder: (controller) {
+      if (controller.chatHistoryList.isEmpty) {
+        return const Center(
+          child: Text(
+            'No data found',
+            style: TextStyle(fontSize: 18),
+          ),
+        );
+      }
       return ListView.separated(
         // controller: controller,
         scrollDirection: Axis.vertical,
@@ -97,7 +105,7 @@ class ChatOrderHistory extends StatelessWidget {
               children: [
                 Text(
                   // "chat".tr,
-                  "${data[index].productType}",
+                  data[index].productType != 7 ? 'Chat' : 'Call',
                   style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w400,
                     /*fontColor: "$type" == "PENALTY"
@@ -129,7 +137,10 @@ class ChatOrderHistory extends StatelessWidget {
               children: [
                 Text(
                   // "$time",
-                  DateFormat("dd MMM, hh:mm aa").format(data[index].createdAt!),
+                  data[index].createdAt != null
+                      ? DateFormat("dd MMM, hh:mm aa")
+                      .format(data[index].createdAt!)
+                      : "N/A",
                   textAlign: TextAlign.end,
                   style: AppTextStyle.textStyle12(
                       fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),

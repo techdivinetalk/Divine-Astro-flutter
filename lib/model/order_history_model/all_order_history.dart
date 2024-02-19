@@ -113,7 +113,7 @@ class AllHistoryData {
         "duration": duration,
         "get_customers": getCustomers?.toJson(),
         "get_gift": getGift,
-      };
+      }..removeWhere((key, value) => value == null);
 }
 
 class GetCustomers {

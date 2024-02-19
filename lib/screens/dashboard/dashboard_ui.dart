@@ -110,7 +110,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                         ),
                                         label: 'performance'.tr,
                                       ),
-                                      BottomNavigationBarItem(
+                                     /* BottomNavigationBarItem(
                                         icon: Column(
                                           children: [
                                             Assets.images.icSelectedSuggest.svg(
@@ -126,7 +126,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                           ],
                                         ),
                                         label: "Remedies",
-                                      ),
+                                      ),*/
                                       BottomNavigationBarItem(
                                         icon: Column(
                                           crossAxisAlignment:
@@ -195,12 +195,12 @@ class DashboardScreen extends GetView<DashboardController> {
                                     onTap: (value) {
 
                                       print("tap working");
-
-                                      if (controller.selectedIndex.value == 2) {
-                                        Get.toNamed(RouteName.orderHistory);
+                                      controller.selectedIndex.value = value;
+                                     /* if (controller.selectedIndex.value == 2) {
+                                       // Get.toNamed(RouteName.orderHistory);
                                       } else {
-                                        controller.selectedIndex.value = value;
-                                      }
+
+                                      }*/
                                     },
                                   ),
                                 ],
@@ -270,7 +270,7 @@ class DashboardScreen extends GetView<DashboardController> {
   static List<Widget> widgetOptions = <Widget>[
     const HomeUI(),
     const PerformanceUI(),
-    const SuggestRemediesUI(),
+    //const SuggestRemediesUI(),
     ChatAssistancePage(),
     ProfileUI()
   ];
