@@ -22,14 +22,19 @@ class KundliUi extends GetView<KundliController> {
     controller.keyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
 
     return Scaffold(
-      // resizeToAvoidBottomInset: true,
+
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: false,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 8),
-          child: Center(child: Assets.images.leftArrow.svg()),
+        leading: GestureDetector(
+          onTap: (){
+            Get.back();
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8),
+            child: Center(child: Assets.images.leftArrow.svg()),
+          ),
         ),
         title: CustomText(
           'Add Kundali',
@@ -254,7 +259,7 @@ class CheckYours extends GetView<KundliController> {
                                 ? DateFormat("dd/MM/yyyy")
                                     .parse(controller.yourDateController.text)
                                 : DateTime.now(),
-                            title: "selectDateBirth".tr,
+                            title: "Select Date Of Birth".tr,
                             btnTitle: "confirmDateBirth".tr,
                             pickerStyle: "DateCalendar",
                             looping: true,
@@ -294,7 +299,7 @@ class CheckYours extends GetView<KundliController> {
                                 ? DateFormat("hh:mm a")
                                     .parse(controller.yourTimeController.text)
                                 : DateTime.now(),
-                            title: "selectTimeBirth".tr,
+                            title: "Select Time Of Birth".tr,
                             btnTitle: "confirmTimeBirth".tr,
                             pickerStyle: "TimeCalendar",
                             looping: true,

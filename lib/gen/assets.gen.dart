@@ -927,7 +927,10 @@ class $AssetsLottieGen {
   /// File path: assets/lottie/generic loading .json
   LottieGenImage get genericLoading =>
       const LottieGenImage('assets/lottie/generic loading .json');
-
+  /// File path: assets/lottie/generic loading .json
+  LottieGenImage get loadingAnimation =>
+      const LottieGenImage('assets/lottie/loading_animation.json');
+ 
   /// File path: assets/lottie/gift.json
   LottieGenImage get gift => const LottieGenImage('assets/lottie/gift.json');
 
