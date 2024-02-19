@@ -64,6 +64,7 @@ class RemedySuggestedDataList {
     this.updatedAt,
     this.getCustomers,
     this.productDetails,
+    this.getOrder
   });
 
   factory RemedySuggestedDataList.fromJson(Map<String, dynamic> json) => RemedySuggestedDataList(
@@ -79,6 +80,7 @@ class RemedySuggestedDataList {
     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
     getCustomers: json["get_customers"] == null ? null : GetCustomers.fromJson(json["get_customers"]),
     productDetails: json["product_details"] == null ? null : ProductDetails.fromJson(json["product_details"]),
+    getOrder: json["get_order"] == null ? null : GetOrder.fromJson(json["get_order"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -94,6 +96,7 @@ class RemedySuggestedDataList {
     "updated_at": updatedAt?.toIso8601String(),
     "get_customers": getCustomers?.toJson(),
     "product_details": productDetails?.toJson(),
+    "get_order":getOrder?.toJson(),
   };
 }
 

@@ -169,7 +169,7 @@ class SuggestRemedies extends StatelessWidget {
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
-                Text("₹1000",
+                Text("₹${data[index].productDetails?.payoutValue}",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
@@ -183,7 +183,7 @@ class SuggestRemedies extends StatelessWidget {
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
-                Text("30%",
+                Text("${data[index].productDetails?.payoutType}%",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
@@ -199,10 +199,17 @@ class SuggestRemedies extends StatelessWidget {
                   "Total Earning",
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600),
                 ),
-                Text("₹${data[index].getOrder?.amount}",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w600,
-                        fontColor: appColors.lightGreen)),
+                Text(
+                  data[index].getOrder?.amount != null && data[index].getOrder?.amount != 0
+                      ? "₹${data[index].getOrder?.amount}"
+                      : "Nill",
+                  style: AppTextStyle.textStyle12(
+                    fontWeight: FontWeight.w600,
+                    fontColor: data[index].getOrder?.amount != null && data[index].getOrder?.amount != 0
+                        ? appColors.lightGreen
+                        : Colors.red,
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 8),
