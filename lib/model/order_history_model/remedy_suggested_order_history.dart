@@ -64,6 +64,7 @@ class RemedySuggestedDataList {
     this.updatedAt,
     this.getCustomers,
     this.productDetails,
+    this.getOrder
   });
 
   factory RemedySuggestedDataList.fromJson(Map<String, dynamic> json) => RemedySuggestedDataList(
@@ -79,6 +80,7 @@ class RemedySuggestedDataList {
     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
     getCustomers: json["get_customers"] == null ? null : GetCustomers.fromJson(json["get_customers"]),
     productDetails: json["product_details"] == null ? null : ProductDetails.fromJson(json["product_details"]),
+    getOrder: json["get_order"] == null ? null : GetOrder.fromJson(json["get_order"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -94,6 +96,7 @@ class RemedySuggestedDataList {
     "updated_at": updatedAt?.toIso8601String(),
     "get_customers": getCustomers?.toJson(),
     "product_details": productDetails?.toJson(),
+    "get_order":getOrder?.toJson(),
   };
 }
 
@@ -129,23 +132,33 @@ class ProductDetails {
   int? id;
   String? prodName;
   String? prodImage;
+  int? payoutType;
+  int? payoutValue;
 
   ProductDetails({
     this.id,
     this.prodName,
     this.prodImage,
+    this.payoutType,
+    this.payoutValue,
   });
 
-  factory ProductDetails.fromJson(Map<String, dynamic> json) => ProductDetails(
-    id: json["id"],
-    prodName: json["prod_name"],
-    prodImage: json["prod_image"],
-  );
+  factory ProductDetails.fromJson(Map<String, dynamic> json) {
+    return ProductDetails(
+      id: json["id"] as int?,
+      prodName: json["prod_name"] as String?,
+      prodImage: json["prod_image"] as String?,
+      payoutType: json["payout_type"] as int?,
+      payoutValue: json["payout_value"] as int?,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "prod_name": prodName,
     "prod_image": prodImage,
+    "payout_type": payoutType,
+    "payout_value": payoutValue,
   };
 }
 
@@ -155,23 +168,41 @@ class GetOrder {
   String? status;
   String? orderId;
   String? createdAt;
+  // New fields
+  String? additionalField1;
+  int? additionalField2;
 
-  GetOrder({this.id, this.amount, this.status, this.orderId, this.createdAt});
+  GetOrder({
+    this.id,
+    this.amount,
+    this.status,
+    this.orderId,
+    this.createdAt,
+    this.additionalField1,
+    this.additionalField2,
+  });
 
   factory GetOrder.fromJson(Map<String, dynamic> json) => GetOrder(
-    id: json['id'],
-    amount: json['amount'],
-    status: json['status'],
-    orderId: json['order_id'],
-    createdAt: json['created_at']
+    id: json['id'] as int?,
+    amount: json['amount'] as int?,
+    status: json['status'] as String?,
+    orderId: json['order_id'] as String?,
+    createdAt: json['created_at'] as String?,
+    // Assign values for new fields or use null checks
+    additionalField1: json['additional_field1'] as String?,
+    additionalField2: json['additional_field2'] as int?,
   );
+
 
   Map<String, dynamic> toJson() => {
     'id': id,
     'amount': amount,
-    'status':  status,
-    'order_id':  orderId,
+    'status': status,
+    'order_id': orderId,
     'created_at': createdAt,
+    // Include new fields in the JSON representation
+    'additional_field1': additionalField1,
+    'additional_field2': additionalField2,
   };
 }
 

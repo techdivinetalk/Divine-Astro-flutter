@@ -52,105 +52,18 @@ class NumberChangeReqUI extends GetView<NumberChangeReqController> {
                         ),
                       ),
                       SizedBox(height: 5.h),
-                      Row(
-                        children: [
-                          Obx(() => CustomButton(
-                                onTap: () {
-                                  countryPickerSheet(context, (value) {
-                                    String code = value.phoneCode;
-                                    if (!code.startsWith("+")) code = "+$code";
-                                    controller.countryCode.value = code;
-                                    Get.back();
-                                  });
-                                },
-                                child: Text(
-                                  controller.countryCode.value,
-                                  style: AppTextStyle.textStyle20(
-                                    fontColor: appColors.darkBlue,
-                                  ).copyWith(
-                                      decoration: TextDecoration.underline),
-                                ),
-                              )),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          Expanded(
-                            child: TextField(
-                              controller: controller.controller,
-                              style: AppTextStyle.textStyle20(
-                                fontColor: appColors.darkBlue,
-                              ),
-                              maxLength: 10,
-                              textInputAction: TextInputAction.done,
-                              keyboardType:
-                                  const TextInputType.numberWithOptions(),
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              decoration:  InputDecoration(
-                                counterText: '',
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: appColors.greyColor,
-                                  ),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: appColors.greyColor,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 10.w),
-                          Expanded(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Obx(
-                                () => Material(
-                                  color: controller.enableUpdateButton.value
-                                      ? appColors.lightYellow
-                                      : appColors.greyColor,
-                                  child: InkWell(
-                                    onTap: controller.enableUpdateButton.value
-                                        ? () {
-                                            if (controller
-                                                    .controller.text.length ==
-                                                10) {
-                                              controller.sendOtpForNumberChange();
-                                            } else {
-                                              divineSnackBar(
-                                                data: "phoneNumberMustBe10Digit"
-                                                    .tr,
-                                              );
-                                            }
-                                          }
-                                        : null,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 8.w,
-                                          vertical: 10.h,
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            "update".tr,
-                                            style: AppTextStyle.textStyle16(
-                                              fontColor: appColors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+
+                      PhoneNumberInput(
+                        controller: controller.controller,
+                        countryCode: controller.countryCode,
+                        enableUpdateButton: controller.enableUpdateButton,
+                        onButtonPressed: () {
+                          if (controller.controller.text.length == 10) {
+                            controller.sendOtpForNumberChange();
+                          } else {
+                            divineSnackBar(data: "phoneNumberMustBe10Digit".tr);
+                          }
+                        },
                       ),
                       SizedBox(height: 25.h),
                     ],
@@ -161,6 +74,111 @@ class NumberChangeReqUI extends GetView<NumberChangeReqController> {
           ),
         ),
       ),
+    );
+  }
+}
+class PhoneNumberInput extends StatelessWidget {
+  final TextEditingController controller;
+  final RxString countryCode;
+  final RxBool enableUpdateButton;
+  final Function() onButtonPressed;
+
+  const PhoneNumberInput({super.key,
+    required this.controller,
+    required this.countryCode,
+    required this.enableUpdateButton,
+    required this.onButtonPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Obx(() => CustomButton(
+          onTap: () {
+            countryPickerSheet(context, (value) {
+              String code = value.phoneCode;
+              if (!code.startsWith("+")) code = "+$code";
+              countryCode.value = code;
+              Get.back();
+            });
+          },
+          child: Text(
+            countryCode.value,
+            style: AppTextStyle.textStyle20(
+              fontColor: appColors.darkBlue,
+            ).copyWith(
+              decoration: TextDecoration.underline,
+            ),
+          ),
+        )),
+        SizedBox(
+          width: 10.w,
+        ),
+        Expanded(
+          flex: 2,
+          child: TextField(
+            controller: controller,
+            style: AppTextStyle.textStyle20(
+              fontColor: appColors.darkBlue,
+            ),
+            maxLength: 10,
+            textInputAction: TextInputAction.done,
+            keyboardType: const TextInputType.numberWithOptions(),
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly
+            ],
+            decoration: InputDecoration(
+              counterText: '',
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: appColors.greyColor,
+                ),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: appColors.greyColor,
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(width: 10.w),
+        Expanded(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Obx(
+                  () => Material(
+                color: enableUpdateButton.value
+                    ? appColors.lightYellow
+                    : appColors.greyColor,
+                child: InkWell(
+                  onTap: enableUpdateButton.value ? onButtonPressed : null,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 2.w,
+                        vertical: 10.h,
+                      ),
+                      child: Center(
+                        child: Text(
+                          "update".tr,
+                          style: AppTextStyle.textStyle16(
+                            fontColor: appColors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

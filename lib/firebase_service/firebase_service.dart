@@ -157,7 +157,7 @@ class AppFirebaseService {
     watcher.nameStream.listen((value) {
       if (value != "") {
         _database.child("order/$value").onValue.listen((event) async {
-          orderData.value = (event.snapshot.value == null
+          orderData(event.snapshot.value == null
               ? <String, String>{}
               : Map<String, dynamic>.from(
                   event.snapshot.value! as Map<Object?, Object?>));
@@ -166,52 +166,8 @@ class AppFirebaseService {
                 event.snapshot.value! as Map<Object?, Object?>);
             debugPrint("orderData-------> $orderData");
             if (orderData["status"] != null) {
-              if (orderData["orderPurchase"] != null) {
-                sendBroadcast(BroadcastMessage(name: "updateTime", data: {
-                  "talktime": orderData["talktime"],
-                }));
-              }
-              if (orderData.containsKey("card")) {
-                print("displayCard");
-                sendBroadcast(
-                    BroadcastMessage(name: "displayCard", data: null));
-              }
-              if (orderData["end_time"] != null) {
-                print("endTime");
-                sendBroadcast(BroadcastMessage(
-                    name: "endTime", data: null));
-              }
               if (orderData["status"] == "0") {
                 acceptBottomWatcher.strValue = "0";
-                sendBroadcast(BroadcastMessage(
-                    name: "AcceptChat",
-                    data: {"orderId": value, "orderData": orderData}));
-                // acceptChatRequestBottomSheet(Get.context!,
-                // onPressed: () async {
-                //   try {
-                //     if (await acceptOrRejectChat(
-                //         orderId: int.parse(value.toString()),
-                //         queueId: orderData["queue_id"])) {
-                //       acceptBottomWatcher.strValue = "1";
-                //       writeData("order/$value", {"status": "1"});
-                //       appSocket.sendConnectRequest(
-                //           astroId: orderData["astroId"],
-                //           custId: orderData["userId"]);
-                //     }
-                //   } on Exception catch (e) {
-                //     debugPrint(e.toString());
-                //   } finally {}
-                // },
-                //     orderStatus: orderData["status"],
-                //     customerName: orderData["customerName"].toString(),
-                //     dob: orderData["dob"].toString(),
-                //     placeOfBirth: orderData["placeOfBirth"].toString(),
-                //     timeOfBirth: orderData["timeOfBirth"].toString(),
-                //     maritalStatus: orderData["maritalStatus"].toString(),
-                //     walletBalance: orderData["walletBalance"].toString(),
-                //     problemArea: orderData["problemArea"].toString(),
-                //     orderData: orderData);
-
                 await Navigator.of(Get.context!).push(
                   MaterialPageRoute(
                     builder: (context) {
@@ -222,19 +178,7 @@ class AppFirebaseService {
               } else if (orderData["status"] == "1") {
                 if (acceptBottomWatcher.currentName != "1") {
                   acceptBottomWatcher.strValue = "1";
-                  // acceptChatRequestBottomSheet(Get.context!,
-                  //     onPressed: () {},
-                  //     orderStatus: orderData["status"],
-                  //     customerName: orderData["customerName"].toString(),
-                  //     dob: orderData["dob"].toString(),
-                  //     walletBalance: orderData["walletBalance"].toString(),
-                  //     placeOfBirth: orderData["placeOfBirth"].toString(),
-                  //     timeOfBirth: orderData["timeOfBirth"].toString(),
-                  //     maritalStatus: orderData["maritalStatus"].toString(),
-                  //     problemArea: orderData["problemArea"].toString(),
-                  //     orderData: orderData);
-
-                   Navigator.of(Get.context!).push(
+                  await Navigator.of(Get.context!).push(
                     MaterialPageRoute(
                       builder: (context) {
                         return const AcceptChatRequestScreen();
@@ -248,17 +192,6 @@ class AppFirebaseService {
                await sendBroadcast(BroadcastMessage(
                     name: "ReJoinChat",
                     data: {"orderId": value, "orderData": orderData}));
-               print("chatMessageWithSocketUI going in chat");
-             //   if(Get.context?.mounted??false) {
-                  await Get.toNamed(RouteName.chatMessageWithSocketUI,
-                      arguments: {"orderData": orderData});
-                  WidgetsBinding.instance.endOfFrame.then(
-                        (_) async {
-
-                          Get.back();
-                    },
-                  );
-             //   }
                 // WidgetsBinding.instance.endOfFrame.then(
                 //   (_) async {
                 //     await Get.toNamed(RouteName.chatMessageWithSocketUI,
@@ -266,15 +199,7 @@ class AppFirebaseService {
                 //   },
                 // );
               }
-            } else {
-              preferenceService.remove(SharedPreferenceService.talkTime);
-              debugPrint("remove method called");
-              sendBroadcast(BroadcastMessage(name: "EndChat"));
             }
-          } else {
-            preferenceService.remove(SharedPreferenceService.talkTime);
-            debugPrint("remove method called");
-            sendBroadcast(BroadcastMessage(name: "EndChat"));
           }
         });
       }

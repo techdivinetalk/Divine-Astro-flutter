@@ -14,10 +14,8 @@ import "package:divine_astrologer/model/chat_offline_model.dart";
 import "package:divine_astrologer/model/res_login.dart";
 import "package:divine_astrologer/repository/message_template_repository.dart";
 import "package:divine_astrologer/repository/user_repository.dart";
-import "package:divine_astrologer/screens/dashboard/dashboard_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
-import "package:divine_astrologer/screens/message_template/message_template_controller.dart";
 import "package:divine_astrologer/zego_call/zego_service.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
@@ -90,11 +88,12 @@ class ChatMessageWithSocketController extends GetxController
   RxBool isDataLoad = false.obs;
   RxBool isOngoingChat = false.obs;
   RxString chatStatus = "Offline".obs;
+
   // DashboardController dashboardController = Get.find<DashboardController>();
   // MessageTemplateController messageTemplateController = Get.find<MessageTemplateController>();
   RxBool isTyping = false.obs;
-  BroadcastReceiver broadcastReceiver = BroadcastReceiver(
-      names: <String>["EndChat", "deliveredMsg", "updateTime", "displayCard"]);
+  BroadcastReceiver broadcastReceiver =
+      BroadcastReceiver(names: <String>["deliveredMsg"]);
   late Duration timeDifference;
   RxList<MessageTemplates> messageTemplates = <MessageTemplates>[].obs;
 
@@ -159,17 +158,36 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   var isCardVisible = false.obs;
+
   // RxInt cardListCount = 0.obs;
 
   @override
   void onInit() {
     super.onInit();
+    AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
+      print("orderData Changed");
+      if (p0["status"] == null) {
+        WidgetsBinding.instance.endOfFrame.then(
+          (_) async {
+            socket.socket?.disconnect();
+            chatTimer?.cancel();
+            Get.back();
+            Get.back();
+          },
+        );
+        return;
+      }
+      if (p0["card"] != null && p0["card"]["isCardVisible"] != null) {
+        isCardVisible.value = p0["card"]["isCardVisible"];
+      }
+      int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
+      talkTimeStartTimer(remainingTime);
+    });
     int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
     talkTimeStartTimer(remainingTime);
     broadcastReceiver.start();
     print("isCardVisible");
     if (AppFirebaseService().orderData.value.containsKey("card")) {
-
       isCardVisible.value =
           AppFirebaseService().orderData.value["card"]["isCardVisible"];
 
@@ -178,25 +196,20 @@ class ChatMessageWithSocketController extends GetxController
     }
     //isCardVisible = AppFirebaseService().orderData.value["card"] != null ? AppFirebaseService().orderData.value["card"]["isCardVisible"] : true;
     broadcastReceiver.messages.listen((BroadcastMessage event) {
-      if (event.name == "displayCard") {
-        print(
-            "displayCard--${AppFirebaseService().orderData.value["card"]["isCardVisible"]}");
-
-        isCardVisible.value =
-            AppFirebaseService().orderData.value["card"]["isCardVisible"];
-
-      } else if (event.name == 'endTime') {
-        int remainingTime =
-            AppFirebaseService().orderData.value["end_time"] ?? 0;
-        talkTimeStartTimer(remainingTime);
-      } else if (event.name == "updateTime") {
-        debugPrint("talkTime hello: ${event.data?["talktime"]}");
-        updateTime(event.data?["talktime"], true);
-      } else if (event.name == "EndChat") {
-        navigateToOtherScreen();
-
-        broadcastReceiver.stop();
-      } else if (event.name == 'deliveredMsg') {
+      // if (event.name == "displayCard") {
+      //   print(
+      //       "displayCard--${AppFirebaseService().orderData.value["card"]["isCardVisible"]}");
+      //
+      //   isCardVisible.value =
+      //       AppFirebaseService().orderData.value["card"]["isCardVisible"];
+      // } else if (event.name == 'endTime') {
+      // } else if (event.name == "updateTime") {
+      //   // debugPrint("talkTime hello: ${event.data?["talktime"]}");
+      //   // updateTime(event.data?["talktime"], true);
+      // } else if (event.name == "EndChat") {
+      //
+      // } else
+      if (event.name == 'deliveredMsg') {
         var response = event.data?['deliveredMsgList'];
         response.forEach((key, value) {
           value.forEach((innerKey, innerValue) {
@@ -250,6 +263,7 @@ class ChatMessageWithSocketController extends GetxController
       //  }
       // }
       updateTime(AppFirebaseService().orderData.value["talktime"], false);
+      //updateTime(data["orderData"]["talktime"], false);
 
       // if (data["orderData"]["talktime"] != null) {
       //   if (preferenceService.getTalkTime() == 0) {
@@ -270,14 +284,14 @@ class ChatMessageWithSocketController extends GetxController
       // }
 
     userData = preferenceService.getUserDetail();
-print("oninir");
+    print("oninir");
     userDataKey = "chat_${currentUserId.value}";
     getChatList();
     socketReconnect();
   }
 
   navigateToOtherScreen() async {
-    await Future.delayed(Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 300));
     Get.offAllNamed(RouteName.dashboard);
   }
 
@@ -288,28 +302,28 @@ print("oninir");
     update();
   }
 
-  updateTime(int? talk, bool isTimeUpdate) {
-    debugPrint('my talk: $talk');
-    if (talk != null) {
-      if (isTimeUpdate) {
-        final int talkTime =
-            talk + (DateTime.now().millisecondsSinceEpoch ~/ 1000).toInt();
-        debugPrint(
-            "millisecondsSinceEpoch ----> ${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
-        preferenceService.setTalkTime(talkTime);
-      } else {
-        if (preferenceService.getTalkTime() == 0) {
-          final int talkTime =
-              talk + (DateTime.now().millisecondsSinceEpoch ~/ 1000).toInt();
-          debugPrint(
-              "millisecondsSinceEpoch ----> ${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
-          preferenceService.setTalkTime(talkTime);
-        } else {
-          debugPrint("else part - ${preferenceService.getTalkTime() ?? 0}");
-        }
-      }
-    }
-  }
+  // updateTime(int? talk, bool isTimeUpdate) {
+  //   debugPrint('my talk: $talk');
+  //   if (talk != null) {
+  //     if (isTimeUpdate) {
+  //       final int talkTime =
+  //           talk + (DateTime.now().millisecondsSinceEpoch ~/ 1000).toInt();
+  //       debugPrint(
+  //           "millisecondsSinceEpoch ----> ${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
+  //       preferenceService.setTalkTime(talkTime);
+  //     } else {
+  //       if (preferenceService.getTalkTime() == 0) {
+  //         final int talkTime =
+  //             talk + (DateTime.now().millisecondsSinceEpoch ~/ 1000).toInt();
+  //         debugPrint(
+  //             "millisecondsSinceEpoch ----> ${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
+  //         preferenceService.setTalkTime(talkTime);
+  //       } else {
+  //         debugPrint("else part - ${preferenceService.getTalkTime() ?? 0}");
+  //       }
+  //     }
+  //   }
+  // }
 
   getMessageTemplates() async {
     try {
@@ -374,6 +388,7 @@ print("oninir");
     print("ZegoService().controller.hangUp end");
     return Future<void>.value();
   }
+
   //
 
   socketReconnect() {
@@ -872,7 +887,7 @@ print("oninir");
     var randomTarotCards = await printRandomTarotCards(choice);
     hsMap["listOfCard"] = randomTarotCards;
     int orderId = AppFirebaseService().orderData.value["orderId"] ?? 0;
-    print("hashmap"+ hsMap.toString());
+    print("hashmap" + hsMap.toString());
     if (orderId != 0) {
       await FirebaseDatabase.instance
           .ref()
@@ -940,8 +955,7 @@ print("oninir");
   int getListOfCardLength(BuildContext context) {
     var orderData = AppFirebaseService().orderData.value;
     if (isCardVisible.value == true && orderData.containsKey("card")) {
-
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
       var listOfCard =
           AppFirebaseService().orderData.value['card']['listOfCard'] as Map;

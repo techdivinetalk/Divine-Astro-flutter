@@ -16,7 +16,7 @@ class NumberChangeReqController extends GetxController {
   late UserData userData;
   late final TextEditingController controller;
   late final TextEditingController pinController;
-  Rx<String> countryCode = "+91".obs;
+  RxString countryCode = "+91".obs;
   FocusNode focusNodeOtp = FocusNode();
   final repository = Get.put(NumberChangeReqRepository());
   late NumberChangeResponse numberChangeResponse;
