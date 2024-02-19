@@ -122,8 +122,22 @@ class OrderHistoryController extends GetxController {
         update(['allOrders']);
 
       } else if (type == 1) {
+        ChatOrderHistoryModelClass data =
+        await OrderHistoryRepository().getChatOrderHistory(params);
+        apiCalling.value = false;
+        var history = data.data;
+
+        if (history!.isNotEmpty && data.data != null) {
+          emptyMsg.value = "";
+          if (page == 1) chatHistoryList.clear();
+          chatHistoryList.addAll(history);
+          // shopPageCount++;
+        } else {
+          emptyMsg.value = data.message ?? "No data found!";
+        }
+      } else if (type == 2) {
         CallOrderHistoryModelClass data =
-            await OrderHistoryRepository().getCallOrderHistory(params);
+        await OrderHistoryRepository().getCallOrderHistory(params);
         apiCalling.value = false;
         var history = data.data;
 
@@ -136,20 +150,6 @@ class OrderHistoryController extends GetxController {
           emptyMsg.value = data.message ?? "No data found!";
         }
         update();
-      } else if (type == 2) {
-        ChatOrderHistoryModelClass data =
-            await OrderHistoryRepository().getChatOrderHistory(params);
-        apiCalling.value = false;
-        var history = data.data;
-
-        if (history!.isNotEmpty && data.data != null) {
-          emptyMsg.value = "";
-          if (page == 1) chatHistoryList.clear();
-          chatHistoryList.addAll(history);
-          // shopPageCount++;
-        } else {
-          emptyMsg.value = data.message ?? "No data found!";
-        }
       } else if (type == 3) {
         GiftOrderHistoryModelClass data =
             await OrderHistoryRepository().getGiftOrderHistory(params);
