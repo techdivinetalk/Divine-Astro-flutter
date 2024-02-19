@@ -15,6 +15,8 @@ import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:get/get.dart";
 import "package:lottie/lottie.dart";
 
+import "MiddleWare.dart";
+
 // acceptChatRequestBottomSheet(BuildContext context,
 //     {required void Function() onPressed,
 //     required orderStatus,
@@ -96,9 +98,10 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
   @override
   void initState() {
     super.initState();
-    
+    print("MiddleWare.instance.currentPage");
+    print(MiddleWare.instance.currentPage);
     AppFirebaseService().orderData.listen(
-      (Map<String, dynamic> p0) {
+      (Map<String, dynamic> p0) async {
         print("AppFirebaseService().orderData listner working");
 
         final dynamic? cond = p0["status"];
@@ -112,16 +115,25 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
             cond == "2" ||
             cond == 2) {
         } else {
-          WidgetsBinding.instance.endOfFrame.then(
-            (_) async {
-              if (mounted) {
-                bool canPop = Navigator.canPop(context);
-                if (canPop) {
-                  Navigator.pop(context);
+          if(cond == "3" || cond == 3){
+            print("orderId status Changed");
+            await Get.toNamed(RouteName.chatMessageWithSocketUI,
+                arguments: {"orderData": AppFirebaseService().orderData.value});
+          }
+          if (MiddleWare.instance.currentPage == "") {
+            print("MiddleWare.instance.currentPage sending you back");
+
+            WidgetsBinding.instance.endOfFrame.then(
+                  (_) async {
+                if (mounted) {
+                  bool canPop = Navigator.canPop(context);
+                  if (canPop) {
+                    Navigator.pop(context);
+                  } else {}
                 } else {}
-              } else {}
-            },
-          );
+              },
+            );
+          }
         }
       },
     );
