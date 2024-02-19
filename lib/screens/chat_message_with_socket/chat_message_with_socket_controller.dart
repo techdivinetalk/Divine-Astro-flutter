@@ -228,12 +228,9 @@ class ChatMessageWithSocketController extends GetxController
     userLeavePrivateChatListenerSocket();
     customerLeavedPrivateChatListenerSocket();
 
-    if (Get.arguments != null) {
-      final data = Get.arguments;
-      debugPrint("data------> ${data.toString()}");
       socket.startAstroCustumerSocketEvent(
-        orderId: data["orderData"]["orderId"].toString(),
-        userId: data["orderData"]["userId"],
+        orderId: AppFirebaseService().orderData.value["orderId"].toString(),
+        userId: AppFirebaseService().orderData.value["userId"],
       );
       //  if (Get.arguments is ResAstroChatListener) {
       sendReadMessageStatus = true;
@@ -241,10 +238,10 @@ class ChatMessageWithSocketController extends GetxController
       chatStatus.value = "Online";
       isOngoingChat.value = true;
       //  currentChatUserId.value = data['userId'];
-      currentUserId.value = int.parse(data["orderData"]['userId'].toString());
-      customerName.value = data["orderData"]["customerName"] ?? "";
-      profileImage.value = data["orderData"]["customerImage"] != null
-          ? "${preference.getBaseImageURL()}/${data['orderData']['customerImage']}"
+      currentUserId.value = int.parse(AppFirebaseService().orderData.value['userId'].toString());
+      customerName.value = AppFirebaseService().orderData.value["customerName"] ?? "";
+      profileImage.value = AppFirebaseService().orderData.value["customerImage"] != null
+          ? "${preference.getBaseImageURL()}/${AppFirebaseService().orderData.value['customerImage']}"
           : "";
       if (astroChatWatcher.value.orderId != null) {
         timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0,
@@ -252,7 +249,7 @@ class ChatMessageWithSocketController extends GetxController
       }
       //  }
       // }
-      updateTime(data["orderData"]["talktime"], false);
+      updateTime(AppFirebaseService().orderData.value["talktime"], false);
 
       // if (data["orderData"]["talktime"] != null) {
       //   if (preferenceService.getTalkTime() == 0) {
@@ -271,7 +268,7 @@ class ChatMessageWithSocketController extends GetxController
       // if (preferenceService.getTalkTime() != null) {
       //   talkTimeStartTimer(preferenceService.getTalkTime() ?? 0);
       // }
-    }
+
     userData = preferenceService.getUserDetail();
 print("oninir");
     userDataKey = "chat_${currentUserId.value}";

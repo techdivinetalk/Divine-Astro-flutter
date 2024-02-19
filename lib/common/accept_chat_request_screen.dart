@@ -96,36 +96,6 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
   @override
   void initState() {
     super.initState();
-    
-    AppFirebaseService().orderData.listen(
-      (Map<String, dynamic> p0) {
-        print("AppFirebaseService().orderData listner working");
-
-        final dynamic? cond = p0["status"];
-
-        print("AppFirebaseService().orderData listner working cond:: $cond");
-
-        if (cond == "0" ||
-            cond == 0 ||
-            cond == "1" ||
-            cond == 1 ||
-            cond == "2" ||
-            cond == 2) {
-        } else {
-          WidgetsBinding.instance.endOfFrame.then(
-            (_) async {
-              if (mounted) {
-                bool canPop = Navigator.canPop(context);
-                if (canPop) {
-                  Navigator.pop(context);
-                } else {}
-              } else {}
-            },
-          );
-        }
-      },
-    );
-
     // broadcastReceiver.start();
     // broadcastReceiver.messages.listen(
     //   (event) {

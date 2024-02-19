@@ -234,7 +234,7 @@ class AppFirebaseService {
                   //     problemArea: orderData["problemArea"].toString(),
                   //     orderData: orderData);
 
-                  await Navigator.of(Get.context!).push(
+                   Navigator.of(Get.context!).push(
                     MaterialPageRoute(
                       builder: (context) {
                         return const AcceptChatRequestScreen();
@@ -243,16 +243,22 @@ class AppFirebaseService {
                   );
                 }
               } else if (orderData["status"] == "2") {
-              await sendBroadcast(BroadcastMessage(name: "backReq", data: null));
+
               } else if (orderData["status"] == "3") {
                await sendBroadcast(BroadcastMessage(
                     name: "ReJoinChat",
                     data: {"orderId": value, "orderData": orderData}));
-
-                if(Get.context?.mounted??false) {
+               print("chatMessageWithSocketUI going in chat");
+             //   if(Get.context?.mounted??false) {
                   await Get.toNamed(RouteName.chatMessageWithSocketUI,
                       arguments: {"orderData": orderData});
-                }
+                  WidgetsBinding.instance.endOfFrame.then(
+                        (_) async {
+
+                          Get.back();
+                    },
+                  );
+             //   }
                 // WidgetsBinding.instance.endOfFrame.then(
                 //   (_) async {
                 //     await Get.toNamed(RouteName.chatMessageWithSocketUI,
