@@ -79,7 +79,7 @@ class AllOrderHistoryUi extends StatelessWidget {
               children: [
                 Text(
                   // "chat".tr,
-                  data[index].productType == 7 ? 'Chat' : 'Call',
+                  data[index].productType != 7 ? 'Chat' : 'Call',
                   style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w400,
                     /*fontColor: "$type" == "PENALTY"

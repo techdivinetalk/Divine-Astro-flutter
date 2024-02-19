@@ -13,7 +13,7 @@ import '../../../model/order_history_model/remedy_suggested_order_history.dart';
 import '../order_history_controller.dart';
 
 class SuggestRemedies extends StatelessWidget {
-  SuggestRemedies({Key? key}) : super(key: key);
+  SuggestRemedies({super.key});
 
   // final ScrollController? controller;
 
