@@ -210,8 +210,8 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
                   AppTextStyle.textStyle16(fontWeight: FontWeight.w400),
               tabs: [
                 ("all".tr),
-                "chat".tr,
                 "call".tr,
+                "chat".tr,
                 "Gifts".tr,
                 ("remedySuggested".tr),
               ].map((e) => Tab(text: e)).toList(),
@@ -227,13 +227,13 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
                     ? const LoadingWidget()
                     : const AllOrderHistoryUi()),
                 Obx(() => (controller.apiCalling.value &&
-                    controller.chatPageCount == 1)
-                    ? const LoadingWidget()
-                    : const ChatOrderHistory()),
-                Obx(() => (controller.apiCalling.value &&
                     controller.callPageCount == 1)
                     ? const LoadingWidget()
                     : const CallOrderHistory()),
+                Obx(() => (controller.apiCalling.value &&
+                    controller.chatPageCount == 1)
+                    ? const LoadingWidget()
+                    : const ChatOrderHistory()),
                 Obx(() => (controller.apiCalling.value &&
                     controller.liveGiftPageCount == 1)
                     ? const LoadingWidget()
@@ -242,6 +242,10 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
                     controller.remedyPageCount == 1)
                     ? const LoadingWidget()
                     :  SuggestRemedies()),
+               /* Obx(() => (controller.apiCalling.value &&
+                    controller.chatPageCount == 1)
+                    ? const LoadingWidget()
+                    : const ChatOrderHistory()),*/
               ],
             ),
           ),

@@ -57,6 +57,8 @@ class AllHistoryData {
   int? astrologerId;
   int? productId;
   String? duration;
+  int? quantity; // New field
+  int? feedbackReviewStatus;
   GetCustomers? getCustomers;
   dynamic getGift;
 
@@ -73,47 +75,53 @@ class AllHistoryData {
     this.astrologerId,
     this.productId,
     this.duration,
+    this.quantity,
+    this.feedbackReviewStatus,
     this.getCustomers,
     this.getGift,
   });
 
   factory AllHistoryData.fromJson(Map<String, dynamic> json) => AllHistoryData(
-        id: json["id"],
-        amount: json["amount"],
-        orderId: json["order_id"],
-        status: json["status"],
-        transactionId: json["transaction_id"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        productType: json["product_type"],
-        userId: json["user_id"],
-        roleId: json["role_id"],
-        astrologerId: json["astrologer_id"],
-        productId: json["product_id"],
-        duration: json["duration"],
-        getCustomers: json["get_customers"] == null
-            ? null
-            : GetCustomers.fromJson(json["get_customers"]),
-        getGift: json["get_gift"],
-      );
+    id: json["id"] as int?,
+    amount: json["amount"] as int?,
+    orderId: json["order_id"] as String?,
+    status: json["status"] as String?,
+    transactionId: json["transaction_id"] as int?,
+    createdAt: json["created_at"] == null
+        ? null
+        : DateTime.tryParse(json["created_at"] as String),
+    productType: json["product_type"] as int?,
+    userId: json["user_id"] as int?,
+    roleId: json["role_id"] as int?,
+    astrologerId: json["astrologer_id"] as int?,
+    productId: json["product_id"] as int?,
+    duration: json["duration"] as String?,
+    quantity: json["quantity"] as int?,
+    feedbackReviewStatus: json["feedback_review_status"] as int?,
+    getCustomers: json["get_customers"] == null
+        ? null
+        : GetCustomers.fromJson(json["get_customers"] as Map<String, dynamic>),
+    getGift: json["get_gift"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "amount": amount,
-        "order_id": orderId,
-        "status": status,
-        "transaction_id": transactionId,
-        "created_at": createdAt?.toIso8601String(),
-        "product_type": productType,
-        "user_id": userId,
-        "role_id": roleId,
-        "astrologer_id": astrologerId,
-        "product_id": productId,
-        "duration": duration,
-        "get_customers": getCustomers?.toJson(),
-        "get_gift": getGift,
-      };
+    "id": id,
+    "amount": amount,
+    "order_id": orderId,
+    "status": status,
+    "transaction_id": transactionId,
+    "created_at": createdAt?.toIso8601String(),
+    "product_type": productType,
+    "user_id": userId,
+    "role_id": roleId,
+    "astrologer_id": astrologerId,
+    "product_id": productId,
+    "duration": duration,
+    "quantity": quantity, // Include new field in the JSON representation
+    "feedback_review_status": feedbackReviewStatus,
+    "get_customers": getCustomers?.toJson(),
+    "get_gift": getGift,
+  }..removeWhere((key, value) => value == null);
 }
 
 class GetCustomers {

@@ -178,12 +178,13 @@ class Routes {
         page: () => const BlockedUserUI(),
         name: RouteName.blockedUser,
         binding: BlockedUserBinding()),
-    CustomGetPage(
-        name: RouteName.editProfileUI, page: () => const EditProfileUI()),
-    // GetPage(
-    //     page: () => const EditProfileUI(),
-    //     name: RouteName.editProfileUI,
-    //     binding: EditProfileBinding()),
+    /*// GetPage(
+    //     name: RouteName.editProfileUI, page: () => const EditProfileUI(),
+    // ),*/
+    GetPage(
+        page: () => const EditProfileUI(),
+        name: RouteName.editProfileUI,
+        binding: EditProfileBinding()),
     GetPage(
         page: () => const OrderHistoryUI(),
         name: RouteName.orderHistory,
@@ -252,9 +253,9 @@ class Routes {
         page: () => const ChatMessageWithSocketUI(),
         name: RouteName.chatMessageWithSocketUI,
         binding: ChatMessageWithSocketBinding()),
-    GetPage(
+   /* GetPage(
         page: () => const SuggestRemediesView(),
-        name: RouteName.suggestRemediesView),
+        name: RouteName.suggestRemediesView),*/
     GetPage(
         page: () => const SuggestRemediesSubUI(),
         name: RouteName.suggestRemediesSubUI,

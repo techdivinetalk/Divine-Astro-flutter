@@ -202,8 +202,8 @@ class SplashController extends GetxController {
   final repository = Get.put(UserRepository());
 
   void navigation() async {
-    if (preferenceService.getToken() == null ||
-        preferenceService.getToken() == "") {
+    if (preferenceService.getUserDetail() == null ||
+          preferenceService.getToken() == null || preferenceService.getToken() == "") {
       await getInitialLoginImages().then(
         (value) async => await preferenceService
             .saveLoginImages(jsonEncode(value.toJson()))

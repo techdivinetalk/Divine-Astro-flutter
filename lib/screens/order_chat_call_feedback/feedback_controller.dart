@@ -21,7 +21,7 @@ class FeedbackController extends GetxController {
   Set<int> processedPages = {};
   RxInt currentPage = 1.obs;
 
-  AstroFeedbackDetailData? astroFeedbackDetailData;
+  Rx<AstroFeedbackDetailData?> astroFeedbackDetailData = Rx<AstroFeedbackDetailData?>(null);
   var homeController = Get.find<HomeController>();
   Order? order;
   RxList<FeedbackData> feedbacks = <FeedbackData>[].obs;
@@ -71,11 +71,10 @@ class FeedbackController extends GetxController {
     loading.value = Loading.initial;
     update();
     try {
-      var response =
-      await callChatFeedBackRepository.getAstroFeedbackDetail(orderId);
+      var response = await callChatFeedBackRepository.getAstroFeedbackDetail(orderId);
       isFeedbackAvailable.value = response.success ?? false;
       if (isFeedbackAvailable.value) {
-        astroFeedbackDetailData = response.data;
+        astroFeedbackDetailData.value = response.data;
       }
     } catch (error) {
       if (error is AppException) {

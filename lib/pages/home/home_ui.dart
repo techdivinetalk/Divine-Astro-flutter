@@ -537,11 +537,7 @@ class HomeUI extends GetView<HomeController> {
       initialData: BroadcastMessage(name: '', data: {}),
       stream: controller.broadcastReceiver.messages,
       builder: (context, broadcastSnapshot) {
-
-
         Map<String, dynamic>? data = broadcastSnapshot.data?.data;
-
-
         return data?["userName"] == null
             ? const SizedBox()
             : Container(
@@ -639,7 +635,7 @@ class HomeUI extends GetView<HomeController> {
                                 ),
                               ],
                             ),
-                          ), 
+                          ),
                           GestureDetector(
                             onTap: () {
                               DateTime time =
@@ -1238,7 +1234,6 @@ class HomeUI extends GetView<HomeController> {
               ),
               InkWell(
                 onTap: () {
-
                   Get.toNamed(RouteName.discountOffers)!.then((value) {
                     controller.homeData?.offers?.customOffer = value;
                     controller.update();
@@ -1321,7 +1316,7 @@ class HomeUI extends GetView<HomeController> {
                           }
                         }
                       }*/
-                    {
+                        {
                       if (data.isOn!) {
                         data.isOn = !data.isOn!;
                         controller.updateOfferType(
