@@ -150,6 +150,7 @@ class CallOrderHistory extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             CommonOptionRow(
+              feedbackReviewStatus: data[index].feedbackReviewStatus ?? 0,
               leftBtnTitle: "FeedBack".tr,
               onLeftTap: () {
                 Get.toNamed(RouteName.feedback, arguments: {

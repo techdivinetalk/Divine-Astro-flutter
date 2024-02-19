@@ -50,6 +50,8 @@ class CallHistoryData {
   int? productId;
   String? duration;
   GetCustomers? getCustomers;
+  int? quantity; // New field
+  int? feedbackReviewStatus; // New field
 
   CallHistoryData({
     this.id,
@@ -65,23 +67,32 @@ class CallHistoryData {
     this.productId,
     this.duration,
     this.getCustomers,
+    this.quantity,
+    this.feedbackReviewStatus,
   });
 
   factory CallHistoryData.fromJson(Map<String, dynamic> json) => CallHistoryData(
-    id: json["id"],
-    amount: json["amount"],
-    orderId: json["order_id"],
-    status: json["status"],
-    transactionId: json["transaction_id"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    productType: json["product_type"],
-    userId: json["user_id"],
-    roleId: json["role_id"],
-    astrologerId: json["astrologer_id"],
-    productId: json["product_id"],
-    duration: json["duration"],
-    getCustomers: json["get_customers"] == null ? null : GetCustomers.fromJson(json["get_customers"]),
+    id: json["id"] as int?,
+    amount: json["amount"] as int?,
+    orderId: json["order_id"] as String?,
+    status: json["status"] as String?,
+    transactionId: json["transaction_id"] as int?,
+    createdAt: json["created_at"] == null
+        ? null
+        : DateTime.parse(json["created_at"]),
+    productType: json["product_type"] as int?,
+    userId: json["user_id"] as int?,
+    roleId: json["role_id"] as int?,
+    astrologerId: json["astrologer_id"] as int?,
+    productId: json["product_id"] as int?,
+    duration: json["duration"] as String?,
+    getCustomers: json["get_customers"] == null
+        ? null
+        : GetCustomers.fromJson(json["get_customers"]),
+    quantity: json["quantity"] as int?,
+    feedbackReviewStatus: json["feedback_review_status"] as int?,
   );
+
 
   Map<String, dynamic> toJson() => {
     "id": id,
@@ -97,6 +108,8 @@ class CallHistoryData {
     "product_id": productId,
     "duration": duration,
     "get_customers": getCustomers?.toJson(),
+    "quantity": quantity, // Include the new field in the JSON representation
+    "feedback_review_status": feedbackReviewStatus, // Include the new field in the JSON representation
   };
 }
 

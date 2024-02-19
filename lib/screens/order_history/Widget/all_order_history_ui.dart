@@ -124,6 +124,7 @@ class AllOrderHistoryUi extends StatelessWidget {
             const SizedBox(height: 20),
             CommonOptionRow(
               leftBtnTitle: "FeedBack".tr,
+              feedbackReviewStatus: data[index].feedbackReviewStatus ?? 0,
               onLeftTap: () {
                 Get.toNamed(RouteName.feedback, arguments: {
                   'order_id': data[index].id,

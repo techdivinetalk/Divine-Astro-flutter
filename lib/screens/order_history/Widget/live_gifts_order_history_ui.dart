@@ -71,6 +71,7 @@ class LiveGiftsHistory extends StatelessWidget {
   }
 
   Widget orderDetailView(List<GiftDataList> data, int index) {
+    print("giftImage :: ${preferenceService.getBaseImageURL()}/${data[index].getGift?.giftImage ?? ''}");
     return InkWell(
       onTap: () {},
       child: Container(

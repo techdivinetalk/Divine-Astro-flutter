@@ -690,6 +690,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/report.svg
   SvgGenImage get report => const SvgGenImage('assets/images/report.svg');
 
+  /// File path: assets/images/splash_bg.png
+  AssetGenImage get splashBg =>
+      const AssetGenImage('assets/images/splash_bg.png');
+
   /// File path: assets/images/star_live.png
   AssetGenImage get starLive =>
       const AssetGenImage('assets/images/star_live.png');
@@ -905,6 +909,7 @@ class $AssetsImagesGen {
         otpImage,
         planetStarLive,
         report,
+        splashBg,
         starLive,
         starLiveBig,
         tablet2353161,
@@ -927,16 +932,17 @@ class $AssetsLottieGen {
   /// File path: assets/lottie/generic loading .json
   LottieGenImage get genericLoading =>
       const LottieGenImage('assets/lottie/generic loading .json');
-  /// File path: assets/lottie/generic loading .json
-  LottieGenImage get loadingAnimation =>
-      const LottieGenImage('assets/lottie/loading_animation.json');
- 
+
   /// File path: assets/lottie/gift.json
   LottieGenImage get gift => const LottieGenImage('assets/lottie/gift.json');
 
   /// File path: assets/lottie/live_follow_heart.json
   LottieGenImage get liveFollowHeart =>
       const LottieGenImage('assets/lottie/live_follow_heart.json');
+
+  /// File path: assets/lottie/loading_animation.json
+  LottieGenImage get loadingAnimation =>
+      const LottieGenImage('assets/lottie/loading_animation.json');
 
   /// File path: assets/lottie/loading_dots.json
   LottieGenImage get loadingDots =>
@@ -956,6 +962,7 @@ class $AssetsLottieGen {
         genericLoading,
         gift,
         liveFollowHeart,
+        loadingAnimation,
         loadingDots,
         soundWaves,
         typingIndicator
