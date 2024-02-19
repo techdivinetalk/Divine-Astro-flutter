@@ -61,6 +61,7 @@ class OtpVerificationController extends GetxController {
     try {
       isResendOtp.value = true;
       SendOtpModel data = await userRepository.sentOtp(params);
+      sessionId = data.data!.sessionId!;
       isResendOtp.value = false;
       divineSnackBar(data: "OTP Re-send successfully.");
       update();
