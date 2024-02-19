@@ -9,6 +9,7 @@ enum TabEnum { checkYours, checkOther }
 enum Gender { none, male, female }
 
 class KundliController extends GetxController {
+  bool keyboardVisible = false;
   TabController? tabController;
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();

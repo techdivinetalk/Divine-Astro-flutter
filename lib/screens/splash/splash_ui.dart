@@ -7,6 +7,13 @@ class SplashUI extends GetView<SplashController> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return SizedBox(
+      height: MediaQuery.sizeOf(context).height,
+      width: MediaQuery.sizeOf(context).width,
+      child: Image.asset(
+        "assets/images/splash_bg.png",
+        fit: BoxFit.cover,
+      ),
+    );
   }
 }
