@@ -98,46 +98,6 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
   @override
   void initState() {
     super.initState();
-    print("MiddleWare.instance.currentPage");
-    print(MiddleWare.instance.currentPage);
-    AppFirebaseService().orderData.listen(
-      (Map<String, dynamic> p0) async {
-        print("AppFirebaseService().orderData listner working");
-
-        final dynamic? cond = p0["status"];
-
-        print("AppFirebaseService().orderData listner working cond:: $cond");
-
-        if (cond == "0" ||
-            cond == 0 ||
-            cond == "1" ||
-            cond == 1 ||
-            cond == "2" ||
-            cond == 2) {
-        } else {
-          if(cond == "3" || cond == 3){
-            print("orderId status Changed");
-            await Get.toNamed(RouteName.chatMessageWithSocketUI,
-                arguments: {"orderData": AppFirebaseService().orderData.value});
-          }
-          if (MiddleWare.instance.currentPage == "") {
-            print("MiddleWare.instance.currentPage sending you back");
-
-            WidgetsBinding.instance.endOfFrame.then(
-                  (_) async {
-                if (mounted) {
-                  bool canPop = Navigator.canPop(context);
-                  if (canPop) {
-                    Navigator.pop(context);
-                  } else {}
-                } else {}
-              },
-            );
-          }
-        }
-      },
-    );
-
     // broadcastReceiver.start();
     // broadcastReceiver.messages.listen(
     //   (event) {

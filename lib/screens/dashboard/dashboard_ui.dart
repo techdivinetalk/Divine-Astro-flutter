@@ -1,14 +1,9 @@
-import 'dart:ffi';
-
-import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
-import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
-import 'package:divine_astrologer/repository/pre_defind_repository.dart';
-import 'package:divine_astrologer/screens/order_history/order_history_ui.dart';
-import 'package:divine_astrologer/screens/dashboard/widgets/accept_chat_widget.dart';
+
+
 import 'package:divine_astrologer/screens/dashboard/widgets/rejoin_widget.dart';
-import 'package:divine_astrologer/tarotCard/widget/custom_image_view.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,7 +15,7 @@ import "../../common/routes.dart";
 import '../../pages/home/home_ui.dart';
 import '../../pages/performance/performance_ui.dart';
 import '../../pages/profile/profile_ui.dart';
-import '../../pages/suggest_remedies/suggest_remedies_ui.dart';
+
 import '../chat_assistance/chat_assistance_ui.dart';
 import 'dashboard_controller.dart';
 
@@ -170,8 +165,8 @@ class DashboardScreen extends GetView<DashboardController> {
                                                     height: 30.h,
                                                     width: 30.h,
                                                     placeHolder:
-                                                        "assets/images/default_profile.png",
-                                                    radius:
+                                                    Assets.images.defaultProfile.path,
+                                                    radius: 
                                                         BorderRadius.circular(
                                                             100.h),
                                                   ),
