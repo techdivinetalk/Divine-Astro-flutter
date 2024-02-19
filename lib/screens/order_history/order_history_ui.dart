@@ -242,6 +242,10 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
                     controller.remedyPageCount == 1)
                     ? const LoadingWidget()
                     :  SuggestRemedies()),
+               /* Obx(() => (controller.apiCalling.value &&
+                    controller.chatPageCount == 1)
+                    ? const LoadingWidget()
+                    : const ChatOrderHistory()),*/
               ],
             ),
           ),

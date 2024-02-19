@@ -22,6 +22,14 @@ class SuggestRemedies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<OrderHistoryController>(builder: (controller) {
+      if (controller.remedySuggestedHistoryList.isEmpty) {
+        return const Center(
+          child: Text(
+            'No data found',
+            style: TextStyle(fontSize: 18),
+          ),
+        );
+      }
       return ListView.separated(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
@@ -124,8 +132,10 @@ class SuggestRemedies extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
                 Text(
-                    DateFormat("dd MMM, hh:mm aa")
-                        .format(data[index].createdAt!),
+                    data[index].createdAt != null
+                        ? DateFormat("dd MMM, hh:mm aa")
+                        .format(data[index].createdAt!)
+                        : "N/A",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),

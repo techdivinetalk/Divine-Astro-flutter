@@ -33,6 +33,7 @@ class OrderHistoryController extends GetxController {
   RxList<AllHistoryData> allHistoryList = <AllHistoryData>[].obs;
   RxList<CallHistoryData> callHistoryList = <CallHistoryData>[].obs;
   RxList<ChatDataList> chatHistoryList = <ChatDataList>[].obs;
+  RxList<ChatDataList> feedHistoryList = <ChatDataList>[].obs;
   RxList<GiftDataList> giftHistoryList = <GiftDataList>[].obs;
   RxList<RemedySuggestedDataList> remedySuggestedHistoryList =
       <RemedySuggestedDataList>[].obs;
@@ -179,7 +180,21 @@ class OrderHistoryController extends GetxController {
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
-      }
+      } /*else if(type == 5){
+        ChatOrderHistoryModelClass data =
+        await OrderHistoryRepository().getChatOrderHistory(params);
+        apiCalling.value = false;
+        var history = data.data;
+
+        if (history!.isNotEmpty && data.data != null) {
+          emptyMsg.value = "";
+          if (page == 1) chatHistoryList.clear();
+          chatHistoryList.addAll(history);
+          // shopPageCount++;
+        } else {
+          emptyMsg.value = data.message ?? "No data found!";
+        }
+      }*/
       update();
     } catch (error) {
       apiCalling.value = false;
