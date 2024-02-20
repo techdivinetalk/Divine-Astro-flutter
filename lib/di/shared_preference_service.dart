@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../model/chat_assistant/chat_assistant_chats_response.dart';
 import '../model/constant_details_model_class.dart';
 import '../model/res_login.dart';
 
@@ -19,6 +20,7 @@ class SharedPreferenceService extends GetxService {
   static const specialAbility = "specialAbility";
   static const loginImages = "loginImages";
   static const baseAmazonUrl = "baseAmazonUrl";
+  static const chatAssistUnreadMessage = "chatAssistUnreadMessage";
 
   static const updatedBankDetails = "updatedBankDetails";
   static const baseImageUrl = "baseImageUrl";
@@ -62,6 +64,43 @@ class SharedPreferenceService extends GetxService {
 
   Future<int> getIntPrefs(String key) async {
     return prefs!.getInt(key) ?? 0;
+  }
+
+  Future addChatAssistUnreadMessage(AssistChatData data) async {
+    final SharedPreferences sharedInstance =
+        await SharedPreferences.getInstance();
+
+    final List<AssistChatData> chatAssistUnreadMessageList =
+        await getChatAssistUnreadMessage();
+    chatAssistUnreadMessageList.add(data);
+    final encodedChatAssistList =
+        chatAssistUnreadMessageList.map((e) => jsonEncode(e)).toList();
+    await sharedInstance.setStringList(
+        chatAssistUnreadMessage, encodedChatAssistList);
+  }
+
+  Future updateChatAssistUnreadMessage(List<AssistChatData> chatMessageList) async {
+    final SharedPreferences sharedInstance =
+    await SharedPreferences.getInstance();
+
+    final encodedChatAssistList =
+    chatMessageList.map((e) => jsonEncode(e)).toList();
+    await sharedInstance.setStringList(
+        chatAssistUnreadMessage, encodedChatAssistList);
+  }
+
+  Future<List<AssistChatData>> getChatAssistUnreadMessage() async {
+    final SharedPreferences sharedInstance =
+        await SharedPreferences.getInstance();
+
+    final localData = sharedInstance.getStringList(chatAssistUnreadMessage);
+
+    if (localData != null) {
+      return localData
+          .map((e) => AssistChatData.fromJson(jsonDecode(e)))
+          .toList();
+    }
+    return [];
   }
 
   Future<bool> setIntPrefs(String key, int value) async {
@@ -129,7 +168,6 @@ class SharedPreferenceService extends GetxService {
 
     // sharedInstance.remove(messageTemplate);
     final result = await sharedInstance.setString(messageTemplate, json);
-
   }
 
   Future<List<MessageTemplates>> getMessageTemplates() async {

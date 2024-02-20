@@ -177,16 +177,13 @@ class ChatMessageWithSocketController extends GetxController
         );
         return;
       }
-      if (p0["card"] != null && p0["card"]["isCardVisible"] != null) {
-        isCardVisible.value = p0["card"]["isCardVisible"];
-      }
+        isCardVisible.value = p0["card"]["isCardVisible"] ?? false;
       int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
       talkTimeStartTimer(remainingTime);
     });
     int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
     talkTimeStartTimer(remainingTime);
     broadcastReceiver.start();
-    print("isCardVisible");
     if (AppFirebaseService().orderData.value.containsKey("card")) {
       isCardVisible.value =
           AppFirebaseService().orderData.value["card"]["isCardVisible"];

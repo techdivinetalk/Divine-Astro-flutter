@@ -1,8 +1,10 @@
 
+import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../app_socket/app_socket.dart';
+import '../../di/shared_preference_service.dart';
 import '../../model/chat_assistant/CustomerDetailsResponse.dart';
 import '../../model/chat_assistant/chat_assistant_astrologer_response.dart';
 import '../../repository/chat_assistant_repository.dart';
@@ -13,6 +15,7 @@ class ChatAssistanceController extends GetxController {
   ChatAssistantAstrologerListResponse? chatAssistantAstrologerListResponse;
   CustomerDetailsResponse? customerDetailsResponse;
   Loading loading = Loading.initial;
+  RxList <AssistChatData> unreadMessageList = <AssistChatData>[].obs;
   RxList searchData = [].obs;
   RxList filteredUserData = [].obs;
   final appSocket = AppSocket();
@@ -27,7 +30,15 @@ class ChatAssistanceController extends GetxController {
     super.onInit();
 
     getAssistantAstrologerList();
+    getUnreadMessage();
     // listenSocket();
+  }
+
+  @override
+  void onReady() {
+    // TODO: implement onReady
+    super.onReady();
+    getUnreadMessage();
   }
 
   // void listenSocket() {
@@ -36,6 +47,17 @@ class ChatAssistanceController extends GetxController {
   //     print("data from chatAssist message $chatData");
   //   });
   // }
+
+  void getUnreadMessage() async {
+    final localDataList =
+    await SharedPreferenceService().getChatAssistUnreadMessage();
+    if (localDataList.isEmpty) {
+      return;
+    }
+    print("data present: ");
+    unreadMessageList.value = localDataList;
+    update();
+  }
 
   Future<void> getAssistantAstrologerList() async {
     try {
