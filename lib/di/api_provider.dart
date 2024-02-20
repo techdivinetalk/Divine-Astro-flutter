@@ -174,6 +174,7 @@ class ApiProvider {
   final String blockCustomerlist = "blockCustomerlist";
   final String blockCustomer = "blockCustomer";
   final String getAstroAllNoticeType2 = "getAstroAllNotice?notice_type=2";
+  final String getTarotCard = "getTarotCard";
 
   //added by dev-chetan
   final String getCustomOffer = "getCustomOffer";

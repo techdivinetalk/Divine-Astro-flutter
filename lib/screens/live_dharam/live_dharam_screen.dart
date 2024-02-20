@@ -79,21 +79,13 @@ class _LivePage extends State<LiveDharamScreen>
   final ZegoUIKitPrebuiltLiveStreamingController _zegoController =
       ZegoUIKitPrebuiltLiveStreamingController();
 
-  late StreamSubscription<ZegoSignalingPluginInRoomCommandMessageReceivedEvent>
-      _zegocloudSubscription;
-
-  late StreamSubscription<DatabaseEvent> _firebaseSubscription;
-
   final ScrollController _scrollControllerForTop = ScrollController();
   final ScrollController _scrollControllerForBottom = ScrollController();
 
   final keyboardVisibilityController = KeyboardVisibilityController();
-  late StreamSubscription<bool> keyboardSubscription;
 
   bool _isKeyboardSheetOpen = false;
   Timer? _timer;
-  Timer? _msgTimer;
-  Timer? _msgTimerLiveMonitoring;
   Timer? _msgTimerForFollowPopup;
 
   BroadcastReceiver receiver = BroadcastReceiver(
@@ -101,32 +93,16 @@ class _LivePage extends State<LiveDharamScreen>
   );
 
   final List<String> indianGreetings = <String>[
-    // # English
-    "Hi", "Hello", "Good morning", "Good afternoon", "Good evening", "Hey",
-    // # Hindi
-    "नमस्ते", "हाय", "हेलो", "नमस्कार", "नमस्ते जी",
-    // # Bengali
-    "হাই", "হ্যালো", "নমস্কার",
-    // # Telugu
-    "నమస్కారం", "హలో", "హాయ్",
-    // # Tamil
-    "வணக்கம்", "ஹலோ", "அருங்காட்சி",
-    // # Kannada
-    "ಹಲೋ", "ಹಾಯ್", "ನಮಸ್ಕಾರ",
-    // # Malayalam
-    "നമസ്കാരം", "ഹലോ", "ഹായ്",
-    // # Punjabi
-    "ਹੈਲੋ", "ਹੈ", "ਨਮਸਤੇ",
-    // # Gujarati
-    "હેલો", "નમસ્તે", "નમસ્કાર",
-    // # Marathi
-    "नमस्कार", "हॅलो", "हाय",
-    // # Urdu
-    "ہیلو", "ہائے", "سلام",
-    // # Sanskrit
-    "नमस्ते", "सुप्रभातम्", "अय्यो",
-    // # Odia
-    "ହେଲୋ", "ନମସ୍କାର", "ହାଇ"
+    "Hi",
+    "Hello",
+    "Good morning",
+    "Good afternoon",
+    "Good evening",
+    "Hey",
+    "नमस्ते",
+    "हाय",
+    "हेलो",
+    "नमस्कार",
   ];
 
   @override
@@ -135,13 +111,12 @@ class _LivePage extends State<LiveDharamScreen>
 
     WidgetsBinding.instance.addObserver(this);
 
-    _zegocloudSubscription = ZegoUIKit()
+    ZegoUIKit()
         .getSignalingPlugin()
         .getInRoomCommandMessageReceivedEventStream()
         .listen(onInRoomCommandMessageReceived);
 
-    _firebaseSubscription =
-        FirebaseDatabase.instance.ref().child("live").onValue.listen(
+    _controller.ref.child("live").onValue.listen(
       (event) async {
         final DataSnapshot dataSnapshot = event.snapshot;
         await _controller.eventListner(
@@ -149,15 +124,15 @@ class _LivePage extends State<LiveDharamScreen>
           zeroAstro: zeroAstro,
           engaging: engaging,
           showFollowPopup: _restartMsgTimerForFollowPopup,
-          successCallBack: (String message) async {
-            await successAndFailureCallBack(
+          successCallBack: (String message) {
+            successAndFailureCallBack(
               message: message,
               isForSuccess: true,
               isForFailure: false,
             );
           },
-          failureCallBack: (String message) async {
-            await successAndFailureCallBack(
+          failureCallBack: (String message) {
+            successAndFailureCallBack(
               message: message,
               isForSuccess: false,
               isForFailure: true,
@@ -167,10 +142,7 @@ class _LivePage extends State<LiveDharamScreen>
       },
     );
 
-    // ZegoUIKit().getUserJoinStream().listen(onUserJoin);
-    // ZegoUIKit().getUserLeaveStream().listen(onUserLeave);
-
-    keyboardSubscription = keyboardVisibilityController.onChange.listen(
+    keyboardVisibilityController.onChange.listen(
       (bool visible) {
         if (visible == false && _isKeyboardSheetOpen == true) {
           Navigator.of(context).pop();
@@ -179,29 +151,27 @@ class _LivePage extends State<LiveDharamScreen>
     );
 
     _startTimer();
-    // _startMsgTimer();
-    _startMsgTimerLiveMonitoring();
-    // _startMsgTimerForFollowPopup();
+    _startMsgTimerForFollowPopup();
 
     receiver.start();
     receiver.messages.listen(
       (event) async {
-        final DatabaseReference ref = FirebaseDatabase.instance.ref();
-        final DataSnapshot dataSnapshot = await ref.child("live").get();
+        final DataSnapshot dataSnapshot =
+            await _controller.ref.child("live").get();
         await _controller.eventListner(
           snapshot: dataSnapshot,
           zeroAstro: zeroAstro,
           engaging: engaging,
           showFollowPopup: _restartMsgTimerForFollowPopup,
-          successCallBack: (String message) async {
-            await successAndFailureCallBack(
+          successCallBack: (String message) {
+            successAndFailureCallBack(
               message: message,
               isForSuccess: true,
               isForFailure: false,
             );
           },
-          failureCallBack: (String message) async {
-            await successAndFailureCallBack(
+          failureCallBack: (String message) {
+            successAndFailureCallBack(
               message: message,
               isForSuccess: false,
               isForFailure: true,
@@ -212,7 +182,7 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-  Future<void> successAndFailureCallBack({
+  void successAndFailureCallBack({
     required String message,
     required bool isForSuccess,
     required bool isForFailure,
@@ -230,48 +200,23 @@ class _LivePage extends State<LiveDharamScreen>
             behavior: SnackBarBehavior.floating,
           );
           if (isForSuccess) {
-            // ScaffoldMessenger.of(context).showSnackBar(snackBar);
           } else if (isForFailure) {
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
           } else {}
         } else {}
       },
     );
-    return Future<void>.value();
+    return;
   }
 
   Future<void> zeroAstro() async {
     // if (mounted) {
     //   _timer?.cancel();
-    //   _msgTimer?.cancel();
-    //   _msgTimerLiveMonitoring?.cancel();
     //   _msgTimerForFollowPopup?.cancel();
     //   await _zegoController.leave(context);
-    //   // unawaited(_zegoController.leave(context));
     // } else {}
     return Future<void>.value();
   }
-
-  // Future<void> engaging(WaitListModel currentCaller) async {
-  //   final String id = currentCaller.id;
-  //   final String name = currentCaller.userName;
-  //   final String avatar = currentCaller.avatar;
-  //   final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
-
-  //   WidgetsBinding.instance.endOfFrame.then(
-  //     (_) async {
-  //       if (mounted) {
-  //         await onCoHostRequest(
-  //           user: user,
-  //           userId: id,
-  //           userName: name,
-  //           avatar: avatar,
-  //         );
-  //       } else {}
-  //     },
-  //   );
-  //   return Future<void>.value();
-  // }
 
   Future<void> engaging(WaitListModel currentCaller) async {
     WidgetsBinding.instance.endOfFrame.then(
@@ -339,33 +284,35 @@ class _LivePage extends State<LiveDharamScreen>
           const duration = Duration(seconds: 1);
           _timer = Timer.periodic(
             duration,
-            (Timer timer) {
+            (Timer timer) async {
+              if (timer.tick % 5 == 0) {
+                math.Random.secure().nextInt(10).isEven
+                    ? await manMessage()
+                    : await womanMessage();
+              } else {}
+
+              if (timer.tick % 15 == 0) {
+                final ZegoCustomMessage model = ZegoCustomMessage(
+                  type: 1,
+                  liveId: _controller.liveId,
+                  userId: "0",
+                  userName: "Live Monitoring Team",
+                  avatar:
+                      "https://divinenew-prod.s3.ap-south-1.amazonaws.com/divine/January2024/fGfpNU1Y40lV0ojgh0JBpgbc4mJtAdV6hgG5xZXJ.jpg",
+                  message: "Live Monitoring Team Joined",
+                  timeStamp: DateTime.now().toString(),
+                  fullGiftImage: "",
+                  isBlockedCustomer: false,
+                );
+                await sendMessageToZego(model);
+              } else {}
+
               if (timer.tick % 15 == 0) {
                 _controller.timerCurrentIndex++;
                 if (_controller.timerCurrentIndex >
                     (_controller.noticeBoardRes.data?.length ?? 0)) {
                   _controller.timerCurrentIndex = 1;
                 } else {}
-              } else {}
-            },
-          );
-        } else {}
-      },
-    );
-  }
-
-  void _startMsgTimer() {
-    WidgetsBinding.instance.endOfFrame.then(
-      (_) async {
-        if (mounted) {
-          const duration = Duration(seconds: 1);
-          _msgTimer = Timer.periodic(
-            duration,
-            (Timer timer) async {
-              if (timer.tick % 5 == 0) {
-                math.Random.secure().nextInt(25).isEven
-                    ? await manMessage()
-                    : await womanMessage();
               } else {}
             },
           );
@@ -399,7 +346,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> manMessage() async {
-    var num = math.Random.secure().nextInt(25);
+    var num = math.Random.secure().nextInt(10);
     var url = "https://xsgames.co/randomusers/assets/avatars/male/$num.jpg";
     final String fullName = RandomNames(Zone.india).manFullName();
     final ZegoCustomMessage model = ZegoCustomMessage(
@@ -418,7 +365,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> womanMessage() async {
-    var num = math.Random.secure().nextInt(25);
+    var num = math.Random.secure().nextInt(10);
     var url = "https://xsgames.co/randomusers/assets/avatars/female/$num.jpg";
     final String fullName = RandomNames(Zone.india).womanFullName();
     final ZegoCustomMessage model = ZegoCustomMessage(
@@ -434,36 +381,6 @@ class _LivePage extends State<LiveDharamScreen>
     );
     await sendMessageToZego(model);
     return Future<void>.value();
-  }
-
-  void _startMsgTimerLiveMonitoring() {
-    WidgetsBinding.instance.endOfFrame.then(
-      (_) async {
-        if (mounted) {
-          const duration = Duration(minutes: 1);
-          _msgTimerLiveMonitoring = Timer.periodic(
-            duration,
-            (Timer timer) async {
-              if (timer.tick % 15 == 0) {
-                final ZegoCustomMessage model = ZegoCustomMessage(
-                  type: 1,
-                  liveId: _controller.liveId,
-                  userId: "0",
-                  userName: "Live Monitoring Team",
-                  avatar:
-                      "https://divinenew-prod.s3.ap-south-1.amazonaws.com/divine/January2024/fGfpNU1Y40lV0ojgh0JBpgbc4mJtAdV6hgG5xZXJ.jpg",
-                  message: "Live Monitoring Team Joined",
-                  timeStamp: DateTime.now().toString(),
-                  fullGiftImage: "",
-                  isBlockedCustomer: false,
-                );
-                await sendMessageToZego(model);
-              } else {}
-            },
-          );
-        } else {}
-      },
-    );
   }
 
   Future<void> onUserJoin() async {
@@ -491,16 +408,11 @@ class _LivePage extends State<LiveDharamScreen>
 
   @override
   void dispose() {
-    // keyboardSubscription.cancel();
-    // unawaited(_zegocloudSubscription.cancel());
-    // unawaited(_firebaseSubscription.cancel());
-    // _scrollControllerForTop.dispose();
-    // _scrollControllerForBottom.dispose();
-    // _timer?.cancel();
-    // _msgTimer?.cancel();
-    // _msgTimerLiveMonitoring?.cancel();
-    // _msgTimerForFollowPopup?.cancel();
-    // WidgetsBinding.instance.removeObserver(this);
+    _scrollControllerForTop.dispose();
+    _scrollControllerForBottom.dispose();
+    _timer?.cancel();
+    _msgTimerForFollowPopup?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
   }
@@ -563,7 +475,6 @@ class _LivePage extends State<LiveDharamScreen>
                         } else {
                           callJoinConfiguration();
                         }
-
                         final callType = _controller.currentCaller.callType;
                         //
                         if (callType == "private") {
@@ -584,7 +495,6 @@ class _LivePage extends State<LiveDharamScreen>
                         } else {
                           callJoinConfiguration();
                         }
-
                         final callType = _controller.currentCaller.callType;
                         //
                         if (callType == "private" || callType == "audio") {
@@ -594,13 +504,11 @@ class _LivePage extends State<LiveDharamScreen>
                       }
                       ..bottomMenuBar = ZegoLiveStreamingBottomMenuBarConfig(
                         showInRoomMessageButton: false,
-                        hostButtons: <ZegoMenuBarButtonName>[],
-                        coHostButtons: <ZegoMenuBarButtonName>[],
+                        hostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
+                        coHostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
                       )
                       ..layout = galleryLayout()
-                      // ..swipingConfig = swipingConfig
                       ..swiping = swipingConfig
-                      // ..onLiveStreamingStateUpdate = onLiveStreamingStateUpdate
                       ..avatarBuilder = avatarWidget
                       ..topMenuBar = ZegoLiveStreamingTopMenuBarConfig(
                         hostAvatarBuilder: (ZegoUIKitUser host) {
@@ -611,59 +519,10 @@ class _LivePage extends State<LiveDharamScreen>
                       ..memberButton = ZegoLiveStreamingMemberButtonConfig(
                         icon: const Icon(Icons.remove_red_eye_outlined),
                         builder: (int memberCount) {
-                          // return Row(
-                          //   children: [
-                          //     SizedBox(
-                          //       height: 32,
-                          //       width: 48,
-                          //       child: DecoratedBox(
-                          //         decoration: BoxDecoration(
-                          //           borderRadius: const BorderRadius.all(
-                          //             Radius.circular(50.0),
-                          //           ),
-                          //           border: Border.all(
-                          //             color: appColors.yellow,
-                          //           ),
-                          //           color: appColors.black.withOpacity(0.2),
-                          //         ),
-                          //         child: Padding(
-                          //           padding: const EdgeInsets.symmetric(
-                          //             horizontal: 8.0,
-                          //           ),
-                          //           child: Row(
-                          //             mainAxisAlignment:
-                          //                 MainAxisAlignment.spaceBetween,
-                          //             crossAxisAlignment:
-                          //                 CrossAxisAlignment.center,
-                          //             children: [
-                          //               const Icon(
-                          //                 Icons.remove_red_eye,
-                          //                 color: Colors.white,
-                          //                 size: 16,
-                          //               ),
-                          //               Text(
-                          //                 memberCount.toString(),
-                          //                 style: const TextStyle(
-                          //                   color: Colors.white,
-                          //                   fontSize: 16,
-                          //                   fontWeight: FontWeight.bold,
-                          //                 ),
-                          //               )
-                          //             ],
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //     SizedBox(
-                          //       width: _controller.isHost ? (16 + 2) : (8 + 2),
-                          //     ),
-                          //   ],
-                          // );
                           return const SizedBox();
                         },
                       )
                       ..memberList = ZegoLiveStreamingMemberListConfig(
-                        // onClicked: (ZegoUIKitUser user) {},
                         itemBuilder: (
                           BuildContext context,
                           Size size,
@@ -695,7 +554,6 @@ class _LivePage extends State<LiveDharamScreen>
                       )
                       ..slideSurfaceToHide = false
                       ..duration.isVisible = false,
-                    // controller: _zegoController,
                     events: events,
                   );
           },
@@ -736,9 +594,8 @@ class _LivePage extends State<LiveDharamScreen>
       child: CustomImageWidget(
         imageUrl: zegoUser == mineUser
             ? _controller.avatar
-            // : zegoUser == astroUser
+            //  : zegoUser == astroUser
             //     ? (_controller.details.data?.image ?? "")
-            // : "https://robohash.org/avatarWidget",
             : "",
         rounded: true,
         typeEnum: TypeEnum.user,
@@ -780,12 +637,6 @@ class _LivePage extends State<LiveDharamScreen>
         children: <Widget>[
           appBarWidget(),
           const SizedBox(height: 8),
-          // ElevatedButton(
-          //   onPressed: _restartMsgTimerForFollowPopup,
-          //   child: Text("Reset"),
-          // ),
-          // Text(_controller.liveId),
-          // const SizedBox(height: 8),
           Expanded(
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -1046,7 +897,6 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget appBarWidget() {
     return SizedBox(
-      // height: 32 + 120,
       height: 32 + 100,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1074,8 +924,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget newLeaderboard() {
     return StreamBuilder<DatabaseEvent>(
-      stream: FirebaseDatabase.instance
-          .ref()
+      stream: _controller.ref
           .child("live/${_controller.liveId}/leaderboard")
           .onValue
           .asBroadcastStream(),
@@ -1127,7 +976,6 @@ class _LivePage extends State<LiveDharamScreen>
   //       padding: EdgeInsets.zero,
   //       itemCount: tempData.length,
   //       scrollDirection: Axis.horizontal,
-  //       // cacheExtent: tempData.length.toDouble(),
   //       cacheExtent: 9999,
   //       itemBuilder: (BuildContext context, int index) {
   //         final GiftData item = tempData[index];
@@ -1344,7 +1192,6 @@ class _LivePage extends State<LiveDharamScreen>
   //   _controller.isProcessing = true;
   //   final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
   //   if (hasMyIdInWaitList) {
-  //     // await alreadyInTheWaitListDialog();
   //     await alreadyInWaitlistPopup();
   //   } else {
   //     final bool hasBal = await _controller.hasBalanceForSendingGift(
@@ -1368,15 +1215,15 @@ class _LivePage extends State<LiveDharamScreen>
   //           },
   //         );
   //       },
-  //       successCallBack: (String message) async {
-  //         await successAndFailureCallBack(
+  //       successCallBack: (String message) {
+  //         successAndFailureCallBack(
   //           message: message,
   //           isForSuccess: true,
   //           isForFailure: false,
   //         );
   //       },
-  //       failureCallBack: (String message) async {
-  //         await successAndFailureCallBack(
+  //       failureCallBack: (String message) {
+  //         successAndFailureCallBack(
   //           message: message,
   //           isForSuccess: false,
   //           isForFailure: true,
@@ -1423,23 +1270,7 @@ class _LivePage extends State<LiveDharamScreen>
   //         isBlockedCustomer: _controller.isCustomerBlockedBool(),
   //       );
   //       await sendMessageToZego(model0);
-  //       // await Future.delayed(const Duration(seconds: 1));
   //       await showHideTopBanner();
-  //       // final ZegoCustomMessage model1 = ZegoCustomMessage(
-  //       //   type: 1,
-  //       //   liveId: _controller.liveId,
-  //       //   userId: _controller.userId,
-  //       //   userName: _controller.userName,
-  //       //   avatar: _controller.avatar,
-  //       //   message: quantity > 1
-  //       //       ? "${_controller.userName} sent a ${item.giftName} (${quantity}X)"
-  //       //       : "${_controller.userName} sent a ${item.giftName}",
-  //       //   timeStamp: DateTime.now().toString(),
-  //       //   fullGiftImage: item.fullGiftImage,
-  //       //   isBlockedCustomer: _controller.isCustomerBlockedBool(),
-  //       // );
-  //       // await sendMessageToZego(model1);
-  //       // await Future.delayed(const Duration(seconds: 1));
   //     } else {}
   //   }
   //   _controller.isProcessing = false;
@@ -1730,63 +1561,6 @@ class _LivePage extends State<LiveDharamScreen>
   //       ],
   //     );
   //   }
-
-  //   // return (isOfferAvailable)
-  //   //     ? Column(
-  //   //         children: <Widget>[
-  //   //           Text(
-  //   //             doubleColumn1,
-  //   //             style: const TextStyle(
-  //   //               fontSize: 10,
-  //   //               fontWeight: FontWeight.bold,
-  //   //             ),
-  //   //           ),
-  //   //           const SizedBox(width: 4.0),
-  //   //           Text(
-  //   //             "₹$doubleColumn2/Min",
-  //   //             style: const TextStyle(
-  //   //               fontSize: 10,
-  //   //               decoration: TextDecoration.lineThrough,
-  //   //               decorationColor: Colors.red,
-  //   //             ),
-  //   //           ),
-  //   //         ],
-  //   //       )
-  //   //     : Column(
-  //   //         children: <Widget>[
-  //   //           const SizedBox(height: 4.0),
-  //   //           Text(
-  //   //             "₹$singleColumn0/Min",
-  //   //             style: const TextStyle(
-  //   //               fontSize: 10,
-  //   //               fontWeight: FontWeight.bold,
-  //   //             ),
-  //   //           ),
-  //   //         ],
-  //   //       );
-  // }
-
-  // Future<void> onLiveStreamingStateUpdate(ZegoLiveStreamingState state) async {
-  //   if (state == ZegoLiveStreamingState.idle) {
-  //     ZegoGiftPlayer().clear();
-  //   } else {}
-
-  //   if (state == ZegoLiveStreamingState.ended) {
-  //     ZegoGiftPlayer().clear();
-  //     await _controller.updateInfo();
-  //     final List<dynamic> list = await _controller.onLiveStreamingEnded();
-  //     final bool canNext = _zegoController.swiping.next();
-  //     if (canNext) {
-  //       await _controller.updateInfo();
-  //       return Future<void>.value();
-  //     } else {}
-  //     final bool canPrevious = _zegoController.swiping.previous();
-  //     if (canPrevious) {
-  //       await _controller.updateInfo();
-  //       return Future<void>.value();
-  //     } else {}
-  //   } else {}
-  //   return Future<void>.value();
   // }
 
   Future<void> onLiveStreamingStateUpdate(ZegoLiveStreamingState state) async {
@@ -1809,52 +1583,6 @@ class _LivePage extends State<LiveDharamScreen>
 
     return Future<void>.value();
   }
-
-  // Future<void> alreadyInTheWaitListDialog() async {
-  //   await showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: const Text(
-  //           "Already in the Wait List",
-  //         ),
-  //         content: const Text(
-  //           "You're already in the Astrologer's Wait List. Tap on hourglass to see your waiting time.",
-  //         ),
-  //         actions: <Widget>[
-  //           ElevatedButton(
-  //             onPressed: Get.back,
-  //             child: const Text("OK"),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  //   return Future<void>.value();
-  // }
-
-  // Future<void> youAreInTheWaitListDialog() async {
-  //   await showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: const Text(
-  //           "You're in the Wait List",
-  //         ),
-  //         content: Text(
-  //           "You are not able to perform this action because you're the Wait List of Astrologer ${_controller.userName}.",
-  //         ),
-  //         actions: <Widget>[
-  //           ElevatedButton(
-  //             onPressed: Get.back,
-  //             child: const Text("OK"),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  //   return Future<void>.value();
-  // }
 
   Future<void> alreadyInWaitlistPopup() async {
     await showCupertinoModalPopup(
@@ -1972,9 +1700,9 @@ class _LivePage extends State<LiveDharamScreen>
           isHost: _controller.isHost,
           onAccept: () async {
             Get.back();
-            final String id = _controller.waitListModel.last.id;
-            final String name = _controller.waitListModel.last.userName;
-            final String avatar = _controller.waitListModel.last.avatar;
+            final String id = _controller.waitListModel.first.id;
+            final String name = _controller.waitListModel.first.userName;
+            final String avatar = _controller.waitListModel.first.avatar;
             final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
             final connectInvite = _zegoController.coHost;
             await connectInvite.hostSendCoHostInvitationToAudience(user);
@@ -2068,12 +1796,6 @@ class _LivePage extends State<LiveDharamScreen>
         return EndSessionWidget(
           onClose: Get.back,
           continueLive: Get.back,
-          // endLive: () async {
-          //   endLive();
-          //   await Future.delayed(const Duration(milliseconds: 300));
-          //   print("after they delayed");
-          //   Get.back();
-          // },
           endLive: () {
             Get.back();
             endLive();
@@ -2171,21 +1893,20 @@ class _LivePage extends State<LiveDharamScreen>
   // }) async {
   //   final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
   //   if (hasMyIdInWaitList) {
-  //     // await alreadyInTheWaitListDialog();
   //     await alreadyInWaitlistPopup();
   //   } else {
   //     final bool canOrder = await _controller.canPlaceLiveOrder(
   //       talkType: type,
   //       needRecharge: needRecharge,
-  //       successCallBack: (String message) async {
-  //         await eventListnerSuccessAndFailureCallBack(
+  //       successCallBack: (String message) {
+  //         eventListnerSuccessAndFailureCallBack(
   //           message: message,
   //           isForSuccess: true,
   //           isForFailure: false,
   //         );
   //       },
-  //       failureCallBack: (String message) async {
-  //         await eventListnerSuccessAndFailureCallBack(
+  //       failureCallBack: (String message) {
+  //         eventListnerSuccessAndFailureCallBack(
   //           message: message,
   //           isForSuccess: false,
   //           isForFailure: true,
@@ -2301,15 +2022,15 @@ class _LivePage extends State<LiveDharamScreen>
                 if (userId != "0") {
                   await _controller.callblockCustomer(
                     id: int.parse(userId),
-                    successCallBack: (String message) async {
-                      await successAndFailureCallBack(
+                    successCallBack: (String message) {
+                      successAndFailureCallBack(
                         message: message,
                         isForSuccess: true,
                         isForFailure: false,
                       );
                     },
-                    failureCallBack: (String message) async {
-                      await successAndFailureCallBack(
+                    failureCallBack: (String message) {
+                      successAndFailureCallBack(
                         message: message,
                         isForSuccess: false,
                         isForFailure: true,
@@ -2383,36 +2104,6 @@ class _LivePage extends State<LiveDharamScreen>
     return;
   }
 
-  // Future<void> onInRoomCommandMessageReceived(
-  //   ZegoSignalingPluginInRoomCommandMessageReceivedEvent event,
-  // ) async {
-  //   final List<ZegoSignalingPluginInRoomCommandMessage> msgs = event.messages;
-  //   for (final ZegoSignalingPluginInRoomCommandMessage commandMessage in msgs) {
-  //     final String senderUserID = commandMessage.senderUserID;
-  //     final String message = utf8.decode(commandMessage.message);
-  //     final Map<String, dynamic> decodedMessage = jsonDecode(message);
-
-  //     // final String svga = decodedMessage["gift_type"];
-  //     final String roomId = decodedMessage["room_id"];
-  //     final num giftCount = decodedMessage["gift_count"];
-
-  //     final animation = decodedMessage["gift_type"]["item"]["animation"];
-  //     print("decodedMessage: $animation");
-
-  //     if (senderUserID != _controller.userId) {
-  //       if (roomId == _controller.liveId) {
-  //         for (int i = 0; i < giftCount; i++) {
-  //           ZegoGiftPlayer().play(
-  //             context,
-  //             GiftPlayerData(GiftPlayerSource.url, animation),
-  //           );
-  //         }
-  //       } else {}
-  //     } else {}
-  //   }
-  //   return Future<void>.value();
-  // }
-
   Future<void> onInRoomCommandMessageReceived(
     ZegoSignalingPluginInRoomCommandMessageReceivedEvent event,
   ) async {
@@ -2473,15 +2164,15 @@ class _LivePage extends State<LiveDharamScreen>
             } else {}
           } else if (type == "Block/Unblock") {
             // await _controller.isCustomerBlocked(
-            //   successCallBack: (String message) async {
-            //     await eventListnerSuccessAndFailureCallBack(
+            //   successCallBack: (String message) {
+            //     eventListnerSuccessAndFailureCallBack(
             //       message: message,
             //       isForSuccess: true,
             //       isForFailure: false,
             //     );
             //   },
-            //   failureCallBack: (String message) async {
-            //     await eventListnerSuccessAndFailureCallBack(
+            //   failureCallBack: (String message) {
+            //     eventListnerSuccessAndFailureCallBack(
             //       message: message,
             //       isForSuccess: false,
             //       isForFailure: true,
@@ -2618,7 +2309,7 @@ class _LivePage extends State<LiveDharamScreen>
         return ChosenCards(
           onClose: Get.back,
           userChosenCards: userPicked,
-          userName: "Dharam",
+          userName: _controller.currentCaller.userName ?? "",
         );
       },
     );
@@ -2736,29 +2427,6 @@ class _LivePage extends State<LiveDharamScreen>
   //     );
   //   } else {}
 
-  //   return Future<void>.value();
-  // }
-
-  // Future<void> youAreBlocked() async {
-  //   await showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: Text(
-  //           "You're Blocked by Astrologer ${_controller.details.data?.name ?? ""}",
-  //         ),
-  //         content: Text(
-  //           "You are not able to perform this action because you're blocked by Astrologer ${_controller.details.data?.name ?? ""}.",
-  //         ),
-  //         actions: <Widget>[
-  //           ElevatedButton(
-  //             onPressed: Get.back,
-  //             child: const Text("OK"),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
   //   return Future<void>.value();
   // }
 
@@ -3067,8 +2735,12 @@ class _LivePage extends State<LiveDharamScreen>
       colonsTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
       timeTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
       onTick: (Duration duration) async {
-        // if (isLessThanOneMinute(duration) && !extendTimeWidgetVisible) {
-        //   extendTimeWidgetVisible = true;
+        // final bool cond1 = isLessThanOneMinute(duration);
+        // final bool cond2 = !_controller.extendTimeWidgetVisible;
+        // final bool cond3 = _controller.currentCaller.id == _controller.userId;
+
+        // if (cond1 && cond2 && cond3) {
+        //   _controller.extendTimeWidgetVisible = true;
         //   await extendTimeWidgetPopup();
         // } else {}
       },
@@ -3081,10 +2753,6 @@ class _LivePage extends State<LiveDharamScreen>
     return duration < const Duration(minutes: 1);
   }
 
-  // temporary purpose
-  bool extendTimeWidgetVisible = false;
-  //
-
   Future<void> extendTimeWidgetPopup() async {
     await showCupertinoModalPopup(
       context: context,
@@ -3092,8 +2760,9 @@ class _LivePage extends State<LiveDharamScreen>
         return ExtendTimeWidget(
           onClose: Get.back,
           isAstro: _controller.isHost,
-          yesExtend: () {
+          yesExtend: () async {
             Get.back();
+            // await _controller.extendTime();
           },
           noExtend: () {
             Get.back();
@@ -3474,49 +3143,6 @@ class _LivePage extends State<LiveDharamScreen>
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        // StreamBuilder<Object>(
-        //   stream: null,
-        //   builder: (context, snapshot) {
-        //     return AnimatedOpacity(
-        //       opacity: !_controller.isHost ? 0.0 : 1.0,
-        //       duration: const Duration(seconds: 1),
-        //       child: !_controller.isHost
-        //           ? const SizedBox()
-        //           : Column(
-        //               children: [
-        //                 InkWell(
-        //                   onTap: exitFunc,
-        //                   child: SizedBox(
-        //                     height: 50,
-        //                     width: 50,
-        //                     child: DecoratedBox(
-        //                       decoration: BoxDecoration(
-        //                         borderRadius: const BorderRadius.all(
-        //                           Radius.circular(50.0),
-        //                         ),
-        //                         border: Border.all(
-        //                           color: appColors.yellow,
-        //                         ),
-        //                         color: appColors.black.withOpacity(0.2),
-        //                       ),
-        //                       child: Padding(
-        //                         padding: const EdgeInsets.all(0.0),
-        //                         child: Image.asset(
-        //                           _controller.currentCaller.isEngaded
-        //                               ? "assets/images/live_new_hang_up.png"
-        //                               : "assets/images/live_exit_red.png",
-        //                         ),
-        //                       ),
-        //                     ),
-        //                   ),
-        //                 ),
-        //                 const SizedBox(height: 8),
-        //               ],
-        //             ),
-        //     );
-        //   },
-        // ),
-        //
         StreamBuilder<Object>(
           stream: null,
           builder: (context, snapshot) {
@@ -3566,8 +3192,7 @@ class _LivePage extends State<LiveDharamScreen>
         ),
         //
         StreamBuilder<DatabaseEvent>(
-          stream: FirebaseDatabase.instance
-              .ref()
+          stream: _controller.ref
               .child("live/${_controller.liveId}/waitList")
               .onValue
               .asBroadcastStream(),
@@ -3635,8 +3260,7 @@ class _LivePage extends State<LiveDharamScreen>
           },
         ),
         StreamBuilder<DatabaseEvent>(
-          stream: FirebaseDatabase.instance
-              .ref()
+          stream: _controller.ref
               .child("live/${_controller.liveId}/leaderboard")
               .onValue
               .asBroadcastStream(),
@@ -3833,15 +3457,15 @@ class _LivePage extends State<LiveDharamScreen>
     //   arguments: <String, dynamic>{"astrologer_id": _controller.liveId},
     // );
     // await _controller.getAstrologerDetails(
-    //   successCallBack: (String message) async {
-    //     await eventListnerSuccessAndFailureCallBack(
+    //   successCallBack: (String message) {
+    //     eventListnerSuccessAndFailureCallBack(
     //       message: message,
     //       isForSuccess: true,
     //       isForFailure: false,
     //     );
     //   },
-    //   failureCallBack: (String message) async {
-    //     await eventListnerSuccessAndFailureCallBack(
+    //   failureCallBack: (String message) {
+    //     eventListnerSuccessAndFailureCallBack(
     //       message: message,
     //       isForSuccess: false,
     //       isForFailure: true,
@@ -3889,11 +3513,8 @@ class _LivePage extends State<LiveDharamScreen>
           endLive: () async {
             if (mounted) {
               _timer?.cancel();
-              _msgTimer?.cancel();
-              _msgTimerLiveMonitoring?.cancel();
               _msgTimerForFollowPopup?.cancel();
               await _zegoController.leave(context);
-              // unawaited(_zegoController.leave(context));
             } else {}
           },
         );
@@ -3902,11 +3523,8 @@ class _LivePage extends State<LiveDharamScreen>
           exitLive: () async {
             if (mounted) {
               _timer?.cancel();
-              _msgTimer?.cancel();
-              _msgTimerLiveMonitoring?.cancel();
               _msgTimerForFollowPopup?.cancel();
               await _zegoController.leave(context);
-              // unawaited(_zegoController.leave(context));
             } else {}
           },
         );
@@ -3967,15 +3585,15 @@ class _LivePage extends State<LiveDharamScreen>
   //   await sendMessageToZego(model);
 
   //   await _controller.followOrUnfollowAstrologer(
-  //     successCallBack: (String message) async {
-  //       await eventListnerSuccessAndFailureCallBack(
+  //     successCallBack: (String message) {
+  //       eventListnerSuccessAndFailureCallBack(
   //         message: message,
   //         isForSuccess: true,
   //         isForFailure: false,
   //       );
   //     },
-  //     failureCallBack: (String message) async {
-  //       await eventListnerSuccessAndFailureCallBack(
+  //     failureCallBack: (String message) {
+  //       eventListnerSuccessAndFailureCallBack(
   //         message: message,
   //         isForSuccess: false,
   //         isForFailure: true,
@@ -3983,15 +3601,15 @@ class _LivePage extends State<LiveDharamScreen>
   //     },
   //   );
   //   await _controller.getAstrologerDetails(
-  //     successCallBack: (String message) async {
-  //       await eventListnerSuccessAndFailureCallBack(
+  //     successCallBack: (String message) {
+  //       eventListnerSuccessAndFailureCallBack(
   //         message: message,
   //         isForSuccess: true,
   //         isForFailure: false,
   //       );
   //     },
-  //     failureCallBack: (String message) async {
-  //       await eventListnerSuccessAndFailureCallBack(
+  //     failureCallBack: (String message) {
+  //       eventListnerSuccessAndFailureCallBack(
   //         message: message,
   //         isForSuccess: false,
   //         isForFailure: true,
@@ -4042,76 +3660,6 @@ class _LivePage extends State<LiveDharamScreen>
 
   // d
 
-  // ZegoUIKitPrebuiltLiveStreamingEvents get events {
-  //   return ZegoUIKitPrebuiltLiveStreamingEvents(
-  //     hostEvents: ZegoUIKitPrebuiltLiveStreamingHostEvents(
-  //       onCoHostRequestReceived: (ZegoUIKitUser user) async {
-  //         showNotifOverlay(user: user, msg: "onCoHostRequestReceived");
-  //         await onCoHostRequest(
-  //           user: user,
-  //           userId: user.id,
-  //           userName: user.name,
-  //           avatar: "https://robohash.org/avatarWidget",
-  //         );
-  //       },
-  //       onCoHostRequestCanceled: (ZegoUIKitUser user) async {
-  //         showNotifOverlay(user: user, msg: "onCoHostRequestCanceled");
-  //         // await onCoHostRequestCanceled(user);
-  //       },
-  //       onCoHostRequestTimeout: (ZegoUIKitUser user) {
-  //         showNotifOverlay(user: user, msg: "onCoHostRequestTimeout");
-  //       },
-  //       onActionAcceptCoHostRequest: () {
-  //         showNotifOverlay(user: null, msg: "onActionAcceptCoHostRequest");
-  //       },
-  //       onActionRefuseCoHostRequest: () {
-  //         showNotifOverlay(user: null, msg: "onActionRefuseCoHostRequest");
-  //       },
-  //       onCoHostInvitationSent: (ZegoUIKitUser user) {
-  //         showNotifOverlay(user: user, msg: "onCoHostInvitationSent");
-  //       },
-  //       onCoHostInvitationTimeout: (ZegoUIKitUser user) {
-  //         showNotifOverlay(user: user, msg: "onCoHostInvitationTimeout");
-  //       },
-  //       onCoHostInvitationAccepted: (ZegoUIKitUser user) {
-  //         showNotifOverlay(user: user, msg: "onCoHostInvitationAccepted");
-  //       },
-  //       onCoHostInvitationRefused: (ZegoUIKitUser user) {
-  //         showNotifOverlay(user: user, msg: "onCoHostInvitationRefused");
-  //       },
-  //     ),
-  //     audienceEvents: ZegoUIKitPrebuiltLiveStreamingAudienceEvents(
-  //       onCoHostRequestSent: () {
-  //         showNotifOverlay(user: null, msg: "onCoHostRequestSent");
-  //       },
-  //       onActionCancelCoHostRequest: () {
-  //         showNotifOverlay(user: null, msg: "onActionCancelCoHostRequest");
-  //       },
-  //       onCoHostRequestTimeout: () {
-  //         showNotifOverlay(user: null, msg: "onCoHostRequestTimeout");
-  //       },
-  //       onCoHostRequestAccepted: () {
-  //         showNotifOverlay(user: null, msg: "onCoHostRequestAccepted");
-  //       },
-  //       onCoHostRequestRefused: () {
-  //         showNotifOverlay(user: null, msg: "onCoHostRequestRefused");
-  //       },
-  //       onCoHostInvitationReceived: (ZegoUIKitUser user) {
-  //         showNotifOverlay(user: user, msg: "onCoHostInvitationReceived");
-  //       },
-  //       onCoHostInvitationTimeout: () {
-  //         showNotifOverlay(user: null, msg: "onCoHostInvitationTimeout");
-  //       },
-  //       onActionAcceptCoHostInvitation: () {
-  //         showNotifOverlay(user: null, msg: "onActionAcceptCoHostInvitation");
-  //       },
-  //       onActionRefuseCoHostInvitation: () {
-  //         showNotifOverlay(user: null, msg: "onActionRefuseCoHostInvitation");
-  //       },
-  //     ),
-  //   );
-  // }
-
   ZegoUIKitPrebuiltLiveStreamingEvents get events {
     return ZegoUIKitPrebuiltLiveStreamingEvents(
       onStateUpdated: onLiveStreamingStateUpdate,
@@ -4141,6 +3689,11 @@ class _LivePage extends State<LiveDharamScreen>
         host: ZegoLiveStreamingCoHostHostEvents(
           onRequestReceived: (ZegoUIKitUser user) async {
             showNotifOverlay(user: user, msg: "onCoHostRequestReceived");
+
+            if (_controller.extendTimeWidgetVisible) {
+              _controller.extendTimeWidgetVisible = false;
+            } else {}
+
             await onCoHostRequest(
               user: user,
               userId: user.id,
@@ -4265,15 +3818,15 @@ class _LivePage extends State<LiveDharamScreen>
         : await connect.stopCoHost(showRequestDialog: false);
     if (removed) {
       await _controller.makeAPICallForEndCall(
-        successCallBack: (String message) async {
-          await successAndFailureCallBack(
+        successCallBack: (String message) {
+          successAndFailureCallBack(
             message: message,
             isForSuccess: true,
             isForFailure: false,
           );
         },
-        failureCallBack: (String message) async {
-          await successAndFailureCallBack(
+        failureCallBack: (String message) {
+          successAndFailureCallBack(
             message: message,
             isForSuccess: false,
             isForFailure: true,
@@ -4283,8 +3836,13 @@ class _LivePage extends State<LiveDharamScreen>
     } else {}
     if (removed) {
       _controller.isHost
-          ? await _controller.removeFromWaitListWhereEngadedIsTrue()
-          : await _controller.removeFromWaitList();
+          ? await _controller.removeFromOrder()
+          // : await _controller.removeFromWaitList();
+          : await _controller.removeFromOrder();
+    } else {}
+
+    if (_controller.extendTimeWidgetVisible) {
+      _controller.extendTimeWidgetVisible = false;
     } else {}
     return Future<void>.value();
   }
@@ -4396,22 +3954,21 @@ class _LivePage extends State<LiveDharamScreen>
     for (var element in _controller.deckCardModelList) {
       element.image = "${_controller.pref.getAmazonUrl()}/${element.image}";
     }
-
     return Future<void>.value();
   }
 
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) async {
     await _controller.noticeBoard(
-      successCallBack: (String message) async {
-        await successAndFailureCallBack(
+      successCallBack: (String message) {
+        successAndFailureCallBack(
           message: message,
           isForSuccess: true,
           isForFailure: false,
         );
       },
-      failureCallBack: (String message) async {
-        await successAndFailureCallBack(
+      failureCallBack: (String message) {
+        successAndFailureCallBack(
           message: message,
           isForSuccess: false,
           isForFailure: true,
@@ -4419,22 +3976,38 @@ class _LivePage extends State<LiveDharamScreen>
       },
     );
     await _controller.callBlockedCustomerListRes(
-      successCallBack: (String message) async {
-        await successAndFailureCallBack(
+      successCallBack: (String message) {
+        successAndFailureCallBack(
           message: message,
           isForSuccess: true,
           isForFailure: false,
         );
       },
-      failureCallBack: (String message) async {
-        await successAndFailureCallBack(
+      failureCallBack: (String message) {
+        successAndFailureCallBack(
           message: message,
           isForSuccess: false,
           isForFailure: true,
         );
       },
     );
-    await initTarot();
+    // await initTarot();
+    await _controller.getTarotCardAPI(
+      successCallBack: (String message) {
+        successAndFailureCallBack(
+          message: message,
+          isForSuccess: true,
+          isForFailure: false,
+        );
+      },
+      failureCallBack: (String message) {
+        successAndFailureCallBack(
+          message: message,
+          isForSuccess: false,
+          isForFailure: true,
+        );
+      },
+    );
     return Future<void>.value();
   }
 }

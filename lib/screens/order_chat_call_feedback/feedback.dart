@@ -9,6 +9,7 @@ import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/screens/order_chat_call_feedback/feedback_controller.dart';
 import 'package:divine_astrologer/screens/order_chat_call_feedback/widget/feedback_card.dart';
+import 'package:divine_astrologer/screens/order_history/Widget/shimmer_widget_feedback.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
@@ -43,12 +44,15 @@ class FeedBack extends GetView<FeedbackController> {
           ),
         ),
       ),
-      body: Obx(() {
+      body: GetBuilder<FeedbackController>(
+          builder: (controller) {
         print ("Product Id :: ${controller.order?.productType}");
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
+            controller.order?.productType == null
+                ? ShimmerLoader()
+                : Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -304,7 +308,9 @@ class FeedBack extends GetView<FeedbackController> {
                 ],
               ),
             ),
-            Padding(
+            controller.order?.productType == null
+                ? ShimmerLoader()
+                : Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Column(
                 children: [
@@ -322,7 +328,7 @@ class FeedBack extends GetView<FeedbackController> {
                               children: [
                                 TextSpan(
                                   text:
-                                      '${controller.astroFeedbackDetailData?.totalProblem ?? 0}',
+                                      '${controller.astroFeedbackDetailData.value?.totalProblem ?? 0}',
                                   style:  TextStyle(color: appColors.red),
                                 ),
                               ],
@@ -337,7 +343,7 @@ class FeedBack extends GetView<FeedbackController> {
                               children: [
                                 TextSpan(
                                   text:
-                                      '-₹ ${controller.astroFeedbackDetailData?.fineAmounts ?? 0}',
+                                      '-₹ ${controller.astroFeedbackDetailData.value?.fineAmounts ?? 0}',
                                   style:  TextStyle(color: appColors.red),
                                 ),
                               ],
@@ -361,11 +367,11 @@ class FeedBack extends GetView<FeedbackController> {
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount:
-                        controller.astroFeedbackDetailData?.problems?.length ??
+                        controller.astroFeedbackDetailData.value?.problems?.length ??
                             0,
                     itemBuilder: (context, index) {
                       final feedbackProblem =
-                          controller.astroFeedbackDetailData?.problems?[index];
+                          controller.astroFeedbackDetailData.value?.problems?[index];
                       return FeedbackCallChatCardWidget(
                           feedbackProblem: feedbackProblem!);
                     },

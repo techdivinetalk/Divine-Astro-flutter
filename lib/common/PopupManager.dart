@@ -29,6 +29,7 @@ class PopupManager {
           GestureDetector(
             onTap: () {
               Get.back();
+              print("many time back ??");
             },
             child: Container(
               padding: const EdgeInsets.all(15.0),

@@ -4,6 +4,7 @@ import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/astrologer_gift_response.dart';
 import 'package:divine_astrologer/model/live/blocked_customer_list_res.dart';
 import 'package:divine_astrologer/model/live/blocked_customer_res.dart';
+import 'package:divine_astrologer/model/live/new_tarot_card_model.dart';
 import 'package:divine_astrologer/model/live/notice_board_res.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -159,5 +160,34 @@ class AstrologerProfileRepository extends ApiProvider {
       failureCallBack("Unknown Error Occurred");
     }
     return Future<String>.value(data);
+  }
+
+  Future<NewTarotCardModel> getTarotCardAPI({
+    required Function(String message) successCallBack,
+    required Function(String message) failureCallBack,
+  }) async {
+    NewTarotCardModel data = NewTarotCardModel();
+    try {
+      final response = await get(getTarotCard);
+      final Map<String, dynamic> responseBody = json.decode(response.body);
+      if (response.statusCode == HttpStatus.ok) {
+        if (responseBody["status_code"] == HttpStatus.ok) {
+          data = NewTarotCardModel.fromJson(responseBody);
+          successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
+          await preferenceService.erase();
+          await Get.offAllNamed(RouteName.login);
+        } else {
+          failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
+        }
+      } else {
+        failureCallBack(response.reasonPhrase ?? "Unknown Error Occurred");
+      }
+    } on Exception catch (error, stack) {
+      debugPrint("getTarotCardAPI(): Exception caught: error: $error");
+      debugPrint("getTarotCardAPI(): Exception caught: stack: $stack");
+      failureCallBack("Unknown Error Occurred");
+    }
+    return Future<NewTarotCardModel>.value(data);
   }
 }

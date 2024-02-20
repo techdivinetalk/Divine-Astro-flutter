@@ -13,7 +13,7 @@ import '../../../model/order_history_model/remedy_suggested_order_history.dart';
 import '../order_history_controller.dart';
 
 class SuggestRemedies extends StatelessWidget {
-  SuggestRemedies({Key? key}) : super(key: key);
+  SuggestRemedies({super.key});
 
   // final ScrollController? controller;
 
@@ -22,6 +22,14 @@ class SuggestRemedies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<OrderHistoryController>(builder: (controller) {
+      if (controller.remedySuggestedHistoryList.isEmpty) {
+        return const Center(
+          child: Text(
+            'No data found',
+            style: TextStyle(fontSize: 18),
+          ),
+        );
+      }
       return ListView.separated(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
@@ -36,6 +44,7 @@ class SuggestRemedies extends StatelessWidget {
   }
 
   Widget remediesDetail(int index, List<RemedySuggestedDataList> data) {
+    print("images ${"${preferenceService.getBaseImageURL()}/${data[index].getCustomers!.avatar!}"}");
     return InkWell(
       onTap: () {},
       child: Container(
@@ -66,8 +75,7 @@ class SuggestRemedies extends StatelessWidget {
                               height: 65,
                               width: 65,
                               child: CachedNetworkPhoto(
-                                url:
-                                    "${preferenceService.getBaseImageURL()}/${data[index].getCustomers!.avatar!}",
+                                url: data[index].getCustomers!.avatar!,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -93,8 +101,8 @@ class SuggestRemedies extends StatelessWidget {
                 InkWell(
                   onTap: () {},
                   child: Container(
-                    width: 90,
-                    height: 37,
+                    width: 70,
+                    height: 32,
                     decoration: BoxDecoration(
                       border:
                           Border.all(color: appColors.lightGreen, width: 1.0),
@@ -124,8 +132,10 @@ class SuggestRemedies extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
                 Text(
-                    DateFormat("dd MMM, hh:mm aa")
-                        .format(data[index].createdAt!),
+                    data[index].createdAt != null
+                        ? DateFormat("dd MMM, hh:mm aa")
+                        .format(data[index].createdAt!)
+                        : "N/A",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
@@ -159,7 +169,7 @@ class SuggestRemedies extends StatelessWidget {
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
-                Text("₹1000",
+                Text("₹${data[index].productDetails?.payoutValue}",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
@@ -173,7 +183,7 @@ class SuggestRemedies extends StatelessWidget {
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
-                Text("30%",
+                Text("${data[index].productDetails?.payoutType}%",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
@@ -189,10 +199,17 @@ class SuggestRemedies extends StatelessWidget {
                   "Total Earning",
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600),
                 ),
-                Text("₹${data[index].getOrder?.amount}",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w600,
-                        fontColor: appColors.lightGreen)),
+                Text(
+                  data[index].getOrder?.amount != null && data[index].getOrder?.amount != 0
+                      ? "₹${data[index].getOrder?.amount}"
+                      : "Nill",
+                  style: AppTextStyle.textStyle12(
+                    fontWeight: FontWeight.w600,
+                    fontColor: data[index].getOrder?.amount != null && data[index].getOrder?.amount != 0
+                        ? appColors.lightGreen
+                        : Colors.red,
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 8),

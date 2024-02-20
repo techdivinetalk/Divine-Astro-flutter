@@ -11,6 +11,7 @@ import "package:divine_astrologer/pages/profile/profile_page_controller.dart";
 import "package:divine_astrologer/repository/pre_defind_repository.dart";
 import "package:divine_astrologer/repository/user_repository.dart";
 import "package:divine_astrologer/screens/dashboard/dashboard_controller.dart";
+import "package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart";
 import "package:divine_astrologer/screens/side_menu/settings/settings_controller.dart";
 import "package:divine_astrologer/watcher/real_time_watcher.dart";
 import "package:firebase_database/firebase_database.dart";
@@ -37,7 +38,7 @@ class AppFirebaseService {
   var acceptBottomWatcher = RealTimeWatcher();
   final appSocket = AppSocket();
   var openChatUserId = "";
-  Rx<Map<String, dynamic>> orderData = Rx<Map<String, dynamic>>({});
+  RxMap<String, dynamic> orderData = <String, dynamic>{}.obs;
   final DatabaseReference _database = FirebaseDatabase.instance.ref();
 
   Future<void> writeData(String path, Map<String, dynamic> data) async {
@@ -74,14 +75,21 @@ class AppFirebaseService {
               Get.put(SettingsController()).logOut();
             }
           }
-          if(realTimeData["profilePhoto"] != null){
-            UserData?  userData = Get.find<SharedPreferenceService>().getUserDetail();
+          if (realTimeData["profilePhoto"] != null) {
+            UserData? userData =
+                Get.find<SharedPreferenceService>().getUserDetail();
             userData!.image = realTimeData["profilePhoto"];
-           String? baseAmazonUrl = Get.find<SharedPreferenceService>().getBaseImageURL();
+            String? baseAmazonUrl =
+                Get.find<SharedPreferenceService>().getBaseImageURL();
             Get.find<SharedPreferenceService>().setUserDetail(userData);
-            Get.put(DashboardController(Get.put(PreDefineRepository()))).userProfileImage.value = "$baseAmazonUrl/${userData.image!}";
-            Get.put(ProfilePageController(Get.put(UserRepository()))).userProfileImage.value = "$baseAmazonUrl/${userData.image!}";
-            Get.put(DashboardController(Get.put(PreDefineRepository()))).update();
+            Get.put(DashboardController(Get.put(PreDefineRepository())))
+                .userProfileImage
+                .value = "$baseAmazonUrl/${userData.image!}";
+            Get.put(ProfilePageController(Get.put(UserRepository())))
+                .userProfileImage
+                .value = "$baseAmazonUrl/${userData.image!}";
+            Get.put(DashboardController(Get.put(PreDefineRepository())))
+                .update();
             Get.put(ProfilePageController(Get.put(UserRepository()))).update();
           }
           if (realTimeData["engageId"] != null) {
@@ -154,126 +162,148 @@ class AppFirebaseService {
     } catch (e) {
       debugPrint("Error reading data from the database: $e");
     }
-    watcher.nameStream.listen((value) {
-      if (value != "") {
-        _database.child("order/$value").onValue.listen((event) async {
-          orderData.value = (event.snapshot.value == null
-              ? <String, String>{}
-              : Map<String, dynamic>.from(
-                  event.snapshot.value! as Map<Object?, Object?>));
-          if (event.snapshot.value != null) {
-            Map<String, dynamic>? orderData = Map<String, dynamic>.from(
-                event.snapshot.value! as Map<Object?, Object?>);
-            debugPrint("orderData-------> $orderData");
-            if (orderData["status"] != null) {
-              if (orderData["orderPurchase"] != null) {
-                sendBroadcast(BroadcastMessage(name: "updateTime", data: {
-                  "talktime": orderData["talktime"],
-                }));
-              }
-              if (orderData.containsKey("card")) {
-                print("displayCard");
-                sendBroadcast(
-                    BroadcastMessage(name: "displayCard", data: null));
-              }
-              if (orderData["end_time"] != null) {
-                print("endTime");
-                sendBroadcast(BroadcastMessage(
-                    name: "endTime", data: null));
-              }
-              if (orderData["status"] == "0") {
-                acceptBottomWatcher.strValue = "0";
-                sendBroadcast(BroadcastMessage(
-                    name: "AcceptChat",
-                    data: {"orderId": value, "orderData": orderData}));
-                // acceptChatRequestBottomSheet(Get.context!,
-                // onPressed: () async {
-                //   try {
-                //     if (await acceptOrRejectChat(
-                //         orderId: int.parse(value.toString()),
-                //         queueId: orderData["queue_id"])) {
-                //       acceptBottomWatcher.strValue = "1";
-                //       writeData("order/$value", {"status": "1"});
-                //       appSocket.sendConnectRequest(
-                //           astroId: orderData["astroId"],
-                //           custId: orderData["userId"]);
-                //     }
-                //   } on Exception catch (e) {
-                //     debugPrint(e.toString());
-                //   } finally {}
-                // },
-                //     orderStatus: orderData["status"],
-                //     customerName: orderData["customerName"].toString(),
-                //     dob: orderData["dob"].toString(),
-                //     placeOfBirth: orderData["placeOfBirth"].toString(),
-                //     timeOfBirth: orderData["timeOfBirth"].toString(),
-                //     maritalStatus: orderData["maritalStatus"].toString(),
-                //     walletBalance: orderData["walletBalance"].toString(),
-                //     problemArea: orderData["problemArea"].toString(),
-                //     orderData: orderData);
 
-                await Navigator.of(Get.context!).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const AcceptChatRequestScreen();
-                    },
-                  ),
-                );
-              } else if (orderData["status"] == "1") {
-                if (acceptBottomWatcher.currentName != "1") {
-                  acceptBottomWatcher.strValue = "1";
-                  // acceptChatRequestBottomSheet(Get.context!,
-                  //     onPressed: () {},
-                  //     orderStatus: orderData["status"],
-                  //     customerName: orderData["customerName"].toString(),
-                  //     dob: orderData["dob"].toString(),
-                  //     walletBalance: orderData["walletBalance"].toString(),
-                  //     placeOfBirth: orderData["placeOfBirth"].toString(),
-                  //     timeOfBirth: orderData["timeOfBirth"].toString(),
-                  //     maritalStatus: orderData["maritalStatus"].toString(),
-                  //     problemArea: orderData["problemArea"].toString(),
-                  //     orderData: orderData);
+    // watcher.nameStream.listen((value) {
+    //   if (value != "") {
+    //     _database.child("order/$value").onValue.listen((event) async {
+    //       orderData(event.snapshot.value == null
+    //           ? <String, String>{}
+    //           : Map<String, dynamic>.from(
+    //               event.snapshot.value! as Map<Object?, Object?>));
+    //       if (event.snapshot.value != null) {
+    //         Map<String, dynamic>? orderData = Map<String, dynamic>.from(
+    //             event.snapshot.value! as Map<Object?, Object?>);
+    //         debugPrint("orderData-------> $orderData");
+    //         if (orderData["status"] != null) {
+    //           if (orderData["status"] == "0") {
+    //             acceptBottomWatcher.strValue = "0";
+    //             await Navigator.of(Get.context!).push(
+    //               MaterialPageRoute(
+    //                 builder: (context) {
+    //                   return const AcceptChatRequestScreen();
+    //                 },
+    //               ),
+    //             );
+    //           } else if (orderData["status"] == "1") {
+    //             if (acceptBottomWatcher.currentName != "1") {
+    //               acceptBottomWatcher.strValue = "1";
+    //               await Navigator.of(Get.context!).push(
+    //                 MaterialPageRoute(
+    //                   builder: (context) {
+    //                     return const AcceptChatRequestScreen();
+    //                   },
+    //                 ),
+    //               );
+    //             }
+    //           } else if (orderData["status"] == "2") {
 
-                  await Navigator.of(Get.context!).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return const AcceptChatRequestScreen();
-                      },
-                    ),
-                  );
-                }
-              } else if (orderData["status"] == "2") {
-              await sendBroadcast(BroadcastMessage(name: "backReq", data: null));
-              } else if (orderData["status"] == "3") {
-               await sendBroadcast(BroadcastMessage(
-                    name: "ReJoinChat",
-                    data: {"orderId": value, "orderData": orderData}));
+    //           } else if (orderData["status"] == "3") {
+    //            await sendBroadcast(BroadcastMessage(
+    //                 name: "ReJoinChat",
+    //                 data: {"orderId": value, "orderData": orderData}));
+    //             // WidgetsBinding.instance.endOfFrame.then(
+    //             //   (_) async {
+    //             //     await Get.toNamed(RouteName.chatMessageWithSocketUI,
+    //             //         arguments: {"orderData": orderData});
+    //             //   },
+    //             // );
+    //           }
+    //         }
+    //       }
+    //     });
+    //   }
 
-                if(Get.context?.mounted??false) {
-                  await Get.toNamed(RouteName.chatMessageWithSocketUI,
-                      arguments: {"orderData": orderData});
-                }
-                // WidgetsBinding.instance.endOfFrame.then(
-                //   (_) async {
-                //     await Get.toNamed(RouteName.chatMessageWithSocketUI,
-                //         arguments: {"orderData": orderData});
-                //   },
-                // );
-              }
-            } else {
-              preferenceService.remove(SharedPreferenceService.talkTime);
-              debugPrint("remove method called");
-              sendBroadcast(BroadcastMessage(name: "EndChat"));
-            }
-          } else {
-            preferenceService.remove(SharedPreferenceService.talkTime);
-            debugPrint("remove method called");
-            sendBroadcast(BroadcastMessage(name: "EndChat"));
-          }
-        });
-      }
+    //   debugPrint("value changed to: $value");
+    // });
 
-      debugPrint("value changed to: $value");
-    });
+    watcher.nameStream.listen(
+      (value) {
+        if (value != "") {
+          _database.child("order/$value").onValue.listen(
+            (DatabaseEvent event) async {
+              final DataSnapshot dataSnapshot = event.snapshot;
+
+              if (dataSnapshot.exists) {
+                if (dataSnapshot.value is Map<dynamic, dynamic>) {
+                  Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+                  map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+                      as Map<dynamic, dynamic>;
+                  orderData(Map<String, dynamic>.from(map));
+
+                  if (orderData.value["status"] != null) {
+                    switch ((orderData.value["status"])) {
+                      case "0":
+                        await commonNavigationForStatus0And1();
+                        break;
+
+                      case "1":
+                        await commonNavigationForStatus0And1();
+                        break;
+
+                      case "2":
+                        await commonNavigationForStatus2And3();
+                        break;
+
+                      case "3":
+                        await commonNavigationForStatus2And3();
+                        break;
+
+                      default:
+                        break;
+                    }
+                  } else {}
+                } else {}
+              } else {}
+            },
+          );
+        } else {}
+      },
+    );
+  }
+
+  Future<void> commonNavigationForStatus0And1() async {
+    if (Get.currentRoute != RouteName.acceptChatRequestScreen) {
+      await Get.toNamed(RouteName.acceptChatRequestScreen);
+
+      final valueMap = AppFirebaseService().orderData.value ?? {};
+      final dynamic status = valueMap['status'];
+      if (status == "0" || status == 0) {
+        await furtherProcedure();
+      } else {}
+    } else {}
+    return Future<void>.value();
+  }
+
+  Future<void> commonNavigationForStatus2And3() async {
+    if (Get.currentRoute != RouteName.chatMessageWithSocketUI) {
+      await Get.toNamed(
+        RouteName.chatMessageWithSocketUI,
+        arguments: {"orderData": orderData},
+      );
+    } else {}
+    return Future<void>.value();
+  }
+
+  Future<void> furtherProcedure() async {
+    final valueMap = AppFirebaseService().orderData.value ?? {};
+    final bool isAccepted = await acceptOrRejectChat(
+      orderId: valueMap['orderId'],
+      queueId: valueMap["queue_id"],
+    );
+    if (isAccepted) {
+      bool value = await AppPermissionService.instance.hasAllPermissions();
+      String path = "order/${valueMap['orderId']}";
+      await AppFirebaseService()._database.child(path).update(
+        <String, dynamic>{
+          "status": "1",
+          "astrologer_permission": value,
+        },
+      );
+    } else {}
+    appSocket.sendConnectRequest(
+      astroId: valueMap["astroId"],
+      custId: valueMap["userId"],
+    );
+    return Future<void>.value();
   }
 }

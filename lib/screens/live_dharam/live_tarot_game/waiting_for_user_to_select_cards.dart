@@ -46,7 +46,7 @@ class _WaitingForUserToSelectCardsState
             border: Border.all(color: appColors.white),
             color: appColors.white.withOpacity(0.2),
           ),
-          child:  Icon(Icons.close, color: appColors.white),
+          child: Icon(Icons.close, color: appColors.white),
         ),
       ),
     );
@@ -97,9 +97,9 @@ class _WaitingForUserToSelectCardsState
             child: ListTile(
               title: Text(
                 widget.userName,
-                style:  TextStyle(fontSize: 20, color: appColors.white),
+                style: TextStyle(fontSize: 20, color: appColors.white),
               ),
-              subtitle:  Text(
+              subtitle: Text(
                 "05 M 30 S",
                 style: TextStyle(color: appColors.white),
               ),
@@ -123,10 +123,8 @@ class _WaitingForUserToSelectCardsState
           ),
         ),
       ),
-      onPressed: () {
-
-      },
-      child:  Icon(
+      onPressed: () {},
+      child: Icon(
         Icons.more_horiz,
         color: appColors.black,
         size: 50,

@@ -1706,7 +1706,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                               children: [
                                 Obx(
                                   () => Text(
-                                    controller.customerName.value,
+                                    AppFirebaseService().orderData.value["customerName"] ?? "",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 14.sp,

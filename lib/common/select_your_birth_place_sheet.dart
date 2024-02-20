@@ -71,12 +71,12 @@ class SelectPlaceOfBirth extends StatelessWidget {
                 Material(
                   color: appColors.transparent,
                   child: Text(
-                    "selectPlaceBirth".tr,
+                    "Select Place Of Birth".tr,
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       color: appColors.darkBlue,
                       fontSize: 20.0.sp,
-                    ),
+                    ), 
                   ),
                 ),
                 SizedBox(height: 20.sp),

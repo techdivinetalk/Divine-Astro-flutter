@@ -21,6 +21,14 @@ class LiveGiftsHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<OrderHistoryController>(builder: (controller) {
+      if (controller.giftHistoryList.isEmpty) {
+        return const Center(
+          child: Text(
+            'No data found',
+            style: TextStyle(fontSize: 18),
+          ),
+        );
+      }
       return ListView.separated(
         // controller: controller,
         scrollDirection: Axis.vertical,
@@ -63,6 +71,7 @@ class LiveGiftsHistory extends StatelessWidget {
   }
 
   Widget orderDetailView(List<GiftDataList> data, int index) {
+    print("giftImage :: ${preferenceService.getBaseImageURL()}/${data[index].getGift?.giftImage ?? ''}");
     return InkWell(
       onTap: () {},
       child: Container(
@@ -132,7 +141,10 @@ class LiveGiftsHistory extends StatelessWidget {
                 Text("${'dateTime'.tr} :",
                     style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue)),
                 Text(
-                  DateFormat("dd MMM, hh:mm aa").format(data[index].createdAt!),
+                  data[index].createdAt != null
+                      ? DateFormat("dd MMM, hh:mm aa")
+                      .format(data[index].createdAt!)
+                      : "N/A",
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
                 ),
               ],
