@@ -105,7 +105,7 @@ class FinalRemediesSubUI extends GetView<FinalRemediesSubController> {
                                     width: MediaQuery.of(context).size.width,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                        color: appColors.lightYellow),
+                                        color: appColors.guideColor),
                                     child: Center(
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(

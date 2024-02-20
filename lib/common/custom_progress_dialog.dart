@@ -46,7 +46,7 @@ class LoadingWidget extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(8.0),
             child: CircularProgressIndicator(
-              color: appColors.lightYellow,
+              color: appColors.guideColor,
             ),
           ),
         ),

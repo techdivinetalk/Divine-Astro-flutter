@@ -30,7 +30,7 @@ class TrueCallerService {
       footerType: TcSdkOptions.FOOTER_TYPE_ANOTHER_MOBILE_NO,
       ctaText: TcSdkOptions.CTA_TEXT_PROCEED,
       buttonShapeOption: TcSdkOptions.BUTTON_SHAPE_ROUNDED,
-      buttonColor: appColors.yellow.value,
+      buttonColor: appColors.guideColor.value,
       buttonTextColor: appColors.black.value,
     );
     log("TrueCallerService: start(): init: $init");

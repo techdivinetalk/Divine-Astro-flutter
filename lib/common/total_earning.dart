@@ -68,7 +68,7 @@ class TotalEarning extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 24.sp,
                         fontWeight: FontWeight.bold,
-                        color: appColors.appYellowColour)),
+                        color: appColors.textColor)),
                 Text(
                     "YouHaveEarnedFromYourLastSession"
                         .trParams({"price": "2115"}),
@@ -130,7 +130,7 @@ class TotalEarning extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(40.0)),
                       ),
                       onPressed: () {},
-                      color: appColors.lightYellow,
+                      color: appColors.guideColor,
                       child: Text(
                         "orderHistory".tr,
                         style: TextStyle(
@@ -158,7 +158,7 @@ class TotalEarning extends StatelessWidget {
           height: 48.w,
           clipBehavior: Clip.antiAlias,
           decoration:  BoxDecoration(
-              color: appColors.lightYellow, shape: BoxShape.circle),
+              color: appColors.guideColor, shape: BoxShape.circle),
           child: Center(
             child: svg,
           ),

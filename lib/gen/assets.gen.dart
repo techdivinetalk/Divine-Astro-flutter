@@ -364,6 +364,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_messageTemplate.svg
   SvgGenImage get icMessageTemplate =>
       const SvgGenImage('assets/images/ic_messageTemplate.svg');
+  /// File path: assets/images/ic_messageTemplate.svg
+  SvgGenImage get message =>
+      const SvgGenImage('assets/images/message.svg');
 
   /// File path: assets/images/ic_moon.svg
   SvgGenImage get icMoon => const SvgGenImage('assets/images/ic_moon.svg');

@@ -33,11 +33,11 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
         fillColor: Colors.white70,
         enabledBorder:  OutlineInputBorder(
           borderRadius:const BorderRadius.all(Radius.circular(30.0)),
-          borderSide: BorderSide(color: appColors.appYellowColour, width: 1),
+          borderSide: BorderSide(color: appColors.guideColor, width: 1),
         ),
         focusedBorder:  OutlineInputBorder(
           borderRadius:const BorderRadius.all(Radius.circular(30.0)),
-          borderSide: BorderSide(color: appColors.appYellowColour),
+          borderSide: BorderSide(color: appColors.guideColor),
         ),
       ),
     );
@@ -124,7 +124,7 @@ class _WhiteTextFieldState extends State<WhiteTextField> {
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide:  BorderSide(
-                color: appColors.appYellowColour,
+                color: appColors.guideColor,
                 width: 1.0,
               )),
         ),

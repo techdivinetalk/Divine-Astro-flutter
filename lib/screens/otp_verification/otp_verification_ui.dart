@@ -64,7 +64,7 @@ class OtpVerificationUI extends GetView<OtpVerificationController> {
                                 radius: 10.sp,
                                 textColor: appColors.brown,
                                 disabledColor:
-                                    appColors.yellow.withOpacity(0.5),
+                                    appColors.guideColor.withOpacity(0.5),
                                 onPressed: controller.otpLength.value == 6
                                     ? () {
                                         if (controller.attempts.value == 0) {
@@ -83,7 +83,7 @@ class OtpVerificationUI extends GetView<OtpVerificationController> {
                                     Expanded(
                                       child: MaterialButton(
                                         height: 55.h,
-                                        disabledColor: appColors.yellow,
+                                        disabledColor: appColors.guideColor,
                                         highlightElevation: 0,
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
@@ -219,7 +219,7 @@ class OtpFieldView extends StatelessWidget {
         border: Border.all(
             color: contro.isWrongOtp.isTrue
                 ? appColors.red.withOpacity(0.5)
-                : appColors.yellow.withOpacity(0.5),
+                : appColors.guideColor.withOpacity(0.5),
             width: 2),
         borderRadius: BorderRadius.circular(10),
       ),
@@ -227,13 +227,13 @@ class OtpFieldView extends StatelessWidget {
 
     final focusedPinTheme = defaultPinTheme.copyDecorationWith(
         border: Border.all(
-            color: contro.isWrongOtp.isTrue ? appColors.red : appColors.yellow,
+            color: contro.isWrongOtp.isTrue ? appColors.red : appColors.guideColor,
             width: 2),
         borderRadius: BorderRadius.circular(10));
 
     final submittedPinTheme = defaultPinTheme.copyDecorationWith(
         border: Border.all(
-            color: contro.isWrongOtp.isTrue ? appColors.red : appColors.yellow,
+            color: contro.isWrongOtp.isTrue ? appColors.red : appColors.guideColor,
             width: 2),
         borderRadius: BorderRadius.circular(10));
     return Padding(

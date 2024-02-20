@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
+import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/model/pivacy_policy_model.dart';
 import 'package:divine_astrologer/screens/side_menu/settings/settings_controller.dart';
 import 'package:flutter/material.dart';
@@ -41,11 +42,7 @@ class PrivacyPolicyUI extends GetView<SettingsController> {
             );
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator.adaptive(
-                valueColor: AlwaysStoppedAnimation(Colors.yellow),
-              ),
-            );
+            return  const GenericLoadingWidget();
           }
           if (snapshot.hasError) {
             return Center(

@@ -226,7 +226,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                       ),
                     );
                   },
-                  color: appColors.lightYellow,
+                  color: appColors.guideColor,
                   child: Text(
                     "suggestNow".tr,
                     style: TextStyle(

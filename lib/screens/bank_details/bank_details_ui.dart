@@ -41,7 +41,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
                     child: CustomMaterialButton(
                       height: 50.h,
                       buttonName: "submit".tr,
-                      textColor: appColors.brownColour,
+
                       onPressed: () => controller.submit(),
                     ),
                   )
@@ -125,7 +125,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                                 "status".tr +
                                                     " : " +
                                                     controller.status,
-                                          color: controller.status == "Approved" ?appColors.lightGreen:appColors.yellow
+                                          color: controller.status == "Approved" ?appColors.lightGreen:appColors.textColor
                                               )
                                             : SizedBox()
                                       ],

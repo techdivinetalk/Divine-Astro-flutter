@@ -46,7 +46,7 @@ class KundliUi extends GetView<KundliController> {
             .copyWith(bottom: viewBottomPadding(15.h)),
         child: FilledButton(
           style: FilledButton.styleFrom(
-            backgroundColor: appColors.yellow,
+            backgroundColor: appColors.guideColor,
             padding: EdgeInsets.symmetric(vertical: 16.h),
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -78,14 +78,7 @@ class KundliUi extends GetView<KundliController> {
             decoration: BoxDecoration(
               borderRadius:
                   BorderRadius.vertical(bottom: Radius.circular(48.r)),
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  appColors.appColorLite.withOpacity(0.35),
-                  appColors.appYellowColour.withOpacity(0.5),
-                ],
-              ),
+             color: appColors.guideColor,
             ),
             child: Column(
               children: [

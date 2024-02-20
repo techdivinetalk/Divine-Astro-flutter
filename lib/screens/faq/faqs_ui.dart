@@ -70,7 +70,7 @@ class FAQsUI extends GetView<FAQsController> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
            Padding(
-              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator(color: appColors.yellow)),
+              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator(color: appColors.guideColor)),
           SizedBox(height: 8.h),
           CustomText('gettingData'.tr)
         ],

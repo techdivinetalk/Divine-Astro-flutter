@@ -90,7 +90,7 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                                 fontWeight: FontWeight.w500,
                                 fontColor: appColors.brownColour),
                             indicator: BoxDecoration(
-                              color: appColors.lightYellow,
+                              color: appColors.guideColor,
                               borderRadius: BorderRadius.circular(28),
                             ),
                             onTap: (value) {

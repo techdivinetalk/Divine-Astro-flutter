@@ -221,13 +221,14 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
     return PreferredSize(
         preferredSize: AppBar().preferredSize,
         child: Obx(() => controller.isSearchEnable.value
-            ? searchWidget(appColors.yellow)
+            ? searchWidget(appColors.guideColor)
             : AppBar(
-                surfaceTintColor: appColors.yellow,
+                surfaceTintColor: appColors.guideColor,
                 title: Text(
                   "chatAssistance".tr,
                   style: const TextStyle(
                     fontSize: 14.0,
+                    color: Colors.white,
                   ),
                 ),
                 leading: IconButton(
@@ -238,7 +239,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                   icon: Icon(
                     Icons.arrow_back_ios,
                     size: 32.sp,
-                    color: appColors.blackColor,
+                    color: Colors.white,
                   ),
                 ),
                 actions: [
@@ -246,10 +247,10 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                       onPressed: () {
                         controller.isSearchEnable(true);
                       },
-                      svg: Assets.images.searchIcon.svg()),
+                      svg: Assets.images.searchIcon.svg(color: Colors.white,)),
                   SizedBox(width: 10.w)
                 ],
-                backgroundColor: appColors.yellow,
+                backgroundColor: appColors.guideColor,
                 elevation: 0,
               )));
   }
@@ -319,7 +320,7 @@ class ChatAssistanceTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(50.r),
           child: Container(
             decoration:
-                BoxDecoration(shape: BoxShape.circle, color: appColors.yellow),
+                BoxDecoration(shape: BoxShape.circle, color: appColors.guideColor),
             height: 50.w,
             width: 50.w,
             child: LoadImage(
@@ -332,7 +333,7 @@ class ChatAssistanceTile extends StatelessWidget {
                         height: 25.h,
                         width: 25.w,
                         child: CircularProgressIndicator(
-                            color: appColors.yellow, strokeWidth: 2)))),
+                            color: appColors.guideColor, strokeWidth: 2)))),
           )),
       title: CustomText(
         data.name ?? '',
@@ -359,7 +360,7 @@ class ChatAssistanceTile extends StatelessWidget {
               .any((element) => element.customerId == data.id)
           ? CircleAvatar(
               radius: 10.r,
-              backgroundColor: appColors.yellow,
+              backgroundColor: appColors.guideColor,
               child: CustomText(
                 returnNumberOfUnreadMessages(data.id ?? 0).toString(),
                 fontSize: 10.sp,
@@ -404,7 +405,7 @@ class ChatAssistanceDataTile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(50.r),
                 child: Container(
                   decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: appColors.yellow),
+                      shape: BoxShape.circle, color: appColors.guideColor),
                   height: 50.w,
                   width: 50.w,
                   child: LoadImage(
@@ -417,7 +418,7 @@ class ChatAssistanceDataTile extends StatelessWidget {
                               height: 25.h,
                               width: 25.w,
                               child: CircularProgressIndicator(
-                                  color: appColors.yellow, strokeWidth: 2)))),
+                                  color: appColors.guideColor, strokeWidth: 2)))),
                 )),
             const SizedBox(
               width: 10,

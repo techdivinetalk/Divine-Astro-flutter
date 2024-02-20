@@ -65,7 +65,7 @@ class ProfilePageController extends GetxController {
     ChangeLanguageModelClass(
         'English',
         'Eng',
-        appColors.appYellowColour,
+        appColors.textColor,
         (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "en_US"
             ? true
             : false),

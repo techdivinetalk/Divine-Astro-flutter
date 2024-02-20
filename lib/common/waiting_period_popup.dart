@@ -63,7 +63,7 @@ class WaitingPeriodPopup extends StatelessWidget {
                       child: FilledButton(
                         onPressed: () => AppSettings.openAppSettings(type: AppSettingsType.date ),
                         style: FilledButton.styleFrom(
-                          backgroundColor: appColors.yellow,
+                          backgroundColor: appColors.guideColor,
                           padding: EdgeInsets.symmetric(vertical: 16.h),
                           minimumSize: Size.zero,
                         ),

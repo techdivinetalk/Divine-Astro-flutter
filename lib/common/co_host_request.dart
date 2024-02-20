@@ -27,7 +27,7 @@ class CoHostRequest extends StatelessWidget {
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(50.0)),
                 color: appColors.white,
-                border: Border.all(color: appColors.appYellowColour)),
+                border: Border.all(color: appColors.guideColor)),
             child: Column(
               children: [
                 SizedBox(height: 20.h),
@@ -72,7 +72,7 @@ class CoHostRequest extends StatelessWidget {
                             onTap: () {
                               onAccept!.call();
                             },
-                            color: appColors.appYellowColour,
+                            color: appColors.guideColor,
                             radius: 28,
                             child: Center(
                               child: CustomText("Accept",

@@ -79,7 +79,7 @@ class _GiftWidgetState extends State<GiftWidget> {
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: appColors.yellow),
+            border: Border.all(color: appColors.guideColor),
             color: appColors.white.withOpacity(0.2),
           ),
           child: Column(
@@ -122,7 +122,7 @@ class _GiftWidgetState extends State<GiftWidget> {
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-            border: Border.all(color: appColors.yellow),
+            border: Border.all(color: appColors.guideColor),
             color: appColors.white.withOpacity(0.2),
           ),
           child: Row(
@@ -175,7 +175,7 @@ class _GiftWidgetState extends State<GiftWidget> {
           "${widget.walletBalance}",
           style:  TextStyle(
             fontSize: 16,
-            color: appColors.yellow,
+            color: appColors.textColor,
           ),
         ),
       ],
@@ -191,7 +191,7 @@ class _GiftWidgetState extends State<GiftWidget> {
         width: 24,
         decoration:  BoxDecoration(
           shape: BoxShape.circle,
-          color: appColors.yellow,
+          color: appColors.textColor,
         ),
         child: Icon(iconData),
       ),

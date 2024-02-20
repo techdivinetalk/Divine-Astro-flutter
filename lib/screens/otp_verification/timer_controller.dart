@@ -61,7 +61,7 @@ class TimerController extends GetxController {
                         Get.back();
                         //Get.toNamed(RouteName.kundliDetailPage);
                       },
-                      color: appColors.yellow,
+                      color: appColors.guideColor,
                       child: Text("Okay",
                           style: AppTextStyle.textStyle16(
                             fontColor: appColors.brown,

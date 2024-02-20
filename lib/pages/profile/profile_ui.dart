@@ -70,7 +70,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     width: 6,
-                                    color: appColors.appYellowColour,
+                                    color: appColors.guideColor,
                                    ),
                                   borderRadius: BorderRadius.circular(80),
                                 ),
@@ -135,12 +135,12 @@ class ProfileUI extends GetView<ProfilePageController> {
                                             style: AppTextStyle.textStyle10(
                                                 fontWeight: FontWeight.w500,
                                                 fontColor: appColors
-                                                    .appYellowColour),
+                                                    .textColor),
                                           ),
                                           Icon(
                                             Icons.arrow_right,
                                             size: 18.h,
-                                            color: appColors.appYellowColour,
+                                            color: appColors.guideColor,
                                           )
                                         ]),
                                       ),
@@ -438,7 +438,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                   .size
                                                   .width,
                                               decoration: BoxDecoration(
-                                                  color: appColors.lightYellow,
+                                                  color: appColors.guideColor,
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           10)),
@@ -454,7 +454,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                             fontWeight:
                                                                 FontWeight.w600,
                                                             fontColor: appColors
-                                                                .brownColour),
+                                                                .white),
                                                   ),
                                                 ),
                                               ),
@@ -570,7 +570,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                           height: 20.h,
                           width: 20.h,
                           colorFilter: ColorFilter.mode(
-                              appColors.appYellowColour, BlendMode.srcIn),
+                              appColors.guideColor, BlendMode.srcIn),
                         ),
                         SizedBox(width: 8.w),
                         Text(
@@ -591,7 +591,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                   //5
                   Row(
                     children: [
-                      Assets.images.icFiveStar.svg(width: 80.w),
+                      Assets.images.icFiveStar.svg(width: 80.w,color: appColors.guideColor),
                       LinearPercentIndicator(
                         width: 100.w,
                         barRadius: const Radius.circular(50),
@@ -605,8 +605,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 ((controller.ratingsData?.data?.totalReviews ??
                                         0)
                                     .toDouble())),
-                        backgroundColor: appColors.lightYellow.withOpacity(0.4),
-                        progressColor: appColors.lightYellow,
+                        backgroundColor: appColors.guideColor.withOpacity(0.4),
+                        progressColor: appColors.guideColor,
                       ),
                     ],
                   ),
@@ -614,7 +614,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                   //4
                   Row(
                     children: [
-                      Assets.images.icFourStar.svg(width: 70.w),
+                      Assets.images.icFourStar.svg(width: 70.w,color: appColors.guideColor),
                       LinearPercentIndicator(
                         width: 100.w,
                         barRadius: const Radius.circular(50),
@@ -628,8 +628,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 (controller.ratingsData?.data?.totalReviews ??
                                         0)
                                     .toDouble()),
-                        backgroundColor: appColors.lightYellow.withOpacity(0.4),
-                        progressColor: appColors.lightYellow,
+                        backgroundColor: appColors.guideColor.withOpacity(0.4),
+                        progressColor: appColors.guideColor,
                       ),
                     ],
                   ),
@@ -637,7 +637,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                   //3
                   Row(
                     children: [
-                      Assets.images.icThreeStar.svg(width: 55.w),
+                      Assets.images.icThreeStar.svg(width: 55.w,color: appColors.guideColor),
                       LinearPercentIndicator(
                         width: 100.w,
                         barRadius: const Radius.circular(50),
@@ -651,8 +651,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 (controller.ratingsData?.data?.totalReviews ??
                                         0)
                                     .toDouble()),
-                        backgroundColor: appColors.lightYellow.withOpacity(0.4),
-                        progressColor: appColors.lightYellow,
+                        backgroundColor: appColors.guideColor.withOpacity(0.4),
+                        progressColor: appColors.guideColor,
                       ),
                     ],
                   ),
@@ -660,7 +660,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                   //2
                   Row(
                     children: [
-                      Assets.images.icTwoStar.svg(width: 35.w),
+                      Assets.images.icTwoStar.svg(width: 35.w,color: appColors.guideColor),
                       LinearPercentIndicator(
                         width: 100.w,
                         barRadius: const Radius.circular(50),
@@ -674,8 +674,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 (controller.ratingsData?.data?.totalReviews ??
                                         0)
                                     .toDouble()),
-                        backgroundColor: appColors.lightYellow.withOpacity(0.4),
-                        progressColor: appColors.lightYellow,
+                        backgroundColor: appColors.guideColor.withOpacity(0.4),
+                        progressColor: appColors.guideColor,
                       ),
                     ],
                   ),
@@ -683,7 +683,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                   //1
                   Row(
                     children: [
-                      Assets.images.icOneStar.svg(width: 15.w),
+                      Assets.images.icOneStar.svg(width: 15.w,color: appColors.guideColor),
                       LinearPercentIndicator(
                         width: 100.w,
                         barRadius: const Radius.circular(50),
@@ -697,8 +697,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 (controller.ratingsData?.data?.totalReviews ??
                                         0)
                                     .toDouble()),
-                        backgroundColor: appColors.lightYellow.withOpacity(0.4),
-                        progressColor: appColors.lightYellow,
+                        backgroundColor: appColors.guideColor.withOpacity(0.4),
+                        progressColor: appColors.guideColor,
                       ),
                     ],
                   ),
@@ -762,8 +762,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 filledIcon: Icons.star,
                                 emptyIcon: Icons.star,
                                 emptyColor:
-                                    appColors.appYellowColour.withOpacity(0.3),
-                                filledColor: appColors.appYellowColour,
+                                    appColors.guideColor.withOpacity(0.3),
+                                filledColor: appColors.guideColor,
                                 initialRating:
                                     double.tryParse("${reviewData?.rating}") ??
                                         0,
@@ -836,7 +836,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                             Visibility(
                               visible: controller.isLoading.value,
                               child: CircularProgressIndicator(
-                                  color: appColors.yellow),
+                                  color: appColors.guideColor),
                             ),
                           ],
                         ),
@@ -1104,7 +1104,7 @@ class ThankYouReportUI extends GetView<ProfilePageController> {
                       borderRadius: BorderRadius.all(Radius.circular(30)),
                     ),
                     onPressed: onPressed,
-                    color: appColors.lightYellow,
+                    color: appColors.guideColor,
                     child: Text(
                       "okay".tr,
                       style: TextStyle(

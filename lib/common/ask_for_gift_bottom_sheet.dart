@@ -155,7 +155,7 @@ class _AskForGiftState extends State<AskForGiftBottomSheet> {
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-            border: Border.all(color: appColors.yellow),
+            border: Border.all(color: appColors.guideColor),
             color: appColors.white.withOpacity(0.2),
           ),
           child: Row(
@@ -219,7 +219,7 @@ class _AskForGiftState extends State<AskForGiftBottomSheet> {
         width: 24,
         decoration:  BoxDecoration(
           shape: BoxShape.circle,
-          color: appColors.yellow,
+          color: appColors.guideColor,
         ),
         child: Icon(iconData),
       ),

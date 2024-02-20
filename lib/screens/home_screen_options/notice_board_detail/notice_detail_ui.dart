@@ -81,7 +81,7 @@ class NoticeDetailUi extends GetView<NoticeDetailController> {
           borderRadius: const BorderRadius.all(
             Radius.circular(20),
           ),
-          border: Border.all(color: appColors.lightYellow)),
+          border: Border.all(color: appColors.guideColor)),
       child: Column(
         children: [
           Row(

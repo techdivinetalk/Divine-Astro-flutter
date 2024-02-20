@@ -82,12 +82,8 @@ class AssistMessageView extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(40)),
-        border: Border.all(width: 2, color: appColors.appColorDark),
-        gradient: LinearGradient(
-          colors: [appColors.white, appColors.appColorDark],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
+        border: Border.all(width: 2, color: appColors.guideColor),
+        color: appColors.guideColor,
       ),
       constraints: BoxConstraints(
           maxWidth: ScreenUtil().screenWidth * 0.8,
@@ -188,7 +184,7 @@ class AssistMessageView extends StatelessWidget {
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: appColors.yellow),
+                      color: appColors.guideColor),
                   child: Text(
                     isToday
                         ? 'Today'

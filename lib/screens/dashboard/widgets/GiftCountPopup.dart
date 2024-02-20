@@ -49,7 +49,7 @@ Future GiftCountPopup(BuildContext context,
                   Text(
                     title,
                     style: AppTextStyle.textStyle20(
-                        fontWeight: FontWeight.w600, fontColor: appColors.appColorDark),
+                        fontWeight: FontWeight.w600, fontColor: appColors.textColor),
                   ),
                 SizedBox(height: 10.h),
                 Text(
@@ -70,8 +70,8 @@ Future GiftCountPopup(BuildContext context,
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       width: Get.width,
                       decoration: BoxDecoration(
-                        color: appColors.appColorDark,
-                        border: Border.all(color: appColors.appColorDark, width: 2,),
+                        color:appColors.guideColor,
+                        border: Border.all(color: appColors.guideColor, width: 2,),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Center(

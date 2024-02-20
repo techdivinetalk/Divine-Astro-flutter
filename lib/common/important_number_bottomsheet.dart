@@ -147,7 +147,7 @@ class _AddContactButtonState extends State<AddContactButton> {
                 borderRadius: BorderRadius.circular(20),
                 color: isButtonTap
                     ? appColors.grey.withOpacity(0.2)
-                    : appColors.lightYellow),
+                    : appColors.guideColor),
             child: Padding(
               padding:
               EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),

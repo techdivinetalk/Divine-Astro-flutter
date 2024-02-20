@@ -202,7 +202,7 @@ class _AllCountryListState extends State<AllCountryList> {
                   child: CircularProgressIndicator.adaptive(
                     strokeWidth: 2.sp,
                     valueColor:
-                         AlwaysStoppedAnimation(appColors.lightYellow),
+                         AlwaysStoppedAnimation(appColors.guideColor),
                   ),
                 );
               },

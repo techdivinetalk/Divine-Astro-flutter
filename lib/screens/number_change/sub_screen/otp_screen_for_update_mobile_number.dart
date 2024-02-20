@@ -179,8 +179,8 @@ class OtpFieldView extends StatelessWidget {
         decoration: CirclePinDecoration(
           strokeWidth: 2.sp,
           strokeColorBuilder: PinListenColorBuilder(
-            appColors.lightYellow,
-            appColors.lightYellow,
+            appColors.guideColor,
+            appColors.guideColor,
           ),
         ),
         onChanged: onChanged,

@@ -204,7 +204,7 @@ class _AllCitiesListState extends State<AllCitiesList> {
                 return Center(
                   child: CircularProgressIndicator.adaptive(
                     strokeWidth: 2.sp,
-                    valueColor:  AlwaysStoppedAnimation(appColors.lightYellow),
+                    valueColor:  AlwaysStoppedAnimation(appColors.guideColor),
                   ),
                 );
               },

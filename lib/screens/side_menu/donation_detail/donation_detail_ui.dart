@@ -27,7 +27,7 @@ class DonationDetailUi extends GetView<DonationDetailController> {
                 borderRadius: BorderRadius.all(Radius.circular(25.0)),
               ),
               onPressed: () {},
-              color: appColors.lightYellow,
+              color: appColors.guideColor,
               child: Text(
                 "donateNow".tr,
                 style: TextStyle(
