@@ -880,7 +880,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     Navigator.pop(context);
                     switch (index) {
                       case 0:
-                        controller.getImage(false);
+                        controller.getImage(true);
                         break;
                       case 1:
                         controller.getImage(false);

@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'dart:ui';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,6 +9,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
+import '../../../common/common_functions.dart';
+import '../../../common/routes.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../model/chat_assistant/chat_assistant_chats_response.dart';
 import '../../../utils/custom_extension.dart';
@@ -29,8 +35,11 @@ class AssistMessageView extends StatelessWidget {
       BuildContext context, AssistChatData chatMessage, bool yourMessage) {
     Widget messageWidget;
     switch (chatMessage.msgType) {
-      case MsgType.Gift:
+      case MsgType.gift:
         messageWidget = giftMsgView(context, chatMessage, yourMessage);
+        break;
+      case MsgType.image:
+        messageWidget = imageMsgView(chatDetail: chatMessage);
         break;
       case MsgType.text:
         messageWidget = textMsgView(context, chatMessage, yourMessage);
@@ -74,6 +83,80 @@ class AssistMessageView extends StatelessWidget {
     return buildMessageView(context, chatMessage, yourMessage);
   }
 
+  Widget imageMsgView({required AssistChatData chatDetail}) {
+    return SizedBox(
+      width: double.maxFinite,
+      child: Column(
+        crossAxisAlignment:
+            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Container(
+              padding: const EdgeInsets.all(8.0),
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 3.0,
+                      offset: const Offset(0.0, 3.0)),
+                ],
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(8.r)),
+              ),
+              constraints: BoxConstraints(
+                  maxWidth: ScreenUtil().screenWidth * 0.7,
+                  minWidth: ScreenUtil().screenWidth * 0.27),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0.sp),
+                    child: CachedNetworkImage(
+                      imageUrl:  chatDetail.message ?? '',
+                      fit: BoxFit.cover,
+                      height: 200.h,
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6)
+                              .copyWith(left: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(10.r)),
+                            gradient: LinearGradient(
+                              colors: [
+                                appColors.darkBlue.withOpacity(0.0),
+                                appColors.darkBlue.withOpacity(0.0),
+                                appColors.darkBlue.withOpacity(0.5),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomCenter,
+                            ),
+                          ),
+                          child: Text(
+                            // messageDateTime(chatDetail. ?? 0),
+                            'datetime',
+                            style: AppTextStyle.textStyle10(
+                                fontColor: appColors.white),
+                          ),
+                        ),
+                        SizedBox(width: 8.w),
+                      ],
+                    ),
+                  ),
+                ],
+              ))
+        ],
+      ),
+    );
+  }
+
   Widget giftMsgView(
       BuildContext context, AssistChatData chatMessage, bool yourMessage) {
     return Container(
@@ -107,10 +190,10 @@ class AssistMessageView extends StatelessWidget {
   Widget textMsgView(
       BuildContext context, AssistChatData currentMsg, bool yourMessage) {
     // RxInt msgType = (chatMessage.msgType ?? 0).obs;
-    final currentMsgDate =
-        DateTime.fromMillisecondsSinceEpoch(int.parse( currentMsg.createdAt ?? '0'));
-    final nextMsgDate =
-        DateTime.fromMillisecondsSinceEpoch(int.parse( nextMessage.createdAt ?? '0'));
+    final currentMsgDate = DateTime.fromMillisecondsSinceEpoch(
+        int.parse(currentMsg.createdAt ?? '0'));
+    final nextMsgDate = DateTime.fromMillisecondsSinceEpoch(
+        int.parse(nextMessage.createdAt ?? '0'));
     final differenceOfDays = nextMsgDate.day - currentMsgDate.day;
     final isToday = DateFormat('yyyy MM dd').format(nextMsgDate) ==
         DateFormat('yyyy MM dd').format(DateTime.now());

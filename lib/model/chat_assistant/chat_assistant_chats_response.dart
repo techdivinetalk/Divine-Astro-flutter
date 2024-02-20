@@ -181,11 +181,13 @@ final sendByValue = EnumValues({
   "1": SendBy.astrologer,
 });
 
-enum MsgType { text, Gift }
+enum MsgType { text, gift, image,remedies }
 
 final msgTypeValues = EnumValues({
   "0": MsgType.text,
-  "8": MsgType.Gift,
+  "1":MsgType.image,
+  "2":MsgType.remedies,
+  "8": MsgType.gift,
 });
 
 enum SeenStatus { notSent, sent, delivered, received }

@@ -41,6 +41,7 @@ import 'di/progress_service.dart';
 import 'di/shared_preference_service.dart';
 import 'gen/fonts.gen.dart';
 import 'localization/translations.dart';
+import 'screens/live_page/constant.dart';
 import 'utils/utils.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -80,8 +81,9 @@ Future<void> main() async {
       print('Message data:- ${MiddleWare.instance.currentPage}');
       print("chat assist realtime notification with data ${message.data}");
       if (MiddleWare.instance.currentPage == RouteName.chatMessageUI) {
-        sendBroadcast(
-            BroadcastMessage(name: "chatAssist", data: {'msg': message.data}));
+        assistChatNewMsg.add(message.data);
+        // sendBroadcast(
+        //     BroadcastMessage(name: "chatAssist", data: {'msg': message.data}));
       } else {
         showNotification(message.data["title"], message.data["message"],
             message.data['type'], message.data);

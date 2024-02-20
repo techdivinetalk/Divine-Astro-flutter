@@ -16,6 +16,7 @@ const yourAppSign =
 
 
 const yourServerSecret = '89ceddc6c59909af326ddb7209cb1c16';
+RxList assistChatNewMsg = [].obs;
 
 const userChatData = "userChatData";
 RxInt currentChatUserId = 8693.obs;
