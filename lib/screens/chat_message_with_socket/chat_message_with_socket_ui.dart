@@ -1946,7 +1946,7 @@ void astroNotAcceptingCallsSnackBar({
       style: const TextStyle(fontSize: 10, color: Colors.black),
       overflow: TextOverflow.ellipsis,
     ),
-    backgroundColor: appColors.yellow,
+    backgroundColor: appColors.guideColor,
     behavior: SnackBarBehavior.floating,
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);

@@ -72,7 +72,7 @@ class _ChatCallOnOffWidgetState extends State<ChatCallOnOffWidget> {
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: appColors.yellow),
+            border: Border.all(color: appColors.guideColor),
             color: appColors.white,
           ),
           child: grid(),
@@ -147,7 +147,7 @@ class _ChatCallOnOffWidgetState extends State<ChatCallOnOffWidget> {
         child: ElevatedButton(
           style: ButtonStyle(
             elevation: MaterialStateProperty.all(4),
-            backgroundColor: MaterialStateProperty.all(appColors.yellow),
+            backgroundColor: MaterialStateProperty.all(appColors.guideColor),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
