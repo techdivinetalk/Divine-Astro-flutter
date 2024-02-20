@@ -1797,7 +1797,10 @@ class AstrologerChatAppBar extends StatelessWidget {
                               },
                               isAstrologer: true,
                               astrologerDisabledCalls: () {
-                                astroNotAcceptingCallsSnackBar(context);
+                                astroNotAcceptingCallsSnackBar(
+                                  context: context,
+                                  isVideoCall: false,
+                                );
                               },
                             );
                           },
@@ -1842,7 +1845,10 @@ class AstrologerChatAppBar extends StatelessWidget {
                               },
                               isAstrologer: true,
                               astrologerDisabledCalls: () {
-                                astroNotAcceptingCallsSnackBar(context);
+                                astroNotAcceptingCallsSnackBar(
+                                  context: context,
+                                  isVideoCall: true,
+                                );
                               },
                             );
                           },
@@ -1933,11 +1939,15 @@ class LoadingIndicatorWidget extends StatelessWidget {
   }
 }
 
-void astroNotAcceptingCallsSnackBar(BuildContext context) {
+void astroNotAcceptingCallsSnackBar({
+  required bool isVideoCall,
+  required BuildContext context,
+}) {
+  final String type = isVideoCall == true ? "Video" : "Voice";
   final SnackBar snackBar = SnackBar(
-    content: const Text(
-      'Astrologer is not accepting the calls at this moment.',
-      style: TextStyle(fontSize: 10, color: Colors.black),
+    content: Text(
+      'Astrologer is not accepting the $type call at this moment.',
+      style: const TextStyle(fontSize: 10, color: Colors.black),
       overflow: TextOverflow.ellipsis,
     ),
     backgroundColor: appColors.yellow,

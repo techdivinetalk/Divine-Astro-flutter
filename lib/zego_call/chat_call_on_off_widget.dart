@@ -1,7 +1,6 @@
 import "dart:ui";
 
 import "package:divine_astrologer/common/colors.dart";
-import "package:divine_astrologer/screens/live_dharam/widgets/common_button.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
 
@@ -11,6 +10,7 @@ class ChatCallOnOffWidget extends StatefulWidget {
     required this.makeCall,
     required this.makeTurnOnOffCalls,
     required this.currentStatus,
+    required this.isVideoCall,
     super.key,
   });
 
@@ -18,6 +18,7 @@ class ChatCallOnOffWidget extends StatefulWidget {
   final void Function() makeCall;
   final void Function() makeTurnOnOffCalls;
   final bool currentStatus;
+  final bool isVideoCall;
 
   @override
   State<ChatCallOnOffWidget> createState() => _ChatCallOnOffWidgetState();
@@ -86,17 +87,7 @@ class _ChatCallOnOffWidgetState extends State<ChatCallOnOffWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          const SizedBox(height: 16),
-          SizedBox(
-            height: 50,
-            width: 50,
-            child: Image.asset(
-              "assets/images/live_end_session.png",
-            ),
-          ),
-          const SizedBox(height: 16),
-          const Text("What to do?"),
-          const SizedBox(height: 16),
+          const SizedBox(height: 32),
           widget.currentStatus
               ? Column(children: [callButton(), changeButton()])
               : changeButton()
@@ -108,9 +99,12 @@ class _ChatCallOnOffWidgetState extends State<ChatCallOnOffWidget> {
   Widget callButton() {
     return Column(
       children: [
-        CommonButton(
-          buttonText: "Make a Call",
+        moreOptionsButton(
+          buttonText: "Make a ${type()} Call",
           buttonCallback: widget.makeCall,
+          buttonImage: widget.isVideoCall
+              ? "assets/images/live_call_video.png"
+              : "assets/images/live_call_audio.png",
         ),
         const SizedBox(height: 16),
       ],
@@ -118,22 +112,108 @@ class _ChatCallOnOffWidgetState extends State<ChatCallOnOffWidget> {
   }
 
   Widget changeButton() {
-    bool value = widget.currentStatus;
     return Column(
       children: [
-        TextButton(
-          onPressed: widget.makeTurnOnOffCalls,
-          child: Text(
-            "Turn ${value ? "off" : "on"} calls",
-            style: const TextStyle(
-              color: Colors.black,
-              decoration: TextDecoration.underline,
-              decorationColor: Colors.black,
-            ),
-          ),
+        moreOptionsButton2(
+          buttonText: msg(),
+          buttonCallback: widget.makeTurnOnOffCalls,
+          buttonImage: widget.currentStatus
+              ? "assets/images/live_block_icon.png"
+              : "assets/images/live_unblock_icon.png",
         ),
         const SizedBox(height: 16),
       ],
+    );
+  }
+
+  String msg() {
+    return "Turn ${widget.currentStatus ? "off" : "on"} ${type()} calls";
+  }
+
+  String type() {
+    return widget.isVideoCall == true ? "Video" : "Voice";
+  }
+
+  Widget moreOptionsButton({
+    required String buttonText,
+    required Function() buttonCallback,
+    required String buttonImage,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: SizedBox(
+        height: 60,
+        width: double.infinity,
+        child: ElevatedButton(
+          style: ButtonStyle(
+            elevation: MaterialStateProperty.all(4),
+            backgroundColor: MaterialStateProperty.all(appColors.yellow),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+            ),
+          ),
+          onPressed: buttonCallback,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                buttonImage,
+                height: 24,
+                width: 24,
+              ),
+              const SizedBox(width: 16),
+              Text(
+                buttonText,
+                style: TextStyle(color: appColors.black),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget moreOptionsButton2({
+    required String buttonText,
+    required Function() buttonCallback,
+    required String buttonImage,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: SizedBox(
+        height: 60,
+        width: double.infinity,
+        child: ElevatedButton(
+          style: ButtonStyle(
+            elevation: MaterialStateProperty.all(4),
+            backgroundColor: MaterialStateProperty.all(appColors.white),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                side: BorderSide(width: 1, color: appColors.red),
+              ),
+            ),
+          ),
+          onPressed: buttonCallback,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                buttonImage,
+                height: 24,
+                width: 24,
+              ),
+              const SizedBox(width: 16),
+              Text(
+                buttonText,
+                style: TextStyle(color: appColors.red),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

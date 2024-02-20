@@ -31,7 +31,6 @@ class ZegoService {
   final SharedPreferenceService _pref = Get.put(SharedPreferenceService());
 
   final controller = ZegoUIKitPrebuiltCallController();
-
   Rx<Size> ourSize = const Size(0, 0).obs;
   RxBool isFront = true.obs;
   RxBool isCamOn = true.obs;
@@ -487,44 +486,49 @@ class ZegoService {
     required Function() astrologerDisabledCalls,
     required bool isAstrologer,
   }) {
+    var orderData = AppFirebaseService().orderData.value;
+    final bool isAccepting = isVideoCall
+        ? orderData["astr_accepting_video_calls"] ?? false
+        : orderData["astr_accepting_voice_calls"] ?? false;
     return InkWell(
       onTap: () async {
-        if (isAstrologer) {
-          await chatCallOnOffWidgetPopup(
-            makeCallFunction: () async {
-              await newOnPressed(
+        isAstrologer
+            ? await chatCallOnOffWidgetPopup(
+                makeCallFunction: () async {
+                  await newOnPressed(
+                    isVideoCall: isVideoCall,
+                    targetUserID: targetUserID,
+                    targetUserName: targetUserName,
+                    checkOppositeSidePermGranted: checkOppositeSidePermGranted,
+                    customData: customData,
+                  );
+                },
+                makeTurnOnOffCallsFunction: () async {
+                  await addUpdateCallOnOff(isVideoCall: isVideoCall);
+                },
                 isVideoCall: isVideoCall,
-                targetUserID: targetUserID,
-                targetUserName: targetUserName,
-                checkOppositeSidePermGranted: checkOppositeSidePermGranted,
-                customData: customData,
-              );
-            },
-            makeTurnOnOffCallsFunction: addUpdateCallOnOff,
-          );
-        } else {
-          var orderData = AppFirebaseService().orderData.value;
-          final bool isAccepting = orderData["astr_accepting_calls"] ?? false;
-          if (isAccepting) {
-            await newOnPressed(
-              isVideoCall: isVideoCall,
-              targetUserID: targetUserID,
-              targetUserName: targetUserName,
-              checkOppositeSidePermGranted: checkOppositeSidePermGranted,
-              customData: customData,
-            );
-          } else {
-            astrologerDisabledCalls();
-          }
-        }
+              )
+            : isAccepting
+                ? await newOnPressed(
+                    isVideoCall: isVideoCall,
+                    targetUserID: targetUserID,
+                    targetUserName: targetUserName,
+                    checkOppositeSidePermGranted: checkOppositeSidePermGranted,
+                    customData: customData,
+                  )
+                : astrologerDisabledCalls();
       },
       child: SizedBox(
         height: 32,
         width: 32,
         child: Image.asset(
           isVideoCall
-              ? "assets/images/chat_video_call_icon.png"
-              : "assets/images/chat_voice_call_icon.png",
+              ? isAccepting
+                  ? "assets/images/chat_video_call_icon.png"
+                  : "assets/images/chat_disabled_video_call.png"
+              : isAccepting
+                  ? "assets/images/chat_voice_call_icon.png"
+                  : "assets/images/chat_disabled_voice_call.png",
         ),
       ),
     );
@@ -597,24 +601,31 @@ class ZegoService {
     return Future<void>.value();
   }
 
-  Future<void> addUpdateCallOnOff() async {
+  Future<void> addUpdateCallOnOff({required bool isVideoCall}) async {
     var orderData = AppFirebaseService().orderData.value;
-    final bool isAccepting = orderData["astr_accepting_calls"] ?? false;
     final int orderId = orderData["orderId"] ?? 0;
+    final bool isAccepting = isVideoCall
+        ? orderData["astr_accepting_video_calls"] ?? false
+        : orderData["astr_accepting_voice_calls"] ?? false;
     if (orderId != 0) {
       final DatabaseReference ref = FirebaseDatabase.instance.ref();
-      await ref.child("order/$orderId").update(
-        {"astr_accepting_calls": !isAccepting},
-      );
+      final Map<String, dynamic> map = isVideoCall
+          ? {"astr_accepting_video_calls": !isAccepting}
+          : {"astr_accepting_voice_calls": !isAccepting};
+      await ref.child("order/$orderId").update(map);
     } else {}
     return Future<void>.value();
   }
 
   Future<void> chatCallOnOffWidgetPopup({
+    required bool isVideoCall,
     required Function() makeCallFunction,
     required Function() makeTurnOnOffCallsFunction,
   }) async {
     var orderData = AppFirebaseService().orderData.value;
+    final bool currentStatus = isVideoCall
+        ? orderData["astr_accepting_video_calls"] ?? false
+        : orderData["astr_accepting_voice_calls"] ?? false;
     await showCupertinoModalPopup(
       context: Get.context!,
       builder: (BuildContext context) {
@@ -628,7 +639,8 @@ class ZegoService {
             Get.back();
             makeTurnOnOffCallsFunction();
           },
-          currentStatus: orderData["astr_accepting_calls"] ?? false,
+          currentStatus: currentStatus,
+          isVideoCall: isVideoCall,
         );
       },
     );
