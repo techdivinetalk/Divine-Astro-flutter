@@ -85,7 +85,7 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
               ],
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(20.r)),
-              border: Border.all(color: appColors.lightYellow)),
+              border: Border.all(color: appColors.guideColor)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -279,7 +279,7 @@ class SettingsUI extends GetView<SettingsController> {
                           // Get.offAndToNamed(RouteName.login);
                         },
                         style: FilledButton.styleFrom(
-                          backgroundColor: appColors.lightYellow,
+                          backgroundColor: appColors.guideColor,
                           padding: EdgeInsets.symmetric(vertical: 16.h),
                           minimumSize: Size.zero,
                         ),

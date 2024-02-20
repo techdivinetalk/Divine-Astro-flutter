@@ -73,7 +73,7 @@ class LoginUI extends GetView<LoginController> {
                         height: 50.h,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: appColors.lightYellow,
+                          color: appColors.guideColor,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: !controller.isLoading.value
@@ -225,13 +225,13 @@ class LoginUI extends GetView<LoginController> {
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                   borderSide: BorderSide(
-                    color: appColors.appYellowColour,
+                    color: appColors.guideColor,
                     width: 1.0,
                   )),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                   borderSide: BorderSide(
-                    color: appColors.appYellowColour,
+                    color: appColors.guideColor,
                     width: 1.0,
                   )),
               errorBorder: OutlineInputBorder(
@@ -302,7 +302,7 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
                   child: e.key == swipeIndex
                       ? Assets.svg.pinkSlider.svg(
                           colorFilter: ColorFilter.mode(
-                              appColors.appYellowColour, BlendMode.srcIn))
+                              appColors.guideColor, BlendMode.srcIn))
                       : Assets.svg.blackDot.svg(),
                 ),
               )

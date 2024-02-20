@@ -55,7 +55,7 @@ class ChatSuggestRemediesDetailsPage
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                        color: appColors.lightYellow,
+                        color: appColors.guideColor,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Padding(
@@ -87,7 +87,7 @@ class ChatSuggestRemediesDetailsPage
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            color: controller.selectedIndex.value == index ? appColors.yellow : Colors.transparent,
+            color: controller.selectedIndex.value == index ? appColors.guideColor : Colors.transparent,
           ),
           borderRadius: BorderRadius.circular(8.0),
         ),

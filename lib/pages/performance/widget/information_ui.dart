@@ -62,7 +62,7 @@ class InformationUI extends GetView<PerformanceController> {
                       child: FilledButton(
                         onPressed: () {},
                         style: FilledButton.styleFrom(
-                          backgroundColor: appColors.lightYellow,
+                          backgroundColor: appColors.guideColor,
                           padding: EdgeInsets.symmetric(vertical: 16.h),
                           minimumSize: Size.zero,
                         ),

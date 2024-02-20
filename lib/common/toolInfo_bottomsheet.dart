@@ -68,7 +68,7 @@ Future toolInfoBottomSheet(BuildContext context,
                     padding:  EdgeInsets.symmetric(vertical: 12.5.h),
                     width: Get.width,
                     decoration: BoxDecoration(
-                      color: appColors.lightYellow,
+                      color: appColors.guideColor,
                       borderRadius: BorderRadius.circular(10.w),
                     ),
                     child: Center(

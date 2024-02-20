@@ -71,7 +71,7 @@ class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: appColors.yellow),
+            border: Border.all(color: appColors.guideColor),
             color: appColors.white.withOpacity(0.2),
           ),
           child: grid(),
@@ -107,7 +107,7 @@ class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
                 ),
                 controlAffinity: ListTileControlAffinity.trailing,
                 toggleable: true,
-                activeColor: appColors.yellow,
+                activeColor: appColors.guideColor,
               );
             },
           ),
@@ -140,7 +140,7 @@ class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
       style: ButtonStyle(
         elevation: MaterialStateProperty.all(4),
         backgroundColor: MaterialStateProperty.all(
-          value == null ? appColors.grey : appColors.yellow,
+          value == null ? appColors.grey : appColors.guideColor,
         ),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           const RoundedRectangleBorder(

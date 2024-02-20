@@ -97,7 +97,7 @@ class SuggestRemediesController extends GetxController {
                         child: Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: appColors.lightYellow),
+                              color: appColors.guideColor),
                           child: Padding(
                             padding: EdgeInsets.symmetric(vertical: 15.h),
                             child: Center(

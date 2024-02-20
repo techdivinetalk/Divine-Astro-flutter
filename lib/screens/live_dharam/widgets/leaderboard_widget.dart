@@ -221,7 +221,7 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: appColors.yellow),
+            border: Border.all(color: appColors.guideColor),
             color: appColors.white.withOpacity(0.2),
           ),
           child: grid(),
@@ -253,7 +253,7 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
                       borderRadius: const BorderRadius.all(
                         Radius.circular(50.0),
                       ),
-                      border: Border.all(color: appColors.yellow),
+                      border: Border.all(color: appColors.guideColor),
                       color: appColors.white,
                     ),
                     child: ListTile(

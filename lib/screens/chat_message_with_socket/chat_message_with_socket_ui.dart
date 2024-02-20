@@ -235,7 +235,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   largeSize: 20.sp,
                                   child: Icon(
                                       Icons.arrow_drop_down_circle_outlined,
-                                      color: appColors.appYellowColour,
+                                      color: appColors.guideColor,
                                       size: 40.h),
                                 ),
                               )
@@ -776,7 +776,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                     borderRadius:
                                         BorderRadius.circular(30.0.sp),
                                     borderSide: BorderSide(
-                                      color: appColors.appYellowColour,
+                                      color: appColors.guideColor,
                                       width: 1.0,
                                     )),
                               ),
@@ -817,13 +817,13 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   controller.isRecording.value = false);
                         },
                         child: SocialMediaRecorder(
-                          backGroundColor: appColors.yellow,
+                          backGroundColor: appColors.guideColor,
                           cancelTextBackGroundColor: Colors.white,
-                          recordIconBackGroundColor: appColors.yellow,
+                          recordIconBackGroundColor: appColors.guideColor,
                           radius: BorderRadius.circular(30),
                           initRecordPackageWidth:
                               kToolbarHeight - Get.width * 0.010,
-                          recordIconWhenLockBackGroundColor: appColors.yellow,
+                          recordIconWhenLockBackGroundColor: appColors.guideColor,
                           maxRecordTimeInSecond: 30,
                           startRecording: () {
                             controller.isRecording.value = true;
@@ -958,12 +958,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(40)),
-              border: Border.all(width: 2, color: appColors.appColorDark),
-              gradient: LinearGradient(
-                colors: [appColors.white, appColors.appColorDark],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
+              border: Border.all(width: 2, color: appColors.guideColor),
+              color: appColors.guideColor,
             ),
             constraints: BoxConstraints(
                 maxWidth: ScreenUtil().screenWidth * 0.8,
@@ -1015,7 +1011,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: appColors.yellow,
+                  color: appColors.guideColor,
                 ),
                 borderRadius: BorderRadius.circular(8.0),
               ),
@@ -1930,7 +1926,7 @@ class LoadingIndicatorWidget extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(8.0),
             child: CircularProgressIndicator(
-              color: appColors.appYellowColour,
+              color: appColors.guideColor,
             ),
           ),
         ),

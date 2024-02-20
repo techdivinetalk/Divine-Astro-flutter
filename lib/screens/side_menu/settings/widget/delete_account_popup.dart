@@ -71,7 +71,7 @@ class DeleteAccountPopup extends GetView<SettingsController> {
                           controller.logOut();
                         },
                         style: FilledButton.styleFrom(
-                          backgroundColor: appColors.lightYellow,
+                          backgroundColor: appColors.guideColor,
                           padding: EdgeInsets.symmetric(vertical: 16.h),
                           minimumSize: Size.zero,
                         ),

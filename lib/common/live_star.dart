@@ -19,7 +19,7 @@ class LiveStar extends StatelessWidget {
               backgroundColor: appColors.white,
               surfaceTintColor: appColors.white,
               shape: OutlineInputBorder(
-                borderSide:  BorderSide(color: appColors.appYellowColour),
+                borderSide:  BorderSide(color: appColors.guideColor),
                 borderRadius: BorderRadius.circular(20),
               ),
               title: Row(
@@ -71,7 +71,7 @@ class LiveStar extends StatelessWidget {
                             text: "Live Star ",
                             style: TextStyle(
                                 fontSize: 16.sp,
-                                color: appColors.appYellowColour,
+                                color: appColors.textColor,
                                 fontWeight: FontWeight.bold)),
                         TextSpan(
                             text: "now!!!",

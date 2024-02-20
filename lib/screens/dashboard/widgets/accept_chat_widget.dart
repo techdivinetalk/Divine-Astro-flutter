@@ -21,10 +21,7 @@ class AcceptChatWidget extends StatelessWidget {
       padding: EdgeInsets.all(16.h),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.r),
-        gradient:  LinearGradient(
-            colors: [appColors.white, appColors.yellow],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter),
+       color: appColors.guideColor
       ),
       child: Row(
         children: [
@@ -41,7 +38,7 @@ class AcceptChatWidget extends StatelessWidget {
             onTap: onTap,
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 6),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: appColors.yellow),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: appColors.guideColor),
               child: Row(
                 children: [
                   Text(' Accept Chat Now',

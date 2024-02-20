@@ -30,21 +30,14 @@ class LeaderBoardWidget extends StatelessWidget {
             height: 32,
             child: DecoratedBox(
               decoration: BoxDecoration(
-                gradient:  LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    appColors.white,
-                    appColors.yellow,
-                  ],
-                ),
+
                 borderRadius: const BorderRadius.all(
                   Radius.circular(50.0),
                 ),
                 border: Border.all(
-                  color: appColors.yellow,
+                  color: appColors.guideColor,
                 ),
-                color: appColors.yellow,
+                color: appColors.guideColor,
               ),
               child: Row(
                 children: <Widget>[
@@ -58,9 +51,9 @@ class LeaderBoardWidget extends StatelessWidget {
                           Radius.circular(50.0),
                         ),
                         border: Border.all(
-                          color: appColors.yellow,
+                          color: appColors.guideColor,
                         ),
-                        color: appColors.black.withOpacity(0.2),
+                        color: appColors.guideColor.withOpacity(0.2),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(0.0),

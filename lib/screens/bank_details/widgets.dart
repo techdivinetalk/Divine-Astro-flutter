@@ -118,7 +118,7 @@ class CustomMaterialButton extends StatelessWidget {
           Expanded(
             child: MaterialButton(
               height: height ?? 55.h,
-              color: color ?? appColors.yellow,
+              color: color ?? appColors.guideColor,
               disabledColor: disabledColor,
               highlightElevation: 0,
               shape: RoundedRectangleBorder(
@@ -131,7 +131,7 @@ class CustomMaterialButton extends StatelessWidget {
                 style: style ??
                     TextStyle(
                       fontSize: fontSize ?? 20.sp,
-                      color: textColor ?? appColors.black,
+                      color: textColor ?? appColors.white,
                       fontWeight: fontWeight ?? FontWeight.w500,
                     ),
               ),
@@ -266,7 +266,7 @@ class BankDetailsField extends StatelessWidget {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: appColors.lightYellow,
+              color: appColors.guideColor,
               width: 1.0,
             ),
           ),

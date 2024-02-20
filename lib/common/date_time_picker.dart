@@ -65,7 +65,7 @@ class DateTimePicker extends StatelessWidget {
                         ? Icons.calendar_month
                         : Icons.access_time_rounded,
                     size: 50,
-                    color: appColors.yellow,
+                    color: appColors.guideColor,
                   )),
               const SizedBox(height: 20),
               Material(
@@ -135,7 +135,7 @@ class DateTimePicker extends StatelessWidget {
                 onPressed: () {
                   Get.back();
                 },
-                color: appColors.yellow,
+                color: appColors.guideColor,
                 child: Text(
                   buttonTitle,
                   style: TextStyle(

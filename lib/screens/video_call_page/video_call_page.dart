@@ -52,7 +52,7 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                   CustomText(
                     controller.name,
                     fontSize: 20.sp,
-                    fontColor: appColors.appYellowColour,
+                    fontColor: appColors.textColor,
                     fontWeight: FontWeight.w600,
                   ),
                   SizedBox(height: 5.h),
@@ -115,7 +115,7 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                       child: FilledButton(
                         onPressed: () => controller.onAccept(),
                         style: FilledButton.styleFrom(
-                          backgroundColor: appColors.lightYellow,
+                          backgroundColor: appColors.textColor,
                           padding: EdgeInsets.symmetric(vertical: 20.h),
                         ),
                         child: Obx(() => CustomText(
@@ -209,7 +209,7 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                   CustomText(
                     'Astrologer Name',
                     fontSize: 20.sp,
-                    fontColor: appColors.appYellowColour,
+                    fontColor: appColors.textColor,
                     fontWeight: FontWeight.w700,
                   ),
                   SizedBox(height: 5.h),
@@ -225,7 +225,7 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                     'Specialty',
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w700,
-                    fontColor: appColors.appYellowColour,
+                    fontColor: appColors.textColor,
                   ),
                   SizedBox(height: 8.h),
                   CustomText(
@@ -241,7 +241,7 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                     'Language',
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w700,
-                    fontColor: appColors.appYellowColour,
+                    fontColor: appColors.textColor,
                   ),
                   SizedBox(height: 8.h),
                   CustomText(
@@ -257,7 +257,7 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                     'Experience',
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w700,
-                    fontColor: appColors.appYellowColour,
+                    fontColor: appColors.textColor,
                   ),
                   SizedBox(height: 8.h),
                   CustomText(
@@ -334,7 +334,7 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                         Get.toNamed(RouteName.videoCall);
                       },
                       style: FilledButton.styleFrom(
-                        backgroundColor: appColors.lightYellow,
+                        backgroundColor: appColors.guideColor,
                         padding: EdgeInsets.symmetric(vertical: 20.h),
                       ),
                       child: CustomText(

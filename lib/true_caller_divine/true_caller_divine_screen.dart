@@ -164,7 +164,7 @@ class _TrueCallerDivineState extends State<TrueCallerDivine> {
                     : divineSnackBar(
                         data:
                             "Please check TrueCaller app whether you're logged-in or not.",
-                        color: appColors.appYellowColour,
+                        color: appColors.guideColor,
                       );
               },
               child: const Text("Log-in with TrueCaller"),

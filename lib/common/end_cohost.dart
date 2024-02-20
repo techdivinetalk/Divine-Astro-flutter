@@ -15,7 +15,7 @@ class EndCoHost extends StatelessWidget {
       backgroundColor: appColors.white,
       surfaceTintColor: appColors.white,
       shape: OutlineInputBorder(
-        borderSide:  BorderSide(color: appColors.appYellowColour),
+        borderSide:  BorderSide(color: appColors.guideColor),
         borderRadius: BorderRadius.circular(20),
       ),
       title: Text.rich(TextSpan(children: <InlineSpan>[

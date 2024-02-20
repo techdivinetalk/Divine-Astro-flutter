@@ -14,15 +14,12 @@ class AppColors extends GetxController {
   Color white = Color(0xFFFFFFFF);
   Color darkBlue = Color(0xFF0E2339);
   Color lightGreen = Color(0xff27C884);
-  Color appColorLite = Color(0xFFFFF2DD);
-  Color appColorDark = Color(0xFFFCB742);
-  Color lightYellow = Color(0xffFDD48E);
+  Color guideColor = Color(0xFF87919C);
+  Color textColor = Color(0xFF0E2339);
   Color blackColor = Colors.black;
   Color brownColour = Color(0xFF5F3C08); // foreground color
   Color appRedColour = Color(0xFFEF5862);
   Color greyColour = Color(0xFF7E7E7E);
-  Color appYellowColour = Color(0xFFFCB742);
-  Color gradientBottom = Color(0xFFFFF2DD);
   Color redColor = Colors.red;
   Color darkRed = Color(0xFFE31E24);
   Color darkGreen = Color(0xff13BF45);
@@ -34,7 +31,6 @@ class AppColors extends GetxController {
   Color transparent = Colors.transparent;
   Color grey = Color(0xFF9E9E9E);
   Color lightBlack = Color(0xff233982);
-  Color yellow = Color(0xFFFDD48E);
   Color black = Color(0xFF000000);
   Color brown = Color(0xFF5F3C08);
   Color red = Color(0xFFEF5862);

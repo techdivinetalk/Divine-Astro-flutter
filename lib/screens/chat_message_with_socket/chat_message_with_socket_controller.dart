@@ -357,7 +357,7 @@ class ChatMessageWithSocketController extends GetxController
                   .toJson());
           if (response.statusCode == 200) {
             divineSnackBar(
-                data: "Chat ended.", color: appColors.appYellowColour);
+                data: "Chat ended.", color: appColors.guideColor);
             Get.back();
           }
         }

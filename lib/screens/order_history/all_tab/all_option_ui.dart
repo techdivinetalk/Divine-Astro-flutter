@@ -144,11 +144,7 @@ class AllTabInfo extends GetView<AllOptionController> {
                             blurRadius: 1.0,
                             offset: const Offset(0.0, 3.0)),
                       ],
-                      gradient:  LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [appColors.appYellowColour, appColors.gradientBottom],
-                      ),
+                      color: appColors.guideColor,
                       borderRadius: BorderRadius.circular(22.0),
                     ),
                     child: Center(

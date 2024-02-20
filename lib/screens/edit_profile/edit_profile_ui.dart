@@ -28,6 +28,7 @@ class EditProfileUI extends GetView<EditProfileController> {
             children: [
               CustomLightYellowButton(
                 name: "saveChanges".tr,
+
                 onTaped: () => controller.editProfile(),
               ),
             ],
@@ -298,7 +299,11 @@ class EditProfileUI extends GetView<EditProfileController> {
                                           .center,
                                       children: [
                                         Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 15.w,
+                                              vertical: 8.h),
                                           decoration: BoxDecoration(
+                                            color: appColors.guideColor,
                                             boxShadow: [
                                               BoxShadow(
                                                   color:
@@ -307,28 +312,16 @@ class EditProfileUI extends GetView<EditProfileController> {
                                                   offset: const Offset(
                                                       0.0, 3.0)),
                                             ],
-                                            gradient: LinearGradient(
-                                              begin: Alignment.bottomCenter,
-                                              end: Alignment.topCenter,
-                                              colors: [
-                                                appColors.appYellowColour,
-                                                appColors.gradientBottom
-                                              ],
-                                            ),
+
                                             borderRadius: const BorderRadius
                                                 .all(
                                                 Radius.circular(20)),
                                           ),
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 15.w,
-                                                vertical: 8.h),
-                                            child: Text(
-                                              element.name.toString(),
-                                              style: AppTextStyle.textStyle14(
-                                                  fontColor: appColors
-                                                      .darkBlue),
-                                            ),
+                                          child: Text(
+                                            element.name.toString(),
+                                            style: AppTextStyle.textStyle14(
+                                                fontColor: appColors
+                                                    .white),
                                           ),
                                         ),
                                         SizedBox(width: 8.w),

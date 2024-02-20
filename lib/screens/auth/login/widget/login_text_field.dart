@@ -74,7 +74,7 @@ class LoginMobileTextField extends StatelessWidget {
   OutlineInputBorder buildOutlineInputBorder() {
     return OutlineInputBorder(
       borderSide: BorderSide(
-        color: borderColor ?? appColors.appYellowColour,
+        color: borderColor ?? appColors.guideColor,
       ),
       borderRadius: BorderRadius.circular(10.sp),
     );

@@ -101,7 +101,7 @@ class _LiveCarousalState extends State<LiveCarousal>
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: appColors.yellow),
+            border: Border.all(color: appColors.guideColor),
             color: appColors.white.withOpacity(0.2),
           ),
           child: grid(),
@@ -119,7 +119,7 @@ class _LiveCarousalState extends State<LiveCarousal>
           const SizedBox(height: 16),
           Text(
             "Scroll and Pick Your Cards",
-            style: TextStyle(fontSize: 20, color: appColors.yellow),
+            style: TextStyle(fontSize: 20, color: appColors.textColor),
           ),
           const SizedBox(height: 16),
           CarouselSlider.builder(
@@ -211,8 +211,8 @@ class _LiveCarousalState extends State<LiveCarousal>
                                     setState(() {});
                                   },
                                   child: CircleAvatar(
-                                    backgroundColor: appColors.yellow,
-                                    child: Icon(Icons.close),
+                                    backgroundColor: appColors.guideColor,
+                                    child: const Icon(Icons.close),
                                   ),
                                 ),
                               )
@@ -272,7 +272,7 @@ class _LiveCarousalState extends State<LiveCarousal>
       style: ButtonStyle(
         elevation: MaterialStateProperty.all(4),
         backgroundColor: MaterialStateProperty.all(
-          condition() ? appColors.grey : appColors.yellow,
+          condition() ? appColors.grey : appColors.guideColor,
         ),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           const RoundedRectangleBorder(

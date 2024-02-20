@@ -54,7 +54,7 @@ class KpUI extends StatelessWidget {
                           Text("bhavChalitChart".tr,
                               style: AppTextStyle.textStyle20(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: appColors.appYellowColour)),
+                                  fontColor: appColors.textColor)),
                           SizedBox(height: 15.h),
                           SvgPicture.string(
                             controller.chalitChart.value.data?.svg ?? '',
@@ -93,7 +93,7 @@ class KpUI extends StatelessWidget {
         Text("cusps".tr,
             style: AppTextStyle.textStyle20(
                 fontWeight: FontWeight.w500,
-                fontColor: appColors.appYellowColour)),
+                fontColor: appColors.textColor)),
         SizedBox(
           height: 20.h,
         ),
@@ -246,7 +246,7 @@ class KpUI extends StatelessWidget {
         Text("planets".tr,
             style: AppTextStyle.textStyle20(
                 fontWeight: FontWeight.w500,
-                fontColor: appColors.appYellowColour)),
+                fontColor: appColors.textColor)),
         SizedBox(
           height: 20.h,
         ),
@@ -399,7 +399,7 @@ class KpUI extends StatelessWidget {
         Text("rulingPlanets".tr,
             style: AppTextStyle.textStyle20(
                 fontWeight: FontWeight.w500,
-                fontColor: appColors.appYellowColour)),
+                fontColor: appColors.textColor)),
         SizedBox(
           height: 15.h,
         ),

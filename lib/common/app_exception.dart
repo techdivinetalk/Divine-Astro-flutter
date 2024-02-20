@@ -110,7 +110,7 @@ class ManyTimeExException extends StatelessWidget {
                     onPressed: () {
                       Get.back();
                     },
-                    color: appColors.lightYellow,
+                    color: appColors.guideColor,
                     child: Text(
                       "okay".tr,
                       style: TextStyle(

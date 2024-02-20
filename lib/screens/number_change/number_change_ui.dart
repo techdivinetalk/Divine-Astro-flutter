@@ -17,75 +17,99 @@ class NumberChangeReqUI extends GetView<NumberChangeReqController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BackNavigationWidget(
-                title: "numberChangeRequest".tr,
-                onPressedBack: () => Get.back(),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "numChangeMsgTitle".tr,
-                        style: TextStyle(
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w400,
-                          color: appColors.greyColor,
-                          decoration: TextDecoration.underline,
-                          decorationColor: appColors.greyColor,
-                        ),
-                      ),
-                      SizedBox(height: 20.h),
-                      Text(
-                        "primaryPhoneNumber".tr,
-                        style: AppTextStyle.textStyle20(
-                          fontColor: appColors.darkBlue,
-                        ),
-                      ),
-                      SizedBox(height: 5.h),
-
-                      PhoneNumberInput(
-                        controller: controller.controller,
-                        countryCode: controller.countryCode,
-                        enableUpdateButton: controller.enableUpdateButton,
-                        onButtonPressed: () {
-                          if (controller.controller.text.length == 10) {
-                            controller.sendOtpForNumberChange();
-                          } else {
-                            divineSnackBar(data: "phoneNumberMustBe10Digit".tr);
-                          }
-                        },
-                      ),
-                      SizedBox(height: 25.h),
-                    ],
+    return GetBuilder<NumberChangeReqController>(
+      assignId: true,
+      init: NumberChangeReqController(),
+      builder: (controller) {
+        return Scaffold(
+          body: SingleChildScrollView(
+            child: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BackNavigationWidget(
+                    title: "numberChangeRequest".tr,
+                    onPressedBack: () => Get.back(),
                   ),
-                ),
-              )
-            ],
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12.w),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "numChangeMsgTitle".tr,
+                            style: TextStyle(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w400,
+                              color: appColors.greyColor,
+                              decoration: TextDecoration.underline,
+                              decorationColor: appColors.greyColor,
+                            ),
+                          ),
+                          SizedBox(height: 20.h),
+                          Text(
+                            "primaryPhoneNumber".tr,
+                            style: AppTextStyle.textStyle20(
+                              fontColor: appColors.darkBlue,
+                            ),
+                          ),
+                          // SizedBox(height: 5.h),
+
+                          PhoneNumberInput(
+                            controller: controller.controller,
+                            countryCode: controller.countryCode,
+                            enableUpdateButton: controller.enableUpdateButton,
+                            onButtonPressed: () {
+                              if (controller.controller.text.length == 10) {
+                                controller.sendOtpForNumberChange();
+                              } else {
+                                divineSnackBar(
+                                    data: "phoneNumberMustBe10Digit".tr);
+                              }
+                            },
+                            onChange: (value) {
+                              if (controller.userData.mobileNumber == value) {
+                                controller.enableUpdateButton.value = false;
+                              } else {
+                                if (value.length == 10) {
+                                  print("controller.text");
+                                  controller.enableUpdateButton.value = true;
+                                } else {
+                                  controller.enableUpdateButton.value = false;
+                                }
+                              }
+                              controller.update();
+                            },
+                          ),
+                          SizedBox(height: 25.h),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
+
 class PhoneNumberInput extends StatelessWidget {
   final TextEditingController controller;
   final RxString countryCode;
   final RxBool enableUpdateButton;
+  final Function(String)? onChange;
   final Function() onButtonPressed;
 
-  const PhoneNumberInput({super.key,
+  const PhoneNumberInput({
+    super.key,
     required this.controller,
     required this.countryCode,
+    required this.onChange,
     required this.enableUpdateButton,
     required this.onButtonPressed,
   });
@@ -93,8 +117,10 @@ class PhoneNumberInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      // mainAxisAlignment: MainAxisAlignment.center,
+      // textBaseline: TextBaseline.ideographic,
       children: [
-        Obx(() => CustomButton(
+        CustomButton(
           onTap: () {
             countryPickerSheet(context, (value) {
               String code = value.phoneCode;
@@ -103,21 +129,23 @@ class PhoneNumberInput extends StatelessWidget {
               Get.back();
             });
           },
-          child: Text(
-            countryCode.value,
-            style: AppTextStyle.textStyle20(
-              fontColor: appColors.darkBlue,
-            ).copyWith(
-              decoration: TextDecoration.underline,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 2.5),
+            child: Text(
+              countryCode.value,
+              style: AppTextStyle.textStyle20(
+                fontColor: appColors.darkBlue,
+              ),
             ),
           ),
-        )),
+        ),
         SizedBox(
-          width: 10.w,
+          width: 5.w,
         ),
         Expanded(
           flex: 2,
           child: TextField(
+            onChanged: onChange,
             controller: controller,
             style: AppTextStyle.textStyle20(
               fontColor: appColors.darkBlue,
@@ -129,6 +157,7 @@ class PhoneNumberInput extends StatelessWidget {
               FilteringTextInputFormatter.digitsOnly
             ],
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(vertical: 5),
               counterText: '',
               enabledBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
@@ -143,32 +172,30 @@ class PhoneNumberInput extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(width: 10.w),
+        SizedBox(width: 20.w),
         Expanded(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Obx(
-                  () => Material(
-                color: enableUpdateButton.value
-                    ? appColors.lightYellow
-                    : appColors.greyColor,
-                child: InkWell(
-                  onTap: enableUpdateButton.value ? onButtonPressed : null,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
+            child: Material(
+              color: enableUpdateButton.value
+                  ? appColors.guideColor
+                  : appColors.greyColor,
+              child: InkWell(
+                onTap: enableUpdateButton.value ? onButtonPressed : null,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 2.w,
+                      vertical: 10.h,
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 2.w,
-                        vertical: 10.h,
-                      ),
-                      child: Center(
-                        child: Text(
-                          "update".tr,
-                          style: AppTextStyle.textStyle16(
-                            fontColor: appColors.white,
-                          ),
+                    child: Center(
+                      child: Text(
+                        "update".tr,
+                        style: AppTextStyle.textStyle16(
+                          fontColor: appColors.white,
                         ),
                       ),
                     ),

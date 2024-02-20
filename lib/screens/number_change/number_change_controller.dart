@@ -10,6 +10,7 @@ import 'package:divine_astrologer/screens/number_change/sub_screen/otp_screen_fo
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class NumberChangeReqController extends GetxController {
   final pref = Get.find<SharedPreferenceService>();
@@ -31,7 +32,7 @@ class NumberChangeReqController extends GetxController {
     super.onInit();
     userData = pref.getUserDetail()!;
     controller = TextEditingController(/*text: userData.mobileNumber*/);
-    controller.addListener(listenerForNumberChange);
+    // controller.addListener(listenerForNumberChange);
     pinController = TextEditingController();
   }
 
@@ -43,10 +44,15 @@ class NumberChangeReqController extends GetxController {
   }
 
   void listenerForNumberChange() {
-    if (userData.mobileNumber == controller.text) {
+    if (userData.mobileNumber == controller.text ) {
       enableUpdateButton.value = false;
     } else {
-      enableUpdateButton.value = true;
+      print(int.parse(controller.text).length  == 10);
+      if(int.parse(controller.text).length  == 10 ){
+      print("controller.text");
+        enableUpdateButton.value = true;
+      }
+
     }
   }
 

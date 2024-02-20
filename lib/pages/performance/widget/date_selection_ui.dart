@@ -202,7 +202,7 @@ class DateSelection extends GetView<OrderHistoryController> {
                           });
                         }
                       },
-                      color: appColors.appYellowColour,
+                      color: appColors.guideColor,
                       child: Text(
                         "submit".tr,
                         style:  TextStyle(color: appColors.brownColour),

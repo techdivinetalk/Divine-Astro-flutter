@@ -233,7 +233,7 @@ class AskPermissionDialog extends StatelessWidget {
                             },
                             radius: 100.r,
                             padding: EdgeInsets.symmetric(vertical: 16.h),
-                            color: appColors.lightYellow,
+                            color: appColors.guideColor,
                             child: Center(
                               child: CustomText(
                                 'Grant Permission',
@@ -342,7 +342,7 @@ class PermissionDialog extends StatelessWidget {
                             },
                             radius: 100.r,
                             padding: EdgeInsets.symmetric(vertical: 16.h),
-                            color: appColors.lightYellow,
+                            color: appColors.guideColor,
                             child: Center(
                               child: CustomText(
                                 'Open Settings',

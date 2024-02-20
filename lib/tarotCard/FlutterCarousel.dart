@@ -996,7 +996,7 @@ class _CardChoiceBottomSheetState extends State<CardChoiceBottomSheet> {
                         : null, // Button is disabled if _choice is null
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _choice != null
-                          ? appColors.appColorDark
+                          ? appColors.guideColor
                           : Colors
                               .grey, // Button color changes based on selection
                     ),

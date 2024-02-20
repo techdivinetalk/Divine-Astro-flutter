@@ -135,7 +135,7 @@ class LanguageBottomSheetWidget extends StatelessWidget {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                            color: appColors.lightYellow,
+                            color: appColors.guideColor,
                             borderRadius: BorderRadius.circular(10)),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 15.0),
@@ -144,7 +144,7 @@ class LanguageBottomSheetWidget extends StatelessWidget {
                               'okay'.tr,
                               style: AppTextStyle.textStyle16(
                                   fontWeight: FontWeight.w600,
-                                  fontColor: appColors.brownColour),
+                                  fontColor: appColors.white),
                             ),
                           ),
                         ),

@@ -41,8 +41,8 @@ class _LiveKeyboardState extends State<LiveKeyboard> {
           onSubmitted: (String value) {
             sendKeyboardMesage();
           },
-          cursorColor: appColors.yellow,
-          style:  TextStyle(color: appColors.yellow),
+          cursorColor: appColors.guideColor,
+          style:  TextStyle(color: appColors.textColor),
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
             suffixIcon: _editingController.value.text == ""
@@ -51,32 +51,32 @@ class _LiveKeyboardState extends State<LiveKeyboard> {
                     onPressed: sendKeyboardMesage,
                     icon: Image.asset(
                       "assets/images/live_send_message_new.png",
-                      color: appColors.yellow,
+                      color: appColors.guideColor,
                     ),
                   ),
             floatingLabelBehavior: FloatingLabelBehavior.never,
             filled: true,
             fillColor: appColors.white,
             hintText: "Say Hi",
-            hintStyle:  TextStyle(color: appColors.yellow),
+            hintStyle:  TextStyle(color: appColors.textColor),
             border: OutlineInputBorder(
               borderSide:  BorderSide(
                 width: 2,
-                color: appColors.yellow,
+                color: appColors.guideColor,
               ),
               borderRadius: BorderRadius.circular(50.0),
             ),
             enabledBorder: OutlineInputBorder(
               borderSide:  BorderSide(
                 width: 2,
-                color: appColors.yellow,
+                color: appColors.guideColor,
               ),
               borderRadius: BorderRadius.circular(50.0),
             ),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 width: 2,
-                color: appColors.yellow,
+                color: appColors.guideColor,
               ),
               borderRadius: BorderRadius.circular(50.0),
             ),
