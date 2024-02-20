@@ -139,7 +139,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                               null ||
                           controller.chatAssistantAstrologerListResponse!.data!
                               .data!.isEmpty) {
-                        return  Center(
+                        return Center(
                           child: Text(
                             'No Data found',
                             style: TextStyle(
@@ -153,14 +153,16 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                         return ListView.builder(
                           padding: EdgeInsets.symmetric(vertical: 10.h),
                           itemCount: (controller.searchData).isNotEmpty ||
-                              controller.searchController.text.isNotEmpty
+                                  controller.searchController.text.isNotEmpty
                               ? controller.searchData.length
                               : controller.chatAssistantAstrologerListResponse!
                                   .data!.data!.length,
                           itemBuilder: (context, index) {
                             return ChatAssistanceTile(
+                              controller: controller,
                               data: (controller.searchData).isNotEmpty ||
-                                  controller.searchController.text.isNotEmpty
+                                      controller
+                                          .searchController.text.isNotEmpty
                                   ? controller.searchData[index]
                                   : controller
                                       .chatAssistantAstrologerListResponse!
@@ -174,7 +176,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                       if (controller.customerDetailsResponse == null ||
                           controller.customerDetailsResponse!.data == null ||
                           controller.customerDetailsResponse!.data.isEmpty) {
-                        return  Center(
+                        return Center(
                           child: Text(
                             'No Data found',
                             style: TextStyle(
@@ -196,7 +198,8 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                           itemBuilder: (context, index) {
                             return ChatAssistanceDataTile(
                               data: (controller.filteredUserData).isNotEmpty ||
-                                  controller.searchController.text.isNotEmpty
+                                      controller
+                                          .searchController.text.isNotEmpty
                                   ? controller.filteredUserData[index]
                                   : controller
                                       .customerDetailsResponse!.data[index],
@@ -300,9 +303,11 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
 }
 
 class ChatAssistanceTile extends StatelessWidget {
+  final ChatAssistanceController controller;
   final DataList data;
 
-  const ChatAssistanceTile({super.key, required this.data});
+  const ChatAssistanceTile(
+      {super.key, required this.data, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -313,8 +318,8 @@ class ChatAssistanceTile extends StatelessWidget {
       leading: ClipRRect(
           borderRadius: BorderRadius.circular(50.r),
           child: Container(
-            decoration: BoxDecoration(
-                shape: BoxShape.circle, color: appColors.yellow),
+            decoration:
+                BoxDecoration(shape: BoxShape.circle, color: appColors.yellow),
             height: 50.w,
             width: 50.w,
             child: LoadImage(
@@ -326,7 +331,7 @@ class ChatAssistanceTile extends StatelessWidget {
                     loadingIndicator: SizedBox(
                         height: 25.h,
                         width: 25.w,
-                        child:  CircularProgressIndicator(
+                        child: CircularProgressIndicator(
                             color: appColors.yellow, strokeWidth: 2)))),
           )),
       title: CustomText(
@@ -350,30 +355,30 @@ class ChatAssistanceTile extends StatelessWidget {
           ),
         ],
       ),
-      trailing: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          // CustomText(
-          //   '11:35 PM',
-          //   fontSize: 12.sp,
-          //   fontWeight: FontWeight.w600,
-          // ),
-          //  SizedBox(height: 5.h),
-          // if (index == 0)
-          CircleAvatar(
-            radius: 10.r,
-            backgroundColor: appColors.yellow,
-            child: CustomText(
-              '2',
-              fontSize: 10.sp,
-              fontWeight: FontWeight.w700,
-              fontColor: appColors.brown,
-            ),
-          ),
-        ],
-      ),
+      trailing: controller.unreadMessageList
+              .any((element) => element.customerId == data.id)
+          ? CircleAvatar(
+              radius: 10.r,
+              backgroundColor: appColors.yellow,
+              child: CustomText(
+                returnNumberOfUnreadMessages(data.id ?? 0).toString(),
+                fontSize: 10.sp,
+                fontWeight: FontWeight.w700,
+                fontColor: appColors.brown,
+              ),
+            )
+          : SizedBox(),
     );
+  }
+
+  int returnNumberOfUnreadMessages(int customerId) {
+    int numberOfUnreadMessages = 0;
+    for (int index = 0; index < controller.unreadMessageList.length; index++) {
+      if (controller.unreadMessageList[index].customerId == customerId) {
+        numberOfUnreadMessages++;
+      }
+    }
+    return numberOfUnreadMessages;
   }
 }
 
@@ -398,7 +403,7 @@ class ChatAssistanceDataTile extends StatelessWidget {
             ClipRRect(
                 borderRadius: BorderRadius.circular(50.r),
                 child: Container(
-                  decoration:  BoxDecoration(
+                  decoration: BoxDecoration(
                       shape: BoxShape.circle, color: appColors.yellow),
                   height: 50.w,
                   width: 50.w,
@@ -411,7 +416,7 @@ class ChatAssistanceDataTile extends StatelessWidget {
                           loadingIndicator: SizedBox(
                               height: 25.h,
                               width: 25.w,
-                              child:  CircularProgressIndicator(
+                              child: CircularProgressIndicator(
                                   color: appColors.yellow, strokeWidth: 2)))),
                 )),
             const SizedBox(
@@ -432,8 +437,10 @@ class ChatAssistanceDataTile extends StatelessWidget {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                            border: Border.all(color: appColors.white, width: 1.5),
-                            borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+                            border:
+                                Border.all(color: appColors.white, width: 1.5),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(50.0)),
                             color: appColors.darkGreen),
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
@@ -446,8 +453,8 @@ class ChatAssistanceDataTile extends StatelessWidget {
                   CustomText(
                     "Total Consultation : ${data.totalConsultation}",
                     fontColor:
-                    // (index == 0) ? appColors.darkBlue:
-                    appColors.grey,
+                        // (index == 0) ? appColors.darkBlue:
+                        appColors.grey,
                     fontSize: 12.sp,
                     fontWeight:
                         //(index == 0) ? FontWeight.w600 :
@@ -456,8 +463,8 @@ class ChatAssistanceDataTile extends StatelessWidget {
                   CustomText(
                     "Last Consulted : ${data.lastConsulted}",
                     fontColor:
-                    // (index == 0) ? appColors.darkBlue:
-                    appColors.grey,
+                        // (index == 0) ? appColors.darkBlue:
+                        appColors.grey,
                     fontSize: 12.sp,
                     fontWeight:
                         //(index == 0) ? FontWeight.w600 :
@@ -466,8 +473,8 @@ class ChatAssistanceDataTile extends StatelessWidget {
                   CustomText(
                     "Days Since Last Consulted : ${data.daySinceLastConsulted}",
                     fontColor:
-                    // (index == 0) ? appColors.darkBlue:
-                    appColors.grey,
+                        // (index == 0) ? appColors.darkBlue:
+                        appColors.grey,
                     fontSize: 12.sp,
                     fontWeight:
                         //(index == 0) ? FontWeight.w600 :

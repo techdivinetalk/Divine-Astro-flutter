@@ -32,7 +32,7 @@ extension StringToDate on String {
 }
 
 String msgTimeFormat(String? value) => DateFormat('hh:mm a').format(
-    DateTime.parse(value ?? ''));
+    DateTime.fromMillisecondsSinceEpoch(int.parse(value ?? '')));
 
 extension DateToString on DateTime {
   String toFormattedString() {
