@@ -102,10 +102,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   reverse: false,
                                   padding: EdgeInsets.only(bottom: 10.h),
                                   itemBuilder: (context, index) {
-
                                     var chatMessage =
                                         controller.chatMessages[index];
-                                    print("value of chatmessage length ${chatMessage.toOfflineJson()}");
+                                    print(
+                                        "value of chatmessage length ${chatMessage.toOfflineJson()}");
                                     return Column(
                                       children: [
                                         Padding(
@@ -196,7 +196,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                           preferenceService
                                                               .getUserDetail()!
                                                               .id,
-                                                  userName: controller.customerName.value,
+                                                  userName: controller
+                                                      .customerName.value,
                                                   unreadMessage: controller
                                                       .unreadMessageIndex
                                                       .value),
@@ -1706,7 +1707,10 @@ class AstrologerChatAppBar extends StatelessWidget {
                               children: [
                                 Obx(
                                   () => Text(
-                                    AppFirebaseService().orderData.value["customerName"] ?? "",
+                                    AppFirebaseService()
+                                            .orderData
+                                            .value["customerName"] ??
+                                        "",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 14.sp,
@@ -1791,6 +1795,10 @@ class AstrologerChatAppBar extends StatelessWidget {
                                 // "time": "00:20:00",
                                 "time": controller.showTalkTime.value,
                               },
+                              isAstrologer: true,
+                              astrologerDisabledCalls: () {
+                                astroNotAcceptingCallsSnackBar(context);
+                              },
                             );
                           },
                         ),
@@ -1831,6 +1839,10 @@ class AstrologerChatAppBar extends StatelessWidget {
                                 "cust_image": appendedCustImage,
                                 // "time": "00:20:00",
                                 "time": controller.showTalkTime.value,
+                              },
+                              isAstrologer: true,
+                              astrologerDisabledCalls: () {
+                                astroNotAcceptingCallsSnackBar(context);
                               },
                             );
                           },
@@ -1919,4 +1931,18 @@ class LoadingIndicatorWidget extends StatelessWidget {
       ],
     );
   }
+}
+
+void astroNotAcceptingCallsSnackBar(BuildContext context) {
+  final SnackBar snackBar = SnackBar(
+    content: const Text(
+      'Astrologer is not accepting the calls at this moment.',
+      style: TextStyle(fontSize: 10, color: Colors.black),
+      overflow: TextOverflow.ellipsis,
+    ),
+    backgroundColor: appColors.yellow,
+    behavior: SnackBarBehavior.floating,
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  return;
 }

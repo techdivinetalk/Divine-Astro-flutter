@@ -5,7 +5,9 @@ import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart';
 import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart';
+import 'package:divine_astrologer/zego_call/chat_call_on_off_widget.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:get/get.dart';
@@ -482,16 +484,39 @@ class ZegoService {
     required String targetUserName,
     required Function() checkOppositeSidePermGranted,
     required Map customData,
+    required Function() astrologerDisabledCalls,
+    required bool isAstrologer,
   }) {
     return InkWell(
       onTap: () async {
-        await newOnPressed(
-          isVideoCall: isVideoCall,
-          targetUserID: targetUserID,
-          targetUserName: targetUserName,
-          checkOppositeSidePermGranted: checkOppositeSidePermGranted,
-          customData: customData,
-        );
+        if (isAstrologer) {
+          await chatCallOnOffWidgetPopup(
+            makeCallFunction: () async {
+              await newOnPressed(
+                isVideoCall: isVideoCall,
+                targetUserID: targetUserID,
+                targetUserName: targetUserName,
+                checkOppositeSidePermGranted: checkOppositeSidePermGranted,
+                customData: customData,
+              );
+            },
+            makeTurnOnOffCallsFunction: addUpdateCallOnOff,
+          );
+        } else {
+          var orderData = AppFirebaseService().orderData.value;
+          final bool isAccepting = orderData["astr_accepting_calls"] ?? false;
+          if (isAccepting) {
+            await newOnPressed(
+              isVideoCall: isVideoCall,
+              targetUserID: targetUserID,
+              targetUserName: targetUserName,
+              checkOppositeSidePermGranted: checkOppositeSidePermGranted,
+              customData: customData,
+            );
+          } else {
+            astrologerDisabledCalls();
+          }
+        }
       },
       child: SizedBox(
         height: 32,
@@ -517,7 +542,7 @@ class ZegoService {
       await canInit();
       final bool checkOppositeSidePerm = await checkOppositeSidePermission();
       checkOppositeSidePerm
-          ? await controller.invitation.send(
+          ? await ZegoUIKitPrebuiltCallInvitationService().send(
               invitees: [ZegoCallUser(targetUserID, targetUserName)],
               isVideoCall: isVideoCall,
               resourceID: "zego_call",
@@ -569,6 +594,44 @@ class ZegoService {
     );
     await AppPermissionService.instance.zegoOnPressedJoinButton(() {});
     await canInit();
+    return Future<void>.value();
+  }
+
+  Future<void> addUpdateCallOnOff() async {
+    var orderData = AppFirebaseService().orderData.value;
+    final bool isAccepting = orderData["astr_accepting_calls"] ?? false;
+    final int orderId = orderData["orderId"] ?? 0;
+    if (orderId != 0) {
+      final DatabaseReference ref = FirebaseDatabase.instance.ref();
+      await ref.child("order/$orderId").update(
+        {"astr_accepting_calls": !isAccepting},
+      );
+    } else {}
+    return Future<void>.value();
+  }
+
+  Future<void> chatCallOnOffWidgetPopup({
+    required Function() makeCallFunction,
+    required Function() makeTurnOnOffCallsFunction,
+  }) async {
+    var orderData = AppFirebaseService().orderData.value;
+    await showCupertinoModalPopup(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return ChatCallOnOffWidget(
+          onClose: Get.back,
+          makeCall: () {
+            Get.back();
+            makeCallFunction();
+          },
+          makeTurnOnOffCalls: () {
+            Get.back();
+            makeTurnOnOffCallsFunction();
+          },
+          currentStatus: orderData["astr_accepting_calls"] ?? false,
+        );
+      },
+    );
     return Future<void>.value();
   }
 }
