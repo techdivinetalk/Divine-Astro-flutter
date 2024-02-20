@@ -148,7 +148,8 @@ class AssistChatData {
     //     : MsgStatus.sent;
     // awsUrl = json['awsUrl'];
     // giftId = json['gift_id'];
-    createdAt = json['created_at'];
+    createdAt =
+        DateTime.parse(json['created_at']).millisecondsSinceEpoch.toString();
     isSuspicious = json['is_suspicious'];
     seenStatus = json['seen_status'] != null
         ? seenStatusValues.map[json["seen_status"].toString()]

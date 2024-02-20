@@ -6,6 +6,7 @@ import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
 import 'package:divine_astrologer/firebase_options.dart';
+import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:divine_astrologer/remote_config/remote_config_helper.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
@@ -77,12 +78,27 @@ Future<void> main() async {
           .update(updateData);
     } else if (message.data["type"] == "3") {
       print('Message data:- ${MiddleWare.instance.currentPage}');
+      print("chat assist realtime notification with data ${message.data}");
       if (MiddleWare.instance.currentPage == RouteName.chatMessageUI) {
         sendBroadcast(
             BroadcastMessage(name: "chatAssist", data: {'msg': message.data}));
       } else {
         showNotification(message.data["title"], message.data["message"],
             message.data['type'], message.data);
+        final responseMsg = message.data;
+         SharedPreferenceService().addChatAssistUnreadMessage(
+            AssistChatData(
+                message: responseMsg["message"],
+                astrologerId: int.parse(responseMsg["userid"] ?? 0),
+                createdAt: responseMsg["created_at"],
+                id: DateTime.now().millisecondsSinceEpoch,
+                isSuspicious: 0,
+                sendBy: SendBy.customer,
+                msgType: responseMsg['msg_type'] != null
+                    ? msgTypeValues.map[responseMsg["msg_type"]]
+                    : MsgType.text,
+                seenStatus: SeenStatus.received,
+                customerId: int.parse(responseMsg["sender_id"] ?? 0)));
       }
     } else {
       showNotification(message.data["title"], message.data["message"],
