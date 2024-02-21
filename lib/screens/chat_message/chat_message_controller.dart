@@ -235,12 +235,12 @@ class ChatMessageController extends GetxController {
 
   reArrangeChatList() {
     // to remove duplicacy of messages
-    chatMessageList(chatMessageList
-        .groupBy((chat) => chat.id)
-        .values
-        .map((group) => group.first)
-        .cast<AssistChatData>()
-        .toList());
+    // chatMessageList(chatMessageList
+    //     .groupBy((chat) => chat.id)
+    //     .values
+    //     .map((group) => group.first)
+    //     .cast<AssistChatData>()
+    //     .toList());
 
     //
     chatMessageList.sort((a, b) {
