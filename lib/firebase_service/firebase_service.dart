@@ -222,7 +222,6 @@ class AppFirebaseService {
           _database.child("order/$value").onValue.listen(
             (DatabaseEvent event) async {
               final DataSnapshot dataSnapshot = event.snapshot;
-
               if (dataSnapshot.exists) {
                 if (dataSnapshot.value is Map<dynamic, dynamic>) {
                   Map<dynamic, dynamic> map = <dynamic, dynamic>{};
@@ -253,10 +252,16 @@ class AppFirebaseService {
                     }
                   } else {}
                 } else {}
-              } else {}
+              } else {
+                sendBroadcast(BroadcastMessage(
+                    name: "orderEnd"));
+              }
             },
           );
-        } else {}
+        } else {
+          sendBroadcast(BroadcastMessage(
+              name: "orderEnd"));
+        }
       },
     );
   }
