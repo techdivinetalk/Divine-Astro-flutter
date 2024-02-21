@@ -312,15 +312,15 @@ class LiveTipsUI extends GetView<LiveTipsController> {
 
     final String userId = (pref.getUserDetail()?.id ?? "").toString();
     final String userName = pref.getUserDetail()?.name ?? "";
-    final String awsURL = pref.getAmazonUrl() ?? "";
-    final String image = pref.getUserDetail()?.image ?? "";
+    // final String awsURL = pref.getAmazonUrl() ?? "";
+    // final String image = pref.getUserDetail()?.image ?? "";
 
     final bool cond1 = userId.isNotEmpty;
     final bool cond2 = userName.isNotEmpty;
-    final bool cond3 = awsURL.isNotEmpty;
-    final bool cond4 = image.isNotEmpty;
+    // final bool cond3 = awsURL.isNotEmpty;
+    // final bool cond4 = image.isNotEmpty;
 
-    hasAllData = cond1 && cond2 && cond3 && cond4;
+    hasAllData = cond1 && cond2 /* && cond3 && cond4 */;
 
     return Future<bool>.value(hasAllData);
   }

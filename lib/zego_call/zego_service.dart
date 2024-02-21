@@ -633,6 +633,11 @@ class ZegoService {
           onClose: Get.back,
           makeCall: () {
             Get.back();
+
+            if (currentStatus) {
+            } else {
+              makeTurnOnOffCallsFunction();
+            }
             makeCallFunction();
           },
           makeTurnOnOffCalls: () {

@@ -10,6 +10,7 @@ import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_resp
 import 'package:divine_astrologer/remote_config/remote_config_helper.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
+import 'package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -114,7 +115,8 @@ Future<void> main() async {
   var data = await userRepository.constantDetailsData();
   preferenceService.setConstantDetails(data);*/
 
-  GiftsSingleton().init();
+    GiftsSingleton().init();
+    LiveSharedPreferencesSingleton().init();
 
   // final navigatorKey = GlobalKey<NavigatorState>();
   // ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);

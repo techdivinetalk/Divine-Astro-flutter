@@ -90,7 +90,7 @@ class _ChatCallOnOffWidgetState extends State<ChatCallOnOffWidget> {
           const SizedBox(height: 32),
           widget.currentStatus
               ? Column(children: [callButton(), changeButton()])
-              : changeButton()
+              : Column(children: [callButton(), changeButton()])
         ],
       ),
     );
