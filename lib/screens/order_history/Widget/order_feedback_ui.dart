@@ -1,23 +1,24 @@
-import 'package:divine_astrologer/model/order_history_model/chat_order_history.dart';
+import 'package:divine_astrologer/common/app_textstyle.dart';
+import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_options_row.dart';
+import 'package:divine_astrologer/common/routes.dart';
+import 'package:divine_astrologer/model/order_history_model/feed_order_history.dart';
 import 'package:divine_astrologer/screens/order_history/order_history_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../../common/app_textstyle.dart';
-import '../../../common/colors.dart';
-import '../../../common/common_options_row.dart';
-import '../../../common/routes.dart';
+import '../../../model/order_history_model/chat_order_history.dart';
 
-class ChatOrderHistory extends StatelessWidget {
-  const ChatOrderHistory({super.key, this.controller});
+class FeedBackOrderHistory extends StatelessWidget {
+  const FeedBackOrderHistory({super.key, this.controller});
 
   final ScrollController? controller;
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<OrderHistoryController>(builder: (controller) {
-      if (controller.chatHistoryList.isEmpty) {
+      if (controller.feedHistoryList.isEmpty) {
         return const Center(
           child: Text(
             'No data found',
@@ -29,11 +30,11 @@ class ChatOrderHistory extends StatelessWidget {
         // controller: controller,
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
-        itemCount: controller.chatHistoryList.length,
+        itemCount: controller.feedHistoryList.length,
         padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(top: 30),
         separatorBuilder: (context, index) => const SizedBox(height: 20),
         itemBuilder: (context, index) {
-          return orderDetailView(index, controller.chatHistoryList);
+          return orderDetailView(index, controller.feedHistoryList);
           /*return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -68,7 +69,7 @@ class ChatOrderHistory extends StatelessWidget {
     });
   }
 
-  Widget orderDetailView(int index, List<ChatDataList> data) {
+  Widget orderDetailView(int index, List<FeedBackData> data) {
     return InkWell(
       onTap: () {},
       child: Container(
@@ -92,7 +93,7 @@ class ChatOrderHistory extends StatelessWidget {
                   "${"orderId".tr} : ${data[index].orderId}",
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500),
                 ),
-                 Icon(
+                Icon(
                   Icons.help_outline,
                   size: 20,
                   color: appColors.darkBlue,
@@ -105,7 +106,7 @@ class ChatOrderHistory extends StatelessWidget {
               children: [
                 Text(
                   // "chat".tr,
-                  data[index].productType != 7 ? 'Chat' : 'Call',
+                  data[index].productType == 12 ? 'Chat' : 'Call',
                   style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w400,
                     /*fontColor: "$type" == "PENALTY"
@@ -149,7 +150,7 @@ class ChatOrderHistory extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             CommonOptionRow(
-              feedbackReviewStatus: data[index].feedbackReviewStatus ?? 0,
+             // feedbackReviewStatus: data[index].feedbackReviewStatus ?? 0,
               leftBtnTitle: "FeedBack".tr,
               onLeftTap: () {
                 Get.toNamed(RouteName.feedback, arguments: {

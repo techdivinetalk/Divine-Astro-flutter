@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:divine_astrologer/model/order_history_model/feed_order_history.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
@@ -90,6 +91,36 @@ class OrderHistoryRepository extends ApiProvider {
           if (orderHistoryModel.statusCode == successResponse &&
               orderHistoryModel.success!) {
             return orderHistoryModel;
+          } else {
+            throw CustomException(json.decode(response.body)["message"]);
+          }
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<FeedBackOrder> getFeedbackChatOrderHistory(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await post(getOrderHistoryUrl,
+          body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          preferenceService.erase();
+          Get.offNamed(RouteName.login);
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final orderFeedHistoryModel =
+          FeedBackOrder.fromJson(json.decode(response.body));
+          if (orderFeedHistoryModel.statusCode == successResponse &&
+              orderFeedHistoryModel.success!) {
+            return orderFeedHistoryModel;
           } else {
             throw CustomException(json.decode(response.body)["message"]);
           }

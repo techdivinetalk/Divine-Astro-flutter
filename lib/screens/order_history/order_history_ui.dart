@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/common/custom_progress_dialog.dart';
 import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/screens/order_history/Widget/live_gifts_order_history_ui.dart';
+import 'package:divine_astrologer/screens/order_history/Widget/order_feedback_ui.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -147,7 +148,7 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
     super.initState();
     controller = Get.find<OrderHistoryController>();
     controller.tabbarController = TabController(
-        length: 5, vsync: this, initialIndex: widget.initialPage ?? 0);
+        length: 6, vsync: this, initialIndex: widget.initialPage ?? 0);
     scrollController = ScrollController();
     /*controller.tabbarController!.addListener(() {
       if (controller.tabbarController!.index == 0) {
@@ -203,6 +204,10 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
                   controller.getOrderHistory(
                       type: 4, page: controller.remedyPageCount); // shop
                 }
+                else if (value == 5) {
+                  controller.getOrderHistory(
+                      type: 5, page: controller.feedBackPageCount); // shop
+                }
               },
               indicatorColor: appColors.blackColor,
               indicatorWeight: 4,
@@ -215,6 +220,7 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
                 "chat".tr,
                 "Gifts".tr,
                 ("remedySuggested".tr),
+                 "Order Feedbacks"
               ].map((e) => Tab(text: e)).toList(),
             ),
           ),
@@ -243,10 +249,10 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
                     controller.remedyPageCount == 1)
                     ? const GenericLoadingWidget()
                     :  SuggestRemedies()),
-               /* Obx(() => (controller.apiCalling.value &&
-                    controller.chatPageCount == 1)
+                Obx(() => (controller.apiCalling.value &&
+                    controller.feedBackPageCount == 1)
                     ? const LoadingWidget()
-                    : const ChatOrderHistory()),*/
+                    : const FeedBackOrderHistory()),
               ],
             ),
           ),
