@@ -2,17 +2,20 @@ import "dart:ui";
 
 import "package:divine_astrologer/common/colors.dart";
 import "package:flutter/material.dart";
+import "package:flutter_timer_countdown/flutter_timer_countdown.dart";
 import "package:get/get.dart";
 
 class WaitingForUserToSelectCards extends StatefulWidget {
   const WaitingForUserToSelectCards({
     required this.onClose,
     required this.userName,
+    required this.onTimeout,
     super.key,
   });
 
   final void Function() onClose;
   final String userName;
+  final Function() onTimeout;
 
   @override
   State<WaitingForUserToSelectCards> createState() =>
@@ -21,6 +24,7 @@ class WaitingForUserToSelectCards extends StatefulWidget {
 
 class _WaitingForUserToSelectCardsState
     extends State<WaitingForUserToSelectCards> {
+  
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -99,10 +103,7 @@ class _WaitingForUserToSelectCardsState
                 widget.userName,
                 style: TextStyle(fontSize: 20, color: appColors.white),
               ),
-              subtitle: Text(
-                "05 M 30 S",
-                style: TextStyle(color: appColors.white),
-              ),
+              subtitle: newTimerWidget(),
               trailing: SizedBox(height: 50, width: 100, child: button()),
             ),
           ),
@@ -129,6 +130,20 @@ class _WaitingForUserToSelectCardsState
         color: appColors.black,
         size: 50,
       ),
+    );
+  }
+
+  Widget newTimerWidget() {
+    return TimerCountdown(
+      format: CountDownTimerFormat.hoursMinutesSeconds,
+      enableDescriptions: false,
+      spacerWidth: 4,
+      colonsTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
+      timeTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
+      endTime: DateTime.now().add(
+        const Duration(days: 0, hours: 0, minutes: 1, seconds: 0),
+      ),
+      onEnd: widget.onTimeout,
     );
   }
 }

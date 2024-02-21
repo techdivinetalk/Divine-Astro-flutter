@@ -70,10 +70,10 @@ class SharedPreferenceService extends GetxService {
 
   Future saveChatAssistUnreadMessage() async {
     final SharedPreferences sharedInstance =
-    await SharedPreferences.getInstance();
+        await SharedPreferences.getInstance();
 
     final encodedChatAssistList =
-    assistChatUnreadMessages.map((e) => jsonEncode(e)).toList();
+        assistChatUnreadMessages.map((e) => jsonEncode(e)).toList();
     await sharedInstance.setStringList(
     assistChatUnreadkey, encodedChatAssistList);
     print("called save unread message ${encodedChatAssistList} ${assistChatUnreadMessages}");
@@ -81,7 +81,7 @@ class SharedPreferenceService extends GetxService {
 
   Future getChatAssistUnreadMessage() async {
     final SharedPreferences sharedInstance =
-    await SharedPreferences.getInstance();
+        await SharedPreferences.getInstance();
 
     final localData = sharedInstance.getStringList(assistChatUnreadkey);
 
@@ -91,7 +91,6 @@ class SharedPreferenceService extends GetxService {
           .map((e) => AssistChatData.fromJson(jsonDecode(e)))
           .toList());
     }
-    print("called get unread message ${localData} ${assistChatUnreadMessages}");
   }
 
   // Future addChatAssistUnreadMessage(AssistChatData data) async {

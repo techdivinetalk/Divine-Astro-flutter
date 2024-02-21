@@ -49,7 +49,7 @@ import '../../repository/performance_repository.dart';
 import '../../repository/user_repository.dart';
 
 class HomeController extends GetxController {
-  RxBool chatSwitch = true.obs;
+  RxBool chatSwitch = false.obs;
   RxBool callSwitch = false.obs;
   RxBool videoSwitch = false.obs;
   double xPosition = 10.0;
@@ -385,6 +385,11 @@ class HomeController extends GetxController {
     callSwitch.value = (homeData?.audioCallPrevStatus ?? 0) == 1;
     videoSwitch.value = (homeData?.videoCallPrevStatus ?? 0) == 1;
 
+    print("updateCurrentData called");
+    print("updateCurrentData Chat ${homeData?.inAppChatPrevStatus}");
+    print("updateCurrentData Audio ${homeData?.audioCallPrevStatus}");
+    print("updateCurrentData Video ${homeData?.videoCallPrevStatus}");
+
     socket.updateChatCallSocketEvent(
       call: callSwitch.value ? "1" : "0",
       chat: chatSwitch.value ? "1" : "0",
@@ -421,9 +426,7 @@ class HomeController extends GetxController {
 
     ///Customer Offer data
     if (homeData?.offers?.customOffer != null &&
-        homeData?.offers?.customOffer != []) {
-
-    }
+        homeData?.offers?.customOffer != []) {}
 
     update();
   }
@@ -578,7 +581,6 @@ class HomeController extends GetxController {
           await userRepository.updateOfferTypeApi(params);
       if (response.statusCode == 200) {
         homeData!.offers!.customOffer![index].isOn = value;
-
       }
       update();
     } catch (error) {

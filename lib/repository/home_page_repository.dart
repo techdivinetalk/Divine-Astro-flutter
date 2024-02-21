@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:divine_astrologer/model/live/new_tarot_card_model.dart';
+import 'package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -53,9 +55,12 @@ class HomePageRepository extends ApiProvider {
         if (json.decode(response.body)["status_code"] == 401) {
           throw CustomException(json.decode(response.body)["error"]);
         } else {
-          final tarotResponse =
-              TarotResponse.fromJson(json.decode(response.body));
+          final tarotResponse = TarotResponse.fromJson(json.decode(response.body));
           saveTarotCards(tarotResponse.data!);
+
+          NewTarotCardModel model = NewTarotCardModel.fromJson(json.decode(response.body));
+          await LiveSharedPreferencesSingleton().setAllTarotCard(model: model);
+
           return tarotResponse;
         }
       } else {
