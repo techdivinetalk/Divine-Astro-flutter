@@ -218,9 +218,9 @@ class AssistMessageView extends StatelessWidget {
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(40)),
-            border: Border.all(width: 2, color: appColors.appColorDark),
+            border: Border.all(width: 2, color: appColors.darkBlue),
             gradient: LinearGradient(
-              colors: [appColors.white, appColors.appColorDark],
+              colors: [appColors.white, appColors.darkBlue],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),

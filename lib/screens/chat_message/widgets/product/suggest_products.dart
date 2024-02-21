@@ -32,7 +32,7 @@ class SuggestProducts extends GetView<SuggestProductController> {
             preferredSize: AppBar().preferredSize,
             child: Obx(
               () => Container(
-                color: appColors.yellow,
+                color: appColors.guideColor,
                 child: AnimatedContainer(
                     duration: const Duration(milliseconds: 100),
                     child: controller.isSearchEnable.value
