@@ -885,6 +885,7 @@ class _FiveCardWidgetState extends State<FiveCardWidget> {
 void showCardChoiceBottomSheet(BuildContext context, ChatMessageWithSocketController controller) {
   showModalBottomSheet<void>(
     context: context,
+    isDismissible:false,
     builder: (BuildContext context) {
       return CardChoiceBottomSheet(controller);
     },
