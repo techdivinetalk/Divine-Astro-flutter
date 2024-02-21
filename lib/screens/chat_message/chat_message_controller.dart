@@ -32,7 +32,7 @@ class ChatMessageController extends GetxController {
   final messageController = TextEditingController();
   RxBool isEmojiShowing = false.obs;
   DataList? args;
-
+  RxBool loading = false.obs;
   File? image;
   final ImagePicker picker = ImagePicker();
   XFile? pickedFile;
@@ -58,11 +58,13 @@ class ChatMessageController extends GetxController {
             if (int.parse(responseMsg?["sender_id"]) == args?.id) {
               chatMessageList.add(AssistChatData(
                   message: responseMsg['message'],
-                  astrologerId: args!.id,
-                  createdAt: DateTime.parse(responseMsg['created_at'])
+                  astrologerId: int.parse(responseMsg?["sender_id"].toString() ?? ''),
+                  createdAt: DateTime.parse(responseMsg?["created_at"])
                       .millisecondsSinceEpoch
                       .toString(),
-                  id: DateTime.now().millisecondsSinceEpoch,
+                  id: responseMsg["chatId"] != null && responseMsg["chatId"] != ''
+                      ? int.parse(responseMsg["chatId"])
+                      : null,
                   isSuspicious: 0,
                   sendBy: SendBy.customer,
                   msgType: responseMsg['msg_type'] != null
@@ -82,7 +84,7 @@ class ChatMessageController extends GetxController {
       //to check if the list has enough number of elements to scroll
       // messageScrollController.hasClients ? null : getAssistantChatList();
       //
-      getUnreadMessage();
+
       messageScrollController.addListener(() {
         final topPosition = messageScrollController.position.minScrollExtent;
         if (messageScrollController.position.pixels == topPosition) {
@@ -95,7 +97,6 @@ class ChatMessageController extends GetxController {
         final bottomPosition = messageScrollController.position.maxScrollExtent;
         if (messageScrollController.position.pixels == bottomPosition) {
           //code to fetch old messages
-          updateUnreadMessageList();
         }
       });
       // getAssistantChatList();
@@ -106,6 +107,7 @@ class ChatMessageController extends GetxController {
   @override
   void dispose() {
     // TODO: implement dispose
+    readUnreadMessages();
     super.dispose();
   }
 
@@ -115,31 +117,13 @@ class ChatMessageController extends GetxController {
     Future.delayed(const Duration(milliseconds: 600)).then((value) {
       scrollToBottomFunc();
     });
-    getUnreadMessage();
   }
 
-  void getUnreadMessage() async {
-    final localDataList =
-        await SharedPreferenceService().getChatAssistUnreadMessage();
-    print("data present: ");
-    unreadMessageList.value = localDataList;
-    update();
-  }
-
-  removeMyUnreadMessages() {
-    for (int index = 0; index < unreadMessageList.length; index++) {
-      if (unreadMessageList[index].customerId == args?.id) {
-        unreadMessageList.removeAt(index);
-      }
+  void readUnreadMessages() {
+    if (assistChatUnreadMessages.isNotEmpty) {
+      assistChatUnreadMessages
+          .removeWhere((element) => element.customerId == args?.id);
     }
-    update();
-  }
-
-  updateUnreadMessageList() async {
-    removeMyUnreadMessages();
-
-    await SharedPreferenceService()
-        .updateChatAssistUnreadMessage(unreadMessageList);
     update();
   }
 
@@ -270,6 +254,9 @@ class ChatMessageController extends GetxController {
 
   getAssistantChatList() async {
     try {
+      if (currentPage.value == 1) {
+        loading(true);
+      }
       if (processedPages.contains(currentPage.value)) {
         return;
       }
@@ -292,7 +279,9 @@ class ChatMessageController extends GetxController {
     } catch (e, s) {
       debugPrint("Error fetching chat messages: $e $s");
     }
+
     reArrangeChatList();
+    loading(false);
   }
 
   void sendMsg(MsgType msgType, Map data) {

@@ -31,8 +31,44 @@ class AssistMessageView extends StatelessWidget {
     this.unreadMessage,
   });
 
+  Widget dayWidget(
+      {required DateTime currentMsgDate,
+        required DateTime nextMsgDate,
+        required bool isToday,
+        required bool isYesterday,
+        required int differenceOfDays}) {
+    if (differenceOfDays >= 1) {
+      return Align(
+        alignment: Alignment.center,
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 25),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15), color: appColors.yellow),
+          child: Text(
+            isToday
+                ? 'Today'
+                : isYesterday
+                ? 'Yesterday'
+                : '${DateFormat('EEEE ,dd MMMM').format(nextMsgDate)}',
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+          ),
+        ),
+      );
+    }
+    return SizedBox.shrink();
+  }
+
   Widget buildMessageView(
-      BuildContext context, AssistChatData chatMessage, bool yourMessage) {
+      BuildContext context, AssistChatData currentMsg, bool yourMessage) {
+    final currentMsgDate = DateTime.fromMillisecondsSinceEpoch(
+        int.parse(currentMsg.createdAt ?? '0'));
+    final nextMsgDate = DateTime.fromMillisecondsSinceEpoch(
+        int.parse(nextMessage.createdAt ?? '0'));
+    final differenceOfDays = nextMsgDate.day - currentMsgDate.day;
+    final isToday = (DateTime.now().day - currentMsgDate.day) == 1;
+    final isYesterday = (DateTime.now().day - currentMsgDate.day) == 2;
+
     Widget messageWidget;
     switch (chatMessage.msgType) {
       case MsgType.gift:
@@ -75,7 +111,19 @@ class AssistMessageView extends StatelessWidget {
     //     ],
     //   );
     // }
-    return messageWidget;
+
+    return Column(
+      children: [
+        // unreadMessageView(),
+        messageWidget,
+        dayWidget(
+            currentMsgDate: currentMsgDate,
+            nextMsgDate: nextMsgDate,
+            isToday: isToday,
+            isYesterday: isYesterday,
+            differenceOfDays: differenceOfDays)
+      ],
+    );
   }
 
   @override
@@ -141,7 +189,7 @@ class AssistMessageView extends StatelessWidget {
                           ),
                           child: Text(
                             // messageDateTime(chatDetail. ?? 0),
-                            'datetime',
+                            msgTimeFormat(chatDetail.createdAt),
                             style: AppTextStyle.textStyle10(
                                 fontColor: appColors.white),
                           ),
@@ -159,30 +207,37 @@ class AssistMessageView extends StatelessWidget {
 
   Widget giftMsgView(
       BuildContext context, AssistChatData chatMessage, bool yourMessage) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(40)),
-        border: Border.all(width: 2, color: appColors.appColorDark),
-        gradient: LinearGradient(
-          colors: [appColors.white, appColors.appColorDark],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
+    return SizedBox(
+      width: double.infinity,
+
+      child: Align(
+
+        child: Container(
+          padding: EdgeInsets.symmetric( vertical: 8.h),
+          margin: EdgeInsets.symmetric(vertical: 10.w,),
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(40)),
+            border: Border.all(width: 2, color: appColors.appColorDark),
+            gradient: LinearGradient(
+              colors: [appColors.white, appColors.appColorDark],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          constraints: BoxConstraints(
+              maxWidth: ScreenUtil().screenWidth * 0.8,
+              minWidth: ScreenUtil().screenWidth * 0.27),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.card_giftcard, size: 15),
+              SizedBox(width: 6.w),
+              Flexible(
+                  child: Text("You have Received ${chatMessage.message}" ?? ''))
+            ],
+          ),
         ),
-      ),
-      constraints: BoxConstraints(
-          maxWidth: ScreenUtil().screenWidth * 0.8,
-          minWidth: ScreenUtil().screenWidth * 0.27),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.card_giftcard, size: 15),
-          SizedBox(width: 6.w),
-          Flexible(
-              child: Text("You have Received ${chatMessage.message}" ?? ''))
-        ],
       ),
     );
   }
@@ -194,10 +249,6 @@ class AssistMessageView extends StatelessWidget {
         int.parse(currentMsg.createdAt ?? '0'));
     final nextMsgDate = DateTime.fromMillisecondsSinceEpoch(
         int.parse(nextMessage.createdAt ?? '0'));
-    final differenceOfDays = nextMsgDate.day - currentMsgDate.day;
-    final isToday = DateFormat('yyyy MM dd').format(nextMsgDate) ==
-        DateFormat('yyyy MM dd').format(DateTime.now());
-    final isYesterday = (DateTime.now().day - currentMsgDate.day) == 2;
     return SizedBox(
       width: double.maxFinite,
       child: Padding(
@@ -262,27 +313,7 @@ class AssistMessageView extends StatelessWidget {
                 ],
               ),
             ),
-            if (differenceOfDays >= 1)
-              Align(
-                alignment: Alignment.center,
-                child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: appColors.yellow),
-                  child: Text(
-                    isToday
-                        ? 'Today'
-                        : isYesterday
-                            ? 'Yesterday'
-                            : '${DateFormat('EEEE ,dd MMMM').format(nextMsgDate)}',
-                    style: const TextStyle(
-                        fontSize: 12, fontWeight: FontWeight.w600),
-                  ),
-                ),
-              ),
+
           ],
         ),
       ),

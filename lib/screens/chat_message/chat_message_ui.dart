@@ -13,6 +13,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../common/app_textstyle.dart';
 import '../../common/common_bottomsheet.dart';
@@ -79,33 +80,39 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                     return false;
                   },
                   child: Obx(
-                    () => ListView.builder(
-                      itemCount: controller.chatMessageList.length,
-                      controller: controller.messageScrollController,
-                      reverse: false,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        final currentMsg =
-                            controller.chatMessageList[index] as AssistChatData;
-                        final nextIndex =
-                            controller.chatMessageList.length - 1 == index
-                                ? index
-                                : index + 1;
-                        print(
-                            'length of chat assist list ${controller.chatMessageList.length}');
-                        print("chat assist msg data:${currentMsg.toJson()}");
-                        return AssistMessageView(
-                          index: index,
-                          chatMessage: currentMsg,
-                          nextMessage: controller.chatMessageList[nextIndex],
-                          yourMessage: currentMsg.sendBy == SendBy.astrologer,
-                          unreadMessage: controller.unreadMessageList.isNotEmpty
-                              ? controller.chatMessageList[index].id ==
-                                  controller.unreadMessageList.first.id
-                              : false,
-                        );
-                      },
-                    ),
+                    () => controller.loading.value
+                        ? msgShimmerList()
+                        : controller.chatMessageList.isEmpty? Text('start a conversastion'):ListView.builder(
+                            itemCount: controller.chatMessageList.length,
+                            controller: controller.messageScrollController,
+                            reverse: false,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              final currentMsg = controller
+                                  .chatMessageList[index] as AssistChatData;
+                              final nextIndex =
+                                  controller.chatMessageList.length - 1 == index
+                                      ? index
+                                      : index + 1;
+                              print(
+                                  'length of chat assist list ${controller.chatMessageList.length}');
+                              print(
+                                  "chat assist msg data:${currentMsg.toJson()}");
+                              return AssistMessageView(
+                                index: index,
+                                chatMessage: currentMsg,
+                                nextMessage:
+                                    controller.chatMessageList[nextIndex],
+                                yourMessage:
+                                    currentMsg.sendBy == SendBy.astrologer,
+                                unreadMessage: controller
+                                        .unreadMessageList.isNotEmpty
+                                    ? controller.chatMessageList[index].id ==
+                                        controller.unreadMessageList.first.id
+                                    : false,
+                              );
+                            },
+                          ),
                   ),
                 ),
               ),
@@ -115,6 +122,42 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget msgShimmerList() {
+    return ListView.builder(
+      itemCount: 30,
+      itemBuilder: (context, index) {
+        return Align(
+          alignment:
+              index % 2 == 0 ? Alignment.centerLeft : Alignment.centerRight,
+          child: Shimmer.fromColors(
+            baseColor: Colors.grey.withOpacity(0.3),
+            highlightColor: Colors.grey,
+            child: Container(
+              width: index % 4 == 0
+                  ? 130
+                  : index % 3 == 0
+                      ? 200
+                      : 150,
+              alignment: Alignment.centerRight,
+              height: 50,
+              margin: EdgeInsets.symmetric(vertical: 5),
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 3.0,
+                      offset: const Offset(0.0, 3.0)),
+                ],
+                color: Colors.white,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -196,7 +239,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                 SizedBox(width: 15.w),
                 InkWell(
                   onTap: () {
-                    controller.sendMsg(MsgType.text,{});
+                    controller.sendMsg(MsgType.text, {});
                   },
                   child: Assets.images.icSendMsg.svg(height: 48.h),
                 )
@@ -214,6 +257,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
       SvgPicture.asset('assets/svg/camera_icon.svg'),
       SvgPicture.asset('assets/svg/gallery_icon.svg'),
       SvgPicture.asset('assets/svg/remedies_icon.svg'),
+      SvgPicture.asset('assets/svg/product.svg'),
       SvgPicture.asset('assets/svg/deck_icon.svg'),
       // Add more items as needed
     ];
@@ -257,7 +301,8 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                         }
                         break;
                       case 3:
-                        // showCardChoiceBottomSheet(context, controller);
+                        var result =
+                        await Get.toNamed(RouteName.chatAssistProductPage);
                         break;
                       case 4:
                         controller.getImage(false);
