@@ -35,12 +35,10 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
       appBar: AppBar(
         backgroundColor: appColors.guideColor,
         centerTitle: false,
-        leading: GestureDetector(
-          onTap: () {
-            Get.back();
-          },
-          child: Icon(
-            Icons.arrow_back_rounded,
+        leading: IconButton(
+          onPressed: () => Get.back(),
+          icon: Icon(
+            Icons.arrow_back_ios_new_rounded,
             color: appColors.white,
           ),
         ),

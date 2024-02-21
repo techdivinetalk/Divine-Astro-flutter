@@ -89,6 +89,7 @@ class ChatMessageController extends GetxController {
         final topPosition = messageScrollController.position.minScrollExtent;
         if (messageScrollController.position.pixels == topPosition) {
           //code to fetch old messages
+          print("to fetch old messages");
           getAssistantChatList();
         }
       });
@@ -254,12 +255,13 @@ class ChatMessageController extends GetxController {
 
   getAssistantChatList() async {
     try {
-      if (currentPage.value == 1) {
-        loading(true);
-      }
+      loading(true);
       if (processedPages.contains(currentPage.value)) {
+        loading(false);
         return;
       }
+      final map = {"customer_id": args!.id, "page": currentPage.value};
+      print("payload data $map");
       final response = await chatAssistantRepository.getAstrologerChats(
           {"customer_id": args!.id, "page": currentPage.value});
       if (response.data != null) {
@@ -302,9 +304,14 @@ class ChatMessageController extends GetxController {
 
             // msgStatus: MsgStatus.sent,
             customerId: args?.id);
+        appSocket.sendAssistantMessage(
+            customerId: args!.id.toString(),
+            msgData: msgData,
+            message: messageController.text,
+            astroId: preferenceService.getUserDetail()!.id.toString());
       case MsgType.image:
         msgData = AssistChatData(
-            message: data['awsUrl'],
+            message: "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologer/71019/1708498690.jpg",
             astrologerId: preferenceService.getUserDetail()!.id,
             createdAt: DateTime.now().toIso8601String(),
             id: DateTime.now().millisecondsSinceEpoch,
@@ -314,13 +321,14 @@ class ChatMessageController extends GetxController {
             seenStatus: SeenStatus.notSent,
             // msgStatus: MsgStatus.sent,
             customerId: args?.id);
+        appSocket.sendAssistantMessage(
+            customerId: args!.id.toString(),
+            msgData: msgData,
+            message:data['awsUrl'],
+            astroId: preferenceService.getUserDetail()!.id.toString());
       default:
     }
-    appSocket.sendAssistantMessage(
-        customerId: args!.id.toString(),
-        msgData: msgData,
-        message: messageController.text,
-        astroId: preferenceService.getUserDetail()!.id.toString());
+
     // print("socket msg");
     // print(preferenceService.getUserDetail()!.id.toString());
     // print(args!.id.toString());

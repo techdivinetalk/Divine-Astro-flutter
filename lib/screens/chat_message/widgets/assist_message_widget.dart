@@ -61,13 +61,14 @@ class AssistMessageView extends StatelessWidget {
 
   Widget buildMessageView(
       BuildContext context, AssistChatData currentMsg, bool yourMessage) {
+
     final currentMsgDate = DateTime.fromMillisecondsSinceEpoch(
         int.parse(currentMsg.createdAt ?? '0'));
     final nextMsgDate = DateTime.fromMillisecondsSinceEpoch(
         int.parse(nextMessage.createdAt ?? '0'));
     final differenceOfDays = nextMsgDate.day - currentMsgDate.day;
-    final isToday = (DateTime.now().day - currentMsgDate.day) == 1;
-    final isYesterday = (DateTime.now().day - currentMsgDate.day) == 2;
+    final isToday = (DateTime.now().day - currentMsgDate.day) == 0;
+    final isYesterday = (DateTime.now().day - currentMsgDate.day) == 1;
 
     Widget messageWidget;
     switch (chatMessage.msgType) {
@@ -139,6 +140,7 @@ class AssistMessageView extends StatelessWidget {
             yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
+            margin:  EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
               padding: const EdgeInsets.all(8.0),
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
