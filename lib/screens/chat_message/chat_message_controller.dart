@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -58,13 +59,15 @@ class ChatMessageController extends GetxController {
             if (int.parse(responseMsg?["sender_id"]) == args?.id) {
               chatMessageList.add(AssistChatData(
                   message: responseMsg['message'],
-                  astrologerId: int.parse(responseMsg?["sender_id"].toString() ?? ''),
+                  astrologerId:
+                      int.parse(responseMsg?["sender_id"].toString() ?? ''),
                   createdAt: DateTime.parse(responseMsg?["created_at"])
                       .millisecondsSinceEpoch
                       .toString(),
-                  id: responseMsg["chatId"] != null && responseMsg["chatId"] != ''
-                      ? int.parse(responseMsg["chatId"])
-                      : null,
+                  // id: responseMsg["chatId"] != null &&
+                  //         responseMsg["chatId"] != ''&& responseMsg["chatId"]=='undefined'
+                  //     ? int.parse(responseMsg["chatId"])
+                  //     : null,
                   isSuspicious: 0,
                   sendBy: SendBy.customer,
                   msgType: responseMsg['msg_type'] != null
@@ -130,16 +133,21 @@ class ChatMessageController extends GetxController {
 
   void listenSocket() {
     appSocket.listenForAssistantChatMessage((chatData) {
-      print("data from chatAssist message $chatData");
-      final newChatData = AssistChatData.fromJson(chatData['msgData']);
-      print(
-          "new message update in chatassist listen scoket ${newChatData.toJson()}");
-      final updateAtIndex = chatMessageList
-          .indexWhere((oldChatData) => oldChatData.id == newChatData.id);
-      if (updateAtIndex == -1) {
-        chatMessageList.add(newChatData);
+      if (chatData['seen_status'] == "10") {
       } else {
-        chatMessageList[updateAtIndex] = newChatData;
+        final newChatData = AssistChatData.fromJson(chatData['msgData']);
+        print(
+            "new message update in chatassist listen scoket ${newChatData.toJson()}");
+        newChatData.seenStatus = chatData['seen_status'] != null
+            ? seenStatusValues.map[chatData["seen_status"].toString()]
+            : SeenStatus.sent;
+        final updateAtIndex = chatMessageList
+            .indexWhere((oldChatData) => oldChatData.id == newChatData.id);
+        if (updateAtIndex == -1) {
+          chatMessageList.add(newChatData);
+        } else {
+          chatMessageList[updateAtIndex] = newChatData;
+        }
       }
       update();
     });
@@ -254,6 +262,7 @@ class ChatMessageController extends GetxController {
   }
 
   getAssistantChatList() async {
+    print("assistant chat ${await FirebaseMessaging.instance.getToken()} ");
     try {
       loading(true);
       if (processedPages.contains(currentPage.value)) {
@@ -311,7 +320,8 @@ class ChatMessageController extends GetxController {
             astroId: preferenceService.getUserDetail()!.id.toString());
       case MsgType.image:
         msgData = AssistChatData(
-            message: "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologer/71019/1708498690.jpg",
+            message:
+                "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologer/71019/1708498690.jpg",
             astrologerId: preferenceService.getUserDetail()!.id,
             createdAt: DateTime.now().toIso8601String(),
             id: DateTime.now().millisecondsSinceEpoch,
@@ -324,7 +334,7 @@ class ChatMessageController extends GetxController {
         appSocket.sendAssistantMessage(
             customerId: args!.id.toString(),
             msgData: msgData,
-            message:data['awsUrl'],
+            message: data['awsUrl'],
             astroId: preferenceService.getUserDetail()!.id.toString());
       default:
     }

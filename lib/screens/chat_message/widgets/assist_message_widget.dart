@@ -325,6 +325,12 @@ class AssistMessageView extends StatelessWidget {
   Widget chatSeenStatusWidget({required SeenStatus seenStatus}) {
     print('msg status ${seenStatus}');
     switch (seenStatus) {
+      case SeenStatus.error:
+        return Icon(
+          Icons.error_outline,
+          size: 15,
+          color: appColors.red,
+        );
       case SeenStatus.notSent:
         return const SizedBox();
       case SeenStatus.sent:
