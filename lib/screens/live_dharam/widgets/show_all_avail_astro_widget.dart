@@ -76,7 +76,7 @@ class _ShowAllAvailAstroWidgetState extends State<ShowAllAvailAstroWidget> {
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: appColors.yellow),
+            border: Border.all(color: appColors.guideColor),
             color: appColors.white,
           ),
           child: grid(),
@@ -150,8 +150,8 @@ class _ShowAllAvailAstroWidgetState extends State<ShowAllAvailAstroWidget> {
                   width: 84,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                    border: Border.all(color: appColors.yellow, width: 4),
-                    color: appColors.yellow.withOpacity(0.2),
+                    border: Border.all(color: appColors.guideColor, width: 4),
+                    color: appColors.guideColor.withOpacity(0.2),
                   ),
                   child: CustomImageWidget(
                     imageUrl: image,

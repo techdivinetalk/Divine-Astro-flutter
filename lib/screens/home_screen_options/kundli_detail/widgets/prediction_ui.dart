@@ -85,7 +85,7 @@ class PredictionUi extends StatelessWidget {
         Text(title.tr,
             style: AppTextStyle.textStyle20(
                 fontWeight: FontWeight.w500,
-                fontColor: appColors.appYellowColour)),
+                fontColor: appColors.textColor)),
         SizedBox(height: 5.h),
         Text(
           details,

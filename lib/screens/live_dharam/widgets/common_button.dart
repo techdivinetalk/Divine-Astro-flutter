@@ -19,7 +19,7 @@ class CommonButton extends StatelessWidget {
       child: ElevatedButton(
         style: ButtonStyle(
           elevation: MaterialStateProperty.all(4),
-          backgroundColor: MaterialStateProperty.all(appColors.yellow),
+          backgroundColor: MaterialStateProperty.all(appColors.guideColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10.0)),

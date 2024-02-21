@@ -217,14 +217,7 @@ class HomeUI extends GetView<HomeController> {
                               child: Ink(
                                 height: 54.h,
                                 decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
-                                    colors: [
-                                      appColors.appYellowColour,
-                                      appColors.gradientBottom
-                                    ],
-                                  ),
+                                  color: appColors.guideColor,
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(10)),
                                 ),
@@ -234,7 +227,7 @@ class HomeUI extends GetView<HomeController> {
                                   child: Text(
                                     "checkKundli".tr,
                                     style: AppTextStyle.textStyle14(
-                                        fontColor: appColors.brownColour,
+                                        fontColor: appColors.white,
                                         fontWeight: FontWeight.w500),
                                   ),
                                 ),
@@ -361,12 +354,12 @@ class HomeUI extends GetView<HomeController> {
                           bool hasOpenOrder = false;
                           // hasOpenOrder = await controller.hasOpenOrder();
                           if (hasOpenOrder) {
-                            divineSnackBar(
-                              data:
-                                  "Unable to Go Live due to your active order.",
-                              color: appColors.appColorDark,
-                              duration: const Duration(seconds: 6),
-                            );
+                            // divineSnackBar(
+                            //   data:
+                            //       "Unable to Go Live due to your active order.",
+                            //   color: appColors.guideColor,
+                            //   duration: const Duration(seconds: 6),
+                            // );
                           } else {
                             bool isChatOn = controller.chatSwitch.value;
                             bool isAudioCallOn = controller.callSwitch.value;
@@ -379,7 +372,7 @@ class HomeUI extends GetView<HomeController> {
                               divineSnackBar(
                                 data:
                                     "Please turn off all session types in order to go live.",
-                                color: appColors.appColorDark,
+                                color: appColors.guideColor,
                                 duration: const Duration(seconds: 6),
                               );
                             }
@@ -388,7 +381,7 @@ class HomeUI extends GetView<HomeController> {
                         child: Container(
                           height: 60,
                           decoration: BoxDecoration(
-                            color: appColors.lightYellow,
+                            color: appColors.guideColor,
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withOpacity(0.2),
@@ -397,25 +390,18 @@ class HomeUI extends GetView<HomeController> {
                               ),
                             ],
                             borderRadius: BorderRadius.circular(10.0),
-                            gradient: LinearGradient(
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                              colors: [
-                                appColors.appYellowColour,
-                                appColors.gradientBottom
-                              ],
-                            ),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Assets.images.icGoLive.svg(),
+                              Assets.images.icGoLive.svg(color: Colors.white),
                               const SizedBox(width: 15),
                               Text(
                                 "goLive".tr,
                                 style: AppTextStyle.textStyle20(
-                                    fontWeight: FontWeight.w700,
-                                    fontColor: appColors.brownColour),
+                                  fontWeight: FontWeight.w700,
+                                  fontColor: appColors.white,
+                                ),
                               ),
                             ],
                           ),
@@ -498,26 +484,19 @@ class HomeUI extends GetView<HomeController> {
                             height: 50,
                             width: 50,
                             decoration: BoxDecoration(
-                              color: appColors.lightYellow,
+                              color: appColors.guideColor,
                               borderRadius: BorderRadius.circular(25.0),
-                              gradient: LinearGradient(
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                                colors: [
-                                  appColors.appYellowColour,
-                                  appColors.gradientBottom
-                                ],
-                              ),
                             ),
                             child: Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Assets.images.icHelp.svg(),
+                                  Assets.images.icHelp
+                                      .svg(color: appColors.white),
                                   Text(
                                     "help".tr,
                                     style: AppTextStyle.textStyle10(
-                                        fontColor: appColors.brownColour,
+                                        fontColor: appColors.white,
                                         fontWeight: FontWeight.w700),
                                   )
                                 ],
@@ -654,14 +633,7 @@ class HomeUI extends GetView<HomeController> {
                             child: Container(
                               height: 54.h,
                               decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.bottomCenter,
-                                  end: Alignment.topCenter,
-                                  colors: [
-                                    appColors.appYellowColour,
-                                    appColors.gradientBottom
-                                  ],
-                                ),
+                                color: appColors.guideColor,
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(30)),
                               ),
@@ -672,7 +644,7 @@ class HomeUI extends GetView<HomeController> {
                                 child: Text(
                                   "View Kundali",
                                   style: AppTextStyle.textStyle14(
-                                      fontColor: appColors.brownColour,
+                                      fontColor: appColors.textColor,
                                       fontWeight: FontWeight.w500),
                                 ),
                               ),
@@ -710,7 +682,7 @@ class HomeUI extends GetView<HomeController> {
                 ],
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(20.r)),
-                border: Border.all(color: appColors.lightYellow)),
+                border: Border.all(color: appColors.guideColor)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -881,230 +853,217 @@ class HomeUI extends GetView<HomeController> {
                 ),
               ],
             ),
-            Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      "nextOnlineTiming".tr,
-                      style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w500,
-                          fontColor: appColors.darkBlue),
-                    ),
-                    SizedBox(
-                      width: 8.w,
-                    ),
-                    GestureDetector(
-                        onTap: () {
-                          Fluttertoast.showToast(msg: "No info for now!");
-                        },
-                        child: Assets.images.icInfo
-                            .svg(height: 16.h, width: 16.h)),
-                  ],
-                ),
-                SizedBox(height: 15.h),
-                Obx(() => controller.selectedChatTime.value.isEmpty
-                    ? InkWell(
-                        onTap: () {
-                          selectDateOrTime(
-                            Get.context!,
-                            futureDate: true,
-                            title: "ScheduleOnlineDate".tr,
-                            btnTitle: "confirmNextDate".tr,
-                            pickerStyle: "DateCalendar",
-                            looping: true,
-                            initialDate: DateTime.now(),
-                            lastDate: DateTime(2050),
-                            onConfirm: (value) =>
-                                controller.selectChatDate(value),
-                            onChange: (value) =>
-                                controller.selectChatDate(value),
-                            onClickOkay: (value) {
-                              Get.back();
+            SizedBox(width: 50.h),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "nextOnlineTiming".tr,
+                        style: AppTextStyle.textStyle12(
+                            fontWeight: FontWeight.w500,
+                            fontColor: appColors.darkBlue),
+                      ),
+                      SizedBox(
+                        width: 8.w,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            Fluttertoast.showToast(msg: "No info for now!");
+                          },
+                          child: Assets.images.icInfo
+                              .svg(height: 16.h, width: 16.h)),
+                    ],
+                  ),
+                  SizedBox(height: 15.h),
+                  Obx(() => controller.selectedChatTime.value.isEmpty
+                      ? InkWell(
+                          onTap: () {
+                            selectDateOrTime(
+                              Get.context!,
+                              futureDate: true,
+                              title: "ScheduleOnlineDate".tr,
+                              btnTitle: "confirmNextDate".tr,
+                              pickerStyle: "DateCalendar",
+                              looping: true,
+                              initialDate: DateTime.now(),
+                              lastDate: DateTime(2050),
+                              onConfirm: (value) =>
+                                  controller.selectChatDate(value),
+                              onChange: (value) =>
+                                  controller.selectChatDate(value),
+                              onClickOkay: (value) {
+                                Get.back();
 
-                              selectDateOrTime(
-                                Get.context!,
-                                title: "scheduleOnlineTime".tr,
-                                btnTitle: "confirmOnlineTime".tr,
-                                pickerStyle: "TimeCalendar",
-                                looping: true,
-                                onConfirm: (value) {
-                                  // controller.selectChatTime(value),
-                                },
-                                onChange: (value) {
-                                  // controller.selectChatTime(value),
-                                },
-                                onClickOkay: (timeValue) {
-                                  if (controller.isValidDate(
-                                      "CHAT", timeValue)) {
-                                    controller.selectChatTime(timeValue);
-                                    controller.scheduleCall("CHAT");
+                                selectDateOrTime(
+                                  Get.context!,
+                                  title: "scheduleOnlineTime".tr,
+                                  btnTitle: "confirmOnlineTime".tr,
+                                  pickerStyle: "TimeCalendar",
+                                  looping: true,
+                                  onConfirm: (value) {
+                                    // controller.selectChatTime(value),
+                                  },
+                                  onChange: (value) {
+                                    // controller.selectChatTime(value),
+                                  },
+                                  onClickOkay: (timeValue) {
+                                    if (controller.isValidDate(
+                                        "CHAT", timeValue)) {
+                                      controller.selectChatTime(timeValue);
+                                      controller.scheduleCall("CHAT");
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg:
+                                              "Please select future date and time");
+                                    }
+                                  },
+                                );
+                              },
+                            );
+                          },
+                          child: Container(
+                            // width: 128.w,
+                            height: 31.h,
+                            decoration: BoxDecoration(
+                              color: appColors.guideColor,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(20)),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "scheduleNow".tr,
+                                style: AppTextStyle.textStyle10(
+                                    fontColor: appColors.white,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                          ),
+                        )
+                      : const SelectedTimeForChat()),
+                  SizedBox(height: 15.h),
+                  //const SelectedTime(),
+                  Obx(() => controller.selectedCallTime.value.isEmpty
+                      ? InkWell(
+                          onTap: () {
+                            selectDateOrTime(
+                              futureDate: true,
+                              Get.context!,
+                              title: "ScheduleOnlineDate".tr,
+                              btnTitle: "confirmNextDate".tr,
+                              pickerStyle: "DateCalendar",
+                              looping: true,
+                              lastDate: DateTime(2050),
+                              onConfirm: (value) =>
+                                  controller.selectCallDate(value),
+                              onChange: (value) =>
+                                  controller.selectCallDate(value),
+                              onClickOkay: (value) {
+                                Get.back();
+                                selectDateOrTime(Get.context!,
+                                    title: "scheduleOnlineTime".tr,
+                                    btnTitle: "confirmOnlineTime".tr,
+                                    pickerStyle: "TimeCalendar",
+                                    looping: true, onConfirm: (value) {
+                                  // controller.selectCallTime(value),
+                                }, onChange: (value1) {
+                                  // controller.selectCallTime(value),
+                                }, onClickOkay: (value1) {
+                                  if (controller.isValidDate("CALL", value1)) {
+                                    controller.selectCallTime(value1);
+                                    controller.scheduleCall("CALL");
                                   } else {
                                     Fluttertoast.showToast(
                                         msg:
                                             "Please select future date and time");
                                   }
-                                },
-                              );
-                            },
-                          );
-                        },
-                        child: Container(
-                          width: 128.w,
-                          height: 31.h,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                              colors: [
-                                appColors.appYellowColour,
-                                appColors.gradientBottom
-                              ],
+                                });
+                              },
+                            );
+                          },
+                          child: Container(
+                            // width: 128.w,
+                            height: 31.h,
+                            decoration: BoxDecoration(
+                              color: appColors.guideColor,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(20)),
                             ),
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "scheduleNow".tr,
-                              style: AppTextStyle.textStyle10(
-                                  fontColor: appColors.brownColour,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                        ),
-                      )
-                    : const SelectedTimeForChat()),
-                SizedBox(height: 15.h),
-                //const SelectedTime(),
-                Obx(() => controller.selectedCallTime.value.isEmpty
-                    ? InkWell(
-                        onTap: () {
-                          selectDateOrTime(
-                            futureDate: true,
-                            Get.context!,
-                            title: "ScheduleOnlineDate".tr,
-                            btnTitle: "confirmNextDate".tr,
-                            pickerStyle: "DateCalendar",
-                            looping: true,
-                            lastDate: DateTime(2050),
-                            onConfirm: (value) =>
-                                controller.selectCallDate(value),
-                            onChange: (value) =>
-                                controller.selectCallDate(value),
-                            onClickOkay: (value) {
-                              Get.back();
-                              selectDateOrTime(Get.context!,
-                                  title: "scheduleOnlineTime".tr,
-                                  btnTitle: "confirmOnlineTime".tr,
-                                  pickerStyle: "TimeCalendar",
-                                  looping: true, onConfirm: (value) {
-                                // controller.selectCallTime(value),
-                              }, onChange: (value1) {
-                                // controller.selectCallTime(value),
-                              }, onClickOkay: (value1) {
-                                if (controller.isValidDate("CALL", value1)) {
-                                  controller.selectCallTime(value1);
-                                  controller.scheduleCall("CALL");
-                                } else {
-                                  Fluttertoast.showToast(
-                                      msg:
-                                          "Please select future date and time");
-                                }
-                              });
-                            },
-                          );
-                        },
-                        child: Container(
-                          width: 128.w,
-                          height: 31.h,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                              colors: [
-                                appColors.appYellowColour,
-                                appColors.gradientBottom
-                              ],
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "scheduleNow".tr,
-                              style: AppTextStyle.textStyle10(
-                                  fontColor: appColors.brownColour,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                        ),
-                      )
-                    : const SelectedTimeForCall()),
-                SizedBox(height: 15.h),
-                Obx(() => controller.selectedVideoTime.value.isEmpty
-                    ? InkWell(
-                        onTap: () {
-                          selectDateOrTime(
-                            futureDate: true,
-                            Get.context!,
-                            title: "ScheduleOnlineDate".tr,
-                            btnTitle: "confirmNextDate".tr,
-                            pickerStyle: "DateCalendar",
-                            looping: true,
-                            lastDate: DateTime(2050),
-                            onConfirm: (value) =>
-                                controller.selectVideoDate(value),
-                            onChange: (value) =>
-                                controller.selectVideoDate(value),
-                            onClickOkay: (value) {
-                              Get.back();
-                              selectDateOrTime(Get.context!,
-                                  title: "scheduleOnlineTime".tr,
-                                  btnTitle: "confirmOnlineTime".tr,
-                                  pickerStyle: "TimeCalendar",
-                                  looping: true, onConfirm: (value) {
-                                // controller.selectVideoTime(value),
-                              }, onChange: (value) {
-                                // controller.selectVideoTime(value);
-                              }, onClickOkay: (value) {
-                                if (controller.isValidDate("VIDEO", value)) {
-                                  controller.selectVideoTime(value);
-                                  controller.scheduleCall("VIDEO");
-                                } else {
-                                  Fluttertoast.showToast(
-                                      msg:
-                                          "Please select future date and time");
-                                }
-                              });
-                            },
-                          );
-                        },
-                        child: Container(
-                          width: 128.w,
-                          height: 31.h,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                              colors: [
-                                appColors.appYellowColour,
-                                appColors.gradientBottom
-                              ],
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "scheduleNow".tr,
-                              style: AppTextStyle.textStyle10(
-                                fontColor: appColors.brownColour,
-                                fontWeight: FontWeight.w400,
+                            child: Center(
+                              child: Text(
+                                "scheduleNow".tr,
+                                style: AppTextStyle.textStyle10(
+                                    fontColor: appColors.white,
+                                    fontWeight: FontWeight.w400),
                               ),
                             ),
                           ),
-                        ),
-                      )
-                    : const SelectedTimeForVideoCall()),
-              ],
+                        )
+                      : const SelectedTimeForCall()),
+                  SizedBox(height: 15.h),
+                  Obx(() => controller.selectedVideoTime.value.isEmpty
+                      ? InkWell(
+                          onTap: () {
+                            selectDateOrTime(
+                              futureDate: true,
+                              Get.context!,
+                              title: "ScheduleOnlineDate".tr,
+                              btnTitle: "confirmNextDate".tr,
+                              pickerStyle: "DateCalendar",
+                              looping: true,
+                              lastDate: DateTime(2050),
+                              onConfirm: (value) =>
+                                  controller.selectVideoDate(value),
+                              onChange: (value) =>
+                                  controller.selectVideoDate(value),
+                              onClickOkay: (value) {
+                                Get.back();
+                                selectDateOrTime(Get.context!,
+                                    title: "scheduleOnlineTime".tr,
+                                    btnTitle: "confirmOnlineTime".tr,
+                                    pickerStyle: "TimeCalendar",
+                                    looping: true, onConfirm: (value) {
+                                  // controller.selectVideoTime(value),
+                                }, onChange: (value) {
+                                  // controller.selectVideoTime(value);
+                                }, onClickOkay: (value) {
+                                  if (controller.isValidDate("VIDEO", value)) {
+                                    controller.selectVideoTime(value);
+                                    controller.scheduleCall("VIDEO");
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg:
+                                            "Please select future date and time");
+                                  }
+                                });
+                              },
+                            );
+                          },
+                          child: Container(
+                            // width: 128.w,
+                            height: 31.h,
+                            decoration: BoxDecoration(
+                              color: appColors.guideColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "scheduleNow".tr,
+                                style: AppTextStyle.textStyle10(
+                                  fontColor: appColors.white,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      : const SelectedTimeForVideoCall()),
+                ],
+              ),
             ),
           ],
         ),
@@ -1533,7 +1492,7 @@ class HomeUI extends GetView<HomeController> {
       decoration: BoxDecoration(
         color: appColors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: appColors.appYellowColour, width: 1),
+        border: Border.all(color: appColors.guideColor, width: 1),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
@@ -1605,7 +1564,7 @@ class HomeUI extends GetView<HomeController> {
                                   ''),
                               loadingIndicator: SizedBox(
                                 child: CircularProgressIndicator(
-                                  color: appColors.yellow,
+                                  color: appColors.guideColor,
                                   strokeWidth: 2,
                                 ),
                               ),
@@ -1685,7 +1644,7 @@ class HomeUI extends GetView<HomeController> {
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                       borderSide: BorderSide(
-                        color: appColors.appYellowColour,
+                        color: appColors.guideColor,
                         width: 1.0,
                       )),
                 ),
@@ -1707,14 +1666,14 @@ class HomeUI extends GetView<HomeController> {
                     width: ScreenUtil().screenWidth / 1.5,
                     height: 56,
                     decoration: BoxDecoration(
-                        color: appColors.lightYellow,
+                        color: appColors.guideColor,
                         borderRadius: BorderRadius.circular(30)),
                     child: Center(
                         child: Text(
                       "submitFeedback".tr,
                       style: AppTextStyle.textStyle16(
                           fontWeight: FontWeight.w600,
-                          fontColor: appColors.brownColour),
+                          fontColor: appColors.white),
                     ))),
               ),
             ),
@@ -2225,14 +2184,6 @@ class PerformanceDialog extends StatelessWidget {
                             onTap: () => Navigator.pop(context),
                             child: Container(
                               decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
-                                    colors: [
-                                      appColors.appYellowColour,
-                                      appColors.gradientBottom
-                                    ],
-                                  ),
                                   borderRadius: BorderRadius.circular(10)),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -2241,7 +2192,7 @@ class PerformanceDialog extends StatelessWidget {
                                     "close".tr,
                                     style: AppTextStyle.textStyle16(
                                         fontWeight: FontWeight.w600,
-                                        fontColor: appColors.brownColour),
+                                        fontColor: appColors.white),
                                   ),
                                 ),
                               ),
@@ -2267,7 +2218,7 @@ class PerformanceDialog extends StatelessWidget {
                                   color: controller.performanceScoreList.last ==
                                           controller.performanceScoreList[
                                               controller.scoreIndex]
-                                      ? appColors.yellow
+                                      ? appColors.guideColor
                                       : appColors.lightGrey,
                                   borderRadius: BorderRadius.circular(10)),
                               child: Padding(

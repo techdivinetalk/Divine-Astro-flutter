@@ -4,33 +4,27 @@ import "package:divine_astrologer/common/colors.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
 
-class MoreOptionsWidget extends StatefulWidget {
-  const MoreOptionsWidget({
+class ChatCallOnOffWidget extends StatefulWidget {
+  const ChatCallOnOffWidget({
     required this.onClose,
-    required this.isHost,
-    required this.onTapAskForGifts,
-    required this.onTapAskForVideoCall,
-    required this.onTapAskForAudioCall,
-    required this.onTapAskForPrivateCall,
-    required this.onTapAskForBlockUnBlockUser,
-    required this.isBlocked,
+    required this.makeCall,
+    required this.makeTurnOnOffCalls,
+    required this.currentStatus,
+    required this.isVideoCall,
     super.key,
   });
 
   final void Function() onClose;
-  final bool isHost;
-  final void Function() onTapAskForGifts;
-  final void Function() onTapAskForVideoCall;
-  final void Function() onTapAskForAudioCall;
-  final void Function() onTapAskForPrivateCall;
-  final void Function() onTapAskForBlockUnBlockUser;
-  final bool isBlocked;
+  final void Function() makeCall;
+  final void Function() makeTurnOnOffCalls;
+  final bool currentStatus;
+  final bool isVideoCall;
 
   @override
-  State<MoreOptionsWidget> createState() => _MoreOptionsWidgetState();
+  State<ChatCallOnOffWidget> createState() => _ChatCallOnOffWidgetState();
 }
 
-class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
+class _ChatCallOnOffWidgetState extends State<ChatCallOnOffWidget> {
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -56,7 +50,7 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
             border: Border.all(color: appColors.white),
             color: appColors.white.withOpacity(0.2),
           ),
-          child:  Icon(Icons.close, color: appColors.white),
+          child: Icon(Icons.close, color: appColors.white),
         ),
       ),
     );
@@ -71,7 +65,7 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
-          // height: Get.height / 3.00,
+          // height: Get.height / 2.24,
           width: Get.width,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
@@ -93,39 +87,51 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          const SizedBox(height: 8),
-          const SizedBox(height: 8),
-          moreOptionsButton(
-            buttonText: "Ask For Gift",
-            buttonCallback: widget.onTapAskForGifts,
-            buttonImage: "assets/images/live_new_gift_latest.png",
-          ),
-          moreOptionsButton(
-            buttonText: "Ask For Video Call",
-            buttonCallback: widget.onTapAskForVideoCall,
-            buttonImage: "assets/images/live_call_video.png",
-          ),
-          moreOptionsButton(
-            buttonText: "Ask For Voice Call",
-            buttonCallback: widget.onTapAskForAudioCall,
-            buttonImage: "assets/images/live_call_audio.png",
-          ),
-          moreOptionsButton(
-            buttonText: "Ask For Private Call",
-            buttonCallback: widget.onTapAskForPrivateCall,
-            buttonImage: "assets/images/live_call_private.png",
-          ),
-          moreOptionsButton2(
-            buttonText: "${widget.isBlocked ? "Unblock" : "Block"} This User",
-            buttonCallback: widget.onTapAskForBlockUnBlockUser,
-            buttonImage: widget.isBlocked
-                ? "assets/images/live_unblock_icon.png"
-                : "assets/images/live_block_icon.png",
-          ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 32),
+          widget.currentStatus
+              ? Column(children: [callButton(), changeButton()])
+              : changeButton()
         ],
       ),
     );
+  }
+
+  Widget callButton() {
+    return Column(
+      children: [
+        moreOptionsButton(
+          buttonText: "Make a ${type()} Call",
+          buttonCallback: widget.makeCall,
+          buttonImage: widget.isVideoCall
+              ? "assets/images/live_call_video.png"
+              : "assets/images/live_call_audio.png",
+        ),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget changeButton() {
+    return Column(
+      children: [
+        moreOptionsButton2(
+          buttonText: msg(),
+          buttonCallback: widget.makeTurnOnOffCalls,
+          buttonImage: widget.currentStatus
+              ? "assets/images/live_block_icon.png"
+              : "assets/images/live_unblock_icon.png",
+        ),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
+  String msg() {
+    return "Turn ${widget.currentStatus ? "off" : "on"} ${type()} calls";
+  }
+
+  String type() {
+    return widget.isVideoCall == true ? "Video" : "Voice";
   }
 
   Widget moreOptionsButton({
@@ -160,7 +166,7 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
               const SizedBox(width: 16),
               Text(
                 buttonText,
-                style:  TextStyle(color: appColors.black),
+                style: TextStyle(color: appColors.black),
               ),
             ],
           ),
@@ -184,8 +190,8 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
             elevation: MaterialStateProperty.all(4),
             backgroundColor: MaterialStateProperty.all(appColors.white),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-               RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              RoundedRectangleBorder(
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                 side: BorderSide(width: 1, color: appColors.red),
               ),
             ),
@@ -202,7 +208,7 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
               const SizedBox(width: 16),
               Text(
                 buttonText,
-                style:  TextStyle(color: appColors.red),
+                style: TextStyle(color: appColors.red),
               ),
             ],
           ),

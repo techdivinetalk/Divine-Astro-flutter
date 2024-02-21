@@ -196,7 +196,7 @@ class _LivePage extends State<LiveDharamScreen>
               style: const TextStyle(fontSize: 10, color: Colors.black),
               overflow: TextOverflow.ellipsis,
             ),
-            backgroundColor: appColors.yellow,
+            backgroundColor: appColors.guideColor,
             behavior: SnackBarBehavior.floating,
           );
           if (isForSuccess) {
@@ -717,7 +717,7 @@ class _LivePage extends State<LiveDharamScreen>
                         Radius.circular(10.0),
                       ),
                       border: Border.all(
-                        color: appColors.yellow,
+                        color: appColors.guideColor,
                       ),
                       color: appColors.black.withOpacity(0.2),
                     ),
@@ -805,16 +805,16 @@ class _LivePage extends State<LiveDharamScreen>
   //                   end: Alignment.bottomCenter,
   //                   colors: [
   //                     appColors.white,
-  //                     appColors.yellow,
+  //                     appColors.guideColor,
   //                   ],
   //                 ),
   //                 borderRadius: const BorderRadius.all(
   //                   Radius.circular(50.0),
   //                 ),
   //                 border: Border.all(
-  //                   color: appColors.yellow,
+  //                   color: appColors.guideColor,
   //                 ),
-  //                 color: appColors.yellow,
+  //                 color: appColors.guideColor,
   //               ),
   //               child: Padding(
   //                 padding: const EdgeInsets.all(4.0),
@@ -1008,7 +1008,7 @@ class _LivePage extends State<LiveDharamScreen>
   //                           Radius.circular(10.0),
   //                         ),
   //                         border: Border.all(
-  //                           color: appColors.yellow,
+  //                           color: appColors.guideColor,
   //                         ),
   //                         color: appColors.black.withOpacity(0.2),
   //                       ),
@@ -1076,7 +1076,7 @@ class _LivePage extends State<LiveDharamScreen>
   //                                             "₹${offerData.offer_amount ?? 0}",
   //                                             style:  TextStyle(
   //                                               fontSize: 10,
-  //                                               color: appColors.yellow,
+  //                                               color: appColors.guideColor,
   //                                               fontWeight: FontWeight.bold,
   //                                             ),
   //                                             overflow: TextOverflow.ellipsis,
@@ -1339,7 +1339,7 @@ class _LivePage extends State<LiveDharamScreen>
                                         color: isBlocked
                                             ? Colors.red
                                             : isLiveMonitoringTeam
-                                                ? appColors.yellow
+                                                ? appColors.guideColor
                                                 : Colors.white,
                                         shadows: const [
                                           Shadow(
@@ -1358,7 +1358,7 @@ class _LivePage extends State<LiveDharamScreen>
                                         color: isBlocked
                                             ? Colors.red
                                             : isLiveMonitoringTeam
-                                                ? appColors.yellow
+                                                ? appColors.guideColor
                                                 : Colors.white,
                                         shadows: const [
                                           Shadow(
@@ -1384,7 +1384,7 @@ class _LivePage extends State<LiveDharamScreen>
                                         icon: Icon(
                                           Icons.more_vert,
                                           size: 16,
-                                          color: appColors.yellow,
+                                          color: appColors.guideColor,
                                         ),
                                         onPressed: () async {
                                           await moreOptionsPopup(
@@ -2094,7 +2094,7 @@ class _LivePage extends State<LiveDharamScreen>
         ),
         textAlign: TextAlign.center,
       ),
-      backgroundColor: appColors.yellow,
+      backgroundColor: appColors.guideColor,
       behavior: SnackBarBehavior.floating,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(50.0)),
@@ -2474,7 +2474,7 @@ class _LivePage extends State<LiveDharamScreen>
               Radius.circular(50.0),
             ),
             border: Border.all(
-              color: appColors.yellow,
+              color: appColors.guideColor,
             ),
             color: appColors.black.withOpacity(0.2),
           ),
@@ -2499,7 +2499,7 @@ class _LivePage extends State<LiveDharamScreen>
               Radius.circular(50.0),
             ),
             border: Border.all(
-              color: appColors.yellow,
+              color: appColors.guideColor,
             ),
             color: appColors.black.withOpacity(0.2),
           ),
@@ -2581,7 +2581,7 @@ class _LivePage extends State<LiveDharamScreen>
               //                           Radius.circular(50.0),
               //                         ),
               //                         border: Border.all(
-              //                           color: appColors.yellow,
+              //                           color: appColors.guideColor,
               //                         ),
               //                         color: appColors.black.withOpacity(0.2),
               //                       ),
@@ -2633,7 +2633,7 @@ class _LivePage extends State<LiveDharamScreen>
               Radius.circular(50.0),
             ),
             border: Border.all(
-              color: appColors.yellow,
+              color: appColors.guideColor,
             ),
             color: appColors.black.withOpacity(0.2),
           ),
@@ -2707,7 +2707,7 @@ class _LivePage extends State<LiveDharamScreen>
               Radius.circular(50.0),
             ),
             border: Border.all(
-              color: appColors.yellow,
+              color: appColors.guideColor,
             ),
             color: appColors.black.withOpacity(0.2),
           ),
@@ -2838,7 +2838,7 @@ class _LivePage extends State<LiveDharamScreen>
                       Radius.circular(50.0),
                     ),
                     border: Border.all(
-                      color: appColors.yellow,
+                      color: appColors.guideColor,
                     ),
                     color: appColors.black.withOpacity(0.2),
                   ),
@@ -2869,7 +2869,7 @@ class _LivePage extends State<LiveDharamScreen>
                       Radius.circular(50.0),
                     ),
                     border: Border.all(
-                      color: appColors.yellow,
+                      color: appColors.guideColor,
                     ),
                     color: appColors.black.withOpacity(0.2),
                   ),
@@ -2900,7 +2900,7 @@ class _LivePage extends State<LiveDharamScreen>
                       Radius.circular(50.0),
                     ),
                     border: Border.all(
-                      color: appColors.yellow,
+                      color: appColors.guideColor,
                     ),
                     color: appColors.black.withOpacity(0.2),
                   ),
@@ -2991,7 +2991,7 @@ class _LivePage extends State<LiveDharamScreen>
                               Radius.circular(50.0),
                             ),
                             border: Border.all(
-                              color: appColors.yellow,
+                              color: appColors.guideColor,
                             ),
                             color: appColors.black.withOpacity(0.2),
                           ),
@@ -3032,7 +3032,7 @@ class _LivePage extends State<LiveDharamScreen>
                               Radius.circular(50.0),
                             ),
                             border: Border.all(
-                              color: appColors.yellow,
+                              color: appColors.guideColor,
                             ),
                             color: appColors.black.withOpacity(0.2),
                           ),
@@ -3073,7 +3073,7 @@ class _LivePage extends State<LiveDharamScreen>
                               Radius.circular(50.0),
                             ),
                             border: Border.all(
-                              color: appColors.yellow,
+                              color: appColors.guideColor,
                             ),
                             color: appColors.black.withOpacity(0.2),
                           ),
@@ -3115,7 +3115,7 @@ class _LivePage extends State<LiveDharamScreen>
                               Radius.circular(50.0),
                             ),
                             border: Border.all(
-                              color: appColors.yellow,
+                              color: appColors.guideColor,
                             ),
                             color: appColors.black.withOpacity(0.2),
                           ),
@@ -3170,7 +3170,7 @@ class _LivePage extends State<LiveDharamScreen>
                                   Radius.circular(50.0),
                                 ),
                                 border: Border.all(
-                                  color: appColors.yellow,
+                                  color: appColors.guideColor,
                                 ),
                                 color: appColors.black.withOpacity(0.2),
                               ),
@@ -3178,7 +3178,7 @@ class _LivePage extends State<LiveDharamScreen>
                                 padding: const EdgeInsets.all(0.0),
                                 child: Icon(
                                   Icons.category,
-                                  color: appColors.yellow,
+                                  color: appColors.guideColor,
                                 ),
                               ),
                             ),
@@ -3216,7 +3216,7 @@ class _LivePage extends State<LiveDharamScreen>
                                   Radius.circular(50.0),
                                 ),
                                 border: Border.all(
-                                  color: appColors.yellow,
+                                  color: appColors.guideColor,
                                 ),
                                 color: appColors.black.withOpacity(0.2),
                               ),
@@ -3238,7 +3238,7 @@ class _LivePage extends State<LiveDharamScreen>
                                               width: 20,
                                               child: CircleAvatar(
                                                 backgroundColor:
-                                                    appColors.yellow,
+                                                    appColors.guideColor,
                                                 child: Text(
                                                   _controller
                                                       .waitListModel.length
@@ -3284,7 +3284,7 @@ class _LivePage extends State<LiveDharamScreen>
                                   Radius.circular(50.0),
                                 ),
                                 border: Border.all(
-                                  color: appColors.yellow,
+                                  color: appColors.guideColor,
                                 ),
                                 color: appColors.black.withOpacity(0.2),
                               ),
@@ -3329,7 +3329,7 @@ class _LivePage extends State<LiveDharamScreen>
                                         Radius.circular(50.0),
                                       ),
                                       border: Border.all(
-                                        color: appColors.yellow,
+                                        color: appColors.guideColor,
                                       ),
                                       color: appColors.black.withOpacity(0.2),
                                     ),
@@ -3432,7 +3432,7 @@ class _LivePage extends State<LiveDharamScreen>
                   Radius.circular(50.0),
                 ),
                 border: Border.all(
-                  color: appColors.yellow,
+                  color: appColors.guideColor,
                 ),
                 color: appColors.black.withOpacity(0.2),
               ),

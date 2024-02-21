@@ -67,7 +67,7 @@ Future openBottomSheet(BuildContext context,
                       Navigator.pop(context);
                       // Get.back();
                     },
-                    color: appColors.lightYellow,
+                    color: appColors.guideColor,
                     child: Text(
                       btnTitle,
                       style:  TextStyle(color: appColors.brownColour),
@@ -214,7 +214,7 @@ selectDateOrTime(
                     }
                     // Get.back();
                   },
-                  color: appColors.appYellowColour,
+                  color: appColors.guideColor,
                   child: Text(
                     btnTitle,
                     style:  TextStyle(color: appColors.brownColour),

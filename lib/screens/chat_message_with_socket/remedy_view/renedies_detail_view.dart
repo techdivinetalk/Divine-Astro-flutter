@@ -36,7 +36,7 @@ class RemediesDetailPage extends GetView<RemediesDetailController> {
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(
-                color:  appColors.yellow ,
+                color:  appColors.guideColor ,
               ),
               borderRadius: BorderRadius.circular(8.0),
             ),

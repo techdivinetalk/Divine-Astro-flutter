@@ -89,6 +89,7 @@ class AcceptChatRequestScreen extends StatefulWidget {
 class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
   final appFirebaseService = AppFirebaseService();
   final appSocket = AppSocket();
+
   // bool isBottomSheetOpen = false;
   // BroadcastReceiver broadcastReceiver =
   //     BroadcastReceiver(names: <String>["EndChat", "backReq"]);
@@ -134,7 +135,6 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
     //   // isBottomSheetOpen = event == "1";
     //   setState(() {});
     // });
-    
   }
 
   @override
@@ -143,11 +143,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
       canPop: false,
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-              stops: [0.7, 1.0],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [appColors.white, appColors.appYellowColour]),
+          color: appColors.guideColor,
         ),
         child: Scaffold(
             backgroundColor: appColors.transparent,
@@ -203,7 +199,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                       fontWeight: FontWeight.w600,
                                       fontFamily: FontFamily.metropolis,
                                       fontSize: 20.sp,
-                                      color: appColors.appYellowColour)),
+                                      color: appColors.textColor)),
                               Text("Ready to chat with you!",
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
@@ -660,7 +656,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                   if (isLoader)
                     Center(
                         child:
-                            CircularProgressIndicator(color: appColors.yellow))
+                            CircularProgressIndicator(color: appColors.guideColor))
                 ],
               );
             })),

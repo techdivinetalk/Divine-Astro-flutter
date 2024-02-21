@@ -22,16 +22,14 @@ class RejoinWidget extends StatelessWidget {
         padding: EdgeInsets.all(16.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
+          color: appColors.guideColor,
           boxShadow: [
             BoxShadow(
                 color: Colors.black.withOpacity(0.2),
                 blurRadius: 3.0,
                 offset: const Offset(3, 0)),
           ],
-          gradient: LinearGradient(
-              colors: [appColors.white, appColors.yellow],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter),
+
         ),
         child: Row(
           children: [
@@ -51,7 +49,7 @@ class RejoinWidget extends StatelessWidget {
               onTap: () => Get.toNamed(
                 RouteName.chatMessageWithSocketUI,
               ),
-              color: appColors.appYellowColour,
+              color: appColors.guideColor,
               radius: 10.r,
               child: Assets.svg.rejoinChatIcon.svg(),
             ),

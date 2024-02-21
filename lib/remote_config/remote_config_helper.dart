@@ -60,12 +60,10 @@ class RemoteConfigHelper {
       /// update colors
       Get.put(AppColors());
       final appColors = Get.find<AppColors>();
-      appColors.appColorLite =fromHex(remoteConfig.getString("appColorLite"));
-      appColors.appColorDark =fromHex(remoteConfig.getString("appColorDark"));
-      appColors.lightYellow =fromHex(remoteConfig.getString("lightYellow"));
+      appColors.guideColor =fromHex(remoteConfig.getString("appColorLite"));
+
       appColors.brownColour =fromHex(remoteConfig.getString("brownColour"));
-      appColors.appYellowColour =fromHex(remoteConfig.getString("appYellowColour"));
-      appColors.yellow =fromHex(remoteConfig.getString("yellow"));
+
       Get.put(AppColors()).update();
     } catch (exception) {
       debugPrint('Error fetching remote config: $exception');

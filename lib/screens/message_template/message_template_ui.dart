@@ -37,7 +37,7 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
               'Message Template',
               style: AppTextStyle.textStyle20().copyWith(
                 decoration: TextDecoration.underline,
-                decorationColor: appColors.appColorDark,
+                decorationColor: appColors.textColor,
                 decorationThickness: 2,
               ),
             ),

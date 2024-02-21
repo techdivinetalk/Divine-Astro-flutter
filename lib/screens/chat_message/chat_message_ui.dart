@@ -33,8 +33,17 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
     Get.put(ChatMessageController(KundliRepository(), ChatRepository()));
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: appColors.yellow,
+        backgroundColor: appColors.guideColor,
         centerTitle: false,
+        leading: GestureDetector(
+          onTap: () {
+            Get.back();
+          },
+          child: Icon(
+            Icons.arrow_back_rounded,
+            color: appColors.white,
+          ),
+        ),
         leadingWidth: 30,
         title: Row(
           children: [
@@ -52,13 +61,13 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                             "${globalConstantModel.data?.awsCredentails.baseurl}/${controller.args!.name ?? ''}",
                         loadingIndicator: SizedBox(
                             child: CircularProgressIndicator(
-                                color: appColors.yellow, strokeWidth: 2))),
+                                color: appColors.guideColor, strokeWidth: 2))),
                   )),
             ),
             SizedBox(width: 10.w),
             Text(controller.args!.name ?? '',
                 style: AppTextStyle.textStyle16(
-                    fontWeight: FontWeight.w500, fontColor: appColors.brown))
+                    fontWeight: FontWeight.w500, fontColor: appColors.white))
           ],
         ),
       ),
@@ -231,17 +240,23 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0.sp),
                             borderSide: BorderSide(
-                                color: appColors.appColorLite, width: 1.0)),
+                                color: appColors.guideColor, width: 1.0)),
                       ),
                     ),
                   ),
                 ),
                 SizedBox(width: 15.w),
-                InkWell(
+                GestureDetector(
                   onTap: () {
                     controller.sendMsg(MsgType.text, {});
                   },
-                  child: Assets.images.icSendMsg.svg(height: 48.h),
+                  child: CircleAvatar(
+                    backgroundColor: appColors.guideColor,
+                    child: SvgPicture.asset(
+                      Assets.images.message.path,
+                      color: appColors.white,
+                    ),
+                  ),
                 )
               ],
             ),

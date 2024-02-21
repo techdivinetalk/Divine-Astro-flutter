@@ -65,7 +65,7 @@ class _TrueCallerFaultWidgetState extends State<TrueCallerFaultWidget> {
               topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
-            border: Border.all(color: appColors.yellow),
+            border: Border.all(color: appColors.guideColor),
             color: appColors.white,
           ),
           child: grid(),

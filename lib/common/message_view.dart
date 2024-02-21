@@ -95,12 +95,8 @@ class MessageView extends StatelessWidget {
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(40)),
-              border: Border.all(width: 2, color: appColors.appColorDark),
-              gradient: LinearGradient(
-                colors: [appColors.white, appColors.appColorDark],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
+              color: appColors.guideColor,
+
             ),
             constraints: BoxConstraints(
                 maxWidth: ScreenUtil().screenWidth * 0.8,
@@ -152,7 +148,7 @@ class MessageView extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: appColors.yellow,
+                  color: appColors.guideColor,
                 ),
                 borderRadius: BorderRadius.circular(8.0),
               ),

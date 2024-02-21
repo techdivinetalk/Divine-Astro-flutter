@@ -36,7 +36,7 @@ class _CustomRadioState<T> extends State<CustomRadio<T>> {
                   width: 16.w,
                   height: 16.h,
                   decoration:  BoxDecoration(
-                      shape: BoxShape.circle, color: appColors.lightYellow),
+                      shape: BoxShape.circle, color: appColors.guideColor),
                 )
               : const SizedBox(),
         ),

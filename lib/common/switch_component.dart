@@ -38,7 +38,7 @@ class SwitchWidget extends StatelessWidget {
       valueFontSize: 12.0,
       activeTextFontWeight: FontWeight.w400,
       inactiveTextFontWeight: FontWeight.w400,
-      activeToggleColor: appColors.appYellowColour,
+      activeToggleColor: appColors.guideColor,
       inactiveToggleColor: Colors.grey,
       toggleColor: appColors.greyColour,
       switchBorder: Border.all(

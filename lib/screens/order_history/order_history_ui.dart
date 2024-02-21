@@ -1,4 +1,5 @@
 import 'package:divine_astrologer/common/custom_progress_dialog.dart';
+import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/screens/order_history/Widget/live_gifts_order_history_ui.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -224,23 +225,23 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
               children: [
                 Obx(() => (controller.apiCalling.value &&
                     controller.allPageCount == 1)
-                    ? const LoadingWidget()
+                    ? const GenericLoadingWidget()
                     : const AllOrderHistoryUi()),
                 Obx(() => (controller.apiCalling.value &&
                     controller.callPageCount == 1)
-                    ? const LoadingWidget()
+                    ? const GenericLoadingWidget()
                     : const CallOrderHistory()),
                 Obx(() => (controller.apiCalling.value &&
                     controller.chatPageCount == 1)
-                    ? const LoadingWidget()
+                    ? const GenericLoadingWidget()
                     : const ChatOrderHistory()),
                 Obx(() => (controller.apiCalling.value &&
                     controller.liveGiftPageCount == 1)
-                    ? const LoadingWidget()
+                    ? const GenericLoadingWidget()
                     :  LiveGiftsHistory()),
                 Obx(() => (controller.apiCalling.value &&
                     controller.remedyPageCount == 1)
-                    ? const LoadingWidget()
+                    ? const GenericLoadingWidget()
                     :  SuggestRemedies()),
                /* Obx(() => (controller.apiCalling.value &&
                     controller.chatPageCount == 1)

@@ -54,7 +54,7 @@ class _DashaUIState extends State<DashaUI> {
                                       : appColors.blackColor),
                               borderRadius: BorderRadius.circular(20),
                               color: controller.isVimshottari.value
-                                  ? appColors.lightYellow
+                                  ? appColors.guideColor
                                   : Colors.white),
                           child: Padding(
                             padding: EdgeInsets.symmetric(
@@ -85,7 +85,7 @@ class _DashaUIState extends State<DashaUI> {
                                       ? Colors.white
                                       : appColors.blackColor),
                               color: controller.isYogini.value
-                                  ? appColors.lightYellow
+                                  ? appColors.guideColor
                                   : appColors.white),
                           child: Padding(
                             padding: EdgeInsets.symmetric(
@@ -140,7 +140,7 @@ class _DashaUIState extends State<DashaUI> {
               Text("mahadasha".tr,
                   style: AppTextStyle.textStyle16(
                       fontWeight: FontWeight.w500,
-                      fontColor: appColors.appYellowColour)),
+                      fontColor: appColors.textColor)),
               const SizedBox(height: 24),
             ],
           ),
@@ -361,7 +361,7 @@ class _DashaUIState extends State<DashaUI> {
                       Text("mahadasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
-                              fontColor: appColors.appYellowColour)),
+                              fontColor: appColors.textColor)),
                     ],
                   ),
                 ),
@@ -369,7 +369,7 @@ class _DashaUIState extends State<DashaUI> {
                 Text("antarDasha".tr,
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w500,
-                        fontColor: appColors.appYellowColour)),
+                        fontColor: appColors.textColor)),
               ],
             ),
             SizedBox(
@@ -535,7 +535,7 @@ class _DashaUIState extends State<DashaUI> {
               child: Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                      color: appColors.lightYellow,
+                      color: appColors.guideColor,
                       borderRadius: BorderRadius.circular(30)),
                   child: Padding(
                     padding: const EdgeInsets.all(14.0),
@@ -591,7 +591,7 @@ class _DashaUIState extends State<DashaUI> {
                           Text("mahadasha".tr,
                               style: AppTextStyle.textStyle16(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: appColors.appYellowColour)),
+                                  fontColor: appColors.textColor)),
                         ],
                       ),
                     ),
@@ -608,7 +608,7 @@ class _DashaUIState extends State<DashaUI> {
                       child: Text("antarDasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
-                              fontColor: appColors.appYellowColour)),
+                              fontColor: appColors.textColor)),
                     ),
                     const Icon(Icons.chevron_right),
                   ],
@@ -616,7 +616,7 @@ class _DashaUIState extends State<DashaUI> {
                 Text("pratyantarDasha".tr,
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w500,
-                        fontColor: appColors.appYellowColour)),
+                        fontColor: appColors.textColor)),
               ],
             ),
             SizedBox(height: 15.h),
@@ -778,7 +778,7 @@ class _DashaUIState extends State<DashaUI> {
               child: Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                      color: appColors.lightYellow,
+                      color: appColors.guideColor,
                       borderRadius: BorderRadius.circular(30)),
                   child: Padding(
                     padding: const EdgeInsets.all(14.0),
@@ -832,7 +832,7 @@ class _DashaUIState extends State<DashaUI> {
                           Text("mahadasha".tr,
                               style: AppTextStyle.textStyle16(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: appColors.appYellowColour)),
+                                  fontColor: appColors.textColor)),
                         ],
                       ),
                     ),
@@ -849,7 +849,7 @@ class _DashaUIState extends State<DashaUI> {
                       child: Text("antarDasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
-                              fontColor: appColors.appYellowColour)),
+                              fontColor: appColors.textColor)),
                     ),
                     const Icon(Icons.chevron_right),
                   ],
@@ -864,7 +864,7 @@ class _DashaUIState extends State<DashaUI> {
                       child: Text("pratyantarDasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
-                              fontColor: appColors.appYellowColour)),
+                              fontColor: appColors.textColor)),
                     ),
                     const Icon(Icons.chevron_right),
                   ],
@@ -872,7 +872,7 @@ class _DashaUIState extends State<DashaUI> {
                 Text("sookshmaDasha".tr,
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w500,
-                        fontColor: appColors.appYellowColour)),
+                        fontColor: appColors.textColor)),
               ],
             ),
             SizedBox(
@@ -1039,7 +1039,7 @@ class _DashaUIState extends State<DashaUI> {
               child: Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                      color: appColors.lightYellow,
+                      color: appColors.guideColor,
                       borderRadius: BorderRadius.circular(30)),
                   child: Padding(
                     padding: const EdgeInsets.all(14.0),
@@ -1095,7 +1095,7 @@ class _DashaUIState extends State<DashaUI> {
                           Text("mahadasha".tr,
                               style: AppTextStyle.textStyle16(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: appColors.appYellowColour)),
+                                  fontColor: appColors.textColor)),
                         ],
                       ),
                     ),
@@ -1112,7 +1112,7 @@ class _DashaUIState extends State<DashaUI> {
                       child: Text("antarDasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
-                              fontColor: appColors.appYellowColour)),
+                              fontColor: appColors.textColor)),
                     ),
                     const Icon(Icons.chevron_right),
                   ],
@@ -1127,7 +1127,7 @@ class _DashaUIState extends State<DashaUI> {
                       child: Text("pratyantarDasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
-                              fontColor: appColors.appYellowColour)),
+                              fontColor: appColors.textColor)),
                     ),
                     const Icon(Icons.chevron_right),
                   ],
@@ -1142,7 +1142,7 @@ class _DashaUIState extends State<DashaUI> {
                       child: Text("sookshmaDasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
-                              fontColor: appColors.appYellowColour)),
+                              fontColor: appColors.textColor)),
                     ),
                     const Icon(Icons.chevron_right),
                   ],
@@ -1150,7 +1150,7 @@ class _DashaUIState extends State<DashaUI> {
                 Text("pranDasha".tr,
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w500,
-                        fontColor: appColors.appYellowColour)),
+                        fontColor: appColors.textColor)),
               ],
             ),
             SizedBox(
@@ -1295,7 +1295,7 @@ class _DashaUIState extends State<DashaUI> {
               child: Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                      color: appColors.lightYellow,
+                      color: appColors.guideColor,
                       borderRadius: BorderRadius.circular(30)),
                   child: Padding(
                     padding: const EdgeInsets.all(14.0),
@@ -1340,7 +1340,7 @@ class _DashaUIState extends State<DashaUI> {
             Text("bhadrika".tr,
                 style: AppTextStyle.textStyle16(
                     fontWeight: FontWeight.w500,
-                    fontColor: appColors.appYellowColour)),
+                    fontColor: appColors.textColor)),
             SizedBox(
               height: 15.h,
             ),
@@ -1490,7 +1490,7 @@ class _DashaUIState extends State<DashaUI> {
             // Text(
             //   "rashiChart".tr,
             //   style:
-            //   AppTextStyle.textStyle16(fontColor: appColors.appYellowColour),
+            //   AppTextStyle.textStyle16(fontColor: appColors.textColor),
             // ),
             // SizedBox(
             //   height: 15.h,

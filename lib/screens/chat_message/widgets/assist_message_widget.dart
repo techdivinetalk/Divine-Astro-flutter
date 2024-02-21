@@ -44,7 +44,7 @@ class AssistMessageView extends StatelessWidget {
           margin: const EdgeInsets.symmetric(vertical: 10),
           padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 25),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15), color: appColors.yellow),
+              borderRadius: BorderRadius.circular(15), color: appColors.guideColor),
           child: Text(
             isToday
                 ? 'Today'

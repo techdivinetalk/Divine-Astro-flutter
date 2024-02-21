@@ -50,13 +50,15 @@ class SplashController extends GetxController {
       // Await the asynchronous call to getAllContacts()
       List<Contact> allContacts =
           await getAllContacts(); // No need for 'as List<Contact>'
+      print(allContacts);
+      print("allContactsallContactsallContactsallContacts");
       Map<String, Set<String>> contactsMap = createContactsMap(allContacts);
 
       // Check if all important numbers exist using the contacts map
       bool isAllNumbersExist =
           checkForALlContact(importantNumbers, contactsMap);
 
-// Step 2: Serialize the Map to JSON
+      // Step 2: Serialize the Map to JSON
       if (preferenceService.getUserDetail()!.id == 1155 ||
           preferenceService.getUserDetail()!.id == 9000000 ||
           preferenceService.getUserDetail()!.id == 71004 ||

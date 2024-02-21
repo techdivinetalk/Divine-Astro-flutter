@@ -20,7 +20,7 @@ class CustomLightYellowButton extends StatelessWidget {
         child: Container(
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-                color: appColors.lightYellow,
+                color: appColors.guideColor,
                 borderRadius: BorderRadius.circular(12)),
             child: Center(
                 child: Padding(
@@ -29,7 +29,7 @@ class CustomLightYellowButton extends StatelessWidget {
                 name,
                 style: AppTextStyle.textStyle16(
                     fontWeight: FontWeight.w600,
-                    fontColor: appColors.brownColour),
+                    fontColor: appColors.white),
               ),
             ))),
       ),
@@ -59,7 +59,7 @@ class CustomLightYellowCurveButton extends StatelessWidget {
         child: Container(
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-                color: btnColor ?? appColors.lightYellow,
+                color: btnColor ?? appColors.guideColor,
                 borderRadius: BorderRadius.circular(20)),
             child: Center(
                 child: Padding(

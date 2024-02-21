@@ -85,7 +85,7 @@ class AllFineDetailsList extends GetView<AllFineDetailsController> {
         children: [
            Padding(
               padding:const EdgeInsets.all(8.0),
-              child: CircularProgressIndicator(color: appColors.yellow)),
+              child: CircularProgressIndicator(color: appColors.guideColor)),
           SizedBox(height: 8.h),
           CustomText('gettingData'.tr)
         ],
