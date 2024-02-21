@@ -41,6 +41,8 @@ class ChatAssistanceController extends GetxController {
     getUnreadMessage();
   }
 
+
+
   // void listenSocket() {
   //   appSocket.listenForAssistantChatMessage((chatData) {
   //     print('socket called');

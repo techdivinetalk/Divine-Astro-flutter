@@ -17,6 +17,7 @@ class AppColors extends GetxController {
   Color guideColor = Color(0xFF87919C);
   Color textColor = Color(0xFF0E2339);
   Color blackColor = Colors.black;
+  Color disabledGrey = Color(0xFF87919C);
   Color brownColour = Color(0xFF5F3C08); // foreground color
   Color appRedColour = Color(0xFFEF5862);
   Color greyColour = Color(0xFF7E7E7E);

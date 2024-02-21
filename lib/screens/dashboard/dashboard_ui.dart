@@ -242,7 +242,7 @@ class DashboardScreen extends GetView<DashboardController> {
     return Obx(
       () {
         final dynamic? cond = AppFirebaseService().orderData.value["status"];
-        return cond == "3" || cond == 3
+        return cond == "3" || cond == 3 || cond == "4" || cond == 4
             ? Positioned(
                 bottom: kToolbarHeight + 20.w,
                 left: 0,

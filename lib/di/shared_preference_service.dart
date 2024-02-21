@@ -5,6 +5,7 @@ import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/model/message_template_response.dart';
 import 'package:divine_astrologer/model/update_bank_response.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart';
+import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,7 +22,7 @@ class SharedPreferenceService extends GetxService {
   static const specialAbility = "specialAbility";
   static const loginImages = "loginImages";
   static const baseAmazonUrl = "baseAmazonUrl";
-  static const chatAssistUnreadMessage = "chatAssistUnreadMessage";
+  static const assistChatUnreadkey = "chatAssistUnreadMessage";
 
   static const updatedBankDetails = "updatedBankDetails";
   static const baseImageUrl = "baseImageUrl";
@@ -67,42 +68,66 @@ class SharedPreferenceService extends GetxService {
     return prefs!.getInt(key) ?? 0;
   }
 
-  Future addChatAssistUnreadMessage(AssistChatData data) async {
+  Future saveChatAssistUnreadMessage() async {
     final SharedPreferences sharedInstance =
         await SharedPreferences.getInstance();
 
-    final List<AssistChatData> chatAssistUnreadMessageList =
-        await getChatAssistUnreadMessage();
-    chatAssistUnreadMessageList.add(data);
     final encodedChatAssistList =
-        chatAssistUnreadMessageList.map((e) => jsonEncode(e)).toList();
+        assistChatUnreadMessages.map((e) => jsonEncode(e)).toList();
     await sharedInstance.setStringList(
-        chatAssistUnreadMessage, encodedChatAssistList);
+        assistChatUnreadkey, encodedChatAssistList);
   }
 
-  Future updateChatAssistUnreadMessage(List<AssistChatData> chatMessageList) async {
-    final SharedPreferences sharedInstance =
-    await SharedPreferences.getInstance();
-
-    final encodedChatAssistList =
-    chatMessageList.map((e) => jsonEncode(e)).toList();
-    await sharedInstance.setStringList(
-        chatAssistUnreadMessage, encodedChatAssistList);
-  }
-
-  Future<List<AssistChatData>> getChatAssistUnreadMessage() async {
+  Future getChatAssistUnreadMessage() async {
     final SharedPreferences sharedInstance =
         await SharedPreferences.getInstance();
 
-    final localData = sharedInstance.getStringList(chatAssistUnreadMessage);
+    final localData = sharedInstance.getStringList(assistChatUnreadkey);
 
     if (localData != null) {
-      return localData
+      assistChatUnreadMessages.value = [];
+      assistChatUnreadMessages.addAll(localData
           .map((e) => AssistChatData.fromJson(jsonDecode(e)))
-          .toList();
+          .toList());
     }
-    return [];
   }
+
+  // Future addChatAssistUnreadMessage(AssistChatData data) async {
+  //   final SharedPreferences sharedInstance =
+  //       await SharedPreferences.getInstance();
+  //
+  //   final List<AssistChatData> chatAssistUnreadMessageList =
+  //       await getChatAssistUnreadMessage();
+  //   chatAssistUnreadMessageList.add(data);
+  //   final encodedChatAssistList =
+  //       chatAssistUnreadMessageList.map((e) => jsonEncode(e)).toList();
+  //   await sharedInstance.setStringList(
+  //       assistChatUnreadMessages, encodedChatAssistList);
+  // }
+  //
+  // Future updateChatAssistUnreadMessage(List<AssistChatData> chatMessageList) async {
+  //   final SharedPreferences sharedInstance =
+  //   await SharedPreferences.getInstance();
+  //
+  //   final encodedChatAssistList =
+  //   chatMessageList.map((e) => jsonEncode(e)).toList();
+  //   await sharedInstance.setStringList(
+  //       assistChatUnreadMessages, encodedChatAssistList);
+  // }
+  //
+  // Future<List<AssistChatData>> getChatAssistUnreadMessage() async {
+  //   final SharedPreferences sharedInstance =
+  //       await SharedPreferences.getInstance();
+  //
+  //   final localData = sharedInstance.getStringList(assistChatUnreadMessages);
+  //
+  //   if (localData != null) {
+  //     return localData
+  //         .map((e) => AssistChatData.fromJson(jsonDecode(e)))
+  //         .toList();
+  //   }
+  //   return [];
+  // }
 
   Future<bool> setIntPrefs(String key, int value) async {
     return prefs!.setInt(key, value);
@@ -200,13 +225,13 @@ class SharedPreferenceService extends GetxService {
     return constantDetails!;
   }
 
-  Future<bool> setConstantDetails(ConstantDetailsModelClass constantDetails) async {
-
+  Future<bool> setConstantDetails(
+      ConstantDetailsModelClass constantDetails) async {
     // Added by divine-dharam
     final String value = constantDetails.data?.taroCard ?? "";
     await LiveSharedPreferencesSingleton().setSingleTarotCard(value: value);
     //
-    
+
     return await prefs!.setString(constantData, jsonEncode(constantDetails));
   }
 
