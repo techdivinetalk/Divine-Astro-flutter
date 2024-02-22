@@ -49,6 +49,7 @@ import '../../repository/performance_repository.dart';
 import '../../repository/user_repository.dart';
 
 class HomeController extends GetxController {
+
   RxBool chatSwitch = true.obs;
   RxBool callSwitch = false.obs;
   RxBool videoSwitch = false.obs;
@@ -63,7 +64,7 @@ class HomeController extends GetxController {
   final socket = AppSocket();
   ExpandedTileController? expandedTileController = ExpandedTileController();
   ExpandedTileController? expandedTile2Controller = ExpandedTileController();
-  UserData? userData = UserData();
+  UserData userData = UserData();
   final preferenceService = Get.find<SharedPreferenceService>();
   final UserRepository userRepository = Get.put(UserRepository());
   final HomePageRepository homePageRepository = Get.put(HomePageRepository());
@@ -72,6 +73,8 @@ class HomeController extends GetxController {
   List<Map<String, dynamic>> yourScore = [];
 
   OrderDetails? order;
+
+  String userImage = "";
 
   Rx<Loading> offerTypeLoading = Loading.initial.obs;
   Rx<Loading> sessionTypeLoading = Loading.initial.obs;
@@ -97,10 +100,11 @@ class HomeController extends GetxController {
   List<Contact> allContacts = <Contact>[].obs;
   bool? isAllNumbersExist;
 
+
+
   @override
   void onInit() async {
     super.onInit();
-
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {
       debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
@@ -110,8 +114,15 @@ class HomeController extends GetxController {
         }
       }
     });
-    userData = preferenceService.getUserDetail();
-    appbarTitle.value = userData?.name ?? "Astrologer Name";
+
+    userData = preferenceService.getUserDetail()!;
+    appbarTitle.value =
+        "${userData.name.toString().capitalizeFirst} (${userData.id})";
+    userImage = "${preferenceService.getBaseImageURL()}/${userData.image}";
+    print("${preferenceService.getBaseImageURL()}/${userData.image}");
+    print(userData.image);
+    print("userData.image");
+
     await getFilteredPerformance();
     //await getContactList();
     // fetchImportantNumbers();
@@ -421,12 +432,36 @@ class HomeController extends GetxController {
 
     ///Customer Offer data
     if (homeData?.offers?.customOffer != null &&
-        homeData?.offers?.customOffer != []) {
-
-    }
+        homeData?.offers?.customOffer != []) {}
 
     update();
   }
+
+  /*getCallKundliData(){
+    _database.child("astrologer/${preferenceService.getUserDetail()!.id}/realTime").onValue.listen((event) async {
+
+      if (preferenceService.getToken() == null ||
+          preferenceService.getToken() == "") {
+        return;
+      }
+
+      if (event.snapshot.value is Map<Object?, Object?>) {
+        Map<String, dynamic>? realTimeData = Map<String, dynamic>.from(
+            event.snapshot.value! as Map<Object?, Object?>);
+        print(realTimeData["callKundli"]);
+        print("datadatadatadatadatadatadata");
+        if (realTimeData['callKundli'] != null) {
+          Map<String, dynamic>? callKundli = Map<String, dynamic>.from(
+              realTimeData['callKundli'] as Map<Object?, Object?>);
+          sendBroadcast(
+              BroadcastMessage(name: "callKundli", data: callKundli));
+          // FirebaseDatabase.instance.ref("$path/callKundli").remove();
+        }
+
+      }
+
+    });
+    }*/
 
   getConstantDetailsData() async {
     try {
@@ -578,7 +613,6 @@ class HomeController extends GetxController {
           await userRepository.updateOfferTypeApi(params);
       if (response.statusCode == 200) {
         homeData!.offers!.customOffer![index].isOn = value;
-
       }
       update();
     } catch (error) {

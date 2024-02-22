@@ -26,8 +26,6 @@ import '../../repository/user_repository.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 
 class ProfileUI extends GetView<ProfilePageController> {
-  ProfileUI({Key? key}) : super(key: key);
-
   final preference = Get.find<SharedPreferenceService>();
 
   // var homeController = Get.find<HomeController>();
@@ -39,207 +37,197 @@ class ProfileUI extends GetView<ProfilePageController> {
       backgroundColor: appColors.white,
       appBar: commonAppbar(
           title: "profile".tr, trailingWidget: const SizedBox.shrink()),
-      drawer: const SideMenuDrawer(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              GetBuilder<ProfilePageController>(
-                builder: (controller) => Container(
-                    padding: EdgeInsets.all(12.h),
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            blurRadius: 3.0,
-                            offset: const Offset(0.0, 3.0)),
-                      ],
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(20),
-                      ),
-                    ),
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 6,
-                                    color: appColors.guideColor,
-                                   ),
-                                  borderRadius: BorderRadius.circular(80),
-                                ),
-                                child: InkWell(
-                                    onTap: () async {
-                                      if (await PermissionHelper()
-                                          .askMediaPermission()) {
-                                        controller.updateProfileImage();
-                                      }
-                                    },
-                                    child: /*ClipRRect(
-                                        borderRadius: BorderRadius.circular(80),
-                                        child: Obx(
-                                              () =>
-                                              CachedNetworkPhoto(
-                                                url: controller.userProfileImage
-                                                    .value,
-                                                fit: BoxFit.cover,
-                                                height: 70.h,
-                                                width: 70.h,
-                                              ),
-                                        ),*/
-                                        controller
-                                                .userProfileImage.value.isEmpty
-                                            ? SizedBox(
-                                                height: 70.h,
-                                                width: 70.h,
-                                              )
-                                            : CommonImageView(
-                                                imagePath: controller
-                                                    .userProfileImage.value,
-                                                fit: BoxFit.cover,
-                                                height: 70.h,
-                                                width: 70.h,
-                                                placeHolder: Assets
-                                                    .images
-                                                    .defaultProfile
-                                                    .path,
-                                                radius: BorderRadius.circular(
-                                                    100.h),
-                                              )),
-                              ),
-                            ],
-                          ),
-                          SizedBox(width: 10.h),
-                          Expanded(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.end,
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          Get.toNamed(
-                                              RouteName.editProfileUI);
-                                        },
-                                        child: Row(children: [
-                                          Text(
-                                            'editProfile'.tr,
-                                            style: AppTextStyle.textStyle10(
-                                                fontWeight: FontWeight.w500,
-                                                fontColor: appColors
-                                                    .textColor),
-                                          ),
-                                          Icon(
-                                            Icons.arrow_right,
-                                            size: 18.h,
-                                            color: appColors.guideColor,
-                                          )
-                                        ]),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Flexible(
-                                          child: Text(
-                                            controller.userData?.name ?? "",
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            softWrap: true,
-                                            style: AppTextStyle.textStyle20(
-                                                fontWeight: FontWeight.w600,
-                                                fontColor: appColors.darkBlue),
-                                          ),
-                                        ),
-                                       // const SizedBox(width: 5),
-                                      ]),
-                                 /* SizedBox(height: 3.h),
-                                  Text(
-                                    '+91- ${controller.userData?.phoneNo ?? ""}',
-                                    style: AppTextStyle.textStyle14(
-                                        fontWeight: FontWeight.w400,
-                                        fontColor: appColors.darkBlue),
-                                  ),*/
-                                 // SizedBox(height: 3.h),
-                                  Row(children: [
-                                    Text("${"astrologerId".tr}-",
-                                        style: AppTextStyle.textStyle14(
-                                            fontWeight: FontWeight.w400,
-                                            fontColor: appColors.darkBlue)),
-                                    SizedBox(width: 5.h),
-                                    Expanded(
-                                      child: Text(
-                                          "${controller.userData?.id ?? ""}",
-                                          style: AppTextStyle.textStyle14(
-                                              fontWeight: FontWeight.w400,
-                                              fontColor: appColors.darkBlue)),
-                                    ),
-                                  ]),
-                                ]),
-                          )
-                        ])),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 20.h),
-                child: Text(
-                  "profileOptions".tr,
-                  style: AppTextStyle.textStyle16(
-                      fontWeight: FontWeight.w500,
-                      fontColor: appColors.darkBlue),
+      // drawer: const SideMenuDrawer(),
+      body: ListView(
+        padding: const EdgeInsets.all(15.0),
+        children: <Widget>[
+          GetBuilder<ProfilePageController>(
+            builder: (controller) => Container(
+                padding: EdgeInsets.all(12.h),
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 3.0,
+                        offset: const Offset(0.0, 3.0)),
+                  ],
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(20),
+                  ),
                 ),
-              ),
-              profileOptions(),
-              SizedBox(height: 10.h),
-              Obx(() => controller.reviewDataSync.value == true
-                  ? controller.ratingsData?.data?.totalRating != 0
-                      ? ratingsView()
-                      : const SizedBox()
-                  : const SizedBox()),
-              SizedBox(height: 20.h),
-              Obx(() => controller.reviewDataSync.value == true
-                  ? (controller.ratingsData?.data?.allReviews?.isNotEmpty ??
-                          false)
-                      ? Container(
-                          width: MediaQuery.of(context).size.width,
-                          padding: EdgeInsets.all(16.w),
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                  color: appColors.blackColor.withOpacity(0.2),
-                                  blurRadius: 1.0,
-                                  offset: const Offset(0.0, 3.0)),
-                            ],
-                            color: appColors.white,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10)),
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 6,
+                                color: appColors.guideColor,
+                              ),
+                              borderRadius: BorderRadius.circular(80),
+                            ),
+                            child: InkWell(
+                                onTap: () async {
+                                  if (await PermissionHelper()
+                                      .askMediaPermission()) {
+                                    controller.updateProfileImage();
+                                  }
+                                },
+                                child: /*ClipRRect(
+                                    borderRadius: BorderRadius.circular(80),
+                                    child: Obx(
+                                          () =>
+                                          CachedNetworkPhoto(
+                                            url: controller.userProfileImage
+                                                .value,
+                                            fit: BoxFit.cover,
+                                            height: 70.h,
+                                            width: 70.h,
+                                          ),
+                                    ),*/
+                                    controller.userProfileImage
+                                                .contains("null") ||
+                                            controller
+                                                .userProfileImage.value.isEmpty
+                                        ? SizedBox(
+                                            height: 70.h,
+                                            width: 70.h,
+                                          )
+                                        : CommonImageView(
+                                            imagePath: controller
+                                                .userProfileImage.value,
+                                            fit: BoxFit.cover,
+                                            height: 70.h,
+                                            width: 70.h,
+                                            placeHolder: Assets
+                                                .images.defaultProfile.path,
+                                            radius:
+                                                BorderRadius.circular(100.h),
+                                          )),
                           ),
-                          child: Column(
+                        ],
+                      ),
+                      SizedBox(width: 10.h),
+                      Expanded(
+                        child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "userReview".tr,
-                                style: AppTextStyle.textStyle20(),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      Get.toNamed(RouteName.editProfileUI);
+                                    },
+                                    child: Row(children: [
+                                      Text(
+                                        'editProfile'.tr,
+                                        style: AppTextStyle.textStyle10(
+                                            fontWeight: FontWeight.w500,
+                                            fontColor: appColors.textColor),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_right,
+                                        size: 18.h,
+                                        color: appColors.guideColor,
+                                      )
+                                    ]),
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: 10.h),
-                              listOfReviews()
-                            ],
-                          ),
-                        )
-                      : const SizedBox()
-                  : const SizedBox()),
-            ],
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        controller.userData?.name ?? "",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        softWrap: true,
+                                        style: AppTextStyle.textStyle20(
+                                            fontWeight: FontWeight.w600,
+                                            fontColor: appColors.darkBlue),
+                                      ),
+                                    ),
+                                    // const SizedBox(width: 5),
+                                  ]),
+                              /* SizedBox(height: 3.h),
+                              Text(
+                                '+91- ${controller.userData?.phoneNo ?? ""}',
+                                style: AppTextStyle.textStyle14(
+                                    fontWeight: FontWeight.w400,
+                                    fontColor: appColors.darkBlue),
+                              ),*/
+                              // SizedBox(height: 3.h),
+                              Row(children: [
+                                Text("${"astrologerId".tr}-",
+                                    style: AppTextStyle.textStyle14(
+                                        fontWeight: FontWeight.w400,
+                                        fontColor: appColors.darkBlue)),
+                                SizedBox(width: 5.h),
+                                Expanded(
+                                  child: Text(
+                                      "${controller.userData?.id ?? ""}",
+                                      style: AppTextStyle.textStyle14(
+                                          fontWeight: FontWeight.w400,
+                                          fontColor: appColors.darkBlue)),
+                                ),
+                              ]),
+                            ]),
+                      )
+                    ])),
           ),
-        ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 20.h),
+            child: Text(
+              "profileOptions".tr,
+              style: AppTextStyle.textStyle16(
+                  fontWeight: FontWeight.w500, fontColor: appColors.darkBlue),
+            ),
+          ),
+          profileOptions(),
+          SizedBox(height: 10.h),
+          Obx(() => controller.reviewDataSync.value == true
+              ? controller.ratingsData?.data?.totalRating != 0
+                  ? ratingsView()
+                  : const SizedBox()
+              : const SizedBox()),
+          SizedBox(height: 20.h),
+          Obx(() => controller.reviewDataSync.value == true
+              ? (controller.ratingsData?.data?.allReviews?.isNotEmpty ?? false)
+                  ? Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.all(16.w),
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: appColors.blackColor.withOpacity(0.2),
+                              blurRadius: 1.0,
+                              offset: const Offset(0.0, 3.0)),
+                        ],
+                        color: appColors.white,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "userReview".tr,
+                            style: AppTextStyle.textStyle20(),
+                          ),
+                          SizedBox(height: 10.h),
+                          listOfReviews()
+                        ],
+                      ),
+                    )
+                  : const SizedBox()
+              : const SizedBox()),
+        ],
       ),
     );
   }
@@ -481,7 +469,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                           }
                         }
                       } else if (index == 3) {
-                        controller.homeController.whatsapp();
+                        controller.whatsapp();
                       } else if (item.nav != "") {
                         if (item.name == "bankDetails".tr ||
                             item.name == "uploadYourPhoto".tr) {
@@ -591,7 +579,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                   //5
                   Row(
                     children: [
-                      Assets.images.icFiveStar.svg(width: 80.w,color: appColors.guideColor),
+                      Assets.images.icFiveStar
+                          .svg(width: 80.w, color: appColors.guideColor),
                       LinearPercentIndicator(
                         width: 100.w,
                         barRadius: const Radius.circular(50),
@@ -614,7 +603,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                   //4
                   Row(
                     children: [
-                      Assets.images.icFourStar.svg(width: 70.w,color: appColors.guideColor),
+                      Assets.images.icFourStar
+                          .svg(width: 70.w, color: appColors.guideColor),
                       LinearPercentIndicator(
                         width: 100.w,
                         barRadius: const Radius.circular(50),
@@ -637,7 +627,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                   //3
                   Row(
                     children: [
-                      Assets.images.icThreeStar.svg(width: 55.w,color: appColors.guideColor),
+                      Assets.images.icThreeStar
+                          .svg(width: 55.w, color: appColors.guideColor),
                       LinearPercentIndicator(
                         width: 100.w,
                         barRadius: const Radius.circular(50),
@@ -660,7 +651,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                   //2
                   Row(
                     children: [
-                      Assets.images.icTwoStar.svg(width: 35.w,color: appColors.guideColor),
+                      Assets.images.icTwoStar
+                          .svg(width: 35.w, color: appColors.guideColor),
                       LinearPercentIndicator(
                         width: 100.w,
                         barRadius: const Radius.circular(50),
@@ -683,7 +675,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                   //1
                   Row(
                     children: [
-                      Assets.images.icOneStar.svg(width: 15.w,color: appColors.guideColor),
+                      Assets.images.icOneStar
+                          .svg(width: 15.w, color: appColors.guideColor),
                       LinearPercentIndicator(
                         width: 100.w,
                         barRadius: const Radius.circular(50),
