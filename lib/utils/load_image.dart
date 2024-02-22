@@ -1,4 +1,5 @@
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ImageModel {
@@ -49,6 +50,6 @@ class LoadImage extends StatelessWidget {
     if (value) {
       return AssetImage(imageModel.imagePath);
     }
-    return NetworkImage(imageModel.imagePath);
+    return CachedNetworkImageProvider(imageModel.imagePath);
   }
 }

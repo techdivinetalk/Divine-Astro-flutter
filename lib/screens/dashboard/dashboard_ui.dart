@@ -23,6 +23,7 @@ import 'dashboard_controller.dart';
 class DashboardScreen extends GetView<DashboardController> {
   const DashboardScreen({super.key});
 
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<DashboardController>(

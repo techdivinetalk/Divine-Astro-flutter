@@ -9,6 +9,7 @@ import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/zego_call/zego_service.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:get/get.dart';
@@ -86,6 +87,12 @@ class DashboardController extends GetxController
     //  connectSocket();
     loadPreDefineData();
     firebaseMessagingConfig(Get.context!);
+    FirebaseMessaging.instance.onTokenRefresh.listen((newtoken) {
+      AppFirebaseService()
+          .database
+          .child("astrologer/${userData?.id}/")
+          .update({'deviceToken': newtoken});
+    });
     //
     // print("asasasasasasa");
     // await ZegoService().zegoLogin();

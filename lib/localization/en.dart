@@ -60,6 +60,7 @@ Map<String, String> en() {
     "displayName": "Display Name",
     "userType": "User Type",
     "price": "Price",
+    'divineShop': 'Divine Shop',
     "discountedPrice": "Discounted Price",
     'callAndChat': "Call & Chat",
     "status": "Status",

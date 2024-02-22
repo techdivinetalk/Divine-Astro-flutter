@@ -196,7 +196,7 @@ Future<void> showNotification(String title, String message, String type,
                     'Accept',
                   ),
                 ]
-              : type=="3"? []:[]);
+              :[]);
   if (type == "1") {
     androidNotificationDetails = const AndroidNotificationDetails(
         "DivineCustomer", "CustomerNotification",

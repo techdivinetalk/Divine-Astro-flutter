@@ -1,4 +1,6 @@
 
+import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
+
 class ChatAssistantAstrologerListResponse {
   Data? data;
   bool? success;
@@ -109,14 +111,20 @@ class DataList {
   String? name;
   String? image;
   String? lastMessage;
+  MsgType? msgType;
+  int? unreadMessage;
 
-  DataList({this.id, this.name, this.image, this.lastMessage});
+  DataList({this.id, this.name, this.image, this.lastMessage, this.msgType});
 
   DataList.fromJson(Map<String, dynamic> json) {
     id = json["id"];
     name = json["name"];
     image = json["image"];
     lastMessage = json["last_message"];
+    unreadMessage = json["not_seen_count"];
+    msgType = json['msg_type'] != null
+        ? msgTypeValues.map[json["msg_type"].toString()]
+        : MsgType.text;
   }
 
   Map<String, dynamic> toJson() {
@@ -125,6 +133,8 @@ class DataList {
     _data["name"] = name;
     _data["image"] = image;
     _data["last_message"] = lastMessage;
+    _data["not_seen_count"] = unreadMessage;
+    _data["msg_type"] = msgTypeValues.reverse[msgType];
     return _data;
   }
 }

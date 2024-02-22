@@ -7,7 +7,11 @@ import 'package:divine_astrologer/screens/auth/login/login_ui.dart';
 import 'package:divine_astrologer/screens/blocked_user/blocked_user_bindings.dart';
 import 'package:divine_astrologer/screens/chat_message/chat_message_binding.dart';
 import 'package:divine_astrologer/screens/chat_message/chat_message_ui.dart';
+import 'package:divine_astrologer/screens/chat_message/widgets/product/sub_product/sub_product_binding.dart';
+import 'package:divine_astrologer/screens/chat_message/widgets/product/sub_product/sub_product_ui.dart';
 import 'package:divine_astrologer/screens/chat_message/widgets/product/suggest_products.dart';
+import 'package:divine_astrologer/screens/chat_message/widgets/remedy/chatAssistSuggestBindingRemedy.dart';
+import 'package:divine_astrologer/screens/chat_message/widgets/remedy/chatAssistSuggestRemedy.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_binding.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_ui.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/remedy_view/remedies_detail_binding.dart';
@@ -66,6 +70,8 @@ import '../screens/bank_details/bank_details_ui.dart';
 import '../screens/blocked_user/blocked_user_ui.dart';
 import '../screens/chat_message/widgets/image_preview.dart';
 import '../screens/chat_message/widgets/product/suggest_product_binding.dart';
+import '../screens/chat_message/widgets/remedy/chatAssistSuggestRemedies/chatAssistSuggestRemedies.dart';
+import '../screens/chat_message/widgets/remedy/chatAssistSuggestRemedies/chatAssistSuggestRemediesBinding.dart';
 import '../screens/dashboard/dashboard_bindings.dart';
 import '../screens/dashboard/dashboard_ui.dart';
 import '../screens/edit_profile/edit_profile_binding.dart';
@@ -128,6 +134,7 @@ class RouteName {
   static const String noticeDetail = "/noticeDetail";
   static const String importantNumbers = "/importantNumbers";
   static const String chatAssistProductPage = "/chatAssistProductPage";
+  static const String chatAssistProductSubPage = "/chatAssistProductSubPage";
   static const String waitList = "/waitList";
   static const String settingsUI = "/settingsUI";
   static const String liveTipsUI = "/liveTipsUI";
@@ -143,6 +150,8 @@ class RouteName {
   static const String numberChangeOtpScreen = "/numberChangeOtpScreen";
   static const String orderFeedback = "/orderFeedback";
   static const String chatSuggestRemedy = "/chatSuggestRemedy";
+  static const String chatAssistSuggestRemedy = "/chatAssistSuggestRemedy";
+  static const String chatAssistSuggestRemedyDetails = "/chatAssistSuggestRemedyDetails";
   static const String chatSuggestRemedyDetails = "/chatSuggestRemedyDetails";
   static const String feedback = "/feedback";
   static const String chatMessageSupportUI = "/chatMessageUI";
@@ -330,6 +339,10 @@ class Routes {
         name: RouteName.chatAssistProductPage,
         page: () => const SuggestProducts(),
         binding: SuggestProductBinding()),
+    GetPage(
+        name: RouteName.chatAssistProductSubPage,
+        page: () => const SubProductUi(),
+        binding: SubProductBinding()),
     // GetPage(
     //   page: () => const VideoCall(),
     //   name: RouteName.videoCall,
@@ -343,12 +356,18 @@ class Routes {
         page: () => const OrderFeedbackUI(),
         name: RouteName.orderFeedback,
         binding: OrderFeedbackBinding()),
-
     GetPage(
         page: () => const ChatSuggestRemedyPage(),
         name: RouteName.chatSuggestRemedy,
         binding: ChatSuggestRemediesBinding()),
-
+    GetPage(
+        page: () => const ChatAssistSuggestRemedyPage(),
+        name: RouteName.chatAssistSuggestRemedy,
+        binding: ChatAssistSuggestRemediesBinding()),
+    GetPage(
+        page: () => const ChatAssistSuggestRemediesDetailsPage(),
+        name: RouteName.chatAssistSuggestRemedyDetails,
+        binding: ChatAssistSuggestRemediesDetailsBinding()),
     GetPage(
         page: () => const ChatSuggestRemediesDetailsPage(),
         name: RouteName.chatSuggestRemedyDetails,

@@ -60,6 +60,12 @@ class AppSocket {
     });
   }
 
+  void emitForStartAstroCustChatAssist(
+      String? astroId, String? userId, int userType) {
+    socket?.emit(ApiProvider().startAstroCustChatAssist,
+        {"astroId": astroId, "userId": userId, "userType": userType});
+  }
+
   void startAstroCustumerSocketEvent(
       {required String orderId, required userId}) {
     debugPrint('enter startAstroCustPrivateChat');
@@ -77,6 +83,10 @@ class AppSocket {
 
   void socketDisconnect() {
     socket?.disconnect();
+  }
+
+  void listenUserJoinedSocket(void Function(dynamic) callback) {
+    socket?.on(ApiProvider().startAstroCustChatAssist, callback);
   }
 
   void isCustomerJoinedChat(void Function(dynamic) callback) {
