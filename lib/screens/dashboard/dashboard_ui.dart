@@ -3,6 +3,7 @@ import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 
 
 import 'package:divine_astrologer/screens/dashboard/widgets/rejoin_widget.dart';
+import 'package:divine_astrologer/screens/queue/queue_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
@@ -105,6 +106,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                         ),
                                         label: 'performance'.tr,
                                       ),
+                                     // Remedies icon comment
                                      /* BottomNavigationBarItem(
                                         icon: Column(
                                           children: [
@@ -134,7 +136,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                                 colorFilter: ColorFilter.mode(
                                                     controller.selectedIndex
                                                                 .value ==
-                                                            3
+                                                            2
                                                         ? appColors.darkBlue
                                                         : appColors.lightGrey,
                                                     BlendMode.srcIn)),
@@ -144,6 +146,28 @@ class DashboardScreen extends GetView<DashboardController> {
                                         label: "Assistance",
                                       ),
                                       BottomNavigationBarItem(
+                                        icon: Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          children: [
+                                            Assets.images.queue.svg(
+                                                height: 22.h,
+                                                colorFilter: ColorFilter.mode(
+                                                    controller.selectedIndex
+                                                        .value ==
+                                                        3
+                                                        ? appColors.darkBlue
+                                                        : appColors.lightGrey,
+                                                    BlendMode.srcIn)),
+                                            const SizedBox(height: 5),
+                                          ],
+                                        ),
+                                        label: "Queue",
+                                      ),
+                                      // Profile Tab comment
+                                      /*BottomNavigationBarItem(
                                         icon: Column(
                                           children: [
                                           
@@ -170,19 +194,19 @@ class DashboardScreen extends GetView<DashboardController> {
                                                         BorderRadius.circular(
                                                             100.h),
                                                   ),
-                                            /*    CommonImageView(
+                                            *//*    CommonImageView(
                                           imagePath:
                                               "${controller.userProfileImage}",
                                           fit: BoxFit.cover,
                                           height: 30,
                                           width: 30,
                                           radius: BorderRadius.circular(50),
-                                        ),*/
+                                        ),*//*
                                             const SizedBox(height: 5),
                                           ],
                                         ),
                                         label: "profile".tr,
-                                      ),
+                                      ),*/
                                     ],
                                     elevation: 0,
                                     currentIndex:
@@ -242,7 +266,7 @@ class DashboardScreen extends GetView<DashboardController> {
     return Obx(
       () {
         final dynamic? cond = AppFirebaseService().orderData.value["status"];
-        return cond == "3" || cond == 3
+        return cond == "3" || cond == 3 || cond == "4" || cond == 4
             ? Positioned(
                 bottom: kToolbarHeight + 20.w,
                 left: 0,
@@ -267,6 +291,6 @@ class DashboardScreen extends GetView<DashboardController> {
     const PerformanceUI(),
     //const SuggestRemediesUI(),
     ChatAssistancePage(),
-    ProfileUI()
+    QueueScreen(),
   ];
 }

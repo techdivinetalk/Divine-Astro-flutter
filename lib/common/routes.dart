@@ -1,5 +1,7 @@
 import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
 import 'package:divine_astrologer/common/custom_get_page.dart';
+import 'package:divine_astrologer/pages/profile/profile_binding.dart';
+import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_binding.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_ui.dart';
 import 'package:divine_astrologer/screens/auth/login/login_binding.dart';
@@ -7,6 +9,7 @@ import 'package:divine_astrologer/screens/auth/login/login_ui.dart';
 import 'package:divine_astrologer/screens/blocked_user/blocked_user_bindings.dart';
 import 'package:divine_astrologer/screens/chat_message/chat_message_binding.dart';
 import 'package:divine_astrologer/screens/chat_message/chat_message_ui.dart';
+import 'package:divine_astrologer/screens/chat_message/widgets/product/suggest_products.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_binding.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_ui.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/remedy_view/remedies_detail_binding.dart';
@@ -64,6 +67,7 @@ import '../screens/bank_details/bank_detail_binding.dart';
 import '../screens/bank_details/bank_details_ui.dart';
 import '../screens/blocked_user/blocked_user_ui.dart';
 import '../screens/chat_message/widgets/image_preview.dart';
+import '../screens/chat_message/widgets/product/suggest_product_binding.dart';
 import '../screens/dashboard/dashboard_bindings.dart';
 import '../screens/dashboard/dashboard_ui.dart';
 import '../screens/edit_profile/edit_profile_binding.dart';
@@ -101,6 +105,7 @@ class RouteName {
   static const String otpVerificationPage = "/otpVerificationPage";
   static const String dashboard = "/dashboard";
   static const String blockedUser = "/blockedUser";
+  static const String profileUi = "/profileUi";
   static const String editProfileUI = "/editProfileUI";
   static const String orderHistory = "/orderHistory";
   static const String messageTemplate = "/messageTemplate";
@@ -125,6 +130,7 @@ class RouteName {
   static const String noticeBoard = "/noticeBoard";
   static const String noticeDetail = "/noticeDetail";
   static const String importantNumbers = "/importantNumbers";
+  static const String chatAssistProductPage = "/chatAssistProductPage";
   static const String waitList = "/waitList";
   static const String settingsUI = "/settingsUI";
   static const String liveTipsUI = "/liveTipsUI";
@@ -173,7 +179,7 @@ class Routes {
       name: RouteName.otpVerificationPage,
       binding: OtpVerificationBinding(),
     ),
-     GetPage(
+    GetPage(
         page: () => const AcceptChatRequestScreen(),
         name: RouteName.acceptChatRequestScreen),
     GetPage(
@@ -184,6 +190,10 @@ class Routes {
         page: () => const BlockedUserUI(),
         name: RouteName.blockedUser,
         binding: BlockedUserBinding()),
+    GetPage(
+        page: () =>  ProfileUI(),
+        name: RouteName.profileUi,
+        binding: ProfileBinding()),
     /*// GetPage(
     //     name: RouteName.editProfileUI, page: () => const EditProfileUI(),
     // ),*/
@@ -323,6 +333,10 @@ class Routes {
       name: RouteName.videoCallPage,
       binding: VideoCallPageBinding(),
     ),
+    GetPage(
+        name: RouteName.chatAssistProductPage,
+        page: () => const SuggestProducts(),
+        binding: SuggestProductBinding()),
     // GetPage(
     //   page: () => const VideoCall(),
     //   name: RouteName.videoCall,

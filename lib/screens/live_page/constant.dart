@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../di/timer_duration_service.dart';
 import '../../model/chat/chat_socket/chat_socket_init.dart';
 import '../../model/chat/res_astro_chat_listener.dart';
+import '../../model/chat_assistant/chat_assistant_chats_response.dart';
 import '../../model/constant_details_model_class.dart';
 
 /// Note that the userID needs to be globally unique,
@@ -16,6 +17,8 @@ const yourAppSign =
 
 
 const yourServerSecret = '89ceddc6c59909af326ddb7209cb1c16';
+RxList assistChatNewMsg = [].obs;
+RxList<AssistChatData> assistChatUnreadMessages = <AssistChatData>[].obs;
 
 const userChatData = "userChatData";
 RxInt currentChatUserId = 8693.obs;

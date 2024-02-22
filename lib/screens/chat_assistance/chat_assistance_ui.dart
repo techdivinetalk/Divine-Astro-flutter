@@ -18,6 +18,7 @@ import '../../model/chat_assistant/CustomerDetailsResponse.dart';
 import '../../model/chat_assistant/chat_assistant_astrologer_response.dart';
 import '../../utils/enum.dart';
 import '../../utils/load_image.dart';
+import '../live_page/constant.dart';
 import 'chat_assistance_controller.dart';
 
 class ChatAssistancePage extends GetView<ChatAssistanceController> {
@@ -356,13 +357,12 @@ class ChatAssistanceTile extends StatelessWidget {
           ),
         ],
       ),
-      trailing: controller.unreadMessageList
-              .any((element) => element.customerId == data.id)
+      trailing: userUnreadMessages(data.id ?? 0) != 0
           ? CircleAvatar(
               radius: 10.r,
               backgroundColor: appColors.guideColor,
               child: CustomText(
-                returnNumberOfUnreadMessages(data.id ?? 0).toString(),
+                userUnreadMessages(data.id ?? 0).toString(),
                 fontSize: 10.sp,
                 fontWeight: FontWeight.w700,
                 fontColor: appColors.brown,
@@ -372,14 +372,12 @@ class ChatAssistanceTile extends StatelessWidget {
     );
   }
 
-  int returnNumberOfUnreadMessages(int customerId) {
-    int numberOfUnreadMessages = 0;
-    for (int index = 0; index < controller.unreadMessageList.length; index++) {
-      if (controller.unreadMessageList[index].customerId == customerId) {
-        numberOfUnreadMessages++;
-      }
+  int userUnreadMessages(int userId) {
+    final allUnreadMessages = assistChatUnreadMessages;
+    if (allUnreadMessages.isNotEmpty) {
+      allUnreadMessages.removeWhere((element) => element.customerId != userId);
     }
-    return numberOfUnreadMessages;
+    return allUnreadMessages.length;
   }
 }
 

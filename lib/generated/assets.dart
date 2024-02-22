@@ -274,6 +274,7 @@ class Assets {
   static const String svgaNewYearCountdown = 'assets/svga/new_year_countdown.svga';
   static const String svgaNewYearGifts = 'assets/svga/new_year_gifts.svga';
   static const String svgaSportsCar = 'assets/svga/sports_car.svga';
+  static const String queue = 'assets/svg/queue.svg';
   static const String svgaWhiteHorse = 'assets/svga/white_horse.svga';
 
 }

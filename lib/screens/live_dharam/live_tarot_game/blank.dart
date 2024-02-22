@@ -14,9 +14,7 @@ import "package:get/get.dart";
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Blank extends StatefulWidget {
-  const Blank({
-    super.key,
-  });
+  const Blank({super.key});
 
   @override
   State<Blank> createState() => _BlankState();
@@ -61,7 +59,6 @@ class _BlankState extends State<Blank> with AfterLayoutMixin<Blank> {
           onClose: Get.back,
           onSelect: (int value) {
             Get.back();
-            // further
           },
           userName: "Dharam",
         );
@@ -77,6 +74,7 @@ class _BlankState extends State<Blank> with AfterLayoutMixin<Blank> {
         return WaitingForUserToSelectCards(
           onClose: Get.back,
           userName: "Dharam",
+          onTimeout: Get.back,
         );
       },
     );
@@ -112,7 +110,6 @@ class _BlankState extends State<Blank> with AfterLayoutMixin<Blank> {
           allCards: deckCardModel,
           onSelect: (List<DeckCardModel> selectedCards) {
             Get.back();
-            // further
           },
         );
       },

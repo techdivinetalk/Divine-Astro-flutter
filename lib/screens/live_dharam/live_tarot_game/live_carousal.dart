@@ -1,13 +1,9 @@
-import "dart:async";
 import "dart:ui";
-import "package:after_layout/after_layout.dart";
 
 import "package:carousel_slider/carousel_slider.dart";
 import "package:divine_astrologer/common/colors.dart";
-import "package:divine_astrologer/di/shared_preference_service.dart";
-import "package:divine_astrologer/model/constant_details_model_class.dart";
 import "package:divine_astrologer/model/live/deck_card_model.dart";
-import "package:divine_astrologer/repository/user_repository.dart";
+import "package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:dynamic_height_grid_view/dynamic_height_grid_view.dart";
 import "package:flutter/foundation.dart";
@@ -35,8 +31,7 @@ class LiveCarousal extends StatefulWidget {
   State<LiveCarousal> createState() => _LiveCarousalState();
 }
 
-class _LiveCarousalState extends State<LiveCarousal>
-    with AfterLayoutMixin<LiveCarousal> {
+class _LiveCarousalState extends State<LiveCarousal> {
   final List<DeckCardModel> numList = [];
 
   String tarotCard = "";
@@ -44,6 +39,9 @@ class _LiveCarousalState extends State<LiveCarousal>
   @override
   void initState() {
     super.initState();
+
+    tarotCard = LiveSharedPreferencesSingleton().getSingleTarotCard();
+    
     for (int i = 0; i < widget.numOfSelection; i++) {
       numList.add(DeckCardModel());
     }
@@ -256,10 +254,12 @@ class _LiveCarousalState extends State<LiveCarousal>
   void autoInsertValue(DeckCardModel model) {
     final int emptyIndex = numList.indexWhere((element) => element.id == null);
     numList[emptyIndex] = model;
+    return;
   }
 
   void removeAt(int index) {
     numList[index] = DeckCardModel();
+    return;
   }
 
   bool condition() {
@@ -290,15 +290,5 @@ class _LiveCarousalState extends State<LiveCarousal>
         ),
       ),
     );
-  }
-
-  @override
-  FutureOr<void> afterFirstLayout(BuildContext context) async {
-    final UserRepository userRepo = UserRepository();
-    var data = await userRepo.constantDetailsData();
-    
-    tarotCard = data.data?.taroCard ?? "";
-    setState(() {});
-    return Future<void>.value();
   }
 }

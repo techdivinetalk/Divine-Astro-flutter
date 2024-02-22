@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
@@ -10,6 +11,7 @@ import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_resp
 import 'package:divine_astrologer/remote_config/remote_config_helper.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
+import 'package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -41,6 +43,7 @@ import 'di/progress_service.dart';
 import 'di/shared_preference_service.dart';
 import 'gen/fonts.gen.dart';
 import 'localization/translations.dart';
+import 'screens/live_page/constant.dart';
 import 'utils/utils.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -80,25 +83,29 @@ Future<void> main() async {
       print('Message data:- ${MiddleWare.instance.currentPage}');
       print("chat assist realtime notification with data ${message.data}");
       if (MiddleWare.instance.currentPage == RouteName.chatMessageUI) {
-        sendBroadcast(
-            BroadcastMessage(name: "chatAssist", data: {'msg': message.data}));
+        assistChatNewMsg.add(message.data);
+        // sendBroadcast(
+        //     BroadcastMessage(name: "chatAssist", data: {'msg': message.data}));
       } else {
         showNotification(message.data["title"], message.data["message"],
             message.data['type'], message.data);
         final responseMsg = message.data;
-         SharedPreferenceService().addChatAssistUnreadMessage(
-            AssistChatData(
-                message: responseMsg["message"],
-                astrologerId: int.parse(responseMsg["userid"] ?? 0),
-                createdAt: responseMsg["created_at"],
-                id: DateTime.now().millisecondsSinceEpoch,
-                isSuspicious: 0,
-                sendBy: SendBy.customer,
-                msgType: responseMsg['msg_type'] != null
-                    ? msgTypeValues.map[responseMsg["msg_type"]]
-                    : MsgType.text,
-                seenStatus: SeenStatus.received,
-                customerId: int.parse(responseMsg["sender_id"] ?? 0)));
+        assistChatNewMsg.add(AssistChatData(
+            message: responseMsg["message"],
+            astrologerId: int.parse(responseMsg?["sender_id"].toString() ?? ''),
+            createdAt: DateTime.parse(responseMsg?["created_at"])
+                .millisecondsSinceEpoch
+                .toString(),
+            // id: responseMsg["chatId"] != null && responseMsg["chatId"] != '' && responseMsg["chatId"]=='undefined'
+            //     ? int.parse(responseMsg["chatId"])
+            //     : null,
+            isSuspicious: 0,
+            sendBy: SendBy.customer,
+            msgType: responseMsg['msg_type'] != null
+                ? msgTypeValues.map[responseMsg["msg_type"]]
+                : MsgType.text,
+            seenStatus: SeenStatus.received,
+            customerId: int.parse(responseMsg["sender_id"] ?? 0)));
       }
     } else {
       showNotification(message.data["title"], message.data["message"],
@@ -114,7 +121,8 @@ Future<void> main() async {
   var data = await userRepository.constantDetailsData();
   preferenceService.setConstantDetails(data);*/
 
-  GiftsSingleton().init();
+    GiftsSingleton().init();
+    LiveSharedPreferencesSingleton().init();
 
   // final navigatorKey = GlobalKey<NavigatorState>();
   // ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
@@ -188,7 +196,7 @@ Future<void> showNotification(String title, String message, String type,
                     'Accept',
                   ),
                 ]
-              : []);
+              : type=="3"? []:[]);
   if (type == "1") {
     androidNotificationDetails = const AndroidNotificationDetails(
         "DivineCustomer", "CustomerNotification",
@@ -201,6 +209,7 @@ Future<void> showNotification(String title, String message, String type,
       NotificationDetails(android: androidNotificationDetails);
   await flutterLocalNotificationsPlugin.show(
       Random().nextInt(90000), title, message, notificationDetails,
+
       payload: json.encode(data));
 }
 
@@ -222,8 +231,38 @@ void initMessaging() async {
   });
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed || Platform.isAndroid) {
+      print("resumed state called");
+      SharedPreferenceService().getChatAssistUnreadMessage();
+    }
+    if (state == AppLifecycleState.hidden ||
+        state == AppLifecycleState.inactive) {
+      print("hidden state called");
+      SharedPreferenceService().saveChatAssistUnreadMessage();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

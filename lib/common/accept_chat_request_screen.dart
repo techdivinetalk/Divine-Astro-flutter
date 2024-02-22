@@ -95,10 +95,30 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
   //     BroadcastReceiver(names: <String>["EndChat", "backReq"]);
   bool isLoader = false;
   final SharedPreferenceService pref = Get.put(SharedPreferenceService());
-
+  BroadcastReceiver broadcastReceiver =
+  BroadcastReceiver(names: <String>["orderEnd"]);
   @override
   void initState() {
     super.initState();
+    print(MiddleWare.instance.currentPage);
+    broadcastReceiver.start();
+    broadcastReceiver.messages.listen((BroadcastMessage event) {
+      print("orderEnd trioggered");
+      if(event.name == "orderEnd") {
+        print("orderEnd called going back");
+        WidgetsBinding.instance.endOfFrame.then(
+              (_) async {
+            if (mounted) {
+              bool canPop = Navigator.canPop(context);
+              if (canPop) {
+                Navigator.pop(context);
+                broadcastReceiver.stop();
+              } else {}
+            } else {}
+          },
+        );
+      }
+    });
     // broadcastReceiver.start();
     // broadcastReceiver.messages.listen(
     //   (event) {

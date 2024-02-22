@@ -116,6 +116,11 @@ class _LivePage extends State<LiveDharamScreen>
         .getInRoomCommandMessageReceivedEventStream()
         .listen(onInRoomCommandMessageReceived);
 
+    ZegoUIKitPrebuiltLiveStreamingController()
+        .coHost
+        .audienceLocalConnectStateNotifier
+        .addListener(onAudienceLocalConnectStateChanged);
+
     _controller.ref.child("live").onValue.listen(
       (event) async {
         final DataSnapshot dataSnapshot = event.snapshot;
@@ -415,6 +420,14 @@ class _LivePage extends State<LiveDharamScreen>
     WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
+  }
+
+  void onAudienceLocalConnectStateChanged() {
+    final audienceConnectState = ZegoUIKitPrebuiltLiveStreamingController()
+        .coHost
+        .audienceLocalConnectStateNotifier
+        .value;
+    debugPrint('audienceConnectState:$audienceConnectState');
   }
 
   @override
@@ -2200,6 +2213,17 @@ class _LivePage extends State<LiveDharamScreen>
               default:
                 break;
             }
+          } else if (type == "Tarot Card Close Wating") {
+            if (waitingForUserToSelectCardsPopupVisible) {
+              Get.back();
+            } else {}
+            if (_controller.isHost) {
+              successAndFailureCallBack(
+                message: "User closed Card Selection",
+                isForSuccess: false,
+                isForFailure: true,
+              );
+            } else {}
           } else {}
         } else {}
       } else {}
@@ -2217,6 +2241,14 @@ class _LivePage extends State<LiveDharamScreen>
         return WaitingForUserToSelectCards(
           onClose: Get.back,
           userName: _controller.currentCaller.userName,
+          onTimeout: () {
+            Get.back();
+            successAndFailureCallBack(
+              message: "Card Selection Timeout",
+              isForSuccess: false,
+              isForFailure: true,
+            );
+          },
         );
       },
     );
@@ -2227,6 +2259,7 @@ class _LivePage extends State<LiveDharamScreen>
   Future<void> showCardDeckToUserPopup() async {
     await showCupertinoModalPopup(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return ShowCardDeckToUser(
           onClose: Get.back,
@@ -2254,9 +2287,14 @@ class _LivePage extends State<LiveDharamScreen>
   Future<void> showCardDeckToUserPopup1() async {
     await showCupertinoModalPopup(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return LiveCarousal(
-          onClose: Get.back,
+          onClose: () async {
+            Get.back();
+
+            await sendTaroCardCloseWating();
+          },
           allCards: _controller.deckCardModelList,
           onSelect: (List<DeckCardModel> selectedCards) async {
             Get.back();
@@ -2293,6 +2331,7 @@ class _LivePage extends State<LiveDharamScreen>
   Future<void> showCardDeckToUserPopup2() async {
     await showCupertinoModalPopup(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         final List<DeckCardModel> userPicked = [];
         for (UserPicked element
@@ -2323,6 +2362,24 @@ class _LivePage extends State<LiveDharamScreen>
       "user_name": _controller.userName,
       "item": item.toJson(),
       "type": "Tarot Card",
+    };
+    await _controller.sendGiftAPI(
+      data: data,
+      count: 1,
+      svga: "",
+      successCallback: log,
+      failureCallback: log,
+    );
+    return Future<void>.value();
+  }
+
+  Future<void> sendTaroCardCloseWating() async {
+    var data = {
+      "room_id": _controller.liveId,
+      "user_id": _controller.userId,
+      "user_name": _controller.userName,
+      "item": {},
+      "type": "Tarot Card Close Wating",
     };
     await _controller.sendGiftAPI(
       data: data,
@@ -3942,23 +3999,9 @@ class _LivePage extends State<LiveDharamScreen>
     } else {}
   }
 
-  Future<void> initTarot() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final List<dynamic> list = jsonDecode(prefs.getString('tarot_cards') ?? "");
-
-    for (var element in list) {
-      _controller.deckCardModelList = [
-        ...[DeckCardModel.fromJson(element)]
-      ];
-    }
-    for (var element in _controller.deckCardModelList) {
-      element.image = "${_controller.pref.getAmazonUrl()}/${element.image}";
-    }
-    return Future<void>.value();
-  }
-
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) async {
+    _controller.tarotCardInit();
     await _controller.noticeBoard(
       successCallBack: (String message) {
         successAndFailureCallBack(
@@ -3976,23 +4019,6 @@ class _LivePage extends State<LiveDharamScreen>
       },
     );
     await _controller.callBlockedCustomerListRes(
-      successCallBack: (String message) {
-        successAndFailureCallBack(
-          message: message,
-          isForSuccess: true,
-          isForFailure: false,
-        );
-      },
-      failureCallBack: (String message) {
-        successAndFailureCallBack(
-          message: message,
-          isForSuccess: false,
-          isForFailure: true,
-        );
-      },
-    );
-    // await initTarot();
-    await _controller.getTarotCardAPI(
       successCallBack: (String message) {
         successAndFailureCallBack(
           message: message,

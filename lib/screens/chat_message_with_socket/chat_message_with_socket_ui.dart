@@ -349,6 +349,22 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       ));
                 }),
                 SizedBox(height: 10.h),
+                Obx(() => Visibility(
+                    visible : controller.showTalkTime.value == "-1" ,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                          decoration: BoxDecoration(
+                      border: Border.all(color: appColors.grey, width: 2),
+                            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                            color: appColors.white,
+                          ),
+                          child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("Chat Ended you can still send message till one minute",style: TextStyle(color: Colors.red),textAlign: TextAlign.center),
+                      )),
+                    ))
+                ),
                 Obx(
                   () => controller.messageTemplates.isNotEmpty
                       ? Column(
@@ -849,7 +865,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       },
     );
   }
-
   void showCurvedBottomSheet(context) {
     List<SvgPicture> itemList = [
       SvgPicture.asset('assets/svg/camera_icon.svg'),
@@ -881,7 +896,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     Navigator.pop(context);
                     switch (index) {
                       case 0:
-                        controller.getImage(false);
+                        controller.getImage(true);
                         break;
                       case 1:
                         controller.getImage(false);
@@ -898,6 +913,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         }
                         break;
                       case 3:
+                        controller.isCardBotOpen.value = true;
                         showCardChoiceBottomSheet(context, controller);
                         // showModalBottomSheet<void>(
                         //   context: context,
@@ -1618,7 +1634,8 @@ class AstrologerChatAppBar extends StatelessWidget {
   void backFunction() {
     WidgetsBinding.instance.endOfFrame.then(
       (_) async {
-        controller.socket.socket?.disconnect();
+        controller.userLeavePrivateChatListenerSocket();
+        print("object");
         controller.chatTimer?.cancel();
         Get.back();
         Get.back();
@@ -1726,7 +1743,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            controller.showTalkTime.value,
+                                            controller.showTalkTime.value == "-1" ? "Chat Ended" : controller.showTalkTime.value,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 10.sp,

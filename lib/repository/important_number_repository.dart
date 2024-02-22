@@ -17,7 +17,7 @@ class ImportantNumberRepo extends ApiProvider {
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
           preferenceService.erase();
-          Get.offNamed(RouteName.login);
+
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final importantNumbers =
