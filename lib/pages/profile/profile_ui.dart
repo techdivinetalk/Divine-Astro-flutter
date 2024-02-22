@@ -98,7 +98,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                           )
                                         : CommonImageView(
                                             imagePath: controller
-                                                .userProfileImage.value,
+                                                .userProfileImage.value, 
                                             fit: BoxFit.cover,
                                             height: 70.h,
                                             width: 70.h,

@@ -31,7 +31,8 @@ class SplashController extends GetxController {
     print("FCM Token: $token");
     notificationPermission();
     requestPermissions();
-    checkImportantNumbers();
+    // checkImportantNumbers();
+    navigation();
   }
 
   notificationPermission() async {

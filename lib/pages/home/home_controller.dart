@@ -118,7 +118,7 @@ class HomeController extends GetxController {
     userData = preferenceService.getUserDetail()!;
     appbarTitle.value =
         "${userData.name.toString().capitalizeFirst} (${userData.id})";
-    userImage = "${preferenceService.getBaseImageURL()}/${userData.image}";
+
     print("${preferenceService.getBaseImageURL()}/${userData.image}");
     print(userData.image);
     print("userData.image");
@@ -127,9 +127,19 @@ class HomeController extends GetxController {
     //await getContactList();
     // fetchImportantNumbers();
     getConstantDetailsData();
+    getUserImage();
     getDashboardDetail();
     getFeedbackData();
     tarotCardData();
+  }
+
+  getUserImage() async {
+    String? baseUrl =await preferenceService.getBaseImageURL();
+    userImage = "${baseUrl}/${userData.image}";
+    print(userImage);
+    print(userImage.contains("null"));
+    print('userImage.contains("null")');
+    update();
   }
 
   fetchImportantNumbers() async {

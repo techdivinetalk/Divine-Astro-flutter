@@ -92,9 +92,9 @@ class HomeUI extends GetView<HomeController> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  controller.userData.image!.contains("null") ||
-                          controller.userData.image!.isEmpty ||
-                          controller.userData.image! == ""
+                  controller.userImage.contains("null") ||
+                          controller.userImage.isEmpty ||
+                          controller.userImage == ""
                       ? SizedBox(
                           height: 24.h,
                           width: 24.h,
@@ -102,7 +102,7 @@ class HomeUI extends GetView<HomeController> {
                       : CommonImageView(
                           imagePath:
                               controller.userImage,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.cover, 
                           height: 24.h,
                           width: 24.h,
                           placeHolder: Assets.images.defaultProfile.path,

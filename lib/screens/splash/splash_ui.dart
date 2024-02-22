@@ -32,24 +32,24 @@ class SplashUI extends GetView<SplashController> {
                   width: 214.h,
                   height: 256.h,
                 ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: 300.h,
-                  child: LinearProgressIndicator(
-                    borderRadius: BorderRadius.circular(30),
-                    value: controller.progessValue, // Current progress
-                    backgroundColor: Colors.grey[300], // Background color
-                    color: appColors.guideColor,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  "Verifying your Details...",
-                  style: AppTextStyle.textStyle16(
-                    fontColor: appColors.textColor,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
+                // const SizedBox(height: 20),
+                // SizedBox(
+                //   width: 300.h,
+                //   child: LinearProgressIndicator(
+                //     borderRadius: BorderRadius.circular(30),
+                //     value: controller.progessValue, // Current progress
+                //     backgroundColor: Colors.grey[300], // Background color
+                //     color: appColors.guideColor,
+                //   ),
+                // ),
+                // const SizedBox(height: 16),
+                // Text(
+                //   "Verifying your Details...",
+                //   style: AppTextStyle.textStyle16(
+                //     fontColor: appColors.textColor,
+                //     fontWeight: FontWeight.w400,
+                //   ),
+                // ),
               ],
             ),
           ),
