@@ -18,10 +18,12 @@ import '../../pages/performance/performance_ui.dart';
 import '../../pages/profile/profile_ui.dart';
 
 import '../chat_assistance/chat_assistance_ui.dart';
+import '../live_page/constant.dart';
 import 'dashboard_controller.dart';
 
 class DashboardScreen extends GetView<DashboardController> {
   const DashboardScreen({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -171,20 +173,27 @@ class DashboardScreen extends GetView<DashboardController> {
                                         icon: Column(
                                           children: [
                                           
-                                            controller.userProfileImage.value
+                                            userImage.value
                                                         .contains("null") ||
-                                                    controller.userProfileImage
+                                                userImage
                                                         .value.isEmpty ||
-                                                    controller.userProfileImage
+                                                userImage
                                                             .value ==
                                                         ""
                                                 ? SizedBox(
-                                                    height: 30.h,
+                                              height: 30.h,
                                                     width: 30.h,
+                                              child: ClipRRect(
+                                              borderRadius:  BorderRadius.circular(
+                                                    100.h),
+                                                child: Image.asset(Assets
+                                                    .images
+                                                    .defaultProfile
+                                                    .path),
+                                              ),
                                                   )
                                                 : CommonImageView(
-                                                    imagePath: controller
-                                                        .userProfileImage.value,
+                                                    imagePath:userImage.value,
                                                     fit: BoxFit.cover,
                                                     height: 30.h,
                                                     width: 30.h,

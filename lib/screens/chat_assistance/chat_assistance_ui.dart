@@ -1,7 +1,9 @@
+import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -141,15 +143,8 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                           controller.chatAssistantAstrologerListResponse!.data!
                               .data!.isEmpty) {
                         return Center(
-                          child: Text(
-                            'No Data found',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              color: appColors.black,
-                              fontFamily: FontFamily.metropolis,
-                            ),
-                          ),
-                        );
+                            child: SvgPicture.asset(
+                                'assets/svg/Group 129525.svg'));
                       } else {
                         return ListView.builder(
                           padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -175,7 +170,6 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                       }
                     } else {
                       if (controller.customerDetailsResponse == null ||
-                          controller.customerDetailsResponse!.data == null ||
                           controller.customerDetailsResponse!.data.isEmpty) {
                         return Center(
                           child: Text(
@@ -232,23 +226,14 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                     color: Colors.white,
                   ),
                 ),
-                leading: IconButton(
-                  onPressed: () {
-                    controller.isSearchEnable(false);
-                    _scaffoldKey.currentState?.openDrawer();
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    size: 32.sp,
-                    color: Colors.white,
-                  ),
-                ),
                 actions: [
                   SvgIconButton(
                       onPressed: () {
                         controller.isSearchEnable(true);
                       },
-                      svg: Assets.images.searchIcon.svg(color: Colors.white,)),
+                      svg: Assets.images.searchIcon.svg(
+                        color: Colors.white,
+                      )),
                   SizedBox(width: 10.w)
                 ],
                 backgroundColor: appColors.guideColor,
@@ -320,8 +305,8 @@ class ChatAssistanceTile extends StatelessWidget {
       leading: ClipRRect(
           borderRadius: BorderRadius.circular(50.r),
           child: Container(
-            decoration:
-                BoxDecoration(shape: BoxShape.circle, color: appColors.guideColor),
+            decoration: BoxDecoration(
+                shape: BoxShape.circle, color: appColors.guideColor),
             height: 50.w,
             width: 50.w,
             child: LoadImage(
@@ -344,16 +329,7 @@ class ChatAssistanceTile extends StatelessWidget {
       subtitle: Row(
         children: [
           Expanded(
-            child: CustomText(
-              data.lastMessage ?? '',
-              fontColor:
-                  // (index == 0) ? appColors.darkBlue:
-                  appColors.grey,
-              fontSize: 12.sp,
-              fontWeight:
-                  //(index == 0) ? FontWeight.w600 :
-                  FontWeight.normal,
-            ),
+            child: lastMessage(data.msgType ?? MsgType.text),
           ),
         ],
       ),
@@ -370,6 +346,85 @@ class ChatAssistanceTile extends StatelessWidget {
             )
           : SizedBox(),
     );
+  }
+
+  Widget lastMessage(MsgType msgtype) {
+    late Widget lastMessageWidget;
+    switch (msgtype) {
+      case MsgType.text:
+        lastMessageWidget = CustomText(
+          data.lastMessage ?? '',
+          fontColor:
+              // (index == 0) ? appColors.darkBlue:
+              appColors.grey,
+          fontSize: 12.sp,
+          fontWeight:
+              //(index == 0) ? FontWeight.w600 :
+              FontWeight.normal,
+        );
+        break;
+
+      case MsgType.image:
+        lastMessageWidget = const Row(
+          children: [
+            Icon(
+              Icons.image,
+              size: 15,
+            ),
+            Text(
+              "  Image",
+              style: TextStyle(fontSize: 10),
+            )
+          ],
+        );
+        break;
+      case MsgType.remedies:
+        lastMessageWidget = Row(
+          children: [
+            SvgPicture.asset(
+              'assets/svg/remedies_icon.svg',
+              width: 10,
+            ),
+            Text(
+              "  Remedy",
+              style: TextStyle(fontSize: 10),
+            )
+          ],
+        );
+        break;
+      case MsgType.product:
+        lastMessageWidget = Row(
+          children: [
+            SvgPicture.asset(
+              'assets/svg/product.svg',
+              width: 10,
+            ),
+            Text(
+              "  Product",
+              style: TextStyle(fontSize: 10),
+            )
+          ],
+        );
+        break;
+      case MsgType.gift:
+        lastMessageWidget = const Row(
+          children: [
+            Icon(
+              Icons.card_giftcard,
+              size: 15,
+            ),
+            Text(
+              "   Gift",
+              style: TextStyle(fontSize: 10),
+            )
+          ],
+        );
+        break;
+      default:
+        lastMessageWidget = SizedBox();
+        break;
+    }
+    return lastMessageWidget;
   }
 
   int userUnreadMessages(int userId) {
@@ -416,7 +471,8 @@ class ChatAssistanceDataTile extends StatelessWidget {
                               height: 25.h,
                               width: 25.w,
                               child: CircularProgressIndicator(
-                                  color: appColors.guideColor, strokeWidth: 2)))),
+                                  color: appColors.guideColor,
+                                  strokeWidth: 2)))),
                 )),
             const SizedBox(
               width: 10,

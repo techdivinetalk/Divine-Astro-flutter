@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/screens/chat_message/widgets/product/suggestProducts_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../../common/appbar.dart';
@@ -68,7 +69,9 @@ class SuggestProducts extends GetView<SuggestProductController> {
                     padding:
                         EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
                     child: controller.shopList.isEmpty
-                        ? buildEmpty("'${'noDataAvailable'.tr}!")
+                        ? Center(
+                            child:
+                                SvgPicture.asset('assets/svg/Group 129525.svg'))
                         : GridView.builder(
                             itemCount: controller.searchShopList.isNotEmpty
                                 ? controller.searchShopList.length
@@ -85,41 +88,12 @@ class SuggestProducts extends GetView<SuggestProductController> {
                                   : controller.shopList)[index];
                               return InkWell(
                                 onTap: () async {
-                                  if (index == 0) {
-                                    // Get.toNamed(
-                                    //   RouteName.divineShopSubCategoryPage,
-                                    //   arguments: {
-                                    //     "shopId": item.id,
-                                    //     "formPooja": false,
-                                    //     "name": item.shopName.toString()
-                                    //   },
-                                    // );
-                                    // await Get.toNamed(
-                                    //   RouteName.poojaDharamMainScreen,
-                                    // );
-                                  } else {
-                                    // Get.toNamed(
-                                    //   RouteName.divineShopSubSubCategoryPage,
-                                    //   arguments: {
-                                    //     "shopId": item.id,
-                                    //     "formPooja": false,
-                                    //     "name": item.shopName.toString()
-                                    //   },
-                                    // );
-                                    // // Get.toNamed(RouteName.divineShopSubCategoryPage);
-                                    // var userData = controller.pref.getUserDetail();
-                                    // controller.firebaseEvent.shopSectionHomeEvent({
-                                    //   "Category_name": item.shopName,
-                                    //   "Action_name": item.shopName,
-                                    //   "Position": "",
-                                    //   "Astrologer_details": "",
-                                    //   "User_id": userData?.id,
-                                    //   "Platform_name":
-                                    //       Platform.isAndroid ? "Android" : "ios",
-                                    //   "Mobile_number": userData?.mobileNo,
-                                    //   "Screen_name": "Divine_Shop",
-                                    // });
-                                  }
+                                  Get.toNamed(
+                                      RouteName.chatAssistProductSubPage,
+                                      arguments: {
+                                        "shodId": item.id,
+                                        "productName": item.shopName
+                                      });
                                 },
                                 child: Container(
                                   width: 300,
@@ -143,8 +117,8 @@ class SuggestProducts extends GetView<SuggestProductController> {
                                         child: LoadImage(
                                           boxFit: BoxFit.cover,
                                           imageModel: ImageModel(
-                                            imagePath: controller.imageUrl +
-                                                (item.shopImage ?? ''),
+                                            imagePath:
+                                                '${controller.pref.getBaseImageURL()}/${item?.shopImage}',
                                             loadingIndicator: const SizedBox(
                                               child: CircularProgressIndicator(
                                                 color: Color(0XFFFDD48E),

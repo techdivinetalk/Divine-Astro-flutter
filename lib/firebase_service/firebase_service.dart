@@ -42,11 +42,11 @@ class AppFirebaseService {
   final appSocket = AppSocket();
   var openChatUserId = "";
   RxMap<String, dynamic> orderData = <String, dynamic>{}.obs;
-  final DatabaseReference _database = FirebaseDatabase.instance.ref();
+  final DatabaseReference database = FirebaseDatabase.instance.ref();
 
   Future<void> writeData(String path, Map<String, dynamic> data) async {
     try {
-      await _database.child(path).update(data);
+      await database.child(path).update(data);
     } catch (e) {
       debugPrint("Error writing data to the database: $e");
     }
@@ -60,7 +60,7 @@ class AppFirebaseService {
       var chatMessages = <ChatMessage>[].obs;
       var databaseMessage = ChatMessagesOffline().obs;
       await hiveServices.initialize();
-      _database.child(path).onValue.listen((event) async {
+      database.child(path).onValue.listen((event) async {
         debugPrint("real time $path ---> ${event.snapshot.value}");
         if (preferenceService.getToken() == null ||
             preferenceService.getToken() == "") {
@@ -237,7 +237,7 @@ class AppFirebaseService {
     watcher.nameStream.listen(
       (value) {
         if (value != "") {
-          _database.child("order/$value").onValue.listen(
+          database.child("order/$value").onValue.listen(
             (DatabaseEvent event) async {
               final DataSnapshot dataSnapshot = event.snapshot;
               if (dataSnapshot.exists) {
@@ -314,7 +314,7 @@ class AppFirebaseService {
     if (isAccepted) {
       bool value = await AppPermissionService.instance.hasAllPermissions();
       String path = "order/${valueMap['orderId']}";
-      await AppFirebaseService()._database.child(path).update(
+      await AppFirebaseService().database.child(path).update(
         <String, dynamic>{
           "status": "1",
           "astrologer_permission": value,

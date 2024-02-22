@@ -47,7 +47,8 @@ class ChatAssistantRepository extends ApiProvider {
       final response = await get(getConsulationData);
       log('response --- ${response.body}');
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] == 401 &&
+            json.decode(response.body)["status_code"] == 500) {
           preferenceService.erase();
           Get.offNamed(RouteName.login);
           print("objectAssist ${json.decode(response.body)}");

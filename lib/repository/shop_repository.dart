@@ -8,6 +8,7 @@ import '../di/api_provider.dart';
 import '../model/res_get_shop.dart';
 import '../model/res_product_detail.dart';
 import '../model/res_product_list.dart';
+import '../model/shop_model_response.dart';
 
 class ShopRepository extends ApiProvider {
   // Future<ResOrderHistory> getOrderHistory(Map<String, dynamic> param) async {
@@ -39,6 +40,35 @@ class ShopRepository extends ApiProvider {
   //     rethrow;
   //   }
   // }
+
+
+  Future<ShopModel> getShopList(Map<String, dynamic> param) async {
+    //progressService.showProgressDialog(true);
+    try {
+      final response = await post(getShopUrl, body: jsonEncode(param).toString());
+      //progressService.showProgressDialog(false);
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          preferenceService.erase();
+          Get.offNamed(RouteName.login);
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final shopModel = shopModelFromJson(response.body);
+          if (shopModel.statusCode == successResponse && shopModel.success!) {
+            return shopModel;
+          } else {
+            throw CustomException(shopModel.message!);
+          }
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      //progressService.showProgressDialog(false);
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
 
   Future<ResGetShop> getShopData(Map<String, dynamic> param) async {
     try {
@@ -122,6 +152,32 @@ class ShopRepository extends ApiProvider {
   Future<SaveRemediesResponse> saveRemedies(Map<String, dynamic> param) async {
     try {
       final response = await post(saveRemediesUrl,
+          body: jsonEncode(param).toString(),
+          headers: await getJsonHeaderURL());
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final responseModel =
+          SaveRemediesResponse.fromJson(json.decode(response.body));
+          if (responseModel.statusCode == successResponse && responseModel.success!) {
+            return responseModel;
+          } else {
+            throw CustomException("Unknown Error");
+          }
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<SaveRemediesResponse> saveRemediesForChatAssist(Map<String, dynamic> param) async {
+    try {
+      final response = await post(saveRemediesChatAssistUrl,
           body: jsonEncode(param).toString(),
           headers: await getJsonHeaderURL());
       if (response.statusCode == 200) {

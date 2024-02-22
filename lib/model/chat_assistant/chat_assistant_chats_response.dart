@@ -112,8 +112,10 @@ class AssistChatData {
   int? astrologerId;
   MsgType? msgType;
   SendBy? sendBy;
+  String? profileImage;
+  int? productId;
   // String? awsUrl;
-  // int? giftId;
+  int? shopId;
   String? createdAt;
   SeenStatus? seenStatus;
   int? isSuspicious;
@@ -125,10 +127,12 @@ class AssistChatData {
       this.astrologerId,
       // this.msgStatus,
       this.msgType,
+        this.profileImage,
+        this.productId,
       this.sendBy,
       this.createdAt,
       // this.awsUrl,
-      // this.giftId,
+      this.shopId,
       this.isSuspicious,
       this.seenStatus});
 
@@ -143,11 +147,13 @@ class AssistChatData {
     msgType = json['msg_type'] != null
         ? msgTypeValues.map[json["msg_type"].toString()]
         : MsgType.text;
+    productId = json['product_id'];
     // msgStatus = json['msg_status'] != null
     //     ? msgStatusValues.map[json["msg_status"]]
     //     : MsgStatus.sent;
     // awsUrl = json['awsUrl'];
-    // giftId = json['gift_id'];
+    shopId = json['shop_id'];
+    profileImage = json['profile_image'];
     createdAt =
         DateTime.parse(json['created_at']).millisecondsSinceEpoch.toString();
     isSuspicious = json['is_suspicious'];
@@ -166,8 +172,10 @@ class AssistChatData {
     data['msg_type'] = msgTypeValues.reverse[msgType];
     // data['msg_status'] = msgStatusValues.reverse[msgStatus];
     data['created_at'] = createdAt;
+    data['profile_image'] = profileImage;
+    data['product_id'] = productId;
     // data['awsUrl'] = awsUrl;
-    // data['gift_id'] = giftId;
+    data['shop_id'] = shopId;
     data['is_suspicious'] = isSuspicious;
     data['seen_status'] = seenStatusValues.reverse[seenStatus];
     return data;
@@ -181,7 +189,7 @@ final sendByValue = EnumValues({
   "1": SendBy.astrologer,
 });
 
-enum MsgType { text, gift, image,remedies , product}
+enum MsgType { text, gift, image,remedies , product,limit}
 
 final msgTypeValues = EnumValues({
   "0": MsgType.text,
@@ -189,6 +197,7 @@ final msgTypeValues = EnumValues({
   "2":MsgType.remedies,
   "3":MsgType.product,
   "8": MsgType.gift,
+  "10":MsgType.limit,
 });
 
 enum SeenStatus { notSent, sent, delivered, received, error }

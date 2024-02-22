@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
+import 'package:divine_astrologer/model/save_remedies_response.dart';
 import 'package:divine_astrologer/repository/chat_repository.dart';
 import 'package:divine_astrologer/repository/kundli_repository.dart';
 import 'package:divine_astrologer/screens/chat_message/widgets/assist_message_widget.dart';
@@ -17,9 +18,12 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../common/app_textstyle.dart';
 import '../../common/common_bottomsheet.dart';
+import '../../common/common_functions.dart';
 import '../../common/routes.dart';
 import '../../gen/assets.gen.dart';
 import '../../gen/fonts.gen.dart';
+import '../../model/chat_suggest_remedies/chat_suggest_remedies.dart';
+import '../../model/message_template_response.dart';
 import '../../tarotCard/FlutterCarousel.dart';
 import '../../utils/load_image.dart';
 import '../live_page/constant.dart';
@@ -56,7 +60,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                         assetImage: false,
                         placeHolderPath: Assets.images.defaultProfile.path,
                         imagePath:
-                            "${globalConstantModel.data?.awsCredentails.baseurl}/${controller.args!.name ?? ''}",
+                            "${preferenceService.getAmazonUrl()}${controller.args?.image ?? ''}",
                         loadingIndicator: SizedBox(
                             child: CircularProgressIndicator(
                                 color: appColors.guideColor, strokeWidth: 2))),
@@ -111,8 +115,9 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                                   return AssistMessageView(
                                     index: index,
                                     chatMessage: currentMsg,
-                                    nextMessage:
-                                        controller.chatMessageList[nextIndex],
+                                    previousMessage: index == 0
+                                        ? controller.chatMessageList[index]
+                                        : controller.chatMessageList[index - 1],
                                     yourMessage:
                                         currentMsg.sendBy == SendBy.astrologer,
                                     unreadMessage:
@@ -128,11 +133,75 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                   ),
                 ),
               ),
+              Obx(
+                () => controller.messageTemplates.isNotEmpty
+                    ? Column(
+                        children: [
+                          messageTemplateRow(),
+                          SizedBox(height: 20.h),
+                        ],
+                      )
+                    : const SizedBox(),
+              ),
               SizedBox(height: 10.h),
               chatBottomBar(context),
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget messageTemplateRow() {
+    return SizedBox(
+      height: 35,
+      child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        scrollDirection: Axis.horizontal,
+        itemCount: controller.messageTemplates.length + 1,
+        separatorBuilder: (_, index) => SizedBox(width: 10.w),
+        itemBuilder: (context, index) {
+          late final MessageTemplates msg;
+          return index == 0
+              ? GestureDetector(
+                  onTap: () {
+                    Get.toNamed(RouteName.addMessageTemplate,
+                        arguments: [true, false]);
+                  },
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: appColors.red,
+                      borderRadius: const BorderRadius.all(Radius.circular(18)),
+                    ),
+                    child: Text(
+                      '+ Add',
+                      style:
+                          AppTextStyle.textStyle12(fontColor: appColors.white),
+                    ),
+                  ),
+                )
+              : GestureDetector(
+                  onTap: () {
+                    controller.sendMsgTemplate(
+                        controller.messageTemplates[index - 1]);
+                  },
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: appColors.brownColour,
+                      borderRadius: const BorderRadius.all(Radius.circular(18)),
+                    ),
+                    child: Text(
+                      '${controller.messageTemplates[index - 1].message}',
+                      style:
+                          AppTextStyle.textStyle12(fontColor: appColors.white),
+                    ),
+                  ),
+                );
+        },
       ),
     );
   }
@@ -252,7 +321,8 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                 GestureDetector(
                   onTap: () {
                     if (controller.messageController.text.isNotEmpty) {
-                      controller.sendMsg(MsgType.text, {});
+                      controller.sendMsg(MsgType.text,
+                          {'text': controller.messageController.text});
                     }
                   },
                   child: CircleAvatar(
@@ -311,11 +381,13 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                         controller.getImage(false);
                         break;
                       case 2:
-                        var result =
-                            await Get.toNamed(RouteName.chatSuggestRemedy);
+                        var result = await Get.toNamed(
+                            RouteName.chatAssistSuggestRemedy);
                         if (result != null) {
                           final String time =
                               "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+                          controller.sendMsg(
+                              MsgType.remedies, {'message': result.toString()});
                           // controller.addNewMessage(time, "Remedies",
                           //     messageText: result.toString());
                           print("getting ul not add1");
@@ -324,6 +396,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                       case 3:
                         var result =
                             await Get.toNamed(RouteName.chatAssistProductPage);
+                        controller.sendMsg(MsgType.product, {'data': result});
                         break;
                       case 4:
                         controller.getImage(false);

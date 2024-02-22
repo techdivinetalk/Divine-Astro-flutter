@@ -16,6 +16,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 
 import '../common/common_functions.dart';
+import '../model/chat_assistant/chat_assistant_astrologer_response.dart';
 
 const channel = AndroidNotificationChannel(
   "DivineAstrologer",
@@ -57,9 +58,11 @@ Future<void> firebaseMessagingConfig(BuildContext buildContext) async {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     if (message.notification != null) {
-      debugPrint("onMessage Notification received : ${message.notification?.title}");
+      debugPrint(
+          "onMessage Notification received : ${message.notification?.title}");
       showNotificationWithActions(
-          title: message.notification!.title ?? '', message: message.notification!.body ?? '');
+          title: message.notification!.title ?? '',
+          message: message.notification!.body ?? '');
       //  checkNotification(isFromNotification: true);
     }
   });
@@ -87,53 +90,65 @@ Future<void> firebaseMessagingConfig(BuildContext buildContext) async {
 
 void initMessaging() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings("@mipmap/ic_launcher");
+      AndroidInitializationSettings("@mipmap/ic_launcher");
   const DarwinInitializationSettings initializationSettingsDarwin =
-  DarwinInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+      DarwinInitializationSettings(
+          onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
-  const InitializationSettings initializationSettings =
-  InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsDarwin);
+  const InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsDarwin);
   flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
 }
 
-void onDidReceiveLocalNotification(int id, String? title, String? body, String? payload) async {
+void onDidReceiveLocalNotification(
+    int id, String? title, String? body, String? payload) async {
   // display a dialog with the notification details, tap ok to go to another page
   showDialog(
     context: Get.context!,
-    builder: (BuildContext context) =>
-        CupertinoAlertDialog(
-          title: Text(title ?? ""),
-          content: Text(body ?? ""),
-          actions: [
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              child: const Text('Ok'),
-              onPressed: () async {
-                // Navigator.of(context, rootNavigator: true).pop();
-                // await Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => SecondScreen(payload),
-                //   ),
-                // );
-              },
-            )
-          ],
-        ),
+    builder: (BuildContext context) => CupertinoAlertDialog(
+      title: Text(title ?? ""),
+      content: Text(body ?? ""),
+      actions: [
+        CupertinoDialogAction(
+          isDefaultAction: true,
+          child: const Text('Ok'),
+          onPressed: () async {
+            // Navigator.of(context, rootNavigator: true).pop();
+            // await Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => SecondScreen(payload),
+            //   ),
+            // );
+          },
+        )
+      ],
+    ),
   );
 }
 
-void onDidReceiveNotificationResponse(NotificationResponse notificationResponse) async {
+void onDidReceiveNotificationResponse(
+    NotificationResponse notificationResponse) async {
   final String? payload = notificationResponse.payload;
   if (notificationResponse.payload != null) {
     ///// redirect to bottom sheet of accept the request
-      final Map<String, dynamic> payloadMap = jsonDecode(notificationResponse.payload!);
+    final Map<String, dynamic> payloadMap =
+        jsonDecode(notificationResponse.payload!);
     debugPrint('notification payload: -- ${payloadMap}');
-   //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
-   // // if(payloadMap["type"] == "2") {
-       AppFirebaseService().openChatUserId = payloadMap["userid"];
-   // }
+    //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
+    // // if(payloadMap["type"] == "2") {
+    print("payload map type ${payloadMap}");
+    if (payloadMap["type"] == "3") {
+      Get.toNamed(RouteName.chatMessageSupportUI,
+          arguments: DataList(
+            id: int.parse( payloadMap["sender_id"],),
+            name: payloadMap["title"],
+          ));
+    }
+    AppFirebaseService().openChatUserId = payloadMap["userid"];
+    // }
     // Accessing individual values
     // String requestId = payloadMap['receiver_id'].toString();
     // String orderId = payloadMap['order_id'].toString();
@@ -163,9 +178,7 @@ Future<void> chatInit(String requestId) async {
     final userDetail = preferenceService.getUserDetail();
     if (userDetail != null) {
       final notificationPath = 'user/$requestId/realTime/notification';
-      final int timestamp = DateTime
-          .now()
-          .millisecondsSinceEpoch;
+      final int timestamp = DateTime.now().millisecondsSinceEpoch;
       final notificationData = {
         '$timestamp': {
           'isActive': 1,
@@ -187,11 +200,14 @@ Future<void> chatInit(String requestId) async {
 }
 
 Future<void> showNotificationWithActions(
-    {required String title, required String message, dynamic payload, HiveServices? hiveServices}) async {
+    {required String title,
+    required String message,
+    dynamic payload,
+    HiveServices? hiveServices}) async {
   debugPrint("enter in showNotificationWithActions --> $payload");
   String? jsonEncodePayload;
   if (payload != null) {
-     jsonEncodePayload = jsonEncode(payload);
+    jsonEncodePayload = jsonEncode(payload);
     if (payload["type"] == 2) {
       final Map<String, dynamic> chatListMap = jsonDecode(payload["chatList"]);
       final ChatMessage chatMessage = ChatMessage.fromOfflineJson(chatListMap);
@@ -204,19 +220,24 @@ Future<void> showNotificationWithActions(
       chatMessages.add(chatMessage);
       databaseMessage.value.chatMessages = chatMessages;
       log('data message ${databaseMessage.value.toOfflineJson()}');
-      await hiveServices?.addData(key: tableName, data: jsonEncode(databaseMessage.value.toOfflineJson()));
+      await hiveServices?.addData(
+          key: tableName,
+          data: jsonEncode(databaseMessage.value.toOfflineJson()));
       final newRes = await hiveServices?.getData(key: tableName);
       log("this is my tableName $tableName");
       log("enter in if condition $newRes");
     }
   }
 
-  const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
+  const AndroidNotificationDetails androidNotificationDetails =
+      AndroidNotificationDetails(
     "DivineAstrologer",
     "AstrologerNotification",
     importance: Importance.high,
   );
-  const NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
-  await flutterLocalNotificationsPlugin
-      .show(math.Random().nextInt(10000), title, message, notificationDetails, payload: jsonEncodePayload);
+  const NotificationDetails notificationDetails =
+      NotificationDetails(android: androidNotificationDetails);
+  await flutterLocalNotificationsPlugin.show(
+      math.Random().nextInt(10000), title, message, notificationDetails,
+      payload: jsonEncodePayload);
 }

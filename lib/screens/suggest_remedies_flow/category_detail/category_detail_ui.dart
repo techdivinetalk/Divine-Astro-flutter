@@ -24,22 +24,23 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
       builder: (controller) {
         return Scaffold(
           appBar: commonDetailAppbar(
-            title: "suggestRemedy".tr,
-            trailingWidget: Container(
-              margin: EdgeInsets.only(right: 16.w),
-              width: 47.w,
-              height: 26.h,
-              decoration:
-                  BoxDecoration(border: Border.all(color: appColors.darkBlue, width: 1), borderRadius: BorderRadius.circular(10)),
-              child: Center(
-                child: Text("₹500",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 12.sp,
-                      color: appColors.darkBlue,
-                    )),
-              ),
-            ),
+            title: "Product Details",
+            // trailingWidget: Container(
+            //   margin: EdgeInsets.only(right: 16.w),
+            //   width: 47.w,
+            //   height: 26.h,
+            //   decoration: BoxDecoration(
+            //       border: Border.all(color: appColors.darkBlue, width: 1),
+            //       borderRadius: BorderRadius.circular(10)),
+            //   // child: Center(
+            //   //   child: Text("₹500",
+            //   //       style: TextStyle(
+            //   //         fontWeight: FontWeight.w400,
+            //   //         fontSize: 12.sp,
+            //   //         color: appColors.darkBlue,
+            //   //       )),
+            //   // ),
+            // ),
           ),
           body: SingleChildScrollView(
             child: Padding(
@@ -51,13 +52,14 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                         children: [
                           CommonImageView(
                             imagePath:
-                                "${Get.find<SharedPreferenceService>().getBaseImageURL()}${controller.productDetail?.prodImage}",
+                                "${controller.preferenceService.getBaseImageURL()}${controller.productDetail?.prodImage}",
                             radius: BorderRadius.circular(20.h),
                           ),
                           SizedBox(height: 20.h),
                           Text(
                             "${controller.productDetail?.prodName}",
-                            style: AppTextStyle.textStyle20(fontWeight: FontWeight.w400),
+                            style: AppTextStyle.textStyle20(
+                                fontWeight: FontWeight.w400),
                           ),
                           // SizedBox(height: 10.h),
                           Column(
@@ -67,7 +69,9 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                 padding: EdgeInsets.only(right: 11.w),
                                 child: Text(
                                   "Select Quantity",
-                                  style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
+                                  style: AppTextStyle.textStyle10(
+                                      fontWeight: FontWeight.w400,
+                                      fontColor: appColors.darkBlue),
                                 ),
                               ),
                               SizedBox(height: 4.h),
@@ -87,12 +91,16 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                     ),
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                        border: Border.all(color: appColors.darkBlue), borderRadius: BorderRadius.circular(10.h)),
+                                        border: Border.all(
+                                            color: appColors.darkBlue),
+                                        borderRadius:
+                                            BorderRadius.circular(10.h)),
                                     child: Row(
                                       children: [
                                         GestureDetector(
                                             onTap: controller.decrementQuantity,
-                                            child: Icon(Icons.remove_rounded, color: appColors.darkBlue)),
+                                            child: Icon(Icons.remove_rounded,
+                                                color: appColors.darkBlue)),
                                         SizedBox(width: 8.w),
                                         Text(
                                           "${controller.selectedQuantity}",
@@ -103,7 +111,8 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                         SizedBox(width: 8.w),
                                         GestureDetector(
                                             onTap: controller.incrementQuantity,
-                                            child: Icon(Icons.add_rounded, color: appColors.darkBlue)),
+                                            child: Icon(Icons.add_rounded,
+                                                color: appColors.darkBlue)),
                                       ],
                                     ),
                                   ),
@@ -112,16 +121,18 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                             ],
                           ),
                           Html(
-                            data:controller.productDetail!.productLongDesc ?? "",
+                            data:
+                                controller.productDetail!.productLongDesc ?? "",
                             onLinkTap: (url, attributes, element) {
                               launchUrl(Uri.parse(url ?? ''));
-                            }, 
+                            },
                           ),
                           SizedBox(height: 10.h),
                           ...List.generate(
                             controller.productDetail!.productFaq!.length,
                             (index) {
-                              ProductFaq data = controller.productDetail!.productFaq![index];
+                              ProductFaq data =
+                                  controller.productDetail!.productFaq![index];
                               return GestureDetector(
                                 onTap: () {
                                   data.isExpand = !data.isExpand!;
@@ -129,7 +140,8 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                 },
                                 child: Container(
                                   width: double.infinity,
-                                  padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 10.h),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 15.h, vertical: 10.h),
                                   margin: EdgeInsets.only(bottom: 10),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
@@ -143,10 +155,12 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                     ],
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             data.title ?? "",
@@ -156,7 +170,11 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                             ),
                                           ),
                                           Icon(
-                                            data.isExpand! ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
+                                            data.isExpand!
+                                                ? Icons
+                                                    .keyboard_arrow_up_rounded
+                                                : Icons
+                                                    .keyboard_arrow_down_rounded,
                                             size: 30.h,
                                             color: appColors.darkBlue,
                                           ),
@@ -187,7 +205,8 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
           bottomNavigationBar: Padding(
             padding: MediaQuery.of(context).viewInsets,
             child: Padding(
-              padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 20.h, top: 10.h),
+              padding: EdgeInsets.only(
+                  left: 20.w, right: 20.w, bottom: 20.h, top: 10.h),
               child: MaterialButton(
                   height: 50,
                   minWidth: Get.width,
@@ -198,7 +217,8 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                     openBottomSheet(
                       context,
                       functionalityWidget: Padding(
-                        padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+                        padding:
+                            const EdgeInsets.only(top: 20, left: 20, right: 20),
                         child: Column(
                           children: [
                             Text(
@@ -211,12 +231,17 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                             Text(
                               "On purchase 30% referral bonus will be added in your wallet",
                               style: AppTextStyle.textStyle12(
-                                  fontWeight: FontWeight.w600, fontColor: appColors.darkBlue.withOpacity(0.5)),
+                                  fontWeight: FontWeight.w600,
+                                  fontColor:
+                                      appColors.darkBlue.withOpacity(0.5)),
                             ),
                             CustomLightYellowCurveButton(
                               name: "suggestNow".tr,
                               onTaped: () {
-                                controller.suggestRemedy();
+                                print("value of controller chat assist ${ controller.isChatAssist.value}");
+                                controller.isChatAssist.value
+                                    ? controller.saveRemedyForChatAssist()
+                                    : controller.suggestRemedy();
                                 // Get.offNamedUntil(RouteName.orderHistory,
                                 //     ModalRoute.withName(RouteName.dashboard));
                               },
