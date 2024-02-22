@@ -23,6 +23,7 @@ import "../model/chat_offline_model.dart";
 import "../screens/live_page/constant.dart";
 
 bool isLogOut = false;
+Rx<dynamic> tempVar = "".obs;
 
 class AppFirebaseService {
   AppFirebaseService._privateConstructor();
@@ -132,6 +133,9 @@ class AppFirebaseService {
             FirebaseDatabase.instance.ref("$path/notification").remove();
           }
           if (realTimeData['giftCount'] != null) {
+            
+            tempVar(realTimeData['giftCount']);
+
             sendBroadcast(BroadcastMessage(
                 name: "giftCount",
                 data: {'giftCount': realTimeData["giftCount"]}));

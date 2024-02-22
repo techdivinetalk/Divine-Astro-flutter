@@ -116,6 +116,11 @@ class _LivePage extends State<LiveDharamScreen>
         .getInRoomCommandMessageReceivedEventStream()
         .listen(onInRoomCommandMessageReceived);
 
+    ZegoUIKitPrebuiltLiveStreamingController()
+        .coHost
+        .audienceLocalConnectStateNotifier
+        .addListener(onAudienceLocalConnectStateChanged);
+
     _controller.ref.child("live").onValue.listen(
       (event) async {
         final DataSnapshot dataSnapshot = event.snapshot;
@@ -415,6 +420,14 @@ class _LivePage extends State<LiveDharamScreen>
     WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
+  }
+
+  void onAudienceLocalConnectStateChanged() {
+    final audienceConnectState = ZegoUIKitPrebuiltLiveStreamingController()
+        .coHost
+        .audienceLocalConnectStateNotifier
+        .value;
+    debugPrint('audienceConnectState:$audienceConnectState');
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:divine_astrologer/common/routes.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -7,11 +8,11 @@ import 'package:get/get_core/src/get_main.dart';
 import 'app_textstyle.dart';
 import 'colors.dart';
 
-
 class PopupManager {
   static bool isPopupOpen = false;
 
-  static Future<void> showGiftCountPopup(BuildContext context, {String? title, String? btnTitle, int? totalGift}) async {
+  static Future<void> showGiftCountPopup(BuildContext context,
+      {String? title, String? btnTitle, int? totalGift}) async {
     if (isPopupOpen) {
       return;
     }
@@ -37,7 +38,7 @@ class PopupManager {
                   borderRadius: const BorderRadius.all(Radius.circular(50.0)),
                   border: Border.all(color: appColors.white),
                   color: appColors.transparent),
-              child:  Icon(
+              child: Icon(
                 Icons.close_rounded,
                 color: appColors.white,
               ),
@@ -47,7 +48,7 @@ class PopupManager {
           Container(
             decoration: BoxDecoration(
               borderRadius:
-              const BorderRadius.vertical(top: Radius.circular(50.0)),
+                  const BorderRadius.vertical(top: Radius.circular(50.0)),
               border: Border.all(color: Colors.white, width: 2),
               color: Colors.white,
             ),
@@ -58,13 +59,17 @@ class PopupManager {
                   Text(
                     title,
                     style: AppTextStyle.textStyle20(
-                        fontWeight: FontWeight.w600, fontColor: appColors.textColor),
+                        fontWeight: FontWeight.w600,
+                        fontColor: appColors.textColor),
                   ),
                 SizedBox(height: 10.h),
-                Text(
-                  "$totalGift Gift${totalGift! > 1 ? 's' : ''} Received",
-                  style: AppTextStyle.textStyle14( fontColor: appColors.black),
-                ),
+                Obx(() {
+                  return Text(
+                    // "$totalGift Gift${totalGift! > 1 ? 's' : ''} Received",
+                    tempVar.value.toString(),
+                    style: AppTextStyle.textStyle14(fontColor: appColors.black),
+                  );
+                }),
                 SizedBox(height: 16.h),
                 Image.asset("assets/images/bg_heart.png"),
                 const SizedBox(height: 20),
@@ -74,7 +79,7 @@ class PopupManager {
                       print("Clicked order history");
                       Get.back();
 
-                      Get.toNamed(RouteName.orderHistory,arguments: 3);
+                      Get.toNamed(RouteName.orderHistory, arguments: 3);
                     },
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -82,7 +87,10 @@ class PopupManager {
                       width: Get.width,
                       decoration: BoxDecoration(
                         color: appColors.guideColor,
-                        border: Border.all(color: appColors.guideColor, width: 2,),
+                        border: Border.all(
+                          color: appColors.guideColor,
+                          width: 2,
+                        ),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Center(

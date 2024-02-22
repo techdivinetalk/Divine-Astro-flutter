@@ -737,7 +737,7 @@ class HomeController extends GetxController {
     //   totaltGift: giftCount,
     // );
   }
-
+ 
   getDateDifference(int timestamp) {
     DateTime dtTimestamp = DateTime.fromMillisecondsSinceEpoch(timestamp);
     DateTime now = DateTime.now();
