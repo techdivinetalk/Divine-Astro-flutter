@@ -136,7 +136,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                                 colorFilter: ColorFilter.mode(
                                                     controller.selectedIndex
                                                                 .value ==
-                                                            3
+                                                            2
                                                         ? appColors.darkBlue
                                                         : appColors.lightGrey,
                                                     BlendMode.srcIn)),

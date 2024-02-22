@@ -99,8 +99,6 @@ class HomeController extends GetxController {
   List<Contact> allContacts = <Contact>[].obs;
   bool? isAllNumbersExist;
 
-
-
   @override
   void onInit() async {
     super.onInit();
@@ -110,7 +108,8 @@ class HomeController extends GetxController {
       debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
       if (event.name == "giftCount") {
         if (int.parse(event.data!["giftCount"].toString()) > 0) {
-          showGiftBottomSheet(event.data?["giftCount"], contextDetail);
+          showGiftBottomSheet(event.data?["giftCount"], contextDetail,
+              baseUrl: preferenceService.getBaseImageURL());
         }
       }
     });
@@ -134,7 +133,7 @@ class HomeController extends GetxController {
   }
 
   getUserImage() async {
-    String? baseUrl =await preferenceService.getBaseImageURL();
+    String? baseUrl = await preferenceService.getBaseImageURL();
     userImage = "${baseUrl}/${userData.image}";
     print(userImage);
     print(userImage.contains("null"));
@@ -602,7 +601,6 @@ class HomeController extends GetxController {
           await userRepository.updateOfferTypeApi(params);
       if (response.statusCode == 200) {
         homeData!.offers!.customOffer![index].isOn = value;
-
       }
       update();
     } catch (error) {
@@ -747,10 +745,12 @@ class HomeController extends GetxController {
     );
   }
 
-  showGiftBottomSheet(int giftCount, BuildContext? contextDetail) async {
+  showGiftBottomSheet(int giftCount, BuildContext? contextDetail,
+      {String? baseUrl}) async {
     PopupManager.showGiftCountPopup(contextDetail!,
         title: "Congratulations",
         btnTitle: "Check Order History",
+        baseUrl: baseUrl,
         totalGift: giftCount);
     // await GiftCountPopup(
     //   Get.context!,
