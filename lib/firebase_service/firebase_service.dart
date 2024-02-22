@@ -23,6 +23,9 @@ import "../model/chat_offline_model.dart";
 import "../screens/live_page/constant.dart";
 
 bool isLogOut = false;
+RxInt giftCountUpdate = 0.obs;
+RxString giftImageUpdate = "".obs;
+RxMap<dynamic, dynamic> callKunadliUpdated = {}.obs;
 
 class AppFirebaseService {
   AppFirebaseService._privateConstructor();
@@ -132,17 +135,32 @@ class AppFirebaseService {
             FirebaseDatabase.instance.ref("$path/notification").remove();
           }
           if (realTimeData['giftCount'] != null) {
-            sendBroadcast(BroadcastMessage(
+            giftCountUpdate(realTimeData["giftCount"]);
+            giftImageUpdate(realTimeData["giftImage"]);
+
+            sendBroadcast(
+              BroadcastMessage(
                 name: "giftCount",
-                data: {'giftCount': realTimeData["giftCount"]}));
+                data: {
+                  'giftCount': realTimeData["giftCount"],
+                  "giftImage": realTimeData["giftImage"],
+                },
+              ),
+            );
             FirebaseDatabase.instance.ref("$path/giftCount").remove();
+            FirebaseDatabase.instance.ref("$path/giftImage").remove();
           }
           if (realTimeData['callKundli'] != null) {
             Map<String, dynamic>? callKundli = Map<String, dynamic>.from(
                 realTimeData['callKundli'] as Map<Object?, Object?>);
+            print(realTimeData['callKundli']);
+            print("realTimeData['callKundli']");
+            callKunadliUpdated(realTimeData['callKundli']);
             sendBroadcast(
                 BroadcastMessage(name: "callKundli", data: callKundli));
             // FirebaseDatabase.instance.ref("$path/callKundli").remove();
+          } else {
+            callKunadliUpdated({});
           }
           if (realTimeData["deliveredMsg"] != null) {
             sendBroadcast(BroadcastMessage(
@@ -253,14 +271,12 @@ class AppFirebaseService {
                   } else {}
                 } else {}
               } else {
-                sendBroadcast(BroadcastMessage(
-                    name: "orderEnd"));
+                sendBroadcast(BroadcastMessage(name: "orderEnd"));
               }
             },
           );
         } else {
-          sendBroadcast(BroadcastMessage(
-              name: "orderEnd"));
+          sendBroadcast(BroadcastMessage(name: "orderEnd"));
         }
       },
     );

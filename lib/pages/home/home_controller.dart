@@ -63,7 +63,7 @@ class HomeController extends GetxController {
   final socket = AppSocket();
   ExpandedTileController? expandedTileController = ExpandedTileController();
   ExpandedTileController? expandedTile2Controller = ExpandedTileController();
-  UserData? userData = UserData();
+  UserData userData = UserData();
   final preferenceService = Get.find<SharedPreferenceService>();
   final UserRepository userRepository = Get.put(UserRepository());
   final HomePageRepository homePageRepository = Get.put(HomePageRepository());
@@ -72,6 +72,8 @@ class HomeController extends GetxController {
   List<Map<String, dynamic>> yourScore = [];
 
   OrderDetails? order;
+
+  String userImage = "";
 
   Rx<Loading> offerTypeLoading = Loading.initial.obs;
   Rx<Loading> sessionTypeLoading = Loading.initial.obs;
@@ -106,19 +108,37 @@ class HomeController extends GetxController {
       debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
       if (event.name == "giftCount") {
         if (int.parse(event.data!["giftCount"].toString()) > 0) {
-          showGiftBottomSheet(event.data?["giftCount"], contextDetail);
+          showGiftBottomSheet(event.data?["giftCount"], contextDetail,
+              baseUrl: preferenceService.getBaseImageURL());
         }
       }
     });
-    userData = preferenceService.getUserDetail();
-    appbarTitle.value = userData?.name ?? "Astrologer Name";
+
+    userData = preferenceService.getUserDetail()!;
+    appbarTitle.value =
+        "${userData.name.toString().capitalizeFirst} (${userData.id})";
+
+    print("${preferenceService.getBaseImageURL()}/${userData.image}");
+    print(userData.image);
+    print("userData.image");
+
     await getFilteredPerformance();
     //await getContactList();
     // fetchImportantNumbers();
     getConstantDetailsData();
+    getUserImage();
     getDashboardDetail();
     getFeedbackData();
     tarotCardData();
+  }
+
+  getUserImage() async {
+    String? baseUrl = await preferenceService.getBaseImageURL();
+    userImage = "${baseUrl}/${userData.image}";
+    print(userImage);
+    print(userImage.contains("null"));
+    print('userImage.contains("null")');
+    update();
   }
 
   fetchImportantNumbers() async {
@@ -725,10 +745,12 @@ class HomeController extends GetxController {
     );
   }
 
-  showGiftBottomSheet(int giftCount, BuildContext? contextDetail) async {
+  showGiftBottomSheet(int giftCount, BuildContext? contextDetail,
+      {String? baseUrl}) async {
     PopupManager.showGiftCountPopup(contextDetail!,
         title: "Congratulations",
         btnTitle: "Check Order History",
+        baseUrl: baseUrl,
         totalGift: giftCount);
     // await GiftCountPopup(
     //   Get.context!,
@@ -737,7 +759,7 @@ class HomeController extends GetxController {
     //   totaltGift: giftCount,
     // );
   }
-
+ 
   getDateDifference(int timestamp) {
     DateTime dtTimestamp = DateTime.fromMillisecondsSinceEpoch(timestamp);
     DateTime now = DateTime.now();

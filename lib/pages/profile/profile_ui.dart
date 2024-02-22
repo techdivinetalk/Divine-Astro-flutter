@@ -26,8 +26,6 @@ import '../../repository/user_repository.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 
 class ProfileUI extends GetView<ProfilePageController> {
-  ProfileUI({Key? key}) : super(key: key);
-
   final preference = Get.find<SharedPreferenceService>();
 
   // var homeController = Get.find<HomeController>();
@@ -39,61 +37,60 @@ class ProfileUI extends GetView<ProfilePageController> {
       backgroundColor: appColors.white,
       appBar: commonAppbar(
           title: "profile".tr, trailingWidget: const SizedBox.shrink()),
-      drawer: const SideMenuDrawer(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              GetBuilder<ProfilePageController>(
-                builder: (controller) => Container(
-                    padding: EdgeInsets.all(12.h),
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            blurRadius: 3.0,
-                            offset: const Offset(0.0, 3.0)),
-                      ],
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(20),
-                      ),
-                    ),
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+      // drawer: const SideMenuDrawer(),
+      body: ListView(
+        padding: const EdgeInsets.all(15.0),
+        children: <Widget>[
+          GetBuilder<ProfilePageController>(
+            builder: (controller) => Container(
+                padding: EdgeInsets.all(12.h),
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 3.0,
+                        offset: const Offset(0.0, 3.0)),
+                  ],
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
                         children: [
-                          Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 6,
-                                    color: appColors.guideColor,
-                                  ),
-                                  borderRadius: BorderRadius.circular(80),
-                                ),
-                                child: InkWell(
-                                    onTap: () async {
-                                      if (await PermissionHelper()
-                                          .askMediaPermission()) {
-                                        controller.updateProfileImage();
-                                      }
-                                    },
-                                    child: /*ClipRRect(
-                                        borderRadius: BorderRadius.circular(80),
-                                        child: Obx(
-                                              () =>
-                                              CachedNetworkPhoto(
-                                                url: controller.userProfileImage
-                                                    .value,
-                                                fit: BoxFit.cover,
-                                                height: 70.h,
-                                                width: 70.h,
-                                              ),
-                                        ),*/
-                                        controller
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 6,
+                                color: appColors.guideColor,
+                              ),
+                              borderRadius: BorderRadius.circular(80),
+                            ),
+                            child: InkWell(
+                                onTap: () async {
+                                  if (await PermissionHelper()
+                                      .askMediaPermission()) {
+                                    controller.updateProfileImage();
+                                  }
+                                },
+                                child: /*ClipRRect(
+                                    borderRadius: BorderRadius.circular(80),
+                                    child: Obx(
+                                          () =>
+                                          CachedNetworkPhoto(
+                                            url: controller.userProfileImage
+                                                .value,
+                                            fit: BoxFit.cover,
+                                            height: 70.h,
+                                            width: 70.h,
+                                          ),
+                                    ),*/
+                                    controller.userProfileImage
+                                                .contains("null") ||
+                                            controller
                                                 .userProfileImage.value.isEmpty
                                             ? SizedBox(
                                                 height: 70.h,
@@ -242,7 +239,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                   : const SizedBox()),
             ],
           ),
-        )));
+        )
   }
 
   Widget profileOptions() {
@@ -482,7 +479,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                           }
                         }
                       } else if (index == 3) {
-                        controller.homeController.whatsapp();
+                        controller.whatsapp();
                       } else if (item.nav != "") {
                         if (item.name == "bankDetails".tr ||
                             item.name == "uploadYourPhoto".tr) {

@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/model/order_history_model/feed_order_history.dart';
 import 'package:divine_astrologer/pages/performance/widget/date_selection_ui.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,7 @@ class OrderHistoryController extends GetxController {
   RxList<AllHistoryData> allHistoryList = <AllHistoryData>[].obs;
   RxList<CallHistoryData> callHistoryList = <CallHistoryData>[].obs;
   RxList<ChatDataList> chatHistoryList = <ChatDataList>[].obs;
-  RxList<ChatDataList> feedHistoryList = <ChatDataList>[].obs;
+  RxList<FeedBackData> feedHistoryList = <FeedBackData>[].obs;
   RxList<GiftDataList> giftHistoryList = <GiftDataList>[].obs;
   RxList<RemedySuggestedDataList> remedySuggestedHistoryList =
       <RemedySuggestedDataList>[].obs;
@@ -44,6 +45,7 @@ class OrderHistoryController extends GetxController {
   var callPageCount = 1;
   var liveGiftPageCount = 1;
   var remedyPageCount = 1;
+  var feedBackPageCount = 1;
 
   @override
   void onInit() {
@@ -182,21 +184,21 @@ class OrderHistoryController extends GetxController {
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
-      } /*else if(type == 5){
-        ChatOrderHistoryModelClass data =
-        await OrderHistoryRepository().getChatOrderHistory(params);
+      } else if(type == 5){
+        FeedBackOrder data =
+        await OrderHistoryRepository().getFeedbackChatOrderHistory(params);
         apiCalling.value = false;
-        var history = data.data;
+        var feedbackOrder = data.data;
 
-        if (history!.isNotEmpty && data.data != null) {
+        if (feedbackOrder!.isNotEmpty && data.data != null) {
           emptyMsg.value = "";
-          if (page == 1) chatHistoryList.clear();
-          chatHistoryList.addAll(history);
+          if (page == 1) feedHistoryList.clear();
+          feedHistoryList.addAll(feedbackOrder);
           // shopPageCount++;
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
-      }*/
+      }
       update();
     } catch (error) {
       apiCalling.value = false;

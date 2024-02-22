@@ -1,5 +1,7 @@
 import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
 import 'package:divine_astrologer/common/custom_get_page.dart';
+import 'package:divine_astrologer/pages/profile/profile_binding.dart';
+import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_binding.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_ui.dart';
 import 'package:divine_astrologer/screens/auth/login/login_binding.dart';
@@ -109,6 +111,7 @@ class RouteName {
   static const String otpVerificationPage = "/otpVerificationPage";
   static const String dashboard = "/dashboard";
   static const String blockedUser = "/blockedUser";
+  static const String profileUi = "/profileUi";
   static const String editProfileUI = "/editProfileUI";
   static const String orderHistory = "/orderHistory";
   static const String messageTemplate = "/messageTemplate";
@@ -196,6 +199,10 @@ class Routes {
         page: () => const BlockedUserUI(),
         name: RouteName.blockedUser,
         binding: BlockedUserBinding()),
+    GetPage(
+        page: () =>  ProfileUI(),
+        name: RouteName.profileUi,
+        binding: ProfileBinding()),
     /*// GetPage(
     //     name: RouteName.editProfileUI, page: () => const EditProfileUI(),
     // ),*/
