@@ -242,9 +242,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                   : const SizedBox()),
             ],
           ),
-        ),
-      ),
-    );
+        )));
   }
 
   Widget profileOptions() {
