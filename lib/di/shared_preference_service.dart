@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/model/message_template_response.dart';
 import 'package:divine_astrologer/model/update_bank_response.dart';
-import 'package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -68,6 +67,7 @@ class SharedPreferenceService extends GetxService {
     return prefs!.getInt(key) ?? 0;
   }
 
+
   Future saveChatAssistUnreadMessage() async {
     final SharedPreferences sharedInstance =
         await SharedPreferences.getInstance();
@@ -75,7 +75,8 @@ class SharedPreferenceService extends GetxService {
     final encodedChatAssistList =
         assistChatUnreadMessages.map((e) => jsonEncode(e)).toList();
     await sharedInstance.setStringList(
-        assistChatUnreadkey, encodedChatAssistList);
+    assistChatUnreadkey, encodedChatAssistList);
+    print("called save unread message ${encodedChatAssistList} ${assistChatUnreadMessages}");
   }
 
   Future getChatAssistUnreadMessage() async {
@@ -227,11 +228,6 @@ class SharedPreferenceService extends GetxService {
 
   Future<bool> setConstantDetails(
       ConstantDetailsModelClass constantDetails) async {
-    // Added by divine-dharam
-    final String value = constantDetails.data?.taroCard ?? "";
-    await LiveSharedPreferencesSingleton().setSingleTarotCard(value: value);
-    //
-
     return await prefs!.setString(constantData, jsonEncode(constantDetails));
   }
 

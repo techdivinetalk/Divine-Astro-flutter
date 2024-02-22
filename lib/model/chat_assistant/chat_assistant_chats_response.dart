@@ -191,9 +191,10 @@ final msgTypeValues = EnumValues({
   "8": MsgType.gift,
 });
 
-enum SeenStatus { notSent, sent, delivered, received }
+enum SeenStatus { notSent, sent, delivered, received, error }
 
 final seenStatusValues = EnumValues({
+  '-2':SeenStatus.error,
   '-1': SeenStatus.notSent,
   '0': SeenStatus.sent,
   '1': SeenStatus.delivered,

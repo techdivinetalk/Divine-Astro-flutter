@@ -240,6 +240,8 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_chatBottom.svg
   SvgGenImage get icChatBottom =>
       const SvgGenImage('assets/images/ic_chatBottom.svg');
+    SvgGenImage get queue =>
+      const SvgGenImage('assets/svg/queue.svg');
 
   /// File path: assets/images/ic_chating.svg
   SvgGenImage get icChating =>

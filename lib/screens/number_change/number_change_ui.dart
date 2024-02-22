@@ -74,7 +74,6 @@ class NumberChangeReqUI extends GetView<NumberChangeReqController> {
                                 controller.enableUpdateButton.value = false;
                               } else {
                                 if (value.length == 10) {
-                                  print("controller.text");
                                   controller.enableUpdateButton.value = true;
                                 } else {
                                   controller.enableUpdateButton.value = false;

@@ -89,37 +89,42 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                   child: Obx(
                     () => controller.loading.value
                         ? msgShimmerList()
-                        : controller.chatMessageList.isEmpty? Text('start a conversastion'):ListView.builder(
-                            itemCount: controller.chatMessageList.length,
-                            controller: controller.messageScrollController,
-                            reverse: false,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              final currentMsg = controller
-                                  .chatMessageList[index] as AssistChatData;
-                              final nextIndex =
-                                  controller.chatMessageList.length - 1 == index
-                                      ? index
-                                      : index + 1;
-                              print(
-                                  'length of chat assist list ${controller.chatMessageList.length}');
-                              print(
-                                  "chat assist msg data:${currentMsg.toJson()}");
-                              return AssistMessageView(
-                                index: index,
-                                chatMessage: currentMsg,
-                                nextMessage:
-                                    controller.chatMessageList[nextIndex],
-                                yourMessage:
-                                    currentMsg.sendBy == SendBy.astrologer,
-                                unreadMessage: controller
-                                        .unreadMessageList.isNotEmpty
-                                    ? controller.chatMessageList[index].id ==
-                                        controller.unreadMessageList.first.id
-                                    : false,
-                              );
-                            },
-                          ),
+                        : controller.chatMessageList.isEmpty
+                            ? Text('start a conversastion')
+                            : ListView.builder(
+                                itemCount: controller.chatMessageList.length,
+                                controller: controller.messageScrollController,
+                                reverse: false,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  final currentMsg = controller
+                                      .chatMessageList[index] as AssistChatData;
+                                  final nextIndex =
+                                      controller.chatMessageList.length - 1 ==
+                                              index
+                                          ? index
+                                          : index + 1;
+                                  print(
+                                      'length of chat assist list ${controller.chatMessageList.length}');
+                                  print(
+                                      "chat assist msg data:${currentMsg.toJson()}");
+                                  return AssistMessageView(
+                                    index: index,
+                                    chatMessage: currentMsg,
+                                    nextMessage:
+                                        controller.chatMessageList[nextIndex],
+                                    yourMessage:
+                                        currentMsg.sendBy == SendBy.astrologer,
+                                    unreadMessage:
+                                        controller.unreadMessageList.isNotEmpty
+                                            ? controller.chatMessageList[index]
+                                                    .id ==
+                                                controller
+                                                    .unreadMessageList.first.id
+                                            : false,
+                                  );
+                                },
+                              ),
                   ),
                 ),
               ),
@@ -246,10 +251,13 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                 SizedBox(width: 15.w),
                 GestureDetector(
                   onTap: () {
-                    controller.sendMsg(MsgType.text, {});
+                    if (controller.messageController.text.isNotEmpty) {
+                      controller.sendMsg(MsgType.text, {});
+                    }
                   },
                   child: CircleAvatar(
                     backgroundColor: appColors.guideColor,
+                    minRadius: 25,
                     child: SvgPicture.asset(
                       Assets.images.message.path,
                       color: appColors.white,
@@ -315,7 +323,7 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                         break;
                       case 3:
                         var result =
-                        await Get.toNamed(RouteName.chatAssistProductPage);
+                            await Get.toNamed(RouteName.chatAssistProductPage);
                         break;
                       case 4:
                         controller.getImage(false);

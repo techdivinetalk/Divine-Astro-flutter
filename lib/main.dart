@@ -96,9 +96,9 @@ Future<void> main() async {
             createdAt: DateTime.parse(responseMsg?["created_at"])
                 .millisecondsSinceEpoch
                 .toString(),
-            id: responseMsg["chatId"] != null && responseMsg["chatId"] != ''
-                ? int.parse(responseMsg["chatId"])
-                : null,
+            // id: responseMsg["chatId"] != null && responseMsg["chatId"] != '' && responseMsg["chatId"]=='undefined'
+            //     ? int.parse(responseMsg["chatId"])
+            //     : null,
             isSuspicious: 0,
             sendBy: SendBy.customer,
             msgType: responseMsg['msg_type'] != null
@@ -196,7 +196,7 @@ Future<void> showNotification(String title, String message, String type,
                     'Accept',
                   ),
                 ]
-              : []);
+              : type=="3"? []:[]);
   if (type == "1") {
     androidNotificationDetails = const AndroidNotificationDetails(
         "DivineCustomer", "CustomerNotification",
@@ -209,6 +209,7 @@ Future<void> showNotification(String title, String message, String type,
       NotificationDetails(android: androidNotificationDetails);
   await flutterLocalNotificationsPlugin.show(
       Random().nextInt(90000), title, message, notificationDetails,
+
       payload: json.encode(data));
 }
 
@@ -252,11 +253,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed && Platform.isAndroid) {
+    if (state == AppLifecycleState.resumed || Platform.isAndroid) {
+      print("resumed state called");
       SharedPreferenceService().getChatAssistUnreadMessage();
     }
-    if (state == AppLifecycleState.hidden &&
+    if (state == AppLifecycleState.hidden ||
         state == AppLifecycleState.inactive) {
+      print("hidden state called");
       SharedPreferenceService().saveChatAssistUnreadMessage();
     }
   }
