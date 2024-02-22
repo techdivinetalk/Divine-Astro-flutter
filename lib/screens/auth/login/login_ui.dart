@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/common/custom_widgets.dart';
+import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/screens/auth/login/true_caller_fault_widget.dart';
 import 'package:divine_astrologer/screens/auth/login/widget/country_picker.dart';
@@ -46,18 +48,70 @@ class LoginUI extends GetView<LoginController> {
                   const ImageSliderWidget(),
                   TextWithDivider(
                     text: 'Log in or Sign up',
-                    textColor: appColors.black,
+                    textColor: appColors.greyColor,
                     dividerHeight: 1.0,
                   ),
                   SizedBox(height: 20.h),
                   mobileField(),
                   SizedBox(height: 5.h),
-                  Text(
-                    "By signing up, you agree to our terms of use and privacy policy",
-                    style: AppTextStyle.textStyle10(
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
+                  Center(
+                      child: Container(
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.only(bottom: 8.h),
+                          child: Text.rich(
+                              textAlign: TextAlign.center,
+                              TextSpan(children: [
+                                WidgetSpan(
+                                  child: Text(
+                                    "By signing up, you agree to our ",
+                                    style: TextStyle(
+                                      color: appColors.textColor,
+                                      fontSize: 11.5.sp,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                                WidgetSpan(
+                                  child: GestureDetector(
+                                    behavior: HitTestBehavior.translucent,
+                                    onTap: () => Get.toNamed(
+                                        RouteName.termsCondition),
+                                    child: Text(
+                                      "terms of use",
+                                      style: TextStyle(
+                                        color: appColors.textColor,
+                                        fontSize: 11.5.sp,
+                                        fontWeight: FontWeight.w400,
+                                        decoration:
+                                        TextDecoration.underline,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                WidgetSpan(
+                                  child: Text(
+                                    " ${"and".tr} ",
+                                    style: TextStyle(
+                                      color: appColors.textColor,
+                                      fontSize: 11.5.sp,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                                WidgetSpan(
+                                    child: GestureDetector(
+                                        behavior:
+                                        HitTestBehavior.translucent,
+                                        onTap: () => Get.toNamed(
+                                            RouteName.privacyPolicy),
+                                        child: Text("privacy policy",
+                                            style: TextStyle(
+                                                color: appColors.textColor,
+                                                fontSize: 11.5.sp,
+                                                fontWeight: FontWeight.w400,
+                                                decoration: TextDecoration
+                                                    .underline))))
+                              ])))),
                   SizedBox(height: 20.h),
                   Obx(() {
                     return GestureDetector(
@@ -73,15 +127,15 @@ class LoginUI extends GetView<LoginController> {
                         height: 50.h,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: appColors.guideColor,
+                          color: appColors.red,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: !controller.isLoading.value
                             ? Text(
-                                "Send Otp",
+                                "Send OTP",
                                 style: AppTextStyle.textStyle16(
                                   fontWeight: FontWeight.w600,
-                                  fontColor: appColors.brownColour,
+                                  fontColor: appColors.white,
                                 ),
                               )
                             : CircularProgressIndicator(
@@ -90,15 +144,17 @@ class LoginUI extends GetView<LoginController> {
                     );
                   }),
                   SizedBox(height: 20.h),
-                  TextWithDivider(
+                  Visibility(
+                      visible: !controller.isLoading.value,
+                      child: TextWithDivider(
                     text: 'Or',
-                    textColor: appColors.black,
+                    textColor: appColors.greyColor,
                     dividerHeight: 1.0,
-                  ),
+                  )),
                   SizedBox(height: 20.h),
                   Obx(() {
                     return Visibility(
-                      visible: controller.showTrueCaller.value,
+                      visible: (controller.showTrueCaller.value && !controller.isLoading.value),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: SizedBox(
@@ -202,7 +258,7 @@ class LoginUI extends GetView<LoginController> {
             ],
             decoration: InputDecoration(
               counterText: '',
-              hintText: "enterRegisteredNumber".tr,
+              hintText: "Enter mobile number",
               fillColor: appColors.white,
               hintStyle:
                   AppTextStyle.textStyle16(fontColor: appColors.greyColor),
@@ -225,7 +281,7 @@ class LoginUI extends GetView<LoginController> {
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                   borderSide: BorderSide(
-                    color: appColors.guideColor,
+                    color: appColors.greyColor,
                     width: 1.0,
                   )),
               focusedBorder: OutlineInputBorder(
@@ -302,7 +358,7 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
                   child: e.key == swipeIndex
                       ? Assets.svg.pinkSlider.svg(
                           colorFilter: ColorFilter.mode(
-                              appColors.guideColor, BlendMode.srcIn))
+                              appColors.greyColor, BlendMode.srcIn))
                       : Assets.svg.blackDot.svg(),
                 ),
               )
@@ -339,9 +395,9 @@ class TextWithDivider extends StatelessWidget {
           width: 10.w,
         ),
         Center(
-          child: Text(
+          child: CustomText(
             text,
-            style: TextStyle(color: textColor),
+            fontColor: textColor,
           ),
         ),
         SizedBox(
