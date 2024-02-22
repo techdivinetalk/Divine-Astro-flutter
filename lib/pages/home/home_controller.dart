@@ -63,7 +63,7 @@ class HomeController extends GetxController {
   final socket = AppSocket();
   ExpandedTileController? expandedTileController = ExpandedTileController();
   ExpandedTileController? expandedTile2Controller = ExpandedTileController();
-  UserData? userData = UserData();
+  UserData userData = UserData();
   final preferenceService = Get.find<SharedPreferenceService>();
   final UserRepository userRepository = Get.put(UserRepository());
   final HomePageRepository homePageRepository = Get.put(HomePageRepository());
@@ -72,6 +72,8 @@ class HomeController extends GetxController {
   List<Map<String, dynamic>> yourScore = [];
 
   OrderDetails? order;
+
+  String userImage = "";
 
   Rx<Loading> offerTypeLoading = Loading.initial.obs;
   Rx<Loading> sessionTypeLoading = Loading.initial.obs;
@@ -97,6 +99,8 @@ class HomeController extends GetxController {
   List<Contact> allContacts = <Contact>[].obs;
   bool? isAllNumbersExist;
 
+
+
   @override
   void onInit() async {
     super.onInit();
@@ -110,8 +114,15 @@ class HomeController extends GetxController {
         }
       }
     });
-    userData = preferenceService.getUserDetail();
-    appbarTitle.value = userData?.name ?? "Astrologer Name";
+
+    userData = preferenceService.getUserDetail()!;
+    appbarTitle.value =
+        "${userData.name.toString().capitalizeFirst} (${userData.id})";
+    userImage = "${preferenceService.getBaseImageURL()}/${userData.image}";
+    print("${preferenceService.getBaseImageURL()}/${userData.image}");
+    print(userData.image);
+    print("userData.image");
+
     await getFilteredPerformance();
     //await getContactList();
     // fetchImportantNumbers();
@@ -581,6 +592,7 @@ class HomeController extends GetxController {
           await userRepository.updateOfferTypeApi(params);
       if (response.statusCode == 200) {
         homeData!.offers!.customOffer![index].isOn = value;
+
       }
       update();
     } catch (error) {

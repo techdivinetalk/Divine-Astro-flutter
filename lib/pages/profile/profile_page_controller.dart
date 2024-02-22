@@ -7,6 +7,7 @@ import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
+import 'package:divine_astrologer/model/constant_details_model_class.dart';
 import 'package:divine_astrologer/model/res_reply_review.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,6 +19,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/app_exception.dart';
 import '../../common/colors.dart';
@@ -36,7 +38,7 @@ class ProfilePageController extends GetxController {
 
   ProfilePageController(this.userRepository);
 
-  var homeController = Get.find<HomeController>();
+
   UserData? userData;
   GetUserProfile? userProfile;
   RxString userProfileImage = "".obs;
@@ -207,6 +209,7 @@ class ProfilePageController extends GetxController {
     userProfileImage.value = "$baseAmazonUrl/${userData?.image}";
     print(userProfileImage.value);
     print("userProfileImage.value");
+    getConstantDetailsData();
     getUserProfileDetails();
     getReviewRating();
   }
@@ -539,6 +542,41 @@ class ProfilePageController extends GetxController {
       print("Image uploaded successfully.");
     } else {
       print("Failed to upload image.");
+    }
+  }
+  ConstantDetailsModelClass? getConstantDetails;
+  getConstantDetailsData() async {
+    try {
+      var data = await userRepository.constantDetailsData();
+      getConstantDetails = data;
+      preferenceService.setConstantDetails(data);
+
+      profileDataSync.value = true;
+      //    getDashboardDetail();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+  whatsapp() async {
+
+    var contact = getConstantDetails?.data?.whatsappNo ?? '';
+    var androidUrl = "whatsapp://send?phone=$contact&text=Hi";
+    var iosUrl = "https://wa.me/$contact?text=${Uri.parse('Hi')}";
+
+    try {
+      if (Platform.isIOS) {
+        await launchUrl(Uri.parse(iosUrl));
+      } else {
+        await launchUrl(Uri.parse(androidUrl));
+      }
+    } on Exception {
+      divineSnackBar(data: 'WhatsApp is not installed.');
+      log('WhatsApp is not installed.');
     }
   }
 }
