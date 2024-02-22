@@ -7,6 +7,7 @@ import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
+import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/zego_call/zego_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
@@ -58,7 +59,7 @@ class DashboardController extends GetxController
     if (!isLogOut) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Future.delayed(const Duration(seconds: 5), () {
-        print("is logged in");
+          print("is logged in");
           appFirebaseService.readData(
               'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
         });
@@ -75,10 +76,10 @@ class DashboardController extends GetxController
     Get.find<SharedPreferenceService>()
         .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
     //
- String?   baseAmazonUrl = preference.getBaseImageURL();
+    String? baseAmazonUrl = preference.getBaseImageURL();
     userData = preference.getUserDetail();
-    userProfileImage.value =
-        userData?.image != null ? "$baseAmazonUrl/${userData?.image}" : "";
+    userImage(
+        userData?.image != null ? "$baseAmazonUrl/${userData?.image}" : "");
     print(userData?.image);
     print(userProfileImage.value);
     print("userProfileImage.value");

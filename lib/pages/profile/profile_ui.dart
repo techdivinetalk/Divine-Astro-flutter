@@ -71,7 +71,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                   border: Border.all(
                                     width: 6,
                                     color: appColors.guideColor,
-                                   ),
+                                  ),
                                   borderRadius: BorderRadius.circular(80),
                                 ),
                                 child: InkWell(
@@ -98,6 +98,14 @@ class ProfileUI extends GetView<ProfilePageController> {
                                             ? SizedBox(
                                                 height: 70.h,
                                                 width: 70.h,
+                                                child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            100.h),
+                                                    child: Image.asset(Assets
+                                                        .images
+                                                        .defaultProfile
+                                                        .path)),
                                               )
                                             : CommonImageView(
                                                 imagePath: controller
@@ -106,9 +114,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                 height: 70.h,
                                                 width: 70.h,
                                                 placeHolder: Assets
-                                                    .images
-                                                    .defaultProfile
-                                                    .path,
+                                                    .images.defaultProfile.path,
                                                 radius: BorderRadius.circular(
                                                     100.h),
                                               )),
@@ -121,21 +127,18 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                          Get.toNamed(
-                                              RouteName.editProfileUI);
+                                          Get.toNamed(RouteName.editProfileUI);
                                         },
                                         child: Row(children: [
                                           Text(
                                             'editProfile'.tr,
                                             style: AppTextStyle.textStyle10(
                                                 fontWeight: FontWeight.w500,
-                                                fontColor: appColors
-                                                    .textColor),
+                                                fontColor: appColors.textColor),
                                           ),
                                           Icon(
                                             Icons.arrow_right,
@@ -161,16 +164,16 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                 fontColor: appColors.darkBlue),
                                           ),
                                         ),
-                                       // const SizedBox(width: 5),
+                                        // const SizedBox(width: 5),
                                       ]),
-                                 /* SizedBox(height: 3.h),
+                                  /* SizedBox(height: 3.h),
                                   Text(
                                     '+91- ${controller.userData?.phoneNo ?? ""}',
                                     style: AppTextStyle.textStyle14(
                                         fontWeight: FontWeight.w400,
                                         fontColor: appColors.darkBlue),
                                   ),*/
-                                 // SizedBox(height: 3.h),
+                                  // SizedBox(height: 3.h),
                                   Row(children: [
                                     Text("${"astrologerId".tr}-",
                                         style: AppTextStyle.textStyle14(
@@ -591,7 +594,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                   //5
                   Row(
                     children: [
-                      Assets.images.icFiveStar.svg(width: 80.w,color: appColors.guideColor),
+                      Assets.images.icFiveStar
+                          .svg(width: 80.w, color: appColors.guideColor),
                       LinearPercentIndicator(
                         width: 100.w,
                         barRadius: const Radius.circular(50),
@@ -614,7 +618,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                   //4
                   Row(
                     children: [
-                      Assets.images.icFourStar.svg(width: 70.w,color: appColors.guideColor),
+                      Assets.images.icFourStar
+                          .svg(width: 70.w, color: appColors.guideColor),
                       LinearPercentIndicator(
                         width: 100.w,
                         barRadius: const Radius.circular(50),
@@ -637,7 +642,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                   //3
                   Row(
                     children: [
-                      Assets.images.icThreeStar.svg(width: 55.w,color: appColors.guideColor),
+                      Assets.images.icThreeStar
+                          .svg(width: 55.w, color: appColors.guideColor),
                       LinearPercentIndicator(
                         width: 100.w,
                         barRadius: const Radius.circular(50),
@@ -660,7 +666,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                   //2
                   Row(
                     children: [
-                      Assets.images.icTwoStar.svg(width: 35.w,color: appColors.guideColor),
+                      Assets.images.icTwoStar
+                          .svg(width: 35.w, color: appColors.guideColor),
                       LinearPercentIndicator(
                         width: 100.w,
                         barRadius: const Radius.circular(50),
@@ -683,7 +690,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                   //1
                   Row(
                     children: [
-                      Assets.images.icOneStar.svg(width: 15.w,color: appColors.guideColor),
+                      Assets.images.icOneStar
+                          .svg(width: 15.w, color: appColors.guideColor),
                       LinearPercentIndicator(
                         width: 100.w,
                         barRadius: const Radius.circular(50),

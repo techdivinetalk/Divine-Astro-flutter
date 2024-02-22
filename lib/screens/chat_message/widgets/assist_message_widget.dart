@@ -67,8 +67,8 @@ class AssistMessageView extends StatelessWidget {
     final nextMsgDate = DateTime.fromMillisecondsSinceEpoch(
         int.parse(nextMessage.createdAt ?? '0'));
     final differenceOfDays = nextMsgDate.day - currentMsgDate.day;
-    final isToday = (DateTime.now().day - currentMsgDate.day) == 0;
-    final isYesterday = (DateTime.now().day - currentMsgDate.day) == 1;
+    final isToday = (DateTime.now().day - currentMsgDate.day) == 1;
+    final isYesterday = (DateTime.now().day - currentMsgDate.day) == 2;
 
     Widget messageWidget;
     switch (chatMessage.msgType) {

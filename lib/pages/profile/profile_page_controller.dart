@@ -29,6 +29,7 @@ import '../../model/res_review_ratings.dart';
 import '../../model/res_user_profile.dart';
 import '../../repository/user_repository.dart';
 import '../../screens/dashboard/dashboard_controller.dart';
+import '../../screens/live_page/constant.dart';
 import '../home/home_controller.dart';
 
 class ProfilePageController extends GetxController {
@@ -43,7 +44,7 @@ class ProfilePageController extends GetxController {
   ResReviewRatings? ratingsData;
   ResReviewReply? reviewReply;
   var preference = Get.find<SharedPreferenceService>();
-  var dashboardController = Get.find<DashboardController>();
+  // var dashboardController = Get.find<DashboardController>();
   RxBool profileDataSync = false.obs;
   RxBool reviewDataSync = false.obs;
   File? image;
@@ -494,7 +495,8 @@ class ProfilePageController extends GetxController {
       region: dataString[2],
     );
     if (response != null) {
-      dashboardController.userProfileImage.value = response;
+      // dashboardController.userProfileImage.value = response;
+      userImage(response??'');
       userProfileImage.value = response;
       userData?.image = response;
       preference.setUserDetail(userData!);
