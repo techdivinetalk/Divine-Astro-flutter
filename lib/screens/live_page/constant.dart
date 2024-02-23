@@ -18,6 +18,9 @@ const yourAppSign =
 
 const yourServerSecret = '89ceddc6c59909af326ddb7209cb1c16';
 RxList assistChatNewMsg = [].obs;
+
+RxString userImage = ''.obs;
+
 RxList<AssistChatData> assistChatUnreadMessages = <AssistChatData>[].obs;
 
 const userChatData = "userChatData";

@@ -39,6 +39,17 @@ class ApiProvider {
   final int successResponse = 200;
   String _token = "";
 
+  //
+  final String generateOrderAPI = "wallet/recharge";
+  final String getPooja = "getPooja";
+  final String getBookedPooja = "getBookedPooja";
+  final String getSinglePooja = "getSinglPooja";
+  final String getPoojaAddOns = "addOns";
+  final String getUserAddressForPooja = "getUserAddress";
+  final String addUserAddressForPooja = "saveUserAddress";
+  final String updateUserAddressForPooja = "editUserAddress";
+  final String deleteUserAddressForPooja = "deleteUserAddress";
+
   final String loginUrl = "astroLogin";
   final String viewTrainingVideo = "viewTrainingVideo";
   final String saveAstrologerExperience = "saveAstrologerExperience";
@@ -51,6 +62,7 @@ class ApiProvider {
   final String getProductListUrl = "getProductList";
   final String getProductDetailsUrl = "getProductDetails";
   final String saveRemediesUrl = "saveRemedies";
+  final String saveRemediesChatAssistUrl = "saveRemediesForChatAssist";
   final String constantDetails = "constantDetails";
   final String getOrderHistoryUrl = "getOrderHistory";
   final String reviewReplyUrl = "reviewReply";
@@ -144,6 +156,9 @@ class ApiProvider {
   final String sendChatAssistMessage = "send-chat-assist-message";
   final String listenChatAssistMessage = "listen-chat-assist-message";
   final String chatAssistMessageSent = "chat-assist-message-sent";
+  final String startAstroCustChatAssist = "start-astro-cust-chatAssist";
+  final String astrologerJoinedChatAssist = "astro-joined-chatAssist";
+  final String userJoinedChatAssist = "user-joined-chatAssist";
 
   // Added By: divine-dharam
   final String joinLive = "join-live";
@@ -361,8 +376,12 @@ class ApiProvider {
       log('body: $body');
       log("headers: $headers");
       var response = await http
-          .post(Uri.parse(endPoint + url),
-              headers: headers, body: body, encoding: encoding,)
+          .post(
+        Uri.parse(endPoint + url),
+        headers: headers,
+        body: body,
+        encoding: encoding,
+      )
           .timeout(const Duration(seconds: 15), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);

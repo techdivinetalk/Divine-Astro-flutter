@@ -23,7 +23,9 @@ import "../model/chat_offline_model.dart";
 import "../screens/live_page/constant.dart";
 
 bool isLogOut = false;
-Rx<dynamic> tempVar = "".obs;
+RxInt giftCountUpdate = 0.obs;
+RxString giftImageUpdate = "".obs;
+RxMap<dynamic, dynamic> callKunadliUpdated = {}.obs;
 
 class AppFirebaseService {
   AppFirebaseService._privateConstructor();
@@ -40,11 +42,11 @@ class AppFirebaseService {
   final appSocket = AppSocket();
   var openChatUserId = "";
   RxMap<String, dynamic> orderData = <String, dynamic>{}.obs;
-  final DatabaseReference _database = FirebaseDatabase.instance.ref();
+  final DatabaseReference database = FirebaseDatabase.instance.ref();
 
   Future<void> writeData(String path, Map<String, dynamic> data) async {
     try {
-      await _database.child(path).update(data);
+      await database.child(path).update(data);
     } catch (e) {
       debugPrint("Error writing data to the database: $e");
     }
@@ -58,7 +60,7 @@ class AppFirebaseService {
       var chatMessages = <ChatMessage>[].obs;
       var databaseMessage = ChatMessagesOffline().obs;
       await hiveServices.initialize();
-      _database.child(path).onValue.listen((event) async {
+      database.child(path).onValue.listen((event) async {
         debugPrint("real time $path ---> ${event.snapshot.value}");
         if (preferenceService.getToken() == null ||
             preferenceService.getToken() == "") {
@@ -133,20 +135,32 @@ class AppFirebaseService {
             FirebaseDatabase.instance.ref("$path/notification").remove();
           }
           if (realTimeData['giftCount'] != null) {
-            
-            tempVar(realTimeData['giftCount']);
+            giftCountUpdate(realTimeData["giftCount"]);
+            giftImageUpdate(realTimeData["giftImage"]);
 
-            sendBroadcast(BroadcastMessage(
+            sendBroadcast(
+              BroadcastMessage(
                 name: "giftCount",
-                data: {'giftCount': realTimeData["giftCount"]}));
+                data: {
+                  'giftCount': realTimeData["giftCount"],
+                  "giftImage": realTimeData["giftImage"],
+                },
+              ),
+            );
             FirebaseDatabase.instance.ref("$path/giftCount").remove();
+            FirebaseDatabase.instance.ref("$path/giftImage").remove();
           }
           if (realTimeData['callKundli'] != null) {
             Map<String, dynamic>? callKundli = Map<String, dynamic>.from(
                 realTimeData['callKundli'] as Map<Object?, Object?>);
+            print(realTimeData['callKundli']);
+            print("realTimeData['callKundli']");
+            callKunadliUpdated(realTimeData['callKundli']);
             sendBroadcast(
                 BroadcastMessage(name: "callKundli", data: callKundli));
             // FirebaseDatabase.instance.ref("$path/callKundli").remove();
+          } else {
+            callKunadliUpdated({});
           }
           if (realTimeData["deliveredMsg"] != null) {
             sendBroadcast(BroadcastMessage(
@@ -223,7 +237,7 @@ class AppFirebaseService {
     watcher.nameStream.listen(
       (value) {
         if (value != "") {
-          _database.child("order/$value").onValue.listen(
+          database.child("order/$value").onValue.listen(
             (DatabaseEvent event) async {
               final DataSnapshot dataSnapshot = event.snapshot;
               if (dataSnapshot.exists) {
@@ -257,14 +271,12 @@ class AppFirebaseService {
                   } else {}
                 } else {}
               } else {
-                sendBroadcast(BroadcastMessage(
-                    name: "orderEnd"));
+                sendBroadcast(BroadcastMessage(name: "orderEnd"));
               }
             },
           );
         } else {
-          sendBroadcast(BroadcastMessage(
-              name: "orderEnd"));
+          sendBroadcast(BroadcastMessage(name: "orderEnd"));
         }
       },
     );
@@ -302,7 +314,7 @@ class AppFirebaseService {
     if (isAccepted) {
       bool value = await AppPermissionService.instance.hasAllPermissions();
       String path = "order/${valueMap['orderId']}";
-      await AppFirebaseService()._database.child(path).update(
+      await AppFirebaseService().database.child(path).update(
         <String, dynamic>{
           "status": "1",
           "astrologer_permission": value,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
@@ -7,6 +8,7 @@ import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/common/switch_component.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/home_page_model_class.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
@@ -18,6 +20,7 @@ import 'package:divine_astrologer/screens/order_feedback/widget/feedback_card_wi
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/load_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
@@ -32,6 +35,7 @@ import '../../common/common_bottomsheet.dart';
 import '../../model/feedback_response.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'home_controller.dart';
+import 'widgets/common_info_sheet.dart';
 
 class HomeUI extends GetView<HomeController> {
   const HomeUI({Key? key}) : super(key: key);
@@ -100,9 +104,8 @@ class HomeUI extends GetView<HomeController> {
                           width: 24.h,
                         )
                       : CommonImageView(
-                          imagePath:
-                              controller.userImage,
-                          fit: BoxFit.cover, 
+                          imagePath: controller.userImage,
+                          fit: BoxFit.cover,
                           height: 24.h,
                           width: 24.h,
                           placeHolder: Assets.images.defaultProfile.path,
@@ -124,6 +127,7 @@ class HomeUI extends GetView<HomeController> {
           ),
           body: GetBuilder<HomeController>(
             init: HomeController(),
+            assignId: true,
             builder: (controller) {
               if (controller.loading == Loading.loaded) {
                 return LayoutBuilder(builder: (context, constraints) {
@@ -403,7 +407,8 @@ class HomeUI extends GetView<HomeController> {
                           // SizedBox(height: 10.h),
                           // noticeBoardWidget(),
                           SizedBox(height: 10.h),
-                          viewKundliWidget(),
+                          // viewKundliWidget(),
+                          viewKundliWidgetUpdated(),
                           SizedBox(height: 10.h),
                           InkWell(
                             onTap: () async {
@@ -572,6 +577,153 @@ class HomeUI extends GetView<HomeController> {
         );
       },
     );
+  }
+
+  Widget viewKundliWidgetUpdated() {
+    return Obx(() {
+      var data = callKunadliUpdated.value;
+      print(data);
+      print("datadatadatadata");
+      return !mapEquals(data, {})
+          ? Container(
+              width: ScreenUtil().screenWidth,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: appColors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 3.0,
+                    offset: const Offset(0, 3.0),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Order Id : ${data?["orderId"]}',
+                          style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          '23 June 23, 02:46 PM',
+                          style: AppTextStyle.textStyle12(
+                            fontWeight: FontWeight.w400,
+                            fontColor: appColors.darkBlue.withOpacity(.5),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'On-Going CALL',
+                      style:
+                          AppTextStyle.textStyle12(fontWeight: FontWeight.w400),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'with ${data?["userName"]}(${data?["userId"]}) for 00:04:32 ',
+                      style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.darkBlue.withOpacity(.5),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Gender: ${data?["gender"]}',
+                      style:
+                          AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'DOB: ${data?["dob"]}',
+                      style:
+                          AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'TOB: ${data?["tob"]}',
+                      style:
+                          AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'POB: ${data?["pob"]}',
+                      style:
+                          AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Marital Status: ${data?["marital"]}',
+                                style: AppTextStyle.textStyle10(
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Problem Area: ${data?["problem"]}',
+                                maxLines: 1,
+                                style: AppTextStyle.textStyle10(
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            DateTime time =
+                                DateFormat('d MMMM yyyy').parse(data?["dob"]);
+                            print(data);
+                            print("datadatadatadatadata");
+
+                            Get.toNamed(RouteName.kundliDetail, arguments: {
+                              "kundli_id": data?["kundli_id"],
+                              "from_kundli": true,
+                              "birth_place": data?["pob"],
+                              "gender": data?["gender"],
+                              "name": data?["userName"],
+                            });
+                          },
+                          child: Container(
+                            height: 54.h,
+                            decoration: BoxDecoration(
+                              color: appColors.guideColor,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(30)),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 8),
+                            // alignment: Alignment.center,
+                            child: Center(
+                              child: Text(
+                                "View Kundali",
+                                style: AppTextStyle.textStyle14(
+                                    fontColor: appColors.textColor,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            )
+          : SizedBox();
+    });
   }
 
   Widget viewKundliWidget() {
@@ -772,7 +924,10 @@ class HomeUI extends GetView<HomeController> {
                         ),
                         GestureDetector(
                             onTap: () {
-                              Fluttertoast.showToast(msg: "No info for now!");
+                              Get.bottomSheet(CommonInfoSheet(
+                                title: "noticeBoard".tr,
+                                subTitle: "noticeBoardDes".tr,
+                              ));
                             },
                             child: Assets.images.icInfo
                                 .svg(height: 18.h, width: 18.h)),
@@ -885,6 +1040,7 @@ class HomeUI extends GetView<HomeController> {
                 ),
               ],
             ),
+            SizedBox(width: 20.h),
             Column(
               children: [
                 Text(
@@ -935,7 +1091,10 @@ class HomeUI extends GetView<HomeController> {
                       ),
                       GestureDetector(
                           onTap: () {
-                            Fluttertoast.showToast(msg: "No info for now!");
+                            Get.bottomSheet(CommonInfoSheet(
+                              title: "nextOnlineTime".tr,
+                              subTitle: "nextOnlineTimeDes".tr,
+                            ));
                           },
                           child: Assets.images.icInfo
                               .svg(height: 16.h, width: 16.h)),
@@ -1135,97 +1294,100 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget orderOfferWidget() {
-    return Container(
-      margin: EdgeInsets.only(top: 10.h),
-      padding: EdgeInsets.all(16.h),
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 1.0,
-              offset: const Offset(0.0, 3.0)),
-        ],
-        color: appColors.white,
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Order Offers",
-                style: AppTextStyle.textStyle12(
-                  fontWeight: FontWeight.w500,
-                  fontColor: appColors.darkBlue,
-                ),
-              ),
-              Text(
-                "status".tr,
-                style: AppTextStyle.textStyle12(
-                  fontWeight: FontWeight.w500,
-                  fontColor: appColors.darkBlue,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 10.h),
-          ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: controller.homeData?.offers?.orderOffer?.length ?? 0,
-            separatorBuilder: (context, _) => SizedBox(height: 10.h),
-            itemBuilder: (context, index) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Text(
-                        "${controller.homeData?.offers?.orderOffer?[index].offerName}"
-                            .toUpperCase(),
-                        style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w700,
-                        ),
+    return controller.homeData!.offers!.orderOffer!.isNotEmpty
+        ? Container(
+            margin: EdgeInsets.only(top: 10.h),
+            padding: EdgeInsets.all(16.h),
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 1.0,
+                    offset: const Offset(0.0, 3.0)),
+              ],
+              color: appColors.white,
+              borderRadius: const BorderRadius.all(Radius.circular(20)),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Order Offers",
+                      style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.w500,
+                        fontColor: appColors.darkBlue,
                       ),
-                      if ((controller.homeData?.offers?.orderOffer?[index]
-                                  .callRate ??
-                              0) >
-                          0)
-                        CustomText(
-                          " (₹${controller.homeData?.offers?.orderOffer?[index].callRate}/min)"
-                              .toUpperCase(),
-                          fontSize: 10.sp,
-                        ),
-                    ],
-                  ),
-                  Obx(
-                    () => SwitchWidget(
-                      onTap: () {
-                        if (controller.offerTypeLoading.value !=
-                            Loading.loading) {
-                          controller.orderOfferSwitch[index] =
-                              !controller.orderOfferSwitch[index];
-                        }
-                        // controller.updateOfferType(
-                        //   index: index,
-                        //   offerId: controller.homeData?.offers?.orderOffer?[index].id ?? 0,
-                        //   offerType: 1,
-                        //   value: !controller.orderOfferSwitch[index],
-                        // );
-                      },
-                      switchValue: controller.orderOfferSwitch[index],
                     ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ],
-      ),
-    );
+                    Text(
+                      "status".tr,
+                      style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.w500,
+                        fontColor: appColors.darkBlue,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10.h),
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount:
+                      controller.homeData?.offers?.orderOffer?.length ?? 0,
+                  separatorBuilder: (context, _) => SizedBox(height: 10.h),
+                  itemBuilder: (context, index) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Text(
+                              "${controller.homeData?.offers?.orderOffer?[index].offerName}"
+                                  .toUpperCase(),
+                              style: AppTextStyle.textStyle12(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            if ((controller.homeData?.offers?.orderOffer?[index]
+                                        .callRate ??
+                                    0) >
+                                0)
+                              CustomText(
+                                " (₹${controller.homeData?.offers?.orderOffer?[index].callRate}/min)"
+                                    .toUpperCase(),
+                                fontSize: 10.sp,
+                              ),
+                          ],
+                        ),
+                        Obx(
+                          () => SwitchWidget(
+                            onTap: () {
+                              if (controller.offerTypeLoading.value !=
+                                  Loading.loading) {
+                                controller.orderOfferSwitch[index] =
+                                    !controller.orderOfferSwitch[index];
+                              }
+                              // controller.updateOfferType(
+                              //   index: index,
+                              //   offerId: controller.homeData?.offers?.orderOffer?[index].id ?? 0,
+                              //   offerType: 1,
+                              //   value: !controller.orderOfferSwitch[index],
+                              // );
+                            },
+                            switchValue: controller.orderOfferSwitch[index],
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
+          )
+        : SizedBox();
   }
 
   Widget customerOfferWidget(BuildContext context) {
@@ -1580,7 +1742,10 @@ class HomeUI extends GetView<HomeController> {
                 ),
                 GestureDetector(
                     onTap: () {
-                      Fluttertoast.showToast(msg: "No info for now!");
+                      Get.bottomSheet(CommonInfoSheet(
+                        title: "trainingVideos".tr,
+                        subTitle: "trainingVideoDes".tr,
+                      ));
                     },
                     child: Assets.images.icInfo.svg(height: 16.h, width: 16.h)),
               ],

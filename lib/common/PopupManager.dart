@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,12 @@ class PopupManager {
   static bool isPopupOpen = false;
 
   static Future<void> showGiftCountPopup(BuildContext context,
-      {String? title, String? btnTitle, int? totalGift}) async {
+      {String? title,
+      String? btnTitle,
+      int? totalGift,
+      String? baseUrl}) async {
+    print("${baseUrl}/${giftImageUpdate.value}");
+    print("baseUrlgiftImageUpdate.value");
     if (isPopupOpen) {
       return;
     }
@@ -63,15 +69,24 @@ class PopupManager {
                         fontColor: appColors.textColor),
                   ),
                 SizedBox(height: 10.h),
+                // Text(
+                //   "$totalGift Gift${totalGift! > 1 ? 's' : ''} Received",
+                //   style: AppTextStyle.textStyle14( fontColor: appColors.black),
+                // ),
                 Obx(() {
                   return Text(
-                    // "$totalGift Gift${totalGift! > 1 ? 's' : ''} Received",
-                    tempVar.value.toString(),
+                    "${giftCountUpdate.value} Gift${giftCountUpdate.value > 1 ? 's' : ''} Received",
                     style: AppTextStyle.textStyle14(fontColor: appColors.black),
                   );
                 }),
                 SizedBox(height: 16.h),
-                Image.asset("assets/images/bg_heart.png"),
+                Obx(() {
+                  return CommonImageView(
+                    imagePath: "${baseUrl}/${giftImageUpdate.value}",
+                    height: 70.h,
+                    width: 70.h,
+                  );
+                }),
                 const SizedBox(height: 20),
                 if (btnTitle != null)
                   GestureDetector(

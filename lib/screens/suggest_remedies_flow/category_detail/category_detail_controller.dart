@@ -15,20 +15,35 @@ class CategoryDetailController extends GetxController {
   final ShopRepository shopRepository;
   CategoryDetailController(this.shopRepository);
   UserData? userData;
-  SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
+  SharedPreferenceService preferenceService =
+      Get.find<SharedPreferenceService>();
   Products? productDetail;
   SaveRemediesResponse? saveRemediesResponse;
   RxBool productListSync = false.obs;
   RxBool shopDataSync = false.obs;
   int? productId;
+  int? customerId;
   int? orderId;
+  RxBool isChatAssist = false.obs;
+  RxBool isSentMessage = false.obs;
   int? shopId;
   @override
   void onInit() {
     super.onInit();
     if (Get.arguments != null) {
-      productId = Get.arguments["productId"];
-      orderId = Get.arguments["orderId"];
+      print("Get.arguments value ${Get.arguments}");
+      productId = int.parse( Get.arguments["productId"].toString());
+      customerId = int.parse( Get.arguments["customerId"].toString());
+      isSentMessage( Get.arguments["isSentMessage"]);
+      isSentMessage.value
+          ? null
+          : isChatAssist(Get.arguments["isChatAssist"] ?? false);
+      isSentMessage.value
+          ? null
+          : isChatAssist.value
+              ? null
+              : orderId = Get.arguments["orderId"];
+
       if (productId != null) {
         getProductDetails();
       }
@@ -54,12 +69,45 @@ class CategoryDetailController extends GetxController {
   }
 
   suggestRemedy() async {
-    Map<String, dynamic> params = {"product_id": productId, "shop_id": shopId, "order_id": orderId};
+    Map<String, dynamic> params = {
+      "product_id": productId,
+      "shop_id": shopId,
+      "order_id": orderId
+    };
     try {
       var response = await shopRepository.saveRemedies(params);
       saveRemediesResponse = response;
-      Get.offNamedUntil(RouteName.orderHistory, ModalRoute.withName(RouteName.dashboard));
+      Get.offNamedUntil(
+          RouteName.orderHistory, ModalRoute.withName(RouteName.dashboard));
       shopDataSync.value = true;
+    } catch (error) {
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  saveRemedyForChatAssist() async {
+    Map<String, dynamic> params = {
+      "product_id": productId,
+      "shop_id": shopId,
+      "customer_id": customerId
+    };
+    print('save remedy called $params}');
+    try {
+      var response = await shopRepository.saveRemediesForChatAssist(params);
+      saveRemediesResponse = response;
+      // Get.offNamedUntil(RouteName.orderHistory, ModalRoute.withName(RouteName.dashboard));
+      shopDataSync.value = true;
+      Get.back();
+      Get.back();
+      Get.back();
+      Get.back(result: {
+        'saveRemedies': saveRemediesResponse,
+        'product_detail': productDetail
+      });
     } catch (error) {
       if (error is AppException) {
         error.onException();

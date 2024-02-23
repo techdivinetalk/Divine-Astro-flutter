@@ -7,6 +7,6 @@ class ChatMessageBinding extends Bindings {
   @override
   void dependencies() {
     Get.put(ChatMessageController(
-        Get.put(KundliRepository()), Get.put(ChatRepository())));
+        Get.put(KundliRepository()), Get.put(ChatRepository())),permanent: true);
   }
 }

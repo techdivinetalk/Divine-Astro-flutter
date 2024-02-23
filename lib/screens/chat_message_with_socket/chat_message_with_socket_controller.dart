@@ -75,7 +75,7 @@ class ChatMessageWithSocketController extends GetxController
   bool sendReadMessageStatus = false;
   RxBool isEmojiShowing = false.obs;
   Rx<String> showTalkTime = "".obs;
-
+  Rx<String> extraTalkTime = "".obs;
   // FocusNode msgFocus = FocusNode();
   RxInt unreadMessageIndex = 0.obs;
   RxBool scrollToBottom = false.obs;
@@ -252,7 +252,28 @@ class ChatMessageWithSocketController extends GetxController
       divineSnackBar(data: error.toString(), color: appColors.redColor);
     }
   }
-
+  Duration _timeLeft = Duration(minutes: 1); // Start from 1 minute
+  late Timer extraTimer;
+  void startExtraTimer() {
+    final endTime = DateTime.now().add(_timeLeft);
+    extraTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      final currentTime = DateTime.now();
+      final difference = endTime.difference(currentTime);
+      if (difference.isNegative) {
+        extraTimer.cancel();
+          _timeLeft = Duration.zero;
+        FirebaseDatabase.instance
+            .ref()
+            .child("order/${AppFirebaseService().orderData.value["orderId"].toString()}/status")
+            .set("5");
+      } else {
+           _timeLeft = difference;
+           extraTalkTime.value = "${_timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
+               "${_timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
+           print("time Left ${extraTalkTime.value}");
+      }
+    });
+  }
   void talkTimeStartTimer(int futureTimeInEpochMillis) {
     DateTime dateTime =
         DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
@@ -263,25 +284,10 @@ class ChatMessageWithSocketController extends GetxController
     chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
       timeDifference = dateTime.difference(DateTime.now());
       if (timeDifference.isNegative || timeDifference.inSeconds == 0) {
-        if (timeDifference.inSeconds == -60) {
-          chatTimer?.cancel();
-          final ReqEndChat response = await ChatRepository().endChat(
-              ReqCommonChat(
-                      orderId: AppFirebaseService().orderData.value["orderId"],
-                      queueId: AppFirebaseService().orderData.value["queue_id"])
-                  .toJson());
-          if (response.statusCode == 200) {
-            divineSnackBar(
-                data: "Chat ended.", color: appColors.guideColor);
-            Get.back();
-          }
-        }
-        if (timeDifference.inSeconds == 0) {
+     //   if (timeDifference.inSeconds == 0) {
           await callHangup();
-        }
-        showTalkTime.value = "${-60 + timeDifference.inSeconds} extra time";
-        print(timeDifference.inSeconds);
-        print('Countdown finished');
+       // }
+        chatTimer?.cancel();
       } else {
         showTalkTime.value =
             "${timeDifference.inHours.toString().padLeft(2, '0')}:"
@@ -956,6 +962,7 @@ class ChatMessageWithSocketController extends GetxController
     if (p0["status"] == null || p0["status"] == "4") {
       showTalkTime.value = "-1";
       chatTimer?.cancel();
+      startExtraTimer();
       return;
     }
     if (p0["status"] == null || p0["status"] == "5") {

@@ -83,29 +83,40 @@ Future<void> main() async {
       print('Message data:- ${MiddleWare.instance.currentPage}');
       print("chat assist realtime notification with data ${message.data}");
       if (MiddleWare.instance.currentPage == RouteName.chatMessageUI) {
-        assistChatNewMsg.add(message.data);
+        print("inside page for realtime notification");
+        assistChatNewMsg([...assistChatNewMsg, message.data]);
+        assistChatNewMsg.refresh();
         // sendBroadcast(
         //     BroadcastMessage(name: "chatAssist", data: {'msg': message.data}));
       } else {
-        showNotification(message.data["title"], message.data["message"],
-            message.data['type'], message.data);
-        final responseMsg = message.data;
-        assistChatNewMsg.add(AssistChatData(
-            message: responseMsg["message"],
-            astrologerId: int.parse(responseMsg?["sender_id"].toString() ?? ''),
-            createdAt: DateTime.parse(responseMsg?["created_at"])
-                .millisecondsSinceEpoch
-                .toString(),
-            // id: responseMsg["chatId"] != null && responseMsg["chatId"] != '' && responseMsg["chatId"]=='undefined'
-            //     ? int.parse(responseMsg["chatId"])
-            //     : null,
-            isSuspicious: 0,
-            sendBy: SendBy.customer,
-            msgType: responseMsg['msg_type'] != null
-                ? msgTypeValues.map[responseMsg["msg_type"]]
-                : MsgType.text,
-            seenStatus: SeenStatus.received,
-            customerId: int.parse(responseMsg["sender_id"] ?? 0)));
+        switch (message.data['msg_type']) {
+          case "0":
+            showNotification(message.data["title"], message.data["message"],
+                message.data['type'], message.data);
+            break;
+          case "1":
+            showNotification(message.data["title"], 'sendNotificationImage'.tr,
+                message.data['type'], message.data);
+            break;
+          case "2":
+            showNotification(message.data["title"], 'sendNotificationRemedy'.tr,
+                message.data['type'], message.data);
+            break;
+          case "3":
+            showNotification(
+                message.data["title"],
+                'sendNotificationProduct'.tr,
+                message.data['type'],
+                message.data);
+            break;
+          case "8":
+            showNotification(
+                message.data["title"],
+                'sendNotificationGift'.tr,
+                message.data['type'],
+                message.data);
+            break;
+        }
       }
     } else {
       showNotification(message.data["title"], message.data["message"],
@@ -196,7 +207,7 @@ Future<void> showNotification(String title, String message, String type,
                     'Accept',
                   ),
                 ]
-              : type=="3"? []:[]);
+              :[]);
   if (type == "1") {
     androidNotificationDetails = const AndroidNotificationDetails(
         "DivineCustomer", "CustomerNotification",
