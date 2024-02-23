@@ -252,9 +252,10 @@ class ChatMessageWithSocketController extends GetxController
       divineSnackBar(data: error.toString(), color: appColors.redColor);
     }
   }
-  Duration _timeLeft = Duration(minutes: 1); // Start from 1 minute
-  late Timer extraTimer;
+
   void startExtraTimer() {
+    Duration _timeLeft = Duration(minutes: 1); // Start from 1 minute
+    late Timer extraTimer;
     final endTime = DateTime.now().add(_timeLeft);
     extraTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       final currentTime = DateTime.now();
