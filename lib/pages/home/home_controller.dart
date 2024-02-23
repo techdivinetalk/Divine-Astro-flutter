@@ -603,7 +603,7 @@ class HomeController extends GetxController {
         homeData!.offers!.customOffer![index].isOn = value;
       }
       update();
-    } catch (error) {
+    } catch (error) { 
       debugPrint("updateOfferType $error");
       if (error is AppException) {
         error.onException();
