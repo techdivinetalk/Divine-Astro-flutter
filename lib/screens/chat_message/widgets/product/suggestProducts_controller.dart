@@ -50,6 +50,7 @@ class SuggestProductController extends GetxController {
       // }
       if (data.data!.shops != null && data.data!.shops!.isNotEmpty) {
         shopList.addAll(data.data!.shops as Iterable<shop.Shop>);
+        shopList.removeAt(0);
         log("Shop-->${jsonEncode(data.data)}");
       }
     } catch (error) {

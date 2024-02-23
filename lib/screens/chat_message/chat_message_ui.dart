@@ -95,6 +95,7 @@ controller.scrollToBottomFunc();
                     //     ? int.parse(responseMsg["chatId"])
                     //     : null,
                     isSuspicious: 0,
+                    productId: responseMsg['productId'].toString(),
                     sendBy: SendBy.customer,
                     msgType: responseMsg["msg_type"] != null
                         ? msgTypeValues.map[responseMsg["msg_type"]]

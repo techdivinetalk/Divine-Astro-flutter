@@ -353,7 +353,7 @@ class AssistMessageView extends StatelessWidget {
       case SeenStatus.delivered:
         return Assets.images.icDoubleTick.svg(color: appColors.grey);
       case SeenStatus.received:
-        return Assets.images.icDoubleTick.svg();
+        return Assets.images.icDoubleTick.svg(color: appColors.grey);
       default:
         return const SizedBox();
     }
@@ -440,7 +440,7 @@ class AssistMessageView extends StatelessWidget {
         print("data from page ${chatMessage.productId} ${chatMessage.customerId}");
         Get.toNamed(RouteName.categoryDetail,
             arguments: {
-              "productId": chatMessage.productId,
+              "productId": chatMessage.productId.toString(),
               "isSentMessage": true,
               "customerId":chatMessage.customerId,
             });
