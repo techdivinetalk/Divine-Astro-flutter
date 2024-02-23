@@ -35,6 +35,7 @@ import '../../common/common_bottomsheet.dart';
 import '../../model/feedback_response.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'home_controller.dart';
+import 'widgets/common_info_sheet.dart';
 
 class HomeUI extends GetView<HomeController> {
   const HomeUI({Key? key}) : super(key: key);
@@ -923,7 +924,10 @@ class HomeUI extends GetView<HomeController> {
                         ),
                         GestureDetector(
                             onTap: () {
-                              Fluttertoast.showToast(msg: "No info for now!");
+                              Get.bottomSheet(CommonInfoSheet(
+                                title: "noticeBoard".tr,
+                                subTitle: "noticeBoardDes".tr,
+                              ));
                             },
                             child: Assets.images.icInfo
                                 .svg(height: 18.h, width: 18.h)),
@@ -1087,7 +1091,10 @@ class HomeUI extends GetView<HomeController> {
                       ),
                       GestureDetector(
                           onTap: () {
-                            Fluttertoast.showToast(msg: "No info for now!");
+                            Get.bottomSheet(CommonInfoSheet(
+                              title: "nextOnlineTime".tr,
+                              subTitle: "nextOnlineTimeDes".tr,
+                            ));
                           },
                           child: Assets.images.icInfo
                               .svg(height: 16.h, width: 16.h)),
@@ -1735,7 +1742,10 @@ class HomeUI extends GetView<HomeController> {
                 ),
                 GestureDetector(
                     onTap: () {
-                      Fluttertoast.showToast(msg: "No info for now!");
+                      Get.bottomSheet(CommonInfoSheet(
+                        title: "trainingVideos".tr,
+                        subTitle: "trainingVideoDes".tr,
+                      ));
                     },
                     child: Assets.images.icInfo.svg(height: 16.h, width: 16.h)),
               ],

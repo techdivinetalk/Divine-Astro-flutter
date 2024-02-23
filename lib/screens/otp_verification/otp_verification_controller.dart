@@ -118,15 +118,15 @@ class OtpVerificationController extends GetxController {
 
   Future<void> astroLogin() async {
     update();
-    print("UserStatus login api ${await FirebaseMessaging.instance.getToken()}");
+    print(
+        "UserStatus login api ${await FirebaseMessaging.instance.getToken()}");
     Map<String, dynamic> params = {
       "mobile_no": number.value,
       "device_token": deviceToken ?? await FirebaseMessaging.instance.getToken()
     };
     try {
       ResLogin data = await userRepository.userLogin(params);
-      print(data.data!.image);
-      print("datadatadatadata");
+
       await updateLoginDataInFirebase(data);
     } catch (error) {
       debugPrint("error $error");

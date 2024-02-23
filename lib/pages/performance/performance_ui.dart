@@ -3,6 +3,8 @@ import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/common/toolInfo_bottomsheet.dart';
 import 'package:divine_astrologer/model/performance_response.dart';
+import 'package:divine_astrologer/pages/home/widgets/common_info_sheet.dart';
+import 'package:divine_astrologer/pages/performance/rank_system_screen.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -457,7 +459,10 @@ class LastAvailabilityWidget extends StatelessWidget {
               const Expanded(child: SizedBox()),
               GestureDetector(
                   onTap: () {
-                    Fluttertoast.showToast(msg: "No info for now!");
+                    Get.bottomSheet(CommonInfoSheet(
+                      title: "last30Days".tr,
+                      subTitle: "last30DaysDes".tr,
+                    ));
                   },
                   child: Assets.images.icInfo.svg(height: 17.h, width: 17.h)),
             ],
@@ -648,11 +653,10 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
               const Expanded(child: SizedBox()),
               GestureDetector(
                   onTap: () {
-                    toolInfoBottomSheet(context,
-                        title: "Tool Info Heading",
-                        subTitle:
-                            "Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text  Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text D",
-                    btnTitle: 'Submit');
+                    Get.bottomSheet(CommonInfoSheet(
+                      title: "totalAvailability".tr,
+                      subTitle: "totalAvailabilityDes".tr,
+                    ));
                   },
                   child: Assets.images.icInfo.svg(height: 17.h, width: 17.h)),
             ],
@@ -893,7 +897,7 @@ class OverAllScoreData extends GetView<PerformanceController> {
                           const Expanded(child: SizedBox()),
                           GestureDetector(
                               onTap: () {
-                                Fluttertoast.showToast(msg: "No info for now!");
+                                Get.to(() => const RankSystemScreen());
                               },
                               child: Assets.images.icInfo
                                   .svg(height: 17.h, width: 17.h)),
@@ -987,7 +991,7 @@ class DurationUI extends StatelessWidget {
                 controller.updateDurationValue(value!);
                 // }
               },
-              iconStyleData:  IconStyleData(
+              iconStyleData: IconStyleData(
                 icon: const Icon(
                   Icons.keyboard_arrow_down,
                 ),

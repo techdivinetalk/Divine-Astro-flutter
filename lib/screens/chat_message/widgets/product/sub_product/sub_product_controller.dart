@@ -21,6 +21,7 @@ class SubProductController extends GetxController {
   var searchProductList = <Products>[].obs;
   RxBool productListSync = false.obs;
   int shopId = 10;
+  RxInt customerId = 0.obs;
   int? orderId;
 
   RxBool isSearchEnable = RxBool(false);
@@ -38,6 +39,7 @@ class SubProductController extends GetxController {
     if (Get.arguments != null) {
       shopId = Get.arguments["shodId"];
       // orderId = Get.arguments["orderId"];
+      customerId = Get.arguments["customerId"];
       productName(Get.arguments["productName"]);
       userData = preferenceService.getUserDetail();
       getProductList();

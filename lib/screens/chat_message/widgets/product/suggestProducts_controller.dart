@@ -23,6 +23,7 @@ class SuggestProductController extends GetxController {
   var searchShopList = <shop.Shop>[].obs;
   var banner = <Banner>[].obs;
   var imageUrl = "";
+  RxInt customerId = 0.obs;
   var pref = Get.find<SharedPreferenceService>();
 
   final UserRepository userRepository = Get.put(UserRepository());
@@ -34,6 +35,7 @@ class SuggestProductController extends GetxController {
   void onReady() {
     imageUrl = pref.getAmazonUrl()!;
     print("image url in suggest Product ${imageUrl}");
+    customerId(Get.arguments['customerId']);
     getShopList();
     super.onReady();
   }
@@ -48,6 +50,7 @@ class SuggestProductController extends GetxController {
       // }
       if (data.data!.shops != null && data.data!.shops!.isNotEmpty) {
         shopList.addAll(data.data!.shops as Iterable<shop.Shop>);
+        shopList.removeAt(0);
         log("Shop-->${jsonEncode(data.data)}");
       }
     } catch (error) {

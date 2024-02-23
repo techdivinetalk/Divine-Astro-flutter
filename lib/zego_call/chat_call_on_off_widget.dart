@@ -87,47 +87,31 @@ class _ChatCallOnOffWidgetState extends State<ChatCallOnOffWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          const SizedBox(height: 32),
-          widget.currentStatus
-              ? Column(children: [callButton(), changeButton()])
-              : Column(children: [callButton(), changeButton()])
+          const SizedBox(height: 16),
+          const SizedBox(height: 16),
+          moreOptionsButton(
+            buttonText: "Request ${type()} Call",
+            buttonCallback: widget.makeCall,
+            buttonImage: widget.isVideoCall
+                ? "assets/images/chat_new_video_call_icon.png"
+                : "assets/images/chat_new_voice_call_icon.png",
+          ),
+          const SizedBox(height: 16),
+          moreOptionsButton2(
+            buttonText: msg(),
+            buttonCallback: widget.makeTurnOnOffCalls,
+            buttonImage: widget.currentStatus
+                ? "assets/images/chat_new_disable_icon.png"
+                : "assets/images/chat_new_enable_icon.png",
+          ),
+          const SizedBox(height: 16),
         ],
       ),
     );
   }
 
-  Widget callButton() {
-    return Column(
-      children: [
-        moreOptionsButton(
-          buttonText: "Make a ${type()} Call",
-          buttonCallback: widget.makeCall,
-          buttonImage: widget.isVideoCall
-              ? "assets/images/live_call_video.png"
-              : "assets/images/live_call_audio.png",
-        ),
-        const SizedBox(height: 16),
-      ],
-    );
-  }
-
-  Widget changeButton() {
-    return Column(
-      children: [
-        moreOptionsButton2(
-          buttonText: msg(),
-          buttonCallback: widget.makeTurnOnOffCalls,
-          buttonImage: widget.currentStatus
-              ? "assets/images/live_block_icon.png"
-              : "assets/images/live_unblock_icon.png",
-        ),
-        const SizedBox(height: 16),
-      ],
-    );
-  }
-
   String msg() {
-    return "Turn ${widget.currentStatus ? "off" : "on"} ${type()} calls";
+    return "${widget.currentStatus ? "Disable" : "Enable"} ${type()} Call";
   }
 
   String type() {
@@ -158,11 +142,7 @@ class _ChatCallOnOffWidgetState extends State<ChatCallOnOffWidget> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                buttonImage,
-                height: 24,
-                width: 24,
-              ),
+              Image.asset(buttonImage, height: 24, width: 24),
               const SizedBox(width: 16),
               Text(
                 buttonText,
@@ -192,7 +172,9 @@ class _ChatCallOnOffWidgetState extends State<ChatCallOnOffWidget> {
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                side: BorderSide(width: 1, color: appColors.red),
+                side: BorderSide(
+                  color: widget.currentStatus ? appColors.red : appColors.black,
+                ),
               ),
             ),
           ),
@@ -200,15 +182,13 @@ class _ChatCallOnOffWidgetState extends State<ChatCallOnOffWidget> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                buttonImage,
-                height: 24,
-                width: 24,
-              ),
+              Image.asset(buttonImage, height: 24, width: 24),
               const SizedBox(width: 16),
               Text(
                 buttonText,
-                style: TextStyle(color: appColors.red),
+                style: TextStyle(
+                  color: widget.currentStatus ? appColors.red : appColors.black,
+                ),
               ),
             ],
           ),

@@ -350,13 +350,14 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                 }),
                 SizedBox(height: 10.h),
                 Obx(() => Visibility(
-                    visible : controller.showTalkTime.value == "-1" ,
+                    visible: controller.showTalkTime.value == "-1",
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                           decoration: BoxDecoration(
-                      border: Border.all(color: appColors.grey, width: 2),
-                            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                            border: Border.all(color: appColors.grey, width: 2),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10.0)),
                             color: appColors.white,
                           ),
                           child: Padding(
@@ -839,7 +840,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           radius: BorderRadius.circular(30),
                           initRecordPackageWidth:
                               kToolbarHeight - Get.width * 0.010,
-                          recordIconWhenLockBackGroundColor: appColors.guideColor,
+                          recordIconWhenLockBackGroundColor:
+                              appColors.guideColor,
                           maxRecordTimeInSecond: 30,
                           startRecording: () {
                             controller.isRecording.value = true;
@@ -865,6 +867,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       },
     );
   }
+
   void showCurvedBottomSheet(context) {
     List<SvgPicture> itemList = [
       SvgPicture.asset('assets/svg/camera_icon.svg'),
@@ -1754,7 +1757,10 @@ class AstrologerChatAppBar extends StatelessWidget {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            controller.showTalkTime.value == "-1" ? "Chat Ended" : controller.showTalkTime.value,
+                                            controller.showTalkTime.value ==
+                                                    "-1"
+                                                ? "Chat Ended"
+                                                : controller.showTalkTime.value,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 10.sp,
@@ -1796,37 +1802,44 @@ class AstrologerChatAppBar extends StatelessWidget {
                             String appendedCustImage =
                                 "${controller.preference.getAmazonUrl()}/$custImage";
 
-                            return ZegoService().buttonUI(
-                              isVideoCall: false,
-                              targetUserID: orderData["userId"] ?? "",
-                              targetUserName: orderData["customerName"] ?? "",
-                              checkOppositeSidePermGranted: () {
-                                String name =
-                                    preferenceService.getUserDetail()?.name ??
-                                        "";
-                                String message =
-                                    "$name wants to start a call, please allow all required permissions";
-                                controller.messageController.text = message;
-                                controller.sendMsg();
-                              },
-                              customData: {
-                                "astr_id": orderData["astroId"] ?? "",
-                                "astr_name": orderData["astrologerName"] ?? "",
-                                "astr_image": appendedAstrImage,
-                                "cust_id": orderData["userId"] ?? "",
-                                "cust_name": orderData["customerName"] ?? "",
-                                "cust_image": appendedCustImage,
-                                // "time": "00:20:00",
-                                "time": controller.showTalkTime.value,
-                              },
-                              isAstrologer: true,
-                              astrologerDisabledCalls: () {
-                                astroNotAcceptingCallsSnackBar(
-                                  context: context,
-                                  isVideoCall: false,
-                                );
-                              },
-                            );
+                            return false
+                                ? const SizedBox()
+                                : ZegoService().buttonUI(
+                                    isVideoCall: false,
+                                    targetUserID: orderData["userId"] ?? "",
+                                    targetUserName:
+                                        orderData["customerName"] ?? "",
+                                    checkOppositeSidePermGranted: () {
+                                      String name = preferenceService
+                                              .getUserDetail()
+                                              ?.name ??
+                                          "";
+                                      String message =
+                                          "$name wants to start a call, please allow all required permissions";
+                                      controller.messageController.text =
+                                          message;
+                                      controller.sendMsg();
+                                    },
+                                    customData: {
+                                      "astr_id": orderData["astroId"] ?? "",
+                                      "astr_name":
+                                          orderData["astrologerName"] ?? "",
+                                      "astr_image": appendedAstrImage,
+                                      "cust_id": orderData["userId"] ?? "",
+                                      "cust_name":
+                                          orderData["customerName"] ?? "",
+                                      "cust_image": appendedCustImage,
+                                      // "time": "00:20:00",
+                                      "time": controller.showTalkTime.value,
+                                    },
+                                    isAstrologer: true,
+                                    astrologerDisabledCalls: () {
+                                      astroNotAcceptingCallsSnackBar(
+                                        context: context,
+                                        isVideoCall: false,
+                                      );
+                                    },
+                                  );
                           },
                         ),
                         SizedBox(width: 10.w),
@@ -1844,37 +1857,44 @@ class AstrologerChatAppBar extends StatelessWidget {
                             String appendedCustImage =
                                 "${controller.preference.getAmazonUrl()}/$custImage";
 
-                            return ZegoService().buttonUI(
-                              isVideoCall: true,
-                              targetUserID: orderData["userId"] ?? "",
-                              targetUserName: orderData["customerName"] ?? "",
-                              checkOppositeSidePermGranted: () {
-                                String name =
-                                    preferenceService.getUserDetail()?.name ??
-                                        "";
-                                String message =
-                                    "$name wants to start a call, please allow all required permissions";
-                                controller.messageController.text = message;
-                                controller.sendMsg();
-                              },
-                              customData: {
-                                "astr_id": orderData["astroId"] ?? "",
-                                "astr_name": orderData["astrologerName"] ?? "",
-                                "astr_image": appendedAstrImage,
-                                "cust_id": orderData["userId"] ?? "",
-                                "cust_name": orderData["customerName"] ?? "",
-                                "cust_image": appendedCustImage,
-                                // "time": "00:20:00",
-                                "time": controller.showTalkTime.value,
-                              },
-                              isAstrologer: true,
-                              astrologerDisabledCalls: () {
-                                astroNotAcceptingCallsSnackBar(
-                                  context: context,
-                                  isVideoCall: true,
-                                );
-                              },
-                            );
+                            return false
+                                ? const SizedBox()
+                                : ZegoService().buttonUI(
+                                    isVideoCall: true,
+                                    targetUserID: orderData["userId"] ?? "",
+                                    targetUserName:
+                                        orderData["customerName"] ?? "",
+                                    checkOppositeSidePermGranted: () {
+                                      String name = preferenceService
+                                              .getUserDetail()
+                                              ?.name ??
+                                          "";
+                                      String message =
+                                          "$name wants to start a call, please allow all required permissions";
+                                      controller.messageController.text =
+                                          message;
+                                      controller.sendMsg();
+                                    },
+                                    customData: {
+                                      "astr_id": orderData["astroId"] ?? "",
+                                      "astr_name":
+                                          orderData["astrologerName"] ?? "",
+                                      "astr_image": appendedAstrImage,
+                                      "cust_id": orderData["userId"] ?? "",
+                                      "cust_name":
+                                          orderData["customerName"] ?? "",
+                                      "cust_image": appendedCustImage,
+                                      // "time": "00:20:00",
+                                      "time": controller.showTalkTime.value,
+                                    },
+                                    isAstrologer: true,
+                                    astrologerDisabledCalls: () {
+                                      astroNotAcceptingCallsSnackBar(
+                                        context: context,
+                                        isVideoCall: true,
+                                      );
+                                    },
+                                  );
                           },
                         ),
                         SizedBox(width: 5.w),
