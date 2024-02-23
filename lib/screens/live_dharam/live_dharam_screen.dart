@@ -422,12 +422,50 @@ class _LivePage extends State<LiveDharamScreen>
     super.dispose();
   }
 
-  void onAudienceLocalConnectStateChanged() {
+  Future<void> onAudienceLocalConnectStateChanged() async {
     final audienceConnectState = ZegoUIKitPrebuiltLiveStreamingController()
         .coHost
         .audienceLocalConnectStateNotifier
         .value;
-    debugPrint('audienceConnectState:$audienceConnectState');
+    switch (audienceConnectState) {
+      case ZegoLiveStreamingAudienceConnectState.idle:
+        await refreshCurrentAstrologerDetails();
+        break;
+      case ZegoLiveStreamingAudienceConnectState.connecting:
+        break;
+      case ZegoLiveStreamingAudienceConnectState.connected:
+        break;
+    }
+    return Future<void>.value();
+  }
+
+  Future<void> refreshCurrentAstrologerDetails() async {
+    WidgetsBinding.instance.endOfFrame.then(
+      (_) async {
+        if (mounted) {
+          // final bool cond = _controller.currentCaller.id == _controller.userId;
+          // if (cond) {
+          //   await _controller.getAstrologerDetails(
+          //     successCallBack: (String message) {
+          //       successAndFailureCallBack(
+          //         message: message,
+          //         isForSuccess: false,
+          //         isForFailure: true,
+          //       );
+          //     },
+          //     failureCallBack: (String message) {
+          //       successAndFailureCallBack(
+          //         message: message,
+          //         isForSuccess: false,
+          //         isForFailure: true,
+          //       );
+          //     },
+          //   );
+          // } else {}
+        } else {}
+      },
+    );
+    return Future<void>.value();
   }
 
   @override
