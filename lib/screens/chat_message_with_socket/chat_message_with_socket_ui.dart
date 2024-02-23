@@ -361,7 +361,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           ),
                           child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text("Chat Ended you can still send message till one minute",style: TextStyle(color: Colors.red),textAlign: TextAlign.center),
+                        child: Text("Chat Ended you can still send message till ${controller.extraTalkTime.value}",style: TextStyle(color: Colors.red),textAlign: TextAlign.center),
                       )),
                     ))
                 ),
@@ -1635,10 +1635,21 @@ class AstrologerChatAppBar extends StatelessWidget {
     WidgetsBinding.instance.endOfFrame.then(
       (_) async {
         controller.userLeavePrivateChatListenerSocket();
-        print("object");
         controller.chatTimer?.cancel();
         Get.back();
         Get.back();
+        if(AppFirebaseService().orderData.value["status"] == "4"){
+          DatabaseReference ref = FirebaseDatabase.instance.ref("order/${AppFirebaseService().orderData.value["orderId"]}");
+          ref.update({
+            "status": "5",
+          }).then((_) {
+            // Success handling if needed.
+          }).catchError((error) {
+            // Error handling.
+            print("Firebase error: $error");
+          });
+        }
+
       },
     );
     return;
