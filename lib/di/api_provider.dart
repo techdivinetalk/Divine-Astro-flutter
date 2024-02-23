@@ -39,6 +39,17 @@ class ApiProvider {
   final int successResponse = 200;
   String _token = "";
 
+  //
+  final String generateOrderAPI = "wallet/recharge";
+  final String getPooja = "getPooja";
+  final String getBookedPooja = "getBookedPooja";
+  final String getSinglePooja = "getSinglPooja";
+  final String getPoojaAddOns = "addOns";
+  final String getUserAddressForPooja = "getUserAddress";
+  final String addUserAddressForPooja = "saveUserAddress";
+  final String updateUserAddressForPooja = "editUserAddress";
+  final String deleteUserAddressForPooja = "deleteUserAddress";
+
   final String loginUrl = "astroLogin";
   final String viewTrainingVideo = "viewTrainingVideo";
   final String saveAstrologerExperience = "saveAstrologerExperience";

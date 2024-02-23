@@ -300,7 +300,7 @@ class ChatAssistanceTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        Get.toNamed(RouteName.chatMessageSupportUI, arguments: data);
+        Get.toNamed(RouteName.chatMessageUI, arguments: data);
       },
       leading: ClipRRect(
           borderRadius: BorderRadius.circular(50.r),
@@ -333,18 +333,19 @@ class ChatAssistanceTile extends StatelessWidget {
           ),
         ],
       ),
-      trailing: userUnreadMessages(data.id ?? 0) != 0
-          ? CircleAvatar(
-              radius: 10.r,
-              backgroundColor: appColors.guideColor,
-              child: CustomText(
-                userUnreadMessages(data.id ?? 0).toString(),
-                fontSize: 10.sp,
-                fontWeight: FontWeight.w700,
-                fontColor: appColors.brown,
-              ),
-            )
-          : SizedBox(),
+      trailing: SizedBox()
+      // data.unreadMessage! > 0
+      //     ? CircleAvatar(
+      //         radius: 10.r,
+      //         backgroundColor: appColors.guideColor,
+      //         child: CustomText(
+      //           data.unreadMessage.toString(),
+      //           fontSize: 10.sp,
+      //           fontWeight: FontWeight.w700,
+      //           fontColor: appColors.brown,
+      //         ),
+      //       )
+      //     : SizedBox(),
     );
   }
 
@@ -448,7 +449,7 @@ class ChatAssistanceDataTile extends StatelessWidget {
         DataList dataList = DataList();
         dataList.name = data.customerName;
         dataList.id = data.customerId;
-        Get.toNamed(RouteName.chatMessageSupportUI, arguments: dataList);
+        Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),

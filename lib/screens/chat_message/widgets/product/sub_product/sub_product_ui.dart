@@ -71,7 +71,9 @@ class SubProductUi extends GetView<SubProductController> {
                                     Get.toNamed(RouteName.categoryDetail,
                                         arguments: {
                                           "productId": item?.id,
-                                          "isChatAssist": true
+                                          "isChatAssist": true,
+                                          "isSentMessage": false,
+                                          "customerId":controller.customerId.value
                                         });
                                   },
                                   child: Container(

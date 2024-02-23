@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:divine_astrologer/common/colors.dart';
@@ -8,6 +9,7 @@ import 'package:divine_astrologer/repository/chat_repository.dart';
 import 'package:divine_astrologer/repository/kundli_repository.dart';
 import 'package:divine_astrologer/screens/chat_message/widgets/assist_message_widget.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,11 +17,13 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
 import '../../common/app_textstyle.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../common/common_functions.dart';
 import '../../common/routes.dart';
+import '../../firebase_service/firebase_service.dart';
 import '../../gen/assets.gen.dart';
 import '../../gen/fonts.gen.dart';
 import '../../model/chat_suggest_remedies/chat_suggest_remedies.dart';
@@ -29,8 +33,132 @@ import '../../utils/load_image.dart';
 import '../live_page/constant.dart';
 import 'chat_message_controller.dart';
 
-class ChatMessageSupportUI extends GetView<ChatMessageController> {
+class ChatMessageSupportUI extends StatefulWidget {
   const ChatMessageSupportUI({super.key});
+
+  @override
+  State<ChatMessageSupportUI> createState() => _ChatMessageSupportUIState();
+}
+
+class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
+  ChatMessageController controller = Get.find();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Placeholder();
+//   }
+// }
+
+// class ChatMessageSupportUI extends GetView<ChatMessageController> {
+//   const ChatMessageSupportUI({super.key});
+
+  @override
+  void initState() {
+    super.initState();
+    controller.listenSocket();
+    if (Get.arguments != null) {
+      controller.args = Get.arguments;
+      controller.update();
+      controller.getAssistantChatList();
+      controller.userjoinedChatSocket();
+      controller.listenjoinedChatSocket();
+      controller.getMessageTemplatesLocally();
+controller.scrollToBottomFunc();
+      FirebaseMessaging.instance.onTokenRefresh.listen((newtoken) {
+        AppFirebaseService()
+            .database
+            .child("astrologer/${userData?.id}/")
+            .update({'deviceToken': newtoken});
+      });
+
+      assistChatNewMsg.listen((newChatList) {
+        if (newChatList.isNotEmpty) {
+          print("new chat list ${newChatList.length} ");
+          for (int index = 0; index < newChatList.length; index++) {
+            print("new chat list ${jsonEncode(newChatList[index])} ");
+            var responseMsg = newChatList[index];
+
+            if (int.parse(responseMsg?["sender_id"].toString() ?? '') ==
+                controller.args?.id) {
+              print("inside chat add condition");
+              controller.chatMessageList([
+                ...controller.chatMessageList,
+                AssistChatData(
+                    message: responseMsg['message'],
+                    astrologerId:
+                        int.parse(responseMsg?["userid"].toString() ?? ''),
+                    createdAt: DateTime.parse(responseMsg?["created_at"])
+                        .millisecondsSinceEpoch
+                        .toString(),
+                    // id: responseMsg["chatId"] != null &&
+                    //         responseMsg["chatId"] != ''&& responseMsg["chatId"]=='undefined'
+                    //     ? int.parse(responseMsg["chatId"])
+                    //     : null,
+                    isSuspicious: 0,
+                    sendBy: SendBy.customer,
+                    msgType: responseMsg["msg_type"] != null
+                        ? msgTypeValues.map[responseMsg["msg_type"]]
+                        : MsgType.text,
+                    seenStatus: SeenStatus.received,
+                    customerId: int.parse(responseMsg['sender_id'] ?? 0))
+              ]);
+              controller.chatMessageList.refresh();
+              controller.scrollToBottomFunc();
+              assistChatNewMsg.removeAt(index);
+              controller.update();
+              print(
+                  "outside chat add condition ${json.encode(controller.chatMessageList.last)}");
+            }
+          }
+          controller.update();
+        }
+        controller.scrollToBottomFunc();
+        controller.reArrangeChatList();
+      });
+      controller.update();
+
+      Future.delayed(const Duration(milliseconds: 600)).then((value) {
+        controller.scrollToBottomFunc();
+      });
+      //to check if the list has enough number of elements to scroll
+      // messageScrollController.hasClients ? null : getAssistantChatList();
+      //
+
+      controller.messageScrollController.addListener(() {
+        final topPosition =
+            controller.messageScrollController.position.minScrollExtent;
+        if (controller.messageScrollController.position.pixels == topPosition) {
+          //code to fetch old messages
+          print("to fetch old messages");
+          controller.getAssistantChatList();
+        }
+      });
+      controller.scrollToBottomFunc();
+      controller.messageScrollController.addListener(() {
+        final bottomPosition =
+            controller.messageScrollController.position.maxScrollExtent;
+        if (controller.messageScrollController.position.pixels ==
+            bottomPosition) {
+          //code to fetch old messages
+        }
+      });
+      // getAssistantChatList();
+      controller.scrollToBottomFunc();
+      controller.update();
+    }
+    controller.scrollToBottomFunc();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    controller.chatMessageList.clear();
+    controller.userjoinedChatSocket();
+    controller.listenjoinedChatSocket();
+    controller.processedPages.clear();
+    controller.currentPage(1);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +168,10 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
         backgroundColor: appColors.guideColor,
         centerTitle: false,
         leading: IconButton(
-          onPressed: () => Get.back(),
+          onPressed: () {
+            Get.delete<ChatMessageController>();
+            Get.back();
+          },
           icon: Icon(
             Icons.arrow_back_ios_new_rounded,
             color: appColors.white,
@@ -109,8 +240,6 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                                           ? index
                                           : index + 1;
                                   print(
-                                      'length of chat assist list ${controller.chatMessageList.length}');
-                                  print(
                                       "chat assist msg data:${currentMsg.toJson()}");
                                   return AssistMessageView(
                                     index: index,
@@ -127,6 +256,8 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                                                 controller
                                                     .unreadMessageList.first.id
                                             : false,
+                                    baseImageUrl:
+                                    controller.preference.getBaseImageURL()??'',
                                   );
                                 },
                               ),
@@ -394,8 +525,9 @@ class ChatMessageSupportUI extends GetView<ChatMessageController> {
                         }
                         break;
                       case 3:
-                        var result =
-                            await Get.toNamed(RouteName.chatAssistProductPage);
+                        var result = await Get.toNamed(
+                            RouteName.chatAssistProductPage,
+                            arguments: {'customerId': controller.args?.id});
                         controller.sendMsg(MsgType.product, {'data': result});
                         break;
                       case 4:

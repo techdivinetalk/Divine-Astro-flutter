@@ -113,10 +113,12 @@ class AssistChatData {
   MsgType? msgType;
   SendBy? sendBy;
   String? profileImage;
-  int? productId;
+  String? productId;
+  String? productImage;
   // String? awsUrl;
-  int? shopId;
+  String? shopId;
   String? createdAt;
+  Product? product;
   SeenStatus? seenStatus;
   int? isSuspicious;
 
@@ -127,10 +129,13 @@ class AssistChatData {
       this.astrologerId,
       // this.msgStatus,
       this.msgType,
-        this.profileImage,
-        this.productId,
+      this.profileImage,
+      this.productId,
       this.sendBy,
+      this.productImage,
+      // this.awsUrl,
       this.createdAt,
+      this.product,
       // this.awsUrl,
       this.shopId,
       this.isSuspicious,
@@ -147,16 +152,21 @@ class AssistChatData {
     msgType = json['msg_type'] != null
         ? msgTypeValues.map[json["msg_type"].toString()]
         : MsgType.text;
-    productId = json['product_id'];
+    productId = json['product_id'].toString();
+    productImage = json['product_image'];
+
     // msgStatus = json['msg_status'] != null
     //     ? msgStatusValues.map[json["msg_status"]]
     //     : MsgStatus.sent;
     // awsUrl = json['awsUrl'];
     shopId = json['shop_id'];
     profileImage = json['profile_image'];
+    product =
+        json["product"] == null ? null : Product.fromJson(json["product"]);
     createdAt =
         DateTime.parse(json['created_at']).millisecondsSinceEpoch.toString();
     isSuspicious = json['is_suspicious'];
+
     seenStatus = json['seen_status'] != null
         ? seenStatusValues.map[json["seen_status"].toString()]
         : SeenStatus.sent;
@@ -173,13 +183,51 @@ class AssistChatData {
     // data['msg_status'] = msgStatusValues.reverse[msgStatus];
     data['created_at'] = createdAt;
     data['profile_image'] = profileImage;
+    data['product_image'] = productImage;
     data['product_id'] = productId;
     // data['awsUrl'] = awsUrl;
+    data["product"] = product?.toJson();
     data['shop_id'] = shopId;
     data['is_suspicious'] = isSuspicious;
     data['seen_status'] = seenStatusValues.reverse[seenStatus];
     return data;
   }
+}
+
+class Product {
+  int? id;
+  int? shopId;
+  int? prodCatId;
+  String? prodName;
+  String? prodImage;
+  dynamic prodDesc;
+
+  Product({
+    this.id,
+    this.shopId,
+    this.prodCatId,
+    this.prodName,
+    this.prodImage,
+    this.prodDesc,
+  });
+
+  factory Product.fromJson(Map<String, dynamic> json) => Product(
+        id: json["id"],
+        shopId: json["shop_id"],
+        prodCatId: json["prod_cat_id"],
+        prodName: json["prod_name"],
+        prodImage: json["prod_image"],
+        prodDesc: json["prod_desc"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "shop_id": shopId,
+        "prod_cat_id": prodCatId,
+        "prod_name": prodName,
+        "prod_image": prodImage,
+        "prod_desc": prodDesc,
+      };
 }
 
 enum SendBy { customer, astrologer }
@@ -189,21 +237,21 @@ final sendByValue = EnumValues({
   "1": SendBy.astrologer,
 });
 
-enum MsgType { text, gift, image,remedies , product,limit}
+enum MsgType { text, gift, image, remedies, product, limit }
 
 final msgTypeValues = EnumValues({
   "0": MsgType.text,
-  "1":MsgType.image,
-  "2":MsgType.remedies,
-  "3":MsgType.product,
+  "1": MsgType.image,
+  "2": MsgType.remedies,
+  "3": MsgType.product,
   "8": MsgType.gift,
-  "10":MsgType.limit,
+  "10": MsgType.limit,
 });
 
 enum SeenStatus { notSent, sent, delivered, received, error }
 
 final seenStatusValues = EnumValues({
-  '-2':SeenStatus.error,
+  '-2': SeenStatus.error,
   '-1': SeenStatus.notSent,
   '0': SeenStatus.sent,
   '1': SeenStatus.delivered,

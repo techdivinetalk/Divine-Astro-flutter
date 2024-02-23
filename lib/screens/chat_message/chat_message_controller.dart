@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:divine_astrologer/model/res_product_detail.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
@@ -16,6 +17,7 @@ import '../../app_socket/app_socket.dart';
 import '../../common/colors.dart';
 import '../../common/common_functions.dart';
 import '../../di/shared_preference_service.dart';
+import '../../firebase_service/firebase_service.dart';
 import '../../model/chat_assistant/chat_assistant_astrologer_response.dart';
 import '../../model/chat_assistant/chat_assistant_chats_response.dart';
 import '../../model/message_template_response.dart';
@@ -30,6 +32,7 @@ class ChatMessageController extends GetxController {
   final messageScrollController = ScrollController();
   ChatAssistChatResponse? chatAssistChatResponse;
   RxList chatMessageList = [].obs;
+  var preference = Get.find<SharedPreferenceService>();
   // RxString userProfileImage = "".obs;
   RxList<AssistChatData> unreadMessageList = <AssistChatData>[].obs;
   RxList<MessageTemplates> messageTemplates = <MessageTemplates>[].obs;
@@ -38,6 +41,7 @@ class ChatMessageController extends GetxController {
   final messageController = TextEditingController();
   RxBool isEmojiShowing = false.obs;
   DataList? args;
+  RxString? baseImageUrl = "".obs;
   RxBool loading = false.obs;
   File? image;
   final ImagePicker picker = ImagePicker();
@@ -47,91 +51,123 @@ class ChatMessageController extends GetxController {
   final appSocket = AppSocket();
 
   ChatMessageController(KundliRepository put, ChatRepository put2);
+
   @override
   void onInit() {
+    // TODO: implement onInit
     super.onInit();
-    listenSocket();
-    if (Get.arguments != null) {
-      args = Get.arguments;
-      getAssistantChatList();
-      userjoinedChatSocket();
-      listenjoinedChatSocket();
-      getMessageTemplatesLocally();
-
-      assistChatNewMsg.listen((newChatList) {
-        if (newChatList.isNotEmpty) {
-          print("new chat list ${newChatList.length} ");
-          for (int index = 0; index < newChatList.length; index++) {
-            print("new chat list ${jsonDecode(newChatList[index])} ");
-            var responseMsg = newChatList[index];
-            if (int.parse(responseMsg?["sender_id"]) == args?.id) {
-              chatMessageList.add(AssistChatData(
-                  message: responseMsg['message'],
-                  astrologerId:
-                      int.parse(responseMsg?["sender_id"].toString() ?? ''),
-                  createdAt: DateTime.parse(responseMsg?["created_at"])
-                      .millisecondsSinceEpoch
-                      .toString(),
-                  // id: responseMsg["chatId"] != null &&
-                  //         responseMsg["chatId"] != ''&& responseMsg["chatId"]=='undefined'
-                  //     ? int.parse(responseMsg["chatId"])
-                  //     : null,
-                  isSuspicious: 0,
-                  sendBy: SendBy.customer,
-                  msgType: responseMsg['msg_type'] != null
-                      ? msgTypeValues.map[responseMsg['msg_type']]
-                      : MsgType.text,
-                  seenStatus: SeenStatus.received,
-                  customerId: int.parse(responseMsg['sender_id'] ?? 0)));
-            }
-          }
-          assistChatNewMsg.value = [];
-          update();
-        }
-        scrollToBottomFunc();
-        reArrangeChatList();
-      });
-
-      //to check if the list has enough number of elements to scroll
-      // messageScrollController.hasClients ? null : getAssistantChatList();
-      //
-
-      messageScrollController.addListener(() {
-        final topPosition = messageScrollController.position.minScrollExtent;
-        if (messageScrollController.position.pixels == topPosition) {
-          //code to fetch old messages
-          print("to fetch old messages");
-          getAssistantChatList();
-        }
-      });
-
-      messageScrollController.addListener(() {
-        final bottomPosition = messageScrollController.position.maxScrollExtent;
-        if (messageScrollController.position.pixels == bottomPosition) {
-          //code to fetch old messages
-        }
-      });
-      // getAssistantChatList();
-      scrollToBottomFunc();
-    }
+    args = Get.arguments;
   }
 
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   listenSocket();
+  //   if (Get.arguments != null) {
+  //     args = Get.arguments;
+  //     getAssistantChatList();
+  //     userjoinedChatSocket();
+  //     listenjoinedChatSocket();
+  //     getMessageTemplatesLocally();
+  //
+  //     FirebaseMessaging.instance.onTokenRefresh.listen((newtoken) {
+  //       AppFirebaseService()
+  //           .database
+  //           .child("astrologer/${userData?.id}/")
+  //           .update({'deviceToken': newtoken});
+  //     });
+  //
+  //     assistChatNewMsg.listen((newChatList) {
+  //       if (newChatList.isNotEmpty) {
+  //         print("new chat list ${newChatList.length} ");
+  //         for (int index = 0; index < newChatList.length; index++) {
+  //           print("new chat list ${jsonEncode(newChatList[index])} ");
+  //           var responseMsg = newChatList[index];
+  //
+  //           if (int.parse(responseMsg?["sender_id"].toString() ?? '') ==
+  //               args?.id) {
+  //             print("inside chat add condition");
+  //             chatMessageList([
+  //               ...chatMessageList,
+  //               AssistChatData(
+  //                   message: responseMsg['message'],
+  //                   astrologerId:
+  //                       int.parse(responseMsg?["userid"].toString() ?? ''),
+  //                   createdAt: DateTime.parse(responseMsg?["created_at"])
+  //                       .millisecondsSinceEpoch
+  //                       .toString(),
+  //                   // id: responseMsg["chatId"] != null &&
+  //                   //         responseMsg["chatId"] != ''&& responseMsg["chatId"]=='undefined'
+  //                   //     ? int.parse(responseMsg["chatId"])
+  //                   //     : null,
+  //                   isSuspicious: 0,
+  //                   sendBy: SendBy.customer,
+  //                   msgType: responseMsg["msg_type"] != null
+  //                       ? msgTypeValues.map[responseMsg["msg_type"]]
+  //                       : MsgType.text,
+  //                   seenStatus: SeenStatus.received,
+  //                   customerId: int.parse(responseMsg['sender_id'] ?? 0))
+  //             ]);
+  //             chatMessageList.refresh();
+  //             scrollToBottomFunc();
+  //             assistChatNewMsg.removeAt(index);
+  //             update();
+  //             print(
+  //                 "outside chat add condition ${json.encode(chatMessageList.last)}");
+  //           }
+  //         }
+  //         update();
+  //       }
+  //       scrollToBottomFunc();
+  //       reArrangeChatList();
+  //     });
+  //     update();
+  //     //to check if the list has enough number of elements to scroll
+  //     // messageScrollController.hasClients ? null : getAssistantChatList();
+  //     //
+  //
+  //     messageScrollController.addListener(() {
+  //       final topPosition = messageScrollController.position.minScrollExtent;
+  //       if (messageScrollController.position.pixels == topPosition) {
+  //         //code to fetch old messages
+  //         print("to fetch old messages");
+  //         getAssistantChatList();
+  //       }
+  //     });
+  //
+  //     messageScrollController.addListener(() {
+  //       final bottomPosition = messageScrollController.position.maxScrollExtent;
+  //       if (messageScrollController.position.pixels == bottomPosition) {
+  //         //code to fetch old messages
+  //       }
+  //     });
+  //     // getAssistantChatList();
+  //     scrollToBottomFunc();
+  //     update();
+  //   }
+  // }
+
+  // getBaseimageUrl() {}
+  //
   @override
   void dispose() {
     // TODO: implement dispose
     // readUnreadMessages();
+    chatMessageList.clear();
     userjoinedChatSocket();
     listenjoinedChatSocket();
+    processedPages.clear();
+    currentPage(1);
     super.dispose();
   }
-
-  @override
-  void onReady() {
-    super.onReady();
-    Future.delayed(const Duration(milliseconds: 600)).then((value) {
-      scrollToBottomFunc();
-    });
-  }
+  //
+  // @override
+  // void onReady() {
+  //   super.onReady();
+  //   Future.delayed(const Duration(milliseconds: 600)).then((value) {
+  //     scrollToBottomFunc();
+  //   });
+  // }
 
   // void readUnreadMessages() {
   //   if (assistChatUnreadMessages.isNotEmpty) {
@@ -335,7 +371,7 @@ class ChatMessageController extends GetxController {
   }
 
   void sendMsg(MsgType msgType, Map data) {
-    print("inside send message");
+    print("inside send message ${userData?.image}");
 
     late AssistChatData msgData;
     switch (msgType) {
@@ -397,9 +433,12 @@ class ChatMessageController extends GetxController {
             astroId: preferenceService.getUserDetail()!.id.toString());
         break;
       case MsgType.product:
-        final productData = data['data']  as SaveRemediesResponse;
+        final productData =
+            data['data']['saveRemedies'] as SaveRemediesResponse;
+        final productDetails = data['data']['product_detail'] as Products;
+        print("delete product data ${productDetails} ${productData}");
         msgData = AssistChatData(
-            message: 'product',
+            message: productDetails.prodName,
             astrologerId: preferenceService.getUserDetail()!.id,
             createdAt: DateTime.now().toIso8601String(),
             id: DateTime.now().millisecondsSinceEpoch,
@@ -407,15 +446,19 @@ class ChatMessageController extends GetxController {
             profileImage: userData?.image,
             msgType: MsgType.product,
             sendBy: SendBy.astrologer,
-            productId: productData.data?.productId,
-            shopId: productData.data?.shopId,
+            product: Product(
+                id: productData.data?.shopId,
+                prodName: productDetails.prodName),
+            productImage: productDetails.prodImage ?? '',
+            productId: productData.data?.productId.toString(),
+            shopId: productData.data?.shopId.toString(),
             seenStatus: SeenStatus.notSent,
             // msgStatus: MsgStatus.sent,
             customerId: args?.id);
         appSocket.sendAssistantMessage(
             customerId: args!.id.toString(),
             msgData: msgData,
-            message: 'product',
+            message: productDetails.prodName ?? '',
             astroId: preferenceService.getUserDetail()!.id.toString());
         break;
       default:

@@ -119,7 +119,7 @@ class DataList {
   DataList.fromJson(Map<String, dynamic> json) {
     id = json["id"];
     name = json["name"];
-    image = json["image"];
+    image = json["avatar"];
     lastMessage = json["last_message"];
     unreadMessage = json["not_seen_count"];
     msgType = json['msg_type'] != null
@@ -131,7 +131,7 @@ class DataList {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["id"] = id;
     _data["name"] = name;
-    _data["image"] = image;
+    _data["avatar"] = image;
     _data["last_message"] = lastMessage;
     _data["not_seen_count"] = unreadMessage;
     _data["msg_type"] = msgTypeValues.reverse[msgType];
