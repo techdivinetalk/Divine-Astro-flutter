@@ -77,7 +77,7 @@ controller.scrollToBottomFunc();
           for (int index = 0; index < newChatList.length; index++) {
             print("new chat list ${jsonEncode(newChatList[index])} ");
             var responseMsg = newChatList[index];
-
+print("controller args id ${controller.args?.id}");
             if (int.parse(responseMsg?["sender_id"].toString() ?? '') ==
                 controller.args?.id) {
               print("inside chat add condition");
@@ -147,6 +147,13 @@ controller.scrollToBottomFunc();
       controller.scrollToBottomFunc();
       controller.update();
     }
+    controller.scrollToBottomFunc();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
     controller.scrollToBottomFunc();
   }
 
