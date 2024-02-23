@@ -434,16 +434,15 @@ class AssistMessageView extends StatelessWidget {
 
   Widget productMsgView(
       BuildContext context, AssistChatData chatMessage, bool yourMessage) {
-
     return GestureDetector(
       onTap: () {
-        print("data from page ${chatMessage.productId} ${chatMessage.customerId}");
-        Get.toNamed(RouteName.categoryDetail,
-            arguments: {
-              "productId": chatMessage.productId.toString(),
-              "isSentMessage": true,
-              "customerId":chatMessage.customerId,
-            });
+        print(
+            "data from page ${chatMessage.productId} ${chatMessage.customerId}");
+        Get.toNamed(RouteName.categoryDetail, arguments: {
+          "productId": chatMessage.productId.toString(),
+          "isSentMessage": true,
+          "customerId": chatMessage.customerId,
+        });
       },
       child: SizedBox(
         width: double.maxFinite,
@@ -470,7 +469,7 @@ class AssistMessageView extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                   subtitle: CustomText(
-                    chatMessage.message?? '',
+                    chatMessage.message ?? '',
                     fontSize: 12.sp,
                     maxLines: 20,
                   ),

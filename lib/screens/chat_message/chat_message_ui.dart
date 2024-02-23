@@ -52,6 +52,23 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
 // class ChatMessageSupportUI extends GetView<ChatMessageController> {
 //   const ChatMessageSupportUI({super.key});
 
+  updateFirebaseToken() async {
+    String? newtoken = await FirebaseMessaging.instance.getToken();
+    print("token: new token: " + newtoken.toString());
+    final data = await AppFirebaseService()
+        .database
+        .child("astrologer/${userData?.id}/deviceToken")
+        .once();
+    final currentToken = data.snapshot.value;
+    if (newtoken != currentToken) {
+      print("token updated from ${currentToken} to ${newtoken}");
+      await AppFirebaseService()
+          .database
+          .child("astrologer/${userData?.id}/")
+          .update({'deviceToken': newtoken});
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -59,11 +76,13 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
     if (Get.arguments != null) {
       controller.args = Get.arguments;
       controller.update();
+      updateFirebaseToken();
       controller.getAssistantChatList();
       controller.userjoinedChatSocket();
       controller.listenjoinedChatSocket();
       controller.getMessageTemplatesLocally();
-controller.scrollToBottomFunc();
+      controller.scrollToBottomFunc();
+
       FirebaseMessaging.instance.onTokenRefresh.listen((newtoken) {
         AppFirebaseService()
             .database
@@ -77,7 +96,6 @@ controller.scrollToBottomFunc();
           for (int index = 0; index < newChatList.length; index++) {
             print("new chat list ${jsonEncode(newChatList[index])} ");
             var responseMsg = newChatList[index];
-print("controller args id ${controller.args?.id}");
             if (int.parse(responseMsg?["sender_id"].toString() ?? '') ==
                 controller.args?.id) {
               print("inside chat add condition");
@@ -264,8 +282,9 @@ print("controller args id ${controller.args?.id}");
                                                 controller
                                                     .unreadMessageList.first.id
                                             : false,
-                                    baseImageUrl:
-                                    controller.preference.getBaseImageURL()??'',
+                                    baseImageUrl: controller.preference
+                                            .getBaseImageURL() ??
+                                        '',
                                   );
                                 },
                               ),
@@ -408,7 +427,6 @@ print("controller args id ${controller.args?.id}");
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.newline,
                       maxLines: 1,
-
                       // focusNode: controller.msgFocus,
                       onChanged: (value) {
                         // controller.isEmojiShowing.value = true;
@@ -488,7 +506,7 @@ print("controller args id ${controller.args?.id}");
       SvgPicture.asset('assets/svg/gallery_icon.svg'),
       SvgPicture.asset('assets/svg/remedies_icon.svg'),
       SvgPicture.asset('assets/svg/product.svg'),
-      SvgPicture.asset('assets/svg/deck_icon.svg'),
+      // SvgPicture.asset('assets/svg/deck_icon.svg'),
       // Add more items as needed
     ];
     showModalBottomSheet(

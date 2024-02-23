@@ -110,11 +110,8 @@ Future<void> main() async {
                 message.data);
             break;
           case "8":
-            showNotification(
-                message.data["title"],
-                'sendNotificationGift'.tr,
-                message.data['type'],
-                message.data);
+            showNotification(message.data["title"], 'sendNotificationGift'.tr,
+                message.data['type'], message.data);
             break;
         }
       }
@@ -132,8 +129,8 @@ Future<void> main() async {
   var data = await userRepository.constantDetailsData();
   preferenceService.setConstantDetails(data);*/
 
-    GiftsSingleton().init();
-    LiveSharedPreferencesSingleton().init();
+  GiftsSingleton().init();
+  LiveSharedPreferencesSingleton().init();
 
   // final navigatorKey = GlobalKey<NavigatorState>();
   // ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
@@ -180,8 +177,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   print("pushNotification");
   FirebaseDatabase.instance.ref().child("pushR").set(DateTime.now());
-  showNotification(message.data["title"], message.data["message"],
-      message.data['type'], message.data);
+
   if (message.data['type'] == "1") {
     HashMap<String, dynamic> updateData = HashMap();
     updateData[message.data["chatId"]] = 1;
@@ -190,6 +186,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         .child(
             "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}")
         .update(updateData);
+  } else if (message.data["type"] == 3) {
+  } else {
+    showNotification(message.data["title"], message.data["message"],
+        message.data['type'], message.data);
   }
 }
 
@@ -207,7 +207,7 @@ Future<void> showNotification(String title, String message, String type,
                     'Accept',
                   ),
                 ]
-              :[]);
+              : []);
   if (type == "1") {
     androidNotificationDetails = const AndroidNotificationDetails(
         "DivineCustomer", "CustomerNotification",
@@ -220,7 +220,6 @@ Future<void> showNotification(String title, String message, String type,
       NotificationDetails(android: androidNotificationDetails);
   await flutterLocalNotificationsPlugin.show(
       Random().nextInt(90000), title, message, notificationDetails,
-
       payload: json.encode(data));
 }
 
