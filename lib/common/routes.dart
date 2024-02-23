@@ -157,7 +157,6 @@ class RouteName {
   static const String chatAssistSuggestRemedyDetails = "/chatAssistSuggestRemedyDetails";
   static const String chatSuggestRemedyDetails = "/chatSuggestRemedyDetails";
   static const String feedback = "/feedback";
-  static const String chatMessageSupportUI = "/chatMessageUI";
   static const String liveDharamScreen = "/liveDharamScreen";
   static const String faq = "/faqPage";
   static const String remediesDetail = "/RemediesDetailsView";

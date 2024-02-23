@@ -410,6 +410,12 @@ Map<String, String> en() {
     'specialty': 'Specialty',
     'languageProficiency': 'Language Proficiency',
     'astrologerRating': 'Astrologer Rating',
-    'acceptChatRequest': 'Accept Chat Request'
+    'acceptChatRequest': 'Accept Chat Request',
+  'sendNotificationImage': 'has send you an Image',
+  'sendNotificationRemedy': 'has suggested you a remedy',
+  'sendNotificationProduct': 'has suggested you a product',
+  'sendNotificationGift': 'has send you an Gift',
+  'sendNotificationFile': 'has send you a File',
+  'sendNotificationLocation': 'has send you a Location',
   };
 }

@@ -141,8 +141,9 @@ void onDidReceiveNotificationResponse(
     // // if(payloadMap["type"] == "2") {
     print("payload map type ${payloadMap}");
     if (payloadMap["type"] == "3") {
-      Get.toNamed(RouteName.chatMessageSupportUI,
+      Get.toNamed(RouteName.chatMessageUI,
           arguments: DataList(
+            image: payloadMap["profile_image"],
             id: int.parse( payloadMap["sender_id"],),
             name: payloadMap["title"],
           ));

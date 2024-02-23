@@ -22,17 +22,27 @@ class CategoryDetailController extends GetxController {
   RxBool productListSync = false.obs;
   RxBool shopDataSync = false.obs;
   int? productId;
+  int? customerId;
   int? orderId;
   RxBool isChatAssist = false.obs;
+  RxBool isSentMessage = false.obs;
   int? shopId;
   @override
   void onInit() {
     super.onInit();
     if (Get.arguments != null) {
       print("Get.arguments value ${Get.arguments}");
-      productId = Get.arguments["productId"];
-      isChatAssist(Get.arguments["isChatAssist"] ?? false);
-      isChatAssist.value ? null : orderId = Get.arguments["orderId"];
+      productId = int.parse( Get.arguments["productId"].toString());
+      customerId = int.parse( Get.arguments["customerId"].toString());
+      isSentMessage( Get.arguments["isSentMessage"]);
+      isSentMessage.value
+          ? null
+          : isChatAssist(Get.arguments["isChatAssist"] ?? false);
+      isSentMessage.value
+          ? null
+          : isChatAssist.value
+              ? null
+              : orderId = Get.arguments["orderId"];
 
       if (productId != null) {
         getProductDetails();
@@ -80,7 +90,11 @@ class CategoryDetailController extends GetxController {
   }
 
   saveRemedyForChatAssist() async {
-    Map<String, dynamic> params = {"product_id": productId, "shop_id": shopId};
+    Map<String, dynamic> params = {
+      "product_id": productId,
+      "shop_id": shopId,
+      "customer_id": customerId
+    };
     print('save remedy called $params}');
     try {
       var response = await shopRepository.saveRemediesForChatAssist(params);
@@ -89,7 +103,11 @@ class CategoryDetailController extends GetxController {
       shopDataSync.value = true;
       Get.back();
       Get.back();
-      Get.back(result: saveRemediesResponse);
+      Get.back();
+      Get.back(result: {
+        'saveRemedies': saveRemediesResponse,
+        'product_detail': productDetail
+      });
     } catch (error) {
       if (error is AppException) {
         error.onException();

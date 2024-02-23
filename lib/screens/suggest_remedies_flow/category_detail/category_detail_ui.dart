@@ -65,15 +65,16 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Padding(
-                                padding: EdgeInsets.only(right: 11.w),
-                                child: Text(
-                                  "Select Quantity",
-                                  style: AppTextStyle.textStyle10(
-                                      fontWeight: FontWeight.w400,
-                                      fontColor: appColors.darkBlue),
+                              if (controller.isSentMessage.value == false)
+                                Padding(
+                                  padding: EdgeInsets.only(right: 11.w),
+                                  child: Text(
+                                    "Select Quantity",
+                                    style: AppTextStyle.textStyle10(
+                                        fontWeight: FontWeight.w400,
+                                        fontColor: appColors.darkBlue),
+                                  ),
                                 ),
-                              ),
                               SizedBox(height: 4.h),
                               Row(
                                 children: [
@@ -84,38 +85,41 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                     ),
                                   ),
                                   Spacer(),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 15.h,
-                                      vertical: 4.h,
-                                    ),
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: appColors.darkBlue),
-                                        borderRadius:
-                                            BorderRadius.circular(10.h)),
-                                    child: Row(
-                                      children: [
-                                        GestureDetector(
-                                            onTap: controller.decrementQuantity,
-                                            child: Icon(Icons.remove_rounded,
-                                                color: appColors.darkBlue)),
-                                        SizedBox(width: 8.w),
-                                        Text(
-                                          "${controller.selectedQuantity}",
-                                          style: AppTextStyle.textStyle16(
-                                            fontWeight: FontWeight.w600,
+                                  if (controller.isSentMessage.value == false)
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 15.h,
+                                        vertical: 4.h,
+                                      ),
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: appColors.darkBlue),
+                                          borderRadius:
+                                              BorderRadius.circular(10.h)),
+                                      child: Row(
+                                        children: [
+                                          GestureDetector(
+                                              onTap:
+                                                  controller.decrementQuantity,
+                                              child: Icon(Icons.remove_rounded,
+                                                  color: appColors.darkBlue)),
+                                          SizedBox(width: 8.w),
+                                          Text(
+                                            "${controller.selectedQuantity}",
+                                            style: AppTextStyle.textStyle16(
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(width: 8.w),
-                                        GestureDetector(
-                                            onTap: controller.incrementQuantity,
-                                            child: Icon(Icons.add_rounded,
-                                                color: appColors.darkBlue)),
-                                      ],
+                                          SizedBox(width: 8.w),
+                                          GestureDetector(
+                                              onTap:
+                                                  controller.incrementQuantity,
+                                              child: Icon(Icons.add_rounded,
+                                                  color: appColors.darkBlue)),
+                                        ],
+                                      ),
                                     ),
-                                  ),
                                 ],
                               )
                             ],
@@ -202,66 +206,69 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
               ),
             ),
           ),
-          bottomNavigationBar: Padding(
-            padding: MediaQuery.of(context).viewInsets,
-            child: Padding(
-              padding: EdgeInsets.only(
-                  left: 20.w, right: 20.w, bottom: 20.h, top: 10.h),
-              child: MaterialButton(
-                  height: 50,
-                  minWidth: Get.width,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                  ),
-                  onPressed: () {
-                    openBottomSheet(
-                      context,
-                      functionalityWidget: Padding(
-                        padding:
-                            const EdgeInsets.only(top: 20, left: 20, right: 20),
-                        child: Column(
-                          children: [
-                            Text(
-                              "Are You Sure You Want To Suggest ${controller.productDetail?.prodName} To User?",
-                              style: AppTextStyle.textStyle20(
-                                fontWeight: FontWeight.w600,
+          bottomNavigationBar: controller.isSentMessage.value == false
+              ? Padding(
+                  padding: MediaQuery.of(context).viewInsets,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: 20.w, right: 20.w, bottom: 20.h, top: 10.h),
+                    child: MaterialButton(
+                        height: 50,
+                        minWidth: Get.width,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                        ),
+                        onPressed: () {
+                          openBottomSheet(
+                            context,
+                            functionalityWidget: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 20, left: 20, right: 20),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "Are You Sure You Want To Suggest ${controller.productDetail?.prodName} To User?",
+                                    style: AppTextStyle.textStyle20(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    "On purchase 30% referral bonus will be added in your wallet",
+                                    style: AppTextStyle.textStyle12(
+                                        fontWeight: FontWeight.w600,
+                                        fontColor: appColors.darkBlue
+                                            .withOpacity(0.5)),
+                                  ),
+                                  CustomLightYellowCurveButton(
+                                    name: "suggestNow".tr,
+                                    onTaped: () {
+                                      print(
+                                          "value of controller chat assist ${controller.isChatAssist.value}");
+                                      controller.isChatAssist.value
+                                          ? controller.saveRemedyForChatAssist()
+                                          : controller.suggestRemedy();
+                                      // Get.offNamedUntil(RouteName.orderHistory,
+                                      //     ModalRoute.withName(RouteName.dashboard));
+                                    },
+                                  )
+                                ],
                               ),
                             ),
-                            const SizedBox(height: 10),
-                            Text(
-                              "On purchase 30% referral bonus will be added in your wallet",
-                              style: AppTextStyle.textStyle12(
-                                  fontWeight: FontWeight.w600,
-                                  fontColor:
-                                      appColors.darkBlue.withOpacity(0.5)),
-                            ),
-                            CustomLightYellowCurveButton(
-                              name: "suggestNow".tr,
-                              onTaped: () {
-                                print("value of controller chat assist ${ controller.isChatAssist.value}");
-                                controller.isChatAssist.value
-                                    ? controller.saveRemedyForChatAssist()
-                                    : controller.suggestRemedy();
-                                // Get.offNamedUntil(RouteName.orderHistory,
-                                //     ModalRoute.withName(RouteName.dashboard));
-                              },
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                  color: appColors.guideColor,
-                  child: Text(
-                    "suggestNow".tr,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20.sp,
-                      color: appColors.brownColour,
-                    ),
-                  )),
-            ),
-          ),
+                          );
+                        },
+                        color: appColors.guideColor,
+                        child: Text(
+                          "suggestNow".tr,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20.sp,
+                            color: appColors.brownColour,
+                          ),
+                        )),
+                  ),
+                )
+              : SizedBox(),
         );
       },
     );
