@@ -353,7 +353,12 @@ class FeedBack extends GetView<FeedbackController> {
                       ),
                       const Spacer(),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          // Get.bottomSheet(CommonInfoSheet(
+                          //   title: "trainingVideos".tr,
+                          //   subTitle: "trainingVideosDes".tr,
+                          // ));
+                        },
                         child: const Align(
                           alignment: Alignment.centerRight,
                           child: Icon(

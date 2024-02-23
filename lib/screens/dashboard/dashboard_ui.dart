@@ -1,21 +1,16 @@
-import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
-
-
 import 'package:divine_astrologer/screens/dashboard/widgets/rejoin_widget.dart';
-import 'package:divine_astrologer/screens/queue/queue_screen.dart';
-
+import 'package:divine_astrologer/screens/side_menu/wait_list/wait_list_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
 import '../../../common/colors.dart';
 import '../../../gen/assets.gen.dart';
 import "../../common/routes.dart";
 import '../../pages/home/home_ui.dart';
 import '../../pages/performance/performance_ui.dart';
-import '../../pages/profile/profile_ui.dart';
+
 
 import '../chat_assistance/chat_assistance_ui.dart';
 import 'dashboard_controller.dart';
@@ -106,8 +101,8 @@ class DashboardScreen extends GetView<DashboardController> {
                                         ),
                                         label: 'performance'.tr,
                                       ),
-                                     // Remedies icon comment
-                                     /* BottomNavigationBarItem(
+                                      // Remedies icon comment
+                                      /* BottomNavigationBarItem(
                                         icon: Column(
                                           children: [
                                             Assets.images.icSelectedSuggest.svg(
@@ -148,16 +143,16 @@ class DashboardScreen extends GetView<DashboardController> {
                                       BottomNavigationBarItem(
                                         icon: Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                              CrossAxisAlignment.center,
                                           mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                              MainAxisAlignment.center,
                                           children: [
                                             Assets.images.queue.svg(
                                                 height: 22.h,
                                                 colorFilter: ColorFilter.mode(
                                                     controller.selectedIndex
-                                                        .value ==
-                                                        3
+                                                                .value ==
+                                                            3
                                                         ? appColors.darkBlue
                                                         : appColors.lightGrey,
                                                     BlendMode.srcIn)),
@@ -170,7 +165,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                       /*BottomNavigationBarItem(
                                         icon: Column(
                                           children: [
-                                          
+
                                             controller.userProfileImage.value
                                                         .contains("null") ||
                                                     controller.userProfileImage
@@ -190,18 +185,18 @@ class DashboardScreen extends GetView<DashboardController> {
                                                     width: 30.h,
                                                     placeHolder:
                                                     Assets.images.defaultProfile.path,
-                                                    radius: 
+                                                    radius:
                                                         BorderRadius.circular(
                                                             100.h),
                                                   ),
-                                            *//*    CommonImageView(
+                                            */ /*    CommonImageView(
                                           imagePath:
                                               "${controller.userProfileImage}",
                                           fit: BoxFit.cover,
                                           height: 30,
                                           width: 30,
                                           radius: BorderRadius.circular(50),
-                                        ),*//*
+                                        ),*/ /*
                                             const SizedBox(height: 5),
                                           ],
                                         ),
@@ -212,10 +207,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                     currentIndex:
                                         controller.selectedIndex.value,
                                     onTap: (value) {
-
                                       print("tap working");
                                       controller.selectedIndex.value = value;
-                                     /* if (controller.selectedIndex.value == 2) {
+                                      /* if (controller.selectedIndex.value == 2) {
                                        // Get.toNamed(RouteName.orderHistory);
                                       } else {
 
@@ -291,6 +285,6 @@ class DashboardScreen extends GetView<DashboardController> {
     const PerformanceUI(),
     //const SuggestRemediesUI(),
     ChatAssistancePage(),
-    QueueScreen(),
+    WaitListUI(),
   ];
 }

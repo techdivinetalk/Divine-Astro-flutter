@@ -1,4 +1,5 @@
 import 'package:divine_astrologer/model/waiting_list_queue.dart';
+import 'package:divine_astrologer/repository/waiting_list_queue_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -28,65 +29,69 @@ class WaitListUI extends GetView<WaitListUIController> {
               color: appColors.darkBlue,
             )),
       ),
-      body: GetBuilder<WaitListUIController>(builder: (controller) {
-        if (controller.loading == Loading.loading) {
-          return const Center(
-            child: CircularProgressIndicator.adaptive(
-              valueColor: AlwaysStoppedAnimation(Colors.yellow),
-            ),
-          );
-        } else if (controller.waitingPersons.isEmpty) {
-          return Center(
-            child: Text("jobTitle".tr),
-          );
-        } else {
-          return SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "nextInLine".tr,
-                    style:
-                        AppTextStyle.textStyle20(fontColor: appColors.darkBlue),
+      body: GetBuilder<WaitListUIController>(
+          init: WaitListUIController(WaitingListQueueRepo()),
+          assignId: true,
+          builder: (controller) {
+            if (controller.loading == Loading.loading) {
+              return const Center(
+                child: CircularProgressIndicator.adaptive(
+                  valueColor: AlwaysStoppedAnimation(Colors.yellow),
+                ),
+              );
+            } else if (controller.waitingPersons.isEmpty) {
+              return Center(
+                child: Text("jobTitle".tr),
+              );
+            } else {
+              return SingleChildScrollView(
+                child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "nextInLine".tr,
+                        style: AppTextStyle.textStyle20(
+                            fontColor: appColors.darkBlue),
+                      ),
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      waitingListTile(
+                          controller.waitingPersons[0].getCustomers!,
+                          controller.waitingPersons[0].waitTime ?? 0,
+                          controller.waitingPersons[0]),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10.h),
+                        child: const Divider(),
+                      ),
+                      Text(
+                        "waitingQueue".tr,
+                        style: AppTextStyle.textStyle20(
+                            fontColor: appColors.darkBlue),
+                      ),
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      ListView.builder(
+                        itemCount: controller.waitingPersons.length - 1,
+                        primary: false,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          WaitingPerson person =
+                              controller.waitingPersons[index + 1];
+                          return waitingListTile(person.getCustomers!,
+                              person.waitTime ?? 0, person);
+                        },
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  waitingListTile(
-                      controller.waitingPersons[0].getCustomers!,
-                      controller.waitingPersons[0].waitTime ?? 0,
-                      controller.waitingPersons[0]),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10.h),
-                    child: const Divider(),
-                  ),
-                  Text(
-                    "waitingQueue".tr,
-                    style:
-                        AppTextStyle.textStyle20(fontColor: appColors.darkBlue),
-                  ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  ListView.builder(
-                    itemCount: controller.waitingPersons.length - 1,
-                    primary: false,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      WaitingPerson person =
-                          controller.waitingPersons[index + 1];
-                      return waitingListTile(
-                          person.getCustomers!, person.waitTime ?? 0, person);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-      }),
+                ),
+              );
+            }
+          }),
     );
   }
 
@@ -98,7 +103,9 @@ class WaitListUI extends GetView<WaitListUIController> {
         children: [
           CachedNetworkPhoto(
             url:
-                "${controller.preference.getBaseImageURL()}/${waitingCustomer.avatar ?? ""}",height: 50,width: 50,
+                "${controller.preference.getBaseImageURL()}/${waitingCustomer.avatar ?? ""}",
+            height: 50,
+            width: 50,
           ),
           SizedBox(width: 10.w),
           Expanded(
@@ -131,6 +138,7 @@ class ImageBasedOnResponse extends StatelessWidget {
       : super(key: key);
 
   final WaitingPerson customer;
+
   @override
   Widget build(BuildContext context) {
     if (customer.callType == 1) {
