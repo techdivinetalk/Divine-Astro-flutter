@@ -143,6 +143,14 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
       // messageScrollController.hasClients ? null : getAssistantChatList();
       //
 
+      controller.keyboardVisibilityController.onChange.listen(
+            (bool visible) {
+          if (visible == false) {
+            controller.messageScrollController.jumpTo(10);
+          } else {}
+        },
+      );
+
       controller.messageScrollController.addListener(() {
         final topPosition =
             controller.messageScrollController.position.minScrollExtent;
@@ -251,7 +259,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                     () => controller.loading.value
                         ? msgShimmerList()
                         : controller.chatMessageList.isEmpty
-                            ? Text('start a conversastion')
+                            ? Center(child: Text('start a conversastion'))
                             : ListView.builder(
                                 itemCount: controller.chatMessageList.length,
                                 controller: controller.messageScrollController,
@@ -270,9 +278,11 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                                   return AssistMessageView(
                                     index: index,
                                     chatMessage: currentMsg,
-                                    previousMessage: index == 0
+                                    nextMessage: index ==
+                                            controller.chatMessageList.length -
+                                                1
                                         ? controller.chatMessageList[index]
-                                        : controller.chatMessageList[index - 1],
+                                        : controller.chatMessageList[index + 1],
                                     yourMessage:
                                         currentMsg.sendBy == SendBy.astrologer,
                                     unreadMessage:

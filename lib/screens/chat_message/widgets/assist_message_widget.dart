@@ -23,7 +23,7 @@ class AssistMessageView extends StatelessWidget {
   final AssistChatData chatMessage;
   final String baseImageUrl;
   final bool yourMessage;
-  final AssistChatData previousMessage;
+  final AssistChatData nextMessage;
   final bool? unreadMessage;
 
   const AssistMessageView({
@@ -31,7 +31,7 @@ class AssistMessageView extends StatelessWidget {
     required this.index,
     required this.baseImageUrl,
     required this.chatMessage,
-    required this.previousMessage,
+    required this.nextMessage,
     required this.yourMessage,
     this.unreadMessage,
   });
@@ -68,16 +68,12 @@ class AssistMessageView extends StatelessWidget {
   Widget buildMessageView(
       BuildContext context, AssistChatData currentMsg, bool yourMessage) {
     final currentMsgDate = DateTime.fromMillisecondsSinceEpoch(
-        int.parse(chatMessage.createdAt ?? '0'));
+        int.parse(currentMsg.createdAt ?? '0'));
     final nextMsgDate = DateTime.fromMillisecondsSinceEpoch(
-        int.parse(previousMessage.createdAt ?? '0'));
+        int.parse(nextMessage.createdAt ?? '0'));
     final differenceOfDays = nextMsgDate.day - currentMsgDate.day;
-    final isToday = (DateTime.now().day - currentMsgDate.day) == 0 &&
-        (DateTime.now().month - currentMsgDate.month) == 0 &&
-        (DateTime.now().year - currentMsgDate.year) == 0;
-    final isYesterday = (DateTime.now().day - currentMsgDate.day) == 1 &&
-        (DateTime.now().month - currentMsgDate.month) == 0 &&
-        (DateTime.now().year - currentMsgDate.year) == 0;
+    final isToday = (DateTime.now().day - currentMsgDate.day) == 1;
+    final isYesterday = (DateTime.now().day - currentMsgDate.day) == 2;
 
     Widget messageWidget;
     switch (chatMessage.msgType) {
@@ -131,14 +127,14 @@ class AssistMessageView extends StatelessWidget {
     return Column(
       children: [
         // unreadMessageView()
-
+        messageWidget,
         dayWidget(
             currentMsgDate: currentMsgDate,
             nextMsgDate: nextMsgDate,
             isToday: isToday,
             isYesterday: isYesterday,
             differenceOfDays: differenceOfDays),
-        messageWidget,
+
       ],
     );
   }
