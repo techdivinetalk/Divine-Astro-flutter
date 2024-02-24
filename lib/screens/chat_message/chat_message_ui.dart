@@ -143,13 +143,13 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
       // messageScrollController.hasClients ? null : getAssistantChatList();
       //
 
-      controller.keyboardVisibilityController.onChange.listen(
-            (bool visible) {
-          if (visible == false) {
-            controller.messageScrollController.jumpTo(10);
-          } else {}
-        },
-      );
+      // controller.keyboardVisibilityController.onChange.listen(
+      //       (bool visible) {
+      //     if (visible == false) {
+      //       controller.messageScrollController.jumpTo(10);
+      //     } else {}
+      //   },
+      // );
 
       controller.messageScrollController.addListener(() {
         final topPosition =
@@ -302,14 +302,13 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                 ),
               ),
               Obx(
-                () => controller.messageTemplates.isNotEmpty
-                    ? Column(
+                () =>  Column(
                         children: [
                           messageTemplateRow(),
                           SizedBox(height: 20.h),
                         ],
                       )
-                    : const SizedBox(),
+                   ,
               ),
               SizedBox(height: 10.h),
               chatBottomBar(context),
@@ -330,11 +329,15 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
         separatorBuilder: (_, index) => SizedBox(width: 10.w),
         itemBuilder: (context, index) {
           late final MessageTemplates msg;
-          return index == 0
+          return index == 0 || controller.messageTemplates.isEmpty
               ? GestureDetector(
-                  onTap: () {
-                    Get.toNamed(RouteName.addMessageTemplate,
-                        arguments: [true, false]);
+                  onTap: ()async {
+                 final result = await  Get.toNamed(RouteName.addMessageTemplate,
+                        arguments: [true, false,true]);
+                 if(result['updated']){
+                   controller.getMessageTemplatesLocally();
+                   controller.update();
+                 }
                   },
                   child: Container(
                     padding:

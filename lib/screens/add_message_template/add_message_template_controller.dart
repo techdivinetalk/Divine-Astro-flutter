@@ -1,4 +1,6 @@
 import 'package:divine_astrologer/model/add_message_template_response.dart';
+import 'package:divine_astrologer/repository/kundli_repository.dart';
+import 'package:divine_astrologer/screens/chat_message/chat_message_controller.dart';
 import 'package:divine_astrologer/screens/message_template/message_template_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -24,21 +26,24 @@ class AddMessageTemplateController extends GetxController {
   bool fromChat = false;
   bool isUpdate = false;
   late MessageTemplates messageTemplate;
+  final messageTemplateController =
+      Get.put(MessageTemplateController(MessageTemplateRepo()));
 
   @override
   void onInit() {
     super.onInit();
     var argument = Get.arguments;
-    if(argument != null) {
+    if (argument != null) {
       fromChat = argument.first;
       isUpdate = argument[1];
     }
-    if(isUpdate) {
+    if (isUpdate) {
       messageTemplate = argument[2];
       nameController.text = messageTemplate.message ?? '';
       messageController.text = messageTemplate.description ?? '';
       nameLenght.value = nameController.text.trim().length;
     }
+
     nameController.addListener(() {
       if (nameController.text.trim().length <= 15) {
         nameLenght.value = nameController.text.trim().length;
@@ -63,52 +68,51 @@ class AddMessageTemplateController extends GetxController {
   }
 
   submit() async {
-    if(validate()) {
+    if (validate()) {
       Map<String, dynamic> params = {
         "message": nameController.text.trim(),
         "description": messageController.text.trim(),
       };
-      AddMessageTemplateResponse response = await repository.addTemplates(params);
+      AddMessageTemplateResponse response =
+          await repository.addTemplates(params);
+      print("added message template ${response.toJson()}");
       if (response.statusCode == 200) {
-        if(fromChat) {
-          Get.find<ChatMessageWithSocketController>().getMessageTemplates();
-          Get.back();
-        } else {
-          Get.find<MessageTemplateController>().getMessageTemplates();
-          Get.back();
-        }
+        await messageTemplateController.addedMessageTemplates();
+        Get.back(result: {'updated': true});
       }
-      if (response.statusCode == 400) {
-        Fluttertoast.showToast(msg: response.message.toString());
+      if (response.statusCode == 400 || response.success == false) {
+        Fluttertoast.showToast(
+            msg: response.message ?? 'Only 10 Templates are allowed');
       }
     } else {
-      if(nameController.text.isEmpty) {
+      if (nameController.text.isEmpty) {
         nameErrorText.value = 'Please enter template name';
-      } else if(messageController.text.isEmpty) {
+      } else if (messageController.text.isEmpty) {
         messageErrorText.value = 'Please enter message';
       }
     }
   }
 
   updateForm() async {
-    if(validate()) {
+    if (validate()) {
       Map<String, dynamic> params = {
         "message": nameController.text.trim(),
         "description": messageController.text.trim(),
-        "template_id":messageTemplate.id,
+        "template_id": messageTemplate.id,
       };
-      UpdateMessageTemplateResponse response = await repository.updateTemplates(params);
+      UpdateMessageTemplateResponse response =
+          await repository.updateTemplates(params);
       if (response.statusCode == 200) {
-          Get.find<MessageTemplateController>().getMessageTemplates();
-          Get.back();
+        Get.find<MessageTemplateController>().getMessageTemplates();
+        Get.back();
       }
       if (response.statusCode == 400) {
         Fluttertoast.showToast(msg: response.message.toString());
       }
     } else {
-      if(nameController.text.isEmpty) {
+      if (nameController.text.isEmpty) {
         nameErrorText.value = 'Please enter template name';
-      } else if(messageController.text.isEmpty) {
+      } else if (messageController.text.isEmpty) {
         messageErrorText.value = 'Please enter message';
       }
     }

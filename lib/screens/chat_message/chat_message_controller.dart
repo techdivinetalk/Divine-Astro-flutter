@@ -394,7 +394,7 @@ class ChatMessageController extends GetxController {
         appSocket.sendAssistantMessage(
             customerId: args!.id.toString(),
             msgData: msgData,
-            message: messageController.text,
+            message:data['text'],
             astroId: preferenceService.getUserDetail()!.id.toString());
         break;
       case MsgType.remedies:
