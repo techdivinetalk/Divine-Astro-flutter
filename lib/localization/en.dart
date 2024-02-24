@@ -13,6 +13,7 @@ Map<String, String> en() {
     "today": "Today",
     'deleteChat':'Delete Chat',
     "followers": "Followers",
+    'voucherPopUpTitle':'Choose The Gift Voucher To Send',
     "dasha": "Dasha",
     "version": "Version",
     "somethingWentWrong": "Something went wrong",

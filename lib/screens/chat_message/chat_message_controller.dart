@@ -48,6 +48,24 @@ class ChatMessageController extends GetxController {
   File? image;
   final ImagePicker picker = ImagePicker();
   XFile? pickedFile;
+  RxMap selectedVoucher = {}.obs;
+  List<Map> voucherList = [
+    {
+      "id": 1,
+      "name": "5 Minutes",
+      "description": "User can chat free for 5 minutes.",
+    },
+    {
+      "id": 2,
+      "name": "10 Minutes",
+      "description": "User can chat free for 10 minutes.",
+    },
+    {
+      "id": 3,
+      "name": "15 Minutes",
+      "description": "User can chat free for 15 minutes.",
+    }
+  ];
   File? uploadFile;
   RxBool isDataLoad = false.obs;
   final appSocket = AppSocket();
@@ -394,7 +412,7 @@ class ChatMessageController extends GetxController {
         appSocket.sendAssistantMessage(
             customerId: args!.id.toString(),
             msgData: msgData,
-            message:data['text'],
+            message: data['text'],
             astroId: preferenceService.getUserDetail()!.id.toString());
         break;
       case MsgType.remedies:
