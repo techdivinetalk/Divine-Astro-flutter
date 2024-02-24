@@ -1,10 +1,7 @@
-import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/screens/splash/splash_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 
 import '../../common/colors.dart';
 
@@ -16,6 +13,7 @@ class SplashUI extends GetView<SplashController> {
     return GetBuilder<SplashController>(
       assignId: true,
       init: SplashController(),
+      initState: (state) {},
       builder: (controller) {
         return Scaffold(
           body: Container(

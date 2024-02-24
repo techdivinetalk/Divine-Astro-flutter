@@ -86,6 +86,20 @@ class AppPermissionService {
     return Future<bool>.value(hasStoragePermission);
   }
 
+  Future<bool> permissionNotification() async {
+    bool hasNotificationPermission = false;
+    final PermissionStatus try0 = await Permission.notification.status;
+    if (try0 == PermissionStatus.granted) {
+      hasNotificationPermission = true;
+    } else {
+      final PermissionStatus try1 = await Permission.notification.request();
+      if (try1 == PermissionStatus.granted) {
+        hasNotificationPermission = true;
+      } else {}
+    }
+    return Future<bool>.value(hasNotificationPermission);
+  }
+
   Future<bool> permissionPhotoOrStorage() async {
     bool perm = false;
     if (Platform.isIOS) {
@@ -215,7 +229,7 @@ class AppPermissionService {
   Future<void> showAlertDialog(String module, List<String> perms) async {
     await showDialog(
       context: Get.context!,
-      barrierColor: appColors.darkBlue.withOpacity(0.5),
+      barrierColor: appColors.textColor.withOpacity(0.5),
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Permission need for use $module"),
@@ -257,20 +271,27 @@ class AppPermissionService {
     return Future<void>.value();
   }
 
+  static bool isPopupOpen = false;
+
   Future<void> showPermissionDialog({
     required String permissionName,
     required bool isForOverlayPermission,
   }) async {
+    if (isPopupOpen) {
+      return;
+    }
+    isPopupOpen = true;
     await showCupertinoModalPopup(
       context: Get.context!,
-      barrierColor: appColors.darkBlue.withOpacity(0.5),
+      barrierColor: appColors.textColor.withOpacity(0.5),
       builder: (BuildContext context) {
         return PermissionDialog(
           permissionName: permissionName,
           isForOverlayPermission: isForOverlayPermission,
         );
       },
-    );
+    ).then((_) => isPopupOpen = false);
+    isPopupOpen = false;
     return Future<void>.value();
   }
 
@@ -282,5 +303,21 @@ class AppPermissionService {
     final bool value = perm1.isGranted && perm2.isGranted && perm3.isGranted;
 
     return Future<bool>.value(value);
+  }
+
+  Future<void> hasRequiredPermForSplash(Function() callback) async {
+    bool hasPerm = false;
+    hasPerm = await AppPermissionService.instance.permissionNotification();
+    if (hasPerm) {
+      callback();
+    } else {
+      if (!hasPerm) {
+        await showPermissionDialog(
+          permissionName: 'Notification permission',
+          isForOverlayPermission: false,
+        );
+      } else {}
+    }
+    return Future<void>.value();
   }
 }

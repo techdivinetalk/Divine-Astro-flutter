@@ -7,36 +7,60 @@ import 'package:divine_astrologer/common/important_number_bottomsheet.dart';
 
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
+import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../common/permission_handler.dart';
 import '../../common/routes.dart';
 import '../../di/shared_preference_service.dart';
-import '../../model/important_numbers.dart';
+
 import '../../repository/important_number_repository.dart';
 
-class SplashController extends GetxController {
+class SplashController extends GetxController with WidgetsBindingObserver {
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
 
-  // List<MobileNumber> importantNumbers = <MobileNumber>[];
+  @override
+  void onInit() {
+    super.onInit();
+    WidgetsBinding.instance.addObserver(this);
+
+    notificationPermission();
+    // requestPermissions();
+    // checkImportantNumbers();
+    // navigation();
+  }
 
   @override
-  Future<void> onInit() async {
-    super.onInit();
-    String? token = await FirebaseMessaging.instance.getToken();
-    print("FCM Token: $token");
-    notificationPermission();
-    requestPermissions();
-    // checkImportantNumbers();
-    navigation();
+  void onClose() {
+    WidgetsBinding.instance.removeObserver(this);
+
+    super.onClose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      notificationPermission();
+    }
   }
 
   notificationPermission() async {
-    await PermissionHelper().askNotificationPermission();
+    await recurringFunction(onComplete: navigation);
+  }
+
+  Future<void> recurringFunction({required void Function() onComplete}) async {
+    bool hasAllPerm = false;
+    await AppPermissionService.instance.hasRequiredPermForSplash(
+      () async {
+        hasAllPerm = true;
+      },
+    );
+    hasAllPerm ? onComplete() : await recurringFunction(onComplete: onComplete);
+    return Future<void>.value();
   }
 
   List isAllDone = [];
@@ -83,7 +107,7 @@ class SplashController extends GetxController {
             update();
           }
         }
-        if(isAllDone.length ==3){
+        if (isAllDone.length == 3) {
           navigation();
         }
         print(isAllDone.length);
@@ -163,13 +187,6 @@ class SplashController extends GetxController {
       });
     } else {}
     return Permission.contacts.isGranted;
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      checkImportantNumbers();
-    }
   }
 }
 

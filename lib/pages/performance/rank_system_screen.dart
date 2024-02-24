@@ -53,7 +53,7 @@ class _RankSystemScreenState extends State<RankSystemScreen> {
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        titleSpacing: 0,
+        titleSpacing: 0, 
         leading: GestureDetector(
           onTap: () {
             Get.back();
