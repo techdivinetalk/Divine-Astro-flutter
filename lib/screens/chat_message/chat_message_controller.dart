@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -36,6 +37,7 @@ class ChatMessageController extends GetxController {
   // RxString userProfileImage = "".obs;
   RxList<AssistChatData> unreadMessageList = <AssistChatData>[].obs;
   RxList<MessageTemplates> messageTemplates = <MessageTemplates>[].obs;
+  final keyboardVisibilityController = KeyboardVisibilityController();
   RxInt currentPage = 1.obs;
   Set<int> processedPages = {};
   final messageController = TextEditingController();

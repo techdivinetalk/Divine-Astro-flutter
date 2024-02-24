@@ -52,6 +52,23 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
 // class ChatMessageSupportUI extends GetView<ChatMessageController> {
 //   const ChatMessageSupportUI({super.key});
 
+  updateFirebaseToken() async {
+    String? newtoken = await FirebaseMessaging.instance.getToken();
+    print("token: new token: " + newtoken.toString());
+    final data = await AppFirebaseService()
+        .database
+        .child("astrologer/${userData?.id}/deviceToken")
+        .once();
+    final currentToken = data.snapshot.value;
+    if (newtoken != currentToken) {
+      print("token updated from ${currentToken} to ${newtoken}");
+      await AppFirebaseService()
+          .database
+          .child("astrologer/${userData?.id}/")
+          .update({'deviceToken': newtoken});
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -59,11 +76,13 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
     if (Get.arguments != null) {
       controller.args = Get.arguments;
       controller.update();
+      updateFirebaseToken();
       controller.getAssistantChatList();
       controller.userjoinedChatSocket();
       controller.listenjoinedChatSocket();
       controller.getMessageTemplatesLocally();
-controller.scrollToBottomFunc();
+      controller.scrollToBottomFunc();
+
       FirebaseMessaging.instance.onTokenRefresh.listen((newtoken) {
         AppFirebaseService()
             .database
@@ -77,7 +96,6 @@ controller.scrollToBottomFunc();
           for (int index = 0; index < newChatList.length; index++) {
             print("new chat list ${jsonEncode(newChatList[index])} ");
             var responseMsg = newChatList[index];
-print("controller args id ${controller.args?.id}");
             if (int.parse(responseMsg?["sender_id"].toString() ?? '') ==
                 controller.args?.id) {
               print("inside chat add condition");
@@ -124,6 +142,14 @@ print("controller args id ${controller.args?.id}");
       //to check if the list has enough number of elements to scroll
       // messageScrollController.hasClients ? null : getAssistantChatList();
       //
+
+      controller.keyboardVisibilityController.onChange.listen(
+            (bool visible) {
+          if (visible == false) {
+            controller.messageScrollController.jumpTo(10);
+          } else {}
+        },
+      );
 
       controller.messageScrollController.addListener(() {
         final topPosition =
@@ -233,7 +259,7 @@ print("controller args id ${controller.args?.id}");
                     () => controller.loading.value
                         ? msgShimmerList()
                         : controller.chatMessageList.isEmpty
-                            ? Text('start a conversastion')
+                            ? Center(child: Text('start a conversastion'))
                             : ListView.builder(
                                 itemCount: controller.chatMessageList.length,
                                 controller: controller.messageScrollController,
@@ -252,9 +278,11 @@ print("controller args id ${controller.args?.id}");
                                   return AssistMessageView(
                                     index: index,
                                     chatMessage: currentMsg,
-                                    previousMessage: index == 0
+                                    nextMessage: index ==
+                                            controller.chatMessageList.length -
+                                                1
                                         ? controller.chatMessageList[index]
-                                        : controller.chatMessageList[index - 1],
+                                        : controller.chatMessageList[index + 1],
                                     yourMessage:
                                         currentMsg.sendBy == SendBy.astrologer,
                                     unreadMessage:
@@ -264,8 +292,9 @@ print("controller args id ${controller.args?.id}");
                                                 controller
                                                     .unreadMessageList.first.id
                                             : false,
-                                    baseImageUrl:
-                                    controller.preference.getBaseImageURL()??'',
+                                    baseImageUrl: controller.preference
+                                            .getBaseImageURL() ??
+                                        '',
                                   );
                                 },
                               ),
@@ -408,7 +437,6 @@ print("controller args id ${controller.args?.id}");
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.newline,
                       maxLines: 1,
-
                       // focusNode: controller.msgFocus,
                       onChanged: (value) {
                         // controller.isEmojiShowing.value = true;
@@ -488,7 +516,7 @@ print("controller args id ${controller.args?.id}");
       SvgPicture.asset('assets/svg/gallery_icon.svg'),
       SvgPicture.asset('assets/svg/remedies_icon.svg'),
       SvgPicture.asset('assets/svg/product.svg'),
-      SvgPicture.asset('assets/svg/deck_icon.svg'),
+      // SvgPicture.asset('assets/svg/deck_icon.svg'),
       // Add more items as needed
     ];
     showModalBottomSheet(

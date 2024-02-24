@@ -88,16 +88,13 @@ class SuggestProducts extends GetView<SuggestProductController> {
                                   : controller.shopList)[index];
                               return InkWell(
                                 onTap: () async {
-                                  if(index==0){
-                                    // Get.toNamed(RouteName.)
-                                  }else{
                                   Get.toNamed(
                                       RouteName.chatAssistProductSubPage,
                                       arguments: {
                                         "shodId": item.id,
                                         "productName": item.shopName,
                                         "customerId":controller.customerId,
-                                      });}
+                                      });
                                 },
                                 child: Container(
                                   width: 300,
