@@ -237,13 +237,15 @@ final sendByValue = EnumValues({
   "1": SendBy.astrologer,
 });
 
-enum MsgType { text, gift, image, remedies, product, limit }
+enum MsgType { text, gift, image, remedies,audio, product, voucher,limit }
 
 final msgTypeValues = EnumValues({
   "0": MsgType.text,
   "1": MsgType.image,
   "2": MsgType.remedies,
   "3": MsgType.product,
+  "4": MsgType.voucher,
+  "5":MsgType.audio,
   "8": MsgType.gift,
   "10": MsgType.limit,
 });

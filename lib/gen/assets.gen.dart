@@ -22,6 +22,10 @@ class $AssetsImagesGen {
   SvgGenImage get searchIcon =>
       const SvgGenImage('assets/images/Search_icon.svg');
 
+  /// File path: assets/images/astrologer.png
+  AssetGenImage get astrologer =>
+      const AssetGenImage('assets/images/astrologer.png');
+
   /// File path: assets/images/audio_disable_live.svg
   SvgGenImage get audioDisableLive =>
       const SvgGenImage('assets/images/audio_disable_live.svg');
@@ -99,6 +103,30 @@ class $AssetsImagesGen {
   AssetGenImage get chatCommonRecharge =>
       const AssetGenImage('assets/images/chat_common_recharge.png');
 
+  /// File path: assets/images/chat_disabled_video_call.png
+  AssetGenImage get chatDisabledVideoCall =>
+      const AssetGenImage('assets/images/chat_disabled_video_call.png');
+
+  /// File path: assets/images/chat_disabled_voice_call.png
+  AssetGenImage get chatDisabledVoiceCall =>
+      const AssetGenImage('assets/images/chat_disabled_voice_call.png');
+
+  /// File path: assets/images/chat_new_disable_icon.png
+  AssetGenImage get chatNewDisableIcon =>
+      const AssetGenImage('assets/images/chat_new_disable_icon.png');
+
+  /// File path: assets/images/chat_new_enable_icon.png
+  AssetGenImage get chatNewEnableIcon =>
+      const AssetGenImage('assets/images/chat_new_enable_icon.png');
+
+  /// File path: assets/images/chat_new_video_call_icon.png
+  AssetGenImage get chatNewVideoCallIcon =>
+      const AssetGenImage('assets/images/chat_new_video_call_icon.png');
+
+  /// File path: assets/images/chat_new_voice_call_icon.png
+  AssetGenImage get chatNewVoiceCallIcon =>
+      const AssetGenImage('assets/images/chat_new_voice_call_icon.png');
+
   /// File path: assets/images/chat_video_call_camera_off.png
   AssetGenImage get chatVideoCallCameraOff =>
       const AssetGenImage('assets/images/chat_video_call_camera_off.png');
@@ -174,6 +202,14 @@ class $AssetsImagesGen {
   AssetGenImage get divineLogo =>
       const AssetGenImage('assets/images/divine_logo.png');
 
+  /// File path: assets/images/ganesh_ji.png
+  AssetGenImage get ganeshJiPng =>
+      const AssetGenImage('assets/images/ganesh_ji.png');
+
+  /// File path: assets/images/ganesh_ji.svg
+  SvgGenImage get ganeshJiSvg =>
+      const SvgGenImage('assets/images/ganesh_ji.svg');
+
   /// File path: assets/images/gift_live.svg
   SvgGenImage get giftLive => const SvgGenImage('assets/images/gift_live.svg');
 
@@ -240,8 +276,6 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_chatBottom.svg
   SvgGenImage get icChatBottom =>
       const SvgGenImage('assets/images/ic_chatBottom.svg');
-    SvgGenImage get queue =>
-      const SvgGenImage('assets/svg/queue.svg');
 
   /// File path: assets/images/ic_chating.svg
   SvgGenImage get icChating =>
@@ -366,9 +400,6 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_messageTemplate.svg
   SvgGenImage get icMessageTemplate =>
       const SvgGenImage('assets/images/ic_messageTemplate.svg');
-  /// File path: assets/images/ic_messageTemplate.svg
-  SvgGenImage get message =>
-      const SvgGenImage('assets/images/message.svg');
 
   /// File path: assets/images/ic_moon.svg
   SvgGenImage get icMoon => const SvgGenImage('assets/images/ic_moon.svg');
@@ -685,6 +716,9 @@ class $AssetsImagesGen {
   AssetGenImage get medalTwo =>
       const AssetGenImage('assets/images/medal_two.png');
 
+  /// File path: assets/images/message.svg
+  SvgGenImage get message => const SvgGenImage('assets/images/message.svg');
+
   /// File path: assets/images/otp_image.svg
   SvgGenImage get otpImage => const SvgGenImage('assets/images/otp_image.svg');
 
@@ -738,6 +772,7 @@ class $AssetsImagesGen {
   List<dynamic> get values => [
         group,
         searchIcon,
+        astrologer,
         audioDisableLive,
         audioEnableLive,
         avatar,
@@ -758,6 +793,12 @@ class $AssetsImagesGen {
         championLive,
         chatCommonClock,
         chatCommonRecharge,
+        chatDisabledVideoCall,
+        chatDisabledVoiceCall,
+        chatNewDisableIcon,
+        chatNewEnableIcon,
+        chatNewVideoCallIcon,
+        chatNewVoiceCallIcon,
         chatVideoCallCameraOff,
         chatVideoCallCameraOn,
         chatVideoCallIcon,
@@ -777,6 +818,8 @@ class $AssetsImagesGen {
         defaultProfile,
         deleteAccout,
         divineLogo,
+        ganeshJiPng,
+        ganeshJiSvg,
         giftLive,
         giftTotal,
         icBankDetail,
@@ -911,6 +954,7 @@ class $AssetsImagesGen {
         medalOne,
         medalThree,
         medalTwo,
+        message,
         otpImage,
         planetStarLive,
         report,
@@ -945,6 +989,10 @@ class $AssetsLottieGen {
   LottieGenImage get liveFollowHeart =>
       const LottieGenImage('assets/lottie/live_follow_heart.json');
 
+  /// File path: assets/lottie/loading_2.json
+  LottieGenImage get loading2 =>
+      const LottieGenImage('assets/lottie/loading_2.json');
+
   /// File path: assets/lottie/loading_animation.json
   LottieGenImage get loadingAnimation =>
       const LottieGenImage('assets/lottie/loading_animation.json');
@@ -967,6 +1015,7 @@ class $AssetsLottieGen {
         genericLoading,
         gift,
         liveFollowHeart,
+        loading2,
         loadingAnimation,
         loadingDots,
         soundWaves,
@@ -976,6 +1025,14 @@ class $AssetsLottieGen {
 
 class $AssetsSvgGen {
   const $AssetsSvgGen();
+
+  /// File path: assets/svg/Group 128714.png
+  AssetGenImage get group128714 =>
+      const AssetGenImage('assets/svg/Group 128714.png');
+
+  /// File path: assets/svg/Group 129525.svg
+  SvgGenImage get group129525 =>
+      const SvgGenImage('assets/svg/Group 129525.svg');
 
   /// File path: assets/svg/access_blocked.svg
   SvgGenImage get accessBlocked =>
@@ -989,6 +1046,9 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/block_user.svg
   SvgGenImage get blockUser => const SvgGenImage('assets/svg/block_user.svg');
+
+  /// File path: assets/svg/bronze.svg
+  SvgGenImage get bronze => const SvgGenImage('assets/svg/bronze.svg');
 
   /// File path: assets/svg/call_earning.svg
   SvgGenImage get callEarning =>
@@ -1009,8 +1069,14 @@ class $AssetsSvgGen {
   /// File path: assets/svg/deck_icon.svg
   SvgGenImage get deckIcon => const SvgGenImage('assets/svg/deck_icon.svg');
 
+  /// File path: assets/svg/diamond.svg
+  SvgGenImage get diamond => const SvgGenImage('assets/svg/diamond.svg');
+
   /// File path: assets/svg/disconnect.svg
   SvgGenImage get disconnect => const SvgGenImage('assets/svg/disconnect.svg');
+
+  /// File path: assets/svg/empty-box 1.svg
+  SvgGenImage get emptyBox1 => const SvgGenImage('assets/svg/empty-box 1.svg');
 
   /// File path: assets/svg/forward_icon.svg
   SvgGenImage get forwardIcon =>
@@ -1023,9 +1089,15 @@ class $AssetsSvgGen {
   SvgGenImage get galleryIcon =>
       const SvgGenImage('assets/svg/gallery_icon.svg');
 
+  /// File path: assets/svg/gift.svg
+  SvgGenImage get gift => const SvgGenImage('assets/svg/gift.svg');
+
   /// File path: assets/svg/gift_earning.svg
   SvgGenImage get giftEarning =>
       const SvgGenImage('assets/svg/gift_earning.svg');
+
+  /// File path: assets/svg/gold.svg
+  SvgGenImage get gold => const SvgGenImage('assets/svg/gold.svg');
 
   /// File path: assets/svg/grey_container.svg
   SvgGenImage get greyContainer =>
@@ -1036,6 +1108,15 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/ic_call_1.svg
   SvgGenImage get icCall1 => const SvgGenImage('assets/svg/ic_call_1.svg');
+
+  /// File path: assets/svg/ic_check.svg
+  SvgGenImage get icCheck => const SvgGenImage('assets/svg/ic_check.svg');
+
+  /// File path: assets/svg/ic_sendMsg.svg
+  SvgGenImage get icSendMsg => const SvgGenImage('assets/svg/ic_sendMsg.svg');
+
+  /// File path: assets/svg/ic_un_check.svg
+  SvgGenImage get icUnCheck => const SvgGenImage('assets/svg/ic_un_check.svg');
 
   /// File path: assets/svg/kundali_header.svg
   SvgGenImage get kundaliHeader =>
@@ -1061,6 +1142,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/pink_slider.svg
   SvgGenImage get pinkSlider => const SvgGenImage('assets/svg/pink_slider.svg');
 
+  /// File path: assets/svg/platinum.svg
+  SvgGenImage get platinum => const SvgGenImage('assets/svg/platinum.svg');
+
   /// File path: assets/svg/please_register_1.svg
   SvgGenImage get pleaseRegister1 =>
       const SvgGenImage('assets/svg/please_register_1.svg');
@@ -1073,6 +1157,12 @@ class $AssetsSvgGen {
   SvgGenImage get privateCallEarning =>
       const SvgGenImage('assets/svg/private_call_earning.svg');
 
+  /// File path: assets/svg/product.svg
+  SvgGenImage get product => const SvgGenImage('assets/svg/product.svg');
+
+  /// File path: assets/svg/queue.svg
+  SvgGenImage get queue => const SvgGenImage('assets/svg/queue.svg');
+
   /// File path: assets/svg/rejoin_chat_icon.svg
   SvgGenImage get rejoinChatIcon =>
       const SvgGenImage('assets/svg/rejoin_chat_icon.svg');
@@ -1080,6 +1170,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/remedies_icon.svg
   SvgGenImage get remediesIcon =>
       const SvgGenImage('assets/svg/remedies_icon.svg');
+
+  /// File path: assets/svg/silver.svg
+  SvgGenImage get silver => const SvgGenImage('assets/svg/silver.svg');
 
   /// File path: assets/svg/switch_camera.svg
   SvgGenImage get switchCamera =>
@@ -1097,25 +1190,35 @@ class $AssetsSvgGen {
       const SvgGenImage('assets/svg/wallet_balance_icon.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [
+  List<dynamic> get values => [
+        group128714,
+        group129525,
         accessBlocked,
         blackDot,
         block,
         blockUser,
+        bronze,
         callEarning,
         camera,
         cameraIcon,
         caution,
         chatGift,
         deckIcon,
+        diamond,
         disconnect,
+        emptyBox1,
         forwardIcon,
         gallery,
         galleryIcon,
+        gift,
         giftEarning,
+        gold,
         greyContainer,
         icAdd,
         icCall1,
+        icCheck,
+        icSendMsg,
+        icUnCheck,
         kundaliHeader,
         loginLogo,
         maximumOrderTimeIcon,
@@ -1123,11 +1226,15 @@ class $AssetsSvgGen {
         mute,
         orderTypeIcon,
         pinkSlider,
+        platinum,
         pleaseRegister1,
         pleaseRegister2,
         privateCallEarning,
+        product,
+        queue,
         rejoinChatIcon,
         remediesIcon,
+        silver,
         switchCamera,
         videoCallEarning,
         videoMute,
