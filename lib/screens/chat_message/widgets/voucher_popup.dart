@@ -104,7 +104,9 @@ voucherPopUp(BuildContext context) {
                           borderRadius: BorderRadius.all(Radius.circular(15.0)),
                         ),
                         onPressed: () {
-                          Get.back();
+                          if (controller.selectedVoucher.isNotEmpty) {
+                            Get.back(result: controller.selectedVoucher.value);
+                          }
                         },
                         color: appColors.guideColor,
                         child: Text(

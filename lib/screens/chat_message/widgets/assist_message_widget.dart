@@ -4,11 +4,13 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/model/res_product_detail.dart';
+import 'package:divine_astrologer/screens/chat_message/chat_message_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:voice_message_package/voice_message_package.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
 import '../../../common/common_functions.dart';
@@ -23,6 +25,7 @@ class AssistMessageView extends StatelessWidget {
   final AssistChatData chatMessage;
   final String baseImageUrl;
   final bool yourMessage;
+
   final AssistChatData nextMessage;
   final bool? unreadMessage;
 
@@ -62,7 +65,7 @@ class AssistMessageView extends StatelessWidget {
         ),
       );
     }
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   Widget buildMessageView(
@@ -91,6 +94,12 @@ class AssistMessageView extends StatelessWidget {
         break;
       case MsgType.product:
         messageWidget = productMsgView(context, chatMessage, yourMessage);
+        break;
+      case MsgType.audio:
+        messageWidget = audioMsgView(context, chatMessage, yourMessage);
+        break;
+      case MsgType.voucher:
+        messageWidget = voucherMsgView(chatMessage, yourMessage);
         break;
       default:
         messageWidget = const SizedBox.shrink();
@@ -134,7 +143,6 @@ class AssistMessageView extends StatelessWidget {
             isToday: isToday,
             isYesterday: isYesterday,
             differenceOfDays: differenceOfDays),
-
       ],
     );
   }
@@ -142,6 +150,134 @@ class AssistMessageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return buildMessageView(context, chatMessage, yourMessage);
+  }
+
+  Widget voucherMsgView(AssistChatData message, bool yourMessage) {
+    final voucher = jsonDecode(message.message ?? '');
+    return Align(
+      alignment: yourMessage ? Alignment.centerRight : Alignment.centerLeft,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: SizedBox(
+          width: 330,
+          child: Stack(
+            children: [
+              GetBuilder<ChatMessageController>(builder: (controller) {
+                return Align(
+                  alignment:   yourMessage ? Alignment.centerRight : Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 40),
+                    child: Container(
+                      width: 300,
+
+                      decoration: BoxDecoration(
+                          color: appColors.white,
+                          borderRadius: BorderRadius.circular(10)),
+                      padding: const EdgeInsets.only(
+                          left: 40, right: 10, top: 10, bottom: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(
+                              text: TextSpan(children: [
+                            TextSpan(
+                                text: "You Gifted ${controller.args?.name} a",
+                                style: TextStyle(
+                                    color: appColors.textColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400)),
+                            TextSpan(
+                                text: " ${voucher['name']} Voucher",
+                                style: TextStyle(
+                                    color: appColors.red,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600))
+                          ])),
+                          const SizedBox(height: 10),
+                          const Text(
+                            "Notification sent to User. Voucher expires in 3 days. User can use the voucher whenever you are online.",
+                            style: TextStyle(
+                                fontSize: 10, fontWeight: FontWeight.w300),
+                          ),
+                          const SizedBox(height: 10),
+                          Text("Status : Used",
+                              style: TextStyle(color: appColors.grey, fontSize: 10))
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }),
+              SizedBox(
+                  height: 130,
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Assets.svg.gift.svg(height: 70))),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget audioMsgView(
+      BuildContext context, AssistChatData chatDetail, bool yourMessage) {
+    return SizedBox(
+      width: double.maxFinite,
+      child: Column(
+        crossAxisAlignment:
+            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8.0),
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 3.0,
+                    offset: const Offset(0.0, 3.0))
+              ],
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(8.r)),
+            ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                VoiceMessageView(
+                    controller: VoiceController(
+                        audioSrc: chatDetail.message ?? '',
+                        maxDuration: const Duration(seconds: 120),
+                        isFile: false,
+                        onComplete: () => debugPrint("onComplete"),
+                        onPause: () => debugPrint("onPause"),
+                        onPlaying: () => debugPrint("onPlaying")),
+                    innerPadding: 0,
+                    cornerRadius: 20),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Row(
+                    children: [
+                      Text(
+                        msgTimeFormat(chatDetail.createdAt),
+                        style: AppTextStyle.textStyle10(
+                            fontColor: appColors.black),
+                      ),
+                      if (yourMessage) SizedBox(width: 8.w),
+                      if (yourMessage)
+                        chatSeenStatusWidget(
+                            seenStatus:
+                                chatMessage.seenStatus ?? SeenStatus.delivered)
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   Widget imageMsgView({required AssistChatData chatDetail}) {
@@ -152,7 +288,7 @@ class AssistMessageView extends StatelessWidget {
             yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
-              margin: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+              margin: EdgeInsets.symmetric(vertical: 4.h),
               padding: const EdgeInsets.all(8.0),
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
@@ -266,7 +402,7 @@ class AssistMessageView extends StatelessWidget {
     return SizedBox(
       width: double.maxFinite,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+        padding: EdgeInsets.symmetric(vertical: 4.h),
         child: Column(
           crossAxisAlignment: (currentMsg.sendBy) == SendBy.astrologer
               ? CrossAxisAlignment.end

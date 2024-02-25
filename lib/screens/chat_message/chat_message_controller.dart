@@ -48,6 +48,7 @@ class ChatMessageController extends GetxController {
   File? image;
   final ImagePicker picker = ImagePicker();
   XFile? pickedFile;
+  Rx<bool> isRecording = false.obs;
   RxMap selectedVoucher = {}.obs;
   List<Map> voucherList = [
     {
@@ -390,8 +391,15 @@ class ChatMessageController extends GetxController {
     loading(false);
   }
 
+  uploadAudioFile(File soundFile) async {
+    final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+    final String uploadFile = await uploadImageToS3Bucket(soundFile, time);
+    if (uploadFile != "") {
+      sendMsg(MsgType.audio, {'audioUrl': uploadFile});
+    }
+  }
+
   void sendMsg(MsgType msgType, Map data) {
-    print("inside send message ${userData?.image}");
 
     late AssistChatData msgData;
     switch (msgType) {
@@ -413,6 +421,46 @@ class ChatMessageController extends GetxController {
             customerId: args!.id.toString(),
             msgData: msgData,
             message: data['text'],
+            astroId: preferenceService.getUserDetail()!.id.toString());
+        break;
+      case MsgType.voucher:
+        msgData = AssistChatData(
+            message: jsonEncode( data['data']),
+            profileImage: userData?.image,
+            astrologerId: preferenceService.getUserDetail()!.id,
+            createdAt: DateTime.now().toIso8601String(),
+            id: DateTime.now().millisecondsSinceEpoch,
+            isSuspicious: 0,
+            msgType: MsgType.voucher,
+            sendBy: SendBy.astrologer,
+            seenStatus: SeenStatus.notSent,
+
+            // msgStatus: MsgStatus.sent,
+            customerId: args?.id);
+        appSocket.sendAssistantMessage(
+            customerId: args!.id.toString(),
+            msgData: msgData,
+            message: jsonEncode(data['data']),
+            astroId: preferenceService.getUserDetail()!.id.toString());
+        break;
+      case MsgType.audio:
+        msgData = AssistChatData(
+            message: data['audioUrl'],
+            profileImage: userData?.image,
+            astrologerId: preferenceService.getUserDetail()!.id,
+            createdAt: DateTime.now().toIso8601String(),
+            id: DateTime.now().millisecondsSinceEpoch,
+            isSuspicious: 0,
+            msgType: MsgType.audio,
+            sendBy: SendBy.astrologer,
+            seenStatus: SeenStatus.notSent,
+
+            // msgStatus: MsgStatus.sent,
+            customerId: args?.id);
+        appSocket.sendAssistantMessage(
+            customerId: args!.id.toString(),
+            msgData: msgData,
+            message: data['audioUrl'],
             astroId: preferenceService.getUserDetail()!.id.toString());
         break;
       case MsgType.remedies:
