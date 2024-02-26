@@ -1674,7 +1674,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                       children: [
                         // SizedBox(width: 16.w),
                         IconButton(
-                          onPressed: backFunction,
+                          onPressed: controller.backFunction,
                           icon: const Icon(Icons.arrow_back_ios_new_rounded),
                         ),
                         //SizedBox(width: 8.w),
