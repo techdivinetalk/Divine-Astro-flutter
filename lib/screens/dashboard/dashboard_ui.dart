@@ -149,7 +149,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Assets.images.queue.svg(
+                                            Assets.svg.queue.svg(
                                                 height: 22.h,
                                                 colorFilter: ColorFilter.mode(
                                                     controller.selectedIndex

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:divine_astrologer/model/message_template_response.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../common/app_exception.dart';
@@ -57,6 +58,7 @@ class MessageTemplateRepo extends ApiProvider {
               addMessageResponse.success!) {
             return addMessageResponse;
           } else {
+            Fluttertoast.showToast(msg: json.decode(response.body)["message"]);
             throw CustomException(json.decode(response.body)["message"]);
           }
         }

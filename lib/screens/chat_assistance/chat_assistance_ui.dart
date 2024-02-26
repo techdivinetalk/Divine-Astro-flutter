@@ -421,6 +421,34 @@ class ChatAssistanceTile extends StatelessWidget {
           ],
         );
         break;
+      case MsgType.voucher:
+        lastMessageWidget = const Row(
+          children: [
+            Icon(
+              Icons.money,
+              size: 15,
+            ),
+            Text(
+              "   Voucher",
+              style: TextStyle(fontSize: 10),
+            )
+          ],
+        );
+        break;
+      case MsgType.audio:
+        lastMessageWidget = const Row(
+          children: [
+            Icon(
+              Icons.audiotrack,
+              size: 15,
+            ),
+            Text(
+              "   Audio",
+              style: TextStyle(fontSize: 10),
+            )
+          ],
+        );
+        break;
       default:
         lastMessageWidget = SizedBox();
         break;

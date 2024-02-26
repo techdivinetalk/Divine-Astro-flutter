@@ -85,7 +85,7 @@ class HomeUI extends GetView<HomeController> {
                         : Assets.images.icVisibilityOff.svg(),
                   ),
                   Text(
-                    controller.isShowTitle.value ? "Unhide" : "Hide",
+                    !controller.isShowTitle.value ? "Unhide" : "Hide",
                     style: AppTextStyle.textStyle13(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.textColor),

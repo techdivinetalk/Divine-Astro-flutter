@@ -111,83 +111,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                         Padding(
                                           padding: EdgeInsets.symmetric(
                                               vertical: 4.h, horizontal: 12.w),
-                                          child: /*Column(
-                                            children: [
-                                              if (chatMessage.id ==
-                                                  controller
-                                                      .unreadMessageIndex.value)
-                                                unreadMessageView(),
-                                              chatMessage.msgType == "kundli"
-                                                  ? kundliView(
-                                                      chatDetail: chatMessage,
-                                                      index: index)
-                                                  : chatMessage.msgType ==
-                                                          "image"
-                                                      ? imageMsgView(
-                                                          controller.chatMessages[index].base64Image ??
-                                                              "",
-                                                          chatDetail: controller
-                                                                  .chatMessages[
-                                                              index],
-                                                          index: index,
-                                                          chatMessage.senderId ==
-                                                              preferenceService
-                                                                  .getUserDetail()!
-                                                                  .id)
-                                                      : chatMessage.msgType ==
-                                                              "audio"
-                                                          ? audioView(context,
-                                                              chatDetail: controller
-                                                                      .chatMessages[
-                                                                  index],
-                                                              yourMessage: chatMessage
-                                                                      .senderId ==
-                                                                  preferenceService
-                                                                      .getUserDetail()!
-                                                                      .id)
-                                                          : chatMessage.msgType ==
-                                                                  "gift"
-                                                              ? giftMsgView(
-                                                                  context,
-                                                                  chatMessage,
-                                                                  chatMessage
-                                                                          .senderId ==
-                                                                      preferenceService
-                                                                          .getUserDetail()!
-                                                                          .id,
-                                                                )
-
-
-
-                                                  : chatMessage.msgType ==
-                                                  "Remedies"
-                                                  ? remediesMsgView(
-                                                context,
-                                                chatMessage,
-                                                chatMessage
-                                                    .senderId ==
-                                                    preferenceService
-                                                        .getUserDetail()!
-                                                        .id,
-                                              )
-
-
-
-                                                              : chatMessage.msgType ==
-                                                                      "sendGifts"
-                                                                  ? giftSendUi(
-                                                                      context,
-                                                                      chatMessage,
-                                                                      chatMessage.senderId ==
-                                                                          preferenceService
-                                                                              .getUserDetail()!
-                                                                              .id)
-                                                                  : textMsgView(
-                                                                      context,
-                                                                      chatMessage,
-                                                                      chatMessage.senderId == preferenceService.getUserDetail()!.id),
-                                            ],
-                                          )*/
+                                          child:
                                               MessageView(
                                                   index: index,
                                                   chatMessage: chatMessage,
@@ -367,14 +291,12 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     ))
                 ),
                 Obx(
-                  () => controller.messageTemplates.isNotEmpty
-                      ? Column(
+                  () =>  Column(
                           children: [
                             messageTemplateRow(),
                             SizedBox(height: 20.h),
                           ],
-                        )
-                      : const SizedBox(),
+                        ),
                 ),
                 chatBottomBar(context),
                 Obx(() => AnimatedContainer(
@@ -608,9 +530,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
           late final MessageTemplates msg;
           return index == 0
               ? GestureDetector(
-                  onTap: () {
-                    Get.toNamed(RouteName.addMessageTemplate,
-                        arguments: [true, false]);
+                  onTap: ()async {
+                 await  Get.toNamed(RouteName.messageTemplate);
+                 controller.getMessageTemplatesLocally();
+                 controller.update();
                   },
                   child: Container(
                     padding:
@@ -1634,36 +1557,14 @@ class AstrologerChatAppBar extends StatelessWidget {
   final ChatMessageWithSocketController controller =
       Get.find<ChatMessageWithSocketController>();
 
-  void backFunction() {
-    WidgetsBinding.instance.endOfFrame.then(
-      (_) async {
-        controller.userLeavePrivateChatListenerSocket();
-        controller.chatTimer?.cancel();
-        Get.back();
-        Get.back();
-        if(AppFirebaseService().orderData.value["status"] == "4"){
-          DatabaseReference ref = FirebaseDatabase.instance.ref("order/${AppFirebaseService().orderData.value["orderId"]}");
-          ref.update({
-            "status": "5",
-          }).then((_) {
-            // Success handling if needed.
-          }).catchError((error) {
-            // Error handling.
-            print("Firebase error: $error");
-          });
-        }
 
-      },
-    );
-    return;
-  }
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
       onPopInvoked: (pop) {
-        backFunction();
+        controller.backFunction();
       },
       child: Container(
         // height: 90.h + Get.mediaQuery.viewPadding.top.h,
@@ -1696,7 +1597,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                       children: [
                         // SizedBox(width: 16.w),
                         IconButton(
-                          onPressed: backFunction,
+                          onPressed: controller.backFunction,
                           icon: const Icon(Icons.arrow_back_ios_new_rounded),
                         ),
                         //SizedBox(width: 8.w),

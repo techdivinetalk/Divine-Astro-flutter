@@ -44,6 +44,17 @@ class MessageTemplateController extends GetxController {
     // print("result: " + result);
   }
 
+  addedMessageTemplates() async {
+    try {
+      await getMessageTemplates();
+      messageLocalTemplates.add(messageTemplates.first);
+      await updateMessageTemplateLocally();
+      update();
+    } catch (error) {
+      divineSnackBar(data: error.toString(), color: appColors.redColor);
+    }
+  }
+
   getMessageTemplates() async {
     try {
       final response = await repository.fetchTemplates();

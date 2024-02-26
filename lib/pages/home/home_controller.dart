@@ -603,7 +603,7 @@ class HomeController extends GetxController {
         homeData!.offers!.customOffer![index].isOn = value;
       }
       update();
-    } catch (error) { 
+    } catch (error) {
       debugPrint("updateOfferType $error");
       if (error is AppException) {
         error.onException();
@@ -759,7 +759,7 @@ class HomeController extends GetxController {
     //   totaltGift: giftCount,
     // );
   }
- 
+
   getDateDifference(int timestamp) {
     DateTime dtTimestamp = DateTime.fromMillisecondsSinceEpoch(timestamp);
     DateTime now = DateTime.now();

@@ -9,6 +9,7 @@ import 'package:divine_astrologer/screens/auth/login/login_ui.dart';
 import 'package:divine_astrologer/screens/blocked_user/blocked_user_bindings.dart';
 import 'package:divine_astrologer/screens/chat_message/chat_message_binding.dart';
 import 'package:divine_astrologer/screens/chat_message/chat_message_ui.dart';
+import 'package:divine_astrologer/screens/chat_message/widgets/product/pooja/pooja_ui.dart';
 import 'package:divine_astrologer/screens/chat_message/widgets/product/sub_product/sub_product_binding.dart';
 import 'package:divine_astrologer/screens/chat_message/widgets/product/sub_product/sub_product_ui.dart';
 import 'package:divine_astrologer/screens/chat_message/widgets/product/suggest_products.dart';
@@ -71,9 +72,18 @@ import '../screens/bank_details/bank_detail_binding.dart';
 import '../screens/bank_details/bank_details_ui.dart';
 import '../screens/blocked_user/blocked_user_ui.dart';
 import '../screens/chat_message/widgets/image_preview.dart';
+import '../screens/chat_message/widgets/product/pooja/pooja_binding.dart';
+import '../screens/chat_message/widgets/product/pooja/widgets/address_flow/add_update/address_add_update_binding.dart';
+import '../screens/chat_message/widgets/product/pooja/widgets/address_flow/add_update/address_add_update_screen.dart';
+import '../screens/chat_message/widgets/product/pooja/widgets/address_flow/view/address_view_binding.dart';
+import '../screens/chat_message/widgets/product/pooja/widgets/address_flow/view/address_view_screen.dart';
+import '../screens/chat_message/widgets/product/pooja/widgets/details/pooja_dharam_details_binding.dart';
+import '../screens/chat_message/widgets/product/pooja/widgets/details/pooja_dharam_details_screen.dart';
+import '../screens/chat_message/widgets/product/pooja/widgets/summary/pooja_dharam_summary_binding.dart';
+import '../screens/chat_message/widgets/product/pooja/widgets/summary/pooja_dharam_summary_screen.dart';
 import '../screens/chat_message/widgets/product/suggest_product_binding.dart';
-import '../screens/chat_message/widgets/remedy/chatAssistSuggestRemedies/chatAssistSuggestRemedies.dart';
-import '../screens/chat_message/widgets/remedy/chatAssistSuggestRemedies/chatAssistSuggestRemediesBinding.dart';
+import '../screens/chat_message/widgets/remedy/chatAssistSuggestRemedies/chatAssistSuggestRemediesDetail.dart';
+import '../screens/chat_message/widgets/remedy/chatAssistSuggestRemedies/chatAssistSuggestRemediesDetailBinding.dart';
 import '../screens/dashboard/dashboard_bindings.dart';
 import '../screens/dashboard/dashboard_ui.dart';
 import '../screens/edit_profile/edit_profile_binding.dart';
@@ -112,12 +122,18 @@ class RouteName {
   static const String dashboard = "/dashboard";
   static const String blockedUser = "/blockedUser";
   static const String profileUi = "/profileUi";
+  static const String poojaDharamMainScreen = "/poojaDharamMainScreen";
+  static const String poojaDharamDetailsScreen = "/poojaDharamDetailsScreen";
+  static const String poojaDharamSummaryScreen = "/poojaDharamSummaryScreen";
+  static const String addressViewScreen = "/addressViewScreen";
+  static const String addressAddUpdateScreen = "/addressAddUpdateScreen";
   static const String editProfileUI = "/editProfileUI";
   static const String orderHistory = "/orderHistory";
   static const String messageTemplate = "/messageTemplate";
   static const String addMessageTemplate = "/addMessageTemplate";
   static const String referAstrologer = "/referAstrologer";
   static const String yourEarning = "/yourEarning";
+  static const String wallet = "/walletPage";
   static const String priceHistoryUI = "/priceHistoryUI";
   static const String priceChangeReqUI = "/priceChangeReqUI";
   static const String numberChangeReqUI = "/numberChangeReqUI";
@@ -154,7 +170,8 @@ class RouteName {
   static const String orderFeedback = "/orderFeedback";
   static const String chatSuggestRemedy = "/chatSuggestRemedy";
   static const String chatAssistSuggestRemedy = "/chatAssistSuggestRemedy";
-  static const String chatAssistSuggestRemedyDetails = "/chatAssistSuggestRemedyDetails";
+  static const String chatAssistSuggestRemedyDetails =
+      "/chatAssistSuggestRemedyDetails";
   static const String chatSuggestRemedyDetails = "/chatSuggestRemedyDetails";
   static const String feedback = "/feedback";
   static const String liveDharamScreen = "/liveDharamScreen";
@@ -199,9 +216,26 @@ class Routes {
         name: RouteName.blockedUser,
         binding: BlockedUserBinding()),
     GetPage(
-        page: () =>  ProfileUI(),
+        page: () => ProfileUI(),
         name: RouteName.profileUi,
         binding: ProfileBinding()),
+    GetPage(
+      name: RouteName.poojaDharamMainScreen,
+      page: () => const PoojaDharamMainScreen(),
+      binding: PoojaDharamMainBinding(),
+    ),
+
+    GetPage<dynamic>(
+      name: RouteName.poojaDharamDetailsScreen,
+      page: PoojaDharamDetailsScreen.new,
+      binding: PoojaDharamDetailsBinding(),
+    ),
+
+    GetPage<dynamic>(
+      name: RouteName.poojaDharamSummaryScreen,
+      page: PoojaDharamSummaryScreen.new,
+      binding: PoojaDharamSummaryBinding(),
+    ),
     /*// GetPage(
     //     name: RouteName.editProfileUI, page: () => const EditProfileUI(),
     // ),*/
@@ -309,6 +343,11 @@ class Routes {
         name: RouteName.waitList,
         binding: WaitListBinding()),
     GetPage(
+      page: () => WalletUI(),
+      name: RouteName.wallet,
+      binding: WalletBinding(),
+    ),
+    GetPage(
         page: () => const SettingsUI(),
         name: RouteName.settingsUI,
         binding: SettingsBinding()),
@@ -397,6 +436,18 @@ class Routes {
       page: () => const RemediesDetailPage(),
       name: RouteName.remediesDetail,
       binding: RemediesDetailBinding(),
+    ),
+
+    GetPage<dynamic>(
+      name: RouteName.addressViewScreen,
+      page: AddressViewScreen.new,
+      binding: AddressViewBinding(),
+    ),
+
+    GetPage<dynamic>(
+      name: RouteName.addressAddUpdateScreen,
+      page: AddressAddUpdateScreen.new,
+      binding: AddressAddUpdateBinding(),
     ),
   ];
 }

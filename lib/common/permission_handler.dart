@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_settings/app_settings.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
@@ -312,7 +313,7 @@ class PermissionDialog extends StatelessWidget {
                   SizedBox(height: 20.h),
                   CustomText(
                     'Allow $permissionName access',
-                    fontSize: 20.sp,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w700,
                   ),
                   SizedBox(height: 15.h),
@@ -332,13 +333,13 @@ class PermissionDialog extends StatelessWidget {
                         Expanded(
                           child: CustomButton(
                             onTap: () async {
-                              // Get.back();
-                              Navigator.pop(context);
-
+                              Get.back();
+                              // Navigator.pop(context);
+                              await Future.delayed(const Duration(seconds: 1));
                               (isForOverlayPermission ?? false) == true
                                   ? await FlutterOverlayWindow
                                       .requestPermission()
-                                  : await openAppSettings();
+                                  : await AppSettings.openAppSettings();
                             },
                             radius: 100.r,
                             padding: EdgeInsets.symmetric(vertical: 16.h),

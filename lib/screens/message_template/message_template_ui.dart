@@ -44,6 +44,7 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
             SizedBox(height: 24.h),
             GestureDetector(
               onTap: () {
+
                 Get.toNamed(RouteName.addMessageTemplate,
                     arguments: [false, false]);
               },
@@ -85,8 +86,9 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                             controller.messageTemplates[index];
                         return GestureDetector(
                           onTap: () {
+                            if(messageTemplate.type != 0){
                             Get.toNamed(RouteName.addMessageTemplate,
-                                arguments: [false, true, messageTemplate]);
+                                arguments: [false, true, messageTemplate]);}
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(

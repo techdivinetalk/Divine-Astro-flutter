@@ -115,6 +115,7 @@ class AssistChatData {
   String? profileImage;
   String? productId;
   String? productImage;
+  bool? isPoojaProduct;
   // String? awsUrl;
   String? shopId;
   String? createdAt;
@@ -130,6 +131,7 @@ class AssistChatData {
       // this.msgStatus,
       this.msgType,
       this.profileImage,
+      this.isPoojaProduct,
       this.productId,
       this.sendBy,
       this.productImage,
@@ -154,7 +156,7 @@ class AssistChatData {
         : MsgType.text;
     productId = json['product_id'].toString();
     productImage = json['product_image'];
-
+    isPoojaProduct = json['is_pooja_product'] == "true" ? true : false;
     // msgStatus = json['msg_status'] != null
     //     ? msgStatusValues.map[json["msg_status"]]
     //     : MsgStatus.sent;
@@ -185,6 +187,7 @@ class AssistChatData {
     data['profile_image'] = profileImage;
     data['product_image'] = productImage;
     data['product_id'] = productId;
+    data['is_pooja_product'] = isPoojaProduct.toString();
     // data['awsUrl'] = awsUrl;
     data["product"] = product?.toJson();
     data['shop_id'] = shopId;
@@ -237,13 +240,15 @@ final sendByValue = EnumValues({
   "1": SendBy.astrologer,
 });
 
-enum MsgType { text, gift, image, remedies, product, limit }
+enum MsgType { text, gift, image, remedies, audio, product, voucher, limit }
 
 final msgTypeValues = EnumValues({
   "0": MsgType.text,
   "1": MsgType.image,
   "2": MsgType.remedies,
   "3": MsgType.product,
+  "4": MsgType.voucher,
+  "5": MsgType.audio,
   "8": MsgType.gift,
   "10": MsgType.limit,
 });

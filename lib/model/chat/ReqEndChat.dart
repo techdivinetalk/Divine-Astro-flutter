@@ -21,4 +21,5 @@ class ReqEndChat {
     data['message'] = message;
     return data;
   }
+
 }
