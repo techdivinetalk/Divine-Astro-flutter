@@ -665,7 +665,7 @@ class UserRepository extends ApiProvider {
 
   Future<String> endCall(Map<String, dynamic> param) async {
     try {
-      final response = await post(agoraEndCall, body: jsonEncode(param));
+      final response = await post(agoraCallEnd, body: jsonEncode(param));
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
           throw CustomException(json.decode(response.body)["error"]);

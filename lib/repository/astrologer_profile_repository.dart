@@ -139,7 +139,7 @@ class AstrologerProfileRepository extends ApiProvider {
     String data = "";
     try {
       final String requestBody = jsonEncode(params);
-      final response = await post(agoraEndCall, body: requestBody);
+      final response = await post(agoraCallEnd, body: requestBody);
       final Map<String, dynamic> responseBody = json.decode(response.body);
       if (response.statusCode == HttpStatus.ok) {
         if (responseBody["status_code"] == HttpStatus.ok) {
