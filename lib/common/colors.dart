@@ -11,6 +11,7 @@ class AppColors extends GetxController {
   Color bannerTitleColor = Color(0xFF2D2D2D);
   Color timeBackgroundColor = Color(0xFF0DAA65);
 
+  Color green = Color(0xFF35BA80);
   Color white = Color(0xFFFFFFFF);
   Color darkBlue = Color(0xFF0E2339);
   Color lightGreen = Color(0xff27C884);

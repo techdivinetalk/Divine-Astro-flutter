@@ -28,6 +28,7 @@ Map<String, String> en() {
     'cusps': 'Cusps',
     'cusp': 'Cusp',
     "viewAll": "View All",
+    "poojaDetails": "Pooja Details",
     'planets': 'Planets',
     'rulingPlanets': 'Ruling Planets',
     'vimshottari': 'Vimshottari',

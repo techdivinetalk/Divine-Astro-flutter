@@ -95,9 +95,9 @@ class AssistMessageView extends StatelessWidget {
       case MsgType.product:
         messageWidget = productMsgView(context, chatMessage, yourMessage);
         break;
-      case MsgType.audio:
-        messageWidget = audioMsgView(context, chatMessage, yourMessage);
-        break;
+      // case MsgType.audio:
+      //   messageWidget = audioMsgView(context, chatMessage, yourMessage);
+      //   break;
       case MsgType.voucher:
         messageWidget = voucherMsgView(chatMessage, yourMessage);
         break;

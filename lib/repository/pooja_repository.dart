@@ -55,6 +55,7 @@ class PoojaRepository extends ApiProvider {
       final response = await post(
           'https://occultism-gleams.000webhostapp.com/poojadetail',
           endPoint: '');
+      print("--------- pooja detail response ------------ ${json.encode(response.body)}");
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
           preferenceService.erase();
@@ -87,7 +88,7 @@ class PoojaRepository extends ApiProvider {
     GetPoojaResponse data = GetPoojaResponse();
     try {
       final String requestBody = jsonEncode(params);
-      final response = await post(getPooja, body: requestBody);
+      final response = await get(getPooja);
       final Map<String, dynamic> responseBody = json.decode(response.body);
       if (response.statusCode == HttpStatus.ok) {
         if (responseBody["status_code"] == HttpStatus.ok) {
