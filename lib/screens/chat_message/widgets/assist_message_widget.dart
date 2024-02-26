@@ -569,12 +569,16 @@ class AssistMessageView extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         print(
-            "data from page ${chatMessage.productId} ${chatMessage.customerId}");
+            "data from page ${chatMessage.productId} ${chatMessage.isPoojaProduct} ${chatMessage.customerId}");
+        if(chatMessage.isPoojaProduct??false){
+          Get.toNamed(RouteName.poojaDharamDetailsScreen,
+              arguments: {'detailOnly':true,'data':int.parse(chatMessage.productId ?? '0')});
+        }else{
         Get.toNamed(RouteName.categoryDetail, arguments: {
           "productId": chatMessage.productId.toString(),
           "isSentMessage": true,
           "customerId": chatMessage.customerId,
-        });
+        });}
       },
       child: SizedBox(
         width: double.maxFinite,
@@ -596,7 +600,7 @@ class AssistMessageView extends StatelessWidget {
                     child: Image.asset('assets/svg/Group 128714.png'),
                   ),
                   title: CustomText(
-                    "You have suggested a product",
+                    "You have suggested a ${ chatMessage.isPoojaProduct??false? "Pooja":"product"}",
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w600,
                   ),

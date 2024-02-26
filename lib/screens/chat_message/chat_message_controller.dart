@@ -81,96 +81,6 @@ class ChatMessageController extends GetxController {
     args = Get.arguments;
   }
 
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   listenSocket();
-  //   if (Get.arguments != null) {
-  //     args = Get.arguments;
-  //     getAssistantChatList();
-  //     userjoinedChatSocket();
-  //     listenjoinedChatSocket();
-  //     getMessageTemplatesLocally();
-  //
-  //     FirebaseMessaging.instance.onTokenRefresh.listen((newtoken) {
-  //       AppFirebaseService()
-  //           .database
-  //           .child("astrologer/${userData?.id}/")
-  //           .update({'deviceToken': newtoken});
-  //     });
-  //
-  //     assistChatNewMsg.listen((newChatList) {
-  //       if (newChatList.isNotEmpty) {
-  //         print("new chat list ${newChatList.length} ");
-  //         for (int index = 0; index < newChatList.length; index++) {
-  //           print("new chat list ${jsonEncode(newChatList[index])} ");
-  //           var responseMsg = newChatList[index];
-  //
-  //           if (int.parse(responseMsg?["sender_id"].toString() ?? '') ==
-  //               args?.id) {
-  //             print("inside chat add condition");
-  //             chatMessageList([
-  //               ...chatMessageList,
-  //               AssistChatData(
-  //                   message: responseMsg['message'],
-  //                   astrologerId:
-  //                       int.parse(responseMsg?["userid"].toString() ?? ''),
-  //                   createdAt: DateTime.parse(responseMsg?["created_at"])
-  //                       .millisecondsSinceEpoch
-  //                       .toString(),
-  //                   // id: responseMsg["chatId"] != null &&
-  //                   //         responseMsg["chatId"] != ''&& responseMsg["chatId"]=='undefined'
-  //                   //     ? int.parse(responseMsg["chatId"])
-  //                   //     : null,
-  //                   isSuspicious: 0,
-  //                   sendBy: SendBy.customer,
-  //                   msgType: responseMsg["msg_type"] != null
-  //                       ? msgTypeValues.map[responseMsg["msg_type"]]
-  //                       : MsgType.text,
-  //                   seenStatus: SeenStatus.received,
-  //                   customerId: int.parse(responseMsg['sender_id'] ?? 0))
-  //             ]);
-  //             chatMessageList.refresh();
-  //             scrollToBottomFunc();
-  //             assistChatNewMsg.removeAt(index);
-  //             update();
-  //             print(
-  //                 "outside chat add condition ${json.encode(chatMessageList.last)}");
-  //           }
-  //         }
-  //         update();
-  //       }
-  //       scrollToBottomFunc();
-  //       reArrangeChatList();
-  //     });
-  //     update();
-  //     //to check if the list has enough number of elements to scroll
-  //     // messageScrollController.hasClients ? null : getAssistantChatList();
-  //     //
-  //
-  //     messageScrollController.addListener(() {
-  //       final topPosition = messageScrollController.position.minScrollExtent;
-  //       if (messageScrollController.position.pixels == topPosition) {
-  //         //code to fetch old messages
-  //         print("to fetch old messages");
-  //         getAssistantChatList();
-  //       }
-  //     });
-  //
-  //     messageScrollController.addListener(() {
-  //       final bottomPosition = messageScrollController.position.maxScrollExtent;
-  //       if (messageScrollController.position.pixels == bottomPosition) {
-  //         //code to fetch old messages
-  //       }
-  //     });
-  //     // getAssistantChatList();
-  //     scrollToBottomFunc();
-  //     update();
-  //   }
-  // }
-
-  // getBaseimageUrl() {}
-  //
   @override
   void dispose() {
     // TODO: implement dispose
@@ -225,7 +135,7 @@ class ChatMessageController extends GetxController {
     print("listen joined chat socket called");
     appSocket.listenUserJoinedSocket(
       (p0) {
-        print(" listen user joined socket" + p0);
+        print(" listen user joined socket ${p0}");
       },
     );
   }
@@ -401,7 +311,6 @@ class ChatMessageController extends GetxController {
   }
 
   void sendMsg(MsgType msgType, Map data) {
-
     late AssistChatData msgData;
     switch (msgType) {
       case MsgType.text:
@@ -426,7 +335,7 @@ class ChatMessageController extends GetxController {
         break;
       case MsgType.voucher:
         msgData = AssistChatData(
-            message: jsonEncode( data['data']),
+            message: jsonEncode(data['data']),
             profileImage: userData?.image,
             astrologerId: preferenceService.getUserDetail()!.id,
             createdAt: DateTime.now().toIso8601String(),
@@ -502,9 +411,8 @@ class ChatMessageController extends GetxController {
             astroId: preferenceService.getUserDetail()!.id.toString());
         break;
       case MsgType.product:
-        final isPooja = data['data']['isPooja'] as bool ;
-        if(isPooja){
-
+        final isPooja = data['data']['isPooja'] as bool;
+        if (isPooja) {
           final productDetails = data['data']['poojaData'] as Pooja;
 
           msgData = AssistChatData(
@@ -513,13 +421,13 @@ class ChatMessageController extends GetxController {
               createdAt: DateTime.now().toIso8601String(),
               id: DateTime.now().millisecondsSinceEpoch,
               isSuspicious: 0,
+              isPoojaProduct: true,
               profileImage: userData?.image,
               msgType: MsgType.product,
               sendBy: SendBy.astrologer,
               product: Product(
-
-                  id: productDetails.id,
-                  ),
+                id: productDetails.id,
+              ),
               productImage: productDetails.poojaImg ?? '',
               productId: productDetails.id.toString(),
               shopId: productDetails.id.toString(),
@@ -529,37 +437,38 @@ class ChatMessageController extends GetxController {
           appSocket.sendAssistantMessage(
               customerId: args!.id.toString(),
               msgData: msgData,
-              message: productDetails.poojaName??'',
+              message: productDetails.poojaName ?? '',
               astroId: preferenceService.getUserDetail()!.id.toString());
-        }else{
-        final productData =
-            data['data']['saveRemedies'] as SaveRemediesResponse;
-        final productDetails = data['data']['product_detail'] as Products;
-        print("delete product data ${productDetails} ${productData}");
-        msgData = AssistChatData(
-            message: productDetails.prodName,
-            astrologerId: preferenceService.getUserDetail()!.id,
-            createdAt: DateTime.now().toIso8601String(),
-            id: DateTime.now().millisecondsSinceEpoch,
-            isSuspicious: 0,
-            profileImage: userData?.image,
-            msgType: MsgType.product,
-            sendBy: SendBy.astrologer,
-            product: Product(
-
-                id: productData.data?.shopId,
-                prodName: productDetails.prodName),
-            productImage: productDetails.prodImage ?? '',
-            productId: productData.data?.productId.toString(),
-            shopId: productData.data?.shopId.toString(),
-            seenStatus: SeenStatus.notSent,
-            // msgStatus: MsgStatus.sent,
-            customerId: args?.id);
-        appSocket.sendAssistantMessage(
-            customerId: args!.id.toString(),
-            msgData: msgData,
-            message: productDetails.prodName ?? '',
-            astroId: preferenceService.getUserDetail()!.id.toString());}
+        } else {
+          final productData =
+              data['data']['saveRemedies'] as SaveRemediesResponse;
+          final productDetails = data['data']['product_detail'] as Products;
+          print("delete product data ${productDetails} ${productData}");
+          msgData = AssistChatData(
+              message: productDetails.prodName,
+              astrologerId: preferenceService.getUserDetail()!.id,
+              createdAt: DateTime.now().toIso8601String(),
+              id: DateTime.now().millisecondsSinceEpoch,
+              isSuspicious: 0,
+              isPoojaProduct: false,
+              profileImage: userData?.image,
+              msgType: MsgType.product,
+              sendBy: SendBy.astrologer,
+              product: Product(
+                  id: productData.data?.shopId,
+                  prodName: productDetails.prodName),
+              productImage: productDetails.prodImage ?? '',
+              productId: productData.data?.productId.toString(),
+              shopId: productData.data?.shopId.toString(),
+              seenStatus: SeenStatus.notSent,
+              // msgStatus: MsgStatus.sent,
+              customerId: args?.id);
+          appSocket.sendAssistantMessage(
+              customerId: args!.id.toString(),
+              msgData: msgData,
+              message: productDetails.prodName ?? '',
+              astroId: preferenceService.getUserDetail()!.id.toString());
+        }
         break;
       default:
     }

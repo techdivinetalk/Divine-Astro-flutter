@@ -105,6 +105,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
               controller.chatMessageList([
                 ...controller.chatMessageList,
                 AssistChatData(
+                    isPoojaProduct: responseMsg['message']=="true"?true:false,
                     message: responseMsg['message'],
                     astrologerId:
                         int.parse(responseMsg?["userid"].toString() ?? ''),
@@ -116,6 +117,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                     //     ? int.parse(responseMsg["chatId"])
                     //     : null,
                     isSuspicious: 0,
+
                     productId: responseMsg['productId'].toString(),
                     sendBy: SendBy.customer,
                     msgType: responseMsg["msg_type"] != null
@@ -341,13 +343,9 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
           return index == 0 || controller.messageTemplates.isEmpty
               ? GestureDetector(
                   onTap: () async {
-                    final result = await Get.toNamed(
-                        RouteName.addMessageTemplate,
-                        arguments: [true, false, true]);
-                    if (result['updated']) {
-                      controller.getMessageTemplatesLocally();
-                      controller.update();
-                    }
+                    await Get.toNamed(RouteName.messageTemplate);
+                    controller.getMessageTemplatesLocally();
+                    controller.update();
                   },
                   child: Container(
                     padding:

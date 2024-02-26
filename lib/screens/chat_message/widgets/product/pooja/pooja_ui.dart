@@ -165,7 +165,7 @@ class _PoojaDharamMainScreenState extends State<PoojaDharamMainScreen>
                   onTap: () async {
                     await Get.toNamed(
                       RouteName.poojaDharamDetailsScreen,
-                      arguments: poojaHistory.getPooja?.id ?? 0,
+                      arguments: {'detailOnly':false,'data': poojaHistory.getPooja?.id ?? 0,}
                     );
                   },
                   child: Padding(
@@ -335,7 +335,7 @@ class _PoojaDharamMainScreenState extends State<PoojaDharamMainScreen>
                                 onPressed: () async {
                                   await Get.toNamed(
                                     RouteName.poojaDharamDetailsScreen,
-                                    arguments: poojaHistory.getPooja?.id ?? 0,
+                                    arguments:{'detailOnly':false,'data': poojaHistory.getPooja?.id ?? 0,}
                                   );
                                 },
                                 child: Row(
@@ -431,7 +431,7 @@ class _PoojaDharamMainScreenState extends State<PoojaDharamMainScreen>
 
                     var route = RouteName.poojaDharamDetailsScreen;
                     var arguments = pooja.id ?? 0;
-                    await Get.toNamed(route, arguments: arguments);
+                    await Get.toNamed(route, arguments: {'detailOnly':false,'data':arguments});
                     await getPoojaCall();
                     await getBookedPoojaCall();
                   },

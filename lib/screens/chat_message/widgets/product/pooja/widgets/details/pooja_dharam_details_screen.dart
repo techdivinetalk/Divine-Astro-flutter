@@ -399,13 +399,13 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
   FutureOr<void> afterFirstLayout(BuildContext context) async {
     if (_controller.getSinglePooja.data?.pooja?.isEmpty ?? true) {
       _controller.getSinglePoojaCall(
-        successCallBack: (message) => divineSnackBar(data: message),
+        successCallBack: (message) => {},
         failureCallBack: (message) => divineSnackBar(data: message),
       );
     } else {}
     if (_controller.getPoojaAddOnes.data?.isEmpty ?? true) {
       _controller.getPoojaAddOnesCall(
-        successCallBack: (message) => divineSnackBar(data: message),
+        successCallBack: (message) => {},
         failureCallBack: (message) => divineSnackBar(data: message),
       );
     } else {}

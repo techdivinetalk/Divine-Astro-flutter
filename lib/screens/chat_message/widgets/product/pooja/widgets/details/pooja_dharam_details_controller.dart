@@ -35,6 +35,8 @@ class PoojaDharamDetailsController extends GetxController {
   int get poojaId => _poojaId.value;
   set poojaId(int value) => _poojaId(value);
 
+  RxBool showOnlyDetail = false.obs;
+
   String get selectedDate => _selectedDate.value;
   set selectedDate(String value) => _selectedDate(value);
 
@@ -48,10 +50,11 @@ class PoojaDharamDetailsController extends GetxController {
 
     // poojaId = Get.arguments;
 
-    final int result = Get.arguments;
-    if (result == 0) {
+    final result = Get.arguments;
+    if (result == null) {
     } else {
-      poojaId = Get.arguments;
+      poojaId = Get.arguments['data'];
+      showOnlyDetail(Get.arguments['detailOnly']);
     }
   }
 
