@@ -27,6 +27,7 @@ import '../../repository/chat_assistant_repository.dart';
 import '../../repository/chat_repository.dart';
 import '../../repository/kundli_repository.dart';
 import '../live_page/constant.dart';
+import 'widgets/product/pooja/pooja_dharam/get_single_pooja_response.dart';
 
 class ChatMessageController extends GetxController {
   final chatAssistantRepository = ChatAssistantRepository();
@@ -501,6 +502,36 @@ class ChatMessageController extends GetxController {
             astroId: preferenceService.getUserDetail()!.id.toString());
         break;
       case MsgType.product:
+        final isPooja = data['data']['isPooja'] as bool ;
+        if(isPooja){
+
+          final productDetails = data['data']['poojaData'] as Pooja;
+
+          msgData = AssistChatData(
+              message: productDetails.poojaName,
+              astrologerId: preferenceService.getUserDetail()!.id,
+              createdAt: DateTime.now().toIso8601String(),
+              id: DateTime.now().millisecondsSinceEpoch,
+              isSuspicious: 0,
+              profileImage: userData?.image,
+              msgType: MsgType.product,
+              sendBy: SendBy.astrologer,
+              product: Product(
+
+                  id: productDetails.id,
+                  ),
+              productImage: productDetails.poojaImg ?? '',
+              productId: productDetails.id.toString(),
+              shopId: productDetails.id.toString(),
+              seenStatus: SeenStatus.notSent,
+              // msgStatus: MsgStatus.sent,
+              customerId: args?.id);
+          appSocket.sendAssistantMessage(
+              customerId: args!.id.toString(),
+              msgData: msgData,
+              message: productDetails.poojaName??'',
+              astroId: preferenceService.getUserDetail()!.id.toString());
+        }else{
         final productData =
             data['data']['saveRemedies'] as SaveRemediesResponse;
         final productDetails = data['data']['product_detail'] as Products;
@@ -515,6 +546,7 @@ class ChatMessageController extends GetxController {
             msgType: MsgType.product,
             sendBy: SendBy.astrologer,
             product: Product(
+
                 id: productData.data?.shopId,
                 prodName: productDetails.prodName),
             productImage: productDetails.prodImage ?? '',
@@ -527,7 +559,7 @@ class ChatMessageController extends GetxController {
             customerId: args!.id.toString(),
             msgData: msgData,
             message: productDetails.prodName ?? '',
-            astroId: preferenceService.getUserDetail()!.id.toString());
+            astroId: preferenceService.getUserDetail()!.id.toString());}
         break;
       default:
     }

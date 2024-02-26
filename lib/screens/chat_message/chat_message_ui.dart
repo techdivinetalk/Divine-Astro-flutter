@@ -435,130 +435,136 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
             Flexible(
               child: Row(
                 children: [
-                  if(controller.isRecording.value == false)
-                  Flexible(
-                    child: Container(
-                      // height: 50.h,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black.withOpacity(0.3),
-                                blurRadius: 3.0,
-                                offset: const Offset(0.3, 3.0)),
-                          ]),
-                      child: TextFormField(
-                        controller: controller.messageController,
-                        keyboardType: TextInputType.text,
-                        textInputAction: TextInputAction.newline,
-                        maxLines: 1,
-                        // focusNode: controller.msgFocus,
-                        onChanged: (value) {
-                          // controller.isEmojiShowing.value = true;
-                          // FocusManager.instance.primaryFocus?.hasFocus ?? false
-                          //     ? controller.scrollToBottomFunc()
-                          //     : null;
-                          controller.update();
-                          controller.scrollToBottomFunc();
-                        },
-                        decoration: InputDecoration(
-                          hintText: "message".tr,
-                          isDense: true,
-                          helperStyle: AppTextStyle.textStyle16(),
-                          fillColor: appColors.white,
-                          hintStyle: AppTextStyle.textStyle16(
-                              fontColor: appColors.grey),
-                          hoverColor: appColors.white,
-                          filled: true,
-                          suffixIcon: InkWell(
-                            onTap: () async {
-                              showCurvedBottomSheet(context);
+                  if (controller.isRecording.value == false)
+                    Flexible(
+                      child: Container(
+                        // height: 50.h,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.3),
+                                  blurRadius: 3.0,
+                                  offset: const Offset(0.3, 3.0)),
+                            ]),
+                        child: TextFormField(
+                          controller: controller.messageController,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.newline,
+                          maxLines: 1,
+                          // focusNode: controller.msgFocus,
+                          onChanged: (value) {
+                            // controller.isEmojiShowing.value = true;
+                            // FocusManager.instance.primaryFocus?.hasFocus ?? false
+                            //     ? controller.scrollToBottomFunc()
+                            //     : null;
+                            controller.update();
+                            controller.scrollToBottomFunc();
+                          },
+                          decoration: InputDecoration(
+                            hintText: "message".tr,
+                            isDense: true,
+                            helperStyle: AppTextStyle.textStyle16(),
+                            fillColor: appColors.white,
+                            hintStyle: AppTextStyle.textStyle16(
+                                fontColor: appColors.grey),
+                            hoverColor: appColors.white,
+                            filled: true,
+                            suffixIcon: InkWell(
+                              onTap: () async {
+                                showCurvedBottomSheet(context);
 
-                              // Move focus to an invisible focus node to dismiss the keyboard
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              // if (controller.isOngoingChat.value) {
+                                // Move focus to an invisible focus node to dismiss the keyboard
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
+                                // if (controller.isOngoingChat.value) {
 
-                              //   } else {
-                              //     divineSnackBar(
-                              //         data: "${'chatEnded'.tr}.", color: appColors.appYellowColour);
-                              //   }
-                            },
-                            child: Padding(
-                              padding:
-                                  EdgeInsets.fromLTRB(0.w, 9.h, 10.w, 10.h),
-                              child: Assets.images.icAttechment.svg(),
+                                //   } else {
+                                //     divineSnackBar(
+                                //         data: "${'chatEnded'.tr}.", color: appColors.appYellowColour);
+                                //   }
+                              },
+                              child: Padding(
+                                padding:
+                                    EdgeInsets.fromLTRB(0.w, 9.h, 10.w, 10.h),
+                                child: Assets.images.icAttechment.svg(),
+                              ),
                             ),
+                            constraints: BoxConstraints(maxHeight: 50.h),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30.0.sp),
+                                borderSide: BorderSide(
+                                    color: appColors.white, width: 1.0)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30.0.sp),
+                                borderSide: BorderSide(
+                                    color: appColors.guideColor, width: 1.0)),
                           ),
-                          constraints: BoxConstraints(maxHeight: 50.h),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0.sp),
-                              borderSide: BorderSide(
-                                  color: appColors.white, width: 1.0)),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0.sp),
-                              borderSide: BorderSide(
-                                  color: appColors.guideColor, width: 1.0)),
                         ),
                       ),
+                    ),
+                  SizedBox(width: 15.w),
+
+                  GestureDetector(
+                    onTap: () async {
+                      if (controller.messageController.text.isNotEmpty) {
+                        controller.sendMsg(MsgType.text,
+                            {'text': controller.messageController.text});
+                      } else {
+                        final result = await voucherPopUp(context);
+                        if (result != null) {
+                          controller.sendMsg(MsgType.voucher, {'data': result});
+                        }
+                      }
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: appColors.guideColor,
+                      minRadius: 25,
+                      child: controller.messageController.text.isEmpty
+                          ? Assets.svg.chatGift.svg(height: 50.h)
+                          : Assets.svg.icSendMsg.svg(height: 50.h),
                     ),
                   ),
-                  SizedBox(width: 15.w),
-                  if (controller.isRecording.value == false)
-                    GestureDetector(
-                      onTap: ()async {
-                        if (controller.messageController.text.isNotEmpty) {
-                          controller.sendMsg(MsgType.text,
-                              {'text': controller.messageController.text});
-                        } else {
-                        final result = await voucherPopUp(context);
-                        controller.sendMsg(MsgType.voucher, {'data': result});
-                        }
-                      },
-                      child: CircleAvatar(
-                        backgroundColor: appColors.guideColor,
-                        minRadius: 25,
-                        child: controller.messageController.text.isEmpty
-                            ? Assets.svg.chatGift.svg(height: 50.h)
-                            : Assets.svg.icSendMsg.svg(height: 50.h),
-                      ),
-                    ),
-                  if (controller.messageController.text.isEmpty) ...[
-                    SizedBox(width: 15.w),
-                    Positioned(
-                      right: 0,
-                      bottom: 0,
-                      child: GestureDetector(
-                        onTap: () {
-                          Future.delayed(const Duration(milliseconds: 500))
-                              .then((value) => controller.isRecording(false));
-                        },
-                        child: SocialMediaRecorder(
-                          backGroundColor: appColors.guideColor,
-                          cancelTextBackGroundColor: Colors.white,
-                          recordIconBackGroundColor: appColors.guideColor,
-                          radius: BorderRadius.circular(30),
-                          initRecordPackageWidth:
-                              kToolbarHeight - Get.width * 0.010,
-                          recordIconWhenLockBackGroundColor:
-                              appColors.guideColor,
-                          maxRecordTimeInSecond: 30,
-                          startRecording: () {
-                            controller.isRecording(true);
-                            controller.update();
-                          },
-                          stopRecording: (time) {
-                            controller.isRecording(false);
-                          },
-                          sendRequestFunction: (soundFile, time) {
-                            controller.isRecording(false);
-                            debugPrint("soundFile ${soundFile.path}");
-                            controller.uploadAudioFile(soundFile);
-                          },
-                          encode: AudioEncoderType.AAC,
-                        ),
-                      ),
-                    )
-                  ]
+                  // if (controller.messageController.text.isEmpty) ...[
+                  //   SizedBox(width: 15.w),
+                  //   Positioned(
+                  //     right: 0,
+                  //     bottom: 0,
+                  //     child: GestureDetector(
+                  //       onTap: () {
+                  //         // Future.delayed(const Duration(milliseconds: 500))
+                  //         //     .then((value) => controller.isRecording(false));
+                  //       },
+                  //       child: SocialMediaRecorder(
+                  //         backGroundColor: appColors.guideColor,
+                  //         cancelTextBackGroundColor: Colors.white,
+                  //         recordIconBackGroundColor: appColors.guideColor,
+                  //         radius: BorderRadius.circular(30),
+                  //         initRecordPackageWidth:
+                  //             kToolbarHeight - Get.width * 0.010,
+                  //         recordIconWhenLockBackGroundColor:
+                  //             appColors.guideColor,
+                  //         maxRecordTimeInSecond: 30,
+                  //         startRecording: () {
+                  //           print("true record called");
+                  //           controller.isRecording(true);
+                  //           controller.update();
+                  //         },
+                  //         stopRecording: (time) {
+                  //           print("false record called");
+                  //           controller.isRecording(false);
+                  //           controller.update();
+                  //         },
+                  //         sendRequestFunction: (soundFile, time) {
+                  //           controller.isRecording(false);
+                  //           debugPrint("soundFile ${soundFile.path}");
+                  //           controller.uploadAudioFile(soundFile);
+                  //         },
+                  //         encode: AudioEncoderType.AAC,
+                  //       ),
+                  //     ),
+                  //   )
+                  // ]
                 ],
               ),
             ),

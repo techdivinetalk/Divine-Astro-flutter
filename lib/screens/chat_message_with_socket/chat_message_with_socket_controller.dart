@@ -241,17 +241,17 @@ class ChatMessageWithSocketController extends GetxController
     messageTemplates(data);
     update();
   }
-  getMessageTemplates() async {
-    try {
-      final response = await messageTemplateRepository.fetchTemplates();
-      if (response.data != null) {
-        messageTemplates.value = response.data!;
-      }
-      update();
-    } catch (error) {
-      divineSnackBar(data: error.toString(), color: appColors.redColor);
-    }
-  }
+  // getMessageTemplates() async {
+  //   try {
+  //     final response = await messageTemplateRepository.fetchTemplates();
+  //     if (response.data != null) {
+  //       messageTemplates.value = response.data!;
+  //     }
+  //     update();
+  //   } catch (error) {
+  //     divineSnackBar(data: error.toString(), color: appColors.redColor);
+  //   }
+  // }
   Duration _timeLeft = Duration(minutes: 1); // Start from 1 minute
   late Timer extraTimer;
   void startExtraTimer() {

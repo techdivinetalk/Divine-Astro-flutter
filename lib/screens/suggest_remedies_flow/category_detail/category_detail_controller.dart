@@ -105,6 +105,7 @@ class CategoryDetailController extends GetxController {
       Get.back();
       Get.back();
       Get.back(result: {
+        'isPooja':false,
         'saveRemedies': saveRemediesResponse,
         'product_detail': productDetail
       });
