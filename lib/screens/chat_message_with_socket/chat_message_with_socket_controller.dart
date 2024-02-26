@@ -31,15 +31,18 @@ import "package:path_provider/path_provider.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:socket_io_client/socket_io_client.dart";
 
+import "../../common/app_exception.dart";
 import "../../common/ask_for_gift_bottom_sheet.dart";
 import "../../common/common_functions.dart";
 import "../../firebase_service/firebase_service.dart";
 import "../../model/astrologer_gift_response.dart";
 import "../../model/chat/ReqCommonChat.dart";
 import "../../model/chat/ReqEndChat.dart";
+import "../../model/chat/res_common_chat_success.dart";
 import "../../model/message_template_response.dart";
 import "../../model/tarot_response.dart";
 import "../../repository/chat_repository.dart";
+import "../../utils/enum.dart";
 import "../live_dharam/gifts_singleton.dart";
 
 class ChatMessageWithSocketController extends GetxController
@@ -263,10 +266,7 @@ class ChatMessageWithSocketController extends GetxController
       if (difference.isNegative) {
         extraTimer.cancel();
           _timeLeft = Duration.zero;
-        FirebaseDatabase.instance
-            .ref()
-            .child("order/${AppFirebaseService().orderData.value["orderId"].toString()}/status")
-            .set("5");
+        backFunction();
       } else {
            _timeLeft = difference;
            extraTalkTime.value = "${_timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
@@ -299,7 +299,52 @@ class ChatMessageWithSocketController extends GetxController
       }
     });
   }
-
+  Loading loading = Loading.initial;
+  endChatApi()  async {
+    Map<String, dynamic>  param = HashMap();
+    param["order_id"] = AppFirebaseService().orderData.value["orderId"];
+    param["queue_id"] = AppFirebaseService().orderData.value["queue_id"];
+      loading = Loading.loading;
+      update();
+      try {
+        ResCommonChatStatus response =
+        await ChatRepository().endChat(param);
+        loading = Loading.loaded;
+          Get.back();
+      } catch (error) {
+        debugPrint("error $error");
+        if (error is AppException) {
+          error.onException();
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
+        loading = Loading.loaded;
+      }
+      update();
+  }
+  void backFunction() {
+    WidgetsBinding.instance.endOfFrame.then(
+          (_) async {
+        userLeavePrivateChatListenerSocket();
+        chatTimer?.cancel();
+        Get.back();
+        Get.back();
+        if(AppFirebaseService().orderData.value["status"] == "4"){
+          DatabaseReference ref = FirebaseDatabase.instance.ref("order/${AppFirebaseService().orderData.value["orderId"]}");
+          ref.update({
+            "status": "5",
+          }).then((_) {
+            // Success handling if needed.
+          }).catchError((error) {
+            // Error handling.
+            print("Firebase error: $error");
+          });
+          endChatApi();
+        }
+      },
+    );
+    return;
+  }
   // Added by divine-dharam
   Future<void> callHangup() {
     print("ZegoService().controller.hangUp start");

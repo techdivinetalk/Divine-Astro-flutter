@@ -1634,36 +1634,14 @@ class AstrologerChatAppBar extends StatelessWidget {
   final ChatMessageWithSocketController controller =
       Get.find<ChatMessageWithSocketController>();
 
-  void backFunction() {
-    WidgetsBinding.instance.endOfFrame.then(
-      (_) async {
-        controller.userLeavePrivateChatListenerSocket();
-        controller.chatTimer?.cancel();
-        Get.back();
-        Get.back();
-        if(AppFirebaseService().orderData.value["status"] == "4"){
-          DatabaseReference ref = FirebaseDatabase.instance.ref("order/${AppFirebaseService().orderData.value["orderId"]}");
-          ref.update({
-            "status": "5",
-          }).then((_) {
-            // Success handling if needed.
-          }).catchError((error) {
-            // Error handling.
-            print("Firebase error: $error");
-          });
-        }
 
-      },
-    );
-    return;
-  }
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
       onPopInvoked: (pop) {
-        backFunction();
+        controller.backFunction();
       },
       child: Container(
         // height: 90.h + Get.mediaQuery.viewPadding.top.h,
