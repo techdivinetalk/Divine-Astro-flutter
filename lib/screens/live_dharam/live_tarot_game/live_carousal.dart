@@ -217,14 +217,14 @@ class _LiveCarousalState extends State<LiveCarousal> {
                             : const SizedBox()
                       ],
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      model.name ?? "Not Selected",
-                      style: TextStyle(
-                        color: appColors.white,
-                        fontSize: 10,
-                      ),
-                    ),
+                    // const SizedBox(height: 8),
+                    // Text(
+                    //   model.name ?? "Not Selected",
+                    //   style: TextStyle(
+                    //     color: appColors.white,
+                    //     fontSize: 10,
+                    //   ),
+                    // ),
                   ],
                 ),
               );
@@ -280,8 +280,18 @@ class _LiveCarousalState extends State<LiveCarousal> {
           ),
         ),
       ),
-      onPressed: () {
-        widget.onSelect(numList);
+      onPressed: () async {
+        final bool cond = condition();
+        
+        if (cond) {
+          final String msg = "Please select ${widget.numOfSelection} cards.";
+          await Fluttertoast.showToast(
+            msg: msg,
+            backgroundColor: Colors.red,
+          );
+        } else {
+          widget.onSelect(numList);
+        }
       },
       child: Text(
         'Send',
