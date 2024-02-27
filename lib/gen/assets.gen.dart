@@ -194,6 +194,10 @@ class $AssetsImagesGen {
   AssetGenImage get defaultProfile =>
       const AssetGenImage('assets/images/default_profile.png');
 
+  /// File path: assets/images/default_profiles.svg
+  SvgGenImage get defaultProfiles =>
+      const SvgGenImage('assets/images/default_profiles.svg');
+
   /// File path: assets/images/delete_accout.svg
   SvgGenImage get deleteAccout =>
       const SvgGenImage('assets/images/delete_accout.svg');
@@ -689,6 +693,10 @@ class $AssetsImagesGen {
   AssetGenImage get liveSwitchCamNew =>
       const AssetGenImage('assets/images/live_switch_cam_new.png');
 
+  /// File path: assets/images/live_tarot_new_icon.png
+  AssetGenImage get liveTarotNewIcon =>
+      const AssetGenImage('assets/images/live_tarot_new_icon.png');
+
   /// File path: assets/images/live_third_medal.png
   AssetGenImage get liveThirdMedal =>
       const AssetGenImage('assets/images/live_third_medal.png');
@@ -725,6 +733,30 @@ class $AssetsImagesGen {
   /// File path: assets/images/planet_star_live.png
   AssetGenImage get planetStarLive =>
       const AssetGenImage('assets/images/planet_star_live.png');
+
+  /// File path: assets/images/pooja_banner.png
+  AssetGenImage get poojaBanner =>
+      const AssetGenImage('assets/images/pooja_banner.png');
+
+  /// File path: assets/images/pooja_low_bal.png
+  AssetGenImage get poojaLowBal =>
+      const AssetGenImage('assets/images/pooja_low_bal.png');
+
+  /// File path: assets/images/pooja_main_placeholder.png
+  AssetGenImage get poojaMainPlaceholder =>
+      const AssetGenImage('assets/images/pooja_main_placeholder.png');
+
+  /// File path: assets/images/pooja_new_date.png
+  AssetGenImage get poojaNewDate =>
+      const AssetGenImage('assets/images/pooja_new_date.png');
+
+  /// File path: assets/images/pooja_new_time.png
+  AssetGenImage get poojaNewTime =>
+      const AssetGenImage('assets/images/pooja_new_time.png');
+
+  /// File path: assets/images/pooja_thank_you.png
+  AssetGenImage get poojaThankYou =>
+      const AssetGenImage('assets/images/pooja_thank_you.png');
 
   /// File path: assets/images/report.svg
   SvgGenImage get report => const SvgGenImage('assets/images/report.svg');
@@ -816,6 +848,7 @@ class $AssetsImagesGen {
         createAccSearch,
         date,
         defaultProfile,
+        defaultProfiles,
         deleteAccout,
         divineLogo,
         ganeshJiPng,
@@ -947,6 +980,7 @@ class $AssetsImagesGen {
         liveSeperatedCrown,
         liveStar,
         liveSwitchCamNew,
+        liveTarotNewIcon,
         liveThirdMedal,
         liveUnblockIcon,
         liveYouAreBlocked,
@@ -957,6 +991,12 @@ class $AssetsImagesGen {
         message,
         otpImage,
         planetStarLive,
+        poojaBanner,
+        poojaLowBal,
+        poojaMainPlaceholder,
+        poojaNewDate,
+        poojaNewTime,
+        poojaThankYou,
         report,
         splashBg,
         starLive,
