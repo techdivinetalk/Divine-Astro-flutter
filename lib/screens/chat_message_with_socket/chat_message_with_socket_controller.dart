@@ -203,7 +203,7 @@ class ChatMessageWithSocketController extends GetxController
     sendMessageSocketListenerSocket();
     listenerMessageStatusSocket();
     sendMessageListenerSocket();
-    userLeavePrivateChatListenerSocket();
+    leavePrivateChat();
     customerLeavedPrivateChatListenerSocket();
 
       socket.startAstroCustumerSocketEvent(
@@ -325,7 +325,8 @@ class ChatMessageWithSocketController extends GetxController
   void backFunction() {
     WidgetsBinding.instance.endOfFrame.then(
           (_) async {
-        userLeavePrivateChatListenerSocket();
+            print("userLeavePrivateChatListenerSocket");
+            socket.leavePrivateChatEmit(userData?.id.toString(), AppFirebaseService().orderData.value["userId"], 0);
         chatTimer?.cancel();
         Get.back();
         Get.back();
@@ -969,8 +970,8 @@ class ChatMessageWithSocketController extends GetxController
     setHiveDataDatabase();
   }
 
-  void userLeavePrivateChatListenerSocket() {
-    socket.userLeavePrivateChat((data) {
+  void leavePrivateChat() {
+    socket.leavePrivateChat((data) {
       debugPrint("userLeavePrivateChatListenerSocket $data");
     });
   }

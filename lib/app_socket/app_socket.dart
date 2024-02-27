@@ -65,6 +65,10 @@ class AppSocket {
     socket?.emit(ApiProvider().startAstroCustChatAssist,
         {"astroId": astroId, "userId": userId, "userType": userType});
   }
+  void leavePrivateChatEmit(String? astroId, String? userId, int userType) {
+    socket?.emit(ApiProvider().leavePrivateChat,
+        {"astroId": astroId, "userId": userId, "userType": userType});
+  }
 
   void startAstroCustumerSocketEvent(
       {required String orderId, required userId}) {
@@ -138,7 +142,7 @@ class AppSocket {
     });
   }
 
-  void userLeavePrivateChat(void Function(dynamic) callback) {
+  void leavePrivateChat(void Function(dynamic) callback) {
     socket?.on(ApiProvider().leavePrivateChat, callback);
   }
 

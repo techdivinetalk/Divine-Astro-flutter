@@ -10,7 +10,7 @@ class ZegoServices {
       appSign: yourAppSign,
       userID: '2',
       userName: 'Astrologer',
-      ringtoneConfig: const ZegoRingtoneConfig(
+      ringtoneConfig: ZegoRingtoneConfig(
           /*incomingCallPath: "assets/ringtone/incomingCallRingtone.mp3",
         outgoingCallPath: "assets/ringtone/outgoingCallRingtone.mp3",*/
           ),
