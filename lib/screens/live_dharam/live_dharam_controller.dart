@@ -109,6 +109,7 @@ class LiveDharamController extends GetxController {
   ).obs;
   final RxBool _isProcessing = false.obs;
   final RxBool _extendTimeWidgetVisible = false.obs;
+  final RxBool _hasReInitCoHost = false.obs;
 
   @override
   void onInit() {
@@ -181,6 +182,7 @@ class LiveDharamController extends GetxController {
     clearRequest();
     isProcessing = false;
     extendTimeWidgetVisible = false;
+    hasReInitCoHost = false;
 
     return;
   }
@@ -224,6 +226,7 @@ class LiveDharamController extends GetxController {
     _requestClass.close();
     _isProcessing.close();
     _extendTimeWidgetVisible.close();
+    _hasReInitCoHost.close();
 
     super.onClose();
   }
@@ -347,6 +350,9 @@ class LiveDharamController extends GetxController {
   bool get extendTimeWidgetVisible => _extendTimeWidgetVisible.value;
   set extendTimeWidgetVisible(bool value) => _extendTimeWidgetVisible(value);
 
+  bool get hasReInitCoHost => _hasReInitCoHost.value;
+  set hasReInitCoHost(bool value) => _hasReInitCoHost(value);
+
   Future<void> eventListner({
     required DataSnapshot snapshot,
     required Function() zeroAstro,
@@ -354,6 +360,7 @@ class LiveDharamController extends GetxController {
     required Function() showFollowPopup,
     required Function(String message) successCallBack,
     required Function(String message) failureCallBack,
+    required Function() reInitCoHost,
   }) async {
     final DataSnapshot dataSnapshot = snapshot;
     if (dataSnapshot != null) {
@@ -384,6 +391,8 @@ class LiveDharamController extends GetxController {
                   var orderNode = liveIdNode["order"];
                   orderModel = getOrderModel(orderNode);
                   currentCaller = getOrderModelGeneric(orderNode, forMe: false);
+
+                  reInitCoHost();
 
                   await Future.delayed(const Duration(seconds: 1));
 
@@ -992,6 +1001,7 @@ class LiveDharamController extends GetxController {
     required bool isEngaded,
     required bool isRequest,
     required int callStatus,
+    required bool isForAdd,
   }) async {
     String previousType = callType != "" ? callType : "";
     final DataSnapshot dataSnapshot =
@@ -1008,7 +1018,7 @@ class LiveDharamController extends GetxController {
       } else {}
     } else {}
     //
-    final Map<String, dynamic> orderDetails = {
+    final ogOrderDetails = <String, dynamic>{
       "isRequest": isRequest,
       "isEngaded": isEngaded,
       "callType": previousType.toLowerCase(),
@@ -1020,11 +1030,16 @@ class LiveDharamController extends GetxController {
       // "offerId": (details.data?.offerDetails?.offerId ?? 0)
       "callStatus": callStatus,
     };
+    final Map<String, dynamic> moOrderDetails = isForAdd
+        ? ogOrderDetails
+        : <String, dynamic>{
+            "callStatus": callStatus,
+          };
     //
-    await ref.child("live/$liveId/waitList/$userId").update(orderDetails);
+    await ref.child("live/$liveId/waitList/$userId").update(moOrderDetails);
     //
     if (callStatus == 2) {
-      await addUpdateOrder(orderDetails);
+      await addUpdateOrder(ogOrderDetails);
       await removeFromWaitList();
     } else {}
     return Future<void>.value();
@@ -1252,23 +1267,78 @@ class LiveDharamController extends GetxController {
     required Function(String message) successCallBack,
     required Function(String message) failureCallBack,
   }) async {
+    bool isExist = false;
+    final String path = "live/$liveId/order";
+    final DataSnapshot dataSnapshot = await ref.child(path).get();
+    if (dataSnapshot != null) {
+      if (dataSnapshot.exists) {
+        if (dataSnapshot.value is Map<dynamic, dynamic>) {
+          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+              as Map<dynamic, dynamic>;
+          final String userId = map["id"] ?? "";
+          isExist = currentCaller.id == userId;
+        } else {}
+      } else {}
+    } else {}
+    if (isExist) {
+      Map<String, dynamic> param = <String, dynamic>{};
+      param = <String, dynamic>{
+        "order_id": getOrderId(),
+        "duration": "0",
+        "amount": "0.0",
+        "role_id": 7,
+      };
+      final int offerId = getOfferId();
+      param.addAll(<String, dynamic>{"offer_id": offerId});
+      await liveRepository.endLiveApi(
+        params: param,
+        successCallBack: successCallBack,
+        failureCallBack: failureCallBack,
+      );
+    } else {}
+    return Future<void>.value();
+  }
+
+  Future<void> makeAPICallForEndCallWithoutFirebase({
+    required Function(String message) successCallBack,
+    required Function(String message) failureCallBack,
+  }) async {
     Map<String, dynamic> param = <String, dynamic>{};
     param = <String, dynamic>{
-      "order_id": (currentCaller.generatedOrderId ?? 0).toString(),
+      "order_id": getOrderId(),
       "duration": "0",
       "amount": "0.0",
       "role_id": 7,
     };
-    if (currentCaller.offerId != null) {
-      int offerId = currentCaller.offerId ?? 0;
-      param.addAll(<String, dynamic>{"offer_id": offerId});
-    } else {}
+    final int offerId = getOfferId();
+    param.addAll(<String, dynamic>{"offer_id": offerId});
     await liveRepository.endLiveApi(
       params: param,
       successCallBack: successCallBack,
       failureCallBack: failureCallBack,
     );
     return Future<void>.value();
+  }
+
+  String getOrderId() {
+    String generatedOrderId = "";
+    int temp = 0;
+    if (temp == 0) {
+      temp = currentCaller.generatedOrderId;
+      generatedOrderId = temp.toString();
+    } else {}
+    return generatedOrderId;
+  }
+
+  int getOfferId() {
+    int offerId = 0;
+    int temp = 0;
+    if (temp == 0) {
+      temp = currentCaller.offerId;
+      offerId = temp;
+    } else {}
+    return offerId;
   }
 
   Future<void> removeMyNode() async {
