@@ -190,6 +190,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
   @override
   void dispose() {
     // TODO: implement dispose
+    controller.isCustomerOnline = false.obs;
     controller.chatMessageList.clear();
     controller.userjoinedChatSocket();
     controller.listenjoinedChatSocket();

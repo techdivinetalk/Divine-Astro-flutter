@@ -45,6 +45,7 @@ class ChatMessageController extends GetxController {
   RxBool isEmojiShowing = false.obs;
   DataList? args;
   RxString? baseImageUrl = "".obs;
+  RxBool isCustomerOnline = false.obs;
   RxBool loading = false.obs;
   File? image;
   final ImagePicker picker = ImagePicker();
@@ -85,6 +86,7 @@ class ChatMessageController extends GetxController {
   void dispose() {
     // TODO: implement dispose
     // readUnreadMessages();
+    isCustomerOnline = false.obs;
     chatMessageList.clear();
     userjoinedChatSocket();
     listenjoinedChatSocket();
@@ -134,8 +136,13 @@ class ChatMessageController extends GetxController {
   listenjoinedChatSocket() {
     print("listen joined chat socket called");
     appSocket.listenUserJoinedSocket(
-      (p0) {
-        print(" listen user joined socket ${p0}");
+      (data) {
+        print("data msg $data");
+        if(data['msg']==2){
+        isCustomerOnline(true);
+        }
+        isCustomerOnline(false);
+        update();
       },
     );
   }

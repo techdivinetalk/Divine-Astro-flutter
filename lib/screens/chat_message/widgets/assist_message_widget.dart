@@ -471,6 +471,7 @@ class AssistMessageView extends StatelessWidget {
 
   Widget chatSeenStatusWidget({required SeenStatus seenStatus}) {
     print('msg status ${seenStatus}');
+
     switch (seenStatus) {
       case SeenStatus.error:
         return Icon(
