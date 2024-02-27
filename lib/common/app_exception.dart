@@ -94,8 +94,13 @@ class ManyTimeExException extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                     fontColor: appColors.appRedColour),
                 SizedBox(height: 10.h),
-                Text(
+               /* Text(
                   "${message!.split(".").last}",
+                  textAlign: TextAlign.center,
+                  style: AppTextStyle.textStyle16(fontWeight: FontWeight.w400),
+                ),*/
+                Text(
+                  "Please try again after sometime",
                   textAlign: TextAlign.center,
                   style: AppTextStyle.textStyle16(fontWeight: FontWeight.w400),
                 ),
