@@ -210,15 +210,15 @@ class Assets {
   static const String imagesSplashBg = 'assets/images/splash_bg.png';
   static const String imagesStarLive = 'assets/images/star_live.png';
   static const String imagesStarLiveBig = 'assets/images/star_live_big.png';
-  static const String imagesTablet235316 1 = 'assets/images/tablet_235316 1.svg';
+  static const String imagesTablet2353161 = 'assets/images/tablet_235316 1.svg';
   static const String imagesTime = 'assets/images/time.svg';
   static const String imagesTrueCallerIcon = 'assets/images/true_caller_icon.png';
   static const String imagesVideoDisableLive = 'assets/images/video_disable_live.svg';
   static const String imagesVidioEnableLive = 'assets/images/vidio_enable_live.svg';
   static const String imagesWaitingPeriod = 'assets/images/waiting-period.svg';
   static const String imagesWaitlistLive = 'assets/images/waitlist_live.svg';
-  static const String lottieExclamation Mark = 'assets/lottie/exclamation _mark.json';
-  static const String lottieGeneric loading  = 'assets/lottie/generic loading .json';
+  static const String lottieExclamationMark = 'assets/lottie/exclamation _mark.json';
+  static const String lottieGenericloading  = 'assets/lottie/generic loading .json';
   static const String lottieGift = 'assets/lottie/gift.json';
   static const String lottieLiveFollowHeart = 'assets/lottie/live_follow_heart.json';
   static const String lottieLoading2 = 'assets/lottie/loading_2.json';
@@ -244,7 +244,7 @@ class Assets {
   static const String metropolisMetropolisSemiBoldItalic = 'assets/fonts/metropolis/Metropolis-SemiBoldItalic.otf';
   static const String metropolisMetropolisThin = 'assets/fonts/metropolis/Metropolis-Thin.otf';
   static const String metropolisMetropolisThinItalic = 'assets/fonts/metropolis/Metropolis-ThinItalic.otf';
-  static const String metropolisSIL Open Font License = 'assets/fonts/metropolis/SIL Open Font License.txt';
+  static const String metropolisSILOpenFontLicense = 'assets/fonts/metropolis/SIL Open Font License.txt';
   static const String notoSansNotoSansBold = 'assets/fonts/noto_sans/NotoSans-Bold.ttf';
   static const String notoSansNotoSansExtraBold = 'assets/fonts/noto_sans/NotoSans-ExtraBold.ttf';
   static const String notoSansNotoSansExtraLight = 'assets/fonts/noto_sans/NotoSans-ExtraLight.ttf';
@@ -266,7 +266,7 @@ class Assets {
   static const String svgDeckIcon = 'assets/svg/deck_icon.svg';
   static const String svgDiamond = 'assets/svg/diamond.svg';
   static const String svgDisconnect = 'assets/svg/disconnect.svg';
-  static const String svgEmptyBox 1 = 'assets/svg/empty-box 1.svg';
+  static const String svgEmptyBox1 = 'assets/svg/empty-box 1.svg';
   static const String svgForwardIcon = 'assets/svg/forward_icon.svg';
   static const String svgGallery = 'assets/svg/gallery.svg';
   static const String svgGalleryIcon = 'assets/svg/gallery_icon.svg';
@@ -274,8 +274,8 @@ class Assets {
   static const String svgGiftEarning = 'assets/svg/gift_earning.svg';
   static const String svgGold = 'assets/svg/gold.svg';
   static const String svgGreyContainer = 'assets/svg/grey_container.svg';
-  static const String svgGroup 128714 = 'assets/svg/Group 128714.png';
-  static const String svgGroup 129525 = 'assets/svg/Group 129525.svg';
+  static const String svgGroup128714 = 'assets/svg/Group 128714.png';
+  static const String svgGroup129525 = 'assets/svg/Group 129525.svg';
   static const String svgIcAdd = 'assets/svg/ic_add.svg';
   static const String svgIcCall1 = 'assets/svg/ic_call_1.svg';
   static const String svgIcCheck = 'assets/svg/ic_check.svg';
