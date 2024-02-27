@@ -54,8 +54,9 @@ dependencies:
   readmore: ^2.2.0
   rxdart: ^0.27.7
   shared_preferences: ^2.2.0
-  social_media_recorder: ^1.1.12
+#  social_media_recorder: ^1.1.12
   socket_io_client: ^2.0.3+1
+  audio_waveforms: ^1.0.4
   svgaplayer_flutter: ^2.2.0
   syncfusion_flutter_gauges: ^23.2.7
   url_launcher: ^6.1.12

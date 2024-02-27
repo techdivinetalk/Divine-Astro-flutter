@@ -49,6 +49,7 @@ class SplashController extends GetxController with WidgetsBindingObserver {
   }
 
   notificationPermission() async {
+    print("splash screen");
     await recurringFunction(onComplete: navigation);
   }
 
