@@ -39,7 +39,7 @@ class SubProductController extends GetxController {
     if (Get.arguments != null) {
       shopId = Get.arguments["shodId"];
       // orderId = Get.arguments["orderId"];
-      customerId = Get.arguments["customerId"];
+      customerId(Get.arguments["customerId"]);
       productName(Get.arguments["productName"]);
       userData = preferenceService.getUserDetail();
       getProductList();

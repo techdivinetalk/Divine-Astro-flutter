@@ -79,7 +79,7 @@ Future<void> main() async {
           .child(
               "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}")
           .update(updateData);
-    } else if (message.data["type"] == "3") {
+    } else if (message.data["type"] == "8") {
       print('Message data:- ${MiddleWare.instance.currentPage}');
       print("chat assist realtime notification with data ${message.data}");
       if (MiddleWare.instance.currentPage == RouteName.chatMessageUI) {
@@ -186,11 +186,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         .child(
             "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}")
         .update(updateData);
-  } else if (message.data["type"] == 3) {
-  } else {
-    showNotification(message.data["title"], message.data["message"],
-        message.data['type'], message.data);
   }
+  showNotification(message.data["title"], message.data["message"],
+      message.data['type'], message.data);
 }
 
 Future<void> showNotification(String title, String message, String type,

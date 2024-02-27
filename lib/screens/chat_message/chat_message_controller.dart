@@ -138,8 +138,8 @@ class ChatMessageController extends GetxController {
     appSocket.listenUserJoinedSocket(
       (data) {
         print("data msg $data");
-        if(data['msg']==2){
-        isCustomerOnline(true);
+        if (data['msg'] == 2) {
+          isCustomerOnline(true);
         }
         isCustomerOnline(false);
         update();
@@ -162,7 +162,8 @@ class ChatMessageController extends GetxController {
       } else {
         chatMessageList[updateAtIndex] = newChatData;
       }
-
+      print(
+          "new message update in chatassist listen scoket ${chatMessageList.last.toJson()}");
       update();
     });
   }
@@ -421,7 +422,7 @@ class ChatMessageController extends GetxController {
         final isPooja = data['data']['isPooja'] as bool;
         if (isPooja) {
           final productDetails = data['data']['poojaData'] as Pooja;
-
+          final saveRemediesData = data['data']['saveRemediesData'] as SaveRemediesResponse;
           msgData = AssistChatData(
               message: productDetails.poojaName,
               astrologerId: preferenceService.getUserDetail()!.id,
@@ -435,6 +436,7 @@ class ChatMessageController extends GetxController {
               product: Product(
                 id: productDetails.id,
               ),
+              suggestedRemediesId: saveRemediesData.data?.id,
               productImage: productDetails.poojaImg ?? '',
               productId: productDetails.id.toString(),
               shopId: productDetails.id.toString(),
@@ -460,6 +462,7 @@ class ChatMessageController extends GetxController {
               isPoojaProduct: false,
               profileImage: userData?.image,
               msgType: MsgType.product,
+              suggestedRemediesId: productData.data?.id ?? 0,
               sendBy: SendBy.astrologer,
               product: Product(
                   id: productData.data?.shopId,

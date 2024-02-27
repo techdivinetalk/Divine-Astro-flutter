@@ -979,6 +979,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       SvgPicture.asset('assets/svg/gallery_icon.svg'),
       SvgPicture.asset('assets/svg/remedies_icon.svg'),
       SvgPicture.asset('assets/svg/deck_icon.svg'),
+      SvgPicture.asset('assets/svg/product.svg'),
       // Add more items as needed
     ];
     showModalBottomSheet(
@@ -1047,7 +1048,23 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         //  showOneCard(context);
                         break;
                       case 4:
-                        controller.getImage(false);
+                        var result = await Get.toNamed(
+                            RouteName.chatAssistProductPage,
+                            arguments: {
+                              'customerId': int.parse(AppFirebaseService()
+                                  .orderData
+                                  .value["userId"]
+                                  .toString())
+                            });
+                        if (result != null) {
+                          final String time =
+                              "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+
+                          controller.addNewMessage(time, "Product",
+                              data: {'data': result},
+                              messageText: 'Product');
+                        }
+
                         break;
                     }
                   },
