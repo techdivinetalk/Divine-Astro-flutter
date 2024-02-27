@@ -54,11 +54,14 @@ class MessageView extends StatelessWidget {
             chatDetail: chatMessage, yourMessage: yourMessage);
         break;
       case "image":
-        messageWidget = imageMsgView(chatMessage.base64Image??"", yourMessage,
+        messageWidget = imageMsgView(chatMessage.base64Image ?? "", yourMessage,
             chatDetail: chatMessage, index: index);
         break;
       case "kundli":
         messageWidget = kundliView(chatDetail: chatMessage, index: 0);
+        break;
+      case "Product":
+        messageWidget = productMsgView(chatMessage, yourMessage);
         break;
       default:
         messageWidget = const SizedBox.shrink();
@@ -82,6 +85,66 @@ class MessageView extends StatelessWidget {
     return buildMessageView(context, chatMessage, yourMessage);
   }
 
+  Widget productMsgView(ChatMessage chatMessage, bool yourMessage) {
+    return GestureDetector(
+      onTap: () {
+        print(
+            "data from page ${chatMessage.orderId} ${chatMessage.isPoojaProduct} ${chatMessage.customerId}");
+        if (chatMessage.isPoojaProduct ?? false) {
+          Get.toNamed(RouteName.poojaDharamDetailsScreen, arguments: {
+            'detailOnly': true,
+            "isSentMessage": true,
+            'data': int.parse(chatMessage.productId ?? '0')
+          });
+        } else {
+          Get.toNamed(RouteName.categoryDetail, arguments: {
+            "productId": chatMessage.productId.toString(),
+            "isSentMessage": true,
+            "customerId": chatMessage.customerId,
+          });
+        }
+      },
+      child: SizedBox(
+        width: double.maxFinite,
+        child: Column(
+          crossAxisAlignment:
+              yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          children: [
+            Card(
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: appColors.guideColor,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: ListTile(
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0.sp),
+                    child: Image.asset('assets/svg/Group 128714.png'),
+                  ),
+                  title: CustomText(
+                    "You have suggested a ${chatMessage.isPoojaProduct ?? false ? "Pooja" : "product"}",
+                    fontSize: 14.sp,
+                    maxLines: 2,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  subtitle: CustomText(
+                    chatMessage.message ?? '',
+                    fontSize: 12.sp,
+                    maxLines: 20,
+                  ),
+                  // onTap: () => Get.toNamed(RouteName.remediesDetail,
+                  //     arguments: {'title': temp[0], 'subtitle': temp[1]}),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget giftMsgView(
       BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     return SizedBox(
@@ -96,7 +159,6 @@ class MessageView extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(40)),
               color: appColors.guideColor,
-
             ),
             constraints: BoxConstraints(
                 maxWidth: ScreenUtil().screenWidth * 0.8,
@@ -331,7 +393,6 @@ class MessageView extends StatelessWidget {
         decoration: BoxDecoration(
           color: appColors.white,
           borderRadius: BorderRadius.circular(10),
-
         ),
         child: Center(
           child: Padding(

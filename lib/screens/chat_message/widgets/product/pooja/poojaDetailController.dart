@@ -22,6 +22,8 @@ class PoojaDharamMainController extends GetxController {
   bool get isLoading => _isLoading.value;
   set isLoading(bool value) => _isLoading(value);
 
+  RxInt customerId = 0.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -36,6 +38,7 @@ class PoojaDharamMainController extends GetxController {
   void initData() {
     getPooja = GetPoojaResponse();
     getBookedPooja = GetBookedPoojaResponse();
+    customerId(Get.arguments["customerId"]??0);
     isLoading = false;
     return;
   }

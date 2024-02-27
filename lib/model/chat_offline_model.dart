@@ -55,6 +55,7 @@ class ChatMessage {
   dynamic exotelCallSid;
   String? callStatus;
   dynamic callRejectReason;
+  bool? isPoojaProduct;
   int? callEnd;
   String? callRecording;
   dynamic customerCallStatus;
@@ -63,6 +64,8 @@ class ChatMessage {
   int? receiverId;
   int? senderId;
   String? awsUrl;
+  String? productId;
+  String? shopId;
   String? downloadedPath;
   String? kundliName;
   String? kundliDateTime;
@@ -78,8 +81,11 @@ class ChatMessage {
     this.orderId,
     this.memberId,
     this.roleId,
+    this.productId,
+    this.shopId,
     this.customerId,
     this.msgSequence,
+    this.isPoojaProduct,
     this.msgType,
     this.message,
     this.multiImage,
@@ -135,6 +141,9 @@ class ChatMessage {
     msgSequence = json['msg_sequence'];
     msgType = json['msgType'];
     message = json['message'];
+    productId = json['product_id'].toString();
+    shopId = json['shop_id'].toString();
+    isPoojaProduct = json['is_pooja_product'].toString() == "1" ? true : false;
     multiImage = json['multiimage'];
     msgTime = json['msg_time'];
     createdAt = json['created_at'];
@@ -196,6 +205,8 @@ class ChatMessage {
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['msg_send_by'] = msgSendBy;
+    data['shop_id'] = shopId;
+    data['product_id'] = productId;
     data['is_suspicious'] = isSuspicious;
     data['is_email_sent'] = isEmailSent;
     data['kundli_id'] = kundliId;
@@ -203,7 +214,7 @@ class ChatMessage {
     data['base64image'] = base64Image;
     data['deleted_at'] = deletedAt;
     data['chat_msg_id'] = chatMsgId;
-
+data['is_pooja_product'] = isPoojaProduct == false ? "0" : "1";
 
     data['astrologer_id'] = astrologerId;
     data['call_initiate'] = callInitiate;

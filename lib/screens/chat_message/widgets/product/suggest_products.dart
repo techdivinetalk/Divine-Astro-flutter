@@ -91,6 +91,7 @@ class SuggestProducts extends GetView<SuggestProductController> {
                                   if(index == 0){
                                      Get.toNamed(
                                       RouteName.poojaDharamMainScreen,
+                                     arguments: {  "customerId":controller.customerId.value,}
                                     );
                                   }else{
                                   Get.toNamed(
@@ -98,7 +99,7 @@ class SuggestProducts extends GetView<SuggestProductController> {
                                       arguments: {
                                         "shodId": item.id,
                                         "productName": item.shopName,
-                                        "customerId":controller.customerId,
+                                        "customerId":controller.customerId.value,
                                       });}
                                 },
                                 child: Container(

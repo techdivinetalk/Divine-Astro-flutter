@@ -111,20 +111,18 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                         Padding(
                                           padding: EdgeInsets.symmetric(
                                               vertical: 4.h, horizontal: 12.w),
-                                          child:
-                                              MessageView(
-                                                  index: index,
-                                                  chatMessage: chatMessage,
-                                                  yourMessage:
-                                                      chatMessage.senderId ==
-                                                          preferenceService
-                                                              .getUserDetail()!
-                                                              .id,
-                                                  userName: controller
-                                                      .customerName.value,
-                                                  unreadMessage: controller
-                                                      .unreadMessageIndex
-                                                      .value),
+                                          child: MessageView(
+                                              index: index,
+                                              chatMessage: chatMessage,
+                                              yourMessage:
+                                                  chatMessage.senderId ==
+                                                      preferenceService
+                                                          .getUserDetail()!
+                                                          .id,
+                                              userName:
+                                                  controller.customerName.value,
+                                              unreadMessage: controller
+                                                  .unreadMessageIndex.value),
                                         ),
                                         if (index ==
                                             (controller.chatMessages.length -
@@ -285,18 +283,20 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             color: appColors.white,
                           ),
                           child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text("Chat Ended you can still send message till ${controller.extraTalkTime.value}",style: TextStyle(color: Colors.red),textAlign: TextAlign.center),
-                      )),
-                    ))
-                ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                                "Chat Ended you can still send message till ${controller.extraTalkTime.value}",
+                                style: TextStyle(color: Colors.red),
+                                textAlign: TextAlign.center),
+                          )),
+                    ))),
                 Obx(
-                  () =>  Column(
-                          children: [
-                            messageTemplateRow(),
-                            SizedBox(height: 20.h),
-                          ],
-                        ),
+                  () => Column(
+                    children: [
+                      messageTemplateRow(),
+                      SizedBox(height: 20.h),
+                    ],
+                  ),
                 ),
                 chatBottomBar(context),
                 Obx(() => AnimatedContainer(
@@ -530,10 +530,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
           late final MessageTemplates msg;
           return index == 0
               ? GestureDetector(
-                  onTap: ()async {
-                 await  Get.toNamed(RouteName.messageTemplate);
-                 controller.getMessageTemplatesLocally();
-                 controller.update();
+                  onTap: () async {
+                    await Get.toNamed(RouteName.messageTemplate);
+                    controller.getMessageTemplatesLocally();
+                    controller.update();
                   },
                   child: Container(
                     padding:
@@ -797,6 +797,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       SvgPicture.asset('assets/svg/gallery_icon.svg'),
       SvgPicture.asset('assets/svg/remedies_icon.svg'),
       SvgPicture.asset('assets/svg/deck_icon.svg'),
+      SvgPicture.asset('assets/svg/product.svg'),
       // Add more items as needed
     ];
     showModalBottomSheet(
@@ -865,7 +866,23 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         //  showOneCard(context);
                         break;
                       case 4:
-                        controller.getImage(false);
+                        var result = await Get.toNamed(
+                            RouteName.chatAssistProductPage,
+                            arguments: {
+                              'customerId': int.parse(AppFirebaseService()
+                                  .orderData
+                                  .value["userId"]
+                                  .toString())
+                            });
+                        if (result != null) {
+                          final String time =
+                              "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+
+                          controller.addNewMessage(time, "Product",
+                              data: {'data': result},
+                              messageText: 'Product');
+                        }
+
                         break;
                     }
                   },
@@ -1556,8 +1573,6 @@ class AstrologerChatAppBar extends StatelessWidget {
 
   final ChatMessageWithSocketController controller =
       Get.find<ChatMessageWithSocketController>();
-
-
 
   @override
   Widget build(BuildContext context) {
