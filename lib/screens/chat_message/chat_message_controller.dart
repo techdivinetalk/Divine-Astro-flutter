@@ -45,6 +45,7 @@ class ChatMessageController extends GetxController {
   RxBool isEmojiShowing = false.obs;
   DataList? args;
   RxString? baseImageUrl = "".obs;
+  RxBool isCustomerOnline = false.obs;
   RxBool loading = false.obs;
   File? image;
   final ImagePicker picker = ImagePicker();
@@ -85,6 +86,7 @@ class ChatMessageController extends GetxController {
   void dispose() {
     // TODO: implement dispose
     // readUnreadMessages();
+    isCustomerOnline = false.obs;
     chatMessageList.clear();
     userjoinedChatSocket();
     listenjoinedChatSocket();
@@ -134,8 +136,13 @@ class ChatMessageController extends GetxController {
   listenjoinedChatSocket() {
     print("listen joined chat socket called");
     appSocket.listenUserJoinedSocket(
-      (p0) {
-        print(" listen user joined socket ${p0}");
+      (data) {
+        print("data msg $data");
+        if (data['msg'] == 2) {
+          isCustomerOnline(true);
+        }
+        isCustomerOnline(false);
+        update();
       },
     );
   }
@@ -155,7 +162,8 @@ class ChatMessageController extends GetxController {
       } else {
         chatMessageList[updateAtIndex] = newChatData;
       }
-
+      print(
+          "new message update in chatassist listen scoket ${chatMessageList.last.toJson()}");
       update();
     });
   }
@@ -414,7 +422,7 @@ class ChatMessageController extends GetxController {
         final isPooja = data['data']['isPooja'] as bool;
         if (isPooja) {
           final productDetails = data['data']['poojaData'] as Pooja;
-
+          final saveRemediesData = data['data']['saveRemediesData'] as SaveRemediesResponse;
           msgData = AssistChatData(
               message: productDetails.poojaName,
               astrologerId: preferenceService.getUserDetail()!.id,
@@ -428,6 +436,7 @@ class ChatMessageController extends GetxController {
               product: Product(
                 id: productDetails.id,
               ),
+              suggestedRemediesId: saveRemediesData.data?.id,
               productImage: productDetails.poojaImg ?? '',
               productId: productDetails.id.toString(),
               shopId: productDetails.id.toString(),
@@ -453,6 +462,7 @@ class ChatMessageController extends GetxController {
               isPoojaProduct: false,
               profileImage: userData?.image,
               msgType: MsgType.product,
+              suggestedRemediesId: productData.data?.id ?? 0,
               sendBy: SendBy.astrologer,
               product: Product(
                   id: productData.data?.shopId,

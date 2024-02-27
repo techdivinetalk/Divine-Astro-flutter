@@ -14,15 +14,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:permission_handler/permission_handler.dart';
+
+
 import 'package:shimmer/shimmer.dart';
-import 'package:social_media_recorder/audio_encoder_type.dart';
-import 'package:social_media_recorder/screen/social_media_recorder.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
+
+
 
 import '../../common/app_textstyle.dart';
-import '../../common/common_bottomsheet.dart';
+
 import '../../common/common_functions.dart';
 import '../../common/routes.dart';
 import '../../firebase_service/firebase_service.dart';
@@ -46,14 +45,6 @@ class ChatMessageSupportUI extends StatefulWidget {
 class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
   ChatMessageController controller = Get.find();
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Placeholder();
-//   }
-// }
-
-// class ChatMessageSupportUI extends GetView<ChatMessageController> {
-//   const ChatMessageSupportUI({super.key});
 
   updateFirebaseToken() async {
     String? newtoken = await FirebaseMessaging.instance.getToken();
@@ -101,11 +92,11 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
             var responseMsg = newChatList[index];
             if (int.parse(responseMsg?["sender_id"].toString() ?? '') ==
                 controller.args?.id) {
-              print("inside chat add condition");
               controller.chatMessageList([
                 ...controller.chatMessageList,
                 AssistChatData(
-                    isPoojaProduct: responseMsg['message']=="true"?true:false,
+                    isPoojaProduct:
+                        responseMsg['message'] == "1" ? true : false,
                     message: responseMsg['message'],
                     astrologerId:
                         int.parse(responseMsg?["userid"].toString() ?? ''),
@@ -117,7 +108,8 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                     //     ? int.parse(responseMsg["chatId"])
                     //     : null,
                     isSuspicious: 0,
-
+                    suggestedRemediesId:
+                       int.parse( responseMsg['suggestedRemediesId']??'0'),
                     productId: responseMsg['productId'].toString(),
                     sendBy: SendBy.customer,
                     msgType: responseMsg["msg_type"] != null
@@ -190,6 +182,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
   @override
   void dispose() {
     // TODO: implement dispose
+    controller.isCustomerOnline = false.obs;
     controller.chatMessageList.clear();
     controller.userjoinedChatSocket();
     controller.listenjoinedChatSocket();

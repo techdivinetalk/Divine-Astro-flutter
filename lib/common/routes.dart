@@ -368,11 +368,11 @@ class Routes {
         name: RouteName.walletScreenUI,
         binding: WalletBinding()),
     GetPage(
-      page: () => const PrivacyPolicyUI(),
+      page: () =>  PrivacyPolicyUI(),
       name: RouteName.privacyPolicy,
     ),
     GetPage(
-      page: () => const TermsConditionUI(),
+      page: () => TermsConditionUI(),
       name: RouteName.termsCondition,
     ),
     GetPage(

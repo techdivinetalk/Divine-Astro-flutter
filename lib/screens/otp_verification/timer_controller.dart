@@ -42,9 +42,16 @@ class TimerController extends GetxController {
                 children: [
                   const ExclamationMark(),
                   const SizedBox(height: 15),
-                  Material(
+                 /* Material(
                     child: Text(
                       'Too many requests. Please try again after $timerValue seconds.',
+                      style:
+                      AppTextStyle.textStyle16(fontWeight: FontWeight.w500),
+                    ),
+                  ),*/
+                  Material(
+                    child: Text(
+                      'Too many requests. Please try again after sometime',
                       style:
                       AppTextStyle.textStyle16(fontWeight: FontWeight.w500),
                     ),

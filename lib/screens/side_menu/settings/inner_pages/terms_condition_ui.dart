@@ -9,8 +9,10 @@ import 'package:get/get.dart';
 
 import '../../../../common/custom_widgets.dart';
 
-class TermsConditionUI extends GetView<SettingsController> {
-  const TermsConditionUI({Key? key}) : super(key: key);
+class TermsConditionUI extends StatelessWidget{
+  TermsConditionUI({super.key});
+
+  final controller = Get.put(SettingsController());
 
   @override
   Widget build(BuildContext context) {

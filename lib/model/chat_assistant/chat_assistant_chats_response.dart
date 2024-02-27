@@ -116,6 +116,7 @@ class AssistChatData {
   String? productId;
   String? productImage;
   bool? isPoojaProduct;
+  int? suggestedRemediesId;
   // String? awsUrl;
   String? shopId;
   String? createdAt;
@@ -135,6 +136,8 @@ class AssistChatData {
       this.productId,
       this.sendBy,
       this.productImage,
+      this.suggestedRemediesId,
+
       // this.awsUrl,
       this.createdAt,
       this.product,
@@ -156,12 +159,16 @@ class AssistChatData {
         : MsgType.text;
     productId = json['product_id'].toString();
     productImage = json['product_image'];
-    isPoojaProduct = json['is_pooja_product'] == "true" ? true : false;
+    isPoojaProduct = json['is_pooja_product'].toString() == "1" ? true : false;
+    suggestedRemediesId = json['suggested_remedies_id'] == null ||
+            json['suggested_remedies_id'].toString() == "null"
+        ? 0
+        : int.parse(json['suggested_remedies_id'].toString());
     // msgStatus = json['msg_status'] != null
     //     ? msgStatusValues.map[json["msg_status"]]
     //     : MsgStatus.sent;
     // awsUrl = json['awsUrl'];
-    shopId = json['shop_id'];
+    shopId = json['shop_id'].toString();
     profileImage = json['profile_image'];
     product =
         json["product"] == null ? null : Product.fromJson(json["product"]);
@@ -187,7 +194,11 @@ class AssistChatData {
     data['profile_image'] = profileImage;
     data['product_image'] = productImage;
     data['product_id'] = productId;
-    data['is_pooja_product'] = isPoojaProduct.toString();
+    data['is_pooja_product'] = isPoojaProduct == false ? "0" : "1";
+    data['suggested_remedies_id'] =
+        suggestedRemediesId == null || suggestedRemediesId == 0
+            ? "0"
+            : suggestedRemediesId.toString();
     // data['awsUrl'] = awsUrl;
     data["product"] = product?.toJson();
     data['shop_id'] = shopId;

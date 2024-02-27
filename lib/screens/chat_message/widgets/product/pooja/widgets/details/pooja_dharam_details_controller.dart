@@ -43,6 +43,9 @@ class PoojaDharamDetailsController extends GetxController {
   String get selectedTime => _selectedTime.value;
   set selectedTime(String value) => _selectedTime(value);
 
+  RxInt customerId = 0.obs;
+  RxBool isSentMessage = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -54,7 +57,9 @@ class PoojaDharamDetailsController extends GetxController {
     if (result == null) {
     } else {
       poojaId = Get.arguments['data'];
+      isSentMessage(Get.arguments["isSentMessage"]);
       showOnlyDetail(Get.arguments['detailOnly']);
+      customerId(Get.arguments["customerId"]??0);
     }
   }
 

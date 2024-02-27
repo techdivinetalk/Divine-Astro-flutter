@@ -5,6 +5,7 @@ import "dart:developer";
 import "dart:io";
 import "dart:typed_data";
 
+import "package:audio_waveforms/audio_waveforms.dart";
 import "package:divine_astrologer/app_socket/app_socket.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/routes.dart";
@@ -39,10 +40,14 @@ import "../../model/astrologer_gift_response.dart";
 import "../../model/chat/ReqCommonChat.dart";
 import "../../model/chat/ReqEndChat.dart";
 import "../../model/chat/res_common_chat_success.dart";
+import "../../model/chat_assistant/chat_assistant_chats_response.dart";
 import "../../model/message_template_response.dart";
+import "../../model/res_product_list.dart";
+import "../../model/save_remedies_response.dart";
 import "../../model/tarot_response.dart";
 import "../../repository/chat_repository.dart";
 import "../../utils/enum.dart";
+import "../chat_message/widgets/product/pooja/pooja_dharam/get_single_pooja_response.dart";
 import "../live_dharam/gifts_singleton.dart";
 
 class ChatMessageWithSocketController extends GetxController
@@ -161,6 +166,63 @@ class ChatMessageWithSocketController extends GetxController
     super.onClose();
   }
 
+  bool isRecordingCompleted = false;
+
+  void startOrStopRecording() async {
+    try {
+      print("is working");
+      if (isRecording.value) {
+        recorderController!.reset();
+        print(isRecording.value);
+        print("isRecording.value");
+
+        final path = await recorderController!.stop(false);
+        print(path);
+        print("pathpathpathpathpath");
+        if (path != null) {
+          isRecordingCompleted = true;
+
+          uploadAudioFile(File(path));
+          debugPrint("Recorded file size: ${File(path).lengthSync()}");
+        }
+      } else {
+        await recorderController!.record(path: path);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isRecording.value = !isRecording.value;
+      update();
+    }
+  }
+  Directory? appDirectory;
+  String path = "";
+  void getDir() async {
+    appDirectory = await getApplicationDocumentsDirectory();
+    path = "${appDirectory!.path}/recording.m4a";
+    update();
+
+  }
+
+  void refreshWave() {
+    if (isRecording.value) {
+      recorderController!.stop(true);
+      isRecording.value = false;
+      update();
+    }
+  }
+
+
+  RecorderController? recorderController;
+
+  void initialiseControllers() {
+    recorderController = RecorderController()
+      ..androidEncoder = AndroidEncoder.aac
+      ..androidOutputFormat = AndroidOutputFormat.mpeg4
+      ..iosEncoder = IosEncoder.kAudioFormatMPEG4AAC
+      ..sampleRate = 44100;
+  }
+
   var isCardVisible = false.obs;
 
   // RxInt cardListCount = 0.obs;
@@ -168,6 +230,8 @@ class ChatMessageWithSocketController extends GetxController
   @override
   void onInit() {
     super.onInit();
+    getDir();
+    initialiseControllers();
     AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
       print("orderData Changed");
       initTask(p0);
@@ -616,15 +680,65 @@ class ChatMessageWithSocketController extends GetxController
   }
   addNewMessage(
     String time,
-    String? msgType, {
+    String? msgType,
+     {Map? data,
     String? messageText,
     String? awsUrl,
     String? base64Image,
     String? downloadedPath,
     String? kundliId,
     String? giftId,
+    String? productId,
+    String? shopId,
   }) async {
-    final ChatMessage newMessage = ChatMessage(
+    late ChatMessage newMessage;
+    if(msgType=="Product") {
+    final isPooja = data?['data']['isPooja'] as bool;
+    if (isPooja) {
+    final productDetails = data?['data']['poojaData'] as Pooja;
+    final saveRemediesData = data?['data']['saveRemediesData'] as SaveRemediesResponse;
+    newMessage = ChatMessage(
+    message: productDetails.poojaName,
+    astrologerId: preferenceService.getUserDetail()!.id,
+    createdAt: DateTime.now().toIso8601String(),
+    id: DateTime.now().millisecondsSinceEpoch,
+    isSuspicious: 0,
+    isPoojaProduct: true,
+      awsUrl:productDetails.poojaImg ?? '',
+    msgType: msgType,
+      type: 0,
+        userType: "astrologer",
+    orderId: saveRemediesData.data?.id,
+    productId: productDetails.id.toString(),
+    shopId: productDetails.id.toString(),
+    // msgStatus: MsgStatus.sent,
+      receiverId:
+      int.parse(AppFirebaseService().orderData.value["userId"].toString()),
+      senderId: preference.getUserDetail()!.id,);
+    } else {
+    final productData =
+    data?['data']['saveRemedies'] as SaveRemediesResponse;
+    final productDetails = data?['data']['product_detail'] as Products;
+    print("delete product data ${productDetails} ${productData}");
+    newMessage = ChatMessage(
+    message: productDetails.prodName,
+    astrologerId: preferenceService.getUserDetail()!.id,
+    createdAt: DateTime.now().toIso8601String(),
+    id: DateTime.now().millisecondsSinceEpoch,
+    isSuspicious: 0,
+    isPoojaProduct: false,
+      awsUrl: userData?.image,
+    msgType: msgType,
+      type: 0,
+    orderId: productData.data?.id ?? 0,
+    productId: productData.data?.productId.toString(),
+    shopId: productData.data?.shopId.toString(),
+      receiverId:
+      int.parse(AppFirebaseService().orderData.value["userId"].toString()),
+      senderId: preference.getUserDetail()!.id,);
+    }}else{
+
+  newMessage = ChatMessage(
       orderId: AppFirebaseService().orderData.value["orderId"],
       id: int.parse(time),
       message: messageText,
@@ -640,7 +754,7 @@ class ChatMessageWithSocketController extends GetxController
       title: giftId ?? "${userData?.name} sent you a message.",
       type: 0,
       userType: "astrologer",
-    );
+    );}
     socket.sendMessageSocket(newMessage);
     print("newMessage1");
     print(newMessage.toOfflineJson());

@@ -18,8 +18,7 @@ Future<void> countryPickerSheet(
 }
 
 class CountryPickerSheetWidget extends StatelessWidget {
-  const CountryPickerSheetWidget({Key? key, required this.onSelect})
-      : super(key: key);
+  const CountryPickerSheetWidget({super.key, required this.onSelect});
 
   final void Function(Country value) onSelect;
 
@@ -94,7 +93,7 @@ class CountryPickerSheetWidget extends StatelessWidget {
 }
 
 class AllCountryList extends StatefulWidget {
-  const AllCountryList({Key? key, required this.onSelect}) : super(key: key);
+  const AllCountryList({super.key, required this.onSelect});
 
   final void Function(Country value) onSelect;
 

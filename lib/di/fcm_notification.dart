@@ -140,7 +140,7 @@ void onDidReceiveNotificationResponse(
     //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
     // // if(payloadMap["type"] == "2") {
     print("payload map type ${payloadMap}");
-    if (payloadMap["type"] == "3") {
+    if (payloadMap["type"] == "8") {
       Get.toNamed(RouteName.chatMessageUI,
           arguments: DataList(
             image: payloadMap["profile_image"],
