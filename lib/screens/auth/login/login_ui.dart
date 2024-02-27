@@ -115,10 +115,11 @@ class LoginUI extends GetView<LoginController> {
                   SizedBox(height: 20.h),
                   Obx(() {
                     return GestureDetector(
-                      onTap: !controller.isLoading.value
+                      onTap:  controller.enable.value
                           ? () {
                               if (_formKey.currentState!.validate()) {
                                 controller.login();
+                                controller.enable.value = false;
                               }
                             }
                           : () {},
@@ -144,17 +145,17 @@ class LoginUI extends GetView<LoginController> {
                     );
                   }),
                   SizedBox(height: 20.h),
-                  Visibility(
-                      visible: !controller.isLoading.value,
+                  Obx(() => Visibility(
+                      visible: controller.enable.value,
                       child: TextWithDivider(
-                    text: 'Or',
-                    textColor: appColors.greyColor,
-                    dividerHeight: 1.0,
-                  )),
+                        text: 'Or',
+                        textColor: appColors.greyColor,
+                        dividerHeight: 1.0,
+                      ))),
                   SizedBox(height: 20.h),
                   Obx(() {
                     return Visibility(
-                      visible: (controller.showTrueCaller.value && !controller.isLoading.value),
+                      visible: (controller.showTrueCaller.value && controller.enable.value),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: SizedBox(
