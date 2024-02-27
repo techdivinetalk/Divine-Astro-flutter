@@ -17,9 +17,13 @@ extension SearchCountry on List<Country> {
   List<Country> search(String? value) {
     if (value == null) return this;
     return where(
-      (element) =>
-          element.name.toLowerCase().startsWith(value.toLowerCase().trim()) ||
-          element.name.toLowerCase().contains(value.toLowerCase().trim()),
+          (element) =>
+      element.name.toLowerCase().startsWith(value.toLowerCase().trim()) ||
+          element.name.toLowerCase().contains(value.toLowerCase().trim()) ||
+          element.phoneCode
+              .toLowerCase()
+              .startsWith(value.toLowerCase().trim()) ||
+          element.phoneCode.toLowerCase().contains(value.toLowerCase().trim()),
     ).toList();
   }
 }

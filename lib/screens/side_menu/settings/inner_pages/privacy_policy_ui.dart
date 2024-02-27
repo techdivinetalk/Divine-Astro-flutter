@@ -8,8 +8,10 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class PrivacyPolicyUI extends GetView<SettingsController> {
-  const PrivacyPolicyUI({Key? key}) : super(key: key);
+class PrivacyPolicyUI extends StatelessWidget {
+   PrivacyPolicyUI({super.key});
+
+   final controller = Get.put(SettingsController());
 
   @override
   Widget build(BuildContext context) {

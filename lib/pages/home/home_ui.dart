@@ -1025,7 +1025,8 @@ class HomeUI extends GetView<HomeController> {
                       fontColor: appColors.darkBlue,
                       fontWeight: FontWeight.w400),
                 ),
-                SizedBox(height: 16.h),
+              /// Video call Text commit
+              /*  SizedBox(height: 16.h),
                 Text(
                   "videoCall".tr.toUpperCase(),
                   style: AppTextStyle.textStyle12(
@@ -1037,7 +1038,7 @@ class HomeUI extends GetView<HomeController> {
                   style: AppTextStyle.textStyle10(
                       fontColor: appColors.darkBlue,
                       fontWeight: FontWeight.w400),
-                ),
+                ),*/
               ],
             ),
             SizedBox(width: 20.h),
@@ -1063,13 +1064,14 @@ class HomeUI extends GetView<HomeController> {
                     switchValue: controller.callSwitch.value,
                   ),
                 ),
-                SizedBox(height: 20.h),
+               /// Video Call Toggel Commit
+               /* SizedBox(height: 20.h),
                 Obx(
                   () => SwitchWidget(
                     onTap: () => controller.videoCallSwitchFN(),
                     switchValue: controller.videoSwitch.value,
                   ),
-                ),
+                ),*/
               ],
             ),
             SizedBox(width: 20.h),
@@ -1225,7 +1227,8 @@ class HomeUI extends GetView<HomeController> {
                           ),
                         )
                       : const SelectedTimeForCall()),
-                  SizedBox(height: 15.h),
+                 /// VideCall Commit
+                 /* SizedBox(height: 15.h),
                   Obx(() => controller.selectedVideoTime.value.isEmpty
                       ? InkWell(
                           onTap: () {
@@ -1283,7 +1286,7 @@ class HomeUI extends GetView<HomeController> {
                             ),
                           ),
                         )
-                      : const SelectedTimeForVideoCall()),
+                      : const SelectedTimeForVideoCall()),*/
                 ],
               ),
             ),

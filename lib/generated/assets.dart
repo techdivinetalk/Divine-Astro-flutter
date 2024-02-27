@@ -2,6 +2,7 @@
 class Assets {
   Assets._();
 
+  static const String assetsImagesGaneshJi = 'assets/images/ganesh_ji.svg';
   static const String assetsLiveNewFollowerButton = 'assets/live_new_follower_button.png';
   static const String fontsPoppinsBold = 'assets/fonts/Poppins-Bold.ttf';
   static const String fontsPoppinsExtraBold = 'assets/fonts/Poppins-ExtraBold.ttf';
@@ -11,6 +12,7 @@ class Assets {
   static const String fontsPoppinsRegular = 'assets/fonts/Poppins-Regular.ttf';
   static const String fontsPoppinsSemiBold = 'assets/fonts/Poppins-SemiBold.ttf';
   static const String fontsPoppinsThin = 'assets/fonts/Poppins-Thin.ttf';
+  static const String imagesAstrologer = 'assets/images/astrologer.png';
   static const String imagesAudioDisableLive = 'assets/images/audio_disable_live.svg';
   static const String imagesAudioEnableLive = 'assets/images/audio_enable_live.svg';
   static const String imagesAvatar = 'assets/images/avatar.svg';
@@ -31,6 +33,12 @@ class Assets {
   static const String imagesChampionLive = 'assets/images/champion_live.png';
   static const String imagesChatCommonClock = 'assets/images/chat_common_clock.png';
   static const String imagesChatCommonRecharge = 'assets/images/chat_common_recharge.png';
+  static const String imagesChatDisabledVideoCall = 'assets/images/chat_disabled_video_call.png';
+  static const String imagesChatDisabledVoiceCall = 'assets/images/chat_disabled_voice_call.png';
+  static const String imagesChatNewDisableIcon = 'assets/images/chat_new_disable_icon.png';
+  static const String imagesChatNewEnableIcon = 'assets/images/chat_new_enable_icon.png';
+  static const String imagesChatNewVideoCallIcon = 'assets/images/chat_new_video_call_icon.png';
+  static const String imagesChatNewVoiceCallIcon = 'assets/images/chat_new_voice_call_icon.png';
   static const String imagesChatVideoCallCameraOff = 'assets/images/chat_video_call_camera_off.png';
   static const String imagesChatVideoCallCameraOn = 'assets/images/chat_video_call_camera_on.png';
   static const String imagesChatVideoCallIcon = 'assets/images/chat_video_call_icon.png';
@@ -48,8 +56,10 @@ class Assets {
   static const String imagesCreateAccSearch = 'assets/images/create_acc_search.svg';
   static const String imagesDate = 'assets/images/date.svg';
   static const String imagesDefaultProfile = 'assets/images/default_profile.png';
+  static const String imagesDefaultProfiles = 'assets/images/default_profiles.svg';
   static const String imagesDeleteAccout = 'assets/images/delete_accout.svg';
   static const String imagesDivineLogo = 'assets/images/divine_logo.png';
+  static const String imagesGaneshJi = 'assets/images/ganesh_ji.png';
   static const String imagesGiftLive = 'assets/images/gift_live.svg';
   static const String imagesGiftTotal = 'assets/images/gift_total.svg';
   static const String imagesGroup = 'assets/images/Group.svg';
@@ -178,6 +188,7 @@ class Assets {
   static const String imagesLiveSeperatedCrown = 'assets/images/live_seperated_crown.png';
   static const String imagesLiveStar = 'assets/images/live_star.png';
   static const String imagesLiveSwitchCamNew = 'assets/images/live_switch_cam_new.png';
+  static const String imagesLiveTarotNewIcon = 'assets/images/live_tarot_new_icon.png';
   static const String imagesLiveThirdMedal = 'assets/images/live_third_medal.png';
   static const String imagesLiveUnblockIcon = 'assets/images/live_unblock_icon.png';
   static const String imagesLiveYouAreBlocked = 'assets/images/live_you_are_blocked.png';
@@ -185,10 +196,18 @@ class Assets {
   static const String imagesMedalOne = 'assets/images/medal_one.png';
   static const String imagesMedalThree = 'assets/images/medal_three.png';
   static const String imagesMedalTwo = 'assets/images/medal_two.png';
+  static const String imagesMessage = 'assets/images/message.svg';
   static const String imagesOtpImage = 'assets/images/otp_image.svg';
   static const String imagesPlanetStarLive = 'assets/images/planet_star_live.png';
+  static const String imagesPoojaBanner = 'assets/images/pooja_banner.png';
+  static const String imagesPoojaLowBal = 'assets/images/pooja_low_bal.png';
+  static const String imagesPoojaMainPlaceholder = 'assets/images/pooja_main_placeholder.png';
+  static const String imagesPoojaNewDate = 'assets/images/pooja_new_date.png';
+  static const String imagesPoojaNewTime = 'assets/images/pooja_new_time.png';
+  static const String imagesPoojaThankYou = 'assets/images/pooja_thank_you.png';
   static const String imagesReport = 'assets/images/report.svg';
   static const String imagesSearchIcon = 'assets/images/Search_icon.svg';
+  static const String imagesSplashBg = 'assets/images/splash_bg.png';
   static const String imagesStarLive = 'assets/images/star_live.png';
   static const String imagesStarLiveBig = 'assets/images/star_live_big.png';
   static const String imagesTablet2353161 = 'assets/images/tablet_235316 1.svg';
@@ -202,6 +221,8 @@ class Assets {
   static const String lottieGenericloading  = 'assets/lottie/generic loading .json';
   static const String lottieGift = 'assets/lottie/gift.json';
   static const String lottieLiveFollowHeart = 'assets/lottie/live_follow_heart.json';
+  static const String lottieLoading2 = 'assets/lottie/loading_2.json';
+  static const String lottieLoadingAnimation = 'assets/lottie/loading_animation.json';
   static const String lottieLoadingDots = 'assets/lottie/loading_dots.json';
   static const String lottieSoundWaves = 'assets/lottie/sound_waves.json';
   static const String lottieTypingIndicator = 'assets/lottie/typing_indicator.json';
@@ -236,20 +257,30 @@ class Assets {
   static const String svgBlackDot = 'assets/svg/black_dot.svg';
   static const String svgBlock = 'assets/svg/block.svg';
   static const String svgBlockUser = 'assets/svg/block_user.svg';
+  static const String svgBronze = 'assets/svg/bronze.svg';
   static const String svgCallEarning = 'assets/svg/call_earning.svg';
   static const String svgCamera = 'assets/svg/camera.svg';
   static const String svgCameraIcon = 'assets/svg/camera_icon.svg';
   static const String svgCaution = 'assets/svg/caution.svg';
   static const String svgChatGift = 'assets/svg/chat_gift.svg';
   static const String svgDeckIcon = 'assets/svg/deck_icon.svg';
+  static const String svgDiamond = 'assets/svg/diamond.svg';
   static const String svgDisconnect = 'assets/svg/disconnect.svg';
+  static const String svgEmptyBox1 = 'assets/svg/empty-box 1.svg';
   static const String svgForwardIcon = 'assets/svg/forward_icon.svg';
   static const String svgGallery = 'assets/svg/gallery.svg';
   static const String svgGalleryIcon = 'assets/svg/gallery_icon.svg';
+  static const String svgGift = 'assets/svg/gift.svg';
   static const String svgGiftEarning = 'assets/svg/gift_earning.svg';
+  static const String svgGold = 'assets/svg/gold.svg';
   static const String svgGreyContainer = 'assets/svg/grey_container.svg';
+  static const String svgGroup128714 = 'assets/svg/Group 128714.png';
+  static const String svgGroup129525 = 'assets/svg/Group 129525.svg';
   static const String svgIcAdd = 'assets/svg/ic_add.svg';
   static const String svgIcCall1 = 'assets/svg/ic_call_1.svg';
+  static const String svgIcCheck = 'assets/svg/ic_check.svg';
+  static const String svgIcSendMsg = 'assets/svg/ic_sendMsg.svg';
+  static const String svgIcUnCheck = 'assets/svg/ic_un_check.svg';
   static const String svgKundaliHeader = 'assets/svg/kundali_header.svg';
   static const String svgLoginLogo = 'assets/svg/login_logo.svg';
   static const String svgMaximumOrderTimeIcon = 'assets/svg/maximum_order_time_icon.svg';
@@ -257,11 +288,15 @@ class Assets {
   static const String svgMute = 'assets/svg/mute.svg';
   static const String svgOrderTypeIcon = 'assets/svg/order_type_icon.svg';
   static const String svgPinkSlider = 'assets/svg/pink_slider.svg';
+  static const String svgPlatinum = 'assets/svg/platinum.svg';
   static const String svgPleaseRegister1 = 'assets/svg/please_register_1.svg';
   static const String svgPleaseRegister2 = 'assets/svg/please_register_2.svg';
   static const String svgPrivateCallEarning = 'assets/svg/private_call_earning.svg';
+  static const String svgProduct = 'assets/svg/product.svg';
+  static const String svgQueue = 'assets/svg/queue.svg';
   static const String svgRejoinChatIcon = 'assets/svg/rejoin_chat_icon.svg';
   static const String svgRemediesIcon = 'assets/svg/remedies_icon.svg';
+  static const String svgSilver = 'assets/svg/silver.svg';
   static const String svgSwitchCamera = 'assets/svg/switch_camera.svg';
   static const String svgVideoCallEarning = 'assets/svg/video_call_earning.svg';
   static const String svgVideoMute = 'assets/svg/video_mute.svg';
@@ -274,7 +309,6 @@ class Assets {
   static const String svgaNewYearCountdown = 'assets/svga/new_year_countdown.svga';
   static const String svgaNewYearGifts = 'assets/svga/new_year_gifts.svga';
   static const String svgaSportsCar = 'assets/svga/sports_car.svga';
-  static const String queue = 'assets/svg/queue.svg';
   static const String svgaWhiteHorse = 'assets/svga/white_horse.svga';
 
 }
