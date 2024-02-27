@@ -5,6 +5,7 @@ import "dart:developer";
 import "dart:io";
 import "dart:typed_data";
 
+import "package:audio_waveforms/audio_waveforms.dart";
 import "package:divine_astrologer/app_socket/app_socket.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/routes.dart";
@@ -161,6 +162,63 @@ class ChatMessageWithSocketController extends GetxController
     super.onClose();
   }
 
+  bool isRecordingCompleted = false;
+
+  void startOrStopRecording() async {
+    try {
+      print("is working");
+      if (isRecording.value) {
+        recorderController!.reset();
+        print(isRecording.value);
+        print("isRecording.value");
+
+        final path = await recorderController!.stop(false);
+        print(path);
+        print("pathpathpathpathpath");
+        if (path != null) {
+          isRecordingCompleted = true;
+
+          uploadAudioFile(File(path));
+          debugPrint("Recorded file size: ${File(path).lengthSync()}");
+        }
+      } else {
+        await recorderController!.record(path: path);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isRecording.value = !isRecording.value;
+      update();
+    }
+  }
+  Directory? appDirectory;
+  String path = "";
+  void getDir() async {
+    appDirectory = await getApplicationDocumentsDirectory();
+    path = "${appDirectory!.path}/recording.m4a";
+    update();
+
+  }
+
+  void refreshWave() {
+    if (isRecording.value) {
+      recorderController!.stop(true);
+      isRecording.value = false;
+      update();
+    }
+  }
+
+
+  RecorderController? recorderController;
+
+  void initialiseControllers() {
+    recorderController = RecorderController()
+      ..androidEncoder = AndroidEncoder.aac
+      ..androidOutputFormat = AndroidOutputFormat.mpeg4
+      ..iosEncoder = IosEncoder.kAudioFormatMPEG4AAC
+      ..sampleRate = 44100;
+  }
+
   var isCardVisible = false.obs;
 
   // RxInt cardListCount = 0.obs;
@@ -168,6 +226,8 @@ class ChatMessageWithSocketController extends GetxController
   @override
   void onInit() {
     super.onInit();
+    getDir();
+    initialiseControllers();
     AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
       print("orderData Changed");
       initTask(p0);
