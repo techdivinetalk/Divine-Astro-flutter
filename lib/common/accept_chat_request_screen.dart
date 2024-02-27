@@ -1,8 +1,9 @@
+import "package:audioplayers/audioplayers.dart";
 import "package:divine_astrologer/app_socket/app_socket.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/common_elevated_button.dart";
 import "package:divine_astrologer/common/common_functions.dart";
-import "package:divine_astrologer/common/routes.dart";
+
 import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/gen/assets.gen.dart";
@@ -96,18 +97,20 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
   bool isLoader = false;
   final SharedPreferenceService pref = Get.put(SharedPreferenceService());
   BroadcastReceiver broadcastReceiver =
-  BroadcastReceiver(names: <String>["orderEnd"]);
+      BroadcastReceiver(names: <String>["orderEnd"]);
+  AudioPlayer? _player;
+
   @override
   void initState() {
     super.initState();
+
     print(MiddleWare.instance.currentPage);
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) {
-      print("orderEnd trioggered");
-      if(event.name == "orderEnd") {
+      if (event.name == "orderEnd") {
         print("orderEnd called going back");
         WidgetsBinding.instance.endOfFrame.then(
-              (_) async {
+          (_) async {
             if (mounted) {
               bool canPop = Navigator.canPop(context);
               if (canPop) {
@@ -119,6 +122,10 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
         );
       }
     });
+    if ((AppFirebaseService().orderData.value["status"] ?? "-1") == "0") {
+      print("play the sound");
+      playAudio();
+    }
     // broadcastReceiver.start();
     // broadcastReceiver.messages.listen(
     //   (event) {
@@ -155,6 +162,24 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
     //   // isBottomSheetOpen = event == "1";
     //   setState(() {});
     // });
+  }
+
+  @override
+  void dispose() {
+    _player?.dispose();
+    super.dispose();
+  }
+
+  playAudio() async {
+    if (_player != null) {
+      _player?.dispose();
+    }
+
+    _player = AudioPlayer();
+    await _player!.setSourceAsset("accept.mp3");
+
+    _player!.play(AssetSource("accept.mp3"));
+    setState(() {});
   }
 
   @override
@@ -675,8 +700,8 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                   ),
                   if (isLoader)
                     Center(
-                        child:
-                            CircularProgressIndicator(color: appColors.guideColor))
+                        child: CircularProgressIndicator(
+                            color: appColors.guideColor))
                 ],
               );
             })),
