@@ -57,7 +57,7 @@ class _GiftWidgetState extends State<GiftWidget> {
             border: Border.all(color: appColors.white),
             color: appColors.white.withOpacity(0.2),
           ),
-          child:  Icon(Icons.close, color: appColors.white),
+          child: Icon(Icons.close, color: appColors.white),
         ),
       ),
     );
@@ -110,16 +110,16 @@ class _GiftWidgetState extends State<GiftWidget> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-         Text(
+        Text(
           "Quantity:",
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 12,
             color: appColors.white,
           ),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 4),
         Container(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(4.0),
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
             border: Border.all(color: appColors.guideColor),
@@ -135,15 +135,15 @@ class _GiftWidgetState extends State<GiftWidget> {
                 },
                 iconData: Icons.remove,
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 4),
               Text(
                 quantity.toString(),
-                style:  TextStyle(
-                  fontSize: 16,
+                style: TextStyle(
+                  fontSize: 12,
                   color: appColors.white,
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 4),
               button(
                 onTap: () {
                   quantity(quantity.value + 1);
@@ -161,20 +161,20 @@ class _GiftWidgetState extends State<GiftWidget> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-         Text(
+        Text(
           // "Amount:",
           "Wallet Balance:",
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 12,
             color: appColors.white,
           ),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 4),
         Text(
           // "₹ $amount",
           "${widget.walletBalance}",
-          style:  TextStyle(
-            fontSize: 16,
+          style: TextStyle(
+            fontSize: 12,
             color: appColors.textColor,
           ),
         ),
@@ -189,7 +189,7 @@ class _GiftWidgetState extends State<GiftWidget> {
       child: Container(
         height: 24,
         width: 24,
-        decoration:  BoxDecoration(
+        decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: appColors.textColor,
         ),
@@ -227,7 +227,7 @@ class _GiftWidgetState extends State<GiftWidget> {
                   const SizedBox(height: 4),
                   Text(
                     "₹${item.giftPrice}",
-                    style:  TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
                       color: appColors.white,
                     ),

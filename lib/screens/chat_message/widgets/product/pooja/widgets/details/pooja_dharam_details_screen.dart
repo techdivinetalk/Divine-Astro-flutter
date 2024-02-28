@@ -13,6 +13,7 @@ import '../../../../../../../common/custom_widgets.dart';
 import '../../../../../../../common/routes.dart';
 import '../../../../../../../di/shared_preference_service.dart';
 import '../../../../../../../gen/assets.gen.dart';
+import '../../../../../../../repository/shop_repository.dart';
 import '../../../../../../../utils/utils.dart';
 import '../../../../../../home_screen_options/notice_board/notice_board_ui.dart';
 import '../../../../../../live_dharam/widgets/custom_image_widget.dart';
@@ -68,7 +69,7 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
     return Scaffold(
       appBar: commonAppbar(
         title: "Pooja Details",
-        trailingWidget:SizedBox(width: 16),
+        trailingWidget: SizedBox(width: 16),
       ),
       body: SafeArea(
         child: NestedScrollView(
@@ -303,31 +304,44 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
           ),
         ),
         const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: PoojaCustomButton(
-            height: 64,
-            text: "Recommended Pooja",
-            backgroundColor: appColors.guideColor,
-            fontColor: appColors.black,
-            needCircularBorder: false,
-            onPressed: () async {
-              Get.back();
-              Get.back();
-              Get.back(result: {'isPooja':true,'poojaData':pooja});
-              // if (_controller.selectedDate.isEmpty) {
-              //   divineSnackBar(data: "Please Select Pooja Date");
-              // } else if (_controller.selectedTime.isEmpty) {
-              //   divineSnackBar(data: "Please Select Pooja Time");
-              // } else {
-              //   _controller.assignGlobalSelectedPooja();
-              //   _controller.assignGlobalSelectedAddOnesList();
-              //   _controller.assignGlobalPoojaDateTimeModel();
-              //   await Get.toNamed(RouteName.addressViewScreen);
-              // }
-            },
+        if (_controller.isSentMessage.value == false)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: PoojaCustomButton(
+              height: 64,
+              text: "Recommended Pooja",
+              backgroundColor: appColors.guideColor,
+              fontColor: appColors.black,
+              needCircularBorder: false,
+              onPressed: () async {
+                Map<String, dynamic> params = {
+                  "product_id": pooja.id,
+                  "shop_id": 0,
+                  "customer_id": _controller.customerId.value,
+                };
+
+                var response =
+                    await ShopRepository().saveRemediesForChatAssist(params);
+                Get.back();
+                Get.back();
+                Get.back(result: {
+                  'isPooja': true,
+                  'poojaData': pooja,
+                  'saveRemediesData': response
+                });
+                // if (_controller.selectedDate.isEmpty) {
+                //   divineSnackBar(data: "Please Select Pooja Date");
+                // } else if (_controller.selectedTime.isEmpty) {
+                //   divineSnackBar(data: "Please Select Pooja Time");
+                // } else {
+                //   _controller.assignGlobalSelectedPooja();
+                //   _controller.assignGlobalSelectedAddOnesList();
+                //   _controller.assignGlobalPoojaDateTimeModel();
+                //   await Get.toNamed(RouteName.addressViewScreen);
+                // }
+              },
+            ),
           ),
-        ),
         const SizedBox(height: 16),
       ],
     );

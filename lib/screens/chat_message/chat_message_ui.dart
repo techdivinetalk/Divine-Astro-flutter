@@ -45,14 +45,6 @@ class ChatMessageSupportUI extends StatefulWidget {
 class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
   ChatMessageController controller = Get.find();
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Placeholder();
-//   }
-// }
-
-// class ChatMessageSupportUI extends GetView<ChatMessageController> {
-//   const ChatMessageSupportUI({super.key});
 
   updateFirebaseToken() async {
     String? newtoken = await FirebaseMessaging.instance.getToken();
@@ -100,11 +92,11 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
             var responseMsg = newChatList[index];
             if (int.parse(responseMsg?["sender_id"].toString() ?? '') ==
                 controller.args?.id) {
-              print("inside chat add condition");
               controller.chatMessageList([
                 ...controller.chatMessageList,
                 AssistChatData(
-                    isPoojaProduct: responseMsg['message']=="true"?true:false,
+                    isPoojaProduct:
+                        responseMsg['message'] == "1" ? true : false,
                     message: responseMsg['message'],
                     astrologerId:
                         int.parse(responseMsg?["userid"].toString() ?? ''),
@@ -116,7 +108,8 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                     //     ? int.parse(responseMsg["chatId"])
                     //     : null,
                     isSuspicious: 0,
-
+                    suggestedRemediesId:
+                       int.parse( responseMsg['suggestedRemediesId']??'0'),
                     productId: responseMsg['productId'].toString(),
                     sendBy: SendBy.customer,
                     msgType: responseMsg["msg_type"] != null

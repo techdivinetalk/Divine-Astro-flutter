@@ -760,7 +760,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               child: Container(
                                 height: kToolbarHeight - Get.width * 0.010,
                                 width: kToolbarHeight - Get.width * 0.010,
-
                                 decoration: BoxDecoration(
                                   color: appColors.guideColor,
                                   shape: BoxShape.circle,
@@ -777,34 +776,37 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               },
                               child:
                                   SvgPicture.asset('assets/svg/chat_gift.svg')),
-                      const SizedBox(
-                        width: 10,
-                      ),
+                      const SizedBox(width: 10),
                       !controller.hasMessage.value
                           ? GestureDetector(
-                          onTap: controller.startOrStopRecording,
-                          child: Container(
-                            height: kToolbarHeight - Get.width * 0.010,
-                            width: kToolbarHeight - Get.width * 0.010,
-                            margin: EdgeInsets.only(right: 10.h),
-                            decoration: BoxDecoration(
-                              color: appColors.guideColor,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: controller.isRecording.value
-                                  ? SvgPicture.asset("assets/svg/send_comment.svg",color: appColors.white)
-                                  :  Icon(Icons.mic,color: appColors.white,),
-                            ),
-                          ))
+                              onTap: controller.startOrStopRecording,
+                              child: Container(
+                                height: kToolbarHeight - Get.width * 0.010,
+                                width: kToolbarHeight - Get.width * 0.010,
+                                margin: EdgeInsets.only(right: 10.h),
+                                decoration: BoxDecoration(
+                                  color: appColors.guideColor,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: controller.isRecording.value
+                                      ? SvgPicture.asset(
+                                          "assets/svg/send_comment.svg",
+                                          color: appColors.white)
+                                      : Icon(
+                                          Icons.mic,
+                                          color: appColors.white,
+                                        ),
+                                ),
+                              ))
                           : InkWell(
-                          onTap: () => controller.sendMsg(),
-                          child: Assets.images.icSendMsg.svg(
-                              height: kToolbarHeight - Get.width * 0.010)),
+                              onTap: () => controller.sendMsg(),
+                              child: Assets.images.icSendMsg.svg(
+                                  height: kToolbarHeight - Get.width * 0.010)),
                       // const SizedBox(width: 10),
                     ],
-                  ),   
-  
+                  ),
+
                   /*Visibility(
                     visible: !controller.isRecording.value,
                     maintainAnimation: true,
@@ -977,6 +979,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       SvgPicture.asset('assets/svg/gallery_icon.svg'),
       SvgPicture.asset('assets/svg/remedies_icon.svg'),
       SvgPicture.asset('assets/svg/deck_icon.svg'),
+      SvgPicture.asset('assets/svg/product.svg'),
       // Add more items as needed
     ];
     showModalBottomSheet(
@@ -1045,7 +1048,23 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         //  showOneCard(context);
                         break;
                       case 4:
-                        controller.getImage(false);
+                        var result = await Get.toNamed(
+                            RouteName.chatAssistProductPage,
+                            arguments: {
+                              'customerId': int.parse(AppFirebaseService()
+                                  .orderData
+                                  .value["userId"]
+                                  .toString())
+                            });
+                        if (result != null) {
+                          final String time =
+                              "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+
+                          controller.addNewMessage(time, "Product",
+                              data: {'data': result},
+                              messageText: 'Product');
+                        }
+
                         break;
                     }
                   },

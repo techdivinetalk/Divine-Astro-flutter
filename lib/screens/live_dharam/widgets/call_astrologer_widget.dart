@@ -1,9 +1,9 @@
 // import "dart:ui";
 
-// import "package:divine_app/common/colors.dart";
-// import "package:divine_app/model/live/get_astrologer_details_response.dart";
-// import "package:divine_app/screens/live_dharam/live_dharam_controller.dart";
-// import "package:divine_app/screens/live_dharam/widgets/custom_image_widget.dart";
+// import "package:divine_astrologer/common/colors.dart";
+// import "package:divine_astrologer/model/live/get_astrologer_details_response.dart";
+// import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
+// import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 // import "package:flutter/material.dart";
 // import "package:get/get.dart";
 
@@ -54,7 +54,7 @@
 //             border: Border.all(color: appColors.white),
 //             color: appColors.white.withOpacity(0.2),
 //           ),
-//           child: const Icon(Icons.close, color: appColors.white),
+//           child: Icon(Icons.close, color: appColors.white),
 //         ),
 //       ),
 //     );
@@ -79,7 +79,7 @@
 //                   topLeft: Radius.circular(50.0),
 //                   topRight: Radius.circular(50.0),
 //                 ),
-//                 border: Border.all(color: appColors.yellow),
+//                 border: Border.all(color: appColors.guideColor),
 //                 color: appColors.white,
 //               ),
 //               child: grid(),
@@ -232,7 +232,7 @@
 //                       const Divider(height: 1, thickness: 1),
 //                     ],
 //                   ),
-//             (widget.details.data?.is_live_annonymous_call ?? 0) == 0
+//             (widget.details.data?.is_live_anonymous_call ?? 0) == 0
 //                 ? const SizedBox()
 //                 : Column(
 //                     children: [
@@ -304,8 +304,11 @@
 //       subtitle: Text(subtitle),
 //       trailing: ElevatedButton(
 //         style: ButtonStyle(
+//           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+//           minimumSize: const MaterialStatePropertyAll(Size(56, 32)),
+//           padding: MaterialStateProperty.all(EdgeInsets.zero),
 //           elevation: MaterialStateProperty.all(4),
-//           backgroundColor: MaterialStateProperty.all(appColors.yellow),
+//           backgroundColor: MaterialStateProperty.all(appColors.guideColor),
 //           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
 //             const RoundedRectangleBorder(
 //               borderRadius: BorderRadius.all(Radius.circular(50.0)),
@@ -320,7 +323,7 @@
 //         },
 //         child: Text(
 //           buttonText,
-//           style: const TextStyle(color: appColors.black),
+//           style: TextStyle(color: appColors.black),
 //         ),
 //       ),
 //     );
