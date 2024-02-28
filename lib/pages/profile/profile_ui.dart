@@ -61,6 +61,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                     children: [
                       Column(
                         children: [
+                          SizedBox(height: 10.h),
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(
@@ -123,6 +124,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  SizedBox(height: 10.h),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [

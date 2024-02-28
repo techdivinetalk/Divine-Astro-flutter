@@ -34,7 +34,7 @@ class TimerController extends GetxController {
             child: Container(
               decoration:  BoxDecoration(
                 color: appColors.white,
-                borderRadius: BorderRadius.all(Radius.circular(15)),
+                borderRadius: BorderRadius.all(Radius.circular(15.r)),
               ),
               padding: const EdgeInsets.all(25.0),
               child: Column(
