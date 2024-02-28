@@ -401,7 +401,7 @@ class HomeUI extends GetView<HomeController> {
                                       ),
                                     ),
                                     SizedBox(height: 10.h),
-                                    noticeBoardWidget(),
+                                    //noticeBoardWidget(),
                                   ],
                                 ),
                           // SizedBox(height: 10.h),

@@ -390,7 +390,7 @@ class ChatMessageWithSocketController extends GetxController
     WidgetsBinding.instance.endOfFrame.then(
           (_) async {
             print("userLeavePrivateChatListenerSocket");
-            socket.leavePrivateChatEmit(userData?.id.toString(), AppFirebaseService().orderData.value["userId"], 0);
+            socket.leavePrivateChatEmit(userData?.id.toString(), AppFirebaseService().orderData.value["userId"], "0");
         chatTimer?.cancel();
         Get.back();
         Get.back();
