@@ -173,7 +173,7 @@ class _LivePage extends State<LiveDharamScreen>
           snapshot: dataSnapshot,
           zeroAstro: zeroAstro,
           engaging: engaging,
-          showFollowPopup: _restartMsgTimerForFollowPopup,
+          showFollowPopup: _startMsgTimerForFollowPopup,
           successCallBack: (String message) {
             successAndFailureCallBack(
               message: message,
@@ -202,7 +202,6 @@ class _LivePage extends State<LiveDharamScreen>
     );
 
     _startTimer();
-    _startMsgTimerForFollowPopup();
 
     receiver.start();
     receiver.messages.listen(
@@ -213,7 +212,7 @@ class _LivePage extends State<LiveDharamScreen>
           snapshot: dataSnapshot,
           zeroAstro: zeroAstro,
           engaging: engaging,
-          showFollowPopup: _restartMsgTimerForFollowPopup,
+          showFollowPopup: _startMsgTimerForFollowPopup,
           successCallBack: (String message) {
             successAndFailureCallBack(
               message: message,
@@ -277,13 +276,14 @@ class _LivePage extends State<LiveDharamScreen>
     WidgetsBinding.instance.endOfFrame.then(
       (_) async {
         if (mounted) {
-          final bool preCond1 =
-              _controller.openAceeptRejectDialogForId != currentCaller.id;
+          final bool preCond1 = _controller.openAceeptRejectDialogForId !=
+              _controller.currentCaller.id;
           final bool preCond2 = _controller.hasCallAcceptRejectPopupOpen;
 
           preCond1 && preCond2
               ? Get.back()
-              : _controller.openAceeptRejectDialogForId = currentCaller.id;
+              : _controller.openAceeptRejectDialogForId =
+                  _controller.currentCaller.id;
 
           final bool cond1 = _controller.isHost;
           final bool cond2 = _controller.waitListModel.length > 0;
@@ -291,8 +291,18 @@ class _LivePage extends State<LiveDharamScreen>
           final bool cond4 = !currentCaller.isEngaded;
           final bool cond5 = !currentCaller.isRequest;
           final bool cond6 = currentCaller.callStatus == 0;
+          final bool cond7 = currentCaller.callStatus == 1;
+          final bool cond8 = _controller.orderModel.id.isEmpty;
+          final bool cond9 = !_controller.hasCallAcceptRejectPopupOpen;
 
-          if (cond1 && cond2 && cond3 && cond4 && cond5 && cond6) {
+          if (cond1 &&
+              cond2 &&
+              cond3 &&
+              cond4 &&
+              cond5 &&
+              (cond6 || cond7) &&
+              cond8 &&
+              cond9) {
             final String id = currentCaller.id;
             final String name = currentCaller.userName;
             final String avatar = currentCaller.avatar;
@@ -383,23 +393,21 @@ class _LivePage extends State<LiveDharamScreen>
       (_) async {
         if (mounted) {
           const duration = Duration(seconds: 1);
-          _msgTimerForFollowPopup = Timer.periodic(
-            duration,
-            (Timer timer) async {
-              if (timer.tick % 15 == 0) {
-                await showFollowPopup();
-              } else {}
-            },
-          );
+          if (_msgTimerForFollowPopup?.isActive ?? false) {
+          } else {
+            _msgTimerForFollowPopup = Timer.periodic(
+              duration,
+              (Timer timer) async {
+                if (timer.tick % 15 == 0) {
+                  await showFollowPopup();
+                  _msgTimerForFollowPopup?.cancel();
+                } else {}
+              },
+            );
+          }
         } else {}
       },
     );
-  }
-
-  void _restartMsgTimerForFollowPopup() {
-    _msgTimerForFollowPopup?.cancel();
-    _startMsgTimerForFollowPopup();
-    return;
   }
 
   void _startMsgTimerForTarotCardPopup() {
@@ -1953,6 +1961,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   // Future<void> exitPopup() async {
+  //   _controller.hasFollowPopupOpen = true;
   //   await showCupertinoModalPopup(
   //     context: context,
   //     builder: (BuildContext context) {
@@ -1967,6 +1976,7 @@ class _LivePage extends State<LiveDharamScreen>
   //       );
   //     },
   //   );
+  //   _controller.hasFollowPopupOpen = false;
   //   return Future<void>.value();
   // }
 
@@ -3834,19 +3844,19 @@ class _LivePage extends State<LiveDharamScreen>
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        // return LiveKeyboard(sendKeyboardMesage: sendKeyboardMesage);
-        return LiveKeyboard(
-          sendKeyboardMesage: (String message) async {
-            final String text = _controller.algoForSendMessage(message);
-            text.isEmpty
-                ? await sendKeyboardMesage(message)
-                : successAndFailureCallBack(
-                    message: "$text is restricted text",
-                    isForSuccess: false,
-                    isForFailure: true,
-                  );
-          },
-        );
+        return LiveKeyboard(sendKeyboardMesage: sendKeyboardMesage);
+        // return LiveKeyboard(
+        //   sendKeyboardMesage: (String message) async {
+        //     final String text = _controller.algoForSendMessage(message);
+        //     text.isEmpty
+        //         ? await sendKeyboardMesage(message)
+        //         : successAndFailureCallBack(
+        //             message: "$text is restricted text",
+        //             isForSuccess: false,
+        //             isForFailure: true,
+        //           );
+        //   },
+        // );
       },
     );
     _isKeyboardSheetOpen = false;
