@@ -142,142 +142,146 @@ class HomeUI extends GetView<HomeController> {
                             () => Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                controller.isShowTitle.value
-                                    ? InkWell(
-                                        onTap: () {},
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                Expanded(
+                                  child:  controller.isShowTitle.value
+                                      ? InkWell(
+                                    onTap: () {},
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
+                                          style: AppTextStyle.textStyle16(
+                                              fontColor:
+                                              appColors.appRedColour,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        Text(
+                                          "today".tr,
+                                          style: AppTextStyle.textStyle16(
+                                              fontColor: appColors.darkBlue,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                      : InkWell(
+                                    onTap: () {},
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "₹******",
+                                          style: AppTextStyle.textStyle16(
+                                              fontColor:
+                                              appColors.appRedColour,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        Text(
+                                          "today".tr,
+                                          style: AppTextStyle.textStyle16(
+                                              fontColor: appColors.darkBlue,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                               // SizedBox(width: 15.w),
+                                Expanded(
+                                  child: controller.isShowTitle.value
+                                      ? InkWell(
+                                    onTap: () {
+                                      earningDetailPopup(Get.context!);
+                                      // Get.toNamed(RouteName.yourEarning);
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
                                           children: [
                                             Text(
-                                              "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
-                                              style: AppTextStyle.textStyle16(
-                                                  fontColor:
-                                                      appColors.appRedColour,
-                                                  fontWeight: FontWeight.w700),
+                                              "₹${controller.homeData?.totalEarning?.toStringAsFixed(2)}",
+                                              style:
+                                              AppTextStyle.textStyle16(
+                                                  fontColor: appColors
+                                                      .appRedColour,
+                                                  fontWeight:
+                                                  FontWeight.w700),
                                             ),
-                                            Text(
-                                              "today".tr,
-                                              style: AppTextStyle.textStyle16(
-                                                  fontColor: appColors.darkBlue,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
+                                            const Icon(
+                                              Icons.arrow_forward_ios,
+                                              size: 20,
+                                            )
                                           ],
                                         ),
-                                      )
-                                    : InkWell(
-                                        onTap: () {},
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                        Text(
+                                          "total".trParams({"count": ""}),
+                                          style: AppTextStyle.textStyle16(
+                                              fontColor: appColors.darkBlue,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                      : InkWell(
+                                    onTap: () {
+                                      earningDetailPopup(Get.context!);
+                                      // Get.toNamed(RouteName.yourEarning);
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
                                           children: [
                                             Text(
-                                              "₹******",
-                                              style: AppTextStyle.textStyle16(
-                                                  fontColor:
-                                                      appColors.appRedColour,
-                                                  fontWeight: FontWeight.w700),
+                                              "₹********",
+                                              style:
+                                              AppTextStyle.textStyle16(
+                                                  fontColor: appColors
+                                                      .appRedColour,
+                                                  fontWeight:
+                                                  FontWeight.w700),
                                             ),
-                                            Text(
-                                              "today".tr,
-                                              style: AppTextStyle.textStyle16(
-                                                  fontColor: appColors.darkBlue,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
+                                            const Icon(
+                                              Icons.arrow_forward_ios,
+                                              size: 20,
+                                            )
                                           ],
                                         ),
-                                      ),
-                                SizedBox(width: 15.w),
-                                controller.isShowTitle.value
-                                    ? InkWell(
-                                        onTap: () {
-                                          earningDetailPopup(Get.context!);
-                                          // Get.toNamed(RouteName.yourEarning);
-                                        },
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  "₹${controller.homeData?.totalEarning?.toStringAsFixed(2)}",
-                                                  style:
-                                                      AppTextStyle.textStyle16(
-                                                          fontColor: appColors
-                                                              .appRedColour,
-                                                          fontWeight:
-                                                              FontWeight.w700),
-                                                ),
-                                                const Icon(
-                                                  Icons.arrow_forward_ios,
-                                                  size: 20,
-                                                )
-                                              ],
-                                            ),
-                                            Text(
-                                              "total".trParams({"count": ""}),
-                                              style: AppTextStyle.textStyle16(
-                                                  fontColor: appColors.darkBlue,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                          ],
+                                        Text(
+                                          "total".trParams({"count": ""}),
+                                          style: AppTextStyle.textStyle16(
+                                              fontColor: appColors.darkBlue,
+                                              fontWeight: FontWeight.w400),
                                         ),
-                                      )
-                                    : InkWell(
-                                        onTap: () {
-                                          earningDetailPopup(Get.context!);
-                                          // Get.toNamed(RouteName.yourEarning);
-                                        },
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  "₹********",
-                                                  style:
-                                                      AppTextStyle.textStyle16(
-                                                          fontColor: appColors
-                                                              .appRedColour,
-                                                          fontWeight:
-                                                              FontWeight.w700),
-                                                ),
-                                                const Icon(
-                                                  Icons.arrow_forward_ios,
-                                                  size: 20,
-                                                )
-                                              ],
-                                            ),
-                                            Text(
-                                              "total".trParams({"count": ""}),
-                                              style: AppTextStyle.textStyle16(
-                                                  fontColor: appColors.darkBlue,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                SizedBox(width: 10.w),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                               // SizedBox(width: 10.w),
                                 InkWell(
                                   onTap: () {
                                     Get.toNamed(RouteName.checkKundli);
                                   },
                                   child: Ink(
-                                    height: 54.h,
+                                    height: 50.h,
                                     decoration: BoxDecoration(
                                       color: appColors.guideColor,
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(10)),
                                     ),
                                     padding:
-                                        EdgeInsets.symmetric(horizontal: 15.w),
+                                        EdgeInsets.symmetric(horizontal: 10.w),
                                     // alignment: Alignment.center,
                                     child: Center(
                                       child: Text(
                                         "checkKundli".tr,
-                                        style: AppTextStyle.textStyle14(
+                                        style: AppTextStyle.textStyle12(
                                             fontColor: appColors.white,
                                             fontWeight: FontWeight.w500),
                                       ),
@@ -401,7 +405,7 @@ class HomeUI extends GetView<HomeController> {
                                       ),
                                     ),
                                     SizedBox(height: 10.h),
-                                    noticeBoardWidget(),
+                                    //noticeBoardWidget(),
                                   ],
                                 ),
                           // SizedBox(height: 10.h),
