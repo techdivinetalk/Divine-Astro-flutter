@@ -1,6 +1,5 @@
 import 'package:divine_astrologer/model/add_message_template_response.dart';
 import 'package:divine_astrologer/repository/kundli_repository.dart';
-import 'package:divine_astrologer/screens/chat_message/chat_message_controller.dart';
 import 'package:divine_astrologer/screens/message_template/message_template_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';

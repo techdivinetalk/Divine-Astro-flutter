@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:divine_astrologer/screens/chat_message/widgets/product/pooja/pooja_dharam/get_pooja_addones_response.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:get/route_manager.dart';
@@ -8,17 +7,18 @@ import 'package:get/route_manager.dart';
 import '../common/app_exception.dart';
 import '../common/routes.dart';
 import '../di/api_provider.dart';
-import '../screens/chat_message/widgets/product/pooja/pooja/pooja_module_detail_response.dart';
-import '../screens/chat_message/widgets/product/pooja/pooja/pooja_module_response.dart';
-import '../screens/chat_message/widgets/product/pooja/pooja_dharam/add_user_address_response.dart';
-import '../screens/chat_message/widgets/product/pooja/pooja_dharam/delete_user_address_response.dart';
-import '../screens/chat_message/widgets/product/pooja/pooja_dharam/get_booked_pooja_response.dart';
-import '../screens/chat_message/widgets/product/pooja/pooja_dharam/get_pooja_response.dart';
-import '../screens/chat_message/widgets/product/pooja/pooja_dharam/get_single_pooja_response.dart';
-import '../screens/chat_message/widgets/product/pooja/pooja_dharam/get_user_address_response.dart';
-import '../screens/chat_message/widgets/product/pooja/pooja_dharam/insufficient_balance_model.dart';
-import '../screens/chat_message/widgets/product/pooja/pooja_dharam/update_user_address_response.dart';
-import '../screens/chat_message/widgets/product/pooja/pooja_dharam/wallet_recharge_response.dart';
+import '../screens/chat_assistance/chat_message/widgets/product/pooja/pooja/pooja_module_detail_response.dart';
+import '../screens/chat_assistance/chat_message/widgets/product/pooja/pooja/pooja_module_response.dart';
+import '../screens/chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/add_user_address_response.dart';
+import '../screens/chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/delete_user_address_response.dart';
+import '../screens/chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/get_booked_pooja_response.dart';
+import '../screens/chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/get_pooja_addones_response.dart';
+import '../screens/chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/get_pooja_response.dart';
+import '../screens/chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/get_single_pooja_response.dart';
+import '../screens/chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/get_user_address_response.dart';
+import '../screens/chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/insufficient_balance_model.dart';
+import '../screens/chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/update_user_address_response.dart';
+import '../screens/chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/wallet_recharge_response.dart';
 
 
 class PoojaRepository extends ApiProvider {
