@@ -5,6 +5,7 @@ import "dart:developer";
 import "dart:io";
 import "dart:typed_data";
 
+import "package:device_info_plus/device_info_plus.dart";
 import "package:divine_astrologer/app_socket/app_socket.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/routes.dart";
@@ -28,12 +29,14 @@ import "package:http/http.dart" as http;
 import "package:image_cropper/image_cropper.dart";
 import "package:image_picker/image_picker.dart";
 import "package:path_provider/path_provider.dart";
+import "package:permission_handler/permission_handler.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:socket_io_client/socket_io_client.dart";
 
 import "../../common/app_exception.dart";
 import "../../common/ask_for_gift_bottom_sheet.dart";
 import "../../common/common_functions.dart";
+import "../../common/show_permission_widget.dart";
 import "../../firebase_service/firebase_service.dart";
 import "../../model/astrologer_gift_response.dart";
 import "../../model/chat/ReqCommonChat.dart";
@@ -46,7 +49,7 @@ import "../../model/save_remedies_response.dart";
 import "../../model/tarot_response.dart";
 import "../../repository/chat_repository.dart";
 import "../../utils/enum.dart";
-import "../chat_message/widgets/product/pooja/pooja_dharam/get_single_pooja_response.dart";
+import "../chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/get_pooja_response.dart";
 import "../live_dharam/gifts_singleton.dart";
 
 class ChatMessageWithSocketController extends GetxController
@@ -438,7 +441,7 @@ class ChatMessageWithSocketController extends GetxController
       if (data['data']["typist"].toString() ==
           AppFirebaseService().orderData.value["userId"].toString()) {
         isTyping.value = true;
-        // chatStatus.value = "Typing";
+        chatStatus.value = "Typing";
         if (isScrollAtBottom()) {
           scrollToBottomFunc();
         }
@@ -544,14 +547,64 @@ class ChatMessageWithSocketController extends GetxController
     return;
   }
 
-  Future getImage(bool isCamera) async {
-    pickedFile = await picker.pickImage(
-        source: isCamera ? ImageSource.camera : ImageSource.gallery);
 
-    if (pickedFile != null) {
-      image = File(pickedFile!.path);
-      isDataLoad.value = false;
-      await cropImage();
+  Future<bool> permissionPhotoOrStorage() async {
+    bool perm = false;
+    if (Platform.isIOS) {
+      perm = await permissionPhotos();
+    } else if (Platform.isAndroid) {
+      final AndroidDeviceInfo android = await DeviceInfoPlugin().androidInfo;
+      final int sdkInt = android.version.sdkInt;
+      perm = sdkInt > 32 ? await permissionPhotos() : await permissionStorage();
+    } else {}
+    return Future<bool>.value(perm);
+  }
+
+  Future<bool> permissionPhotos() async {
+    bool hasPhotosPermission = false;
+    final PermissionStatus try0 = await Permission.photos.status;
+    if (try0 == PermissionStatus.granted) {
+      hasPhotosPermission = true;
+    } else {
+      final PermissionStatus try1 = await Permission.photos.request();
+      if (try1 == PermissionStatus.granted) {
+        hasPhotosPermission = true;
+      } else {}
+    }
+    return Future<bool>.value(hasPhotosPermission);
+  }
+
+  Future<bool> permissionStorage() async {
+    bool hasStoragePermission = false;
+    final PermissionStatus try0 = await Permission.storage.status;
+    if (try0 == PermissionStatus.granted) {
+      hasStoragePermission = true;
+    } else {
+      final PermissionStatus try1 = await Permission.storage.request();
+      if (try1 == PermissionStatus.granted) {
+        hasStoragePermission = true;
+      } else {}
+    }
+    return Future<bool>.value(hasStoragePermission);
+  }
+
+  Future getImage(bool isCamera) async {
+    final bool result = await permissionPhotoOrStorage();
+    print("photo permission $result");
+    if (result) {
+      pickedFile = await picker.pickImage(
+          source: isCamera ? ImageSource.camera : ImageSource.gallery);
+
+      if (pickedFile != null) {
+        image = File(pickedFile!.path);
+        isDataLoad.value = false;
+        await cropImage();
+      }
+    } else {
+      await showPermissionDialog(
+        permissionName: 'Gallery permission',
+        isForOverlayPermission: false,
+      );
     }
   }
 
