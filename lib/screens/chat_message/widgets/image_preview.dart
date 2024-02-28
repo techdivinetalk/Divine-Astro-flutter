@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
@@ -20,8 +21,10 @@ class ImagePreviewUi extends GetView<ImagePreviewController> {
         backgroundColor: appColors.guideColor,
         centerTitle: false,
       ),
-      body: PhotoView(
-        imageProvider: FileImage(File(filePath??'')),
+      body: Center(
+        child: CommonImageView(
+          imagePath: filePath??'',
+        ),
       ),
     );
   }

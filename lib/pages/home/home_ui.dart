@@ -2207,6 +2207,7 @@ class PerformanceDialog extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(15.0))),
       child: GetBuilder<HomeController>(
           id: "score_update",
+          init: HomeController(),
           builder: (controller) {
             return Container(
               decoration: BoxDecoration(

@@ -798,11 +798,14 @@ class HomeController extends GetxController {
   }
 
   String getLabel() {
-    final bool b1 = (performanceScoreList ?? <Conversion?>[]).isNotEmpty;
-    final bool b2 = performanceScoreList[scoreIndex] != null;
-    final bool b3 = performanceScoreList[scoreIndex]?.label != null;
-    return (b1 && b2 && b3)
-        ? performanceScoreList[scoreIndex]?.label ?? ""
-        : "";
+    if(performanceScoreList.length > scoreIndex){
+      final bool b1 = (performanceScoreList ?? <Conversion?>[]).isNotEmpty;
+      final bool b2 = performanceScoreList[scoreIndex] != null;
+      final bool b3 = performanceScoreList[scoreIndex]?.label != null;
+      return (b1 && b2 && b3)
+          ? performanceScoreList[scoreIndex]?.label ?? ""
+          : "";
+    }
+    return "";
   }
 }

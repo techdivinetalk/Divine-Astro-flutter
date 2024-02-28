@@ -461,9 +461,11 @@ class MessageView extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            File imageFile = File.fromRawPath(bytesImage);
+
+                            print(chatMessage.awsUrl);
+                            print("chatMessage.awsUrl");
                             Get.toNamed(RouteName.imagePreviewUi,
-                                arguments: imageFile.path);
+                                arguments: chatMessage.awsUrl);
                           },
                           child: Image.memory(
                             bytesImage,

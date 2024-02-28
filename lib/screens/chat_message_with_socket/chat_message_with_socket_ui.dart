@@ -1477,6 +1477,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         )
                       : InkWell(
                           onTap: () {
+                            print(chatDetail.downloadedPath);
+                            print("chatDetail.downloadedPath");
                             Get.toNamed(RouteName.imagePreviewUi,
                                 arguments: chatDetail.downloadedPath);
                           },
