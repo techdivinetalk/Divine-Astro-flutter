@@ -12,7 +12,6 @@ import "package:divine_astrologer/model/live/new_tarot_card_model.dart";
 import "package:divine_astrologer/model/live/notice_board_res.dart";
 import "package:divine_astrologer/model/res_login.dart";
 import "package:divine_astrologer/repository/astrologer_profile_repository.dart";
-import "package:divine_astrologer/repository/kundli_repository.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart";
 import "package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart";
 import "package:firebase_database/firebase_database.dart";
@@ -20,6 +19,7 @@ import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 import "package:get/get_connect/http/src/status/http_status.dart";
 import "package:http/http.dart" as http;
+//
 //
 //
 //
@@ -90,8 +90,8 @@ class LiveDharamController extends GetxController {
   final RxList<DeckCardModel> _deckCardModelList = <DeckCardModel>[].obs;
   final Rx<TarotGameModel> _tarotGameModel = TarotGameModel().obs;
   final RxBool _hasFollowPopupOpen = false.obs;
-  final RxBool _hasCallAcceptRejectPopupOpen = false.obs;
-  final RxString _openAceeptRejectDialogForId = "".obs;
+  // final RxBool _hasCallAcceptRejectPopupOpen = false.obs;
+  // final RxString _openAceeptRejectDialogForId = "".obs;
   final Rx<RequestClass> _requestClass = RequestClass(
     type: "",
     giftData: GiftData(
@@ -177,8 +177,8 @@ class LiveDharamController extends GetxController {
     deckCardModelList = [];
     tarotGameModel = TarotGameModel();
     hasFollowPopupOpen = false;
-    hasCallAcceptRejectPopupOpen = false;
-    openAceeptRejectDialogForId = "";
+    // hasCallAcceptRejectPopupOpen = false;
+    // openAceeptRejectDialogForId = "";
     clearRequest();
     isProcessing = false;
     extendTimeWidgetVisible = false;
@@ -221,8 +221,8 @@ class LiveDharamController extends GetxController {
     _deckCardModelList.close();
     _tarotGameModel.close();
     _hasFollowPopupOpen.close();
-    _hasCallAcceptRejectPopupOpen.close();
-    _openAceeptRejectDialogForId.close();
+    // _hasCallAcceptRejectPopupOpen.close();
+    // _openAceeptRejectDialogForId.close();
     _requestClass.close();
     _isProcessing.close();
     _extendTimeWidgetVisible.close();
@@ -333,13 +333,13 @@ class LiveDharamController extends GetxController {
   bool get hasFollowPopupOpen => _hasFollowPopupOpen.value;
   set hasFollowPopupOpen(bool value) => _hasFollowPopupOpen(value);
 
-  bool get hasCallAcceptRejectPopupOpen => _hasCallAcceptRejectPopupOpen.value;
-  set hasCallAcceptRejectPopupOpen(bool value) =>
-      _hasCallAcceptRejectPopupOpen(value);
+  // bool get hasCallAcceptRejectPopupOpen => _hasCallAcceptRejectPopupOpen.value;
+  // set hasCallAcceptRejectPopupOpen(bool value) =>
+  //     _hasCallAcceptRejectPopupOpen(value);
 
-  String get openAceeptRejectDialogForId => _openAceeptRejectDialogForId.value;
-  set openAceeptRejectDialogForId(String value) =>
-      _openAceeptRejectDialogForId(value);
+  // String get openAceeptRejectDialogForId => _openAceeptRejectDialogForId.value;
+  // set openAceeptRejectDialogForId(String value) =>
+  //     _openAceeptRejectDialogForId(value);
 
   RequestClass get requestClass => _requestClass.value;
   set requestClass(RequestClass value) => _requestClass(value);
@@ -1493,20 +1493,21 @@ class LiveDharamController extends GetxController {
 
   final RegExp indianPhoneNumberRegex = RegExp(r'\b(?:\+?91|0)?[ -]?\d{10}\b');
   final RegExp emailRegex =
-      RegExp(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b');
-  final RegExp instagramIdRegex = RegExp(r'\b@([A-Za-z0-9_]{1,30})\b');
+      RegExp(r'\b[A-Za-z0-9._%+-]+@\b[A-Za-z0-9.-]+\.[A-Z|a-z]{2,6}\b');
+  final RegExp instagramIdRegex = RegExp(r'@[a-zA-Z0-9_]{1,30}\b');
 
   String algoForSendMessage(String input) {
     final bool hasPhoneNumber = indianPhoneNumberRegex.hasMatch(input);
     final bool hasEmail = emailRegex.hasMatch(input);
     final bool hasInstagramId = instagramIdRegex.hasMatch(input);
-
     final List<String> data = <String>[];
     if (hasPhoneNumber) {
       data.add("Phone Number");
-    } else if (hasEmail) {
+    } else {}
+    if (hasEmail) {
       data.add("Email Address");
-    } else if (hasInstagramId) {
+    } else {}
+    if (hasInstagramId) {
       data.add("Instagram Id");
     } else {}
     return data.isEmpty ? "" : data.join(", ");

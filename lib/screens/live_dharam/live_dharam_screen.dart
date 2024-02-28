@@ -272,40 +272,80 @@ class _LivePage extends State<LiveDharamScreen>
     return Future<void>.value();
   }
 
+  // Future<void> engaging(WaitListModel currentCaller) async {
+  //   WidgetsBinding.instance.endOfFrame.then(
+  //     (_) async {
+  //       if (mounted) {
+  //         final bool preCond1 = _controller.openAceeptRejectDialogForId !=
+  //             _controller.currentCaller.id;
+  //         final bool preCond2 = _controller.hasCallAcceptRejectPopupOpen;
+
+  //         preCond1 && preCond2
+  //             ? Get.back()
+  //             : _controller.openAceeptRejectDialogForId =
+  //                 _controller.currentCaller.id;
+
+  //         final bool cond1 = _controller.isHost;
+  //         final bool cond2 = _controller.waitListModel.length > 0;
+  //         final bool cond3 = currentCaller.id.isNotEmpty;
+  //         final bool cond4 = !currentCaller.isEngaded;
+  //         final bool cond5 = !currentCaller.isRequest;
+  //         final bool cond6 = currentCaller.callStatus == 0;
+  //         final bool cond7 = currentCaller.callStatus == 1;
+  //         final bool cond8 = _controller.orderModel.id.isEmpty;
+  //         final bool cond9 = !_controller.hasCallAcceptRejectPopupOpen;
+
+  //         if (cond1 &&
+  //             cond2 &&
+  //             cond3 &&
+  //             cond4 &&
+  //             cond5 &&
+  //             (cond6 || cond7) &&
+  //             cond8 &&
+  //             cond9) {
+  //           final String id = currentCaller.id;
+  //           final String name = currentCaller.userName;
+  //           final String avatar = currentCaller.avatar;
+  //           final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
+
+  //           await onCoHostRequest(
+  //             user: user,
+  //             userId: id,
+  //             userName: name,
+  //             avatar: avatar,
+  //           );
+  //         } else {}
+  //       } else {}
+  //     },
+  //   );
+  //   return Future<void>.value();
+  // }
+
+  bool isAcceptPopupOpen = false;
+
   Future<void> engaging(WaitListModel currentCaller) async {
     WidgetsBinding.instance.endOfFrame.then(
       (_) async {
         if (mounted) {
-          final bool preCond1 = _controller.openAceeptRejectDialogForId !=
-              _controller.currentCaller.id;
-          final bool preCond2 = _controller.hasCallAcceptRejectPopupOpen;
-
-          preCond1 && preCond2
-              ? Get.back()
-              : _controller.openAceeptRejectDialogForId =
-                  _controller.currentCaller.id;
-
           final bool cond1 = _controller.isHost;
-          final bool cond2 = _controller.waitListModel.length > 0;
-          final bool cond3 = currentCaller.id.isNotEmpty;
-          final bool cond4 = !currentCaller.isEngaded;
-          final bool cond5 = !currentCaller.isRequest;
-          final bool cond6 = currentCaller.callStatus == 0;
-          final bool cond7 = currentCaller.callStatus == 1;
-          final bool cond8 = _controller.orderModel.id.isEmpty;
-          final bool cond9 = !_controller.hasCallAcceptRejectPopupOpen;
+          final bool cond2 = _controller.waitListModel.isNotEmpty;
+          final bool cond3 = _controller.orderModel.id.isEmpty;
+          final bool cond4 = !isAcceptPopupOpen;
 
-          if (cond1 &&
-              cond2 &&
-              cond3 &&
-              cond4 &&
-              cond5 &&
-              (cond6 || cond7) &&
-              cond8 &&
-              cond9) {
-            final String id = currentCaller.id;
-            final String name = currentCaller.userName;
-            final String avatar = currentCaller.avatar;
+          bool cond5 = true;
+          for (var e in _controller.waitListModel) {
+            if (e.callStatus == 1) cond5 = false;
+          }
+
+          bool cond6 = false;
+          for (var e in _controller.waitListModel) {
+            if (e.callStatus == 0 && !e.isEngaded && !e.isRequest) cond6 = true;
+          }
+
+          if (cond1 && cond2 && cond3 && cond4 && cond5 && cond6) {
+            final String id = _controller.waitListModel.first.id;
+            final String name = _controller.waitListModel.first.userName;
+            final String avatar = _controller.waitListModel.first.avatar;
             final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
 
             await onCoHostRequest(
@@ -3845,18 +3885,6 @@ class _LivePage extends State<LiveDharamScreen>
       backgroundColor: Colors.transparent,
       builder: (context) {
         return LiveKeyboard(sendKeyboardMesage: sendKeyboardMesage);
-        // return LiveKeyboard(
-        //   sendKeyboardMesage: (String message) async {
-        //     final String text = _controller.algoForSendMessage(message);
-        //     text.isEmpty
-        //         ? await sendKeyboardMesage(message)
-        //         : successAndFailureCallBack(
-        //             message: "$text is restricted text",
-        //             isForSuccess: false,
-        //             isForFailure: true,
-        //           );
-        //   },
-        // );
       },
     );
     _isKeyboardSheetOpen = false;
@@ -3864,18 +3892,27 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> sendKeyboardMesage(msg) async {
-    final ZegoCustomMessage model = ZegoCustomMessage(
-      type: 1,
-      liveId: _controller.liveId,
-      userId: _controller.userId,
-      userName: _controller.userName,
-      avatar: _controller.avatar,
-      message: msg,
-      timeStamp: DateTime.now().toString(),
-      fullGiftImage: "",
-      isBlockedCustomer: _controller.isCustomerBlockedBool(),
-    );
-    await sendMessageToZego(model);
+    final String text = _controller.algoForSendMessage(msg);
+    if (text.isEmpty) {
+      final ZegoCustomMessage model = ZegoCustomMessage(
+        type: 1,
+        liveId: _controller.liveId,
+        userId: _controller.userId,
+        userName: _controller.userName,
+        avatar: _controller.avatar,
+        message: msg,
+        timeStamp: DateTime.now().toString(),
+        fullGiftImage: "",
+        isBlockedCustomer: _controller.isCustomerBlockedBool(),
+      );
+      await sendMessageToZego(model);
+    } else {
+      successAndFailureCallBack(
+        message: "$text is restricted text",
+        isForSuccess: false,
+        isForFailure: true,
+      );
+    }
     FocusManager.instance.primaryFocus?.unfocus();
     scrollDownForTop();
     scrollDownForBottom();
@@ -4046,6 +4083,12 @@ class _LivePage extends State<LiveDharamScreen>
           },
           onInvitationRefused: (ZegoUIKitUser user) {
             showNotifOverlay(user: user, msg: "onCoHostInvitationRefused");
+
+            successAndFailureCallBack(
+              message: "${user.name} refused to take the call",
+              isForSuccess: false,
+              isForFailure: true,
+            );
           },
         ),
         audience: ZegoLiveStreamingCoHostAudienceEvents(
@@ -4096,16 +4139,19 @@ class _LivePage extends State<LiveDharamScreen>
     required String userName,
     required String avatar,
   }) async {
-    _controller.hasCallAcceptRejectPopupOpen = true;
+    // _controller.hasCallAcceptRejectPopupOpen = true;
+    isAcceptPopupOpen = true;
     await hostingAndCoHostingPopup(
       onClose: () {},
       needAcceptButton: true,
       needDeclinetButton: false,
       onAcceptButton: () async {
-        if (_controller.openAceeptRejectDialogForId == userId) {
-          final connectInvite = _zegoController.coHost;
-          await connectInvite.hostSendCoHostInvitationToAudience(user);
-        } else {}
+        // if (_controller.openAceeptRejectDialogForId == userId) {
+        //   final connectInvite = _zegoController.coHost;
+        //   await connectInvite.hostSendCoHostInvitationToAudience(user);
+        // } else {}
+        final connectInvite = _zegoController.coHost;
+        await connectInvite.hostSendCoHostInvitationToAudience(user);
       },
       onDeclineButton: () {},
       user: user,
@@ -4113,7 +4159,8 @@ class _LivePage extends State<LiveDharamScreen>
       userName: userName,
       avatar: avatar,
     );
-    _controller.hasCallAcceptRejectPopupOpen = false;
+    // _controller.hasCallAcceptRejectPopupOpen = false;
+    isAcceptPopupOpen = false;
     return Future<void>.value();
   }
 
