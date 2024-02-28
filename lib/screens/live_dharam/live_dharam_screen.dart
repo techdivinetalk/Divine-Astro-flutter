@@ -7,6 +7,7 @@ import "dart:math" as math;
 
 import "package:after_layout/after_layout.dart";
 import "package:divine_astrologer/common/colors.dart";
+import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/model/live/deck_card_model.dart";
 import "package:divine_astrologer/model/live/notice_board_res.dart";
@@ -58,7 +59,6 @@ import 'package:random_name_generator/random_name_generator.dart';
 //
 //
 //
-//
 
 const int appID = 696414715;
 const String appSign =
@@ -87,23 +87,68 @@ class _LivePage extends State<LiveDharamScreen>
   bool _isKeyboardSheetOpen = false;
   Timer? _timer;
   Timer? _msgTimerForFollowPopup;
+  Timer? _msgTimerForTarotCardPopup;
 
   BroadcastReceiver receiver = BroadcastReceiver(
     names: <String>["LiveDharamScreen_eventListner"],
   );
 
-  final List<String> indianGreetings = <String>[
-    "Hi",
-    "Hello",
-    "Good morning",
-    "Good afternoon",
-    "Good evening",
-    "Hey",
-    "नमस्ते",
-    "हाय",
-    "हेलो",
-    "नमस्कार",
-  ];
+  // final List<String> indianGreetings = <String>[
+  //   "Hi",
+  //   "Hello",
+  //   "Hey",
+  //   "Good morning",
+  //   "Good afternoon",
+  //   "Good evening",
+  //   "नमस्ते",
+  //   "हाय",
+  //   "हेलो",
+  //   "नमस्कार",
+  // ];
+
+  List<String> indianGreetingsFunction() {
+    List<String> temp = <String>[
+      "Hi",
+      "Hello",
+      "Hey",
+      "Welcome",
+      "Howdy!",
+      "Hi, how are you?",
+      "Hey, what's up?",
+      "Hi, long time no see!",
+      "Hey, good to see you!",
+      "नमस्ते",
+      "हाय",
+      "हेलो",
+      "नमस्कार",
+      greetingEnglish(),
+      greetingHindi(),
+    ];
+
+    return temp;
+  }
+
+  String greetingEnglish() {
+    var hour = DateTime.now().hour;
+    if (hour < 12) {
+      return 'Good morning';
+    }
+    if (hour < 17) {
+      return 'Good afternoon';
+    }
+    return 'Good evening';
+  }
+
+  String greetingHindi() {
+    var hour = DateTime.now().hour;
+    if (hour < 12) {
+      return 'शुभ प्रभात';
+    }
+    if (hour < 17) {
+      return 'शुभ दोपहर';
+    }
+    return 'शुभ संध्या';
+  }
 
   @override
   void initState() {
@@ -128,7 +173,7 @@ class _LivePage extends State<LiveDharamScreen>
           snapshot: dataSnapshot,
           zeroAstro: zeroAstro,
           engaging: engaging,
-          showFollowPopup: _restartMsgTimerForFollowPopup,
+          showFollowPopup: _startMsgTimerForFollowPopup,
           successCallBack: (String message) {
             successAndFailureCallBack(
               message: message,
@@ -157,7 +202,6 @@ class _LivePage extends State<LiveDharamScreen>
     );
 
     _startTimer();
-    _startMsgTimerForFollowPopup();
 
     receiver.start();
     receiver.messages.listen(
@@ -168,7 +212,7 @@ class _LivePage extends State<LiveDharamScreen>
           snapshot: dataSnapshot,
           zeroAstro: zeroAstro,
           engaging: engaging,
-          showFollowPopup: _restartMsgTimerForFollowPopup,
+          showFollowPopup: _startMsgTimerForFollowPopup,
           successCallBack: (String message) {
             successAndFailureCallBack(
               message: message,
@@ -222,6 +266,7 @@ class _LivePage extends State<LiveDharamScreen>
     // if (mounted) {
     //   _timer?.cancel();
     //   _msgTimerForFollowPopup?.cancel();
+    //   _msgTimerForTarotCardPopup?.cancel();
     //   await _zegoController.leave(context);
     // } else {}
     return Future<void>.value();
@@ -231,13 +276,14 @@ class _LivePage extends State<LiveDharamScreen>
     WidgetsBinding.instance.endOfFrame.then(
       (_) async {
         if (mounted) {
-          final bool preCond1 =
-              _controller.openAceeptRejectDialogForId != currentCaller.id;
+          final bool preCond1 = _controller.openAceeptRejectDialogForId !=
+              _controller.currentCaller.id;
           final bool preCond2 = _controller.hasCallAcceptRejectPopupOpen;
 
           preCond1 && preCond2
               ? Get.back()
-              : _controller.openAceeptRejectDialogForId = currentCaller.id;
+              : _controller.openAceeptRejectDialogForId =
+                  _controller.currentCaller.id;
 
           final bool cond1 = _controller.isHost;
           final bool cond2 = _controller.waitListModel.length > 0;
@@ -245,8 +291,18 @@ class _LivePage extends State<LiveDharamScreen>
           final bool cond4 = !currentCaller.isEngaded;
           final bool cond5 = !currentCaller.isRequest;
           final bool cond6 = currentCaller.callStatus == 0;
+          final bool cond7 = currentCaller.callStatus == 1;
+          final bool cond8 = _controller.orderModel.id.isEmpty;
+          final bool cond9 = !_controller.hasCallAcceptRejectPopupOpen;
 
-          if (cond1 && cond2 && cond3 && cond4 && cond5 && cond6) {
+          if (cond1 &&
+              cond2 &&
+              cond3 &&
+              cond4 &&
+              cond5 &&
+              (cond6 || cond7) &&
+              cond8 &&
+              cond9) {
             final String id = currentCaller.id;
             final String name = currentCaller.userName;
             final String avatar = currentCaller.avatar;
@@ -294,34 +350,36 @@ class _LivePage extends State<LiveDharamScreen>
           _timer = Timer.periodic(
             duration,
             (Timer timer) async {
-              if (timer.tick % 5 == 0) {
-                math.Random.secure().nextInt(10).isEven
+              if (timer.tick % 10 == 0) {
+                math.Random.secure().nextInt(15).isEven
                     ? await manMessage()
                     : await womanMessage();
               } else {}
 
-              if (timer.tick % 15 == 0) {
+              if (timer.tick % 30 == 0) {
+                _controller.timerCurrentIndex++;
+                if (_controller.timerCurrentIndex >
+                    (_controller.noticeBoardRes.data?.length ?? 0)) {
+                  _controller.timerCurrentIndex = 1;
+                } else {}
+              } else {}
+
+              if (timer.tick % 600 == 0) {
                 final ZegoCustomMessage model = ZegoCustomMessage(
                   type: 1,
                   liveId: _controller.liveId,
                   userId: "0",
                   userName: "Live Monitoring Team",
+                  // avatar:
+                  //     "https://divinenew-prod.s3.ap-south-1.amazonaws.com/divine/January2024/fGfpNU1Y40lV0ojgh0JBpgbc4mJtAdV6hgG5xZXJ.jpg",
                   avatar:
-                      "https://divinenew-prod.s3.ap-south-1.amazonaws.com/divine/January2024/fGfpNU1Y40lV0ojgh0JBpgbc4mJtAdV6hgG5xZXJ.jpg",
+                      "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
                   message: "Live Monitoring Team Joined",
                   timeStamp: DateTime.now().toString(),
                   fullGiftImage: "",
                   isBlockedCustomer: false,
                 );
                 await sendMessageToZego(model);
-              } else {}
-
-              if (timer.tick % 15 == 0) {
-                _controller.timerCurrentIndex++;
-                if (_controller.timerCurrentIndex >
-                    (_controller.noticeBoardRes.data?.length ?? 0)) {
-                  _controller.timerCurrentIndex = 1;
-                } else {}
               } else {}
             },
           );
@@ -335,11 +393,43 @@ class _LivePage extends State<LiveDharamScreen>
       (_) async {
         if (mounted) {
           const duration = Duration(seconds: 1);
-          _msgTimerForFollowPopup = Timer.periodic(
+          if (_msgTimerForFollowPopup?.isActive ?? false) {
+          } else {
+            _msgTimerForFollowPopup = Timer.periodic(
+              duration,
+              (Timer timer) async {
+                if (timer.tick % 15 == 0) {
+                  await showFollowPopup();
+                  _msgTimerForFollowPopup?.cancel();
+                } else {}
+              },
+            );
+          }
+        } else {}
+      },
+    );
+  }
+
+  void _startMsgTimerForTarotCardPopup() {
+    WidgetsBinding.instance.endOfFrame.then(
+      (_) async {
+        if (mounted) {
+          const duration = Duration(seconds: 1);
+          _msgTimerForTarotCardPopup = Timer.periodic(
             duration,
             (Timer timer) async {
-              if (timer.tick % 15 == 0) {
-                await showFollowPopup();
+              if (timer.tick % 60 == 0) {
+                if (showCardDeckToUserPopupTimeoutHappening) {
+                  Get.back();
+                } else {}
+
+                successAndFailureCallBack(
+                  message: "Card Selection Timeout",
+                  isForSuccess: false,
+                  isForFailure: true,
+                );
+
+                _msgTimerForTarotCardPopup?.cancel();
               } else {}
             },
           );
@@ -348,14 +438,8 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-  void _restartMsgTimerForFollowPopup() {
-    _msgTimerForFollowPopup?.cancel();
-    _startMsgTimerForFollowPopup();
-    return;
-  }
-
   Future<void> manMessage() async {
-    var num = math.Random.secure().nextInt(10);
+    var num = math.Random.secure().nextInt(15);
     var url = "https://xsgames.co/randomusers/assets/avatars/male/$num.jpg";
     final String fullName = RandomNames(Zone.india).manFullName();
     final ZegoCustomMessage model = ZegoCustomMessage(
@@ -364,7 +448,7 @@ class _LivePage extends State<LiveDharamScreen>
       userId: "0",
       userName: fullName,
       avatar: url,
-      message: indianGreetings[num],
+      message: indianGreetingsFunction()[num],
       timeStamp: DateTime.now().toString(),
       fullGiftImage: "",
       isBlockedCustomer: _controller.isCustomerBlockedBool(),
@@ -374,7 +458,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> womanMessage() async {
-    var num = math.Random.secure().nextInt(10);
+    var num = math.Random.secure().nextInt(15);
     var url = "https://xsgames.co/randomusers/assets/avatars/female/$num.jpg";
     final String fullName = RandomNames(Zone.india).womanFullName();
     final ZegoCustomMessage model = ZegoCustomMessage(
@@ -383,7 +467,7 @@ class _LivePage extends State<LiveDharamScreen>
       userId: "0",
       userName: fullName,
       avatar: url,
-      message: indianGreetings[num],
+      message: indianGreetingsFunction()[num],
       timeStamp: DateTime.now().toString(),
       fullGiftImage: "",
       isBlockedCustomer: _controller.isCustomerBlockedBool(),
@@ -430,6 +514,7 @@ class _LivePage extends State<LiveDharamScreen>
     _scrollControllerForBottom.dispose();
     _timer?.cancel();
     _msgTimerForFollowPopup?.cancel();
+    _msgTimerForTarotCardPopup?.cancel();
     WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
@@ -484,14 +569,22 @@ class _LivePage extends State<LiveDharamScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: PopScope(
-        canPop: false,
-        onPopInvoked: (pop) async {
-          await exitFunc();
-        },
-        child: Obx(
+    // ignore: deprecated_member_use
+    return WillPopScope(
+      onWillPop: () async {
+        await exitFunc();
+        return Future<bool>.value(false);
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body:
+            // PopScope(
+            // canPop: false,
+            // onPopInvoked: (pop) async {
+            //   await exitFunc();
+            // },
+            // child:
+            Obx(
           () {
             return _controller.liveId == ""
                 ? const Center(child: CircularProgressIndicator())
@@ -624,6 +717,7 @@ class _LivePage extends State<LiveDharamScreen>
           },
         ),
       ),
+      // ),
     );
   }
 
@@ -1439,8 +1533,12 @@ class _LivePage extends State<LiveDharamScreen>
                                   ],
                                 ),
                               ),
+                              // _controller.isHost &&
+                              //         !_controller.currentCaller.isEngaded &&
+                              //         !isLiveMonitoringTeam
                               _controller.isHost &&
-                                      !_controller.currentCaller.isEngaded &&
+                                      !(_controller.orderModel.id ==
+                                          (msg.userId ?? "")) &&
                                       !isLiveMonitoringTeam
                                   ? SizedBox(
                                       height: 24,
@@ -1863,6 +1961,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   // Future<void> exitPopup() async {
+  //   _controller.hasFollowPopupOpen = true;
   //   await showCupertinoModalPopup(
   //     context: context,
   //     builder: (BuildContext context) {
@@ -1877,6 +1976,7 @@ class _LivePage extends State<LiveDharamScreen>
   //       );
   //     },
   //   );
+  //   _controller.hasFollowPopupOpen = false;
   //   return Future<void>.value();
   // }
 
@@ -2270,52 +2370,70 @@ class _LivePage extends State<LiveDharamScreen>
             //   },
             // );
           } else if (type == "Tarot Card") {
-            TarotGameModel model = TarotGameModel.fromJson(item);
-            _controller.tarotGameModel = model;
+            final TarotGameModel model = TarotGameModel.fromJson(item);
+            print("Tarot Card:: model.senderId:: ${model.senderId}");
+            print("Tarot Card:: model.receiverId:: ${model.receiverId}");
+            print(
+                "Tarot Card:: model.receiverId == _controller.userId:: ${model.receiverId == _controller.userId}");
 
-            final int step = _controller.tarotGameModel.currentStep ?? 0;
+            if (model.receiverId == _controller.userId) {
+              _controller.tarotGameModel = model;
+              final int step = _controller.tarotGameModel.currentStep ?? 0;
+              if (waitingForUserToSelectCardsPopupVisible) {
+                Get.back();
+              } else {}
+              // if (showCardDeckToUserPopupTimeoutHappening) {
+              //   Get.back();
+              // } else {}
+              switch (step) {
+                case 0:
+                  await showCardDeckToUserPopup();
+                  break;
+                case 1:
+                  final singleton = LiveSharedPreferencesSingleton();
+                  final String tarotCard = singleton.getSingleTarotCard();
+                  tarotCard.isEmpty
+                      ? WidgetsBinding.instance.endOfFrame.then(
+                          (_) async {
+                            if (mounted) {
+                              successAndFailureCallBack(
+                                message: "Unable to load tarot card game.",
+                                isForSuccess: false,
+                                isForFailure: true,
+                              );
+                              await sendTaroCardClose();
+                            } else {}
+                          },
+                        )
+                      : await showCardDeckToUserPopup1();
+                  break;
+                case 2:
+                  await showCardDeckToUserPopup2();
+                  break;
+                default:
+                  break;
+              }
+            } else {}
+          } else if (type == "Tarot Card Close") {
             if (waitingForUserToSelectCardsPopupVisible) {
               Get.back();
             } else {}
-            switch (step) {
-              case 0:
-                await showCardDeckToUserPopup();
-                break;
-              case 1:
-                final singleton = LiveSharedPreferencesSingleton();
-                final String tarotCard = singleton.getSingleTarotCard();
-                tarotCard.isEmpty
-                    ? WidgetsBinding.instance.endOfFrame.then(
-                        (_) async {
-                          if (mounted) {
-                            successAndFailureCallBack(
-                              message: "Unable to load tarot card game.",
-                              isForSuccess: false,
-                              isForFailure: true,
-                            );
-                            await sendTaroCardCloseWating();
-                          } else {}
-                        },
-                      )
-                    : await showCardDeckToUserPopup1();
-                break;
-              case 2:
-                await showCardDeckToUserPopup2();
-                break;
-              default:
-                break;
-            }
-          } else if (type == "Tarot Card Close Wating") {
-            if (waitingForUserToSelectCardsPopupVisible) {
-              Get.back();
-            } else {}
+            // if (showCardDeckToUserPopupTimeoutHappening) {
+            //   Get.back();
+            // } else {}
             if (_controller.isHost) {
               successAndFailureCallBack(
                 message: "User closed Card Selection",
                 isForSuccess: false,
                 isForFailure: true,
               );
-            } else {}
+            } else {
+              // successAndFailureCallBack(
+              //   message: "Card Selection Timeout",
+              //   isForSuccess: false,
+              //   isForFailure: true,
+              // );
+            }
           } else {}
         } else {}
       } else {}
@@ -2324,6 +2442,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   bool waitingForUserToSelectCardsPopupVisible = false;
+  bool showCardDeckToUserPopupTimeoutHappening = false;
 
   Future<void> waitingForUserToSelectCardsPopup() async {
     waitingForUserToSelectCardsPopupVisible = true;
@@ -2333,13 +2452,14 @@ class _LivePage extends State<LiveDharamScreen>
         return WaitingForUserToSelectCards(
           onClose: Get.back,
           userName: _controller.currentCaller.userName,
-          onTimeout: () {
+          onTimeout: () async {
             Get.back();
             successAndFailureCallBack(
               message: "Card Selection Timeout",
               isForSuccess: false,
               isForFailure: true,
             );
+            // await sendTaroCardClose();
           },
         );
       },
@@ -2362,6 +2482,8 @@ class _LivePage extends State<LiveDharamScreen>
               currentStep: 1,
               canPick: value,
               userPicked: [],
+              senderId: _controller.userId,
+              receiverId: _controller.currentCaller.id,
             );
             await sendTaroCard(item);
 
@@ -2377,6 +2499,8 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> showCardDeckToUserPopup1() async {
+    showCardDeckToUserPopupTimeoutHappening = true;
+    _startMsgTimerForTarotCardPopup();
     await showCupertinoModalPopup(
       context: context,
       barrierDismissible: false,
@@ -2385,7 +2509,7 @@ class _LivePage extends State<LiveDharamScreen>
           onClose: () async {
             Get.back();
 
-            await sendTaroCardCloseWating();
+            await sendTaroCardClose();
           },
           allCards: _controller.deckCardModelList,
           onSelect: (List<DeckCardModel> selectedCards) async {
@@ -2406,6 +2530,8 @@ class _LivePage extends State<LiveDharamScreen>
               currentStep: 2,
               canPick: _controller.tarotGameModel.canPick ?? 0,
               userPicked: userPicked,
+              senderId: _controller.userId,
+              receiverId: _controller.currentCaller.id,
             );
             await sendTaroCard(item);
 
@@ -2417,6 +2543,7 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    showCardDeckToUserPopupTimeoutHappening = false;
     return Future<void>.value();
   }
 
@@ -2465,13 +2592,13 @@ class _LivePage extends State<LiveDharamScreen>
     return Future<void>.value();
   }
 
-  Future<void> sendTaroCardCloseWating() async {
+  Future<void> sendTaroCardClose() async {
     var data = {
       "room_id": _controller.liveId,
       "user_id": _controller.userId,
       "user_name": _controller.userName,
       "item": {},
-      "type": "Tarot Card Close Wating",
+      "type": "Tarot Card Close",
     };
     await _controller.sendGiftAPI(
       data: data,
@@ -3075,6 +3202,9 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   callJoinConfiguration() {
+    // turnOff();
+    // turnOn();
+
     final bool isEngaded = _controller.currentCaller.isEngaded;
     final String type = _controller.currentCaller.callType;
     final bool condForVideoCall = isEngaded && type == "video";
@@ -3685,6 +3815,7 @@ class _LivePage extends State<LiveDharamScreen>
             if (mounted) {
               _timer?.cancel();
               _msgTimerForFollowPopup?.cancel();
+              _msgTimerForTarotCardPopup?.cancel();
               await _zegoController.leave(context);
             } else {}
           },
@@ -3695,6 +3826,7 @@ class _LivePage extends State<LiveDharamScreen>
             if (mounted) {
               _timer?.cancel();
               _msgTimerForFollowPopup?.cancel();
+              _msgTimerForTarotCardPopup?.cancel();
               await _zegoController.leave(context);
             } else {}
           },
@@ -3713,6 +3845,18 @@ class _LivePage extends State<LiveDharamScreen>
       backgroundColor: Colors.transparent,
       builder: (context) {
         return LiveKeyboard(sendKeyboardMesage: sendKeyboardMesage);
+        // return LiveKeyboard(
+        //   sendKeyboardMesage: (String message) async {
+        //     final String text = _controller.algoForSendMessage(message);
+        //     text.isEmpty
+        //         ? await sendKeyboardMesage(message)
+        //         : successAndFailureCallBack(
+        //             message: "$text is restricted text",
+        //             isForSuccess: false,
+        //             isForFailure: true,
+        //           );
+        //   },
+        // );
       },
     );
     _isKeyboardSheetOpen = false;
@@ -3736,7 +3880,7 @@ class _LivePage extends State<LiveDharamScreen>
     scrollDownForTop();
     scrollDownForBottom();
     if (mounted) {
-      Navigator.of(context).pop();
+      Get.until((route) => route.settings.name == RouteName.liveDharamScreen);
     } else {}
     return Future<void>.value();
   }

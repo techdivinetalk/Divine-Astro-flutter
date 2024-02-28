@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
+import '../firebase_service/firebase_service.dart';
+
 class AppSocket {
   static final AppSocket _singleton = AppSocket._internal();
   Socket? socket;
@@ -64,6 +66,11 @@ class AppSocket {
       String? astroId, String? userId, int userType) {
     socket?.emit(ApiProvider().startAstroCustChatAssist,
         {"astroId": astroId, "userId": userId, "userType": userType});
+  }
+  void leavePrivateChatEmit(String? astroId, String? userId, String userType) {
+    print("leavePrivateChat");
+    socket?.emit(ApiProvider().leavePrivateChat,
+        {"astroId": astroId, "userId": userId, "userType": userType,"orderId":AppFirebaseService().orderData.value["orderId"].toString()});
   }
 
   void startAstroCustumerSocketEvent(
@@ -138,7 +145,7 @@ class AppSocket {
     });
   }
 
-  void userLeavePrivateChat(void Function(dynamic) callback) {
+  void leavePrivateChat(void Function(dynamic) callback) {
     socket?.on(ApiProvider().leavePrivateChat, callback);
   }
 

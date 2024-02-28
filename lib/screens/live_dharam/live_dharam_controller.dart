@@ -1321,24 +1321,46 @@ class LiveDharamController extends GetxController {
     return Future<void>.value();
   }
 
+  // String getOrderId() {
+  //   String generatedOrderId = "";
+  //   int temp = 0;
+  //   if (temp == 0) {
+  //     temp = currentCaller.generatedOrderId;
+  //     generatedOrderId = temp.toString();
+  //   } else {}
+  //   return generatedOrderId;
+  // }
+
+  // int getOfferId() {
+  //   int offerId = 0;
+  //   int temp = 0;
+  //   if (temp == 0) {
+  //     temp = currentCaller.offerId;
+  //     offerId = temp;
+  //   } else {}
+  //   return offerId;
+  // }
+
   String getOrderId() {
-    String generatedOrderId = "";
+    // int temp = orderGenerate.data?.generatedOrderId ?? 0;
     int temp = 0;
-    if (temp == 0) {
-      temp = currentCaller.generatedOrderId;
-      generatedOrderId = temp.toString();
-    } else {}
-    return generatedOrderId;
+    if (temp != 0) {
+      return temp.toString();
+    } else {
+      temp = orderModel.generatedOrderId;
+      return temp.toString();
+    }
   }
 
   int getOfferId() {
-    int offerId = 0;
+    // int temp = details.data?.offerDetails?.offerId ?? 0;
     int temp = 0;
-    if (temp == 0) {
-      temp = currentCaller.offerId;
-      offerId = temp;
-    } else {}
-    return offerId;
+    if (temp != 0) {
+      return temp;
+    } else {
+      temp = orderModel.offerId;
+      return temp;
+    }
   }
 
   Future<void> removeMyNode() async {
@@ -1468,6 +1490,27 @@ class LiveDharamController extends GetxController {
     }
     return;
   }
+
+  final RegExp indianPhoneNumberRegex = RegExp(r'\b(?:\+?91|0)?[ -]?\d{10}\b');
+  final RegExp emailRegex =
+      RegExp(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b');
+  final RegExp instagramIdRegex = RegExp(r'\b@([A-Za-z0-9_]{1,30})\b');
+
+  String algoForSendMessage(String input) {
+    final bool hasPhoneNumber = indianPhoneNumberRegex.hasMatch(input);
+    final bool hasEmail = emailRegex.hasMatch(input);
+    final bool hasInstagramId = instagramIdRegex.hasMatch(input);
+
+    final List<String> data = <String>[];
+    if (hasPhoneNumber) {
+      data.add("Phone Number");
+    } else if (hasEmail) {
+      data.add("Email Address");
+    } else if (hasInstagramId) {
+      data.add("Instagram Id");
+    } else {}
+    return data.isEmpty ? "" : data.join(", ");
+  }
 }
 
 class CustomGiftModel {
@@ -1581,8 +1624,16 @@ class TarotGameModel {
   int? currentStep;
   int? canPick;
   List<UserPicked>? userPicked;
+  String? senderId;
+  String? receiverId;
 
-  TarotGameModel({this.currentStep, this.canPick, this.userPicked});
+  TarotGameModel({
+    this.currentStep,
+    this.canPick,
+    this.userPicked,
+    this.senderId,
+    this.receiverId,
+  });
 
   TarotGameModel.fromJson(Map<String, dynamic> json) {
     currentStep = json['current_step'];
@@ -1590,9 +1641,11 @@ class TarotGameModel {
     if (json['user_picked'] != null) {
       userPicked = <UserPicked>[];
       json['user_picked'].forEach((v) {
-        userPicked!.add(new UserPicked.fromJson(v));
+        userPicked!.add(UserPicked.fromJson(v));
       });
     }
+    senderId = json['sender_id'];
+    receiverId = json['receiver_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1602,6 +1655,8 @@ class TarotGameModel {
     if (userPicked != null) {
       data['user_picked'] = userPicked!.map((v) => v.toJson()).toList();
     }
+    data['sender_id'] = senderId;
+    data['receiver_id'] = receiverId;
     return data;
   }
 }
