@@ -1086,14 +1086,14 @@ class HomeUI extends GetView<HomeController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
+                      CustomText(
                         "nextOnlineTiming".tr,
-                        style: AppTextStyle.textStyle10(
-                            fontWeight: FontWeight.w500,
-                            fontColor: appColors.darkBlue),
+                        fontWeight: FontWeight.w500,
+                        fontColor: appColors.darkBlue,
+                        fontSize: 10.sp,
                       ),
                       SizedBox(
-                        width: 8.w,
+                        width: 5.w,
                       ),
                       GestureDetector(
                           onTap: () {
