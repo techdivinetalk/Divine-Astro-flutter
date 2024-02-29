@@ -1,7 +1,9 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -89,11 +91,18 @@ class SuggestRemedies extends StatelessWidget {
                             style: AppTextStyle.textStyle12(
                                 fontWeight: FontWeight.w400,
                                 fontColor: appColors.darkBlue)),
-                        Text(
-                            "${data[index].getCustomers != null ? data[index].getCustomers!.name : "Username"}",
-                            style: AppTextStyle.textStyle20(
-                                fontWeight: FontWeight.w600,
-                                fontColor: appColors.darkBlue))
+
+                        SizedBox(
+                          width: 140, // Set a specific width if needed
+                          child: CustomText(
+                            "${data[index].getCustomers != null ? data[index].getCustomers?.name : "UserName"}",
+                            fontWeight: FontWeight.w600,
+                            fontColor: appColors.darkBlue,
+                            fontSize: 16.sp,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        )
                       ],
                     )
                   ],

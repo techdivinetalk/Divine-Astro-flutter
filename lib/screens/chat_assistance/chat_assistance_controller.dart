@@ -50,7 +50,7 @@ class ChatAssistanceController extends GetxController {
   //   });
   // }
 
-  void getUnreadMessage() async {
+ /* void getUnreadMessage() async {
     final localDataList =
     await SharedPreferenceService().getChatAssistUnreadMessage();
     if (localDataList.isEmpty) {
@@ -59,7 +59,20 @@ class ChatAssistanceController extends GetxController {
     print("data present: ");
     unreadMessageList.value = localDataList;
     update();
+  }*/
+
+  void getUnreadMessage() async {
+    final localDataList =
+    await SharedPreferenceService().getChatAssistUnreadMessage();
+    /// Check if localDataList is null before accessing isEmpty
+    if (localDataList == null || localDataList.isEmpty) {
+      return;
+    }
+    print("data present: ");
+    unreadMessageList.value = localDataList;
+    update();
   }
+
 
   Future<void> getAssistantAstrologerList() async {
     try {

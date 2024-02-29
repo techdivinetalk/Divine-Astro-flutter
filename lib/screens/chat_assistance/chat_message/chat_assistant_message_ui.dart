@@ -191,6 +191,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
 
   @override
   Widget build(BuildContext context) {
+    print("print image:: ${preferenceService.getAmazonUrl()}/${controller.args?.image ?? ''}");
     Get.put(ChatMessageController(KundliRepository(), ChatRepository()));
     return Scaffold(
       appBar: AppBar(
@@ -220,7 +221,9 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                         assetImage: false,
                         placeHolderPath: Assets.images.defaultProfile.path,
                         imagePath:
-                            "${preferenceService.getAmazonUrl()}${controller.args?.image ?? ''}",
+                        (controller.args?.image ?? '').startsWith('https://divinenew-prod.s3.ap-south-1.amazonaws.com/')
+                            ? controller.args?.image ?? ''
+                            : "${preferenceService.getAmazonUrl()}/${controller.args?.image ?? ''}",
                         loadingIndicator: SizedBox(
                             child: CircularProgressIndicator(
                                 color: appColors.guideColor, strokeWidth: 2))),

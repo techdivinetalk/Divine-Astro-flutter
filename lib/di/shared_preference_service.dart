@@ -197,7 +197,7 @@ class SharedPreferenceService extends GetxService {
     final result = await sharedInstance.setString(messageTemplate, json);
   }
 
-  Future<List<MessageTemplates>> getMessageTemplates() async {
+  /*Future<List<MessageTemplates>> getMessageTemplates() async {
     final SharedPreferences sharedInstance =
         await SharedPreferences.getInstance();
     String data = sharedInstance.getString(messageTemplate) ?? 'dharam';
@@ -206,7 +206,31 @@ class SharedPreferenceService extends GetxService {
         .map<MessageTemplates>((element) => MessageTemplates.fromJson(element))
         .toList();
     // return null;
+  }*/
+
+  Future<List<MessageTemplates>> getMessageTemplates() async {
+    final SharedPreferences sharedInstance =
+    await SharedPreferences.getInstance();
+
+    // Example: encoding a list of message templates to JSON
+    List<MessageTemplates> templates = []; // Replace with your actual list
+    String jsonData = json.encode(templates);
+
+    // Store the JSON string in SharedPreferences
+    sharedInstance.setString(messageTemplate, jsonData);
+
+    // Retrieve the JSON string from SharedPreferences
+    String storedData = sharedInstance.getString(messageTemplate) ?? '';
+
+    // Parse the stored JSON string
+    final list = json.decode(storedData);
+
+    // Map the decoded list to MessageTemplates objects
+    return list
+        .map<MessageTemplates>((element) => MessageTemplates.fromJson(element))
+        .toList();
   }
+
 
   String? getBaseImageURL() {
     return prefs!.getString(baseImageUrl);

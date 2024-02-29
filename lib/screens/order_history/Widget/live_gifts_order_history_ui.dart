@@ -3,10 +3,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/order_history_model/gift_order_history.dart';
 import 'package:divine_astrologer/screens/order_history/order_history_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -109,8 +111,17 @@ class LiveGiftsHistory extends StatelessWidget {
                       children: [
                         Text("${'orderId'.tr} : ${data[index].orderId}",
                             style: AppTextStyle.textStyle9(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue)),
-                        Text("${data[index].getCustomers != null ? data[index].getCustomers?.name : "UserName"}",
-                            style: AppTextStyle.textStyle20(fontWeight: FontWeight.w600, fontColor: appColors.darkBlue))
+                        SizedBox(
+                          width: 140, // Set a specific width if needed
+                          child: CustomText(
+                            "${data[index].getCustomers != null ? data[index].getCustomers?.name : "UserName"}",
+                            fontWeight: FontWeight.w600,
+                            fontColor: appColors.darkBlue,
+                            fontSize: 16.sp,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        )
                       ],
                     )
                   ],

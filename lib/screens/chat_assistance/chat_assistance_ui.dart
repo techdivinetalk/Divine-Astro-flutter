@@ -310,16 +310,22 @@ class ChatAssistanceTile extends StatelessWidget {
             height: 50.w,
             width: 50.w,
             child: LoadImage(
-                imageModel: ImageModel(
-                    assetImage: false,
-                    placeHolderPath: Assets.images.defaultProfile.path,
-                    imagePath:
-                        "${preferenceService.getAmazonUrl()}${data.image ?? ''}",
-                    loadingIndicator: SizedBox(
-                        height: 25.h,
-                        width: 25.w,
-                        child: CircularProgressIndicator(
-                            color: appColors.guideColor, strokeWidth: 2)))),
+              imageModel: ImageModel(
+                assetImage: false,
+                placeHolderPath: Assets.images.defaultProfile.path,
+                imagePath: (data.image ?? '').startsWith('https://divinenew-prod.s3.ap-south-1.amazonaws.com/')
+                    ? data.image ?? ''
+                    : "${preferenceService.getAmazonUrl()}/${data.image ?? ''}",
+                loadingIndicator: SizedBox(
+                  height: 25.h,
+                  width: 25.w,
+                  child: CircularProgressIndicator(
+                    color: appColors.guideColor,
+                    strokeWidth: 2,
+                  ),
+                ),
+              ),
+            ),
           )),
       title: CustomText(
         data.name ?? '',
@@ -477,6 +483,7 @@ class ChatAssistanceDataTile extends StatelessWidget {
         DataList dataList = DataList();
         dataList.name = data.customerName;
         dataList.id = data.customerId;
+        dataList.image = data.customerImage;
         Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
       },
       child: Padding(
@@ -491,17 +498,22 @@ class ChatAssistanceDataTile extends StatelessWidget {
                   height: 50.w,
                   width: 50.w,
                   child: LoadImage(
-                      imageModel: ImageModel(
-                          assetImage: false,
-                          placeHolderPath: Assets.images.defaultProfile.path,
-                          imagePath:
-                              "${preferenceService.getAmazonUrl()}${data.customerImage ?? ''}",
-                          loadingIndicator: SizedBox(
-                              height: 25.h,
-                              width: 25.w,
-                              child: CircularProgressIndicator(
-                                  color: appColors.guideColor,
-                                  strokeWidth: 2)))),
+                    imageModel: ImageModel(
+                      assetImage: false,
+                      placeHolderPath: Assets.images.defaultProfile.path,
+                      imagePath: (data.customerImage ?? '').startsWith('https://divinenew-prod.s3.ap-south-1.amazonaws.com/')
+                          ? data.customerImage ?? ''
+                          : "${preferenceService.getAmazonUrl()}/${data.customerImage ?? ''}",
+                      loadingIndicator: SizedBox(
+                        height: 25.h,
+                        width: 25.w,
+                        child: CircularProgressIndicator(
+                          color: appColors.guideColor,
+                          strokeWidth: 2,
+                        ),
+                      ),
+                    ),
+                  ),
                 )),
             const SizedBox(
               width: 10,
