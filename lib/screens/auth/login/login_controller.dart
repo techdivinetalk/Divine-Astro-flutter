@@ -61,10 +61,8 @@ class LoginController extends GetxController {
     update();
   }
 
-
   var isLoading = false.obs;
   login() async {
-
     //deviceToken = await FirebaseMessaging.instance.getToken();
     Map<String, dynamic> params = {
       "mobile_no": mobileNumberController.text,
@@ -79,7 +77,6 @@ class LoginController extends GetxController {
         navigateToOtpPage(data);
       } else {
         isLoading.value = false;
-
       }
       update();
       //updateLoginDatainFirebase(data);
@@ -292,39 +289,62 @@ class LoginController extends GetxController {
     return Future<void>.value();
   }
 
-
-   Future<void> updateLoginDataInFirebase(ResLogin data) async {
+  Future<void> updateLoginDataInFirebase(ResLogin data) async {
     final String uniqueId = await getDeviceId() ?? '';
     final String firebaseNodeUrl = 'astrologer/${data.data?.id}';
     final FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
     final DatabaseReference ref = firebaseDatabase.ref();
-    ref.child(firebaseNodeUrl).onValue.listen(
-      (DatabaseEvent event) {
-        if (event.snapshot.value == null) {
-          FirebaseUserData userData = FirebaseUserData(
-            data.data?.name ?? "",
-            deviceToken ?? FirebaseMessaging.instance.getToken().toString(),
-            data.data?.image ?? "",
-            RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0),
-          );
-          firebaseDatabase.ref().child(firebaseNodeUrl).set(userData.toJson());
-          navigateToDashboard(data);
-        } else {
-          HashMap<String, dynamic> realTime = HashMap();
-          realTime["uniqueId"] = uniqueId;
-          HashMap<String, dynamic> deviceTokenNode = HashMap();
-          deviceTokenNode["deviceToken"] = deviceToken;
-          firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
-          firebaseDatabase
-              .ref()
-              .child("$firebaseNodeUrl/realTime")
-              .update(realTime);
-          navigateToDashboard(data);
-        }
-        final appFirebaseService = AppFirebaseService();
-        appFirebaseService.readData('$firebaseNodeUrl/realTime');
-      },
-    );
+    // ref.child(firebaseNodeUrl).onValue.listen(
+    //   (DatabaseEvent event) {
+    //     if (event.snapshot.value == null) {
+    //       FirebaseUserData userData = FirebaseUserData(
+    //         data.data?.name ?? "",
+    //         deviceToken ?? FirebaseMessaging.instance.getToken().toString(),
+    //         data.data?.image ?? "",
+    //         RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0),
+    //       );
+    //       firebaseDatabase.ref().child(firebaseNodeUrl).set(userData.toJson());
+    //       navigateToDashboard(data);
+    //     } else {
+    //       HashMap<String, dynamic> realTime = HashMap();
+    //       realTime["uniqueId"] = uniqueId;
+    //       HashMap<String, dynamic> deviceTokenNode = HashMap();
+    //       deviceTokenNode["deviceToken"] = deviceToken;
+    //       firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
+    //       firebaseDatabase
+    //           .ref()
+    //           .child("$firebaseNodeUrl/realTime")
+    //           .update(realTime);
+    //       navigateToDashboard(data);
+    //     }
+    //     final appFirebaseService = AppFirebaseService();
+    //     appFirebaseService.readData('$firebaseNodeUrl/realTime');
+    //   },
+    // );
+
+    final DataSnapshot dataSnapshot = await ref.child(firebaseNodeUrl).get();
+    if (dataSnapshot.exists) {
+      HashMap<String, dynamic> realTime = HashMap();
+      realTime["uniqueId"] = uniqueId;
+      HashMap<String, dynamic> deviceTokenNode = HashMap();
+      deviceTokenNode["deviceToken"] =
+          deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
+      firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
+      firebaseDatabase
+          .ref()
+          .child("$firebaseNodeUrl/realTime")
+          .update(realTime);
+      navigateToDashboard(data);
+    } else {
+      FirebaseUserData userData = FirebaseUserData(
+        data.data?.name ?? "",
+        deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "",
+        data.data?.image ?? "",
+        RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0),
+      );
+      firebaseDatabase.ref().child(firebaseNodeUrl).set(userData.toJson());
+      navigateToDashboard(data);
+    }
   }
 
   void navigateToDashboard(ResLogin data) {
