@@ -119,25 +119,23 @@ class HomeController extends GetxController {
         "${userData.name.toString().capitalizeFirst} (${userData.id})";
 
     print("${preferenceService.getBaseImageURL()}/${userData.image}");
-    print(userData.image);
-    print("userData.image");
 
     await getFilteredPerformance();
     //await getContactList();
     // fetchImportantNumbers();
     getConstantDetailsData();
-    getUserImage();
     getDashboardDetail();
     getFeedbackData();
     tarotCardData();
+    getUserImage();
   }
 
   getUserImage() async {
-    String? baseUrl = await preferenceService.getBaseImageURL();
+    String? baseUrl = Get.find<SharedPreferenceService>().getBaseImageURL();
+
     userImage = "${baseUrl}/${userData.image}";
     print(userImage);
-    print(userImage.contains("null"));
-    print('userImage.contains("null")');
+    print("userImageuserImageuserImageuserImage");
     update();
   }
 
@@ -712,7 +710,10 @@ class HomeController extends GetxController {
         context: Get.context!,
         barrierColor: appColors.darkBlue.withOpacity(0.5),
         builder: (_) => PerformanceDialog(),
-      );
+      ).then((value) {
+        getUserImage();
+        update();
+      });
     }
   }
 
@@ -798,7 +799,8 @@ class HomeController extends GetxController {
   }
 
   String getLabel() {
-    if(performanceScoreList.isNotEmpty && performanceScoreList.length > scoreIndex){
+    if (performanceScoreList.isNotEmpty &&
+        performanceScoreList.length > scoreIndex) {
       final bool b1 = (performanceScoreList ?? <Conversion?>[]).isNotEmpty;
       final bool b2 = performanceScoreList[scoreIndex] != null;
       final bool b3 = performanceScoreList[scoreIndex]?.label != null;

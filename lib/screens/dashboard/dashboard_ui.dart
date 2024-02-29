@@ -295,6 +295,6 @@ class DashboardScreen extends GetView<DashboardController> {
     const PerformanceUI(),
     //const SuggestRemediesUI(),
     ChatAssistancePage(),
-    WaitListUI(),
+    const WaitListUI(),
   ];
 }
