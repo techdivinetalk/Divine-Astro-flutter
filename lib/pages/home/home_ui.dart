@@ -480,15 +480,15 @@ class HomeUI extends GetView<HomeController> {
                               height: 1.h,
                               color: appColors.darkBlue.withOpacity(0.5)),
                           SizedBox(height: 10.h),
-                          sessionTypeWidget(),
+                          sessionTypeWidget(controller: controller),
                           // if (controller.homeData?.offerType != null &&
                           //     controller.homeData?.offerType != [])
                           //   offerTypeWidget(),
                           controller.homeData?.offers?.orderOffer != null
-                              ? orderOfferWidget()
+                              ? orderOfferWidget(homeController: controller)
                               : const SizedBox(),
                           controller.homeData?.offers?.customOffer != null
-                              ? customerOfferWidget(context)
+                              ? customerOfferWidget(context,controller: controller)
                               : const SizedBox(),
                           SizedBox(height: 10.h),
                           fullScreenBtnWidget(
@@ -498,9 +498,7 @@ class HomeUI extends GetView<HomeController> {
                                 Get.toNamed(RouteName.referAstrologer);
                               }),
                           SizedBox(height: 10.h),
-                          GetBuilder<HomeController>(
-                            builder: (controller) => trainingVideoWidget(),
-                          ),
+                          trainingVideoWidget(controller:controller),
                           SizedBox(height: 10.h),
                           fullScreenBtnWidget(
                               imageName: Assets.images.icEcommerce.svg(),
@@ -511,7 +509,7 @@ class HomeUI extends GetView<HomeController> {
                                 }
                               }),
                           SizedBox(height: 20.h),
-                          feedbackWidget(),
+                          feedbackWidget(controller: controller),
                           SizedBox(height: 20.h),
                         ],
                       ),
@@ -976,59 +974,58 @@ class HomeUI extends GetView<HomeController> {
     );
   }
 
-  Widget sessionTypeWidget() {
-    return GetBuilder<HomeController>(
-      builder: (controller) => Container(
-        padding: EdgeInsets.all(16.h),
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 1.0,
-                offset: const Offset(0.0, 3.0)),
-          ],
-          color: appColors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "sessionType".tr,
-                  style: AppTextStyle.textStyle10(
-                      fontWeight: FontWeight.w500,
-                      fontColor: appColors.darkBlue),
-                ),
-                SizedBox(height: 16.h),
-                Text(
-                  "chat".tr.toUpperCase(),
-                  style: AppTextStyle.textStyle12(
-                      fontColor: appColors.darkBlue,
-                      fontWeight: FontWeight.w700),
-                ),
-                Text(
-                  "₹${controller.homeData?.sessionType?.chatAmount}/Min",
-                  style: AppTextStyle.textStyle10(
-                      fontColor: appColors.darkBlue,
-                      fontWeight: FontWeight.w400),
-                ),
-                SizedBox(height: 16.h),
-                Text(
-                  "call".tr.toUpperCase(),
-                  style: AppTextStyle.textStyle12(
-                      fontColor: appColors.darkBlue,
-                      fontWeight: FontWeight.w700),
-                ),
-                Text(
-                  "₹${controller.homeData?.sessionType?.chatAmount}/Min",
-                  style: AppTextStyle.textStyle10(
-                      fontColor: appColors.darkBlue,
-                      fontWeight: FontWeight.w400),
-                ),
+  Widget sessionTypeWidget({HomeController? controller}) {
+    return Container(
+      padding: EdgeInsets.all(16.h),
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 1.0,
+              offset: const Offset(0.0, 3.0)),
+        ],
+        color: appColors.white,
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "sessionType".tr,
+                style: AppTextStyle.textStyle10(
+                    fontWeight: FontWeight.w500,
+                    fontColor: appColors.darkBlue),
+              ),
+              SizedBox(height: 16.h),
+              Text(
+                "chat".tr.toUpperCase(),
+                style: AppTextStyle.textStyle12(
+                    fontColor: appColors.darkBlue,
+                    fontWeight: FontWeight.w700),
+              ),
+              Text(
+                "₹${controller!.homeData?.sessionType?.chatAmount}/Min",
+                style: AppTextStyle.textStyle10(
+                    fontColor: appColors.darkBlue,
+                    fontWeight: FontWeight.w400),
+              ),
+              SizedBox(height: 16.h),
+              Text(
+                "call".tr.toUpperCase(),
+                style: AppTextStyle.textStyle12(
+                    fontColor: appColors.darkBlue,
+                    fontWeight: FontWeight.w700),
+              ),
+              Text(
+                "₹${controller.homeData?.sessionType?.chatAmount}/Min",
+                style: AppTextStyle.textStyle10(
+                    fontColor: appColors.darkBlue,
+                    fontWeight: FontWeight.w400),
+              ),
               /// Video call Text commit
               /*  SizedBox(height: 16.h),
                 Text(
@@ -1043,196 +1040,196 @@ class HomeUI extends GetView<HomeController> {
                       fontColor: appColors.darkBlue,
                       fontWeight: FontWeight.w400),
                 ),*/
-              ],
-            ),
-            SizedBox(width: 20.h),
-            Column(
-              children: [
-                Text(
-                  "status".tr,
-                  style: AppTextStyle.textStyle10(
-                      fontWeight: FontWeight.w500,
-                      fontColor: appColors.darkBlue),
+            ],
+          ),
+          SizedBox(width: 20.h),
+          Column(
+            children: [
+              Text(
+                "status".tr,
+                style: AppTextStyle.textStyle10(
+                    fontWeight: FontWeight.w500,
+                    fontColor: appColors.darkBlue),
+              ),
+              SizedBox(height: 18.h),
+              Obx(
+                    () => SwitchWidget(
+                  onTap: () => controller.chatSwitchFN(),
+                  switchValue: controller.chatSwitch.value,
                 ),
-                SizedBox(height: 18.h),
-                Obx(
-                  () => SwitchWidget(
-                    onTap: () => controller.chatSwitchFN(),
-                    switchValue: controller.chatSwitch.value,
-                  ),
+              ),
+              SizedBox(height: 20.h),
+              Obx(
+                    () => SwitchWidget(
+                  onTap: () => controller.callSwitchFN(),
+                  switchValue: controller.callSwitch.value,
                 ),
-                SizedBox(height: 20.h),
-                Obx(
-                  () => SwitchWidget(
-                    onTap: () => controller.callSwitchFN(),
-                    switchValue: controller.callSwitch.value,
-                  ),
-                ),
-               /// Video Call Toggel Commit
-               /* SizedBox(height: 20.h),
+              ),
+              /// Video Call Toggel Commit
+              /* SizedBox(height: 20.h),
                 Obx(
                   () => SwitchWidget(
                     onTap: () => controller.videoCallSwitchFN(),
                     switchValue: controller.videoSwitch.value,
                   ),
                 ),*/
-              ],
-            ),
-            SizedBox(width: 20.h),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      CustomText(
-                        "nextOnlineTiming".tr,
-                        fontWeight: FontWeight.w500,
-                        fontColor: appColors.darkBlue,
-                        fontSize: 10.sp,
-                      ),
-                      SizedBox(
-                        width: 5.w,
-                      ),
-                      GestureDetector(
-                          onTap: () {
-                            Get.bottomSheet(CommonInfoSheet(
-                              title: "nextOnlineTime".tr,
-                              subTitle: "nextOnlineTimeDes".tr,
-                            ));
-                          },
-                          child: Assets.images.icInfo
-                              .svg(height: 16.h, width: 16.h)),
-                    ],
-                  ),
-                  SizedBox(height: 15.h),
-                  Obx(() => controller.selectedChatTime.value.isEmpty
-                      ? InkWell(
-                          onTap: () {
-                            selectDateOrTime(
-                              Get.context!,
-                              futureDate: true,
-                              title: "ScheduleOnlineDate".tr,
-                              btnTitle: "confirmNextDate".tr,
-                              pickerStyle: "DateCalendar",
-                              looping: true,
-                              initialDate: DateTime.now(),
-                              lastDate: DateTime(2050),
-                              onConfirm: (value) =>
-                                  controller.selectChatDate(value),
-                              onChange: (value) =>
-                                  controller.selectChatDate(value),
-                              onClickOkay: (value) {
-                                Get.back();
+            ],
+          ),
+          SizedBox(width: 20.h),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    CustomText(
+                      "nextOnlineTiming".tr,
+                      fontWeight: FontWeight.w500,
+                      fontColor: appColors.darkBlue,
+                      fontSize: 10.sp,
+                    ),
+                    SizedBox(
+                      width: 5.w,
+                    ),
+                    GestureDetector(
+                        onTap: () {
+                          Get.bottomSheet(CommonInfoSheet(
+                            title: "nextOnlineTime".tr,
+                            subTitle: "nextOnlineTimeDes".tr,
+                          ));
+                        },
+                        child: Assets.images.icInfo
+                            .svg(height: 16.h, width: 16.h)),
+                  ],
+                ),
+                SizedBox(height: 15.h),
+                Obx(() => controller.selectedChatTime.value.isEmpty
+                    ? InkWell(
+                  onTap: () {
+                    selectDateOrTime(
+                      Get.context!,
+                      futureDate: true,
+                      title: "ScheduleOnlineDate".tr,
+                      btnTitle: "confirmNextDate".tr,
+                      pickerStyle: "DateCalendar",
+                      looping: true,
+                      initialDate: DateTime.now(),
+                      lastDate: DateTime(2050),
+                      onConfirm: (value) =>
+                          controller.selectChatDate(value),
+                      onChange: (value) =>
+                          controller.selectChatDate(value),
+                      onClickOkay: (value) {
+                        Get.back();
 
-                                selectDateOrTime(
-                                  Get.context!,
-                                  title: "scheduleOnlineTime".tr,
-                                  btnTitle: "confirmOnlineTime".tr,
-                                  pickerStyle: "TimeCalendar",
-                                  looping: true,
-                                  onConfirm: (value) {
-                                    // controller.selectChatTime(value),
-                                  },
-                                  onChange: (value) {
-                                    // controller.selectChatTime(value),
-                                  },
-                                  onClickOkay: (timeValue) {
-                                    if (controller.isValidDate(
-                                        "CHAT", timeValue)) {
-                                      controller.selectChatTime(timeValue);
-                                      controller.scheduleCall("CHAT");
-                                    } else {
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              "Please select future date and time");
-                                    }
-                                  },
-                                );
-                              },
-                            );
+                        selectDateOrTime(
+                          Get.context!,
+                          title: "scheduleOnlineTime".tr,
+                          btnTitle: "confirmOnlineTime".tr,
+                          pickerStyle: "TimeCalendar",
+                          looping: true,
+                          onConfirm: (value) {
+                            // controller.selectChatTime(value),
                           },
-                          child: Container(
-                            // width: 128.w,
-                            height: 31.h,
-                            decoration: BoxDecoration(
-                              color: appColors.guideColor,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(20)),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "scheduleNow".tr,
-                                style: AppTextStyle.textStyle10(
-                                    fontColor: appColors.white,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ),
-                          ),
-                        )
-                      : const SelectedTimeForChat()),
-                  SizedBox(height: 15.h),
-                  //const SelectedTime(),
-                  Obx(() => controller.selectedCallTime.value.isEmpty
-                      ? InkWell(
-                          onTap: () {
-                            selectDateOrTime(
-                              futureDate: true,
-                              Get.context!,
-                              title: "ScheduleOnlineDate".tr,
-                              btnTitle: "confirmNextDate".tr,
-                              pickerStyle: "DateCalendar",
-                              looping: true,
-                              lastDate: DateTime(2050),
-                              onConfirm: (value) =>
-                                  controller.selectCallDate(value),
-                              onChange: (value) =>
-                                  controller.selectCallDate(value),
-                              onClickOkay: (value) {
-                                Get.back();
-                                selectDateOrTime(Get.context!,
-                                    title: "scheduleOnlineTime".tr,
-                                    btnTitle: "confirmOnlineTime".tr,
-                                    pickerStyle: "TimeCalendar",
-                                    looping: true, onConfirm: (value) {
-                                  // controller.selectCallTime(value),
-                                }, onChange: (value1) {
-                                  // controller.selectCallTime(value),
-                                }, onClickOkay: (value1) {
-                                  if (controller.isValidDate("CALL", value1)) {
-                                    controller.selectCallTime(value1);
-                                    controller.scheduleCall("CALL");
-                                  } else {
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            "Please select future date and time");
-                                  }
-                                });
-                              },
-                            );
+                          onChange: (value) {
+                            // controller.selectChatTime(value),
                           },
-                          child: Container(
-                            // width: 128.w,
-                            height: 31.h,
-                            decoration: BoxDecoration(
-                              color: appColors.guideColor,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(20)),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "scheduleNow".tr,
-                                style: AppTextStyle.textStyle10(
-                                    fontColor: appColors.white,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ),
-                          ),
-                        )
-                      : const SelectedTimeForCall()),
-                 /// VideCall Commit
-                 /* SizedBox(height: 15.h),
+                          onClickOkay: (timeValue) {
+                            if (controller.isValidDate(
+                                "CHAT", timeValue)) {
+                              controller.selectChatTime(timeValue);
+                              controller.scheduleCall("CHAT");
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg:
+                                  "Please select future date and time");
+                            }
+                          },
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    // width: 128.w,
+                    height: 31.h,
+                    decoration: BoxDecoration(
+                      color: appColors.guideColor,
+                      borderRadius:
+                      const BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "scheduleNow".tr,
+                        style: AppTextStyle.textStyle10(
+                            fontColor: appColors.white,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                  ),
+                )
+                    : const SelectedTimeForChat()),
+                SizedBox(height: 15.h),
+                //const SelectedTime(),
+                Obx(() => controller.selectedCallTime.value.isEmpty
+                    ? InkWell(
+                  onTap: () {
+                    selectDateOrTime(
+                      futureDate: true,
+                      Get.context!,
+                      title: "ScheduleOnlineDate".tr,
+                      btnTitle: "confirmNextDate".tr,
+                      pickerStyle: "DateCalendar",
+                      looping: true,
+                      lastDate: DateTime(2050),
+                      onConfirm: (value) =>
+                          controller.selectCallDate(value),
+                      onChange: (value) =>
+                          controller.selectCallDate(value),
+                      onClickOkay: (value) {
+                        Get.back();
+                        selectDateOrTime(Get.context!,
+                            title: "scheduleOnlineTime".tr,
+                            btnTitle: "confirmOnlineTime".tr,
+                            pickerStyle: "TimeCalendar",
+                            looping: true, onConfirm: (value) {
+                              // controller.selectCallTime(value),
+                            }, onChange: (value1) {
+                              // controller.selectCallTime(value),
+                            }, onClickOkay: (value1) {
+                              if (controller.isValidDate("CALL", value1)) {
+                                controller.selectCallTime(value1);
+                                controller.scheduleCall("CALL");
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg:
+                                    "Please select future date and time");
+                              }
+                            });
+                      },
+                    );
+                  },
+                  child: Container(
+                    // width: 128.w,
+                    height: 31.h,
+                    decoration: BoxDecoration(
+                      color: appColors.guideColor,
+                      borderRadius:
+                      const BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "scheduleNow".tr,
+                        style: AppTextStyle.textStyle10(
+                            fontColor: appColors.white,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                  ),
+                )
+                    : const SelectedTimeForCall()),
+                /// VideCall Commit
+                /* SizedBox(height: 15.h),
                   Obx(() => controller.selectedVideoTime.value.isEmpty
                       ? InkWell(
                           onTap: () {
@@ -1291,17 +1288,16 @@ class HomeUI extends GetView<HomeController> {
                           ),
                         )
                       : const SelectedTimeForVideoCall()),*/
-                ],
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget orderOfferWidget() {
-    return controller.homeData!.offers!.orderOffer!.isNotEmpty
+  Widget orderOfferWidget({HomeController? homeController}) {
+    return homeController!.homeData!.offers!.orderOffer!.isNotEmpty
         ? Container(
             margin: EdgeInsets.only(top: 10.h),
             padding: EdgeInsets.all(16.h),
@@ -1341,7 +1337,7 @@ class HomeUI extends GetView<HomeController> {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount:
-                      controller.homeData?.offers?.orderOffer?.length ?? 0,
+                  homeController.homeData?.offers?.orderOffer?.length ?? 0,
                   separatorBuilder: (context, _) => SizedBox(height: 10.h),
                   itemBuilder: (context, index) {
                     return Row(
@@ -1352,18 +1348,18 @@ class HomeUI extends GetView<HomeController> {
                           crossAxisAlignment: WrapCrossAlignment.center,
                           children: [
                             Text(
-                              "${controller.homeData?.offers?.orderOffer?[index].offerName}"
+                              "${homeController.homeData?.offers?.orderOffer?[index].offerName}"
                                   .toUpperCase(),
                               style: AppTextStyle.textStyle12(
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                            if ((controller.homeData?.offers?.orderOffer?[index]
+                            if ((homeController.homeData?.offers?.orderOffer?[index]
                                         .callRate ??
                                     0) >
                                 0)
                               CustomText(
-                                " (₹${controller.homeData?.offers?.orderOffer?[index].callRate}/min)"
+                                " (₹${homeController.homeData?.offers?.orderOffer?[index].callRate}/min)"
                                     .toUpperCase(),
                                 fontSize: 10.sp,
                               ),
@@ -1372,9 +1368,9 @@ class HomeUI extends GetView<HomeController> {
                         Obx(
                           () => SwitchWidget(
                             onTap: () {
-                              if (controller.offerTypeLoading.value !=
+                              if (homeController.offerTypeLoading.value !=
                                   Loading.loading) {
-                                controller.orderOfferSwitch[index] =
+                                homeController.orderOfferSwitch[index] =
                                     !controller.orderOfferSwitch[index];
                               }
                               // controller.updateOfferType(
@@ -1384,7 +1380,7 @@ class HomeUI extends GetView<HomeController> {
                               //   value: !controller.orderOfferSwitch[index],
                               // );
                             },
-                            switchValue: controller.orderOfferSwitch[index],
+                            switchValue: homeController.orderOfferSwitch[index],
                           ),
                         ),
                       ],
@@ -1397,7 +1393,7 @@ class HomeUI extends GetView<HomeController> {
         : SizedBox();
   }
 
-  Widget customerOfferWidget(BuildContext context) {
+  Widget customerOfferWidget(BuildContext context,{HomeController? controller}) {
     return Container(
       margin: EdgeInsets.only(top: 10.h),
       padding: EdgeInsets.all(16.h),
@@ -1426,7 +1422,7 @@ class HomeUI extends GetView<HomeController> {
               InkWell(
                 onTap: () {
                   Get.toNamed(RouteName.discountOffers)!.then((value) {
-                    controller.homeData?.offers?.customOffer = value;
+                    controller!.homeData?.offers?.customOffer = value;
                     controller.update();
                   });
                 },
@@ -1444,7 +1440,7 @@ class HomeUI extends GetView<HomeController> {
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: controller.homeData?.offers?.customOffer?.length ?? 0,
+            itemCount: controller!.homeData?.offers?.customOffer?.length ?? 0,
             separatorBuilder: (context, _) => SizedBox(height: 10.h),
             itemBuilder: (context, index) {
               DiscountOffer data =
@@ -1542,7 +1538,7 @@ class HomeUI extends GetView<HomeController> {
     );
   }
 
-  Widget offerTypeWidget() {
+  Widget offerTypeWidget({HomeController? controller}) {
     return Stack(
       children: [
         Container(
@@ -1596,7 +1592,7 @@ class HomeUI extends GetView<HomeController> {
               ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: controller.homeData?.offerType?.length ?? 0,
+                itemCount: controller!.homeData?.offerType?.length ?? 0,
                 separatorBuilder: (context, _) => SizedBox(height: 10.h),
                 itemBuilder: (context, index) {
                   return Row(
@@ -1712,8 +1708,8 @@ class HomeUI extends GetView<HomeController> {
         ));
   }
 
-  Widget trainingVideoWidget() {
-    if (controller.homeData?.trainingVideo == null ||
+  Widget trainingVideoWidget({HomeController? controller}) {
+    if (controller!.homeData?.trainingVideo == null ||
         (controller.homeData?.trainingVideo ?? []).isEmpty) {
       return const SizedBox.shrink();
     }
@@ -1820,7 +1816,7 @@ class HomeUI extends GetView<HomeController> {
     );
   }
 
-  Widget feedbackWidget() {
+  Widget feedbackWidget({HomeController? controller}) {
     return Container(
       width: ScreenUtil().screenWidth,
       decoration: BoxDecoration(
@@ -1857,7 +1853,7 @@ class HomeUI extends GetView<HomeController> {
                 maxLines: 6,
                 maxLength: 96,
                 keyboardType: TextInputType.text,
-                controller: controller.feedBackText,
+                controller: controller!.feedBackText,
                 textInputAction: TextInputAction.done,
                 onTapOutside: (value) => FocusScope.of(Get.context!).unfocus(),
                 decoration: InputDecoration(
@@ -2455,7 +2451,7 @@ class PerformanceDialog extends StatelessWidget {
                                           controller.performanceScoreList[
                                               controller.scoreIndex]
                                       ? appColors.guideColor
-                                      : appColors.lightGrey,
+                                      : appColors.lightGrey.withOpacity(0.4),
                                   borderRadius: BorderRadius.circular(10)),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
