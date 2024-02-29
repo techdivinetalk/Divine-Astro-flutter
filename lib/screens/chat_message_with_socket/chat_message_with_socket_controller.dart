@@ -76,7 +76,7 @@ class ChatMessageWithSocketController extends GetxController
   ScrollController messgeScrollController = ScrollController();
   ScrollController typingScrollController = ScrollController();
   File? image;
-  final ImagePicker picker = ImagePicker();
+   ImagePicker picker = ImagePicker();
   XFile? pickedFile;
   File? uploadFile;
   final SharedPreferenceService preference =
@@ -87,6 +87,7 @@ class ChatMessageWithSocketController extends GetxController
   RxBool isEmojiShowing = false.obs;
   Rx<String> showTalkTime = "".obs;
   Rx<String> extraTalkTime = "".obs;
+
   // FocusNode msgFocus = FocusNode();
   RxInt unreadMessageIndex = 0.obs;
   RxBool scrollToBottom = false.obs;
@@ -117,6 +118,7 @@ class ChatMessageWithSocketController extends GetxController
   Rx<bool> isRecording = false.obs;
   Rx<bool> hasMessage = false.obs;
   Rx<bool> isCardBotOpen = false.obs;
+
   void startTimer() {
     int _start = 5;
     if (_timer2 != null) {
@@ -198,13 +200,14 @@ class ChatMessageWithSocketController extends GetxController
       update();
     }
   }
+
   Directory? appDirectory;
   String path = "";
+
   void getDir() async {
     appDirectory = await getApplicationDocumentsDirectory();
     path = "${appDirectory!.path}/recording.m4a";
     update();
-
   }
 
   void refreshWave() {
@@ -214,7 +217,6 @@ class ChatMessageWithSocketController extends GetxController
       update();
     }
   }
-
 
   RecorderController? recorderController;
 
@@ -273,25 +275,30 @@ class ChatMessageWithSocketController extends GetxController
     leavePrivateChat();
     customerLeavedPrivateChatListenerSocket();
 
-      socket.startAstroCustumerSocketEvent(
-        orderId: AppFirebaseService().orderData.value["orderId"].toString(),
-        userId: AppFirebaseService().orderData.value["userId"],
-      );
-      //  if (Get.arguments is ResAstroChatListener) {
-      sendReadMessageStatus = true;
-      // if (data!.customerId != null) {
-      chatStatus.value = "Online";
-      isOngoingChat.value = true;
-      //  currentChatUserId.value = data['userId'];
-      currentUserId.value = int.parse(AppFirebaseService().orderData.value['userId'].toString());
-      customerName.value = AppFirebaseService().orderData.value["customerName"] ?? "";
-      profileImage.value = AppFirebaseService().orderData.value["customerImage"] != null
-          ? "${preference.getBaseImageURL()}/${AppFirebaseService().orderData.value['customerImage']}"
-          : "";
-      if (astroChatWatcher.value.orderId != null) {
-        timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0,
-            astroChatWatcher.value.orderId!);
-      }
+    socket.startAstroCustumerSocketEvent(
+      orderId: AppFirebaseService().orderData.value["orderId"].toString(),
+      userId: AppFirebaseService().orderData.value["userId"],
+    );
+    //  if (Get.arguments is ResAstroChatListener) {
+    sendReadMessageStatus = true;
+    // if (data!.customerId != null) {
+    chatStatus.value = "Online";
+    isOngoingChat.value = true;
+    //  currentChatUserId.value = data['userId'];
+    currentUserId.value =
+        int.parse(AppFirebaseService().orderData.value['userId'].toString());
+    customerName.value =
+        AppFirebaseService().orderData.value["customerName"] ?? "";
+    profileImage.value = AppFirebaseService()
+                .orderData
+                .value["customerImage"] !=
+            null
+        ? "${preference.getBaseImageURL()}/${AppFirebaseService().orderData.value['customerImage']}"
+        : "";
+    if (astroChatWatcher.value.orderId != null) {
+      timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0,
+          astroChatWatcher.value.orderId!);
+    }
     userData = preferenceService.getUserDetail();
     print("oninir");
     userDataKey = "chat_${currentUserId.value}";
@@ -311,6 +318,7 @@ class ChatMessageWithSocketController extends GetxController
     messageTemplates(data);
     update();
   }
+
   getMessageTemplates() async {
     try {
       final response = await messageTemplateRepository.fetchTemplates();
@@ -332,16 +340,18 @@ class ChatMessageWithSocketController extends GetxController
       final difference = endTime.difference(currentTime);
       if (difference.isNegative) {
         extraTimer.cancel();
-          _timeLeft = Duration.zero;
+        _timeLeft = Duration.zero;
         backFunction();
       } else {
-           _timeLeft = difference;
-           extraTalkTime.value = "${_timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
-               "${_timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
-           print("time Left ${extraTalkTime.value}");
+        _timeLeft = difference;
+        extraTalkTime.value =
+            "${_timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
+            "${_timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
+        print("time Left ${extraTalkTime.value}");
       }
     });
   }
+
   void talkTimeStartTimer(int futureTimeInEpochMillis) {
     DateTime dateTime =
         DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
@@ -352,9 +362,9 @@ class ChatMessageWithSocketController extends GetxController
     chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
       timeDifference = dateTime.difference(DateTime.now());
       if (timeDifference.isNegative || timeDifference.inSeconds == 0) {
-     //   if (timeDifference.inSeconds == 0) {
-          await callHangup();
-       // }
+        //   if (timeDifference.inSeconds == 0) {
+        await callHangup();
+        // }
         chatTimer?.cancel();
       } else {
         showTalkTime.value =
@@ -366,53 +376,67 @@ class ChatMessageWithSocketController extends GetxController
       }
     });
   }
+
   Loading loading = Loading.initial;
-  endChatApi()  async {
-    Map<String, dynamic>  param = HashMap();
+
+  endChatApi() async {
+    Map<String, dynamic> param = HashMap();
     param["order_id"] = AppFirebaseService().orderData.value["orderId"];
     param["queue_id"] = AppFirebaseService().orderData.value["queue_id"];
-      loading = Loading.loading;
-      update();
-      try {
-        ResCommonChatStatus response =
-        await ChatRepository().endChat(param);
-        loading = Loading.loaded;
-          Get.back();
-      } catch (error) {
-        debugPrint("error $error");
-        if (error is AppException) {
-          error.onException();
-        } else {
-          divineSnackBar(data: error.toString(), color: appColors.red);
-        }
-        loading = Loading.loaded;
+    loading = Loading.loading;
+    update();
+    try {
+      ResCommonChatStatus response = await ChatRepository().endChat(param);
+      loading = Loading.loaded;
+      WidgetsBinding.instance.endOfFrame.then(
+        (_) async {
+          socket.socket?.disconnect();
+          chatTimer?.cancel();
+          Get.until(
+            (route) {
+              return Get.currentRoute == RouteName.dashboard;
+            },
+          );
+        },
+      );
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.red);
       }
-      update();
+      loading = Loading.loaded;
+    }
+    update();
   }
+
   void backFunction() {
     WidgetsBinding.instance.endOfFrame.then(
-          (_) async {
-            print("userLeavePrivateChatListenerSocket");
-            socket.leavePrivateChatEmit(userData?.id.toString(), AppFirebaseService().orderData.value["userId"], "0");
+      (_) async {
+        print("userLeavePrivateChatListenerSocket");
+        socket.leavePrivateChatEmit(userData?.id.toString(),
+            AppFirebaseService().orderData.value["userId"], "0");
         chatTimer?.cancel();
         Get.back();
         Get.back();
-        if(AppFirebaseService().orderData.value["status"] == "4"){
-          DatabaseReference ref = FirebaseDatabase.instance.ref("order/${AppFirebaseService().orderData.value["orderId"]}");
-          ref.update({
-            "status": "5",
-          }).then((_) {
-            // Success handling if needed.
-          }).catchError((error) {
-            // Error handling.
-            print("Firebase error: $error");
-          });
+        if (AppFirebaseService().orderData.value["status"] == "4") {
+          // DatabaseReference ref = FirebaseDatabase.instance.ref("order/${AppFirebaseService().orderData.value["orderId"]}");
+          // ref.update({
+          //   "status": "5",
+          // }).then((_) {
+          //   // Success handling if needed.
+          // }).catchError((error) {
+          //   // Error handling.
+          //   print("Firebase error: $error");
+          // });
           endChatApi();
         }
       },
     );
     return;
   }
+
   // Added by divine-dharam
   Future<void> callHangup() {
     print("ZegoService().controller.hangUp start");
@@ -461,6 +485,7 @@ class ChatMessageWithSocketController extends GetxController
       orderId: AppFirebaseService().orderData.value["orderId"].toString(),
       userId: AppFirebaseService().orderData.value["userId"].toString(),
     );
+    // update();
   }
 
   void checkIsCustomerJoinedPrivateChat() {
@@ -608,7 +633,6 @@ class ChatMessageWithSocketController extends GetxController
     return;
   }
 
-
   Future<bool> permissionPhotoOrStorage() async {
     bool perm = false;
     if (Platform.isIOS) {
@@ -732,10 +756,11 @@ class ChatMessageWithSocketController extends GetxController
           awsUrl: uploadFile, base64Image: base64Image, downloadedPath: '');
     }
   }
+
   addNewMessage(
     String time,
-    String? msgType,
-     {Map? data,
+    String? msgType, {
+    Map? data,
     String? messageText,
     String? awsUrl,
     String? base64Image,
@@ -746,69 +771,73 @@ class ChatMessageWithSocketController extends GetxController
     String? shopId,
   }) async {
     late ChatMessage newMessage;
-    if(msgType=="Product") {
-    final isPooja = data?['data']['isPooja'] as bool;
-    if (isPooja) {
-    final productDetails = data?['data']['poojaData'] as Pooja;
-    final saveRemediesData = data?['data']['saveRemediesData'] as SaveRemediesResponse;
-    newMessage = ChatMessage(
-    message: productDetails.poojaName,
-    astrologerId: preferenceService.getUserDetail()!.id,
-    createdAt: DateTime.now().toIso8601String(),
-    id: DateTime.now().millisecondsSinceEpoch,
-    isSuspicious: 0,
-    isPoojaProduct: true,
-      awsUrl:productDetails.poojaImg ?? '',
-    msgType: msgType,
-      type: 0,
-        userType: "astrologer",
-    orderId: saveRemediesData.data?.id,
-    productId: productDetails.id.toString(),
-    shopId: productDetails.id.toString(),
-    // msgStatus: MsgStatus.sent,
-      receiverId:
-      int.parse(AppFirebaseService().orderData.value["userId"].toString()),
-      senderId: preference.getUserDetail()!.id,);
+    if (msgType == "Product") {
+      final isPooja = data?['data']['isPooja'] as bool;
+      if (isPooja) {
+        final productDetails = data?['data']['poojaData'] as Pooja;
+        final saveRemediesData =
+            data?['data']['saveRemediesData'] as SaveRemediesResponse;
+        newMessage = ChatMessage(
+          message: productDetails.poojaName,
+          astrologerId: preferenceService.getUserDetail()!.id,
+          createdAt: DateTime.now().toIso8601String(),
+          id: DateTime.now().millisecondsSinceEpoch,
+          isSuspicious: 0,
+          isPoojaProduct: true,
+          awsUrl: productDetails.poojaImg ?? '',
+          msgType: msgType,
+          type: 0,
+          userType: "astrologer",
+          orderId: saveRemediesData.data?.id,
+          productId: productDetails.id.toString(),
+          shopId: productDetails.id.toString(),
+          // msgStatus: MsgStatus.sent,
+          receiverId: int.parse(
+              AppFirebaseService().orderData.value["userId"].toString()),
+          senderId: preference.getUserDetail()!.id,
+        );
+      } else {
+        final productData =
+            data?['data']['saveRemedies'] as SaveRemediesResponse;
+        final productDetails = data?['data']['product_detail'] as Products;
+        print("delete product data ${productDetails} ${productData}");
+        newMessage = ChatMessage(
+          message: productDetails.prodName,
+          astrologerId: preferenceService.getUserDetail()!.id,
+          createdAt: DateTime.now().toIso8601String(),
+          id: DateTime.now().millisecondsSinceEpoch,
+          isSuspicious: 0,
+          isPoojaProduct: false,
+          awsUrl: userData?.image,
+          msgType: msgType,
+          type: 0,
+          orderId: productData.data?.id ?? 0,
+          productId: productData.data?.productId.toString(),
+          shopId: productData.data?.shopId.toString(),
+          receiverId: int.parse(
+              AppFirebaseService().orderData.value["userId"].toString()),
+          senderId: preference.getUserDetail()!.id,
+        );
+      }
     } else {
-    final productData =
-    data?['data']['saveRemedies'] as SaveRemediesResponse;
-    final productDetails = data?['data']['product_detail'] as Products;
-    print("delete product data ${productDetails} ${productData}");
-    newMessage = ChatMessage(
-    message: productDetails.prodName,
-    astrologerId: preferenceService.getUserDetail()!.id,
-    createdAt: DateTime.now().toIso8601String(),
-    id: DateTime.now().millisecondsSinceEpoch,
-    isSuspicious: 0,
-    isPoojaProduct: false,
-      awsUrl: userData?.image,
-    msgType: msgType,
-      type: 0,
-    orderId: productData.data?.id ?? 0,
-    productId: productData.data?.productId.toString(),
-    shopId: productData.data?.shopId.toString(),
-      receiverId:
-      int.parse(AppFirebaseService().orderData.value["userId"].toString()),
-      senderId: preference.getUserDetail()!.id,);
-    }}else{
-
-  newMessage = ChatMessage(
-      orderId: AppFirebaseService().orderData.value["orderId"],
-      id: int.parse(time),
-      message: messageText,
-      receiverId:
-          int.parse(AppFirebaseService().orderData.value["userId"].toString()),
-      senderId: preference.getUserDetail()!.id,
-      time: int.parse(time),
-      awsUrl: awsUrl,
-      base64Image: base64Image,
-      downloadedPath: downloadedPath,
-      msgType: msgType,
-      kundliId: kundliId,
-      title: giftId ?? "${userData?.name} sent you a message.",
-      type: 0,
-      userType: "astrologer",
-    );}
+      newMessage = ChatMessage(
+        orderId: AppFirebaseService().orderData.value["orderId"],
+        id: int.parse(time),
+        message: messageText,
+        receiverId: int.parse(
+            AppFirebaseService().orderData.value["userId"].toString()),
+        senderId: preference.getUserDetail()!.id,
+        time: int.parse(time),
+        awsUrl: awsUrl,
+        base64Image: base64Image,
+        downloadedPath: downloadedPath,
+        msgType: msgType,
+        kundliId: kundliId,
+        title: giftId ?? "${userData?.name} sent you a message.",
+        type: 0,
+        userType: "astrologer",
+      );
+    }
     socket.sendMessageSocket(newMessage);
     print("newMessage1");
     print(newMessage.toOfflineJson());
@@ -1181,7 +1210,7 @@ class ChatMessageWithSocketController extends GetxController
     }
     if (p0["status"] == null || p0["status"] == "5") {
       WidgetsBinding.instance.endOfFrame.then(
-            (_) async {
+        (_) async {
           socket.socket?.disconnect();
           chatTimer?.cancel();
           Get.back();
@@ -1190,9 +1219,14 @@ class ChatMessageWithSocketController extends GetxController
       );
       return;
     }
-    isCardVisible.value = p0["card"] != null ? (p0["card"]["isCardVisible"] ?? false) : false;
-    if(isCardBotOpen == true && p0["card"] != null && p0["card"]["isCardVisible"]){
-      Get.back();
+    isCardVisible.value =
+        p0["card"] != null ? (p0["card"]["isCardVisible"] ?? false) : false;
+
+    if (isCardBotOpen == true &&
+        p0["card"] != null &&
+        !(p0["card"]["isCardVisible"])) {
+      // "Picking tarot card...";
+      update();
     }
     int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
     talkTimeStartTimer(remainingTime);

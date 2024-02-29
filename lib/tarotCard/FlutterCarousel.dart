@@ -985,8 +985,8 @@ class _CardChoiceBottomSheetState extends State<CardChoiceBottomSheet> {
                   ElevatedButton(
                     onPressed: _choice != null && !isVisible
                         ? () {
-                            isVisible = true;
-                            //Get.back();
+                            // isVisible = true;
+                            Get.back();
                             setState(() {});
                             controller.sendTarotCard(_choice);
                             // Logic to handle send action
