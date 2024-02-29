@@ -179,7 +179,7 @@ class MessageView extends StatelessWidget {
                 ),
                 SizedBox(width: 6.w),
                 Flexible(
-                    child: Text(
+                    child: CustomText(
                         'Astrologer has requested to send ${chatMessage.message}.'))
               ],
             ),
