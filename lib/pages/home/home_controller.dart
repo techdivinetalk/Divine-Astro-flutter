@@ -356,12 +356,12 @@ class HomeController extends GetxController {
     loading = Loading.initial;
     update();
     Map<String, dynamic> params = {
-      "role_id": userData?.roleId ?? 0,
-      "device_token": userData?.deviceToken,
+      "role_id": userData.roleId ?? 0,
+      "device_token": userData.deviceToken,
     };
 
-    log("roleID==>${userData!.roleId}");
-    log("deviceToken==>${userData?.deviceToken}");
+    log("roleID==>${userData.roleId}");
+    log("deviceToken==>${userData.deviceToken}");
     try {
       var response = await HomePageRepository().getDashboardData(params);
       homeData = response.data;
@@ -798,7 +798,7 @@ class HomeController extends GetxController {
   }
 
   String getLabel() {
-    if(performanceScoreList.length > scoreIndex){
+    if(performanceScoreList.isNotEmpty && performanceScoreList.length > scoreIndex){
       final bool b1 = (performanceScoreList ?? <Conversion?>[]).isNotEmpty;
       final bool b2 = performanceScoreList[scoreIndex] != null;
       final bool b3 = performanceScoreList[scoreIndex]?.label != null;
