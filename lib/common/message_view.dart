@@ -390,37 +390,38 @@ class MessageView extends StatelessWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
+        padding: const EdgeInsets.fromLTRB(15.0, 10, 15.0, 10),
         decoration: BoxDecoration(
           color: appColors.white,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(15.0, 4.0, 15.0, 4.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 32,
-                  width: 32,
-                  child: CustomImageWidget(
-                    imageUrl: chatMessage.awsUrl ?? '',
-                    rounded: true,
-                    // added by divine-dharam
-                    typeEnum: TypeEnum.gift,
-                    //
-                  ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 32,
+                width: 32,
+                child: CustomImageWidget(
+                  imageUrl: chatMessage.awsUrl ?? '',
+                  rounded: true,
+                  // added by divine-dharam
+                  typeEnum: TypeEnum.gift,
+                  //
                 ),
-                Text(
-                  " $customerName have sent ${chatMessage.message}",
-                  textAlign: TextAlign.start,
+              ),
+              SizedBox(width: 10.h),
+              Expanded(
+                child: Text(
+                  "$customerName have sent ${chatMessage.message}",
+                  textAlign: TextAlign.center,
                   softWrap: true,
                   maxLines: 5,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(color: Colors.red),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -461,7 +462,6 @@ class MessageView extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTap: () {
-
                             print(chatMessage.awsUrl);
                             print("chatMessage.awsUrl");
                             Get.toNamed(RouteName.imagePreviewUi,

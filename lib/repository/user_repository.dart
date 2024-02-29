@@ -695,6 +695,8 @@ class UserRepository extends ApiProvider {
         } else {
           final updateSessionTypeResponse =
               updateSessionTypeResponseFromJson(response.body);
+          print(jsonEncode(updateSessionTypeResponse));
+          print("jsonEncode(updateSessionTypeResponse)");
           if (updateSessionTypeResponse.statusCode == successResponse &&
               (updateSessionTypeResponse.success ?? false)) {
             return updateSessionTypeResponse;
