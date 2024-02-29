@@ -323,6 +323,17 @@ class _LivePage extends State<LiveDharamScreen>
 
   bool isAcceptPopupOpen = false;
 
+  /*
+   * Dear Maintainer
+   *
+   * Once you are done trying to ‘optimize’ this engaging,
+   * and you have realized what a terrible mistake that was,
+   * please increment the following counter as a warning
+   * to the next guy.
+   *
+   * total_hours_wasted_here = 1
+  */
+  
   Future<void> engaging(WaitListModel currentCaller) async {
     WidgetsBinding.instance.endOfFrame.then(
       (_) async {
@@ -2532,6 +2543,12 @@ class _LivePage extends State<LiveDharamScreen>
             } else {}
           },
           userName: _controller.currentCaller.userName,
+          onTimeout: () async {
+            Get.back();
+
+            await sendTaroCardClose();
+          },
+          totalTime: _controller.engagedCoHostWithAstro().totalTime,
         );
       },
     );

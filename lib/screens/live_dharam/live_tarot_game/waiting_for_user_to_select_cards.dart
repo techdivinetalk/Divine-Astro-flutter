@@ -1,9 +1,11 @@
 import "dart:ui";
 
 import "package:divine_astrologer/common/colors.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/custom_lottie_widget.dart";
 import "package:flutter/material.dart";
 import "package:flutter_timer_countdown/flutter_timer_countdown.dart";
 import "package:get/get.dart";
+import "package:lottie/lottie.dart";
 
 class WaitingForUserToSelectCards extends StatefulWidget {
   const WaitingForUserToSelectCards({
@@ -24,7 +26,6 @@ class WaitingForUserToSelectCards extends StatefulWidget {
 
 class _WaitingForUserToSelectCardsState
     extends State<WaitingForUserToSelectCards> {
-  
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -125,10 +126,13 @@ class _WaitingForUserToSelectCardsState
         ),
       ),
       onPressed: () {},
-      child: Icon(
-        Icons.more_horiz,
-        color: appColors.black,
-        size: 50,
+      child: CustomLottieWidget(
+        path: "assets/lottie/loading_dots.json",
+        fit: BoxFit.cover,
+        height: 50,
+        width: 100,
+        repeat: true,
+        onLoaded: (LottieComposition lottieComposition) {},
       ),
     );
   }

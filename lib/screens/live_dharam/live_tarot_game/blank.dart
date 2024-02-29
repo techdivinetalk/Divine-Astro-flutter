@@ -61,6 +61,8 @@ class _BlankState extends State<Blank> with AfterLayoutMixin<Blank> {
             Get.back();
           },
           userName: "Dharam",
+          onTimeout: () {},
+          totalTime: "",
         );
       },
     );

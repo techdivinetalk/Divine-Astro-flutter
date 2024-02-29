@@ -2,6 +2,8 @@ import "dart:ui";
 
 import "package:divine_astrologer/common/colors.dart";
 import "package:flutter/material.dart";
+import "package:flutter_timer_countdown/flutter_timer_countdown.dart";
+import "package:fluttertoast/fluttertoast.dart";
 import "package:get/get.dart";
 
 class ShowCardDeckToUser extends StatefulWidget {
@@ -9,12 +11,16 @@ class ShowCardDeckToUser extends StatefulWidget {
     required this.onClose,
     required this.onSelect,
     required this.userName,
+    required this.onTimeout,
+    required this.totalTime,
     super.key,
   });
 
   final void Function() onClose;
   final void Function(int value) onSelect;
   final String userName;
+  final Function() onTimeout;
+  final String totalTime;
 
   @override
   State<ShowCardDeckToUser> createState() => _ShowCardDeckToUserState();
@@ -22,6 +28,7 @@ class ShowCardDeckToUser extends StatefulWidget {
 
 class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
   final List<int> numList = [1, 3, 5];
+
   int? value;
 
   @override
@@ -122,10 +129,7 @@ class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
                 widget.userName,
                 style: TextStyle(fontSize: 20, color: appColors.white),
               ),
-              subtitle: Text(
-                "05 M 30 S",
-                style: TextStyle(color: appColors.white),
-              ),
+              subtitle: newTimerWidget(),
               trailing: SizedBox(height: 50, width: 100, child: button()),
             ),
           ),
@@ -148,10 +152,16 @@ class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
           ),
         ),
       ),
-      onPressed: () {
+      onPressed: () async {
         if (value != null) {
           widget.onSelect(numList[value ?? 0]);
-        } else {}
+        } else {
+          const String msg = "Select No. of cards 1 / 3 / 5 ";
+          await Fluttertoast.showToast(
+            msg: msg,
+            backgroundColor: Colors.red,
+          );
+        }
       },
       child: Text(
         'Send',
@@ -159,6 +169,21 @@ class _ShowCardDeckToUserState extends State<ShowCardDeckToUser> {
           color: value == null ? appColors.white : appColors.black,
         ),
       ),
+    );
+  }
+
+  Widget newTimerWidget() {
+    final String source = widget.totalTime;
+    final int epoch = int.parse(source);
+    final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
+    return TimerCountdown(
+      format: CountDownTimerFormat.hoursMinutesSeconds,
+      enableDescriptions: false,
+      spacerWidth: 4,
+      colonsTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
+      timeTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
+      endTime: dateTime,
+      onEnd: widget.onTimeout,
     );
   }
 }
