@@ -46,6 +46,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
         return Stack(
           children: [
@@ -55,6 +56,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
               },
               child: Assets.images.bgChatWallpaper.image(
                   width: MediaQuery.of(context).size.width,
+                  height: double.infinity,
                   fit: BoxFit.fitWidth),
             ),
             Column(
