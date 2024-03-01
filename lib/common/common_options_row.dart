@@ -161,7 +161,7 @@ class CommonOptionRow extends StatelessWidget {
             child: Container(
               height: 37,
               decoration: BoxDecoration(
-                border: Border.all(color: appColors.red, width: 1.0),
+                border: hasReview != false ? Border.all(color: appColors.red, width: 1.0) : Border.all(color: appColors.black, width: 1.0),
                 borderRadius: BorderRadius.circular(22.0),
               ),
               child: Row(
@@ -171,7 +171,7 @@ class CommonOptionRow extends StatelessWidget {
                     leftBtnTitle,
                     style: AppTextStyle.textStyle12(
                       fontWeight: FontWeight.w500,
-                      fontColor: appColors.red,
+                      fontColor: hasReview != false ? appColors.red : appColors.black,
                     ),
                   ),
                   SizedBox(width: 8.w),

@@ -93,7 +93,7 @@ class SuggestRemedies extends StatelessWidget {
                                 fontColor: appColors.darkBlue)),
 
                         SizedBox(
-                          width: 140, // Set a specific width if needed
+                          width: 140,
                           child: CustomText(
                             "${data[index].getCustomers != null ? data[index].getCustomers?.name : "UserName"}",
                             fontWeight: FontWeight.w600,
@@ -113,8 +113,10 @@ class SuggestRemedies extends StatelessWidget {
                     width: 70,
                     height: 32,
                     decoration: BoxDecoration(
-                      border:
-                          Border.all(color: appColors.lightGreen, width: 1.0),
+                      border: Border.all(
+                        color: getStatusColor("${data[index].status}"),
+                        width: 1.0,
+                      ),
                       borderRadius: BorderRadius.circular(22.0),
                     ),
                     child: Row(
@@ -123,13 +125,14 @@ class SuggestRemedies extends StatelessWidget {
                         Text(
                           "${data[index].status}",
                           style: AppTextStyle.textStyle14(
-                              fontWeight: FontWeight.w500,
-                              fontColor: appColors.lightGreen),
+                            fontWeight: FontWeight.w500,
+                            fontColor: getStatusColor("${data[index].status}"),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ),
+                )
               ],
             ),
             const SizedBox(height: 10),
@@ -226,5 +229,18 @@ class SuggestRemedies extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Color getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'initiated':
+        return appColors.initiateColor;
+      case 'pending':
+        return appColors.pendingColor;
+      case 'completed':
+        return appColors.completeColor;
+      default:
+        return Colors.black;
+    }
   }
 }
