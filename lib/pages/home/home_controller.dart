@@ -147,42 +147,42 @@ class HomeController extends GetxController {
     tarotCardData();
     getUserImage();
 
-    // final String path = "astrologer/${(userData.id ?? 0)}/realTime";
-    // FirebaseDatabase.instance.ref().child(path).onValue.listen(
-    //   (event) async {
-    //     final DataSnapshot dataSnapshot = event.snapshot;
+    final String path = "astrologer/${(userData.id ?? 0)}/realTime";
+    FirebaseDatabase.instance.ref().child(path).onValue.listen(
+      (event) async {
+        final DataSnapshot dataSnapshot = event.snapshot;
 
-    //     if (dataSnapshot.exists) {
-    //       if (dataSnapshot.value is Map<dynamic, dynamic>) {
-    //         Map<dynamic, dynamic> map = <dynamic, dynamic>{};
-    //         map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-    //             as Map<dynamic, dynamic>;
-    //         print("Home Realtime DB Listener: $map");
+        if (dataSnapshot.exists) {
+          if (dataSnapshot.value is Map<dynamic, dynamic>) {
+            Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+            map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+                as Map<dynamic, dynamic>;
+            print("Home Realtime DB Listener: $map");
 
-    //         final isCallSwitchRes = map["voiceCallStatus"] ?? 0;
-    //         callSwitch(isCallSwitchRes > 0);
+            final isCallSwitchRes = map["voiceCallStatus"] ?? 0;
+            callSwitch(isCallSwitchRes > 0);
 
-    //         final isChatSwitchRes = map["chatStatus"] ?? 0;
-    //         chatSwitch(isChatSwitchRes > 0);
+            final isChatSwitchRes = map["chatStatus"] ?? 0;
+            chatSwitch(isChatSwitchRes > 0);
 
-    //         final isVideoCallSwitchRes = map["videoCallStatus"] ?? 0;
-    //         videoSwitch(isVideoCallSwitchRes > 0);
+            final isVideoCallSwitchRes = map["videoCallStatus"] ?? 0;
+            videoSwitch(isVideoCallSwitchRes > 0);
 
-    //         final isCallEnableRes = map["is_call_enable"] ?? false;
-    //         isCallEnable(isCallEnableRes);
+            final isCallEnableRes = map["is_call_enable"] ?? false;
+            isCallEnable(isCallEnableRes);
 
-    //         final isChatEnableRes = map["is_chat_enable"] ?? false;
-    //         isChatEnable(isChatEnableRes);
+            final isChatEnableRes = map["is_chat_enable"] ?? false;
+            isChatEnable(isChatEnableRes);
 
-    //         final isVideoCallEnableRes = map["is_video_call_enable"] ?? false;
-    //         isVideoCallEnable(isVideoCallEnableRes);
+            final isVideoCallEnableRes = map["is_video_call_enable"] ?? false;
+            isVideoCallEnable(isVideoCallEnableRes);
 
-    //         final isLiveEnableRes = map["is_live_enable"] ?? false;
-    //         isLiveEnable(isLiveEnableRes);
-    //       } else {}
-    //     } else {}
-    //   },
-    // );
+            final isLiveEnableRes = map["is_live_enable"] ?? false;
+            isLiveEnable(isLiveEnableRes);
+          } else {}
+        } else {}
+      },
+    );
   }
 
   getUserImage() async {
