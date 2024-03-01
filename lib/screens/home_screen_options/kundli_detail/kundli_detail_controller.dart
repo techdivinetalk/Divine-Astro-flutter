@@ -25,7 +25,7 @@ import '../../../model/internal/sookshma_dasha_model.dart';
 class KundliDetailController extends GetxController {
   RxInt currentIndex = 0.obs;
   List<Widget> detailPageImage = [
-    Assets.images.defaultProfiles.svg(width: 87.w, height: 87.h),
+    Assets.images.icBoyKundli.svg(width: 87.w, height: 87.h),
     Assets.images.icWedding.svg(width: 87.w, height: 87.h),
     Assets.images.icMoon.svg(width: 87.w, height: 87.h),
     Assets.images.icSun.svg(width: 87.w, height: 87.h),

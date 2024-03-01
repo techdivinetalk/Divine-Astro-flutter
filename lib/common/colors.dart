@@ -8,32 +8,38 @@ import 'package:get/get.dart';
 final appColors = Get.find<AppColors>();
 
 class AppColors extends GetxController {
-  Color bannerTitleColor = Color(0xFF2D2D2D);
-  Color timeBackgroundColor = Color(0xFF0DAA65);
+  Color bannerTitleColor = const Color(0xFF2D2D2D);
+  Color timeBackgroundColor = const Color(0xFF0DAA65);
 
-  Color green = Color(0xFF35BA80);
-  Color white = Color(0xFFFFFFFF);
-  Color darkBlue = Color(0xFF0E2339);
-  Color lightGreen = Color(0xff27C884);
-  Color guideColor = Color(0xFF87919C);
-  Color textColor = Color(0xFF0E2339);
+  Color green = const Color(0xFF35BA80);
+  Color white = const Color(0xFFFFFFFF);
+  Color darkBlue = const Color(0xFF0E2339);
+  Color lightGreen = const Color(0xff27C884);
+  Color guideColor = const Color(0xFF87919C);
+  Color textColor = const Color(0xFF0E2339);
   Color blackColor = Colors.black;
-  Color disabledGrey = Color(0xFF87919C);
-  Color brownColour = Color(0xFF5F3C08); // foreground color
-  Color appRedColour = Color(0xFFEF5862);
-  Color greyColour = Color(0xFF7E7E7E);
+  Color disabledGrey = const Color(0xFF87919C);
+  Color brownColour = const Color(0xFF5F3C08); // foreground color
+  Color appRedColour = const Color(0xFFEF5862);
+  Color greyColour = const Color(0xFF7E7E7E);
   Color redColor = Colors.red;
-  Color darkRed = Color(0xFFE31E24);
-  Color darkGreen = Color(0xff13BF45);
+  Color darkRed = const Color(0xFFE31E24);
+  Color darkGreen = const Color(0xff13BF45);
   Color greyColor = Colors.grey;
-  Color lightGrey = Color(0xff87919C);
-  Color extraLightGrey = Color(0xffD9D9D9);
-  Color markerColor = Color(0xffc5c5d8);
-  Color teal = Color(0xFF41C1D1);
+  Color lightGrey = const Color(0xff87919C);
+  Color extraLightGrey = const Color(0xffD9D9D9);
+  Color markerColor = const Color(0xffc5c5d8);
+  Color teal = const Color(0xFF41C1D1);
   Color transparent = Colors.transparent;
-  Color grey = Color(0xFF9E9E9E);
-  Color lightBlack = Color(0xff233982);
-  Color black = Color(0xFF000000);
-  Color brown = Color(0xFF5F3C08);
-  Color red = Color(0xFFEF5862);
+  Color grey = const Color(0xFF9E9E9E);
+  Color lightBlack = const Color(0xff233982);
+  Color black = const Color(0xFF000000);
+  Color brown = const Color(0xFF5F3C08);
+  Color red = const Color(0xFFEF5862);
+
+  /// Order Status Color
+  Color initiateColor = const Color(0xFF000000);
+  Color pendingColor = const Color(0xFFE31E24);
+  Color completeColor = const Color(0xff27C884);
+
 }

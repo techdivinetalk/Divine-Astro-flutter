@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../common/custom_widgets.dart';
 
@@ -42,7 +43,9 @@ class TermsConditionUI extends StatelessWidget{
             return SingleChildScrollView(
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.h),
-                child: Html(data: snapshot.data!.data.termsAndCondition),
+                child: Html(data: snapshot.data!.data.termsAndCondition, onLinkTap: (url, attributes, element) {
+                  launchUrl(Uri.parse(url ?? ''));
+                },),
               ),
             );
           }

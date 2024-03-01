@@ -112,7 +112,7 @@ class LiveGiftsHistory extends StatelessWidget {
                         Text("${'orderId'.tr} : ${data[index].orderId}",
                             style: AppTextStyle.textStyle9(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue)),
                         SizedBox(
-                          width: 140, // Set a specific width if needed
+                          width: 140,
                           child: CustomText(
                             "${data[index].getCustomers != null ? data[index].getCustomers?.name : "UserName"}",
                             fontWeight: FontWeight.w600,
@@ -130,7 +130,7 @@ class LiveGiftsHistory extends StatelessWidget {
                   width: 70,
                   height: 32,
                   decoration: BoxDecoration(
-                    border: Border.all(color: appColors.lightGreen, width: 1.0),
+                    border: Border.all(color: getStatusColor("${data[index].status}"), width: 1.0),
                     borderRadius: BorderRadius.circular(22.0),
                   ),
                   child: Row(
@@ -138,7 +138,7 @@ class LiveGiftsHistory extends StatelessWidget {
                     children: [
                       Text(
                         "${data[index].status}",
-                        style: AppTextStyle.textStyle10(fontWeight: FontWeight.w500, fontColor: appColors.lightGreen),
+                        style: AppTextStyle.textStyle10(fontWeight: FontWeight.w500, fontColor: getStatusColor("${data[index].status}")),
                       ),
                     ],
                   ),
@@ -298,6 +298,19 @@ class LiveGiftsHistory extends StatelessWidget {
         List<String> words = text.split(' ');
         return '${words.take(maxWords).join(' ')}...';
       }
+    }
+  }
+
+  Color getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'initiated':
+        return appColors.initiateColor;
+      case 'pending':
+        return appColors.pendingColor;
+      case 'completed':
+        return appColors.completeColor;
+      default:
+        return Colors.black;
     }
   }
 }

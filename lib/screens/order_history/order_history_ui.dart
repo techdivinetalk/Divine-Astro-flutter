@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/custom_progress_dialog.dart';
 import 'package:divine_astrologer/common/generic_loading_widget.dart';
+import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/screens/order_history/Widget/live_gifts_order_history_ui.dart';
 import 'package:divine_astrologer/screens/order_history/Widget/order_feedback_ui.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -35,9 +36,10 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
             appBar: commonDetailAppbar(
                 title: "orderHistory".tr,
                 trailingWidget: InkWell(
+                  onTap: () =>  Get.toNamed(RouteName.wallet),
                   child: Padding(
                       padding: EdgeInsets.only(right: 20.w),
-                      child: Assets.images.icOrderHistory.svg()),
+                      child: Assets.svg.iconWallet.svg()),
                 )),
             body: Container(
               color: appColors.white,
