@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
 
-
 import '../../../../../../repository/pooja_repository.dart';
 import 'pooja_dharam/get_booked_pooja_response.dart';
 import 'pooja_dharam/get_pooja_response.dart';
@@ -38,8 +37,8 @@ class PoojaDharamMainController extends GetxController {
 
   void initData() {
     getPooja = GetPoojaResponse();
+    customerId(Get.arguments["customerId"] ?? 0);
     getBookedPooja = GetBookedPoojaResponse();
-    customerId(Get.arguments["customerId"]??0);
     isLoading = false;
     return;
   }
@@ -63,7 +62,7 @@ class PoojaDharamMainController extends GetxController {
     response = await poojaRepository.getPoojaApi(
       params: param,
       successCallBack: successCallBack,
-      failureCallBack: failureCallBack,
+      failureCallBack:  failureCallBack,
     );
     getPooja = response.statusCode == HttpStatus.ok
         ? GetPoojaResponse.fromJson(response.toJson())
@@ -83,7 +82,7 @@ class PoojaDharamMainController extends GetxController {
     response = await poojaRepository.getBookedPoojaApi(
       params: param,
       successCallBack: successCallBack,
-      failureCallBack: failureCallBack,
+      failureCallBack: customerId.value == 0 ? failureCallBack : (message) {},
     );
     getBookedPooja = response.statusCode == HttpStatus.ok
         ? GetBookedPoojaResponse.fromJson(response.toJson())

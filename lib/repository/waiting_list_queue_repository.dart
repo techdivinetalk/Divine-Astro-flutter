@@ -37,4 +37,6 @@ class WaitingListQueueRepo extends ApiProvider {
       rethrow;
     }
   }
+
+
 }

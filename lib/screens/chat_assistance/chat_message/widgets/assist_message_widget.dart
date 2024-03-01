@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:voice_message_package/voice_message_package.dart';
@@ -468,26 +469,31 @@ class AssistMessageView extends StatelessWidget {
   }
 
   Widget chatSeenStatusWidget({required SeenStatus seenStatus}) {
-    print('msg status ${seenStatus}');
-
-    switch (seenStatus) {
-      case SeenStatus.error:
-        return Icon(
-          Icons.error_outline,
-          size: 15,
-          color: appColors.red,
-        );
-      case SeenStatus.notSent:
-        return const SizedBox();
-      case SeenStatus.sent:
-        return Assets.images.icSingleTick.svg(color: appColors.grey);
-      case SeenStatus.delivered:
-        return Assets.images.icDoubleTick.svg(color: appColors.grey);
-      case SeenStatus.received:
-        return Assets.images.icDoubleTick.svg(color: appColors.grey);
-      default:
-        return const SizedBox();
-    }
+    return GetBuilder<ChatMessageController>(
+      builder: (controller) {
+        print('msg status ${seenStatus} ${controller.isCustomerOnline.value}');
+        if (controller.isCustomerOnline.value == true) {
+          return Assets.images.icDoubleTick.svg();
+        }
+        switch (seenStatus) {
+          case SeenStatus.error:
+            return Icon(
+              Icons.error_outline,
+              color: appColors.red,
+              size: 12.w,
+            );
+          case SeenStatus.sent:
+            return Assets.images.icSingleTick
+                .svg(theme: SvgTheme(currentColor: appColors.grey));
+          case SeenStatus.delivered:
+            return Assets.images.icDoubleTick.svg(color: appColors.grey);
+          case SeenStatus.received:
+            return Assets.images.icDoubleTick.svg();
+          default:
+            return const SizedBox();
+        }
+      },
+    );
   }
 
   Widget unreadMessageView() {
