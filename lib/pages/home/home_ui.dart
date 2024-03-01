@@ -129,6 +129,7 @@ class HomeUI extends GetView<HomeController> {
             init: HomeController(),
             assignId: true,
             builder: (controller) {
+
               if (controller.loading == Loading.loaded) {
                 return LayoutBuilder(builder: (context, constraints) {
                   final double maxHeight = constraints.maxHeight;
