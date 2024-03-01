@@ -8,7 +8,12 @@ class ChatAssistChatResponse {
       {this.data, this.success, this.statusCode, this.message});
 
   ChatAssistChatResponse.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    /// here Null List Data in Object so i added
+    data = json['data'] != null
+        ? (json['data'] is Map
+        ? Data.fromJson(json['data'])
+        : null)
+        : null;
     success = json['success'];
     statusCode = json['status_code'];
     message = json['message'];

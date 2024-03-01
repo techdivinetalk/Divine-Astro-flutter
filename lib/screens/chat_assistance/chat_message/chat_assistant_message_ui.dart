@@ -17,8 +17,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shimmer/shimmer.dart';
-// import 'package:social_media_recorder/audio_encoder_type.dart';
-// import 'package:social_media_recorder/screen/social_media_recorder.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
 
@@ -68,6 +66,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
     if (Get.arguments != null) {
       controller.args = Get.arguments;
       controller.update();
+       chatAssistantCurrentUserId(controller.args?.id);
       updateFirebaseToken();
       controller.getAssistantChatList();
       controller.userjoinedChatSocket();
@@ -107,7 +106,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                     //     : null,
                     isSuspicious: 0,
                     suggestedRemediesId:
-                       int.parse( responseMsg['suggestedRemediesId']??'0'),
+                        int.parse(responseMsg['suggestedRemediesId'] ?? '0'),
                     productId: responseMsg['productId'].toString(),
                     sendBy: SendBy.customer,
                     msgType: responseMsg["msg_type"] != null
@@ -186,11 +185,14 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
     controller.listenjoinedChatSocket();
     controller.processedPages.clear();
     controller.currentPage(1);
+    controller.userleftChatSocket();
+    chatAssistantCurrentUserId(0);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    print("print image:: ${preferenceService.getAmazonUrl()}/${controller.args?.image ?? ''}");
     Get.put(ChatMessageController(KundliRepository(), ChatRepository()));
     return Scaffold(
       appBar: AppBar(
@@ -220,7 +222,9 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                         assetImage: false,
                         placeHolderPath: Assets.images.defaultProfile.path,
                         imagePath:
-                            "${preferenceService.getAmazonUrl()}${controller.args?.image ?? ''}",
+                        (controller.args?.image ?? '').startsWith('https://divinenew-prod.s3.ap-south-1.amazonaws.com/')
+                            ? controller.args?.image ?? ''
+                            : "${preferenceService.getAmazonUrl()}/${controller.args?.image ?? ''}",
                         loadingIndicator: SizedBox(
                             child: CircularProgressIndicator(
                                 color: appColors.guideColor, strokeWidth: 2))),

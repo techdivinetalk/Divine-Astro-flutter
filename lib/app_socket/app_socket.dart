@@ -67,6 +67,12 @@ class AppSocket {
     socket?.emit(ApiProvider().startAstroCustChatAssist,
         {"astroId": astroId, "userId": userId, "userType": userType});
   }
+
+  void userLeftCustChatAssist(
+      String? astroId, String? userId, int userType) {
+    socket?.emit(ApiProvider().astrologerLeftChatAssist,
+        {"astroId": astroId, "userId": userId, "userType": userType});
+  }
   void leavePrivateChatEmit(String? astroId, String? userId, String userType) {
     print("leavePrivateChat");
     socket?.emit(ApiProvider().leavePrivateChat,

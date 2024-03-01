@@ -18,6 +18,7 @@ const yourAppSign =
 
 const yourServerSecret = '89ceddc6c59909af326ddb7209cb1c16';
 RxList assistChatNewMsg = [].obs;
+RxInt chatAssistantCurrentUserId = 0.obs;
 RxInt walletBalance = 0.obs;
 
 RxString userImage = ''.obs;

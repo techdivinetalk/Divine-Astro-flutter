@@ -24,6 +24,7 @@ class DashboardScreen extends GetView<DashboardController> {
   Widget build(BuildContext context) {
     return GetBuilder<DashboardController>(
       assignId: true,
+
       builder: (controller) {
         return Material(
           child: StreamBuilder<BroadcastMessage>(
@@ -294,6 +295,6 @@ class DashboardScreen extends GetView<DashboardController> {
     const PerformanceUI(),
     //const SuggestRemediesUI(),
     ChatAssistancePage(),
-    WaitListUI(),
+    const WaitListUI(),
   ];
 }

@@ -82,7 +82,9 @@ Future<void> main() async {
     } else if (message.data["type"] == "8") {
       print('Message data:- ${MiddleWare.instance.currentPage}');
       print("chat assist realtime notification with data ${message.data}");
-      if (MiddleWare.instance.currentPage == RouteName.chatMessageUI) {
+      if (MiddleWare.instance.currentPage == RouteName.chatMessageUI &&
+          chatAssistantCurrentUserId.value.toString() ==
+              message.data['sender_id'].toString()) {
         print("inside page for realtime notification");
         assistChatNewMsg([...assistChatNewMsg, message.data]);
         assistChatNewMsg.refresh();
@@ -172,7 +174,7 @@ Future<void> initServices() async {
   await Get.putAsync(() => FirebaseNetworkService().init());
   await Hive.initFlutter();
 }
-
+@pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   print("pushNotification");
