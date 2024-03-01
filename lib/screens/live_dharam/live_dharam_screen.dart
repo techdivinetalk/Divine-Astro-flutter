@@ -59,6 +59,7 @@ import 'package:random_name_generator/random_name_generator.dart';
 //
 //
 //
+//
 
 const int appID = 696414715;
 const String appSign =
@@ -333,7 +334,7 @@ class _LivePage extends State<LiveDharamScreen>
    *
    * total_hours_wasted_here = 1
   */
-  
+
   Future<void> engaging(WaitListModel currentCaller) async {
     WidgetsBinding.instance.endOfFrame.then(
       (_) async {
@@ -1501,8 +1502,9 @@ class _LivePage extends State<LiveDharamScreen>
           reverse: true,
           shrinkWrap: true,
           padding: EdgeInsets.zero,
-          itemCount:
-              messages.isNotEmpty && messages.length >= 5 ? 5 : messages.length,
+          // itemCount:
+          //     messages.isNotEmpty && messages.length >= 5 ? 5 : messages.length,
+          itemCount: messages.length,
           controller: _scrollControllerForBottom,
           itemBuilder: (BuildContext context, int index) {
             final ZegoInRoomMessage message = messages[index];
@@ -2068,6 +2070,35 @@ class _LivePage extends State<LiveDharamScreen>
   //   return Future<void>.value();
   // }
 
+  // void sendCustomEventDataToMoEngage({required String type}) {
+  //   bool canSend = false;
+  //   String name = "";
+
+  //   switch (type) {
+  //     case "Video":
+  //       canSend = true;
+  //       name = "voip_video_calls";
+  //       break;
+  //     case "Audio":
+  //       canSend = true;
+  //       name = "voip_audio_calls";
+  //       break;
+  //     case "Private":
+  //       break;
+  //     default:
+  //       break;
+  //   }
+
+  //   if (canSend) {
+  //     MoEngage().sendCustomEventDataToMoEngage(
+  //       eventData: "abc",
+  //       eventName_: "eventName",
+  //       trackEvent: name,
+  //     );
+  //   } else {}
+  //   return;
+  // }
+
   // Future<void> callAstrologerPopup() async {
   //   await showCupertinoModalPopup(
   //     context: context,
@@ -2078,10 +2109,11 @@ class _LivePage extends State<LiveDharamScreen>
   //         details: _controller.details,
   //         onSelect: (String type) async {
   //           Get.back();
+  //           sendCustomEventDataToMoEngage(type: type);
   //           //
   //           // Exceptional Case Start
   //           //
-  //           _controller.isWaitingForCallAstrologerPopupResponse = true;
+  //           _controller.isWaitingForCallAstrologerPopupRes = true;
   //           //
   //           // Exceptional Case End
   //           //
@@ -2117,7 +2149,7 @@ class _LivePage extends State<LiveDharamScreen>
   //           //
   //           // Exceptional Case Start
   //           //
-  //           _controller.isWaitingForCallAstrologerPopupResponse = false;
+  //           _controller.isWaitingForCallAstrologerPopupRes = false;
   //           //
   //           // Exceptional Case End
   //           //

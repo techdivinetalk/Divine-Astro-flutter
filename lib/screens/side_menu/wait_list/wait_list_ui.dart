@@ -114,17 +114,32 @@ class WaitListUI extends GetView<WaitListUIController> {
               style: AppTextStyle.textStyle16(fontColor: appColors.darkBlue),
             ),
           ),
+          InkWell(
+            onTap: () {
+            },
+            child: Container(
+                padding: EdgeInsets.all(7),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: appColors.guideColor,
+                ),
+                child: Text(
+                  "Accept",
+                  style: TextStyle(fontSize: 13, color: appColors.black),
+                )),
+          ),
+          const SizedBox(width: 10),
           Row(
             children: [
               ImageBasedOnResponse(customer: person),
               SizedBox(
                 width: 8.w,
               ),
-              Text(
-                "$waitTime minutes",
-                style: AppTextStyle.textStyle16(
-                    fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
-              ),
+              // Text(
+              //   "$waitTime minutes",
+              //   style: AppTextStyle.textStyle16(
+              //       fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
+              // ),
             ],
           ),
         ],

@@ -94,6 +94,7 @@ class ChatMessageController extends GetxController {
     userjoinedChatSocket();
     listenjoinedChatSocket();
     processedPages.clear();
+    userleftChatSocket();
     currentPage(1);
     super.dispose();
   }
@@ -131,10 +132,18 @@ class ChatMessageController extends GetxController {
     sendMsg(MsgType.text, {'text': msg.description});
   }
 
+
+
   userjoinedChatSocket() {
     appSocket.emitForStartAstroCustChatAssist(
         userData?.id.toString(), args?.id.toString(), 0);
   }
+
+  userleftChatSocket() {
+    appSocket.userLeftCustChatAssist(
+        userData?.id.toString(),  args?.id.toString(), 0);
+  }
+
 
   listenjoinedChatSocket() {
     print("listen joined chat socket called");

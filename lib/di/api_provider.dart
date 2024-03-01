@@ -157,6 +157,7 @@ class ApiProvider {
   final String listenChatAssistMessage = "listen-chat-assist-message";
   final String chatAssistMessageSent = "chat-assist-message-sent";
   final String startAstroCustChatAssist = "start-astro-cust-chatAssist";
+  final String astrologerLeftChatAssist = "leave-chat-assist";
   final String astrologerJoinedChatAssist = "astro-joined-chatAssist";
   final String userJoinedChatAssist = "user-joined-chatAssist";
 
@@ -174,7 +175,7 @@ class ApiProvider {
   //Basic Auth
   final String username = "625170";
   final String password = "4eb3e540da68887ac72d4d45d7da9906";
-
+ 
   ///ReferAn Astrologer Base
   final elasticDivineTalkBase = "https://crm-api.divinetalk.live/api/v1/";
 

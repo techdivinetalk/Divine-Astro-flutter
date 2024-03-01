@@ -33,15 +33,12 @@ class LiveCarousal extends StatefulWidget {
 
 class _LiveCarousalState extends State<LiveCarousal> {
   final List<DeckCardModel> numList = [];
-
   String tarotCard = "";
 
   @override
   void initState() {
     super.initState();
-
     tarotCard = LiveSharedPreferencesSingleton().getSingleTarotCard();
-    
     for (int i = 0; i < widget.numOfSelection; i++) {
       numList.add(DeckCardModel());
     }
@@ -123,7 +120,7 @@ class _LiveCarousalState extends State<LiveCarousal> {
           CarouselSlider.builder(
             itemCount: widget.allCards.length,
             options: CarouselOptions(
-              height: Get.height / 4.80,
+              height: Get.height / 5.00,
               viewportFraction: 0.20,
               initialPage: 0,
               enableInfiniteScroll: true,
@@ -149,8 +146,8 @@ class _LiveCarousalState extends State<LiveCarousal> {
                   }
                 },
                 child: Container(
-                  height: Get.height / 4.80,
-                  width: Get.width / 4,
+                  height: Get.height / 5.00,
+                  width: Get.width / 5.00,
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: ClipRRect(
                     borderRadius: const BorderRadius.all(
@@ -172,6 +169,8 @@ class _LiveCarousalState extends State<LiveCarousal> {
             shrinkWrap: true,
             itemCount: widget.numOfSelection,
             crossAxisCount: widget.numOfSelection,
+            mainAxisSpacing: 0.0,
+            crossAxisSpacing: 0.0,
             builder: (BuildContext context, int index) {
               final DeckCardModel model = numList[index];
               return Center(
@@ -182,8 +181,8 @@ class _LiveCarousalState extends State<LiveCarousal> {
                       alignment: Alignment.center,
                       children: [
                         SizedBox(
-                          height: Get.height / 4.80,
-                          width: Get.width / 4,
+                          height: Get.height / 5.00,
+                          width: Get.width / 5.00,
                           child: ClipRRect(
                             borderRadius: const BorderRadius.all(
                               Radius.circular(10.0),
@@ -217,14 +216,6 @@ class _LiveCarousalState extends State<LiveCarousal> {
                             : const SizedBox()
                       ],
                     ),
-                    // const SizedBox(height: 8),
-                    // Text(
-                    //   model.name ?? "Not Selected",
-                    //   style: TextStyle(
-                    //     color: appColors.white,
-                    //     fontSize: 10,
-                    //   ),
-                    // ),
                   ],
                 ),
               );
@@ -282,7 +273,6 @@ class _LiveCarousalState extends State<LiveCarousal> {
       ),
       onPressed: () async {
         final bool cond = condition();
-        
         if (cond) {
           final String msg = "Please select ${widget.numOfSelection} cards.";
           await Fluttertoast.showToast(
