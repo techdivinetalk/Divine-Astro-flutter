@@ -132,8 +132,6 @@ class ChatMessageController extends GetxController {
     sendMsg(MsgType.text, {'text': msg.description});
   }
 
-
-
   userjoinedChatSocket() {
     appSocket.emitForStartAstroCustChatAssist(
         userData?.id.toString(), args?.id.toString(), 0);
@@ -141,9 +139,21 @@ class ChatMessageController extends GetxController {
 
   userleftChatSocket() {
     appSocket.userLeftCustChatAssist(
-        userData?.id.toString(),  args?.id.toString(), 0);
+        userData?.id.toString(), args?.id.toString(), 0);
   }
 
+  userleftChatSocketListen() {
+    appSocket.userLeftListenChatAssist(
+      (data) {
+        print("data msg $data");
+        if (data['msg'] == 2) {
+          isCustomerOnline(true);
+        }
+        isCustomerOnline(false);
+        update();
+      },
+    );
+  }
 
   listenjoinedChatSocket() {
     print("listen joined chat socket called");
@@ -239,7 +249,6 @@ class ChatMessageController extends GetxController {
       );
     }
   }
-
 
   Future<void> cropImage() async {
     final CroppedFile? croppedFile = await ImageCropper().cropImage(

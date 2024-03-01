@@ -68,15 +68,23 @@ class AppSocket {
         {"astroId": astroId, "userId": userId, "userType": userType});
   }
 
-  void userLeftCustChatAssist(
-      String? astroId, String? userId, int userType) {
+  void userLeftCustChatAssist(String? astroId, String? userId, int userType) {
     socket?.emit(ApiProvider().astrologerLeftChatAssist,
         {"astroId": astroId, "userId": userId, "userType": userType});
   }
+
+  void userLeftListenChatAssist(void Function(dynamic) callback) {
+    socket?.on(ApiProvider().astrologerLeftChatAssist, callback);
+  }
+
   void leavePrivateChatEmit(String? astroId, String? userId, String userType) {
     print("leavePrivateChat");
-    socket?.emit(ApiProvider().leavePrivateChat,
-        {"astroId": astroId, "userId": userId, "userType": userType,"orderId":AppFirebaseService().orderData.value["orderId"].toString()});
+    socket?.emit(ApiProvider().leavePrivateChat, {
+      "astroId": astroId,
+      "userId": userId,
+      "userType": userType,
+      "orderId": AppFirebaseService().orderData.value["orderId"].toString()
+    });
   }
 
   void startAstroCustumerSocketEvent(

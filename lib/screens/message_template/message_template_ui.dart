@@ -148,7 +148,7 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                                             //         .messageTemplates[index]
                                             //         .isOn ??
                                             //     true);
-                                            print("1");
+
                                             final result = controller
                                                 .messageLocalTemplates
                                                 .indexWhere(
@@ -156,7 +156,7 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                                                   element.id ==
                                                   messageTemplate.id,
                                             );
-
+                                            print("1 $result");
                                             if (result != -1) {
                                               print("2");
                                               controller.messageLocalTemplates
@@ -166,6 +166,7 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                                             } else {
                                               controller.messageLocalTemplates
                                                   .add(messageTemplate);
+                                              print("3 ${controller.messageLocalTemplates}");
                                             }
                                             await controller
                                                 .updateMessageTemplateLocally();

@@ -137,13 +137,14 @@ class AppFirebaseService {
           if (realTimeData['giftCount'] != null) {
             giftCountUpdate(realTimeData["giftCount"]);
             giftImageUpdate(realTimeData["giftImage"]);
-
+            print(
+                "gift broadcase called ${realTimeData["giftCount"]} ${realTimeData["giftImage"]}");
             sendBroadcast(
               BroadcastMessage(
                 name: "giftCount",
                 data: {
                   'giftCount': realTimeData["giftCount"],
-                  "giftImage": realTimeData["giftImage"],
+                  // "giftImage": realTimeData["giftImage"],
                 },
               ),
             );

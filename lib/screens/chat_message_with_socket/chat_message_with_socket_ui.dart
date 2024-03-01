@@ -46,7 +46,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
       body: GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
         return Stack(
           children: [
@@ -347,26 +347,27 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
                             textEditingController: controller.messageController,
                             config: Config(
-                                categoryViewConfig: CategoryViewConfig(
-                                    backspaceColor: appColors.appRedColour,
-                                    categoryIcons: CategoryIcons(),
-                                    initCategory: Category.RECENT,
-                                    indicatorColor: appColors.appRedColour,
-                                    iconColor: Colors.grey,
-                                    iconColorSelected: appColors.appRedColour,
-                                    recentTabBehavior:
-                                        RecentTabBehavior.RECENT),
-                                emojiViewConfig: const EmojiViewConfig(
-                                    emojiSizeMax: 32.0,
-                                    verticalSpacing: 0,
-                                    horizontalSpacing: 0,
-                                    recentsLimit: 28,
-                                    replaceEmojiOnLimitExceed: false,
-                                    buttonMode: ButtonMode.MATERIAL))),
+                                )),
                       ),
                     ))
               ],
             ),
+            // ategoryViewConfig: CategoryViewConfig(
+            //     backspaceColor: appColors.appRedColour,
+            //     categoryIcons: CategoryIcons(),
+            //     initCategory: Category.RECENT,
+            //     indicatorColor: appColors.appRedColour,
+            //     iconColor: Colors.grey,
+            //     iconColorSelected: appColors.appRedColour,
+            //     recentTabBehavior:
+            //     RecentTabBehavior.RECENT),
+            // emojiViewConfig: const EmojiViewConfig(
+            //     emojiSizeMax: 32.0,
+            //     verticalSpacing: 0,
+            //     horizontalSpacing: 0,
+            //     recentsLimit: 28,
+            //     replaceEmojiOnLimitExceed: false,
+            //     buttonMode: ButtonMode.MATERIAL)
             // Obx(() => Visibility(
             //     visible: !controller.isDataLoad.value,
             //     child: const IgnorePointer(
