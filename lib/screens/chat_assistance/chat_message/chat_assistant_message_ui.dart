@@ -184,6 +184,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
     controller.listenjoinedChatSocket();
     controller.processedPages.clear();
     controller.currentPage(1);
+    controller.userleftChatSocket();
     chatAssistantCurrentUserId(0);
     super.dispose();
   }

@@ -22,6 +22,10 @@ class WaitListUIController extends GetxController {
     getWaitingList();
   }
 
+  onAccept() {
+
+  }
+
   getWaitingList() async {
     try {
       final response = await repository.fetchData();

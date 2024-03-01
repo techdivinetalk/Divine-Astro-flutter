@@ -122,10 +122,20 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
         );
       }
     });
-    if ((AppFirebaseService().orderData.value["status"] ?? "-1") == "0") {
-      print("play the sound");
-      playAudio();
-    }
+    AppFirebaseService().orderData.listen((p0) {
+      if ((p0["status"] ?? "-1") == "0") {
+        // print("play the sound");
+        playAudio();
+      } else {
+        // print("stop the sound");
+      }
+    });
+    // print(
+    //     "data of ordercreated called  ${AppFirebaseService().orderData.value["status"]}");
+    // if ((AppFirebaseService().orderData.value["status"] ?? "-1") == "0") {
+    //   print("play the sound");
+    //   playAudio();
+    // }
     // broadcastReceiver.start();
     // broadcastReceiver.messages.listen(
     //   (event) {

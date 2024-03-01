@@ -128,7 +128,8 @@ class ChatMessageWithSocketController extends GetxController
       (Timer timer) {
         if (_start == 0) {
           timer.cancel();
-          isTyping.value = false;
+          isTyping(false);
+          chatStatus("online");
         } else {
           _start--;
         }

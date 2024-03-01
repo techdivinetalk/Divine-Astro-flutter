@@ -241,12 +241,13 @@ class AppFirebaseService {
             (DatabaseEvent event) async {
               final DataSnapshot dataSnapshot = event.snapshot;
               if (dataSnapshot.exists) {
+                print("data from snapshot ${dataSnapshot.value}");
                 if (dataSnapshot.value is Map<dynamic, dynamic>) {
                   Map<dynamic, dynamic> map = <dynamic, dynamic>{};
                   map = (dataSnapshot.value ?? <dynamic, dynamic>{})
                       as Map<dynamic, dynamic>;
                   orderData(Map<String, dynamic>.from(map));
-
+                  print("data from snapshot ${dataSnapshot.value}");
                   if (orderData.value["status"] != null) {
                     switch ((orderData.value["status"])) {
                       case "0":

@@ -1,5 +1,3 @@
-
-
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
 
@@ -59,7 +57,7 @@ class PoojaDharamDetailsController extends GetxController {
       poojaId = Get.arguments['data'];
       isSentMessage(Get.arguments["isSentMessage"]);
       showOnlyDetail(Get.arguments['detailOnly']);
-      customerId(Get.arguments["customerId"]??0);
+      customerId(Get.arguments["customerId"] ?? 0);
     }
   }
 
@@ -95,8 +93,9 @@ class PoojaDharamDetailsController extends GetxController {
     response = await poojaRepository.getSinglePoojaApi(
       params: param,
       successCallBack: successCallBack,
-      failureCallBack: failureCallBack,
+      failureCallBack: customerId.value == 0 ? failureCallBack : (message) {},
     );
+    print("12 pooja detail  ${response.toJson()} ${customerId.value}");
     getSinglePooja = response.statusCode == HttpStatus.ok
         ? GetSinglePoojaResponse.fromJson(response.toJson())
         : GetSinglePoojaResponse.fromJson(GetSinglePoojaResponse().toJson());
@@ -115,8 +114,9 @@ class PoojaDharamDetailsController extends GetxController {
     response = await poojaRepository.getPoojaAddOnesApi(
       params: param,
       successCallBack: successCallBack,
-      failureCallBack: failureCallBack,
+      failureCallBack: customerId.value == 0 ? failureCallBack : (message) {},
     );
+    print("2 pooja detail ${response.toJson()} ${customerId.value}");
     getPoojaAddOnes = response.statusCode == HttpStatus.ok
         ? GetPoojaAddOnesResponse.fromJson(response.toJson())
         : GetPoojaAddOnesResponse.fromJson(GetPoojaAddOnesResponse().toJson());

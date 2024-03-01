@@ -315,27 +315,29 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               //         curve: Curves.easeOut)
                               //     : null;
                             },
+
                             onBackspacePressed: () {
                               _onBackspacePressed();
                             },
+
                             textEditingController: controller.messageController,
                             config: Config(
-                                columns: 7,
-                                emojiSizeMax: 32.0,
-                                verticalSpacing: 0,
-                                horizontalSpacing: 0,
-                                initCategory: Category.RECENT,
-                                bgColor: Color(0xFFF2F2F2),
-                                indicatorColor: appColors.appRedColour,
-                                iconColor: Colors.grey,
-                                iconColorSelected: appColors.appRedColour,
-                                enableSkinTones: true,
-                                recentTabBehavior: RecentTabBehavior.RECENT,
-                                recentsLimit: 28,
-                                replaceEmojiOnLimitExceed: false,
-                                backspaceColor: appColors.appRedColour,
-                                categoryIcons: CategoryIcons(),
-                                buttonMode: ButtonMode.MATERIAL)),
+                                categoryViewConfig: CategoryViewConfig(
+                                    backspaceColor: appColors.appRedColour,
+                                    categoryIcons: CategoryIcons(),
+                                    initCategory: Category.RECENT,
+                                    indicatorColor: appColors.appRedColour,
+                                    iconColor: Colors.grey,
+                                    iconColorSelected: appColors.appRedColour,
+                                    recentTabBehavior:
+                                        RecentTabBehavior.RECENT),
+                                emojiViewConfig: const EmojiViewConfig(
+                                    emojiSizeMax: 32.0,
+                                    verticalSpacing: 0,
+                                    horizontalSpacing: 0,
+                                    recentsLimit: 28,
+                                    replaceEmojiOnLimitExceed: false,
+                                    buttonMode: ButtonMode.MATERIAL))),
                       ),
                     ))
               ],
@@ -1061,8 +1063,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
 
                           controller.addNewMessage(time, "Product",
-                              data: {'data': result},
-                              messageText: 'Product');
+                              data: {'data': result}, messageText: 'Product');
                         }
 
                         break;

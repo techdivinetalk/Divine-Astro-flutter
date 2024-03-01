@@ -214,7 +214,7 @@ class ChatMessage {
     data['base64image'] = base64Image;
     data['deleted_at'] = deletedAt;
     data['chat_msg_id'] = chatMsgId;
-data['is_pooja_product'] = isPoojaProduct == false ? "0" : "1";
+data['is_pooja_product'] = isPoojaProduct == true ? "1" : "0";
 
     data['astrologer_id'] = astrologerId;
     data['call_initiate'] = callInitiate;
