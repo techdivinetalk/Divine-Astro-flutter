@@ -33,6 +33,7 @@ import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import 'common/MiddleWare.dart';
 import 'common/app_theme.dart';
 import 'common/colors.dart';
+import 'common/common_functions.dart';
 import 'common/custom_progress_dialog.dart';
 import 'common/routes.dart';
 import 'common/strings.dart';
@@ -41,6 +42,7 @@ import 'di/firebase_network_service.dart';
 import 'di/network_service.dart';
 import 'di/progress_service.dart';
 import 'di/shared_preference_service.dart';
+import 'firebase_service/firebase_service.dart';
 import 'gen/fonts.gen.dart';
 import 'localization/translations.dart';
 import 'screens/live_page/constant.dart';
@@ -142,7 +144,7 @@ Future<void> main() async {
   //   );
   //   runApp(const MyApp());
   // });
-
+  checkIfTokenUpdated();
   ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
   // call the useSystemCallingUI
   ZegoUIKit().initLog().then((value) {
@@ -152,6 +154,43 @@ Future<void> main() async {
     runApp(MyApp());
   });
 }
+
+
+//conditions to update firebase token by dev-chetan
+void checkIfTokenUpdated() {
+  FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
+    await updateFirebaseToken();
+  });
+}
+
+updateFirebaseToken() async {
+  String? newtoken = await FirebaseMessaging.instance.getToken();
+  final data = await AppFirebaseService()
+      .database
+      .child("astrologer/${userData?.id}/deviceToken")
+      .once();
+  final currentToken = data.snapshot.value;
+  if (newtoken.toString() != currentToken.toString()) {
+    print("token updated from ${currentToken} to ${newtoken}");
+    await AppFirebaseService()
+        .database
+        .child("astrologer/${userData?.id}/")
+        .update({'deviceToken': newtoken});
+  }
+}
+
+// @pragma('vm:entry-point')
+// void callbackDispatcher() {
+//   Workmanager().executeTask((task, inputData) async {
+//     if (task == "updateTokenTask") {
+//       // Retrieve the refreshed FCM token
+//       updateFirebaseToken();
+//     }
+//     return Future.value(true);
+//   });
+// }
+
+//end- conditions to update firebase token by dev-chetan
 
 Future<bool> saveLanguage(String? lang) async {
   final box = GetStorage();

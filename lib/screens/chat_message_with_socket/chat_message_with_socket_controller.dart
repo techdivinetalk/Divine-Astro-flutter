@@ -45,12 +45,12 @@ import "../../model/chat/ReqEndChat.dart";
 import "../../model/chat/res_common_chat_success.dart";
 import "../../model/chat_assistant/chat_assistant_chats_response.dart";
 import "../../model/message_template_response.dart";
-import "../../model/res_product_list.dart";
+import "../../model/res_product_detail.dart";
 import "../../model/save_remedies_response.dart";
 import "../../model/tarot_response.dart";
 import "../../repository/chat_repository.dart";
 import "../../utils/enum.dart";
-import "../chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/get_pooja_response.dart";
+import "../chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/get_single_pooja_response.dart";
 import "../live_dharam/gifts_singleton.dart";
 
 class ChatMessageWithSocketController extends GetxController
@@ -76,7 +76,7 @@ class ChatMessageWithSocketController extends GetxController
   ScrollController messgeScrollController = ScrollController();
   ScrollController typingScrollController = ScrollController();
   File? image;
-   ImagePicker picker = ImagePicker();
+  ImagePicker picker = ImagePicker();
   XFile? pickedFile;
   File? uploadFile;
   final SharedPreferenceService preference =
@@ -266,14 +266,14 @@ class ChatMessageWithSocketController extends GetxController
     });
     messageController.addListener(_onMessageChanged);
     // getMessageTemplates();
-    isAstroJoinedChat();
+    // isAstroJoinedChat();
     getMessageTemplatesLocally();
     checkIsCustomerJoinedPrivateChat();
     typingListenerSocket();
-    sendMessageSocketListenerSocket();
-    listenerMessageStatusSocket();
+    // sendMessageSocketListenerSocket();
     sendMessageListenerSocket();
-    leavePrivateChat();
+    listenerMessageStatusSocket();
+    // leavePrivateChat();
     customerLeavedPrivateChatListenerSocket();
 
     socket.startAstroCustumerSocketEvent(
@@ -472,11 +472,11 @@ class ChatMessageWithSocketController extends GetxController
     });
   }
 
-  void isAstroJoinedChat() {
-    socket.isAstroJoinedChat((data) {
-      debugPrint("private chat Joined event $data");
-    });
-  }
+  // void isAstroJoinedChat() {
+  //   socket.isAstroJoinedChat((data) {
+  //     debugPrint("private chat Joined event $data");
+  //   });
+  // }
 
   void tyingSocket() {
     debugPrint(
@@ -491,8 +491,8 @@ class ChatMessageWithSocketController extends GetxController
 
   void checkIsCustomerJoinedPrivateChat() {
     socket.isCustomerJoinedChat((data) {
-      debugPrint("Yes astro joined chat successfully $data");
-      chatStatus.value = "Online";
+      debugPrint("Yes customer joined chat successfully $data");
+      chatStatus("Online");
     });
   }
 
@@ -550,11 +550,11 @@ class ChatMessageWithSocketController extends GetxController
         (messgeScrollController.position.maxScrollExtent - threshold);
   }
 
-  void sendMessageSocketListenerSocket() {
-    socket.sendMessageSocketListenerSocket((data) {
-      debugPrint("sendMessageSocketListenerSocket $data");
-    });
-  }
+  // void sendMessageSocketListenerSocket() {
+  //   socket.sendMessageSocketListenerSocket((data) {
+  //     debugPrint("sendMessageSocketListenerSocket $data");
+  //   });
+  // }
 
   void listenerMessageStatusSocket() {
     print('listener function called');
@@ -848,7 +848,7 @@ class ChatMessageWithSocketController extends GetxController
 
   updateChatMessages(ChatMessage newMessage, bool isFromNotification,
       {bool isSendMessage = false}) async {
-    print("newMessage1");
+    print("newMessage1 ");
     final int index = chatMessages
         .indexWhere((ChatMessage element) => newMessage.time == element.time);
     print("newMessage2");
@@ -1167,16 +1167,16 @@ class ChatMessageWithSocketController extends GetxController
     setHiveDataDatabase();
   }
 
-  void leavePrivateChat() {
-    socket.leavePrivateChat((data) {
-      debugPrint("userLeavePrivateChatListenerSocket $data");
-    });
-  }
+  // void leavePrivateChat() {
+  //   socket.leavePrivateChat((data) {
+  //     debugPrint("userLeavePrivateChatListenerSocket $data");
+  //   });
+  // }
 
   void customerLeavedPrivateChatListenerSocket() {
     socket.customerLeavedPrivateChatListenerSocket((data) {
-      debugPrint("customerLeavedPrivateChatListenerSocket $data");
-      chatStatus.value = "Offline";
+      debugPrint("Yes customer leaved chat successfully $data");
+      chatStatus("Offline");
     });
   }
 

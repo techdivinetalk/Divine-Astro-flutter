@@ -44,13 +44,12 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
 
   updateFirebaseToken() async {
     String? newtoken = await FirebaseMessaging.instance.getToken();
-    print("token: new token: " + newtoken.toString());
     final data = await AppFirebaseService()
         .database
         .child("astrologer/${userData?.id}/deviceToken")
         .once();
     final currentToken = data.snapshot.value;
-    if (newtoken != currentToken) {
+    if (newtoken.toString() != currentToken.toString()) {
       print("token updated from ${currentToken} to ${newtoken}");
       await AppFirebaseService()
           .database

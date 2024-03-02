@@ -87,12 +87,12 @@ class DashboardController extends GetxController
     //  connectSocket();
     loadPreDefineData();
     firebaseMessagingConfig(Get.context!);
-    FirebaseMessaging.instance.onTokenRefresh.listen((newtoken) {
-      AppFirebaseService()
-          .database
-          .child("astrologer/${userData?.id}/")
-          .update({'deviceToken': newtoken});
-    });
+    // FirebaseMessaging.instance.onTokenRefresh.listen((newtoken) {
+    //   AppFirebaseService()
+    //       .database
+    //       .child("astrologer/${userData?.id}/")
+    //       .update({'deviceToken': newtoken});
+    // });
     //
     // print("asasasasasasa");
     // await ZegoService().zegoLogin();
