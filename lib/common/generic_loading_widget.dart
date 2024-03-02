@@ -12,7 +12,7 @@ class GenericLoadingWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Assets.lottie.loadingAnimation.lottie(width: 100.w),
+          Assets.lottie.loading2.lottie(width: 100.w),
           Text("pleaseWait".tr),
         ],
       ),

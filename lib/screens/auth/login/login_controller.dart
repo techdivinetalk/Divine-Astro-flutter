@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:device_apps/device_apps.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
-import 'package:divine_astrologer/firebase_service/firebase_service.dart';
+
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/firebase_model.dart';
 import 'package:divine_astrologer/model/login_images.dart';
