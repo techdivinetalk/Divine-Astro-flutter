@@ -39,13 +39,13 @@ class ProfilePageController extends GetxController {
 
   ProfilePageController(this.userRepository);
 
-
   UserData? userData;
   GetUserProfile? userProfile;
   RxString userProfileImage = "".obs;
   ResReviewRatings? ratingsData;
   ResReviewReply? reviewReply;
   var preference = Get.find<SharedPreferenceService>();
+
   // var dashboardController = Get.find<DashboardController>();
   RxBool profileDataSync = false.obs;
   RxBool reviewDataSync = false.obs;
@@ -164,7 +164,9 @@ class ProfilePageController extends GetxController {
         "blockedUsers".tr,
         Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h),
         '/blockedUser'),
-    ProfileOptionModelClass("Pooja",
+    ProfileOptionModelClass(
+        "Pooja", Assets.images.pooja.svg(width: 30.h, height: 30.h), ''),
+    ProfileOptionModelClass("Add Remedies",
         Assets.images.remedies.svg(width: 30.h, height: 30.h), ''),
   ].obs;
 
@@ -429,9 +431,10 @@ class ProfilePageController extends GetxController {
 
   Future getImage(bool isCamera) async {
     pickedFile = await picker.pickImage(
-        source: isCamera ? ImageSource.camera : ImageSource.gallery,
-        imageQuality: 90,
-        maxWidth: 250,);
+      source: isCamera ? ImageSource.camera : ImageSource.gallery,
+      imageQuality: 90,
+      maxWidth: 250,
+    );
 
     if (pickedFile != null) {
       image = File(pickedFile!.path);
@@ -485,8 +488,6 @@ class ProfilePageController extends GetxController {
     }
   }
 
-
-
   uploadImageToS3Bucket(File? selectedFile) async {
     var commonConstants = await userRepository.constantDetailsData();
     var dataString = commonConstants.data!.awsCredentails.baseurl?.split(".");
@@ -503,7 +504,7 @@ class ProfilePageController extends GetxController {
     );
     if (response != null) {
       // dashboardController.userProfileImage.value = response;
-      userImage(response??'');
+      userImage(response ?? '');
       userProfileImage.value = response;
       userData?.image = response;
       preference.setUserDetail(userData!);
@@ -514,10 +515,11 @@ class ProfilePageController extends GetxController {
     }
   }
 
-  Future<void> uploadImage( File imageFile) async {
+  Future<void> uploadImage(File imageFile) async {
     var token = preferenceService.getToken();
     // Create a Uri from the URL string
-    var uri = Uri.parse("https://wakanda-api.divinetalk.live/api/astro/v7/uploadAstroImage");
+    var uri = Uri.parse(
+        "https://wakanda-api.divinetalk.live/api/astro/v7/uploadAstroImage");
 
     // Create a MultipartRequest
     var request = http.MultipartRequest('POST', uri);
@@ -535,13 +537,13 @@ class ProfilePageController extends GetxController {
       imageFile.path,
     ));
 
-
     var response = await request.send();
 
     // Listen for the response
     response.stream.transform(utf8.decoder).listen((value) {
       print(value); // Handle the response from the server
-      print("valuevaluevaluevaluevaluevaluevalue"); // Handle the response from the server
+      print(
+          "valuevaluevaluevaluevaluevaluevalue"); // Handle the response from the server
     });
 
     if (response.statusCode == 200) {
@@ -550,7 +552,9 @@ class ProfilePageController extends GetxController {
       print("Failed to upload image.");
     }
   }
+
   ConstantDetailsModelClass? getConstantDetails;
+
   getConstantDetailsData() async {
     try {
       var data = await userRepository.constantDetailsData();
@@ -568,8 +572,8 @@ class ProfilePageController extends GetxController {
       }
     }
   }
-  whatsapp() async {
 
+  whatsapp() async {
     var contact = getConstantDetails?.data?.whatsappNo ?? '';
     var androidUrl = "whatsapp://send?phone=$contact&text=Hi";
     var iosUrl = "https://wa.me/$contact?text=${Uri.parse('Hi')}";

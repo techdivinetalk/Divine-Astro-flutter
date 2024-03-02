@@ -40,6 +40,8 @@ Future<String> uploadImageToS3Bucket(File? selectedFile, String fileName) async 
     filename: '$fileName$extension',
     region: dataString[2],
   );
+
+
   if (response != null) {
     return response;
   } else {

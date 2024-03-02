@@ -15,6 +15,8 @@ import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/model/upload_image_model.dart';
 import 'package:divine_astrologer/model/upload_story_response.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
+import 'package:divine_astrologer/screens/remedies/model/add_edit_puja_model.dart';
+import 'package:divine_astrologer/screens/remedies/model/pooja_listing_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide FormData;
@@ -194,6 +196,7 @@ class UserRepository extends ApiProvider {
       rethrow;
     }
   }
+
   /*Future<ResLogin> uploadAstroImageUpload(Map<String, dynamic> param) async {
     try {
       final response = await post(uploadAstroImage, body: FormData);
@@ -241,6 +244,7 @@ class UserRepository extends ApiProvider {
     }
     return Future<ResLogin>.value(data);
   }
+
   //
 
   Future<GetUserProfile> getProfileDetail(Map<String, dynamic> param) async {
@@ -281,6 +285,29 @@ class UserRepository extends ApiProvider {
           final blockedCustomerList =
               ResReviewRatings.fromJson(json.decode(response.body));
           return blockedCustomerList;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<PujaListingModel> getPujaList(Map<String, dynamic> param) async {
+    try {
+      final response = await post(getPoojaListUrl,
+          body: jsonEncode(param).toString(),
+          headers: await getJsonHeaderURL());
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final pujaListModel =
+              PujaListingModel.fromJson(json.decode(response.body));
+          return pujaListModel;
         }
       } else {
         throw CustomException(json.decode(response.body)["error"]);
@@ -430,6 +457,52 @@ class UserRepository extends ApiProvider {
         } else {
           final editResponse = updateProfileResponseFromJson(response.body);
           return editResponse;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<AddEditPujaModel> addEditPujaApi(Map<String, dynamic> param) async {
+    try {
+      final response = await post(addPooja,
+          body: jsonEncode(param), headers: await getJsonHeaderURL());
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final editResponse =
+              AddEditPujaModel.fromJson(jsonDecode(response.body));
+          return editResponse;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<AddEditPujaModel> deletePujaApi({String? id}) async {
+    try {
+      final response = await delete(
+        "${deletePuja}/${id}",
+        headers: await getJsonHeaderURL(),
+      );
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final deletePujaResponse =
+              AddEditPujaModel.fromJson(jsonDecode(response.body));
+          return deletePujaResponse;
         }
       } else {
         throw CustomException(json.decode(response.body)["error"]);
