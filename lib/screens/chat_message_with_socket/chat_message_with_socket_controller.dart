@@ -539,7 +539,7 @@ class ChatMessageWithSocketController extends GetxController
 
   bool isScrollAtBottom() {
     // Ensure we have a scroll position to check against
-    if (!messgeScrollController.hasClients) return false;
+    if (messgeScrollController.hasClients == false) return false;
 
     // The current scroll position is at the bottom if the current offset is equal
     // or greater than the maximum scroll extent. A small threshold is used for
@@ -590,7 +590,7 @@ class ChatMessageWithSocketController extends GetxController
         final ChatMessage chatMessage =
             ChatMessage.fromOfflineJson(data["data"]);
         final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-        print(' data inside receiver ${chatMessages.toJson()}');
+        log(' data inside receiver ${chatMessage.toOfflineJson()}');
         if (chatMessage.msgType == "sendGifts") {
           if (chatMessage.title != null && chatMessage.title != "") {
             debugPrint("sendMesxxx $data");
@@ -615,6 +615,7 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   void playAnimation({required String id}) {
+    print("playAnimation string id $id");
     List<GiftData> data = GiftsSingleton().gifts.data?.where(
           (element) {
             return element.id == int.parse(id);
@@ -773,6 +774,7 @@ class ChatMessageWithSocketController extends GetxController
   }) async {
     late ChatMessage newMessage;
     if (msgType == "Product") {
+      print("new message added product type");
       final isPooja = data?['data']['isPooja'] as bool;
       if (isPooja) {
         final productDetails = data?['data']['poojaData'] as Pooja;
@@ -782,7 +784,8 @@ class ChatMessageWithSocketController extends GetxController
           message: productDetails.poojaName,
           astrologerId: preferenceService.getUserDetail()!.id,
           createdAt: DateTime.now().toIso8601String(),
-          id: DateTime.now().millisecondsSinceEpoch,
+          id: int.parse(time),
+          time: int.parse(time),
           isSuspicious: 0,
           isPoojaProduct: true,
           awsUrl: productDetails.poojaImg ?? '',
@@ -804,12 +807,14 @@ class ChatMessageWithSocketController extends GetxController
         print("delete product data ${productDetails} ${productData}");
         newMessage = ChatMessage(
           message: productDetails.prodName,
+          title: productDetails.prodName,
           astrologerId: preferenceService.getUserDetail()!.id,
           createdAt: DateTime.now().toIso8601String(),
-          id: DateTime.now().millisecondsSinceEpoch,
+          time: int.parse(time),
+          id: int.parse(time),
           isSuspicious: 0,
           isPoojaProduct: false,
-          awsUrl: userData?.image,
+          awsUrl: userData?.image ?? '',
           msgType: msgType,
           type: 0,
           orderId: productData.data?.id ?? 0,
@@ -821,6 +826,7 @@ class ChatMessageWithSocketController extends GetxController
         );
       }
     } else {
+      print("new message added text type");
       newMessage = ChatMessage(
         orderId: AppFirebaseService().orderData.value["orderId"],
         id: int.parse(time),
@@ -843,6 +849,7 @@ class ChatMessageWithSocketController extends GetxController
     print("newMessage1");
     print(newMessage.toOfflineJson());
     updateChatMessages(newMessage, false, isSendMessage: true);
+    print("last message  ${chatMessages.last.message}");
     isDataLoad.value = true;
   }
 
@@ -926,14 +933,21 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   scrollToBottomFunc() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      messgeScrollController.hasClients
-          ? messgeScrollController.animateTo(
-              messgeScrollController.position.maxScrollExtent * 2,
-              duration: const Duration(milliseconds: 600),
-              curve: Curves.easeOut)
-          : null;
-    });
+    messgeScrollController.hasClients
+        ? messgeScrollController.animateTo(
+            messgeScrollController.position.maxScrollExtent * 2,
+            duration: const Duration(milliseconds: 600),
+            curve: Curves.easeOut)
+        : null;
+
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   messgeScrollController.hasClients
+    //       ? messgeScrollController.animateTo(
+    //           messgeScrollController.position.maxScrollExtent * 2,
+    //           duration: const Duration(milliseconds: 600),
+    //           curve: Curves.easeOut)
+    //       : null;
+    // });
   }
 
   askForGift() async {
@@ -989,7 +1003,9 @@ class ChatMessageWithSocketController extends GetxController
       // type 1= New chat message, 2 = Delivered, 3= Msg read, 4= Other messages
       unreadMessageIndex.value = -1;
       addNewMessage(time, "text", messageText: messageController.text.trim());
+
       messageController.clear();
+      scrollToBottomFunc();
     }
   }
 

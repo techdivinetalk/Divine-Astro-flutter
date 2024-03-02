@@ -23,7 +23,7 @@ RxInt walletBalance = 0.obs;
 
 RxString userImage = ''.obs;
 
-RxList<AssistChatData> assistChatUnreadMessages = <AssistChatData>[].obs;
+RxList assistChatUnreadMessages = [].obs;
 
 const userChatData = "userChatData";
 RxInt currentChatUserId = 8693.obs;

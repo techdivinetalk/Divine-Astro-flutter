@@ -114,7 +114,7 @@ class PoojaDharamDetailsController extends GetxController {
     response = await poojaRepository.getPoojaAddOnesApi(
       params: param,
       successCallBack: successCallBack,
-      failureCallBack: customerId.value == 0 ? failureCallBack : (message) {},
+      failureCallBack: (message) {},
     );
     print("2 pooja detail ${response.toJson()} ${customerId.value}");
     getPoojaAddOnes = response.statusCode == HttpStatus.ok

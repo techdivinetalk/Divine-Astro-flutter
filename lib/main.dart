@@ -93,6 +93,7 @@ Future<void> main() async {
         // sendBroadcast(
         //     BroadcastMessage(name: "chatAssist", data: {'msg': message.data}));
       } else {
+        assistChatUnreadMessages([...assistChatUnreadMessages, message.data]);
         switch (message.data['msg_type']) {
           case "0":
             showNotification(message.data["title"], message.data["message"],

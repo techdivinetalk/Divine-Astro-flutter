@@ -26,7 +26,6 @@ import 'chat_assistance_controller.dart';
 class ChatAssistancePage extends GetView<ChatAssistanceController> {
   ChatAssistancePage({super.key});
 
-
   Rx<bool> isUSerTabSelected = true.obs;
 
   @override
@@ -36,7 +35,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
       appBar: appBar(),
       body: GetBuilder<ChatAssistanceController>(builder: (controller) {
         if (controller.loading == Loading.loading) {
-          return const  Center(child: GenericLoadingWidget());
+          return const Center(child: GenericLoadingWidget());
         }
         if (controller.loading == Loading.loaded) {
           return Column(
@@ -45,7 +44,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: SizedBox(
                   child: Obx(
-                        () => Row(
+                    () => Row(
                       children: [
                         Expanded(
                           child: GestureDetector(
@@ -136,34 +135,32 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                 child: Obx(() {
                   if (isUSerTabSelected.value) {
                     if (controller.chatAssistantAstrologerListResponse ==
-                        null ||
-                        controller
-                            .chatAssistantAstrologerListResponse!.data ==
+                            null ||
+                        controller.chatAssistantAstrologerListResponse!.data ==
                             null ||
                         controller.chatAssistantAstrologerListResponse!.data!
                             .data!.isEmpty) {
                       return Center(
-                          child: SvgPicture.asset(
-                              'assets/svg/Group 129525.svg'));
+                          child:
+                              SvgPicture.asset('assets/svg/Group 129525.svg'));
                     } else {
                       return ListView.builder(
                         padding: EdgeInsets.symmetric(vertical: 10.h),
                         itemCount: (controller.searchData).isNotEmpty ||
-                            controller.searchController.text.isNotEmpty
+                                controller.searchController.text.isNotEmpty
                             ? controller.searchData.length
                             : controller.chatAssistantAstrologerListResponse!
-                            .data!.data!.length,
+                                .data!.data!.length,
                         itemBuilder: (context, index) {
                           return ChatAssistanceTile(
                             controller: controller,
                             data: (controller.searchData).isNotEmpty ||
-                                controller
-                                    .searchController.text.isNotEmpty
+                                    controller.searchController.text.isNotEmpty
                                 ? controller.searchData[index]
                                 : controller
-                                .chatAssistantAstrologerListResponse!
-                                .data!
-                                .data![index],
+                                    .chatAssistantAstrologerListResponse!
+                                    .data!
+                                    .data![index],
                           );
                         },
                       );
@@ -185,19 +182,17 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                       return ListView.builder(
                         padding: EdgeInsets.symmetric(vertical: 10.h),
                         itemCount: (controller.filteredUserData).isNotEmpty ||
-                            controller.searchController.text.isNotEmpty
+                                controller.searchController.text.isNotEmpty
                             ? controller.filteredUserData.length
-                            : controller
-                            .customerDetailsResponse?.data.length ??
-                            0,
+                            : controller.customerDetailsResponse?.data.length ??
+                                0,
                         itemBuilder: (context, index) {
                           return ChatAssistanceDataTile(
                             data: (controller.filteredUserData).isNotEmpty ||
-                                controller
-                                    .searchController.text.isNotEmpty
+                                    controller.searchController.text.isNotEmpty
                                 ? controller.filteredUserData[index]
                                 : controller
-                                .customerDetailsResponse!.data[index],
+                                    .customerDetailsResponse!.data[index],
                           );
                         },
                       );
@@ -208,7 +203,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
             ],
           );
         }
-        return  const Center(
+        return const Center(
           child: Text("No data available"),
         );
       }),
@@ -316,7 +311,8 @@ class ChatAssistanceTile extends StatelessWidget {
               imageModel: ImageModel(
                 assetImage: false,
                 placeHolderPath: Assets.images.defaultProfile.path,
-                imagePath: (data.image ?? '').startsWith('https://divinenew-prod.s3.ap-south-1.amazonaws.com/')
+                imagePath: (data.image ?? '').startsWith(
+                        'https://divinenew-prod.s3.ap-south-1.amazonaws.com/')
                     ? data.image ?? ''
                     : "${preferenceService.getAmazonUrl()}/${data.image ?? ''}",
                 loadingIndicator: SizedBox(
@@ -342,19 +338,18 @@ class ChatAssistanceTile extends StatelessWidget {
           ),
         ],
       ),
-      trailing: SizedBox()
-      // data.unreadMessage! > 0
-      //     ? CircleAvatar(
-      //         radius: 10.r,
-      //         backgroundColor: appColors.guideColor,
-      //         child: CustomText(
-      //           data.unreadMessage.toString(),
-      //           fontSize: 10.sp,
-      //           fontWeight: FontWeight.w700,
-      //           fontColor: appColors.brown,
-      //         ),
-      //       )
-      //     : SizedBox(),
+      trailing: userUnreadMessages(data.id ?? 0) > 0
+          ? CircleAvatar(
+              radius: 10.r,
+              backgroundColor: appColors.guideColor,
+              child: CustomText(
+                userUnreadMessages(data.id ?? 0).toString(),
+                fontSize: 10.sp,
+                fontWeight: FontWeight.w700,
+                fontColor: appColors.brown,
+              ),
+            )
+          : const SizedBox(),
     );
   }
 
@@ -468,7 +463,8 @@ class ChatAssistanceTile extends StatelessWidget {
   int userUnreadMessages(int userId) {
     final allUnreadMessages = assistChatUnreadMessages;
     if (allUnreadMessages.isNotEmpty) {
-      allUnreadMessages.removeWhere((element) => element.customerId != userId);
+      allUnreadMessages.removeWhere(
+          (element) => element['']      .toString() != userId.toString());
     }
     return allUnreadMessages.length;
   }
@@ -504,7 +500,8 @@ class ChatAssistanceDataTile extends StatelessWidget {
                     imageModel: ImageModel(
                       assetImage: false,
                       placeHolderPath: Assets.images.defaultProfile.path,
-                      imagePath: (data.customerImage ?? '').startsWith('https://divinenew-prod.s3.ap-south-1.amazonaws.com/')
+                      imagePath: (data.customerImage ?? '').startsWith(
+                              'https://divinenew-prod.s3.ap-south-1.amazonaws.com/')
                           ? data.customerImage ?? ''
                           : "${preferenceService.getAmazonUrl()}/${data.customerImage ?? ''}",
                       loadingIndicator: SizedBox(

@@ -44,7 +44,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
     controller.setContext(context);
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
         return Stack(
           children: [
@@ -64,77 +64,74 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                 Expanded(
                   child: Stack(
                     children: [
-                      MediaQuery.removePadding(
-                          context: context,
-                          removeBottom: true,
-                          removeTop: true,
-                          child: Obx(
-                            () => AnimatedCrossFade(
-                              duration: const Duration(milliseconds: 200),
-                              crossFadeState: controller.chatMessages.isEmpty ||
-                                      controller.isDataLoad.value == false
-                                  ? CrossFadeState.showSecond
-                                  : CrossFadeState.showFirst,
-                              secondChild: Container(),
-                              firstChild: NotificationListener(
-                                onNotification: (t) {
-                                  if (t is ScrollEndNotification) {
-                                    bool atScrollViewBottom = controller
-                                            .messgeScrollController
-                                            .position
-                                            .pixels <
-                                        controller.messgeScrollController
-                                                .position.maxScrollExtent -
-                                            100;
-                                    controller.scrollToBottom.value =
-                                        atScrollViewBottom;
-                                    if (atScrollViewBottom == false &&
-                                        controller.unreadMsgCount.value > 0) {
-                                      controller.updateReadMessageStatus();
-                                    }
-                                  }
-                                  return true;
-                                },
-                                child: ListView.builder(
-                                  // controller: controller.messgeScrollController,
-                                  itemCount: controller.chatMessages.length,
-                                  shrinkWrap: true,
-                                  reverse: false,
-                                  padding: EdgeInsets.only(bottom: 10.h),
-                                  itemBuilder: (context, index) {
-                                    var chatMessage =
-                                        controller.chatMessages[index];
-                                    print(
-                                        "value of chatmessage length ${chatMessage.toOfflineJson()}");
-                                    return Column(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 4.h, horizontal: 12.w),
-                                          child: MessageView(
-                                              index: index,
-                                              chatMessage: chatMessage,
-                                              yourMessage:
-                                                  chatMessage.senderId ==
-                                                      preferenceService
-                                                          .getUserDetail()!
-                                                          .id,
-                                              userName:
-                                                  controller.customerName.value,
-                                              unreadMessage: controller
-                                                  .unreadMessageIndex.value),
-                                        ),
-                                        if (index ==
-                                            (controller.chatMessages.length -
-                                                1))
-                                          typingWidget()
-                                      ],
-                                    );
-                                  },
-                                ),
-                              ),
+                      Obx(
+                        () => AnimatedCrossFade(
+                          duration: const Duration(milliseconds: 200),
+                          crossFadeState: controller.chatMessages.isEmpty ||
+                                  controller.isDataLoad.value == false
+                              ? CrossFadeState.showSecond
+                              : CrossFadeState.showFirst,
+                          secondChild: Container(),
+                          firstChild: NotificationListener(
+                            onNotification: (t) {
+                              // if (t is ScrollEndNotification) {
+                              //   bool atScrollViewBottom = controller
+                              //           .messgeScrollController
+                              //           .position
+                              //           .pixels <
+                              //       controller.messgeScrollController
+                              //               .position.maxScrollExtent -
+                              //           100;
+                              //   controller.scrollToBottom.value =
+                              //       atScrollViewBottom;
+                              //   if (atScrollViewBottom == false &&
+                              //       controller.unreadMsgCount.value > 0) {
+                              //     controller.updateReadMessageStatus();
+                              //   }
+                              // }
+                              return true;
+                            },
+                            child: ListView.builder(
+                              controller: controller.messgeScrollController,
+                              itemCount: controller.chatMessages.length,
+                              shrinkWrap: true,
+                              reverse: false,
+
+
+                              itemBuilder: (context, index) {
+                                var chatMessage =
+                                    controller.chatMessages[index];
+                                print(
+                                    "value of chatmessage length ${chatMessage.toOfflineJson()}");
+                                return Column(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 4.h, horizontal: 12.w),
+                                      child: MessageView(
+                                          index: index,
+                                          chatMessage: chatMessage,
+                                          yourMessage:
+                                              chatMessage.senderId ==
+                                                  preferenceService
+                                                      .getUserDetail()!
+                                                      .id,
+                                          userName:
+                                              controller.customerName.value,
+                                          unreadMessage: controller
+                                              .unreadMessageIndex.value),
+                                    ),
+                                    if (index ==
+                                        (controller.chatMessages.length -
+                                            1))
+                                      typingWidget()
+                                  ],
+                                );
+                              },
                             ),
-                          )),
+                          ),
+                        ),
+                      ),
                       Positioned(
                         bottom: 4.h,
                         right: 25.w,
@@ -684,6 +681,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                             offset: const Offset(0.3, 3.0))
                                       ]),
                                   child: TextFormField(
+
                                     controller: controller.messageController,
                                     keyboardType: TextInputType.text,
                                     minLines: 1,
@@ -795,7 +793,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               child:
                                   SvgPicture.asset('assets/svg/chat_gift.svg')),
                       const SizedBox(width: 10),
-                      controller.messageController.text.isEmpty
+                      controller.hasMessage.value == false
                           ? GestureDetector(
                               onTap: controller.startOrStopRecording,
                               child: Container(
@@ -924,7 +922,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           final String time =
                               "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
 
-                          controller.addNewMessage(time, "Product",
+                          controller.addNewMessage(time,"Product",
                               data: {'data': result}, messageText: 'Product');
                         }
 
@@ -953,43 +951,45 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     return SizedBox(
       width: double.maxFinite,
-      child: Column(
-        crossAxisAlignment:
-            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(40)),
-              border: Border.all(width: 2, color: appColors.guideColor),
-              color: appColors.guideColor,
-            ),
-            constraints: BoxConstraints(
-                maxWidth: ScreenUtil().screenWidth * 0.8,
-                minWidth: ScreenUtil().screenWidth * 0.27),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                SizedBox(
-                  height: 32,
-                  width: 32,
-                  child: CustomImageWidget(
-                    imageUrl: chatMessage.awsUrl ?? '',
-                    rounded: true,
-                    // added by divine-dharam
-                    typeEnum: TypeEnum.gift,
-                    //
+      child: Expanded(
+        child: Column(
+          crossAxisAlignment:
+              yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(40)),
+                border: Border.all(width: 2, color: appColors.guideColor),
+                color: appColors.guideColor,
+              ),
+              constraints: BoxConstraints(
+                  maxWidth: ScreenUtil().screenWidth * 0.8,
+                  minWidth: ScreenUtil().screenWidth * 0.27),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  SizedBox(
+                    height: 32,
+                    width: 32,
+                    child: CustomImageWidget(
+                      imageUrl: chatMessage.awsUrl ?? '',
+                      rounded: true,
+                      // added by divine-dharam
+                      typeEnum: TypeEnum.gift,
+                      //
+                    ),
                   ),
-                ),
-                SizedBox(width: 6.w),
-                Flexible(
-                    child: Text(
-                        'Astrologer has requested to send ${chatMessage.message}.'))
-              ],
+                  SizedBox(width: 6.w),
+                  Flexible(
+                      child: Text(
+                          'Astrologer has requested to send ${chatMessage.message}.',maxLines: 3,))
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

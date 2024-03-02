@@ -144,7 +144,7 @@ class AppFirebaseService {
                 name: "giftCount",
                 data: {
                   'giftCount': realTimeData["giftCount"],
-                  // "giftImage": realTimeData["giftImage"],
+                  "giftImage": realTimeData["giftImage"],
                 },
               ),
             );

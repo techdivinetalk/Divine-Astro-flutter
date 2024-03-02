@@ -89,7 +89,7 @@ class MessageView extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         print(
-            "data from page ${chatMessage.orderId} ${chatMessage.isPoojaProduct} ${chatMessage.customerId}");
+            "data from page ${chatMessage.productId} ${chatMessage.isPoojaProduct} ${chatMessage.customerId}");
         if (chatMessage.isPoojaProduct ?? false) {
           Get.toNamed(RouteName.poojaDharamDetailsScreen, arguments: {
             'detailOnly': true,
@@ -100,7 +100,7 @@ class MessageView extends StatelessWidget {
           Get.toNamed(RouteName.categoryDetail, arguments: {
             "productId": chatMessage.productId.toString(),
             "isSentMessage": true,
-            "customerId": chatMessage.customerId,
+            "customerId": chatMessage.senderId,
           });
         }
       },
@@ -149,42 +149,44 @@ class MessageView extends StatelessWidget {
       BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     return SizedBox(
       width: double.maxFinite,
-      child: Column(
-        crossAxisAlignment:
-            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(40)),
-              color: appColors.guideColor,
-            ),
-            constraints: BoxConstraints(
-                maxWidth: ScreenUtil().screenWidth * 0.8,
-                minWidth: ScreenUtil().screenWidth * 0.27),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                SizedBox(
-                  height: 32,
-                  width: 32,
-                  child: CustomImageWidget(
-                    imageUrl: chatMessage.awsUrl ?? '',
-                    rounded: true,
-                    // added by divine-dharam
-                    typeEnum: TypeEnum.gift,
-                    //
+      child: Expanded(
+        child: Column(
+          crossAxisAlignment:
+              yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(40)),
+                color: appColors.guideColor,
+              ),
+              constraints: BoxConstraints(
+                  maxWidth: ScreenUtil().screenWidth * 0.8,
+                  minWidth: ScreenUtil().screenWidth * 0.27),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  SizedBox(
+                    height: 32,
+                    width: 32,
+                    child: CustomImageWidget(
+                      imageUrl: chatMessage.awsUrl ?? '',
+                      rounded: true,
+                      // added by divine-dharam
+                      typeEnum: TypeEnum.gift,
+                      //
+                    ),
                   ),
-                ),
-                SizedBox(width: 6.w),
-                Flexible(
-                    child: CustomText(
-                        'Astrologer has requested to send ${chatMessage.message}.'))
-              ],
+                  SizedBox(width: 6.w),
+                  Flexible(
+                      child: CustomText(
+                          'Astrologer has requested to send ${chatMessage.message}.',maxLines: 2,))
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -398,34 +400,29 @@ class MessageView extends StatelessWidget {
           color: appColors.white,
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 32,
-                width: 32,
-                child: CustomImageWidget(
-                  imageUrl: chatMessage.awsUrl ?? '',
-                  rounded: true,
-                  // added by divine-dharam
-                  typeEnum: TypeEnum.gift,
-                  //
-                ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Flexible(
+              child: Text(
+                "$customerName have sent ${chatMessage.message}",
+                style: const TextStyle(color: Colors.red),
               ),
-              SizedBox(width: 10.h),
-              Expanded(
-                child: Text(
-                  "$customerName have sent ${chatMessage.message}",
-                  textAlign: TextAlign.center,
-                  softWrap: true,
-                  maxLines: 5,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: Colors.red),
-                ),
+            ),
+            SizedBox(width: 10.h),
+            SizedBox(
+              height: 32,
+              width: 32,
+              child: CustomImageWidget(
+                imageUrl: chatMessage.awsUrl ?? '',
+                rounded: true,
+                // added by divine-dharam
+                typeEnum: TypeEnum.gift,
+                //
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
