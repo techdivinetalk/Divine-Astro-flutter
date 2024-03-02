@@ -31,7 +31,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
 
   @override
   Widget build(BuildContext context) {
-    // Get.put(ChatAssistanceController());
+    Get.put(ChatAssistanceController());
     return Scaffold(
       appBar: appBar(),
       body: GetBuilder<ChatAssistanceController>(builder: (controller) {

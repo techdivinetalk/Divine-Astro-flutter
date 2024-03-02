@@ -22,7 +22,7 @@ class Remedies extends GetView<RemediesController> {
           leading: IconButton(
               onPressed: () => Get.back(),
               icon: const Icon(Icons.arrow_back_ios_new_rounded)),
-          title: const CustomText('Remedies')),
+          title: const CustomText('Pooja')),
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         child: Row(
@@ -30,7 +30,7 @@ class Remedies extends GetView<RemediesController> {
             Expanded(
               child: FilledButton(
                 style: FilledButton.styleFrom(
-                  backgroundColor: Colors.amber,
+                  backgroundColor: appColors.guideColor,
                   padding: EdgeInsets.symmetric(vertical: 16.h),
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -44,11 +44,10 @@ class Remedies extends GetView<RemediesController> {
                   );
                 },
                 child: Text(
-                  'Add New Remedy',
-                  style: TextStyle(
+                  'Add New Pooja',
+                  style: AppTextStyle.textStyle16(
                     fontWeight: FontWeight.w600,
-                    fontSize: 16.sp,
-                    color: appColors.black,
+                    fontColor: appColors.white,
                   ),
                 ),
               ),
@@ -56,74 +55,69 @@ class Remedies extends GetView<RemediesController> {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child:  ListView.builder(
-            controller: controller.orderScrollController,
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: controller.orderList.value,
-            itemBuilder: (context, index) {
-              Widget separator = const SizedBox(height: 30);
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (index == 2)
-                    orderDetailView(
-                      onDeletePressed: () {},
-                      onEditPressed: () {
-                        int idToPass = 1;
-                        Get.toNamed(
-                          RouteName.addRemedies,
-                          arguments: {'edit': idToPass != 1, 'id': idToPass},
-                        );
-                      },
-                      onSelectPressed: () {},
-                      orderId: 785421,
-                      name: "Gemstone",
-                      amount: "₹10000",
-                      status: "Under Review",
-                      details:
+      body: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        controller: controller.orderScrollController,
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: controller.orderList.value,
+        itemBuilder: (context, index) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (index == 2)
+                orderDetailView(
+                  onDeletePressed: () {},
+                  onEditPressed: () {
+                    int idToPass = 1;
+                    Get.toNamed(
+                      RouteName.addRemedies,
+                      arguments: {'edit': idToPass != 1, 'id': idToPass},
+                    );
+                  },
+                  onSelectPressed: () {},
+                  orderId: 785421,
+                  name: "Gemstone",
+                  amount: "₹10000",
+                  status: "Under Review",
+                  details:
                       "Lorem Ipsum is simply dummy text of the printing and ...",
-                    ),
-                  if (index % 2 == 0 && index != 2)
-                    orderDetailView(
-                      onDeletePressed: () {},
-                      onEditPressed: () {
-                        int idToPass = 1;
-                        Get.toNamed(
-                          RouteName.addRemedies,
-                          arguments: {'edit': idToPass != 1, 'id': idToPass},
-                        );
-                      },
-                      onSelectPressed: () {},
-                      orderId: 785421,
-                      name: "Shani Dev Puja",
-                      amount: "₹10000",
-                      status: "approved",
-                      details:
+                ),
+              if (index % 2 == 0 && index != 2)
+                orderDetailView(
+                  onDeletePressed: () {},
+                  onEditPressed: () {
+                    int idToPass = 1;
+                    Get.toNamed(
+                      RouteName.addRemedies,
+                      arguments: {'edit': idToPass != 1, 'id': idToPass},
+                    );
+                  },
+                  onSelectPressed: () {},
+                  orderId: 785421,
+                  name: "Shani Dev Puja",
+                  amount: "₹10000",
+                  status: "approved",
+                  details:
                       "Lorem Ipsum is simply dummy text of the printing and ...",
-                    ),
-                  if (index % 2 == 1)
-                    orderDetailView(
-                      onDeletePressed: () {},
-                      onEditPressed: () {},
-                      onSelectPressed: () {},
-                      showDeleteSelectButton: false,
-                      orderId: 785421,
-                      name: "Gemstone",
-                      amount: "₹1000",
-                      status: "rejected",
-                      details:
+                ),
+              if (index % 2 == 1)
+                orderDetailView(
+                  onDeletePressed: () {},
+                  onEditPressed: () {},
+                  onSelectPressed: () {},
+                  showDeleteSelectButton: false,
+                  orderId: 785421,
+                  name: "Gemstone",
+                  amount: "₹1000",
+                  status: "rejected",
+                  details:
                       "Lorem Ipsum is simply dummy text of the printing and ...",
-                    ),
-                  separator,
-                ],
-              );
-            },
-          ),
-        ),
+                ),
+            ],
+          );
+        },
+        separatorBuilder: (context, index) => const SizedBox(height: 15),
       ),
     );
   }
@@ -173,7 +167,8 @@ class Remedies extends GetView<RemediesController> {
               CustomText(
                 name!,
                 fontSize: 14.sp,
-                fontColor: Colors.amber,
+                fontWeight: FontWeight.w500,
+                fontColor: appColors.guideColor,
               ),
               CustomText(
                 amount!,
