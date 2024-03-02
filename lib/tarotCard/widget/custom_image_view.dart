@@ -123,7 +123,7 @@ class CustomImageView extends StatelessWidget {
                 backgroundColor: Colors.grey.shade100,
               ),
             ),
-            errorWidget: (context, url, error) => Image.asset(
+            errorWidget: (context, url, error) =>placeHolder.contains(".svg") ? SvgPicture.asset(placeHolder): Image.asset(
               placeHolder,
               height: height,
               width: width,

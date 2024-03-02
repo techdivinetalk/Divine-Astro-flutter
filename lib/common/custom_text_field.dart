@@ -95,7 +95,7 @@ class CustomTextField extends StatelessWidget {
               showCursor: showCursor,
               keyboardType: keyboardType,
               controller: controller,
-              validator: validator,
+                validator: validator,
               autofocus: autoFocus ?? false,
               readOnly: readOnly ?? false,
               inputFormatters: textInputFormatter ?? [],

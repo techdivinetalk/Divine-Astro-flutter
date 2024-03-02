@@ -55,6 +55,7 @@ class ApiProvider {
   final String saveAstrologerExperience = "saveAstrologerExperience";
   final String getProfileUrl = "getAstrologerProfile";
   final String getReviewRatingUrl = "getReviewRating";
+  final String getPoojaListUrl = "getPoojaList";
   final String blockCustomerlistUrl = "blockCustomerlist";
   final String blockCustomerUrl = "blockCustomer";
   final String uploadAstroImage = "uploadAstroImage";
@@ -70,6 +71,8 @@ class ApiProvider {
   final String getAstroAllNotice = "getAstroAllNotice";
   final String getSpecialityList = "getSpecialityList";
   final String updateProfileDetails = "updateProfileDetails";
+  final String addPooja = "addPooja";
+  final String deletePuja = "pooja";
   final String uploadAstroStories = "uploadAstroStories";
   final String deleteAccount = "deleteAccount";
   final String reportUserReview = "reportReview";

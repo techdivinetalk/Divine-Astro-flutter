@@ -3,254 +3,252 @@ import 'package:divine_astrologer/common/SvgIconButton.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
+import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/screens/remedies/model/pooja_listing_model.dart';
 import 'package:divine_astrologer/screens/remedies/remedies_controller.dart';
+import 'package:divine_astrologer/tarotCard/widget/custom_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
+import 'widget/pooja_delete_bottom_sheet.dart';
 
 class Remedies extends GetView<RemediesController> {
   const Remedies({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          backgroundColor: appColors.white,
-          surfaceTintColor: appColors.white,
-          leading: IconButton(
-              onPressed: () => Get.back(),
-              icon: const Icon(Icons.arrow_back_ios_new_rounded)),
-          title: const CustomText('Pooja')),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-        child: Row(
-          children: [
-            Expanded(
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                  backgroundColor: appColors.guideColor,
-                  padding: EdgeInsets.symmetric(vertical: 16.h),
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                ),
-                onPressed: () {
-                  int idToPass = 0;
-                  Get.toNamed(
-                    RouteName.addRemedies,
-                    arguments: {'edit': idToPass != 0, 'id': idToPass},
-                  );
-                },
-                child: Text(
-                  'Add New Pooja',
-                  style: AppTextStyle.textStyle16(
-                    fontWeight: FontWeight.w600,
-                    fontColor: appColors.white,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        controller: controller.orderScrollController,
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: controller.orderList.value,
-        itemBuilder: (context, index) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (index == 2)
-                orderDetailView(
-                  onDeletePressed: () {},
-                  onEditPressed: () {
-                    int idToPass = 1;
-                    Get.toNamed(
-                      RouteName.addRemedies,
-                      arguments: {'edit': idToPass != 1, 'id': idToPass},
-                    );
-                  },
-                  onSelectPressed: () {},
-                  orderId: 785421,
-                  name: "Gemstone",
-                  amount: "₹10000",
-                  status: "Under Review",
-                  details:
-                      "Lorem Ipsum is simply dummy text of the printing and ...",
-                ),
-              if (index % 2 == 0 && index != 2)
-                orderDetailView(
-                  onDeletePressed: () {},
-                  onEditPressed: () {
-                    int idToPass = 1;
-                    Get.toNamed(
-                      RouteName.addRemedies,
-                      arguments: {'edit': idToPass != 1, 'id': idToPass},
-                    );
-                  },
-                  onSelectPressed: () {},
-                  orderId: 785421,
-                  name: "Shani Dev Puja",
-                  amount: "₹10000",
-                  status: "approved",
-                  details:
-                      "Lorem Ipsum is simply dummy text of the printing and ...",
-                ),
-              if (index % 2 == 1)
-                orderDetailView(
-                  onDeletePressed: () {},
-                  onEditPressed: () {},
-                  onSelectPressed: () {},
-                  showDeleteSelectButton: false,
-                  orderId: 785421,
-                  name: "Gemstone",
-                  amount: "₹1000",
-                  status: "rejected",
-                  details:
-                      "Lorem Ipsum is simply dummy text of the printing and ...",
-                ),
-            ],
-          );
-        },
-        separatorBuilder: (context, index) => const SizedBox(height: 15),
-      ),
-    );
-  }
-
-  Widget orderDetailView({
-    required int orderId,
-    required String? name,
-    required String? amount,
-    required String? details,
-    required String? status,
-    required Function() onDeletePressed,
-    required Function() onSelectPressed,
-    required Function() onEditPressed,
-    bool showDeleteSelectButton = true,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(12.0),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: appColors.white,
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                blurRadius: 3.0,
-                offset: const Offset(0.3, 3.0)),
-          ]),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: SizedBox(
-              height: 65,
-              width: 65,
-              child: CachedNetworkImage(
-                imageUrl: "",
-                errorWidget: (context, s, d) =>
-                    Assets.images.defaultProfiles.svg(),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          SizedBox(width: 10.w),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomText(
-                name!,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-                fontColor: appColors.guideColor,
-              ),
-              CustomText(
-                amount!,
-                fontSize: 14.sp,
-              ),
-              SizedBox(
-                width: 100,
-                child: CustomText(
-                  details!,
-                  fontSize: 12.sp,
-                  textAlign: TextAlign.start,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-          const Spacer(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  showDeleteSelectButton != false
-                      ? SvgIconButton(
-                          height: 22.h,
-                          width: 20.w,
-                          svg: Assets.svg.deleteAccout.svg(),
-                          onPressed: onDeletePressed)
-                      : SizedBox(
-                          height: 50.h,
-                        ),
-                  showDeleteSelectButton != false
-                      ? SvgIconButton(
-                          height: 22.h,
-                          width: 20.w,
-                          svg: Assets.svg.icPoojaAddress.svg(),
-                          onPressed: onEditPressed)
-                      : SizedBox(
-                          height: 50.h,
-                        ),
-                ],
-              ),
-              IntrinsicWidth(
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        color: getStatusColor("$status"), width: 1.0),
-                    borderRadius: BorderRadius.circular(22.0),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "$status",
-                        style: AppTextStyle.textStyle9(
-                          fontWeight: FontWeight.w500,
-                          fontColor: getStatusColor("$status"),
-                        ),
+    return GetBuilder<RemediesController>(
+      assignId: true,
+      init: RemediesController(),
+      builder: (controller) {
+        return Scaffold(
+          appBar: AppBar(
+              backgroundColor: appColors.white,
+              surfaceTintColor: appColors.white,
+              leading: IconButton(
+                  onPressed: () => Get.back(),
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+              title: const CustomText('Pooja')),
+          bottomNavigationBar: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+            child: Row(
+              children: [
+                Expanded(
+                  child: FilledButton(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: appColors.guideColor,
+                      padding: EdgeInsets.symmetric(vertical: 16.h),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
-                    ],
-                  ).paddingSymmetric(horizontal: 9, vertical: 6),
+                    ),
+                    onPressed: () {
+                      int idToPass = 0;
+                      Get.toNamed(
+                        RouteName.addRemedies,
+                        arguments: {'edit': idToPass != 0, 'id': idToPass},
+                      );
+                    },
+                    child: Text(
+                      'Add New Pooja',
+                      style: AppTextStyle.textStyle16(
+                        fontWeight: FontWeight.w600,
+                        fontColor: appColors.white,
+                      ),
+                    ),
+                  ),
                 ),
-              )
-            ],
-          )
-        ],
-      ),
+              ],
+            ),
+          ),
+          body: controller.isPujaLoading
+              ? const GenericLoadingWidget()
+              : controller.noPoojaFound.isNotEmpty
+                  ? Text(
+                      controller.noPoojaFound,
+                      style: AppTextStyle.textStyle16(
+                          fontWeight: FontWeight.w600,
+                          fontColor: appColors.textColor),
+                    )
+                  : ListView.separated(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      controller: controller.orderScrollController,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: controller.pujaData.length,
+                      itemBuilder: (context, index) {
+                        PujaListingData data = controller.pujaData[index];
+                        return Container(
+                          padding: const EdgeInsets.all(12.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: appColors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.3),
+                                  blurRadius: 3.0,
+                                  offset: const Offset(0.3, 3.0)),
+                            ],
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomImageView(
+                                height: 65,
+                                width: 65,
+                                imagePath: data.poojaImg ?? "",
+                                radius: BorderRadius.circular(10),
+                                placeHolder:
+                                    "assets/images/default_profiles.svg",
+                              ),
+                              SizedBox(width: 10.w),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomText(
+                                      data.poojaName ?? "",
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w500,
+                                      fontColor: appColors.guideColor,
+                                    ),
+                                    CustomText(
+                                      "${data.poojaStartingPriceInr ?? "0"}",
+                                      fontSize: 14.sp,
+                                    ),
+                                    SizedBox(
+                                      width: 100,
+                                      child: CustomText(
+                                        data.poojaDesc ?? "",
+                                        fontSize: 12.sp,
+                                        textAlign: TextAlign.start,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      data.isApprove != 0
+                                          ? SvgIconButton(
+                                              height: 22.h,
+                                              width: 20.w,
+                                              svg:
+                                                  Assets.svg.deleteAccout.svg(),
+                                              onPressed: () {
+                                                Get.bottomSheet(
+                                                    PoojaDeleteBottomSheet(
+                                                  pujaData: data,
+                                                  onTap: () {
+                                                    controller.deletePujaApi(
+                                                        deleteId:
+                                                            data.id.toString());
+                                                  },
+                                                )).then((value) {
+                                                  if (value == 1) {
+                                                    controller.getPujaList();
+                                                  }
+                                                });
+                                              },
+                                            )
+                                          : SizedBox(
+                                              height: 50.h,
+                                            ),
+                                      data.isApprove != 0
+                                          ? SvgIconButton(
+                                              height: 22.h,
+                                              width: 20.w,
+                                              svg: Assets.svg.icPoojaAddress
+                                                  .svg(),
+                                              onPressed: () {
+                                                Get.toNamed(
+                                                  RouteName.addRemedies,
+                                                  arguments: {
+                                                    'edit': true,
+                                                    'id': data.id
+                                                  },
+                                                );
+                                              },
+                                            )
+                                          : SizedBox(
+                                              height: 50.h,
+                                            ),
+                                    ],
+                                  ),
+                                  IntrinsicWidth(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: getStatusColor(
+                                                data.isApprove ?? 0),
+                                            width: 1.0),
+                                        borderRadius:
+                                            BorderRadius.circular(22.0),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            getStatus(data.isApprove ?? 0),
+                                            style: AppTextStyle.textStyle9(
+                                              fontWeight: FontWeight.w500,
+                                              fontColor: getStatusColor(
+                                                  data.isApprove ?? 0),
+                                            ),
+                                          ),
+                                        ],
+                                      ).paddingSymmetric(
+                                          horizontal: 9, vertical: 6),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 15),
+                    ),
+        );
+      },
     );
   }
 
-  Color getStatusColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'Under Review':
+  Color getStatusColor(int status) {
+    switch (status) {
+      case 0:
         return appColors.initiateColor;
-      case 'rejected':
+      case 2:
         return appColors.pendingColor;
-      case 'approved':
+      case 1:
         return appColors.completeColor;
       default:
         return Colors.black;
+    }
+  }
+
+  String getStatus(int status) {
+    switch (status) {
+      case 0:
+        return "Under Review";
+      case 2:
+        return "Rejected";
+      case 1:
+        return "Approved";
+      default:
+        return "";
     }
   }
 }

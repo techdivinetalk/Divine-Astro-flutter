@@ -6,6 +6,9 @@ import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/screens/add_remedies/add_remedies_controller.dart';
+import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_ui.dart';
+import 'package:divine_astrologer/screens/remedies/widget/pooja_submited_sheet.dart';
+import 'package:divine_astrologer/screens/remedies/widget/remedy_text_filed.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,119 +20,144 @@ class AddRemedies extends GetView<AddRemediesController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          backgroundColor: appColors.white,
-          surfaceTintColor: appColors.white,
-          leading: IconButton(
-              onPressed: () => Get.back(),
-              icon: const Icon(Icons.arrow_back_ios_new_rounded)),
-          title:  Obx(() => controller.id == 0 ? CustomText('Add Remedies',) : CustomText('Edit Remedies'))),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-        child: Row(
-          children: [
-            Expanded(
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                  backgroundColor: Colors.amber,
-                  padding: EdgeInsets.symmetric(vertical: 16.h),
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                ),
-                onPressed: () {
-                  if (controller.formKey.currentState?.validate() ?? false) {
-                  }
-                },
-                child: Text(
-                  'Add Puja',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16.sp,
-                    color: appColors.black,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        child: Form(
-          key: controller.formKey,
-          child: ListView(
-            children: [
-              durationWidget(),
-              SizedBox(height: 40.h),
-              Column(
-                children: [
-                  InkWell(
-                      onTap: () async {
-                        if (await PermissionHelper()
-                            .askMediaPermission()) {
-                          controller.updateProfileImage();
+    return GetBuilder<AddRemediesController>(
+      assignId: true,
+      init: AddRemediesController(),
+      builder: (controller) {
+        return Scaffold(
+          appBar: AppBar(
+              backgroundColor: appColors.white,
+              surfaceTintColor: appColors.white,
+              leading: IconButton(
+                  onPressed: () => Get.back(),
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+              title: Obx(() =>
+              controller.id.value == 0
+                  ? const CustomText(
+                'Add Puja',
+              )
+                  : const CustomText('Edit Remedies'))),
+          bottomNavigationBar: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+            child: Row(
+              children: [
+                Expanded(
+                  child: FilledButton(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: appColors.guideColor,
+                      padding: EdgeInsets.symmetric(vertical: 16.h),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                    ),
+                    onPressed: () {
+
+                      if (controller.formKey.currentState?.validate() ??
+                          false) {
+                          print("going in inside");
+                        if (controller.validation()) {
+                          controller.addEditPoojaApi();
                         }
-                      },
-                      child: CommonImageView(
-                        imagePath: Assets
-                            .images.icUploadStory.path,
-                        fit: BoxFit.cover,
-                        height: 90.h,
-                        width: 90.h,
-                        placeHolder: Assets
-                            .images.defaultProfile.path,
-                        radius: BorderRadius.circular(
-                            100.h),
-                      )),
-                  SizedBox(height: 10.h),
-                  CustomText('Upload Puja Image',fontColor: appColors.textColor,)
-                ],
-              ),
-              SizedBox(height: 20.h),
-              CustomTextField(
-                topLabel: CustomText('Puja Name', fontColor: appColors.textColor,),
-                maxLength: 20,
-                suffixIconPadding: 0,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Puja Name is required';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20.h),
-              CustomTextField(
-                topLabel: CustomText('Puja Description',fontColor: appColors.textColor,),
-                maxLines: 5,
-                maxLength: 100,
-                suffixIconPadding: 0,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Puja Description is required';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20.h),
-              CustomTextField(
-                textInputFormatter: [LengthLimitingTextInputFormatter(10)],
-                topLabel: CustomText('Puja Price ( In INR )', fontColor: appColors.textColor,),
-                suffixIconPadding: 0,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Puja Price is required';
-                  }
-                  // Additional validation logic can be added here
-                  return null;
-                },
-              ),
-              SizedBox(height: 100.h),
-            ],
+                      }
+                    },
+                    child: Text(
+                      'Add Puja',
+                      style: AppTextStyle.textStyle16(
+                        fontWeight: FontWeight.w600,
+                        fontColor: appColors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
+          body: Form(
+            key: controller.formKey,
+            child: ListView(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              children: [
+                // durationWidget(),
+                // SizedBox(height: 40.h),
+                Column(
+                  children: [
+                    InkWell(
+                        onTap: () async {
+                          if (await PermissionHelper().askMediaPermission()) {
+                            controller.updateProfileImage();
+                          }
+                        },
+                        child: CommonImageView(
+                          imagePath: Assets.images.icUploadStory.path,
+                          fit: BoxFit.cover,
+                          height: 90.h,
+                          width: 90.h,
+                          placeHolder: Assets.images.defaultProfile.path,
+                          radius: BorderRadius.circular(100.h),
+                        )),
+                    SizedBox(height: 10.h),
+                    CustomText(
+                      'Upload Puja Image',
+                      fontColor: appColors.textColor,
+                    )
+                  ],
+                ),
+                SizedBox(height: 20.h),
+                PoojaRemedyTextFiled(
+                  title: "Puja Name",
+                  maxLength: 20,
+                  controller: controller.poojaName,
+                  textInputFormatter: [CustomSpaceInputFormatter()],
+                  onChanged: (value) {
+                    controller.update();
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Puja Name is required';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 20.h),
+                PoojaRemedyTextFiled(
+                  title: "Puja Description",
+                  maxLines: 5,
+                  textInputFormatter: [CustomSpaceInputFormatter()],
+                  controller: controller.poojaDes,
+                  maxLength: 500,
+                  onChanged: (value) {
+                    controller.update();
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Puja Description is required';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 20.h),
+                PoojaRemedyTextFiled(
+                  textInputFormatter: [
+                    LengthLimitingTextInputFormatter(10),
+                    CustomSpaceInputFormatter(),
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  isSuffix: false,
+                  title: 'Puja Price ( In INR )',
+                  controller: controller.poojaPrice,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Puja Price is required';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 100.h),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -158,7 +186,8 @@ class AddRemedies extends GetView<AddRemediesController> {
   }
 
   Widget durationOptions() {
-    return Obx(() => DropdownButtonHideUnderline(
+    return Obx(() =>
+        DropdownButtonHideUnderline(
           child: DropdownButton2<String>(
             isExpanded: true,
             hint: Text(
@@ -167,19 +196,20 @@ class AddRemedies extends GetView<AddRemediesController> {
                   fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
             ),
             items: controller.durationOptions
-                .map((String item) => DropdownMenuItem<String>(
-                      value: item,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: Text(
-                          item.tr,
-                          style: AppTextStyle.textStyle16(
-                              fontWeight: FontWeight.w400,
-                              fontColor: appColors.darkBlue),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ))
+                .map((String item) =>
+                DropdownMenuItem<String>(
+                  value: item,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Text(
+                      item.tr,
+                      style: AppTextStyle.textStyle16(
+                          fontWeight: FontWeight.w400,
+                          fontColor: appColors.darkBlue),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ))
                 .toList(),
             style: AppTextStyle.textStyle16(
                 fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
