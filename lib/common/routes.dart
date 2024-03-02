@@ -4,6 +4,8 @@ import 'package:divine_astrologer/pages/profile/profile_binding.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_binding.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_ui.dart';
+import 'package:divine_astrologer/screens/add_remedies/add_remedies_binding.dart';
+import 'package:divine_astrologer/screens/add_remedies/add_remedies_form.dart';
 import 'package:divine_astrologer/screens/auth/login/login_binding.dart';
 import 'package:divine_astrologer/screens/auth/login/login_ui.dart';
 import 'package:divine_astrologer/screens/blocked_user/blocked_user_bindings.dart';
@@ -43,6 +45,8 @@ import 'package:divine_astrologer/screens/order_feedback/order_feedback_binding.
 import 'package:divine_astrologer/screens/order_feedback/order_feedback_ui.dart';
 import 'package:divine_astrologer/screens/otp_verification/otp_verification_binding.dart';
 import 'package:divine_astrologer/screens/otp_verification/otp_verification_ui.dart';
+import 'package:divine_astrologer/screens/remedies/Remedies_binding.dart';
+import 'package:divine_astrologer/screens/remedies/remedies_view.dart';
 import 'package:divine_astrologer/screens/side_menu/donation/donation_ui.dart';
 import 'package:divine_astrologer/screens/side_menu/settings/inner_pages/privacy_policy_ui.dart';
 import 'package:divine_astrologer/screens/side_menu/settings/inner_pages/terms_condition_ui.dart';
@@ -176,6 +180,8 @@ class RouteName {
   static const String feedback = "/feedback";
   static const String liveDharamScreen = "/liveDharamScreen";
   static const String faq = "/faqPage";
+  static const String remedies = "/remedies";
+  static const String addRemedies = "/addRemedies";
   static const String remediesDetail = "/RemediesDetailsView";
   static const String acceptChatRequestScreen = "/AcceptChatRequestScreen";
 }
@@ -183,6 +189,8 @@ class RouteName {
 final Set<String> validRoutes = {
   RouteName.chatMessageUI,
   RouteName.faq,
+  RouteName.remedies,
+  RouteName.addRemedies,
   RouteName.remediesDetail,
   RouteName.acceptChatRequestScreen,
 };
@@ -431,6 +439,16 @@ class Routes {
       page: () => const FAQsUI(),
       name: RouteName.faq,
       binding: FAQsBindings(),
+    ),
+    GetPage(
+      page: () => const Remedies(),
+      name: RouteName.remedies,
+      binding: RemediesBindings(),
+    ),
+    GetPage(
+      page: () => const AddRemedies(),
+      name: RouteName.addRemedies,
+      binding: AddRemediesBindings(),
     ),
     GetPage(
       page: () => const RemediesDetailPage(),

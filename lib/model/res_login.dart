@@ -41,6 +41,7 @@ class UserData {
   String? description;
   int? isChat;
   int? isCall;
+  int? isLive;
   int? isVideo;
   num? amount;
   int? videoCallAmount;
@@ -89,6 +90,7 @@ class UserData {
   String? sessionId;
   int? callPreviousStatus;
   int? chatPreviousStatus;
+  int? videoCallPreviousStatus;
   num? retention;
   String? premium;
   List<AstrologerSpeciality>? astrologerSpeciality;
@@ -115,6 +117,7 @@ class UserData {
     this.description,
     this.isChat,
     this.isCall,
+    this.isLive,
     this.isVideo,
     this.amount,
     this.videoCallAmount,
@@ -160,6 +163,7 @@ class UserData {
     this.sessionId,
     this.callPreviousStatus,
     this.chatPreviousStatus,
+    this.videoCallPreviousStatus,
     this.retention,
     this.premium,
     // this.astroCat,
@@ -185,7 +189,8 @@ class UserData {
     description = json['description'];
     isChat = json['is_chat'];
     isCall = json['is_call'];
-    isVideo = json['is_video'];
+    isLive = json['is_video'];
+    isVideo = json['is_video_call'];
     amount = json['amount'];
     videoCallAmount = json['video_call_amount'];
     videoCallMinimumTime = json['video_call_minimum_time'];
@@ -230,6 +235,7 @@ class UserData {
     sessionId = json['session_id'];
     callPreviousStatus = json['call_previous_status'];
     chatPreviousStatus = json['chat_previous_status'];
+    videoCallPreviousStatus = json['video_call_previous_status'];
     retention = json['retention'];
     premium = json['premium'];
     mobileNumber = json['mobile_no'];
@@ -271,7 +277,8 @@ class UserData {
     data['description'] = description;
     data['is_chat'] = isChat;
     data['is_call'] = isCall;
-    data['is_video'] = isVideo;
+    data['is_video'] = isLive;
+    data['is_video_call'] = isVideo;
     data['amount'] = amount;
     data['video_call_amount'] = videoCallAmount;
     data['video_call_minimum_time'] = videoCallMinimumTime;

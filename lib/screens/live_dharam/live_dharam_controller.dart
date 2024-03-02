@@ -2,6 +2,7 @@
 
 import "dart:async";
 import "dart:convert";
+import "dart:developer";
 
 import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
@@ -36,6 +37,7 @@ class LiveDharamController extends GetxController {
   final RxString _userId = "".obs;
   final RxString _userName = "".obs;
   final RxString _avatar = "".obs;
+  final RxBool _isMod = false.obs;
   final RxString _liveId = "".obs;
   final RxBool _isHost = true.obs;
   final RxBool _isHostAvailable = true.obs;
@@ -125,6 +127,7 @@ class LiveDharamController extends GetxController {
     final String awsURL = pref.getAmazonUrl() ?? "";
     final String image = pref.getUserDetail()?.image ?? "";
     avatar = isValidImageURL(imageURL: "$awsURL/$image");
+    isMod = false;
     liveId = (Get.arguments ?? "").toString();
     isHost = true;
     isHostAvailable = true;
@@ -192,6 +195,7 @@ class LiveDharamController extends GetxController {
     _userId.close();
     _userName.close();
     _avatar.close();
+    _isMod.close();
     _liveId.close();
     _isHost.close();
     _isHostAvailable.close();
@@ -239,6 +243,9 @@ class LiveDharamController extends GetxController {
 
   String get avatar => _avatar.value;
   set avatar(String value) => _avatar(value);
+
+  bool get isMod => _isMod.value;
+  set isMod(bool value) => _isMod(value);
 
   String get liveId => _liveId.value;
   set liveId(String value) => _liveId(value);
@@ -1491,6 +1498,15 @@ class LiveDharamController extends GetxController {
     return;
   }
 
+  bool hasMessageContainsAnyBadWord(String input) {
+    final int i = LiveSharedPreferencesSingleton().getBadWordsList().indexWhere(
+      (element) {
+        return element == input;
+      },
+    );
+    return i != -1;
+  }
+
   final RegExp indianPhoneNumberRegex = RegExp(r'\b(?:\+?91|0)?[ -]?\d{10}\b');
   final RegExp emailRegex =
       RegExp(r'\b[A-Za-z0-9._%+-]+@\b[A-Za-z0-9.-]+\.[A-Z|a-z]{2,6}\b');
@@ -1573,26 +1589,29 @@ class WaitListModel {
 }
 
 class ZegoCustomMessage {
-  int? type;
-  String? liveId;
-  String? userId;
-  String? userName;
-  String? avatar;
-  String? message;
-  String? timeStamp;
-  String? fullGiftImage;
-  bool? isBlockedCustomer;
+  int type = 0;
+  String liveId = "";
+  String userId = "";
+  String userName = "";
+  String avatar = "";
+  String message = "";
+  String timeStamp = "";
+  String fullGiftImage = "";
+  bool isBlockedCustomer = false;
+  bool isMod = false;
 
-  ZegoCustomMessage(
-      {this.type,
-      this.liveId,
-      this.userId,
-      this.userName,
-      this.avatar,
-      this.message,
-      this.timeStamp,
-      this.fullGiftImage,
-      required this.isBlockedCustomer});
+  ZegoCustomMessage({
+    required this.type,
+    required this.liveId,
+    required this.userId,
+    required this.userName,
+    required this.avatar,
+    required this.message,
+    required this.timeStamp,
+    required this.fullGiftImage,
+    required this.isBlockedCustomer,
+    required this.isMod,
+  });
 
   ZegoCustomMessage.fromJson(Map<String, dynamic> json) {
     type = json['type'];
@@ -1604,6 +1623,7 @@ class ZegoCustomMessage {
     timeStamp = json['timeStamp'];
     fullGiftImage = json['fullGiftImage'];
     isBlockedCustomer = json['isBlockedCustomer'];
+    isMod = json['isMod'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1617,6 +1637,7 @@ class ZegoCustomMessage {
     data['timeStamp'] = timeStamp;
     data['fullGiftImage'] = fullGiftImage;
     data['isBlockedCustomer'] = isBlockedCustomer;
+    data['isMod'] = isMod;
     return data;
   }
 }

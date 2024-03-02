@@ -761,6 +761,7 @@ class UserRepository extends ApiProvider {
           await preferenceService.erase();
           await Get.offAllNamed(RouteName.login);
         } else {
+          data = UpdateSessionTypeResponse.fromJson(responseBody);
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         }
       } else {

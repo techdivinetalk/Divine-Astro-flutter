@@ -34,8 +34,8 @@ class WalletUI extends GetView<WalletController> {
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: Column(
             children: [
-              durationWidget(),
-              const SizedBox(height: 20),
+              /*durationWidget(),
+              const SizedBox(height: 20),*/
               balanceView(),
               const SizedBox(height: 20),
               Container(
@@ -118,7 +118,7 @@ class WalletUI extends GetView<WalletController> {
                 width: 60.w,
                 child: amountDetailView(
                     amountType: controller.amountTypeList[index],
-                    amount: "10000",
+                    amount: "100000",
                     is2linesRequired:
                         controller.amountTypeList[index] == "tds".tr
                             ? false
@@ -179,36 +179,36 @@ class WalletUI extends GetView<WalletController> {
       required String? amount,
       required String? details,
       required String? time}) {
-    return InkWell(
-      onTap: () {
-        openBottomSheet(Get.context!,
-            functionalityWidget: Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: detailView(),
-                  ),
-                ],
-              ),
-            ));
-      },
-      child: Container(
-        padding: const EdgeInsets.all(12.0),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: appColors.white,
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  blurRadius: 3.0,
-                  offset: const Offset(0.3, 3.0)),
-            ]),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+    return Container(
+      padding: const EdgeInsets.all(12.0),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: appColors.white,
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                blurRadius: 3.0,
+                offset: const Offset(0.3, 3.0)),
+          ]),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: () {
+              openBottomSheet(Get.context!,
+                  functionalityWidget: Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: detailView(),
+                        ),
+                      ],
+                    ),
+                  ));
+            },
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
@@ -222,58 +222,58 @@ class WalletUI extends GetView<WalletController> {
                 )
               ],
             ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "$type",
-                  style: AppTextStyle.textStyle12(
-                      fontWeight: FontWeight.w400,
-                      fontColor: "$type" == "PENALTY"
-                          ? appColors.appRedColour
-                          : appColors.darkBlue),
-                ),
-                Text(
-                  "$amount",
-                  style: AppTextStyle.textStyle12(
-                      fontWeight: FontWeight.w400,
-                      fontColor: amount!.contains("+")
-                          ? appColors.lightGreen
-                          : appColors.appRedColour),
-                )
-              ],
-            ),
-            Text(
-              "$details ",
-              textAlign: TextAlign.start,
-              style: AppTextStyle.textStyle12(
-                  fontWeight: FontWeight.w400,
-                  fontColor: appColors.darkBlue.withOpacity(0.5)),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  "$time",
-                  textAlign: TextAlign.end,
-                  style: AppTextStyle.textStyle12(
-                      fontWeight: FontWeight.w400,
-                      fontColor: appColors.darkBlue.withOpacity(0.5)),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            CommonOptionRow(
-              leftBtnTitle: "refund".tr,
-              onLeftTap: () {},
-              onRightTap: () {},
-              rightBtnTitle: "suggestedRemediesEarning".tr,
-            ),
-            const SizedBox(height: 20),
-          ],
-        ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "$type",
+                style: AppTextStyle.textStyle12(
+                    fontWeight: FontWeight.w400,
+                    fontColor: "$type" == "PENALTY"
+                        ? appColors.appRedColour
+                        : appColors.darkBlue),
+              ),
+              Text(
+                "$amount",
+                style: AppTextStyle.textStyle12(
+                    fontWeight: FontWeight.w400,
+                    fontColor: amount!.contains("+")
+                        ? appColors.lightGreen
+                        : appColors.appRedColour),
+              )
+            ],
+          ),
+          Text(
+            "$details ",
+            textAlign: TextAlign.start,
+            style: AppTextStyle.textStyle12(
+                fontWeight: FontWeight.w400,
+                fontColor: appColors.darkBlue.withOpacity(0.5)),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                "$time",
+                textAlign: TextAlign.end,
+                style: AppTextStyle.textStyle12(
+                    fontWeight: FontWeight.w400,
+                    fontColor: appColors.darkBlue.withOpacity(0.5)),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          CommonOptionRow(
+            leftBtnTitle: "refund".tr,
+            onLeftTap: () {},
+            onRightTap: () {},
+            rightBtnTitle: "suggestedRemediesEarning".tr,
+          ),
+          const SizedBox(height: 20),
+        ],
       ),
     );
   }

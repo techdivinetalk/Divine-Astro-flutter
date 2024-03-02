@@ -156,45 +156,95 @@ class OtpVerificationController extends GetxController {
   //   databaseRef.set(firebaseUserData.toJson());
   // }
 
-  updateLoginDataInFirebase(ResLogin data) async {
-    await FirebaseDatabase.instance.goOnline();
-    String uniqueId = await getDeviceId() ?? '';
-    String firebaseNodeUrl = 'astrologer/${data.data?.id}';
-    FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
-    firebaseDatabase
-        .ref()
-        .child(firebaseNodeUrl)
-        .onValue
-        .listen((DatabaseEvent event) {
-      if (event.snapshot.value == null) {
-        print("userStatus  New user");
-        FirebaseUserData firebaseUserData = FirebaseUserData(
-            data.data!.name!,
-            deviceToken ?? FirebaseMessaging.instance.getToken().toString(),
-            data.data!.image ?? "",
-            RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0));
-        firebaseDatabase
-            .ref()
-            .child(firebaseNodeUrl)
-            .set(firebaseUserData.toJson());
-        navigateToDashboard(data);
-      } else {
-        print("userStatus existing user");
-        HashMap<String, dynamic> realTime = HashMap();
-        realTime["uniqueId"] = uniqueId; // Add to HashMap
-        HashMap<String, dynamic> deviceTokenNode = HashMap();
-        deviceTokenNode["deviceToken"] = deviceToken; // Add to HashMap
-        firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
-        firebaseDatabase
-            .ref()
-            .child("$firebaseNodeUrl/realTime")
-            .update(realTime);
-        navigateToDashboard(data);
-      }
-      final appFirebaseService = AppFirebaseService();
+  // updateLoginDataInFirebase(ResLogin data) async {
+  //   await FirebaseDatabase.instance.goOnline();
+  //   String uniqueId = await getDeviceId() ?? '';
+  //   String firebaseNodeUrl = 'astrologer/${data.data?.id}';
+  //   FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
+  //   firebaseDatabase
+  //       .ref()
+  //       .child(firebaseNodeUrl)
+  //       .onValue
+  //       .listen((DatabaseEvent event) {
+  //     if (event.snapshot.value == null) {
+  //       print("userStatus  New user");
+  //       FirebaseUserData firebaseUserData = FirebaseUserData(
+  //           data.data!.name!,
+  //           deviceToken ?? FirebaseMessaging.instance.getToken().toString(),
+  //           data.data!.image ?? "",
+  //           RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0));
+  //       firebaseDatabase
+  //           .ref()
+  //           .child(firebaseNodeUrl)
+  //           .set(firebaseUserData.toJson());
+  //       navigateToDashboard(data);
+  //     } else {
+  //       print("userStatus existing user");
+  //       HashMap<String, dynamic> realTime = HashMap();
+  //       realTime["uniqueId"] = uniqueId; // Add to HashMap
 
-      appFirebaseService.readData('$firebaseNodeUrl/realTime');
-    });
+  //       // Added by divine-dharam
+  //       realTime["voiceCallStatus"] = (data.data?.callPreviousStatus ?? 0);
+  //       realTime["chatStatus"] = (data.data?.chatPreviousStatus ?? 0);
+  //       realTime["videoCallStatus"] = (data.data?.videoCallPreviousStatus ?? 0);
+  //       realTime["is_call_enable"] = (data.data?.isCall ?? 0) == 1;
+  //       realTime["is_chat_enable"] = (data.data?.isChat ?? 0) == 1;
+  //       realTime["is_video_call_enable"] = (data.data?.isVideo ?? 0) == 1;
+  //       realTime["is_live_enable"] = (data.data?.isLive ?? 0) == 1;
+  //       //
+
+  //       HashMap<String, dynamic> deviceTokenNode = HashMap();
+  //       deviceTokenNode["deviceToken"] = deviceToken; // Add to HashMap
+  //       firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
+  //       firebaseDatabase
+  //           .ref()
+  //           .child("$firebaseNodeUrl/realTime")
+  //           .update(realTime);
+  //       navigateToDashboard(data);
+  //     }
+  //     final appFirebaseService = AppFirebaseService();
+
+  //     appFirebaseService.readData('$firebaseNodeUrl/realTime');
+  //   });
+  // }
+
+  Future<void> updateLoginDataInFirebase(ResLogin data) async {
+    await FirebaseDatabase.instance.goOnline();
+    final String uniqueId = await getDeviceId() ?? '';
+    final String firebaseNodeUrl = 'astrologer/${data.data?.id}';
+    final FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
+    final DatabaseReference ref = firebaseDatabase.ref();
+    final DataSnapshot dataSnapshot = await ref.child(firebaseNodeUrl).get();
+    if (dataSnapshot.exists) {
+      final HashMap<String, dynamic> realTime = HashMap();
+      realTime["uniqueId"] = uniqueId;
+      realTime["voiceCallStatus"] = (data.data?.callPreviousStatus ?? 0);
+      realTime["chatStatus"] = (data.data?.chatPreviousStatus ?? 0);
+      realTime["videoCallStatus"] = (data.data?.videoCallPreviousStatus ?? 0);
+      realTime["is_call_enable"] = (data.data?.isCall ?? 0) == 1;
+      realTime["is_chat_enable"] = (data.data?.isChat ?? 0) == 1;
+      realTime["is_video_call_enable"] = (data.data?.isVideo ?? 0) == 1;
+      realTime["is_live_enable"] = (data.data?.isLive ?? 0) == 1;
+      final HashMap<String, dynamic> deviceTokenNode = HashMap();
+      deviceTokenNode["deviceToken"] =
+          deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
+      firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
+      firebaseDatabase
+          .ref()
+          .child("$firebaseNodeUrl/realTime")
+          .update(realTime);
+      navigateToDashboard(data);
+    } else {
+      final FirebaseUserData userData = FirebaseUserData(
+        data.data?.name ?? "",
+        deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "",
+        data.data?.image ?? "",
+        RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0),
+      );
+      firebaseDatabase.ref().child(firebaseNodeUrl).set(userData.toJson());
+      navigateToDashboard(data);
+    }
+    return Future<void>.value();
   }
 
   navigateToDashboard(ResLogin data) async {

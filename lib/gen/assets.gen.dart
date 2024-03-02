@@ -758,6 +758,9 @@ class $AssetsImagesGen {
   AssetGenImage get poojaThankYou =>
       const AssetGenImage('assets/images/pooja_thank_you.png');
 
+  /// File path: assets/images/remedies.svg
+  SvgGenImage get remedies => const SvgGenImage('assets/images/remedies.svg');
+
   /// File path: assets/images/report.svg
   SvgGenImage get report => const SvgGenImage('assets/images/report.svg');
 
@@ -997,6 +1000,7 @@ class $AssetsImagesGen {
         poojaNewDate,
         poojaNewTime,
         poojaThankYou,
+        remedies,
         report,
         splashBg,
         starLive,
@@ -1109,6 +1113,10 @@ class $AssetsSvgGen {
   /// File path: assets/svg/deck_icon.svg
   SvgGenImage get deckIcon => const SvgGenImage('assets/svg/deck_icon.svg');
 
+  /// File path: assets/svg/delete_accout.svg
+  SvgGenImage get deleteAccout =>
+      const SvgGenImage('assets/svg/delete_accout.svg');
+
   /// File path: assets/svg/diamond.svg
   SvgGenImage get diamond => const SvgGenImage('assets/svg/diamond.svg');
 
@@ -1152,11 +1160,19 @@ class $AssetsSvgGen {
   /// File path: assets/svg/ic_check.svg
   SvgGenImage get icCheck => const SvgGenImage('assets/svg/ic_check.svg');
 
+  /// File path: assets/svg/ic_pooja_address.svg
+  SvgGenImage get icPoojaAddress =>
+      const SvgGenImage('assets/svg/ic_pooja_address.svg');
+
   /// File path: assets/svg/ic_sendMsg.svg
   SvgGenImage get icSendMsg => const SvgGenImage('assets/svg/ic_sendMsg.svg');
 
   /// File path: assets/svg/ic_un_check.svg
   SvgGenImage get icUnCheck => const SvgGenImage('assets/svg/ic_un_check.svg');
+
+  /// File path: assets/svg/icon _wallet_.svg
+  SvgGenImage get iconWallet =>
+      const SvgGenImage('assets/svg/icon _wallet_.svg');
 
   /// File path: assets/svg/kundali_header.svg
   SvgGenImage get kundaliHeader =>
@@ -1211,6 +1227,10 @@ class $AssetsSvgGen {
   SvgGenImage get remediesIcon =>
       const SvgGenImage('assets/svg/remedies_icon.svg');
 
+  /// File path: assets/svg/send_comment.svg
+  SvgGenImage get sendComment =>
+      const SvgGenImage('assets/svg/send_comment.svg');
+
   /// File path: assets/svg/silver.svg
   SvgGenImage get silver => const SvgGenImage('assets/svg/silver.svg');
 
@@ -1244,6 +1264,7 @@ class $AssetsSvgGen {
         caution,
         chatGift,
         deckIcon,
+        deleteAccout,
         diamond,
         disconnect,
         emptyBox1,
@@ -1257,8 +1278,10 @@ class $AssetsSvgGen {
         icAdd,
         icCall1,
         icCheck,
+        icPoojaAddress,
         icSendMsg,
         icUnCheck,
+        iconWallet,
         kundaliHeader,
         loginLogo,
         maximumOrderTimeIcon,
@@ -1274,6 +1297,7 @@ class $AssetsSvgGen {
         queue,
         rejoinChatIcon,
         remediesIcon,
+        sendComment,
         silver,
         switchCamera,
         videoCallEarning,
@@ -1330,10 +1354,16 @@ class $AssetsSvgaGen {
 class Assets {
   Assets._();
 
+  static const String accept = 'assets/accept.mp3';
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const AssetGenImage liveNewFollowerButton =
+      AssetGenImage('assets/live_new_follower_button.png');
   static const $AssetsLottieGen lottie = $AssetsLottieGen();
   static const $AssetsSvgGen svg = $AssetsSvgGen();
   static const $AssetsSvgaGen svga = $AssetsSvgaGen();
+
+  /// List of all assets
+  static List<dynamic> get values => [accept, liveNewFollowerButton];
 }
 
 class AssetGenImage {

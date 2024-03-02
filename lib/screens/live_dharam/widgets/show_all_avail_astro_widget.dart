@@ -69,7 +69,7 @@ class _ShowAllAvailAstroWidgetState extends State<ShowAllAvailAstroWidget> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
-          height: Get.height / 2.25,
+          height: Get.height / 2,
           width: Get.width,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
@@ -146,8 +146,8 @@ class _ShowAllAvailAstroWidgetState extends State<ShowAllAvailAstroWidget> {
               alignment: Alignment.center,
               children: <Widget>[
                 Container(
-                  height: 84,
-                  width: 84,
+                  height: 72,
+                  width: 72,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(50.0)),
                     border: Border.all(color: appColors.guideColor, width: 4),

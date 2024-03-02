@@ -2,6 +2,7 @@
 class Assets {
   Assets._();
 
+  static const String assetsAccept = 'assets/accept.mp3';
   static const String assetsImagesGaneshJi = 'assets/images/ganesh_ji.svg';
   static const String assetsLiveNewFollowerButton = 'assets/live_new_follower_button.png';
   static const String fontsPoppinsBold = 'assets/fonts/Poppins-Bold.ttf';
@@ -205,6 +206,7 @@ class Assets {
   static const String imagesPoojaNewDate = 'assets/images/pooja_new_date.png';
   static const String imagesPoojaNewTime = 'assets/images/pooja_new_time.png';
   static const String imagesPoojaThankYou = 'assets/images/pooja_thank_you.png';
+  static const String imagesRemedies = 'assets/images/remedies.svg';
   static const String imagesReport = 'assets/images/report.svg';
   static const String imagesSearchIcon = 'assets/images/Search_icon.svg';
   static const String imagesSplashBg = 'assets/images/splash_bg.png';
@@ -264,6 +266,7 @@ class Assets {
   static const String svgCaution = 'assets/svg/caution.svg';
   static const String svgChatGift = 'assets/svg/chat_gift.svg';
   static const String svgDeckIcon = 'assets/svg/deck_icon.svg';
+  static const String svgDeleteAccout = 'assets/svg/delete_accout.svg';
   static const String svgDiamond = 'assets/svg/diamond.svg';
   static const String svgDisconnect = 'assets/svg/disconnect.svg';
   static const String svgEmptyBox1 = 'assets/svg/empty-box 1.svg';
@@ -279,8 +282,10 @@ class Assets {
   static const String svgIcAdd = 'assets/svg/ic_add.svg';
   static const String svgIcCall1 = 'assets/svg/ic_call_1.svg';
   static const String svgIcCheck = 'assets/svg/ic_check.svg';
+  static const String svgIcPoojaAddress = 'assets/svg/ic_pooja_address.svg';
   static const String svgIcSendMsg = 'assets/svg/ic_sendMsg.svg';
   static const String svgIcUnCheck = 'assets/svg/ic_un_check.svg';
+  static const String svgIconWallet = 'assets/svg/icon _wallet_.svg';
   static const String svgKundaliHeader = 'assets/svg/kundali_header.svg';
   static const String svgLoginLogo = 'assets/svg/login_logo.svg';
   static const String svgMaximumOrderTimeIcon = 'assets/svg/maximum_order_time_icon.svg';

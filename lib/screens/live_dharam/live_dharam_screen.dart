@@ -31,6 +31,7 @@ import "package:divine_astrologer/screens/live_dharam/widgets/exit_wait_list_wid
 import "package:divine_astrologer/screens/live_dharam/widgets/follow_player.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/gift_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/more_options_for_mod_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
 import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
@@ -50,6 +51,8 @@ import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_ast
 import "package:divine_astrologer/screens/live_dharam/widgets/extend_time_widget.dart";
 import 'package:random_name_generator/random_name_generator.dart';
 
+//
+//
 //
 //
 //
@@ -333,7 +336,7 @@ class _LivePage extends State<LiveDharamScreen>
    *
    * total_hours_wasted_here = 1
   */
-  
+
   Future<void> engaging(WaitListModel currentCaller) async {
     WidgetsBinding.instance.endOfFrame.then(
       (_) async {
@@ -429,6 +432,7 @@ class _LivePage extends State<LiveDharamScreen>
                   timeStamp: DateTime.now().toString(),
                   fullGiftImage: "",
                   isBlockedCustomer: false,
+                  isMod: true,
                 );
                 await sendMessageToZego(model);
               } else {}
@@ -503,6 +507,7 @@ class _LivePage extends State<LiveDharamScreen>
       timeStamp: DateTime.now().toString(),
       fullGiftImage: "",
       isBlockedCustomer: _controller.isCustomerBlockedBool(),
+      isMod: false,
     );
     await sendMessageToZego(model);
     return Future<void>.value();
@@ -522,6 +527,7 @@ class _LivePage extends State<LiveDharamScreen>
       timeStamp: DateTime.now().toString(),
       fullGiftImage: "",
       isBlockedCustomer: _controller.isCustomerBlockedBool(),
+      isMod: false,
     );
     await sendMessageToZego(model);
     return Future<void>.value();
@@ -542,6 +548,7 @@ class _LivePage extends State<LiveDharamScreen>
         timeStamp: DateTime.now().toString(),
         fullGiftImage: "",
         isBlockedCustomer: _controller.isCustomerBlockedBool(),
+        isMod: _controller.isMod,
       );
       await sendMessageToZego(model);
     }
@@ -1478,6 +1485,7 @@ class _LivePage extends State<LiveDharamScreen>
   //         timeStamp: DateTime.now().toString(),
   //         fullGiftImage: item.fullGiftImage,
   //         isBlockedCustomer: _controller.isCustomerBlockedBool(),
+  //         isMod: false,
   //       );
   //       await sendMessageToZego(model0);
   //       await showHideTopBanner();
@@ -1488,140 +1496,171 @@ class _LivePage extends State<LiveDharamScreen>
   // }
 
   Widget inRoomMessage() {
-    return StreamBuilder<List<ZegoInRoomMessage>>(
-      stream: _zegoController.message.stream(),
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,
-      ) {
-        List<ZegoInRoomMessage> messages =
-            snapshot.data ?? <ZegoInRoomMessage>[];
-        messages = messages.reversed.toList();
-        return ListView.builder(
-          reverse: true,
-          shrinkWrap: true,
-          padding: EdgeInsets.zero,
-          itemCount:
-              messages.isNotEmpty && messages.length >= 5 ? 5 : messages.length,
-          controller: _scrollControllerForBottom,
-          itemBuilder: (BuildContext context, int index) {
-            final ZegoInRoomMessage message = messages[index];
-            final ZegoCustomMessage msg = receiveMessageToZego(message.message);
-            final bool isBlocked =
-                _controller.firebaseBlockUsersIds.contains(msg.userId);
-            final isLiveMonitoringTeam = msg.userName == "Live Monitoring Team";
-            return msg.type == 0
-                ? const SizedBox()
-                : Container(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(50.0),
-                      ),
-                      border: Border.all(
+    return SizedBox(
+      height: Get.height * 0.30,
+      child: StreamBuilder<List<ZegoInRoomMessage>>(
+        stream: _zegoController.message.stream(),
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,
+        ) {
+          List<ZegoInRoomMessage> messages =
+              snapshot.data ?? <ZegoInRoomMessage>[];
+          messages = messages.reversed.toList();
+          return ListView.builder(
+            reverse: true,
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            // itemCount:
+            //     messages.isNotEmpty && messages.length >= 5 ? 5 : messages.length,
+            itemCount: messages.length,
+            controller: _scrollControllerForBottom,
+            cacheExtent: 9999,
+            physics: const ScrollPhysics(),
+            itemBuilder: (BuildContext context, int index) {
+              final ZegoInRoomMessage message = messages[index];
+              final ZegoCustomMessage msg =
+                  receiveMessageToZego(message.message);
+              final bool isBlocked =
+                  _controller.firebaseBlockUsersIds.contains(msg.userId);
+              // final isLiveMonitoringTeam =
+              //     msg.userName == "Live Monitoring Team";
+              final isModerator = msg.isMod;
+              return msg.type == 0
+                  ? const SizedBox()
+                  : Container(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(50.0),
+                        ),
+                        border: Border.all(
+                          color: Colors.transparent,
+                        ),
                         color: Colors.transparent,
                       ),
-                      color: Colors.transparent,
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        SizedBox(
-                          height: 24,
-                          width: 24,
-                          child: CustomImageWidget(
-                            imageUrl: msg.avatar ?? "",
-                            rounded: true,
-                            typeEnum: TypeEnum.user,
+                      child: Row(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: CustomImageWidget(
+                              imageUrl: msg.avatar ?? "",
+                              rounded: true,
+                              typeEnum: TypeEnum.user,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 4),
-                        Flexible(
-                          child: Row(
-                            children: [
-                              Flexible(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      msg.userName ?? "",
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: isBlocked
-                                            ? Colors.red
-                                            : isLiveMonitoringTeam
-                                                ? appColors.guideColor
-                                                : Colors.white,
-                                        shadows: const [
-                                          Shadow(
-                                            color: Colors.black,
-                                            offset: Offset(1.0, 1.0),
-                                            blurRadius: 1.0,
-                                          ),
-                                        ],
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Text(
-                                      msg.message ?? "",
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: isBlocked
-                                            ? Colors.red
-                                            : isLiveMonitoringTeam
-                                                ? appColors.guideColor
-                                                : Colors.white,
-                                        shadows: const [
-                                          Shadow(
-                                            color: Colors.black,
-                                            offset: Offset(1.0, 1.0),
-                                            blurRadius: 1.0,
-                                          ),
-                                        ],
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              // _controller.isHost &&
-                              //         !_controller.currentCaller.isEngaded &&
-                              //         !isLiveMonitoringTeam
-                              _controller.isHost &&
-                                      !(_controller.orderModel.id ==
-                                          (msg.userId ?? "")) &&
-                                      !isLiveMonitoringTeam
-                                  ? SizedBox(
-                                      height: 24,
-                                      width: 24,
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.more_vert,
-                                          size: 16,
-                                          color: appColors.guideColor,
-                                        ),
-                                        onPressed: () async {
-                                          await moreOptionsPopup(
-                                            userId: msg.userId ?? "",
-                                            userName: msg.userName ?? "",
-                                            isBlocked: _controller.isBlocked(
-                                              id: int.parse(msg.userId ?? ""),
+                          const SizedBox(width: 4),
+                          Flexible(
+                            child: Row(
+                              children: [
+                                Flexible(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        msg.userName ?? "",
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: isBlocked
+                                              ? Colors.red
+                                              : isModerator
+                                                  ? appColors.guideColor
+                                                  : Colors.white,
+                                          shadows: const [
+                                            Shadow(
+                                              color: Colors.black,
+                                              offset: Offset(1.0, 1.0),
+                                              blurRadius: 1.0,
                                             ),
-                                          );
-                                        },
+                                          ],
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                    )
-                                  : const SizedBox(),
-                            ],
+                                      Text(
+                                        msg.message ?? "",
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: isBlocked
+                                              ? Colors.red
+                                              : isModerator
+                                                  ? appColors.guideColor
+                                                  : Colors.white,
+                                          shadows: const [
+                                            Shadow(
+                                              color: Colors.black,
+                                              offset: Offset(1.0, 1.0),
+                                              blurRadius: 1.0,
+                                            ),
+                                          ],
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                // _controller.isHost &&
+                                //         !_controller.currentCaller.isEngaded &&
+                                //         !isLiveMonitoringTeam
+                                moreOptionConditions(msg, isModerator)
+                                    ? SizedBox(
+                                        height: 24,
+                                        width: 24,
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.more_vert,
+                                            size: 16,
+                                            color: appColors.guideColor,
+                                          ),
+                                          onPressed: () async {
+                                            if (_controller.isHost) {
+                                              await moreOptionsPopup(
+                                                userId: msg.userId ?? "",
+                                                userName: msg.userName ?? "",
+                                                isBlocked:
+                                                    _controller.isBlocked(
+                                                  id: int.parse(
+                                                      msg.userId ?? ""),
+                                                ),
+                                              );
+                                            } else {
+                                              await moreOptionsForModPopup(
+                                                userId: msg.userId ?? "",
+                                                userName: msg.userName ?? "",
+                                                isBlocked: _controller
+                                                    .isCustomerBlockedBool(),
+                                              );
+                                            }
+                                          },
+                                        ),
+                                      )
+                                    : const SizedBox(),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-          },
-        );
-      },
+                        ],
+                      ),
+                    );
+            },
+          );
+        },
+      ),
     );
+  }
+
+  bool moreOptionConditions(ZegoCustomMessage msg, bool isModerator) {
+    final bool cond1 = msg.userId != _controller.userId;
+    final bool cond2 = !(_controller.orderModel.id == (msg.userId ?? ""));
+    final bool cond3 = !_controller.currentCaller.isEngaded;
+    final bool cond4 = msg.userId != _controller.liveId;
+
+    return _controller.isHost
+        ? cond1 && cond2 && cond3
+        : _controller.isMod
+            ? cond1 && cond2 && cond4
+            : false;
   }
 
   Widget inRoomMessageTop() {
@@ -2068,6 +2107,35 @@ class _LivePage extends State<LiveDharamScreen>
   //   return Future<void>.value();
   // }
 
+  // void sendCustomEventDataToMoEngage({required String type}) {
+  //   bool canSend = false;
+  //   String name = "";
+
+  //   switch (type) {
+  //     case "Video":
+  //       canSend = true;
+  //       name = "voip_video_calls";
+  //       break;
+  //     case "Audio":
+  //       canSend = true;
+  //       name = "voip_audio_calls";
+  //       break;
+  //     case "Private":
+  //       break;
+  //     default:
+  //       break;
+  //   }
+
+  //   if (canSend) {
+  //     MoEngage().sendCustomEventDataToMoEngage(
+  //       eventData: "abc",
+  //       eventName_: "eventName",
+  //       trackEvent: name,
+  //     );
+  //   } else {}
+  //   return;
+  // }
+
   // Future<void> callAstrologerPopup() async {
   //   await showCupertinoModalPopup(
   //     context: context,
@@ -2078,10 +2146,11 @@ class _LivePage extends State<LiveDharamScreen>
   //         details: _controller.details,
   //         onSelect: (String type) async {
   //           Get.back();
+  //           sendCustomEventDataToMoEngage(type: type);
   //           //
   //           // Exceptional Case Start
   //           //
-  //           _controller.isWaitingForCallAstrologerPopupResponse = true;
+  //           _controller.isWaitingForCallAstrologerPopupRes = true;
   //           //
   //           // Exceptional Case End
   //           //
@@ -2117,7 +2186,7 @@ class _LivePage extends State<LiveDharamScreen>
   //           //
   //           // Exceptional Case Start
   //           //
-  //           _controller.isWaitingForCallAstrologerPopupResponse = false;
+  //           _controller.isWaitingForCallAstrologerPopupRes = false;
   //           //
   //           // Exceptional Case End
   //           //
@@ -2294,6 +2363,54 @@ class _LivePage extends State<LiveDharamScreen>
                     successCallback: log,
                     failureCallback: log,
                   );
+                } else {}
+              },
+            );
+          },
+          isBlocked: isBlocked,
+        );
+      },
+    );
+    return Future<void>.value();
+  }
+
+  Future<void> moreOptionsForModPopup({
+    required String userId,
+    required String userName,
+    required bool isBlocked,
+  }) async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return MoreOptionsForModWidget(
+          onClose: Get.back,
+          isHost: _controller.isHost,
+          isMod: _controller.isMod,
+          onTapAskForBlockUnBlockUser: () async {
+            Get.back();
+            await blockUnblockPopup(
+              isAlreadyBeenBlocked: isBlocked,
+              performAction: () async {
+                if (userId != "0") {
+                  // Perma Block
+
+                  // await _controller.callblockCustomer(
+                  //   id: int.parse(userId),
+                  //   successCallBack: (String message) {
+                  //     successAndFailureCallBack(
+                  //       message: message,
+                  //       isForSuccess: true,
+                  //       isForFailure: false,
+                  //     );
+                  //   },
+                  //   failureCallBack: (String message) {
+                  //     successAndFailureCallBack(
+                  //       message: message,
+                  //       isForSuccess: false,
+                  //       isForFailure: true,
+                  //     );
+                  //   },
+                  // );
                 } else {}
               },
             );
@@ -2776,14 +2893,26 @@ class _LivePage extends State<LiveDharamScreen>
   // }
 
   void scrollDownForTop() {
-    final double maxScr = _scrollControllerForTop.position.maxScrollExtent;
-    _scrollControllerForTop.jumpTo(maxScr);
+    if (_scrollControllerForTop.hasClients) {
+      final double maxScr = _scrollControllerForTop.position.minScrollExtent;
+      _scrollControllerForTop.animateTo(
+        maxScr,
+        duration: const Duration(seconds: 1),
+        curve: Curves.easeIn,
+      );
+    } else {}
     return;
   }
 
   void scrollDownForBottom() {
-    final double maxScr = _scrollControllerForBottom.position.maxScrollExtent;
-    _scrollControllerForBottom.jumpTo(maxScr);
+    if (_scrollControllerForBottom.hasClients) {
+      final double maxScr = _scrollControllerForBottom.position.minScrollExtent;
+      _scrollControllerForBottom.animateTo(
+        maxScr,
+        duration: const Duration(seconds: 1),
+        curve: Curves.easeIn,
+      );
+    } else {}
     return;
   }
 
@@ -3909,8 +4038,21 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> sendKeyboardMesage(msg) async {
+    final bool hasBadWord = _controller.hasMessageContainsAnyBadWord(msg);
     final String text = _controller.algoForSendMessage(msg);
-    if (text.isEmpty) {
+    if (hasBadWord) {
+      successAndFailureCallBack(
+        message: "Bad words are restricted",
+        isForSuccess: false,
+        isForFailure: true,
+      );
+    } else if (text.isNotEmpty) {
+      successAndFailureCallBack(
+        message: "$text is restricted text",
+        isForSuccess: false,
+        isForFailure: true,
+      );
+    } else {
       final ZegoCustomMessage model = ZegoCustomMessage(
         type: 1,
         liveId: _controller.liveId,
@@ -3921,15 +4063,11 @@ class _LivePage extends State<LiveDharamScreen>
         timeStamp: DateTime.now().toString(),
         fullGiftImage: "",
         isBlockedCustomer: _controller.isCustomerBlockedBool(),
+        isMod: _controller.isMod,
       );
       await sendMessageToZego(model);
-    } else {
-      successAndFailureCallBack(
-        message: "$text is restricted text",
-        isForSuccess: false,
-        isForFailure: true,
-      );
     }
+
     FocusManager.instance.primaryFocus?.unfocus();
     scrollDownForTop();
     scrollDownForBottom();
@@ -3950,6 +4088,7 @@ class _LivePage extends State<LiveDharamScreen>
   //     timeStamp: DateTime.now().toString(),
   //     fullGiftImage: "",
   //     isBlockedCustomer: _controller.isCustomerBlockedBool(),
+  //     isMod: false,
   //   );
   //   await sendMessageToZego(model);
 

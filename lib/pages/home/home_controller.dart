@@ -20,6 +20,7 @@ import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
@@ -49,9 +50,26 @@ import '../../repository/performance_repository.dart';
 import '../../repository/user_repository.dart';
 
 class HomeController extends GetxController {
-  RxBool chatSwitch = false.obs;
-  RxBool callSwitch = false.obs;
-  RxBool videoSwitch = false.obs;
+  // RxBool chatSwitch = false.obs;
+  // RxBool callSwitch = false.obs;
+  // RxBool videoSwitch = false.obs;
+  // RxBool liveSwitch = false.obs;
+
+  // RxBool isCallEnable = false.obs;
+  // RxBool isChatEnable = false.obs;
+  // RxBool isVideoCallEnable = false.obs;
+  // RxBool isLiveEnable = false.obs;
+
+  RxBool chatSwitch = true.obs;
+  RxBool callSwitch = true.obs;
+  RxBool videoSwitch = true.obs;
+  RxBool liveSwitch = true.obs;
+
+  RxBool isCallEnable = true.obs;
+  RxBool isChatEnable = true.obs;
+  RxBool isVideoCallEnable = true.obs;
+  RxBool isLiveEnable = true.obs;
+
   double xPosition = 10.0;
   double yPosition = Get.height * 0.4;
   RxString chatSchedule = "".obs, callSchedule = "".obs, videoSchedule = "".obs;
@@ -128,6 +146,43 @@ class HomeController extends GetxController {
     getFeedbackData();
     tarotCardData();
     getUserImage();
+
+    final String path = "astrologer/${(userData.id ?? 0)}/realTime";
+    FirebaseDatabase.instance.ref().child(path).onValue.listen(
+      (event) async {
+        final DataSnapshot dataSnapshot = event.snapshot;
+
+        if (dataSnapshot.exists) {
+          if (dataSnapshot.value is Map<dynamic, dynamic>) {
+            Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+            map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+                as Map<dynamic, dynamic>;
+            print("Home Realtime DB Listener: $map");
+
+            final isCallSwitchRes = map["voiceCallStatus"] ?? 0;
+            callSwitch(isCallSwitchRes > 0);
+
+            final isChatSwitchRes = map["chatStatus"] ?? 0;
+            chatSwitch(isChatSwitchRes > 0);
+
+            final isVideoCallSwitchRes = map["videoCallStatus"] ?? 0;
+            videoSwitch(isVideoCallSwitchRes > 0);
+
+            final isCallEnableRes = map["is_call_enable"] ?? false;
+            isCallEnable(isCallEnableRes);
+
+            final isChatEnableRes = map["is_chat_enable"] ?? false;
+            isChatEnable(isChatEnableRes);
+
+            final isVideoCallEnableRes = map["is_video_call_enable"] ?? false;
+            isVideoCallEnable(isVideoCallEnableRes);
+
+            final isLiveEnableRes = map["is_live_enable"] ?? false;
+            isLiveEnable(isLiveEnableRes);
+          } else {}
+        } else {}
+      },
+    );
   }
 
   getUserImage() async {
@@ -544,31 +599,48 @@ class HomeController extends GetxController {
       "type": type,
       "role_id": 7,
       "device_token": preferenceService.getDeviceToken(),
-      // "is_chat": getBoolToString(type == 1 ? value : chatSwitch.value),
-      // "is_call": getBoolToString(type == 2 ? value : callSwitch.value),
-      // "is_video": getBoolToString(type == 3 ? value : videoSwitch.value)
     };
 
-    if (value) {
-      params["check_in"] = 1;
-    } else {
-      params["check_out"] = 1;
-    }
-
-    print("Dashboard:: send:: $params");
+    value ? params["check_in"] = 1 : params["check_out"] = 1;
 
     sessionTypeLoading.value = Loading.loading;
     try {
+      // UpdateSessionTypeResponse response =
+      //     await userRepository.astroOnlineAPIForLive(params);
+
       UpdateSessionTypeResponse response =
-          await userRepository.updateSessionTypeApi(params);
+          await userRepository.astroOnlineAPIForLive(
+        params: params,
+        successCallBack: (message) {
+          switchType.value = value;
+          socket.updateChatCallSocketEvent(
+            call: callSwitch.value ? "1" : "0",
+            chat: chatSwitch.value ? "1" : "0",
+            video: videoSwitch.value ? "1" : "0",
+          );
+          divineSnackBar(data: message);
+        },
+        failureCallBack: (message) {
+          switch (type) {
+            case 1:
+              chatSwitch(!chatSwitch.value);
+              break;
+            case 2:
+              callSwitch(!callSwitch.value);
+              break;
+            case 3:
+              videoSwitch(!videoSwitch.value);
+              break;
+            default:
+              break;
+          }
+          divineSnackBar(data: message ?? "");
+        },
+      );
+
+      print("response.data.toJson(): ${response?.toJson()}");
       if (response.statusCode == 200) {
-        switchType.value = value;
-        socket.updateChatCallSocketEvent(
-          call: callSwitch.value ? "1" : "0",
-          chat: chatSwitch.value ? "1" : "0",
-          video: videoSwitch.value ? "1" : "0",
-        );
-      }
+      } else {}
       update();
     } catch (error) {
       debugPrint("updateOfferType $error");

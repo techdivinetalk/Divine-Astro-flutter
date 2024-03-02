@@ -17,6 +17,7 @@ class LiveSharedPreferencesSingleton {
 
   final String _singleTarot = "singleTarot";
   final String _allTarot = "allTarot";
+  final String _badWordsList = "badWordsList";
 
   Future<void> init() async {
     _pref = await SharedPreferences.getInstance();
@@ -50,5 +51,19 @@ class LiveSharedPreferencesSingleton {
     final NewTarotCardModel res = NewTarotCardModel.fromJson(jsonMap);
     print("LiveSharedPreferencesSingleton:: getAllTarotCard():: $jsonMap");
     return res;
+  }
+
+  Future<bool> setBadWordsList({required List<String> values}) async {
+    final bool isSaved =
+        await _pref?.setStringList(_badWordsList, values) ?? false;
+    print("LiveSharedPreferencesSingleton:: setBadWordsList():: $values");
+    return Future<bool>.value(isSaved);
+  }
+
+  List<String> getBadWordsList() {
+    final List<String> values =
+        _pref?.getStringList(_badWordsList) ?? <String>[];
+    print("LiveSharedPreferencesSingleton:: getBadWordsList():: $values");
+    return values;
   }
 }

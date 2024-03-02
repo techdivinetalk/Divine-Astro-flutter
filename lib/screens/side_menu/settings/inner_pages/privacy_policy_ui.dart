@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PrivacyPolicyUI extends StatelessWidget {
    PrivacyPolicyUI({super.key});
@@ -39,7 +40,9 @@ class PrivacyPolicyUI extends StatelessWidget {
             return SingleChildScrollView(
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.h),
-                child: Html(data: snapshot.data!.data.privacyPolicy),
+                child: Html(data: snapshot.data!.data.privacyPolicy, onLinkTap: (url, attributes, element) {
+                  launchUrl(Uri.parse(url ?? ''));
+                },),
               ),
             );
           }

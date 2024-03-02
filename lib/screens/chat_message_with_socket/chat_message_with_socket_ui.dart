@@ -1,18 +1,17 @@
-import "dart:collection";
 import "dart:convert";
 import "dart:io";
 import "dart:ui";
 
 import "package:audio_waveforms/audio_waveforms.dart";
 import "package:divine_astrologer/common/app_textstyle.dart";
-import "package:divine_astrologer/common/cached_network_image.dart";
+
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/common/custom_widgets.dart";
 import "package:divine_astrologer/common/message_view.dart";
-import "package:divine_astrologer/common/permission_handler.dart";
+
 import "package:divine_astrologer/common/routes.dart";
-import "package:divine_astrologer/di/shared_preference_service.dart";
+
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/gen/assets.gen.dart";
 import "package:divine_astrologer/model/chat_offline_model.dart";
@@ -23,7 +22,7 @@ import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_html/flutter_html.dart";
+
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
 import "package:get/get.dart";
@@ -44,9 +43,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   Widget build(BuildContext context) {
     controller.setContext(context);
 
-
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: false,
       body: GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
         return Stack(
           children: [
@@ -170,9 +168,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                 ),
                 Obx(() {
                   return Visibility(
-                      visible: AppFirebaseService()
-                      .orderData
-                      .value["card"] != null,
+                      visible:
+                          AppFirebaseService().orderData.value["card"] != null,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
@@ -184,9 +181,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           ), // First container color
                           child: !controller.isCardVisible.value
                               ? Text(
-                                  "${AppFirebaseService()
-                                      .orderData
-                                      .value["customerName"]} is picking tarot cards...",
+                                  "${AppFirebaseService().orderData.value["customerName"]} is picking tarot cards...",
                                   maxLines: 2,
                                   textAlign: TextAlign.center,
                                   style: AppTextStyle.textStyle15(
@@ -340,34 +335,28 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               //         curve: Curves.easeOut)
                               //     : null;
                             },
-
                             onBackspacePressed: () {
                               _onBackspacePressed();
                             },
-
                             textEditingController: controller.messageController,
                             config: Config(
-                                )),
+                                backspaceColor: appColors.appRedColour,
+                                categoryIcons: const CategoryIcons(),
+                                initCategory: Category.RECENT,
+                                indicatorColor: appColors.appRedColour,
+                                iconColor: Colors.grey,
+                                iconColorSelected: appColors.appRedColour,
+                                recentTabBehavior: RecentTabBehavior.RECENT,
+                                emojiSizeMax: 32.0,
+                                verticalSpacing: 0,
+                                horizontalSpacing: 0,
+                                recentsLimit: 28,
+                                replaceEmojiOnLimitExceed: false,
+                                buttonMode: ButtonMode.MATERIAL)),
                       ),
                     ))
               ],
             ),
-            // ategoryViewConfig: CategoryViewConfig(
-            //     backspaceColor: appColors.appRedColour,
-            //     categoryIcons: CategoryIcons(),
-            //     initCategory: Category.RECENT,
-            //     indicatorColor: appColors.appRedColour,
-            //     iconColor: Colors.grey,
-            //     iconColorSelected: appColors.appRedColour,
-            //     recentTabBehavior:
-            //     RecentTabBehavior.RECENT),
-            // emojiViewConfig: const EmojiViewConfig(
-            //     emojiSizeMax: 32.0,
-            //     verticalSpacing: 0,
-            //     horizontalSpacing: 0,
-            //     recentsLimit: 28,
-            //     replaceEmojiOnLimitExceed: false,
-            //     buttonMode: ButtonMode.MATERIAL)
             // Obx(() => Visibility(
             //     visible: !controller.isDataLoad.value,
             //     child: const IgnorePointer(
