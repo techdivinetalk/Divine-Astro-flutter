@@ -1,18 +1,18 @@
-import "dart:collection";
+
 import "dart:convert";
 import "dart:io";
 import "dart:ui";
 
 import "package:audio_waveforms/audio_waveforms.dart";
 import "package:divine_astrologer/common/app_textstyle.dart";
-import "package:divine_astrologer/common/cached_network_image.dart";
+
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/common/custom_widgets.dart";
 import "package:divine_astrologer/common/message_view.dart";
-import "package:divine_astrologer/common/permission_handler.dart";
+
 import "package:divine_astrologer/common/routes.dart";
-import "package:divine_astrologer/di/shared_preference_service.dart";
+
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/gen/assets.gen.dart";
 import "package:divine_astrologer/model/chat_offline_model.dart";
@@ -23,13 +23,13 @@ import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_html/flutter_html.dart";
+
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
 import "package:get/get.dart";
 import "package:get/get_state_manager/get_state_manager.dart";
 import "package:lottie/lottie.dart";
-import "package:permission_handler/permission_handler.dart";
+
 
 import "package:voice_message_package/voice_message_package.dart";
 
@@ -349,7 +349,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             config: Config(
                                 categoryViewConfig: CategoryViewConfig(
                                     backspaceColor: appColors.appRedColour,
-                                    categoryIcons: CategoryIcons(),
+                                    categoryIcons: const CategoryIcons(),
                                     initCategory: Category.RECENT,
                                     indicatorColor: appColors.appRedColour,
                                     iconColor: Colors.grey,

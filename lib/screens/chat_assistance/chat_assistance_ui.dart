@@ -26,190 +26,193 @@ import 'chat_assistance_controller.dart';
 class ChatAssistancePage extends GetView<ChatAssistanceController> {
   ChatAssistancePage({super.key});
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   Rx<bool> isUSerTabSelected = true.obs;
 
   @override
   Widget build(BuildContext context) {
-    Get.put(ChatAssistanceController());
-    return GetBuilder<ChatAssistanceController>(builder: (controller) {
-      if (controller.loading == Loading.loading) {
-        return const Scaffold(body: Center(child: GenericLoadingWidget()));
-      }
-      if (controller.loading == Loading.loaded) {
-        return Scaffold(
-            appBar: appBar(),
-            body: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: SizedBox(
-                    child: Obx(
-                      () => Row(
-                        children: [
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                isUSerTabSelected.value = true;
-                                controller.getAssistantAstrologerList();
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.all(10),
-                                // Adjust padding as needed
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      color: Colors.blue,
-                                      // Color of the underline
-                                      width: isUSerTabSelected.value
-                                          ? 3.0
-                                          : 00, // Thickness of the underline
-                                    ),
+    // Get.put(ChatAssistanceController());
+    return Scaffold(
+      appBar: appBar(),
+      body: GetBuilder<ChatAssistanceController>(builder: (controller) {
+        if (controller.loading == Loading.loading) {
+          return const  Center(child: GenericLoadingWidget());
+        }
+        if (controller.loading == Loading.loaded) {
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                child: SizedBox(
+                  child: Obx(
+                        () => Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              isUSerTabSelected.value = true;
+                              controller.getAssistantAstrologerList();
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              // Adjust padding as needed
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.blue,
+                                    // Color of the underline
+                                    width: isUSerTabSelected.value
+                                        ? 3.0
+                                        : 00, // Thickness of the underline
                                   ),
                                 ),
-                                child: const Center(
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.person, // User icon
-                                        size: 30,
-                                      ),
-                                      SizedBox(width: 8),
-                                      // Provides a space between the icon and the text
-                                      Text(
-                                        "Users",
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
+                              ),
+                              child: const Center(
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.person, // User icon
+                                      size: 30,
+                                    ),
+                                    SizedBox(width: 8),
+                                    // Provides a space between the icon and the text
+                                    Text(
+                                      "Users",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                           ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                isUSerTabSelected.value = false;
-                                controller.getConsulation();
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.all(10),
-                                // Adjust padding as needed
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      color: Colors.black,
-                                      // Color of the underline
-                                      width: !isUSerTabSelected.value
-                                          ? 3.0
-                                          : 00, // Thickness of the underline
-                                    ),
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              isUSerTabSelected.value = false;
+                              controller.getConsulation();
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              // Adjust padding as needed
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.black,
+                                    // Color of the underline
+                                    width: !isUSerTabSelected.value
+                                        ? 3.0
+                                        : 00, // Thickness of the underline
                                   ),
                                 ),
-                                child: const Center(
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.folder, // User icon
-                                        size: 30,
-                                      ),
-                                      SizedBox(width: 8),
-                                      // Provides a space between the icon and the text
-                                      Text(
-                                        "User's Data",
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
+                              ),
+                              child: const Center(
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.folder, // User icon
+                                      size: 30,
+                                    ),
+                                    SizedBox(width: 8),
+                                    // Provides a space between the icon and the text
+                                    Text(
+                                      "User's Data",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Obx(() {
-                    if (isUSerTabSelected.value) {
-                      if (controller.chatAssistantAstrologerListResponse ==
-                              null ||
-                          controller
-                                  .chatAssistantAstrologerListResponse!.data ==
-                              null ||
-                          controller.chatAssistantAstrologerListResponse!.data!
-                              .data!.isEmpty) {
-                        return Center(
-                            child: SvgPicture.asset(
-                                'assets/svg/Group 129525.svg'));
-                      } else {
-                        return ListView.builder(
-                          padding: EdgeInsets.symmetric(vertical: 10.h),
-                          itemCount: (controller.searchData).isNotEmpty ||
-                                  controller.searchController.text.isNotEmpty
-                              ? controller.searchData.length
-                              : controller.chatAssistantAstrologerListResponse!
-                                  .data!.data!.length,
-                          itemBuilder: (context, index) {
-                            return ChatAssistanceTile(
-                              controller: controller,
-                              data: (controller.searchData).isNotEmpty ||
-                                      controller
-                                          .searchController.text.isNotEmpty
-                                  ? controller.searchData[index]
-                                  : controller
-                                      .chatAssistantAstrologerListResponse!
-                                      .data!
-                                      .data![index],
-                            );
-                          },
-                        );
-                      }
+              ),
+              Expanded(
+                child: Obx(() {
+                  if (isUSerTabSelected.value) {
+                    if (controller.chatAssistantAstrologerListResponse ==
+                        null ||
+                        controller
+                            .chatAssistantAstrologerListResponse!.data ==
+                            null ||
+                        controller.chatAssistantAstrologerListResponse!.data!
+                            .data!.isEmpty) {
+                      return Center(
+                          child: SvgPicture.asset(
+                              'assets/svg/Group 129525.svg'));
                     } else {
-                      if (controller.customerDetailsResponse == null ||
-                          controller.customerDetailsResponse!.data.isEmpty) {
-                        return Center(
-                          child: Text(
-                            'No Data found',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              color: appColors.black,
-                              fontFamily: FontFamily.metropolis,
-                            ),
-                          ),
-                        );
-                      } else {
-                        return ListView.builder(
-                          padding: EdgeInsets.symmetric(vertical: 10.h),
-                          itemCount: (controller.filteredUserData).isNotEmpty ||
-                                  controller.searchController.text.isNotEmpty
-                              ? controller.filteredUserData.length
-                              : controller
-                                      .customerDetailsResponse?.data.length ??
-                                  0,
-                          itemBuilder: (context, index) {
-                            return ChatAssistanceDataTile(
-                              data: (controller.filteredUserData).isNotEmpty ||
-                                      controller
-                                          .searchController.text.isNotEmpty
-                                  ? controller.filteredUserData[index]
-                                  : controller
-                                      .customerDetailsResponse!.data[index],
-                            );
-                          },
-                        );
-                      }
+                      return ListView.builder(
+                        padding: EdgeInsets.symmetric(vertical: 10.h),
+                        itemCount: (controller.searchData).isNotEmpty ||
+                            controller.searchController.text.isNotEmpty
+                            ? controller.searchData.length
+                            : controller.chatAssistantAstrologerListResponse!
+                            .data!.data!.length,
+                        itemBuilder: (context, index) {
+                          return ChatAssistanceTile(
+                            controller: controller,
+                            data: (controller.searchData).isNotEmpty ||
+                                controller
+                                    .searchController.text.isNotEmpty
+                                ? controller.searchData[index]
+                                : controller
+                                .chatAssistantAstrologerListResponse!
+                                .data!
+                                .data![index],
+                          );
+                        },
+                      );
                     }
-                  }),
-                )
-              ],
-            ));
-      }
-      return const SizedBox.shrink();
-    });
+                  } else {
+                    if (controller.customerDetailsResponse == null ||
+                        controller.customerDetailsResponse!.data.isEmpty) {
+                      return Center(
+                        child: Text(
+                          'No Data found',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            color: appColors.black,
+                            fontFamily: FontFamily.metropolis,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return ListView.builder(
+                        padding: EdgeInsets.symmetric(vertical: 10.h),
+                        itemCount: (controller.filteredUserData).isNotEmpty ||
+                            controller.searchController.text.isNotEmpty
+                            ? controller.filteredUserData.length
+                            : controller
+                            .customerDetailsResponse?.data.length ??
+                            0,
+                        itemBuilder: (context, index) {
+                          return ChatAssistanceDataTile(
+                            data: (controller.filteredUserData).isNotEmpty ||
+                                controller
+                                    .searchController.text.isNotEmpty
+                                ? controller.filteredUserData[index]
+                                : controller
+                                .customerDetailsResponse!.data[index],
+                          );
+                        },
+                      );
+                    }
+                  }
+                }),
+              )
+            ],
+          );
+        }
+        return  const Center(
+          child: Text("No data available"),
+        );
+      }),
+    );
   }
 
   PreferredSize appBar() {
