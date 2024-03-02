@@ -34,6 +34,7 @@ class MessageTemplateController extends GetxController {
   getMessageTemplatesLocally() async {
     final data = await sharedPreferencesInstance.getMessageTemplates();
     messageLocalTemplates = data;
+    print("message Template locally called ${messageLocalTemplates}");
     update();
   }
 
