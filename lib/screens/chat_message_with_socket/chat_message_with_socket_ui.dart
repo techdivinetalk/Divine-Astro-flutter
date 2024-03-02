@@ -1,4 +1,3 @@
-
 import "dart:convert";
 import "dart:io";
 import "dart:ui";
@@ -43,7 +42,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   @override
   Widget build(BuildContext context) {
     controller.setContext(context);
-
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -170,9 +168,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                 ),
                 Obx(() {
                   return Visibility(
-                      visible: AppFirebaseService()
-                      .orderData
-                      .value["card"] != null,
+                      visible:
+                          AppFirebaseService().orderData.value["card"] != null,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
@@ -184,9 +181,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           ), // First container color
                           child: !controller.isCardVisible.value
                               ? Text(
-                                  "${AppFirebaseService()
-                                      .orderData
-                                      .value["customerName"]} is picking tarot cards...",
+                                  "${AppFirebaseService().orderData.value["customerName"]} is picking tarot cards...",
                                   maxLines: 2,
                                   textAlign: TextAlign.center,
                                   style: AppTextStyle.textStyle15(
@@ -340,29 +335,24 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               //         curve: Curves.easeOut)
                               //     : null;
                             },
-
                             onBackspacePressed: () {
                               _onBackspacePressed();
                             },
-
                             textEditingController: controller.messageController,
                             config: Config(
-                                categoryViewConfig: CategoryViewConfig(
-                                    backspaceColor: appColors.appRedColour,
-                                    categoryIcons: const CategoryIcons(),
-                                    initCategory: Category.RECENT,
-                                    indicatorColor: appColors.appRedColour,
-                                    iconColor: Colors.grey,
-                                    iconColorSelected: appColors.appRedColour,
-                                    recentTabBehavior:
-                                        RecentTabBehavior.RECENT),
-                                emojiViewConfig: const EmojiViewConfig(
-                                    emojiSizeMax: 32.0,
-                                    verticalSpacing: 0,
-                                    horizontalSpacing: 0,
-                                    recentsLimit: 28,
-                                    replaceEmojiOnLimitExceed: false,
-                                    buttonMode: ButtonMode.MATERIAL))),
+                                backspaceColor: appColors.appRedColour,
+                                categoryIcons: const CategoryIcons(),
+                                initCategory: Category.RECENT,
+                                indicatorColor: appColors.appRedColour,
+                                iconColor: Colors.grey,
+                                iconColorSelected: appColors.appRedColour,
+                                recentTabBehavior: RecentTabBehavior.RECENT,
+                                emojiSizeMax: 32.0,
+                                verticalSpacing: 0,
+                                horizontalSpacing: 0,
+                                recentsLimit: 28,
+                                replaceEmojiOnLimitExceed: false,
+                                buttonMode: ButtonMode.MATERIAL)),
                       ),
                     ))
               ],
