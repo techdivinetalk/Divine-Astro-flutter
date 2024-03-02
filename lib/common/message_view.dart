@@ -278,7 +278,10 @@ class MessageView extends StatelessWidget {
                       children: [
                         Text(
                           chatMessage.message ?? "",
-                          style: AppTextStyle.textStyle14(),
+                          style: AppTextStyle.textStyle14(
+                              fontColor: chatMessage.msgType == "text2"
+                                  ? appColors.red
+                                  : appColors.black),
                         ),
                       ],
                     ),

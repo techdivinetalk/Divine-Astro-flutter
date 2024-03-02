@@ -98,7 +98,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   return true;
                                 },
                                 child: ListView.builder(
-                                  controller: controller.messgeScrollController,
+                                  // controller: controller.messgeScrollController,
                                   itemCount: controller.chatMessages.length,
                                   shrinkWrap: true,
                                   reverse: false,
