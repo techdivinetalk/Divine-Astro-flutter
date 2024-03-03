@@ -68,30 +68,30 @@ class SharedPreferenceService extends GetxService {
   }
 
 
-  Future saveChatAssistUnreadMessage() async {
-    final SharedPreferences sharedInstance =
-        await SharedPreferences.getInstance();
-
-    final encodedChatAssistList =
-        assistChatUnreadMessages.map((e) => jsonEncode(e)).toList();
-    await sharedInstance.setStringList(
-    assistChatUnreadkey, encodedChatAssistList);
-    print("called save unread message ${encodedChatAssistList} ${assistChatUnreadMessages}");
-  }
-
-  Future getChatAssistUnreadMessage() async {
-    final SharedPreferences sharedInstance =
-        await SharedPreferences.getInstance();
-
-    final localData = sharedInstance.getStringList(assistChatUnreadkey);
-
-    if (localData != null) {
-      assistChatUnreadMessages.value = [];
-      assistChatUnreadMessages.addAll(localData
-          .map((e) => AssistChatData.fromJson(jsonDecode(e)))
-          .toList());
-    }
-  }
+  // Future saveChatAssistUnreadMessage() async {
+  //   final SharedPreferences sharedInstance =
+  //       await SharedPreferences.getInstance();
+  //
+  //   final encodedChatAssistList =
+  //       assistChatUnreadMessages.map((e) => jsonEncode(e)).toList();
+  //   await sharedInstance.setStringList(
+  //   assistChatUnreadkey, encodedChatAssistList);
+  //   print("called save unread message ${encodedChatAssistList} ${assistChatUnreadMessages}");
+  // }
+  //
+  // Future getChatAssistUnreadMessage() async {
+  //   final SharedPreferences sharedInstance =
+  //       await SharedPreferences.getInstance();
+  //
+  //   final localData = sharedInstance.getStringList(assistChatUnreadkey);
+  //
+  //   if (localData != null) {
+  //     assistChatUnreadMessages.value = [];
+  //     assistChatUnreadMessages.addAll(localData
+  //         .map((e) => AssistChatData.fromJson(jsonDecode(e)))
+  //         .toList());
+  //   }
+  // }
 
   // Future addChatAssistUnreadMessage(AssistChatData data) async {
   //   final SharedPreferences sharedInstance =

@@ -68,9 +68,9 @@ class AppSocket {
         {"astroId": astroId, "userId": userId, "userType": userType});
   }
 
-  void userLeftCustChatAssist(String? astroId, String? userId, int userType) {
+  void userLeftCustChatAssist(String? astroId, String? userId) {
     socket?.emit(ApiProvider().astrologerLeftChatAssist,
-        {"astroId": astroId, "userId": userId, "userType": userType});
+        {"astroId": astroId, "userId": userId});
   }
 
   void userLeftListenChatAssist(void Function(dynamic) callback) {

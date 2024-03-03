@@ -63,6 +63,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                   ),
                                   const SizedBox(height: 10),
                                   BottomNavigationBar(
+
                                     backgroundColor: appColors.white,
                                     type: BottomNavigationBarType.fixed,
                                     selectedFontSize: 10,
@@ -219,6 +220,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                     onTap: (value) {
                                       print("tap working");
                                       controller.selectedIndex.value = value;
+                                      dasboardCurrentIndex(value);
                                       /* if (controller.selectedIndex.value == 2) {
                                        // Get.toNamed(RouteName.orderHistory);
                                       } else {

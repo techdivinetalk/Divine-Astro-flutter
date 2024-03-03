@@ -296,60 +296,86 @@ class ChatAssistanceTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () {
-        Get.toNamed(RouteName.chatMessageUI, arguments: data);
-      },
-      leading: ClipRRect(
-          borderRadius: BorderRadius.circular(50.r),
-          child: Container(
-            decoration: BoxDecoration(
-                shape: BoxShape.circle, color: appColors.guideColor),
-            height: 50.w,
-            width: 50.w,
-            child: LoadImage(
-              imageModel: ImageModel(
-                assetImage: false,
-                placeHolderPath: Assets.images.defaultProfile.path,
-                imagePath: (data.image ?? '').startsWith(
-                        'https://divinenew-prod.s3.ap-south-1.amazonaws.com/')
-                    ? data.image ?? ''
-                    : "${preferenceService.getAmazonUrl()}/${data.image ?? ''}",
-                loadingIndicator: SizedBox(
-                  height: 25.h,
-                  width: 25.w,
-                  child: CircularProgressIndicator(
-                    color: appColors.guideColor,
-                    strokeWidth: 2,
+    return Obx(
+            () {
+              print("data from api ${data.toJson()}");
+              late AssistChatData element;
+              bool newMessageFromlist = false;
+              if (assistChatUnreadMessages.isNotEmpty) {
+                element = assistChatUnreadMessages.lastWhere((element) {
+                  return (element.astrologerId == data.id);
+                });
+
+                newMessageFromlist = element.message.toString() != data.lastMessage;
+                if(newMessageFromlist){
+                  data.lastMessage = element.message.toString();
+                }
+                data.unreadMessage =
+                    (data.unreadMessage ?? 0) + (userUnreadMessages(data.id ?? 0));
+                assistChatUnreadMessages.removeWhere((message) =>
+                message.astrologerId.toString() == data.id.toString());
+              }
+        return ListTile(
+          onTap: () {
+            if (assistChatUnreadMessages.isNotEmpty) {
+              assistChatUnreadMessages.removeWhere((message) =>
+              message.astrologerId.toString() == data.id.toString());
+            }
+            Get.toNamed(RouteName.chatMessageUI, arguments: data)
+                ?.then((value) {
+              return controller.getAssistantAstrologerList();
+            });
+
+          },
+          leading: ClipRRect(
+              borderRadius: BorderRadius.circular(50.r),
+              child: Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle, color: appColors.guideColor),
+                height: 50.w,
+                width: 50.w,
+                child: LoadImage(
+                  imageModel: ImageModel(
+                    assetImage: false,
+                    placeHolderPath: Assets.images.defaultProfile.path,
+                    imagePath: (data.image ?? '').startsWith(
+                            'https://divinenew-prod.s3.ap-south-1.amazonaws.com/')
+                        ? data.image ?? ''
+                        : "${preferenceService.getAmazonUrl()}/${data.image ?? ''}",
+                    loadingIndicator: SizedBox(
+                      height: 25.h,
+                      width: 25.w,
+                      child: CircularProgressIndicator(
+                        color: appColors.guideColor,
+                        strokeWidth: 2,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          )),
-      title: CustomText(
-        data.name ?? '',
-        fontSize: 16.sp,
-        fontWeight: FontWeight.w600,
-      ),
-      subtitle: Row(
-        children: [
-          Expanded(
-            child: lastMessage(data.msgType ?? MsgType.text),
+              )),
+          title: CustomText(
+            data.name ?? '',
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
           ),
-        ],
-      ),
-      trailing: userUnreadMessages(data.id ?? 0) > 0
-          ? CircleAvatar(
-              radius: 10.r,
-              backgroundColor: appColors.guideColor,
-              child: CustomText(
-                userUnreadMessages(data.id ?? 0).toString(),
-                fontSize: 10.sp,
-                fontWeight: FontWeight.w700,
-                fontColor: appColors.brown,
-              ),
-            )
-          : const SizedBox(),
+          subtitle: Expanded(
+            child: lastMessage(
+                data.msgType ?? MsgType.text),
+          ),
+          trailing: (data.unreadMessage??0) > 0
+              ? CircleAvatar(
+            radius: 10.r,
+            backgroundColor: appColors.guideColor,
+            child: CustomText(
+              data.unreadMessage.toString(),
+              fontSize: 10.sp,
+              fontWeight: FontWeight.w700,
+              fontColor: appColors.brown,
+            ),
+          )
+              : const SizedBox(),
+        );
+      }
     );
   }
 
@@ -461,12 +487,12 @@ class ChatAssistanceTile extends StatelessWidget {
   }
 
   int userUnreadMessages(int userId) {
-    final allUnreadMessages = assistChatUnreadMessages;
-    if (allUnreadMessages.isNotEmpty) {
-      allUnreadMessages.removeWhere(
-          (element) => element['']      .toString() != userId.toString());
+    final myUnreadMessages = [];
+    if (assistChatUnreadMessages.isNotEmpty) {
+      myUnreadMessages.addAll(assistChatUnreadMessages
+          .where((element) => element.astrologerId == userId));
     }
-    return allUnreadMessages.length;
+    return  myUnreadMessages.length;
   }
 }
 

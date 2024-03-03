@@ -20,10 +20,12 @@ const yourServerSecret = '89ceddc6c59909af326ddb7209cb1c16';
 RxList assistChatNewMsg = [].obs;
 RxInt chatAssistantCurrentUserId = 0.obs;
 RxInt walletBalance = 0.obs;
+RxList<AssistChatData> assistChatUnreadMessages = <AssistChatData>[].obs;
 
 RxString userImage = ''.obs;
 
-RxList assistChatUnreadMessages = [].obs;
+
+RxInt dasboardCurrentIndex = 0.obs;
 
 const userChatData = "userChatData";
 RxInt currentChatUserId = 8693.obs;

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
@@ -41,7 +42,7 @@ class ChatMessageSupportUI extends StatefulWidget {
 class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
   ChatMessageController controller = Get.find();
 
-
+Timer? timer;
   updateFirebaseToken() async {
     String? newtoken = await FirebaseMessaging.instance.getToken();
     final data = await AppFirebaseService()
@@ -67,11 +68,15 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
       controller.update();
        chatAssistantCurrentUserId(controller.args?.id);
       updateFirebaseToken();
+      controller.socketReconnect();
       controller.getAssistantChatList();
       controller.userjoinedChatSocket();
       controller.listenjoinedChatSocket();
       controller.getMessageTemplatesLocally();
       controller.scrollToBottomFunc();
+      timer = Timer.periodic(Duration(minutes: 5), (timer) {
+        controller.socketReconnect();
+      });
 
       FirebaseMessaging.instance.onTokenRefresh.listen((newtoken) {
         AppFirebaseService()
@@ -103,6 +108,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                     //         responseMsg["chatId"] != ''&& responseMsg["chatId"]=='undefined'
                     //     ? int.parse(responseMsg["chatId"])
                     //     : null,
+                    id: int.parse(responseMsg?["chatId"].toString()??''),
                     isSuspicious: 0,
                     suggestedRemediesId:
                         int.parse(responseMsg['suggestedRemediesId'] ?? '0'),
@@ -180,12 +186,12 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
     // TODO: implement dispose
     controller.isCustomerOnline = false.obs;
     controller.chatMessageList.clear();
-    controller.userjoinedChatSocket();
-    controller.listenjoinedChatSocket();
+
     controller.processedPages.clear();
     controller.currentPage(1);
     controller.userleftChatSocket();
     chatAssistantCurrentUserId(0);
+    timer?.cancel();
     super.dispose();
   }
 

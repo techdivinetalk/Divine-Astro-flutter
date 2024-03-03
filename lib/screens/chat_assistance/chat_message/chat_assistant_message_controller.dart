@@ -53,6 +53,7 @@ class ChatMessageController extends GetxController {
   File? image;
   final ImagePicker picker = ImagePicker();
   XFile? pickedFile;
+  final socket = AppSocket();
   Rx<bool> isRecording = false.obs;
   RxMap selectedVoucher = {}.obs;
   List<Map> voucherList = [
@@ -91,13 +92,21 @@ class ChatMessageController extends GetxController {
     // readUnreadMessages();
     isCustomerOnline = false.obs;
     chatMessageList.clear();
-    userjoinedChatSocket();
-    listenjoinedChatSocket();
     processedPages.clear();
     userleftChatSocket();
     currentPage(1);
     super.dispose();
   }
+
+  socketReconnect(){
+    print("called socketReconnect ${socket.socket?.disconnected}");
+    if(socket.socket?.disconnected==true){
+      socket.socket
+        ?..disconnect()
+        ..connect();
+    }
+  }
+
   //
   // @override
   // void onReady() {
@@ -139,7 +148,7 @@ class ChatMessageController extends GetxController {
 
   userleftChatSocket() {
     appSocket.userLeftCustChatAssist(
-        userData?.id.toString(), args?.id.toString(), 0);
+        userData?.id.toString(), args?.id.toString());
   }
 
   userleftChatSocketListen() {

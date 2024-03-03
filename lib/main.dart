@@ -84,8 +84,35 @@ Future<void> main() async {
       print('Message data: ${message.data['userid']}');
       print('Message data: ${message.data['sender_id']}');
     } else if (message.data["type"] == "8") {
-      print('Message data:- ${MiddleWare.instance.currentPage}');
-      print("chat assist realtime notification with data ${message.data}");
+      if (dasboardCurrentIndex.value == 2) {
+        final responseMsg = message.data;
+        assistChatUnreadMessages([
+          ...assistChatUnreadMessages,
+          AssistChatData(
+              message: responseMsg?["message"],
+              id: int.parse(responseMsg?["chatId"].toString()??''),
+              astrologerId:
+              int.parse(responseMsg?["sender_id"].toString() ?? ''),
+              createdAt: DateTime.parse(responseMsg?["created_at"])
+                  .millisecondsSinceEpoch
+                  .toString(),
+              isSuspicious: 0,
+              suggestedRemediesId:
+              int.parse(responseMsg?["suggestedRemediesId"] ?? "0"),
+              isPoojaProduct: responseMsg?['is_pooja_product'].toString() == '1'
+                  ? true
+                  : false,
+              productId: responseMsg?["product_id"].toString(),
+              shopId: responseMsg?["shop_id"].toString(),
+              sendBy: SendBy.astrologer,
+              msgType: responseMsg?['msg_type'] != null
+                  ? msgTypeValues.map[responseMsg?["msg_type"]]
+                  : MsgType.text,
+              seenStatus: SeenStatus.received,
+              customerId: int.parse(responseMsg?["userid"] ?? 0))
+        ]);
+        return;
+      }
       if (MiddleWare.instance.currentPage == RouteName.chatMessageUI &&
           chatAssistantCurrentUserId.value.toString() ==
               message.data['sender_id'].toString()) {
@@ -95,7 +122,7 @@ Future<void> main() async {
         // sendBroadcast(
         //     BroadcastMessage(name: "chatAssist", data: {'msg': message.data}));
       } else {
-        assistChatUnreadMessages([...assistChatUnreadMessages, message.data]);
+        // assistChatUnreadMessages([...assistChatUnreadMessages, message.data]);
         switch (message.data['msg_type']) {
           case "0":
             showNotification(message.data["title"], message.data["message"],
@@ -158,7 +185,6 @@ Future<void> main() async {
   });
 }
 
-
 //conditions to update firebase token by dev-chetan
 void checkIfTokenUpdated() {
   FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
@@ -216,6 +242,7 @@ Future<void> initServices() async {
   await Get.putAsync(() => FirebaseNetworkService().init());
   await Hive.initFlutter();
 }
+
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -307,12 +334,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed || Platform.isAndroid) {
       print("resumed state called");
-      SharedPreferenceService().getChatAssistUnreadMessage();
+      // SharedPreferenceService().getChatAssistUnreadMessage();
     }
     if (state == AppLifecycleState.hidden ||
         state == AppLifecycleState.inactive) {
       print("hidden state called");
-      SharedPreferenceService().saveChatAssistUnreadMessage();
+      // SharedPreferenceService().saveChatAssistUnreadMessage();
     }
   }
 

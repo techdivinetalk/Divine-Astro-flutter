@@ -1,6 +1,7 @@
 
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:get/get.dart';
 
 import '../../app_socket/app_socket.dart';
@@ -15,13 +16,11 @@ class ChatAssistanceController extends GetxController {
   ChatAssistantAstrologerListResponse? chatAssistantAstrologerListResponse;
   CustomerDetailsResponse? customerDetailsResponse;
   Loading loading = Loading.initial;
-  RxList <AssistChatData> unreadMessageList = <AssistChatData>[].obs;
   RxList searchData = [].obs;
   RxList filteredUserData = [].obs;
   final appSocket = AppSocket();
 
   RxBool isSearchEnable = RxBool(false);
-
   RxBool keyboardActive = false.obs;
   final searchController = TextEditingController();
 
@@ -30,17 +29,20 @@ class ChatAssistanceController extends GetxController {
     super.onInit();
 
     getAssistantAstrologerList();
-    getUnreadMessage();
-    // listenSocket();
+
+    update();
   }
 
   @override
   void onReady() {
     // TODO: implement onReady
     super.onReady();
-    getUnreadMessage();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
 
   // void listenSocket() {
@@ -60,18 +62,18 @@ class ChatAssistanceController extends GetxController {
     unreadMessageList.value = localDataList;
     update();
   }*/
-
-  void getUnreadMessage() async {
-    final localDataList =
-    await SharedPreferenceService().getChatAssistUnreadMessage();
-    /// Check if localDataList is null before accessing isEmpty
-    if (localDataList == null || localDataList.isEmpty) {
-      return;
-    }
-    print("data present: ");
-    unreadMessageList.value = localDataList;
-    update();
-  }
+  //
+  // void getUnreadMessage() async {
+  //   final localDataList =
+  //   // await SharedPreferenceService().getChatAssistUnreadMessage();
+  //   /// Check if localDataList is null before accessing isEmpty
+  //   if (localDataList == null || localDataList.isEmpty) {
+  //     return;
+  //   }
+  //   print("data present: ");
+  //   unreadMessageList.value = localDataList;
+  //   update();
+  // }
 
 
   Future<void> getAssistantAstrologerList() async {
