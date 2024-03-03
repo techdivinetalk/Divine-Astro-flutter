@@ -66,7 +66,6 @@ Future<void> main() async {
   await GetStorage.init();
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print("pushNotification1");
-    print('Message data: ${message.data}');
     print('Message data-: ${message.data["type"] == "1"}');
     print(
         'Message data-: ${MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI}');
@@ -76,11 +75,14 @@ Future<void> main() async {
           message.data['type'], message.data);
       HashMap<String, dynamic> updateData = HashMap();
       updateData[message.data["chatId"]] = 1;
+      print('Message data-:-users ${message.data}');
       FirebaseDatabase.instance
-          .ref("astrologer")
+          .ref("user")
           .child(
               "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}")
           .update(updateData);
+      print('Message data: ${message.data['userid']}');
+      print('Message data: ${message.data['sender_id']}');
     } else if (message.data["type"] == "8") {
       print('Message data:- ${MiddleWare.instance.currentPage}');
       print("chat assist realtime notification with data ${message.data}");

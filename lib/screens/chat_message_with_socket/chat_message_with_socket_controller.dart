@@ -38,6 +38,7 @@ import "../../common/app_exception.dart";
 import "../../common/ask_for_gift_bottom_sheet.dart";
 import "../../common/common_functions.dart";
 import "../../common/show_permission_widget.dart";
+import "../../di/api_provider.dart";
 import "../../firebase_service/firebase_service.dart";
 import "../../model/astrologer_gift_response.dart";
 import "../../model/chat/ReqCommonChat.dart";
@@ -492,6 +493,11 @@ class ChatMessageWithSocketController extends GetxController
   void checkIsCustomerJoinedPrivateChat() {
     socket.isCustomerJoinedChat((data) {
       debugPrint("Yes customer joined chat successfully $data");
+      socket.startAstroCustumerSocketEvent(
+        orderId: AppFirebaseService().orderData.value["orderId"].toString(),
+        userId: AppFirebaseService().orderData.value["userId"],
+      );
+      debugPrint("emited Data $data");
       chatStatus("Online");
     });
   }

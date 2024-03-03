@@ -607,7 +607,6 @@ class HomeController extends GetxController {
     try {
       // UpdateSessionTypeResponse response =
       //     await userRepository.astroOnlineAPIForLive(params);
-
       UpdateSessionTypeResponse response =
           await userRepository.astroOnlineAPIForLive(
         params: params,
