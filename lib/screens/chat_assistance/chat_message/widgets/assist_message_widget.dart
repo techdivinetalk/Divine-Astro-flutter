@@ -135,13 +135,23 @@ class AssistMessageView extends StatelessWidget {
     return Column(
       children: [
         // unreadMessageView()
+        if (index == 0)
+          dayWidget(
+              currentMsgDate: currentMsgDate,
+              nextMsgDate: nextMsgDate,
+              isToday: (DateTime.now().day - currentMsgDate.day) == 0,
+              isYesterday: (DateTime.now().day - currentMsgDate.day) == 1,
+              differenceOfDays: 1),
+
         messageWidget,
-        dayWidget(
-            currentMsgDate: currentMsgDate,
-            nextMsgDate: nextMsgDate,
-            isToday: isToday,
-            isYesterday: isYesterday,
-            differenceOfDays: differenceOfDays),
+
+        if (index != 0)
+          dayWidget(
+              currentMsgDate: currentMsgDate,
+              nextMsgDate: nextMsgDate,
+              isToday: isToday,
+              isYesterday: isYesterday,
+              differenceOfDays: differenceOfDays),
       ],
     );
   }
@@ -163,12 +173,13 @@ class AssistMessageView extends StatelessWidget {
             children: [
               GetBuilder<ChatMessageController>(builder: (controller) {
                 return Align(
-                  alignment:   yourMessage ? Alignment.centerRight : Alignment.centerLeft,
+                  alignment: yourMessage
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 40),
                     child: Container(
                       width: 300,
-
                       decoration: BoxDecoration(
                           color: appColors.white,
                           borderRadius: BorderRadius.circular(10)),
@@ -200,7 +211,8 @@ class AssistMessageView extends StatelessWidget {
                           ),
                           const SizedBox(height: 10),
                           Text("Status : Used",
-                              style: TextStyle(color: appColors.grey, fontSize: 10))
+                              style: TextStyle(
+                                  color: appColors.grey, fontSize: 10))
                         ],
                       ),
                     ),
@@ -575,15 +587,18 @@ class AssistMessageView extends StatelessWidget {
       onTap: () {
         print(
             "data from page ${chatMessage.suggestedRemediesId} ${chatMessage.isPoojaProduct} ${chatMessage.customerId}");
-        if(chatMessage.isPoojaProduct??false){
-          Get.toNamed(RouteName.poojaDharamDetailsScreen,
-              arguments: {'detailOnly':true,"isSentMessage": true,'data':int.parse(chatMessage.productId ?? '0')});
-        }else{
-        Get.toNamed(RouteName.categoryDetail, arguments: {
-          "productId": chatMessage.productId.toString(),
-          "isSentMessage": true,
-          "customerId": chatMessage.customerId,
-        });
+        if (chatMessage.isPoojaProduct ?? false) {
+          Get.toNamed(RouteName.poojaDharamDetailsScreen, arguments: {
+            'detailOnly': true,
+            "isSentMessage": true,
+            'data': int.parse(chatMessage.productId ?? '0')
+          });
+        } else {
+          Get.toNamed(RouteName.categoryDetail, arguments: {
+            "productId": chatMessage.productId.toString(),
+            "isSentMessage": true,
+            "customerId": chatMessage.customerId,
+          });
         }
       },
       child: SizedBox(
@@ -606,7 +621,7 @@ class AssistMessageView extends StatelessWidget {
                     child: Image.asset('assets/svg/Group 128714.png'),
                   ),
                   title: CustomText(
-                    "You have suggested a ${ chatMessage.isPoojaProduct??false? "Pooja":"product"}",
+                    "You have suggested a ${chatMessage.isPoojaProduct ?? false ? "Pooja" : "product"}",
                     fontSize: 14.sp,
                     maxLines: 2,
                     fontWeight: FontWeight.w600,

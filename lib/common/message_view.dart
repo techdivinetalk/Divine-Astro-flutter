@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:voice_message_package/voice_message_package.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -19,6 +20,7 @@ import 'dart:ui';
 class MessageView extends StatelessWidget {
   final int index;
   final ChatMessage chatMessage;
+  final ChatMessage nextChatMessage;
   final String userName;
   final bool yourMessage;
   final int? unreadMessage;
@@ -28,12 +30,23 @@ class MessageView extends StatelessWidget {
     required this.index,
     required this.userName,
     required this.chatMessage,
+    required this.nextChatMessage,
     required this.yourMessage,
     this.unreadMessage,
   });
 
+
+
   Widget buildMessageView(
       BuildContext context, ChatMessage chatMessage, bool yourMessage) {
+    print("message Detail $chatMessage");
+    // final currentMsgDate = DateTime.fromMillisecondsSinceEpoch(
+    //     int.parse(chatMessage.createdAt ?? '0'));
+    // final nextMsgDate = DateTime.fromMillisecondsSinceEpoch(
+    //     int.parse(nextChatMessage.createdAt ?? '0'));
+    // final differenceOfDays = nextMsgDate.day - currentMsgDate.day;
+    // final isToday = (DateTime.now().day - currentMsgDate.day) == 1;
+    // final isYesterday = (DateTime.now().day - currentMsgDate.day) == 2;
     Widget messageWidget;
     print("chat Message:: ${chatMessage.msgType}");
     switch (chatMessage.msgType) {
@@ -68,16 +81,60 @@ class MessageView extends StatelessWidget {
     }
 
     // Conditionally add unreadMessageView() based on chat
-    if (chatMessage.id == unreadMessage) {
+
       return Column(
         children: [
-          unreadMessageView(),
+          if (chatMessage.id == unreadMessage)
+            unreadMessageView(),
+          // if (index == 0)
+          //   dayWidget(
+          //       currentMsgDate: currentMsgDate,
+          //       nextMsgDate: nextMsgDate,
+          //       isToday: (DateTime.now().day - currentMsgDate.day) == 0,
+          //       isYesterday: (DateTime.now().day - currentMsgDate.day) == 1,
+          //       differenceOfDays: 1),
+
           messageWidget,
+          // if (index != 0)
+          //   dayWidget(
+          //       currentMsgDate: currentMsgDate,
+          //       nextMsgDate: nextMsgDate,
+          //       isToday: (DateTime.now().day - currentMsgDate.day) == 0,
+          //       isYesterday: (DateTime.now().day - currentMsgDate.day) == 1,
+          //       differenceOfDays: 1),
+
         ],
       );
-    } else {
-      return messageWidget;
+
+  }
+
+  Widget dayWidget(
+      {required DateTime currentMsgDate,
+        required DateTime nextMsgDate,
+        required bool isToday,
+        required bool isYesterday,
+        required int differenceOfDays}) {
+    if (differenceOfDays >= 1) {
+      return Align(
+        alignment: Alignment.center,
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 25),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: appColors.guideColor),
+          child: Text(
+            isToday
+                ? 'Today'
+                : isYesterday
+                ? 'Yesterday'
+                : '${DateFormat('EEEE ,dd MMMM').format(nextMsgDate)}',
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+          ),
+        ),
+      );
     }
+    return const SizedBox.shrink();
   }
 
   @override
@@ -392,6 +449,7 @@ class MessageView extends StatelessWidget {
 
   Widget giftSendUi(BuildContext context, ChatMessage chatMessage,
       bool yourMessage, String customerName) {
+    print("giftsend called");
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(

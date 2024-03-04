@@ -180,7 +180,7 @@ class SubProductUi extends GetView<SubProductController> {
                     },
                     child: Assets.images.searchIcon.svg()),
                 hintText: '${'search'.tr}...',
-                suffixIconPadding: 0,
+                // suffixIconPadding: 0,
               ))),
               SizedBox(width: 20.w)
             ],

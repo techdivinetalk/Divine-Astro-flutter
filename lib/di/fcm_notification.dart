@@ -14,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../common/common_functions.dart';
 import '../model/chat_assistant/chat_assistant_astrologer_response.dart';
@@ -140,6 +141,15 @@ void onDidReceiveNotificationResponse(
     //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
     // // if(payloadMap["type"] == "2") {
     print("payload map type ${payloadMap}");
+    if (payloadMap["type"] == "1") {
+      final senderId = payloadMap["sender_id"];
+      final userId = AppFirebaseService().orderData.value["userId"];
+      if (senderId.toString() == userId.toString()) {
+        if (!await launchUrl(Uri.parse(payloadMap["url"].toString()))) {
+          throw Exception('Could not launch ${payloadMap["url"]}');
+        }
+      }
+    }
     if (payloadMap["type"] == "8") {
       Get.toNamed(RouteName.chatMessageUI,
           arguments: DataList(

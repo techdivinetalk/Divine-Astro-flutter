@@ -213,30 +213,36 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
   PreferredSize appBar() {
     return PreferredSize(
         preferredSize: AppBar().preferredSize,
-        child: Obx(() => controller.isSearchEnable.value
-            ? searchWidget(appColors.guideColor)
-            : AppBar(
-                surfaceTintColor: appColors.guideColor,
-                title: Text(
-                  "chatAssistance".tr,
-                  style: const TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.white,
-                  ),
-                ),
-                actions: [
-                  SvgIconButton(
-                      onPressed: () {
-                        controller.isSearchEnable(true);
-                      },
-                      svg: Assets.images.searchIcon.svg(
+        child: Obx(() => Container(
+          color: appColors.guideColor,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 100),
+            child: controller.isSearchEnable.value
+                ? searchWidget(appColors.guideColor)
+                : AppBar(
+                    surfaceTintColor: appColors.guideColor,
+                    title: Text(
+                      "chatAssistance".tr,
+                      style: const TextStyle(
+                        fontSize: 14.0,
                         color: Colors.white,
-                      )),
-                  SizedBox(width: 10.w)
-                ],
-                backgroundColor: appColors.guideColor,
-                elevation: 0,
-              )));
+                      ),
+                    ),
+                    actions: [
+                      SvgIconButton(
+                          onPressed: () {
+                            controller.isSearchEnable(true);
+                          },
+                          svg: Assets.images.searchIcon.svg(
+                            color: Colors.white,
+                          )),
+                      SizedBox(width: 10.w)
+                    ],
+                    backgroundColor: appColors.guideColor,
+                    elevation: 0,
+                  ),
+          ),
+        )));
   }
 
   Widget searchWidget(Color backgroundColor) {
@@ -249,11 +255,14 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
             children: [
               IconButton(
                 onPressed: () {
-                  controller.isSearchEnable(false);
+                  controller.isSearchEnable.value = false;
                   controller.searchController.clear();
                   controller.searchData.clear();
                 },
-                icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                icon: Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  color: appColors.white,
+                ),
               ),
               Expanded(
                 child: Card(
@@ -265,7 +274,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                       controller.searchCall(value);
                     },
                     contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 10.0),
+                    const EdgeInsets.symmetric(horizontal: 10.0),
                     controller: controller.searchController,
                     inputBorder: OutlineInputBorder(
                         borderSide: BorderSide.none,
@@ -274,7 +283,6 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                     suffixIcon: InkWell(
                         onTap: () {}, child: Assets.images.searchIcon.svg()),
                     hintText: '${'search'.tr}...',
-                    suffixIconPadding: 0,
                   ),
                 ),
               ),
@@ -298,7 +306,10 @@ class ChatAssistanceTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
             () {
-              print("data from api ${data.toJson()}");
+              assistChatUnreadMessages.every((element) {
+                print(element);
+                return false;
+              });
               late AssistChatData element;
               bool newMessageFromlist = false;
               if (assistChatUnreadMessages.isNotEmpty) {
@@ -307,7 +318,7 @@ class ChatAssistanceTile extends StatelessWidget {
                 });
 
                 newMessageFromlist = element.message.toString() != data.lastMessage;
-                if(newMessageFromlist){
+                if (newMessageFromlist) {
                   data.lastMessage = element.message.toString();
                 }
                 data.unreadMessage =

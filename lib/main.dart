@@ -84,6 +84,7 @@ Future<void> main() async {
       print('Message data: ${message.data['userid']}');
       print('Message data: ${message.data['sender_id']}');
     } else if (message.data["type"] == "8") {
+      print("inside page for realtime notification ${message.data}");
       if (dasboardCurrentIndex.value == 2) {
         final responseMsg = message.data;
         assistChatUnreadMessages([

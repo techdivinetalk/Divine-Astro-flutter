@@ -2115,7 +2115,7 @@ class _HomeUIState extends State<HomeUI> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '-${'order Amount'.tr}:',
+                        '-${'Order Amount'}:',
                         style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w500,
                             fontColor: appColors.darkBlue.withOpacity(0.5)),

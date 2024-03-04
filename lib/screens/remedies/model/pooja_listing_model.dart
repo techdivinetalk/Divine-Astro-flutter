@@ -30,8 +30,8 @@ class PujaListingData {
   final String? poojaName;
   final String? poojaImg;
   final String? poojaDesc;
-  final int? poojaStartingPriceInr;
-  final int? poojaStartingPriceUsd;
+  final dynamic poojaStartingPriceInr;
+  final dynamic poojaStartingPriceUsd;
   final String? poojaShortDesc;
   final String? poojaBannerImage;
   final int? referalAmount;
@@ -41,7 +41,7 @@ class PujaListingData {
   final int? cashbackValue;
   final int? poojaBy;
   final int? poojaById;
-  final int? isApprove;
+  final dynamic isApprove;
 
   PujaListingData({
     this.id,
@@ -67,8 +67,8 @@ class PujaListingData {
         poojaName = json['pooja_name'] as String?,
         poojaImg = json['pooja_img'] as String?,
         poojaDesc = json['pooja_desc'] as String?,
-        poojaStartingPriceInr = json['pooja_starting_price_inr'] as int?,
-        poojaStartingPriceUsd = json['pooja_starting_price_usd'] as int?,
+        poojaStartingPriceInr = json['pooja_starting_price_inr'],
+        poojaStartingPriceUsd = json['pooja_starting_price_usd'] ,
         poojaShortDesc = json['pooja_short_desc'] as String?,
         poojaBannerImage = json['pooja_banner_image'] as String?,
         referalAmount = json['referal_amount'] as int?,
@@ -78,7 +78,7 @@ class PujaListingData {
         cashbackValue = json['cashback_value'] as int?,
         poojaBy = json['pooja_by'] as int?,
         poojaById = json['pooja_by_id'] as int?,
-        isApprove = json['is_approve'] as int?;
+        isApprove = json['is_approve'];
 
   Map<String, dynamic> toJson() => {
     'id' : id,

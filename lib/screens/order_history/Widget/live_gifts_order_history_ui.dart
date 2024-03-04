@@ -126,23 +126,24 @@ class LiveGiftsHistory extends StatelessWidget {
                     )
                   ],
                 ),
-                Container(
-                  width: 70,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: getStatusColor("${data[index].status}"), width: 1.0),
-                    borderRadius: BorderRadius.circular(22.0),
+                IntrinsicWidth(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: getStatusColor("${data[index].status}"), width: 1.0),
+                      borderRadius: BorderRadius.circular(22.0),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "${data[index].status}",
+                          style: AppTextStyle.textStyle10(fontWeight: FontWeight.w500, fontColor: getStatusColor("${data[index].status}")),
+                        ),
+                      ],
+                    ).paddingSymmetric(
+                        horizontal: 9, vertical: 6),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "${data[index].status}",
-                        style: AppTextStyle.textStyle10(fontWeight: FontWeight.w500, fontColor: getStatusColor("${data[index].status}")),
-                      ),
-                    ],
-                  ),
-                ),
+                )
               ],
             ),
             const SizedBox(height: 10),
