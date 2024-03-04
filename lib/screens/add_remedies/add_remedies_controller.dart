@@ -6,10 +6,12 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/screens/remedies/model/pooja_listing_model.dart';
 import 'package:divine_astrologer/screens/remedies/widget/pooja_submited_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -25,6 +27,8 @@ class AddRemediesController extends GetxController {
   var durationOptions = ['Puja', 'remedies', 'mahakali', 'custom'].obs;
   RxString selectedValue = "Puja".obs;
 
+  PujaListingData? pujaListingData;
+
   File? image;
   final picker = ImagePicker();
   XFile? pickedFile;
@@ -35,9 +39,18 @@ class AddRemediesController extends GetxController {
 
   @override
   void onInit() {
-    var arguments = Get.arguments;
-    isEdit(arguments?['edit'] ?? false);
-    id(arguments?['id'] ?? 0);
+    if (Get.arguments != null) {
+      isEdit(Get.arguments?['edit'] ?? false);
+      if (isEdit.value) {
+        pujaListingData = Get.arguments?['pujaData'];
+        poojaName.text = pujaListingData!.poojaName ?? "";
+        poojaDes.text = pujaListingData!.poojaDesc ?? "";
+        poojaImageUrl = pujaListingData!.poojaImg ?? "";
+        poojaPrice.text = "${pujaListingData!.poojaStartingPriceInr ?? 0}";
+      }
+
+      update();
+    }
     super.onInit();
   }
 
@@ -194,15 +207,15 @@ class AddRemediesController extends GetxController {
         minWidth: 500,
       );
       if (result != null) {
-        String image = await uploadImageToS3Bucket(
-            File(result.path), result.path.split("/").last);
+        uploadImage(File(result.path));
+        // String image = await uploadImageToS3Bucket(
+        //     File(result.path), result.path.split("/").last);
         print(image);
-        if (image.isNotEmpty) {
-          poojaImageUrl = image;
-        }
+        // if (image.isNotEmpty) {
+        //   poojaImageUrl = image;
+        // }
         update();
         print("imageimageimageimage");
-        //  uploadImage(File(result.path));
       }
     } else {
       debugPrint("Image is not cropped.");
@@ -218,10 +231,9 @@ class AddRemediesController extends GetxController {
       "pooja_desc": poojaDes.text,
       "pooja_starting_price_inr": poojaPrice.text,
       "pooja_short_desc": poojaDes.text,
-      "pooja_banner_image": "https://example.com/pooja_banner_image.jpg"
+      "pooja_banner_image": "https://example.com/pooja_banner_image.jpg",
     };
     param.addIf(id.value != 0, "pooja_id", id.value);
-
     try {
       final response = await userRepository.addEditPujaApi(param);
       if (response.data != null) {
@@ -245,6 +257,49 @@ class AddRemediesController extends GetxController {
       return false;
     }
     return true;
+  }
+
+  Future<void> uploadImage(File imageFile) async {
+    var token = await preferenceService.getToken();
+
+    var uri = Uri.parse(
+        "https://wakanda-api.divinetalk.live/api/astro/v7/uploadImage");
+
+    var request = http.MultipartRequest('POST', uri);
+
+    request.headers.addAll({
+      'Authorization': 'Bearer $token',
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    });
+
+    // Attach the image file to the request
+    request.files.add(await http.MultipartFile.fromPath(
+      'image',
+      imageFile.path,
+    ));
+    request.fields.addAll({"module_name": "pooja"});
+
+    var response = await request.send();
+
+    // Listen for the response
+    print(response);
+    print("responseresponseresponse");
+    response.stream.transform(utf8.decoder).listen((value) {
+      poojaImageUrl = jsonDecode(value)["data"]["full_path"];
+      update();
+      print(
+          "valuevaluevaluevaluevaluevaluevalue"); // Handle the response from the server
+    });
+
+    if (response.statusCode == 200) {
+      print("Image uploaded successfully.");
+      // if (image.isNotEmpty) {
+      //   poojaImageUrl = image;
+      // }
+    } else {
+      print("Failed to upload image.");
+    }
   }
 }
 

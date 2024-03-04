@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/common/SvgIconButton.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
@@ -31,11 +32,10 @@ class AddRemedies extends GetView<AddRemediesController> {
               leading: IconButton(
                   onPressed: () => Get.back(),
                   icon: const Icon(Icons.arrow_back_ios_new_rounded)),
-              title: Obx(() =>
-              controller.id.value == 0
+              title: Obx(() => controller.id.value == 0
                   ? const CustomText(
-                'Add Puja',
-              )
+                      'Add Puja',
+                    )
                   : const CustomText('Edit Remedies'))),
           bottomNavigationBar: Container(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -51,10 +51,9 @@ class AddRemedies extends GetView<AddRemediesController> {
                       ),
                     ),
                     onPressed: () {
-
                       if (controller.formKey.currentState?.validate() ??
                           false) {
-                          print("going in inside");
+                        print("going in inside");
                         if (controller.validation()) {
                           controller.addEditPoojaApi();
                         }
@@ -81,20 +80,55 @@ class AddRemedies extends GetView<AddRemediesController> {
                 // SizedBox(height: 40.h),
                 Column(
                   children: [
-                    InkWell(
-                        onTap: () async {
-                          if (await PermissionHelper().askMediaPermission()) {
-                            controller.updateProfileImage();
-                          }
-                        },
-                        child: CommonImageView(
-                          imagePath: Assets.images.icUploadStory.path,
-                          fit: BoxFit.cover,
-                          height: 90.h,
-                          width: 90.h,
-                          placeHolder: Assets.images.defaultProfile.path,
-                          radius: BorderRadius.circular(100.h),
-                        )),
+                    Stack(
+                      alignment: Alignment.bottomRight,
+                      children: [
+                        InkWell(
+                            onTap: () async {
+                              if (!(controller.id.value == 0)) {
+                                if (await PermissionHelper()
+                                    .askMediaPermission()) {
+                                  controller.updateProfileImage();
+                                }
+                              }
+                            },
+                            child: CommonImageView(
+                              imagePath: controller.poojaImageUrl.isEmpty
+                                  ? Assets.images.icUploadStory.path
+                                  : controller.poojaImageUrl,
+                              fit: BoxFit.cover,
+                              height: 90.h,
+                              width: 90.h,
+                              placeHolder: Assets.images.defaultProfile.path,
+                              radius: BorderRadius.circular(100.h),
+                            )),
+                        Container(
+                          height: 30,
+                          width: 30,
+                          decoration: BoxDecoration(
+                            color: appColors.textColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: SvgIconButton(
+                            height: 25.h,
+                            width: 25.w,
+                            svg: Assets.svg.icPoojaAddress.svg(
+                              color: appColors.white,
+                              height: 25.h,
+                              width: 25.w,
+                            ),
+                            onPressed: () async {
+                              if (controller.isEdit.value) {
+                                if (await PermissionHelper()
+                                    .askMediaPermission()) {
+                                  controller.updateProfileImage();
+                                }
+                              }
+                            },
+                          ),
+                        )
+                      ],
+                    ),
                     SizedBox(height: 10.h),
                     CustomText(
                       'Upload Puja Image',
@@ -186,8 +220,7 @@ class AddRemedies extends GetView<AddRemediesController> {
   }
 
   Widget durationOptions() {
-    return Obx(() =>
-        DropdownButtonHideUnderline(
+    return Obx(() => DropdownButtonHideUnderline(
           child: DropdownButton2<String>(
             isExpanded: true,
             hint: Text(
@@ -196,20 +229,19 @@ class AddRemedies extends GetView<AddRemediesController> {
                   fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
             ),
             items: controller.durationOptions
-                .map((String item) =>
-                DropdownMenuItem<String>(
-                  value: item,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Text(
-                      item.tr,
-                      style: AppTextStyle.textStyle16(
-                          fontWeight: FontWeight.w400,
-                          fontColor: appColors.darkBlue),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ))
+                .map((String item) => DropdownMenuItem<String>(
+                      value: item,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Text(
+                          item.tr,
+                          style: AppTextStyle.textStyle16(
+                              fontWeight: FontWeight.w400,
+                              fontColor: appColors.darkBlue),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ))
                 .toList(),
             style: AppTextStyle.textStyle16(
                 fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
