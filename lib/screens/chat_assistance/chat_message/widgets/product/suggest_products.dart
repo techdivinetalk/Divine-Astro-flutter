@@ -220,7 +220,7 @@ class SuggestProducts extends GetView<SuggestProductController> {
                     },
                     child: Assets.images.searchIcon.svg()),
                 hintText: '${'search'.tr}...',
-                suffixIconPadding: 0,
+                // suffixIconPadding: 0,
               ))),
               SizedBox(width: 20.w)
             ],

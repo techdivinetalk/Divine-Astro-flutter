@@ -40,13 +40,13 @@ class MessageView extends StatelessWidget {
   Widget buildMessageView(
       BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     print("message Detail $chatMessage");
-    final currentMsgDate = DateTime.fromMillisecondsSinceEpoch(
-        int.parse(chatMessage.createdAt ?? '0'));
-    final nextMsgDate = DateTime.fromMillisecondsSinceEpoch(
-        int.parse(nextChatMessage.createdAt ?? '0'));
-    final differenceOfDays = nextMsgDate.day - currentMsgDate.day;
-    final isToday = (DateTime.now().day - currentMsgDate.day) == 1;
-    final isYesterday = (DateTime.now().day - currentMsgDate.day) == 2;
+    // final currentMsgDate = DateTime.fromMillisecondsSinceEpoch(
+    //     int.parse(chatMessage.createdAt ?? '0'));
+    // final nextMsgDate = DateTime.fromMillisecondsSinceEpoch(
+    //     int.parse(nextChatMessage.createdAt ?? '0'));
+    // final differenceOfDays = nextMsgDate.day - currentMsgDate.day;
+    // final isToday = (DateTime.now().day - currentMsgDate.day) == 1;
+    // final isYesterday = (DateTime.now().day - currentMsgDate.day) == 2;
     Widget messageWidget;
     print("chat Message:: ${chatMessage.msgType}");
     switch (chatMessage.msgType) {
@@ -86,22 +86,22 @@ class MessageView extends StatelessWidget {
         children: [
           if (chatMessage.id == unreadMessage)
             unreadMessageView(),
-          if (index == 0)
-            dayWidget(
-                currentMsgDate: currentMsgDate,
-                nextMsgDate: nextMsgDate,
-                isToday: (DateTime.now().day - currentMsgDate.day) == 0,
-                isYesterday: (DateTime.now().day - currentMsgDate.day) == 1,
-                differenceOfDays: 1),
+          // if (index == 0)
+          //   dayWidget(
+          //       currentMsgDate: currentMsgDate,
+          //       nextMsgDate: nextMsgDate,
+          //       isToday: (DateTime.now().day - currentMsgDate.day) == 0,
+          //       isYesterday: (DateTime.now().day - currentMsgDate.day) == 1,
+          //       differenceOfDays: 1),
 
           messageWidget,
-          if (index != 0)
-            dayWidget(
-                currentMsgDate: currentMsgDate,
-                nextMsgDate: nextMsgDate,
-                isToday: (DateTime.now().day - currentMsgDate.day) == 0,
-                isYesterday: (DateTime.now().day - currentMsgDate.day) == 1,
-                differenceOfDays: 1),
+          // if (index != 0)
+          //   dayWidget(
+          //       currentMsgDate: currentMsgDate,
+          //       nextMsgDate: nextMsgDate,
+          //       isToday: (DateTime.now().day - currentMsgDate.day) == 0,
+          //       isYesterday: (DateTime.now().day - currentMsgDate.day) == 1,
+          //       differenceOfDays: 1),
 
         ],
       );
@@ -449,6 +449,7 @@ class MessageView extends StatelessWidget {
 
   Widget giftSendUi(BuildContext context, ChatMessage chatMessage,
       bool yourMessage, String customerName) {
+    print("giftsend called");
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(

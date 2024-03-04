@@ -50,7 +50,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
           children: [
             GestureDetector(
               onTap: () {
-                controller.isEmojiShowing.value = false;
+                // controller.isEmojiShowing.value = false;
               },
               child: Assets.images.bgChatWallpaper.image(
                   width: MediaQuery.of(context).size.width,
@@ -319,50 +319,33 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   ),
                 ),
                 chatBottomBar(context),
+
                 Obx(() => AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      height: controller.isEmojiShowing.value ? 300 : 0,
-                      child: SizedBox(
-                        height: 300,
-                        child: EmojiPicker(
-                            onEmojiSelected: (category, emoji) {
-                              // controller.typingScrollController.hasClients
-                              //     ? controller.typingScrollController.animateTo(
-                              //         controller.typingScrollController.position
-                              //             .maxScrollExtent,
-                              //         duration:
-                              //             const Duration(milliseconds: 100),
-                              //         curve: Curves.easeOut)
-                              //     : null;
-                            },
-                            onBackspacePressed: () {
-                              _onBackspacePressed();
-                            },
-                            textEditingController: controller.messageController,
-                            config: Config(
-                                backspaceColor: appColors.appRedColour,
-                                categoryIcons: const CategoryIcons(),
-                                initCategory: Category.RECENT,
-                                indicatorColor: appColors.appRedColour,
-                                iconColor: Colors.grey,
-                                iconColorSelected: appColors.appRedColour,
-                                recentTabBehavior: RecentTabBehavior.RECENT,
-                                emojiSizeMax: 32.0,
-                                verticalSpacing: 0,
-                                horizontalSpacing: 0,
-                                recentsLimit: 28,
-                                replaceEmojiOnLimitExceed: false,
-                                buttonMode: ButtonMode.MATERIAL)),
-                      ),
-                    ))
+                  duration: const Duration(milliseconds: 200),
+                  height: controller.isEmojiShowing.value ? 300 : 0,
+                  child: SizedBox(
+                    height: 300,
+                    child: EmojiPicker(
+                        onEmojiSelected: (category, emoji) {
+
+                          // controller.typingScrollController.hasClients
+                          //     ? controller.typingScrollController.animateTo(
+                          //         controller.typingScrollController.position
+                          //             .maxScrollExtent,
+                          //         duration:
+                          //             const Duration(milliseconds: 100),
+                          //         curve: Curves.easeOut)
+                          //     : null;
+                        },
+                        onBackspacePressed: () {
+                          _onBackspacePressed();
+                        },
+                        textEditingController: controller.messageController,
+                        config: Config()),
+                  ),
+                )),
               ],
             ),
-            // Obx(() => Visibility(
-            //     visible: !controller.isDataLoad.value,
-            //     child: const IgnorePointer(
-            //       ignoring: true,
-            //       child: LoadingIndicatorWidget(),
-            //     ))),
           ],
         );
       }),
@@ -696,11 +679,11 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                     scrollController:
                                         controller.typingScrollController,
                                     onTapOutside: (value) {
-                                      FocusScope.of(Get.context!).unfocus();
+                                      // FocusScope.of(Get.context!).unfocus();
                                       controller.scrollToBottomFunc();
-                                      if (controller.isEmojiShowing.value) {
-                                        controller.isEmojiShowing.value = false;
-                                      }
+                                      // if (controller.isEmojiShowing.value) {
+                                      //   controller.isEmojiShowing.value = false;
+                                      // }
                                     },
                                     onChanged: (value) {
                                       controller.tyingSocket();
@@ -819,7 +802,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               ))
                           : InkWell(
                               onTap: () {
-                                print("clicking");
+
                                 controller.sendMsg();
                               },
                               child: Assets.images.icSendMsg.svg(

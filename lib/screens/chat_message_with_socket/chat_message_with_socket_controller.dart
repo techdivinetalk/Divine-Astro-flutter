@@ -989,7 +989,7 @@ class ChatMessageWithSocketController extends GetxController
       final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       unreadMessageIndex.value = -1;
       addNewMessage(time, "gift",
-          messageText: "${quantity}x ${item.giftName}",
+          messageText: "${quantity} ${item.giftName} ${quantity>1?"gifts":"gift"}",
           awsUrl: item.fullGiftImage,
           giftId: item.id.toString());
     }
@@ -1144,7 +1144,7 @@ class ChatMessageWithSocketController extends GetxController
     print("get chat list 1");
     await hiveServices.initialize();
     print("get chat list 2");
-    final res = await hiveServices.getData(key: userDataKey);
+    final res = await hiveServices.getData(key: "chat_${currentUserId.value}");
     print("get chat list $res");
     if (res != null) {
       final ChatMessagesOffline msg =
