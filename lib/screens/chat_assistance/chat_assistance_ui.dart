@@ -243,8 +243,8 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
     return Container(
       color: backgroundColor,
       child: SafeArea(
-        child: SizedBox(
-          height: AppBar().preferredSize.height,
+        child: PreferredSize(
+          preferredSize: AppBar().preferredSize,
           child: Row(
             children: [
               IconButton(
@@ -260,7 +260,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                   child: CustomTextField(
                     autoFocus: true,
                     align: TextAlignVertical.center,
-                    height: 40,
+                    // height: 40,
                     onChanged: (value) {
                       controller.searchCall(value);
                     },
@@ -298,7 +298,10 @@ class ChatAssistanceTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
             () {
-              print("data from api ${data.toJson()}");
+              assistChatUnreadMessages.every((element) {
+                print(element);
+                return false;
+              });
               late AssistChatData element;
               bool newMessageFromlist = false;
               if (assistChatUnreadMessages.isNotEmpty) {
@@ -307,7 +310,7 @@ class ChatAssistanceTile extends StatelessWidget {
                 });
 
                 newMessageFromlist = element.message.toString() != data.lastMessage;
-                if(newMessageFromlist){
+                if (newMessageFromlist) {
                   data.lastMessage = element.message.toString();
                 }
                 data.unreadMessage =

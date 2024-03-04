@@ -169,8 +169,16 @@ class ChatMessageWithSocketController extends GetxController
 
   @override
   void onClose() {
+    ZegoGiftPlayer().clear();
     WidgetsBinding.instance.removeObserver(this);
     super.onClose();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    ZegoGiftPlayer().clear();
+    super.dispose();
   }
 
   bool isRecordingCompleted = false;
@@ -628,7 +636,7 @@ class ChatMessageWithSocketController extends GetxController
           },
         ).toList() ??
         <GiftData>[];
-
+    print("playAnimation string id 2 $id");
     if (data.isNotEmpty) {
       ZegoGiftPlayer().play(
         context!,
@@ -638,6 +646,7 @@ class ChatMessageWithSocketController extends GetxController
         ),
       );
     } else {}
+    print("playAnimation string id 3 $id");
     return;
   }
 
@@ -837,6 +846,7 @@ class ChatMessageWithSocketController extends GetxController
         orderId: AppFirebaseService().orderData.value["orderId"],
         id: int.parse(time),
         message: messageText,
+        createdAt: DateTime.now().toIso8601String(),
         receiverId: int.parse(
             AppFirebaseService().orderData.value["userId"].toString()),
         senderId: preference.getUserDetail()!.id,

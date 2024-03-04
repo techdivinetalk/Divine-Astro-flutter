@@ -155,6 +155,13 @@ class FeedBack extends GetView<FeedbackController> {
                                   child: MessageView(
                                     index: index,
                                     userName: '',
+                                    nextChatMessage: index ==
+                                        controller
+                                            .chatMessageList.length -
+                                            1
+                                        ? controller.chatMessageList[index]
+                                        : controller
+                                        .chatMessageList[index + 1],
                                     chatMessage: data,
                                     yourMessage:
                                     data.senderId ==

@@ -96,8 +96,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               itemCount: controller.chatMessages.length,
                               shrinkWrap: true,
                               reverse: false,
-
-
                               itemBuilder: (context, index) {
                                 var chatMessage =
                                     controller.chatMessages[index];
@@ -110,20 +108,25 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                           vertical: 4.h, horizontal: 12.w),
                                       child: MessageView(
                                           index: index,
+                                          nextChatMessage: index ==
+                                                  controller
+                                                          .chatMessages.length -
+                                                      1
+                                              ? controller.chatMessages[index]
+                                              : controller
+                                                  .chatMessages[index + 1],
                                           chatMessage: chatMessage,
-                                          yourMessage:
-                                              chatMessage.senderId ==
-                                                  preferenceService
-                                                      .getUserDetail()!
-                                                      .id,
+                                          yourMessage: chatMessage.senderId ==
+                                              preferenceService
+                                                  .getUserDetail()!
+                                                  .id,
                                           userName:
                                               controller.customerName.value,
                                           unreadMessage: controller
                                               .unreadMessageIndex.value),
                                     ),
                                     if (index ==
-                                        (controller.chatMessages.length -
-                                            1))
+                                        (controller.chatMessages.length - 1))
                                       typingWidget()
                                   ],
                                 );
@@ -681,7 +684,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                             offset: const Offset(0.3, 3.0))
                                       ]),
                                   child: TextFormField(
-
                                     controller: controller.messageController,
                                     keyboardType: TextInputType.text,
                                     minLines: 1,
@@ -922,7 +924,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           final String time =
                               "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
 
-                          controller.addNewMessage(time,"Product",
+                          controller.addNewMessage(time, "Product",
                               data: {'data': result}, messageText: 'Product');
                         }
 
@@ -984,7 +986,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   SizedBox(width: 6.w),
                   Flexible(
                       child: Text(
-                          'Astrologer has requested to send ${chatMessage.message}.',maxLines: 3,))
+                    'Astrologer has requested to send ${chatMessage.message}.',
+                    maxLines: 3,
+                  ))
                 ],
               ),
             ),

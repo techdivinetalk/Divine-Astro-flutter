@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:divine_astrologer/main.dart';
 import 'package:divine_astrologer/model/res_product_detail.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,7 +33,7 @@ import '../../../repository/chat_repository.dart';
 import '../../../repository/kundli_repository.dart';
 import 'widgets/product/pooja/pooja_dharam/get_single_pooja_response.dart';
 
-class ChatMessageController extends GetxController {
+class ChatMessageController extends GetxController  with WidgetsBindingObserver  {
   final chatAssistantRepository = ChatAssistantRepository();
   final messageScrollController = ScrollController();
   ChatAssistChatResponse? chatAssistChatResponse;
@@ -84,6 +85,28 @@ class ChatMessageController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     args = Get.arguments;
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        socket.socketConnect();
+updateFirebaseToken();
+        break;
+      case AppLifecycleState.inactive:
+        debugPrint("App Inactive");
+        break;
+      case AppLifecycleState.paused:
+        debugPrint("App Paused");
+        break;
+      case AppLifecycleState.detached:
+        debugPrint("App Detached");
+        break;
+      case AppLifecycleState.hidden:
+        break;
+    }
+    super.didChangeAppLifecycleState(state);
   }
 
   @override
