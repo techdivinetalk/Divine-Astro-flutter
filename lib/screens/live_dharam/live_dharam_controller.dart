@@ -2,7 +2,6 @@
 
 import "dart:async";
 import "dart:convert";
-import "dart:developer";
 
 import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
@@ -112,6 +111,10 @@ class LiveDharamController extends GetxController {
   final RxBool _isProcessing = false.obs;
   final RxBool _extendTimeWidgetVisible = false.obs;
   final RxBool _hasReInitCoHost = false.obs;
+  final Rx<AcceptPopupClass> _acceptPopupClass = AcceptPopupClass(
+    acceptPopupOpenedForUserId: "",
+    acceptPopupOpenedForUserName: "",
+  ).obs;
 
   @override
   void onInit() {
@@ -186,6 +189,10 @@ class LiveDharamController extends GetxController {
     isProcessing = false;
     extendTimeWidgetVisible = false;
     hasReInitCoHost = false;
+    acceptPopupClass = AcceptPopupClass(
+      acceptPopupOpenedForUserId: "",
+      acceptPopupOpenedForUserName: "",
+    );
 
     return;
   }
@@ -231,6 +238,7 @@ class LiveDharamController extends GetxController {
     _isProcessing.close();
     _extendTimeWidgetVisible.close();
     _hasReInitCoHost.close();
+    _acceptPopupClass.close();
 
     super.onClose();
   }
@@ -359,6 +367,9 @@ class LiveDharamController extends GetxController {
 
   bool get hasReInitCoHost => _hasReInitCoHost.value;
   set hasReInitCoHost(bool value) => _hasReInitCoHost(value);
+
+  AcceptPopupClass get acceptPopupClass => _acceptPopupClass.value;
+  set acceptPopupClass(AcceptPopupClass value) => _acceptPopupClass(value);
 
   Future<void> eventListner({
     required DataSnapshot snapshot,
@@ -1528,6 +1539,24 @@ class LiveDharamController extends GetxController {
     } else {}
     return data.isEmpty ? "" : data.join(", ");
   }
+
+  // Future<void> callblockCustomerByMod({
+  //   required int id,
+  //   required Function(String message) successCallBack,
+  //   required Function(String message) failureCallBack,
+  // }) async {
+  //   Map<String, dynamic> param = <String, dynamic>{};
+  //   param = <String, dynamic>{
+  //     "customer_id": id,
+  //     // "unblock": 0,
+  //   };
+  //   await liveRepository.blockedCustomerFromModAPI(
+  //     params: param,
+  //     successCallBack: successCallBack,
+  //     failureCallBack: failureCallBack,
+  //   );
+  //   return Future<void>.value();
+  // }
 }
 
 class CustomGiftModel {
@@ -1718,4 +1747,26 @@ class RequestClass {
     required this.giftData,
     required this.giftCount,
   });
+}
+
+class AcceptPopupClass {
+  String? acceptPopupOpenedForUserId;
+  String? acceptPopupOpenedForUserName;
+
+  AcceptPopupClass({
+    this.acceptPopupOpenedForUserId,
+    this.acceptPopupOpenedForUserName,
+  });
+
+  AcceptPopupClass.fromJson(Map<String, dynamic> json) {
+    acceptPopupOpenedForUserId = json['acceptPopupOpenedForUserId'];
+    acceptPopupOpenedForUserName = json['acceptPopupOpenedForUserName'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['acceptPopupOpenedForUserId'] = acceptPopupOpenedForUserId;
+    data['acceptPopupOpenedForUserName'] = acceptPopupOpenedForUserName;
+    return data;
+  }
 }

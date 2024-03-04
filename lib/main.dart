@@ -175,6 +175,7 @@ Future<void> main() async {
   //   runApp(const MyApp());
   // });
   checkIfTokenUpdated();
+  
   ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
   // call the useSystemCallingUI
   ZegoUIKit().initLog().then((value) {
