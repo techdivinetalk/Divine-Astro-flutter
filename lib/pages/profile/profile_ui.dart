@@ -230,7 +230,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                             style: AppTextStyle.textStyle20(),
                           ),
                           SizedBox(height: 10.h),
-                          listOfReviews()
+                          listOfReviews(),
                         ],
                       ),
                     )

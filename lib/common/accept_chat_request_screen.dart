@@ -739,16 +739,23 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
     print("onPressedFunction() isAccepted: $isAccepted");
 
     appFirebaseService.acceptBottomWatcher.strValue = "1";
-    print(
-        "onPressedFunction() acceptBottomWatcher: ${appFirebaseService.acceptBottomWatcher.currentName}");
+    print("onPressedFunction() acceptBottomWatcher: ${appFirebaseService.acceptBottomWatcher.currentName}");
+
+    // final bool perm = await AppPermissionService.instance.hasAllPermissions();
+    // await appFirebaseService.writeData(
+    //   "order/${AppFirebaseService().orderData.value["orderId"] ?? 0}",
+    //   {"status": "1", "astrologer_permission": perm},
+    // );
 
     final bool perm = await AppPermissionService.instance.hasAllPermissions();
-    print("onPressedFunction() perm: ${perm}");
+    final int orderId = AppFirebaseService().orderData.value["orderId"] ?? 0;
+    if (orderId != 0) {
+      await appFirebaseService.writeData(
+        "order/$orderId",
+        {"status": "1", "astrologer_permission": perm},
+      );
+    } else {}
 
-    await appFirebaseService.writeData(
-      "order/${AppFirebaseService().orderData.value["orderId"] ?? 0}",
-      {"status": "1", "astrologer_permission": perm},
-    );
     print("onPressedFunction() writeData: Done");
 
     appSocket.sendConnectRequest(

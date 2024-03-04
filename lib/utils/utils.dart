@@ -1,12 +1,4 @@
-import 'package:divine_astrologer/common/app_textstyle.dart';
-import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/common_functions.dart';
-import 'package:divine_astrologer/common/internet_speed.dart';
-import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 

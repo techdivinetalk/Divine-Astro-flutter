@@ -49,7 +49,10 @@ class Remedies extends GetView<RemediesController> {
                       int idToPass = 0;
                       Get.toNamed(
                         RouteName.addRemedies,
-                        arguments: {'edit': idToPass != 0, 'id': idToPass},
+                        arguments: {
+                          'edit': false,
+                          'id': idToPass,
+                        },
                       );
                     },
                     child: Text(
@@ -161,10 +164,8 @@ class Remedies extends GetView<RemediesController> {
                                                 });
                                               },
                                             )
-                                          : SizedBox(
-                                              height: 50.h,
-                                            ),
-                                      data.isApprove != 0
+                                          : SizedBox(height: 50.h),
+                                      data.isApprove == 0
                                           ? SvgIconButton(
                                               height: 22.h,
                                               width: 20.w,
@@ -175,7 +176,7 @@ class Remedies extends GetView<RemediesController> {
                                                   RouteName.addRemedies,
                                                   arguments: {
                                                     'edit': true,
-                                                    'id': data.id
+                                                    'pujaData': data,
                                                   },
                                                 );
                                               },

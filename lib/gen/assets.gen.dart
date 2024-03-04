@@ -761,6 +761,7 @@ class $AssetsImagesGen {
   /// File path: assets/images/remedies.svg
   SvgGenImage get remedies => const SvgGenImage('assets/images/remedies.svg');
 
+  /// File path: assets/svg/puja.svg
   SvgGenImage get pooja => const SvgGenImage('assets/svg/puja.svg');
 
   /// File path: assets/images/report.svg

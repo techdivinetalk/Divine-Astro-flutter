@@ -169,9 +169,12 @@ class AppFirebaseService {
                 data: {'deliveredMsgList': realTimeData["deliveredMsg"]}));
           }
           if (realTimeData["totalGift"] != null) {
-            sendBroadcast(BroadcastMessage(
+            sendBroadcast(
+              BroadcastMessage(
                 name: "totalGift",
-                data: {'totalGift': realTimeData["totalGift"]}));
+                data: {'totalGift': realTimeData["totalGift"]},
+              ),
+            );
           }
           if (realTimeData["order_id"] != null) {
             watcher.strValue = realTimeData["order_id"].toString();
@@ -314,14 +317,23 @@ class AppFirebaseService {
       queueId: valueMap["queue_id"],
     );
     if (isAccepted) {
-      bool value = await AppPermissionService.instance.hasAllPermissions();
-      String path = "order/${valueMap['orderId']}";
-      await AppFirebaseService().database.child(path).update(
-        <String, dynamic>{
-          "status": "1",
-          "astrologer_permission": value,
-        },
-      );
+      // bool value = await AppPermissionService.instance.hasAllPermissions();
+      // String path = "order/${valueMap['orderId']}";
+      // await AppFirebaseService().database.child(path).update(
+      //   <String, dynamic>{
+      //     "status": "1",
+      //     "astrologer_permission": value,
+      //   },
+      // );
+
+      final bool value = await AppPermissionService.instance.hasAllPermissions();
+      final int orderId = valueMap["orderId"] ?? 0;
+      if (orderId != 0) {
+        await AppFirebaseService().database.child("order/$orderId").update(
+          <String, dynamic>{"status": "1", "astrologer_permission": value},
+        );
+      } else {}
+      
     } else {}
     appSocket.sendConnectRequest(
       astroId: valueMap["astroId"],
