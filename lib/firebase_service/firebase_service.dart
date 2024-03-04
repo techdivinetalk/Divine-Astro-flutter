@@ -314,14 +314,23 @@ class AppFirebaseService {
       queueId: valueMap["queue_id"],
     );
     if (isAccepted) {
-      bool value = await AppPermissionService.instance.hasAllPermissions();
-      String path = "order/${valueMap['orderId']}";
-      await AppFirebaseService().database.child(path).update(
-        <String, dynamic>{
-          "status": "1",
-          "astrologer_permission": value,
-        },
-      );
+      // bool value = await AppPermissionService.instance.hasAllPermissions();
+      // String path = "order/${valueMap['orderId']}";
+      // await AppFirebaseService().database.child(path).update(
+      //   <String, dynamic>{
+      //     "status": "1",
+      //     "astrologer_permission": value,
+      //   },
+      // );
+
+      final bool value = await AppPermissionService.instance.hasAllPermissions();
+      final int orderId = valueMap["orderId"] ?? 0;
+      if (orderId != 0) {
+        await AppFirebaseService().database.child("order/$orderId").update(
+          <String, dynamic>{"status": "1", "astrologer_permission": value},
+        );
+      } else {}
+      
     } else {}
     appSocket.sendConnectRequest(
       astroId: valueMap["astroId"],
