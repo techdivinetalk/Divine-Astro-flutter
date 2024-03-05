@@ -264,6 +264,10 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> zeroAstro() async {
+    // // experimental
+    // Get.until((route) => route.settings.name == RouteName.liveDharamScreen);
+    // //
+    
     // await endOrderFirst();
 
     // if (mounted) {
@@ -325,6 +329,7 @@ class _LivePage extends State<LiveDharamScreen>
   // }
 
   bool isAcceptPopupOpen = false;
+  ZegoUIKitUser isAcceptPopupOpenFor = ZegoUIKitUser(id: "", name: "");
 
   /*
    * Dear Maintainer
@@ -404,7 +409,7 @@ class _LivePage extends State<LiveDharamScreen>
           _timer = Timer.periodic(
             duration,
             (Timer timer) async {
-              if (timer.tick % 10 == 0) {
+              if (timer.tick % 1 == 0) {
                 math.Random.secure().nextInt(15).isEven
                     ? await manMessage()
                     : await womanMessage();
@@ -497,13 +502,14 @@ class _LivePage extends State<LiveDharamScreen>
     var num = math.Random.secure().nextInt(15);
     var url = "https://xsgames.co/randomusers/assets/avatars/male/$num.jpg";
     final String fullName = RandomNames(Zone.india).manFullName();
+    final String nameAvatar = "https://ui-avatars.com/api/${fullName[0]}";
     final ZegoCustomMessage model = ZegoCustomMessage(
       type: 1,
       liveId: _controller.liveId,
       userId: "0",
       userName: fullName,
-      avatar: url,
-      message: indianGreetingsFunction()[num],
+      avatar: num % 2 == 0 ? nameAvatar : url,
+      message: num > 10 ? "Joined" : indianGreetingsFunction()[num],
       timeStamp: DateTime.now().toString(),
       fullGiftImage: "",
       isBlockedCustomer: _controller.isCustomerBlockedBool(),
@@ -517,13 +523,14 @@ class _LivePage extends State<LiveDharamScreen>
     var num = math.Random.secure().nextInt(15);
     var url = "https://xsgames.co/randomusers/assets/avatars/female/$num.jpg";
     final String fullName = RandomNames(Zone.india).womanFullName();
+    final String nameAvatar = "https://ui-avatars.com/api/${fullName[0]}";
     final ZegoCustomMessage model = ZegoCustomMessage(
       type: 1,
       liveId: _controller.liveId,
       userId: "0",
       userName: fullName,
-      avatar: url,
-      message: indianGreetingsFunction()[num],
+      avatar: num % 2 == 0 ? nameAvatar : url,
+      message: num > 10 ? "Joined" : indianGreetingsFunction()[num],
       timeStamp: DateTime.now().toString(),
       fullGiftImage: "",
       isBlockedCustomer: _controller.isCustomerBlockedBool(),
@@ -1291,7 +1298,7 @@ class _LivePage extends State<LiveDharamScreen>
   //                                           ),
   //                                           Text(
   //                                             "₹${offerData.offer_amount ?? 0}",
-  //                                             style:  TextStyle(
+  //                                             style: TextStyle(
   //                                               fontSize: 10,
   //                                               color: appColors.guideColor,
   //                                               fontWeight: FontWeight.bold,
@@ -1314,7 +1321,8 @@ class _LivePage extends State<LiveDharamScreen>
   //                 ),
   //               )
   //             : index == 1
-  //                 ? ((_controller.details.data?.isFollow ?? 0) == 1)
+  //                 ? _controller.details.data?.isFollow == null ||
+  //                         (_controller.details.data?.isFollow ?? 0) == 1
   //                     ? const SizedBox()
   //                     : Padding(
   //                         padding:
@@ -1347,7 +1355,7 @@ class _LivePage extends State<LiveDharamScreen>
   //                                         : "assets/images/live_new_follower_button.png",
   //                                   ),
   //                                   const SizedBox(height: 4),
-  //                                    Text(
+  //                                   Text(
   //                                     "Follow",
   //                                     style: TextStyle(
   //                                       fontSize: 10,
@@ -1367,7 +1375,7 @@ class _LivePage extends State<LiveDharamScreen>
   //                     ),
   //                     child: InkWell(
   //                       onTap: () async {
-  //                         isEngagedStatus.value == 2
+  //                         isUserInACall()
   //                             ? CustomToasts.inACallToast()
   //                             : await sendGiftFunc(
   //                                 ctx: ctx, item: item, quantity: 1);
@@ -1387,7 +1395,7 @@ class _LivePage extends State<LiveDharamScreen>
   //                           const SizedBox(height: 4),
   //                           Text(
   //                             "₹${item.giftPrice}",
-  //                             style:  TextStyle(
+  //                             style: TextStyle(
   //                               fontSize: 10,
   //                               color: appColors.white,
   //                             ),
@@ -1626,12 +1634,12 @@ class _LivePage extends State<LiveDharamScreen>
                                                 ),
                                               );
                                             } else {
-                                              await moreOptionsForModPopup(
-                                                userId: msg.userId ?? "",
-                                                userName: msg.userName ?? "",
-                                                isBlocked: _controller
-                                                    .isCustomerBlockedBool(),
-                                              );
+                                              // await moreOptionsForModPopup(
+                                              //   userId: msg.userId ?? "",
+                                              //   userName: msg.userName ?? "",
+                                              //   isBlocked: _controller
+                                              //       .isCustomerBlockedBool(),
+                                              // );
                                             }
                                           },
                                         ),
@@ -1829,6 +1837,11 @@ class _LivePage extends State<LiveDharamScreen>
       _controller.updateInfo();
       List<dynamic> list = await _controller.onLiveStreamingEnded();
       if (list.isNotEmpty) {
+        
+        // experimental
+        Get.until((route) => route.settings.name == RouteName.liveDharamScreen);
+        //
+      
         _zegoController.swiping.next();
 
         _controller.initData();
@@ -1969,6 +1982,7 @@ class _LivePage extends State<LiveDharamScreen>
               yesDisconnect: () async {
                 if (!_controller.isHost) {
                   await _controller.removeFromWaitList();
+                  await notifyAstroForExitWaitList();
                 } else {}
               },
             );
@@ -1990,6 +2004,25 @@ class _LivePage extends State<LiveDharamScreen>
           model: _controller.currentCaller,
         );
       },
+    );
+    return Future<void>.value();
+  }
+
+  Future<void> notifyAstroForExitWaitList() async {
+    var data = {
+      "room_id": _controller.liveId,
+      "user_id": _controller.userId,
+      "user_name": _controller.userName,
+      "item": {},
+      "type": "Notify Astro For Exit WaitList",
+    };
+
+    await _controller.sendGiftAPI(
+      data: data,
+      count: 1,
+      svga: "",
+      successCallback: log,
+      failureCallback: log,
     );
     return Future<void>.value();
   }
@@ -2128,8 +2161,6 @@ class _LivePage extends State<LiveDharamScreen>
 
   //   if (canSend) {
   //     MoEngage().sendCustomEventDataToMoEngage(
-  //       eventData: "abc",
-  //       eventName_: "eventName",
   //       trackEvent: name,
   //     );
   //   } else {}
@@ -2374,53 +2405,51 @@ class _LivePage extends State<LiveDharamScreen>
     return Future<void>.value();
   }
 
-  Future<void> moreOptionsForModPopup({
-    required String userId,
-    required String userName,
-    required bool isBlocked,
-  }) async {
-    await showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) {
-        return MoreOptionsForModWidget(
-          onClose: Get.back,
-          isHost: _controller.isHost,
-          isMod: _controller.isMod,
-          onTapAskForBlockUnBlockUser: () async {
-            Get.back();
-            await blockUnblockPopup(
-              isAlreadyBeenBlocked: isBlocked,
-              performAction: () async {
-                if (userId != "0") {
-                  // Perma Block
-
-                  // await _controller.callblockCustomer(
-                  //   id: int.parse(userId),
-                  //   successCallBack: (String message) {
-                  //     successAndFailureCallBack(
-                  //       message: message,
-                  //       isForSuccess: true,
-                  //       isForFailure: false,
-                  //     );
-                  //   },
-                  //   failureCallBack: (String message) {
-                  //     successAndFailureCallBack(
-                  //       message: message,
-                  //       isForSuccess: false,
-                  //       isForFailure: true,
-                  //     );
-                  //   },
-                  // );
-                } else {}
-              },
-            );
-          },
-          isBlocked: isBlocked,
-        );
-      },
-    );
-    return Future<void>.value();
-  }
+  // Future<void> moreOptionsForModPopup({
+  //   required String userId,
+  //   required String userName,
+  //   required bool isBlocked,
+  // }) async {
+  //   await showCupertinoModalPopup(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return MoreOptionsForModWidget(
+  //         onClose: Get.back,
+  //         isHost: _controller.isHost,
+  //         isMod: _controller.isMod,
+  //         onTapAskForBlockUnBlockUser: () async {
+  //           Get.back();
+  //           await blockUnblockPopup(
+  //             isAlreadyBeenBlocked: isBlocked,
+  //             performAction: () async {
+  //               if (userId != "0") {
+  //                 await _controller.callblockCustomerByMod(
+  //                   id: int.parse(userId),
+  //                   successCallBack: (String message) {
+  //                     successAndFailureCallBack(
+  //                       message: message,
+  //                      isForSuccess: false,
+  //                       isForFailure: true,
+  //                     );
+  //                   },
+  //                   failureCallBack: (String message) {
+  //                     successAndFailureCallBack(
+  //                       message: message,
+  //                       isForSuccess: false,
+  //                       isForFailure: true,
+  //                     );
+  //                   },
+  //                 );
+  //               } else {}
+  //             },
+  //           );
+  //         },
+  //         isBlocked: isBlocked,
+  //       );
+  //     },
+  //   );
+  //   return Future<void>.value();
+  // }
 
   Future<void> blockUnblockPopup({
     required bool isAlreadyBeenBlocked,
@@ -2539,10 +2568,6 @@ class _LivePage extends State<LiveDharamScreen>
             // );
           } else if (type == "Tarot Card") {
             final TarotGameModel model = TarotGameModel.fromJson(item);
-            print("Tarot Card:: model.senderId:: ${model.senderId}");
-            print("Tarot Card:: model.receiverId:: ${model.receiverId}");
-            print(
-                "Tarot Card:: model.receiverId == _controller.userId:: ${model.receiverId == _controller.userId}");
 
             if (model.receiverId == _controller.userId) {
               _controller.tarotGameModel = model;
@@ -2602,6 +2627,16 @@ class _LivePage extends State<LiveDharamScreen>
               //   isForFailure: true,
               // );
             }
+          } else if (type == "Notify Astro For Exit WaitList") {
+            final bool cond1 = _controller.isHost;
+            final bool cond2 = isAcceptPopupOpen;
+            final bool cond3 = roomId == _controller.userId;
+            final bool cond4 = userId == isAcceptPopupOpenFor.id;
+            final bool cond5 = userName == isAcceptPopupOpenFor.name;
+
+            if (cond1 && cond2 && cond3 && cond4 && cond5) {
+              Get.back();
+            } else {}
           } else {}
         } else {}
       } else {}
@@ -4078,6 +4113,39 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   // Future<void> followOrUnfollowFunction() async {
+  //   await _controller.followOrUnfollowAstrologer(
+  //     successCallBack: (String message) {
+  //       successAndFailureCallBack(
+  //         message: message,
+  //         isForSuccess: true,
+  //         isForFailure: false,
+  //       );
+  //     },
+  //     failureCallBack: (String message) {
+  //       successAndFailureCallBack(
+  //         message: message,
+  //         isForSuccess: false,
+  //         isForFailure: true,
+  //       );
+  //     },
+  //   );
+  //   await _controller.getAstrologerDetails(
+  //     successCallBack: (String message) {
+  //       successAndFailureCallBack(
+  //         message: message,
+  //         isForSuccess: true,
+  //         isForFailure: false,
+  //       );
+  //     },
+  //     failureCallBack: (String message) {
+  //       successAndFailureCallBack(
+  //         message: message,
+  //         isForSuccess: false,
+  //         isForFailure: true,
+  //       );
+  //     },
+  //   );
+
   //   final ZegoCustomMessage model = ZegoCustomMessage(
   //     type: 1,
   //     liveId: _controller.liveId,
@@ -4091,39 +4159,6 @@ class _LivePage extends State<LiveDharamScreen>
   //     isMod: false,
   //   );
   //   await sendMessageToZego(model);
-
-  //   await _controller.followOrUnfollowAstrologer(
-  //     successCallBack: (String message) {
-  //       eventListnerSuccessAndFailureCallBack(
-  //         message: message,
-  //         isForSuccess: true,
-  //         isForFailure: false,
-  //       );
-  //     },
-  //     failureCallBack: (String message) {
-  //       eventListnerSuccessAndFailureCallBack(
-  //         message: message,
-  //         isForSuccess: false,
-  //         isForFailure: true,
-  //       );
-  //     },
-  //   );
-  //   await _controller.getAstrologerDetails(
-  //     successCallBack: (String message) {
-  //       eventListnerSuccessAndFailureCallBack(
-  //         message: message,
-  //         isForSuccess: true,
-  //         isForFailure: false,
-  //       );
-  //     },
-  //     failureCallBack: (String message) {
-  //       eventListnerSuccessAndFailureCallBack(
-  //         message: message,
-  //         isForSuccess: false,
-  //         isForFailure: true,
-  //       );
-  //     },
-  //   );
 
   //   var item = GiftData(
   //     id: 0,
@@ -4233,12 +4268,26 @@ class _LivePage extends State<LiveDharamScreen>
           },
           onInvitationTimeout: (ZegoUIKitUser user) {
             showNotifOverlay(user: user, msg: "onCoHostInvitationTimeout");
+
+            if (isAcceptPopupOpen) {
+              Get.back();
+            } else {}
+
+            successAndFailureCallBack(
+              message: "${user.name} timeout to take the call",
+              isForSuccess: false,
+              isForFailure: true,
+            );
           },
           onInvitationAccepted: (ZegoUIKitUser user) {
             showNotifOverlay(user: user, msg: "onCoHostInvitationAccepted");
           },
           onInvitationRefused: (ZegoUIKitUser user) {
             showNotifOverlay(user: user, msg: "onCoHostInvitationRefused");
+
+            if (isAcceptPopupOpen) {
+              Get.back();
+            } else {}
 
             successAndFailureCallBack(
               message: "${user.name} refused to take the call",
@@ -4297,6 +4346,7 @@ class _LivePage extends State<LiveDharamScreen>
   }) async {
     // _controller.hasCallAcceptRejectPopupOpen = true;
     isAcceptPopupOpen = true;
+    isAcceptPopupOpenFor = user;
     await hostingAndCoHostingPopup(
       onClose: () {},
       needAcceptButton: true,
@@ -4317,6 +4367,7 @@ class _LivePage extends State<LiveDharamScreen>
     );
     // _controller.hasCallAcceptRejectPopupOpen = false;
     isAcceptPopupOpen = false;
+    isAcceptPopupOpenFor = ZegoUIKitUser(id: "", name: "");
     return Future<void>.value();
   }
 
@@ -4424,6 +4475,12 @@ class _LivePage extends State<LiveDharamScreen>
             List<dynamic> list = await _controller.onLiveStreamingEnded();
             _controller.liveId = liveId;
             _controller.currentIndex = list.indexWhere((e) => e == liveId);
+
+            // experimental
+            Get.until(
+                (route) => route.settings.name == RouteName.liveDharamScreen);
+            //
+
             _zegoController.swiping.jumpTo(liveId);
 
             _controller.initData();

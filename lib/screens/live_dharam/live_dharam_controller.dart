@@ -2,7 +2,6 @@
 
 import "dart:async";
 import "dart:convert";
-import "dart:developer";
 
 import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
@@ -1499,12 +1498,12 @@ class LiveDharamController extends GetxController {
   }
 
   bool hasMessageContainsAnyBadWord(String input) {
-    final int i = LiveSharedPreferencesSingleton().getBadWordsList().indexWhere(
-      (element) {
-        return element == input;
-      },
-    );
-    return i != -1;
+    for (var badWord in LiveSharedPreferencesSingleton().getBadWordsList()) {
+      if (input.toLowerCase().contains(badWord.toLowerCase())) {
+        return true;
+      }
+    }
+    return false;
   }
 
   final RegExp indianPhoneNumberRegex = RegExp(r'\b(?:\+?91|0)?[ -]?\d{10}\b');
@@ -1528,6 +1527,24 @@ class LiveDharamController extends GetxController {
     } else {}
     return data.isEmpty ? "" : data.join(", ");
   }
+
+  // Future<void> callblockCustomerByMod({
+  //   required int id,
+  //   required Function(String message) successCallBack,
+  //   required Function(String message) failureCallBack,
+  // }) async {
+  //   Map<String, dynamic> param = <String, dynamic>{};
+  //   param = <String, dynamic>{
+  //     "customer_id": id,
+  //     // "unblock": 0,
+  //   };
+  //   await liveRepository.blockedCustomerFromModAPI(
+  //     params: param,
+  //     successCallBack: successCallBack,
+  //     failureCallBack: failureCallBack,
+  //   );
+  //   return Future<void>.value();
+  // }
 }
 
 class CustomGiftModel {

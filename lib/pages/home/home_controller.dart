@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -48,6 +49,7 @@ import "../../repository/important_number_repository.dart";
 import '../../repository/notice_repository.dart';
 import '../../repository/performance_repository.dart';
 import '../../repository/user_repository.dart';
+import 'package:cron/cron.dart';
 
 class HomeController extends GetxController {
   // RxBool chatSwitch = false.obs;
@@ -117,6 +119,8 @@ class HomeController extends GetxController {
   List<Contact> allContacts = <Contact>[].obs;
   bool? isAllNumbersExist;
 
+  final cron = Cron();
+
   @override
   void onInit() async {
     super.onInit();
@@ -183,6 +187,67 @@ class HomeController extends GetxController {
         } else {}
       },
     );
+
+    // cron.schedule(Schedule.parse('*/5 * * * * *'), checkForScheduleUpdate);
+  }
+
+  void checkForScheduleUpdate() {
+    DateTime chatChatDateAndTime = DateTime(2050);
+    final String dateStringForChat = selectedChatDate.value.toString();
+    final String timeStringForChat = selectedChatTime.value.toString();
+    if (dateStringForChat.isNotEmpty && timeStringForChat.isNotEmpty) {
+      chatChatDateAndTime = getChatDateAndTime(
+        dateString: dateStringForChat,
+        timeString: timeStringForChat,
+      );
+    } else {}
+
+    DateTime callChatDateAndTime = DateTime(2050);
+    final String dateStringForCall = selectedCallDate.value.toString();
+    final String timeStringForCall = selectedCallTime.value.toString();
+    if (dateStringForCall.isNotEmpty && timeStringForCall.isNotEmpty) {
+      callChatDateAndTime = getChatDateAndTime(
+        dateString: dateStringForCall,
+        timeString: timeStringForCall,
+      );
+    } else {}
+
+    DateTime videoChatDateAndTime = DateTime(2050);
+    final String dateStringForVideoDate = selectedVideoDate.value.toString();
+    final String timeStringForVideoTime = selectedVideoTime.value.toString();
+    if (dateStringForVideoDate.isNotEmpty &&
+        timeStringForVideoTime.isNotEmpty) {
+      videoChatDateAndTime = getChatDateAndTime(
+        dateString: dateStringForVideoDate,
+        timeString: timeStringForVideoTime,
+      );
+    } else {}
+
+    final bool isBeforeChat = chatChatDateAndTime.isBefore(DateTime.now());
+    final bool isBeforeCall = callChatDateAndTime.isBefore(DateTime.now());
+    final bool isVideo = videoChatDateAndTime.isBefore(DateTime.now());
+
+    if (!isBeforeChat || !isBeforeCall || !isVideo) {
+      getDashboardDetail();
+    } else {}
+    return;
+  }
+
+  DateTime getChatDateAndTime({
+    required String dateString,
+    required String timeString,
+  }) {
+    final DateTime date = DateTime.parse(dateString);
+    final DateFormat timeFormat = DateFormat('hh:mm a');
+    final TimeOfDay time = TimeOfDay.fromDateTime(timeFormat.parse(timeString));
+    final DateTime combinedDateTime = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+    return combinedDateTime;
   }
 
   getUserImage() async {
@@ -539,19 +604,25 @@ class HomeController extends GetxController {
     }
   }
 
-  void chatSwitchFN() {
+  Future<void> chatSwitchFN({required Function() onComplete}) async {
     chatSwitch(!chatSwitch.value);
-    updateSessionType(chatSwitch.value, chatSwitch, 1);
+    await updateSessionType(chatSwitch.value, chatSwitch, 1);
+    onComplete();
+    return Future<void>.value();
   }
 
-  void callSwitchFN() {
+  Future<void> callSwitchFN({required Function() onComplete}) async {
     callSwitch(!callSwitch.value);
-    updateSessionType(callSwitch.value, callSwitch, 2);
+    await updateSessionType(callSwitch.value, callSwitch, 2);
+    onComplete();
+    return Future<void>.value();
   }
 
-  void videoCallSwitchFN() {
+  Future<void> videoCallSwitchFN({required Function() onComplete}) async {
     videoSwitch(!videoSwitch.value);
-    updateSessionType(videoSwitch.value, videoSwitch, 3);
+    await updateSessionType(videoSwitch.value, videoSwitch, 3);
+    onComplete();
+    return Future<void>.value();
   }
 
   final noticeRepository = Get.put(NoticeRepository());
