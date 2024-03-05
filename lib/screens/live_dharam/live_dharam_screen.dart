@@ -15,6 +15,7 @@ import "package:divine_astrologer/screens/live_dharam/gift/gift.dart";
 import "package:divine_astrologer/screens/live_dharam/gift/gift_manager/gift_manager.dart";
 import "package:divine_astrologer/screens/live_dharam/gifts_singleton.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
+import "package:divine_astrologer/screens/live_dharam/live_global_singleton.dart";
 import "package:divine_astrologer/screens/live_dharam/live_screen_widgets/leaderboard_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/live_screen_widgets/live_keyboard.dart";
 import "package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart";
@@ -69,6 +70,8 @@ const int appID = 696414715;
 const String appSign =
     "bf7174a98b7d6fb6e2dc7ae60f6ed932d6a9794dad8a5cae22e29ad8abfac1aa";
 const String serverSecret = "89ceddc6c59909af326ddb7209cb1c16";
+final ZegoUIKitPrebuiltLiveStreamingController zegoController =
+    ZegoUIKitPrebuiltLiveStreamingController();
 
 class LiveDharamScreen extends StatefulWidget {
   const LiveDharamScreen({super.key});
@@ -80,9 +83,6 @@ class LiveDharamScreen extends StatefulWidget {
 class _LivePage extends State<LiveDharamScreen>
     with WidgetsBindingObserver, AfterLayoutMixin<LiveDharamScreen> {
   final LiveDharamController _controller = Get.find();
-
-  final ZegoUIKitPrebuiltLiveStreamingController _zegoController =
-      ZegoUIKitPrebuiltLiveStreamingController();
 
   final ScrollController _scrollControllerForTop = ScrollController();
   final ScrollController _scrollControllerForBottom = ScrollController();
@@ -177,9 +177,7 @@ class _LivePage extends State<LiveDharamScreen>
         .getInRoomCommandMessageReceivedEventStream()
         .listen(onInRoomCommandMessageReceived);
 
-    ZegoUIKitPrebuiltLiveStreamingController()
-        .coHost
-        .audienceLocalConnectStateNotifier
+    zegoController.coHost.audienceLocalConnectStateNotifier
         .addListener(onAudienceLocalConnectStateChanged);
 
     _controller.ref.child("live").onValue.listen(
@@ -614,10 +612,8 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> onAudienceLocalConnectStateChanged() async {
-    final audienceConnectState = ZegoUIKitPrebuiltLiveStreamingController()
-        .coHost
-        .audienceLocalConnectStateNotifier
-        .value;
+    final audienceConnectState =
+        zegoController.coHost.audienceLocalConnectStateNotifier.value;
 
     switch (audienceConnectState) {
       case ZegoLiveStreamingAudienceConnectState.idle:
@@ -662,6 +658,10 @@ class _LivePage extends State<LiveDharamScreen>
 
   @override
   Widget build(BuildContext context) {
+    //
+    LiveGlobalSingleton().buildContext = context;
+    //
+
     // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
@@ -1684,7 +1684,7 @@ class _LivePage extends State<LiveDharamScreen>
     return SizedBox(
       height: Get.height * 0.30,
       child: StreamBuilder<List<ZegoInRoomMessage>>(
-        stream: _zegoController.message.stream(),
+        stream: zegoController.message.stream(),
         builder: (
           BuildContext context,
           AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,
@@ -1853,7 +1853,7 @@ class _LivePage extends State<LiveDharamScreen>
       height: 32,
       width: Get.width / 1.5,
       child: StreamBuilder<List<ZegoInRoomMessage>>(
-        stream: _zegoController.message.stream(),
+        stream: zegoController.message.stream(),
         builder: (
           BuildContext context,
           AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,
@@ -2016,7 +2016,7 @@ class _LivePage extends State<LiveDharamScreen>
       _controller.updateInfo();
       List<dynamic> list = await _controller.onLiveStreamingEnded();
       if (list.isNotEmpty) {
-        _zegoController.swiping.next();
+        zegoController.swiping.next();
 
         _controller.initData();
         _controller.updateInfo();
@@ -2171,7 +2171,7 @@ class _LivePage extends State<LiveDharamScreen>
             final String name = _controller.waitListModel.first.userName;
             final String avatar = _controller.waitListModel.first.avatar;
             final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
-            final connectInvite = _zegoController.coHost;
+            final connectInvite = zegoController.coHost;
             await connectInvite.hostSendCoHostInvitationToAudience(user);
           },
           onReject: Get.back,
@@ -3835,6 +3835,45 @@ class _LivePage extends State<LiveDharamScreen>
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
+        // StreamBuilder<Object>(
+        //   stream: null,
+        //   builder: (context, snapshot) {
+        //     return AnimatedOpacity(
+        //       opacity: 1.0,
+        //       duration: const Duration(seconds: 1),
+        //       child: Column(
+        //         children: [
+        //           InkWell(
+        //             onTap: () {},
+        //             child: SizedBox(
+        //               height: 50,
+        //               width: 50,
+        //               child: DecoratedBox(
+        //                 decoration: BoxDecoration(
+        //                   borderRadius: const BorderRadius.all(
+        //                     Radius.circular(50.0),
+        //                   ),
+        //                   border: Border.all(
+        //                     color: appColors.guideColor,
+        //                   ),
+        //                   color: appColors.black.withOpacity(0.2),
+        //                 ),
+        //                 child: Padding(
+        //                   padding: const EdgeInsets.all(8.0),
+        //                   child: Icon(
+        //                     Icons.shopping_bag_outlined,
+        //                     color: appColors.guideColor,
+        //                   ),
+        //                 ),
+        //               ),
+        //             ),
+        //           ),
+        //           const SizedBox(height: 8),
+        //         ],
+        //       ),
+        //     );
+        //   },
+        // ),
         StreamBuilder<Object>(
           stream: null,
           builder: (context, snapshot) {
@@ -4187,7 +4226,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   Future<void> sendMessageToZego(ZegoCustomMessage model) async {
     final String encodedstring = json.encode(model.toJson());
-    await _zegoController.message.send(encodedstring);
+    await zegoController.message.send(encodedstring);
     return Future<void>.value();
   }
 
@@ -4227,7 +4266,7 @@ class _LivePage extends State<LiveDharamScreen>
               _timer?.cancel();
               _msgTimerForFollowPopup?.cancel();
               _msgTimerForTarotCardPopup?.cancel();
-              await _zegoController.leave(context);
+              await zegoController.leave(context);
             } else {}
           },
         );
@@ -4238,7 +4277,7 @@ class _LivePage extends State<LiveDharamScreen>
               _timer?.cancel();
               _msgTimerForFollowPopup?.cancel();
               _msgTimerForTarotCardPopup?.cancel();
-              await _zegoController.leave(context);
+              await zegoController.leave(context);
             } else {}
           },
         );
@@ -4546,7 +4585,7 @@ class _LivePage extends State<LiveDharamScreen>
         //   final connectInvite = _zegoController.coHost;
         //   await connectInvite.hostSendCoHostInvitationToAudience(user);
         // } else {}
-        final connectInvite = _zegoController.coHost;
+        final connectInvite = zegoController.coHost;
         await connectInvite.hostSendCoHostInvitationToAudience(user);
       },
       onDeclineButton: () {},
@@ -4566,7 +4605,7 @@ class _LivePage extends State<LiveDharamScreen>
       id: _controller.currentCaller.id,
       name: _controller.currentCaller.userName,
     );
-    final connect = _zegoController.coHost;
+    final connect = zegoController.coHost;
     final bool removed = _controller.isHost
         ? await connect.removeCoHost(user)
         : await connect.stopCoHost(showRequestDialog: false);
@@ -4665,7 +4704,7 @@ class _LivePage extends State<LiveDharamScreen>
             List<dynamic> list = await _controller.onLiveStreamingEnded();
             _controller.liveId = liveId;
             _controller.currentIndex = list.indexWhere((e) => e == liveId);
-            _zegoController.swiping.jumpTo(liveId);
+            zegoController.swiping.jumpTo(liveId);
 
             _controller.initData();
             _controller.updateInfo();

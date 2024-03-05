@@ -6,6 +6,7 @@ import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/live/blocked_customer_list_res.dart';
 import 'package:divine_astrologer/repository/astrologer_profile_repository.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
+import 'package:divine_astrologer/screens/live_dharam/live_global_singleton.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_screen_recording/flutter_screen_recording.dart';
@@ -86,7 +87,9 @@ class LiveTipsController extends GetxController {
     );
     await database.ref().child("astro-live-list/$userId").set(1);
 
+    LiveGlobalSingleton().isInLiveScreen = true;
     await Get.toNamed(RouteName.liveDharamScreen, arguments: userId);
+    LiveGlobalSingleton().isInLiveScreen = false;
 
     await database.ref().child("live/$userId").remove();
     await database.ref().child("astro-live-list/$userId").remove();

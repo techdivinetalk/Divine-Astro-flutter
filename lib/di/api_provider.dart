@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:divine_astrologer/di/progress_service.dart';
+import 'package:divine_astrologer/screens/live_dharam/live_global_singleton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -315,6 +316,7 @@ class ApiProvider {
         throw CustomException(AppString.timeoutMessage);
       });
       log('response: ${response.body}');
+      await doLiveStreamPendingTasks(response);
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);
@@ -338,6 +340,7 @@ class ApiProvider {
         throw CustomException(AppString.timeoutMessage);
       });
       log('response: ${response.body}');
+      await doLiveStreamPendingTasks(response);
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);
@@ -361,6 +364,7 @@ class ApiProvider {
         throw CustomException(AppString.timeoutMessage);
       });
       log('response: ${response.body}');
+      await doLiveStreamPendingTasks(response);
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);
@@ -395,6 +399,7 @@ class ApiProvider {
       if (url != constantDetails) {
         log('response: ${response.body}');
       }
+      await doLiveStreamPendingTasks(response);
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);
@@ -420,6 +425,7 @@ class ApiProvider {
         throw CustomException(AppString.timeoutMessage);
       });
       log('response: ${response.body}');
+      await doLiveStreamPendingTasks(response);
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);
@@ -454,6 +460,7 @@ class ApiProvider {
       log("request : $request");
       final response = await http.Response.fromStream(await request.send());
       log(response.body);
+      await doLiveStreamPendingTasks(response);
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);
@@ -468,5 +475,16 @@ class ApiProvider {
       'Content-Type': 'application/json',
     };
     return headers;
+  }
+
+  Future<void> doLiveStreamPendingTasks(http.Response response) async {
+    final bool cond1 = response.statusCode == HttpStatus.unauthorized;
+    final bool cond2 = json.decode(response.body)["status_code"] == HttpStatus.unauthorized;
+
+    if (cond1 || cond2) {
+      await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
+    } else {}
+
+    return Future<void>.value();
   }
 }
