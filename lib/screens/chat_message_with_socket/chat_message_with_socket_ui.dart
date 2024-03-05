@@ -91,46 +91,48 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               // }
                               return true;
                             },
-                            child: ListView.builder(
-                              controller: controller.messgeScrollController,
-                              itemCount: controller.chatMessages.length,
-                              shrinkWrap: true,
-                              reverse: false,
-                              itemBuilder: (context, index) {
-                                var chatMessage =
-                                    controller.chatMessages[index];
-                                print(
-                                    "value of chatmessage length ${chatMessage.toOfflineJson()}");
-                                return Column(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 4.h, horizontal: 12.w),
-                                      child: MessageView(
-                                          index: index,
-                                          nextChatMessage: index ==
-                                                  controller
-                                                          .chatMessages.length -
-                                                      1
-                                              ? controller.chatMessages[index]
-                                              : controller
-                                                  .chatMessages[index + 1],
-                                          chatMessage: chatMessage,
-                                          yourMessage: chatMessage.senderId ==
-                                              preferenceService
-                                                  .getUserDetail()!
-                                                  .id,
-                                          userName:
-                                              controller.customerName.value,
-                                          unreadMessage: controller
-                                              .unreadMessageIndex.value),
-                                    ),
-                                    if (index ==
-                                        (controller.chatMessages.length - 1))
-                                      typingWidget()
-                                  ],
-                                );
-                              },
+                            child: Expanded(
+                              child: ListView.builder(
+                                controller: controller.messgeScrollController,
+                                itemCount: controller.chatMessages.length,
+                                shrinkWrap: true,
+                                reverse: false,
+                                itemBuilder: (context, index) {
+                                  var chatMessage =
+                                      controller.chatMessages[index];
+                                  print(
+                                      "value of chatmessage length ${chatMessage.toOfflineJson()}");
+                                  return Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 4.h, horizontal: 12.w),
+                                        child: MessageView(
+                                            index: index,
+                                            nextChatMessage: index ==
+                                                    controller
+                                                            .chatMessages.length -
+                                                        1
+                                                ? controller.chatMessages[index]
+                                                : controller
+                                                    .chatMessages[index + 1],
+                                            chatMessage: chatMessage,
+                                            yourMessage: chatMessage.senderId ==
+                                                preferenceService
+                                                    .getUserDetail()!
+                                                    .id,
+                                            userName:
+                                                controller.customerName.value,
+                                            unreadMessage: controller
+                                                .unreadMessageIndex.value),
+                                      ),
+                                      if (index ==
+                                          (controller.chatMessages.length - 1))
+                                        typingWidget()
+                                    ],
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ),
