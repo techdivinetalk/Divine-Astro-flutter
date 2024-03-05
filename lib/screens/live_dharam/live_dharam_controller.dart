@@ -111,10 +111,6 @@ class LiveDharamController extends GetxController {
   final RxBool _isProcessing = false.obs;
   final RxBool _extendTimeWidgetVisible = false.obs;
   final RxBool _hasReInitCoHost = false.obs;
-  final Rx<AcceptPopupClass> _acceptPopupClass = AcceptPopupClass(
-    acceptPopupOpenedForUserId: "",
-    acceptPopupOpenedForUserName: "",
-  ).obs;
 
   @override
   void onInit() {
@@ -189,10 +185,6 @@ class LiveDharamController extends GetxController {
     isProcessing = false;
     extendTimeWidgetVisible = false;
     hasReInitCoHost = false;
-    acceptPopupClass = AcceptPopupClass(
-      acceptPopupOpenedForUserId: "",
-      acceptPopupOpenedForUserName: "",
-    );
 
     return;
   }
@@ -238,7 +230,6 @@ class LiveDharamController extends GetxController {
     _isProcessing.close();
     _extendTimeWidgetVisible.close();
     _hasReInitCoHost.close();
-    _acceptPopupClass.close();
 
     super.onClose();
   }
@@ -367,9 +358,6 @@ class LiveDharamController extends GetxController {
 
   bool get hasReInitCoHost => _hasReInitCoHost.value;
   set hasReInitCoHost(bool value) => _hasReInitCoHost(value);
-
-  AcceptPopupClass get acceptPopupClass => _acceptPopupClass.value;
-  set acceptPopupClass(AcceptPopupClass value) => _acceptPopupClass(value);
 
   Future<void> eventListner({
     required DataSnapshot snapshot,
@@ -1510,12 +1498,12 @@ class LiveDharamController extends GetxController {
   }
 
   bool hasMessageContainsAnyBadWord(String input) {
-    final int i = LiveSharedPreferencesSingleton().getBadWordsList().indexWhere(
-      (element) {
-        return element == input;
-      },
-    );
-    return i != -1;
+    for (var badWord in LiveSharedPreferencesSingleton().getBadWordsList()) {
+      if (input.toLowerCase().contains(badWord.toLowerCase())) {
+        return true;
+      }
+    }
+    return false;
   }
 
   final RegExp indianPhoneNumberRegex = RegExp(r'\b(?:\+?91|0)?[ -]?\d{10}\b');
@@ -1747,26 +1735,4 @@ class RequestClass {
     required this.giftData,
     required this.giftCount,
   });
-}
-
-class AcceptPopupClass {
-  String? acceptPopupOpenedForUserId;
-  String? acceptPopupOpenedForUserName;
-
-  AcceptPopupClass({
-    this.acceptPopupOpenedForUserId,
-    this.acceptPopupOpenedForUserName,
-  });
-
-  AcceptPopupClass.fromJson(Map<String, dynamic> json) {
-    acceptPopupOpenedForUserId = json['acceptPopupOpenedForUserId'];
-    acceptPopupOpenedForUserName = json['acceptPopupOpenedForUserName'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['acceptPopupOpenedForUserId'] = acceptPopupOpenedForUserId;
-    data['acceptPopupOpenedForUserName'] = acceptPopupOpenedForUserName;
-    return data;
-  }
 }

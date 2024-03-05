@@ -264,6 +264,10 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> zeroAstro() async {
+    // // experimental
+    // Get.until((route) => route.settings.name == RouteName.liveDharamScreen);
+    // //
+    
     // await endOrderFirst();
 
     // if (mounted) {
@@ -362,7 +366,7 @@ class _LivePage extends State<LiveDharamScreen>
             final String name = _controller.waitListModel.first.userName;
             final String avatar = _controller.waitListModel.first.avatar;
             final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
-            
+
             await onCoHostRequest(
               user: user,
               userId: id,
@@ -1833,6 +1837,11 @@ class _LivePage extends State<LiveDharamScreen>
       _controller.updateInfo();
       List<dynamic> list = await _controller.onLiveStreamingEnded();
       if (list.isNotEmpty) {
+        
+        // experimental
+        Get.until((route) => route.settings.name == RouteName.liveDharamScreen);
+        //
+      
         _zegoController.swiping.next();
 
         _controller.initData();
@@ -1973,7 +1982,7 @@ class _LivePage extends State<LiveDharamScreen>
               yesDisconnect: () async {
                 if (!_controller.isHost) {
                   await _controller.removeFromWaitList();
-                  await notifyAstroForExitLive();
+                  await notifyAstroForExitWaitList();
                 } else {}
               },
             );
@@ -1999,11 +2008,14 @@ class _LivePage extends State<LiveDharamScreen>
     return Future<void>.value();
   }
 
-  Future<void> notifyAstroForExitLive() async {
-    final Map<String, dynamic> data = AcceptPopupClass(
-            acceptPopupOpenedForUserId: _controller.userId,
-            acceptPopupOpenedForUserName: _controller.userName)
-        .toJson();
+  Future<void> notifyAstroForExitWaitList() async {
+    var data = {
+      "room_id": _controller.liveId,
+      "user_id": _controller.userId,
+      "user_name": _controller.userName,
+      "item": {},
+      "type": "Notify Astro For Exit WaitList",
+    };
 
     await _controller.sendGiftAPI(
       data: data,
@@ -2615,6 +2627,16 @@ class _LivePage extends State<LiveDharamScreen>
               //   isForFailure: true,
               // );
             }
+          } else if (type == "Notify Astro For Exit WaitList") {
+            final bool cond1 = _controller.isHost;
+            final bool cond2 = isAcceptPopupOpen;
+            final bool cond3 = roomId == _controller.userId;
+            final bool cond4 = userId == isAcceptPopupOpenFor.id;
+            final bool cond5 = userName == isAcceptPopupOpenFor.name;
+
+            if (cond1 && cond2 && cond3 && cond4 && cond5) {
+              Get.back();
+            } else {}
           } else {}
         } else {}
       } else {}
@@ -4091,6 +4113,39 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   // Future<void> followOrUnfollowFunction() async {
+  //   await _controller.followOrUnfollowAstrologer(
+  //     successCallBack: (String message) {
+  //       successAndFailureCallBack(
+  //         message: message,
+  //         isForSuccess: true,
+  //         isForFailure: false,
+  //       );
+  //     },
+  //     failureCallBack: (String message) {
+  //       successAndFailureCallBack(
+  //         message: message,
+  //         isForSuccess: false,
+  //         isForFailure: true,
+  //       );
+  //     },
+  //   );
+  //   await _controller.getAstrologerDetails(
+  //     successCallBack: (String message) {
+  //       successAndFailureCallBack(
+  //         message: message,
+  //         isForSuccess: true,
+  //         isForFailure: false,
+  //       );
+  //     },
+  //     failureCallBack: (String message) {
+  //       successAndFailureCallBack(
+  //         message: message,
+  //         isForSuccess: false,
+  //         isForFailure: true,
+  //       );
+  //     },
+  //   );
+
   //   final ZegoCustomMessage model = ZegoCustomMessage(
   //     type: 1,
   //     liveId: _controller.liveId,
@@ -4104,39 +4159,6 @@ class _LivePage extends State<LiveDharamScreen>
   //     isMod: false,
   //   );
   //   await sendMessageToZego(model);
-
-  //   await _controller.followOrUnfollowAstrologer(
-  //     successCallBack: (String message) {
-  //       eventListnerSuccessAndFailureCallBack(
-  //         message: message,
-  //         isForSuccess: true,
-  //         isForFailure: false,
-  //       );
-  //     },
-  //     failureCallBack: (String message) {
-  //       eventListnerSuccessAndFailureCallBack(
-  //         message: message,
-  //         isForSuccess: false,
-  //         isForFailure: true,
-  //       );
-  //     },
-  //   );
-  //   await _controller.getAstrologerDetails(
-  //     successCallBack: (String message) {
-  //       eventListnerSuccessAndFailureCallBack(
-  //         message: message,
-  //         isForSuccess: true,
-  //         isForFailure: false,
-  //       );
-  //     },
-  //     failureCallBack: (String message) {
-  //       eventListnerSuccessAndFailureCallBack(
-  //         message: message,
-  //         isForSuccess: false,
-  //         isForFailure: true,
-  //       );
-  //     },
-  //   );
 
   //   var item = GiftData(
   //     id: 0,
@@ -4453,6 +4475,12 @@ class _LivePage extends State<LiveDharamScreen>
             List<dynamic> list = await _controller.onLiveStreamingEnded();
             _controller.liveId = liveId;
             _controller.currentIndex = list.indexWhere((e) => e == liveId);
+
+            // experimental
+            Get.until(
+                (route) => route.settings.name == RouteName.liveDharamScreen);
+            //
+
             _zegoController.swiping.jumpTo(liveId);
 
             _controller.initData();
