@@ -11,6 +11,8 @@ import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/model/live/deck_card_model.dart";
 import "package:divine_astrologer/model/live/notice_board_res.dart";
+import "package:divine_astrologer/screens/live_dharam/gift/gift.dart";
+import "package:divine_astrologer/screens/live_dharam/gift/gift_manager/gift_manager.dart";
 import "package:divine_astrologer/screens/live_dharam/gifts_singleton.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/live_screen_widgets/leaderboard_widget.dart";
@@ -31,10 +33,9 @@ import "package:divine_astrologer/screens/live_dharam/widgets/exit_wait_list_wid
 import "package:divine_astrologer/screens/live_dharam/widgets/follow_player.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/gift_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
-import "package:divine_astrologer/screens/live_dharam/widgets/more_options_for_mod_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
-import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
+// import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
@@ -42,7 +43,6 @@ import "package:flutter/scheduler.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 import "package:intl/intl.dart";
-import "package:shared_preferences/shared_preferences.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
@@ -51,6 +51,8 @@ import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_ast
 import "package:divine_astrologer/screens/live_dharam/widgets/extend_time_widget.dart";
 import 'package:random_name_generator/random_name_generator.dart';
 
+//
+//
 //
 //
 //
@@ -159,6 +161,17 @@ class _LivePage extends State<LiveDharamScreen>
 
     WidgetsBinding.instance.addObserver(this);
 
+    ZegoGiftManager().service.recvNotifier.addListener(onGiftReceived);
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ZegoGiftManager().service.init(
+            appID: appID,
+            liveID: _controller.liveId,
+            localUserID: _controller.userId,
+            localUserName: _controller.userName,
+          );
+    });
+
     ZegoUIKit()
         .getSignalingPlugin()
         .getInRoomCommandMessageReceivedEventStream()
@@ -204,7 +217,7 @@ class _LivePage extends State<LiveDharamScreen>
       },
     );
 
-    _startTimer();
+    // _startTimer();
 
     receiver.start();
     receiver.messages.listen(
@@ -264,13 +277,9 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> zeroAstro() async {
-    // // experimental
-    // Get.until((route) => route.settings.name == RouteName.liveDharamScreen);
-    // //
-    
-    // await endOrderFirst();
-
     // if (mounted) {
+    //   endOrderFirst();
+
     //   _timer?.cancel();
     //   _msgTimerForFollowPopup?.cancel();
     //   _msgTimerForTarotCardPopup?.cancel();
@@ -580,9 +589,28 @@ class _LivePage extends State<LiveDharamScreen>
     _timer?.cancel();
     _msgTimerForFollowPopup?.cancel();
     _msgTimerForTarotCardPopup?.cancel();
+
+    ZegoGiftManager().service.recvNotifier.removeListener(onGiftReceived);
+    ZegoGiftManager().service.uninit();
+
     WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
+  }
+
+  void onGiftReceived() {
+    final receivedGift = ZegoGiftManager().service.recvNotifier.value ??
+        ZegoGiftProtocolItem.empty();
+    final giftData = queryGiftInItemList(receivedGift.name);
+    if (null == giftData) {
+      debugPrint('not ${receivedGift.name} exist');
+      return;
+    }
+
+    ZegoGiftManager().playList.add(PlayData(
+          giftItem: giftData,
+          count: receivedGift.count,
+        ));
   }
 
   Future<void> onAudienceLocalConnectStateChanged() async {
@@ -765,7 +793,9 @@ class _LivePage extends State<LiveDharamScreen>
                           );
                         },
                       )
-                      ..foreground = foregroundWidget()
+                      // ..foreground = foregroundWidget()
+                      ..foreground = giftForeground()
+                      ..mediaPlayer.supportTransparent = false
                       ..inRoomMessage = ZegoLiveStreamingInRoomMessageConfig(
                         itemBuilder: (
                           BuildContext context,
@@ -854,51 +884,182 @@ class _LivePage extends State<LiveDharamScreen>
           );
   }
 
+  Widget giftForeground() {
+    return ValueListenableBuilder<PlayData?>(
+      valueListenable: ZegoGiftManager().playList.playingDataNotifier,
+      builder: (context, playData, _) {
+        if (null == playData) {
+          return foregroundWidget();
+        }
+
+        if (playData.giftItem.type == ZegoGiftType.svga) {
+          return svgaWidget(playData);
+        } else {
+          return mp4Widget(playData);
+        }
+      },
+    );
+  }
+
+  Widget svgaWidget(PlayData playData) {
+    if (playData.giftItem.type != ZegoGiftType.svga) {
+      return foregroundWidget();
+    }
+
+    /// you can define the area and size for displaying your own
+    /// animations here
+    int level = 1;
+    if (playData.giftItem.weight < 10) {
+      level = 1;
+    } else if (playData.giftItem.weight < 100) {
+      level = 2;
+    } else {
+      level = 3;
+    }
+    switch (level) {
+      case 2:
+        return Positioned(
+          top: 100,
+          bottom: 100,
+          left: 10,
+          right: 10,
+          child: ZegoSvgaPlayerWidget(
+            key: UniqueKey(),
+            playData: playData,
+            onPlayEnd: () {
+              ZegoGiftManager().playList.next();
+            },
+          ),
+        );
+      case 3:
+        return ZegoSvgaPlayerWidget(
+          key: UniqueKey(),
+          playData: playData,
+          onPlayEnd: () {
+            ZegoGiftManager().playList.next();
+          },
+        );
+    }
+    // level 1
+    return Positioned(
+      bottom: 200,
+      left: 10,
+      child: ZegoSvgaPlayerWidget(
+        key: UniqueKey(),
+        size: const Size(100, 100),
+        playData: playData,
+        onPlayEnd: () {
+          /// if there is another gift animation, then play
+          ZegoGiftManager().playList.next();
+        },
+      ),
+    );
+  }
+
+  Widget mp4Widget(PlayData playData) {
+    if (playData.giftItem.type != ZegoGiftType.mp4) {
+      return foregroundWidget();
+    }
+
+    /// you can define the area and size for displaying your own
+    /// animations here
+    int level = 1;
+    if (playData.giftItem.weight < 10) {
+      level = 1;
+    } else if (playData.giftItem.weight < 100) {
+      level = 2;
+    } else {
+      level = 3;
+    }
+    switch (level) {
+      case 2:
+        return Positioned(
+          top: 100,
+          bottom: 100,
+          left: 10,
+          right: 10,
+          child: ZegoMp4PlayerWidget(
+            key: UniqueKey(),
+            playData: playData,
+            onPlayEnd: () {
+              ZegoGiftManager().playList.next();
+            },
+          ),
+        );
+      case 3:
+        return ZegoMp4PlayerWidget(
+          key: UniqueKey(),
+          playData: playData,
+          onPlayEnd: () {
+            ZegoGiftManager().playList.next();
+          },
+        );
+    }
+    // level 1
+    return Positioned(
+      bottom: 200,
+      left: 10,
+      child: ZegoMp4PlayerWidget(
+        key: UniqueKey(),
+        size: const Size(100, 100),
+        playData: playData,
+        onPlayEnd: () {
+          /// if there is another gift animation, then play
+          ZegoGiftManager().playList.next();
+        },
+      ),
+    );
+  }
+
   Widget foregroundWidget() {
-    return Padding(
-      padding: const EdgeInsets.only(top: kToolbarHeight - 16.0),
-      child: Column(
-        children: <Widget>[
-          appBarWidget(),
-          const SizedBox(height: 8),
-          Expanded(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      noticeBoard(),
-                      // requestedBoard(),
-                      SizedBox(
-                          height:
-                              (_controller.noticeBoardRes.data ?? []).isEmpty
+    return Obx(
+      () {
+        return Padding(
+          padding: const EdgeInsets.only(top: kToolbarHeight - 16.0),
+          child: Column(
+            children: <Widget>[
+              appBarWidget(),
+              const SizedBox(height: 8),
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          noticeBoard(),
+                          // requestedBoard(),
+                          SizedBox(
+                              height: (_controller.noticeBoardRes.data ?? [])
+                                      .isEmpty
                                   ? 0.0
                                   : 4.0),
-                      inRoomMessage(),
-                    ],
-                  ),
+                          inRoomMessage(),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    //
+                    verticalDefault(),
+                    //
+                    const SizedBox(width: 8),
+                  ],
                 ),
-                const SizedBox(width: 8),
-                //
-                verticalDefault(),
-                //
-                const SizedBox(width: 8),
-              ],
-            ),
+              ),
+              const SizedBox(height: 8),
+              // horizontalGiftBar(ctx: context),
+              // const SizedBox(height: 8),
+              newUI(),
+              const SizedBox(height: 8),
+            ],
           ),
-          const SizedBox(height: 8),
-          // horizontalGiftBar(ctx: context),
-          // const SizedBox(height: 8),
-          newUI(),
-          const SizedBox(height: 8),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -1457,10 +1618,26 @@ class _LivePage extends State<LiveDharamScreen>
   //     );
   //     if (hasBal) {
   //       if (mounted) {
-  //         ZegoGiftPlayer().play(
-  //           ctx,
-  //           GiftPlayerData(GiftPlayerSource.url, item.animation),
+  //         // ZegoGiftPlayer().play(
+  //         //   ctx,
+  //         //   GiftPlayerData(GiftPlayerSource.url, item.animation),
+  //         // );
+
+  //         final ZegoGiftItem giftItem = ZegoGiftItem(
+  //           sourceURL: item.animation,
+  //           weight: 100,
+  //           name: item.giftName,
+  //           icon: item.giftImage,
+  //           source: ZegoGiftSource.url,
+  //           type: ZegoGiftType.svga,
   //         );
+
+  //         ZegoGiftManager().playList.add(
+  //               PlayData(
+  //                 giftItem: giftItem,
+  //                 count: quantity.toInt(),
+  //               ),
+  //             );
   //       } else {}
   //       var data = {
   //         "room_id": _controller.liveId,
@@ -1826,22 +2003,19 @@ class _LivePage extends State<LiveDharamScreen>
 
   Future<void> onLiveStreamingStateUpdate(ZegoLiveStreamingState state) async {
     if (state == ZegoLiveStreamingState.idle) {
-      ZegoGiftPlayer().clear();
+      // ZegoGiftPlayer().clear();
+      ZegoGiftManager().playList.clear();
     } else {}
 
     if (state == ZegoLiveStreamingState.ended) {
-      ZegoGiftPlayer().clear();
+      // ZegoGiftPlayer().clear();
+      ZegoGiftManager().playList.clear();
 
       await endOrderFirst();
 
       _controller.updateInfo();
       List<dynamic> list = await _controller.onLiveStreamingEnded();
       if (list.isNotEmpty) {
-        
-        // experimental
-        Get.until((route) => route.settings.name == RouteName.liveDharamScreen);
-        //
-      
         _zegoController.swiping.next();
 
         _controller.initData();
@@ -2525,10 +2699,26 @@ class _LivePage extends State<LiveDharamScreen>
         if (roomId == _controller.liveId) {
           if (type == "") {
             if (mounted) {
-              ZegoGiftPlayer().play(
-                context,
-                GiftPlayerData(GiftPlayerSource.url, item["animation"]),
+              // ZegoGiftPlayer().play(
+              //   context,
+              //   GiftPlayerData(GiftPlayerSource.url, item["animation"]),
+              // );
+
+              final ZegoGiftItem giftItem = ZegoGiftItem(
+                sourceURL: item["animation"],
+                weight: 100,
+                name: item["gift_name"],
+                icon: item["full_gift_image"],
+                source: ZegoGiftSource.url,
+                type: ZegoGiftType.svga,
               );
+
+              ZegoGiftManager().playList.add(
+                    PlayData(
+                      giftItem: giftItem,
+                      count: giftCount.toInt(),
+                    ),
+                  );
             } else {}
             await showHideTopBanner();
           } else if (type == "Started following") {
@@ -4475,12 +4665,6 @@ class _LivePage extends State<LiveDharamScreen>
             List<dynamic> list = await _controller.onLiveStreamingEnded();
             _controller.liveId = liveId;
             _controller.currentIndex = list.indexWhere((e) => e == liveId);
-
-            // experimental
-            Get.until(
-                (route) => route.settings.name == RouteName.liveDharamScreen);
-            //
-
             _zegoController.swiping.jumpTo(liveId);
 
             _controller.initData();

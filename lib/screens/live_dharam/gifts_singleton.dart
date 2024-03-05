@@ -7,6 +7,7 @@ import "package:get/get_connect/http/src/status/http_status.dart";
 
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/repository/astrologer_profile_repository.dart";
+import "package:divine_astrologer/screens/live_dharam/gift/gift.dart" as gift;
 
 class GiftsSingleton {
   static final GiftsSingleton _singleton = GiftsSingleton._internal();
@@ -26,6 +27,7 @@ class GiftsSingleton {
 
   Future<void> init() async {
     await getAllGifts();
+    cacheAllFiles();
     cache();
     return Future<void>.value();
   }
@@ -40,6 +42,24 @@ class GiftsSingleton {
         ? GiftResponse.fromJson(giftResponse.toJson())
         : GiftResponse.fromJson(GiftResponse().toJson());
     return Future<void>.value();
+  }
+
+  void cacheAllFiles() {
+    final List<gift.ZegoGiftItem> giftItemList = <gift.ZegoGiftItem>[];
+    for (final GiftData itemData in gifts.data ?? <GiftData>[]) {
+      giftItemList.add(
+        gift.ZegoGiftItem(
+          sourceURL: itemData.animation,
+          weight: 100,
+          name: itemData.giftName,
+          icon: itemData.giftImage,
+          source: gift.ZegoGiftSource.url,
+          type: gift.ZegoGiftType.svga,
+        ),
+      );
+    }
+    gift.ZegoGiftManager().cache.cacheAllFiles(giftItemList);
+    return;
   }
 
   void cache() {
