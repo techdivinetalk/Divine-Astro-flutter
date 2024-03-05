@@ -22,9 +22,12 @@ class LiveGlobalSingleton {
   set buildContext(BuildContext value) => _buildContext(value);
 
   Future<void> leaveLiveIfIsInLiveScreen() async {
-    // if (isInLiveScreen) {
-    //   await zegoController.leave(buildContext);
-    // } else {}
+    print("LiveGlobalSingleton:: leaveLiveIfIsInLiveScreen():: isInLiveScreen:: $isInLiveScreen");
+    bool canLeave = false;
+    if (isInLiveScreen) {
+      canLeave = await zegoController.leave(buildContext);
+    } else {}
+    print("LiveGlobalSingleton:: leaveLiveIfIsInLiveScreen():: canLeave:: $canLeave");
     return Future<void>.value();
   }
 }

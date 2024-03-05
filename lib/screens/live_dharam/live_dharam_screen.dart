@@ -128,6 +128,22 @@ class _LivePage extends State<LiveDharamScreen>
       "नमस्कार",
       greetingEnglish(),
       greetingHindi(),
+
+      "Hi",
+      "Hello",
+      "Hey",
+      "Welcome",
+      "Howdy!",
+      "Hi, how are you?",
+      "Hey, what's up?",
+      "Hi, long time no see!",
+      "Hey, good to see you!",
+      "नमस्ते",
+      "हाय",
+      "हेलो",
+      "नमस्कार",
+      greetingEnglish(),
+      greetingHindi(),
     ];
 
     return temp;
@@ -417,7 +433,7 @@ class _LivePage extends State<LiveDharamScreen>
             duration,
             (Timer timer) async {
               if (timer.tick % 1 == 0) {
-                math.Random.secure().nextInt(15).isEven
+                math.Random.secure().nextInt(30).isEven
                     ? await manMessage()
                     : await womanMessage();
               } else {}
@@ -506,10 +522,10 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> manMessage() async {
-    var num = math.Random.secure().nextInt(15);
+    var num = math.Random.secure().nextInt(30);
     var url = "https://xsgames.co/randomusers/assets/avatars/male/$num.jpg";
     final String fullName = RandomNames(Zone.india).manFullName();
-    final String nameAvatar = "https://ui-avatars.com/api/${fullName[0]}";
+    final String nameAvatar = "https://api.dicebear.com/7.x/initials/jpg?seed=$fullName";
     final ZegoCustomMessage model = ZegoCustomMessage(
       type: 1,
       liveId: _controller.liveId,
@@ -527,10 +543,10 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> womanMessage() async {
-    var num = math.Random.secure().nextInt(15);
+    var num = math.Random.secure().nextInt(30);
     var url = "https://xsgames.co/randomusers/assets/avatars/female/$num.jpg";
     final String fullName = RandomNames(Zone.india).womanFullName();
-    final String nameAvatar = "https://ui-avatars.com/api/${fullName[0]}";
+    final String nameAvatar = "https://api.dicebear.com/7.x/initials/jpg?seed=$fullName";
     final ZegoCustomMessage model = ZegoCustomMessage(
       type: 1,
       liveId: _controller.liveId,
