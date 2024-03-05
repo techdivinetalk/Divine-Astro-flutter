@@ -215,7 +215,7 @@ class _LivePage extends State<LiveDharamScreen>
       },
     );
 
-    // _startTimer();
+    _startTimer();
 
     receiver.start();
     receiver.messages.listen(
