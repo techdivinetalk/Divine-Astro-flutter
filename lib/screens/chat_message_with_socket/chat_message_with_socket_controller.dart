@@ -45,7 +45,6 @@ import "../../model/astrologer_gift_response.dart";
 import "../../model/chat/ReqCommonChat.dart";
 import "../../model/chat/ReqEndChat.dart";
 import "../../model/chat/res_common_chat_success.dart";
-import "../../model/chat_assistant/chat_assistant_chats_response.dart";
 import "../../model/message_template_response.dart";
 import "../../model/res_product_detail.dart";
 import "../../model/save_remedies_response.dart";
@@ -774,14 +773,14 @@ class ChatMessageWithSocketController extends GetxController
         await uploadImageToS3Bucket(File(fileData.path), time);
     if (uploadFile != "") {
       print("image message upload file ${uploadFile} ${base64Image}");
-      addNewMessage(time, "image",
+      addNewMessage(time, MsgType.image,
           awsUrl: uploadFile, base64Image: base64Image, downloadedPath: '');
     }
   }
 
   addNewMessage(
     String time,
-    String? msgType, {
+    MsgType? msgType, {
     Map? data,
     String? messageText,
     String? awsUrl,
@@ -793,8 +792,7 @@ class ChatMessageWithSocketController extends GetxController
     String? shopId,
   }) async {
     late ChatMessage newMessage;
-    if (msgType == "Product") {
-      print("new message added product type");
+    if (msgType == MsgType.product) {
       final isPooja = data?['data']['isPooja'] as bool;
       if (isPooja) {
         final productDetails = data?['data']['poojaData'] as Pooja;
@@ -809,7 +807,7 @@ class ChatMessageWithSocketController extends GetxController
           isSuspicious: 0,
           isPoojaProduct: true,
           awsUrl: productDetails.poojaImg ?? '',
-          msgType: "Product",
+          msgType: msgType,
           type: 0,
           orderId: AppFirebaseService().orderData.value["orderId"],
           userType: "astrologer",
@@ -825,7 +823,6 @@ class ChatMessageWithSocketController extends GetxController
         final productData =
             data?['data']['saveRemedies'] as SaveRemediesResponse;
         final productDetails = data?['data']['product_detail'] as Products;
-        print("delete product data ${productDetails} ${productData}");
         newMessage = ChatMessage(
           message: productDetails.prodName,
           title: productDetails.prodName,
@@ -996,7 +993,7 @@ class ChatMessageWithSocketController extends GetxController
     if (item.giftName.isNotEmpty) {
       final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       unreadMessageIndex.value = -1;
-      addNewMessage(time, "gift",
+      addNewMessage(time, MsgType.gift,
           messageText:
               "${quantity} ${item.giftName} ${quantity > 1 ? "gifts" : "gift"}",
           awsUrl: item.fullGiftImage,
@@ -1027,7 +1024,8 @@ class ChatMessageWithSocketController extends GetxController
       final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       // type 1= New chat message, 2 = Delivered, 3= Msg read, 4= Other messages
       unreadMessageIndex.value = -1;
-      addNewMessage(time, "text", messageText: messageController.text.trim());
+      addNewMessage(time, MsgType.text,
+          messageText: messageController.text.trim());
 
       messageController.clear();
       scrollToBottomFunc();
@@ -1082,7 +1080,7 @@ class ChatMessageWithSocketController extends GetxController
   sendMsgTemplate(MessageTemplates msg) {
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
     unreadMessageIndex.value = -1;
-    addNewMessage(time, "text", messageText: msg.description);
+    addNewMessage(time, MsgType.text, messageText: msg.description);
   }
 
   // int getListOfCardLength() {
@@ -1184,7 +1182,7 @@ class ChatMessageWithSocketController extends GetxController
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
     final String uploadFile = await uploadImageToS3Bucket(soundFile, time);
     if (uploadFile != "") {
-      addNewMessage(time, "audio", awsUrl: uploadFile);
+      addNewMessage(time, MsgType.audio, awsUrl: uploadFile);
     }
   }
 

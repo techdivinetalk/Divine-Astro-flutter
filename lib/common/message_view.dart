@@ -50,30 +50,30 @@ class MessageView extends StatelessWidget {
     Widget messageWidget;
     print("chat Message:: ${chatMessage.msgType}");
     switch (chatMessage.msgType) {
-      case "gift":
+      case MsgType.gift:
         messageWidget = giftMsgView(context, chatMessage, yourMessage);
         break;
-      case "sendGifts":
+      case MsgType.sendgifts:
         messageWidget = giftSendUi(context, chatMessage, yourMessage, userName);
         break;
-      case "Remedies" || 0:
+      case MsgType.remedies:
         messageWidget = remediesMsgView(context, chatMessage, yourMessage);
         break;
-      case "text":
+      case MsgType.text:
         messageWidget = textMsgView(context, chatMessage, yourMessage);
         break;
-      case "audio":
+      case MsgType.audio:
         messageWidget = audioView(context,
             chatDetail: chatMessage, yourMessage: yourMessage);
         break;
-      case "image":
+      case MsgType.image:
         messageWidget = imageMsgView(chatMessage.base64Image ?? "", yourMessage,
             chatDetail: chatMessage, index: index);
         break;
-      case "kundli":
+      case MsgType.kundli:
         messageWidget = kundliView(chatDetail: chatMessage, index: 0);
         break;
-      case "Product":
+      case MsgType.product || MsgType.pooja:
         messageWidget = productMsgView(chatMessage, yourMessage);
         break;
       default:

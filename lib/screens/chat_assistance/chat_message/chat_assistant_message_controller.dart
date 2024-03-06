@@ -536,7 +536,7 @@ updateFirebaseToken();
               isSuspicious: 0,
               isPoojaProduct: true,
               profileImage: userData?.image,
-              msgType: MsgType.product,
+              msgType: MsgType.pooja,
               sendBy: SendBy.astrologer,
               product: Product(
                 id: productDetails.id,

@@ -1,3 +1,5 @@
+import 'chat_assistant/chat_assistant_chats_response.dart';
+
 class ChatMessagesOffline {
   List<ChatMessage>? chatMessages;
 
@@ -10,7 +12,7 @@ class ChatMessagesOffline {
           chatMessages: json['data'] == null
               ? []
               : List<ChatMessage>.from(
-              json["data"].map((x) => ChatMessage.fromOfflineJson(x))));
+                  json["data"].map((x) => ChatMessage.fromOfflineJson(x))));
 
   Map<String, dynamic> toOfflineJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -22,7 +24,6 @@ class ChatMessagesOffline {
   }
 }
 
-
 class ChatMessage {
   int? id;
   int? orderId;
@@ -30,7 +31,7 @@ class ChatMessage {
   int? roleId;
   int? customerId;
   int? msgSequence;
-  dynamic msgType;
+  MsgType? msgType;
   String? message;
   String? multiImage;
   String? msgTime;
@@ -100,21 +101,18 @@ class ChatMessage {
     this.base64Image,
     this.deletedAt,
     this.chatMsgId,
-
     this.astrologerId,
     this.callInitiate,
     this.exotelInitiateResponse,
     this.callStartedAt,
     this.callEndedAt,
     this.callDuration,
-
     this.exotelEndResponse,
     this.exotelCallSid,
     this.callStatus,
     this.callRejectReason,
     this.callEnd,
     this.callRecording,
-
     this.customerCallStatus,
     this.memberCallStatus,
     this.apiCallFrom,
@@ -139,7 +137,9 @@ class ChatMessage {
     roleId = json['role_id'];
     customerId = json['customer_id'];
     msgSequence = json['msg_sequence'];
-    msgType = json['msgType'];
+    msgType = json['msg_type'] != null
+        ? msgTypeValues.map[json["msg_type"].toString()]
+        : MsgType.text;
     message = json['message'];
     productId = json['product_id'].toString();
     shopId = json['shop_id'].toString();
@@ -198,7 +198,7 @@ class ChatMessage {
     data['role_id'] = roleId;
     data['customer_id'] = customerId;
     data['msg_sequence'] = msgSequence;
-    data['msgType'] = msgType;
+    data['msg_type'] = msgTypeValues.reverse[msgType];
     data['message'] = message;
     data['multiimage'] = multiImage;
     data['msg_time'] = msgTime;
@@ -214,7 +214,7 @@ class ChatMessage {
     data['base64image'] = base64Image;
     data['deleted_at'] = deletedAt;
     data['chat_msg_id'] = chatMsgId;
-data['is_pooja_product'] = isPoojaProduct == true ? "1" : "0";
+    data['is_pooja_product'] = isPoojaProduct == true ? "1" : "0";
 
     data['astrologer_id'] = astrologerId;
     data['call_initiate'] = callInitiate;
@@ -251,6 +251,33 @@ data['is_pooja_product'] = isPoojaProduct == true ? "1" : "0";
     return data;
   }
 }
+
+enum MsgType {
+  text,
+  gift,
+  image,
+  product,
+  pooja,
+  remedies,
+  audio,
+  kundli,
+  sendgifts,
+  limit,
+  error
+}
+
+final msgTypeValues = EnumValues({
+  "0": MsgType.text,
+  "1": MsgType.image,
+  "2": MsgType.remedies,
+  "3": MsgType.product,
+  "4": MsgType.pooja,
+  "5": MsgType.kundli,
+  "6": MsgType.audio,
+  "7": MsgType.sendgifts,
+  "8": MsgType.gift,
+  "10": MsgType.error,
+});
 
 /*class ChatMessage {
   int? id;

@@ -90,9 +90,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               itemCount: controller.chatMessages.length,
                               shrinkWrap: true,
                               padding: EdgeInsets.only(
-                                  bottom: MediaQuery.of(context)
-                                      .viewInsets
-                                      .bottom),
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom),
                               reverse: false,
                               itemBuilder: (context, index) {
                                 var chatMessage =
@@ -105,8 +104,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                       child: MessageView(
                                           index: index,
                                           nextChatMessage: index ==
-                                                  controller.chatMessages
-                                                          .length -
+                                                  controller
+                                                          .chatMessages.length -
                                                       1
                                               ? controller.chatMessages[index]
                                               : controller
@@ -845,7 +844,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         if (result != null) {
                           final String time =
                               "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-                          controller.addNewMessage(time, "Remedies",
+                          controller.addNewMessage(time, MsgType.remedies,
                               messageText: result.toString());
                           print("getting ul not add1");
                         }
@@ -889,7 +888,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           final String time =
                               "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
 
-                          controller.addNewMessage(time, "Product",
+                          controller.addNewMessage(time, MsgType.product,
                               data: {'data': result}, messageText: 'Product');
                         }
 
