@@ -84,46 +84,45 @@ Future<void> main() async {
       print('Message data: ${message.data['userid']}');
       print('Message data: ${message.data['sender_id']}');
     } else if (message.data["type"] == "8") {
-      print("inside page for realtime notification ${message.data}");
-      if (dasboardCurrentIndex.value == 2) {
-        final responseMsg = message.data;
-        assistChatUnreadMessages([
-          ...assistChatUnreadMessages,
-          AssistChatData(
-              message: responseMsg?["message"],
-              id: int.parse(responseMsg?["chatId"].toString()??''),
-              astrologerId:
-              int.parse(responseMsg?["sender_id"].toString() ?? ''),
-              createdAt: DateTime.parse(responseMsg?["created_at"])
-                  .millisecondsSinceEpoch
-                  .toString(),
-              isSuspicious: 0,
-              suggestedRemediesId:
-              int.parse(responseMsg?["suggestedRemediesId"] ?? "0"),
-              isPoojaProduct: responseMsg?['is_pooja_product'].toString() == '1'
-                  ? true
-                  : false,
-              productId: responseMsg?["product_id"].toString(),
-              shopId: responseMsg?["shop_id"].toString(),
-              sendBy: SendBy.astrologer,
-              msgType: responseMsg?['msg_type'] != null
-                  ? msgTypeValues.map[responseMsg?["msg_type"]]
-                  : MsgType.text,
-              seenStatus: SeenStatus.received,
-              customerId: int.parse(responseMsg?["userid"] ?? 0))
-        ]);
-        return;
-      }
+      print("inside page for realtime notification ${message.data} ${MiddleWare.instance.currentPage}");
       if (MiddleWare.instance.currentPage == RouteName.chatMessageUI &&
           chatAssistantCurrentUserId.value.toString() ==
               message.data['sender_id'].toString()) {
-        print("inside page for realtime notification");
         assistChatNewMsg([...assistChatNewMsg, message.data]);
         assistChatNewMsg.refresh();
         // sendBroadcast(
         //     BroadcastMessage(name: "chatAssist", data: {'msg': message.data}));
       } else {
         // assistChatUnreadMessages([...assistChatUnreadMessages, message.data]);
+        if (dasboardCurrentIndex.value == 2) {
+          final responseMsg = message.data;
+          assistChatUnreadMessages([
+            ...assistChatUnreadMessages,
+            AssistChatData(
+                message: responseMsg?["message"],
+                id: int.parse(responseMsg?["chatId"].toString() ?? ''),
+                customerId:
+                int.parse(responseMsg?["sender_id"].toString() ?? ''),
+                createdAt: DateTime.parse(responseMsg?["created_at"])
+                    .millisecondsSinceEpoch
+                    .toString(),
+                isSuspicious: 0,
+                suggestedRemediesId:
+                int.parse(responseMsg?["suggestedRemediesId"] ?? "0"),
+                isPoojaProduct: responseMsg?['is_pooja_product'].toString() == '1'
+                    ? true
+                    : false,
+                productId: responseMsg?["product_id"].toString(),
+                shopId: responseMsg?["shop_id"].toString(),
+                sendBy: SendBy.astrologer,
+                msgType: responseMsg?['msg_type'] != null
+                    ? msgTypeValues.map[responseMsg?["msg_type"]]
+                    : MsgType.text,
+                seenStatus: SeenStatus.received,
+                astrologerId: int.parse(responseMsg?["userid"] ?? 0))
+          ]);
+          return;
+        }
         switch (message.data['msg_type']) {
           case "0":
             showNotification(message.data["title"], message.data["message"],
@@ -176,7 +175,7 @@ Future<void> main() async {
   //   runApp(const MyApp());
   // });
   checkIfTokenUpdated();
-  
+
   ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
   // call the useSystemCallingUI
   ZegoUIKit().initLog().then((value) {

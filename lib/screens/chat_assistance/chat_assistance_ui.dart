@@ -214,35 +214,35 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
     return PreferredSize(
         preferredSize: AppBar().preferredSize,
         child: Obx(() => Container(
-          color: appColors.guideColor,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 100),
-            child: controller.isSearchEnable.value
-                ? searchWidget(appColors.guideColor)
-                : AppBar(
-                    surfaceTintColor: appColors.guideColor,
-                    title: Text(
-                      "chatAssistance".tr,
-                      style: const TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    actions: [
-                      SvgIconButton(
-                          onPressed: () {
-                            controller.isSearchEnable(true);
-                          },
-                          svg: Assets.images.searchIcon.svg(
+              color: appColors.guideColor,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 100),
+                child: controller.isSearchEnable.value
+                    ? searchWidget(appColors.guideColor)
+                    : AppBar(
+                        surfaceTintColor: appColors.guideColor,
+                        title: Text(
+                          "chatAssistance".tr,
+                          style: const TextStyle(
+                            fontSize: 14.0,
                             color: Colors.white,
-                          )),
-                      SizedBox(width: 10.w)
-                    ],
-                    backgroundColor: appColors.guideColor,
-                    elevation: 0,
-                  ),
-          ),
-        )));
+                          ),
+                        ),
+                        actions: [
+                          SvgIconButton(
+                              onPressed: () {
+                                controller.isSearchEnable(true);
+                              },
+                              svg: Assets.images.searchIcon.svg(
+                                color: Colors.white,
+                              )),
+                          SizedBox(width: 10.w)
+                        ],
+                        backgroundColor: appColors.guideColor,
+                        elevation: 0,
+                      ),
+              ),
+            )));
   }
 
   Widget searchWidget(Color backgroundColor) {
@@ -274,7 +274,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                       controller.searchCall(value);
                     },
                     contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 10.0),
+                        const EdgeInsets.symmetric(horizontal: 10.0),
                     controller: controller.searchController,
                     inputBorder: OutlineInputBorder(
                         borderSide: BorderSide.none,
@@ -304,90 +304,87 @@ class ChatAssistanceTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-            () {
-              assistChatUnreadMessages.every((element) {
-                print(element);
-                return false;
-              });
-              late AssistChatData element;
-              bool newMessageFromlist = false;
-              if (assistChatUnreadMessages.isNotEmpty) {
-                element = assistChatUnreadMessages.lastWhere((element) {
-                  return (element.astrologerId == data.id);
-                });
-
-                newMessageFromlist = element.message.toString() != data.lastMessage;
-                if (newMessageFromlist) {
-                  data.lastMessage = element.message.toString();
-                }
-                data.unreadMessage =
-                    (data.unreadMessage ?? 0) + (userUnreadMessages(data.id ?? 0));
-                assistChatUnreadMessages.removeWhere((message) =>
+    return Obx(() {
+      late AssistChatData element;
+      bool newMessageFromlist = false;
+      if (assistChatUnreadMessages.isNotEmpty) {
+        print(
+            "list of assist chat unread messages ${assistChatUnreadMessages.length}");
+        int index = assistChatUnreadMessages.lastIndexWhere((element) {
+          return element.customerId.toString() == data.id.toString();
+        });
+        if (index != -1) {
+          element = assistChatUnreadMessages[index];
+          newMessageFromlist = element.message.toString() != data.lastMessage;
+          if (newMessageFromlist) {
+            data.lastMessage = element.message.toString();
+          }
+          data.unreadMessage =
+              (data.unreadMessage ?? 0) + (userUnreadMessages(data.id ?? 0));
+          // assistChatUnreadMessages.removeWhere(
+          //     (message) => message.customerId.toString() == data.id.toString());
+        }
+      }
+      return ListTile(
+        onTap: () async {
+          if (assistChatUnreadMessages.isNotEmpty) {
+            assistChatUnreadMessages.removeWhere((message) =>
                 message.astrologerId.toString() == data.id.toString());
-              }
-        return ListTile(
-          onTap: () {
-            if (assistChatUnreadMessages.isNotEmpty) {
-              assistChatUnreadMessages.removeWhere((message) =>
-              message.astrologerId.toString() == data.id.toString());
-            }
-            Get.toNamed(RouteName.chatMessageUI, arguments: data)
-                ?.then((value) {
-              return controller.getAssistantAstrologerList();
-            });
-
-          },
-          leading: ClipRRect(
-              borderRadius: BorderRadius.circular(50.r),
-              child: Container(
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle, color: appColors.guideColor),
-                height: 50.w,
-                width: 50.w,
-                child: LoadImage(
-                  imageModel: ImageModel(
-                    assetImage: false,
-                    placeHolderPath: Assets.images.defaultProfile.path,
-                    imagePath: (data.image ?? '').startsWith(
-                            'https://divinenew-prod.s3.ap-south-1.amazonaws.com/')
-                        ? data.image ?? ''
-                        : "${preferenceService.getAmazonUrl()}/${data.image ?? ''}",
-                    loadingIndicator: SizedBox(
-                      height: 25.h,
-                      width: 25.w,
-                      child: CircularProgressIndicator(
-                        color: appColors.guideColor,
-                        strokeWidth: 2,
-                      ),
+          }
+          chatAssistantCurrentUserId = 0.obs;
+          await Get.toNamed(RouteName.chatMessageUI, arguments: data)
+              ?.then((value) {
+            return controller.getAssistantAstrologerList();
+          });
+        },
+        leading: ClipRRect(
+            borderRadius: BorderRadius.circular(50.r),
+            child: Container(
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle, color: appColors.guideColor),
+              height: 50.w,
+              width: 50.w,
+              child: LoadImage(
+                imageModel: ImageModel(
+                  assetImage: false,
+                  placeHolderPath: Assets.images.defaultProfile.path,
+                  imagePath: (data.image ?? '').startsWith(
+                          'https://divinenew-prod.s3.ap-south-1.amazonaws.com/')
+                      ? data.image ?? ''
+                      : "${preferenceService.getAmazonUrl()}/${data.image ?? ''}",
+                  loadingIndicator: SizedBox(
+                    height: 25.h,
+                    width: 25.w,
+                    child: CircularProgressIndicator(
+                      color: appColors.guideColor,
+                      strokeWidth: 2,
                     ),
                   ),
                 ),
-              )),
-          title: CustomText(
-            data.name ?? '',
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
-          ),
-          subtitle: Expanded(
-            child: lastMessage(
-                data.msgType ?? MsgType.text),
-          ),
-          trailing: (data.unreadMessage??0) > 0
-              ? CircleAvatar(
-            radius: 10.r,
-            backgroundColor: appColors.guideColor,
-            child: CustomText(
-              data.unreadMessage.toString(),
-              fontSize: 10.sp,
-              fontWeight: FontWeight.w700,
-              fontColor: appColors.brown,
-            ),
-          )
-              : const SizedBox(),
-        );
-      }
-    );
+              ),
+            )),
+        title: CustomText(
+          data.name ?? '',
+          fontSize: 16.sp,
+          fontWeight: FontWeight.w600,
+        ),
+        subtitle: Expanded(
+          child: lastMessage(data.msgType ?? MsgType.text),
+        ),
+        trailing: (data.unreadMessage ?? 0) > 0
+            ? CircleAvatar(
+                radius: 10.r,
+                backgroundColor: appColors.guideColor,
+                child: CustomText(
+                  data.unreadMessage.toString(),
+                  fontSize: 10.sp,
+                  fontWeight: FontWeight.w700,
+                  fontColor: appColors.brown,
+                ),
+              )
+            : const SizedBox(),
+      );
+    });
   }
 
   Widget lastMessage(MsgType msgtype) {
@@ -501,9 +498,9 @@ class ChatAssistanceTile extends StatelessWidget {
     final myUnreadMessages = [];
     if (assistChatUnreadMessages.isNotEmpty) {
       myUnreadMessages.addAll(assistChatUnreadMessages
-          .where((element) => element.astrologerId == userId));
+          .where((element) => element.customerId == userId));
     }
-    return  myUnreadMessages.length;
+    return myUnreadMessages.length;
   }
 }
 

@@ -22,8 +22,10 @@ import "package:divine_astrologer/zego_call/zego_service.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
+import "package:flutter/scheduler.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:fluttertoast/fluttertoast.dart";
 import "package:get/get.dart";
 import "package:http/http.dart" as http;
@@ -44,7 +46,6 @@ import "../../model/astrologer_gift_response.dart";
 import "../../model/chat/ReqCommonChat.dart";
 import "../../model/chat/ReqEndChat.dart";
 import "../../model/chat/res_common_chat_success.dart";
-import "../../model/chat_assistant/chat_assistant_chats_response.dart";
 import "../../model/message_template_response.dart";
 import "../../model/res_product_detail.dart";
 import "../../model/save_remedies_response.dart";
@@ -145,28 +146,12 @@ class ChatMessageWithSocketController extends GetxController
     hasMessage.value = messageController.text.isNotEmpty;
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch (state) {
-      case AppLifecycleState.resumed:
-        socket.socketConnect();
-
-        break;
-      case AppLifecycleState.inactive:
-        debugPrint("App Inactive");
-        break;
-      case AppLifecycleState.paused:
-        debugPrint("App Paused");
-        break;
-      case AppLifecycleState.detached:
-        debugPrint("App Detached");
-        break;
-      case AppLifecycleState.hidden:
-        break;
-    }
-    super.didChangeAppLifecycleState(state);
-  }
-
+  //variables to manage chat state
+  StreamSubscription? _appLinkingStreamSubscription;
+  late final AppLifecycleListener _listener;
+  late AppLifecycleState? _state;
+  final List<String> _states = <String>[];
+//end
   @override
   void onClose() {
     ZegoGiftPlayer().clear();
@@ -177,6 +162,8 @@ class ChatMessageWithSocketController extends GetxController
   @override
   void dispose() {
     // TODO: implement dispose
+    _appLinkingStreamSubscription?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     ZegoGiftPlayer().clear();
     super.dispose();
   }
@@ -251,6 +238,33 @@ class ChatMessageWithSocketController extends GetxController
       print("orderData Changed");
       initTask(p0);
     });
+
+    WidgetsBinding.instance.addObserver(this);
+    _state = SchedulerBinding.instance.lifecycleState;
+    _listener = AppLifecycleListener(
+      onShow: () {},
+      onResume: () {
+        socket.socketConnect();
+      },
+      onHide: () {},
+      onInactive: () {
+        backFunction();
+      },
+      onPause: () {},
+      onDetach: () {
+        backFunction();
+      },
+      onRestart: () {
+        socket.socketConnect();
+      },
+      onStateChange: (value) {
+        print("on state changed called ${value.name}");
+      },
+    );
+    if (_state != null) {
+      _states.add(_state!.name);
+    }
+
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) {
       if (event.name == 'deliveredMsg') {
@@ -310,7 +324,6 @@ class ChatMessageWithSocketController extends GetxController
           astroChatWatcher.value.orderId!);
     }
     userData = preferenceService.getUserDetail();
-    print("oninir");
     userDataKey = "chat_${currentUserId.value}";
     getChatList();
     socketReconnect();
@@ -348,7 +361,8 @@ class ChatMessageWithSocketController extends GetxController
     extraTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       final currentTime = DateTime.now();
       final difference = endTime.difference(currentTime);
-      if (difference.isNegative) {
+      if (difference.isNegative || difference.inSeconds == 0) {
+        print("duration ended called for extra timer");
         extraTimer.cancel();
         _timeLeft = Duration.zero;
         backFunction();
@@ -371,18 +385,21 @@ class ChatMessageWithSocketController extends GetxController
     }
     chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
       timeDifference = dateTime.difference(DateTime.now());
+
       if (timeDifference.isNegative || timeDifference.inSeconds == 0) {
         //   if (timeDifference.inSeconds == 0) {
         await callHangup();
         // }
+        showTalkTime.value = "-1";
         chatTimer?.cancel();
       } else {
+        //         print('Countdown working');
         showTalkTime.value =
             "${timeDifference.inHours.toString().padLeft(2, '0')}:"
             "${timeDifference.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
-            "${timeDifference.inSeconds.remainder(60).toString().padLeft(2, '0')}"; //         print('Countdown working');
+            "${timeDifference.inSeconds.remainder(60).toString().padLeft(2, '0')}";
         print(
-            '${timeDifference.inHours}:${timeDifference.inMinutes.remainder(60)}:${timeDifference.inSeconds.remainder(60)}');
+            'timer called ${timeDifference.inHours}:${timeDifference.inMinutes.remainder(60)}:${timeDifference.inSeconds.remainder(60)}');
       }
     });
   }
@@ -543,9 +560,9 @@ class ChatMessageWithSocketController extends GetxController
           AppFirebaseService().orderData.value["userId"].toString()) {
         isTyping.value = true;
         chatStatus.value = "Typing";
-        if (isScrollAtBottom()) {
-          scrollToBottomFunc();
-        }
+        // if (isScrollAtBottom()) {
+        //   scrollToBottomFunc();
+        // }
         startTimer();
       }
     });
@@ -559,7 +576,7 @@ class ChatMessageWithSocketController extends GetxController
     // or greater than the maximum scroll extent. A small threshold is used for
     // ensuring a smoother detection, considering floating-point rounding issues or
     // cases where the scroll physics allow slight overscrolling.
-    final threshold = 10.0; // Pixels tolerance
+    final threshold = 10.h; // Pixels tolerance
     return messgeScrollController.offset >=
         (messgeScrollController.position.maxScrollExtent - threshold);
   }
@@ -765,18 +782,18 @@ class ChatMessageWithSocketController extends GetxController
     final String base64Image = base64Encode(imageBytes);
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
 
-    final String uploadFile =
-        await uploadImageToS3Bucket(File(fileData.path), time);
-    if (uploadFile != "") {
+    final String? uploadFile = await uploadImageFileToAws(
+        imageFile: File(fileData.path), moduleName: "Chat");
+    if (uploadFile != "" || uploadFile != null) {
       print("image message upload file ${uploadFile} ${base64Image}");
-      addNewMessage(time, "image",
+      addNewMessage(time, MsgType.image,
           awsUrl: uploadFile, base64Image: base64Image, downloadedPath: '');
     }
   }
 
   addNewMessage(
     String time,
-    String? msgType, {
+    MsgType? msgType, {
     Map? data,
     String? messageText,
     String? awsUrl,
@@ -788,8 +805,7 @@ class ChatMessageWithSocketController extends GetxController
     String? shopId,
   }) async {
     late ChatMessage newMessage;
-    if (msgType == "Product") {
-      print("new message added product type");
+    if (msgType == MsgType.product) {
       final isPooja = data?['data']['isPooja'] as bool;
       if (isPooja) {
         final productDetails = data?['data']['poojaData'] as Pooja;
@@ -798,7 +814,7 @@ class ChatMessageWithSocketController extends GetxController
         newMessage = ChatMessage(
           message: productDetails.poojaName,
           astrologerId: preferenceService.getUserDetail()!.id,
-          createdAt: DateTime.now().toIso8601String(),
+          // createdAt: DateTime.now().toIso8601String(),
           id: int.parse(time),
           time: int.parse(time),
           isSuspicious: 0,
@@ -806,8 +822,9 @@ class ChatMessageWithSocketController extends GetxController
           awsUrl: productDetails.poojaImg ?? '',
           msgType: msgType,
           type: 0,
+          orderId: AppFirebaseService().orderData.value["orderId"],
           userType: "astrologer",
-          orderId: saveRemediesData.data?.id,
+          memberId: saveRemediesData.data?.id,
           productId: productDetails.id.toString(),
           shopId: productDetails.id.toString(),
           // msgStatus: MsgStatus.sent,
@@ -819,20 +836,21 @@ class ChatMessageWithSocketController extends GetxController
         final productData =
             data?['data']['saveRemedies'] as SaveRemediesResponse;
         final productDetails = data?['data']['product_detail'] as Products;
-        print("delete product data ${productDetails} ${productData}");
         newMessage = ChatMessage(
           message: productDetails.prodName,
           title: productDetails.prodName,
           astrologerId: preferenceService.getUserDetail()!.id,
-          createdAt: DateTime.now().toIso8601String(),
+          // createdAt: DateTime.now().toIso8601String(),
           time: int.parse(time),
           id: int.parse(time),
           isSuspicious: 0,
+          userType: "astrologer",
           isPoojaProduct: false,
           awsUrl: userData?.image ?? '',
           msgType: msgType,
           type: 0,
-          orderId: productData.data?.id ?? 0,
+          orderId: AppFirebaseService().orderData.value["orderId"],
+          memberId: productData.data?.id ?? 0,
           productId: productData.data?.productId.toString(),
           shopId: productData.data?.shopId.toString(),
           receiverId: int.parse(
@@ -846,7 +864,7 @@ class ChatMessageWithSocketController extends GetxController
         orderId: AppFirebaseService().orderData.value["orderId"],
         id: int.parse(time),
         message: messageText,
-        createdAt: DateTime.now().toIso8601String(),
+        // createdAt: DateTime.now().toIso8601String(),
         receiverId: int.parse(
             AppFirebaseService().orderData.value["userId"].toString()),
         senderId: preference.getUserDetail()!.id,
@@ -988,8 +1006,9 @@ class ChatMessageWithSocketController extends GetxController
     if (item.giftName.isNotEmpty) {
       final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       unreadMessageIndex.value = -1;
-      addNewMessage(time, "gift",
-          messageText: "${quantity} ${item.giftName} ${quantity>1?"gifts":"gift"}",
+      addNewMessage(time, MsgType.gift,
+          messageText:
+              "${quantity} ${item.giftName} ${quantity > 1 ? "gifts" : "gift"}",
           awsUrl: item.fullGiftImage,
           giftId: item.id.toString());
     }
@@ -1018,7 +1037,8 @@ class ChatMessageWithSocketController extends GetxController
       final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       // type 1= New chat message, 2 = Delivered, 3= Msg read, 4= Other messages
       unreadMessageIndex.value = -1;
-      addNewMessage(time, "text", messageText: messageController.text.trim());
+      addNewMessage(time, MsgType.text,
+          messageText: messageController.text.trim());
 
       messageController.clear();
       scrollToBottomFunc();
@@ -1073,7 +1093,7 @@ class ChatMessageWithSocketController extends GetxController
   sendMsgTemplate(MessageTemplates msg) {
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
     unreadMessageIndex.value = -1;
-    addNewMessage(time, "text", messageText: msg.description);
+    addNewMessage(time, MsgType.text, messageText: msg.description);
   }
 
   // int getListOfCardLength() {
@@ -1175,7 +1195,7 @@ class ChatMessageWithSocketController extends GetxController
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
     final String uploadFile = await uploadImageToS3Bucket(soundFile, time);
     if (uploadFile != "") {
-      addNewMessage(time, "audio", awsUrl: uploadFile);
+      addNewMessage(time, MsgType.audio, awsUrl: uploadFile);
     }
   }
 
@@ -1236,6 +1256,7 @@ class ChatMessageWithSocketController extends GetxController
 
   void initTask(Map<String, dynamic> p0) {
     if (p0["status"] == null || p0["status"] == "4") {
+      print("chat status 4");
       showTalkTime.value = "-1";
       chatTimer?.cancel();
       startExtraTimer();

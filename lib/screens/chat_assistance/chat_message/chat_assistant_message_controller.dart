@@ -170,6 +170,7 @@ updateFirebaseToken();
   }
 
   userleftChatSocket() {
+    print("called user left chat socket");
     appSocket.userLeftCustChatAssist(
         userData?.id.toString(), args?.id.toString());
   }
@@ -535,7 +536,7 @@ updateFirebaseToken();
               isSuspicious: 0,
               isPoojaProduct: true,
               profileImage: userData?.image,
-              msgType: MsgType.product,
+              msgType: MsgType.pooja,
               sendBy: SendBy.astrologer,
               product: Product(
                 id: productDetails.id,
