@@ -22,6 +22,7 @@ import "package:divine_astrologer/zego_call/zego_service.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
+import "package:flutter/scheduler.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -145,28 +146,12 @@ class ChatMessageWithSocketController extends GetxController
     hasMessage.value = messageController.text.isNotEmpty;
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch (state) {
-      case AppLifecycleState.resumed:
-        socket.socketConnect();
-
-        break;
-      case AppLifecycleState.inactive:
-        debugPrint("App Inactive");
-        break;
-      case AppLifecycleState.paused:
-        debugPrint("App Paused");
-        break;
-      case AppLifecycleState.detached:
-        debugPrint("App Detached");
-        break;
-      case AppLifecycleState.hidden:
-        break;
-    }
-    super.didChangeAppLifecycleState(state);
-  }
-
+  //variables to manage chat state
+  StreamSubscription? _appLinkingStreamSubscription;
+  late final AppLifecycleListener _listener;
+  late AppLifecycleState? _state;
+  final List<String> _states = <String>[];
+//end
   @override
   void onClose() {
     ZegoGiftPlayer().clear();
@@ -177,6 +162,8 @@ class ChatMessageWithSocketController extends GetxController
   @override
   void dispose() {
     // TODO: implement dispose
+    _appLinkingStreamSubscription?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     ZegoGiftPlayer().clear();
     super.dispose();
   }
@@ -251,6 +238,33 @@ class ChatMessageWithSocketController extends GetxController
       print("orderData Changed");
       initTask(p0);
     });
+
+    WidgetsBinding.instance.addObserver(this);
+    _state = SchedulerBinding.instance.lifecycleState;
+    _listener = AppLifecycleListener(
+      onShow: () {},
+      onResume: () {
+        socket.socketConnect();
+      },
+      onHide: () {},
+      onInactive: () {
+        backFunction();
+      },
+      onPause: () {},
+      onDetach: () {
+        backFunction();
+      },
+      onRestart: () {
+        socket.socketConnect();
+      },
+      onStateChange: (value) {
+        print("on state changed called ${value.name}");
+      },
+    );
+    if (_state != null) {
+      _states.add(_state!.name);
+    }
+
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) {
       if (event.name == 'deliveredMsg') {
@@ -310,7 +324,6 @@ class ChatMessageWithSocketController extends GetxController
           astroChatWatcher.value.orderId!);
     }
     userData = preferenceService.getUserDetail();
-    print("oninir");
     userDataKey = "chat_${currentUserId.value}";
     getChatList();
     socketReconnect();
@@ -769,9 +782,9 @@ class ChatMessageWithSocketController extends GetxController
     final String base64Image = base64Encode(imageBytes);
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
 
-    final String uploadFile =
-        await uploadImageToS3Bucket(File(fileData.path), time);
-    if (uploadFile != "") {
+    final String? uploadFile = await uploadImageFileToAws(
+        imageFile: File(fileData.path), moduleName: "Chat");
+    if (uploadFile != "" || uploadFile != null) {
       print("image message upload file ${uploadFile} ${base64Image}");
       addNewMessage(time, MsgType.image,
           awsUrl: uploadFile, base64Image: base64Image, downloadedPath: '');

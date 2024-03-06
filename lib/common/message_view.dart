@@ -658,7 +658,7 @@ class MessageView extends StatelessWidget {
                       : InkWell(
                           onTap: () {
                             Get.toNamed(RouteName.imagePreviewUi,
-                                arguments: chatDetail.downloadedPath);
+                                arguments: chatDetail.awsUrl);
                           },
                           child: Stack(
                             children: [

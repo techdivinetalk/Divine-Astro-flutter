@@ -64,9 +64,11 @@ Timer? timer;
     super.initState();
     controller.listenSocket();
     if (Get.arguments != null) {
+
       controller.args = Get.arguments;
       controller.update();
        chatAssistantCurrentUserId(controller.args?.id);
+       print("controller arguments ${controller.args?.toJson()}");
       updateFirebaseToken();
       controller.socketReconnect();
       controller.getAssistantChatList();

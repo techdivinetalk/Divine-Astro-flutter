@@ -10,6 +10,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 import '../di/hive_services.dart';
 import '../di/shared_preference_service.dart';
@@ -47,6 +48,43 @@ Future<String> uploadImageToS3Bucket(File? selectedFile, String fileName) async 
   } else {
     return "";
   }
+}
+
+
+Future<String?> uploadImageFileToAws(
+    {required File imageFile, required String moduleName}) async {
+  var token = await preferenceService.getToken();
+
+  var uri = Uri.parse("https://wakanda-api.divinetalk.live/api/astro/v7/uploadImage");
+
+  var request = http.MultipartRequest('POST', uri);
+
+  request.headers.addAll({
+    'Authorization': 'Bearer $token',
+    'Content-type': 'application/json',
+    'Accept': 'application/json',
+  });
+
+  // Attach the image file to the request
+  request.files.add(await http.MultipartFile.fromPath(
+    'image',
+    imageFile.path,
+  ));
+  request.fields.addAll({"module_name": moduleName});
+
+  var response = await request.send();
+
+  // Listen for the response
+  String? url;
+  if (response.statusCode == 200) {
+    print("Image uploaded successfully.");
+    var urlResponse = await http.Response.fromStream(response);
+    print(urlResponse.body);
+    url = json.decode(urlResponse.body)["data"]['full_path'];
+  } else {
+    url = null;
+  }
+  return url;
 }
 
 void checkNotification({required bool isFromNotification, Map? updatedData}) async {
