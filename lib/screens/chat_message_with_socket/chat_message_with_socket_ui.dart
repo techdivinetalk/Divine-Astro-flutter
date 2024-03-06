@@ -42,21 +42,15 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   @override
   Widget build(BuildContext context) {
     controller.setContext(context);
-
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      // resizeToAvoidBottomInset: true,
       body: GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
         return Stack(
           children: [
-            GestureDetector(
-              onTap: () {
-                // controller.isEmojiShowing.value = false;
-              },
-              child: Assets.images.bgChatWallpaper.image(
-                  width: MediaQuery.of(context).size.width,
-                  height: double.infinity,
-                  fit: BoxFit.fitWidth),
-            ),
+            Assets.images.bgChatWallpaper.image(
+                width: MediaQuery.of(context).size.width,
+                height: double.infinity,
+                fit: BoxFit.fitWidth),
             Column(
               children: [
                 AstrologerChatAppBar(),
@@ -95,12 +89,14 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               controller: controller.messgeScrollController,
                               itemCount: controller.chatMessages.length,
                               shrinkWrap: true,
+                              padding: EdgeInsets.only(
+                                  bottom: MediaQuery.of(context)
+                                      .viewInsets
+                                      .bottom),
                               reverse: false,
                               itemBuilder: (context, index) {
                                 var chatMessage =
                                     controller.chatMessages[index];
-                                print(
-                                    "value of chatmessage length ${chatMessage.toOfflineJson()}");
                                 return Column(
                                   children: [
                                     Padding(
@@ -109,8 +105,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                       child: MessageView(
                                           index: index,
                                           nextChatMessage: index ==
-                                                  controller
-                                                          .chatMessages.length -
+                                                  controller.chatMessages
+                                                          .length -
                                                       1
                                               ? controller.chatMessages[index]
                                               : controller
@@ -319,31 +315,19 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   ),
                 ),
                 chatBottomBar(context),
-
                 Obx(() => AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  height: controller.isEmojiShowing.value ? 300 : 0,
-                  child: SizedBox(
-                    height: 300,
-                    child: EmojiPicker(
-                        onEmojiSelected: (category, emoji) {
-
-                          // controller.typingScrollController.hasClients
-                          //     ? controller.typingScrollController.animateTo(
-                          //         controller.typingScrollController.position
-                          //             .maxScrollExtent,
-                          //         duration:
-                          //             const Duration(milliseconds: 100),
-                          //         curve: Curves.easeOut)
-                          //     : null;
-                        },
-                        onBackspacePressed: () {
-                          _onBackspacePressed();
-                        },
-                        textEditingController: controller.messageController,
-                        config: Config()),
-                  ),
-                )),
+                      duration: const Duration(milliseconds: 200),
+                      height: controller.isEmojiShowing.value ? 300 : 0,
+                      child: SizedBox(
+                        height: 300,
+                        child: EmojiPicker(
+                            onBackspacePressed: () {
+                              _onBackspacePressed();
+                            },
+                            textEditingController: controller.messageController,
+                            config: Config()),
+                      ),
+                    )),
               ],
             ),
           ],
@@ -679,7 +663,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                     scrollController:
                                         controller.typingScrollController,
                                     onTapOutside: (value) {
-                                      // FocusScope.of(Get.context!).unfocus();
                                       controller.scrollToBottomFunc();
                                       // if (controller.isEmojiShowing.value) {
                                       //   controller.isEmojiShowing.value = false;
@@ -802,7 +785,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               ))
                           : InkWell(
                               onTap: () {
-
                                 controller.sendMsg();
                               },
                               child: Assets.images.icSendMsg.svg(

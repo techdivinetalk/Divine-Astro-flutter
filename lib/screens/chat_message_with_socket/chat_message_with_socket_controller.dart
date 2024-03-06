@@ -24,6 +24,7 @@ import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:fluttertoast/fluttertoast.dart";
 import "package:get/get.dart";
 import "package:http/http.dart" as http;
@@ -348,7 +349,8 @@ class ChatMessageWithSocketController extends GetxController
     extraTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       final currentTime = DateTime.now();
       final difference = endTime.difference(currentTime);
-      if (difference.isNegative) {
+      if (difference.isNegative || difference.inSeconds == 0) {
+        print("duration ended called for extra timer");
         extraTimer.cancel();
         _timeLeft = Duration.zero;
         backFunction();
@@ -371,18 +373,21 @@ class ChatMessageWithSocketController extends GetxController
     }
     chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
       timeDifference = dateTime.difference(DateTime.now());
+
       if (timeDifference.isNegative || timeDifference.inSeconds == 0) {
         //   if (timeDifference.inSeconds == 0) {
         await callHangup();
         // }
+        showTalkTime.value = "-1";
         chatTimer?.cancel();
       } else {
+        //         print('Countdown working');
         showTalkTime.value =
             "${timeDifference.inHours.toString().padLeft(2, '0')}:"
             "${timeDifference.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
-            "${timeDifference.inSeconds.remainder(60).toString().padLeft(2, '0')}"; //         print('Countdown working');
+            "${timeDifference.inSeconds.remainder(60).toString().padLeft(2, '0')}";
         print(
-            '${timeDifference.inHours}:${timeDifference.inMinutes.remainder(60)}:${timeDifference.inSeconds.remainder(60)}');
+            'timer called ${timeDifference.inHours}:${timeDifference.inMinutes.remainder(60)}:${timeDifference.inSeconds.remainder(60)}');
       }
     });
   }
@@ -543,9 +548,9 @@ class ChatMessageWithSocketController extends GetxController
           AppFirebaseService().orderData.value["userId"].toString()) {
         isTyping.value = true;
         chatStatus.value = "Typing";
-        if (isScrollAtBottom()) {
-          scrollToBottomFunc();
-        }
+        // if (isScrollAtBottom()) {
+        //   scrollToBottomFunc();
+        // }
         startTimer();
       }
     });
@@ -559,7 +564,7 @@ class ChatMessageWithSocketController extends GetxController
     // or greater than the maximum scroll extent. A small threshold is used for
     // ensuring a smoother detection, considering floating-point rounding issues or
     // cases where the scroll physics allow slight overscrolling.
-    final threshold = 10.0; // Pixels tolerance
+    final threshold = 10.h; // Pixels tolerance
     return messgeScrollController.offset >=
         (messgeScrollController.position.maxScrollExtent - threshold);
   }
@@ -798,16 +803,17 @@ class ChatMessageWithSocketController extends GetxController
         newMessage = ChatMessage(
           message: productDetails.poojaName,
           astrologerId: preferenceService.getUserDetail()!.id,
-          createdAt: DateTime.now().toIso8601String(),
+          // createdAt: DateTime.now().toIso8601String(),
           id: int.parse(time),
           time: int.parse(time),
           isSuspicious: 0,
           isPoojaProduct: true,
           awsUrl: productDetails.poojaImg ?? '',
-          msgType: msgType,
+          msgType: "Product",
           type: 0,
+          orderId: AppFirebaseService().orderData.value["orderId"],
           userType: "astrologer",
-          orderId: saveRemediesData.data?.id,
+          memberId: saveRemediesData.data?.id,
           productId: productDetails.id.toString(),
           shopId: productDetails.id.toString(),
           // msgStatus: MsgStatus.sent,
@@ -824,15 +830,17 @@ class ChatMessageWithSocketController extends GetxController
           message: productDetails.prodName,
           title: productDetails.prodName,
           astrologerId: preferenceService.getUserDetail()!.id,
-          createdAt: DateTime.now().toIso8601String(),
+          // createdAt: DateTime.now().toIso8601String(),
           time: int.parse(time),
           id: int.parse(time),
           isSuspicious: 0,
+          userType: "astrologer",
           isPoojaProduct: false,
           awsUrl: userData?.image ?? '',
           msgType: msgType,
           type: 0,
-          orderId: productData.data?.id ?? 0,
+          orderId: AppFirebaseService().orderData.value["orderId"],
+          memberId: productData.data?.id ?? 0,
           productId: productData.data?.productId.toString(),
           shopId: productData.data?.shopId.toString(),
           receiverId: int.parse(
@@ -846,7 +854,7 @@ class ChatMessageWithSocketController extends GetxController
         orderId: AppFirebaseService().orderData.value["orderId"],
         id: int.parse(time),
         message: messageText,
-        createdAt: DateTime.now().toIso8601String(),
+        // createdAt: DateTime.now().toIso8601String(),
         receiverId: int.parse(
             AppFirebaseService().orderData.value["userId"].toString()),
         senderId: preference.getUserDetail()!.id,
@@ -989,7 +997,8 @@ class ChatMessageWithSocketController extends GetxController
       final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       unreadMessageIndex.value = -1;
       addNewMessage(time, "gift",
-          messageText: "${quantity} ${item.giftName} ${quantity>1?"gifts":"gift"}",
+          messageText:
+              "${quantity} ${item.giftName} ${quantity > 1 ? "gifts" : "gift"}",
           awsUrl: item.fullGiftImage,
           giftId: item.id.toString());
     }
@@ -1236,6 +1245,7 @@ class ChatMessageWithSocketController extends GetxController
 
   void initTask(Map<String, dynamic> p0) {
     if (p0["status"] == null || p0["status"] == "4") {
+      print("chat status 4");
       showTalkTime.value = "-1";
       chatTimer?.cancel();
       startExtraTimer();

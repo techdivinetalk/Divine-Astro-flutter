@@ -17,6 +17,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
+import '../utils/load_image.dart';
+
 class MessageView extends StatelessWidget {
   final int index;
   final ChatMessage chatMessage;
@@ -35,11 +37,9 @@ class MessageView extends StatelessWidget {
     this.unreadMessage,
   });
 
-
-
   Widget buildMessageView(
       BuildContext context, ChatMessage chatMessage, bool yourMessage) {
-    print("message Detail $chatMessage");
+    // print("message Detail $chatMessage");
     // final currentMsgDate = DateTime.fromMillisecondsSinceEpoch(
     //     int.parse(chatMessage.createdAt ?? '0'));
     // final nextMsgDate = DateTime.fromMillisecondsSinceEpoch(
@@ -82,38 +82,35 @@ class MessageView extends StatelessWidget {
 
     // Conditionally add unreadMessageView() based on chat
 
-      return Column(
-        children: [
-          if (chatMessage.id == unreadMessage)
-            unreadMessageView(),
-          // if (index == 0)
-          //   dayWidget(
-          //       currentMsgDate: currentMsgDate,
-          //       nextMsgDate: nextMsgDate,
-          //       isToday: (DateTime.now().day - currentMsgDate.day) == 0,
-          //       isYesterday: (DateTime.now().day - currentMsgDate.day) == 1,
-          //       differenceOfDays: 1),
+    return Column(
+      children: [
+        if (chatMessage.id == unreadMessage) unreadMessageView(),
+        // if (index == 0)
+        //   dayWidget(
+        //       currentMsgDate: currentMsgDate,
+        //       nextMsgDate: nextMsgDate,
+        //       isToday: (DateTime.now().day - currentMsgDate.day) == 0,
+        //       isYesterday: (DateTime.now().day - currentMsgDate.day) == 1,
+        //       differenceOfDays: 1),
 
-          messageWidget,
-          // if (index != 0)
-          //   dayWidget(
-          //       currentMsgDate: currentMsgDate,
-          //       nextMsgDate: nextMsgDate,
-          //       isToday: (DateTime.now().day - currentMsgDate.day) == 0,
-          //       isYesterday: (DateTime.now().day - currentMsgDate.day) == 1,
-          //       differenceOfDays: 1),
-
-        ],
-      );
-
+        messageWidget,
+        // if (index != 0)
+        //   dayWidget(
+        //       currentMsgDate: currentMsgDate,
+        //       nextMsgDate: nextMsgDate,
+        //       isToday: (DateTime.now().day - currentMsgDate.day) == 0,
+        //       isYesterday: (DateTime.now().day - currentMsgDate.day) == 1,
+        //       differenceOfDays: 1),
+      ],
+    );
   }
 
   Widget dayWidget(
       {required DateTime currentMsgDate,
-        required DateTime nextMsgDate,
-        required bool isToday,
-        required bool isYesterday,
-        required int differenceOfDays}) {
+      required DateTime nextMsgDate,
+      required bool isToday,
+      required bool isYesterday,
+      required int differenceOfDays}) {
     if (differenceOfDays >= 1) {
       return Align(
         alignment: Alignment.center,
@@ -127,8 +124,8 @@ class MessageView extends StatelessWidget {
             isToday
                 ? 'Today'
                 : isYesterday
-                ? 'Yesterday'
-                : '${DateFormat('EEEE ,dd MMMM').format(nextMsgDate)}',
+                    ? 'Yesterday'
+                    : '${DateFormat('EEEE ,dd MMMM').format(nextMsgDate)}',
             style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
           ),
         ),
@@ -238,7 +235,9 @@ class MessageView extends StatelessWidget {
                   SizedBox(width: 6.w),
                   Flexible(
                       child: CustomText(
-                          'Astrologer has requested to send ${chatMessage.message}.',maxLines: 2,))
+                    'Astrologer has requested to send ${chatMessage.message}.',
+                    maxLines: 2,
+                  ))
                 ],
               ),
             ),
@@ -493,6 +492,7 @@ class MessageView extends StatelessWidget {
     // final localImagefile = File.fromRawPath(bytesImage);
     RxInt msgType = (chatDetail.type ?? 0).obs;
     var chatController = Get.find<ChatMessageWithSocketController>();
+
     return SizedBox(
       width: double.maxFinite,
       child: Column(
@@ -583,32 +583,43 @@ class MessageView extends StatelessWidget {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10.0.sp),
                               child: ImageFiltered(
-                                imageFilter:
-                                    ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-                                child: Image.network(
-                                  chatDetail.awsUrl ?? '',
-                                  fit: BoxFit.cover,
-                                  height: 200.h,
+                                  imageFilter: ImageFilter.blur(
+                                      sigmaX: 5.0, sigmaY: 5.0),
+                                  child: SizedBox(
+                                    height: 200.h,
+                                    width: 150.w,
+                                    child: LoadImage(
+                                      boxFit: BoxFit.cover,
+                                      imageModel: ImageModel(
+                                          assetImage: false,
+                                          placeHolderPath:
+                                              Assets.images.defaultProfile.path,
+                                          imagePath: chatDetail.awsUrl ?? '',
+                                          loadingIndicator: SizedBox(
+                                              child: CircularProgressIndicator(
+                                                  color: appColors.guideColor,
+                                                  strokeWidth: 2))),
+                                    ),
+                                  )),
+                            ),
+                            if (chatDetail.awsUrl != null)
+                              InkWell(
+                                onTap: () {
+                                  chatController.downloadImage(
+                                      fileName: image,
+                                      chatDetail: chatDetail,
+                                      index: index);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: appColors.darkBlue.withOpacity(0.3),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(Icons.download_rounded,
+                                      color: appColors.white),
                                 ),
                               ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                chatController.downloadImage(
-                                    fileName: image,
-                                    chatDetail: chatDetail,
-                                    index: index);
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: appColors.darkBlue.withOpacity(0.3),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(Icons.download_rounded,
-                                    color: appColors.white),
-                              ),
-                            ),
                             Positioned(
                               bottom: 0,
                               right: 0,
