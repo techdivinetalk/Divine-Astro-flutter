@@ -459,7 +459,7 @@ class _HomeUIState extends State<HomeUI> {
                                               } else {
                                                 divineSnackBar(
                                                   data:
-                                                      "Please turn off all session types in order to go live.",
+                                                      "Please turn off all chat, call, video call switch in order to go live.",
                                                   color: appColors.guideColor,
                                                   duration: const Duration(
                                                       seconds: 6),

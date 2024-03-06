@@ -480,6 +480,8 @@ class ApiProvider {
   Future<void> doLiveStreamPendingTasks(http.Response response) async {
     final bool cond1 = response.statusCode == HttpStatus.unauthorized;
     final bool cond2 = json.decode(response.body)["status_code"] == HttpStatus.unauthorized;
+    print("LiveGlobalSingleton:: doLiveStreamPendingTasks():: cond1:: $cond1");
+    print("LiveGlobalSingleton:: doLiveStreamPendingTasks():: cond2:: $cond2");
 
     if (cond1 || cond2) {
       await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();

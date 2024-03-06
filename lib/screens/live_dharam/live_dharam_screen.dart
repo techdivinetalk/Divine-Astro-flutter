@@ -7,12 +7,12 @@ import "dart:math" as math;
 
 import "package:after_layout/after_layout.dart";
 import "package:divine_astrologer/common/colors.dart";
+import "package:divine_astrologer/common/generic_loading_widget.dart";
 import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/model/live/deck_card_model.dart";
 import "package:divine_astrologer/model/live/notice_board_res.dart";
 import "package:divine_astrologer/screens/live_dharam/gift/gift.dart";
-import "package:divine_astrologer/screens/live_dharam/gift/gift_manager/gift_manager.dart";
 import "package:divine_astrologer/screens/live_dharam/gifts_singleton.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/live_global_singleton.dart";
@@ -39,8 +39,8 @@ import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart
 // import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:flutter/scheduler.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 import "package:intl/intl.dart";
@@ -52,6 +52,8 @@ import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_ast
 import "package:divine_astrologer/screens/live_dharam/widgets/extend_time_widget.dart";
 import 'package:random_name_generator/random_name_generator.dart';
 
+//
+//
 //
 //
 //
@@ -98,19 +100,6 @@ class _LivePage extends State<LiveDharamScreen>
     names: <String>["LiveDharamScreen_eventListner"],
   );
 
-  // final List<String> indianGreetings = <String>[
-  //   "Hi",
-  //   "Hello",
-  //   "Hey",
-  //   "Good morning",
-  //   "Good afternoon",
-  //   "Good evening",
-  //   "नमस्ते",
-  //   "हाय",
-  //   "हेलो",
-  //   "नमस्कार",
-  // ];
-
   List<String> indianGreetingsFunction() {
     List<String> temp = <String>[
       "Hi",
@@ -128,7 +117,6 @@ class _LivePage extends State<LiveDharamScreen>
       "नमस्कार",
       greetingEnglish(),
       greetingHindi(),
-
       "Hi",
       "Hello",
       "Hey",
@@ -177,16 +165,18 @@ class _LivePage extends State<LiveDharamScreen>
 
     WidgetsBinding.instance.addObserver(this);
 
-    ZegoGiftManager().service.recvNotifier.addListener(onGiftReceived);
+    // ZegoGiftManager().service.recvNotifier.addListener(onGiftReceived);
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ZegoGiftManager().service.init(
-            appID: appID,
-            liveID: _controller.liveId,
-            localUserID: _controller.userId,
-            localUserName: _controller.userName,
-          );
-    });
+    // WidgetsBinding.instance.addPostFrameCallback(
+    //   (_) {
+    //     ZegoGiftManager().service.init(
+    //           appID: appID,
+    //           liveID: _controller.liveId,
+    //           localUserID: _controller.userId,
+    //           localUserName: _controller.userName,
+    //         );
+    //   },
+    // );
 
     ZegoUIKit()
         .getSignalingPlugin()
@@ -231,7 +221,10 @@ class _LivePage extends State<LiveDharamScreen>
       },
     );
 
-    _startTimer();
+    if (kReleaseMode) {
+      // _startTimer();
+    } else {}
+     _startTimer();
 
     receiver.start();
     receiver.messages.listen(
@@ -290,14 +283,32 @@ class _LivePage extends State<LiveDharamScreen>
     return;
   }
 
+  void getUntil() {
+    WidgetsBinding.instance.endOfFrame.then(
+      (_) async {
+        // Maybe add some delay
+        if (mounted) {
+          final int length = LiveGlobalSingleton().getCountOfOpenDialogs();
+          for (int i = 0; i < length; i++) {
+            Get.back();
+          }
+        } else {}
+      },
+    );
+    return;
+  }
+
   Future<void> zeroAstro() async {
     // if (mounted) {
+    //   // Get.until((route) => route.settings.name == RouteName.liveDharamScreen);
+    //   getUntil();
+
     //   endOrderFirst();
 
     //   _timer?.cancel();
     //   _msgTimerForFollowPopup?.cancel();
     //   _msgTimerForTarotCardPopup?.cancel();
-    //   await _zegoController.leave(context);
+    //   await zegoController.leave(context);
     // } else {}
     return Future<void>.value();
   }
@@ -525,7 +536,8 @@ class _LivePage extends State<LiveDharamScreen>
     var num = math.Random.secure().nextInt(30);
     var url = "https://xsgames.co/randomusers/assets/avatars/male/$num.jpg";
     final String fullName = RandomNames(Zone.india).manFullName();
-    final String nameAvatar = "https://api.dicebear.com/7.x/initials/jpg?seed=$fullName";
+    final String nameAvatar =
+        "https://api.dicebear.com/7.x/initials/jpg?seed=$fullName";
     final ZegoCustomMessage model = ZegoCustomMessage(
       type: 1,
       liveId: _controller.liveId,
@@ -546,7 +558,8 @@ class _LivePage extends State<LiveDharamScreen>
     var num = math.Random.secure().nextInt(30);
     var url = "https://xsgames.co/randomusers/assets/avatars/female/$num.jpg";
     final String fullName = RandomNames(Zone.india).womanFullName();
-    final String nameAvatar = "https://api.dicebear.com/7.x/initials/jpg?seed=$fullName";
+    final String nameAvatar =
+        "https://api.dicebear.com/7.x/initials/jpg?seed=$fullName";
     final ZegoCustomMessage model = ZegoCustomMessage(
       type: 1,
       liveId: _controller.liveId,
@@ -604,28 +617,28 @@ class _LivePage extends State<LiveDharamScreen>
     _msgTimerForFollowPopup?.cancel();
     _msgTimerForTarotCardPopup?.cancel();
 
-    ZegoGiftManager().service.recvNotifier.removeListener(onGiftReceived);
-    ZegoGiftManager().service.uninit();
+    // ZegoGiftManager().service.recvNotifier.removeListener(onGiftReceived);
+    // ZegoGiftManager().service.uninit();
 
     WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
   }
 
-  void onGiftReceived() {
-    final receivedGift = ZegoGiftManager().service.recvNotifier.value ??
-        ZegoGiftProtocolItem.empty();
-    final giftData = queryGiftInItemList(receivedGift.name);
-    if (null == giftData) {
-      debugPrint('not ${receivedGift.name} exist');
-      return;
-    }
+  // void onGiftReceived() {
+  //   final receivedGift = ZegoGiftManager().service.recvNotifier.value ??
+  //       ZegoGiftProtocolItem.empty();
+  //   final giftData = queryGiftInItemList(receivedGift.name);
+  //   if (null == giftData) {
+  //     debugPrint('not ${receivedGift.name} exist');
+  //     return;
+  //   }
 
-    ZegoGiftManager().playList.add(PlayData(
-          giftItem: giftData,
-          count: receivedGift.count,
-        ));
-  }
+  //   ZegoGiftManager().playList.add(PlayData(
+  //         giftItem: giftData,
+  //         count: receivedGift.count,
+  //       ));
+  // }
 
   Future<void> onAudienceLocalConnectStateChanged() async {
     final audienceConnectState =
@@ -644,31 +657,47 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> refreshCurrentAstrologerDetails() async {
-    WidgetsBinding.instance.endOfFrame.then(
-      (_) async {
-        if (mounted) {
-          // final bool cond = _controller.currentCaller.id == _controller.userId;
-          // if (cond) {
-          //   await _controller.getAstrologerDetails(
-          //     successCallBack: (String message) {
-          //       successAndFailureCallBack(
-          //         message: message,
-          //         isForSuccess: true,
-          //         isForFailure: false,
-          //       );
-          //     },
-          //     failureCallBack: (String message) {
-          //       successAndFailureCallBack(
-          //         message: message,
-          //         isForSuccess: false,
-          //         isForFailure: true,
-          //       );
-          //     },
-          //   );
-          // } else {}
-        } else {}
-      },
-    );
+    // WidgetsBinding.instance.endOfFrame.then(
+    //   (_) async {
+    //     if (mounted) {
+    //       final bool cond = _controller.currentCaller.id == _controller.userId;
+    //       if (cond) {
+    //         await _controller.getAstrologerDetails(
+    //           successCallBack: (String message) {
+    //             successAndFailureCallBack(
+    //               message: message,
+    //               isForSuccess: true,
+    //               isForFailure: false,
+    //             );
+    //           },
+    //           failureCallBack: (String message) {
+    //             successAndFailureCallBack(
+    //               message: message,
+    //               isForSuccess: false,
+    //               isForFailure: true,
+    //             );
+    //           },
+    //         );
+    //       } else {}
+    //     } else {}
+    //   },
+    // );
+    // await _controller.getAstrologerDetails(
+    //   successCallBack: (String message) {
+    //     successAndFailureCallBack(
+    //       message: message,
+    //       isForSuccess: true,
+    //       isForFailure: false,
+    //     );
+    //   },
+    //   failureCallBack: (String message) {
+    //     successAndFailureCallBack(
+    //       message: message,
+    //       isForSuccess: false,
+    //       isForFailure: true,
+    //     );
+    //   },
+    // );
     return Future<void>.value();
   }
 
@@ -693,10 +722,11 @@ class _LivePage extends State<LiveDharamScreen>
             //   await exitFunc();
             // },
             // child:
-            Obx(
-          () {
+            GetBuilder<LiveDharamController>(
+          init: _controller,
+          builder: (context) {
             return _controller.liveId == ""
-                ? const Center(child: CircularProgressIndicator())
+                ? const Center(child: GenericLoadingWidget())
                 : ZegoUIKitPrebuiltLiveStreaming(
                     appID: appID,
                     appSign: appSign,
@@ -811,7 +841,7 @@ class _LivePage extends State<LiveDharamScreen>
                       )
                       // ..foreground = foregroundWidget()
                       ..foreground = giftForeground()
-                      ..mediaPlayer.supportTransparent = false
+                      // ..mediaPlayer.supportTransparent = false
                       ..inRoomMessage = ZegoLiveStreamingInRoomMessageConfig(
                         itemBuilder: (
                           BuildContext context,
@@ -1036,6 +1066,13 @@ class _LivePage extends State<LiveDharamScreen>
             children: <Widget>[
               appBarWidget(),
               const SizedBox(height: 8),
+              // ElevatedButton(
+              //   onPressed: () async {
+              //     await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
+              //   },
+              //   child: const Text("Test"),
+              // ),
+              // const SizedBox(height: 8),
               Expanded(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -2027,6 +2064,9 @@ class _LivePage extends State<LiveDharamScreen>
       // ZegoGiftPlayer().clear();
       ZegoGiftManager().playList.clear();
 
+      // Get.until((route) => route.settings.name == RouteName.liveDharamScreen);
+      getUntil();
+
       await endOrderFirst();
 
       _controller.updateInfo();
@@ -2151,6 +2191,19 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    return Future<void>.value();
+  }
+
+  Future<void> liveShopPopup() async {
+    // await showCupertinoModalPopup(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return LiveShopWidget(
+    //       onClose: Get.back,
+    //       liveId: _controller.liveId,
+    //     );
+    //   },
+    // );
     return Future<void>.value();
   }
 
@@ -3860,7 +3913,7 @@ class _LivePage extends State<LiveDharamScreen>
         //       child: Column(
         //         children: [
         //           InkWell(
-        //             onTap: () {},
+        //             onTap: liveShopPopup,
         //             child: SizedBox(
         //               height: 50,
         //               width: 50,
@@ -3876,9 +3929,8 @@ class _LivePage extends State<LiveDharamScreen>
         //                 ),
         //                 child: Padding(
         //                   padding: const EdgeInsets.all(8.0),
-        //                   child: Icon(
-        //                     Icons.shopping_bag_outlined,
-        //                     color: appColors.guideColor,
+        //                   child: Image.asset(
+        //                     "assets/images/live_new_shop.png",
         //                   ),
         //                 ),
         //               ),
@@ -4353,6 +4405,7 @@ class _LivePage extends State<LiveDharamScreen>
     scrollDownForBottom();
     if (mounted) {
       Get.until((route) => route.settings.name == RouteName.liveDharamScreen);
+      // getUntil();
     } else {}
     return Future<void>.value();
   }
@@ -4713,6 +4766,9 @@ class _LivePage extends State<LiveDharamScreen>
           data: _controller.data,
           onSelect: (liveId) async {
             Get.back();
+            // Get.until(
+            //     (route) => route.settings.name == RouteName.liveDharamScreen);
+            getUntil();
 
             await endOrderFirst();
 

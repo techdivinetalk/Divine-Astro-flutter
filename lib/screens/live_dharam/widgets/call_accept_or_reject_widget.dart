@@ -172,7 +172,7 @@ class _CallAcceptOrRejectWidgetState extends State<CallAcceptOrRejectWidget> {
       colonsTextStyle: const TextStyle(fontSize: 12, color: Colors.black),
       timeTextStyle: const TextStyle(fontSize: 12, color: Colors.black),
       endTime: DateTime.now().add(
-        const Duration(days: 0, hours: 0, minutes: 1, seconds: 0),
+        const Duration(days: 0, hours: 0, minutes: 2, seconds: 0),
       ),
       onEnd: widget.onTimeout,
     );

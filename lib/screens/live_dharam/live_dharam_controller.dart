@@ -385,47 +385,54 @@ class LiveDharamController extends GetxController {
                 if (data.keys.toList()[currentIndex] != null) {
                   liveId = isHost ? liveId : data.keys.toList()[currentIndex];
                   // isHostAvailable = checkIfAstrologerAvailable(map);
+                  
                   var liveIdNode = data[liveId];
 
-                  List<dynamic> blockListNode = liveIdNode["blockList"] ?? [];
-                  if (blockListNode.isEmpty) {
-                    firebaseBlockUsersIds = [];
-                  } else {
-                    firebaseBlockUsersIds = blockListNode;
-                  }
+                  if (liveIdNode != null) {
+                    List<dynamic> blockListNode = liveIdNode["blockList"] ?? [];
+                    if (blockListNode.isEmpty) {
+                      firebaseBlockUsersIds = [];
+                    } else {
+                      firebaseBlockUsersIds = blockListNode;
+                    }
 
-                  var orderNode = liveIdNode["order"];
-                  orderModel = getOrderModel(orderNode);
-                  currentCaller = getOrderModelGeneric(orderNode, forMe: false);
+                    var orderNode = liveIdNode["order"];
+                    orderModel = getOrderModel(orderNode);
+                    currentCaller =
+                        getOrderModelGeneric(orderNode, forMe: false);
 
-                  reInitCoHost();
+                    reInitCoHost();
 
-                  await Future.delayed(const Duration(seconds: 1));
+                    await Future.delayed(const Duration(seconds: 1));
 
-                  engaging(upcomingUser());
+                    engaging(upcomingUser());
 
-                  // String astroIdFromNode = liveId;
-                  // String astroIdFromAPIs = (details.data?.id ?? "").toString();
+                    // String astroIdFromNode = liveId;
+                    // String astroIdFromAPIs =
+                    //     (details.data?.id ?? "").toString();
 
-                  // if (astroIdFromNode == astroIdFromAPIs) {
-                  // } else {
-                  //   await getAstrologerDetails(
-                  //     successCallBack: successCallBack,
-                  //     failureCallBack: failureCallBack,
-                  //   );
-                  // }
+                    // if (astroIdFromNode == astroIdFromAPIs) {
+                    // } else {
+                    //   await getAstrologerDetails(
+                    //     successCallBack: successCallBack,
+                    //     failureCallBack: failureCallBack,
+                    //   );
+                    // }
 
-                  showFollowPopup();
+                    showFollowPopup();
 
-                  // if (astroIdFromNode == astroIdFromAPIs) {
-                  // } else {
-                  //   await isCustomerBlocked(
-                  //     successCallBack: successCallBack,
-                  //     failureCallBack: failureCallBack,
-                  //   );
-                  // }
+                    // if (astroIdFromNode == astroIdFromAPIs) {
+                    // } else {
+                    //   await isCustomerBlocked(
+                    //     successCallBack: successCallBack,
+                    //     failureCallBack: failureCallBack,
+                    //   );
+                    // }
+                  } else {}
                 } else {}
               } else {}
+
+              update();
             }
           } else {}
         } else {}
@@ -439,9 +446,32 @@ class LiveDharamController extends GetxController {
     return Future<void>.value();
   }
 
+  // WaitListModel upcomingUser() {
+  //   var waitListNode = data[liveId]["waitList"];
+  //   final WaitListModel temp = isEngadedNew(waitListNode, forMe: false);
+  //   return temp;
+  // }
+
   WaitListModel upcomingUser() {
-    var waitListNode = data[liveId]["waitList"];
-    final WaitListModel temp = isEngadedNew(waitListNode, forMe: false);
+    WaitListModel temp = WaitListModel(
+      isRequest: false,
+      isEngaded: false,
+      callType: "",
+      totalTime: "",
+      avatar: "",
+      userName: "",
+      id: "",
+      generatedOrderId: 0,
+      offerId: 0,
+      callStatus: 0,
+    );
+
+    var liveIdNode = data[liveId];
+    if (liveIdNode != null) {
+      var waitListNode = data[liveId]["waitList"];
+      temp = isEngadedNew(waitListNode, forMe: false);
+    } else {}
+
     return temp;
   }
 
@@ -522,41 +552,32 @@ class LiveDharamController extends GetxController {
   }
 
   WaitListModel engagedCoHostWithAstro() {
+    WaitListModel temp = WaitListModel(
+      isRequest: false,
+      isEngaded: false,
+      callType: "",
+      totalTime: "",
+      avatar: "",
+      userName: "",
+      id: "",
+      generatedOrderId: 0,
+      offerId: 0,
+      callStatus: 0,
+    );
+
     if (data.keys.toList() != null &&
         data.keys.toList().length > currentIndex) {
       if (data.keys.toList()[currentIndex] != null) {
         var liveId = data.keys.toList()[currentIndex];
         var liveIdNode = data[liveId];
-        var orderNode = liveIdNode["order"];
-        return getOrderModelGeneric(orderNode, forMe: false);
-      } else {
-        return WaitListModel(
-          isRequest: false,
-          isEngaded: false,
-          callType: "",
-          totalTime: "",
-          avatar: "",
-          userName: "",
-          id: "",
-          generatedOrderId: 0,
-          offerId: 0,
-          callStatus: 0,
-        );
-      }
-    } else {
-      return WaitListModel(
-        isRequest: false,
-        isEngaded: false,
-        callType: "",
-        totalTime: "",
-        avatar: "",
-        userName: "",
-        id: "",
-        generatedOrderId: 0,
-        offerId: 0,
-        callStatus: 0,
-      );
-    }
+        if (liveIdNode != null) {
+          var orderNode = liveIdNode["order"];
+          temp = getOrderModelGeneric(orderNode, forMe: false);
+        } else {}
+      } else {}
+    } else {}
+
+    return temp;
   }
 
   WaitListModel getOrderModel(Map? map) {

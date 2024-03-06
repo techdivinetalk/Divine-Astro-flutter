@@ -22,12 +22,128 @@ class LiveGlobalSingleton {
   set buildContext(BuildContext value) => _buildContext(value);
 
   Future<void> leaveLiveIfIsInLiveScreen() async {
-    print("LiveGlobalSingleton:: leaveLiveIfIsInLiveScreen():: isInLiveScreen:: $isInLiveScreen");
+    print(
+        "LiveGlobalSingleton:: leaveLiveIfIsInLiveScreen():: isInLiveScreen:: $isInLiveScreen");
     bool canLeave = false;
     if (isInLiveScreen) {
       canLeave = await zegoController.leave(buildContext);
     } else {}
-    print("LiveGlobalSingleton:: leaveLiveIfIsInLiveScreen():: canLeave:: $canLeave");
+    print(
+        "LiveGlobalSingleton:: leaveLiveIfIsInLiveScreen():: canLeave:: $canLeave");
     return Future<void>.value();
+  }
+
+  //
+  bool isAlreadyInWaitlistPopupOpen = false;
+  bool isGiftPopupOpen = false;
+  bool isLeaderboardPopupOpen = false;
+  bool isWaitListPopupOpen = false;
+  bool isDisconnectPopupOpen = false;
+  bool isExitWaitListPopupOpen = false;
+  bool isExitPopupOpen = false;
+  bool isEndLiveSessionPopupOpen = false;
+  bool isLowBalancePopupOpen = false;
+  bool isCallAstrologerPopupOpen = false;
+  bool isMoreOptionsPopupOpen = false;
+  bool isMoreOptionsForModPopupOpen = false;
+  bool isBlockUnblockPopupOpen = false;
+  bool isWaitingForUserToSelectCardsPopupOpen = false;
+  bool isShowCardDeckToUserPopupOpen = false;
+  bool isShowCardDeckToUser1PopupOpen = false;
+  bool isShowCardDeckToUser2PopupOpen = false;
+  bool isYouAreBlockedPopupOpen = false;
+  bool isExtendTimeWidgetPopupOpen = false;
+  bool isHostingAndCoHostingPopupOpen = false;
+  bool isShowAllAvailAstroPopupOpen = false;
+  //
+
+  int getCountOfOpenDialogs() {
+    final List<dynamic> temp = <dynamic>[];
+
+    if (isAlreadyInWaitlistPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isGiftPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isLeaderboardPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isWaitListPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isDisconnectPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isExitWaitListPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isExitPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isEndLiveSessionPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isLowBalancePopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isCallAstrologerPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isMoreOptionsPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isMoreOptionsForModPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isBlockUnblockPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isWaitingForUserToSelectCardsPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isShowCardDeckToUserPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isShowCardDeckToUser1PopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isShowCardDeckToUser2PopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isYouAreBlockedPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isExtendTimeWidgetPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isHostingAndCoHostingPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isShowAllAvailAstroPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    return temp.length;
   }
 }
