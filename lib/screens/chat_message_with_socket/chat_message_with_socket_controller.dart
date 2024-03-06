@@ -248,7 +248,9 @@ class ChatMessageWithSocketController extends GetxController
       },
       onHide: () {},
       onInactive: () {
-        backFunction();
+        socket.leavePrivateChatEmit(userData?.id.toString(),
+            AppFirebaseService().orderData.value["userId"], "0");
+        chatTimer?.cancel();
       },
       onPause: () {},
       onDetach: () {
@@ -813,7 +815,7 @@ class ChatMessageWithSocketController extends GetxController
             data?['data']['saveRemediesData'] as SaveRemediesResponse;
         newMessage = ChatMessage(
           message: productDetails.poojaName,
-          astrologerId: preferenceService.getUserDetail()!.id,
+          astrologerId: userData?.id,
           // createdAt: DateTime.now().toIso8601String(),
           id: int.parse(time),
           time: int.parse(time),
