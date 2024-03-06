@@ -39,7 +39,7 @@ class MessageView extends StatelessWidget {
 
   Widget buildMessageView(
       BuildContext context, ChatMessage chatMessage, bool yourMessage) {
-    print("message Detail $chatMessage");
+    // print("message Detail $chatMessage");
     // final currentMsgDate = DateTime.fromMillisecondsSinceEpoch(
     //     int.parse(chatMessage.createdAt ?? '0'));
     // final nextMsgDate = DateTime.fromMillisecondsSinceEpoch(

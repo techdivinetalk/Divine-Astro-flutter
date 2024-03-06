@@ -170,6 +170,7 @@ updateFirebaseToken();
   }
 
   userleftChatSocket() {
+    print("called user left chat socket");
     appSocket.userLeftCustChatAssist(
         userData?.id.toString(), args?.id.toString());
   }
