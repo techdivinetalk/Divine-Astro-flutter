@@ -520,8 +520,6 @@ class MessageView extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            print(chatMessage.awsUrl);
-                            print("chatMessage.awsUrl");
                             Get.toNamed(RouteName.imagePreviewUi,
                                 arguments: chatMessage.awsUrl);
                           },
@@ -577,7 +575,10 @@ class MessageView extends StatelessWidget {
                       ],
                     )
                   : chatDetail.downloadedPath == ""
-                      ? Stack(
+                      ?
+
+
+              Stack(
                           alignment: Alignment.center,
                           children: [
                             ClipRRect(
@@ -672,7 +673,8 @@ class MessageView extends StatelessWidget {
                               ),
                             ],
                           ),
-                        ))
+                        )
+          )
         ],
       ),
     );

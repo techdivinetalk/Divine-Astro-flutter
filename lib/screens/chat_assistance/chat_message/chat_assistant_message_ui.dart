@@ -20,7 +20,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
-
 import '../../../common/app_textstyle.dart';
 import '../../../common/common_functions.dart';
 import '../../../common/routes.dart';
@@ -42,7 +41,7 @@ class ChatMessageSupportUI extends StatefulWidget {
 class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
   ChatMessageController controller = Get.find();
 
-Timer? timer;
+  Timer? timer;
   updateFirebaseToken() async {
     String? newtoken = await FirebaseMessaging.instance.getToken();
     final data = await AppFirebaseService()
@@ -64,11 +63,9 @@ Timer? timer;
     super.initState();
     controller.listenSocket();
     if (Get.arguments != null) {
-
       controller.args = Get.arguments;
       controller.update();
-       chatAssistantCurrentUserId(controller.args?.id);
-       print("controller arguments ${controller.args?.toJson()}");
+      chatAssistantCurrentUserId(controller.args?.id);
       updateFirebaseToken();
       controller.socketReconnect();
       controller.getAssistantChatList();
@@ -110,7 +107,7 @@ Timer? timer;
                     //         responseMsg["chatId"] != ''&& responseMsg["chatId"]=='undefined'
                     //     ? int.parse(responseMsg["chatId"])
                     //     : null,
-                    id: int.parse(responseMsg?["chatId"].toString()??''),
+                    id: int.parse(responseMsg?["chatId"].toString() ?? ''),
                     isSuspicious: 0,
                     suggestedRemediesId:
                         int.parse(responseMsg['suggestedRemediesId'] ?? '0'),
@@ -199,7 +196,8 @@ Timer? timer;
 
   @override
   Widget build(BuildContext context) {
-    print("print image:: ${preferenceService.getAmazonUrl()}/${controller.args?.image ?? ''}");
+    print(
+        "print image:: ${preferenceService.getAmazonUrl()}/${controller.args?.image ?? ''}");
     Get.put(ChatMessageController(KundliRepository(), ChatRepository()));
     return Scaffold(
       appBar: AppBar(
@@ -228,8 +226,8 @@ Timer? timer;
                     imageModel: ImageModel(
                         assetImage: false,
                         placeHolderPath: Assets.images.defaultProfile.path,
-                        imagePath:
-                        (controller.args?.image ?? '').startsWith('https://divinenew-prod.s3.ap-south-1.amazonaws.com/')
+                        imagePath: (controller.args?.image ?? '').startsWith(
+                                'https://divinenew-prod.s3.ap-south-1.amazonaws.com/')
                             ? controller.args?.image ?? ''
                             : "${preferenceService.getAmazonUrl()}/${controller.args?.image ?? ''}",
                         loadingIndicator: SizedBox(
@@ -250,71 +248,55 @@ Timer? timer;
               width: MediaQuery.of(context).size.width, fit: BoxFit.fitWidth),
           Column(
             children: [
-              Expanded(
-                child: NotificationListener<ScrollNotification>(
-                  onNotification: (notification) {
-                    if (notification is ScrollUpdateNotification &&
-                        notification.metrics.pixels == 0.0 &&
-                        notification.metrics.axis == Axis.vertical &&
-                        notification.dragDetails != null) {
-                      // controller.getAssistantChatList();
-                    }
-                    return false;
-                  },
+              Obx(() {
+                return Expanded(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 7),
-                    child: Obx(
-                      () => controller.loading.value
-                          ? msgShimmerList()
-                          : controller.chatMessageList.isEmpty
-                              ? Center(child: Text('start a conversastion'))
-                              : ListView.builder(
-                                  itemCount: controller.chatMessageList.length,
-                                  controller:
-                                      controller.messageScrollController,
-                                  reverse: false,
-                                  shrinkWrap: true,
-                                  padding: EdgeInsets.symmetric(vertical: 5),
-                                  itemBuilder: (context, index) {
-                                    final currentMsg =
-                                        controller.chatMessageList[index]
-                                            as AssistChatData;
-                                    final nextIndex =
-                                        controller.chatMessageList.length - 1 ==
-                                                index
-                                            ? index
-                                            : index + 1;
-                                    print(
-                                        "chat assist msg data:${currentMsg.toJson()}");
-                                    return AssistMessageView(
-                                      index: index,
-                                      chatMessage: currentMsg,
-                                      nextMessage: index ==
-                                              controller
-                                                      .chatMessageList.length -
-                                                  1
-                                          ? controller.chatMessageList[index]
-                                          : controller
-                                              .chatMessageList[index + 1],
-                                      yourMessage: currentMsg.sendBy ==
-                                          SendBy.astrologer,
-                                      unreadMessage: controller
-                                              .unreadMessageList.isNotEmpty
-                                          ? controller
-                                                  .chatMessageList[index].id ==
-                                              controller
-                                                  .unreadMessageList.first.id
-                                          : false,
-                                      baseImageUrl: controller.preference
-                                              .getBaseImageURL() ??
-                                          '',
-                                    );
-                                  },
-                                ),
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 7),
+                    child: controller.loading.value
+                        ? msgShimmerList()
+                        : controller.chatMessageList.isEmpty
+                            ? const Center(child: Text('start a conversation'))
+                            : ListView.builder(
+                                itemCount: controller.chatMessageList.length,
+                                controller: controller.messageScrollController,
+                                reverse: false,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  final currentMsg = controller
+                                      .chatMessageList[index] as AssistChatData;
+                                  final nextIndex =
+                                      controller.chatMessageList.length - 1 ==
+                                              index
+                                          ? index
+                                          : index + 1;
+                                  print(
+                                      "chat assist msg data:${currentMsg.toJson()}");
+                                  return AssistMessageView(
+                                    index: index,
+                                    chatMessage: currentMsg,
+                                    nextMessage: index ==
+                                            controller.chatMessageList.length -
+                                                1
+                                        ? controller.chatMessageList[index]
+                                        : controller.chatMessageList[index + 1],
+                                    yourMessage:
+                                        currentMsg.sendBy == SendBy.astrologer,
+                                    unreadMessage:
+                                        controller.unreadMessageList.isNotEmpty
+                                            ? controller.chatMessageList[index]
+                                                    .id ==
+                                                controller
+                                                    .unreadMessageList.first.id
+                                            : false,
+                                    baseImageUrl: controller.preference
+                                            .getBaseImageURL() ??
+                                        '',
+                                  );
+                                },
+                              ),
                   ),
-                ),
-              ),
+                );
+              }),
               Obx(
                 () => Column(
                   children: [

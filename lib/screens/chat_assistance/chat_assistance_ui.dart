@@ -131,75 +131,69 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                   ),
                 ),
               ),
-              Expanded(
-                child: Obx(() {
-                  if (isUSerTabSelected.value) {
-                    if (controller.chatAssistantAstrologerListResponse ==
-                            null ||
-                        controller.chatAssistantAstrologerListResponse!.data ==
-                            null ||
-                        controller.chatAssistantAstrologerListResponse!.data!
-                            .data!.isEmpty) {
-                      return Center(
-                          child:
-                              SvgPicture.asset('assets/svg/Group 129525.svg'));
-                    } else {
-                      return ListView.builder(
-                        padding: EdgeInsets.symmetric(vertical: 10.h),
-                        itemCount: (controller.searchData).isNotEmpty ||
-                                controller.searchController.text.isNotEmpty
-                            ? controller.searchData.length
-                            : controller.chatAssistantAstrologerListResponse!
-                                .data!.data!.length,
-                        itemBuilder: (context, index) {
-                          return ChatAssistanceTile(
-                            controller: controller,
-                            data: (controller.searchData).isNotEmpty ||
-                                    controller.searchController.text.isNotEmpty
-                                ? controller.searchData[index]
-                                : controller
-                                    .chatAssistantAstrologerListResponse!
-                                    .data!
-                                    .data![index],
-                          );
-                        },
-                      );
-                    }
+              Obx(() {
+                if (isUSerTabSelected.value) {
+                  if (controller.chatAssistantAstrologerListResponse == null ||
+                      controller.chatAssistantAstrologerListResponse!.data ==
+                          null ||
+                      controller.chatAssistantAstrologerListResponse!.data!
+                          .data!.isEmpty) {
+                    return Center(
+                        child: SvgPicture.asset('assets/svg/Group 129525.svg'));
                   } else {
-                    if (controller.customerDetailsResponse == null ||
-                        controller.customerDetailsResponse!.data.isEmpty) {
-                      return Center(
-                        child: Text(
-                          'No Data found',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            color: appColors.black,
-                            fontFamily: FontFamily.metropolis,
-                          ),
-                        ),
-                      );
-                    } else {
-                      return ListView.builder(
-                        padding: EdgeInsets.symmetric(vertical: 10.h),
-                        itemCount: (controller.filteredUserData).isNotEmpty ||
-                                controller.searchController.text.isNotEmpty
-                            ? controller.filteredUserData.length
-                            : controller.customerDetailsResponse?.data.length ??
-                                0,
-                        itemBuilder: (context, index) {
-                          return ChatAssistanceDataTile(
-                            data: (controller.filteredUserData).isNotEmpty ||
-                                    controller.searchController.text.isNotEmpty
-                                ? controller.filteredUserData[index]
-                                : controller
-                                    .customerDetailsResponse!.data[index],
-                          );
-                        },
-                      );
-                    }
+                    return ListView.builder(
+                      padding: EdgeInsets.symmetric(vertical: 10.h),
+                      itemCount: (controller.searchData).isNotEmpty ||
+                              controller.searchController.text.isNotEmpty
+                          ? controller.searchData.length
+                          : controller.chatAssistantAstrologerListResponse!
+                              .data!.data!.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return ChatAssistanceTile(
+                          controller: controller,
+                          data: (controller.searchData).isNotEmpty ||
+                                  controller.searchController.text.isNotEmpty
+                              ? controller.searchData[index]
+                              : controller.chatAssistantAstrologerListResponse!
+                                  .data!.data![index],
+                        );
+                      },
+                    );
                   }
-                }),
-              )
+                } else {
+                  if (controller.customerDetailsResponse == null ||
+                      controller.customerDetailsResponse!.data.isEmpty) {
+                    return Center(
+                      child: Text(
+                        'No Data found',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: appColors.black,
+                          fontFamily: FontFamily.metropolis,
+                        ),
+                      ),
+                    );
+                  } else {
+                    return ListView.builder(
+                      padding: EdgeInsets.symmetric(vertical: 10.h),
+                      itemCount: (controller.filteredUserData).isNotEmpty ||
+                              controller.searchController.text.isNotEmpty
+                          ? controller.filteredUserData.length
+                          : controller.customerDetailsResponse?.data.length ??
+                              0,
+                      itemBuilder: (context, index) {
+                        return ChatAssistanceDataTile(
+                          data: (controller.filteredUserData).isNotEmpty ||
+                                  controller.searchController.text.isNotEmpty
+                              ? controller.filteredUserData[index]
+                              : controller.customerDetailsResponse!.data[index],
+                        );
+                      },
+                    );
+                  }
+                }
+              })
             ],
           );
         }
@@ -307,7 +301,8 @@ class ChatAssistanceTile extends StatelessWidget {
     return Obx(() {
       late AssistChatData element;
       bool newMessageFromlist = false;
-      if (assistChatUnreadMessages.isNotEmpty) {
+      if (assistChatUnreadMessages.isNotEmpty ||
+          assistChatUnreadMessages != []) {
         print(
             "list of assist chat unread messages ${assistChatUnreadMessages.length}");
         int index = assistChatUnreadMessages.lastIndexWhere((element) {
@@ -319,17 +314,14 @@ class ChatAssistanceTile extends StatelessWidget {
           if (newMessageFromlist) {
             data.lastMessage = element.message.toString();
           }
-          data.unreadMessage =
-              (data.unreadMessage ?? 0) + (userUnreadMessages(data.id ?? 0));
-          // assistChatUnreadMessages.removeWhere(
-          //     (message) => message.customerId.toString() == data.id.toString());
+          data.unreadMessage = (data.unreadMessage ?? 0) + 1;
         }
       }
       return ListTile(
         onTap: () async {
           if (assistChatUnreadMessages.isNotEmpty) {
             assistChatUnreadMessages.removeWhere((message) =>
-                message.astrologerId.toString() == data.id.toString());
+                message.customerId.toString() == data.id.toString());
           }
           chatAssistantCurrentUserId = 0.obs;
           await Get.toNamed(RouteName.chatMessageUI, arguments: data)
@@ -368,9 +360,7 @@ class ChatAssistanceTile extends StatelessWidget {
           fontSize: 16.sp,
           fontWeight: FontWeight.w600,
         ),
-        subtitle: Expanded(
-          child: lastMessage(data.msgType ?? MsgType.text),
-        ),
+        subtitle: lastMessage(data.msgType ?? MsgType.text),
         trailing: (data.unreadMessage ?? 0) > 0
             ? CircleAvatar(
                 radius: 10.r,
@@ -440,6 +430,20 @@ class ChatAssistanceTile extends StatelessWidget {
             ),
             Text(
               "  Product",
+              style: TextStyle(fontSize: 10),
+            )
+          ],
+        );
+        break;
+      case MsgType.pooja:
+        lastMessageWidget = Row(
+          children: [
+            SvgPicture.asset(
+              'assets/svg/product.svg',
+              width: 10,
+            ),
+            Text(
+              "  ${data.lastMessage}",
               style: TextStyle(fontSize: 10),
             )
           ],
