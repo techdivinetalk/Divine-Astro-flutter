@@ -7,6 +7,7 @@ import 'package:divine_astrologer/model/res_product_detail.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -31,9 +32,10 @@ import '../../../model/save_remedies_response.dart';
 import '../../../repository/chat_assistant_repository.dart';
 import '../../../repository/chat_repository.dart';
 import '../../../repository/kundli_repository.dart';
+import '../../live_page/constant.dart';
 import 'widgets/product/pooja/pooja_dharam/get_single_pooja_response.dart';
 
-class ChatMessageController extends GetxController  with WidgetsBindingObserver  {
+class ChatMessageController extends GetxController with WidgetsBindingObserver {
   final chatAssistantRepository = ChatAssistantRepository();
   final messageScrollController = ScrollController();
   ChatAssistChatResponse? chatAssistChatResponse;
@@ -80,34 +82,114 @@ class ChatMessageController extends GetxController  with WidgetsBindingObserver 
 
   ChatMessageController(KundliRepository put, ChatRepository put2);
 
+  //variables to manage chat state
+  StreamSubscription? _appLinkingStreamSubscription;
+  late final AppLifecycleListener _listener;
+  late AppLifecycleState? _state;
+  final List<String> _states = <String>[];
+//end
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     args = Get.arguments;
+    WidgetsBinding.instance.addObserver(this);
+    stateHandling();
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch (state) {
-      case AppLifecycleState.resumed:
-        socket.socketConnect();
-updateFirebaseToken();
-        break;
-      case AppLifecycleState.inactive:
-        debugPrint("App Inactive");
-        break;
-      case AppLifecycleState.paused:
-        debugPrint("App Paused");
-        break;
-      case AppLifecycleState.detached:
-        debugPrint("App Detached");
-        break;
-      case AppLifecycleState.hidden:
-        break;
+  stateHandling() {
+    _state = SchedulerBinding.instance.lifecycleState;
+    _listener = AppLifecycleListener(
+      onShow: () {},
+      onResume: () {
+        updateFirebaseToken();
+        // getBackGroundMessages();
+      },
+      onHide: () {
+
+      },
+      onInactive: () {},
+      onPause: () {},
+      onDetach: () {},
+      onRestart: () {
+        updateFirebaseToken();
+        // getBackGroundMessages();
+      },
+      onStateChange: (value) {
+        print("on state changed called ${value.name}");
+      },
+    );
+    if (_state != null) {
+      _states.add(_state!.name);
     }
-    super.didChangeAppLifecycleState(state);
   }
+
+  getBackGroundMessages() {
+    final newChatList = assistChatNewMsg;
+    if (newChatList.isNotEmpty) {
+      print("new chat list ${newChatList.length} ");
+      for (int index = 0; index < newChatList.length; index++) {
+        print("new chat list ${jsonEncode(newChatList[index])} ");
+        var responseMsg = newChatList[index];
+        if (int.parse(responseMsg?["sender_id"].toString() ?? '') == args?.id) {
+          chatMessageList([
+            ...chatMessageList,
+            AssistChatData(
+                isPoojaProduct: responseMsg['message'] == "1" ? true : false,
+                message: responseMsg['message'],
+                astrologerId:
+                    int.parse(responseMsg?["userid"].toString() ?? ''),
+                createdAt: DateTime.parse(responseMsg?["created_at"])
+                    .millisecondsSinceEpoch
+                    .toString(),
+                // id: responseMsg["chatId"] != null &&
+                //         responseMsg["chatId"] != ''&& responseMsg["chatId"]=='undefined'
+                //     ? int.parse(responseMsg["chatId"])
+                //     : null,
+                id: int.parse(responseMsg?["chatId"].toString() ?? ''),
+                isSuspicious: 0,
+                suggestedRemediesId:
+                    int.parse(responseMsg['suggestedRemediesId'] ?? '0'),
+                productId: responseMsg['productId'].toString(),
+                sendBy: SendBy.customer,
+                msgType: responseMsg["msg_type"] != null
+                    ? msgTypeValues.map[responseMsg["msg_type"]]
+                    : MsgType.text,
+                seenStatus: SeenStatus.received,
+                customerId: int.parse(responseMsg['sender_id'] ?? 0))
+          ]);
+          chatMessageList.refresh();
+          scrollToBottomFunc();
+          assistChatNewMsg.removeAt(index);
+          update();
+        }
+      }
+      update();
+    }
+  }
+
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   switch (state) {
+  //     case AppLifecycleState.resumed:
+  //       socket.socketConnect();
+  //       updateFirebaseToken();
+  //       break;
+  //     case AppLifecycleState.inactive:
+  //       debugPrint("App Inactive");
+  //       break;
+  //     case AppLifecycleState.paused:
+  //       debugPrint("App Paused");
+  //       break;
+  //     case AppLifecycleState.detached:
+  //       debugPrint("App Detached");
+  //       break;
+  //     case AppLifecycleState.hidden:
+  //       break;
+  //   }
+  //   super.didChangeAppLifecycleState(state);
+  // }
 
   @override
   void dispose() {
@@ -116,14 +198,15 @@ updateFirebaseToken();
     isCustomerOnline = false.obs;
     chatMessageList.clear();
     processedPages.clear();
-    userleftChatSocket();
+    listenUserEnterChatSocket();
+    WidgetsBinding.instance.removeObserver(this);
     currentPage(1);
     super.dispose();
   }
 
-  socketReconnect(){
+  socketReconnect() {
     print("called socketReconnect ${socket.socket?.disconnected}");
-    if(socket.socket?.disconnected==true){
+    if (socket.socket?.disconnected == true) {
       socket.socket
         ?..disconnect()
         ..connect();
@@ -164,43 +247,56 @@ updateFirebaseToken();
     sendMsg(MsgType.text, {'text': msg.description});
   }
 
-  userjoinedChatSocket() {
-    appSocket.emitForStartAstroCustChatAssist(
-        userData?.id.toString(), args?.id.toString(), 0);
+  userEnterChatSocket() {
+    appSocket.emitForAstrologerEnterChatAssist(
+        args?.id.toString(), userData?.id.toString());
   }
 
-  userleftChatSocket() {
-    print("called user left chat socket");
-    appSocket.userLeftCustChatAssist(
-        userData?.id.toString(), args?.id.toString());
-  }
-
-  userleftChatSocketListen() {
-    appSocket.userLeftListenChatAssist(
+  listenUserEnterChatSocket() {
+    appSocket.listenForAstrologerEnterChatAssist(
       (data) {
-        print("data msg $data");
-        if (data['msg'] == 2) {
-          isCustomerOnline(true);
-        }
-        isCustomerOnline(false);
-        update();
+        print("people in room data from astro left socket ${data}");
       },
     );
   }
 
-  listenjoinedChatSocket() {
-    print("listen joined chat socket called");
-    appSocket.listenUserJoinedSocket(
-      (data) {
-        print("data msg $data");
-        if (data['msg'] == 2) {
-          isCustomerOnline(true);
-        }
-        isCustomerOnline(false);
-        update();
-      },
-    );
-  }
+  // userjoinedChatSocket() {
+  //   appSocket.emitForStartAstroCustChatAssist(
+  //       userData?.id.toString(), args?.id.toString(), 0);
+  // }
+  //
+  // userleftChatSocket() {
+  //   print("called user left chat socket");
+  //   appSocket.userLeftCustChatAssist(
+  //       userData?.id.toString(), args?.id.toString());
+  // }
+  //
+  // userleftChatSocketListen() {
+  //   appSocket.userLeftListenChatAssist(
+  //     (data) {
+  //       print("people in room data from left socket $data");
+  //       if (data['msg'] == 2) {
+  //         isCustomerOnline(true);
+  //       }
+  //       isCustomerOnline(false);
+  //       update();
+  //     },
+  //   );
+  // }
+  //
+  // listenjoinedChatSocket() {
+  //   print("listen joined chat socket called");
+  //   appSocket.listenUserJoinedSocket(
+  //     (data) {
+  //       print("people in room data from joined socket $data");
+  //       if (data['msg'] == 2) {
+  //         isCustomerOnline(true);
+  //       }
+  //       isCustomerOnline(false);
+  //       update();
+  //     },
+  //   );
+  // }
 
   void listenSocket() {
     appSocket.listenForAssistantChatMessage((chatData) {
@@ -338,8 +434,10 @@ updateFirebaseToken();
     final String base64Image = base64Encode(imageBytes);
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
 
-    final String uploadFile =
-        await uploadImageToS3Bucket(File(fileData.path), time);
+    final String uploadFile = await uploadImageFileToAws(
+            imageFile: File(fileData.path),
+            moduleName: "chat-assistant-astrologer") ??
+        "";
     if (uploadFile != "") {
       print("image message upload file ${uploadFile} ${base64Image}");
       final Map<String, dynamic> data = {

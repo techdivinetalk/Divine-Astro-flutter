@@ -229,6 +229,61 @@ class ChatMessageWithSocketController extends GetxController
 
   // RxInt cardListCount = 0.obs;
 
+
+  stateHandling(){
+    WidgetsBinding.instance.addObserver(this);
+    _state = SchedulerBinding.instance.lifecycleState;
+    _listener = AppLifecycleListener(
+      onShow: () {},
+      onResume: () {
+        socket.socketConnect();
+        socket.startAstroCustumerSocketEvent(
+          orderId: AppFirebaseService().orderData.value["orderId"].toString(),
+          userId: AppFirebaseService().orderData.value["userId"],
+        );
+        chatStatus("Online");
+      },
+      onHide: () {},
+      onInactive: () {
+        WidgetsBinding.instance.endOfFrame.then(
+              (_) async {
+            socket.leavePrivateChatEmit(userData?.id.toString(),
+                AppFirebaseService().orderData.value["userId"], "0");
+            if (AppFirebaseService().orderData.value["status"] == "4") {
+              endChatApi();
+            }
+          },
+        );
+      },
+      onPause: () {},
+      onDetach: () {
+        WidgetsBinding.instance.endOfFrame.then(
+              (_) async {
+            socket.leavePrivateChatEmit(userData?.id.toString(),
+                AppFirebaseService().orderData.value["userId"], "0");
+            if (AppFirebaseService().orderData.value["status"] == "4") {
+              endChatApi();
+            }
+          },
+        );
+      },
+      onRestart: () {
+        socket.socketConnect();
+        socket.startAstroCustumerSocketEvent(
+          orderId: AppFirebaseService().orderData.value["orderId"].toString(),
+          userId: AppFirebaseService().orderData.value["userId"],
+        );
+        chatStatus("Online");
+      },
+      onStateChange: (value) {
+        print("on state changed called ${value.name}");
+      },
+    );
+    if (_state != null) {
+      _states.add(_state!.name);
+    }
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -239,33 +294,7 @@ class ChatMessageWithSocketController extends GetxController
       initTask(p0);
     });
 
-    WidgetsBinding.instance.addObserver(this);
-    _state = SchedulerBinding.instance.lifecycleState;
-    _listener = AppLifecycleListener(
-      onShow: () {},
-      onResume: () {
-        socket.socketConnect();
-      },
-      onHide: () {},
-      onInactive: () {
-        socket.leavePrivateChatEmit(userData?.id.toString(),
-            AppFirebaseService().orderData.value["userId"], "0");
-        chatTimer?.cancel();
-      },
-      onPause: () {},
-      onDetach: () {
-        backFunction();
-      },
-      onRestart: () {
-        socket.socketConnect();
-      },
-      onStateChange: (value) {
-        print("on state changed called ${value.name}");
-      },
-    );
-    if (_state != null) {
-      _states.add(_state!.name);
-    }
+    stateHandling();
 
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) {

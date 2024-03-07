@@ -62,6 +62,17 @@ class AppSocket {
     });
   }
 
+  void emitForAstrologerEnterChatAssist(
+      String? customerId, String? userId) {
+    socket?.emit(ApiProvider().enterChatAssist,
+        {"receiver_id": customerId, "sender_id": userId});
+  }
+  void listenForAstrologerEnterChatAssist(void Function(dynamic) callback) {
+    print("called inside socket");
+    socket?.on(ApiProvider().enterChatAssist, callback);
+    print("called outside socket");
+  }
+
   void emitForStartAstroCustChatAssist(
       String? astroId, String? userId, int userType) {
     socket?.emit(ApiProvider().startAstroCustChatAssist,

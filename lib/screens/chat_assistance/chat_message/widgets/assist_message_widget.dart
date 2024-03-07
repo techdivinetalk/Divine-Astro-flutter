@@ -298,69 +298,75 @@ class AssistMessageView extends StatelessWidget {
         crossAxisAlignment:
             yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          Container(
-              margin: EdgeInsets.symmetric(vertical: 4.h),
-              padding: const EdgeInsets.all(8.0),
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 3.0,
-                      offset: const Offset(0.0, 3.0)),
-                ],
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(8.r)),
-              ),
-              constraints: BoxConstraints(
-                  maxWidth: ScreenUtil().screenWidth * 0.7,
-                  minWidth: ScreenUtil().screenWidth * 0.27),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0.sp),
-                    child: CachedNetworkImage(
-                      imageUrl: chatDetail.message ?? '',
-                      fit: BoxFit.cover,
-                      height: 200.h,
+          GestureDetector(
+            onTap: () {
+              Get.toNamed(RouteName.imagePreviewUi,
+                  arguments: chatDetail.message);
+            },
+            child: Container(
+                margin: EdgeInsets.symmetric(vertical: 4.h),
+                padding: const EdgeInsets.all(8.0),
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 3.0,
+                        offset: const Offset(0.0, 3.0)),
+                  ],
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(8.r)),
+                ),
+                constraints: BoxConstraints(
+                    maxWidth: ScreenUtil().screenWidth * 0.7,
+                    minWidth: ScreenUtil().screenWidth * 0.27),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0.sp),
+                      child: CachedNetworkImage(
+                        imageUrl: chatDetail.message ?? '',
+                        fit: BoxFit.cover,
+                        height: 200.h,
+                      ),
                     ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6)
-                              .copyWith(left: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                bottomRight: Radius.circular(10.r)),
-                            gradient: LinearGradient(
-                              colors: [
-                                appColors.darkBlue.withOpacity(0.0),
-                                appColors.darkBlue.withOpacity(0.0),
-                                appColors.darkBlue.withOpacity(0.5),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomCenter,
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6)
+                                .copyWith(left: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(10.r)),
+                              gradient: LinearGradient(
+                                colors: [
+                                  appColors.darkBlue.withOpacity(0.0),
+                                  appColors.darkBlue.withOpacity(0.0),
+                                  appColors.darkBlue.withOpacity(0.5),
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomCenter,
+                              ),
+                            ),
+                            child: Text(
+                              // messageDateTime(chatDetail. ?? 0),
+                              msgTimeFormat(chatDetail.createdAt),
+                              style: AppTextStyle.textStyle10(
+                                  fontColor: appColors.white),
                             ),
                           ),
-                          child: Text(
-                            // messageDateTime(chatDetail. ?? 0),
-                            msgTimeFormat(chatDetail.createdAt),
-                            style: AppTextStyle.textStyle10(
-                                fontColor: appColors.white),
-                          ),
-                        ),
-                        SizedBox(width: 8.w),
-                      ],
+                          SizedBox(width: 8.w),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ))
+                  ],
+                )),
+          )
         ],
       ),
     );

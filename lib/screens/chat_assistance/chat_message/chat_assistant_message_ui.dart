@@ -69,11 +69,14 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
       updateFirebaseToken();
       controller.socketReconnect();
       controller.getAssistantChatList();
-      controller.userjoinedChatSocket();
-      controller.listenjoinedChatSocket();
+      controller.listenUserEnterChatSocket();
+      controller.userEnterChatSocket();
+      // controller.userjoinedChatSocket();
+      // controller.listenjoinedChatSocket();
+      // controller.userleftChatSocketListen();
       controller.getMessageTemplatesLocally();
       controller.scrollToBottomFunc();
-      timer = Timer.periodic(Duration(minutes: 5), (timer) {
+      timer = Timer.periodic(const Duration(minutes: 5), (timer) {
         controller.socketReconnect();
       });
 
@@ -185,10 +188,10 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
     // TODO: implement dispose
     controller.isCustomerOnline = false.obs;
     controller.chatMessageList.clear();
-
     controller.processedPages.clear();
     controller.currentPage(1);
-    controller.userleftChatSocket();
+    controller.listenUserEnterChatSocket();
+    // controller.userleftChatSocket();
     chatAssistantCurrentUserId(0);
     timer?.cancel();
     super.dispose();
