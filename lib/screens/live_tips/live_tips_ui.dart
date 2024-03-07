@@ -273,11 +273,13 @@ class LiveTipsUI extends GetView<LiveTipsController> {
     if (hasAllPermission) {
       final bool hasAllData = await dataCheck();
       if (hasAllData) {
-        final (bool, String) can1 = await canEnter();
+        // final (bool, String) can1 = await canEnter();
+        final (bool, String) can1 = (true, "");
         if (can1.$1 == true && can1.$2 == "") {
           connectSocket();
           await controller.furtherProcedure();
-          final (bool, String) can2 = await canExit();
+          // final (bool, String) can2 = await canExit();
+          final (bool, String) can2 = (true, "");
           if (can2.$1 == true && can2.$2 == "") {
           } else {
             divineSnackBar(data: can2.$2);

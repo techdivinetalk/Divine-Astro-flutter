@@ -126,12 +126,17 @@
 //                 : ListView.builder(
 //                     shrinkWrap: true,
 //                     itemCount: ecomResponse.data?.length,
+//                     physics: const ScrollPhysics(),
 //                     padding: const EdgeInsets.only(top: 16),
 //                     itemBuilder: (BuildContext context, int index) {
 //                       final Data item = ecomResponse.data?[index] ?? Data();
 //                       final startPoint = pref.getAmazonUrl() ?? "";
 //                       final endPoint = item.poojaImg ?? "";
 //                       final String poojaImg = "$startPoint$endPoint";
+//                       final String tag = item.tag ?? "";
+//                       final bool isTagAvail = tag.isNotEmpty;
+//                       final String result = item.result ?? "";
+//                       final bool isResultAvail = result.isNotEmpty;
 //                       return Stack(
 //                         children: [
 //                           Container(
@@ -190,35 +195,40 @@
 //                                                 overflow: TextOverflow.ellipsis,
 //                                               ),
 //                                             ),
-//                                             const SizedBox(width: 8),
-//                                             Flexible(
-//                                               child: Container(
-//                                                 padding:
-//                                                     const EdgeInsets.symmetric(
-//                                                   vertical: 2,
-//                                                   horizontal: 4,
-//                                                 ),
-//                                                 decoration: BoxDecoration(
-//                                                   color: appColors.textColor,
-//                                                   borderRadius:
-//                                                       const BorderRadius.all(
-//                                                     Radius.circular(10.0),
-//                                                   ),
-//                                                 ),
-//                                                 child: Flexible(
-//                                                   child: Text(
-//                                                     item.tag ?? "",
-//                                                     style: TextStyle(
-//                                                       fontSize: 10,
-//                                                       color: appColors.white,
+//                                             SizedBox(width: isTagAvail ? 8 : 0),
+//                                             isTagAvail
+//                                                 ? Flexible(
+//                                                     child: Container(
+//                                                       padding: const EdgeInsets
+//                                                           .symmetric(
+//                                                         vertical: 2,
+//                                                         horizontal: 4,
+//                                                       ),
+//                                                       decoration: BoxDecoration(
+//                                                         color:
+//                                                             appColors.textColor,
+//                                                         borderRadius:
+//                                                             const BorderRadius
+//                                                                 .all(
+//                                                           Radius.circular(10.0),
+//                                                         ),
+//                                                       ),
+//                                                       child: Flexible(
+//                                                         child: Text(
+//                                                           tag,
+//                                                           style: TextStyle(
+//                                                             fontSize: 10,
+//                                                             color:
+//                                                                 appColors.white,
+//                                                           ),
+//                                                           maxLines: 1,
+//                                                           overflow: TextOverflow
+//                                                               .ellipsis,
+//                                                         ),
+//                                                       ),
 //                                                     ),
-//                                                     maxLines: 1,
-//                                                     overflow:
-//                                                         TextOverflow.ellipsis,
-//                                                   ),
-//                                                 ),
-//                                               ),
-//                                             ),
+//                                                   )
+//                                                 : const SizedBox(),
 //                                           ],
 //                                         ),
 //                                         const SizedBox(height: 8),
@@ -258,32 +268,34 @@
 //                               ),
 //                             ),
 //                           ),
-//                           Positioned(
-//                             top: 4,
-//                             right: 24,
-//                             child: Container(
-//                               padding: const EdgeInsets.symmetric(
-//                                 vertical: 2,
-//                                 horizontal: 4,
-//                               ),
-//                               decoration: BoxDecoration(
-//                                 color: appColors.red,
-//                                 borderRadius: const BorderRadius.only(
-//                                   bottomLeft: Radius.circular(10),
-//                                   bottomRight: Radius.circular(10),
-//                                 ),
-//                               ),
-//                               child: Text(
-//                                 "${item.result ?? ""}% Result",
-//                                 style: TextStyle(
-//                                   fontSize: 10,
-//                                   color: appColors.white,
-//                                 ),
-//                                 maxLines: 1,
-//                                 overflow: TextOverflow.ellipsis,
-//                               ),
-//                             ),
-//                           )
+//                           isResultAvail
+//                               ? Positioned(
+//                                   top: 4,
+//                                   right: 24,
+//                                   child: Container(
+//                                     padding: const EdgeInsets.symmetric(
+//                                       vertical: 2,
+//                                       horizontal: 4,
+//                                     ),
+//                                     decoration: BoxDecoration(
+//                                       color: appColors.red,
+//                                       borderRadius: const BorderRadius.only(
+//                                         bottomLeft: Radius.circular(10),
+//                                         bottomRight: Radius.circular(10),
+//                                       ),
+//                                     ),
+//                                     child: Text(
+//                                       "$result% Result",
+//                                       style: TextStyle(
+//                                         fontSize: 10,
+//                                         color: appColors.white,
+//                                       ),
+//                                       maxLines: 1,
+//                                       overflow: TextOverflow.ellipsis,
+//                                     ),
+//                                   ),
+//                                 )
+//                               : const SizedBox()
 //                         ],
 //                       );
 //                     },
@@ -296,28 +308,36 @@
 //     required String buttonText,
 //     required Function() buttonCallback,
 //   }) {
-//     return SizedBox(
-//       width: 70,
-//       child: OutlinedButton(
-//         style: ButtonStyle(
-//           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-//           minimumSize: const MaterialStatePropertyAll(Size(56, 32)),
-//           padding: MaterialStateProperty.all(EdgeInsets.zero),
-//           elevation: MaterialStateProperty.all(4),
-//           backgroundColor: MaterialStateProperty.all(appColors.white),
-//           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-//             RoundedRectangleBorder(
-//               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-//               side: BorderSide(width: 1, color: appColors.green),
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 8.0),
+//       child: SizedBox(
+//         width: 70,
+//         child: ElevatedButton(
+//           style: ButtonStyle(
+//             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+//             minimumSize: const MaterialStatePropertyAll(Size(56, 32)),
+//             padding: MaterialStateProperty.all(EdgeInsets.zero),
+//             elevation: MaterialStateProperty.all(4),
+//             backgroundColor: MaterialStateProperty.all(appColors.white),
+//             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+//               RoundedRectangleBorder(
+//                 borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+//                 side: BorderSide(width: 1, color: appColors.green),
+//               ),
 //             ),
 //           ),
-//         ),
-//         onPressed: buttonCallback,
-//         child: Text(
-//           buttonText,
-//           style: TextStyle(
-//             color: appColors.green,
-//             fontSize: 12,
+//           onPressed: buttonCallback,
+//           child: Row(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: [
+//               Text(
+//                 buttonText,
+//                 style: TextStyle(
+//                   color: appColors.green,
+//                   fontSize: 12,
+//                 ),
+//               ),
+//             ],
 //           ),
 //         ),
 //       ),
