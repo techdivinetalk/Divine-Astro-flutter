@@ -70,6 +70,7 @@ class ChatMessageWithSocketController extends GetxController
       Get.put(MessageTemplateRepo());
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
+  RxBool isAudioPlaying = false.obs;
   TextEditingController messageController = TextEditingController();
   UserData? userData = UserData();
   FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
@@ -814,7 +815,7 @@ class ChatMessageWithSocketController extends GetxController
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
 
     final String? uploadFile = await uploadImageFileToAws(
-        imageFile: File(fileData.path), moduleName: "Chat");
+        file: File(fileData.path), moduleName: "Chat");
     if (uploadFile != "" || uploadFile != null) {
       print("image message upload file ${uploadFile} ${base64Image}");
       addNewMessage(time, MsgType.image,
@@ -1224,8 +1225,8 @@ class ChatMessageWithSocketController extends GetxController
 
   uploadAudioFile(File soundFile) async {
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-    final String uploadFile = await uploadImageToS3Bucket(soundFile, time);
-    if (uploadFile != "") {
+    final  uploadFile = await uploadImageFileToAws(file: soundFile, moduleName: "chat");
+    if (uploadFile != ""&& uploadFile!=null) {
       addNewMessage(time, MsgType.audio, awsUrl: uploadFile);
     }
   }

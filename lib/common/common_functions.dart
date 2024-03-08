@@ -26,10 +26,12 @@ final UserRepository userRepository = Get.find<UserRepository>();
 SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
 var userData = preferenceService.getUserDetail();
 
-Future<String> uploadImageToS3Bucket(File? selectedFile, String fileName) async {
+Future<String> uploadImageToS3Bucket(
+    File? selectedFile, String fileName) async {
   var commonConstants = await userRepository.constantDetailsData();
   var dataString = commonConstants.data!.awsCredentails.baseurl?.split(".");
   var extension = p.extension(selectedFile!.path);
+  print("extension: " + extension);
   var response = await AwsS3.uploadFile(
     // accessKey: commonConstants.data.awsCredentails.accesskey!,
     // secretKey: commonConstants.data.awsCredentails.secretKey!,
@@ -42,7 +44,6 @@ Future<String> uploadImageToS3Bucket(File? selectedFile, String fileName) async 
     region: dataString[2],
   );
 
-
   if (response != null) {
     return response;
   } else {
@@ -50,12 +51,12 @@ Future<String> uploadImageToS3Bucket(File? selectedFile, String fileName) async 
   }
 }
 
-
 Future<String?> uploadImageFileToAws(
-    {required File imageFile, required String moduleName}) async {
-  var token = await preferenceService.getToken();
+    {required File file, required String moduleName}) async {
+  var token = preferenceService.getToken();
 
-  var uri = Uri.parse("https://wakanda-api.divinetalk.live/api/astro/v7/uploadImage");
+  var uri =
+      Uri.parse("https://wakanda-api.divinetalk.live/api/astro/v7/uploadImage");
 
   var request = http.MultipartRequest('POST', uri);
 
@@ -68,7 +69,7 @@ Future<String?> uploadImageFileToAws(
   // Attach the image file to the request
   request.files.add(await http.MultipartFile.fromPath(
     'image',
-    imageFile.path,
+    file.path,
   ));
   request.fields.addAll({"module_name": moduleName});
 
@@ -87,11 +88,14 @@ Future<String?> uploadImageFileToAws(
   return url;
 }
 
-void checkNotification({required bool isFromNotification, Map? updatedData}) async {
+void checkNotification(
+    {required bool isFromNotification, Map? updatedData}) async {
   Map notificationList;
   if (isFromNotification) {
-    final snapshot =
-        await FirebaseDatabase.instance.ref().child("astrologer/${userData?.id}/realTime/notification").get();
+    final snapshot = await FirebaseDatabase.instance
+        .ref()
+        .child("astrologer/${userData?.id}/realTime/notification")
+        .get();
     notificationList = snapshot.value as Map;
   } else {
     notificationList = updatedData!;
@@ -145,7 +149,7 @@ void checkNotification({required bool isFromNotification, Map? updatedData}) asy
       //   setHiveDatabase("userKey_${userData?.id}_$senderId", newMessage);
       // }
     });
-  //  removeNotificationNode();
+    //  removeNotificationNode();
   }
 }
 
@@ -169,7 +173,8 @@ void setHiveDatabase(String userDataKey, ChatMessage newMessage) async {
   }
   databaseMessage.chatMessages = chatMessages;
 
-  await hiveServices.addData(key: userDataKey, data: jsonEncode(databaseMessage.toOfflineJson()));
+  await hiveServices.addData(
+      key: userDataKey, data: jsonEncode(databaseMessage.toOfflineJson()));
   Future.delayed(const Duration(seconds: 5)).then((value) async {
     await hiveServices.close();
   });
@@ -228,7 +233,8 @@ void divineSnackBar({required String data, Color? color, Duration? duration}) {
       duration: duration ?? const Duration(milliseconds: 4000),
       content: Text(
         data,
-        style: TextStyle(color: color != null ? appColors.white : appColors.blackColor),
+        style: TextStyle(
+            color: color != null ? appColors.white : appColors.blackColor),
       ),
       backgroundColor: color ?? appColors.guideColor,
       showCloseIcon: true,
@@ -238,13 +244,19 @@ void divineSnackBar({required String data, Color? color, Duration? duration}) {
   }
 }
 
-Future<bool> acceptOrRejectChat({required int? orderId, required int? queueId}) async {
+Future<bool> acceptOrRejectChat(
+    {required int? orderId, required int? queueId}) async {
 // *accept_or_reject: 1 = accept, 3 = chat reject by timeout
 // * is_timeout: should be 1 when reject by timeout"
-print("chat_reject 1");
+  print("chat_reject 1");
   ResCommonChatStatus response = await ChatRepository().chatAccept(
-      ReqCommonChatParams(queueId: queueId, orderId: orderId, isTimeout: 0, acceptOrReject: 1).toJson());
-print("chat_reject 2");
+      ReqCommonChatParams(
+              queueId: queueId,
+              orderId: orderId,
+              isTimeout: 0,
+              acceptOrReject: 1)
+          .toJson());
+  print("chat_reject 2");
   if (response.statusCode == 200) {
     print("chat_reject 3");
     return true;
@@ -252,7 +264,6 @@ print("chat_reject 2");
     print("chat_reject 4");
     return false;
   }
-
 }
 
 Future<String?> getDeviceId() async {

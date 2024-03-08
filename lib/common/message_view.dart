@@ -10,6 +10,7 @@ import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widge
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:voice_message_package/voice_message_package.dart';
@@ -382,68 +383,83 @@ class MessageView extends StatelessWidget {
   Widget audioView(BuildContext context,
       {required ChatMessage chatDetail, required bool yourMessage}) {
     RxInt msgType = (chatDetail.type ?? 0).obs;
-    return SizedBox(
-      width: double.maxFinite,
-      child: Column(
-        crossAxisAlignment:
-            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8.0),
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 3.0,
-                    offset: const Offset(0.0, 3.0))
-              ],
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(8.r)),
-            ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                VoiceMessageView(
-                    controller: VoiceController(
-                        audioSrc: chatDetail.awsUrl!,
-                        maxDuration: const Duration(seconds: 120),
-                        isFile: false,
-                        onComplete: () => debugPrint("onComplete"),
-                        onPause: () => debugPrint("onPause"),
-                        onPlaying: () => debugPrint("onPlaying")),
-                    innerPadding: 0,
-                    cornerRadius: 20),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Row(
-                    children: [
-                      Text(
-                        messageDateTime(chatDetail.time ?? 0),
-                        style: AppTextStyle.textStyle10(
-                            fontColor: appColors.black),
-                      ),
-                      if (yourMessage) SizedBox(width: 8.w),
-                      if (yourMessage)
-                        msgType.value == 0
-                            ? Assets.images.icSingleTick.svg()
-                            : msgType.value == 1
-                                ? Assets.images.icDoubleTick.svg(
-                                    colorFilter: ColorFilter.mode(
-                                        appColors.lightGrey, BlendMode.srcIn))
-                                : msgType.value == 3
-                                    ? Assets.images.icDoubleTick.svg()
-                                    : Assets.images.icSingleTick.svg()
-                    ],
+    return GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
+      return SizedBox(
+        width: double.maxFinite,
+        child: Column(
+          crossAxisAlignment:
+              yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8.0),
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 3.0,
+                      offset: const Offset(0.0, 3.0))
+                ],
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(8.r)),
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  AbsorbPointer(
+                    absorbing: controller.isAudioPlaying.value,
+                    child: VoiceMessageView(
+                        controller: VoiceController(
+                            audioSrc: chatDetail.awsUrl!,
+                            maxDuration: const Duration(seconds: 120),
+                            isFile: false,
+                            onComplete: () {
+                              controller.isAudioPlaying(false);
+                            },
+                            onPause: () {
+                              controller.isAudioPlaying(false);
+                            },
+                            onPlaying: () {
+                              if (controller.isAudioPlaying.value) {
+                                Fluttertoast.showToast(msg: "Audio is Already playing");
+                              } else {
+                                controller.isAudioPlaying(true);
+                              }
+                            }),
+                        innerPadding: 0,
+                        cornerRadius: 20),
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Row(
+                      children: [
+                        Text(
+                          messageDateTime(chatDetail.time ?? 0),
+                          style: AppTextStyle.textStyle10(
+                              fontColor: appColors.black),
+                        ),
+                        if (yourMessage) SizedBox(width: 8.w),
+                        if (yourMessage)
+                          msgType.value == 0
+                              ? Assets.images.icSingleTick.svg()
+                              : msgType.value == 1
+                                  ? Assets.images.icDoubleTick.svg(
+                                      colorFilter: ColorFilter.mode(
+                                          appColors.lightGrey, BlendMode.srcIn))
+                                  : msgType.value == 3
+                                      ? Assets.images.icDoubleTick.svg()
+                                      : Assets.images.icSingleTick.svg()
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    });
   }
 
   Widget giftSendUi(BuildContext context, ChatMessage chatMessage,
@@ -575,10 +591,7 @@ class MessageView extends StatelessWidget {
                       ],
                     )
                   : chatDetail.downloadedPath == ""
-                      ?
-
-
-              Stack(
+                      ? Stack(
                           alignment: Alignment.center,
                           children: [
                             ClipRRect(
@@ -673,8 +686,7 @@ class MessageView extends StatelessWidget {
                               ),
                             ],
                           ),
-                        )
-          )
+                        ))
         ],
       ),
     );

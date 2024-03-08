@@ -289,7 +289,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
   }
 }
 
-class ChatAssistanceTile extends StatefulWidget {
+class ChatAssistanceTile extends StatelessWidget {
   final ChatAssistanceController controller;
   final DataList data;
 
@@ -297,44 +297,36 @@ class ChatAssistanceTile extends StatefulWidget {
       {super.key, required this.data, required this.controller});
 
   @override
-  State<ChatAssistanceTile> createState() => _ChatAssistanceTileState();
-}
-
-class _ChatAssistanceTileState extends State<ChatAssistanceTile> {
-  @override
   Widget build(BuildContext context) {
     return Obx(() {
       late AssistChatData element;
       bool newMessageFromlist = false;
+      int unreadMessageCount = 0;
       if (assistChatUnreadMessages.isNotEmpty ||
           assistChatUnreadMessages != []) {
         print(
             "list of assist chat unread messages ${assistChatUnreadMessages.length}");
         int index = assistChatUnreadMessages.lastIndexWhere((element) {
-          return element.customerId.toString() == widget.data.id.toString();
+          return element.customerId.toString() == data.id.toString();
         });
         if (index != -1) {
           element = assistChatUnreadMessages[index];
-          newMessageFromlist = element.message.toString() != widget.data.lastMessage;
+          newMessageFromlist = element.message.toString() != data.lastMessage;
           if (newMessageFromlist) {
-            widget.data.lastMessage = element.message.toString();
+            data.lastMessage = element.message.toString();
           }
-          widget.data.unreadMessage = (widget.data.unreadMessage ?? 0) + userUnreadMessages(widget.data.id??0);
+          unreadMessageCount = (data.unreadMessage ?? 0) + userUnreadMessages(data.id??0);
         }
       }
       return ListTile(
         onTap: () async {
           if (assistChatUnreadMessages.isNotEmpty) {
-            for (int i = 0; i < assistChatUnreadMessages.length; i++) {
-              if (assistChatUnreadMessages[i].customerId == widget.data.id) {
-                assistChatUnreadMessages.removeAt(i);
-              }
-            }
+           assistChatUnreadMessages.removeWhere((element) => element.customerId == data.id);
           }
           chatAssistantCurrentUserId = 0.obs;
-          await Get.toNamed(RouteName.chatMessageUI, arguments: widget.data)
+          await Get.toNamed(RouteName.chatMessageUI, arguments: data)
               ?.then((value) {
-            return widget.controller.getAssistantAstrologerList();
+            return controller.getAssistantAstrologerList();
           });
         },
         leading: ClipRRect(
@@ -348,10 +340,10 @@ class _ChatAssistanceTileState extends State<ChatAssistanceTile> {
                 imageModel: ImageModel(
                   assetImage: false,
                   placeHolderPath: Assets.images.defaultProfile.path,
-                  imagePath: (widget.data.image ?? '').startsWith(
+                  imagePath: (data.image ?? '').startsWith(
                           'https://divinenew-prod.s3.ap-south-1.amazonaws.com/')
-                      ? widget.data.image ?? ''
-                      : "${preferenceService.getAmazonUrl()}/${widget.data.image ?? ''}",
+                      ? data.image ?? ''
+                      : "${preferenceService.getAmazonUrl()}/${data.image ?? ''}",
                   loadingIndicator: SizedBox(
                     height: 25.h,
                     width: 25.w,
@@ -364,17 +356,17 @@ class _ChatAssistanceTileState extends State<ChatAssistanceTile> {
               ),
             )),
         title: CustomText(
-          widget.data.name ?? '',
+          data.name ?? '',
           fontSize: 16.sp,
           fontWeight: FontWeight.w600,
         ),
-        subtitle: lastMessage(widget.data.msgType ?? MsgType.text),
-        trailing: (widget.data.unreadMessage ?? 0) > 0
+        subtitle: lastMessage(data.msgType ?? MsgType.text),
+        trailing: (unreadMessageCount) > 0
             ? CircleAvatar(
                 radius: 10.r,
                 backgroundColor: appColors.guideColor,
                 child: CustomText(
-                  widget.data.unreadMessage.toString(),
+                  unreadMessageCount.toString(),
                   fontSize: 10.sp,
                   fontWeight: FontWeight.w700,
                   fontColor: appColors.brown,
@@ -390,7 +382,7 @@ class _ChatAssistanceTileState extends State<ChatAssistanceTile> {
     switch (msgtype) {
       case MsgType.text:
         lastMessageWidget = CustomText(
-          widget.data.lastMessage ?? '',
+          data.lastMessage ?? '',
           fontColor:
               // (index == 0) ? appColors.darkBlue:
               appColors.grey,
@@ -451,7 +443,7 @@ class _ChatAssistanceTileState extends State<ChatAssistanceTile> {
               width: 10,
             ),
             Text(
-              "  ${widget.data.lastMessage}",
+              "  ${data.lastMessage}",
               style: TextStyle(fontSize: 10),
             )
           ],
