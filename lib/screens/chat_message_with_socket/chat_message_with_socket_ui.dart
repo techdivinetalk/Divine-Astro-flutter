@@ -772,12 +772,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   shape: BoxShape.circle,
                                 ),
                                 child: Center(
-                                  child: controller.isRecording.value
-                                      ? SvgPicture.asset(
-                                          "assets/svg/send_comment.svg",
-                                          color: appColors.white)
-                                      : Icon(
-                                          Icons.mic,
+                                  child:
+                                      Icon(
+                                        controller.isRecording.value? Icons.send:  Icons.mic,
                                           color: appColors.white,
                                         ),
                                 ),
@@ -786,8 +783,21 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               onTap: () {
                                 controller.sendMsg();
                               },
-                              child: Assets.images.icSendMsg.svg(
-                                  height: kToolbarHeight - Get.width * 0.010)),
+                              child: Container(
+                                height: kToolbarHeight - Get.width * 0.010,
+                                width: kToolbarHeight - Get.width * 0.010,
+                                margin: EdgeInsets.only(right: 10.h),
+                                decoration: BoxDecoration(
+                                  color: appColors.guideColor,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: Icon(
+                                    Icons.send,
+                                    color: appColors.white,
+                                  ),
+                                ),
+                              )),
                       // const SizedBox(width: 10),
                     ],
                   ),

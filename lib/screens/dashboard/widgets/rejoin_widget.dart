@@ -41,7 +41,7 @@ class RejoinWidget extends StatelessWidget {
                     fontSize: 10.sp,
                     fontColor: appColors.brown,
                     fontWeight: FontWeight.w700),
-                CustomText('already joined', fontSize: 10.sp),
+                CustomText(' already joined', fontSize: 10.sp),
                 SizedBox(width: 8.w),
               ]),
             ),

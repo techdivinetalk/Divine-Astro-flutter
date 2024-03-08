@@ -140,7 +140,6 @@ void onDidReceiveNotificationResponse(
     debugPrint('notification payload: -- ${payloadMap}');
     //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
     // // if(payloadMap["type"] == "2") {
-    print("payload map type ${payloadMap}");
     if (payloadMap["type"] == "1") {
       final senderId = payloadMap["sender_id"];
       final userId = AppFirebaseService().orderData.value["userId"];
@@ -149,15 +148,12 @@ void onDidReceiveNotificationResponse(
           throw Exception('Could not launch ${payloadMap["url"]}');
         }
       }
+    } else {
+      if (!await launchUrl(Uri.parse(payloadMap["url"].toString()))) {
+        throw Exception('Could not launch ${payloadMap["url"]}');
+      }
     }
-    if (payloadMap["type"] == "8") {
-      Get.toNamed(RouteName.chatMessageUI,
-          arguments: DataList(
-            image: payloadMap["profile_image"],
-            id: int.parse( payloadMap["sender_id"],),
-            name: payloadMap["title"],
-          ));
-    }
+
     AppFirebaseService().openChatUserId = payloadMap["userid"];
     // }
     // Accessing individual values

@@ -162,6 +162,7 @@ class ApiProvider {
   final String chatAssistMessageSent = "chat-assist-message-sent";
   final String startAstroCustChatAssist = "start-astro-cust-chatAssist";
   final String astrologerLeftChatAssist = "leave-chat-assist";
+  final String enterChatAssist = "enter-chat-assist";
   final String astrologerJoinedChatAssist = "astro-joined-chatAssist";
   final String userJoinedChatAssist = "user-joined-chatAssist";
 
