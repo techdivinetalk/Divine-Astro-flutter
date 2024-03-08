@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/model/wallet/wallet_model.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_controller.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class WalletUI extends GetView<WalletController> {
           title: "wallet".tr,
           trailingWidget: InkWell(
             onTap: () {
-              Get.toNamed(RouteName.orderHistory);
+              Get.offNamed(RouteName.orderHistory);
             },
             child: Padding(
                 padding: EdgeInsets.only(right: 20.w),
@@ -36,57 +37,41 @@ class WalletUI extends GetView<WalletController> {
             children: [
               /*durationWidget(),
               const SizedBox(height: 20),*/
-              balanceView(),
-              const SizedBox(height: 20),
+            /*  balanceView(),*/
+             /* const SizedBox(height: 20),
               Container(
                   height: 1.h, color: appColors.darkBlue.withOpacity(0.5)),
-              const SizedBox(height: 20),
-              ListView.builder(
-                controller: controller.orderScrollController,
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: controller.orderList.value,
-                itemBuilder: (context, index) {
-                  Widget separator = const SizedBox(height: 30);
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (index == 2)
-                        orderDetailView(
-                            orderId: 785421,
-                            type: "PENALTY",
-                            amount: "- ₹100000",
-                            details:
-                                "Policy Violation - Shared Personal Information with User  ",
-                            time: "23 June 23, 02:46 PM"),
-                      if (index % 2 == 0 && index != 2)
-                        orderDetailView(
-                            orderId: 785421,
-                            type: "CHAT",
-                            amount: "+ ₹100000",
-                            details: "with Username(user id) for 8 minutes ",
-                            time: "23 June 23, 02:46 PM"),
-                      if (index % 2 == 1)
-                        orderDetailView(
-                            orderId: 785421,
-                            type: "CALL",
-                            amount: "- ₹100000",
-                            details:
-                                "Policy Violation - Shared Personal Information with User  ",
-                            time: "23 June 23, 02:46 PM"),
-                      separator,
-                    ],
-                  );
-                },
-              )
-            ],
+              const SizedBox(height: 20),*/
+         /* Obx(() => ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: controller.walletListRepo.value.data?.paymentLog.length,
+            itemBuilder: (context, index) {
+              var orderDetail = controller.walletListRepo.value.data?.paymentLog[index];
+              Widget separator = const SizedBox(height: 30);
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  orderDetailView(
+                    orderId: orderDetail?.id,
+                    type: orderDetail?.status,
+                    amount: orderDetail?.totalAmount.toString() ?? "",
+                    details: orderDetail?.discount,
+                    time: orderDetail?.date,
+                  ),
+                  separator,
+                ],
+              );
+            },
+          ))*/
+          ],
           ),
         ),
       ),
     );
   }
 
-  Widget durationWidget() {
+  /* Widget durationWidget() {
     return Container(
         padding: EdgeInsets.all(8.h),
         decoration: BoxDecoration(
@@ -99,25 +84,25 @@ class WalletUI extends GetView<WalletController> {
             color: appColors.white,
             borderRadius: const BorderRadius.all(Radius.circular(20))),
         child: durationOptions());
-  }
+  }*/
 
-  Widget balanceView() {
+/*  Widget balanceView() {
     return SizedBox(
       height: 60.h,
       width: ScreenUtil().screenWidth,
       child: ListView.builder(
-        controller: controller.amountScrollController,
         scrollDirection: Axis.horizontal,
         shrinkWrap: true,
-        itemCount: controller.amountTypeList.length,
+        itemCount: (controller.walletListRepo.value.data ?? []).length,
         itemBuilder: (context, index) {
+          var balance = controller.walletListRepo.value.data?[index];
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SizedBox(
                 width: 60.w,
                 child: amountDetailView(
-                    amountType: controller.amountTypeList[index],
+                    amountType: balance!.totalAmountEarned.amountEarned! ?? "",
                     amount: "100000",
                     is2linesRequired:
                         controller.amountTypeList[index] == "tds".tr
@@ -135,7 +120,7 @@ class WalletUI extends GetView<WalletController> {
       ),
     );
     // Container();
-  }
+  }*/
 
   Widget amountDetailView(
       {required String amountType,
@@ -174,7 +159,7 @@ class WalletUI extends GetView<WalletController> {
   }
 
   Widget orderDetailView(
-      {required int orderId,
+      {required int? orderId,
       required String? type,
       required String? amount,
       required String? details,
@@ -197,7 +182,8 @@ class WalletUI extends GetView<WalletController> {
             onTap: () {
               openBottomSheet(Get.context!,
                   functionalityWidget: Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, top: 20),
                     child: Column(
                       children: [
                         Padding(
@@ -420,7 +406,7 @@ class WalletUI extends GetView<WalletController> {
     );
   }
 
-  Widget durationOptions() {
+/* Widget durationOptions() {
     return Obx(() => DropdownButtonHideUnderline(
           child: DropdownButton2<String>(
             isExpanded: true,
@@ -476,5 +462,5 @@ class WalletUI extends GetView<WalletController> {
             ),
           ),
         ));
-  }
+  }*/
 }

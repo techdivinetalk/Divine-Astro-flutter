@@ -99,14 +99,7 @@ class _HomeUIState extends State<HomeUI> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      controller.userImage.contains("null") ||
-                              controller.userImage.isEmpty ||
-                              controller.userImage == ""
-                          ? SizedBox(
-                              height: 24.h,
-                              width: 24.h,
-                            )
-                          : CommonImageView(
+                      CommonImageView(
                               imagePath: controller.userImage,
                               fit: BoxFit.cover,
                               height: 24.h,
