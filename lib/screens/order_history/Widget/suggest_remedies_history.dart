@@ -46,7 +46,7 @@ class SuggestRemedies extends StatelessWidget {
   }
 
   Widget remediesDetail(int index, List<RemedySuggestedDataList> data) {
-    print("images ${"${preferenceService.getBaseImageURL()}/${data[index].getCustomers!.avatar!}"}");
+    print("images ${"${preferenceService.getBaseImageURL()}/${data[index].getCustomers?.avatar}"}");
     return InkWell(
       onTap: () {},
       child: Container(
@@ -77,7 +77,7 @@ class SuggestRemedies extends StatelessWidget {
                               height: 65,
                               width: 65,
                               child: CachedNetworkPhoto(
-                                url: data[index].getCustomers!.avatar!,
+                                url: data[index].getCustomers?.avatar,
                                 fit: BoxFit.cover,
                               ),
                             ),
