@@ -224,7 +224,7 @@ class _LivePage extends State<LiveDharamScreen>
     if (kReleaseMode) {
       // _startTimer();
     } else {}
-     _startTimer();
+    _startTimer();
 
     receiver.start();
     receiver.messages.listen(
@@ -512,9 +512,12 @@ class _LivePage extends State<LiveDharamScreen>
           _msgTimerForTarotCardPopup = Timer.periodic(
             duration,
             (Timer timer) async {
+              print("_startMsgTimerForTarotCardPopup(): ${timer.tick}");
+
               if (timer.tick % 60 == 0) {
                 if (showCardDeckToUserPopupTimeoutHappening) {
                   Get.back();
+                  _endMsgTimerForTarotCardPopup();
                 } else {}
 
                 successAndFailureCallBack(
@@ -523,13 +526,20 @@ class _LivePage extends State<LiveDharamScreen>
                   isForFailure: true,
                 );
 
-                _msgTimerForTarotCardPopup?.cancel();
+                _endMsgTimerForTarotCardPopup();
               } else {}
             },
           );
         } else {}
       },
     );
+  }
+
+  void _endMsgTimerForTarotCardPopup() {
+    if (_msgTimerForTarotCardPopup?.isActive ?? false) {
+      _msgTimerForTarotCardPopup?.cancel();
+    } else {}
+    return;
   }
 
   Future<void> manMessage() async {
@@ -2969,6 +2979,9 @@ class _LivePage extends State<LiveDharamScreen>
   Future<void> showCardDeckToUserPopup1() async {
     showCardDeckToUserPopupTimeoutHappening = true;
     _startMsgTimerForTarotCardPopup();
+
+    bool hasSelected = false;
+
     await showCupertinoModalPopup(
       context: context,
       barrierDismissible: false,
@@ -2976,12 +2989,16 @@ class _LivePage extends State<LiveDharamScreen>
         return LiveCarousal(
           onClose: () async {
             Get.back();
+            _endMsgTimerForTarotCardPopup();
 
             await sendTaroCardClose();
           },
           allCards: _controller.deckCardModelList,
           onSelect: (List<DeckCardModel> selectedCards) async {
             Get.back();
+            _endMsgTimerForTarotCardPopup();
+
+            hasSelected = true;
 
             final List<UserPicked> userPicked = [];
             for (DeckCardModel element in selectedCards) {
@@ -3011,7 +3028,14 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+
     showCardDeckToUserPopupTimeoutHappening = false;
+    _endMsgTimerForTarotCardPopup();
+
+    if (hasSelected) {
+    } else {
+      await sendTaroCardClose();
+    }
     return Future<void>.value();
   }
 
@@ -3681,7 +3705,7 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-  callJoinConfiguration() {
+  void callJoinConfiguration() {
     // turnOff();
     // turnOn();
 
@@ -3694,34 +3718,53 @@ class _LivePage extends State<LiveDharamScreen>
     final ZegoUIKit instance = ZegoUIKit.instance;
 
     if (condForVideoCall) {
-      if (_controller.isFront == false) {
-        _controller.isFront = true;
-        instance.useFrontFacingCamera(true);
-      } else {}
-      if (_controller.isCamOn == false) {
-        _controller.isCamOn = true;
-        instance.turnCameraOn(true);
-      } else {}
-      if (_controller.isMicOn == false) {
-        _controller.isMicOn = true;
-        instance.turnMicrophoneOn(true, muteMode: true);
-      } else {}
+      // if (_controller.isFront == false) {
+      //   _controller.isFront = true;
+      //   instance.useFrontFacingCamera(true);
+      // } else {}
+      // if (_controller.isCamOn == false) {
+      //   _controller.isCamOn = true;
+      //   instance.turnCameraOn(true);
+      // } else {}
+      // if (_controller.isMicOn == false) {
+      //   _controller.isMicOn = true;
+      //   instance.turnMicrophoneOn(true, muteMode: true);
+      // } else {}
+
+      _controller.isFront = true;
+      instance.useFrontFacingCamera(true);
+
+      _controller.isCamOn = true;
+      instance.turnCameraOn(true);
+
+      _controller.isMicOn = true;
+      instance.turnMicrophoneOn(true, muteMode: true);
     } else {}
 
     if (condForAudioCall) {
-      if (_controller.isFront == true) {
-        _controller.isFront = false;
-        instance.useFrontFacingCamera(false);
-      } else {}
-      if (_controller.isCamOn == true) {
-        _controller.isCamOn = false;
-        instance.turnCameraOn(false);
-      } else {}
-      if (_controller.isMicOn == false) {
-        _controller.isMicOn = true;
-        instance.turnMicrophoneOn(true, muteMode: true);
-      } else {}
+      // if (_controller.isFront == true) {
+      //   _controller.isFront = false;
+      //   instance.useFrontFacingCamera(false);
+      // } else {}
+      // if (_controller.isCamOn == true) {
+      //   _controller.isCamOn = false;
+      //   instance.turnCameraOn(false);
+      // } else {}
+      // if (_controller.isMicOn == false) {
+      //   _controller.isMicOn = true;
+      //   instance.turnMicrophoneOn(true, muteMode: true);
+      // } else {}
+
+      _controller.isFront = false;
+      instance.useFrontFacingCamera(false);
+
+      _controller.isCamOn = false;
+      instance.turnCameraOn(false);
+
+      _controller.isMicOn = true;
+      instance.turnMicrophoneOn(true, muteMode: true);
     } else {}
+    return;
   }
 
   Widget settingsColForCust() {
