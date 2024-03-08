@@ -1,7 +1,7 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
+import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
-import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/common/switch_component.dart';
@@ -10,9 +10,7 @@ import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/home_page_model_class.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
-
 import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_ui.dart';
-
 import 'package:divine_astrologer/screens/order_feedback/widget/feedback_card_widget.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
@@ -26,7 +24,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
 import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../model/feedback_response.dart';
@@ -44,8 +41,10 @@ class HomeUI extends StatefulWidget {
 class _HomeUIState extends State<HomeUI> {
   final HomeController controller = Get.put(HomeController());
 
+
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
     return GetBuilder(
         init: controller,
         builder: (context) {
@@ -99,7 +98,7 @@ class _HomeUIState extends State<HomeUI> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CommonImageView(
+                      /*CommonImageView(
                               imagePath: controller.userImage,
                               fit: BoxFit.cover,
                               height: 24.h,
@@ -108,8 +107,24 @@ class _HomeUIState extends State<HomeUI> {
                               radius: BorderRadius.circular(100.h),
                               onTap: () {
                                 Get.toNamed(RouteName.profileUi);
-                              },
+                              },*/
+                      GestureDetector(
+                        onTap: () => Get.toNamed(RouteName.profileUi),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: Container(
+                            height: screenWidth * 0.08,
+                            width: screenWidth * 0.08,
+                            decoration:
+                            const BoxDecoration(shape: BoxShape.circle),
+                            child: CachedNetworkPhoto(
+                              height: screenWidth * 0.08,
+                              width: screenWidth * 0.08,
+                              url: controller.userImage,
                             ),
+                          ),
+                        ),
+                      ),
                       Text(
                         "Profile",
                         style: AppTextStyle.textStyle13(
