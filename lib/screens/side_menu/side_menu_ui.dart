@@ -75,14 +75,14 @@ class SideMenuDrawer extends GetView<HomeController> {
                 Get.toNamed(RouteName.importantNumbers)
               },
             ),
-            ListTile(
+          /*  ListTile(
               leading: Assets.images.icDonations.svg(),
               title: Text('donation'.tr),
               onTap: () => {
                 Navigator.of(context).pop(),
                 Get.toNamed(RouteName.donationUi)
               },
-            ),
+            ),*/
           ],
         ),
       ),

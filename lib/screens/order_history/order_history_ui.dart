@@ -36,7 +36,7 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
             appBar: commonDetailAppbar(
                 title: "orderHistory".tr,
                 trailingWidget: InkWell(
-                  onTap: () =>  Get.toNamed(RouteName.wallet),
+                  onTap: () =>  Get.offNamed(RouteName.wallet),
                   child: Padding(
                       padding: EdgeInsets.only(right: 20.w),
                       child: Assets.svg.iconWallet.svg()),
