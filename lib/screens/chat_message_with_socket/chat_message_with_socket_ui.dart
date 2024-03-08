@@ -68,21 +68,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           secondChild: Container(),
                           firstChild: NotificationListener(
                             onNotification: (t) {
-                              // if (t is ScrollEndNotification) {
-                              //   bool atScrollViewBottom = controller
-                              //           .messgeScrollController
-                              //           .position
-                              //           .pixels <
-                              //       controller.messgeScrollController
-                              //               .position.maxScrollExtent -
-                              //           100;
-                              //   controller.scrollToBottom.value =
-                              //       atScrollViewBottom;
-                              //   if (atScrollViewBottom == false &&
-                              //       controller.unreadMsgCount.value > 0) {
-                              //     controller.updateReadMessageStatus();
-                              //   }
-                              // }
                               return true;
                             },
                             child: ListView.builder(
@@ -772,11 +757,12 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   shape: BoxShape.circle,
                                 ),
                                 child: Center(
-                                  child:
-                                      Icon(
-                                        controller.isRecording.value? Icons.send:  Icons.mic,
-                                          color: appColors.white,
-                                        ),
+                                  child: Icon(
+                                    controller.isRecording.value
+                                        ? Icons.send
+                                        : Icons.mic,
+                                    color: appColors.white,
+                                  ),
                                 ),
                               ))
                           : InkWell(
@@ -862,28 +848,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       case 3:
                         controller.isCardBotOpen.value = true;
                         showCardChoiceBottomSheet(context, controller);
-                        // showModalBottomSheet<void>(
-                        //   context: context,
-                        //   builder: (BuildContext context) {
-                        //     return SizedBox(
-                        //       height: 200,
-                        //       child: Center(
-                        //         child: Column(
-                        //           mainAxisAlignment: MainAxisAlignment.center,
-                        //           mainAxisSize: MainAxisSize.min,
-                        //           children: <Widget>[
-                        //             const Text('Modal BottomSheet'),
-                        //             ElevatedButton(
-                        //               child: const Text('Close BottomSheet'),
-                        //               onPressed: () => Navigator.pop(context),
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       ),
-                        //     );
-                        //   },
-                        // );
-                        //  showOneCard(context);
                         break;
                       case 4:
                         var result = await Get.toNamed(
