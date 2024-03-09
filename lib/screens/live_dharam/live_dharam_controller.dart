@@ -33,6 +33,8 @@ class LiveDharamController extends GetxController {
 
   final DatabaseReference ref = FirebaseDatabase.instance.ref();
 
+  List<String> astroFollowPopup = <String>[];
+
   final RxString _userId = "".obs;
   final RxString _userName = "".obs;
   final RxString _avatar = "".obs;
@@ -85,7 +87,7 @@ class LiveDharamController extends GetxController {
       BlockedCustomerListRes().obs;
   final Rx<NoticeBoardRes> _noticeBoardRes = NoticeBoardRes().obs;
   final RxInt _timerCurrentIndex = 1.obs;
-  final RxList<String> _astroFollowPopup = <String>[].obs;
+  // final RxList<String> _astroFollowPopup = <String>[].obs;
   final Rx<bool> _isWaitingForCallAstrologerPopupRes = false.obs;
   final RxList<dynamic> _firebaseBlockUsersIds = <dynamic>[].obs;
   final RxList<DeckCardModel> _deckCardModelList = <DeckCardModel>[].obs;
@@ -173,7 +175,7 @@ class LiveDharamController extends GetxController {
     blockedCustomerList = BlockedCustomerListRes();
     noticeBoardRes = NoticeBoardRes();
     timerCurrentIndex = 1;
-    astroFollowPopup = [];
+    // astroFollowPopup = [];
     isWaitingForCallAstrologerPopupRes = false;
     firebaseBlockUsersIds = [];
     deckCardModelList = [];
@@ -218,7 +220,7 @@ class LiveDharamController extends GetxController {
     _blockedCustomerList.close();
     _noticeBoardRes.close();
     _timerCurrentIndex.close();
-    _astroFollowPopup.close();
+    // _astroFollowPopup.close();
     _isWaitingForCallAstrologerPopupRes.close();
     _firebaseBlockUsersIds.close();
     _deckCardModelList.close();
@@ -318,8 +320,8 @@ class LiveDharamController extends GetxController {
   int get timerCurrentIndex => _timerCurrentIndex.value;
   set timerCurrentIndex(int value) => _timerCurrentIndex(value);
 
-  List<String> get astroFollowPopup => _astroFollowPopup.value;
-  set astroFollowPopup(List<String> value) => _astroFollowPopup(value);
+  // List<String> get astroFollowPopup => _astroFollowPopup.value;
+  // set astroFollowPopup(List<String> value) => _astroFollowPopup(value);
 
   bool get isWaitingForCallAstrologerPopupRes =>
       _isWaitingForCallAstrologerPopupRes.value;
@@ -543,7 +545,7 @@ class LiveDharamController extends GetxController {
   }
 
   void updateInfo() {
-    astroFollowPopup = [];
+    // astroFollowPopup = [];
     // do not write await here!
     sendBroadcast(
       BroadcastMessage(name: "LiveDharamScreen_eventListner"),

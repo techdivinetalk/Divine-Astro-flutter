@@ -39,7 +39,7 @@ import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart
 import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 // import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:firebase_database/firebase_database.dart";
-import "package:flutter/cupertino.dart";
+// import "package:flutter/cupertino.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
@@ -204,7 +204,8 @@ class _LivePage extends State<LiveDharamScreen>
     keyboardVisibilityController.onChange.listen(
       (bool visible) {
         if (visible == false && _isKeyboardSheetOpen == true) {
-          Navigator.of(context).pop();
+          // Navigator.of(context).pop();
+          Get.back();
         } else {}
       },
     );
@@ -272,17 +273,20 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   void getUntil() {
-    WidgetsBinding.instance.endOfFrame.then(
-      (_) async {
-        // Maybe add some delay
-        if (mounted) {
-          final int length = LiveGlobalSingleton().getCountOfOpenDialogs();
-          for (int i = 0; i < length; i++) {
-            Get.back();
-          }
-        } else {}
-      },
-    );
+    // WidgetsBinding.instance.endOfFrame.then(
+    //   (_) async {
+    //     if (mounted) {
+    //       final bool cond1 = Get.isBottomSheetOpen ?? false;
+    //       final bool cond2 = Get.isDialogOpen ?? false;
+    //       final bool cond3 = Get.isOverlaysOpen ?? false;
+    //       final bool cond4 = Get.isSnackbarOpen ?? false;
+
+    //       while (cond1 || cond2 || cond3 || cond4) {
+    //         Get.back();
+    //       }
+    //     } else {}
+    //   },
+    // );
     return;
   }
 
@@ -609,11 +613,12 @@ class _LivePage extends State<LiveDharamScreen>
 
   @override
   void dispose() {
-    _scrollControllerForTop.dispose();
-    _scrollControllerForBottom.dispose();
     _timer?.cancel();
     _msgTimerForFollowPopup?.cancel();
     _msgTimerForTarotCardPopup?.cancel();
+
+    _scrollControllerForTop.dispose();
+    _scrollControllerForBottom.dispose();
 
     WidgetsBinding.instance.removeObserver(this);
 
@@ -702,9 +707,8 @@ class _LivePage extends State<LiveDharamScreen>
             //   await exitFunc();
             // },
             // child:
-            GetBuilder<LiveDharamController>(
-          init: _controller,
-          builder: (context) {
+            Obx(
+          () {
             return _controller.liveId == ""
                 ? const Center(child: GenericLoadingWidget())
                 : ZegoUIKitPrebuiltLiveStreaming(
@@ -909,61 +913,57 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Widget foregroundWidget() {
-    return Obx(
-      () {
-        return Padding(
-          padding: const EdgeInsets.only(top: kToolbarHeight - 16.0),
-          child: Column(
-            children: <Widget>[
-              appBarWidget(),
-              const SizedBox(height: 8),
-              // ElevatedButton(
-              //   onPressed: () async {
-              //     await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
-              //   },
-              //   child: const Text("Test"),
-              // ),
-              // const SizedBox(height: 8),
-              Expanded(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          noticeBoard(),
-                          // requestedBoard(),
-                          SizedBox(
-                              height: (_controller.noticeBoardRes.data ?? [])
-                                      .isEmpty
+    return Padding(
+      padding: const EdgeInsets.only(top: kToolbarHeight - 16.0),
+      child: Column(
+        children: <Widget>[
+          appBarWidget(),
+          const SizedBox(height: 8),
+          // ElevatedButton(
+          //   onPressed: () async {
+          //     await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
+          //   },
+          //   child: const Text("Test"),
+          // ),
+          // const SizedBox(height: 8),
+          Expanded(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      noticeBoard(),
+                      // requestedBoard(),
+                      SizedBox(
+                          height:
+                              (_controller.noticeBoardRes.data ?? []).isEmpty
                                   ? 0.0
                                   : 4.0),
-                          inRoomMessage(),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    //
-                    verticalDefault(),
-                    //
-                    const SizedBox(width: 8),
-                  ],
+                      inRoomMessage(),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              // horizontalGiftBar(ctx: context),
-              // const SizedBox(height: 8),
-              newUI(),
-              const SizedBox(height: 8),
-            ],
+                const SizedBox(width: 8),
+                //
+                verticalDefault(),
+                //
+                const SizedBox(width: 8),
+              ],
+            ),
           ),
-        );
-      },
+          const SizedBox(height: 8),
+          // horizontalGiftBar(ctx: context),
+          // const SizedBox(height: 8),
+          newUI(),
+          const SizedBox(height: 8),
+        ],
+      ),
     );
   }
 
@@ -1940,17 +1940,28 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> alreadyInWaitlistPopup() async {
-    await showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) {
-        return AlreadyInWaitlistWidget(
-          onClose: Get.back,
-          openWaitlist: () async {
-            Get.back();
-            await waitListPopup();
-          },
-        );
-      },
+    // await showCupertinoModalPopup(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return AlreadyInWaitlistWidget(
+    //       onClose: Get.back,
+    //       openWaitlist: () async {
+    //         Get.back();
+    //         await waitListPopup();
+    //       },
+    //     );
+    //   },
+    // );
+    await Get.bottomSheet(
+      AlreadyInWaitlistWidget(
+        onClose: Get.back,
+        openWaitlist: () async {
+          Get.back();
+          await waitListPopup();
+        },
+      ),
+      isScrollControlled: true,
+      elevation: 0,
     );
     return Future<void>.value();
   }
@@ -1960,30 +1971,54 @@ class _LivePage extends State<LiveDharamScreen>
     required String userId,
     required String userName,
   }) async {
-    await showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) {
-        return GiftWidget(
-          onClose: Get.back,
-          list: GiftsSingleton().gifts.data ?? <GiftData>[],
-          onSelect: (GiftData item, num quantity) async {
-            Get.back();
-            if (_controller.isHost) {
-              await sendGiftFuncAstro(
-                ctx: ctx,
-                item: item,
-                quantity: quantity,
-                userId: userId,
-                userName: userName,
-              );
-            } else {
-              // await sendGiftFunc(ctx: ctx, item: item, quantity: quantity);
-            }
-          },
-          isHost: _controller.isHost,
-          walletBalance: 0,
-        );
-      },
+    // await showCupertinoModalPopup(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return GiftWidget(
+    //       onClose: Get.back,
+    //       list: GiftsSingleton().gifts.data ?? <GiftData>[],
+    //       onSelect: (GiftData item, num quantity) async {
+    //         Get.back();
+    //         if (_controller.isHost) {
+    //           await sendGiftFuncAstro(
+    //             ctx: ctx,
+    //             item: item,
+    //             quantity: quantity,
+    //             userId: userId,
+    //             userName: userName,
+    //           );
+    //         } else {
+    //           // await sendGiftFunc(ctx: ctx, item: item, quantity: quantity);
+    //         }
+    //       },
+    //       isHost: _controller.isHost,
+    //       walletBalance: 0,
+    //     );
+    //   },
+    // );
+    await Get.bottomSheet(
+      GiftWidget(
+        onClose: Get.back,
+        list: GiftsSingleton().gifts.data ?? <GiftData>[],
+        onSelect: (GiftData item, num quantity) async {
+          Get.back();
+          if (_controller.isHost) {
+            await sendGiftFuncAstro(
+              ctx: ctx,
+              item: item,
+              quantity: quantity,
+              userId: userId,
+              userName: userName,
+            );
+          } else {
+            // await sendGiftFunc(ctx: ctx, item: item, quantity: quantity);
+          }
+        },
+        isHost: _controller.isHost,
+        walletBalance: 0,
+      ),
+      isScrollControlled: true,
+      elevation: 0,
     );
     return Future<void>.value();
   }
@@ -2015,14 +2050,22 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> leaderboardPopup() async {
-    await showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) {
-        return LeaderboardWidget(
-          onClose: Get.back,
-          liveId: _controller.liveId,
-        );
-      },
+    // await showCupertinoModalPopup(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return LeaderboardWidget(
+    //       onClose: Get.back,
+    //       liveId: _controller.liveId,
+    //     );
+    //   },
+    // );
+    await Get.bottomSheet(
+      LeaderboardWidget(
+        onClose: Get.back,
+        liveId: _controller.liveId,
+      ),
+      isScrollControlled: true,
+      elevation: 0,
     );
     return Future<void>.value();
   }
@@ -2037,49 +2080,95 @@ class _LivePage extends State<LiveDharamScreen>
     //     );
     //   },
     // );
+    // await Get.bottomSheet(
+    //   LiveShopWidget(
+    //     onClose: Get.back,
+    //     liveId: _controller.liveId,
+    //   ),
+    //   isScrollControlled: true,
+    //   elevation: 0,
+    // );
     return Future<void>.value();
   }
 
   Future<void> waitListPopup() async {
-    await showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) {
-        // return WaitListWidget(
-        return AstroWaitListWidget(
-          onClose: Get.back,
-          waitTime: _controller.getTotalWaitTime(),
-          myUserId: _controller.userId,
-          list: _controller.waitListModel,
-          hasMyIdInWaitList: false,
-          onExitWaitList: () async {
-            Get.back();
-            await exitWaitListPopup(
-              noDisconnect: () {},
-              yesDisconnect: () async {
-                if (!_controller.isHost) {
-                  await _controller.removeFromWaitList();
-                  await notifyAstroForExitWaitList();
-                } else {}
-              },
-            );
-          },
-          astologerName: _controller.userName,
-          astologerImage: _controller.avatar,
-          astologerSpeciality: _controller.hostSpeciality,
-          isHost: _controller.isHost,
-          onAccept: () async {
-            Get.back();
-            final String id = _controller.waitListModel.first.id;
-            final String name = _controller.waitListModel.first.userName;
-            final String avatar = _controller.waitListModel.first.avatar;
-            final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
-            final connectInvite = zegoController.coHost;
-            await connectInvite.hostSendCoHostInvitationToAudience(user);
-          },
-          onReject: Get.back,
-          model: _controller.currentCaller,
-        );
-      },
+    // await showCupertinoModalPopup(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     // return WaitListWidget(
+    //     return AstroWaitListWidget(
+    //       onClose: Get.back,
+    //       waitTime: _controller.getTotalWaitTime(),
+    //       myUserId: _controller.userId,
+    //       list: _controller.waitListModel,
+    //       hasMyIdInWaitList: false,
+    //       onExitWaitList: () async {
+    //         Get.back();
+    //         await exitWaitListPopup(
+    //           noDisconnect: () {},
+    //           yesDisconnect: () async {
+    //             if (!_controller.isHost) {
+    //               await _controller.removeFromWaitList();
+    //               await notifyAstroForExitWaitList();
+    //             } else {}
+    //           },
+    //         );
+    //       },
+    //       astologerName: _controller.userName,
+    //       astologerImage: _controller.avatar,
+    //       astologerSpeciality: _controller.hostSpeciality,
+    //       isHost: _controller.isHost,
+    //       onAccept: () async {
+    //         Get.back();
+    //         final String id = _controller.waitListModel.first.id;
+    //         final String name = _controller.waitListModel.first.userName;
+    //         final String avatar = _controller.waitListModel.first.avatar;
+    //         final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
+    //         final connectInvite = zegoController.coHost;
+    //         await connectInvite.hostSendCoHostInvitationToAudience(user);
+    //       },
+    //       onReject: Get.back,
+    //       model: _controller.currentCaller,
+    //     );
+    //   },
+    // );
+    await Get.bottomSheet(
+      AstroWaitListWidget(
+        onClose: Get.back,
+        waitTime: _controller.getTotalWaitTime(),
+        myUserId: _controller.userId,
+        list: _controller.waitListModel,
+        hasMyIdInWaitList: false,
+        onExitWaitList: () async {
+          Get.back();
+          await exitWaitListPopup(
+            noDisconnect: () {},
+            yesDisconnect: () async {
+              if (!_controller.isHost) {
+                await _controller.removeFromWaitList();
+                await notifyAstroForExitWaitList();
+              } else {}
+            },
+          );
+        },
+        astologerName: _controller.userName,
+        astologerImage: _controller.avatar,
+        astologerSpeciality: _controller.hostSpeciality,
+        isHost: _controller.isHost,
+        onAccept: () async {
+          Get.back();
+          final String id = _controller.waitListModel.first.id;
+          final String name = _controller.waitListModel.first.userName;
+          final String avatar = _controller.waitListModel.first.avatar;
+          final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
+          final connectInvite = zegoController.coHost;
+          await connectInvite.hostSendCoHostInvitationToAudience(user);
+        },
+        onReject: Get.back,
+        model: _controller.currentCaller,
+      ),
+      isScrollControlled: true,
+      elevation: 0,
     );
     return Future<void>.value();
   }
@@ -2107,26 +2196,46 @@ class _LivePage extends State<LiveDharamScreen>
     required Function() noDisconnect,
     required Function() yesDisconnect,
   }) async {
-    await showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) {
-        return DisconnectWidget(
-          onClose: Get.back,
-          noDisconnect: () {
-            Get.back();
-            noDisconnect();
-          },
-          yesDisconnect: () {
-            Get.back();
-            yesDisconnect();
-          },
-          isAstro: _controller.isHost,
-          astroAvatar: _controller.avatar,
-          astroUserName: _controller.userName,
-          custoAvatar: _controller.currentCaller.avatar,
-          custoUserName: _controller.currentCaller.userName,
-        );
-      },
+    // await showCupertinoModalPopup(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return DisconnectWidget(
+    //       onClose: Get.back,
+    //       noDisconnect: () {
+    //         Get.back();
+    //         noDisconnect();
+    //       },
+    //       yesDisconnect: () {
+    //         Get.back();
+    //         yesDisconnect();
+    //       },
+    //       isAstro: _controller.isHost,
+    //       astroAvatar: _controller.avatar,
+    //       astroUserName: _controller.userName,
+    //       custoAvatar: _controller.currentCaller.avatar,
+    //       custoUserName: _controller.currentCaller.userName,
+    //     );
+    //   },
+    // );
+    await Get.bottomSheet(
+      DisconnectWidget(
+        onClose: Get.back,
+        noDisconnect: () {
+          Get.back();
+          noDisconnect();
+        },
+        yesDisconnect: () {
+          Get.back();
+          yesDisconnect();
+        },
+        isAstro: _controller.isHost,
+        astroAvatar: _controller.avatar,
+        astroUserName: _controller.userName,
+        custoAvatar: _controller.currentCaller.avatar,
+        custoUserName: _controller.currentCaller.userName,
+      ),
+      isScrollControlled: true,
+      elevation: 0,
     );
     return Future<void>.value();
   }
@@ -2135,63 +2244,108 @@ class _LivePage extends State<LiveDharamScreen>
     required Function() noDisconnect,
     required Function() yesDisconnect,
   }) async {
-    await showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) {
-        return ExitWaitListWidget(
-          onClose: Get.back,
-          noDisconnect: () {
-            Get.back();
-            noDisconnect();
-          },
-          yesDisconnect: () {
-            Get.back();
-            yesDisconnect();
-          },
-          isAstro: _controller.isHost,
-          astroAvatar: _controller.avatar,
-          astroUserName: _controller.userName,
-          custoAvatar: _controller.currentCaller.avatar,
-          custoUserName: _controller.currentCaller.userName,
-        );
-      },
+    // await showCupertinoModalPopup(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return ExitWaitListWidget(
+    //       onClose: Get.back,
+    //       noDisconnect: () {
+    //         Get.back();
+    //         noDisconnect();
+    //       },
+    //       yesDisconnect: () {
+    //         Get.back();
+    //         yesDisconnect();
+    //       },
+    //       isAstro: _controller.isHost,
+    //       astroAvatar: _controller.avatar,
+    //       astroUserName: _controller.userName,
+    //       custoAvatar: _controller.currentCaller.avatar,
+    //       custoUserName: _controller.currentCaller.userName,
+    //     );
+    //   },
+    // );
+    await Get.bottomSheet(
+      ExitWaitListWidget(
+        onClose: Get.back,
+        noDisconnect: () {
+          Get.back();
+          noDisconnect();
+        },
+        yesDisconnect: () {
+          Get.back();
+          yesDisconnect();
+        },
+        isAstro: _controller.isHost,
+        astroAvatar: _controller.avatar,
+        astroUserName: _controller.userName,
+        custoAvatar: _controller.currentCaller.avatar,
+        custoUserName: _controller.currentCaller.userName,
+      ),
+      isScrollControlled: true,
+      elevation: 0,
     );
     return Future<void>.value();
   }
 
   // Future<void> exitPopup() async {
   //   _controller.hasFollowPopupOpen = true;
-  //   await showCupertinoModalPopup(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return ExitWidget(
-  //         onClose: Get.back,
-  //         astrologerAvatar: _controller.details.data?.image ?? "",
-  //         astrologerUserName: _controller.details.data?.name ?? "",
-  //         onFollow: () async {
-  //           Get.back();
-  //           await followOrUnfollowFunction();
-  //         },
-  //       );
-  //     },
+  //   // await showCupertinoModalPopup(
+  //   //   context: context,
+  //   //   builder: (BuildContext context) {
+  //   //     return ExitWidget(
+  //   //       onClose: Get.back,
+  //   //       astrologerAvatar: _controller.details.data?.image ?? "",
+  //   //       astrologerUserName: _controller.details.data?.name ?? "",
+  //   //       onFollow: () async {
+  //   //         Get.back();
+  //   //         await followOrUnfollowFunction();
+  //   //       },
+  //   //     );
+  //   //   },
+  //   // );
+  //   await Get.bottomSheet(
+  //     ExitWidget(
+  //       onClose: Get.back,
+  //       astrologerAvatar: _controller.details.data?.image ?? "",
+  //       astrologerUserName: _controller.details.data?.name ?? "",
+  //       onFollow: () async {
+  //         Get.back();
+  //         await followOrUnfollowFunction();
+  //       },
+  //     ),
+  //     isScrollControlled: true,
+  //     elevation: 0,
   //   );
   //   _controller.hasFollowPopupOpen = false;
   //   return Future<void>.value();
   // }
 
   Future<void> endLiveSession({required void Function() endLive}) async {
-    await showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) {
-        return EndSessionWidget(
-          onClose: Get.back,
-          continueLive: Get.back,
-          endLive: () {
-            Get.back();
-            endLive();
-          },
-        );
-      },
+    // await showCupertinoModalPopup(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return EndSessionWidget(
+    //       onClose: Get.back,
+    //       continueLive: Get.back,
+    //       endLive: () {
+    //         Get.back();
+    //         endLive();
+    //       },
+    //     );
+    //   },
+    // );
+    await Get.bottomSheet(
+      EndSessionWidget(
+        onClose: Get.back,
+        continueLive: Get.back,
+        endLive: () {
+          Get.back();
+          endLive();
+        },
+      ),
+      isScrollControlled: true,
+      elevation: 0,
     );
     return Future<void>.value();
   }
@@ -2200,18 +2354,30 @@ class _LivePage extends State<LiveDharamScreen>
   //   required bal.InsufficientBalModel balModel,
   //   required Function(bal.Data data) callbackBalModelData,
   // }) async {
-  //   await showCupertinoModalPopup(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return LowBalanceWidget(
-  //         onClose: Get.back,
-  //         balModel: balModel,
-  //         callbackBalModelData: (bal.Data data) {
-  //           Get.back();
-  //           callbackBalModelData(data);
-  //         },
-  //       );
-  //     },
+  //   // await showCupertinoModalPopup(
+  //   //   context: context,
+  //   //   builder: (BuildContext context) {
+  //   //     return LowBalanceWidget(
+  //   //       onClose: Get.back,
+  //   //       balModel: balModel,
+  //   //       callbackBalModelData: (bal.Data data) {
+  //   //         Get.back();
+  //   //         callbackBalModelData(data);
+  //   //       },
+  //   //     );
+  //   //   },
+  //   // );
+  //   await Get.bottomSheet(
+  //     LowBalanceWidget(
+  //       onClose: Get.back,
+  //       balModel: balModel,
+  //       callbackBalModelData: (bal.Data data) {
+  //         Get.back();
+  //         callbackBalModelData(data);
+  //       },
+  //     ),
+  //     isScrollControlled: true,
+  //     elevation: 0,
   //   );
   //   return Future<void>.value();
   // }
@@ -2244,63 +2410,120 @@ class _LivePage extends State<LiveDharamScreen>
   // }
 
   // Future<void> callAstrologerPopup() async {
-  //   await showCupertinoModalPopup(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return CallAstrologerWidget(
-  //         onClose: Get.back,
-  //         waitTime: _controller.getTotalWaitTime(),
-  //         details: _controller.details,
-  //         onSelect: (String type) async {
-  //           Get.back();
-  //           sendCustomEventDataToMoEngage(type: type);
-  //           //
-  //           // Exceptional Case Start
-  //           //
-  //           _controller.isWaitingForCallAstrologerPopupRes = true;
-  //           //
-  //           // Exceptional Case End
-  //           //
-  //           bool hasAllPerm = false;
-  //           await AppPermissionService.instance.onPressedJoinButton(
-  //             type,
-  //             () async {
-  //               hasAllPerm = true;
+  //   // await showCupertinoModalPopup(
+  //   //   context: context,
+  //   //   builder: (BuildContext context) {
+  //   //     return CallAstrologerWidget(
+  //   //       onClose: Get.back,
+  //   //       waitTime: _controller.getTotalWaitTime(),
+  //   //       details: _controller.details,
+  //   //       onSelect: (String type) async {
+  //   //         Get.back();
+  //   //         sendCustomEventDataToMoEngage(type: type);
+  //   //         //
+  //   //         // Exceptional Case Start
+  //   //         //
+  //   //         _controller.isWaitingForCallAstrologerPopupRes = true;
+  //   //         //
+  //   //         // Exceptional Case End
+  //   //         //
+  //   //         bool hasAllPerm = false;
+  //   //         await AppPermissionService.instance.onPressedJoinButton(
+  //   //           type,
+  //   //           () async {
+  //   //             hasAllPerm = true;
+  //   //           },
+  //   //         );
+  //   //         if (hasAllPerm) {
+  //   //           await sendCallFunc(
+  //   //             type: type,
+  //   //             needRecharge: (bal.InsufficientBalModel balModel) async {
+  //   //               await lowBalancePopup(
+  //   //                 balModel: balModel,
+  //   //                 callbackBalModelData: (data) async {
+  //   //                   final CommonOffer arg = CommonOffer(
+  //   //                     extraAmount: data.extraAmount,
+  //   //                     offerAmount: data.offerAmount,
+  //   //                     percentage: data.percentage?.toInt(),
+  //   //                     rechargeAmount: data.rechargeAmount,
+  //   //                   );
+  //   //                   await Get.toNamed(
+  //   //                     RouteName.paymentSummary,
+  //   //                     arguments: arg,
+  //   //                   );
+  //   //                 },
+  //   //               );
+  //   //             },
+  //   //           );
+  //   //         } else {}
+  //   //         //
+  //   //         // Exceptional Case Start
+  //   //         //
+  //   //         _controller.isWaitingForCallAstrologerPopupRes = false;
+  //   //         //
+  //   //         // Exceptional Case End
+  //   //         //
+  //   //       },
+  //   //       list: _controller.waitListModel,
+  //   //     );
+  //   //   },
+  //   // );
+  //   await Get.bottomSheet(
+  //     CallAstrologerWidget(
+  //       onClose: Get.back,
+  //       waitTime: _controller.getTotalWaitTime(),
+  //       details: _controller.details,
+  //       onSelect: (String type) async {
+  //         Get.back();
+  //         sendCustomEventDataToMoEngage(type: type);
+  //         //
+  //         // Exceptional Case Start
+  //         //
+  //         _controller.isWaitingForCallAstrologerPopupRes = true;
+  //         //
+  //         // Exceptional Case End
+  //         //
+  //         bool hasAllPerm = false;
+  //         await AppPermissionService.instance.onPressedJoinButton(
+  //           type,
+  //           () async {
+  //             hasAllPerm = true;
+  //           },
+  //         );
+  //         if (hasAllPerm) {
+  //           await sendCallFunc(
+  //             type: type,
+  //             needRecharge: (bal.InsufficientBalModel balModel) async {
+  //               await lowBalancePopup(
+  //                 balModel: balModel,
+  //                 callbackBalModelData: (data) async {
+  //                   final CommonOffer arg = CommonOffer(
+  //                     extraAmount: data.extraAmount,
+  //                     offerAmount: data.offerAmount,
+  //                     percentage: data.percentage?.toInt(),
+  //                     rechargeAmount: data.rechargeAmount,
+  //                   );
+  //                   await Get.toNamed(
+  //                     RouteName.paymentSummary,
+  //                     arguments: arg,
+  //                   );
+  //                 },
+  //               );
   //             },
   //           );
-  //           if (hasAllPerm) {
-  //             await sendCallFunc(
-  //               type: type,
-  //               needRecharge: (bal.InsufficientBalModel balModel) async {
-  //                 await lowBalancePopup(
-  //                   balModel: balModel,
-  //                   callbackBalModelData: (data) async {
-  //                     final CommonOffer arg = CommonOffer(
-  //                       extraAmount: data.extraAmount,
-  //                       offerAmount: data.offerAmount,
-  //                       percentage: data.percentage?.toInt(),
-  //                       rechargeAmount: data.rechargeAmount,
-  //                     );
-  //                     await Get.toNamed(
-  //                       RouteName.paymentSummary,
-  //                       arguments: arg,
-  //                     );
-  //                   },
-  //                 );
-  //               },
-  //             );
-  //           } else {}
-  //           //
-  //           // Exceptional Case Start
-  //           //
-  //           _controller.isWaitingForCallAstrologerPopupRes = false;
-  //           //
-  //           // Exceptional Case End
-  //           //
-  //         },
-  //         list: _controller.waitListModel,
-  //       );
-  //     },
+  //         } else {}
+  //         //
+  //         // Exceptional Case Start
+  //         //
+  //         _controller.isWaitingForCallAstrologerPopupRes = false;
+  //         //
+  //         // Exceptional Case End
+  //         //
+  //       },
+  //       list: _controller.waitListModel,
+  //     ),
+  //     isScrollControlled: true,
+  //     elevation: 0,
   //   );
   //   return Future<void>.value();
   // }
@@ -2351,132 +2574,263 @@ class _LivePage extends State<LiveDharamScreen>
     required String userName,
     required bool isBlocked,
   }) async {
-    await showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) {
-        var item = GiftData(
-          id: 0,
-          giftName: "",
-          giftImage: "",
-          giftPrice: 0,
-          giftStatus: 0,
-          createdAt: DateTime.now(),
-          updatedAt: DateTime.now(),
-          fullGiftImage: "",
-          animation: "",
-        );
-        return MoreOptionsWidget(
-          onClose: Get.back,
-          isHost: _controller.isHost,
-          onTapAskForGifts: () async {
-            Get.back();
-            await giftPopup(ctx: context, userId: userId, userName: userName);
-            showacknowledgementSnackBar("Gift");
-          },
-          onTapAskForVideoCall: () async {
-            Get.back();
-            if (userId != "0") {
-              var data = {
-                "room_id": _controller.liveId,
-                "user_id": userId,
-                "user_name": userName,
-                "item": item.toJson(),
-                "type": "Ask For Video Call",
-              };
-              await _controller.sendGiftAPI(
-                data: data,
-                count: 1,
-                svga: "",
-                successCallback: log,
-                failureCallback: log,
+    // await showCupertinoModalPopup(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     var item = GiftData(
+    //       id: 0,
+    //       giftName: "",
+    //       giftImage: "",
+    //       giftPrice: 0,
+    //       giftStatus: 0,
+    //       createdAt: DateTime.now(),
+    //       updatedAt: DateTime.now(),
+    //       fullGiftImage: "",
+    //       animation: "",
+    //     );
+    //     return MoreOptionsWidget(
+    //       onClose: Get.back,
+    //       isHost: _controller.isHost,
+    //       onTapAskForGifts: () async {
+    //         Get.back();
+    //         await giftPopup(ctx: context, userId: userId, userName: userName);
+    //         showacknowledgementSnackBar("Gift");
+    //       },
+    //       onTapAskForVideoCall: () async {
+    //         Get.back();
+    //         if (userId != "0") {
+    //           var data = {
+    //             "room_id": _controller.liveId,
+    //             "user_id": userId,
+    //             "user_name": userName,
+    //             "item": item.toJson(),
+    //             "type": "Ask For Video Call",
+    //           };
+    //           await _controller.sendGiftAPI(
+    //             data: data,
+    //             count: 1,
+    //             svga: "",
+    //             successCallback: log,
+    //             failureCallback: log,
+    //           );
+    //         } else {}
+    //         showacknowledgementSnackBar("Video Call");
+    //       },
+    //       onTapAskForAudioCall: () async {
+    //         Get.back();
+    //         if (userId != "0") {
+    //           var data = {
+    //             "room_id": _controller.liveId,
+    //             "user_id": userId,
+    //             "user_name": userName,
+    //             "item": item.toJson(),
+    //             "type": "Ask For Voice Call",
+    //           };
+    //           await _controller.sendGiftAPI(
+    //             data: data,
+    //             count: 1,
+    //             svga: "",
+    //             successCallback: log,
+    //             failureCallback: log,
+    //           );
+    //         } else {}
+    //         showacknowledgementSnackBar("Voice Call");
+    //       },
+    //       onTapAskForPrivateCall: () async {
+    //         Get.back();
+    //         if (userId != "0") {
+    //           var data = {
+    //             "room_id": _controller.liveId,
+    //             "user_id": userId,
+    //             "user_name": userName,
+    //             "item": item.toJson(),
+    //             "type": "Ask For Private Call",
+    //           };
+    //           await _controller.sendGiftAPI(
+    //             data: data,
+    //             count: 1,
+    //             svga: "",
+    //             successCallback: log,
+    //             failureCallback: log,
+    //           );
+    //         } else {}
+    //         showacknowledgementSnackBar("Private Call");
+    //       },
+    //       onTapAskForBlockUnBlockUser: () async {
+    //         Get.back();
+    //         await blockUnblockPopup(
+    //           isAlreadyBeenBlocked: isBlocked,
+    //           performAction: () async {
+    //             if (userId != "0") {
+    //               await _controller.callblockCustomer(
+    //                 id: int.parse(userId),
+    //                 successCallBack: (String message) {
+    //                   successAndFailureCallBack(
+    //                     message: message,
+    //                     isForSuccess: true,
+    //                     isForFailure: false,
+    //                   );
+    //                 },
+    //                 failureCallBack: (String message) {
+    //                   successAndFailureCallBack(
+    //                     message: message,
+    //                     isForSuccess: false,
+    //                     isForFailure: true,
+    //                   );
+    //                 },
+    //               );
+    //               var data = {
+    //                 "room_id": _controller.liveId,
+    //                 "user_id": userId,
+    //                 "user_name": userName,
+    //                 "item": item.toJson(),
+    //                 "type": "Block/Unblock",
+    //               };
+    //               await _controller.sendGiftAPI(
+    //                 data: data,
+    //                 count: 1,
+    //                 svga: "",
+    //                 successCallback: log,
+    //                 failureCallback: log,
+    //               );
+    //             } else {}
+    //           },
+    //         );
+    //       },
+    //       isBlocked: isBlocked,
+    //     );
+    //   },
+    // );
+
+    await Get.bottomSheet(
+      Builder(
+        builder: (context) {
+          var item = GiftData(
+            id: 0,
+            giftName: "",
+            giftImage: "",
+            giftPrice: 0,
+            giftStatus: 0,
+            createdAt: DateTime.now(),
+            updatedAt: DateTime.now(),
+            fullGiftImage: "",
+            animation: "",
+          );
+          return MoreOptionsWidget(
+            onClose: Get.back,
+            isHost: _controller.isHost,
+            onTapAskForGifts: () async {
+              Get.back();
+              await giftPopup(ctx: context, userId: userId, userName: userName);
+              showacknowledgementSnackBar("Gift");
+            },
+            onTapAskForVideoCall: () async {
+              Get.back();
+              if (userId != "0") {
+                var data = {
+                  "room_id": _controller.liveId,
+                  "user_id": userId,
+                  "user_name": userName,
+                  "item": item.toJson(),
+                  "type": "Ask For Video Call",
+                };
+                await _controller.sendGiftAPI(
+                  data: data,
+                  count: 1,
+                  svga: "",
+                  successCallback: log,
+                  failureCallback: log,
+                );
+              } else {}
+              showacknowledgementSnackBar("Video Call");
+            },
+            onTapAskForAudioCall: () async {
+              Get.back();
+              if (userId != "0") {
+                var data = {
+                  "room_id": _controller.liveId,
+                  "user_id": userId,
+                  "user_name": userName,
+                  "item": item.toJson(),
+                  "type": "Ask For Voice Call",
+                };
+                await _controller.sendGiftAPI(
+                  data: data,
+                  count: 1,
+                  svga: "",
+                  successCallback: log,
+                  failureCallback: log,
+                );
+              } else {}
+              showacknowledgementSnackBar("Voice Call");
+            },
+            onTapAskForPrivateCall: () async {
+              Get.back();
+              if (userId != "0") {
+                var data = {
+                  "room_id": _controller.liveId,
+                  "user_id": userId,
+                  "user_name": userName,
+                  "item": item.toJson(),
+                  "type": "Ask For Private Call",
+                };
+                await _controller.sendGiftAPI(
+                  data: data,
+                  count: 1,
+                  svga: "",
+                  successCallback: log,
+                  failureCallback: log,
+                );
+              } else {}
+              showacknowledgementSnackBar("Private Call");
+            },
+            onTapAskForBlockUnBlockUser: () async {
+              Get.back();
+              await blockUnblockPopup(
+                isAlreadyBeenBlocked: isBlocked,
+                performAction: () async {
+                  if (userId != "0") {
+                    await _controller.callblockCustomer(
+                      id: int.parse(userId),
+                      successCallBack: (String message) {
+                        successAndFailureCallBack(
+                          message: message,
+                          isForSuccess: true,
+                          isForFailure: false,
+                        );
+                      },
+                      failureCallBack: (String message) {
+                        successAndFailureCallBack(
+                          message: message,
+                          isForSuccess: false,
+                          isForFailure: true,
+                        );
+                      },
+                    );
+                    var data = {
+                      "room_id": _controller.liveId,
+                      "user_id": userId,
+                      "user_name": userName,
+                      "item": item.toJson(),
+                      "type": "Block/Unblock",
+                    };
+                    await _controller.sendGiftAPI(
+                      data: data,
+                      count: 1,
+                      svga: "",
+                      successCallback: log,
+                      failureCallback: log,
+                    );
+                  } else {}
+                },
               );
-            } else {}
-            showacknowledgementSnackBar("Video Call");
-          },
-          onTapAskForAudioCall: () async {
-            Get.back();
-            if (userId != "0") {
-              var data = {
-                "room_id": _controller.liveId,
-                "user_id": userId,
-                "user_name": userName,
-                "item": item.toJson(),
-                "type": "Ask For Voice Call",
-              };
-              await _controller.sendGiftAPI(
-                data: data,
-                count: 1,
-                svga: "",
-                successCallback: log,
-                failureCallback: log,
-              );
-            } else {}
-            showacknowledgementSnackBar("Voice Call");
-          },
-          onTapAskForPrivateCall: () async {
-            Get.back();
-            if (userId != "0") {
-              var data = {
-                "room_id": _controller.liveId,
-                "user_id": userId,
-                "user_name": userName,
-                "item": item.toJson(),
-                "type": "Ask For Private Call",
-              };
-              await _controller.sendGiftAPI(
-                data: data,
-                count: 1,
-                svga: "",
-                successCallback: log,
-                failureCallback: log,
-              );
-            } else {}
-            showacknowledgementSnackBar("Private Call");
-          },
-          onTapAskForBlockUnBlockUser: () async {
-            Get.back();
-            await blockUnblockPopup(
-              isAlreadyBeenBlocked: isBlocked,
-              performAction: () async {
-                if (userId != "0") {
-                  await _controller.callblockCustomer(
-                    id: int.parse(userId),
-                    successCallBack: (String message) {
-                      successAndFailureCallBack(
-                        message: message,
-                        isForSuccess: true,
-                        isForFailure: false,
-                      );
-                    },
-                    failureCallBack: (String message) {
-                      successAndFailureCallBack(
-                        message: message,
-                        isForSuccess: false,
-                        isForFailure: true,
-                      );
-                    },
-                  );
-                  var data = {
-                    "room_id": _controller.liveId,
-                    "user_id": userId,
-                    "user_name": userName,
-                    "item": item.toJson(),
-                    "type": "Block/Unblock",
-                  };
-                  await _controller.sendGiftAPI(
-                    data: data,
-                    count: 1,
-                    svga: "",
-                    successCallback: log,
-                    failureCallback: log,
-                  );
-                } else {}
-              },
-            );
-          },
-          isBlocked: isBlocked,
-        );
-      },
+            },
+            isBlocked: isBlocked,
+          );
+        },
+      ),
+      isScrollControlled: true,
+      elevation: 0,
     );
     return Future<void>.value();
   }
@@ -2486,43 +2840,81 @@ class _LivePage extends State<LiveDharamScreen>
   //   required String userName,
   //   required bool isBlocked,
   // }) async {
-  //   await showCupertinoModalPopup(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return MoreOptionsForModWidget(
-  //         onClose: Get.back,
-  //         isHost: _controller.isHost,
-  //         isMod: _controller.isMod,
-  //         onTapAskForBlockUnBlockUser: () async {
-  //           Get.back();
-  //           await blockUnblockPopup(
-  //             isAlreadyBeenBlocked: isBlocked,
-  //             performAction: () async {
-  //               if (userId != "0") {
-  //                 await _controller.callblockCustomerByMod(
-  //                   id: int.parse(userId),
-  //                   successCallBack: (String message) {
-  //                     successAndFailureCallBack(
-  //                       message: message,
-  //                      isForSuccess: false,
-  //                       isForFailure: true,
-  //                     );
-  //                   },
-  //                   failureCallBack: (String message) {
-  //                     successAndFailureCallBack(
-  //                       message: message,
-  //                       isForSuccess: false,
-  //                       isForFailure: true,
-  //                     );
-  //                   },
-  //                 );
-  //               } else {}
-  //             },
-  //           );
-  //         },
-  //         isBlocked: isBlocked,
-  //       );
-  //     },
+  //   // await showCupertinoModalPopup(
+  //   //   context: context,
+  //   //   builder: (BuildContext context) {
+  //   //     return MoreOptionsForModWidget(
+  //   //       onClose: Get.back,
+  //   //       isHost: _controller.isHost,
+  //   //       isMod: _controller.isMod,
+  //   //       onTapAskForBlockUnBlockUser: () async {
+  //   //         Get.back();
+  //   //         await blockUnblockPopup(
+  //   //           isAlreadyBeenBlocked: isBlocked,
+  //   //           performAction: () async {
+  //   //             if (userId != "0") {
+  //   //               await _controller.callblockCustomerByMod(
+  //   //                 id: int.parse(userId),
+  //   //                 successCallBack: (String message) {
+  //   //                   successAndFailureCallBack(
+  //   //                     message: message,
+  //   //                     isForSuccess: false,
+  //   //                     isForFailure: true,
+  //   //                   );
+  //   //                 },
+  //   //                 failureCallBack: (String message) {
+  //   //                   successAndFailureCallBack(
+  //   //                     message: message,
+  //   //                     isForSuccess: false,
+  //   //                     isForFailure: true,
+  //   //                   );
+  //   //                 },
+  //   //               );
+  //   //             } else {}
+  //   //           },
+  //   //         );
+  //   //       },
+  //   //       isBlocked: isBlocked,
+  //   //     );
+  //   //   },
+  //   // );
+
+  //   await Get.bottomSheet(
+  //     MoreOptionsForModWidget(
+  //       onClose: Get.back,
+  //       isHost: _controller.isHost,
+  //       isMod: _controller.isMod,
+  //       onTapAskForBlockUnBlockUser: () async {
+  //         Get.back();
+  //         await blockUnblockPopup(
+  //           isAlreadyBeenBlocked: isBlocked,
+  //           performAction: () async {
+  //             if (userId != "0") {
+  //               await _controller.callblockCustomerByMod(
+  //                 id: int.parse(userId),
+  //                 successCallBack: (String message) {
+  //                   successAndFailureCallBack(
+  //                     message: message,
+  //                     isForSuccess: false,
+  //                     isForFailure: true,
+  //                   );
+  //                 },
+  //                 failureCallBack: (String message) {
+  //                   successAndFailureCallBack(
+  //                     message: message,
+  //                     isForSuccess: false,
+  //                     isForFailure: true,
+  //                   );
+  //                 },
+  //               );
+  //             } else {}
+  //           },
+  //         );
+  //       },
+  //       isBlocked: isBlocked,
+  //     ),
+  //     isScrollControlled: true,
+  //     elevation: 0,
   //   );
   //   return Future<void>.value();
   // }
@@ -2531,18 +2923,30 @@ class _LivePage extends State<LiveDharamScreen>
     required bool isAlreadyBeenBlocked,
     required Function() performAction,
   }) async {
-    await showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) {
-        return BlockUnblockWidget(
-          onClose: Get.back,
-          isAlreadyBeenBlocked: isAlreadyBeenBlocked,
-          performAction: () {
-            Get.back();
-            performAction();
-          },
-        );
-      },
+    // await showCupertinoModalPopup(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return BlockUnblockWidget(
+    //       onClose: Get.back,
+    //       isAlreadyBeenBlocked: isAlreadyBeenBlocked,
+    //       performAction: () {
+    //         Get.back();
+    //         performAction();
+    //       },
+    //     );
+    //   },
+    // );
+    await Get.bottomSheet(
+      BlockUnblockWidget(
+        onClose: Get.back,
+        isAlreadyBeenBlocked: isAlreadyBeenBlocked,
+        performAction: () {
+          Get.back();
+          performAction();
+        },
+      ),
+      isScrollControlled: true,
+      elevation: 0,
     );
     return Future<void>.value();
   }
@@ -2725,60 +3129,108 @@ class _LivePage extends State<LiveDharamScreen>
 
   Future<void> waitingForUserToSelectCardsPopup() async {
     waitingForUserToSelectCardsPopupVisible = true;
-    await showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) {
-        return WaitingForUserToSelectCards(
-          onClose: Get.back,
-          userName: _controller.currentCaller.userName,
-          onTimeout: () async {
-            Get.back();
-            successAndFailureCallBack(
-              message: "Card Selection Timeout",
-              isForSuccess: false,
-              isForFailure: true,
-            );
-            // await sendTaroCardClose();
-          },
-        );
-      },
+    // await showCupertinoModalPopup(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return WaitingForUserToSelectCards(
+    //       onClose: Get.back,
+    //       userName: _controller.currentCaller.userName,
+    //       onTimeout: () async {
+    //         Get.back();
+    //         successAndFailureCallBack(
+    //           message: "Card Selection Timeout",
+    //           isForSuccess: false,
+    //           isForFailure: true,
+    //         );
+    //         // await sendTaroCardClose();
+    //       },
+    //     );
+    //   },
+    // );
+    await Get.bottomSheet(
+      WaitingForUserToSelectCards(
+        onClose: Get.back,
+        userName: _controller.currentCaller.userName,
+        onTimeout: () async {
+          Get.back();
+          successAndFailureCallBack(
+            message: "Card Selection Timeout",
+            isForSuccess: false,
+            isForFailure: true,
+          );
+          // await sendTaroCardClose();
+        },
+      ),
+      isScrollControlled: true,
+      elevation: 0,
     );
     waitingForUserToSelectCardsPopupVisible = false;
     return Future<void>.value();
   }
 
   Future<void> showCardDeckToUserPopup() async {
-    await showCupertinoModalPopup(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return ShowCardDeckToUser(
-          onClose: Get.back,
-          onSelect: (int value) async {
-            Get.back();
+    // await showCupertinoModalPopup(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   builder: (BuildContext context) {
+    //     return ShowCardDeckToUser(
+    //       onClose: Get.back,
+    //       onSelect: (int value) async {
+    //         Get.back();
 
-            var item = TarotGameModel(
-              currentStep: 1,
-              canPick: value,
-              userPicked: [],
-              senderId: _controller.userId,
-              receiverId: _controller.currentCaller.id,
-            );
-            await sendTaroCard(item);
+    //         var item = TarotGameModel(
+    //           currentStep: 1,
+    //           canPick: value,
+    //           userPicked: [],
+    //           senderId: _controller.userId,
+    //           receiverId: _controller.currentCaller.id,
+    //         );
+    //         await sendTaroCard(item);
 
-            if (_controller.isHost) {
-              await waitingForUserToSelectCardsPopup();
-            } else {}
-          },
-          userName: _controller.currentCaller.userName,
-          onTimeout: () async {
-            Get.back();
+    //         if (_controller.isHost) {
+    //           await waitingForUserToSelectCardsPopup();
+    //         } else {}
+    //       },
+    //       userName: _controller.currentCaller.userName,
+    //       onTimeout: () async {
+    //         Get.back();
 
-            await sendTaroCardClose();
-          },
-          totalTime: _controller.engagedCoHostWithAstro().totalTime,
-        );
-      },
+    //         await sendTaroCardClose();
+    //       },
+    //       totalTime: _controller.engagedCoHostWithAstro().totalTime,
+    //     );
+    //   },
+    // );
+    await Get.bottomSheet(
+      ShowCardDeckToUser(
+        onClose: Get.back,
+        onSelect: (int value) async {
+          Get.back();
+
+          var item = TarotGameModel(
+            currentStep: 1,
+            canPick: value,
+            userPicked: [],
+            senderId: _controller.userId,
+            receiverId: _controller.currentCaller.id,
+          );
+          await sendTaroCard(item);
+
+          if (_controller.isHost) {
+            await waitingForUserToSelectCardsPopup();
+          } else {}
+        },
+        userName: _controller.currentCaller.userName,
+        onTimeout: () async {
+          Get.back();
+
+          await sendTaroCardClose();
+        },
+        totalTime: _controller.engagedCoHostWithAstro().totalTime,
+      ),
+      isScrollControlled: true,
+      elevation: 0,
+      isDismissible: false,
     );
     return Future<void>.value();
   }
@@ -2789,51 +3241,97 @@ class _LivePage extends State<LiveDharamScreen>
 
     bool hasSelected = false;
 
-    await showCupertinoModalPopup(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return LiveCarousal(
-          onClose: () async {
-            Get.back();
-            _endMsgTimerForTarotCardPopup();
+    // await showCupertinoModalPopup(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   builder: (BuildContext context) {
+    //     return LiveCarousal(
+    //       onClose: () async {
+    //         Get.back();
+    //         _endMsgTimerForTarotCardPopup();
 
-            await sendTaroCardClose();
-          },
-          allCards: _controller.deckCardModelList,
-          onSelect: (List<DeckCardModel> selectedCards) async {
-            Get.back();
-            _endMsgTimerForTarotCardPopup();
+    //         await sendTaroCardClose();
+    //       },
+    //       allCards: _controller.deckCardModelList,
+    //       onSelect: (List<DeckCardModel> selectedCards) async {
+    //         Get.back();
+    //         _endMsgTimerForTarotCardPopup();
 
-            hasSelected = true;
+    //         hasSelected = true;
 
-            final List<UserPicked> userPicked = [];
-            for (DeckCardModel element in selectedCards) {
-              userPicked.add(
-                UserPicked(
-                  id: element.id,
-                  name: element.name,
-                  status: element.status,
-                  image: element.image,
-                ),
-              );
-            }
-            var item = TarotGameModel(
-              currentStep: 2,
-              canPick: _controller.tarotGameModel.canPick ?? 0,
-              userPicked: userPicked,
-              senderId: _controller.userId,
-              receiverId: _controller.currentCaller.id,
+    //         final List<UserPicked> userPicked = [];
+    //         for (DeckCardModel element in selectedCards) {
+    //           userPicked.add(
+    //             UserPicked(
+    //               id: element.id,
+    //               name: element.name,
+    //               status: element.status,
+    //               image: element.image,
+    //             ),
+    //           );
+    //         }
+    //         var item = TarotGameModel(
+    //           currentStep: 2,
+    //           canPick: _controller.tarotGameModel.canPick ?? 0,
+    //           userPicked: userPicked,
+    //           senderId: _controller.userId,
+    //           receiverId: _controller.currentCaller.id,
+    //         );
+    //         await sendTaroCard(item);
+
+    //         if (_controller.isHost) {
+    //         } else {}
+    //       },
+    //       numOfSelection: _controller.tarotGameModel.canPick ?? 0,
+    //       userName: _controller.currentCaller.userName,
+    //     );
+    //   },
+    // );
+
+    await Get.bottomSheet(
+      LiveCarousal(
+        onClose: () async {
+          Get.back();
+          _endMsgTimerForTarotCardPopup();
+
+          await sendTaroCardClose();
+        },
+        allCards: _controller.deckCardModelList,
+        onSelect: (List<DeckCardModel> selectedCards) async {
+          Get.back();
+          _endMsgTimerForTarotCardPopup();
+
+          hasSelected = true;
+
+          final List<UserPicked> userPicked = [];
+          for (DeckCardModel element in selectedCards) {
+            userPicked.add(
+              UserPicked(
+                id: element.id,
+                name: element.name,
+                status: element.status,
+                image: element.image,
+              ),
             );
-            await sendTaroCard(item);
+          }
+          var item = TarotGameModel(
+            currentStep: 2,
+            canPick: _controller.tarotGameModel.canPick ?? 0,
+            userPicked: userPicked,
+            senderId: _controller.userId,
+            receiverId: _controller.currentCaller.id,
+          );
+          await sendTaroCard(item);
 
-            if (_controller.isHost) {
-            } else {}
-          },
-          numOfSelection: _controller.tarotGameModel.canPick ?? 0,
-          userName: _controller.currentCaller.userName,
-        );
-      },
+          if (_controller.isHost) {
+          } else {}
+        },
+        numOfSelection: _controller.tarotGameModel.canPick ?? 0,
+        userName: _controller.currentCaller.userName,
+      ),
+      isScrollControlled: true,
+      elevation: 0,
+      isDismissible: false,
     );
 
     showCardDeckToUserPopupTimeoutHappening = false;
@@ -2847,28 +3345,55 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> showCardDeckToUserPopup2() async {
-    await showCupertinoModalPopup(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        final List<DeckCardModel> userPicked = [];
-        for (UserPicked element
-            in _controller.tarotGameModel.userPicked ?? []) {
-          userPicked.add(
-            DeckCardModel(
-              id: element.id,
-              name: element.name,
-              status: element.status,
-              image: element.image,
-            ),
+    // await showCupertinoModalPopup(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   builder: (BuildContext context) {
+    //     final List<DeckCardModel> userPicked = [];
+    //     for (UserPicked element
+    //         in _controller.tarotGameModel.userPicked ?? []) {
+    //       userPicked.add(
+    //         DeckCardModel(
+    //           id: element.id,
+    //           name: element.name,
+    //           status: element.status,
+    //           image: element.image,
+    //         ),
+    //       );
+    //     }
+    //     return ChosenCards(
+    //       onClose: Get.back,
+    //       userChosenCards: userPicked,
+    //       userName: _controller.currentCaller.userName ?? "",
+    //     );
+    //   },
+    // );
+
+    await Get.bottomSheet(
+      Builder(
+        builder: (context) {
+          final List<DeckCardModel> userPicked = [];
+          for (UserPicked element
+              in _controller.tarotGameModel.userPicked ?? []) {
+            userPicked.add(
+              DeckCardModel(
+                id: element.id,
+                name: element.name,
+                status: element.status,
+                image: element.image,
+              ),
+            );
+          }
+          return ChosenCards(
+            onClose: Get.back,
+            userChosenCards: userPicked,
+            userName: _controller.currentCaller.userName ?? "",
           );
-        }
-        return ChosenCards(
-          onClose: Get.back,
-          userChosenCards: userPicked,
-          userName: _controller.currentCaller.userName ?? "",
-        );
-      },
+        },
+      ),
+      isScrollControlled: true,
+      elevation: 0,
+      isDismissible: false,
     );
     return Future<void>.value();
   }
@@ -2942,34 +3467,62 @@ class _LivePage extends State<LiveDharamScreen>
   //   required GiftData giftData,
   //   required num giftCount,
   // }) async {
-  //   await showCupertinoDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return RequestPopupWidget(
-  //         onClose: Get.back,
-  //         details: _controller.details,
-  //         speciality: _controller.getSpeciality(),
-  //         type: type,
-  //         onTapAcceptForGifts: () async {
-  //           Get.back();
-  //           await sendGiftFunc(ctx: ctx, item: giftData, quantity: giftCount);
-  //         },
-  //         onTapAcceptForVideoCall: () async {
-  //           Get.back();
-  //           await requestCallFunction(type: "Video");
-  //         },
-  //         onTapAcceptForAudioCall: () async {
-  //           Get.back();
-  //           await requestCallFunction(type: "Audio");
-  //         },
-  //         onTapAcceptForPrivateCall: () async {
-  //           Get.back();
-  //           await requestCallFunction(type: "Private");
-  //         },
-  //         giftData: giftData,
-  //         giftCount: giftCount,
-  //       );
-  //     },
+  //   // await showCupertinoDialog(
+  //   //   context: context,
+  //   //   builder: (BuildContext context) {
+  //   //     return RequestPopupWidget(
+  //   //       onClose: Get.back,
+  //   //       details: _controller.details,
+  //   //       speciality: _controller.getSpeciality(),
+  //   //       type: type,
+  //   //       onTapAcceptForGifts: () async {
+  //   //         Get.back();
+  //   //         await sendGiftFunc(ctx: ctx, item: giftData, quantity: giftCount);
+  //   //       },
+  //   //       onTapAcceptForVideoCall: () async {
+  //   //         Get.back();
+  //   //         await requestCallFunction(type: "Video");
+  //   //       },
+  //   //       onTapAcceptForAudioCall: () async {
+  //   //         Get.back();
+  //   //         await requestCallFunction(type: "Audio");
+  //   //       },
+  //   //       onTapAcceptForPrivateCall: () async {
+  //   //         Get.back();
+  //   //         await requestCallFunction(type: "Private");
+  //   //       },
+  //   //       giftData: giftData,
+  //   //       giftCount: giftCount,
+  //   //     );
+  //   //   },
+  //   // );
+  //   await Get.bottomSheet(
+  //     RequestPopupWidget(
+  //       onClose: Get.back,
+  //       details: _controller.details,
+  //       speciality: _controller.getSpeciality(),
+  //       type: type,
+  //       onTapAcceptForGifts: () async {
+  //         Get.back();
+  //         await sendGiftFunc(ctx: ctx, item: giftData, quantity: giftCount);
+  //       },
+  //       onTapAcceptForVideoCall: () async {
+  //         Get.back();
+  //         await requestCallFunction(type: "Video");
+  //       },
+  //       onTapAcceptForAudioCall: () async {
+  //         Get.back();
+  //         await requestCallFunction(type: "Audio");
+  //       },
+  //       onTapAcceptForPrivateCall: () async {
+  //         Get.back();
+  //         await requestCallFunction(type: "Private");
+  //       },
+  //       giftData: giftData,
+  //       giftCount: giftCount,
+  //     ),
+  //     isScrollControlled: true,
+  //     elevation: 0,
   //   );
   //   return Future<void>.value();
   // }
@@ -3006,13 +3559,20 @@ class _LivePage extends State<LiveDharamScreen>
   // }
 
   // Future<void> youAreBlocked() async {
-  //   await showCupertinoModalPopup(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return YouAreBlockedWidget(
-  //         onClose: Get.back,
-  //       );
-  //     },
+  //   // await showCupertinoModalPopup(
+  //   //   context: context,
+  //   //   builder: (BuildContext context) {
+  //   //     return YouAreBlockedWidget(
+  //   //       onClose: Get.back,
+  //   //     );
+  //   //   },
+  //   // );
+  //   await Get.bottomSheet(
+  //     YouAreBlockedWidget(
+  //       onClose: Get.back,
+  //     ),
+  //     isScrollControlled: true,
+  //     elevation: 0,
   //   );
   //   return Future<void>.value();
   // }
@@ -3343,21 +3903,36 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> extendTimeWidgetPopup() async {
-    await showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) {
-        return ExtendTimeWidget(
-          onClose: Get.back,
-          isAstro: _controller.isHost,
-          yesExtend: () async {
-            Get.back();
-            // await _controller.extendTime();
-          },
-          noExtend: () {
-            Get.back();
-          },
-        );
-      },
+    // await showCupertinoModalPopup(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return ExtendTimeWidget(
+    //       onClose: Get.back,
+    //       isAstro: _controller.isHost,
+    //       yesExtend: () async {
+    //         Get.back();
+    //         // await _controller.extendTime();
+    //       },
+    //       noExtend: () {
+    //         Get.back();
+    //       },
+    //     );
+    //   },
+    // );
+    await Get.bottomSheet(
+      ExtendTimeWidget(
+        onClose: Get.back,
+        isAstro: _controller.isHost,
+        yesExtend: () async {
+          Get.back();
+          // await _controller.extendTime();
+        },
+        noExtend: () {
+          Get.back();
+        },
+      ),
+      isScrollControlled: true,
+      elevation: 0,
     );
     return Future<void>.value();
   }
@@ -4206,15 +4781,22 @@ class _LivePage extends State<LiveDharamScreen>
 
   Future<void> keyboardPop() async {
     _isKeyboardSheetOpen = true;
-    await showModalBottomSheet(
-      context: context,
-      elevation: 0,
+    // await showModalBottomSheet(
+    //   context: context,
+    //   elevation: 0,
+    //   isScrollControlled: true,
+    //   backgroundColor: Colors.transparent,
+    //   builder: (context) {
+    //     return LiveKeyboard(sendKeyboardMesage: sendKeyboardMesage);
+    //   },
+    // );
+
+    await Get.bottomSheet(
+      LiveKeyboard(sendKeyboardMesage: sendKeyboardMesage),
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return LiveKeyboard(sendKeyboardMesage: sendKeyboardMesage);
-      },
+      elevation: 0,
     );
+
     _isKeyboardSheetOpen = false;
     return Future<void>.value();
   }
@@ -4253,9 +4835,9 @@ class _LivePage extends State<LiveDharamScreen>
     FocusManager.instance.primaryFocus?.unfocus();
     scrollDownForTop();
     scrollDownForBottom();
-    if (mounted) {
+    // getUntil();
+    if(mounted) {
       Get.until((route) => route.settings.name == RouteName.liveDharamScreen);
-      // getUntil();
     } else {}
     return Future<void>.value();
   }
@@ -4569,38 +5151,70 @@ class _LivePage extends State<LiveDharamScreen>
     required String userName,
     required String avatar,
   }) async {
-    await showCupertinoModalPopup(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return CallAcceptOrRejectWidget(
-          onClose: () {
-            Get.back();
-            onClose();
-          },
-          needAcceptButton: needAcceptButton,
-          needDeclinetButton: needDeclinetButton,
-          onAcceptButton: () {
-            Get.back();
-            onAcceptButton();
-          },
-          onDeclineButton: () {
-            Get.back();
+    // await showCupertinoModalPopup(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   builder: (BuildContext context) {
+    //     return CallAcceptOrRejectWidget(
+    //       onClose: () {
+    //         Get.back();
+    //         onClose();
+    //       },
+    //       needAcceptButton: needAcceptButton,
+    //       needDeclinetButton: needDeclinetButton,
+    //       onAcceptButton: () {
+    //         Get.back();
+    //         onAcceptButton();
+    //       },
+    //       onDeclineButton: () {
+    //         Get.back();
+    //         onDeclineButton();
+    //       },
+    //       userId: userId,
+    //       avatar: avatar,
+    //       userName: userName,
+    //       isHost: _controller.isHost,
+    //       onTimeout: () {
+    //         Get.back();
+    //         if (_controller.isHost) {
+    //         } else {
+    //           onDeclineButton();
+    //         }
+    //       },
+    //     );
+    //   },
+    // );
+    await Get.bottomSheet(
+      CallAcceptOrRejectWidget(
+        onClose: () {
+          Get.back();
+          onClose();
+        },
+        needAcceptButton: needAcceptButton,
+        needDeclinetButton: needDeclinetButton,
+        onAcceptButton: () {
+          Get.back();
+          onAcceptButton();
+        },
+        onDeclineButton: () {
+          Get.back();
+          onDeclineButton();
+        },
+        userId: userId,
+        avatar: avatar,
+        userName: userName,
+        isHost: _controller.isHost,
+        onTimeout: () {
+          Get.back();
+          if (_controller.isHost) {
+          } else {
             onDeclineButton();
-          },
-          userId: userId,
-          avatar: avatar,
-          userName: userName,
-          isHost: _controller.isHost,
-          onTimeout: () {
-            Get.back();
-            if (_controller.isHost) {
-            } else {
-              onDeclineButton();
-            }
-          },
-        );
-      },
+          }
+        },
+      ),
+      isScrollControlled: true,
+      elevation: 0,
+      isDismissible: false,
     );
     return Future<void>.value();
   }
@@ -4608,40 +5222,74 @@ class _LivePage extends State<LiveDharamScreen>
   Future<void> showAllAvailAstroPopup({
     required void Function() exitLive,
   }) async {
-    await showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) {
-        return ShowAllAvailAstroWidget(
-          onClose: Get.back,
-          data: _controller.data,
-          onSelect: (liveId) async {
-            Get.back();
-            // Get.until(
-            //     (route) => route.settings.name == RouteName.liveDharamScreen);
-            getUntil();
+    // await showCupertinoModalPopup(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return ShowAllAvailAstroWidget(
+    //       onClose: Get.back,
+    //       data: _controller.data,
+    //       onSelect: (liveId) async {
+    //         Get.back();
+    //         // Get.until(
+    //         //     (route) => route.settings.name == RouteName.liveDharamScreen);
+    //         getUntil();
 
-            await endOrderFirst();
+    //         await endOrderFirst();
 
-            _controller.updateInfo();
-            List<dynamic> list = await _controller.onLiveStreamingEnded();
-            _controller.liveId = liveId;
-            _controller.currentIndex = list.indexWhere((e) => e == liveId);
-            zegoController.swiping.jumpTo(liveId);
+    //         _controller.updateInfo();
+    //         List<dynamic> list = await _controller.onLiveStreamingEnded();
+    //         _controller.liveId = liveId;
+    //         _controller.currentIndex = list.indexWhere((e) => e == liveId);
+    //         zegoController.swiping.jumpTo(liveId);
 
-            _controller.initData();
-            _controller.updateInfo();
-          },
-          onFollowAndLeave: () async {
-            Get.back();
-            // await followOrUnfollowFunction();
-            exitLive();
-          },
-          onLeave: () {
-            Get.back();
-            exitLive();
-          },
-        );
-      },
+    //         _controller.initData();
+    //         _controller.updateInfo();
+    //       },
+    //       onFollowAndLeave: () async {
+    //         Get.back();
+    //         // await followOrUnfollowFunction();
+    //         exitLive();
+    //       },
+    //       onLeave: () {
+    //         Get.back();
+    //         exitLive();
+    //       },
+    //     );
+    //   },
+    // );
+    await Get.bottomSheet(
+      ShowAllAvailAstroWidget(
+        onClose: Get.back,
+        data: _controller.data,
+        onSelect: (liveId) async {
+          Get.back();
+          // Get.until(
+          //     (route) => route.settings.name == RouteName.liveDharamScreen);
+          getUntil();
+
+          await endOrderFirst();
+
+          _controller.updateInfo();
+          List<dynamic> list = await _controller.onLiveStreamingEnded();
+          _controller.liveId = liveId;
+          _controller.currentIndex = list.indexWhere((e) => e == liveId);
+          zegoController.swiping.jumpTo(liveId);
+
+          _controller.initData();
+          _controller.updateInfo();
+        },
+        onFollowAndLeave: () async {
+          Get.back();
+          // await followOrUnfollowFunction();
+          exitLive();
+        },
+        onLeave: () {
+          Get.back();
+          exitLive();
+        },
+      ),
+      isScrollControlled: true,
+      elevation: 0,
     );
     return Future<void>.value();
   }

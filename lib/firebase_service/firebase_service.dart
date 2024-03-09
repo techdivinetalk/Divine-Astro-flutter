@@ -11,6 +11,7 @@ import "package:divine_astrologer/pages/profile/profile_page_controller.dart";
 import "package:divine_astrologer/repository/pre_defind_repository.dart";
 import "package:divine_astrologer/repository/user_repository.dart";
 import "package:divine_astrologer/screens/dashboard/dashboard_controller.dart";
+import "package:divine_astrologer/screens/live_dharam/live_global_singleton.dart";
 import "package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart";
 import "package:divine_astrologer/screens/side_menu/settings/settings_controller.dart";
 import "package:divine_astrologer/watcher/real_time_watcher.dart";
@@ -70,14 +71,18 @@ class AppFirebaseService {
         if (event.snapshot.value is Map<Object?, Object?>) {
           Map<String, dynamic>? realTimeData = Map<String, dynamic>.from(
               event.snapshot.value! as Map<Object?, Object?>);
+
           if (realTimeData["uniqueId"] != null) {
             String uniqueId = await getDeviceId() ?? "";
             debugPrint(
-                'check uniqueId ${realTimeData['uniqueId']}\ngetDeviceId ${uniqueId.toString()}');
+              'check uniqueId ${realTimeData['uniqueId']}\ngetDeviceId ${uniqueId.toString()}',
+            );
             if (realTimeData["uniqueId"] != uniqueId) {
+              await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
               Get.put(SettingsController()).logOut();
             }
           }
+
           if (realTimeData["profilePhoto"] != null) {
             UserData? userData =
                 Get.find<SharedPreferenceService>().getUserDetail();
@@ -326,14 +331,14 @@ class AppFirebaseService {
       //   },
       // );
 
-      final bool value = await AppPermissionService.instance.hasAllPermissions();
+      final bool value =
+          await AppPermissionService.instance.hasAllPermissions();
       final int orderId = valueMap["orderId"] ?? 0;
       if (orderId != 0) {
         await AppFirebaseService().database.child("order/$orderId").update(
           <String, dynamic>{"status": "1", "astrologer_permission": value},
         );
       } else {}
-      
     } else {}
     appSocket.sendConnectRequest(
       astroId: valueMap["astroId"],
