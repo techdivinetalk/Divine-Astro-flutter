@@ -206,6 +206,10 @@ class $AssetsImagesGen {
   AssetGenImage get divineLogo =>
       const AssetGenImage('assets/images/divine_logo.png');
 
+  /// File path: assets/images/empty-box 1.png
+  AssetGenImage get emptyBox1 =>
+      const AssetGenImage('assets/images/empty-box 1.png');
+
   /// File path: assets/images/ganesh_ji.png
   AssetGenImage get ganeshJiPng =>
       const AssetGenImage('assets/images/ganesh_ji.png');
@@ -661,6 +665,10 @@ class $AssetsImagesGen {
   AssetGenImage get liveNewPrivateIcon =>
       const AssetGenImage('assets/images/live_new_private_icon.png');
 
+  /// File path: assets/images/live_new_shop.png
+  AssetGenImage get liveNewShop =>
+      const AssetGenImage('assets/images/live_new_shop.png');
+
   /// File path: assets/images/live_new_video_icon.png
   AssetGenImage get liveNewVideoIcon =>
       const AssetGenImage('assets/images/live_new_video_icon.png');
@@ -761,9 +769,6 @@ class $AssetsImagesGen {
   /// File path: assets/images/remedies.svg
   SvgGenImage get remedies => const SvgGenImage('assets/images/remedies.svg');
 
-  /// File path: assets/svg/puja.svg
-  SvgGenImage get pooja => const SvgGenImage('assets/svg/puja.svg');
-
   /// File path: assets/images/report.svg
   SvgGenImage get report => const SvgGenImage('assets/images/report.svg');
 
@@ -857,6 +862,7 @@ class $AssetsImagesGen {
         defaultProfiles,
         deleteAccout,
         divineLogo,
+        emptyBox1,
         ganeshJiPng,
         ganeshJiSvg,
         giftLive,
@@ -978,6 +984,7 @@ class $AssetsImagesGen {
         liveNewPlusIcon,
         liveNewPodium,
         liveNewPrivateIcon,
+        liveNewShop,
         liveNewVideoIcon,
         liveRechargeButton,
         liveRequestedPopup,
@@ -1126,6 +1133,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/disconnect.svg
   SvgGenImage get disconnect => const SvgGenImage('assets/svg/disconnect.svg');
 
+  /// File path: assets/svg/done.svg
+  SvgGenImage get done => const SvgGenImage('assets/svg/done.svg');
+
   /// File path: assets/svg/empty-box 1.svg
   SvgGenImage get emptyBox1 => const SvgGenImage('assets/svg/empty-box 1.svg');
 
@@ -1219,6 +1229,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/product.svg
   SvgGenImage get product => const SvgGenImage('assets/svg/product.svg');
 
+  /// File path: assets/svg/puja.svg
+  SvgGenImage get puja => const SvgGenImage('assets/svg/puja.svg');
+
   /// File path: assets/svg/queue.svg
   SvgGenImage get queue => const SvgGenImage('assets/svg/queue.svg');
 
@@ -1270,6 +1283,7 @@ class $AssetsSvgGen {
         deleteAccout,
         diamond,
         disconnect,
+        done,
         emptyBox1,
         forwardIcon,
         gallery,
@@ -1297,6 +1311,7 @@ class $AssetsSvgGen {
         pleaseRegister2,
         privateCallEarning,
         product,
+        puja,
         queue,
         rejoinChatIcon,
         remediesIcon,

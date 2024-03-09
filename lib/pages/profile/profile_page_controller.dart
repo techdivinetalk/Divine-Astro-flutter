@@ -165,7 +165,7 @@ class ProfilePageController extends GetxController {
         Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h),
         '/blockedUser'),
     ProfileOptionModelClass(
-        "Pooja", Assets.images.pooja.svg(width: 30.h, height: 30.h), ''),
+        "Pooja", Assets.images.poojaBanner.image(width: 30.h, height: 30.h), ''),
     ProfileOptionModelClass("Add Remedies",
         Assets.images.remedies.svg(width: 30.h, height: 30.h), ''),
   ].obs;

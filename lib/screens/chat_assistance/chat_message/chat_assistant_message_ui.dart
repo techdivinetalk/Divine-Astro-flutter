@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/helper_widgets.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:divine_astrologer/model/save_remedies_response.dart';
@@ -258,7 +259,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                     child: controller.loading.value
                         ? msgShimmerList()
                         : controller.chatMessageList.isEmpty
-                            ? const Center(child: Text('start a conversation'))
+                            ? HelpersWidget().emptyChatWidget()
                             : ListView.builder(
                                 itemCount: controller.chatMessageList.length,
                                 controller: controller.messageScrollController,

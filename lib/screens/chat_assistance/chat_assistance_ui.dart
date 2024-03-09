@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/common/helper_widgets.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -138,8 +139,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                           null ||
                       controller.chatAssistantAstrologerListResponse!.data!
                           .data!.isEmpty) {
-                    return Center(
-                        child: SvgPicture.asset('assets/svg/Group 129525.svg'));
+                    return HelpersWidget().emptyChatWidget();
                   } else {
                     return ListView.builder(
                       padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -164,32 +164,26 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                 } else {
                   if (controller.customerDetailsResponse == null ||
                       controller.customerDetailsResponse!.data.isEmpty) {
-                    return Center(
-                      child: Text(
-                        'No Data found',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          color: appColors.black,
-                          fontFamily: FontFamily.metropolis,
-                        ),
-                      ),
-                    );
+                    return HelpersWidget().emptyChatWidget();
                   } else {
-                    return ListView.builder(
-                      padding: EdgeInsets.symmetric(vertical: 10.h),
-                      itemCount: (controller.filteredUserData).isNotEmpty ||
-                              controller.searchController.text.isNotEmpty
-                          ? controller.filteredUserData.length
-                          : controller.customerDetailsResponse?.data.length ??
-                              0,
-                      itemBuilder: (context, index) {
-                        return ChatAssistanceDataTile(
-                          data: (controller.filteredUserData).isNotEmpty ||
-                                  controller.searchController.text.isNotEmpty
-                              ? controller.filteredUserData[index]
-                              : controller.customerDetailsResponse!.data[index],
-                        );
-                      },
+                    return Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.symmetric(vertical: 10.h),
+                        itemCount: (controller.filteredUserData).isNotEmpty ||
+                                controller.searchController.text.isNotEmpty
+                            ? controller.filteredUserData.length
+                            : controller.customerDetailsResponse?.data.length ??
+                                0,
+                        itemBuilder: (context, index) {
+                          return ChatAssistanceDataTile(
+                            data: (controller.filteredUserData).isNotEmpty ||
+                                    controller.searchController.text.isNotEmpty
+                                ? controller.filteredUserData[index]
+                                : controller.customerDetailsResponse!.data[index],
+                          );
+                        },
+                      ),
                     );
                   }
                 }
@@ -197,9 +191,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
             ],
           );
         }
-        return const Center(
-          child: Text("No data available"),
-        );
+        return HelpersWidget().emptyChatWidget();
       }),
     );
   }
