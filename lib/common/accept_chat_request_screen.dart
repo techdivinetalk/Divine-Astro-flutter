@@ -549,7 +549,15 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                       fontSize: 16.sp,
                                                       color:
                                                           appColors.darkBlue)),
-                                              Text("PAID",
+                                              Text(
+                                                  AppFirebaseService()
+                                                              .orderData
+                                                              .value[
+                                                                  "chatAmount"]
+                                                              .toString() ==
+                                                          "0"
+                                                      ? "Free"
+                                                      : "PAID",
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w600,
@@ -739,7 +747,8 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
     print("onPressedFunction() isAccepted: $isAccepted");
 
     appFirebaseService.acceptBottomWatcher.strValue = "1";
-    print("onPressedFunction() acceptBottomWatcher: ${appFirebaseService.acceptBottomWatcher.currentName}");
+    print(
+        "onPressedFunction() acceptBottomWatcher: ${appFirebaseService.acceptBottomWatcher.currentName}");
 
     // final bool perm = await AppPermissionService.instance.hasAllPermissions();
     // await appFirebaseService.writeData(

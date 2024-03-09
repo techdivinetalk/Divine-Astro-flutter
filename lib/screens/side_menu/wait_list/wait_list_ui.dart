@@ -116,6 +116,7 @@ class WaitListUI extends GetView<WaitListUIController> {
           ),
           InkWell(
             onTap: () {
+
             },
             child: Container(
                 padding: EdgeInsets.all(7),

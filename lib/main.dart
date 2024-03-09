@@ -341,19 +341,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed || Platform.isAndroid) {
-      print("resumed state called");
-      // SharedPreferenceService().getChatAssistUnreadMessage();
-    }
-    if (state == AppLifecycleState.hidden ||
-        state == AppLifecycleState.inactive) {
-      print("hidden state called");
-      // SharedPreferenceService().saveChatAssistUnreadMessage();
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return AppTheme(
       child: ScreenUtilInit(
