@@ -162,7 +162,7 @@ class _TrueCallerDivineState extends State<TrueCallerDivine> {
                 false
                     ? await TrueCallerService().startTrueCaller()
                     : divineSnackBar(
-                        data:
+                        data:trueCallerFaultPopup();
                             "Please check TrueCaller app whether you're logged-in or not.",
                         color: appColors.guideColor,
                       );
