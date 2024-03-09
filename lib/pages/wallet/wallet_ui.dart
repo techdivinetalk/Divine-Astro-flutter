@@ -23,9 +23,7 @@ class WalletUI extends GetView<WalletController> {
       appBar: commonAppbar(
           title: "wallet".tr,
           trailingWidget: InkWell(
-            onTap: () {
-              Get.offNamed(RouteName.orderHistory);
-            },
+            onTap: () => Get.back(),
             child: Padding(
                 padding: EdgeInsets.only(right: 20.w),
                 child: Assets.images.icOrderHistory.svg()),
