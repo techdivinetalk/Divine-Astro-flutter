@@ -70,6 +70,7 @@ class ChatMessageWithSocketController extends GetxController
       Get.put(MessageTemplateRepo());
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
+  RxBool isAudioPlaying = false.obs;
   TextEditingController messageController = TextEditingController();
   UserData? userData = UserData();
   FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
@@ -229,8 +230,7 @@ class ChatMessageWithSocketController extends GetxController
 
   // RxInt cardListCount = 0.obs;
 
-
-  stateHandling(){
+  stateHandling() {
     WidgetsBinding.instance.addObserver(this);
     _state = SchedulerBinding.instance.lifecycleState;
     _listener = AppLifecycleListener(
@@ -246,7 +246,7 @@ class ChatMessageWithSocketController extends GetxController
       onHide: () {},
       onInactive: () {
         WidgetsBinding.instance.endOfFrame.then(
-              (_) async {
+          (_) async {
             socket.leavePrivateChatEmit(userData?.id.toString(),
                 AppFirebaseService().orderData.value["userId"], "0");
             if (AppFirebaseService().orderData.value["status"] == "4") {
@@ -258,7 +258,7 @@ class ChatMessageWithSocketController extends GetxController
       onPause: () {},
       onDetach: () {
         WidgetsBinding.instance.endOfFrame.then(
-              (_) async {
+          (_) async {
             socket.leavePrivateChatEmit(userData?.id.toString(),
                 AppFirebaseService().orderData.value["userId"], "0");
             if (AppFirebaseService().orderData.value["status"] == "4") {
@@ -392,11 +392,13 @@ class ChatMessageWithSocketController extends GetxController
     extraTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       final currentTime = DateTime.now();
       final difference = endTime.difference(currentTime);
-      if (difference.isNegative || difference.inSeconds == 0) {
+      if (difference.isNegative ||
+          (difference.inSeconds == 0 &&
+              difference.inMinutes == 0 &&
+              difference.inHours == 0)) {
         print("duration ended called for extra timer");
         extraTimer.cancel();
         _timeLeft = Duration.zero;
-        backFunction();
       } else {
         _timeLeft = difference;
         extraTalkTime.value =
@@ -417,12 +419,17 @@ class ChatMessageWithSocketController extends GetxController
     chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
       timeDifference = dateTime.difference(DateTime.now());
 
-      if (timeDifference.isNegative || timeDifference.inSeconds == 0) {
-        //   if (timeDifference.inSeconds == 0) {
+      if (timeDifference.isNegative ||
+          (timeDifference.inSeconds == 0 &&
+              timeDifference.inMinutes == 0 &&
+              timeDifference.inHours == 0)) {
         await callHangup();
-        // }
+
         showTalkTime.value = "-1";
         chatTimer?.cancel();
+        if (AppFirebaseService().orderData.value["status"] == "4") {
+          endChatApi();
+        }
       } else {
         //         print('Countdown working');
         showTalkTime.value =
@@ -814,7 +821,7 @@ class ChatMessageWithSocketController extends GetxController
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
 
     final String? uploadFile = await uploadImageFileToAws(
-        imageFile: File(fileData.path), moduleName: "Chat");
+        file: File(fileData.path), moduleName: "Chat");
     if (uploadFile != "" || uploadFile != null) {
       print("image message upload file ${uploadFile} ${base64Image}");
       addNewMessage(time, MsgType.image,
@@ -1224,8 +1231,9 @@ class ChatMessageWithSocketController extends GetxController
 
   uploadAudioFile(File soundFile) async {
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-    final String uploadFile = await uploadImageToS3Bucket(soundFile, time);
-    if (uploadFile != "") {
+    final uploadFile =
+        await uploadImageFileToAws(file: soundFile, moduleName: "chat");
+    if (uploadFile != "" && uploadFile != null) {
       addNewMessage(time, MsgType.audio, awsUrl: uploadFile);
     }
   }
@@ -1245,9 +1253,13 @@ class ChatMessageWithSocketController extends GetxController
     await Directory(firstPath).create(recursive: true);
     final File file2 = File(filePathAndName);
     file2.writeAsBytesSync(response.bodyBytes);
-    chatMessages[index].downloadedPath = filePathAndName;
+    int index2 = chatMessages.indexWhere((element) {
+      return element.id == chatDetail.id;
+    });
+    chatMessages[index2].downloadedPath = filePathAndName;
     chatMessages.refresh();
     setHiveDataDatabase();
+    update();
   }
 
   // void leavePrivateChat() {

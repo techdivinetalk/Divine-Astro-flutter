@@ -435,7 +435,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
 
     final String uploadFile = await uploadImageFileToAws(
-            imageFile: File(fileData.path),
+            file: File(fileData.path),
             moduleName: "chat-assistant-astrologer") ??
         "";
     if (uploadFile != "") {
