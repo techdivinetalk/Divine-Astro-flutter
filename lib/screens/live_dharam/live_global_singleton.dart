@@ -40,7 +40,7 @@ class LiveGlobalSingleton {
   bool isWaitListPopupOpen = false;
   bool isDisconnectPopupOpen = false;
   bool isExitWaitListPopupOpen = false;
-  bool isExitPopupOpen = false;
+  bool isRequestPopupOpen = false;
   bool isEndLiveSessionPopupOpen = false;
   bool isLowBalancePopupOpen = false;
   bool isCallAstrologerPopupOpen = false;
@@ -55,6 +55,10 @@ class LiveGlobalSingleton {
   bool isExtendTimeWidgetPopupOpen = false;
   bool isHostingAndCoHostingPopupOpen = false;
   bool isShowAllAvailAstroPopupOpen = false;
+  bool isFollowPopupOpen = false;
+  bool isCannotSpendMoneyPopupOpen = false;
+  bool isShopPopupOpen = false;
+  bool isKeyboardPopupOpen = false;
   //
 
   int getCountOfOpenDialogs() {
@@ -84,7 +88,7 @@ class LiveGlobalSingleton {
       temp.add(true);
     } else {}
 
-    if (isExitPopupOpen) {
+    if (isRequestPopupOpen) {
       temp.add(true);
     } else {}
 
@@ -141,6 +145,22 @@ class LiveGlobalSingleton {
     } else {}
 
     if (isShowAllAvailAstroPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isFollowPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isCannotSpendMoneyPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isShopPopupOpen) {
+      temp.add(true);
+    } else {}
+
+    if (isKeyboardPopupOpen) {
       temp.add(true);
     } else {}
 

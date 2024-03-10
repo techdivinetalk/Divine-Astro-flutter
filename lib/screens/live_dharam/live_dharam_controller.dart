@@ -113,6 +113,7 @@ class LiveDharamController extends GetxController {
   final RxBool _isProcessing = false.obs;
   final RxBool _extendTimeWidgetVisible = false.obs;
   final RxBool _hasReInitCoHost = false.obs;
+  final RxInt _testingVar = 0.obs;
 
   @override
   void onInit() {
@@ -187,6 +188,7 @@ class LiveDharamController extends GetxController {
     isProcessing = false;
     extendTimeWidgetVisible = false;
     hasReInitCoHost = false;
+    testingVar = 0;
 
     return;
   }
@@ -232,6 +234,7 @@ class LiveDharamController extends GetxController {
     _isProcessing.close();
     _extendTimeWidgetVisible.close();
     _hasReInitCoHost.close();
+    _testingVar.close();
 
     super.onClose();
   }
@@ -361,6 +364,9 @@ class LiveDharamController extends GetxController {
   bool get hasReInitCoHost => _hasReInitCoHost.value;
   set hasReInitCoHost(bool value) => _hasReInitCoHost(value);
 
+  int get testingVar => _testingVar.value;
+  set testingVar(int value) => _testingVar(value);
+
   Future<void> eventListner({
     required DataSnapshot snapshot,
     required Function() zeroAstro,
@@ -387,7 +393,7 @@ class LiveDharamController extends GetxController {
                 if (data.keys.toList()[currentIndex] != null) {
                   liveId = isHost ? liveId : data.keys.toList()[currentIndex];
                   // isHostAvailable = checkIfAstrologerAvailable(map);
-                  
+
                   var liveIdNode = data[liveId];
 
                   if (liveIdNode != null) {
@@ -788,6 +794,8 @@ class LiveDharamController extends GetxController {
   //       : GetAstroDetailsRes.fromJson(GetAstroDetailsRes().toJson());
   //   details.data?.image = isValidImageURL(imageURL: details.data?.image ?? "");
   //   details.data?.speciality = getSpeciality();
+  //   //      
+  //   testingVar = testingVar + 1;
   //   return Future<void>.value();
   // }
 

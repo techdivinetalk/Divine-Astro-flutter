@@ -41,7 +41,6 @@ import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 // import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
-// import "package:flutter/cupertino.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
@@ -207,7 +206,6 @@ class _LivePage extends State<LiveDharamScreen>
       (bool visible) {
         if (visible == false && _isKeyboardSheetOpen == true) {
           Navigator.of(context).pop();
-          // Get.back();
         } else {}
       },
     );
@@ -275,26 +273,22 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   void getUntil() {
-    // WidgetsBinding.instance.endOfFrame.then(
-    //   (_) async {
-    //     if (mounted) {
-    //       final bool cond1 = Get.isBottomSheetOpen ?? false;
-    //       final bool cond2 = Get.isDialogOpen ?? false;
-    //       final bool cond3 = Get.isOverlaysOpen ?? false;
-    //       final bool cond4 = Get.isSnackbarOpen ?? false;
-
-    //       while (cond1 || cond2 || cond3 || cond4) {
-    //         Get.back();
-    //       }
-    //     } else {}
-    //   },
-    // );
+    WidgetsBinding.instance.endOfFrame.then(
+      (_) async {
+        if (mounted) {
+          final int length = LiveGlobalSingleton().getCountOfOpenDialogs();
+          print("getUntil():: closing $length items");
+          for (int i = 0; i < length; i++) {
+            Navigator.of(context).pop();
+          }
+        } else {}
+      },
+    );
     return;
   }
 
   Future<void> zeroAstro() async {
     // if (mounted) {
-    //   // Get.until((route) => route.settings.name == RouteName.liveDharamScreen);
     //   getUntil();
 
     //   endOrderFirst();
@@ -438,9 +432,9 @@ class _LivePage extends State<LiveDharamScreen>
             duration,
             (Timer timer) async {
               if (timer.tick % 1 == 0) {
-                math.Random.secure().nextInt(30).isEven
-                    ? await manMessage()
-                    : await womanMessage();
+                // math.Random.secure().nextInt(30).isEven
+                //     ? await manMessage()
+                //     : await womanMessage();
               } else {}
 
               if (timer.tick % 30 == 0) {
@@ -452,22 +446,22 @@ class _LivePage extends State<LiveDharamScreen>
               } else {}
 
               if (timer.tick % 600 == 0) {
-                final ZegoCustomMessage model = ZegoCustomMessage(
-                  type: 1,
-                  liveId: _controller.liveId,
-                  userId: "0",
-                  userName: "Live Monitoring Team",
-                  // avatar:
-                  //     "https://divinenew-prod.s3.ap-south-1.amazonaws.com/divine/January2024/fGfpNU1Y40lV0ojgh0JBpgbc4mJtAdV6hgG5xZXJ.jpg",
-                  avatar:
-                      "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
-                  message: "Live Monitoring Team Joined",
-                  timeStamp: DateTime.now().toString(),
-                  fullGiftImage: "",
-                  isBlockedCustomer: false,
-                  isMod: true,
-                );
-                await sendMessageToZego(model);
+                // final ZegoCustomMessage model = ZegoCustomMessage(
+                //   type: 1,
+                //   liveId: _controller.liveId,
+                //   userId: "0",
+                //   userName: "Live Monitoring Team",
+                //   // avatar:
+                //   //     "https://divinenew-prod.s3.ap-south-1.amazonaws.com/divine/January2024/fGfpNU1Y40lV0ojgh0JBpgbc4mJtAdV6hgG5xZXJ.jpg",
+                //   avatar:
+                //       "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
+                //   message: "Live Monitoring Team Joined",
+                //   timeStamp: DateTime.now().toString(),
+                //   fullGiftImage: "",
+                //   isBlockedCustomer: false,
+                //   isMod: true,
+                // );
+                // await sendMessageToZego(model);
               } else {}
             },
           );
@@ -615,12 +609,11 @@ class _LivePage extends State<LiveDharamScreen>
 
   @override
   void dispose() {
+    _scrollControllerForTop.dispose();
+    _scrollControllerForBottom.dispose();
     _timer?.cancel();
     _msgTimerForFollowPopup?.cancel();
     _msgTimerForTarotCardPopup?.cancel();
-
-    _scrollControllerForTop.dispose();
-    _scrollControllerForBottom.dispose();
 
     WidgetsBinding.instance.removeObserver(this);
 
@@ -1255,12 +1248,15 @@ class _LivePage extends State<LiveDharamScreen>
   //     fullGiftImage: "",
   //     animation: "",
   //   );
-  //   if (tempData[0].id != 0) {
-  //     tempData.insert(0, emptyGiftIbject);
-  //   } else {}
-  //   if (tempData[1].id != 0) {
-  //     tempData.insert(1, emptyGiftIbject);
-  //   } else {}
+  //   if (tempData.isEmpty) {
+  //   } else {
+  //     if (tempData[0].id != 0) {
+  //       tempData.insert(0, emptyGiftIbject);
+  //     } else {}
+  //     if (tempData[1].id != 0) {
+  //       tempData.insert(1, emptyGiftIbject);
+  //     } else {}
+  //   }
   //   return SizedBox(
   //     height: 50,
   //     child: ListView.builder(
@@ -1483,8 +1479,14 @@ class _LivePage extends State<LiveDharamScreen>
   // }) async {
   //   _controller.isProcessing = true;
   //   final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
-  //   if (hasMyIdInWaitList) {
-  //     await alreadyInWaitlistPopup();
+  //   final bool isEngaded = _controller.currentCaller.isEngaded;
+  //   if (hasMyIdInWaitList || isEngaded) {
+  //     if (hasMyIdInWaitList) {
+  //       await cannotSpendMoney(isForWaitList: true, isForCall: false);
+  //     } else {}
+  //     if (isEngaded) {
+  //       await cannotSpendMoney(isForWaitList: false, isForCall: true);
+  //     } else {}
   //   } else {
   //     final bool hasBal = await _controller.hasBalanceForSendingGift(
   //       giftId: item.id,
@@ -1899,7 +1901,6 @@ class _LivePage extends State<LiveDharamScreen>
     if (state == ZegoLiveStreamingState.ended) {
       ZegoGiftPlayer().clear();
 
-      // Get.until((route) => route.settings.name == RouteName.liveDharamScreen);
       getUntil();
 
       await endOrderFirst();
@@ -1942,6 +1943,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> alreadyInWaitlistPopup() async {
+    LiveGlobalSingleton().isAlreadyInWaitlistPopupOpen = true;
     await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -1954,6 +1956,7 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    LiveGlobalSingleton().isAlreadyInWaitlistPopupOpen = false;
     return Future<void>.value();
   }
 
@@ -1961,6 +1964,7 @@ class _LivePage extends State<LiveDharamScreen>
     required bool isForCall,
     required bool isForWaitList,
   }) async {
+    LiveGlobalSingleton().isCannotSpendMoneyPopupOpen = true;
     await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -1971,6 +1975,7 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    LiveGlobalSingleton().isCannotSpendMoneyPopupOpen = false;
     return Future<void>.value();
   }
 
@@ -1979,6 +1984,7 @@ class _LivePage extends State<LiveDharamScreen>
     required String userId,
     required String userName,
   }) async {
+    LiveGlobalSingleton().isGiftPopupOpen = true;
     await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -2004,6 +2010,7 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    LiveGlobalSingleton().isGiftPopupOpen = false;
     return Future<void>.value();
   }
 
@@ -2034,6 +2041,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> leaderboardPopup() async {
+    LiveGlobalSingleton().isLeaderboardPopupOpen = true;
     await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -2043,10 +2051,12 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    LiveGlobalSingleton().isLeaderboardPopupOpen = false;
     return Future<void>.value();
   }
 
   Future<void> liveShopPopup() async {
+    LiveGlobalSingleton().isShopPopupOpen = true;
     // await showCupertinoModalPopup(
     //   context: context,
     //   builder: (BuildContext context) {
@@ -2056,10 +2066,12 @@ class _LivePage extends State<LiveDharamScreen>
     //     );
     //   },
     // );
+    LiveGlobalSingleton().isShopPopupOpen = false;
     return Future<void>.value();
   }
 
   Future<void> waitListPopup() async {
+    LiveGlobalSingleton().isWaitListPopupOpen = true;
     await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -2100,6 +2112,7 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    LiveGlobalSingleton().isWaitListPopupOpen = false;
     return Future<void>.value();
   }
 
@@ -2126,6 +2139,7 @@ class _LivePage extends State<LiveDharamScreen>
     required Function() noDisconnect,
     required Function() yesDisconnect,
   }) async {
+    LiveGlobalSingleton().isDisconnectPopupOpen = true;
     await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -2147,6 +2161,7 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    LiveGlobalSingleton().isDisconnectPopupOpen = false;
     return Future<void>.value();
   }
 
@@ -2154,6 +2169,7 @@ class _LivePage extends State<LiveDharamScreen>
     required Function() noDisconnect,
     required Function() yesDisconnect,
   }) async {
+    LiveGlobalSingleton().isExitWaitListPopupOpen = true;
     await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -2175,11 +2191,13 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    LiveGlobalSingleton().isExitWaitListPopupOpen = false;
     return Future<void>.value();
   }
 
   // Future<void> exitPopup() async {
   //   _controller.hasFollowPopupOpen = true;
+  //   LiveGlobalSingleton().isFollowPopupOpen = true;
   //   await showCupertinoModalPopup(
   //     context: context,
   //     builder: (BuildContext context) {
@@ -2195,10 +2213,12 @@ class _LivePage extends State<LiveDharamScreen>
   //     },
   //   );
   //   _controller.hasFollowPopupOpen = false;
+  //   LiveGlobalSingleton().isFollowPopupOpen = false;
   //   return Future<void>.value();
   // }
 
   Future<void> endLiveSession({required void Function() endLive}) async {
+    LiveGlobalSingleton().isEndLiveSessionPopupOpen = true;
     await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -2212,6 +2232,7 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    LiveGlobalSingleton().isEndLiveSessionPopupOpen = false;
     return Future<void>.value();
   }
 
@@ -2219,6 +2240,7 @@ class _LivePage extends State<LiveDharamScreen>
   //   required bal.InsufficientBalModel balModel,
   //   required Function(bal.Data data) callbackBalModelData,
   // }) async {
+  //   LiveGlobalSingleton().isLowBalancePopupOpen = true;
   //   await showCupertinoModalPopup(
   //     context: context,
   //     builder: (BuildContext context) {
@@ -2232,6 +2254,7 @@ class _LivePage extends State<LiveDharamScreen>
   //       );
   //     },
   //   );
+  //   LiveGlobalSingleton().isLowBalancePopupOpen = false;
   //   return Future<void>.value();
   // }
 
@@ -2263,6 +2286,7 @@ class _LivePage extends State<LiveDharamScreen>
   // }
 
   // Future<void> callAstrologerPopup() async {
+  //   LiveGlobalSingleton().isCallAstrologerPopupOpen = true;
   //   await showCupertinoModalPopup(
   //     context: context,
   //     builder: (BuildContext context) {
@@ -2321,6 +2345,7 @@ class _LivePage extends State<LiveDharamScreen>
   //       );
   //     },
   //   );
+  //   LiveGlobalSingleton().isCallAstrologerPopupOpen = false;
   //   return Future<void>.value();
   // }
 
@@ -2329,29 +2354,21 @@ class _LivePage extends State<LiveDharamScreen>
   //   required dynamic Function(bal.InsufficientBalModel) needRecharge,
   // }) async {
   //   final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
-  //   final bool isEngaded = _controller.currentCaller.isEngaded;
-
-  //   if (hasMyIdInWaitList || isEngaded) {
-  //     if (hasMyIdInWaitList) {
-  //       await cannotSpendMoney(isForWaitList: true, isForCall: false);
-  //     } else {}
-
-  //     if (isEngaded) {
-  //       await cannotSpendMoney(isForWaitList: false, isForCall: true);
-  //     } else {}
+  //   if (hasMyIdInWaitList) {
+  //     await alreadyInWaitlistPopup();
   //   } else {
   //     final bool canOrder = await _controller.canPlaceLiveOrder(
   //       talkType: type,
   //       needRecharge: needRecharge,
   //       successCallBack: (String message) {
-  //         successAndFailureCallBack(
+  //         eventListnerSuccessAndFailureCallBack(
   //           message: message,
   //           isForSuccess: true,
   //           isForFailure: false,
   //         );
   //       },
   //       failureCallBack: (String message) {
-  //         successAndFailureCallBack(
+  //         eventListnerSuccessAndFailureCallBack(
   //           message: message,
   //           isForSuccess: false,
   //           isForFailure: true,
@@ -2378,6 +2395,7 @@ class _LivePage extends State<LiveDharamScreen>
     required String userName,
     required bool isBlocked,
   }) async {
+    LiveGlobalSingleton().isMoreOptionsPopupOpen = true;
     await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -2505,59 +2523,63 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    LiveGlobalSingleton().isMoreOptionsPopupOpen = false;
     return Future<void>.value();
   }
 
-  Future<void> moreOptionsForModPopup({
-    required String userId,
-    required String userName,
-    required bool isBlocked,
-  }) async {
-    // await showCupertinoModalPopup(
-    //   context: context,
-    //   builder: (BuildContext context) {
-    //     return MoreOptionsForModWidget(
-    //       onClose: Get.back,
-    //       isHost: _controller.isHost,
-    //       isMod: _controller.isMod,
-    //       onTapAskForBlockUnBlockUser: () async {
-    //         Get.back();
-    //         await blockUnblockPopup(
-    //           isAlreadyBeenBlocked: isBlocked,
-    //           performAction: () async {
-    //             if (userId != "0") {
-    //               await _controller.callblockCustomerByMod(
-    //                 id: int.parse(userId),
-    //                 successCallBack: (String message) {
-    //                   successAndFailureCallBack(
-    //                     message: message,
-    //                     isForSuccess: false,
-    //                     isForFailure: true,
-    //                   );
-    //                 },
-    //                 failureCallBack: (String message) {
-    //                   successAndFailureCallBack(
-    //                     message: message,
-    //                     isForSuccess: false,
-    //                     isForFailure: true,
-    //                   );
-    //                 },
-    //               );
-    //             } else {}
-    //           },
-    //         );
-    //       },
-    //       isBlocked: isBlocked,
-    //     );
-    //   },
-    // );
-    return Future<void>.value();
-  }
+  // Future<void> moreOptionsForModPopup({
+  //   required String userId,
+  //   required String userName,
+  //   required bool isBlocked,
+  // }) async {
+  //   LiveGlobalSingleton().isMoreOptionsForModPopupOpen = true;
+  //   await showCupertinoModalPopup(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return MoreOptionsForModWidget(
+  //         onClose: Get.back,
+  //         isHost: _controller.isHost,
+  //         isMod: _controller.isMod,
+  //         onTapAskForBlockUnBlockUser: () async {
+  //           Get.back();
+  //           await blockUnblockPopup(
+  //             isAlreadyBeenBlocked: isBlocked,
+  //             performAction: () async {
+  //               if (userId != "0") {
+  //                 await _controller.callblockCustomerByMod(
+  //                   id: int.parse(userId),
+  //                   successCallBack: (String message) {
+  //                     successAndFailureCallBack(
+  //                       message: message,
+  //                      isForSuccess: false,
+  //                       isForFailure: true,
+  //                     );
+  //                   },
+  //                   failureCallBack: (String message) {
+  //                     successAndFailureCallBack(
+  //                       message: message,
+  //                       isForSuccess: false,
+  //                       isForFailure: true,
+  //                     );
+  //                   },
+  //                 );
+  //               } else {}
+  //             },
+  //           );
+  //         },
+  //         isBlocked: isBlocked,
+  //       );
+  //     },
+  //   );
+  //   LiveGlobalSingleton().isMoreOptionsForModPopupOpen = false;
+  //   return Future<void>.value();
+  // }
 
   Future<void> blockUnblockPopup({
     required bool isAlreadyBeenBlocked,
     required Function() performAction,
   }) async {
+    LiveGlobalSingleton().isBlockUnblockPopupOpen = true;
     await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -2571,6 +2593,7 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    LiveGlobalSingleton().isBlockUnblockPopupOpen = false;
     return Future<void>.value();
   }
 
@@ -2752,6 +2775,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   Future<void> waitingForUserToSelectCardsPopup() async {
     waitingForUserToSelectCardsPopupVisible = true;
+    LiveGlobalSingleton().isWaitingForUserToSelectCardsPopupOpen = true;
     await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -2771,10 +2795,12 @@ class _LivePage extends State<LiveDharamScreen>
       },
     );
     waitingForUserToSelectCardsPopupVisible = false;
+    LiveGlobalSingleton().isWaitingForUserToSelectCardsPopupOpen = false;
     return Future<void>.value();
   }
 
   Future<void> showCardDeckToUserPopup() async {
+    LiveGlobalSingleton().isShowCardDeckToUserPopupOpen = true;
     await showCupertinoModalPopup(
       context: context,
       barrierDismissible: false,
@@ -2807,11 +2833,14 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    LiveGlobalSingleton().isShowCardDeckToUserPopupOpen = false;
     return Future<void>.value();
   }
 
   Future<void> showCardDeckToUserPopup1() async {
     showCardDeckToUserPopupTimeoutHappening = true;
+    LiveGlobalSingleton().isShowCardDeckToUser1PopupOpen = true;
+
     _startMsgTimerForTarotCardPopup();
 
     bool hasSelected = false;
@@ -2864,6 +2893,8 @@ class _LivePage extends State<LiveDharamScreen>
     );
 
     showCardDeckToUserPopupTimeoutHappening = false;
+    LiveGlobalSingleton().isShowCardDeckToUser1PopupOpen = false;
+
     _endMsgTimerForTarotCardPopup();
 
     if (hasSelected) {
@@ -2874,6 +2905,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> showCardDeckToUserPopup2() async {
+    LiveGlobalSingleton().isShowCardDeckToUser2PopupOpen = true;
     await showCupertinoModalPopup(
       context: context,
       barrierDismissible: false,
@@ -2897,6 +2929,7 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    LiveGlobalSingleton().isShowCardDeckToUser2PopupOpen = false;
     return Future<void>.value();
   }
 
@@ -2963,43 +2996,45 @@ class _LivePage extends State<LiveDharamScreen>
   //   return Future<void>.value();
   // }
 
-  Future<void> requestPopup({
-    required BuildContext ctx,
-    required String type,
-    required GiftData giftData,
-    required num giftCount,
-  }) async {
-    // await showCupertinoDialog(
-    //   context: context,
-    //   builder: (BuildContext context) {
-    //     return RequestPopupWidget(
-    //       onClose: Get.back,
-    //       details: _controller.details,
-    //       speciality: _controller.getSpeciality(),
-    //       type: type,
-    //       onTapAcceptForGifts: () async {
-    //         Get.back();
-    //         await sendGiftFunc(ctx: ctx, item: giftData, quantity: giftCount);
-    //       },
-    //       onTapAcceptForVideoCall: () async {
-    //         Get.back();
-    //         await requestCallFunction(type: "Video");
-    //       },
-    //       onTapAcceptForAudioCall: () async {
-    //         Get.back();
-    //         await requestCallFunction(type: "Audio");
-    //       },
-    //       onTapAcceptForPrivateCall: () async {
-    //         Get.back();
-    //         await requestCallFunction(type: "Private");
-    //       },
-    //       giftData: giftData,
-    //       giftCount: giftCount,
-    //     );
-    //   },
-    // );
-    return Future<void>.value();
-  }
+  // Future<void> requestPopup({
+  //   required BuildContext ctx,
+  //   required String type,
+  //   required GiftData giftData,
+  //   required num giftCount,
+  // }) async {
+  //   LiveGlobalSingleton().isRequestPopupOpen = true;
+  //   await showCupertinoDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return RequestPopupWidget(
+  //         onClose: Get.back,
+  //         details: _controller.details,
+  //         speciality: _controller.getSpeciality(),
+  //         type: type,
+  //         onTapAcceptForGifts: () async {
+  //           Get.back();
+  //           await sendGiftFunc(ctx: ctx, item: giftData, quantity: giftCount);
+  //         },
+  //         onTapAcceptForVideoCall: () async {
+  //           Get.back();
+  //           await requestCallFunction(type: "Video");
+  //         },
+  //         onTapAcceptForAudioCall: () async {
+  //           Get.back();
+  //           await requestCallFunction(type: "Audio");
+  //         },
+  //         onTapAcceptForPrivateCall: () async {
+  //           Get.back();
+  //           await requestCallFunction(type: "Private");
+  //         },
+  //         giftData: giftData,
+  //         giftCount: giftCount,
+  //       );
+  //     },
+  //   );
+  //   LiveGlobalSingleton().isRequestPopupOpen = false;
+  //   return Future<void>.value();
+  // }
 
   // Future<void> requestCallFunction({required String type}) async {
   //   bool hasAllPerm = false;
@@ -3033,6 +3068,7 @@ class _LivePage extends State<LiveDharamScreen>
   // }
 
   // Future<void> youAreBlocked() async {
+  //   LiveGlobalSingleton().isYouAreBlockedPopupOpen = true;
   //   await showCupertinoModalPopup(
   //     context: context,
   //     builder: (BuildContext context) {
@@ -3041,6 +3077,7 @@ class _LivePage extends State<LiveDharamScreen>
   //       );
   //     },
   //   );
+  //   LiveGlobalSingleton().isYouAreBlockedPopupOpen = false;
   //   return Future<void>.value();
   // }
 
@@ -3370,6 +3407,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> extendTimeWidgetPopup() async {
+    LiveGlobalSingleton().isExtendTimeWidgetPopupOpen = true;
     await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -3386,6 +3424,7 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    LiveGlobalSingleton().isExtendTimeWidgetPopupOpen = false;
     return Future<void>.value();
   }
 
@@ -4094,6 +4133,7 @@ class _LivePage extends State<LiveDharamScreen>
                                           const Positioned(
                                             top: 46,
                                             child: SizedBox(),
+                                            // child: Text(_controller.testingVar.toString()),
                                           ),
                                         ],
                                       ),
@@ -4233,6 +4273,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   Future<void> keyboardPop() async {
     _isKeyboardSheetOpen = true;
+    LiveGlobalSingleton().isKeyboardPopupOpen = true;
     await showModalBottomSheet(
       context: context,
       elevation: 0,
@@ -4243,6 +4284,7 @@ class _LivePage extends State<LiveDharamScreen>
       },
     );
     _isKeyboardSheetOpen = false;
+    LiveGlobalSingleton().isKeyboardPopupOpen = false;
     return Future<void>.value();
   }
 
@@ -4280,10 +4322,7 @@ class _LivePage extends State<LiveDharamScreen>
     FocusManager.instance.primaryFocus?.unfocus();
     scrollDownForTop();
     scrollDownForBottom();
-    // getUntil();
-    if (mounted) {
-      Get.until((route) => route.settings.name == RouteName.liveDharamScreen);
-    } else {}
+    getUntil();
     return Future<void>.value();
   }
 
@@ -4519,7 +4558,6 @@ class _LivePage extends State<LiveDharamScreen>
     required String userName,
     required String avatar,
   }) async {
-    // _controller.hasCallAcceptRejectPopupOpen = true;
     isAcceptPopupOpen = true;
     isAcceptPopupOpenFor = user;
     await hostingAndCoHostingPopup(
@@ -4540,7 +4578,6 @@ class _LivePage extends State<LiveDharamScreen>
       userName: userName,
       avatar: avatar,
     );
-    // _controller.hasCallAcceptRejectPopupOpen = false;
     isAcceptPopupOpen = false;
     isAcceptPopupOpenFor = ZegoUIKitUser(id: "", name: "");
     return Future<void>.value();
@@ -4596,6 +4633,7 @@ class _LivePage extends State<LiveDharamScreen>
     required String userName,
     required String avatar,
   }) async {
+    LiveGlobalSingleton().isHostingAndCoHostingPopupOpen = true;
     await showCupertinoModalPopup(
       context: context,
       barrierDismissible: false,
@@ -4629,12 +4667,14 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    LiveGlobalSingleton().isHostingAndCoHostingPopupOpen = false;
     return Future<void>.value();
   }
 
   Future<void> showAllAvailAstroPopup({
     required void Function() exitLive,
   }) async {
+    LiveGlobalSingleton().isShowAllAvailAstroPopupOpen = true;
     await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -4670,6 +4710,7 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    LiveGlobalSingleton().isShowAllAvailAstroPopupOpen = false;
     return Future<void>.value();
   }
 

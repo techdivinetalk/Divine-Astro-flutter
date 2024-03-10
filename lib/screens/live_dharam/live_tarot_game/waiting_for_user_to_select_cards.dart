@@ -26,6 +26,27 @@ class WaitingForUserToSelectCards extends StatefulWidget {
 
 class _WaitingForUserToSelectCardsState
     extends State<WaitingForUserToSelectCards> {
+  String totalTime = "";
+
+  @override
+  void initState() {
+    super.initState();
+    totalTime = generateFutureTime();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  String generateFutureTime() {
+    final DateTime current = DateTime.now();
+    const int min = 1;
+    final DateTime addedTime = current.add(const Duration(minutes: min));
+    final int millisecondsSinceEpoch = addedTime.millisecondsSinceEpoch;
+    return millisecondsSinceEpoch.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -138,15 +159,16 @@ class _WaitingForUserToSelectCardsState
   }
 
   Widget newTimerWidget() {
+    final String source = totalTime;
+    final int epoch = int.parse(source);
+    final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
     return TimerCountdown(
       format: CountDownTimerFormat.hoursMinutesSeconds,
       enableDescriptions: false,
       spacerWidth: 4,
       colonsTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
       timeTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
-      endTime: DateTime.now().add(
-        const Duration(days: 0, hours: 0, minutes: 1, seconds: 0),
-      ),
+      endTime: dateTime,
       onEnd: widget.onTimeout,
     );
   }
