@@ -794,7 +794,7 @@ class LiveDharamController extends GetxController {
   //       : GetAstroDetailsRes.fromJson(GetAstroDetailsRes().toJson());
   //   details.data?.image = isValidImageURL(imageURL: details.data?.image ?? "");
   //   details.data?.speciality = getSpeciality();
-  //   //      
+  //   //
   //   testingVar = testingVar + 1;
   //   return Future<void>.value();
   // }
@@ -1529,12 +1529,21 @@ class LiveDharamController extends GetxController {
   }
 
   bool hasMessageContainsAnyBadWord(String input) {
-    for (var badWord in LiveSharedPreferencesSingleton().getBadWordsList()) {
-      if (input.toLowerCase().contains(badWord.toLowerCase())) {
-        return true;
+    // for (var badWord in LiveSharedPreferencesSingleton().getBadWordsList()) {
+    //   if (input.toLowerCase().contains(badWord.toLowerCase())) {
+    //     return true;
+    //   }
+    // }
+
+    bool containsBadWord = false;
+    for (String word in LiveSharedPreferencesSingleton().getBadWordsList()) {
+      if (input.toLowerCase().contains(word)) {
+        containsBadWord = true;
+        break;
       }
     }
-    return false;
+
+    return containsBadWord;
   }
 
   final RegExp indianPhoneNumberRegex = RegExp(r'\b(?:\+?91|0)?[ -]?\d{10}\b');
