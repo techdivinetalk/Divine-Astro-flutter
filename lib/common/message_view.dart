@@ -411,7 +411,7 @@ class MessageView extends StatelessWidget {
                     child: VoiceMessageView(
                         controller: VoiceController(
                             audioSrc: chatDetail.awsUrl!,
-                            maxDuration: const Duration(seconds: 120),
+                            maxDuration: const Duration(minutes: 30),
                             isFile: false,
                             onComplete: () {
                               controller.isAudioPlaying(false);
@@ -420,6 +420,7 @@ class MessageView extends StatelessWidget {
                               controller.isAudioPlaying(false);
                             },
                             onPlaying: () {
+                              print("value of audio playing ${controller.isAudioPlaying.value}");
                               if (controller.isAudioPlaying.value) {
                                 Fluttertoast.showToast(msg: "Audio is Already playing");
                               } else {
