@@ -179,7 +179,7 @@ Future<void> main() async {
   //   );
   //   runApp(const MyApp());
   // });
-  checkIfTokenUpdated();
+  await checkIfTokenUpdated();
 
   ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
   // call the useSystemCallingUI
@@ -192,7 +192,7 @@ Future<void> main() async {
 }
 
 //conditions to update firebase token by dev-chetan
-void checkIfTokenUpdated() {
+checkIfTokenUpdated() {
   FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
     await updateFirebaseToken();
   });
@@ -211,6 +211,10 @@ updateFirebaseToken() async {
         .database
         .child("astrologer/${userData?.id}/")
         .update({'deviceToken': newtoken});
+    await AppFirebaseService()
+        .database
+        .child("astrologer/${userData?.id}/")
+        .update({'from main': "true"});
   }
 }
 
@@ -364,6 +368,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                 fallbackLocale: AppTranslations.fallbackLocale,
                 translations: AppTranslations(),
                 theme: ThemeData(
+                  bottomSheetTheme: const BottomSheetThemeData(
+                      backgroundColor: Colors.transparent,
+                      modalElevation: 0
+                  ),
                   splashColor: appColors.transparent,
                   highlightColor: Colors.transparent,
                   colorScheme: ColorScheme.fromSeed(
