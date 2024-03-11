@@ -39,6 +39,27 @@ class CallAcceptOrRejectWidget extends StatefulWidget {
 }
 
 class _CallAcceptOrRejectWidgetState extends State<CallAcceptOrRejectWidget> {
+  String totalTime = "";
+
+  @override
+  void initState() {
+    super.initState();
+    totalTime = generateFutureTime();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  String generateFutureTime() {
+    final DateTime current = DateTime.now();
+    const int min = 2;
+    final DateTime addedTime = current.add(const Duration(minutes: min));
+    final int millisecondsSinceEpoch = addedTime.millisecondsSinceEpoch;
+    return millisecondsSinceEpoch.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -64,7 +85,7 @@ class _CallAcceptOrRejectWidgetState extends State<CallAcceptOrRejectWidget> {
             border: Border.all(color: appColors.white),
             color: appColors.white.withOpacity(0.2),
           ),
-          child:  Icon(Icons.close, color: appColors.white),
+          child: Icon(Icons.close, color: appColors.white),
         ),
       ),
     );
@@ -165,15 +186,16 @@ class _CallAcceptOrRejectWidgetState extends State<CallAcceptOrRejectWidget> {
   }
 
   Widget newTimerWidget() {
+    final String source = totalTime;
+    final int epoch = int.parse(source);
+    final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
     return TimerCountdown(
       format: CountDownTimerFormat.hoursMinutesSeconds,
       enableDescriptions: false,
       spacerWidth: 4,
       colonsTextStyle: const TextStyle(fontSize: 12, color: Colors.black),
       timeTextStyle: const TextStyle(fontSize: 12, color: Colors.black),
-      endTime: DateTime.now().add(
-        const Duration(days: 0, hours: 0, minutes: 2, seconds: 0),
-      ),
+      endTime: dateTime,
       onEnd: widget.onTimeout,
     );
   }

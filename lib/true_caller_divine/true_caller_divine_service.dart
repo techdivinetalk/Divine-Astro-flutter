@@ -31,7 +31,7 @@ class TrueCallerService {
       ctaText: TcSdkOptions.CTA_TEXT_PROCEED,
       buttonShapeOption: TcSdkOptions.BUTTON_SHAPE_ROUNDED,
       buttonColor: appColors.guideColor.value,
-      buttonTextColor: appColors.black.value,
+      buttonTextColor: appColors.guideColor.value,
     );
     log("TrueCallerService: start(): init: $init");
 

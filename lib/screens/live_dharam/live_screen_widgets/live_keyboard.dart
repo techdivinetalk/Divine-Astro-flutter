@@ -27,9 +27,9 @@ class _LiveKeyboardState extends State<LiveKeyboard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // padding: EdgeInsets.only(
-      //   bottom: MediaQuery.of(context).viewInsets.bottom,
-      // ),
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextField(
