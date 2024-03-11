@@ -104,7 +104,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
       onShow: () {},
       onResume: () {
         updateFirebaseToken();
-        // getBackGroundMessages();
+        getBackGroundMessages();
       },
       onHide: () {
 
@@ -114,10 +114,10 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
       onDetach: () {},
       onRestart: () {
         updateFirebaseToken();
-        // getBackGroundMessages();
+        getBackGroundMessages();
       },
       onStateChange: (value) {
-        print("on state changed called ${value.name}");
+        print("on state changed called in chat assistance ${value.name}");
       },
     );
     if (_state != null) {
