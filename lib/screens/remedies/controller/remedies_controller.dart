@@ -4,19 +4,18 @@ import 'dart:developer';
 import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
-import 'package:divine_astrologer/model/faq_response.dart';
-import 'package:divine_astrologer/repository/faqs_repository.dart';
-import 'package:divine_astrologer/screens/remedies/model/pooja_listing_model.dart';
-import 'package:divine_astrologer/utils/enum.dart';
+import 'package:divine_astrologer/di/shared_preference_service.dart';
+import 'package:divine_astrologer/screens/puja/model/pooja_listing_model.dart';
+import 'package:divine_astrologer/screens/remedies/model/remedies_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class RemediesController extends GetxController {
-  RxInt orderList = 3.obs;
-  List<PujaListingData> pujaData = [];
-  bool isPujaLoading = false;
-  String noPoojaFound = "";
-  ScrollController orderScrollController = ScrollController();
+class RemediesController extends GetxController{
+  List<Remedy> remdiesData = [];
+  bool isRemdiesLoading = false;
+  String noRemediesFound = "";
+  var pref = Get.find<SharedPreferenceService>();
+
 
   @override
   void onInit() {
@@ -25,22 +24,22 @@ class RemediesController extends GetxController {
   }
 
   getPujaList() async {
-    isPujaLoading = true;
+    isRemdiesLoading = true;
     try {
       Map<String, dynamic> params = {"role_id": userData?.roleId};
-      var response = await userRepository.getPujaList(params);
-      if (response.data!.isNotEmpty) {
-        pujaData = response.data!;
-        isPujaLoading = false;
+      var response = await userRepository.getRemedyList(params);
+      if (response.data != null) {
+        remdiesData = response.data!;
+        isRemdiesLoading = false;
       } else {
-        isPujaLoading = false;
-        noPoojaFound = "No Puja found!.";
+        isRemdiesLoading = false;
+        noRemediesFound = "No Puja found!.";
       }
       update();
       log("Data Of Pooja ==> ${jsonEncode(response.data)}");
     } catch (error) {
-      isPujaLoading = false;
-      noPoojaFound = "No Puja found!.";
+      isRemdiesLoading = false;
+      noRemediesFound = "No Puja found!.";
       debugPrint("error $error");
       if (error is AppException) {
         error.onException();

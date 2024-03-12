@@ -6,8 +6,8 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
-import 'package:divine_astrologer/screens/remedies/model/pooja_listing_model.dart';
-import 'package:divine_astrologer/screens/remedies/widget/pooja_submited_sheet.dart';
+import 'package:divine_astrologer/screens/puja/model/pooja_listing_model.dart';
+import 'package:divine_astrologer/screens/puja/widget/pooja_submited_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +19,7 @@ import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AddRemediesController extends GetxController {
+class AddPujaController extends GetxController {
   TextEditingController poojaName = TextEditingController();
   TextEditingController poojaDes = TextEditingController();
   TextEditingController poojaPrice = TextEditingController();

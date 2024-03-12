@@ -1,4 +1,4 @@
-import 'package:divine_astrologer/screens/remedies/model/pooja_listing_model.dart';
+import 'package:divine_astrologer/screens/puja/model/pooja_listing_model.dart';
 
 class AddEditPujaModel {
   final bool? success;
