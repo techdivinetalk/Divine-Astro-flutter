@@ -188,6 +188,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                   }
                 }
               })
+              ,SizedBox(height: 10,)
             ],
           );
         }
