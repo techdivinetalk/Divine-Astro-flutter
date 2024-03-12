@@ -38,7 +38,7 @@ class AppSocket {
       Get.put(HomeController());
       //Get.find<HomeController>();
       socket?.emit(ApiProvider().joinRoomSocket, {
-        "userId": preferenceService.getUserDetail()!.id.toString(),
+        "userId": preferenceService.getUserDetail()?.id.toString(),
         "userType": 'astrologer',
         "chat": Get.find<HomeController>().chatSwitch.value ? "1" : "0",
         "call": Get.find<HomeController>().callSwitch.value ? "1" : "0",

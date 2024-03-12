@@ -359,7 +359,7 @@ class Routes {
         name: RouteName.waitList,
         binding: WaitListBinding()),
     GetPage(
-      page: () => WalletUI(),
+      page: () => const WalletPage(),
       name: RouteName.wallet,
       binding: WalletBinding(),
     ),
@@ -379,10 +379,7 @@ class Routes {
       page: () => const ImagePreviewUi(),
       name: RouteName.imagePreviewUi,
     ),
-    GetPage(
-        page: () => const WalletUI(),
-        name: RouteName.walletScreenUI,
-        binding: WalletBinding()),
+
     GetPage(
       page: () =>  PrivacyPolicyUI(),
       name: RouteName.privacyPolicy,

@@ -2325,7 +2325,6 @@ class HomeUI extends GetView<HomeController> {
 
 class SelectedTimeForChat extends StatelessWidget {
   final HomeController? controller;
-
   const SelectedTimeForChat({Key? key, this.controller}) : super(key: key);
 
   @override
@@ -2639,7 +2638,6 @@ class PerformanceDialog extends StatelessWidget {
 
 class SelectedTimeForCall extends StatelessWidget {
   final HomeController? controller;
-
   const SelectedTimeForCall({Key? key, this.controller}) : super(key: key);
 
   @override
