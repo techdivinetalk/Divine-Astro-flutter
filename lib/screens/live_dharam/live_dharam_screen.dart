@@ -3493,12 +3493,15 @@ class _LivePage extends State<LiveDharamScreen>
                       Radius.circular(50.0),
                     ),
                     border: Border.all(
-                      color: appColors.guideColor,
+                      // color: appColors.guideColor,
+                      color: appColors.transparent,
                     ),
-                    color: appColors.black.withOpacity(0.2),
+                    // color: appColors.black.withOpacity(0.2),
+                    color: appColors.transparent,
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    // padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(0.0),
                     child: Image.asset(
                       _controller.isFront
                           ? "assets/images/live_switch_cam_new.png"
@@ -3524,12 +3527,15 @@ class _LivePage extends State<LiveDharamScreen>
                       Radius.circular(50.0),
                     ),
                     border: Border.all(
-                      color: appColors.guideColor,
+                      // color: appColors.guideColor,
+                      color: appColors.transparent,
                     ),
-                    color: appColors.black.withOpacity(0.2),
+                    // color: appColors.black.withOpacity(0.2),
+                    color: appColors.transparent,
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    // padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(0.0),
                     child: Image.asset(
                       _controller.isCamOn
                           ? "assets/images/live_cam_on.png"
@@ -3555,12 +3561,15 @@ class _LivePage extends State<LiveDharamScreen>
                       Radius.circular(50.0),
                     ),
                     border: Border.all(
-                      color: appColors.guideColor,
+                      // color: appColors.guideColor,
+                      color: appColors.transparent,
                     ),
-                    color: appColors.black.withOpacity(0.2),
+                    // color: appColors.black.withOpacity(0.2),
+                    color: appColors.transparent,
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    // padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(0.0),
                     child: Image.asset(
                       _controller.isMicOn
                           ? "assets/images/live_mic_on.png"
@@ -4289,6 +4298,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> sendKeyboardMesage(msg) async {
+    print("sendKeyboardMesage: $msg");
     final bool hasBadWord = _controller.hasMessageContainsAnyBadWord(msg);
     final String text = _controller.algoForSendMessage(msg);
     if (hasBadWord) {

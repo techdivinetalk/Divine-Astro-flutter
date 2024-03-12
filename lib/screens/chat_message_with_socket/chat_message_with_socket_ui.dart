@@ -646,12 +646,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                     },
                                     scrollController:
                                         controller.typingScrollController,
-                                    onTapOutside: (value) {
-                                      // controller.scrollToBottomFunc();
-                                      // if (controller.isEmojiShowing.value) {
-                                      //   controller.isEmojiShowing.value = false;
-                                      // }
-                                    },
                                     onChanged: (value) {
                                       controller.tyingSocket();
                                       // controller.update();
