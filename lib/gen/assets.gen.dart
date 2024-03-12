@@ -259,6 +259,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_blockUserNew.svg
   SvgGenImage get icBlockUserNew =>
       const SvgGenImage('assets/images/ic_blockUserNew.svg');
+  /// File path: assets/images/pooja.svg
+  SvgGenImage get pooja =>
+      const SvgGenImage('assets/images/pooja.svg');
 
   /// File path: assets/images/ic_boy_kundli.svg
   SvgGenImage get icBoyKundli =>
