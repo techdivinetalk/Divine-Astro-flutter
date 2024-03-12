@@ -15,8 +15,9 @@ import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/model/upload_image_model.dart';
 import 'package:divine_astrologer/model/upload_story_response.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
-import 'package:divine_astrologer/screens/remedies/model/add_edit_puja_model.dart';
-import 'package:divine_astrologer/screens/remedies/model/pooja_listing_model.dart';
+import 'package:divine_astrologer/screens/puja/model/add_edit_puja_model.dart';
+import 'package:divine_astrologer/screens/puja/model/pooja_listing_model.dart';
+import 'package:divine_astrologer/screens/remedies/model/remedies_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide FormData;
@@ -307,6 +308,28 @@ class UserRepository extends ApiProvider {
         } else {
           final pujaListModel =
               PujaListingModel.fromJson(json.decode(response.body));
+          return pujaListModel;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+  Future<RemediesModel> getRemedyList(Map<String, dynamic> param) async {
+    try {
+      final response = await post(getRemedyUrl,
+          body: jsonEncode(param).toString(),
+          headers: await getJsonHeaderURL());
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final pujaListModel =
+          RemediesModel.fromJson(json.decode(response.body));
           return pujaListModel;
         }
       } else {

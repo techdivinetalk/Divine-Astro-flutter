@@ -33,6 +33,7 @@ import '../../model/feedback_response.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'home_controller.dart';
 import 'widgets/common_info_sheet.dart';
+import 'widgets/retention_widget.dart';
 
 class HomeUI extends GetView<HomeController> {
   const HomeUI({Key? key}) : super(key: key);
@@ -285,6 +286,51 @@ class HomeUI extends GetView<HomeController> {
                               ),
                             ],
                           ),
+                        ),
+                        SizedBox(height: 12.h),
+
+                        /// new widget
+                        Row(
+                          children: [
+                            Expanded(
+                                child: RetentionWidget(
+                              title: "Bonus Wallet - ₹9999",
+                              subTitle: "Retention Rate - 10%",
+                            )),
+                            SizedBox(width: 10),
+                            Expanded(
+                                child: RetentionWidget(
+                              title: "Bonus Wallet - ₹9999",
+                              subTitle: "Retention Rate - 10%",
+                            )),
+                            SizedBox(width: 10),
+                            Expanded(
+                                child: RetentionWidget(
+                              borderColor: appColors.textColor,
+                              bottomTextColor: appColors.textColor,
+                              bottomColor: appColors.transparent,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Ecommerce Wallet",
+                                    style: AppTextStyle.textStyle10(
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 5
+                                  ),
+                                  Text(
+                                    "₹9999",
+                                    style: AppTextStyle.textStyle10(
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )),
+                          ],
                         ),
                         SizedBox(height: 10.h),
                         Obx(
@@ -2264,6 +2310,7 @@ class HomeUI extends GetView<HomeController> {
 
 class SelectedTimeForChat extends StatelessWidget {
   final HomeController? controller;
+
   const SelectedTimeForChat({Key? key, this.controller}) : super(key: key);
 
   @override
@@ -2577,6 +2624,7 @@ class PerformanceDialog extends StatelessWidget {
 
 class SelectedTimeForCall extends StatelessWidget {
   final HomeController? controller;
+
   const SelectedTimeForCall({Key? key, this.controller}) : super(key: key);
 
   @override

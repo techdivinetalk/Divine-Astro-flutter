@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:aws_s3_upload/aws_s3_upload.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:flutter/material.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:video_trimmer/video_trimmer.dart';
@@ -16,7 +17,7 @@ import 'package:path/path.dart' as p;
 import '../../../repository/user_repository.dart';
 
 class UploadStoryController extends GetxController {
-  final Trimmer trimmer = Trimmer();
+  Trimmer trimmer = Trimmer();
   RxBool? selectedFile = false.obs;
 
   double startValue = 0.0;
@@ -34,10 +35,9 @@ class UploadStoryController extends GetxController {
     userData = preference.getUserDetail();
 
     if (Get.arguments != null) {
-      if (Get.arguments is String) {
-        trimmer.loadVideo(videoFile: File(Get.arguments));
-        selectedFile?.value = true;
-      }
+      trimmer.loadVideo(videoFile: File(Get.arguments));
+      selectedFile?.value = true;
+      update();
     }
   }
 
@@ -46,9 +46,14 @@ class UploadStoryController extends GetxController {
     trimmer.saveTrimmedVideo(
       startValue: startValue,
       endValue: endValue,
-      onSave: (outputPath) {
+      onSave: (outputPath) async {
         progressVisibility.value = false;
+        print(outputPath);
         debugPrint('OUTPUT PATH: $outputPath');
+
+        print(trimmer.videoPlayerController!.value.duration.inSeconds);
+
+        print("infoinfoinfoinfoinfo");
         uploadImageToS3Bucket(File(outputPath!));
       },
     );
@@ -79,7 +84,11 @@ class UploadStoryController extends GetxController {
 
   Future<void> uploadStory(String url) async {
     try {
-      Map<String, dynamic> param = {"media_url": url};
+      Map<String, dynamic> param = {
+        "media_url": url,
+        "astrologer_id": userData?.id,
+        "duration": trimmer.videoPlayerController!.value.duration.inSeconds,
+      };
       final response = await userRepository.uploadAstroStory(param);
       if (response.statusCode == 200 && response.success == true) {
         Get.back();

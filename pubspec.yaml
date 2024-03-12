@@ -17,6 +17,7 @@ dependencies:
   connectivity_plus: ^4.0.1
   contacts_service: ^0.6.3
   country_state_city: ^0.1.6
+  video_player: ^2.8.3
   cupertino_icons: ^1.0.2
   custom_rating_bar: ^2.0.5
   custom_timer: ^0.2.3

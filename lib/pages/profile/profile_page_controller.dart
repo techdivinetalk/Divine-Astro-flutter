@@ -166,8 +166,8 @@ class ProfilePageController extends GetxController {
         '/blockedUser'),
     ProfileOptionModelClass(
         "Pooja", Assets.images.pooja.svg(width: 30.h, height: 30.h), ''),
-    ProfileOptionModelClass("Add Remedies",
-        Assets.images.remedies.svg(width: 30.h, height: 30.h), ''),
+    // ProfileOptionModelClass("Add Remedies",
+    //     Assets.images.remedies.svg(width: 30.h, height: 30.h), ''),
   ].obs;
 
   selectedLanguageData(ChangeLanguageModelClass item) {

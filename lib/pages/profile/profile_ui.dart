@@ -492,8 +492,10 @@ class ProfileUI extends GetView<ProfilePageController> {
                       } else if (index == 5) {
                         Get.toNamed(RouteName.faq);
                       } else if (index == 9) {
+                        Get.toNamed(RouteName.puja);
+                      } /*else if (index == 10) {
                         Get.toNamed(RouteName.remedies);
-                      }
+                      }*/
                     },
                     child: Container(
                       padding: const EdgeInsets.all(10),
