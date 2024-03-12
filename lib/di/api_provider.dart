@@ -57,6 +57,7 @@ class ApiProvider {
   final String getProfileUrl = "getAstrologerProfile";
   final String getReviewRatingUrl = "getReviewRating";
   final String getPoojaListUrl = "getPoojaList";
+  final String getRemedyUrl = "getRemedy";
   final String blockCustomerlistUrl = "blockCustomerlist";
   final String blockCustomerUrl = "blockCustomer";
   final String uploadAstroImage = "uploadAstroImage";

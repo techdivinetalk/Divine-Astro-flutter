@@ -4,8 +4,8 @@ import 'package:divine_astrologer/pages/profile/profile_binding.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_binding.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_ui.dart';
-import 'package:divine_astrologer/screens/add_remedies/add_remedies_binding.dart';
-import 'package:divine_astrologer/screens/add_remedies/add_remedies_form.dart';
+import 'package:divine_astrologer/screens/add_puja/add_puja_binding.dart';
+import 'package:divine_astrologer/screens/add_puja/add_puja_form.dart';
 import 'package:divine_astrologer/screens/auth/login/login_binding.dart';
 import 'package:divine_astrologer/screens/auth/login/login_ui.dart';
 import 'package:divine_astrologer/screens/blocked_user/blocked_user_bindings.dart';
@@ -45,8 +45,12 @@ import 'package:divine_astrologer/screens/order_feedback/order_feedback_binding.
 import 'package:divine_astrologer/screens/order_feedback/order_feedback_ui.dart';
 import 'package:divine_astrologer/screens/otp_verification/otp_verification_binding.dart';
 import 'package:divine_astrologer/screens/otp_verification/otp_verification_ui.dart';
-import 'package:divine_astrologer/screens/remedies/Remedies_binding.dart';
-import 'package:divine_astrologer/screens/remedies/remedies_view.dart';
+import 'package:divine_astrologer/screens/puja/puja_binding.dart';
+import 'package:divine_astrologer/screens/puja/puja_view.dart';
+import 'package:divine_astrologer/screens/remedies/binding/add_remedies_binding.dart';
+import 'package:divine_astrologer/screens/remedies/binding/remedies_binding.dart';
+import 'package:divine_astrologer/screens/remedies/screen/add_remedies_screen.dart';
+import 'package:divine_astrologer/screens/remedies/screen/remedies_screen.dart';
 import 'package:divine_astrologer/screens/side_menu/donation/donation_ui.dart';
 import 'package:divine_astrologer/screens/side_menu/settings/inner_pages/privacy_policy_ui.dart';
 import 'package:divine_astrologer/screens/side_menu/settings/inner_pages/terms_condition_ui.dart';
@@ -167,6 +171,8 @@ class RouteName {
   static const String imagePreviewUi = "/imagePreviewUi";
   static const String walletScreenUI = "/walletScreenUI";
   static const String privacyPolicy = "/privacyPolicy";
+  static const String remedies = "/remedies";
+  static const String addRemedies = "/addRemedies";
   static const String termsCondition = "/termsCondition";
   static const String videoCallPage = "/videoCallPage";
   static const String videoCall = "/videoCall";
@@ -180,8 +186,8 @@ class RouteName {
   static const String feedback = "/feedback";
   static const String liveDharamScreen = "/liveDharamScreen";
   static const String faq = "/faqPage";
-  static const String remedies = "/remedies";
-  static const String addRemedies = "/addRemedies";
+  static const String puja = "/puja";
+  static const String addPuja = "/addPujaScreen";
   static const String remediesDetail = "/RemediesDetailsView";
   static const String acceptChatRequestScreen = "/AcceptChatRequestScreen";
 }
@@ -189,6 +195,8 @@ class RouteName {
 final Set<String> validRoutes = {
   RouteName.chatMessageUI,
   RouteName.faq,
+  RouteName.puja,
+  RouteName.addPuja,
   RouteName.remedies,
   RouteName.addRemedies,
   RouteName.remediesDetail,
@@ -378,6 +386,16 @@ class Routes {
     GetPage(
       page: () =>  PrivacyPolicyUI(),
       name: RouteName.privacyPolicy,
+    ),   GetPage(
+      page: () =>  RemediesScreen(),
+      name: RouteName.remedies,
+        binding: RemediesBindings(),
+      // name: RouteName.remedies,
+    ), GetPage(
+      page: () =>  AddRemedies(),
+      name: RouteName.addRemedies,
+        binding: AddRemediesBindings(),
+      // name: RouteName.remedies,
     ),
     GetPage(
       page: () => TermsConditionUI(),
@@ -441,14 +459,14 @@ class Routes {
       binding: FAQsBindings(),
     ),
     GetPage(
-      page: () => const Remedies(),
-      name: RouteName.remedies,
-      binding: RemediesBindings(),
+      page: () => const PujaScreen(),
+      name: RouteName.puja,
+      binding: PujaBindings(),
     ),
     GetPage(
-      page: () => const AddRemedies(),
-      name: RouteName.addRemedies,
-      binding: AddRemediesBindings(),
+      page: () => const AddPujaScreen(),
+      name: RouteName.addPuja,
+      binding: AddPujaBindings(),
     ),
     GetPage(
       page: () => const RemediesDetailPage(),

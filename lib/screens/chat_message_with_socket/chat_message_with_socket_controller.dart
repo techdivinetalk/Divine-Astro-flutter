@@ -659,8 +659,10 @@ class ChatMessageWithSocketController extends GetxController
         final ChatMessage chatMessage =
             ChatMessage.fromOfflineJson(data["data"]);
         final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-        log(' data inside receiver ${chatMessage.toOfflineJson()}');
-        if (chatMessage.msgType == "sendGifts") {
+        log('${chatMessage.toOfflineJson()}');
+        log('sendGiftss ${chatMessage.msgType}');
+        log('sendGiftss ${chatMessage.msgType == MsgType.gift}');
+        if (chatMessage.msgType == MsgType.sendgifts) {
           if (chatMessage.title != null && chatMessage.title != "") {
             debugPrint("sendMesxxx $data");
             playAnimation(id: chatMessage.title ?? "");

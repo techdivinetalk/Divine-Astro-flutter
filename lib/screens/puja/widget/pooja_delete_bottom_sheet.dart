@@ -1,6 +1,6 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/screens/remedies/model/pooja_listing_model.dart';
+import 'package:divine_astrologer/screens/puja/model/pooja_listing_model.dart';
 import 'package:divine_astrologer/tarotCard/widget/custom_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

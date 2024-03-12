@@ -6,8 +6,8 @@ import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
-import 'package:divine_astrologer/screens/remedies/model/pooja_listing_model.dart';
-import 'package:divine_astrologer/screens/remedies/remedies_controller.dart';
+import 'package:divine_astrologer/screens/puja/model/pooja_listing_model.dart';
+import 'package:divine_astrologer/screens/puja/puja_controller.dart';
 import 'package:divine_astrologer/tarotCard/widget/custom_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,14 +15,14 @@ import 'package:get/get.dart';
 
 import 'widget/pooja_delete_bottom_sheet.dart';
 
-class Remedies extends GetView<RemediesController> {
-  const Remedies({super.key});
+class PujaScreen extends GetView<PujaController> {
+  const PujaScreen    ({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<RemediesController>(
+    return GetBuilder<PujaController>(
       assignId: true,
-      init: RemediesController(),
+      init: PujaController(),
       builder: (controller) {
         return Scaffold(
           appBar: AppBar(
@@ -48,7 +48,7 @@ class Remedies extends GetView<RemediesController> {
                     onPressed: () {
                       int idToPass = 0;
                       Get.toNamed(
-                        RouteName.addRemedies,
+                        RouteName.addPuja,
                         arguments: {
                           'edit': false,
                           'id': idToPass,
@@ -102,7 +102,7 @@ class Remedies extends GetView<RemediesController> {
                               CustomImageView(
                                 height: 65,
                                 width: 65,
-                                imagePath: data.poojaImg ?? "",
+                                imagePath:controller.pref.getAmazonUrl()! + data.poojaImg!,
                                 radius: BorderRadius.circular(10),
                                 placeHolder:
                                     "assets/images/default_profiles.svg",
@@ -173,7 +173,7 @@ class Remedies extends GetView<RemediesController> {
                                                   .svg(),
                                               onPressed: () {
                                                 Get.toNamed(
-                                                  RouteName.addRemedies,
+                                                  RouteName.addPuja,
                                                   arguments: {
                                                     'edit': true,
                                                     'pujaData': data,
