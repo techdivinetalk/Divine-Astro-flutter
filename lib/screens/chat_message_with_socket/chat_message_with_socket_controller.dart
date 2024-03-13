@@ -451,7 +451,7 @@ class ChatMessageWithSocketController extends GetxController
     loading = Loading.loading;
     update();
     try {
-      ResCommonChatStatus response = await ChatRepository().endChat(param);
+      await ChatRepository().endChat(param);
       loading = Loading.loaded;
       WidgetsBinding.instance.endOfFrame.then(
         (_) async {
@@ -459,6 +459,7 @@ class ChatMessageWithSocketController extends GetxController
           chatTimer?.cancel();
           Get.until(
             (route) {
+              AppFirebaseService().orderData.value = {};
               return Get.currentRoute == RouteName.dashboard;
             },
           );
