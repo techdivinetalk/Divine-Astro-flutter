@@ -46,7 +46,6 @@ class DashboardController extends GetxController
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {
       print("broadCastResponse");
-      print(event.name == "ReJoinChat");
       print(AppFirebaseService().openChatUserId != "");
       print(event.data!["orderData"]);
       if (event.name == "ReJoinChat" &&

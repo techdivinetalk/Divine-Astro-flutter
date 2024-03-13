@@ -459,7 +459,6 @@ class ChatMessageWithSocketController extends GetxController
           chatTimer?.cancel();
           Get.until(
             (route) {
-              AppFirebaseService().orderData.value = {};
               return Get.currentRoute == RouteName.dashboard;
             },
           );
@@ -484,9 +483,13 @@ class ChatMessageWithSocketController extends GetxController
         socket.leavePrivateChatEmit(userData?.id.toString(),
             AppFirebaseService().orderData.value["userId"], "0");
         chatTimer?.cancel();
-        Get.back();
-        Get.back();
+        Get.until(
+              (route) {
+            return Get.currentRoute == RouteName.dashboard;
+          },
+        );
         if (AppFirebaseService().orderData.value["status"] == "4") {
+          AppFirebaseService().orderData.value["status"] = "5";
           // DatabaseReference ref = FirebaseDatabase.instance.ref("order/${AppFirebaseService().orderData.value["orderId"]}");
           // ref.update({
           //   "status": "5",
