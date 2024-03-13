@@ -27,7 +27,7 @@ class WalletController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    //getWalletDetailsApi();
+    getWalletDetailsApi();
   }
 
 
@@ -37,6 +37,7 @@ class WalletController extends GetxController {
     try {
       PayoutDetails response = await walletRepository.walletPayOutDetails();
       walletListRepo.value = response;
+      print("Walet Data:: ${walletListRepo.value.toJson()}");
       loading = Loading.loaded;
     } catch (error) {
       debugPrint("error $error");

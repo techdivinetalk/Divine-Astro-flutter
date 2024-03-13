@@ -1,169 +1,210 @@
+import 'package:divine_astrologer/common/common_bottomsheet.dart';
+import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/wallet/wallet_model.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_controller.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:divine_astrologer/utils/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
+import 'package:velocity_x/velocity_x.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/appbar.dart';
 import '../../../common/colors.dart';
-import '../../../common/common_bottomsheet.dart';
-import '../../../common/common_options_row.dart';
 
-class WalletUI extends GetView<WalletController> {
-  const WalletUI({Key? key}) : super(key: key);
+class WalletPage extends GetView<WalletController> {
+  const WalletPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: appColors.white,
       appBar: commonAppbar(
-          title: "wallet".tr,
-          trailingWidget: InkWell(
-            onTap: () {
-              Get.offNamed(RouteName.orderHistory);
-            },
-            child: Padding(
-                padding: EdgeInsets.only(right: 20.w),
-                child: Assets.images.icOrderHistory.svg()),
-          )),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: Column(
-            children: [
-              /*durationWidget(),
-              const SizedBox(height: 20),*/
-            /*  balanceView(),*/
-             /* const SizedBox(height: 20),
-              Container(
-                  height: 1.h, color: appColors.darkBlue.withOpacity(0.5)),
-              const SizedBox(height: 20),*/
-         /* Obx(() => ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: controller.walletListRepo.value.data?.paymentLog.length,
-            itemBuilder: (context, index) {
-              var orderDetail = controller.walletListRepo.value.data?.paymentLog[index];
-              Widget separator = const SizedBox(height: 30);
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  orderDetailView(
-                    orderId: orderDetail?.id,
-                    type: orderDetail?.status,
-                    amount: orderDetail?.totalAmount.toString() ?? "",
-                    details: orderDetail?.discount,
-                    time: orderDetail?.date,
-                  ),
-                  separator,
-                ],
-              );
-            },
-          ))*/
-          ],
+        title: "wallet".tr,
+        trailingWidget: InkWell(
+          onTap: () => Get.offNamed(RouteName.orderHistory),
+          child: Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Assets.images.icOrderHistory.svg(),
           ),
         ),
       ),
-    );
-  }
-
-  /* Widget durationWidget() {
-    return Container(
-        padding: EdgeInsets.all(8.h),
-        decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 3.0,
-                  offset: const Offset(0.0, 3.0)),
-            ],
-            color: appColors.white,
-            borderRadius: const BorderRadius.all(Radius.circular(20))),
-        child: durationOptions());
-  }*/
-
-/*  Widget balanceView() {
-    return SizedBox(
-      height: 60.h,
-      width: ScreenUtil().screenWidth,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
-        itemCount: (controller.walletListRepo.value.data ?? []).length,
-        itemBuilder: (context, index) {
-          var balance = controller.walletListRepo.value.data?[index];
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 60.w,
-                child: amountDetailView(
-                    amountType: balance!.totalAmountEarned.amountEarned! ?? "",
-                    amount: "100000",
-                    is2linesRequired:
-                        controller.amountTypeList[index] == "tds".tr
-                            ? false
-                            : true,
-                    boldTextStyle:
-                        controller.amountTypeList[index] == "totalAmount".tr
-                            ? true
-                            : false),
+      body: Column(
+        children: [
+          /*  balanceView(),*/
+         Row(
+           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+           children: [
+             SizedBox(
+               width: 60.w,
+               child: Column(
+                 children: [
+                   Text(
+                     'Available Balance:',
+                     textAlign: TextAlign.center,
+                     maxLines: 2,
+                     style: AppTextStyle.textStyle12(
+                         fontColor: appColors.darkBlue,
+                         fontWeight: FontWeight.w400
+                     ),
+                   ),
+                   const SizedBox(height: 10),
+                   Text(
+                     '₹${controller.walletListRepo.value.data?.totalAmountEarned.amountEarned ?? 0}',
+                     style: AppTextStyle.textStyle12(
+                         fontColor: appColors.darkBlue,
+                         fontWeight: FontWeight.w400
+                     ),
+                   ),
+                 ],
+               ),
+             ),
+             SizedBox(
+               width: 60.w,
+               child: Column(
+                 children: [
+                   Text(
+                     'PG \n Charges:',
+                     textAlign: TextAlign.center,
+                     maxLines: 2,
+                     style: AppTextStyle.textStyle12(
+                         fontColor: appColors.darkBlue,
+                         fontWeight: FontWeight.w400
+                     ),
+                   ),
+                   const SizedBox(height: 10),
+                   Text(
+                     '₹${controller.walletListRepo.value.data?.productRevenue.amount ?? 0}',
+                     style: AppTextStyle.textStyle12(
+                         fontColor: appColors.darkBlue,
+                         fontWeight: FontWeight.w400
+                     ),
+                   ),
+                 ],
+               ),
+             ),
+             SizedBox(
+               width: 60.w,
+               child: Column(
+                 children: [
+                   Text(
+                     'Sub \n Total:',
+                     textAlign: TextAlign.center,
+                     maxLines: 2,
+                     style: AppTextStyle.textStyle12(
+                         fontColor: appColors.darkBlue,
+                         fontWeight: FontWeight.w400
+                     ),
+                   ),
+                   const SizedBox(height: 10),
+                   Text(
+                     '₹${controller.walletListRepo.value.data?.weeklyOrder.count ?? 0}',
+                     style: AppTextStyle.textStyle12(
+                         fontColor: appColors.darkBlue,
+                         fontWeight: FontWeight.w400
+                     ),
+                   ),
+                 ],
+               ),
+             ),
+             SizedBox(
+               width: 60.w,
+               child: Column(
+                 children: [
+                   Text(
+                     'Product  \n Sold:',
+                     textAlign: TextAlign.center,
+                     maxLines: 2,
+                     style: AppTextStyle.textStyle12(
+                         fontColor: appColors.darkBlue,
+                         fontWeight: FontWeight.w400
+                     ),
+                   ),
+                   const SizedBox(height: 10),
+                   Text(
+                     '₹${controller.walletListRepo.value.data?.productSold.count ?? 0}',
+                     style: AppTextStyle.textStyle12(
+                         fontColor: appColors.darkBlue,
+                         fontWeight: FontWeight.w400
+                     ),
+                   ),
+                 ],
+               ),
+             ),
+             SizedBox(
+               width: 60.w,
+               child: Column(
+                 children: [
+                   Text(
+                     'Total \n Amount',
+                     textAlign: TextAlign.center,
+                     maxLines: 2,
+                     style: AppTextStyle.textStyle12(
+                       fontWeight: FontWeight.bold,
+                     ),
+                   ),
+                   const SizedBox(height: 10),
+                   Text(
+                     '₹${controller.walletListRepo.value.data?.totalAmountEarned.amountEarned ?? 0}',
+                     style: AppTextStyle.textStyle12(
+                       fontWeight: FontWeight.bold,
+                     ),
+                   ),
+                 ],
+               ),
+             ),
+           ],
+         ).scrollHorizontal(),
+           const SizedBox(height: 20),
+              Container(
+                  height: 1.h, color: appColors.darkBlue.withOpacity(0.5)),
+              const SizedBox(height: 20),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Obx(
+                      () {
+                    final paymentLogList =
+                        controller.walletListRepo.value.data?.paymentLog;
+                    if (controller.loading == Loading.loading) {
+                      return const GenericLoadingWidget();
+                    } else if (paymentLogList != null &&
+                        paymentLogList.isNotEmpty) {
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: paymentLogList.length,
+                        separatorBuilder: (context, index) =>
+                        const SizedBox(height: 20),
+                        itemBuilder: (context, index) {
+                          final log = paymentLogList[index];
+                          return PaymentLogTile(log: log!);
+                        },
+                      );
+                    } else {
+                      return const Text('No data available');
+                    }
+                  },
+                ),
               ),
-              const SizedBox(width: 10)
-            ],
-          );
-        },
+            ),
+          )
+        ],
       ),
     );
-    // Container();
-  }*/
-
-  Widget amountDetailView(
-      {required String amountType,
-      required String amount,
-      required bool is2linesRequired,
-      required bool boldTextStyle}) {
-    return Column(
-      children: [
-        if (is2linesRequired)
-          Text("$amountType:",
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              style: AppTextStyle.textStyle12(
-                  fontColor: appColors.darkBlue,
-                  fontWeight:
-                      boldTextStyle ? FontWeight.w700 : FontWeight.w400)),
-        if (!is2linesRequired)
-          Padding(
-            padding: const EdgeInsets.only(top: 10, bottom: 9),
-            child: Text("${"tds".tr}:",
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                style: AppTextStyle.textStyle12(
-                    fontColor: appColors.darkBlue,
-                    fontWeight: FontWeight.w400)),
-          ),
-        const SizedBox(height: 10),
-        Text(amount, //"₹100000",
-            maxLines: 2,
-            textAlign: TextAlign.center,
-            style: AppTextStyle.textStyle10(
-                fontColor: appColors.darkBlue,
-                fontWeight: boldTextStyle ? FontWeight.w700 : FontWeight.w400)),
-      ],
-    );
   }
 
-  Widget orderDetailView(
-      {required int? orderId,
-      required String? type,
-      required String? amount,
-      required String? details,
-      required String? time}) {
+}
+
+class PaymentLogTile extends StatelessWidget {
+  final PaymentLog log;
+
+  const PaymentLogTile({super.key, required this.log});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
@@ -198,13 +239,13 @@ class WalletUI extends GetView<WalletController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Order Id : $orderId",
+                  "${"orderId".tr} : ${log.orderId}",
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500),
                 ),
                 Icon(
                   Icons.help_outline,
                   size: 20,
-                  color: appColors.darkBlue.withOpacity(0.5),
+                  color: appColors.darkBlue,
                 )
               ],
             ),
@@ -214,51 +255,59 @@ class WalletUI extends GetView<WalletController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "$type",
+                log.payoutFor != "chat" ? 'Chat' : 'Call',
                 style: AppTextStyle.textStyle12(
-                    fontWeight: FontWeight.w400,
-                    fontColor: "$type" == "PENALTY"
-                        ? appColors.appRedColour
-                        : appColors.darkBlue),
+                  fontWeight: FontWeight.w400,
+                  /*fontColor: "$type" == "PENALTY"
+                          ? appColors.appRedColour
+                          : appColors.darkBlue*/
+                ),
               ),
               Text(
-                "$amount",
+                "+ ₹${log.totalAmount}",
                 style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w400,
-                    fontColor: amount!.contains("+")
-                        ? appColors.lightGreen
-                        : appColors.appRedColour),
+                    fontColor: /*data[index].amount.toString().contains("+")
+                          ?*/
+                        appColors.lightGreen /*: appColors.appRedColour*/),
               )
             ],
           ),
           Text(
-            "$details ",
+            // "with Username(user id) for 8 minutes "
+            "with ${log.customerDetails?.name}(${log.customerDetails?.id}) for ${log.callDuration} minutes",
             textAlign: TextAlign.start,
             style: AppTextStyle.textStyle12(
-                fontWeight: FontWeight.w400,
-                fontColor: appColors.darkBlue.withOpacity(0.5)),
+                fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
           ),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                "$time",
+                log.date != null ? log.date! : "N/A",
                 textAlign: TextAlign.end,
                 style: AppTextStyle.textStyle12(
-                    fontWeight: FontWeight.w400,
-                    fontColor: appColors.darkBlue.withOpacity(0.5)),
+                    fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
               ),
             ],
           ),
           const SizedBox(height: 20),
-          CommonOptionRow(
-            leftBtnTitle: "refund".tr,
-            onLeftTap: () {},
-            onRightTap: () {},
+          /*CommonOptionRow(
+            feedbackReviewStatus: data[index].feedbackReviewStatus ?? 0,
+            leftBtnTitle: "FeedBack".tr,
+            onLeftTap: () {
+              Get.toNamed(RouteName.feedback, arguments: {
+                'order_id': data[index].id,
+                'product_type': data[index].productType,
+              });
+            },
+            onRightTap: () {
+              Get.toNamed(RouteName.suggestRemediesView, arguments: data[index].id);
+            },
             rightBtnTitle: "suggestedRemediesEarning".tr,
-          ),
-          const SizedBox(height: 20),
+          ),*/
+          const SizedBox(height: 10),
         ],
       ),
     );
@@ -405,62 +454,4 @@ class WalletUI extends GetView<WalletController> {
       ],
     );
   }
-
-/* Widget durationOptions() {
-    return Obx(() => DropdownButtonHideUnderline(
-          child: DropdownButton2<String>(
-            isExpanded: true,
-            hint: Text(
-              "June - 2023 ",
-              style: AppTextStyle.textStyle16(
-                  fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
-            ),
-            items: controller.durationOptions
-                .map((String item) => DropdownMenuItem<String>(
-                      value: item,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: Text(
-                          item.tr,
-                          style: AppTextStyle.textStyle16(
-                              fontWeight: FontWeight.w400,
-                              fontColor: appColors.darkBlue),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ))
-                .toList(),
-            style: AppTextStyle.textStyle16(
-                fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
-            value: controller.selectedValue.value,
-            onChanged: (String? value) {
-              controller.selectedValue.value = value ?? "daily".tr;
-            },
-            iconStyleData:  IconStyleData(
-              icon: const Icon(
-                Icons.keyboard_arrow_down,
-              ),
-              iconSize: 35,
-              iconEnabledColor: appColors.blackColor,
-            ),
-            dropdownStyleData: DropdownStyleData(
-              width: ScreenUtil().screenWidth * 0.9,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
-                color: appColors.white,
-              ),
-              offset: const Offset(-8, -17),
-              scrollbarTheme: ScrollbarThemeData(
-                radius: const Radius.circular(40),
-                thickness: MaterialStateProperty.all<double>(6),
-                thumbVisibility: MaterialStateProperty.all<bool>(false),
-              ),
-            ),
-            menuItemStyleData: const MenuItemStyleData(
-              height: 40,
-              padding: EdgeInsets.only(left: 14, right: 14),
-            ),
-          ),
-        ));
-  }*/
 }

@@ -40,15 +40,15 @@ class PayoutDetails {
 
 class Data {
   final TotalAmountEarned totalAmountEarned;
-  final double payoutPending;
+  final dynamic payoutPending;
   final ProductRevenue productRevenue;
   final WeeklyOrder weeklyOrder;
   final ProductSold productSold;
   final CallPickup callPickup;
   final Ratings ratings;
   final List<PaymentLog> paymentLog;
-  final double tds;
-  final double totalPaymentGatewayCharges;
+  final dynamic tds;
+  final dynamic totalPaymentGatewayCharges;
 
   Data({
     required this.totalAmountEarned,
@@ -95,7 +95,7 @@ class Data {
 }
 
 class TotalAmountEarned {
-  final double amountEarned;
+  final dynamic amountEarned;
   final int percentage;
   final String increaseDecrease;
 
@@ -123,7 +123,7 @@ class TotalAmountEarned {
 }
 
 class ProductRevenue {
-  final double amount;
+  final dynamic amount;
   final int percentage;
   final String increaseDecrease;
 
@@ -263,53 +263,53 @@ class Ratings {
 }
 
 class PaymentLog {
-  final int id;
-  final String payoutFor;
-  final double tax;
-  final double paymentGateway;
-  final double totalAmount;
-  final String status;
-  final String date;
-  final double actualPayments;
-  final String discount;
-  final String orderId;
-  final String callDuration;
-  final String callStatus;
-  final CustomerDetails customerDetails;
+  int? id;
+  String? payoutFor;
+  dynamic tax;
+  dynamic paymentGateway;
+  dynamic totalAmount;
+  String? status;
+  String? date;
+  dynamic actualPayments;
+  dynamic discount;
+  String? orderId;
+  String? callDuration;  // Update this line
+  String? callStatus;
+  CustomerDetails? customerDetails;
 
   PaymentLog({
-    required this.id,
-    required this.payoutFor,
-    required this.tax,
-    required this.paymentGateway,
-    required this.totalAmount,
-    required this.status,
-    required this.date,
-    required this.actualPayments,
-    required this.discount,
-    required this.orderId,
-    required this.callDuration,
-    required this.callStatus,
-    required this.customerDetails,
+    this.id,
+    this.payoutFor,
+    this.tax,
+    this.paymentGateway,
+    this.totalAmount,
+    this.status,
+    this.date,
+    this.actualPayments,
+    this.discount,
+    this.orderId,
+    this.callDuration,
+    this.callStatus,
+    this.customerDetails,
   });
 
-  factory PaymentLog.fromJson(Map<String, dynamic> json) {
-    return PaymentLog(
-      id: json['id'],
-      payoutFor: json['payout_for'],
-      tax: json['tax'],
-      paymentGateway: json['paymet_gateway'],
-      totalAmount: json['total_amount'],
-      status: json['status'],
-      date: json['date'],
-      actualPayments: json['actual_payments'],
-      discount: json['discount'],
-      orderId: json['order_id'],
-      callDuration: json['call_duration'],
-      callStatus: json['call_status'],
-      customerDetails: CustomerDetails.fromJson(json['customer_details']),
-    );
-  }
+  factory PaymentLog.fromJson(Map<String, dynamic> json) => PaymentLog(
+    id: json['id'],
+    payoutFor: json['payout_for'],
+    tax: json['tax'],
+    paymentGateway: json['paymet_gateway'],
+    totalAmount: json['total_amount'],
+    status: json['status'],
+    date: json['date'],
+    actualPayments: json['actual_payments'],
+    discount: json['discount'],
+    orderId: json['order_id'],
+    callDuration: json['call_duration'],  // Update this line
+    callStatus: json['call_status'],
+    customerDetails: json['customer_details'] != null
+        ? CustomerDetails.fromJson(json['customer_details'])
+        : null,
+  );
 
   Map<String, dynamic> toJson() {
     return {
@@ -323,9 +323,9 @@ class PaymentLog {
       'actual_payments': actualPayments,
       'discount': discount,
       'order_id': orderId,
-      'call_duration': callDuration,
+      'call_duration': callDuration,  // Update this line
       'call_status': callStatus,
-      'customer_details': customerDetails.toJson(),
+      'customer_details': customerDetails?.toJson(),
     };
   }
 }
