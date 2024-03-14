@@ -432,6 +432,7 @@ class _LivePage extends State<LiveDharamScreen>
           _timer = Timer.periodic(
             duration,
             (Timer timer) async {
+              /// if any function after some second
               if (timer.tick % 1 == 0) {
                 // math.Random.secure().nextInt(30).isEven
                 //     ? await manMessage()
@@ -3552,8 +3553,7 @@ class _LivePage extends State<LiveDharamScreen>
                 final ZegoUIKit instance = ZegoUIKit.instance;
                 _controller.isMicOn = !_controller.isMicOn;
                 _controller.update();
-                instance.turnMicrophoneOn(_controller.isMicOn,
-                    muteMode: _controller.isMicOn); 
+                instance.turnMicrophoneOn(_controller.isMicOn, muteMode: true);
               },
               child: SizedBox(
                 height: 32,

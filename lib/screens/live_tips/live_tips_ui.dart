@@ -37,17 +37,22 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                     end: Alignment.bottomCenter,
                     colors: [Colors.transparent, Colors.black],
                   ).createShader(
-                      Rect.fromLTRB(0, -140, rect.width, rect.height - 20));
+                    Rect.fromLTRB(0, -140, rect.width, rect.height - 20),
+                  );
                 },
                 blendMode: BlendMode.darken,
                 child: Container(
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
-                        colors: [Colors.transparent, Colors.black],
-                        begin: FractionalOffset(0, 0),
-                        end: FractionalOffset(0, 1),
-                        stops: [0.0, 2.0],
-                        tileMode: TileMode.clamp),
+                      colors: [Colors.transparent, Colors.black],
+                      begin: FractionalOffset(0, 0),
+                      end: FractionalOffset(0, 1),
+                      stops: [
+                        0.0,
+                        2.0,
+                      ],
+                      tileMode: TileMode.clamp,
+                    ),
                     image: DecorationImage(
                       image: ExactAssetImage(Assets.images.bgLiveTemp.path),
                       fit: BoxFit.cover,
@@ -86,17 +91,16 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                             child: InkWell(
                               onTap: () {
                                 controller.isFrontCamera.value =
-                                !controller.isFrontCamera.value;
+                                    !controller.isFrontCamera.value;
                               },
                               child: Obx(
-                                    () =>
-                                    Icon(
-                                      controller.isFrontCamera.value
-                                          ? Icons.camera_front
-                                          : Icons.camera_alt,
-                                      color: appColors.white,
-                                      size: 28.sp,
-                                    ),
+                                () => Icon(
+                                  controller.isFrontCamera.value
+                                      ? Icons.camera_front
+                                      : Icons.camera_alt,
+                                  color: appColors.white,
+                                  size: 28.sp,
+                                ),
                               ),
                             ),
                           ),
@@ -176,16 +180,17 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                           borderRadius: BorderRadius.circular(50),
                           child: CommonButton(
                             buttonText: "startLive".tr,
-                            buttonCallback: snapshot.hasData &&
-                                snapshot.data == false
-                                ? () async {
-                              controller.streamController.add(true);
-                              await furtherProcedure();
-                              controller.streamController.add(false);
-                            }
-                                : () {
-                              divineSnackBar(data: "Loading, please wait...");
-                            },
+                            buttonCallback:
+                                snapshot.hasData && snapshot.data == false
+                                    ? () async {
+                                        controller.streamController.add(true);
+                                        await furtherProcedure();
+                                        controller.streamController.add(false);
+                                      }
+                                    : () {
+                                        divineSnackBar(
+                                            data: "Loading, please wait...");
+                                      },
                           ),
                         );
                       },
@@ -286,7 +291,8 @@ class LiveTipsUI extends GetView<LiveTipsController> {
           connectSocket();
           await controller.furtherProcedure();
           final (bool, String) can2 = await canExit();
-          if (can2.$1 == true && can2.$2 == "") {} else {
+          if (can2.$1 == true && can2.$2 == "") {
+          } else {
             divineSnackBar(data: can2.$2);
           }
         } else {
@@ -305,7 +311,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
   Future<bool> permissionCheck() async {
     bool hasAllPerm = false;
     await AppPermissionService.instance.onPressedAstrologerGoLive(
-          () async {
+      () async {
         hasAllPerm = true;
       },
     );
@@ -317,12 +323,8 @@ class LiveTipsUI extends GetView<LiveTipsController> {
 
     var pref = controller.pref;
 
-    final String userId = (pref
-        .getUserDetail()
-        ?.id ?? "").toString();
-    final String userName = pref
-        .getUserDetail()
-        ?.name ?? "";
+    final String userId = (pref.getUserDetail()?.id ?? "").toString();
+    final String userName = pref.getUserDetail()?.name ?? "";
     // final String awsURL = pref.getAmazonUrl() ?? "";
     // final String image = pref.getUserDetail()?.image ?? "";
 
@@ -354,9 +356,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
   }
 
   void connectSocket() {
-    final int userId = controller.pref
-        .getUserDetail()
-        ?.id ?? 0;
+    final int userId = controller.pref.getUserDetail()?.id ?? 0;
     AppSocket().joinLive(userType: "astrologer", userId: userId);
     return;
   }

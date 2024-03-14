@@ -24,10 +24,10 @@ class AddPujaController extends GetxController {
   TextEditingController poojaDes = TextEditingController();
   TextEditingController poojaPrice = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  var durationOptions = ['Puja', 'remedies', 'mahakali', 'custom'].obs;
+  var durationOptions = ['Puja', "Product"].obs;
   RxString selectedValue = "Puja".obs;
 
-  PujaListingData? pujaListingData;
+  PujaListingData? pujaListingData; 
 
   File? image;
   final picker = ImagePicker();
