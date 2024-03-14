@@ -6,6 +6,7 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/screens/add_puja/model/puja_product_categories_model.dart';
 import 'package:divine_astrologer/screens/puja/model/pooja_listing_model.dart';
 import 'package:divine_astrologer/screens/puja/widget/pooja_submited_sheet.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,8 +27,13 @@ class AddPujaController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   var durationOptions = ['Puja', "Product"].obs;
   RxString selectedValue = "Puja".obs;
+  List<PujaProductCategoriesData> selectedTag = [];
 
-  PujaListingData? pujaListingData; 
+  PujaProductCategoriesData? selectedCategory;
+  List<PujaProductCategoriesData> categoriesType = [];
+  List<PujaProductCategoriesData> tagType = [];
+
+  PujaListingData? pujaListingData;
 
   File? image;
   final picker = ImagePicker();
@@ -50,7 +56,10 @@ class AddPujaController extends GetxController {
       }
 
       update();
+      getCategoriesData();
+      getTag();
     }
+
     super.onInit();
   }
 
@@ -239,6 +248,72 @@ class AddPujaController extends GetxController {
       if (response.data != null) {
         Get.back();
         Get.bottomSheet(const PujaSubmitedBottomSheet());
+      }
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  void addEditProduct() async {
+    Map<String, dynamic> param = {
+      "prod_shop_id": null,
+      "prod_cat_id": selectedCategory?.id,
+      "prod_name": poojaName.text,
+      "prod_image": poojaImageUrl,
+      "prod_desc": poojaDes.text,
+      "product_price_inr": poojaPrice.text,
+      //"offer_price_inr": poojaPrice.text,
+      //"product_price_usd": 10.0,     
+      "product_long_desc": poojaDes.text, 
+      // "product_banner_image": "https://example.com/banner_image.jpg",
+    };
+    param.addIf(id.value != 0, "product_id", id.value);
+    try {
+      final response = await userRepository.addEditProductApi(param);
+      if (response.data != null) {
+        Get.back();
+        Get.bottomSheet(const PujaSubmitedBottomSheet());
+      }
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  getCategoriesData({String? type}) async {
+    Map<String, dynamic> param = {
+      "type": type ?? "pooja",
+    };
+    try {
+      final response = await userRepository.getCategoriesProductAndPooja(param);
+      if (response.data != null) {
+        categoriesType = response.data!;
+      }
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  getTag() async {
+    Map<String, dynamic> param = {};
+    try {
+      final response = await userRepository.getTagProductAndPooja(param);
+      if (response.data != null) {
+        tagType = response.data!;
       }
     } catch (error) {
       debugPrint("error $error");
