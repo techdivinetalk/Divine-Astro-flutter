@@ -399,6 +399,7 @@ class ChatMessageWithSocketController extends GetxController
         print("duration ended called for extra timer");
         extraTimer.cancel();
         _timeLeft = Duration.zero;
+        backFunction();
       } else {
         _timeLeft = difference;
         extraTalkTime.value =
@@ -427,9 +428,6 @@ class ChatMessageWithSocketController extends GetxController
 
         showTalkTime.value = "-1";
         chatTimer?.cancel();
-        if (AppFirebaseService().orderData.value["status"] == "4") {
-          endChatApi();
-        }
       } else {
         //         print('Countdown working');
         showTalkTime.value =
@@ -483,6 +481,7 @@ class ChatMessageWithSocketController extends GetxController
         socket.leavePrivateChatEmit(userData?.id.toString(),
             AppFirebaseService().orderData.value["userId"], "0");
         chatTimer?.cancel();
+       // Get.delete<ChatMessageWithSocketController>();
         Get.until(
               (route) {
             return Get.currentRoute == RouteName.dashboard;
@@ -1316,8 +1315,12 @@ class ChatMessageWithSocketController extends GetxController
         (_) async {
           socket.socket?.disconnect();
           chatTimer?.cancel();
-          Get.back();
-          Get.back();
+          Get.delete<ChatMessageWithSocketController>();
+          Get.until(
+                (route) {
+              return Get.currentRoute == RouteName.dashboard;
+            },
+          );
         },
       );
       return;
