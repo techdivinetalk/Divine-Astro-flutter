@@ -76,8 +76,8 @@ class AddPujaScreen extends GetView<AddPujaController> {
             child: ListView(
               padding: const EdgeInsets.only(left: 20, right: 20),
               children: [
-                // durationWidget(),
-                // SizedBox(height: 40.h),
+                durationWidget(),
+                SizedBox(height: 40.h),
                 Column(
                   children: [
                     Stack(
@@ -196,11 +196,11 @@ class AddPujaScreen extends GetView<AddPujaController> {
   }
 
   Widget durationWidget() {
-    return Column(
+    return Column(  
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomText(
-          'Remedy Type',
+          'Ecom type',
           fontColor: appColors.textColor,
         ),
         SizedBox(height: 8.h), // Adjust the spacing between label and container

@@ -31,13 +31,13 @@ class RetentionWidget extends StatelessWidget {
             child: Center(
               child: Text(
                 title ?? "",
-                style: AppTextStyle.textStyle10(
+                style: AppTextStyle.textStyle9(
                   fontWeight: FontWeight.w400,
                 ),
               ),
             ),
           ),
-          Expanded(
+          Expanded(  
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -49,7 +49,7 @@ class RetentionWidget extends StatelessWidget {
               child: Center(
                 child: Text(
                   subTitle ?? "",
-                  style: AppTextStyle.textStyle10(
+                  style: AppTextStyle.textStyle9(
                     fontWeight: FontWeight.w400,
                     fontColor: bottomTextColor ?? appColors.white,
                   ),

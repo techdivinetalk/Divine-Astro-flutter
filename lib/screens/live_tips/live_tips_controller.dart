@@ -99,7 +99,6 @@ class LiveTipsController extends GetxController {
 
     // unawaited(database.ref().child("live/$userId").remove());
     // unawaited(database.ref().child("astro-live-list/$userId").remove());
-
     // Get.back(closeOverlays: true);
     // Get.back(closeOverlays: true);
 
