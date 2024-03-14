@@ -1,12 +1,14 @@
 import 'package:divine_astrologer/common/SvgIconButton.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/common/custom_text_field.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/screens/add_puja/add_puja_controller.dart';
+import 'package:divine_astrologer/screens/add_puja/model/puja_product_categories_model.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_ui.dart';
 import 'package:divine_astrologer/screens/puja/widget/pooja_submited_sheet.dart';
 import 'package:divine_astrologer/screens/puja/widget/remedy_text_filed.dart';
@@ -16,8 +18,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import 'widget/category_bottom_sheet.dart';
+
 class AddPujaScreen extends GetView<AddPujaController> {
-  const AddPujaScreen ({super.key});
+  const AddPujaScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +80,7 @@ class AddPujaScreen extends GetView<AddPujaController> {
             child: ListView(
               padding: const EdgeInsets.only(left: 20, right: 20),
               children: [
-                durationWidget(),
+                AllDropDownWidget(),
                 SizedBox(height: 40.h),
                 Column(
                   children: [
@@ -195,17 +199,17 @@ class AddPujaScreen extends GetView<AddPujaController> {
     );
   }
 
-  Widget durationWidget() {
-    return Column(  
+  Widget AllDropDownWidget() {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomText(
           'Ecom type',
           fontColor: appColors.textColor,
         ),
-        SizedBox(height: 8.h), // Adjust the spacing between label and container
+        SizedBox(height: 8.h),
         Container(
-          padding: EdgeInsets.all(8.h),
+          padding: EdgeInsets.symmetric(horizontal: 10.h, vertical: 5.h),
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(10)),
             border: Border.all(
@@ -213,13 +217,146 @@ class AddPujaScreen extends GetView<AddPujaController> {
               width: 1.0, // Adjust the border width as needed
             ),
           ),
-          child: durationOptions(),
+          child: EComeTypeDropdown(),
+        ),
+
+        SizedBox(height: 10.h),
+        CustomText(
+          'Categories',
+          fontColor: appColors.textColor,
+        ),
+        SizedBox(height: 8.h),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 10.h, vertical: 5.h),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            border: Border.all(
+              color: Colors.black.withOpacity(0.2),
+              width: 1.0, // Adjust the border width as needed
+            ),
+          ),
+          child: EComeTagTypeDropdown(),
+        ),
+        SizedBox(height: 10.h),
+        CustomText(
+          'Tags',
+          fontColor: appColors.textColor,
+        ),
+        SizedBox(height: 8.h),
+        GestureDetector(
+          onTap: () {
+            Get.bottomSheet(CategoryBottomSheet(
+              categoriesType: controller.tagType,
+              onTap: (PujaProductCategoriesData) {
+                if (!controller.selectedTag
+                    .contains(PujaProductCategoriesData)) {
+                  controller.selectedTag.add(PujaProductCategoriesData);
+                } else {
+                  controller.selectedTag.remove(PujaProductCategoriesData);
+                }
+                controller.update();
+              },
+            ));
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.h, vertical: 5.h),
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              border: Border.all(
+                color: Colors.black.withOpacity(0.2),
+                width: 1.0, // Adjust the border width as needed
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      "Select tag",
+                      style: AppTextStyle.textStyle16(
+                          fontWeight: FontWeight.w400,
+                          fontColor: appColors.darkBlue),
+                    ),
+                    const Spacer(),
+                    Icon(
+                      Icons.keyboard_arrow_down_outlined,
+                      size: 35,
+                      color: appColors.black,
+                    ),
+                  ],
+                ),
+                Wrap(
+                  direction: Axis.horizontal,
+                  children: List.generate(controller.selectedTag.length,
+                          (index) {
+                        return Padding(
+                          padding:
+                          EdgeInsets.symmetric(horizontal: 4.w, vertical: 6.h),
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15.w, vertical: 8.h),
+                                decoration: BoxDecoration(
+                                  color: appColors.textColor,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: appColors.textColor.withOpacity(0.2),
+                                      blurRadius: 1.0,
+                                      offset: const Offset(0.0, 3.0),
+                                    ),
+                                  ],
+                                  borderRadius:
+                                  const BorderRadius.all(Radius.circular(20)),
+                                ),
+                                child: Text(
+                                  controller.selectedTag[index].name
+                                      .toString(),
+                                  style: AppTextStyle.textStyle14(
+                                      fontColor: appColors.white),
+                                ),
+                              ),
+                              SizedBox(width: 8.w),
+                              InkWell(
+                                onTap: () {
+                                  for (int i = 0;
+                                  i < controller.selectedTag.length;
+                                  i++) {
+                                    if (controller.selectedTag[i].id ==
+                                        controller.selectedTag[index].id) {
+                                      controller.selectedTag[i].isSelected =
+                                      false;
+                                      controller.selectedTag.removeAt(i);
+                                      break;
+                                    }
+                                  }
+                                  controller.update();
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle, border: Border.all()),
+                                  child: Icon(
+                                    Icons.close,
+                                    size: 18.sp,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                )
+              ],
+            ),
+          ),
         ),
       ],
     );
   }
 
-  Widget durationOptions() {
+  Widget EComeTypeDropdown() {
     return Obx(() => DropdownButtonHideUnderline(
           child: DropdownButton2<String>(
             isExpanded: true,
@@ -231,15 +368,12 @@ class AddPujaScreen extends GetView<AddPujaController> {
             items: controller.durationOptions
                 .map((String item) => DropdownMenuItem<String>(
                       value: item,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: Text(
-                          item.tr,
-                          style: AppTextStyle.textStyle16(
-                              fontWeight: FontWeight.w400,
-                              fontColor: appColors.darkBlue),
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                      child: Text(
+                        item.tr,
+                        style: AppTextStyle.textStyle16(
+                            fontWeight: FontWeight.w400,
+                            fontColor: appColors.darkBlue),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ))
                 .toList(),
@@ -247,7 +381,9 @@ class AddPujaScreen extends GetView<AddPujaController> {
                 fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
             value: controller.selectedValue.value,
             onChanged: (String? value) {
-              controller.selectedValue.value = value ?? "daily".tr;
+              controller.selectedValue.value = value ?? "Puja".tr;
+              controller.getCategoriesData(
+                  type: value == "Puja" ? "pooja" : "product");
             },
             iconStyleData: IconStyleData(
               icon: const Icon(
@@ -271,9 +407,67 @@ class AddPujaScreen extends GetView<AddPujaController> {
             ),
             menuItemStyleData: const MenuItemStyleData(
               height: 40,
-              padding: EdgeInsets.only(left: 14, right: 14),
+              // padding: EdgeInsets.only(left: 14, right: 14),
             ),
           ),
         ));
   }
+
+  Widget EComeTagTypeDropdown() {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton2<PujaProductCategoriesData>(
+        isExpanded: true,
+        hint: Text(
+          "Category",
+          style: AppTextStyle.textStyle16(
+              fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
+        ),
+        items: controller.categoriesType
+            .map((PujaProductCategoriesData item) =>
+            DropdownMenuItem<PujaProductCategoriesData>(
+              value: item,
+              child: Text(
+                item.name ?? "",
+                style: AppTextStyle.textStyle16(
+                    fontWeight: FontWeight.w400,
+                    fontColor: appColors.darkBlue),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ))
+            .toList(),
+        style: AppTextStyle.textStyle16(
+            fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
+        value: controller.selectedCategory,
+        onChanged: (PujaProductCategoriesData? value) {
+          controller.selectedCategory = value;
+          controller.update();
+        },
+        iconStyleData: IconStyleData(
+          icon: const Icon(
+            Icons.keyboard_arrow_down_outlined,
+          ),
+          iconSize: 35,
+          iconEnabledColor: appColors.blackColor,
+        ),
+        dropdownStyleData: DropdownStyleData(
+          width: ScreenUtil().screenWidth * 0.9,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            color: appColors.white,
+          ),
+          offset: const Offset(-8, -17),
+          scrollbarTheme: ScrollbarThemeData(
+            radius: const Radius.circular(40),
+            thickness: MaterialStateProperty.all<double>(6),
+            thumbVisibility: MaterialStateProperty.all<bool>(false),
+          ),
+        ),
+        menuItemStyleData: const MenuItemStyleData(
+          height: 40,
+          // padding: EdgeInsets.zero,
+        ),
+      ),
+    );
+  }
 }
+  
