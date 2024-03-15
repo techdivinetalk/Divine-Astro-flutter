@@ -37,8 +37,8 @@ class AddPujaScreen extends GetView<AddPujaController> {
                   onPressed: () => Get.back(),
                   icon: const Icon(Icons.arrow_back_ios_new_rounded)),
               title: Obx(() => controller.id.value == 0
-                  ? const CustomText(
-                      'Add Puja',
+                  ? CustomText(
+                      'Add ${controller.selectedValue}',
                     )
                   : const CustomText('Edit Remedies'))),
           bottomNavigationBar: Container(
@@ -59,7 +59,11 @@ class AddPujaScreen extends GetView<AddPujaController> {
                           false) {
                         print("going in inside");
                         if (controller.validation()) {
-                          controller.addEditPoojaApi();
+                          if (controller.selectedValue.value == "Puja") {
+                            controller.addEditPoojaApi();
+                          } else {
+                            controller.addEditProduct();
+                          }
                         }
                       }
                     },
@@ -89,7 +93,7 @@ class AddPujaScreen extends GetView<AddPujaController> {
                       children: [
                         InkWell(
                             onTap: () async {
-                              if (!(controller.id.value == 0)) {
+                              if (!controller.isEdit.value) {
                                 if (await PermissionHelper()
                                     .askMediaPermission()) {
                                   controller.updateProfileImage();
@@ -135,14 +139,14 @@ class AddPujaScreen extends GetView<AddPujaController> {
                     ),
                     SizedBox(height: 10.h),
                     CustomText(
-                      'Upload Puja Image',
+                      'Upload ${controller.selectedValue} Image',
                       fontColor: appColors.textColor,
-                    )
+                    ),
                   ],
                 ),
                 SizedBox(height: 20.h),
                 PoojaRemedyTextFiled(
-                  title: "Puja Name",
+                  title: "${controller.selectedValue} Name",
                   maxLength: 20,
                   controller: controller.poojaName,
                   textInputFormatter: [CustomSpaceInputFormatter()],
@@ -151,14 +155,14 @@ class AddPujaScreen extends GetView<AddPujaController> {
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Puja Name is required';
+                      return '${controller.selectedValue} Name is required';
                     }
                     return null;
                   },
                 ),
                 SizedBox(height: 20.h),
                 PoojaRemedyTextFiled(
-                  title: "Puja Description",
+                  title: "${controller.selectedValue} Description",
                   maxLines: 5,
                   textInputFormatter: [CustomSpaceInputFormatter()],
                   controller: controller.poojaDes,
@@ -168,7 +172,7 @@ class AddPujaScreen extends GetView<AddPujaController> {
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Puja Description is required';
+                      return '${controller.selectedValue} Description is required';
                     }
                     return null;
                   },
@@ -181,11 +185,11 @@ class AddPujaScreen extends GetView<AddPujaController> {
                     FilteringTextInputFormatter.digitsOnly
                   ],
                   isSuffix: false,
-                  title: 'Puja Price ( In INR )',
+                  title: '${controller.selectedValue} Price ( In INR )',
                   controller: controller.poojaPrice,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Puja Price is required';
+                      return '${controller.selectedValue} Price is required';
                     }
                     return null;
                   },
@@ -219,7 +223,6 @@ class AddPujaScreen extends GetView<AddPujaController> {
           ),
           child: EComeTypeDropdown(),
         ),
-
         SizedBox(height: 10.h),
         CustomText(
           'Categories',
@@ -288,65 +291,63 @@ class AddPujaScreen extends GetView<AddPujaController> {
                 ),
                 Wrap(
                   direction: Axis.horizontal,
-                  children: List.generate(controller.selectedTag.length,
-                          (index) {
-                        return Padding(
-                          padding:
+                  children:
+                      List.generate(controller.selectedTag.length, (index) {
+                    return Padding(
+                      padding:
                           EdgeInsets.symmetric(horizontal: 4.w, vertical: 6.h),
-                          child: Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 15.w, vertical: 8.h),
-                                decoration: BoxDecoration(
-                                  color: appColors.textColor,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: appColors.textColor.withOpacity(0.2),
-                                      blurRadius: 1.0,
-                                      offset: const Offset(0.0, 3.0),
-                                    ),
-                                  ],
-                                  borderRadius:
+                      child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15.w, vertical: 8.h),
+                            decoration: BoxDecoration(
+                              color: appColors.textColor,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: appColors.textColor.withOpacity(0.2),
+                                  blurRadius: 1.0,
+                                  offset: const Offset(0.0, 3.0),
+                                ),
+                              ],
+                              borderRadius:
                                   const BorderRadius.all(Radius.circular(20)),
-                                ),
-                                child: Text(
-                                  controller.selectedTag[index].name
-                                      .toString(),
-                                  style: AppTextStyle.textStyle14(
-                                      fontColor: appColors.white),
-                                ),
-                              ),
-                              SizedBox(width: 8.w),
-                              InkWell(
-                                onTap: () {
-                                  for (int i = 0;
+                            ),
+                            child: Text(
+                              controller.selectedTag[index].name.toString(),
+                              style: AppTextStyle.textStyle14(
+                                  fontColor: appColors.white),
+                            ),
+                          ),
+                          SizedBox(width: 8.w),
+                          InkWell(
+                            onTap: () {
+                              for (int i = 0;
                                   i < controller.selectedTag.length;
                                   i++) {
-                                    if (controller.selectedTag[i].id ==
-                                        controller.selectedTag[index].id) {
-                                      controller.selectedTag[i].isSelected =
-                                      false;
-                                      controller.selectedTag.removeAt(i);
-                                      break;
-                                    }
-                                  }
-                                  controller.update();
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle, border: Border.all()),
-                                  child: Icon(
-                                    Icons.close,
-                                    size: 18.sp,
-                                  ),
-                                ),
+                                if (controller.selectedTag[i].id ==
+                                    controller.selectedTag[index].id) {
+                                  controller.selectedTag[i].isSelected = false;
+                                  controller.selectedTag.removeAt(i);
+                                  break;
+                                }
+                              }
+                              controller.update();
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle, border: Border.all()),
+                              child: Icon(
+                                Icons.close,
+                                size: 18.sp,
                               ),
-                            ],
+                            ),
                           ),
-                        );
-                      }),
+                        ],
+                      ),
+                    );
+                  }),
                 )
               ],
             ),
@@ -424,16 +425,16 @@ class AddPujaScreen extends GetView<AddPujaController> {
         ),
         items: controller.categoriesType
             .map((PujaProductCategoriesData item) =>
-            DropdownMenuItem<PujaProductCategoriesData>(
-              value: item,
-              child: Text(
-                item.name ?? "",
-                style: AppTextStyle.textStyle16(
-                    fontWeight: FontWeight.w400,
-                    fontColor: appColors.darkBlue),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ))
+                DropdownMenuItem<PujaProductCategoriesData>(
+                  value: item,
+                  child: Text(
+                    item.name ?? "",
+                    style: AppTextStyle.textStyle16(
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.darkBlue),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ))
             .toList(),
         style: AppTextStyle.textStyle16(
             fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
@@ -470,4 +471,3 @@ class AddPujaScreen extends GetView<AddPujaController> {
     );
   }
 }
-  
