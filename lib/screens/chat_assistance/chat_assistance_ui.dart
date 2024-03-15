@@ -141,24 +141,26 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                           .data!.isEmpty) {
                     return HelpersWidget().emptyChatWidget();
                   } else {
-                    return ListView.builder(
-                      padding: EdgeInsets.symmetric(vertical: 10.h),
-                      itemCount: (controller.searchData).isNotEmpty ||
-                              controller.searchController.text.isNotEmpty
-                          ? controller.searchData.length
-                          : controller.chatAssistantAstrologerListResponse!
-                              .data!.data!.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return ChatAssistanceTile(
-                          controller: controller,
-                          data: (controller.searchData).isNotEmpty ||
-                                  controller.searchController.text.isNotEmpty
-                              ? controller.searchData[index]
-                              : controller.chatAssistantAstrologerListResponse!
-                                  .data!.data![index],
-                        );
-                      },
+                    return Expanded(
+                      child: ListView.builder(
+                        padding: EdgeInsets.symmetric(vertical: 10.h),
+                        itemCount: (controller.searchData).isNotEmpty ||
+                                controller.searchController.text.isNotEmpty
+                            ? controller.searchData.length
+                            : controller.chatAssistantAstrologerListResponse!
+                                .data!.data!.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return ChatAssistanceTile(
+                            controller: controller,
+                            data: (controller.searchData).isNotEmpty ||
+                                    controller.searchController.text.isNotEmpty
+                                ? controller.searchData[index]
+                                : controller.chatAssistantAstrologerListResponse!
+                                    .data!.data![index],
+                          );
+                        },
+                      ),
                     );
                   }
                 } else {

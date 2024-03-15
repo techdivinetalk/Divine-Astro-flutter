@@ -11,6 +11,7 @@ import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/home_page_model_class.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/pages/home/widgets/offer_bottom_widget.dart';
+import 'package:divine_astrologer/pages/home/widgets/can_not_online.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
 import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_ui.dart';
 import 'package:divine_astrologer/screens/order_feedback/widget/feedback_card_widget.dart';
@@ -26,7 +27,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:velocity_x/velocity_x.dart';
 import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../model/feedback_response.dart';
@@ -592,13 +592,13 @@ class HomeUI extends GetView<HomeController> {
                               ? customerOfferWidget(context,
                                   controller: controller)
                               : const SizedBox(),
-                          SizedBox(height: 10.h),
-                          fullScreenBtnWidget(
-                              imageName: Assets.images.icReferAFriend.svg(),
-                              btnTitle: "referAnAstrologer".tr,
-                              onbtnTap: () {
-                                Get.toNamed(RouteName.referAstrologer);
-                              }),
+                          // SizedBox(height: 10.h),
+                          // fullScreenBtnWidget(
+                          //     imageName: Assets.images.icReferAFriend.svg(),
+                          //     btnTitle: "referAnAstrologer".tr,
+                          //     onbtnTap: () {
+                          //       Get.toNamed(RouteName.referAstrologer);
+                          //     }),
                           SizedBox(height: 10.h),
                           trainingVideoWidget(controller: controller),
                           SizedBox(height: 10.h),
@@ -1192,10 +1192,10 @@ class HomeUI extends GetView<HomeController> {
                               onTap: () async {
                                 await controller.chatSwitchFN(
                                   onComplete: () {
-                                    if (controller.chatSwitch.value) {
-                                    } else {
-                                      selectDateTimePopupForChat();
-                                    }
+                                    // if (controller.chatSwitch.value) {
+                                    // } else {
+                                    //   selectDateTimePopupForChat();
+                                    // }
                                   },
                                 );
                               },
@@ -1216,10 +1216,10 @@ class HomeUI extends GetView<HomeController> {
                               onTap: () async {
                                 await controller.callSwitchFN(
                                   onComplete: () {
-                                    if (controller.callSwitch.value) {
-                                    } else {
-                                      selectDateTimePopupForCall();
-                                    }
+                                    // if (controller.callSwitch.value) {
+                                    // } else {
+                                    //   selectDateTimePopupForCall();
+                                    // }
                                   },
                                 );
                               },
@@ -1240,10 +1240,10 @@ class HomeUI extends GetView<HomeController> {
                               onTap: () async {
                                 await controller.videoCallSwitchFN(
                                   onComplete: () {
-                                    if (controller.videoSwitch.value) {
-                                    } else {
-                                      selectDateTimePopupForVideo();
-                                    }
+                                    // if (controller.videoSwitch.value) {
+                                    // } else {
+                                    //   selectDateTimePopupForVideo();
+                                    // }
                                   },
                                 );
                               },
@@ -1293,7 +1293,9 @@ class HomeUI extends GetView<HomeController> {
                           children: [
                             Obx(() => controller.selectedChatTime.value.isEmpty
                                 ? InkWell(
-                                    onTap: selectDateTimePopupForChat,
+                                    onTap:
+                                        controller.selectDateTimePopupForChat,
+
                                     child: Container(
                                       // width: 128.w,
                                       height: 31.h,
@@ -1324,7 +1326,8 @@ class HomeUI extends GetView<HomeController> {
                           children: [
                             Obx(() => controller.selectedCallTime.value.isEmpty
                                 ? InkWell(
-                                    onTap: selectDateTimePopupForCall,
+                                    onTap:
+                                        controller.selectDateTimePopupForCall,
                                     child: Container(
                                       // width: 128.w,
                                       height: 31.h,
@@ -1355,7 +1358,8 @@ class HomeUI extends GetView<HomeController> {
                           children: [
                             Obx(() => controller.selectedVideoTime.value.isEmpty
                                 ? InkWell(
-                                    onTap: selectDateTimePopupForVideo,
+                                    onTap:
+                                        controller.selectDateTimePopupForVideo,
                                     child: Container(
                                       // width: 128.w,
                                       height: 31.h,
@@ -1386,112 +1390,6 @@ class HomeUI extends GetView<HomeController> {
           ),
         ],
       ),
-    );
-  }
-
-  void selectDateTimePopupForChat() {
-    selectDateOrTime(
-      Get.context!,
-      futureDate: true,
-      title: "ScheduleOnlineDate".tr,
-      btnTitle: "confirmNextDate".tr,
-      pickerStyle: "DateCalendar",
-      looping: true,
-      initialDate: DateTime.now(),
-      lastDate: DateTime(2050),
-      onConfirm: (value) => controller.selectChatDate(value),
-      onChange: (value) => controller.selectChatDate(value),
-      onClickOkay: (value) {
-        Get.back();
-
-        selectDateOrTime(
-          Get.context!,
-          title: "scheduleOnlineTime".tr,
-          btnTitle: "confirmOnlineTime".tr,
-          pickerStyle: "TimeCalendar",
-          looping: true,
-          onConfirm: (value) {
-            // controller.selectChatTime(value),
-          },
-          onChange: (value) {
-            // controller.selectChatTime(value),
-          },
-          onClickOkay: (timeValue) {
-            if (controller.isValidDate("CHAT", timeValue)) {
-              controller.selectChatTime(timeValue);
-              controller.scheduleCall("CHAT");
-            } else {
-              Fluttertoast.showToast(msg: "Please select future date and time");
-            }
-          },
-        );
-      },
-    );
-  }
-
-  void selectDateTimePopupForCall() {
-    selectDateOrTime(
-      futureDate: true,
-      Get.context!,
-      title: "ScheduleOnlineDate".tr,
-      btnTitle: "confirmNextDate".tr,
-      pickerStyle: "DateCalendar",
-      looping: true,
-      lastDate: DateTime(2050),
-      onConfirm: (value) => controller.selectCallDate(value),
-      onChange: (value) => controller.selectCallDate(value),
-      onClickOkay: (value) {
-        Get.back();
-        selectDateOrTime(Get.context!,
-            title: "scheduleOnlineTime".tr,
-            btnTitle: "confirmOnlineTime".tr,
-            pickerStyle: "TimeCalendar",
-            looping: true, onConfirm: (value) {
-          // controller.selectCallTime(value),
-        }, onChange: (value1) {
-          // controller.selectCallTime(value),
-        }, onClickOkay: (value1) {
-          if (controller.isValidDate("CALL", value1)) {
-            controller.selectCallTime(value1);
-            controller.scheduleCall("CALL");
-          } else {
-            Fluttertoast.showToast(msg: "Please select future date and time");
-          }
-        });
-      },
-    );
-  }
-
-  void selectDateTimePopupForVideo() {
-    selectDateOrTime(
-      futureDate: true,
-      Get.context!,
-      title: "ScheduleOnlineDate".tr,
-      btnTitle: "confirmNextDate".tr,
-      pickerStyle: "DateCalendar",
-      looping: true,
-      lastDate: DateTime(2050),
-      onConfirm: (value) => controller.selectVideoDate(value),
-      onChange: (value) => controller.selectVideoDate(value),
-      onClickOkay: (value) {
-        Get.back();
-        selectDateOrTime(Get.context!,
-            title: "scheduleOnlineTime".tr,
-            btnTitle: "confirmOnlineTime".tr,
-            pickerStyle: "TimeCalendar",
-            looping: true, onConfirm: (value) {
-          // controller.selectVideoTime(value),
-        }, onChange: (value) {
-          // controller.selectVideoTime(value);
-        }, onClickOkay: (value) {
-          if (controller.isValidDate("VIDEO", value)) {
-            controller.selectVideoTime(value);
-            controller.scheduleCall("VIDEO");
-          } else {
-            Fluttertoast.showToast(msg: "Please select future date and time");
-          }
-        });
-      },
     );
   }
 
@@ -2707,7 +2605,6 @@ class PerformanceDialog extends StatelessWidget {
 
 class SelectedTimeForCall extends StatelessWidget {
   final HomeController? controller;
-
   const SelectedTimeForCall({Key? key, this.controller}) : super(key: key);
 
   @override
@@ -2742,7 +2639,6 @@ class SelectedTimeForCall extends StatelessWidget {
 
 class SelectedTimeForVideoCall extends StatelessWidget {
   final HomeController? controller;
-
   const SelectedTimeForVideoCall({Key? key, this.controller}) : super(key: key);
 
   @override
