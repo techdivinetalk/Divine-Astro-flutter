@@ -28,11 +28,11 @@ class HomePageModelClass {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data?.toJson(),
-        "success": success,
-        "status_code": statusCode,
-        "message": message,
-      };
+    "data": data?.toJson(),
+    "success": success,
+    "status_code": statusCode,
+    "message": message,
+  };
 }
 
 class HomeData {
@@ -50,14 +50,19 @@ class HomeData {
   dynamic totalFinePayout;
   double? tds;
   dynamic totalPaymentGatewayCharges;
-  //
   dynamic inAppChatPrevStatus;
   dynamic audioCallPrevStatus;
   dynamic videoCallPrevStatus;
   dynamic totalDivineWalletPayout;
   dynamic totalRefundPayout;
   dynamic totalTax;
-  //
+  int? paidWallet;
+  int? bonusWallet;
+  int? ecommerceWallet;
+  int? retention;
+  int? repurchaseRate;
+  int? minimumRetention;
+  int? minimumRepurchaseRate;
 
   HomeData({
     this.noticeBoard,
@@ -68,90 +73,98 @@ class HomeData {
     this.offerType,
     this.trainingVideo,
     this.offers,
+    this.wallet,
+    this.payoutPending,
     this.totalOrderPayout,
     this.totalFinePayout,
-    this.totalDivineWalletPayout,
-    this.totalRefundPayout,
-    this.totalTax,
-
-    //
+    this.tds,
+    this.totalPaymentGatewayCharges,
     this.inAppChatPrevStatus,
     this.audioCallPrevStatus,
     this.videoCallPrevStatus,
-    this.wallet,
-    this.payoutPending,
-    this.tds,
-    this.totalPaymentGatewayCharges,
-    //
+    this.totalDivineWalletPayout,
+    this.totalRefundPayout,
+    this.totalTax,
+    this.paidWallet,
+    this.bonusWallet,
+    this.ecommerceWallet,
+    this.retention,
+    this.repurchaseRate,
+    this.minimumRetention,
+    this.minimumRepurchaseRate,
   });
 
   factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
-        noticeBoard: json["notice_board"] == null
-            ? null
-            : NoticeBoard.fromJson(json["notice_board"]),
-        totalEarning: json["total_earning"]?.toDouble(),
-        todaysEarning: json["todays_earning"],
-        onGoingCall: json["on_going_call"] == null
-            ? null
-            : OnGoingCall.fromJson(json["on_going_call"]),
-        wallet: Wallet.fromJson(json["wallet"]),
-        payoutPending: json["payout_pending"]?.toDouble(),
-        tds: json["tds"]?.toDouble(),
-        totalPaymentGatewayCharges: json["total_payment_gateway_charges"] ?? 0,
+    noticeBoard: json["notice_board"] == null
+        ? null
+        : NoticeBoard.fromJson(json["notice_board"]),
+    totalEarning: json["total_earning"]?.toDouble(),
+    todaysEarning: json["todays_earning"],
+    onGoingCall: OnGoingCall.fromJson(json["on_going_call"] ?? {}),
+    wallet: Wallet.fromJson(json["wallet"] ?? {}),
+    payoutPending: json["payout_pending"]?.toDouble(),
+    tds: json["tds"]?.toDouble(),
+    totalPaymentGatewayCharges: json["total_payment_gateway_charges"] ?? 0,
     totalOrderPayout: json["total_order_payout"] ?? 0,
     totalFinePayout: json["total_fine_payout"] ?? 0,
     totalDivineWalletPayout: json["total_divine_wallet_payout"] ?? 0,
     totalRefundPayout: json["total_refund_payout"] ?? 0,
     totalTax: json["total_tax"] ?? 0,
-        sessionType: json["session_type"] == null
-            ? null
-            : SessionType.fromJson(json["session_type"]),
-        offerType: json["offer_type"] == null
-            ? []
-            : List<OfferType>.from(
-                json["offer_type"]!.map((x) => OfferType.fromJson(x))),
-        trainingVideo: json["training_video"] == null
-            ? []
-            : List<TrainingVideo>.from(
-                json["training_video"]!.map((x) => TrainingVideo.fromJson(x))),
-        offers: json["offers"] == null ? null : Offers.fromJson(json["offers"]),
-
-        //
-        inAppChatPrevStatus: json["chat_previous_status"] ?? 0,
-        audioCallPrevStatus: json["call_previous_status"] ?? 0,
-        videoCallPrevStatus: json["video_call_previous_status"] ?? 0,
-        //
-      );
+    sessionType: SessionType.fromJson(json["session_type"] ?? {}),
+    offerType: json["offer_type"] == null
+        ? []
+        : List<OfferType>.from(
+        json["offer_type"].map((x) => OfferType.fromJson(x))),
+    trainingVideo: json["training_video"] == null
+        ? []
+        : List<TrainingVideo>.from(
+        json["training_video"].map((x) => TrainingVideo.fromJson(x))),
+    offers: json["offers"] == null ? null : Offers.fromJson(json["offers"]),
+    inAppChatPrevStatus: json["chat_previous_status"] ?? 0,
+    audioCallPrevStatus: json["call_previous_status"] ?? 0,
+    videoCallPrevStatus: json["video_call_previous_status"] ?? 0,
+    paidWallet: json["paid_wallet"],
+    bonusWallet: json["bonus_wallet"],
+    ecommerceWallet: json["ecommerce_wallet"],
+    retention: json["retention"],
+    repurchaseRate: json["repurchase_rate"],
+    minimumRetention: json["minimum_retention"],
+    minimumRepurchaseRate: json["minimum_repurchase_rate"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "notice_board": noticeBoard?.toJson(),
-        "total_earning": totalEarning,
-        "todays_earning": todaysEarning,
-        "total_fine_payout": totalFinePayout,
-        "on_going_call": onGoingCall?.toJson(),
-        "session_type": sessionType?.toJson(),
-        "wallet": wallet?.toJson(),
-        "payout_pending": payoutPending,
-        "total_order_payout": totalOrderPayout,
-        "tds": tds,
-        "total_divine_wallet_payout": totalDivineWalletPayout,
-        "total_refund_payout": totalRefundPayout,
-        "total_tax": totalTax,
-        "total_payment_gateway_charges": totalPaymentGatewayCharges,
-        "offer_type": offerType == null
-            ? []
-            : List<dynamic>.from(offerType!.map((x) => x.toJson())),
-        "training_video": trainingVideo == null
-            ? []
-            : List<dynamic>.from(trainingVideo!.map((x) => x.toJson())),
-        "offers": offers?.toJson(),
-
-        //
-        "chat_previous_status": inAppChatPrevStatus,
-        "call_previous_status": audioCallPrevStatus,
-        "video_call_previous_status": videoCallPrevStatus,
-        //
-      };
+    "notice_board": noticeBoard?.toJson(),
+    "total_earning": totalEarning,
+    "todays_earning": todaysEarning,
+    "total_fine_payout": totalFinePayout,
+    "on_going_call": onGoingCall?.toJson(),
+    "session_type": sessionType?.toJson(),
+    "wallet": wallet?.toJson(),
+    "payout_pending": payoutPending,
+    "total_order_payout": totalOrderPayout,
+    "tds": tds,
+    "total_divine_wallet_payout": totalDivineWalletPayout,
+    "total_refund_payout": totalRefundPayout,
+    "total_tax": totalTax,
+    "total_payment_gateway_charges": totalPaymentGatewayCharges,
+    "offer_type": offerType == null
+        ? []
+        : List<dynamic>.from(offerType!.map((x) => x.toJson())),
+    "training_video": trainingVideo == null
+        ? []
+        : List<dynamic>.from(trainingVideo!.map((x) => x.toJson())),
+    "offers": offers?.toJson(),
+    "chat_previous_status": inAppChatPrevStatus,
+    "call_previous_status": audioCallPrevStatus,
+    "video_call_previous_status": videoCallPrevStatus,
+    "paid_wallet": paidWallet,
+    "bonus_wallet": bonusWallet,
+    "ecommerce_wallet": ecommerceWallet,
+    "retention": retention,
+    "repurchase_rate": repurchaseRate,
+    "minimum_retention": minimumRetention,
+    "minimum_repurchase_rate": minimumRepurchaseRate,
+  };
 }
 
 class Offers {

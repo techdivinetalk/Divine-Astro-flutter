@@ -239,7 +239,7 @@ class PaymentLogTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "${"orderId".tr} : ${log.orderId}",
+                  "${"orderId".tr} : ${log.orderId.toString()}",
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w500),
                 ),
                 Icon(
@@ -264,7 +264,7 @@ class PaymentLogTile extends StatelessWidget {
                 ),
               ),
               Text(
-                "+ ₹${log.totalAmount}",
+                "+ ₹${log.totalAmount.toString()}",
                 style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w400,
                     fontColor: /*data[index].amount.toString().contains("+")
@@ -275,7 +275,7 @@ class PaymentLogTile extends StatelessWidget {
           ),
           Text(
             // "with Username(user id) for 8 minutes "
-            "with ${log.customerDetails?.name}(${log.customerDetails?.id}) for ${log.callDuration} minutes",
+            "with ${log.customerDetails?.name}(${log.customerDetails?.id.toString()}) for ${log.callDuration.toString()} minutes",
             textAlign: TextAlign.start,
             style: AppTextStyle.textStyle12(
                 fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
