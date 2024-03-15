@@ -234,12 +234,18 @@ class AddPujaController extends GetxController {
   /// add puja or edit api function
 
   void addEditPoojaApi() async {
+    List tagList = [];
+    for (int i = 0; i < selectedTag.length; i++) {
+      tagList.add(selectedTag[i].id);
+    }
     Map<String, dynamic> param = {
       "pooja_name": poojaName.text,
       "pooja_img": poojaImageUrl,
       "pooja_desc": poojaDes.text,
       "pooja_starting_price_inr": poojaPrice.text,
       "pooja_short_desc": poojaDes.text,
+      "pooja_category_id": selectedCategory?.id,
+      "tag": jsonEncode(jsonEncode(tagList)),
       "pooja_banner_image": "https://example.com/pooja_banner_image.jpg",
     };
     param.addIf(id.value != 0, "pooja_id", id.value);
@@ -268,8 +274,8 @@ class AddPujaController extends GetxController {
       "prod_desc": poojaDes.text,
       "product_price_inr": poojaPrice.text,
       //"offer_price_inr": poojaPrice.text,
-      //"product_price_usd": 10.0,     
-      "product_long_desc": poojaDes.text, 
+      //"product_price_usd": 10.0,
+      "product_long_desc": poojaDes.text,
       // "product_banner_image": "https://example.com/banner_image.jpg",
     };
     param.addIf(id.value != 0, "product_id", id.value);
@@ -298,6 +304,7 @@ class AddPujaController extends GetxController {
       if (response.data != null) {
         categoriesType = response.data!;
       }
+      update();
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {

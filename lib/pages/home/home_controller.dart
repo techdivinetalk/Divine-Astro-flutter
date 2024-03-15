@@ -27,6 +27,7 @@ import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import "package:permission_handler/permission_handler.dart";
@@ -50,6 +51,8 @@ import '../../repository/notice_repository.dart';
 import '../../repository/performance_repository.dart';
 import '../../repository/user_repository.dart';
 import 'package:cron/cron.dart';
+
+import 'widgets/can_not_online.dart';
 
 class HomeController extends GetxController {
   // RxBool chatSwitch = false.obs;
@@ -682,7 +685,6 @@ class HomeController extends GetxController {
           await userRepository.astroOnlineAPIForLive(
         params: params,
         successCallBack: (message) {
-          switchType.value = value;
           socket.updateChatCallSocketEvent(
             call: callSwitch.value ? "1" : "0",
             chat: chatSwitch.value ? "1" : "0",
@@ -708,9 +710,21 @@ class HomeController extends GetxController {
         },
       );
 
-      print("response.data.toJson(): ${response?.toJson()}");
       if (response.statusCode == 200) {
-      } else {}
+        if (!videoSwitch.value && type == 3) {
+          print("is it true");
+          selectDateTimePopupForVideo();
+        }
+        if (!callSwitch.value && type == 2) {
+          selectDateTimePopupForCall();
+        }
+        if (!chatSwitch.value && type == 1) {
+          selectDateTimePopupForChat();
+        }
+        switchType.value = value;
+      } else if (response.statusCode == 400) {
+        Get.bottomSheet(const CantOnline());
+      }
       update();
     } catch (error) {
       debugPrint("updateOfferType $error");
@@ -951,5 +965,111 @@ class HomeController extends GetxController {
           : "";
     }
     return "";
+  }
+
+  void selectDateTimePopupForVideo() {
+    selectDateOrTime(
+      futureDate: true,
+      Get.context!,
+      title: "ScheduleOnlineDate".tr,
+      btnTitle: "confirmNextDate".tr,
+      pickerStyle: "DateCalendar",
+      looping: true,
+      lastDate: DateTime(2050),
+      onConfirm: (value) => selectVideoDate(value),
+      onChange: (value) => selectVideoDate(value),
+      onClickOkay: (value) {
+        Get.back();
+        selectDateOrTime(Get.context!,
+            title: "scheduleOnlineTime".tr,
+            btnTitle: "confirmOnlineTime".tr,
+            pickerStyle: "TimeCalendar",
+            looping: true, onConfirm: (value) {
+          // controller.selectVideoTime(value),
+        }, onChange: (value) {
+          // controller.selectVideoTime(value);
+        }, onClickOkay: (value) {
+          if (isValidDate("VIDEO", value)) {
+            selectVideoTime(value);
+            scheduleCall("VIDEO");
+          } else {
+            Fluttertoast.showToast(msg: "Please select future date and time");
+          }
+        });
+      },
+    );
+  }
+
+  void selectDateTimePopupForCall() {
+    selectDateOrTime(
+      futureDate: true,
+      Get.context!,
+      title: "ScheduleOnlineDate".tr,
+      btnTitle: "confirmNextDate".tr,
+      pickerStyle: "DateCalendar",
+      looping: true,
+      lastDate: DateTime(2050),
+      onConfirm: (value) => selectCallDate(value),
+      onChange: (value) => selectCallDate(value),
+      onClickOkay: (value) {
+        Get.back();
+        selectDateOrTime(Get.context!,
+            title: "scheduleOnlineTime".tr,
+            btnTitle: "confirmOnlineTime".tr,
+            pickerStyle: "TimeCalendar",
+            looping: true, onConfirm: (value) {
+          // controller.selectCallTime(value),
+        }, onChange: (value1) {
+          // controller.selectCallTime(value),
+        }, onClickOkay: (value1) {
+          if (isValidDate("CALL", value1)) {
+            selectCallTime(value1);
+            scheduleCall("CALL");
+          } else {
+            Fluttertoast.showToast(msg: "Please select future date and time");
+          }
+        });
+      },
+    );
+  }
+
+  void selectDateTimePopupForChat() {
+    selectDateOrTime(
+      Get.context!,
+      futureDate: true,
+      title: "ScheduleOnlineDate".tr,
+      btnTitle: "confirmNextDate".tr,
+      pickerStyle: "DateCalendar",
+      looping: true,
+      initialDate: DateTime.now(),
+      lastDate: DateTime(2050),
+      onConfirm: (value) => selectChatDate(value),
+      onChange: (value) => selectChatDate(value),
+      onClickOkay: (value) {
+        Get.back();
+
+        selectDateOrTime(
+          Get.context!,
+          title: "scheduleOnlineTime".tr,
+          btnTitle: "confirmOnlineTime".tr,
+          pickerStyle: "TimeCalendar",
+          looping: true,
+          onConfirm: (value) {
+            // controller.selectChatTime(value),
+          },
+          onChange: (value) {
+            // controller.selectChatTime(value),
+          },
+          onClickOkay: (timeValue) {
+            if (isValidDate("CHAT", timeValue)) {
+              selectChatTime(timeValue);
+              scheduleCall("CHAT");
+            } else {
+              Fluttertoast.showToast(msg: "Please select future date and time");
+            }
+          },
+        );
+      },
+    );
   }
 }
