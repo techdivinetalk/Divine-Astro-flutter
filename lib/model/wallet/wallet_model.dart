@@ -272,7 +272,7 @@ class PaymentLog {
   String? date;
   dynamic actualPayments;
   dynamic discount;
-  String? orderId;
+  dynamic orderId;
   String? callDuration;  // Update this line
   String? callStatus;
   CustomerDetails? customerDetails;
