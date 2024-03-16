@@ -273,7 +273,7 @@ class DashboardScreen extends GetView<DashboardController> {
       () {
         final dynamic cond = AppFirebaseService().orderData.value["status"];
         print("order_Status $cond");
-        return cond == "3" || cond == 3 || cond == "4" || cond == 4
+        return cond == "2" || cond == 2 || cond == "3" || cond == 3 || cond == "4" || cond == 4
             ? Positioned(
                 bottom: kToolbarHeight + 20.w,
                 left: 0,
