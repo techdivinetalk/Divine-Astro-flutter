@@ -2652,7 +2652,10 @@ class _LivePage extends State<LiveDharamScreen>
       if (senderUserID != _controller.userId) {
         if (roomId == _controller.liveId) {
           if (type == "") {
-            if (mounted) {
+            if (mounted) { 
+              print("item------${item}");
+              print(item["animation"]);
+              print("getting gift");
               ZegoGiftPlayer().play(
                 context,
                 GiftPlayerData(GiftPlayerSource.url, item["animation"]),

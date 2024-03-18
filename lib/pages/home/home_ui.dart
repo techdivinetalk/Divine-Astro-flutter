@@ -345,7 +345,7 @@ class HomeUI extends GetView<HomeController> {
                                   children: [
                                     Text(
                                       "Ecommerce Wallet",
-                                      style: AppTextStyle.textStyle10(
+                                      style: AppTextStyle.textStyle9(
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
