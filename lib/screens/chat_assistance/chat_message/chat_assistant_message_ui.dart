@@ -496,19 +496,19 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                       if (controller.messageController.text.isNotEmpty) {
                         controller.sendMsg(MsgType.text,
                             {'text': controller.messageController.text});
-                      } else {
+                      } /*else {
                         final result = await voucherPopUp(context);
                         if (result != null) {
                           controller.sendMsg(MsgType.voucher, {'data': result});
                         }
-                      }
+                      }*/
                     },
                     child: CircleAvatar(
                       backgroundColor: appColors.guideColor,
                       minRadius: 25,
-                      child: controller.messageController.text.isEmpty
+                      child: /*controller.messageController.text.isEmpty
                           ? Assets.svg.chatGift.svg(height: 50.h)
-                          : Assets.svg.icSendMsg.svg(height: 50.h),
+                          :*/ Assets.svg.icSendMsg.svg(height: 50.h),
                     ),
                   ),
                   // if (controller.messageController.text.isEmpty) ...[

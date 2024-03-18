@@ -61,11 +61,32 @@ class BlockedUserUI extends GetView<BlockUserController> {
                                 contentPadding: EdgeInsets.symmetric(
                                   vertical: 4.h,
                                 ),
-                                leading: CommonImageView(
+                               /* leading: CommonImageView(
                                   imagePath: customer.avatar,
                                   height: 55.h,
                                   width: 55.h,
                                   radius: BorderRadius.circular(60.h),
+                                ),*/
+                                leading: CircleAvatar(
+                                  radius: 25.sp,
+                                  //backgroundColor: AppColors.white,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: LoadImage(
+                                      boxFit: BoxFit.cover,
+                                      imageModel: ImageModel(
+                                        placeHolderPath:
+                                        Assets.images.defaultProfile.path,
+                                        imagePath: customer.avatar ?? "",
+                                        loadingIndicator: const SizedBox(
+                                          child: CircularProgressIndicator(
+                                            color: Color(0XFFFFFFFF),
+                                            strokeWidth: 2,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                                 title: CustomText(
                                   customer.name ?? "",
