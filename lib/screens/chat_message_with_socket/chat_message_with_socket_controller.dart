@@ -704,6 +704,7 @@ class ChatMessageWithSocketController extends GetxController
         GiftPlayerData(
           GiftPlayerSource.url,
           data.first.animation,
+
         ),
       );
     } else {}

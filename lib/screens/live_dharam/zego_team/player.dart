@@ -14,10 +14,12 @@ enum GiftPlayerSource {
 class GiftPlayerData {
   GiftPlayerSource source = GiftPlayerSource.asset;
   dynamic value = '';
+  // Function() onCompleted;
 
   GiftPlayerData(
     this.source,
     this.value,
+    // this.onCompleted,
   );
 
   @override
@@ -38,6 +40,7 @@ class GiftPlayerWidget extends StatefulWidget {
 
   final VoidCallback onRemove;
   final GiftPlayerData data;
+
 
   @override
   State<GiftPlayerWidget> createState() => GiftPlayerWidgetState();
@@ -115,7 +118,10 @@ class GiftPlayerWidgetState extends State<GiftPlayerWidget>
               animationController ??= (SVGAAnimationController(vsync: this)
                 ..videoItem = snapshot.data as MovieEntity
                 ..forward().whenComplete(() {
+                  print("whenComplete");
+                  print("whenComplete");
                   widget.onRemove();
+
                 }));
               return SVGAImage(
                 animationController!,
@@ -170,14 +176,21 @@ class ZegoGiftPlayer {
           currentGiftEntries = null;
 
           if (giftEntryPathCache.isNotEmpty) {
-            var nextGiftPath = giftEntryPathCache.first;
-            giftEntryPathCache.removeAt(0);
-
-            debugPrint("has gift cache, play $nextGiftPath");
-
-            play(context, nextGiftPath);
+            print(giftEntryPathCache);
+            print("giftEntryPathCache");
+            for(int i = 0; i < giftEntryPathCache.length;i++){
+              var nextGiftPath = giftEntryPathCache[i];
+              giftEntryPathCache.removeAt(i);
+              print(nextGiftPath);
+              print("nextGiftPath");
+              play(context, nextGiftPath);
+              // debugPrint("has gift cache, play ${nextGiftPath.value}");
+            }
           }
+
         },
+
+
       );
     });
 

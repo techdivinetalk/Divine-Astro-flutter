@@ -40,6 +40,8 @@ class HomeUI extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    final double maxWidth = MediaQuery.of(context).size.width;
+    final double maxHeight = MediaQuery.of(context).size.height;
     return GetBuilder<HomeController>(
         assignId: true,
         init: HomeController(),
@@ -123,289 +125,309 @@ class HomeUI extends GetView<HomeController> {
                   SizedBox(width: 10.w),
                 ],
               ),
-              body: LayoutBuilder(builder: (context, constraints) {
-                final double maxHeight = constraints.maxHeight;
-                final double maxWidth = constraints.maxWidth;
-                if (controller.loading == Loading.loaded) {
-                  return Stack(children: [
-                    SingleChildScrollView(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: Column(
-                        children: [
-                          Obx(
-                            () => Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: controller.isShowTitle.value
-                                      ? InkWell(
-                                          onTap: () {},
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
-                                                style: AppTextStyle.textStyle16(
-                                                    fontColor:
-                                                        appColors.appRedColour,
-                                                    fontWeight:
-                                                        FontWeight.w700),
-                                              ),
-                                              Text(
-                                                "today".tr,
-                                                style: AppTextStyle.textStyle16(
-                                                    fontColor:
-                                                        appColors.darkBlue,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      : InkWell(
-                                          onTap: () {},
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "₹******",
-                                                style: AppTextStyle.textStyle16(
-                                                    fontColor:
-                                                        appColors.appRedColour,
-                                                    fontWeight:
-                                                        FontWeight.w700),
-                                              ),
-                                              Text(
-                                                "today".tr,
-                                                style: AppTextStyle.textStyle16(
-                                                    fontColor:
-                                                        appColors.darkBlue,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                ),
-                                // SizedBox(width: 15.w),
-                                Expanded(
-                                  child: controller.isShowTitle.value
-                                      ? InkWell(
-                                          onTap: () {
-                                            earningDetailPopup(Get.context!,
-                                                controller: controller);
-                                            // Get.toNamed(RouteName.yourEarning);
-                                          },
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    "₹${controller.homeData?.totalEarning?.toStringAsFixed(2)}",
-                                                    style: AppTextStyle
-                                                        .textStyle16(
-                                                            fontColor: appColors
-                                                                .appRedColour,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w700),
-                                                  ),
-                                                  const Icon(
-                                                    Icons.arrow_forward_ios,
-                                                    size: 20,
-                                                  )
-                                                ],
-                                              ),
-                                              Text(
-                                                "total".trParams({"count": ""}),
-                                                style: AppTextStyle.textStyle16(
-                                                    fontColor:
-                                                        appColors.darkBlue,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      : InkWell(
-                                          onTap: () {
-                                            earningDetailPopup(Get.context!,
-                                                controller: controller);
-                                            // Get.toNamed(RouteName.yourEarning);
-                                          },
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    "₹********",
-                                                    style: AppTextStyle
-                                                        .textStyle16(
-                                                            fontColor: appColors
-                                                                .appRedColour,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w700),
-                                                  ),
-                                                  const Icon(
-                                                    Icons.arrow_forward_ios,
-                                                    size: 20,
-                                                  )
-                                                ],
-                                              ),
-                                              Text(
-                                                "total".trParams({"count": ""}),
-                                                style: AppTextStyle.textStyle16(
-                                                    fontColor:
-                                                        appColors.darkBlue,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                ),
-                                // SizedBox(width: 10.w),
-                                InkWell(
-                                  onTap: () {
-                                    Get.toNamed(RouteName.checkKundli);
-                                  },
-                                  child: Ink(
-                                    height: 50.h,
-                                    decoration: BoxDecoration(
-                                      color: appColors.guideColor,
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(10)),
-                                    ),
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10.w),
-                                    // alignment: Alignment.center,
-                                    child: Center(
-                                      child: Text(
-                                        "checkKundli".tr,
-                                        style: AppTextStyle.textStyle12(
-                                            fontColor: appColors.white,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 12.h),
-
-                          /// new widget
-                          Row(
+              body: controller.loading == Loading.loaded
+                  ? Stack(
+                      children: [
+                        SingleChildScrollView(
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          child: Column(
                             children: [
-                              Expanded(
-                                  child: RetentionWidget(
-                                title:
-                                    "Bonus Wallet - ₹${controller.homeData?.bonusWallet ?? 0}",
-                                subTitle:
-                                    "Retention Rate - ${controller.homeData?.retention ?? 0}%",
-                                minimumRetention:
-                                    controller.homeData?.minimumRetention ?? 0,
-                                minimumRepurchaseRate: controller
-                                        .homeData?.minimumRepurchaseRate ??
-                                    0,
-                                onTap: () {},
-                              )),
-                              SizedBox(width: 10.w),
-                              Expanded(
-                                  child: RetentionWidget(
-                                title:
-                                    "Paid Wallet - ₹${controller.homeData?.paidWallet ?? 0}",
-                                subTitle:
-                                    "Retention Rate - ${controller.homeData?.repurchaseRate ?? 0}%",
-                                minimumRetention:
-                                    controller.homeData?.minimumRetention ?? 0,
-                                minimumRepurchaseRate: controller
-                                        .homeData?.minimumRepurchaseRate ??
-                                    0,
-                                onTap: () {
-                                  ecommerceWalletDetailPopup(Get.context!,
-                                      controller: controller);
-                                },
-                              )),
-                              SizedBox(width: 10.w),
-                              Expanded(
-                                  child: RetentionWidget(
-                                borderColor: appColors.textColor,
-                                bottomTextColor: appColors.textColor,
-                                bottomColor: appColors.transparent,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                              Obx(
+                                () => Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      "Ecommerce Wallet",
-                                      style: AppTextStyle.textStyle9(
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                                    Expanded(
+                                      child: controller.isShowTitle.value
+                                          ? InkWell(
+                                              onTap: () {},
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
+                                                    style: AppTextStyle
+                                                        .textStyle16(
+                                                            fontColor: appColors
+                                                                .appRedColour,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                  ),
+                                                  Text(
+                                                    "today".tr,
+                                                    style: AppTextStyle
+                                                        .textStyle16(
+                                                            fontColor: appColors
+                                                                .darkBlue,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          : InkWell(
+                                              onTap: () {},
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "₹******",
+                                                    style: AppTextStyle
+                                                        .textStyle16(
+                                                            fontColor: appColors
+                                                                .appRedColour,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                  ),
+                                                  Text(
+                                                    "today".tr,
+                                                    style: AppTextStyle
+                                                        .textStyle16(
+                                                            fontColor: appColors
+                                                                .darkBlue,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                     ),
-                                    SizedBox(height: 5.h),
-                                    Text(
-                                      "₹${controller.homeData?.ecommerceWallet ?? 0}",
-                                      style: AppTextStyle.textStyle10(
-                                        fontWeight: FontWeight.w400,
+                                    // SizedBox(width: 15.w),
+                                    Expanded(
+                                      child: controller.isShowTitle.value
+                                          ? InkWell(
+                                              onTap: () {
+                                                earningDetailPopup(Get.context!,
+                                                    controller: controller);
+                                                // Get.toNamed(RouteName.yourEarning);
+                                              },
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        "₹${controller.homeData?.totalEarning?.toStringAsFixed(2)}",
+                                                        style: AppTextStyle
+                                                            .textStyle16(
+                                                                fontColor: appColors
+                                                                    .appRedColour,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700),
+                                                      ),
+                                                      const Icon(
+                                                        Icons.arrow_forward_ios,
+                                                        size: 20,
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Text(
+                                                    "total".trParams(
+                                                        {"count": ""}),
+                                                    style: AppTextStyle
+                                                        .textStyle16(
+                                                            fontColor: appColors
+                                                                .darkBlue,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          : InkWell(
+                                              onTap: () {
+                                                earningDetailPopup(Get.context!,
+                                                    controller: controller);
+                                                // Get.toNamed(RouteName.yourEarning);
+                                              },
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        "₹********",
+                                                        style: AppTextStyle
+                                                            .textStyle16(
+                                                                fontColor: appColors
+                                                                    .appRedColour,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700),
+                                                      ),
+                                                      const Icon(
+                                                        Icons.arrow_forward_ios,
+                                                        size: 20,
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Text(
+                                                    "total".trParams(
+                                                        {"count": ""}),
+                                                    style: AppTextStyle
+                                                        .textStyle16(
+                                                            fontColor: appColors
+                                                                .darkBlue,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                    ),
+                                    // SizedBox(width: 10.w),
+                                    InkWell(
+                                      onTap: () {
+                                        Get.toNamed(RouteName.checkKundli);
+                                      },
+                                      child: Ink(
+                                        height: 50.h,
+                                        decoration: BoxDecoration(
+                                          color: appColors.guideColor,
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(10)),
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10.w),
+                                        // alignment: Alignment.center,
+                                        child: Center(
+                                          child: Text(
+                                            "checkKundli".tr,
+                                            style: AppTextStyle.textStyle12(
+                                                fontColor: appColors.white,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
-                              )),
-                            ],
-                          ),
-                          SizedBox(height: 10.h),
-                          Obx(
-                            () => controller.isFeedbackAvailable.value
-                                ? controller.feedbackResponse == null
-                                    ? const SizedBox.shrink()
-                                    : Column(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              Get.toNamed(
-                                                  RouteName.orderFeedback,
-                                                  arguments: [
-                                                    controller.feedbacksList
-                                                  ]);
-                                            },
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  'Order Feedback',
-                                                  style:
-                                                      AppTextStyle.textStyle16(
-                                                          fontColor: appColors
-                                                              .darkBlue,
-                                                          fontWeight:
-                                                              FontWeight.w400),
-                                                ),
-                                                Text(
-                                                  "viewAll".tr,
-                                                  style:
-                                                      AppTextStyle.textStyle12(
-                                                          fontColor: appColors
-                                                              .darkBlue,
-                                                          fontWeight:
-                                                              FontWeight.w400),
-                                                )
-                                              ],
-                                            ),
+                              ),
+                              SizedBox(height: 12.h),
+
+                              /// new widget
+                              Row(
+                                children: [
+                                  Expanded(
+                                      child: RetentionWidget(
+                                    title:
+                                        "Bonus Wallet - ₹${controller.homeData?.bonusWallet ?? 0}",
+                                    subTitle:
+                                        "Retention Rate - ${controller.homeData?.retention ?? 0}%",
+                                    minimumRetention:
+                                        controller.homeData?.minimumRetention ??
+                                            0,
+                                    minimumRepurchaseRate: controller
+                                            .homeData?.minimumRepurchaseRate ??
+                                        0,
+                                    onTap: () {},
+                                  )),
+                                  SizedBox(width: 10.w),
+                                  Expanded(
+                                      child: RetentionWidget(
+                                    title:
+                                        "Paid Wallet - ₹${controller.homeData?.paidWallet ?? 0}",
+                                    subTitle:
+                                        "Retention Rate - ${controller.homeData?.repurchaseRate ?? 0}%",
+                                    minimumRetention:
+                                        controller.homeData?.minimumRetention ??
+                                            0,
+                                    minimumRepurchaseRate: controller
+                                            .homeData?.minimumRepurchaseRate ??
+                                        0,
+                                    onTap: () {
+                                      ecommerceWalletDetailPopup(Get.context!,
+                                          controller: controller);
+                                    },
+                                  )),
+                                  SizedBox(width: 10.w),
+                                  Expanded(
+                                      child: RetentionWidget(
+                                    borderColor: appColors.textColor,
+                                    bottomTextColor: appColors.textColor,
+                                    bottomColor: appColors.transparent,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Ecommerce Wallet",
+                                          style: AppTextStyle.textStyle9(
+                                            fontWeight: FontWeight.w500,
                                           ),
-                                          SizedBox(height: 10.h),
-                                          FeedbackCardWidget(
-                                              feedback:
-                                                  controller.feedbackResponse ??
+                                        ),
+                                        SizedBox(height: 5.h),
+                                        Text(
+                                          "₹${controller.homeData?.ecommerceWallet ?? 0}",
+                                          style: AppTextStyle.textStyle10(
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                                ],
+                              ),
+                              SizedBox(height: 10.h),
+                              Obx(
+                                () => controller.isFeedbackAvailable.value
+                                    ? controller.feedbackResponse == null
+                                        ? const SizedBox.shrink()
+                                        : Column(
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Get.toNamed(
+                                                      RouteName.orderFeedback,
+                                                      arguments: [
+                                                        controller.feedbacksList
+                                                      ]);
+                                                },
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      'Order Feedback',
+                                                      style: AppTextStyle
+                                                          .textStyle16(
+                                                              fontColor:
+                                                                  appColors
+                                                                      .darkBlue,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400),
+                                                    ),
+                                                    Text(
+                                                      "viewAll".tr,
+                                                      style: AppTextStyle
+                                                          .textStyle12(
+                                                              fontColor:
+                                                                  appColors
+                                                                      .darkBlue,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(height: 10.h),
+                                              FeedbackCardWidget(
+                                                  feedback: controller
+                                                          .feedbackResponse ??
                                                       FeedbackData(
                                                         id: controller
                                                             .feedbackResponse
@@ -439,187 +461,200 @@ class HomeUI extends GetView<HomeController> {
                                                               ?.createdAt,
                                                         ),
                                                       )),
-                                          SizedBox(height: 10.h),
-                                        ],
-                                      )
-                                : const SizedBox(),
-                          ),
-                          // SizedBox(height: 10.h),
-                          // availableFeedbackWidget(controller.feedbackResponse ?? FeedbackData()),
-                          // SizedBox(height: 10.h),
-                          controller.homeData?.noticeBoard == null
-                              ? const SizedBox()
-                              : Column(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        Get.toNamed(RouteName.noticeBoard);
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "noticeBoard".tr,
-                                            style: AppTextStyle.textStyle16(
-                                                fontColor: appColors.darkBlue,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                          Text(
-                                            "viewAll".tr,
-                                            style: AppTextStyle.textStyle12(
-                                                fontColor: appColors.darkBlue,
-                                                fontWeight: FontWeight.w400),
+                                              SizedBox(height: 10.h),
+                                            ],
                                           )
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(height: 10.h),
-                                    noticeBoardWidget(),
-                                  ],
-                                ),
-                          // SizedBox(height: 10.h),
-                          // noticeBoardWidget(),
-                          SizedBox(height: 10.h),
-                          // viewKundliWidget(),
-                          viewKundliWidgetUpdated(),
-                          SizedBox(height: 10.h),
-                          Obx(
-                            () {
-                              return controller.isLiveEnable.value
-                                  ? Column(
+                                    : const SizedBox(),
+                              ),
+                              // SizedBox(height: 10.h),
+                              // availableFeedbackWidget(controller.feedbackResponse ?? FeedbackData()),
+                              // SizedBox(height: 10.h),
+                              controller.homeData?.noticeBoard == null
+                                  ? const SizedBox()
+                                  : Column(
                                       children: [
-                                        SizedBox(height: 10.h),
-                                        InkWell(
-                                          onTap: () async {
-                                            bool hasOpenOrder = false;
-                                            // hasOpenOrder = await controller.hasOpenOrder();
-                                            if (hasOpenOrder) {
-                                              // divineSnackBar(
-                                              //   data:
-                                              //       "Unable to Go Live due to your active order.",
-                                              //   color: appColors.guideColor,
-                                              //   duration: const Duration(seconds: 6),
-                                              // );
-                                            } else {
-                                              bool isChatOn =
-                                                  controller.chatSwitch.value;
-                                              bool isAudioCallOn =
-                                                  controller.callSwitch.value;
-                                              bool isVideoCallOn =
-                                                  controller.videoSwitch.value;
-                                              if (isChatOn == false &&
-                                                  isAudioCallOn == false &&
-                                                  isVideoCallOn == false) {
-                                                await Get.toNamed(
-                                                    RouteName.liveTipsUI);
-                                              } else {
-                                                divineSnackBar(
-                                                  data:
-                                                      "Please turn off all session types in order to go live.",
-                                                  color: appColors.guideColor,
-                                                  duration: const Duration(
-                                                      seconds: 6),
-                                                );
-                                              }
-                                            }
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.toNamed(RouteName.noticeBoard);
                                           },
-                                          child: Container(
-                                            height: 60,
-                                            decoration: BoxDecoration(
-                                              color: appColors.guideColor,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withOpacity(0.2),
-                                                  blurRadius: 1.0,
-                                                  offset:
-                                                      const Offset(0.0, 3.0),
-                                                ),
-                                              ],
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Assets.images.icGoLive
-                                                    .svg(color: Colors.white),
-                                                const SizedBox(width: 15),
-                                                Text(
-                                                  "goLive".tr,
-                                                  style:
-                                                      AppTextStyle.textStyle20(
-                                                    fontWeight: FontWeight.w700,
-                                                    fontColor: appColors.white,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "noticeBoard".tr,
+                                                style: AppTextStyle.textStyle16(
+                                                    fontColor:
+                                                        appColors.darkBlue,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                              Text(
+                                                "viewAll".tr,
+                                                style: AppTextStyle.textStyle12(
+                                                    fontColor:
+                                                        appColors.darkBlue,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              )
+                                            ],
                                           ),
                                         ),
                                         SizedBox(height: 10.h),
+                                        noticeBoardWidget(),
                                       ],
-                                    )
-                                  : const SizedBox();
-                            },
-                          ),
-                          SizedBox(height: 10.h),
-                          Container(
-                              height: 1.h,
-                              color: appColors.darkBlue.withOpacity(0.5)),
-                          SizedBox(height: 10.h),
-                          Obx(
-                            () {
-                              final bool cond1 = controller.isCallEnable.value;
-                              final bool cond2 = controller.isChatEnable.value;
-                              final bool cond3 =
-                                  controller.isVideoCallEnable.value;
+                                    ),
+                              // SizedBox(height: 10.h),
+                              // noticeBoardWidget(),
+                              SizedBox(height: 10.h),
+                              // viewKundliWidget(),
+                              viewKundliWidgetUpdated(),
+                              SizedBox(height: 10.h),
+                              Obx(
+                                () {
+                                  return controller.isLiveEnable.value
+                                      ? Column(
+                                          children: [
+                                            SizedBox(height: 10.h),
+                                            InkWell(
+                                              onTap: () async {
+                                                bool hasOpenOrder = false;
+                                                // hasOpenOrder = await controller.hasOpenOrder();
+                                                if (hasOpenOrder) {
+                                                  // divineSnackBar(
+                                                  //   data:
+                                                  //       "Unable to Go Live due to your active order.",
+                                                  //   color: appColors.guideColor,
+                                                  //   duration: const Duration(seconds: 6),
+                                                  // );
+                                                } else {
+                                                  bool isChatOn = controller
+                                                      .chatSwitch.value;
+                                                  bool isAudioCallOn =
+                                                      controller
+                                                          .callSwitch.value;
+                                                  bool isVideoCallOn =
+                                                      controller
+                                                          .videoSwitch.value;
+                                                  if (isChatOn == false &&
+                                                      isAudioCallOn == false &&
+                                                      isVideoCallOn == false) {
+                                                    await Get.toNamed(
+                                                        RouteName.liveTipsUI);
+                                                  } else {
+                                                    divineSnackBar(
+                                                      data:
+                                                          "Please turn off all session types in order to go live.",
+                                                      color:
+                                                          appColors.guideColor,
+                                                      duration: const Duration(
+                                                          seconds: 6),
+                                                    );
+                                                  }
+                                                }
+                                              },
+                                              child: Container(
+                                                height: 60,
+                                                decoration: BoxDecoration(
+                                                  color: appColors.guideColor,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.black
+                                                          .withOpacity(0.2),
+                                                      blurRadius: 1.0,
+                                                      offset: const Offset(
+                                                          0.0, 3.0),
+                                                    ),
+                                                  ],
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Assets.images.icGoLive.svg(
+                                                        color: Colors.white),
+                                                    const SizedBox(width: 15),
+                                                    Text(
+                                                      "goLive".tr,
+                                                      style: AppTextStyle
+                                                          .textStyle20(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontColor:
+                                                            appColors.white,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: 10.h),
+                                          ],
+                                        )
+                                      : const SizedBox();
+                                },
+                              ),
+                              SizedBox(height: 10.h),
+                              Container(
+                                  height: 1.h,
+                                  color: appColors.darkBlue.withOpacity(0.5)),
+                              SizedBox(height: 10.h),
+                              Obx(
+                                () {
+                                  final bool cond1 =
+                                      controller.isCallEnable.value;
+                                  final bool cond2 =
+                                      controller.isChatEnable.value;
+                                  final bool cond3 =
+                                      controller.isVideoCallEnable.value;
 
-                              return cond1 || cond2 || cond3
-                                  ? sessionTypeWidget()
-                                  : const SizedBox();
-                            },
+                                  return cond1 || cond2 || cond3
+                                      ? sessionTypeWidget()
+                                      : const SizedBox();
+                                },
+                              ),
+                              // if (controller.homeData?.offerType != null &&
+                              //     controller.homeData?.offerType != [])
+                              //   offerTypeWidget(),
+                              controller.homeData?.offers?.orderOffer != null
+                                  ? orderOfferWidget(homeController: controller)
+                                  : const SizedBox(),
+                              controller.homeData?.offers?.customOffer != null
+                                  ? customerOfferWidget(context,
+                                      controller: controller)
+                                  : const SizedBox(),
+                              // SizedBox(height: 10.h),
+                              // fullScreenBtnWidget(
+                              //     imageName: Assets.images.icReferAFriend.svg(),
+                              //     btnTitle: "referAnAstrologer".tr,
+                              //     onbtnTap: () {
+                              //       Get.toNamed(RouteName.referAstrologer);
+                              //     }),
+                              SizedBox(height: 10.h),
+                              trainingVideoWidget(controller: controller),
+                              SizedBox(height: 10.h),
+                              fullScreenBtnWidget(
+                                  imageName: Assets.images.icEcommerce.svg(),
+                                  btnTitle: "eCommerce".tr,
+                                  onbtnTap: () async {
+                                    if (await PermissionHelper()
+                                        .askPermissions()) {
+                                      Get.toNamed(RouteName.videoCallPage);
+                                    }
+                                  }),
+                              SizedBox(height: 20.h),
+                              feedbackWidget(controller: controller),
+                              SizedBox(height: 20.h),
+                            ],
                           ),
-                          // if (controller.homeData?.offerType != null &&
-                          //     controller.homeData?.offerType != [])
-                          //   offerTypeWidget(),
-                          controller.homeData?.offers?.orderOffer != null
-                              ? orderOfferWidget(homeController: controller)
-                              : const SizedBox(),
-                          controller.homeData?.offers?.customOffer != null
-                              ? customerOfferWidget(context,
-                                  controller: controller)
-                              : const SizedBox(),
-                          // SizedBox(height: 10.h),
-                          // fullScreenBtnWidget(
-                          //     imageName: Assets.images.icReferAFriend.svg(),
-                          //     btnTitle: "referAnAstrologer".tr,
-                          //     onbtnTap: () {
-                          //       Get.toNamed(RouteName.referAstrologer);
-                          //     }),
-                          SizedBox(height: 10.h),
-                          trainingVideoWidget(controller: controller),
-                          SizedBox(height: 10.h),
-                          fullScreenBtnWidget(
-                              imageName: Assets.images.icEcommerce.svg(),
-                              btnTitle: "eCommerce".tr,
-                              onbtnTap: () async {
-                                if (await PermissionHelper().askPermissions()) {
-                                  Get.toNamed(RouteName.videoCallPage);
-                                }
-                              }),
-                          SizedBox(height: 20.h),
-                          feedbackWidget(controller: controller),
-                          SizedBox(height: 20.h),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                        top: controller.yPosition,
-                        left: controller.xPosition + 10,
-                        child: GestureDetector(
+                        ),
+                        Positioned(
+                          top: controller.yPosition,
+                          left: controller.xPosition + 10,
+                          child: GestureDetector(
                             onPanUpdate: (tapInfo) {
                               double newXPosition =
                                   controller.xPosition + tapInfo.delta.dx;
@@ -651,32 +686,33 @@ class HomeUI extends GetView<HomeController> {
                               controller.whatsapp();
                             },
                             child: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  color: appColors.guideColor,
-                                  borderRadius: BorderRadius.circular(25.0),
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                color: appColors.guideColor,
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Assets.images.icHelp
+                                        .svg(color: appColors.white),
+                                    Text(
+                                      "help".tr,
+                                      style: AppTextStyle.textStyle10(
+                                          fontColor: appColors.white,
+                                          fontWeight: FontWeight.w700),
+                                    )
+                                  ],
                                 ),
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Assets.images.icHelp
-                                          .svg(color: appColors.white),
-                                      Text(
-                                        "help".tr,
-                                        style: AppTextStyle.textStyle10(
-                                            fontColor: appColors.white,
-                                            fontWeight: FontWeight.w700),
-                                      )
-                                    ],
-                                  ),
-                                ))))
-                  ]);
-                } else {
-                  return SizedBox();
-                }
-              }));
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  : SizedBox());
         });
   }
 
@@ -1295,7 +1331,6 @@ class HomeUI extends GetView<HomeController> {
                                 ? InkWell(
                                     onTap:
                                         controller.selectDateTimePopupForChat,
-
                                     child: Container(
                                       // width: 128.w,
                                       height: 31.h,
@@ -2273,7 +2308,8 @@ class HomeUI extends GetView<HomeController> {
                 ),
                 SizedBox(height: 10.h),
                 CustomInfoWidget(
-                  text: "Bonus Wallet contains money which is sanctioned by the platform.",
+                  text:
+                      "Bonus Wallet contains money which is sanctioned by the platform.",
                   badgeText: "1",
                 ),
                 CustomInfoWidget(
@@ -2605,6 +2641,7 @@ class PerformanceDialog extends StatelessWidget {
 
 class SelectedTimeForCall extends StatelessWidget {
   final HomeController? controller;
+
   const SelectedTimeForCall({Key? key, this.controller}) : super(key: key);
 
   @override
@@ -2639,6 +2676,7 @@ class SelectedTimeForCall extends StatelessWidget {
 
 class SelectedTimeForVideoCall extends StatelessWidget {
   final HomeController? controller;
+
   const SelectedTimeForVideoCall({Key? key, this.controller}) : super(key: key);
 
   @override

@@ -11,8 +11,9 @@ import '../../../gen/assets.gen.dart';
 class PoojaDeleteBottomSheet extends StatelessWidget {
   final PujaListingData? pujaData;
   final Function()? onTap;
+  final String? baseImageUrl;
 
-  const PoojaDeleteBottomSheet({super.key, this.pujaData, this.onTap});
+  const PoojaDeleteBottomSheet({super.key, this.pujaData, this.onTap, this.baseImageUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class PoojaDeleteBottomSheet extends StatelessWidget {
                 alignment: Alignment.bottomRight,
                 children: [
                   CustomImageView(
-                    imagePath: pujaData!.poojaImg,
+                    imagePath: baseImageUrl! +pujaData!.poojaImg!,
                     height: 65.h,
                     width: 65.h,
                     placeHolder: "assets/images/default_profiles.svg",
