@@ -317,9 +317,16 @@ class HomeUI extends GetView<HomeController> {
                                     ? appColors.red
                                     : appColors.green,
                                 onTap: () async {
-                                  await controller.getWalletPointDetail(2);
-                                  ecommerceWalletDetailPopup(
-                                      Get.context!, controller.walletData,title: "What is Bonus Wallet ?");
+                                 if(!controller.isOpenBonusSheet) {
+                                   controller.isOpenBonusSheet = true;
+                                   controller.update();
+                                    await controller.getWalletPointDetail(2);
+                                    ecommerceWalletDetailPopup(
+                                        Get.context!, controller.walletData,
+                                        title: "What is Bonus Wallet ?",
+                                        controller: controller,
+                                        type: 2);
+                                  }
                                 },
                               )),
                               SizedBox(width: 10.w),
@@ -336,9 +343,16 @@ class HomeUI extends GetView<HomeController> {
                                           ? appColors.red
                                           : appColors.green,
                                   onTap: () async {
-                                    await controller.getWalletPointDetail(1);
-                                    ecommerceWalletDetailPopup(
-                                        Get.context!, controller.walletData,title: "What is Paid Wallet ?");
+                                    if(!controller.isOpenPaidSheet){
+                                      controller.isOpenPaidSheet = true;
+                                      controller.update();
+                                      await controller.getWalletPointDetail(1);
+                                      ecommerceWalletDetailPopup(
+                                          Get.context!, controller.walletData,
+                                          title: "What is Paid Wallet ?",
+                                          controller: controller,
+                                          type: 1);
+                                    }
                                   },
                                 ),
                               ),
@@ -349,9 +363,14 @@ class HomeUI extends GetView<HomeController> {
                                 bottomTextColor: appColors.textColor,
                                 bottomColor: appColors.transparent,
                                 onTap: () async {
-                                  await controller.getWalletPointDetail(3);
-                                  ecommerceWalletDetailPopup(
-                                      Get.context!, controller.walletData,title: "What is Ecommerce Wallet ?");
+                                  if (!controller.isOpenECommerceSheet) {
+                                    controller.isOpenECommerceSheet = true;
+                                    controller.update();
+                                    await controller.getWalletPointDetail(3);
+                                    ecommerceWalletDetailPopup(
+                                        Get.context!, controller.walletData,
+                                        title: "What is Ecommerce Wallet ?",controller: controller,type: 3);
+                                  }
                                 },
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -2284,8 +2303,8 @@ class HomeUI extends GetView<HomeController> {
         ));
   }
 
-  ecommerceWalletDetailPopup(
-      BuildContext context, List<WalletPoint> walletData,{String?title}) async {
+  ecommerceWalletDetailPopup(BuildContext context, List<WalletPoint> walletData,
+      {String? title, int? type,HomeController? controller}) async {
     await openBottomSheet(
       context,
       functionalityWidget: Padding(
@@ -2318,6 +2337,21 @@ class HomeUI extends GetView<HomeController> {
           ),
         ),
       ),
+    ).then(
+      (value)  {
+        if (type == 1) {
+          controller!.isOpenPaidSheet = false;
+          controller.update();
+        } 
+        if (type == 2) {
+          controller!.isOpenBonusSheet = false;
+          controller.update();
+        }
+        if (type == 3) {
+          controller!.isOpenECommerceSheet = false;
+          controller.update();
+        }
+      },
     );
   }
 
