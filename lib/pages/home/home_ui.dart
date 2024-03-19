@@ -319,7 +319,7 @@ class HomeUI extends GetView<HomeController> {
                                 onTap: () async {
                                   await controller.getWalletPointDetail(2);
                                   ecommerceWalletDetailPopup(
-                                      Get.context!, controller.walletData);
+                                      Get.context!, controller.walletData,title: "What is Bonus Wallet ?");
                                 },
                               )),
                               SizedBox(width: 10.w),
@@ -338,7 +338,7 @@ class HomeUI extends GetView<HomeController> {
                                   onTap: () async {
                                     await controller.getWalletPointDetail(1);
                                     ecommerceWalletDetailPopup(
-                                        Get.context!, controller.walletData);
+                                        Get.context!, controller.walletData,title: "What is Paid Wallet ?");
                                   },
                                 ),
                               ),
@@ -351,7 +351,7 @@ class HomeUI extends GetView<HomeController> {
                                 onTap: () async {
                                   await controller.getWalletPointDetail(3);
                                   ecommerceWalletDetailPopup(
-                                      Get.context!, controller.walletData);
+                                      Get.context!, controller.walletData,title: "What is Ecommerce Wallet ?");
                                 },
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -2285,7 +2285,7 @@ class HomeUI extends GetView<HomeController> {
   }
 
   ecommerceWalletDetailPopup(
-      BuildContext context, List<WalletPoint> walletData) async {
+      BuildContext context, List<WalletPoint> walletData,{String?title}) async {
     await openBottomSheet(
       context,
       functionalityWidget: Padding(
@@ -2296,7 +2296,7 @@ class HomeUI extends GetView<HomeController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "What Is Bonus Wallet?",
+                title ?? "",
                 style: AppTextStyle.textStyle20(
                   fontWeight: FontWeight.w500,
                   fontColor: appColors.textColor,
