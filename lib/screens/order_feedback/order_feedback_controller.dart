@@ -32,7 +32,6 @@ class OrderFeedbackController extends GetxController {
     update();
     try {
       var response = await homePageRepository.getFeedbackDataList();
-
       feedbacks.addAll(response.data!);
       // loading = Loading.loaded;
       loading = false;
