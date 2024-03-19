@@ -14,11 +14,17 @@ class RetentionWidget extends StatelessWidget {
   final int? minimumRepurchaseRate;
   final VoidCallback? onTap;
 
-  const RetentionWidget({super.key,
-  this.onTap,
+  const RetentionWidget({
+    super.key,
+    this.onTap,
     this.borderColor,
     this.bottomColor,
-    this.bottomTextColor, this.title, this.subTitle, this.child, this.minimumRetention, this.minimumRepurchaseRate,
+    this.bottomTextColor,
+    this.title,
+    this.subTitle,
+    this.child,
+    this.minimumRetention,
+    this.minimumRepurchaseRate,
   });
 
   @override
