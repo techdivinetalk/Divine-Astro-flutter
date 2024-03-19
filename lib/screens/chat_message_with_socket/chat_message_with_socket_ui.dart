@@ -625,6 +625,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   margin: const EdgeInsets.only(left: 15),
                                 )
                               : Container(
+                                  height: 50,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(30),
                                       boxShadow: [
