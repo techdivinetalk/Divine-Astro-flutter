@@ -17,12 +17,12 @@ class CustomInfoWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 10.sp,),
       child: Stack(
         clipBehavior: Clip.none,
+        alignment: Alignment.centerLeft,
         children: [
           Container(
-            height: 70.h,
-            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 35.sp),
+            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 32.sp),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(10),
               border: Border.all(color: Colors.black),
             ),
             child: Row(
@@ -44,12 +44,12 @@ class CustomInfoWidget extends StatelessWidget {
           ),
           Positioned(
             left: -10,
-            top: 15,
+
             child: Container(
               width: 30,
               height: 30,
               decoration: BoxDecoration(
-                color: appColors.guideColor,
+                color: appColors.extraLightGrey,
                 shape: BoxShape.circle,
               ),
               child: Center(

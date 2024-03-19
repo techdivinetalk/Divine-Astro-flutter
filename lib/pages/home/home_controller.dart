@@ -488,6 +488,8 @@ class HomeController extends GetxController {
     try {
       var response = await HomePageRepository().getDashboardData(params);
       homeData = response.data;
+      print(homeData!.retention);
+      print("homeData.retention");
       updateCurrentData();
       shopDataSync.value = true;
       loading = Loading.loaded;

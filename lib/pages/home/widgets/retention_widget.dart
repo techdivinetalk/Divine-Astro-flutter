@@ -10,8 +10,7 @@ class RetentionWidget extends StatelessWidget {
   final String? title;
   final String? subTitle;
   final Widget? child;
-  final int? minimumRetention;
-  final int? minimumRepurchaseRate;
+
   final VoidCallback? onTap;
 
   const RetentionWidget({
@@ -23,13 +22,13 @@ class RetentionWidget extends StatelessWidget {
     this.title,
     this.subTitle,
     this.child,
-    this.minimumRetention,
-    this.minimumRepurchaseRate,
+
+
   });
 
   @override
   Widget build(BuildContext context) {
-    Color bottomColor = minimumRetention == minimumRepurchaseRate ? appColors.green : appColors.red;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -37,7 +36,7 @@ class RetentionWidget extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: appColors.transparent,
-          border: Border.all(color: borderColor ?? bottomColor),
+          border: Border.all(color: borderColor ?? Colors.transparent),
           borderRadius: BorderRadius.circular(10),
         ),
         child: child ?? Column(
@@ -57,7 +56,7 @@ class RetentionWidget extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: bottomColor,
+                  color:  borderColor ?? Colors.transparent,
                   borderRadius: const BorderRadius.vertical(
                     bottom: Radius.circular(10),
                   ),
