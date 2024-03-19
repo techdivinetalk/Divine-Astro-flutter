@@ -13,7 +13,7 @@ class SplashUI extends GetView<SplashController> {
     return GetBuilder<SplashController>(
       assignId: true,
       init: SplashController(),
-      initState: (state) {},
+
       builder: (controller) {
         return Scaffold(
           body: Container(

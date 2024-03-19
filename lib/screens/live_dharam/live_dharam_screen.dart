@@ -2529,6 +2529,8 @@ class _LivePage extends State<LiveDharamScreen>
     return Future<void>.value();
   }
 
+  List animationsList = [];
+
   // Future<void> moreOptionsForModPopup({
   //   required String userId,
   //   required String userName,
@@ -2652,11 +2654,19 @@ class _LivePage extends State<LiveDharamScreen>
       if (senderUserID != _controller.userId) {
         if (roomId == _controller.liveId) {
           if (type == "") {
+            // await Future.delayed(const Duration(seconds: 10));
             if (mounted) {
+              // animationsList.add(item["animation"]);
+              // await Future.delayed(const Duration(seconds:2));
+              // if(mounted){
+              //   for(int i = 0;i<animationsList.length;i++){
+              print("objectobjectobjectobject");
               ZegoGiftPlayer().play(
                 context,
                 GiftPlayerData(GiftPlayerSource.url, item["animation"]),
               );
+              // }
+              // }
             } else {}
             await showHideTopBanner();
           } else if (type == "Started following") {

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -314,7 +315,8 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
                 Map<String, dynamic> params = {
                   "product_id": pooja.id,
                   "shop_id": 0,
-                  "customer_id": _controller.customerId.value,
+                  "customer_id": int.parse(AppFirebaseService().orderData.value["userId"]),
+                  "order_id":AppFirebaseService().orderData.value["orderId"]
                 };
 
                 var response =

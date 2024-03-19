@@ -629,19 +629,19 @@ class HomeUI extends GetView<HomeController> {
                         top: controller.yPosition,
                         left: controller.xPosition + 10,
                         child: GestureDetector(
-                            onPanUpdate: (tapInfo) {
-                              double newXPosition =
-                                  controller.xPosition + tapInfo.delta.dx;
-                              double newYPosition =
-                                  controller.yPosition + tapInfo.delta.dy;
+                          onPanUpdate: (tapInfo) {
+                            double newXPosition =
+                                controller.xPosition + tapInfo.delta.dx;
+                            double newYPosition =
+                                controller.yPosition + tapInfo.delta.dy;
 
-                              // Ensure newXPosition is within screen bounds
-                              newXPosition = newXPosition.clamp(0.0,
-                                  maxWidth - 50); // Assuming widget width is 50
-                              newYPosition = newYPosition.clamp(
-                                  0,
-                                  maxHeight -
-                                      50); // Assuming widget height is 50
+                            // Ensure newXPosition is within screen bounds
+                            newXPosition = newXPosition.clamp(0.0,
+                                maxWidth - 50); // Assuming widget width is 50
+                            newYPosition = newYPosition.clamp(
+                                0,
+                                maxHeight -
+                                    50); // Assuming widget height is 50
 
                               controller.xPosition = newXPosition;
                               controller.yPosition = newYPosition;
@@ -1304,7 +1304,6 @@ class HomeUI extends GetView<HomeController> {
                                 ? InkWell(
                                     onTap:
                                         controller.selectDateTimePopupForChat,
-
                                     child: Container(
                                       // width: 128.w,
                                       height: 31.h,

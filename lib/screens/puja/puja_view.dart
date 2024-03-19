@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/SvgIconButton.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/common/routes.dart';
@@ -152,6 +153,7 @@ class PujaScreen extends GetView<PujaController> {
                                                 Get.bottomSheet(
                                                     PoojaDeleteBottomSheet(
                                                   pujaData: data,
+                                                  baseImageUrl: controller.pref.getAmazonUrl()! ,
                                                   onTap: () {
                                                     controller.deletePujaApi(
                                                         deleteId:

@@ -68,7 +68,7 @@ class AddPujaScreen extends GetView<AddPujaController> {
                       }
                     },
                     child: Text(
-                      'Add Puja',
+                      'Add ${controller.selectedValue}',
                       style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w600,
                         fontColor: appColors.white,

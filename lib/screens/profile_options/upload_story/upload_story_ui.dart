@@ -74,8 +74,16 @@ class UploadStoryUi extends GetView<UploadStoryController> {
                               viewerHeight: 50.0,
                               viewerWidth: MediaQuery.of(context).size.width,
                               maxVideoLength: const Duration(seconds: 30),
-                              onChangeStart: (value) =>
-                                  controller.startValue = value,
+                              onChangeStart: (value){
+                                print(value.runtimeType);
+                                print("value.runtimeTyp");
+                                controller.startValue = value;
+                                print(controller.startValue);
+                                print(controller.startValue.runtimeType);
+                                print("controller.startValue.runtimeType");
+                                controller.update();
+                              }
+                                  ,
                               onChangeEnd: (value) =>
                                   controller.endValue = value,
                               onChangePlaybackState: (value) {

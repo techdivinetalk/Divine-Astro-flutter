@@ -75,19 +75,19 @@ class PoojaDharamMainController extends GetxController {
     required Function(String message) successCallBack,
     required Function(String message) failureCallBack,
   }) async {
-    isLoading = true;
-    Map<String, dynamic> param = <String, dynamic>{};
-    param = <String, dynamic>{};
-    GetBookedPoojaResponse response = GetBookedPoojaResponse();
-    response = await poojaRepository.getBookedPoojaApi(
-      params: param,
-      successCallBack: successCallBack,
-      failureCallBack: customerId.value == 0 ? failureCallBack : (message) {},
-    );
-    getBookedPooja = response.statusCode == HttpStatus.ok
-        ? GetBookedPoojaResponse.fromJson(response.toJson())
-        : GetBookedPoojaResponse.fromJson(GetBookedPoojaResponse().toJson());
-    isLoading = false;
+    // isLoading = true;
+    // Map<String, dynamic> param = <String, dynamic>{};
+    // param = <String, dynamic>{};
+    // GetBookedPoojaResponse response = GetBookedPoojaResponse();
+    // response = await poojaRepository.getBookedPoojaApi(
+    //   params: param,
+    //   successCallBack: successCallBack,
+    //   failureCallBack: customerId.value == 0 ? failureCallBack : (message) {},
+    // );
+    // getBookedPooja = response.statusCode == HttpStatus.ok
+    //     ? GetBookedPoojaResponse.fromJson(response.toJson())
+    //     : GetBookedPoojaResponse.fromJson(GetBookedPoojaResponse().toJson());
+    // isLoading = false;
     return Future<void>.value();
   }
 }

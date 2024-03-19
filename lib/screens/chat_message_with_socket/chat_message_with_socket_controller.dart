@@ -47,10 +47,12 @@ import "../../model/chat/ReqCommonChat.dart";
 import "../../model/chat/ReqEndChat.dart";
 import "../../model/chat/res_common_chat_success.dart";
 import "../../model/message_template_response.dart";
+import "../../model/notice_response.dart";
 import "../../model/res_product_detail.dart";
 import "../../model/save_remedies_response.dart";
 import "../../model/tarot_response.dart";
 import "../../repository/chat_repository.dart";
+import "../../repository/notice_repository.dart";
 import "../../utils/enum.dart";
 import "../chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/get_single_pooja_response.dart";
 import "../live_dharam/gifts_singleton.dart";
@@ -704,6 +706,7 @@ class ChatMessageWithSocketController extends GetxController
         GiftPlayerData(
           GiftPlayerSource.url,
           data.first.animation,
+
         ),
       );
     } else {}
@@ -1337,5 +1340,27 @@ class ChatMessageWithSocketController extends GetxController
     }
     int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
     talkTimeStartTimer(remainingTime);
+  }
+  final noticeRepository = Get.put(NoticeRepository());
+  Future<NoticeResponse> noticeAPi() async {
+    try {
+      final response =
+      await noticeRepository.get(noticeRepository.getAstroAllNotice, headers: await noticeRepository.getJsonHeaderURL());
+
+      if (response.statusCode == 200) {
+        final noticeResponse = noticeResponseFromJson(response.body);
+        if (noticeResponse.statusCode == noticeRepository.successResponse &&
+            noticeResponse.success!) {
+          return noticeResponse;
+        } else {
+          throw CustomException(json.decode(response.body));
+        }
+      } else {
+        throw CustomException(json.decode(response.body));
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
   }
 }

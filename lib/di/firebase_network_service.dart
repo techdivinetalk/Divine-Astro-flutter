@@ -4,6 +4,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../app_socket/app_socket.dart';
+
 class FirebaseNetworkService extends GetxService {
   final StreamController<bool?> _onDatabaseConnected =
       StreamController.broadcast();
@@ -18,6 +20,8 @@ class FirebaseNetworkService extends GetxService {
       _onDatabaseConnected.sink.add(connected);
       if (connected) {
         debugPrint("You are Connected.");
+        final socket = AppSocket();
+        socket.socketConnect();
       } else {
         debugPrint("You DisConnected");
       }
