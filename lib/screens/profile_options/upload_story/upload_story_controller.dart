@@ -36,6 +36,7 @@ class UploadStoryController extends GetxController {
 
     if (Get.arguments != null) {
       trimmer.loadVideo(videoFile: File(Get.arguments));
+
       selectedFile?.value = true;
       update();
     }
@@ -48,18 +49,14 @@ class UploadStoryController extends GetxController {
       endValue: endValue,
       onSave: (outputPath) async {
         progressVisibility.value = false;
-        print(outputPath);
-        debugPrint('OUTPUT PATH: $outputPath');
 
-        print(trimmer.videoPlayerController!.value.duration.inSeconds);
-
-        print("infoinfoinfoinfoinfo");
-        uploadImageToS3Bucket(File(outputPath!));
+        uploadImageToS3Bucket(File(outputPath!),
+            duration: ((endValue - startValue) / 1000).toString());
       },
     );
   }
 
-  uploadImageToS3Bucket(File? selectedFile) async {
+  uploadImageToS3Bucket(File? selectedFile, {String? duration}) async {
     var commonConstants = await userRepository.constantDetailsData();
     var dataString = commonConstants.data!.awsCredentails.baseurl?.split(".");
     var extension = p.extension(selectedFile!.path);
@@ -75,19 +72,19 @@ class UploadStoryController extends GetxController {
     );
     if (response != null) {
       debugPrint("Uploaded Url : $response");
-      await uploadStory(response);
+      await uploadStory(response, duration: duration);
       CustomException("Video uploaded successfully");
     } else {
       CustomException("Something went wrong");
     }
   }
 
-  Future<void> uploadStory(String url) async {
+  Future<void> uploadStory(String url, {String? duration}) async {
     try {
       Map<String, dynamic> param = {
         "media_url": url,
         "astrologer_id": userData?.id,
-        "duration": trimmer.videoPlayerController!.value.duration.inSeconds,
+        "duration": duration,
       };
       final response = await userRepository.uploadAstroStory(param);
       if (response.statusCode == 200 && response.success == true) {

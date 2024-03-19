@@ -40,14 +40,6 @@ class SplashController extends GetxController with WidgetsBindingObserver {
     super.onClose();
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.resumed) {
-      notificationPermission();
-    }
-  }
-
   notificationPermission() async {
     print("splash screen");
     await recurringFunction(onComplete: navigation);
