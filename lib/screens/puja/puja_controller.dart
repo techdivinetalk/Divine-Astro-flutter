@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PujaController extends GetxController {
-
   List<PujaListingData> pujaData = [];
   bool isPujaLoading = false;
   String noPoojaFound = "";
@@ -67,4 +66,7 @@ class PujaController extends GetxController {
       }
     }
   }
+
+  ///{{url}}/api/astro/v7/getPoojaNameMaster
+  /// {{url}}/api/astro/v7/getProductNameMaster
 }

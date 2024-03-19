@@ -76,6 +76,7 @@ class ApiProvider {
   final String addPooja = "addPooja";
   final String addProductByAstrologer = "addProductByAstrologer";
   final String getCategory = "getCategory";
+  final String getPoojaNameMaster = "getPoojaNameMaster";
   final String getTag = "getTag";
   final String deletePuja = "pooja";
   final String uploadAstroStories = "uploadAstroStories";

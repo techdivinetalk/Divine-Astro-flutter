@@ -85,6 +85,7 @@ class PujaScreen extends GetView<PujaController> {
                       itemCount: controller.pujaData.length,
                       itemBuilder: (context, index) {
                         PujaListingData data = controller.pujaData[index];
+
                         return Container(
                           padding: const EdgeInsets.all(12.0),
                           decoration: BoxDecoration(

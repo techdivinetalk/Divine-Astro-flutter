@@ -353,6 +353,30 @@ class AddPujaScreen extends GetView<AddPujaController> {
             ),
           ),
         ),
+
+        controller.selectedValue.value  == "Puja" ?    Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 10.h),
+            CustomText(
+              'Select puja name',
+              fontColor: appColors.textColor,
+            ),
+            SizedBox(height: 8.h),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.h, vertical: 5.h),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                border: Border.all(
+                  color: Colors.black.withOpacity(0.2),
+                  width: 1.0, // Adjust the border width as needed
+                ),
+              ),
+              child: PujaNameDropdown(),
+            ),
+          ],
+        ):SizedBox(),
+
       ],
     );
   }
@@ -412,6 +436,63 @@ class AddPujaScreen extends GetView<AddPujaController> {
             ),
           ),
         ));
+  }
+
+  Widget PujaNameDropdown() {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton2<PujaProductCategoriesData>(
+        isExpanded: true,
+        hint: Text(
+          "Select puja name",
+          style: AppTextStyle.textStyle16(
+              fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
+        ),
+        items: controller.pujaNamesList
+            .map((PujaProductCategoriesData item) =>
+            DropdownMenuItem<PujaProductCategoriesData>(
+              value: item,
+              child: Text(
+                item.name ?? "",
+                style: AppTextStyle.textStyle16(
+                    fontWeight: FontWeight.w400,
+                    fontColor: appColors.darkBlue),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ))
+            .toList(),
+        style: AppTextStyle.textStyle16(
+            fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
+        value: controller.selectedPujaName,
+        onChanged: (PujaProductCategoriesData? value) {
+          controller.selectedPujaName = value;
+          controller.update();
+        },
+        iconStyleData: IconStyleData(
+          icon: const Icon(
+            Icons.keyboard_arrow_down_outlined,
+          ),
+          iconSize: 35,
+          iconEnabledColor: appColors.blackColor,
+        ),
+        dropdownStyleData: DropdownStyleData(
+          width: ScreenUtil().screenWidth * 0.9,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            color: appColors.white,
+          ),
+          offset: const Offset(-8, -17),
+          scrollbarTheme: ScrollbarThemeData(
+            radius: const Radius.circular(40),
+            thickness: MaterialStateProperty.all<double>(6),
+            thumbVisibility: MaterialStateProperty.all<bool>(false),
+          ),
+        ),
+        menuItemStyleData: const MenuItemStyleData(
+          height: 40,
+          // padding: EdgeInsets.only(left: 14, right: 14),
+        ),
+      ),
+    );
   }
 
   Widget EComeTagTypeDropdown() {
