@@ -14,6 +14,7 @@ import 'package:divine_astrologer/model/astro_schedule_response.dart';
 import 'package:divine_astrologer/model/feedback_response.dart';
 import 'package:divine_astrologer/model/update_offer_type_response.dart';
 import 'package:divine_astrologer/model/update_session_type_response.dart';
+import 'package:divine_astrologer/model/wallet_deatils_response.dart';
 import 'package:divine_astrologer/pages/home/home_ui.dart';
 import 'package:divine_astrologer/remote_config/remote_config_helper.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
@@ -359,6 +360,7 @@ class HomeController extends GetxController {
   RxBool profileDataSync = false.obs;
 
   HomeData? homeData;
+  var walletData = <WalletPoint>[].obs;
   RxBool isFeedbackAvailable = false.obs;
   FeedbackData? feedbackResponse;
   Offset fabPosition = const Offset(20, 20);
@@ -494,6 +496,20 @@ class HomeController extends GetxController {
       update();
       //   getFeedbackData();
       //log("DashboardData==>${jsonEncode(homeData)}");
+    } catch (error) {
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  getWalletPointDetail(wallet) async {
+    update();
+    try {
+      var response = await HomePageRepository().getWalletDetailsData(wallet);
+      walletData.value = response.data;
     } catch (error) {
       if (error is AppException) {
         error.onException();

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:divine_astrologer/model/live/new_tarot_card_model.dart';
+import 'package:divine_astrologer/model/wallet_deatils_response.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,6 +63,30 @@ class HomePageRepository extends ApiProvider {
           await LiveSharedPreferencesSingleton().setAllTarotCard(model: model);
 
           return tarotResponse;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<WalletPointResponse> getWalletDetailsData(wallet) async {
+    try {
+      final response = await get(
+        '$getwalletPointDetail?wallet_type=$wallet',
+        headers: await getJsonHeaderURL(),
+      );
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final walletDetailsResponse =
+          WalletPointResponse.fromJson(json.decode(response.body));
+          return walletDetailsResponse;
         }
       } else {
         throw CustomException(json.decode(response.body)["error"]);

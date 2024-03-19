@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RetentionWidget extends StatelessWidget {
   final Color? borderColor;
@@ -26,13 +27,15 @@ class RetentionWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 60,
+        height: 50.h,
+        width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: appColors.transparent,
           border: Border.all(color: borderColor ?? bottomColor),
           borderRadius: BorderRadius.circular(10),
         ),
-        child:child ?? Column(
+        child: child ?? Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(
               child: Center(

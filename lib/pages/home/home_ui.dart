@@ -10,6 +10,7 @@ import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/home_page_model_class.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
+import 'package:divine_astrologer/model/wallet_deatils_response.dart';
 import 'package:divine_astrologer/pages/home/widgets/offer_bottom_widget.dart';
 import 'package:divine_astrologer/pages/home/widgets/can_not_online.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
@@ -27,6 +28,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:velocity_x/velocity_x.dart';
 import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../model/feedback_response.dart';
@@ -315,7 +317,10 @@ class HomeUI extends GetView<HomeController> {
                                 minimumRepurchaseRate: controller
                                         .homeData?.minimumRepurchaseRate ??
                                     0,
-                                onTap: () {},
+                                    onTap: ()  async{
+                                      await controller.getWalletPointDetail(2);
+                                      ecommerceWalletDetailPopup(Get.context!, controller.walletData);
+                                    },
                               )),
                               SizedBox(width: 10.w),
                               Expanded(
@@ -329,9 +334,9 @@ class HomeUI extends GetView<HomeController> {
                                 minimumRepurchaseRate: controller
                                         .homeData?.minimumRepurchaseRate ??
                                     0,
-                                onTap: () {
-                                  ecommerceWalletDetailPopup(Get.context!,
-                                      controller: controller);
+                                onTap: () async {
+                                  await controller.getWalletPointDetail(1);
+                                  ecommerceWalletDetailPopup(Get.context!, controller.walletData);
                                 },
                               )),
                               SizedBox(width: 10.w),
@@ -340,6 +345,10 @@ class HomeUI extends GetView<HomeController> {
                                 borderColor: appColors.textColor,
                                 bottomTextColor: appColors.textColor,
                                 bottomColor: appColors.transparent,
+                                    onTap: () async{
+                                      await controller.getWalletPointDetail(3);
+                                      ecommerceWalletDetailPopup(Get.context!, controller.walletData);
+                                    },
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -601,7 +610,7 @@ class HomeUI extends GetView<HomeController> {
                           //     }),
                           SizedBox(height: 10.h),
                           trainingVideoWidget(controller: controller),
-                          SizedBox(height: 10.h),
+                        /*  SizedBox(height: 10.h),
                           fullScreenBtnWidget(
                               imageName: Assets.images.icEcommerce.svg(),
                               btnTitle: "eCommerce".tr,
@@ -609,7 +618,7 @@ class HomeUI extends GetView<HomeController> {
                                 if (await PermissionHelper().askPermissions()) {
                                   Get.toNamed(RouteName.videoCallPage);
                                 }
-                              }),
+                              }),*/
                           SizedBox(height: 20.h),
                           feedbackWidget(controller: controller),
                           SizedBox(height: 20.h),
@@ -2258,8 +2267,44 @@ class HomeUI extends GetView<HomeController> {
         ));
   }
 
-  ecommerceWalletDetailPopup(BuildContext context,
-      {HomeController? controller}) async {
+  ecommerceWalletDetailPopup(BuildContext context, List<WalletPoint> walletData) async {
+    await openBottomSheet(
+      context,
+      functionalityWidget: Padding(
+        padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+        child: SizedBox(
+          height: Get.height / 2,
+          child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "What Is Bonus Wallet?",
+              style: AppTextStyle.textStyle20(
+                fontWeight: FontWeight.w500,
+                fontColor: appColors.textColor,
+              ),
+            ).centered(),
+            SizedBox(height: 10.h),
+            Expanded(
+              child: ListView.builder(
+                itemCount: walletData.length,
+                itemBuilder: (context, index) {
+                  return CustomInfoWidget(
+                    text: walletData[index].title,
+                    badgeText: walletData[index].sequence.toString(),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),),
+      ),
+    );
+  }
+
+
+/* ecommerceWalletDetailPopup(BuildContext context,
+      wallet) async {
     await openBottomSheet(context,
         functionalityWidget: Padding(
             padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
@@ -2286,7 +2331,7 @@ class HomeUI extends GetView<HomeController> {
                 ),
               ],
             )));
-  }
+  }*/
 }
 
 class SelectedTimeForChat extends StatelessWidget {

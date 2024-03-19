@@ -89,6 +89,7 @@ class ApiProvider {
   final String getKundliData = "getKundliData";
   final String getHomePageData = "astroDashboard";
   final String getTarotCardDataApi = "getTarotCard";
+  final String getwalletPointDetail = "getwalletPointDetail";
   final String getFeedback = "getNotSeenFeedback";
   final String getFeedbackList = "getAstroFeedbackList";
   final String getAstroFeedback = "getAstroFeedbackDetail";
