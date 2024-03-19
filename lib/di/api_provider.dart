@@ -43,9 +43,9 @@ class ApiProvider {
   //
   final String generateOrderAPI = "wallet/recharge";
   final String getPooja = "getPooja";
-  final String getBookedPooja = "getBookedPooja";
+  //final String getBookedPooja = "getBookedPooja";
   final String getSinglePooja = "getSinglPooja";
-  final String getPoojaAddOns = "addOns";
+  //final String getPoojaAddOns = "addOns";
   final String getUserAddressForPooja = "getUserAddress";
   final String addUserAddressForPooja = "saveUserAddress";
   final String updateUserAddressForPooja = "editUserAddress";

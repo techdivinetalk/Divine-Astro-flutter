@@ -69,7 +69,7 @@ class _PoojaDharamMainScreenState extends State<PoojaDharamMainScreen>
         if (_tabController.index == 0) {
         } else if (_tabController.index == 1) {
           if ((_controller.getBookedPooja.data?.poojaHistory ?? []).isEmpty) {
-            await getBookedPoojaCall();
+          //  await getBookedPoojaCall();
           } else {}
         } else {}
       },
@@ -431,7 +431,7 @@ class _PoojaDharamMainScreenState extends State<PoojaDharamMainScreen>
                     var arguments = pooja.id ?? 0;
                     await Get.toNamed(route, arguments: {'detailOnly':false,'data':arguments});
                     await getPoojaCall();
-                    await getBookedPoojaCall();
+                   // await getBookedPoojaCall();
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

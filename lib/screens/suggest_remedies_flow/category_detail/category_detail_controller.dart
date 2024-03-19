@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import '../../../common/app_exception.dart';
 import '../../../common/routes.dart';
 import '../../../di/shared_preference_service.dart';
+import '../../../firebase_service/firebase_service.dart';
 import '../../../model/res_login.dart';
 import '../../../model/res_product_detail.dart';
 import '../../../repository/shop_repository.dart';
@@ -93,7 +94,8 @@ class CategoryDetailController extends GetxController {
     Map<String, dynamic> params = {
       "product_id": productId,
       "shop_id": shopId,
-      "customer_id": customerId
+      "order_id":AppFirebaseService().orderData.value["orderId"],
+      "customer_id": int.parse(AppFirebaseService().orderData.value["userId"]),
     };
     print('save remedy called $params}');
     try {

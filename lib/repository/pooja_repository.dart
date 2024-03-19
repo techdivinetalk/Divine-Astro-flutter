@@ -117,28 +117,28 @@ class PoojaRepository extends ApiProvider {
     required Function(String message) failureCallBack,
   }) async {
     GetBookedPoojaResponse data = GetBookedPoojaResponse();
-    try {
-      final String requestBody = jsonEncode(params);
-      final response = await post(getBookedPooja, body: requestBody);
-      final Map<String, dynamic> responseBody = json.decode(response.body);
-      if (response.statusCode == HttpStatus.ok) {
-        if (responseBody["status_code"] == HttpStatus.ok) {
-          data = GetBookedPoojaResponse.fromJson(responseBody);
-          successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-          await preferenceService.erase();
-          await Get.offAllNamed(RouteName.login);
-        } else {
-          failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        }
-      } else {
-        failureCallBack(response.reasonPhrase ?? "Unknown Error Occurred");
-      }
-    } on Exception catch (error, stack) {
-      debugPrint("getBookedPoojaApi(): Exception caught: error: $error");
-      debugPrint("getBookedPoojaApi(): Exception caught: stack: $stack");
-      failureCallBack("Unknown Error Occurred");
-    }
+    // try {
+    //   final String requestBody = jsonEncode(params);
+    //   final response = await post(getBookedPooja, body: requestBody);
+    //   final Map<String, dynamic> responseBody = json.decode(response.body);
+    //   if (response.statusCode == HttpStatus.ok) {
+    //     if (responseBody["status_code"] == HttpStatus.ok) {
+    //       data = GetBookedPoojaResponse.fromJson(responseBody);
+    //       successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
+    //     } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
+    //       await preferenceService.erase();
+    //       await Get.offAllNamed(RouteName.login);
+    //     } else {
+    //       failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
+    //     }
+    //   } else {
+    //     failureCallBack(response.reasonPhrase ?? "Unknown Error Occurred");
+    //   }
+    // } on Exception catch (error, stack) {
+    //   debugPrint("getBookedPoojaApi(): Exception caught: error: $error");
+    //   debugPrint("getBookedPoojaApi(): Exception caught: stack: $stack");
+    //   failureCallBack("Unknown Error Occurred");
+    // }
     return Future<GetBookedPoojaResponse>.value(data);
   }
 
@@ -179,28 +179,28 @@ class PoojaRepository extends ApiProvider {
     required Function(String message) failureCallBack,
   }) async {
     GetPoojaAddOnesResponse data = GetPoojaAddOnesResponse();
-    try {
-      final String requestBody = jsonEncode(params);
-      final response = await post(getPoojaAddOns, body: requestBody);
-      final Map<String, dynamic> responseBody = json.decode(response.body);
-      if (response.statusCode == HttpStatus.ok) {
-        if (responseBody["status_code"] == HttpStatus.ok) {
-          data = GetPoojaAddOnesResponse.fromJson(responseBody);
-          successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-          await preferenceService.erase();
-          await Get.offAllNamed(RouteName.login);
-        } else {
-          failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        }
-      } else {
-        failureCallBack(response.reasonPhrase ?? "Unknown Error Occurred");
-      }
-    } on Exception catch (error, stack) {
-      debugPrint("getPoojaAddOnesApi(): Exception caught: error: $error");
-      debugPrint("getPoojaAddOnesApi(): Exception caught: stack: $stack");
-      failureCallBack("Unknown Error Occurred");
-    }
+    // try {
+    //   final String requestBody = jsonEncode(params);
+    //   final response = await post(getPoojaAddOns, body: requestBody);
+    //   final Map<String, dynamic> responseBody = json.decode(response.body);
+    //   if (response.statusCode == HttpStatus.ok) {
+    //     if (responseBody["status_code"] == HttpStatus.ok) {
+    //       data = GetPoojaAddOnesResponse.fromJson(responseBody);
+    //       successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
+    //     } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
+    //       await preferenceService.erase();
+    //       await Get.offAllNamed(RouteName.login);
+    //     } else {
+    //       failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
+    //     }
+    //   } else {
+    //     failureCallBack(response.reasonPhrase ?? "Unknown Error Occurred");
+    //   }
+    // } on Exception catch (error, stack) {
+    //   debugPrint("getPoojaAddOnesApi(): Exception caught: error: $error");
+    //   debugPrint("getPoojaAddOnesApi(): Exception caught: stack: $stack");
+    //   failureCallBack("Unknown Error Occurred");
+    // }
     return Future<GetPoojaAddOnesResponse>.value(data);
   }
 
