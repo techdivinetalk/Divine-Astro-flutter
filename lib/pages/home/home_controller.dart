@@ -56,15 +56,9 @@ import 'package:cron/cron.dart';
 import 'widgets/can_not_online.dart';
 
 class HomeController extends GetxController {
-  // RxBool chatSwitch = false.obs;
-  // RxBool callSwitch = false.obs;
-  // RxBool videoSwitch = false.obs;
-  // RxBool liveSwitch = false.obs;
-
-  // RxBool isCallEnable = false.obs;
-  // RxBool isChatEnable = false.obs;
-  // RxBool isVideoCallEnable = false.obs;
-  // RxBool isLiveEnable = false.obs;
+  bool isOpenBonusSheet =  false;
+  bool isOpenPaidSheet =  false;
+  bool isOpenECommerceSheet =  false;
 
   RxBool chatSwitch = true.obs;
   RxBool callSwitch = true.obs;
@@ -488,6 +482,8 @@ class HomeController extends GetxController {
     try {
       var response = await HomePageRepository().getDashboardData(params);
       homeData = response.data;
+      print(homeData!.retention);
+      print("homeData.retention");
       updateCurrentData();
       shopDataSync.value = true;
       loading = Loading.loaded;

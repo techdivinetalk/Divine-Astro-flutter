@@ -28,9 +28,10 @@ class AddPujaController extends GetxController {
   var durationOptions = ['Puja', "Product"].obs;
   RxString selectedValue = "Puja".obs;
   List<PujaProductCategoriesData> selectedTag = [];
-
+  PujaProductCategoriesData? selectedPujaName;
   PujaProductCategoriesData? selectedCategory;
   List<PujaProductCategoriesData> categoriesType = [];
+  List<PujaProductCategoriesData> pujaNamesList = [];
   List<PujaProductCategoriesData> tagType = [];
 
   PujaListingData? pujaListingData;
@@ -57,6 +58,7 @@ class AddPujaController extends GetxController {
 
       update();
       getCategoriesData();
+      getPujaNamesData();
       getTag();
     }
 
@@ -178,6 +180,7 @@ class AddPujaController extends GetxController {
 
   /// Crop aimge method
   String poojaImageUrl = "";
+  String poojaApiPath = "";
 
   cropImage() async {
     CroppedFile? croppedFile = await ImageCropper().cropImage(
@@ -240,7 +243,7 @@ class AddPujaController extends GetxController {
     }
     Map<String, dynamic> param = {
       "pooja_name": poojaName.text,
-      "pooja_img": poojaImageUrl,
+      "pooja_img": poojaApiPath,
       "pooja_desc": poojaDes.text,
       "pooja_starting_price_inr": poojaPrice.text,
       "pooja_short_desc": poojaDes.text,
@@ -270,7 +273,7 @@ class AddPujaController extends GetxController {
       "prod_shop_id": null,
       "prod_cat_id": selectedCategory?.id,
       "prod_name": poojaName.text,
-      "prod_image": poojaImageUrl,
+      "prod_image": poojaApiPath,
       "prod_desc": poojaDes.text,
       "product_price_inr": poojaPrice.text,
       //"offer_price_inr": poojaPrice.text,
@@ -303,6 +306,25 @@ class AddPujaController extends GetxController {
       final response = await userRepository.getCategoriesProductAndPooja(param);
       if (response.data != null) {
         categoriesType = response.data!;
+      }
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  getPujaNamesData() async {
+    try {
+      final response = await userRepository.getPoojaNamesApi({});
+      if (response.data != null) {
+        pujaNamesList = response.data!;
+        print(pujaNamesList.length);
+        print("pujaNamesList.length");
       }
       update();
     } catch (error) {
@@ -365,13 +387,14 @@ class AddPujaController extends GetxController {
     var response = await request.send();
 
     // Listen for the response
-    print(response);
+
     print("responseresponseresponse");
     response.stream.transform(utf8.decoder).listen((value) {
+      print(jsonDecode(value)["data"]);
+      poojaApiPath = jsonDecode(value)["data"]["path"];
       poojaImageUrl = jsonDecode(value)["data"]["full_path"];
       update();
-      print(
-          "valuevaluevaluevaluevaluevaluevalue"); // Handle the response from the server
+      print("valuevaluevaluevaluevaluevaluevalue");
     });
 
     if (response.statusCode == 200) {

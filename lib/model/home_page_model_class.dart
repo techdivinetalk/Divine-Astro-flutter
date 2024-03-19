@@ -123,13 +123,13 @@ class HomeData {
     inAppChatPrevStatus: json["chat_previous_status"] ?? 0,
     audioCallPrevStatus: json["call_previous_status"] ?? 0,
     videoCallPrevStatus: json["video_call_previous_status"] ?? 0,
-    paidWallet: json["paid_wallet"],
-    bonusWallet: json["bonus_wallet"],
-    ecommerceWallet: json["ecommerce_wallet"],
-    retention: json["retention"],
-    repurchaseRate: json["repurchase_rate"],
-    minimumRetention: json["minimum_retention"],
-    minimumRepurchaseRate: json["minimum_repurchase_rate"],
+    paidWallet: json["paid_wallet"] ?? 0,
+    bonusWallet: json["bonus_wallet"] ??0,
+    ecommerceWallet: json["ecommerce_wallet"] ?? 0,
+    retention: json["retention"] ?? 0,
+    repurchaseRate: json["repurchase_rate"] ?? 0,
+    minimumRetention: json["minimum_retention"] ?? 0,
+    minimumRepurchaseRate: json["minimum_repurchase_rate"] ?? 0,
   );
 
   Map<String, dynamic> toJson() => {
