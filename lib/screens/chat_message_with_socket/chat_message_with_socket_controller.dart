@@ -154,6 +154,7 @@ class ChatMessageWithSocketController extends GetxController
   late final AppLifecycleListener _listener;
   late AppLifecycleState? _state;
   final List<String> _states = <String>[];
+
 //end
   @override
   void onClose() {
@@ -293,13 +294,12 @@ class ChatMessageWithSocketController extends GetxController
     super.onInit();
     getDir();
     initialiseControllers();
+    noticeAPi();
     AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
       print("orderData Changed");
       initTask(p0);
     });
-
     stateHandling();
-
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) {
       if (event.name == 'deliveredMsg') {
@@ -388,7 +388,9 @@ class ChatMessageWithSocketController extends GetxController
       divineSnackBar(data: error.toString(), color: appColors.redColor);
     }
   }
+
   late Timer extraTimer;
+
   void startExtraTimer() {
     Duration _timeLeft = Duration(minutes: 1); // Start from 1 minute
     final endTime = DateTime.now().add(_timeLeft);
@@ -484,9 +486,9 @@ class ChatMessageWithSocketController extends GetxController
         socket.leavePrivateChatEmit(userData?.id.toString(),
             AppFirebaseService().orderData.value["userId"], "0");
         chatTimer?.cancel();
-       // Get.delete<ChatMessageWithSocketController>();
+        // Get.delete<ChatMessageWithSocketController>();
         Get.until(
-              (route) {
+          (route) {
             return Get.currentRoute == RouteName.dashboard;
           },
         );
@@ -706,7 +708,6 @@ class ChatMessageWithSocketController extends GetxController
         GiftPlayerData(
           GiftPlayerSource.url,
           data.first.animation,
-
         ),
       );
     } else {}
@@ -1321,7 +1322,7 @@ class ChatMessageWithSocketController extends GetxController
           chatTimer?.cancel();
           Get.delete<ChatMessageWithSocketController>();
           Get.until(
-                (route) {
+            (route) {
               return Get.currentRoute == RouteName.dashboard;
             },
           );
@@ -1341,17 +1342,24 @@ class ChatMessageWithSocketController extends GetxController
     int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
     talkTimeStartTimer(remainingTime);
   }
+
   final noticeRepository = Get.put(NoticeRepository());
-  Future<NoticeResponse> noticeAPi() async {
+  List<NoticeDatum> noticeDataChat = [];
+
+  noticeAPi() async {
     try {
-      final response =
-      await noticeRepository.get(noticeRepository.getAstroAllNotice, headers: await noticeRepository.getJsonHeaderURL());
+      final response = await noticeRepository.get(
+          ApiProvider.getAstroAllNoticeType3,
+          headers: await noticeRepository.getJsonHeaderURL());
 
       if (response.statusCode == 200) {
         final noticeResponse = noticeResponseFromJson(response.body);
         if (noticeResponse.statusCode == noticeRepository.successResponse &&
             noticeResponse.success!) {
-          return noticeResponse;
+          noticeDataChat = noticeResponse.data;
+          print(noticeDataChat.length);  
+          print("noticeDataChat.length");
+          update();
         } else {
           throw CustomException(json.decode(response.body));
         }

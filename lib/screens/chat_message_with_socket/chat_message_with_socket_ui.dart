@@ -3,6 +3,7 @@ import "dart:io";
 import "dart:ui";
 
 import "package:audio_waveforms/audio_waveforms.dart";
+import "package:carousel_slider/carousel_slider.dart";
 import "package:divine_astrologer/common/app_textstyle.dart";
 
 import "package:divine_astrologer/common/colors.dart";
@@ -15,6 +16,7 @@ import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/gen/assets.gen.dart";
 import "package:divine_astrologer/model/chat_offline_model.dart";
+import "package:divine_astrologer/screens/chat_message_with_socket/custom_puja/saved_remedies.dart";
 import "package:divine_astrologer/tarotCard/FlutterCarousel.dart";
 import "package:divine_astrologer/zego_call/zego_service.dart";
 import "package:emoji_picker_flutter/emoji_picker_flutter.dart";
@@ -54,7 +56,39 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
             Column(
               children: [
                 AstrologerChatAppBar(),
-                permissionRequestWidget(),
+                // permissionRequestWidget(),
+                SizedBox(height: 10),
+                CarouselSlider(
+                  options: CarouselOptions(
+                    height: 50,
+                    autoPlay: true,
+                    aspectRatio: 1,
+                    viewportFraction: 1,
+                  ),
+                  items: controller.noticeDataChat.map((i) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            width: MediaQuery.of(context).size.width,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: appColors.white,
+                                border:
+                                    Border.all(color: appColors.red, width: 2),
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Text(
+                              '${i.description}',
+                              style: AppTextStyle.textStyle12(
+                                fontWeight: FontWeight.w400,
+                                fontColor: appColors.red,
+                              ),
+                            ));
+                      },
+                    );
+                  }).toList(),
+                ),
+
                 Expanded(
                   child: Stack(
                     children: [
@@ -369,6 +403,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
     );
   }
 
+  /// open setting comment code
   Widget commonRedContainer() {
     return Container(
       margin: const EdgeInsets.symmetric(
@@ -798,6 +833,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       SvgPicture.asset('assets/svg/remedies_icon.svg'),
       SvgPicture.asset('assets/svg/deck_icon.svg'),
       SvgPicture.asset('assets/svg/product.svg'),
+      SvgPicture.asset('assets/svg/custom_puja.svg'),
       // Add more items as needed
     ];
     showModalBottomSheet(
@@ -859,6 +895,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           controller.addNewMessage(time, MsgType.product,
                               data: {'data': result}, messageText: 'Product');
                         }
+
+                        break;
+                      case 5:
+                        Get.bottomSheet(const SavedRemediesBottomSheet());
 
                         break;
                     }

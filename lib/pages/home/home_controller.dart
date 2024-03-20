@@ -476,14 +476,9 @@ class HomeController extends GetxController {
       "role_id": userData.roleId ?? 0,
       "device_token": userData.deviceToken,
     };
-
-    log("roleID==>${userData.roleId}");
-    log("deviceToken==>${userData.deviceToken}");
     try {
       var response = await HomePageRepository().getDashboardData(params);
       homeData = response.data;
-      print(homeData!.retention);
-      print("homeData.retention");
       updateCurrentData();
       shopDataSync.value = true;
       loading = Loading.loaded;
