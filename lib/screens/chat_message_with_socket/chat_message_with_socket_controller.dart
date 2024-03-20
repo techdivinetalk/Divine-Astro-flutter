@@ -458,6 +458,7 @@ class ChatMessageWithSocketController extends GetxController
         (_) async {
           socket.socket?.disconnect();
           chatTimer?.cancel();
+          extraTimer?.cancel();
           Get.until(
             (route) {
               return Get.currentRoute == RouteName.dashboard;
@@ -484,6 +485,7 @@ class ChatMessageWithSocketController extends GetxController
         socket.leavePrivateChatEmit(userData?.id.toString(),
             AppFirebaseService().orderData.value["userId"], "0");
         chatTimer?.cancel();
+        extraTimer?.cancel();
        // Get.delete<ChatMessageWithSocketController>();
         Get.until(
               (route) {
@@ -1322,6 +1324,7 @@ class ChatMessageWithSocketController extends GetxController
         (_) async {
           socket.socket?.disconnect();
           chatTimer?.cancel();
+          extraTimer?.cancel();
           Get.delete<ChatMessageWithSocketController>();
           Get.until(
                 (route) {
