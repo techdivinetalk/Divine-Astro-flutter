@@ -891,8 +891,8 @@ class HomeController extends GetxController {
       Get.context!,
       title: "Feedback Available!!!",
       subTitle:
-          'We noticed a little guideline slip in your previous order. No worries! \n'
-          'We\'ve sorted out the fines and shared some helpful feedback. \n'
+          'We noticed a little guideline slip in your \n previous order. No worries!'
+          'We\'ve sorted out\n the fines and shared some helpful feedback.\n'
           'Thanks for your understanding!',
       btnTitle: "Check Report",
       onTap: () {

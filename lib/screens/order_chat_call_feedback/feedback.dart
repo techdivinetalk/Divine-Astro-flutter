@@ -7,6 +7,7 @@ import 'package:divine_astrologer/common/message_view.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
+import 'package:divine_astrologer/pages/home/home_controller.dart';
 import 'package:divine_astrologer/screens/order_chat_call_feedback/feedback_controller.dart';
 import 'package:divine_astrologer/screens/order_chat_call_feedback/widget/feedback_card.dart';
 import 'package:divine_astrologer/screens/order_history/Widget/shimmer_widget_feedback.dart';
@@ -27,7 +28,7 @@ class FeedBack extends GetView<FeedbackController> {
       appBar: commonDetailAppbar(
         title: "Order Feedback",
         trailingWidget: InkWell(
-          onTap: () => controller.homeController.whatsapp(),
+          onTap: () => HomeController().whatsapp(),
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

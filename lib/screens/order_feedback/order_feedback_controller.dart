@@ -11,7 +11,6 @@ import '../../model/feedback_response.dart';
 class OrderFeedbackController extends GetxController {
   bool loading = true;
   FeedbackData? feedbackResponse;
-  var homeController = Get.find<HomeController>();
   final HomePageRepository homePageRepository = Get.put(HomePageRepository());
   RxList<FeedbackData> feedbacks = <FeedbackData>[].obs;
 

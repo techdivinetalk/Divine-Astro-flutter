@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/model/feedback_response.dart';
+import 'package:divine_astrologer/pages/home/home_controller.dart';
 import 'package:divine_astrologer/screens/order_feedback/order_feedback_controller.dart';
 import 'package:divine_astrologer/screens/order_feedback/widget/feedback_card_widget.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class OrderFeedbackUI extends GetView<OrderFeedbackController> {
           appBar: commonDetailAppbar(
             title: "All Order Feedback",
             trailingWidget: InkWell(
-              onTap: () => controller.homeController.whatsapp(),
+              onTap: () => HomeController().whatsapp(),
               child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   padding: const EdgeInsets.symmetric(

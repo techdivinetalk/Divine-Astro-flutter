@@ -22,7 +22,6 @@ class FeedbackController extends GetxController {
   RxInt currentPage = 1.obs;
 
   Rx<AstroFeedbackDetailData?> astroFeedbackDetailData = Rx<AstroFeedbackDetailData?>(null);
-  var homeController = Get.find<HomeController>();
   Order? order;
   RxList<FeedbackData> feedbacks = <FeedbackData>[].obs;
 
