@@ -324,7 +324,7 @@ class NoticeBoard {
         "title": title,
         "description": description,
         "schedule_date":
-            "${scheduleDate!.year.toString().padLeft(4, '0')}-${scheduleDate!.month.toString().padLeft(2, '0')}-${scheduleDate!.day.toString().padLeft(2, '0')}",
+            "${scheduleDate?.year.toString().padLeft(4, '0')}-${scheduleDate?.month.toString().padLeft(2, '0')}-${scheduleDate?.day.toString().padLeft(2, '0')}",
         "schedule_time": scheduleTime,
         "status": status,
         "created_at": createdAt?.toIso8601String(),

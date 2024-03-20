@@ -483,7 +483,7 @@ class HomeUI extends GetView<HomeController> {
                               ? const SizedBox()
                               : Column(
                                   children: [
-                                    GestureDetector(
+                                   /* GestureDetector(
                                       onTap: () {
                                         Get.toNamed(RouteName.noticeBoard);
                                       },
@@ -506,7 +506,7 @@ class HomeUI extends GetView<HomeController> {
                                         ],
                                       ),
                                     ),
-                                    SizedBox(height: 10.h),
+                                    SizedBox(height: 10.h),*/
                                     noticeBoardWidget(controller: controller),
                                   ],
                                 ),

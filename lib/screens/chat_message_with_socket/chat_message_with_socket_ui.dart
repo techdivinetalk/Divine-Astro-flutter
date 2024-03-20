@@ -625,7 +625,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   margin: const EdgeInsets.only(left: 15),
                                 )
                               : Container(
-                                  height: 50,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(30),
                                       boxShadow: [
@@ -721,8 +720,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           ? GestureDetector(
                               onTap: () => controller.refreshWave(),
                               child: Container(
-                                height: kToolbarHeight - Get.width * 0.010,
-                                width: kToolbarHeight - Get.width * 0.010,
+                                height: kToolbarHeight - Get.width * 0.008,
+                                width: kToolbarHeight - Get.width * 0.008,
                                 decoration: BoxDecoration(
                                   color: appColors.guideColor,
                                   shape: BoxShape.circle,
@@ -744,8 +743,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           ? GestureDetector(
                               onTap: controller.startOrStopRecording,
                               child: Container(
-                                height: kToolbarHeight - Get.width * 0.010,
-                                width: kToolbarHeight - Get.width * 0.010,
+                                height: kToolbarHeight - Get.width * 0.008,
+                                width: kToolbarHeight - Get.width * 0.008,
                                 margin: EdgeInsets.only(right: 10.h),
                                 decoration: BoxDecoration(
                                   color: appColors.guideColor,
@@ -765,8 +764,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 controller.sendMsg();
                               },
                               child: Container(
-                                height: kToolbarHeight - Get.width * 0.010,
-                                width: kToolbarHeight - Get.width * 0.010,
+                                height: kToolbarHeight - Get.width * 0.008,
+                                width: kToolbarHeight - Get.width * 0.008,
                                 margin: EdgeInsets.only(right: 10.h),
                                 decoration: BoxDecoration(
                                   color: appColors.guideColor,

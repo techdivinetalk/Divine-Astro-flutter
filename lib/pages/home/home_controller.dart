@@ -455,7 +455,8 @@ class HomeController extends GetxController {
         //print(" Dharam::${response.data?[0].order?.orderId}");
         feedbackResponse = response.data?[0];
         feedbacksList = response.data;
-        if (feedbackResponse?.id != null && !isFeedbackAvailable.value) {
+
+        if (feedbackResponse?.id != null && isFeedbackAvailable.value) {
           showFeedbackBottomSheet();
           debugPrint('feed id: ${feedbackResponse?.id}');
         }
@@ -890,8 +891,8 @@ class HomeController extends GetxController {
       Get.context!,
       title: "Feedback Available!!!",
       subTitle:
-          'We noticed a little guideline slip in your previous order. No worries! '
-          'We\'ve sorted out the fines and shared some helpful feedback. '
+          'We noticed a little guideline slip in your previous order. No worries! \n'
+          'We\'ve sorted out the fines and shared some helpful feedback. \n'
           'Thanks for your understanding!',
       btnTitle: "Check Report",
       onTap: () {

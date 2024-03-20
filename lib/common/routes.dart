@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
 import 'package:divine_astrologer/common/custom_get_page.dart';
+import 'package:divine_astrologer/pages/home/home_ui.dart';
 import 'package:divine_astrologer/pages/profile/profile_binding.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_binding.dart';
@@ -144,6 +145,7 @@ class RouteName {
   static const String wallet = "/walletPage";
   static const String priceHistoryUI = "/priceHistoryUI";
   static const String priceChangeReqUI = "/priceChangeReqUI";
+  static const String homePageUI = "/homePageUI";
   static const String numberChangeReqUI = "/numberChangeReqUI";
   static const String bankDetailsUI = "/bankDetailsUI";
   static const String checkKundli = "/checkKundli";
@@ -286,6 +288,10 @@ class Routes {
     GetPage(
         page: () => const PriceChangeReqUI(),
         name: RouteName.priceChangeReqUI,
+        binding: PriceChangeReqBinding()),
+    GetPage(
+        page: () => const HomeUI(),
+        name: RouteName.homePageUI,
         binding: PriceChangeReqBinding()),
     GetPage(
         page: () => const NumberChangeReqUI(),
