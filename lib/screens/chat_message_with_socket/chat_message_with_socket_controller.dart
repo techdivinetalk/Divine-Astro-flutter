@@ -116,7 +116,7 @@ class ChatMessageWithSocketController extends GetxController
   RxList<MessageTemplates> messageTemplates = <MessageTemplates>[].obs;
 
   final AppSocket socket = AppSocket();
-
+  Timer? extraTimer;
   Timer? chatTimer;
   Timer? _timer2;
 
@@ -388,7 +388,6 @@ class ChatMessageWithSocketController extends GetxController
       divineSnackBar(data: error.toString(), color: appColors.redColor);
     }
   }
-  late Timer extraTimer;
   void startExtraTimer() {
     Duration _timeLeft = Duration(minutes: 1); // Start from 1 minute
     final endTime = DateTime.now().add(_timeLeft);
