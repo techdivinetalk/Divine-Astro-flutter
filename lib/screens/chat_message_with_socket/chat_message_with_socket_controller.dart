@@ -701,6 +701,7 @@ class ChatMessageWithSocketController extends GetxController
         <GiftData>[];
     print("playAnimation string id 2 $id");
     if (data.isNotEmpty) {
+      print("playAnimation string id 2111 $id");
       ZegoGiftPlayer().play(
         context!,
         GiftPlayerData(
@@ -709,7 +710,9 @@ class ChatMessageWithSocketController extends GetxController
 
         ),
       );
-    } else {}
+    } else {
+      print("playAnimation string id 3333 $id");
+    }
     print("playAnimation string id 3 $id");
     return;
   }

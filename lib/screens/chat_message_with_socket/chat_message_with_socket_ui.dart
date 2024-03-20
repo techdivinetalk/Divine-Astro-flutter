@@ -799,6 +799,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       SvgPicture.asset('assets/svg/remedies_icon.svg'),
       SvgPicture.asset('assets/svg/deck_icon.svg'),
       SvgPicture.asset('assets/svg/product.svg'),
+      SvgPicture.asset('assets/svg/custom.svg'),
       // Add more items as needed
     ];
     showModalBottomSheet(
@@ -861,6 +862,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               data: {'data': result}, messageText: 'Product');
                         }
 
+                        break;
+                      case 5:
                         break;
                     }
                   },
