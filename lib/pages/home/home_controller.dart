@@ -455,7 +455,8 @@ class HomeController extends GetxController {
         //print(" Dharam::${response.data?[0].order?.orderId}");
         feedbackResponse = response.data?[0];
         feedbacksList = response.data;
-        if (feedbackResponse?.id != null && !isFeedbackAvailable.value) {
+
+        if (feedbackResponse?.id != null && isFeedbackAvailable.value) {
           showFeedbackBottomSheet();
           debugPrint('feed id: ${feedbackResponse?.id}');
         }
@@ -476,14 +477,9 @@ class HomeController extends GetxController {
       "role_id": userData.roleId ?? 0,
       "device_token": userData.deviceToken,
     };
-
-    log("roleID==>${userData.roleId}");
-    log("deviceToken==>${userData.deviceToken}");
     try {
       var response = await HomePageRepository().getDashboardData(params);
       homeData = response.data;
-      print(homeData!.retention);
-      print("homeData.retention");
       updateCurrentData();
       shopDataSync.value = true;
       loading = Loading.loaded;
@@ -890,8 +886,8 @@ class HomeController extends GetxController {
       Get.context!,
       title: "Feedback Available!!!",
       subTitle:
-          'We noticed a little guideline slip in your previous order. No worries! '
-          'We\'ve sorted out the fines and shared some helpful feedback. '
+          'We noticed a little guideline slip in your \n previous order. No worries!'
+          'We\'ve sorted out\n the fines and shared some helpful feedback.\n'
           'Thanks for your understanding!',
       btnTitle: "Check Report",
       onTap: () {

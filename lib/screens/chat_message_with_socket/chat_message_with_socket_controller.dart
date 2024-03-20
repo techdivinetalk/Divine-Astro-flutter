@@ -293,13 +293,12 @@ class ChatMessageWithSocketController extends GetxController
     super.onInit();
     getDir();
     initialiseControllers();
+    noticeAPi();
     AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
       print("orderData Changed");
       initTask(p0);
     });
-
     stateHandling();
-
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) {
       if (event.name == 'deliveredMsg') {
@@ -1346,17 +1345,24 @@ class ChatMessageWithSocketController extends GetxController
     int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
     talkTimeStartTimer(remainingTime);
   }
+
   final noticeRepository = Get.put(NoticeRepository());
-  Future<NoticeResponse> noticeAPi() async {
+  List<NoticeDatum> noticeDataChat = [];
+
+  noticeAPi() async {
     try {
-      final response =
-      await noticeRepository.get(noticeRepository.getAstroAllNotice, headers: await noticeRepository.getJsonHeaderURL());
+      final response = await noticeRepository.get(
+          ApiProvider.getAstroAllNoticeType3,
+          headers: await noticeRepository.getJsonHeaderURL());
 
       if (response.statusCode == 200) {
         final noticeResponse = noticeResponseFromJson(response.body);
         if (noticeResponse.statusCode == noticeRepository.successResponse &&
             noticeResponse.success!) {
-          return noticeResponse;
+          noticeDataChat = noticeResponse.data;
+          print(noticeDataChat.length);
+          print("noticeDataChat.length");
+          update();
         } else {
           throw CustomException(json.decode(response.body));
         }

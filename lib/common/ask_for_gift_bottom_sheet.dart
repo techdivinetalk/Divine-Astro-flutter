@@ -76,10 +76,10 @@ class _AskForGiftState extends State<AskForGiftBottomSheet> {
                   const Divider(),
                   SizedBox(height: 20.h),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       quantityWidget(),
-                      amountWidget(),
+                     /* amountWidget(),*/
                     ],
                   ),
                   SizedBox(height: 20.h),

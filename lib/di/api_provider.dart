@@ -202,6 +202,7 @@ class ApiProvider {
   final String blockCustomerlist = "blockCustomerlist";
   final String blockCustomer = "blockCustomer";
   final String getAstroAllNoticeType2 = "getAstroAllNotice?notice_type=2";
+  static const String getAstroAllNoticeType3 = "getAstroAllNotice?notice_type=3";
   final String getTarotCard = "getTarotCard";
 
   //added by dev-chetan

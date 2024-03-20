@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import 'date_picker/date_picker_widget.dart';
 
@@ -55,11 +56,14 @@ Future feedbackBottomSheet(BuildContext context,
                       fontWeight: FontWeight.w600, fontColor: appColors.red),
                 ),
               SizedBox(height: 16.h),
-              if(subTitle != null) Text(
+              if(subTitle != null)  Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Text(
                 subTitle,
                 style: AppTextStyle.textStyle13(fontColor: appColors.black),
                 textAlign: TextAlign.center,
-              ),
+                maxLines: 4,
+              )),
               if(functionalityWidget != null) Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: functionalityWidget,

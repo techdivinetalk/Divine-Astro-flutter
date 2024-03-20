@@ -317,9 +317,9 @@ class HomeUI extends GetView<HomeController> {
                                     ? appColors.red
                                     : appColors.green,
                                 onTap: () async {
-                                 if(!controller.isOpenBonusSheet) {
-                                   controller.isOpenBonusSheet = true;
-                                   controller.update();
+                                  if (!controller.isOpenBonusSheet) {
+                                    controller.isOpenBonusSheet = true;
+                                    controller.update();
                                     await controller.getWalletPointDetail(2);
                                     ecommerceWalletDetailPopup(
                                         Get.context!, controller.walletData,
@@ -343,7 +343,7 @@ class HomeUI extends GetView<HomeController> {
                                           ? appColors.red
                                           : appColors.green,
                                   onTap: () async {
-                                    if(!controller.isOpenPaidSheet){
+                                    if (!controller.isOpenPaidSheet) {
                                       controller.isOpenPaidSheet = true;
                                       controller.update();
                                       await controller.getWalletPointDetail(1);
@@ -369,7 +369,9 @@ class HomeUI extends GetView<HomeController> {
                                     await controller.getWalletPointDetail(3);
                                     ecommerceWalletDetailPopup(
                                         Get.context!, controller.walletData,
-                                        title: "What is Ecommerce Wallet ?",controller: controller,type: 3);
+                                        title: "What is Ecommerce Wallet ?",
+                                        controller: controller,
+                                        type: 3);
                                   }
                                 },
                                 child: Column(
@@ -483,7 +485,7 @@ class HomeUI extends GetView<HomeController> {
                               ? const SizedBox()
                               : Column(
                                   children: [
-                                    GestureDetector(
+                                   /* GestureDetector(
                                       onTap: () {
                                         Get.toNamed(RouteName.noticeBoard);
                                       },
@@ -506,7 +508,7 @@ class HomeUI extends GetView<HomeController> {
                                         ],
                                       ),
                                     ),
-                                    SizedBox(height: 10.h),
+                                    SizedBox(height: 10.h),*/
                                     noticeBoardWidget(controller: controller),
                                   ],
                                 ),
@@ -715,8 +717,7 @@ class HomeUI extends GetView<HomeController> {
   Widget viewKundliWidgetUpdated() {
     return Obx(() {
       var data = callKunadliUpdated.value;
-      print(data);
-      print("datadatadatadata");
+
       return !mapEquals(data, {})
           ? Container(
               width: ScreenUtil().screenWidth,
@@ -761,7 +762,7 @@ class HomeUI extends GetView<HomeController> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'with ${data?["userName"]}(${data?["userId"]}) for 00:04:32 ',
+                      'with ${data["userName"]}(${data["userId"]}) for 00:04:32 ',
                       style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue.withOpacity(.5),
@@ -769,25 +770,25 @@ class HomeUI extends GetView<HomeController> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Gender: ${data?["gender"]}',
+                      'Gender: ${data["gender"]}',
                       style:
                           AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'DOB: ${data?["dob"]}',
+                      'DOB: ${data["dob"]}',
                       style:
                           AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'TOB: ${data?["tob"]}',
+                      'TOB: ${data["tob"]}',
                       style:
                           AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'POB: ${data?["pob"]}',
+                      'POB: ${data["pob"]}',
                       style:
                           AppTextStyle.textStyle10(fontWeight: FontWeight.w400),
                     ),
@@ -800,13 +801,13 @@ class HomeUI extends GetView<HomeController> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Marital Status: ${data?["marital"]}',
+                                'Marital Status: ${data["marital"]}',
                                 style: AppTextStyle.textStyle10(
                                     fontWeight: FontWeight.w400),
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                'Problem Area: ${data?["problem"]}',
+                                'Problem Area: ${data["problem"]}',
                                 maxLines: 1,
                                 style: AppTextStyle.textStyle10(
                                     fontWeight: FontWeight.w400),
@@ -817,17 +818,19 @@ class HomeUI extends GetView<HomeController> {
                         GestureDetector(
                           onTap: () {
                             DateTime time =
-                                DateFormat('d MMMM yyyy').parse(data?["dob"]);
+                                DateFormat('d MMMM yyyy').parse(data["dob"]);
                             print(data);
                             print("datadatadatadatadata");
-
-                            Get.toNamed(RouteName.kundliDetail, arguments: {
-                              "kundli_id": data?["kundli_id"],
-                              "from_kundli": true,
-                              "birth_place": data?["pob"],
-                              "gender": data?["gender"],
-                              "name": data?["userName"],
-                            });
+                            Get.toNamed(
+                              RouteName.kundliDetail,
+                              arguments: {
+                                "kundli_id": data["kundli_id"],
+                                "from_kundli": true,
+                                "birth_place": data["pob"],
+                                "gender": data["gender"],
+                                "name": data["userName"],
+                              },
+                            );
                           },
                           child: Container(
                             height: 54.h,
@@ -2304,7 +2307,7 @@ class HomeUI extends GetView<HomeController> {
   }
 
   ecommerceWalletDetailPopup(BuildContext context, List<WalletPoint> walletData,
-      {String? title, int? type,HomeController? controller}) async {
+      {String? title, int? type, HomeController? controller}) async {
     await openBottomSheet(
       context,
       functionalityWidget: Padding(
@@ -2338,11 +2341,11 @@ class HomeUI extends GetView<HomeController> {
         ),
       ),
     ).then(
-      (value)  {
+      (value) {
         if (type == 1) {
           controller!.isOpenPaidSheet = false;
           controller.update();
-        } 
+        }
         if (type == 2) {
           controller!.isOpenBonusSheet = false;
           controller.update();
