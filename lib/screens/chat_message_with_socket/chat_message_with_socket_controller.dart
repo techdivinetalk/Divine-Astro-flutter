@@ -169,7 +169,7 @@ class ChatMessageWithSocketController extends GetxController
     WidgetsBinding.instance.removeObserver(this);
     ZegoGiftPlayer().clear();
     chatTimer?.cancel();
-    extraTimer.cancel();
+    extraTimer?.cancel();
     super.dispose();
   }
 
@@ -398,7 +398,7 @@ class ChatMessageWithSocketController extends GetxController
               difference.inMinutes == 0 &&
               difference.inHours == 0)) {
         print("duration ended called for extra timer");
-        extraTimer.cancel();
+        extraTimer?.cancel();
         _timeLeft = Duration.zero;
         backFunction();
       } else {
