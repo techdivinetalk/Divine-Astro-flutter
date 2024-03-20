@@ -756,12 +756,11 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
     //   {"status": "1", "astrologer_permission": perm},
     // );
 
-    final bool perm = await AppPermissionService.instance.hasAllPermissions();
     final int orderId = AppFirebaseService().orderData.value["orderId"] ?? 0;
     if (orderId != 0) {
       await appFirebaseService.writeData(
         "order/$orderId",
-        {"status": "1", "astrologer_permission": perm},
+        {"status": "1"},
       );
     } else {}
 

@@ -584,21 +584,21 @@ class ZegoService {
     if (value) {
       await zegoLogin();
     } else {}
-    await addUpdatePermission();
+    //await addUpdatePermission();
     Future<void>.value();
   }
 
-  Future<void> addUpdatePermission() async {
-    final bool value = await AppPermissionService.instance.hasAllPermissions();
-    final int orderId = AppFirebaseService().orderData.value["orderId"] ?? 0;
-    if (orderId != 0) {
-      final DatabaseReference ref = FirebaseDatabase.instance.ref();
-      await ref.child("order/$orderId").update(
-        {"astrologer_permission": value},
-      );
-    } else {}
-    return Future<void>.value();
-  }
+  // Future<void> addUpdatePermission() async {
+  //   final bool value = await AppPermissionService.instance.hasAllPermissions();
+  //   final int orderId = AppFirebaseService().orderData.value["orderId"] ?? 0;
+  //   if (orderId != 0) {
+  //     final DatabaseReference ref = FirebaseDatabase.instance.ref();
+  //     await ref.child("order/$orderId").update(
+  //       {"astrologer_permission": value},
+  //     );
+  //   } else {}
+  //   return Future<void>.value();
+  // }
 
   Future<bool> checkOppositeSidePermission() async {
     bool hasPermission =

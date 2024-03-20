@@ -336,7 +336,7 @@ class AppFirebaseService {
       final int orderId = valueMap["orderId"] ?? 0;
       if (orderId != 0) {
         await AppFirebaseService().database.child("order/$orderId").update(
-          <String, dynamic>{"status": "1", "astrologer_permission": value},
+          <String, dynamic>{"status": "1"},
         );
       } else {}
     } else {}
