@@ -834,7 +834,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       SvgPicture.asset('assets/svg/deck_icon.svg'),
       SvgPicture.asset('assets/svg/product.svg'),
       SvgPicture.asset('assets/svg/custom.svg'),
-      SvgPicture.asset('assets/svg/custom_puja.svg'),
+      // SvgPicture.asset('assets/svg/custom_puja.svg'),
       // Add more items as needed
     ];
     showModalBottomSheet(
