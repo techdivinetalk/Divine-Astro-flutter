@@ -14,13 +14,11 @@ enum GiftPlayerSource {
 class GiftPlayerData {
   GiftPlayerSource source = GiftPlayerSource.asset;
   dynamic value = '';
-  // Function() onCompleted;
 
   GiftPlayerData(
-    this.source,
-    this.value,
-    // this.onCompleted,
-  );
+      this.source,
+      this.value,
+      );
 
   @override
   String toString() {
@@ -40,7 +38,6 @@ class GiftPlayerWidget extends StatefulWidget {
 
   final VoidCallback onRemove;
   final GiftPlayerData data;
-
 
   @override
   State<GiftPlayerWidget> createState() => GiftPlayerWidgetState();
@@ -84,17 +81,17 @@ class GiftPlayerWidgetState extends State<GiftPlayerWidget>
     }
   }
 
-  @override
-  void dispose() {
-    widget.onRemove();
-
-    if (animationController?.isAnimating ?? false) {
-      animationController?.stop();
-    }
-    animationController?.dispose();
-
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   widget.onRemove();
+  //
+  //   if (animationController?.isAnimating ?? false) {
+  //     animationController?.stop();
+  //   }
+  //   animationController?.dispose();
+  //
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -118,10 +115,7 @@ class GiftPlayerWidgetState extends State<GiftPlayerWidget>
               animationController ??= (SVGAAnimationController(vsync: this)
                 ..videoItem = snapshot.data as MovieEntity
                 ..forward().whenComplete(() {
-                  print("whenComplete");
-                  print("whenComplete");
                   widget.onRemove();
-
                 }));
               return SVGAImage(
                 animationController!,
@@ -155,13 +149,18 @@ class ZegoGiftPlayer {
   List<GiftPlayerData> giftEntryPathCache = [];
 
   void play(
-    BuildContext context,
-    GiftPlayerData data,
-  ) {
+      BuildContext context,
+      GiftPlayerData data,
+      ) {
     if (null != currentGiftEntries) {
       debugPrint("has gift displaying, cache, data:$data");
-
-      giftEntryPathCache.add(data);
+      if (!(giftEntryPathCache.length > 3)) {
+        giftEntryPathCache.add(data);
+      } else {
+        currentGiftEntries?.remove();
+        clear();
+        giftEntryPathCache.clear();
+      }
 
       return;
     }
@@ -174,23 +173,17 @@ class ZegoGiftPlayer {
             currentGiftEntries?.remove();
           }
           currentGiftEntries = null;
-
+          print(giftEntryPathCache.length);
+          print("giftEntryPathCache.length");
           if (giftEntryPathCache.isNotEmpty) {
-            print(giftEntryPathCache);
-            print("giftEntryPathCache");
-            for(int i = 0; i < giftEntryPathCache.length;i++){
-              var nextGiftPath = giftEntryPathCache[i];
-              giftEntryPathCache.removeAt(i);
-              print(nextGiftPath);
-              print("nextGiftPath");
+            var nextGiftPath = giftEntryPathCache.first;
+            giftEntryPathCache.removeAt(0);
+            debugPrint("has gift cache, play $nextGiftPath");
+            do {
               play(context, nextGiftPath);
-              // debugPrint("has gift cache, play ${nextGiftPath.value}");
-            }
+            } while (giftEntryPathCache.length > 1);
           }
-
         },
-
-
       );
     });
 
