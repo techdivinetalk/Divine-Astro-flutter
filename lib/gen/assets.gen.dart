@@ -259,9 +259,6 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_blockUserNew.svg
   SvgGenImage get icBlockUserNew =>
       const SvgGenImage('assets/images/ic_blockUserNew.svg');
-  /// File path: assets/images/pooja.svg
-  SvgGenImage get pooja =>
-      const SvgGenImage('assets/images/pooja.svg');
 
   /// File path: assets/images/ic_boy_kundli.svg
   SvgGenImage get icBoyKundli =>
@@ -584,6 +581,10 @@ class $AssetsImagesGen {
   AssetGenImage get liveCamOn =>
       const AssetGenImage('assets/images/live_cam_on.png');
 
+  /// File path: assets/images/live_cannot_spend.png
+  AssetGenImage get liveCannotSpend =>
+      const AssetGenImage('assets/images/live_cannot_spend.png');
+
   /// File path: assets/images/live_champion.png
   AssetGenImage get liveChampion =>
       const AssetGenImage('assets/images/live_champion.png');
@@ -744,6 +745,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/planet_star_live.png
   AssetGenImage get planetStarLive =>
       const AssetGenImage('assets/images/planet_star_live.png');
+
+  /// File path: assets/images/pooja.svg
+  SvgGenImage get pooja => const SvgGenImage('assets/images/pooja.svg');
 
   /// File path: assets/images/pooja_banner.png
   AssetGenImage get poojaBanner =>
@@ -966,6 +970,7 @@ class $AssetsImagesGen {
         liveCallsOnNew,
         liveCamOff,
         liveCamOn,
+        liveCannotSpend,
         liveChampion,
         liveDashes,
         liveEndSession,
@@ -1007,6 +1012,7 @@ class $AssetsImagesGen {
         message,
         otpImage,
         planetStarLive,
+        pooja,
         poojaBanner,
         poojaLowBal,
         poojaMainPlaceholder,
@@ -1123,6 +1129,12 @@ class $AssetsSvgGen {
   /// File path: assets/svg/chat_gift.svg
   SvgGenImage get chatGift => const SvgGenImage('assets/svg/chat_gift.svg');
 
+  /// File path: assets/svg/custom.svg
+  SvgGenImage get custom => const SvgGenImage('assets/svg/custom.svg');
+
+  /// File path: assets/svg/custom_puja.svg
+  SvgGenImage get customPuja => const SvgGenImage('assets/svg/custom_puja.svg');
+
   /// File path: assets/svg/deck_icon.svg
   SvgGenImage get deckIcon => const SvgGenImage('assets/svg/deck_icon.svg');
 
@@ -1238,6 +1250,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/queue.svg
   SvgGenImage get queue => const SvgGenImage('assets/svg/queue.svg');
 
+  /// File path: assets/svg/rejoin.svg
+  SvgGenImage get rejoin => const SvgGenImage('assets/svg/rejoin.svg');
+
   /// File path: assets/svg/rejoin_chat_icon.svg
   SvgGenImage get rejoinChatIcon =>
       const SvgGenImage('assets/svg/rejoin_chat_icon.svg');
@@ -1282,6 +1297,8 @@ class $AssetsSvgGen {
         cameraIcon,
         caution,
         chatGift,
+        custom,
+        customPuja,
         deckIcon,
         deleteAccout,
         diamond,
@@ -1316,6 +1333,7 @@ class $AssetsSvgGen {
         product,
         puja,
         queue,
+        rejoin,
         rejoinChatIcon,
         remediesIcon,
         sendComment,

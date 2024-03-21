@@ -5,6 +5,7 @@ import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widge
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../../../common/cached_network_image.dart';
 import '../../../common/colors.dart';
@@ -19,17 +20,20 @@ class RejoinWidget extends StatelessWidget {
     return InkWell(
       onTap: () {},
       child: Container(
-        padding: EdgeInsets.all(16.h),
+        padding: EdgeInsets.symmetric(horizontal: 16.sp, vertical: 8.sp),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
-          color: appColors.guideColor,
+          color: appColors.white,
+          border: Border.all(
+            color: Colors.grey, // Choose your border color here
+            width: 2, // Adjust the width as needed
+          ),
           boxShadow: [
             BoxShadow(
                 color: Colors.black.withOpacity(0.2),
                 blurRadius: 3.0,
                 offset: const Offset(3, 0)),
           ],
-
         ),
         child: Row(
           children: [
@@ -45,13 +49,42 @@ class RejoinWidget extends StatelessWidget {
                 SizedBox(width: 8.w),
               ]),
             ),
-            CustomButton(
+           /* CustomButton(
               onTap: () => Get.toNamed(
                 RouteName.chatMessageWithSocketUI,
               ),
               color: appColors.guideColor,
               radius: 10.r,
               child: Assets.svg.rejoinChatIcon.svg(),
+            ),*/
+            Card(
+              color: appColors.guideColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              elevation: 2,
+              child: InkWell(
+                onTap: () async {
+                  debugPrint('rejoinChatIcon');
+                  Get.toNamed(RouteName.chatMessageWithSocketUI);
+                },
+                child: Padding(
+                  padding: EdgeInsets.all(10.0.sp), // Adjust padding as needed
+                  child: Row(
+                    children: [
+                      CustomText(
+                        "Re-Join Chat",
+                        fontSize: 12.sp,
+                        fontColor: appColors.white,
+                        fontWeight: FontWeight.w600,
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(width: 5.w),
+                      Assets.svg.rejoin.svg(height:12.sp)
+                    ],
+                  ),
+                ),
+              ),
             ),
             SizedBox(width: 20.w),
             // ClipRRect(
@@ -84,7 +117,7 @@ class RejoinWidget extends StatelessWidget {
             ),
           ],
         ),
-      ),
+      ).px4(),
     );
   }
 }

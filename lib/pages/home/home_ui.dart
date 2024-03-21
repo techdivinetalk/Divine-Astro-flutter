@@ -329,7 +329,7 @@ class HomeUI extends GetView<HomeController> {
                                   }
                                 },
                               )),
-                              SizedBox(width: 10.w),
+                              SizedBox(width: 7.w),
                               Expanded(
                                 child: RetentionWidget(
                                   title:
@@ -356,7 +356,7 @@ class HomeUI extends GetView<HomeController> {
                                   },
                                 ),
                               ),
-                              SizedBox(width: 10.w),
+                              SizedBox(width: 7.w),
                               Expanded(
                                   child: RetentionWidget(
                                 borderColor: appColors.textColor,
@@ -382,7 +382,7 @@ class HomeUI extends GetView<HomeController> {
                                       "Ecommerce Wallet",
                                       fontWeight: FontWeight.w500,
                                       textAlign: TextAlign.center,
-                                      fontSize: 10.sp,
+                                      fontSize: 9.sp,
                                       fontColor: appColors.textColor,
                                     ),
                                     SizedBox(height: 5.h),
@@ -390,7 +390,7 @@ class HomeUI extends GetView<HomeController> {
                                       "₹${controller.homeData?.ecommerceWallet ?? 0}",
                                       fontWeight: FontWeight.w400,
                                       textAlign: TextAlign.center,
-                                      fontSize: 10.sp,
+                                      fontSize: 9.sp,
                                       fontColor: appColors.textColor,
                                     ),
                                   ],

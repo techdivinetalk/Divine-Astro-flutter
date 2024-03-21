@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -41,14 +42,17 @@ class RetentionWidget extends StatelessWidget {
         ),
         child: child ?? Column(
           mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
               child: Center(
-                child: Text(
+                child: CustomText(
                   title ?? "",
-                  style: AppTextStyle.textStyle9(
-                    fontWeight: FontWeight.w400,
-                  ),
+                  fontWeight: FontWeight.w400,
+                  textAlign: TextAlign.center,
+                  fontSize: 9.sp,
+                  maxLines: 2,
+                  fontColor: appColors.textColor,
                 ),
               ),
             ),
@@ -62,12 +66,13 @@ class RetentionWidget extends StatelessWidget {
                   ),
                 ),
                 child: Center(
-                  child: Text(
+                  child: CustomText(
                     subTitle ?? "",
-                    style: AppTextStyle.textStyle9(
-                      fontWeight: FontWeight.w400,
-                      fontColor: bottomTextColor ?? appColors.white,
-                    ),
+                    fontWeight: FontWeight.w400,
+                    textAlign: TextAlign.center,
+                    fontSize: 8.5.sp,
+                    maxLines: 2,
+                    fontColor: bottomTextColor ?? appColors.white,
                   ),
                 ),
               ),
