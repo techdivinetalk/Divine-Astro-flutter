@@ -95,8 +95,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       Obx(
                         () => AnimatedCrossFade(
                           duration: const Duration(milliseconds: 200),
-                          crossFadeState: controller.chatMessages.isEmpty ||
-                                  controller.isDataLoad.value == false
+                          crossFadeState: controller.chatMessages.isEmpty
                               ? CrossFadeState.showSecond
                               : CrossFadeState.showFirst,
                           secondChild: Container(),
@@ -834,7 +833,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       SvgPicture.asset('assets/svg/deck_icon.svg'),
       SvgPicture.asset('assets/svg/product.svg'),
       SvgPicture.asset('assets/svg/custom.svg'),
-      SvgPicture.asset('assets/svg/custom_puja.svg'),
+      // SvgPicture.asset('assets/svg/custom_puja.svg'),
       // Add more items as needed
     ];
     showModalBottomSheet(

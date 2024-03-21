@@ -403,6 +403,7 @@ class ApiProvider {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
         }
+        //print("urlFound ${url} ${response}");
         throw CustomException(AppString.timeoutMessage);
       });
       if (url != constantDetails) {

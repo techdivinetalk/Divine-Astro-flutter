@@ -4,13 +4,13 @@ import 'package:divine_astrologer/screens/side_menu/wait_list/wait_list_ui.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import '../../../common/colors.dart';
 import '../../../gen/assets.gen.dart';
 import "../../common/routes.dart";
 import '../../pages/home/home_ui.dart';
 import '../../pages/performance/performance_ui.dart';
-
 
 import '../chat_assistance/chat_assistance_ui.dart';
 import '../live_page/constant.dart';
@@ -19,12 +19,10 @@ import 'dashboard_controller.dart';
 class DashboardScreen extends GetView<DashboardController> {
   const DashboardScreen({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return GetBuilder<DashboardController>(
       assignId: true,
-
       builder: (controller) {
         return Material(
           child: StreamBuilder<BroadcastMessage>(
@@ -63,7 +61,6 @@ class DashboardScreen extends GetView<DashboardController> {
                                   ),
                                   const SizedBox(height: 10),
                                   BottomNavigationBar(
-
                                     backgroundColor: appColors.white,
                                     type: BottomNavigationBarType.fixed,
                                     selectedFontSize: 10,
@@ -169,7 +166,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                       /*BottomNavigationBarItem(
                                         icon: Column(
                                           children: [
-                                          
+
                                             userImage.value
                                                         .contains("null") ||
                                                 userImage
@@ -218,9 +215,15 @@ class DashboardScreen extends GetView<DashboardController> {
                                     currentIndex:
                                         controller.selectedIndex.value,
                                     onTap: (value) {
-                                      print("tap working");
-                                      controller.selectedIndex.value = value;
-                                      dasboardCurrentIndex(value);
+                                      if (value == 2 &&
+                                          isEngagedStatus.value == 2) {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                'Can\'t Perform this action while in a Chat');
+                                      } else {
+                                        controller.selectedIndex.value = value;
+                                        dasboardCurrentIndex(value);
+                                      }
                                       /* if (controller.selectedIndex.value == 2) {
                                        // Get.toNamed(RouteName.orderHistory);
                                       } else {
@@ -271,9 +274,14 @@ class DashboardScreen extends GetView<DashboardController> {
   Widget rejoinVisibility() {
     return Obx(
       () {
-        final dynamic cond = AppFirebaseService().orderData.value["status"];
+        final dynamic cond = AppFirebaseService().orderData.value["status"] ?? "0";
         print("order_Status $cond");
-        return cond == "2" || cond == 2 || cond == "3" || cond == 3 || cond == "4" || cond == 4
+        return cond == "2" ||
+                cond == 2 ||
+                cond == "3" ||
+                cond == 3 ||
+                cond == "4" ||
+                cond == 4
             ? Positioned(
                 bottom: kToolbarHeight + 20.w,
                 left: 0,
@@ -283,14 +291,6 @@ class DashboardScreen extends GetView<DashboardController> {
             : const SizedBox();
       },
     );
-  }
-
-  void _onItemTapped(int index) async {
-    if (index == 2) {
-      Get.toNamed(RouteName.orderHistory);
-    } else {
-      controller.selectedIndex.value = index;
-    }
   }
 
   static List<Widget> widgetOptions = <Widget>[

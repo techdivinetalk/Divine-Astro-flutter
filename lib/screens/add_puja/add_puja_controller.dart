@@ -299,13 +299,27 @@ class AddPujaController extends GetxController {
   }
 
   getCategoriesData({String? type}) async {
+    categoriesType.clear();
+    for (int i = 0; i < tagType.length; i++) {
+      tagType[i].isSelected = false;
+    }
+    selectedTag.clear();
+
+    selectedCategory = null;
+
+    update();
+
     Map<String, dynamic> param = {
       "type": type ?? "pooja",
     };
+
     try {
       final response = await userRepository.getCategoriesProductAndPooja(param);
       if (response.data != null) {
         categoriesType = response.data!;
+
+        print(categoriesType);
+        print("categoriesTypecategoriesTypecategoriesType");
       }
       update();
     } catch (error) {

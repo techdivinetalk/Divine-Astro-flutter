@@ -24,7 +24,7 @@ RxList<AssistChatData> assistChatUnreadMessages = <AssistChatData>[].obs;
 
 RxString userImage = ''.obs;
 
-
+RxInt isEngagedStatus = 0.obs;
 RxInt dasboardCurrentIndex = 0.obs;
 
 const userChatData = "userChatData";
