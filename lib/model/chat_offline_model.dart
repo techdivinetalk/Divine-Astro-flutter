@@ -263,6 +263,7 @@ enum MsgType {
   kundli,
   sendgifts,
   limit,
+  customProduct,
   error
 }
 
@@ -277,6 +278,7 @@ final msgTypeValues = EnumValues({
   "7": MsgType.sendgifts,
   "8": MsgType.gift,
   "10": MsgType.error,
+  "11": MsgType.customProduct,
 });
 
 /*class ChatMessage {

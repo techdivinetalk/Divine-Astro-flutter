@@ -239,6 +239,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                       imageUrl: appended,
                                       rounded: true,
                                       typeEnum: TypeEnum.user,
+
                                     ),
                                   );
                                 },

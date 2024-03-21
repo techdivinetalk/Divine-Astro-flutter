@@ -22,9 +22,7 @@ class WaitListUIController extends GetxController {
     getWaitingList();
   }
 
-  onAccept() {
-
-  }
+  onAccept() {}
 
   getWaitingList() async {
     try {
@@ -33,6 +31,21 @@ class WaitListUIController extends GetxController {
         waitingPersons = response.data!;
       }
       loading = Loading.loaded;
+      update();
+    } catch (err) {
+      divineSnackBar(data: err.toString(), color: appColors.redColor);
+    }
+  }
+
+  acceptChatButtonApi({String? queueId,orderId}) async {
+    try {
+      Map<String,dynamic> data =  {
+        "queue_id":queueId,
+        "order_id":orderId,
+      };
+      final response = await repository.acceptChatApi(body: data);
+      if (response.isNotEmpty) {}
+
       update();
     } catch (err) {
       divineSnackBar(data: err.toString(), color: appColors.redColor);

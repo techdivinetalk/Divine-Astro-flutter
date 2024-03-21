@@ -2,8 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:divine_astrologer/common/app_exception.dart';
+import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/main.dart';
+import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/model/res_product_detail.dart';
+import 'package:divine_astrologer/repository/notice_repository.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -93,6 +97,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    noticeAPi();
     args = Get.arguments;
     WidgetsBinding.instance.addObserver(this);
     stateHandling();
@@ -166,6 +171,34 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
         }
       }
       update();
+    }
+  }
+
+  List<NoticeDatum> noticeDataChat = [];
+final noticeRepository = NoticeRepository();
+  noticeAPi() async {
+    try {
+      final response = await noticeRepository.get(
+          ApiProvider.getAstroAllNoticeType3,
+          headers: await noticeRepository.getJsonHeaderURL());
+
+      if (response.statusCode == 200) {
+        final noticeResponse = noticeResponseFromJson(response.body);
+        if (noticeResponse.statusCode == noticeRepository.successResponse &&
+            noticeResponse.success!) {
+          noticeDataChat = noticeResponse.data;
+          print(noticeDataChat.length);
+          print("noticeDataChat.length");
+          update();
+        } else {
+          throw CustomException(json.decode(response.body));
+        }
+      } else {
+        throw CustomException(json.decode(response.body));
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
     }
   }
 

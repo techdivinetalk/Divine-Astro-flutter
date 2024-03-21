@@ -898,7 +898,14 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
                         break;
                       case 5:
-                        Get.bottomSheet(const SavedRemediesBottomSheet());
+                        print(controller.customProductData);
+                        print("controller.customProductData");
+                        Get.bottomSheet(
+                          SavedRemediesBottomSheet(
+                            controller: controller,
+                            // customProductData: controller.customProductData,
+                          ),
+                        );
 
                         break;
                     }

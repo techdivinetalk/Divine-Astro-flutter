@@ -62,7 +62,7 @@ class WaitListUI extends GetView<WaitListUIController> {
                       waitingListTile(
                           controller.waitingPersons[0].getCustomers!,
                           controller.waitingPersons[0].waitTime ?? 0,
-                          controller.waitingPersons[0]),
+                          controller.waitingPersons[0],controller: controller),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 10.h),
                         child: const Divider(),
@@ -96,14 +96,14 @@ class WaitListUI extends GetView<WaitListUIController> {
   }
 
   Widget waitingListTile(
-      GetCustomers waitingCustomer, int waitTime, WaitingPerson person) {
+      GetCustomers waitingCustomer, int waitTime, WaitingPerson person,{WaitListUIController? controller}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10.h),
       child: Row(
         children: [
           CachedNetworkPhoto(
             url:
-                "${controller.preference.getBaseImageURL()}/${waitingCustomer.avatar ?? ""}",
+                "${controller!.preference.getBaseImageURL()}/${waitingCustomer.avatar ?? ""}",
             height: 50,
             width: 50,
           ),
@@ -116,7 +116,7 @@ class WaitListUI extends GetView<WaitListUIController> {
           ),
           InkWell(
             onTap: () {
-
+              controller.acceptChatButtonApi(orderId: waitingCustomer.id.toString());
             },
             child: Container(
                 padding: EdgeInsets.all(7),

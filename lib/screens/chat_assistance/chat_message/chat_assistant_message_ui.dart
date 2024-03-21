@@ -2,13 +2,18 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/helper_widgets.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
+import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
+import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/model/save_remedies_response.dart';
 import 'package:divine_astrologer/repository/chat_repository.dart';
 import 'package:divine_astrologer/repository/kundli_repository.dart';
+import 'package:divine_astrologer/repository/notice_repository.dart';
 import 'package:divine_astrologer/utils/load_image.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -43,6 +48,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
   ChatMessageController controller = Get.find();
 
   Timer? timer;
+
   updateFirebaseToken() async {
     String? newtoken = await FirebaseMessaging.instance.getToken();
     final data = await AppFirebaseService()
@@ -62,6 +68,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
   @override
   void initState() {
     super.initState();
+    noticeAPi();
     controller.listenSocket();
     if (Get.arguments != null) {
       controller.args = Get.arguments;
@@ -260,43 +267,104 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                         ? msgShimmerList()
                         : controller.chatMessageList.isEmpty
                             ? HelpersWidget().emptyChatWidget()
-                            : ListView.builder(
-                                itemCount: controller.chatMessageList.length,
-                                controller: controller.messageScrollController,
-                                reverse: false,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  final currentMsg = controller
-                                      .chatMessageList[index] as AssistChatData;
-                                  final nextIndex =
-                                      controller.chatMessageList.length - 1 ==
-                                              index
-                                          ? index
-                                          : index + 1;
-                                  print(
-                                      "chat assist msg data:${currentMsg.toJson()}");
-                                  return AssistMessageView(
-                                    index: index,
-                                    chatMessage: currentMsg,
-                                    nextMessage: index ==
-                                            controller.chatMessageList.length -
-                                                1
-                                        ? controller.chatMessageList[index]
-                                        : controller.chatMessageList[index + 1],
-                                    yourMessage:
-                                        currentMsg.sendBy == SendBy.astrologer,
-                                    unreadMessage:
-                                        controller.unreadMessageList.isNotEmpty
+                            : Column(
+                                children: [
+                                  SizedBox(height: 10),
+                                  noticeDataChat.isNotEmpty
+                                      ? CarouselSlider(
+                                          options: CarouselOptions(
+                                            height: 50,
+                                            autoPlay: true,
+                                            aspectRatio: 1,
+                                            viewportFraction: 1,
+                                          ),
+                                          items: noticeDataChat
+                                              .map((i) {
+                                            return Builder(
+                                              builder: (BuildContext context) {
+                                                return Container(
+                                                    margin: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 10),
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                        color: appColors.white,
+                                                        border: Border.all(
+                                                            color:
+                                                                appColors.red,
+                                                            width: 2),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20)),
+                                                    child: Text(
+                                                      '${i.description}',
+                                                      style: AppTextStyle
+                                                          .textStyle12(
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontColor:
+                                                            appColors.red,
+                                                      ),
+                                                    ));
+                                              },
+                                            );
+                                          }).toList(),
+                                        )
+                                      : SizedBox(),
+                                  SizedBox(
+                                      height:
+                                          noticeDataChat.isNotEmpty
+                                              ? 10
+                                              : 0),
+                                  ListView.builder(
+                                    itemCount:
+                                        controller.chatMessageList.length,
+                                    controller:
+                                        controller.messageScrollController,
+                                    reverse: false,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      final currentMsg =
+                                          controller.chatMessageList[index]
+                                              as AssistChatData;
+                                      final nextIndex =
+                                          controller.chatMessageList.length -
+                                                      1 ==
+                                                  index
+                                              ? index
+                                              : index + 1;
+                                      print(
+                                          "chat assist msg data:${currentMsg.toJson()}");
+                                      return AssistMessageView(
+                                        index: index,
+                                        chatMessage: currentMsg,
+                                        nextMessage: index ==
+                                                controller.chatMessageList
+                                                        .length -
+                                                    1
+                                            ? controller.chatMessageList[index]
+                                            : controller
+                                                .chatMessageList[index + 1],
+                                        yourMessage: currentMsg.sendBy ==
+                                            SendBy.astrologer,
+                                        unreadMessage: controller
+                                                .unreadMessageList.isNotEmpty
                                             ? controller.chatMessageList[index]
                                                     .id ==
                                                 controller
                                                     .unreadMessageList.first.id
                                             : false,
-                                    baseImageUrl: controller.preference
-                                            .getBaseImageURL() ??
-                                        '',
-                                  );
-                                },
+                                        baseImageUrl: controller.preference
+                                                .getBaseImageURL() ??
+                                            '',
+                                      );
+                                    },
+                                  ),
+                                ],
                               ),
                   ),
                 );
@@ -508,7 +576,8 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                       minRadius: 25,
                       child: /*controller.messageController.text.isEmpty
                           ? Assets.svg.chatGift.svg(height: 50.h)
-                          :*/ Assets.svg.icSendMsg.svg(height: 50.h),
+                          :*/
+                          Assets.svg.icSendMsg.svg(height: 50.h),
                     ),
                   ),
                   // if (controller.messageController.text.isEmpty) ...[
@@ -634,5 +703,34 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
             ),
           );
         });
+  }
+
+  List<NoticeDatum> noticeDataChat = [];
+  final noticeRepository = NoticeRepository();
+
+  noticeAPi() async {
+    try {
+      final response = await noticeRepository.get(
+          ApiProvider.getAstroAllNoticeType3,
+          headers: await noticeRepository.getJsonHeaderURL());
+
+      if (response.statusCode == 200) {
+        final noticeResponse = noticeResponseFromJson(response.body);
+        if (noticeResponse.statusCode == noticeRepository.successResponse &&
+            noticeResponse.success!) {
+          noticeDataChat = noticeResponse.data;
+          print(noticeDataChat.length);
+          print("noticeDataChat.length");
+          setState(() {});
+        } else {
+          throw CustomException(json.decode(response.body));
+        }
+      } else {
+        throw CustomException(json.decode(response.body));
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
   }
 }
