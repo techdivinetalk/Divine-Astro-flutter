@@ -96,6 +96,7 @@ class ApiProvider {
   final String getAstroFeedback = "getAstroFeedbackDetail";
   final String agoraCallEnd = "agoraCallEnd";
   final String getWaitingListQueue = "getWaitingListQueue";
+  final String partnerOfflineChoiceOrder = "PartnerOfflineChoiceOrder";
   final String getImportantNumber = "getImportantNumber";
   final String getMessageTemplate = "getMessageTemplate";
   final String addMessageTemplate = "addMessageTemplate";
@@ -203,6 +204,8 @@ class ApiProvider {
   final String blockCustomer = "blockCustomer";
   final String getAstroAllNoticeType2 = "getAstroAllNotice?notice_type=2";
   static const String getAstroAllNoticeType3 = "getAstroAllNotice?notice_type=3";
+  static const String getCustomEcom = "getCustomEcom";
+  static const String customeEcommerce = "customeEcommerce";
   final String getTarotCard = "getTarotCard";
 
   //added by dev-chetan

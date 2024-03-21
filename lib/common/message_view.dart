@@ -7,6 +7,7 @@ import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_controller.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart';
+import 'package:divine_astrologer/tarotCard/widget/custom_image_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -73,6 +74,9 @@ class MessageView extends StatelessWidget {
         break;
       case MsgType.kundli:
         messageWidget = kundliView(chatDetail: chatMessage, index: 0);
+        break;
+      case MsgType.customProduct:
+        messageWidget = CustomProductView(chatDetail: chatMessage, index: 0);
         break;
       case MsgType.product || MsgType.pooja:
         messageWidget = productMsgView(chatMessage, yourMessage);
@@ -420,9 +424,11 @@ class MessageView extends StatelessWidget {
                               controller.isAudioPlaying(false);
                             },
                             onPlaying: () {
-                              print("value of audio playing ${controller.isAudioPlaying.value}");
+                              print(
+                                  "value of audio playing ${controller.isAudioPlaying.value}");
                               if (controller.isAudioPlaying.value) {
-                                Fluttertoast.showToast(msg: "Audio is Already playing");
+                                Fluttertoast.showToast(
+                                    msg: "Audio is Already playing");
                               } else {
                                 controller.isAudioPlaying(true);
                               }
@@ -768,6 +774,70 @@ class MessageView extends StatelessWidget {
                   size: 35,
                 ),
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget CustomProductView(
+      {required ChatMessage chatDetail, required int index}) {
+    return InkWell(
+      onTap: () {
+        // Get.toNamed(RouteName.kundliDetail, arguments: {
+        //   "kundli_id": chatDetail.kundliId,
+        //   "from_kundli": true,
+        //   "birth_place": chatDetail.kundliPlace,
+        //   "gender": chatDetail.gender,
+        //   "name": chatDetail.kundliName,
+        // });
+        // debugPrint("KundliId : ${chatDetail.kundliId}");
+      },
+      child: Card(
+        color: appColors.white,
+        surfaceTintColor: appColors.white,
+        child: Container(
+          padding: EdgeInsets.all(12.h),
+          child: Column(
+            children: [
+              CustomImageView(
+                height: 65,
+                width: 65,
+                imagePath: "assets/images/default_profiles.svg",
+                radius: BorderRadius.circular(10),
+              ),
+              Text(
+                "Lucky Stone",
+                style: AppTextStyle.textStyle12(
+                  fontColor: appColors.textColor,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              Text(
+                "₹1000",
+                style: AppTextStyle.textStyle12(
+                  fontColor: appColors.textColor,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              Container(
+                width: 85,
+                height: 26,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: appColors.guideColor,
+                ),
+                child: Center(
+                  child: Text(
+                    "Buy Now",
+                    style: AppTextStyle.textStyle12(
+                      fontColor: appColors.textColor,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),

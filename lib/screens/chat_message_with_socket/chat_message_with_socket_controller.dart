@@ -9,6 +9,7 @@ import "package:audio_waveforms/audio_waveforms.dart";
 import "package:device_info_plus/device_info_plus.dart";
 import "package:divine_astrologer/app_socket/app_socket.dart";
 import "package:divine_astrologer/common/colors.dart";
+import "package:divine_astrologer/common/custom_widgets.dart";
 import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/di/hive_services.dart";
 import "package:divine_astrologer/di/shared_preference_service.dart";
@@ -16,6 +17,8 @@ import "package:divine_astrologer/model/chat_offline_model.dart";
 import "package:divine_astrologer/model/res_login.dart";
 import "package:divine_astrologer/repository/message_template_repository.dart";
 import "package:divine_astrologer/repository/user_repository.dart";
+import "package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_list_model.dart";
+import "package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_model.dart";
 import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
 import "package:divine_astrologer/zego_call/zego_service.dart";
@@ -42,6 +45,7 @@ import "../../common/common_functions.dart";
 import "../../common/show_permission_widget.dart";
 import "../../di/api_provider.dart";
 import "../../firebase_service/firebase_service.dart";
+import "../../gen/assets.gen.dart";
 import "../../model/astrologer_gift_response.dart";
 import "../../model/chat/ReqCommonChat.dart";
 import "../../model/chat/ReqEndChat.dart";
@@ -123,6 +127,7 @@ class ChatMessageWithSocketController extends GetxController
   Rx<bool> hasMessage = false.obs;
   Rx<bool> isCardBotOpen = false.obs;
   bool isGalleryOpen = false;
+
   void startTimer() {
     int _start = 5;
     if (_timer2 != null) {
@@ -153,6 +158,7 @@ class ChatMessageWithSocketController extends GetxController
   late final AppLifecycleListener _listener;
   late AppLifecycleState? _state;
   final List<String> _states = <String>[];
+
 //end
   @override
   void onClose() {
@@ -252,7 +258,7 @@ class ChatMessageWithSocketController extends GetxController
       onInactive: () {
         WidgetsBinding.instance.endOfFrame.then(
           (_) async {
-            if(!isGalleryOpen) {
+            if (!isGalleryOpen) {
               socket.leavePrivateChatEmit(userData?.id.toString(),
                   AppFirebaseService().orderData.value["userId"], "0");
             }
@@ -266,7 +272,7 @@ class ChatMessageWithSocketController extends GetxController
       onDetach: () {
         WidgetsBinding.instance.endOfFrame.then(
           (_) async {
-            if(!isGalleryOpen) {
+            if (!isGalleryOpen) {
               socket.leavePrivateChatEmit(userData?.id.toString(),
                   AppFirebaseService().orderData.value["userId"], "0");
             }
@@ -298,6 +304,7 @@ class ChatMessageWithSocketController extends GetxController
     getDir();
     initialiseControllers();
     noticeAPi();
+    getSavedRemedies();
     AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
       print("orderData Changed");
       initTask(p0);
@@ -391,6 +398,7 @@ class ChatMessageWithSocketController extends GetxController
       divineSnackBar(data: error.toString(), color: appColors.redColor);
     }
   }
+
   void startExtraTimer() {
     Duration _timeLeft = Duration(minutes: 1); // Start from 1 minute
     final endTime = DateTime.now().add(_timeLeft);
@@ -411,7 +419,7 @@ class ChatMessageWithSocketController extends GetxController
             "${_timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
             "${_timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
         print("time Left ${extraTalkTime.value}");
-        if(AppFirebaseService().orderData.value["status"] != "4"){
+        if (AppFirebaseService().orderData.value["status"] != "4") {
           timer.cancel();
         }
         print("time Left ${AppFirebaseService().orderData.value["status"]}");
@@ -494,9 +502,9 @@ class ChatMessageWithSocketController extends GetxController
         chatTimer?.cancel();
         print("WentBack backFunc");
         extraTimer?.cancel();
-       // Get.delete<ChatMessageWithSocketController>();
+        // Get.delete<ChatMessageWithSocketController>();
         Get.until(
-              (route) {
+          (route) {
             return Get.currentRoute == RouteName.dashboard;
           },
         );
@@ -717,7 +725,6 @@ class ChatMessageWithSocketController extends GetxController
         GiftPlayerData(
           GiftPlayerSource.url,
           data.first.animation,
-
         ),
       );
     } else {
@@ -1332,9 +1339,9 @@ class ChatMessageWithSocketController extends GetxController
           chatTimer?.cancel();
           print("WentBack Status-5");
           extraTimer?.cancel();
-         // Get.delete<ChatMessageWithSocketController>();
+          // Get.delete<ChatMessageWithSocketController>();
           Get.until(
-                (route) {
+            (route) {
               return Get.currentRoute == RouteName.dashboard;
             },
           );
@@ -1383,4 +1390,32 @@ class ChatMessageWithSocketController extends GetxController
       rethrow;
     }
   }
+
+  List<CustomProductData> customProductData = [];
+
+  getSavedRemedies() async {
+    try {
+      final response = await noticeRepository.get(ApiProvider.getCustomEcom,
+          headers: await noticeRepository.getJsonHeaderURL());
+      CustomProductListModel savedRemediesData =
+          CustomProductListModel.fromJson(jsonDecode(response.body));
+      if (savedRemediesData.statusCode == 200) {
+        customProductData = savedRemediesData.data!;
+        print(jsonEncode(customProductData));
+        print(customProductData.length);
+        print("customProductData.length");
+        update();
+      } else {
+        customProductData = [];
+      }
+    } catch (e, s) { 
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+
+
+
+
 }

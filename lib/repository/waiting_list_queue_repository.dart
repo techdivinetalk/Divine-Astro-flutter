@@ -37,6 +37,22 @@ class WaitingListQueueRepo extends ApiProvider {
       rethrow;
     }
   }
+  Future<String> acceptChatApi({dynamic body}) async {
+    try {
+      final response = await post(partnerOfflineChoiceOrder,
+          body: body,
+          headers: await getJsonHeaderURL(version: 7));
+
+      if (response.statusCode == 200) {
+        return "suceess";
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
 
 
 }
