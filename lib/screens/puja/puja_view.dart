@@ -13,6 +13,7 @@ import 'package:divine_astrologer/tarotCard/widget/custom_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import 'widget/pooja_delete_bottom_sheet.dart';
 
@@ -76,7 +77,8 @@ class PujaScreen extends GetView<PujaController> {
                       style: AppTextStyle.textStyle16(
                           fontWeight: FontWeight.w600,
                           fontColor: appColors.textColor),
-                    )
+                     textAlign: TextAlign.center,
+                    ).centered()
                   : ListView.separated(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       controller: controller.orderScrollController,

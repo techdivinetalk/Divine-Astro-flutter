@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:divine_astrologer/model/feedback_response.dart';
+
 HomePageModelClass homePageModelClassFromJson(String str) =>
     HomePageModelClass.fromJson(json.decode(str));
 
@@ -37,6 +39,7 @@ class HomePageModelClass {
 
 class HomeData {
   NoticeBoard? noticeBoard;
+  FeedbackData? feedback;
   dynamic totalEarning;
   num? todaysEarning;
   OnGoingCall? onGoingCall;
@@ -66,6 +69,7 @@ class HomeData {
 
   HomeData({
     this.noticeBoard,
+    this.feedback,
     this.totalEarning,
     this.todaysEarning,
     this.onGoingCall,
@@ -98,6 +102,9 @@ class HomeData {
     noticeBoard: json["notice_board"] == null
         ? null
         : NoticeBoard.fromJson(json["notice_board"]),
+    feedback: json["feedback"] == null
+        ? null
+        : FeedbackData.fromJson(json["feedback"]),
     totalEarning: json["total_earning"]?.toDouble(),
     todaysEarning: json["todays_earning"],
     onGoingCall: OnGoingCall.fromJson(json["on_going_call"] ?? {}),
@@ -134,6 +141,7 @@ class HomeData {
 
   Map<String, dynamic> toJson() => {
     "notice_board": noticeBoard?.toJson(),
+    "feedback": feedback?.toJson(),
     "total_earning": totalEarning,
     "todays_earning": todaysEarning,
     "total_fine_payout": totalFinePayout,
@@ -166,6 +174,35 @@ class HomeData {
     "minimum_repurchase_rate": minimumRepurchaseRate,
   };
 }
+
+/*class FeedbackData {
+  int id;
+  int orderId;
+  String remark;
+  DateTime createdAt;
+
+  FeedbackData({
+    required this.id,
+    required this.orderId,
+    required this.remark,
+    required this.createdAt,
+  });
+
+  factory FeedbackData.fromJson(Map<String, dynamic> json) => FeedbackData(
+    id: json["id"],
+    orderId: json["order_id"],
+    remark: json["remark"],
+    createdAt: DateTime.parse(json["created_at"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "order_id": orderId,
+    "remark": remark,
+    "created_at": createdAt.toIso8601String(),
+  };
+}*/
+
 
 class Offers {
   List<OrderOffer>? orderOffer;

@@ -18,7 +18,7 @@ class AddMessageTemplateUI extends GetView<AddMessageTemplateController> {
         centerTitle: false,
         forceMaterialTransparency: true,
         backgroundColor: appColors.white,
-        title: Text("Template",
+        title: Text("Add Template",
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,

@@ -145,7 +145,7 @@ class HomeController extends GetxController {
     // fetchImportantNumbers();
     getConstantDetailsData();
     getDashboardDetail();
-    getFeedbackData();
+    //getFeedbackData();
     tarotCardData();
     getUserImage();
 
@@ -443,7 +443,7 @@ class HomeController extends GetxController {
     }
   }
 
-  getFeedbackData() async {
+ /* getFeedbackData() async {
     loading = Loading.initial;
     update();
     try {
@@ -468,7 +468,7 @@ class HomeController extends GetxController {
         divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
-  }
+  }*/
 
   getDashboardDetail() async {
     loading = Loading.initial;
@@ -479,6 +479,7 @@ class HomeController extends GetxController {
     };
     try {
       var response = await HomePageRepository().getDashboardData(params);
+      isFeedbackAvailable.value = response.success ?? false;
       homeData = response.data;
       updateCurrentData();
       shopDataSync.value = true;

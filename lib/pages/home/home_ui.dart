@@ -375,20 +375,23 @@ class HomeUI extends GetView<HomeController> {
                                   }
                                 },
                                 child: Column(
+                                  mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(
+                                    CustomText(
                                       "Ecommerce Wallet",
-                                      style: AppTextStyle.textStyle10(
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                                      fontWeight: FontWeight.w500,
+                                      textAlign: TextAlign.center,
+                                      fontSize: 10.sp,
+                                      fontColor: appColors.textColor,
                                     ),
                                     SizedBox(height: 5.h),
-                                    Text(
+                                    CustomText(
                                       "₹${controller.homeData?.ecommerceWallet ?? 0}",
-                                      style: AppTextStyle.textStyle10(
-                                        fontWeight: FontWeight.w400,
-                                      ),
+                                      fontWeight: FontWeight.w400,
+                                      textAlign: TextAlign.center,
+                                      fontSize: 10.sp,
+                                      fontColor: appColors.textColor,
                                     ),
                                   ],
                                 ),
@@ -398,7 +401,7 @@ class HomeUI extends GetView<HomeController> {
                           SizedBox(height: 10.h),
                           Obx(
                             () => controller.isFeedbackAvailable.value
-                                ? controller.feedbackResponse == null
+                                ? controller.homeData?.feedback == null
                                     ? const SizedBox.shrink()
                                     : Column(
                                         children: [
@@ -439,36 +442,28 @@ class HomeUI extends GetView<HomeController> {
                                           SizedBox(height: 10.h),
                                           FeedbackCardWidget(
                                               feedback:
-                                                  controller.feedbackResponse ??
+                                              controller.homeData?.feedback ??
                                                       FeedbackData(
-                                                        id: controller
-                                                            .feedbackResponse
+                                                        id: controller.homeData?.feedback
                                                             ?.id,
-                                                        orderId: controller
-                                                            .feedbackResponse
+                                                        orderId: controller.homeData?.feedback
                                                             ?.orderId,
-                                                        remark: controller
-                                                            .feedbackResponse
+                                                        remark: controller.homeData?.feedback
                                                             ?.remark,
                                                         order: OrderDetails(
-                                                          astrologerId: controller
-                                                              .feedbackResponse
+                                                          astrologerId: controller.homeData?.feedback
                                                               ?.order
                                                               ?.astrologerId,
-                                                          id: controller
-                                                              .feedbackResponse
+                                                          id: controller.homeData?.feedback
                                                               ?.order
                                                               ?.id,
-                                                          productType: controller
-                                                              .feedbackResponse
+                                                          productType: controller.homeData?.feedback
                                                               ?.order
                                                               ?.productType,
-                                                          orderId: controller
-                                                              .feedbackResponse
+                                                          orderId: controller.homeData?.feedback
                                                               ?.order
                                                               ?.orderId,
-                                                          createdAt: controller
-                                                              .feedbackResponse
+                                                          createdAt: controller.homeData?.feedback
                                                               ?.order
                                                               ?.createdAt,
                                                         ),
