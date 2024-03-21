@@ -2654,14 +2654,14 @@ class _LivePage extends State<LiveDharamScreen>
       if (senderUserID != _controller.userId) {
         if (roomId == _controller.liveId) {
           if (type == "") {
-            // await Future.delayed(const Duration(seconds: 10));
+            await Future.delayed(const Duration(seconds: 3));
             if (mounted) {
               // animationsList.add(item["animation"]);
               // await Future.delayed(const Duration(seconds:2));
               // if(mounted){
               //   for(int i = 0;i<animationsList.length;i++){
               print("objectobjectobjectobject");
-              ZegoGiftPlayer().play(
+               ZegoGiftPlayer().play(
                 context,
                 GiftPlayerData(GiftPlayerSource.url, item["animation"]),
               );

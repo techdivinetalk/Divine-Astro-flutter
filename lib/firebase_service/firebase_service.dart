@@ -111,6 +111,13 @@ class AppFirebaseService {
             databaseMessage.value.chatMessages = chatMessages;
             debugPrint("msg.chatMessages ${msg.chatMessages?.length}");
           }
+          if (realTimeData["isEngagedStatus"] != null) {
+            print(realTimeData["isEngagedStatus"]);
+            print('realTimeData["isEngagedStatus"]');
+            isEngagedStatus(realTimeData['isEngagedStatus']);
+          } else {
+            isEngagedStatus(0);
+          }
           if (realTimeData["notification"] != null) {
             final HiveServices hiveServices =
                 HiveServices(boxName: userChatData);
