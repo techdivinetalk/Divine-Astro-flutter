@@ -103,7 +103,6 @@ class ChatMessageWithSocketController extends GetxController
   // final ChatRepository chatRepository;
   RxString customerName = "".obs;
   RxString profileImage = "".obs;
-  RxBool isDataLoad = false.obs;
   RxBool isOngoingChat = false.obs;
   RxString chatStatus = "Offline".obs;
 
@@ -123,7 +122,7 @@ class ChatMessageWithSocketController extends GetxController
   Rx<bool> isRecording = false.obs;
   Rx<bool> hasMessage = false.obs;
   Rx<bool> isCardBotOpen = false.obs;
-
+  bool isGalleryOpen = false;
   void startTimer() {
     int _start = 5;
     if (_timer2 != null) {
@@ -169,6 +168,7 @@ class ChatMessageWithSocketController extends GetxController
     WidgetsBinding.instance.removeObserver(this);
     ZegoGiftPlayer().clear();
     chatTimer?.cancel();
+    print("WentBack dispose-5");
     extraTimer?.cancel();
     super.dispose();
   }
@@ -240,6 +240,7 @@ class ChatMessageWithSocketController extends GetxController
     _listener = AppLifecycleListener(
       onShow: () {},
       onResume: () {
+        isGalleryOpen = false;
         socket.socketConnect();
         socket.startAstroCustumerSocketEvent(
           orderId: AppFirebaseService().orderData.value["orderId"].toString(),
@@ -251,8 +252,10 @@ class ChatMessageWithSocketController extends GetxController
       onInactive: () {
         WidgetsBinding.instance.endOfFrame.then(
           (_) async {
-            socket.leavePrivateChatEmit(userData?.id.toString(),
-                AppFirebaseService().orderData.value["userId"], "0");
+            if(!isGalleryOpen) {
+              socket.leavePrivateChatEmit(userData?.id.toString(),
+                  AppFirebaseService().orderData.value["userId"], "0");
+            }
             if (AppFirebaseService().orderData.value["status"] == "4") {
               endChatApi();
             }
@@ -263,8 +266,10 @@ class ChatMessageWithSocketController extends GetxController
       onDetach: () {
         WidgetsBinding.instance.endOfFrame.then(
           (_) async {
-            socket.leavePrivateChatEmit(userData?.id.toString(),
-                AppFirebaseService().orderData.value["userId"], "0");
+            if(!isGalleryOpen) {
+              socket.leavePrivateChatEmit(userData?.id.toString(),
+                  AppFirebaseService().orderData.value["userId"], "0");
+            }
             if (AppFirebaseService().orderData.value["status"] == "4") {
               endChatApi();
             }
@@ -277,7 +282,6 @@ class ChatMessageWithSocketController extends GetxController
           orderId: AppFirebaseService().orderData.value["orderId"].toString(),
           userId: AppFirebaseService().orderData.value["userId"],
         );
-        chatStatus("Online");
       },
       onStateChange: (value) {
         print("on state changed called ${value.name}");
@@ -397,8 +401,8 @@ class ChatMessageWithSocketController extends GetxController
           (difference.inSeconds == 0 &&
               difference.inMinutes == 0 &&
               difference.inHours == 0)) {
-        print("duration ended called for extra timer");
         extraTimer?.cancel();
+        print("WentBack timeUp");
         _timeLeft = Duration.zero;
         backFunction();
       } else {
@@ -407,6 +411,10 @@ class ChatMessageWithSocketController extends GetxController
             "${_timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
             "${_timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
         print("time Left ${extraTalkTime.value}");
+        if(AppFirebaseService().orderData.value["status"] != "4"){
+          timer.cancel();
+        }
+        print("time Left ${AppFirebaseService().orderData.value["status"]}");
       }
     });
   }
@@ -456,6 +464,7 @@ class ChatMessageWithSocketController extends GetxController
         (_) async {
           socket.socket?.disconnect();
           chatTimer?.cancel();
+          print("WentBack endChat");
           extraTimer?.cancel();
           Get.until(
             (route) {
@@ -483,6 +492,7 @@ class ChatMessageWithSocketController extends GetxController
         socket.leavePrivateChatEmit(userData?.id.toString(),
             AppFirebaseService().orderData.value["userId"], "0");
         chatTimer?.cancel();
+        print("WentBack backFunc");
         extraTimer?.cancel();
        // Get.delete<ChatMessageWithSocketController>();
         Get.until(
@@ -758,6 +768,7 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   Future getImage(bool isCamera) async {
+    isGalleryOpen = true;
     final bool result = await permissionPhotoOrStorage();
     print("photo permission $result");
     if (result) {
@@ -766,7 +777,6 @@ class ChatMessageWithSocketController extends GetxController
 
       if (pickedFile != null) {
         image = File(pickedFile!.path);
-        isDataLoad.value = false;
         await cropImage();
       }
     } else {
@@ -778,6 +788,7 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   Future<void> cropImage() async {
+    isGalleryOpen = true;
     final CroppedFile? croppedFile = await ImageCropper().cropImage(
       sourcePath: image!.path,
       aspectRatioPresets: <CropAspectRatioPreset>[
@@ -813,7 +824,6 @@ class ChatMessageWithSocketController extends GetxController
         await getBase64Image(File(result.path));
       }
     } else {
-      isDataLoad.value = true;
       debugPrint("Image is not cropped.");
     }
   }
@@ -934,7 +944,6 @@ class ChatMessageWithSocketController extends GetxController
     print(newMessage.toOfflineJson());
     updateChatMessages(newMessage, false, isSendMessage: true);
     print("last message  ${chatMessages.last.message}");
-    isDataLoad.value = true;
   }
 
   updateChatMessages(ChatMessage newMessage, bool isFromNotification,
@@ -1238,7 +1247,6 @@ class ChatMessageWithSocketController extends GetxController
       // var response = await chatRepository.getChatListApi(params);
       // debugPrint("$response");
     }
-    isDataLoad.value = true;
   }
 
   uploadAudioFile(File soundFile) async {
@@ -1322,8 +1330,9 @@ class ChatMessageWithSocketController extends GetxController
         (_) async {
           socket.socket?.disconnect();
           chatTimer?.cancel();
+          print("WentBack Status-5");
           extraTimer?.cancel();
-          Get.delete<ChatMessageWithSocketController>();
+         // Get.delete<ChatMessageWithSocketController>();
           Get.until(
                 (route) {
               return Get.currentRoute == RouteName.dashboard;

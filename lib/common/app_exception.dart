@@ -47,7 +47,7 @@ class CustomException extends AppException {
       String? dismissButtonText,
       shouldShowFlushBar = true}) {
     if (shouldShowFlushBar) {
-      divineSnackBar(data: message, color: appColors.redColor);
+     // divineSnackBar(data: message, color: appColors.redColor);
     } else {
       debugPrint(message);
     }

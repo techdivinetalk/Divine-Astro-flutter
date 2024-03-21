@@ -271,7 +271,7 @@ class DashboardScreen extends GetView<DashboardController> {
   Widget rejoinVisibility() {
     return Obx(
       () {
-        final dynamic cond = AppFirebaseService().orderData.value["status"];
+        final dynamic cond = AppFirebaseService().orderData.value["status"] ?? "0";
         print("order_Status $cond");
         return cond == "2" || cond == 2 || cond == "3" || cond == 3 || cond == "4" || cond == 4
             ? Positioned(

@@ -95,8 +95,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       Obx(
                         () => AnimatedCrossFade(
                           duration: const Duration(milliseconds: 200),
-                          crossFadeState: controller.chatMessages.isEmpty ||
-                                  controller.isDataLoad.value == false
+                          crossFadeState: controller.chatMessages.isEmpty
                               ? CrossFadeState.showSecond
                               : CrossFadeState.showFirst,
                           secondChild: Container(),
