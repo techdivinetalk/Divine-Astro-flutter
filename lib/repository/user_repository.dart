@@ -16,6 +16,7 @@ import 'package:divine_astrologer/model/upload_image_model.dart';
 import 'package:divine_astrologer/model/upload_story_response.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:divine_astrologer/screens/add_puja/model/puja_product_categories_model.dart';
+import 'package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_model.dart';
 import 'package:divine_astrologer/screens/puja/model/add_edit_puja_model.dart';
 import 'package:divine_astrologer/screens/puja/model/pooja_listing_model.dart';
 import 'package:divine_astrologer/screens/remedies/model/remedies_model.dart';
@@ -962,5 +963,39 @@ class UserRepository extends ApiProvider {
       failureCallBack("Unknown Error Occurred");
     }
     return Future<UpdateSessionTypeResponse>.value(data);
+  }
+
+  Future<CustomProductModel> customeEcommerceApi(Map<String, dynamic> param) async {
+    //progressService.showProgressDialog(true);
+    try {
+      final response =
+      await post(customeEcommerce, body: jsonEncode(param).toString());
+
+      print("messResponse");
+      print(json.decode(response.body)["message"]);
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          preferenceService.erase();
+          Get.offNamed(RouteName.login);
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          CustomProductModel savedRemediesData =
+          CustomProductModel.fromJson(jsonDecode(response.body));
+
+          if (savedRemediesData.statusCode == successResponse &&
+              savedRemediesData.success!) {
+            return savedRemediesData;
+          } else {
+            throw CustomException(savedRemediesData.message!);
+          }
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      //progressService.showProgressDialog(false);
+      debugPrint("we got $e $s");
+      rethrow;
+    }
   }
 }

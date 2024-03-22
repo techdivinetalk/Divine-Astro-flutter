@@ -239,7 +239,7 @@ class AddPujaController extends GetxController {
   void addEditPoojaApi() async {
     List tagList = [];
     for (int i = 0; i < selectedTag.length; i++) {
-      tagList.add(selectedTag[i].id);
+      tagList.add(selectedTag[i].id.toString());
     }
     Map<String, dynamic> param = {
       "pooja_name": poojaName.text,
@@ -248,7 +248,7 @@ class AddPujaController extends GetxController {
       "pooja_starting_price_inr": poojaPrice.text,
       "pooja_short_desc": poojaDes.text,
       "pooja_category_id": selectedCategory?.id,
-      "tag": jsonEncode(jsonEncode(tagList)),
+      "tag": tagList,
       "pooja_banner_image": "https://example.com/pooja_banner_image.jpg",
     };
     param.addIf(id.value != 0, "pooja_id", id.value);
@@ -270,7 +270,7 @@ class AddPujaController extends GetxController {
 
   void addEditProduct() async {
     Map<String, dynamic> param = {
-      "prod_shop_id": null,
+
       "prod_cat_id": selectedCategory?.id,
       "prod_name": poojaName.text,
       "prod_image": poojaApiPath,

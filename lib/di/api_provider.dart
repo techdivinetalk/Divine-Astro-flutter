@@ -205,7 +205,7 @@ class ApiProvider {
   final String getAstroAllNoticeType2 = "getAstroAllNotice?notice_type=2";
   static const String getAstroAllNoticeType3 = "getAstroAllNotice?notice_type=3";
   static const String getCustomEcom = "getCustomEcom";
-  static const String customeEcommerce = "customeEcommerce";
+  final  String customeEcommerce = "customeEcommerce";
   final String getTarotCard = "getTarotCard";
 
   //added by dev-chetan

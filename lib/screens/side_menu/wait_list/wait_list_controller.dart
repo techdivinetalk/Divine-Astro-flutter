@@ -14,7 +14,7 @@ class WaitListUIController extends GetxController {
   WaitListUIController(this.repository);
 
   Loading loading = Loading.initial;
-  List<WaitingPerson> waitingPersons = <WaitingPerson>[];
+  List<WaitingListQueueData> waitingPersons = <WaitingListQueueData>[];
 
   @override
   void onInit() {

@@ -15,6 +15,7 @@ import 'package:divine_astrologer/pages/home/widgets/offer_bottom_widget.dart';
 import 'package:divine_astrologer/pages/home/widgets/can_not_online.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
 import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_ui.dart';
+import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/screens/order_feedback/widget/feedback_card_widget.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
@@ -532,11 +533,11 @@ class HomeUI extends GetView<HomeController> {
                                               // );
                                             } else {
                                               bool isChatOn =
-                                                  controller.chatSwitch.value;
+                                                  chatSwitch.value;
                                               bool isAudioCallOn =
-                                                  controller.callSwitch.value;
+                                                  callSwitch.value;
                                               bool isVideoCallOn =
-                                                  controller.videoSwitch.value;
+                                                  videoSwitch.value;
                                               if (isChatOn == false &&
                                                   isAudioCallOn == false &&
                                                   isVideoCallOn == false) {
@@ -1235,7 +1236,7 @@ class HomeUI extends GetView<HomeController> {
                                     },
                                   );
                                 },
-                                switchValue: controller.chatSwitch.value,
+                                switchValue: chatSwitch.value,
                               ),
                             ),
                           ],
@@ -1259,7 +1260,7 @@ class HomeUI extends GetView<HomeController> {
                                     },
                                   );
                                 },
-                                switchValue: controller.callSwitch.value,
+                                switchValue: callSwitch.value,
                               ),
                             ),
                           ],
@@ -1283,7 +1284,7 @@ class HomeUI extends GetView<HomeController> {
                                     },
                                   );
                                 },
-                                switchValue: controller.videoSwitch.value,
+                                switchValue: videoSwitch.value,
                               ),
                             ),
                           ],

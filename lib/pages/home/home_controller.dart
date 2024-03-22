@@ -60,9 +60,7 @@ class HomeController extends GetxController {
   bool isOpenPaidSheet =  false;
   bool isOpenECommerceSheet =  false;
 
-  RxBool chatSwitch = true.obs;
-  RxBool callSwitch = true.obs;
-  RxBool videoSwitch = true.obs;
+
   RxBool liveSwitch = true.obs;
 
   RxBool isCallEnable = true.obs;

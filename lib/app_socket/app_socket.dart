@@ -5,6 +5,7 @@ import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/pages/home/home_controller.dart';
+import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -40,9 +41,9 @@ class AppSocket {
       socket?.emit(ApiProvider().joinRoomSocket, {
         "userId": preferenceService.getUserDetail()?.id.toString(),
         "userType": 'astrologer',
-        "chat": Get.find<HomeController>().chatSwitch.value ? "1" : "0",
-        "call": Get.find<HomeController>().callSwitch.value ? "1" : "0",
-        "video": Get.find<HomeController>().videoSwitch.value ? "1" : "0"
+        "chat": chatSwitch.value ? "1" : "0",
+        "call": callSwitch.value ? "1" : "0",
+        "video":videoSwitch.value ? "1" : "0"
       });
       log('Socket connected successfully');
     });
