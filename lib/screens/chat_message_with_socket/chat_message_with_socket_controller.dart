@@ -401,9 +401,9 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   void startExtraTimer() {
-    Duration _timeLeft = Duration(minutes: 1); // Start from 1 minute
-    final endTime = DateTime.now().add(_timeLeft);
-    extraTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+    Duration timeLeft = const Duration(minutes: 1); // Start from 1 minute
+    final endTime = DateTime.now().add(timeLeft);
+    extraTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       final currentTime = DateTime.now();
       final difference = endTime.difference(currentTime);
       if (difference.isNegative ||
@@ -411,18 +411,19 @@ class ChatMessageWithSocketController extends GetxController
               difference.inMinutes == 0 &&
               difference.inHours == 0)) {
         extraTimer?.cancel();
+        timer.cancel();
         print("WentBack timeUp");
-        _timeLeft = Duration.zero;
+        timeLeft = Duration.zero;
         backFunction();
       } else {
-        _timeLeft = difference;
+        timeLeft = difference;
         extraTalkTime.value =
-        "${_timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
-            "${_timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
+        "${timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
+            "${timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
         print("time Left ${extraTalkTime.value}");
         if (MiddleWare.instance.currentPage == RouteName.dashboard) {
           extraTimer?.cancel();
-          AppFirebaseService().orderData.value={};
+          //AppFirebaseService().orderData.value={};
           endChatApi();
         }
         print("time Left ${MiddleWare.instance.currentPage}");
@@ -1331,6 +1332,13 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   void initTask(Map<String, dynamic> p0) {
+    if (MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
+      if(p0["status"] == "5"){
+        print("chat status 5");
+        AppFirebaseService().orderData.value = {};
+      }
+      return;
+    }
     if (p0["status"] == null || p0["status"] == "4") {
       print("chat status 4");
       showTalkTime.value = "-1";
@@ -1345,7 +1353,6 @@ class ChatMessageWithSocketController extends GetxController
           chatTimer?.cancel();
           print("WentBack Status-5");
           extraTimer?.cancel();
-          // Get.delete<ChatMessageWithSocketController>();
           Get.until(
             (route) {
               return Get.currentRoute == RouteName.dashboard;
