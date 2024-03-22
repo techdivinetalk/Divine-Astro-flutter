@@ -3,6 +3,7 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/routes.dart';
+import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_controller.dart';
@@ -782,64 +783,47 @@ class MessageView extends StatelessWidget {
   }
 
   Widget CustomProductView(
-      {required ChatMessage chatDetail, required int index}) {
-    return InkWell(
-      onTap: () {
-        // Get.toNamed(RouteName.kundliDetail, arguments: {
-        //   "kundli_id": chatDetail.kundliId,
-        //   "from_kundli": true,
-        //   "birth_place": chatDetail.kundliPlace,
-        //   "gender": chatDetail.gender,
-        //   "name": chatDetail.kundliName,
-        // });
-        // debugPrint("KundliId : ${chatDetail.kundliId}");
-      },
-      child: Card(
-        color: appColors.white,
-        surfaceTintColor: appColors.white,
-        child: Container(
-          padding: EdgeInsets.all(12.h),
-          child: Column(
-            children: [
-              CustomImageView(
-                height: 65,
-                width: 65,
-                imagePath: "assets/images/default_profiles.svg",
-                radius: BorderRadius.circular(10),
+      {required ChatMessage chatDetail, required int index, String? baseUrl}) {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Container(
+        width: 165,
+        height: 220,
+
+        decoration: BoxDecoration(
+          color: appColors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            CustomImageView(
+              height: 165,
+              width: 165,
+              imagePath: Get.find<SharedPreferenceService>().getAmazonUrl()! +
+                  "/${chatDetail.awsUrl}",
+              radius: BorderRadius.vertical(top: Radius.circular(10)),
+              placeHolder: "assets/images/default_profiles.svg",
+              fit: BoxFit.cover,
+            ),
+            Text(
+              chatDetail.message ?? "",
+              maxLines: 1,
+              style: AppTextStyle.textStyle12(
+                fontColor: appColors.textColor,
+                fontWeight: FontWeight.w400,
               ),
-              Text(
-                "Lucky Stone",
-                style: AppTextStyle.textStyle12(
-                  fontColor: appColors.textColor,
-                  fontWeight: FontWeight.w400,
-                ),
+            ),
+            const SizedBox(height: 5),
+            Text(
+              "₹${chatDetail.productPrice ?? "0"}",
+              style: AppTextStyle.textStyle12(
+                fontColor: appColors.textColor,
+                fontWeight: FontWeight.w400,
               ),
-              Text(
-                "₹1000",
-                style: AppTextStyle.textStyle12(
-                  fontColor: appColors.textColor,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              Container(
-                width: 85,
-                height: 26,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: appColors.guideColor,
-                ),
-                child: Center(
-                  child: Text(
-                    "Buy Now",
-                    style: AppTextStyle.textStyle12(
-                      fontColor: appColors.textColor,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
+            ),
+            const SizedBox(height: 5),
+          ],
         ),
       ),
     );

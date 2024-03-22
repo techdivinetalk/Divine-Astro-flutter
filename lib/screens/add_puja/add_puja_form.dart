@@ -145,21 +145,24 @@ class AddPujaScreen extends GetView<AddPujaController> {
                   ],
                 ),
                 SizedBox(height: 20.h),
-                PoojaRemedyTextFiled(
-                  title: "${controller.selectedValue} Name",
-                  maxLength: 20,
-                  controller: controller.poojaName,
-                  textInputFormatter: [CustomSpaceInputFormatter()],
-                  onChanged: (value) {
-                    controller.update();
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return '${controller.selectedValue} Name is required';
-                    }
-                    return null;
-                  },
-                ),
+                controller.selectedPujaName != null &&
+                        controller.selectedPujaName!.id == 0
+                    ? PoojaRemedyTextFiled(
+                        title: "${controller.selectedValue} Name",
+                        maxLength: 20,
+                        controller: controller.poojaName,
+                        textInputFormatter: [CustomSpaceInputFormatter()],
+                        onChanged: (value) {
+                          controller.update();
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '${controller.selectedValue} Name is required';
+                          }
+                          return null;
+                        },
+                      )
+                    : SizedBox(),
                 SizedBox(height: 20.h),
                 PoojaRemedyTextFiled(
                   title: "${controller.selectedValue} Description",
@@ -353,30 +356,31 @@ class AddPujaScreen extends GetView<AddPujaController> {
             ),
           ),
         ),
-
-        controller.selectedValue.value  == "Puja" ?    Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 10.h),
-            CustomText(
-              'Select puja name',
-              fontColor: appColors.textColor,
-            ),
-            SizedBox(height: 8.h),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 10.h, vertical: 5.h),
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-                border: Border.all(
-                  color: Colors.black.withOpacity(0.2),
-                  width: 1.0, // Adjust the border width as needed
-                ),
-              ),
-              child: PujaNameDropdown(),
-            ),
-          ],
-        ):SizedBox(),
-
+        controller.selectedValue.value == "Puja"
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 10.h),
+                  CustomText(
+                    'Select puja name',
+                    fontColor: appColors.textColor,
+                  ),
+                  SizedBox(height: 8.h),
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10.h, vertical: 5.h),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      border: Border.all(
+                        color: Colors.black.withOpacity(0.2),
+                        width: 1.0, // Adjust the border width as needed
+                      ),
+                    ),
+                    child: PujaNameDropdown(),
+                  ),
+                ],
+              )
+            : SizedBox(),
       ],
     );
   }
@@ -449,16 +453,16 @@ class AddPujaScreen extends GetView<AddPujaController> {
         ),
         items: controller.pujaNamesList
             .map((PujaProductCategoriesData item) =>
-            DropdownMenuItem<PujaProductCategoriesData>(
-              value: item,
-              child: Text(
-                item.name ?? "",
-                style: AppTextStyle.textStyle16(
-                    fontWeight: FontWeight.w400,
-                    fontColor: appColors.darkBlue),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ))
+                DropdownMenuItem<PujaProductCategoriesData>(
+                  value: item,
+                  child: Text(
+                    item.name ?? "",
+                    style: AppTextStyle.textStyle16(
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.darkBlue),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ))
             .toList(),
         style: AppTextStyle.textStyle16(
             fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),

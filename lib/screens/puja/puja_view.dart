@@ -106,7 +106,7 @@ class PujaScreen extends GetView<PujaController> {
                               CustomImageView(
                                 height: 65,
                                 width: 65,
-                                imagePath:controller.pref.getAmazonUrl()! + data.poojaImg!,
+                                imagePath:controller.pref.getAmazonUrl()! + "${data.poojaImg ?? ""}",
                                 radius: BorderRadius.circular(10),
                                 placeHolder:
                                     "assets/images/default_profiles.svg",

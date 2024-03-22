@@ -242,9 +242,12 @@ class AddPujaController extends GetxController {
       tagList.add(selectedTag[i].id.toString());
     }
     Map<String, dynamic> param = {
-      "pooja_name": poojaName.text,
+      "pooja_name": selectedPujaName != null && selectedPujaName!.id == 0
+          ? poojaName.text
+          : selectedPujaName!.name,
       "pooja_img": poojaApiPath,
       "pooja_desc": poojaDes.text,
+      "pooja_name_id": selectedPujaName!.id,
       "pooja_starting_price_inr": poojaPrice.text,
       "pooja_short_desc": poojaDes.text,
       "pooja_category_id": selectedCategory?.id,
@@ -270,7 +273,6 @@ class AddPujaController extends GetxController {
 
   void addEditProduct() async {
     Map<String, dynamic> param = {
-
       "prod_cat_id": selectedCategory?.id,
       "prod_name": poojaName.text,
       "prod_image": poojaApiPath,

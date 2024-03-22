@@ -8,6 +8,8 @@ import 'package:divine_astrologer/tarotCard/widget/custom_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../model/chat_offline_model.dart';
+
 class SavedRemediesBottomSheet extends StatelessWidget {
   final List<CustomProductData>? customProductData;
   final ChatMessageWithSocketController? controller;
@@ -73,65 +75,79 @@ class SavedRemediesBottomSheet extends StatelessWidget {
                               print(controller!.pref.getAmazonUrl()! +
                                   data.image!);
                               print("data.image");
-                              return Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: appColors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color:
-                                          appColors.textColor.withOpacity(0.4),
-                                      offset: const Offset(0, 1),
-                                      blurRadius: 3,
-                                    )
-                                  ],
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Row(
-                                  children: [
-                                    CustomImageView(
-                                      height: 65,
-                                      width: 65,
-                                      imagePath:
-                                          controller!.pref.getAmazonUrl()! +
-                                              "/${data.image!}",
-                                      radius: BorderRadius.circular(10),
-                                      placeHolder:
-                                          "assets/images/default_profiles.svg",
-                                      fit: BoxFit.cover,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            data.name ?? "",
-                                            style: AppTextStyle.textStyle14(
-                                              fontColor: appColors.textColor,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                          Text(
-                                            "₹${data.amount}",
-                                            style: AppTextStyle.textStyle14(
-                                              fontColor: appColors.textColor,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                          /*Text(
-                                      "Lorem Ipsum is simply dummy text of the printing and need to fill some space ...",
-                                      maxLines: 2 ,
-                                      style: AppTextStyle.textStyle10(
-                                        fontColor: appColors.textColor,
-                                        fontWeight: FontWeight.w400,
+                              return GestureDetector(
+                                onTap: () {
+                                  final String time =
+                                      "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+                                  controller!.addNewMessage(
+                                    time,
+                                    MsgType.customProduct,
+                                    messageText: data.name,
+                                    productPrice: data.amount.toString(),
+                                    productId: data.id.toString(),
+                                    awsUrl: data.image,
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: appColors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: appColors.textColor
+                                            .withOpacity(0.4),
+                                        offset: const Offset(0, 1),
+                                        blurRadius: 3,
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      CustomImageView(
+                                        height: 65,
+                                        width: 65,
+                                        imagePath:
+                                            controller!.pref.getAmazonUrl()! +
+                                                "/${data.image!}",
+                                        radius: BorderRadius.circular(10),
+                                        placeHolder:
+                                            "assets/images/default_profiles.svg",
+                                        fit: BoxFit.cover,
                                       ),
-                                    ),*/
-                                        ],
-                                      ),
-                                    )
-                                  ],
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              data.name ?? "",
+                                              style: AppTextStyle.textStyle14(
+                                                fontColor: appColors.textColor,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            Text(
+                                              "₹${data.amount}",
+                                              style: AppTextStyle.textStyle14(
+                                                fontColor: appColors.textColor,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                            /*Text(
+                                        "Lorem Ipsum is simply dummy text of the printing and need to fill some space ...",
+                                        maxLines: 2 ,
+                                        style: AppTextStyle.textStyle10(
+                                          fontColor: appColors.textColor,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),*/
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               );
                             },

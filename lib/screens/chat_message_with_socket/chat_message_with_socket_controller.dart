@@ -875,11 +875,34 @@ class ChatMessageWithSocketController extends GetxController
     String? downloadedPath,
     String? kundliId,
     String? giftId,
+    String? productPrice,
     String? productId,
     String? shopId,
+    String? customProductId,
   }) async {
     late ChatMessage newMessage;
-    if (msgType == MsgType.product) {
+    if (msgType == MsgType.customProduct) {
+      newMessage = ChatMessage(
+        orderId: AppFirebaseService().orderData.value["orderId"],
+        id: int.parse(time),
+        message: messageText,
+        // createdAt: DateTime.now().toIso8601String(),
+        receiverId: int.parse(
+            AppFirebaseService().orderData.value["userId"].toString()),
+        senderId: preference.getUserDetail()!.id,
+        time: int.parse(time),
+        awsUrl: awsUrl,
+        base64Image: base64Image,
+        downloadedPath: downloadedPath,
+        msgType: msgType,
+        kundliId: kundliId,
+        productPrice: productPrice,
+        title: giftId ?? "${userData?.name} sent you a message.",
+        type: 0,
+        productId: customProductId,
+        userType: "astrologer",
+      );
+    } else if (msgType == MsgType.product) {
       final isPooja = data?['data']['isPooja'] as bool;
       if (isPooja) {
         final productDetails = data?['data']['poojaData'] as Pooja;

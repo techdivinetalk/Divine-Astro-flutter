@@ -26,6 +26,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../gen/assets.gen.dart';
+import '../../../model/chat_offline_model.dart';
 
 class CreateCustomProductSheet extends StatefulWidget {
   final ChatMessageWithSocketController? controller;
@@ -359,7 +360,6 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
 
     // Listen for the response
 
-    print("responseresponseresponse");
     response.stream.transform(utf8.decoder).listen((value) {
       print(jsonDecode(value)["data"]);
       productApiPath = jsonDecode(value)["data"]["path"];
@@ -383,7 +383,7 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
 
   addCustomProduct() async {
     try {
-      Map<String,dynamic> body = {
+      Map<String, dynamic> body = {
         "prod_name": productName.text,
         "prod_image": productApiPath,
         "product_price": productPrice.text,
@@ -393,6 +393,16 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
       if (response.data != null) {
         customProductData = response.data!;
         widget.controller!.customProductData.add(customProductData!);
+        final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+        widget.controller!.addNewMessage(
+          time,
+          MsgType.customProduct,
+          messageText: productName.text,
+          productPrice: productPrice.text,
+          productId: customProductData!.id,
+          awsUrl: productApiPath,
+        );
+
         Get.back();
         setState(() {});
       }
