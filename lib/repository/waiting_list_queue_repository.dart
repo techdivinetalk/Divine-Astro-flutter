@@ -37,11 +37,14 @@ class WaitingListQueueRepo extends ApiProvider {
       rethrow;
     }
   }
+
   Future<String> acceptChatApi({dynamic body}) async {
     try {
-      final response = await post(partnerOfflineChoiceOrder,
-          body: body,
-          headers: await getJsonHeaderURL(version: 7));
+      final response = await post(
+        partnerOfflineChoiceOrder,
+        body: jsonEncode(body),
+        headers: await getJsonHeaderURL(version: 7),
+      );
 
       if (response.statusCode == 200) {
         return "suceess";
@@ -53,6 +56,4 @@ class WaitingListQueueRepo extends ApiProvider {
       rethrow;
     }
   }
-
-
 }
