@@ -1,4 +1,6 @@
+import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
+import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:divine_astrologer/screens/dashboard/widgets/rejoin_widget.dart';
 import 'package:divine_astrologer/screens/side_menu/wait_list/wait_list_ui.dart';
 import 'package:flutter/material.dart';
@@ -162,8 +164,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                         ),
                                         label: "Queue",
                                       ),
+
                                       // Profile Tab comment
-                                      /*BottomNavigationBarItem(
+                                      BottomNavigationBarItem(
                                         icon: Column(
                                           children: [
 
@@ -197,19 +200,19 @@ class DashboardScreen extends GetView<DashboardController> {
                                                         BorderRadius.circular(
                                                             100.h),
                                                   ),
-                                            */ /*    CommonImageView(
+                                                 /*CommonImageView(
                                           imagePath:
                                               "${controller.userProfileImage}",
                                           fit: BoxFit.cover,
                                           height: 30,
                                           width: 30,
                                           radius: BorderRadius.circular(50),
-                                        ),*/ /*
+                                        ), */
                                             const SizedBox(height: 5),
                                           ],
                                         ),
                                         label: "profile".tr,
-                                      ),*/
+                                      ),
                                     ],
                                     elevation: 0,
                                     currentIndex:
@@ -299,5 +302,6 @@ class DashboardScreen extends GetView<DashboardController> {
     //const SuggestRemediesUI(),
     ChatAssistancePage(),
     const WaitListUI(),
+    ProfileUI()
   ];
 }

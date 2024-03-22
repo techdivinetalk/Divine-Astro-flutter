@@ -35,8 +35,17 @@ class ProfileUI extends GetView<ProfilePageController> {
     Get.put(ProfilePageController(Get.put(UserRepository())));
     return Scaffold(
       backgroundColor: appColors.white,
-      appBar: commonAppbar(
-          title: "profile".tr, trailingWidget: const SizedBox.shrink()),
+      appBar: AppBar(
+        centerTitle: false,
+        forceMaterialTransparency: true,
+        backgroundColor: appColors.white,
+        title: Text("profile".tr,
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 16.sp,
+              color: appColors.darkBlue,
+            )),
+      ),
       // drawer: const SideMenuDrawer(),
       body: ListView(
         padding: const EdgeInsets.all(15.0),
