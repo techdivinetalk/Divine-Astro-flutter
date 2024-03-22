@@ -632,7 +632,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                 fontSize: 16.sp,
                                                 color: appColors.darkBlue)),
                                         Text(
-                                            formatMinutesToHoursMinutes(
+                                            formatMinutesToHoursMinutesSeconds(
                                                 (AppFirebaseService()
                                                             .orderData
                                                             .value[
@@ -775,20 +775,23 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
     return Future<void>.value();
   }
 
-  String formatMinutesToHoursMinutes(int minutes) {
+  String formatMinutesToHoursMinutesSeconds(int minutes) {
     final hours = minutes ~/ 60;
     final remainingMinutes = minutes % 60;
+    final remainingSeconds = ((minutes % 60) * 60) % 60;
 
     // Handle edge cases for negative or zero minutes
     if (minutes < 0) {
-      return "${formatMinutesToHoursMinutes(-minutes)} (negative)";
+      return "${formatMinutesToHoursMinutesSeconds(-minutes)} (negative)";
     } else if (minutes == 0) {
-      return "0:00";
+      return "0:00:00";
     }
 
-    // Ensure consistent two-digit format for minutes
+    // Ensure consistent two-digit format for minutes and seconds
     final formattedMinutes = remainingMinutes.toString().padLeft(2, '0');
+    final formattedSeconds = remainingSeconds.toString().padLeft(2, '0');
 
-    return '$hours:$formattedMinutes';
+    return '$hours:$formattedMinutes:$formattedSeconds';
   }
+
 }
