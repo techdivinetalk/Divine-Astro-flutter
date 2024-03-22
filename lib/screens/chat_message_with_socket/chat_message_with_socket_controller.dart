@@ -39,6 +39,7 @@ import "package:permission_handler/permission_handler.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:socket_io_client/socket_io_client.dart";
 
+import "../../common/MiddleWare.dart";
 import "../../common/app_exception.dart";
 import "../../common/ask_for_gift_bottom_sheet.dart";
 import "../../common/common_functions.dart";
@@ -416,20 +417,22 @@ class ChatMessageWithSocketController extends GetxController
       } else {
         _timeLeft = difference;
         extraTalkTime.value =
-            "${_timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
+        "${_timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
             "${_timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
         print("time Left ${extraTalkTime.value}");
-        if (AppFirebaseService().orderData.value["status"] != "4") {
-          timer.cancel();
+        if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+          extraTimer?.cancel();
+          AppFirebaseService().orderData.value={};
+          endChatApi();
         }
-        print("time Left ${AppFirebaseService().orderData.value["status"]}");
+        print("time Left ${MiddleWare.instance.currentPage}");
       }
     });
   }
 
   void talkTimeStartTimer(int futureTimeInEpochMillis) {
     DateTime dateTime =
-        DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
+    DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
     print("futureTime.minute");
     if (chatTimer != null) {
       chatTimer?.cancel();
@@ -448,9 +451,12 @@ class ChatMessageWithSocketController extends GetxController
       } else {
         //         print('Countdown working');
         showTalkTime.value =
-            "${timeDifference.inHours.toString().padLeft(2, '0')}:"
+        "${timeDifference.inHours.toString().padLeft(2, '0')}:"
             "${timeDifference.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
             "${timeDifference.inSeconds.remainder(60).toString().padLeft(2, '0')}";
+        if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+          timer.cancel();
+        }
         print(
             'timer called ${timeDifference.inHours}:${timeDifference.inMinutes.remainder(60)}:${timeDifference.inSeconds.remainder(60)}');
       }
