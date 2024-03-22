@@ -45,7 +45,6 @@ class ChatMessage {
   String? base64Image;
   dynamic deletedAt;
   int? chatMsgId;
-
   int? astrologerId;
   int? callInitiate;
   dynamic exotelInitiateResponse;
@@ -76,6 +75,7 @@ class ChatMessage {
   int? time;
   int? type;
   String? userType;
+  String? productPrice;
 
   ChatMessage({
     this.id,
@@ -128,6 +128,7 @@ class ChatMessage {
     this.title,
     this.type,
     this.userType,
+    this.productPrice,
   });
 
   ChatMessage.fromOfflineJson(Map<String, dynamic> json) {
@@ -150,6 +151,7 @@ class ChatMessage {
     updatedAt = json['updated_at'];
     msgSendBy = json['msg_send_by'];
     isSuspicious = json['is_suspicious'];
+    productPrice = json['productPrice'];
     isEmailSent = json['is_email_sent'];
     kundliId = json['kundli_id'];
     seenStatus = json['seen_status'];
@@ -186,6 +188,7 @@ class ChatMessage {
     kundliPlace = json['kundliPlace'];
     kundliId = json['kundliId'];
     gender = json['gender'];
+    productPrice = json['productPrice'];
     title = json['title'];
     userType = json['userType'];
   }
@@ -195,6 +198,7 @@ class ChatMessage {
     data['chatMessageId'] = id;
     data['order_id'] = orderId;
     data['member_id'] = memberId;
+    data['productPrice'] = productPrice;
     data['role_id'] = roleId;
     data['customer_id'] = customerId;
     data['msg_sequence'] = msgSequence;
