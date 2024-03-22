@@ -8,6 +8,7 @@ import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/repository/notice_repository.dart';
+import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/add_puja/add_puja_controller.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_controller.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_list_model.dart';
@@ -378,23 +379,21 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
   }
 
   CustomProductData? customProductData;
-  final noticeRepository = NoticeRepository();
+  final userRepository = UserRepository();
 
   addCustomProduct() async {
     try {
-      final response = await noticeRepository.post(ApiProvider.customeEcommerce,
-          body: {
-            "prod_name": productName.text,
-            "prod_image": productApiPath,
-            "prod_desc": "",
-            "product_price": productPrice.text,
-          },
-          headers: await noticeRepository.getJsonHeaderURL());
-      CustomProductModel savedRemediesData =
-          CustomProductModel.fromJson(jsonDecode(response.body));
-      if (savedRemediesData.statusCode == 200) {
-        customProductData = savedRemediesData.data!;
+      Map<String,dynamic> body = {
+        "prod_name": productName.text,
+        "prod_image": productApiPath,
+        "product_price": productPrice.text,
+      };
+      final response = await userRepository.customeEcommerceApi(body);
+
+      if (response.data != null) {
+        customProductData = response.data!;
         widget.controller!.customProductData.add(customProductData!);
+        Get.back();
         setState(() {});
       }
     } catch (e, s) {

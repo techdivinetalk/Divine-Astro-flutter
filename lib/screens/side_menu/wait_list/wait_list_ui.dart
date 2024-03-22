@@ -1,7 +1,10 @@
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/waiting_list_queue.dart';
 import 'package:divine_astrologer/repository/waiting_list_queue_repository.dart';
+import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../../common/app_textstyle.dart';
@@ -62,7 +65,8 @@ class WaitListUI extends GetView<WaitListUIController> {
                       waitingListTile(
                           controller.waitingPersons[0].getCustomers!,
                           controller.waitingPersons[0].waitTime ?? 0,
-                          controller.waitingPersons[0],controller: controller),
+                          controller.waitingPersons[0],
+                          controller: controller),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 10.h),
                         child: const Divider(),
@@ -80,10 +84,11 @@ class WaitListUI extends GetView<WaitListUIController> {
                         primary: false,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          WaitingPerson person =
+                          WaitingListQueueData person =
                               controller.waitingPersons[index + 1];
                           return waitingListTile(person.getCustomers!,
-                              person.waitTime ?? 0, person);
+                              person.waitTime ?? 0, person,
+                              controller: controller);
                         },
                       ),
                     ],
@@ -96,14 +101,15 @@ class WaitListUI extends GetView<WaitListUIController> {
   }
 
   Widget waitingListTile(
-      GetCustomers waitingCustomer, int waitTime, WaitingPerson person,{WaitListUIController? controller}) {
+      GetCustomers waitingCustomer, int waitTime, WaitingListQueueData person,
+      {WaitListUIController? controller}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10.h),
       child: Row(
         children: [
           CachedNetworkPhoto(
             url:
-                "${controller!.preference.getBaseImageURL()}/${waitingCustomer.avatar ?? ""}",
+                "${controller!.preference.getBaseImageURL()!}/${waitingCustomer.avatar ?? ""}",
             height: 50,
             width: 50,
           ),
@@ -115,8 +121,17 @@ class WaitListUI extends GetView<WaitListUIController> {
             ),
           ),
           InkWell(
-            onTap: () {
-              controller.acceptChatButtonApi(orderId: waitingCustomer.id.toString());
+            onTap: () async {
+              if (chatSwitch.value == false &&
+                  callSwitch.value == false &&
+                  videoSwitch.value == false) {
+                controller.acceptChatButtonApi(
+                    queueId: person.id.toString(), orderId: person.orderId);
+              } else {
+                Fluttertoast.showToast(
+                  msg: "Please turn off all session types.",
+                );
+              }
             },
             child: Container(
                 padding: EdgeInsets.all(7),
@@ -153,14 +168,14 @@ class ImageBasedOnResponse extends StatelessWidget {
   const ImageBasedOnResponse({Key? key, required this.customer})
       : super(key: key);
 
-  final WaitingPerson customer;
+  final WaitingListQueueData customer;
 
   @override
   Widget build(BuildContext context) {
-    if (customer.callType == 1) {
+    if (customer.isCall == 1) {
       return Assets.images.icChating.svg();
     }
-    if (customer.callType == 2) {
+    if (customer.isCall == 2) {
       return Assets.svg.icCall1.svg();
     }
     return const SizedBox.shrink();

@@ -21,8 +21,11 @@ RxList assistChatNewMsg = [].obs;
 RxInt chatAssistantCurrentUserId = 0.obs;
 RxInt walletBalance = 0.obs;
 RxList<AssistChatData> assistChatUnreadMessages = <AssistChatData>[].obs;
-
+RxBool chatSwitch = true.obs;
+RxBool callSwitch = true.obs;
+RxBool videoSwitch = true.obs;
 RxString userImage = ''.obs;
+
 
 RxInt isEngagedStatus = 0.obs;
 RxInt dasboardCurrentIndex = 0.obs;
@@ -34,3 +37,6 @@ ConstantDetailsModelClass globalConstantModel = ConstantDetailsModelClass();
 var astroChatWatcher = ResAstroChatListener().obs;
 TimeDurationService timer = TimeDurationService();
 var chatSession = ResChatSocketInit().obs;
+
+
+

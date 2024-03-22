@@ -67,10 +67,12 @@ class SavedRemediesBottomSheet extends StatelessWidget {
                             shrinkWrap: true,
                             clipBehavior: Clip.antiAliasWithSaveLayer,
                             itemBuilder: (context, index) {
-                              print(customProductData!.length);
                               print("customProductData!.length");
                               CustomProductData data =
                                   controller!.customProductData[index];
+                              print(controller!.pref.getAmazonUrl()! +
+                                  data.image!);
+                              print("data.image");
                               return Container(
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
@@ -92,11 +94,13 @@ class SavedRemediesBottomSheet extends StatelessWidget {
                                       width: 65,
                                       imagePath:
                                           controller!.pref.getAmazonUrl()! +
-                                              data.image!,
+                                              "/${data.image!}",
                                       radius: BorderRadius.circular(10),
                                       placeHolder:
                                           "assets/images/default_profiles.svg",
+                                      fit: BoxFit.cover,
                                     ),
+                                    const SizedBox(width: 10),
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
@@ -149,7 +153,9 @@ class SavedRemediesBottomSheet extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Get.back();
-                      Get.bottomSheet(CreateCustomProductSheet(controller: controller),isScrollControlled: true);
+                      Get.bottomSheet(
+                          CreateCustomProductSheet(controller: controller),
+                          isScrollControlled: true);
                     },
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 15),
