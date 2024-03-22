@@ -132,8 +132,8 @@ class YourScoreWidget extends GetView<PerformanceController> {
                               ),
                             ),
                             Positioned(
-                              right: 38.h,
-                              top: 40.h,
+                              right: 26.h,
+                              top: 45.h,
                               child: CustomText(
                                 // "50",
                                 '${item?.performance?.marks?[1].max ?? 0}',

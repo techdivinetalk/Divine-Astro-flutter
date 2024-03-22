@@ -54,7 +54,7 @@ class MessageView extends StatelessWidget {
     print("chat Message:: ${chatMessage.msgType}");
     switch (chatMessage.msgType) {
       case MsgType.gift:
-        messageWidget = giftMsgView(context, chatMessage, yourMessage);
+        messageWidget = giftMsgView(context, chatMessage, yourMessage, userName);
         break;
       case MsgType.sendgifts:
         messageWidget = giftSendUi(context, chatMessage, yourMessage, userName);
@@ -206,7 +206,7 @@ class MessageView extends StatelessWidget {
   }
 
   Widget giftMsgView(
-      BuildContext context, ChatMessage chatMessage, bool yourMessage) {
+      BuildContext context, ChatMessage chatMessage, bool yourMessage, String customerName) {
     return SizedBox(
       width: double.maxFinite,
       child: Expanded(
@@ -241,7 +241,7 @@ class MessageView extends StatelessWidget {
                   SizedBox(width: 6.w),
                   Flexible(
                       child: CustomText(
-                    'Astrologer has requested to send ${chatMessage.message}.',
+                    '$customerName has requested to send ${chatMessage.message}.',
                     maxLines: 2,
                   ))
                 ],
