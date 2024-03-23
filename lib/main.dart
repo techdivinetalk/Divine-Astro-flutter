@@ -66,7 +66,7 @@ Future<void> main() async {
   await GetStorage.init();
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print("pushNotification1");
-    print('Message data-: ${message.data["type"] == "1"}');
+    print('Message data-: dasboardCurrentIndex}');
     print(
         'Message data-: ${MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI}');
     if (message.data["type"] == "2") {
@@ -126,7 +126,6 @@ Future<void> main() async {
                 seenStatus: SeenStatus.received,
                 astrologerId: int.parse(responseMsg?["userid"] ?? 0))
           ]);
-          return;
         }
         switch (message.data['msg_type']) {
           case "0":

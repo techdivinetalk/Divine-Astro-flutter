@@ -32,7 +32,7 @@ class AppFirebaseService {
   AppFirebaseService._privateConstructor();
 
   static final AppFirebaseService _instance =
-      AppFirebaseService._privateConstructor();
+  AppFirebaseService._privateConstructor();
 
   factory AppFirebaseService() {
     return _instance;
@@ -61,7 +61,10 @@ class AppFirebaseService {
       var chatMessages = <ChatMessage>[].obs;
       var databaseMessage = ChatMessagesOffline().obs;
       await hiveServices.initialize();
-      database.child(path).onValue.listen((event) async {
+      database
+          .child(path)
+          .onValue
+          .listen((event) async {
         debugPrint("real time $path ---> ${event.snapshot.value}");
         if (preferenceService.getToken() == null ||
             preferenceService.getToken() == "") {
@@ -75,7 +78,8 @@ class AppFirebaseService {
           if (realTimeData["uniqueId"] != null) {
             String uniqueId = await getDeviceId() ?? "";
             debugPrint(
-              'check uniqueId ${realTimeData['uniqueId']}\ngetDeviceId ${uniqueId.toString()}',
+              'check uniqueId ${realTimeData['uniqueId']}\ngetDeviceId ${uniqueId
+                  .toString()}',
             );
             if (realTimeData["uniqueId"] != uniqueId) {
               await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
@@ -85,15 +89,17 @@ class AppFirebaseService {
 
           if (realTimeData["profilePhoto"] != null) {
             UserData? userData =
-                Get.find<SharedPreferenceService>().getUserDetail();
+            Get.find<SharedPreferenceService>().getUserDetail();
             userData!.image = realTimeData["profilePhoto"];
             String? baseAmazonUrl =
-                Get.find<SharedPreferenceService>().getBaseImageURL();
+            Get.find<SharedPreferenceService>().getBaseImageURL();
             Get.find<SharedPreferenceService>().setUserDetail(userData);
-            Get.put(DashboardController(Get.put(PreDefineRepository())))
+            Get
+                .put(DashboardController(Get.put(PreDefineRepository())))
                 .userProfileImage
                 .value = "$baseAmazonUrl/${userData.image!}";
-            Get.put(ProfilePageController(Get.put(UserRepository())))
+            Get
+                .put(ProfilePageController(Get.put(UserRepository())))
                 .userProfileImage
                 .value = "$baseAmazonUrl/${userData.image!}";
             Get.put(DashboardController(Get.put(PreDefineRepository())))
@@ -120,14 +126,14 @@ class AppFirebaseService {
           }
           if (realTimeData["notification"] != null) {
             final HiveServices hiveServices =
-                HiveServices(boxName: userChatData);
+            HiveServices(boxName: userChatData);
             await hiveServices.initialize();
             realTimeData["notification"].forEach((key, notificationData) async {
               if (notificationData["type"] == 2) {
                 final Map<String, dynamic> chatListMap =
-                    jsonDecode(notificationData["chatList"]);
+                jsonDecode(notificationData["chatList"]);
                 final ChatMessage chatMessage =
-                    ChatMessage.fromOfflineJson(chatListMap);
+                ChatMessage.fromOfflineJson(chatListMap);
                 chatMessages.add(chatMessage);
                 databaseMessage.value.chatMessages = chatMessages;
                 await hiveServices.addData(
@@ -251,36 +257,54 @@ class AppFirebaseService {
     // });
 
     watcher.nameStream.listen(
-      (value) {
+          (value) {
         if (value != "") {
-
-          database.child("order/$value").onValue.listen(
-            (DatabaseEvent event) async {
+          database
+              .child("order/$value")
+              .onValue
+              .listen(
+                (DatabaseEvent event) async {
               final DataSnapshot dataSnapshot = event.snapshot;
               if (dataSnapshot.exists) {
                 print("data from snapshot ${dataSnapshot.value}");
                 if (dataSnapshot.value is Map<dynamic, dynamic>) {
                   Map<dynamic, dynamic> map = <dynamic, dynamic>{};
                   map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-                      as Map<dynamic, dynamic>;
+                  as Map<dynamic, dynamic>;
                   orderData(Map<String, dynamic>.from(map));
-                  print("data from snapshot ${dataSnapshot.value}");
                   if (orderData.value["status"] != null) {
                     switch ((orderData.value["status"])) {
                       case "0":
-                        await commonNavigationForStatus0And1();
+                        if (Get.currentRoute !=
+                            RouteName.acceptChatRequestScreen) {
+                          await Get.toNamed(RouteName.acceptChatRequestScreen);
+                        }
                         break;
-
                       case "1":
-                        await commonNavigationForStatus0And1();
+                        if (Get.currentRoute !=
+                            RouteName.acceptChatRequestScreen) {
+                          await Get.toNamed(RouteName.acceptChatRequestScreen);
+                        }
                         break;
 
                       case "2":
-                        await commonNavigationForStatus2And3();
+                        if (Get.currentRoute !=
+                            RouteName.chatMessageWithSocketUI) {
+                          await Get.toNamed(
+                            RouteName.chatMessageWithSocketUI,
+                            arguments: {"orderData": orderData},
+                          );
+                        }
                         break;
 
                       case "3":
-                        await commonNavigationForStatus2And3();
+                        if (Get.currentRoute !=
+                            RouteName.chatMessageWithSocketUI) {
+                          await Get.toNamed(
+                            RouteName.chatMessageWithSocketUI,
+                            arguments: {"orderData": orderData},
+                          );
+                        }
                         break;
 
                       default:
@@ -289,69 +313,16 @@ class AppFirebaseService {
                   } else {}
                 } else {}
               } else {
+                orderData({});
                 sendBroadcast(BroadcastMessage(name: "orderEnd"));
               }
             },
           );
         } else {
+          orderData({});
           sendBroadcast(BroadcastMessage(name: "orderEnd"));
         }
       },
     );
-  }
-
-  Future<void> commonNavigationForStatus0And1() async {
-    if (Get.currentRoute != RouteName.acceptChatRequestScreen) {
-      await Get.toNamed(RouteName.acceptChatRequestScreen);
-
-      final valueMap = AppFirebaseService().orderData.value ?? {};
-      final dynamic status = valueMap['status'];
-      if (status == "0" || status == 0) {
-        await furtherProcedure();
-      } else {}
-    } else {}
-    return Future<void>.value();
-  }
-
-  Future<void> commonNavigationForStatus2And3() async {
-    if (Get.currentRoute != RouteName.chatMessageWithSocketUI) {
-      await Get.toNamed(
-        RouteName.chatMessageWithSocketUI,
-        arguments: {"orderData": orderData},
-      );
-    } else {}
-    return Future<void>.value();
-  }
-
-  Future<void> furtherProcedure() async {
-    final valueMap = AppFirebaseService().orderData.value ?? {};
-    final bool isAccepted = await acceptOrRejectChat(
-      orderId: valueMap['orderId'],
-      queueId: valueMap["queue_id"],
-    );
-    if (isAccepted) {
-      // bool value = await AppPermissionService.instance.hasAllPermissions();
-      // String path = "order/${valueMap['orderId']}";
-      // await AppFirebaseService().database.child(path).update(
-      //   <String, dynamic>{
-      //     "status": "1",
-      //     "astrologer_permission": value,
-      //   },
-      // );
-
-      final bool value =
-          await AppPermissionService.instance.hasAllPermissions();
-      final int orderId = valueMap["orderId"] ?? 0;
-      if (orderId != 0) {
-        await AppFirebaseService().database.child("order/$orderId").update(
-          <String, dynamic>{"status": "1"},
-        );
-      } else {}
-    } else {}
-    appSocket.sendConnectRequest(
-      astroId: valueMap["astroId"],
-      custId: valueMap["userId"],
-    );
-    return Future<void>.value();
   }
 }

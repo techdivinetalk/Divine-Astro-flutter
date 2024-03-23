@@ -1356,9 +1356,10 @@ class ChatMessageWithSocketController extends GetxController
 
   void initTask(Map<String, dynamic> p0) {
     if (MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
-      if(p0["status"] == "5"){
-        print("chat status 5");
-        AppFirebaseService().orderData.value = {};
+      if(p0["status"] == null || p0["status"] == "5"){
+        print("chat status ${p0["status"]}");
+       // AppFirebaseService().orderData.value = {};
+        Get.delete<ChatMessageWithSocketController>();
       }
       return;
     }

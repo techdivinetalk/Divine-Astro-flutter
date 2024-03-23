@@ -130,48 +130,6 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
         // print("stop the sound");
       }
     });
-    // print(
-    //     "data of ordercreated called  ${AppFirebaseService().orderData.value["status"]}");
-    // if ((AppFirebaseService().orderData.value["status"] ?? "-1") == "0") {
-    //   print("play the sound");
-    //   playAudio();
-    // }
-    // broadcastReceiver.start();
-    // broadcastReceiver.messages.listen(
-    //   (event) {
-    //     if (event.name == "backReq") {
-    //       // Navigator.pop(context);
-    //       WidgetsBinding.instance.endOfFrame.then(
-    //         (_) async {
-    //           if (mounted) {
-    //             bool canPop = Navigator.canPop(context);
-    //             if (canPop) {
-    //               Navigator.pop(context);
-    //             } else {}
-    //           } else {}
-    //         },
-    //       );
-    //     } else if (event.name == "EndChat") {
-    //       WidgetsBinding.instance.endOfFrame.then(
-    //         (_) async {
-    //           if (mounted) {
-    //             bool canPop = Navigator.canPop(context);
-    //             if (canPop) {
-    //               broadcastReceiver.stop();
-    //               Navigator.pop(context);
-    //             } else {}
-    //           } else {}
-    //         },
-    //       );
-    //     }
-    //   },
-    // );
-
-    // appFirebaseService.acceptBottomWatcher.nameStream.listen((event) {
-    //   debugPrint('event .... $event');
-    //   // isBottomSheetOpen = event == "1";
-    //   setState(() {});
-    // });
   }
 
   @override
@@ -183,6 +141,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
   playAudio() async {
     if (_player != null) {
       _player?.dispose();
+      _player = null;
     }
 
     _player = AudioPlayer();
@@ -705,7 +664,13 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
 
                                               //   // setState(() {});
                                               // },
-                                              onPressed: Get.back,
+                                              onPressed: () async {
+                                                await acceptOrRejectChat(
+                                                orderId: AppFirebaseService().orderData.value["orderId"] ?? 0,
+                                                queueId: AppFirebaseService().orderData.value["queue_id"] ?? 0,
+                                                );
+                                                AppFirebaseService().database.child("order/${AppFirebaseService().orderData.value["orderId"]}").update({"status": "1"});
+                                              },
                                               // widget.onPressed
                                             )
                                           : const SizedBox();
@@ -740,40 +705,9 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
   //   return Future<void>.value();
   // }
 
-  Future<void> onPressedFunction() async {
-    final bool isAccepted = await acceptOrRejectChat(
-      orderId: AppFirebaseService().orderData.value["orderId"] ?? 0,
-      queueId: AppFirebaseService().orderData.value["queue_id"] ?? 0,
-    );
-    print("onPressedFunction() isAccepted: $isAccepted");
-
-    appFirebaseService.acceptBottomWatcher.strValue = "1";
-    print(
-        "onPressedFunction() acceptBottomWatcher: ${appFirebaseService.acceptBottomWatcher.currentName}");
-
-    // final bool perm = await AppPermissionService.instance.hasAllPermissions();
-    // await appFirebaseService.writeData(
-    //   "order/${AppFirebaseService().orderData.value["orderId"] ?? 0}",
-    //   {"status": "1", "astrologer_permission": perm},
-    // );
-
-    final int orderId = AppFirebaseService().orderData.value["orderId"] ?? 0;
-    if (orderId != 0) {
-      await appFirebaseService.writeData(
-        "order/$orderId",
-        {"status": "1"},
-      );
-    } else {}
-
-    print("onPressedFunction() writeData: Done");
-
-    appSocket.sendConnectRequest(
-      astroId: AppFirebaseService().orderData.value["astroId"] ?? "",
-      custId: AppFirebaseService().orderData.value["userId"] ?? "",
-    );
-    print("onPressedFunction() sendConnectRequest: Done");
-    return Future<void>.value();
-  }
+  // Future<void> onPressedFunction() async {
+  //
+  // }
 
   String formatMinutesToHoursMinutesSeconds(int minutes) {
     final hours = minutes ~/ 60;
