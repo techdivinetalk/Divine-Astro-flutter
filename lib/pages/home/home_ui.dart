@@ -1038,7 +1038,7 @@ class HomeUI extends GetView<HomeController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            controller!.homeData?.noticeBoard?.title ?? '',
+                            controller.homeData?.noticeBoard?.title ?? '',
                             style: AppTextStyle.textStyle16(
                                 fontWeight: FontWeight.w500,
                                 fontColor: appColors.darkBlue),
@@ -1060,6 +1060,7 @@ class HomeUI extends GetView<HomeController> {
                                     Get.bottomSheet(CommonInfoSheet(
                                       title: "noticeBoard".tr,
                                       subTitle: "noticeBoardDes".tr,
+                                      argument: controller!.homeData?.noticeBoard,
                                     ));
                                   },
                                   child: Assets.images.icInfo

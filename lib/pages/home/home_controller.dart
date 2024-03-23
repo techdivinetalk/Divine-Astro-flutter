@@ -143,7 +143,7 @@ class HomeController extends GetxController {
     // fetchImportantNumbers();
     getConstantDetailsData();
     getDashboardDetail();
-    //getFeedbackData();
+    getFeedbackData();
     tarotCardData();
     getUserImage();
 
@@ -441,7 +441,7 @@ class HomeController extends GetxController {
     }
   }
 
- /* getFeedbackData() async {
+  getFeedbackData() async {
     loading = Loading.initial;
     update();
     try {
@@ -454,7 +454,7 @@ class HomeController extends GetxController {
         feedbackResponse = response.data?[0];
         feedbacksList = response.data;
 
-        if (feedbackResponse?.id != null && isFeedbackAvailable.value) {
+        if (feedbackResponse?.id != null && !isFeedbackAvailable.value ) {
           showFeedbackBottomSheet();
           debugPrint('feed id: ${feedbackResponse?.id}');
         }
@@ -466,7 +466,7 @@ class HomeController extends GetxController {
         divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
-  }*/
+  }
 
   getDashboardDetail() async {
     loading = Loading.initial;
