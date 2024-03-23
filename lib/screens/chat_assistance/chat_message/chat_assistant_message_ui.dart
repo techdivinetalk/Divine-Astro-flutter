@@ -32,6 +32,7 @@ import '../../../common/common_functions.dart';
 import '../../../common/routes.dart';
 import '../../../firebase_service/firebase_service.dart';
 import '../../../gen/assets.gen.dart';
+import '../../../model/chat_offline_model.dart';
 import '../../../model/message_template_response.dart';
 import '../../live_page/constant.dart';
 import 'chat_assistant_message_controller.dart';
