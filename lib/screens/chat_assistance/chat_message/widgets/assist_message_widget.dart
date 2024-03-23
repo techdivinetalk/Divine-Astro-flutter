@@ -3,6 +3,9 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:divine_astrologer/di/shared_preference_service.dart';
+import 'package:divine_astrologer/model/chat_offline_model.dart';
+import 'package:divine_astrologer/tarotCard/widget/custom_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -99,6 +102,9 @@ class AssistMessageView extends StatelessWidget {
       //   break;
       case MsgType.voucher:
         messageWidget = voucherMsgView(chatMessage, yourMessage);
+        break;
+      case MsgType.customProduct:
+        messageWidget = CustomProductView(message:chatMessage,yourMessage: yourMessage);
         break;
       default:
         messageWidget = const SizedBox.shrink();
@@ -226,6 +232,53 @@ class AssistMessageView extends StatelessWidget {
                       child: Assets.svg.gift.svg(height: 70))),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget CustomProductView(
+      { AssistChatData? message, bool? yourMessage}) {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Container(
+        width: 165,
+        height: 220,
+
+        decoration: BoxDecoration(
+          color: appColors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            CustomImageView(
+              height: 165,
+              width: 165,
+              imagePath: Get.find<SharedPreferenceService>().getAmazonUrl()! +
+                  "${message!.productImage}",
+              radius: BorderRadius.vertical(top: Radius.circular(10)),
+              placeHolder: "assets/images/default_profiles.svg",
+              fit: BoxFit.cover,
+            ),
+            Text(
+              message.message ?? "",
+              maxLines: 1,
+              style: AppTextStyle.textStyle12(
+                fontColor: appColors.textColor,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SizedBox(height: 5),
+            Text(
+              "₹${message!.productPrice ?? "0"}",
+              style: AppTextStyle.textStyle12(
+                fontColor: appColors.textColor,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SizedBox(height: 5),
+          ],
         ),
       ),
     );

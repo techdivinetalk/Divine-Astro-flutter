@@ -5,9 +5,12 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/main.dart';
+import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/model/res_product_detail.dart';
 import 'package:divine_astrologer/repository/notice_repository.dart';
+import 'package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_list_model.dart';
+import 'package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +48,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
   ChatAssistChatResponse? chatAssistChatResponse;
   RxList chatMessageList = [].obs;
   var preference = Get.find<SharedPreferenceService>();
+
   // RxString userProfileImage = "".obs;
   RxList<AssistChatData> unreadMessageList = <AssistChatData>[].obs;
   RxList<MessageTemplates> messageTemplates = <MessageTemplates>[].obs;
@@ -91,6 +95,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
   late final AppLifecycleListener _listener;
   late AppLifecycleState? _state;
   final List<String> _states = <String>[];
+
 //end
 
   @override
@@ -98,6 +103,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
     // TODO: implement onInit
     super.onInit();
     noticeAPi();
+    getSavedRemedies();
     args = Get.arguments;
     WidgetsBinding.instance.addObserver(this);
     stateHandling();
@@ -111,9 +117,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
         updateFirebaseToken();
         getBackGroundMessages();
       },
-      onHide: () {
-
-      },
+      onHide: () {},
       onInactive: () {},
       onPause: () {},
       onDetach: () {},
@@ -175,7 +179,8 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
   }
 
   List<NoticeDatum> noticeDataChat = [];
-final noticeRepository = NoticeRepository();
+  final noticeRepository = NoticeRepository();
+
   noticeAPi() async {
     try {
       final response = await noticeRepository.get(
@@ -716,6 +721,31 @@ final noticeRepository = NoticeRepository();
               astroId: preferenceService.getUserDetail()!.id.toString());
         }
         break;
+      case MsgType.customProduct:
+        msgData = AssistChatData(
+            message: data["title"],
+            astrologerId: preferenceService.getUserDetail()!.id,
+            createdAt: DateTime.now().toIso8601String(),
+            id: DateTime.now().millisecondsSinceEpoch,
+            isSuspicious: 0,
+            profileImage: userData?.image,
+            msgType: MsgType.customProduct,
+            sendBy: SendBy.astrologer,
+            seenStatus: SeenStatus.notSent,
+            productImage: data["image"],
+            // msgStatus: MsgStatus.sent,
+            productPrice: data["product_price"],
+            productId: data["product_id"].toString(), 
+            customerId: args?.id);
+        print(msgData.msgType);
+        print("msgData.msgType");
+        appSocket.sendAssistantMessage(
+          customerId: args!.id.toString(),
+          msgData: msgData,
+          
+          message: data["title"],
+          astroId: preferenceService.getUserDetail()!.id.toString(),
+        );
       default:
     }
 
@@ -729,5 +759,28 @@ final noticeRepository = NoticeRepository();
           .toString());
     scrollToBottomFunc();
     messageController.clear();
+  }
+
+  List<CustomProductData> customProductData = [];
+
+  getSavedRemedies() async {
+    try {
+      final response = await noticeRepository.get(ApiProvider.getCustomEcom,
+          headers: await noticeRepository.getJsonHeaderURL());
+      CustomProductListModel savedRemediesData =
+          CustomProductListModel.fromJson(jsonDecode(response.body));
+      if (savedRemediesData.statusCode == 200) {
+        customProductData = savedRemediesData.data!;
+        print(jsonEncode(customProductData));
+        print(customProductData.length);
+        print("customProductData.length");
+        update();
+      } else {
+        customProductData = [];
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
   }
 }

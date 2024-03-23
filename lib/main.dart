@@ -8,6 +8,7 @@ import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
 import 'package:divine_astrologer/firebase_options.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
+import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/remote_config/remote_config_helper.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
@@ -22,7 +23,6 @@ import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/routes/get_transition_mixin.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:overlay_support/overlay_support.dart';
@@ -34,9 +34,9 @@ import 'common/MiddleWare.dart';
 import 'common/app_theme.dart';
 import 'common/colors.dart';
 import 'common/common_functions.dart';
-import 'common/custom_progress_dialog.dart';
+
 import 'common/routes.dart';
-import 'common/strings.dart';
+
 import 'di/fcm_notification.dart';
 import 'di/firebase_network_service.dart';
 import 'di/network_service.dart';
@@ -46,7 +46,7 @@ import 'firebase_service/firebase_service.dart';
 import 'gen/fonts.gen.dart';
 import 'localization/translations.dart';
 import 'screens/live_page/constant.dart';
-import 'utils/utils.dart';
+
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -103,28 +103,28 @@ Future<void> main() async {
           assistChatUnreadMessages([
             ...assistChatUnreadMessages,
             AssistChatData(
-                message: responseMsg?["message"],
-                id: int.parse(responseMsg?["chatId"].toString() ?? ''),
+                message: responseMsg["message"],
+                id: int.parse(responseMsg["chatId"].toString() ?? ''),
                 customerId:
-                    int.parse(responseMsg?["sender_id"].toString() ?? ''),
-                createdAt: DateTime.parse(responseMsg?["created_at"])
+                    int.parse(responseMsg["sender_id"].toString() ?? ''),
+                createdAt: DateTime.parse(responseMsg["created_at"])
                     .millisecondsSinceEpoch
                     .toString(),
                 isSuspicious: 0,
                 suggestedRemediesId:
-                    int.parse(responseMsg?["suggestedRemediesId"] ?? "0"),
+                    int.parse(responseMsg["suggestedRemediesId"] ?? "0"),
                 isPoojaProduct:
-                    responseMsg?['is_pooja_product'].toString() == '1'
+                    responseMsg['is_pooja_product'].toString() == '1'
                         ? true
                         : false,
-                productId: responseMsg?["product_id"].toString(),
-                shopId: responseMsg?["shop_id"].toString(),
+                productId: responseMsg["product_id"].toString(),
+                shopId: responseMsg["shop_id"].toString(),
                 sendBy: SendBy.astrologer,
-                msgType: responseMsg?['msg_type'] != null
-                    ? msgTypeValues.map[responseMsg?["msg_type"]]
+                msgType: responseMsg['msg_type'] != null
+                    ? msgTypeValues.map[responseMsg["msg_type"]]
                     : MsgType.text,
                 seenStatus: SeenStatus.received,
-                astrologerId: int.parse(responseMsg?["userid"] ?? 0))
+                astrologerId: int.parse(responseMsg["userid"] ?? 0))
           ]);
           return;
         }

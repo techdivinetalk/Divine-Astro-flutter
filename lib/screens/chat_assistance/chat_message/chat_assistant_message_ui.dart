@@ -9,14 +9,17 @@ import 'package:divine_astrologer/common/helper_widgets.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
+import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/model/save_remedies_response.dart';
 import 'package:divine_astrologer/repository/chat_repository.dart';
 import 'package:divine_astrologer/repository/kundli_repository.dart';
 import 'package:divine_astrologer/repository/notice_repository.dart';
+import 'package:divine_astrologer/screens/chat_message_with_socket/custom_puja/saved_remedies.dart';
 import 'package:divine_astrologer/utils/load_image.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -207,8 +210,6 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        "print image:: ${preferenceService.getAmazonUrl()}/${controller.args?.image ?? ''}");
     Get.put(ChatMessageController(KundliRepository(), ChatRepository()));
     return Scaffold(
       appBar: AppBar(
@@ -278,8 +279,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                                             aspectRatio: 1,
                                             viewportFraction: 1,
                                           ),
-                                          items: noticeDataChat
-                                              .map((i) {
+                                          items: noticeDataChat.map((i) {
                                             return Builder(
                                               builder: (BuildContext context) {
                                                 return Container(
@@ -317,52 +317,52 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                                       : SizedBox(),
                                   SizedBox(
                                       height:
-                                          noticeDataChat.isNotEmpty
-                                              ? 10
-                                              : 0),
-                                  ListView.builder(
-                                    itemCount:
-                                        controller.chatMessageList.length,
-                                    controller:
-                                        controller.messageScrollController,
-                                    reverse: false,
-                                    shrinkWrap: true,
-                                    itemBuilder: (context, index) {
-                                      final currentMsg =
-                                          controller.chatMessageList[index]
-                                              as AssistChatData;
-                                      final nextIndex =
-                                          controller.chatMessageList.length -
-                                                      1 ==
-                                                  index
-                                              ? index
-                                              : index + 1;
-                                      print(
-                                          "chat assist msg data:${currentMsg.toJson()}");
-                                      return AssistMessageView(
-                                        index: index,
-                                        chatMessage: currentMsg,
-                                        nextMessage: index ==
-                                                controller.chatMessageList
-                                                        .length -
-                                                    1
-                                            ? controller.chatMessageList[index]
-                                            : controller
-                                                .chatMessageList[index + 1],
-                                        yourMessage: currentMsg.sendBy ==
-                                            SendBy.astrologer,
-                                        unreadMessage: controller
-                                                .unreadMessageList.isNotEmpty
-                                            ? controller.chatMessageList[index]
-                                                    .id ==
-                                                controller
-                                                    .unreadMessageList.first.id
-                                            : false,
-                                        baseImageUrl: controller.preference
-                                                .getBaseImageURL() ??
-                                            '',
-                                      );
-                                    },
+                                          noticeDataChat.isNotEmpty ? 10 : 0),
+                                  Expanded(
+                                    child: ListView.builder(
+                                      itemCount:
+                                          controller.chatMessageList.length,
+                                      controller:
+                                          controller.messageScrollController,
+                                      reverse: false,
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index) {
+                                        final currentMsg =
+                                            controller.chatMessageList[index]
+                                                as AssistChatData;
+                                        final nextIndex =
+                                            controller.chatMessageList.length -
+                                                        1 ==
+                                                    index
+                                                ? index
+                                                : index + 1;
+                                        print(
+                                            "chat assist msg data:${currentMsg.toJson()}");
+                                        return AssistMessageView(
+                                          index: index,
+                                          chatMessage: currentMsg,
+                                          nextMessage: index ==
+                                                  controller.chatMessageList
+                                                          .length -
+                                                      1
+                                              ? controller.chatMessageList[index]
+                                              : controller
+                                                  .chatMessageList[index + 1],
+                                          yourMessage: currentMsg.sendBy ==
+                                              SendBy.astrologer,
+                                          unreadMessage: controller
+                                                  .unreadMessageList.isNotEmpty
+                                              ? controller.chatMessageList[index]
+                                                      .id ==
+                                                  controller
+                                                      .unreadMessageList.first.id
+                                              : false,
+                                          baseImageUrl: controller.preference
+                                                  .getBaseImageURL() ??
+                                              '',
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ],
                               ),
@@ -636,6 +636,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
       SvgPicture.asset('assets/svg/gallery_icon.svg'),
       SvgPicture.asset('assets/svg/remedies_icon.svg'),
       SvgPicture.asset('assets/svg/product.svg'),
+      SvgPicture.asset('assets/svg/custom.svg'),
       // SvgPicture.asset('assets/svg/deck_icon.svg'),
       // Add more items as needed
     ];
@@ -687,7 +688,13 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                         controller.sendMsg(MsgType.product, {'data': result});
                         break;
                       case 4:
-                        controller.getImage(false);
+                        Get.bottomSheet(
+                          SavedRemediesBottomSheet(
+                            chatMessageController: controller,
+                            customProductData: controller.customProductData,
+                          ),
+                        );
+
                         break;
                     }
                   },

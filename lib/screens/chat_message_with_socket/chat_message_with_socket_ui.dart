@@ -903,7 +903,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         Get.bottomSheet(
                           SavedRemediesBottomSheet(
                             controller: controller,
-                            // customProductData: controller.customProductData,
+                            customProductData: controller.customProductData,
                           ),
                         );
 

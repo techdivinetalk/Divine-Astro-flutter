@@ -35,6 +35,7 @@ class ChatMessage {
   String? message;
   String? multiImage;
   String? msgTime;
+
   // String? createdAt;
   String? updatedAt;
   int? msgSendBy;
@@ -268,6 +269,7 @@ enum MsgType {
   sendgifts,
   limit,
   customProduct,
+  voucher,
   error
 }
 
@@ -283,6 +285,8 @@ final msgTypeValues = EnumValues({
   "8": MsgType.gift,
   "10": MsgType.error,
   "11": MsgType.customProduct,
+  "12": MsgType.limit,
+  "13": MsgType.voucher,
 });
 
 /*class ChatMessage {

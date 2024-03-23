@@ -99,30 +99,29 @@ class _ChosenCardsState extends State<ChosenCards> {
             crossAxisCount: widget.userChosenCards.length,
             builder: (BuildContext context, int index) {
               final DeckCardModel model = widget.userChosenCards[index];
-              return Center(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: Get.width / 2.5,
-                      width: Get.width / 4,
-                      child: ClipRRect(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(10.0),
-                        ),
-                        child: CustomImageWidget(
-                          imageUrl: model.image ?? "",
-                          rounded: false,
-                          typeEnum: TypeEnum.user,
-                        ),
+              return Column(
+                children: [
+                  SizedBox(
+                    // height: Get.width / 2.5,
+                    // width: Get.width / 4,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
+                      child: CustomImageWidget(
+                        imageUrl: model.image ?? "",
+                        rounded: false,
+                        typeEnum: TypeEnum.user,
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      model.name ?? "",
-                      style:  TextStyle(color: appColors.white),
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    model.name ?? "",
+                    textAlign: TextAlign.center,
+                    style:  TextStyle(color: appColors.white,),
+                  ),
+                ],
               );
             },
           ),
