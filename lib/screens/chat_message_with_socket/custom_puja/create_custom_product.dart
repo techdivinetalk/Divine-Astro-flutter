@@ -10,6 +10,7 @@ import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/repository/notice_repository.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/add_puja/add_puja_controller.dart';
+import 'package:divine_astrologer/screens/chat_assistance/chat_message/chat_assistant_message_controller.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_controller.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_list_model.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_model.dart';
@@ -30,8 +31,9 @@ import '../../../model/chat_offline_model.dart';
 
 class CreateCustomProductSheet extends StatefulWidget {
   final ChatMessageWithSocketController? controller;
+  final ChatMessageController? chatMessageController;
 
-  const CreateCustomProductSheet({super.key, this.controller});
+  const CreateCustomProductSheet({super.key, this.controller, this.chatMessageController});
 
   @override
   State<CreateCustomProductSheet> createState() =>
@@ -392,16 +394,27 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
 
       if (response.data != null) {
         customProductData = response.data!;
-        widget.controller!.customProductData.add(customProductData!);
-        final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-        widget.controller!.addNewMessage(
-          time,
-          MsgType.customProduct,
-          messageText: productName.text,
-          productPrice: productPrice.text,
-          productId: customProductData!.id,
-          awsUrl: productApiPath,
-        );
+        if(widget.controller != null){
+          widget.controller!.customProductData.add(customProductData!);
+          final String time =
+              "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+          widget.controller!.addNewMessage(
+            time,
+            MsgType.customProduct,
+            messageText: productName.text,
+            productPrice: productPrice.text,
+            productId: customProductData!.id,
+            awsUrl: productApiPath,
+          );
+        }else if(widget.chatMessageController != null){
+          widget.chatMessageController!
+              .sendMsg(MsgType.customProduct, {
+            'title': productName.text, 
+            'image': productApiPath.toString(),
+            'product_price':productPrice.text.toString() ,
+            'product_id': customProductData!.id,
+          });
+        }
 
         Get.back();
         setState(() {});

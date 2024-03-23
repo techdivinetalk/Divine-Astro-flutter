@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/helper_widgets.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
+import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

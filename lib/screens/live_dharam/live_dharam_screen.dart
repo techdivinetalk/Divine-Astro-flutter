@@ -3389,7 +3389,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget newTimerWidget() {
     final String source = _controller.engagedCoHostWithAstro().totalTime;
-    final int epoch = int.parse(source);
+    final int epoch = int.parse(source.isEmpty ? "0" : source);
     final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
     return TimerCountdown(
       format: CountDownTimerFormat.hoursMinutesSeconds,

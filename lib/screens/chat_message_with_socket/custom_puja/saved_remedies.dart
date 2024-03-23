@@ -1,6 +1,9 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
+import 'package:divine_astrologer/di/shared_preference_service.dart';
+import 'package:divine_astrologer/model/chat_offline_model.dart';
+import 'package:divine_astrologer/screens/chat_assistance/chat_message/chat_assistant_message_controller.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_controller.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/custom_puja/create_custom_product.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_model.dart';
@@ -8,14 +11,16 @@ import 'package:divine_astrologer/tarotCard/widget/custom_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../model/chat_offline_model.dart';
-
 class SavedRemediesBottomSheet extends StatelessWidget {
   final List<CustomProductData>? customProductData;
+  final ChatMessageController? chatMessageController;
   final ChatMessageWithSocketController? controller;
 
-  const SavedRemediesBottomSheet(
-      {super.key, this.customProductData, this.controller});
+  const SavedRemediesBottomSheet({
+    this.customProductData,
+    this.controller,
+    this.chatMessageController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -62,31 +67,41 @@ class SavedRemediesBottomSheet extends StatelessWidget {
                   const SizedBox(height: 15),
                   SizedBox(
                     height: 200,
-                    child: controller!.customProductData.isNotEmpty
+                    child: customProductData!.isNotEmpty
                         ? ListView.separated(
                             padding: const EdgeInsets.symmetric(horizontal: 15),
-                            itemCount: controller!.customProductData.length,
+                            itemCount: customProductData!.length,
                             shrinkWrap: true,
                             clipBehavior: Clip.antiAliasWithSaveLayer,
                             itemBuilder: (context, index) {
                               print("customProductData!.length");
                               CustomProductData data =
-                                  controller!.customProductData[index];
-                              print(controller!.pref.getAmazonUrl()! +
-                                  data.image!);
+                                  customProductData![index];
+
                               print("data.image");
                               return GestureDetector(
                                 onTap: () {
-                                  final String time =
-                                      "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-                                  controller!.addNewMessage(
-                                    time,
-                                    MsgType.customProduct,
-                                    messageText: data.name,
-                                    productPrice: data.amount.toString(),
-                                    productId: data.id.toString(),
-                                    awsUrl: data.image,
-                                  );
+                                  if (controller != null) {
+                                    final String time =
+                                        "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+                                    controller!.addNewMessage(
+                                      time,
+                                      MsgType.customProduct,
+                                      messageText: data.name,
+                                      productPrice: data.amount.toString(),
+                                      productId: data.id.toString(),
+                                      awsUrl: data.image,
+                                    );
+                                  } else if (chatMessageController != null) {
+                                    chatMessageController!
+                                        .sendMsg(MsgType.customProduct, {
+                                      'title': data.name,
+                                      'image': data.image.toString(),
+                                      'product_price':data.amount.toString() ,
+                                      'product_id': data.id,
+                                    });
+                                  }
+                                  Get.back();
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.all(10),
@@ -108,7 +123,7 @@ class SavedRemediesBottomSheet extends StatelessWidget {
                                         height: 65,
                                         width: 65,
                                         imagePath:
-                                            controller!.pref.getAmazonUrl()! +
+                                        Get.find<SharedPreferenceService>().getAmazonUrl()! +
                                                 "/${data.image!}",
                                         radius: BorderRadius.circular(10),
                                         placeHolder:
@@ -170,7 +185,7 @@ class SavedRemediesBottomSheet extends StatelessWidget {
                     onTap: () {
                       Get.back();
                       Get.bottomSheet(
-                          CreateCustomProductSheet(controller: controller),
+                          CreateCustomProductSheet(controller: controller,chatMessageController: chatMessageController,),
                           isScrollControlled: true);
                     },
                     child: Container(

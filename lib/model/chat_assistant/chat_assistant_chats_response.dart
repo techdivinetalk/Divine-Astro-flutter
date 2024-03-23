@@ -1,3 +1,5 @@
+import 'package:divine_astrologer/model/chat_offline_model.dart';
+
 class ChatAssistChatResponse {
   Data? data;
   bool? success;
@@ -117,6 +119,7 @@ class AssistChatData {
   SendBy? sendBy;
   String? profileImage;
   String? productId;
+  String? productPrice;
   String? productImage;
   bool? isPoojaProduct;
   int? suggestedRemediesId;
@@ -135,6 +138,7 @@ class AssistChatData {
       // this.msgStatus,
       this.msgType,
       this.profileImage,
+      this.productPrice,
       this.isPoojaProduct,
       this.productId,
       this.sendBy,
@@ -154,6 +158,7 @@ class AssistChatData {
     message = json['message'];
     customerId = json['customer_id'];
     astrologerId = json['astrologer_id'];
+    productPrice = json['productPrice'];
     sendBy = json['send_by'] != null
         ? sendByValue.map[json["send_by"].toString()]
         : SendBy.customer;
@@ -195,6 +200,7 @@ class AssistChatData {
     // data['msg_status'] = msgStatusValues.reverse[msgStatus];
     data['created_at'] = createdAt;
     data['profile_image'] = profileImage;
+    data['productPrice'] = productPrice;
     data['product_image'] = productImage;
     data['product_id'] = productId;
     data['is_pooja_product'] = isPoojaProduct == false ? "0" : "1";
@@ -254,29 +260,31 @@ final sendByValue = EnumValues({
   "1": SendBy.astrologer,
 });
 
-enum MsgType {
-  text,
-  gift,
-  image,
-  remedies,
-  audio,
-  product,
-  pooja,
-  voucher,
-  limit
-}
-
-final msgTypeValues = EnumValues({
-  "0": MsgType.text,
-  "1": MsgType.image,
-  "2": MsgType.remedies,
-  "3": MsgType.product,
-  "4": MsgType.pooja,
-  "5": MsgType.voucher,
-  "6": MsgType.audio,
-  "7": MsgType.gift,
-  "10": MsgType.limit,
-});
+// enum MsgType {
+//   text,
+//   gift,
+//   image,
+//   remedies,
+//   audio,
+//   product,
+//   pooja,
+//   voucher,
+//   customProduct,
+//   limit
+// }
+//
+// final msgTypeValues = EnumValues({   /// "0": MsgType.text,
+//   "0": MsgType.text,   /// "1": MsgType.image,
+//   "1": MsgType.image,   /// "2": MsgType.remedies,
+//   "2": MsgType.remedies,   /// "3": MsgType.product,
+//   "3": MsgType.product,   /// "4": MsgType.pooja,
+//   "4": MsgType.pooja,   /// "5": MsgType.kundli,
+//   "5": MsgType.voucher,   /// "6": MsgType.audio,
+//   "6": MsgType.audio,   /// "7": MsgType.sendgifts,
+//   "7": MsgType.gift,   /// "8": MsgType.gift,
+//   "10": MsgType.limit,   /// "10": MsgType.error,
+//   "11": MsgType.customProduct,   /// "11": MsgType.customProduct,
+// });
 
 enum SeenStatus { notSent, sent, delivered, received, error }
 
