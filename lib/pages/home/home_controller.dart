@@ -71,7 +71,7 @@ class HomeController extends GetxController {
   double yPosition = Get.height * 0.4;
   RxString chatSchedule = "".obs, callSchedule = "".obs, videoSchedule = "".obs;
   RxList<bool> customOfferSwitch = RxList([]);
-  RxList<bool> orderOfferSwitch = RxList([false, false]);
+
   RxString appbarTitle = "Astrologer Name ".obs;
   RxBool isShowTitle = true.obs;
   TextEditingController feedBackText = TextEditingController();
@@ -178,6 +178,26 @@ class HomeController extends GetxController {
 
             final isLiveEnableRes = map["is_live_enable"] ?? false;
             isLiveEnable(isLiveEnableRes);
+
+            final offers = map["offers"];
+            if (offers != null) {
+              if (homeData != null) {
+                for (int i = 0; i < homeData!.offers!.orderOffer!.length; i++) {
+                  for (int j = 0; j < offers.keys.toList().length; j++) {
+                    if ("${homeData!.offers!.orderOffer![i].id}" ==
+                        "${offers.keys.toList()[j]}") {
+                      if ("${offers.values.toList()[j]}" == "1") {
+                        homeData!.offers!.orderOffer![i].isOn = true;
+                        update();
+                      } else {
+                        homeData!.offers!.orderOffer![i].isOn = false;
+                        update();
+                      }
+                    }
+                  }
+                }
+              }
+            }
           } else {}
         } else {}
       },
@@ -769,6 +789,38 @@ class HomeController extends GetxController {
           await userRepository.updateOfferTypeApi(params);
       if (response.statusCode == 200) {
         homeData!.offers!.customOffer![index].isOn = value;
+      }
+      update();
+    } catch (error) {
+      debugPrint("updateOfferType $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+    offerTypeLoading.value = Loading.loaded;
+    update();
+  }
+
+  updateOrderOffer({
+    required bool value,
+    required int offerId,
+    required int index,
+  }) async {
+    Map<String, dynamic> params = {
+      "offer_id": offerId,
+      "offer_type": 1,
+      "action": value ? 1 : 0,
+    };
+    offerTypeLoading.value = Loading.loading;
+    try {
+      UpdateOfferResponse response =
+          await userRepository.updateOfferTypeApi(params);
+      if (response.statusCode == 200) {
+        homeData!.offers!.orderOffer![index].isOn = value;
+        // homeData!.offers!.orderOffer![index].isOn = !homeData!.offers!.orderOffer![index].isOn!;
+        update();
       }
       update();
     } catch (error) {

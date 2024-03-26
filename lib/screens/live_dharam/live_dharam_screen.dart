@@ -2660,6 +2660,7 @@ class _LivePage extends State<LiveDharamScreen>
               // await Future.delayed(const Duration(seconds:2));
               // if(mounted){
               //   for(int i = 0;i<animationsList.length;i++){
+              print(item["animation"]);
               print("objectobjectobjectobject");
                ZegoGiftPlayer().play(
                 context,

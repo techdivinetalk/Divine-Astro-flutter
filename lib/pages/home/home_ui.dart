@@ -443,33 +443,40 @@ class HomeUI extends GetView<HomeController> {
                                           ),
                                           SizedBox(height: 10.h),
                                           FeedbackCardWidget(
-                                              feedback:
-                                              controller.homeData?.feedback ??
-                                                      FeedbackData(
-                                                        id: controller.homeData?.feedback
-                                                            ?.id,
-                                                        orderId: controller.homeData?.feedback
-                                                            ?.orderId,
-                                                        remark: controller.homeData?.feedback
-                                                            ?.remark,
-                                                        order: OrderDetails(
-                                                          astrologerId: controller.homeData?.feedback
-                                                              ?.order
-                                                              ?.astrologerId,
-                                                          id: controller.homeData?.feedback
-                                                              ?.order
-                                                              ?.id,
-                                                          productType: controller.homeData?.feedback
-                                                              ?.order
-                                                              ?.productType,
-                                                          orderId: controller.homeData?.feedback
-                                                              ?.order
-                                                              ?.orderId,
-                                                          createdAt: controller.homeData?.feedback
-                                                              ?.order
-                                                              ?.createdAt,
-                                                        ),
-                                                      )),
+                                              feedback: controller
+                                                      .homeData?.feedback ??
+                                                  FeedbackData(
+                                                    id: controller
+                                                        .homeData?.feedback?.id,
+                                                    orderId: controller.homeData
+                                                        ?.feedback?.orderId,
+                                                    remark: controller.homeData
+                                                        ?.feedback?.remark,
+                                                    order: OrderDetails(
+                                                      astrologerId: controller
+                                                          .homeData
+                                                          ?.feedback
+                                                          ?.order
+                                                          ?.astrologerId,
+                                                      id: controller.homeData
+                                                          ?.feedback?.order?.id,
+                                                      productType: controller
+                                                          .homeData
+                                                          ?.feedback
+                                                          ?.order
+                                                          ?.productType,
+                                                      orderId: controller
+                                                          .homeData
+                                                          ?.feedback
+                                                          ?.order
+                                                          ?.orderId,
+                                                      createdAt: controller
+                                                          .homeData
+                                                          ?.feedback
+                                                          ?.order
+                                                          ?.createdAt,
+                                                    ),
+                                                  )),
                                           SizedBox(height: 10.h),
                                         ],
                                       )
@@ -482,7 +489,7 @@ class HomeUI extends GetView<HomeController> {
                               ? const SizedBox()
                               : Column(
                                   children: [
-                                   /* GestureDetector(
+                                    /* GestureDetector(
                                       onTap: () {
                                         Get.toNamed(RouteName.noticeBoard);
                                       },
@@ -533,8 +540,7 @@ class HomeUI extends GetView<HomeController> {
                                               //   duration: const Duration(seconds: 6),
                                               // );
                                             } else {
-                                              bool isChatOn =
-                                                  chatSwitch.value;
+                                              bool isChatOn = chatSwitch.value;
                                               bool isAudioCallOn =
                                                   callSwitch.value;
                                               bool isVideoCallOn =
@@ -1061,7 +1067,8 @@ class HomeUI extends GetView<HomeController> {
                                     Get.bottomSheet(CommonInfoSheet(
                                       title: "noticeBoard".tr,
                                       subTitle: "noticeBoardDes".tr,
-                                      argument: controller!.homeData?.noticeBoard,
+                                      argument:
+                                          controller!.homeData?.noticeBoard,
                                     ));
                                   },
                                   child: Assets.images.icInfo
@@ -1512,6 +1519,7 @@ class HomeUI extends GetView<HomeController> {
                       homeController.homeData?.offers?.orderOffer?.length ?? 0,
                   separatorBuilder: (context, _) => SizedBox(height: 10.h),
                   itemBuilder: (context, index) {
+                    OrderOffer  orderOffer = homeController.homeData!.offers!.orderOffer![index];
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1520,41 +1528,35 @@ class HomeUI extends GetView<HomeController> {
                           crossAxisAlignment: WrapCrossAlignment.center,
                           children: [
                             Text(
-                              "${homeController.homeData?.offers?.orderOffer?[index].offerName}"
+                              "${orderOffer.offerName}"
                                   .toUpperCase(),
                               style: AppTextStyle.textStyle12(
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                            if ((homeController.homeData?.offers
-                                        ?.orderOffer?[index].callRate ??
+                            if ((orderOffer.callRate ??
                                     0) >
                                 0)
                               CustomText(
-                                " (₹${homeController.homeData?.offers?.orderOffer?[index].callRate}/min)"
+                                " (₹${orderOffer.callRate}/min)"
                                     .toUpperCase(),
                                 fontSize: 10.sp,
                               ),
                           ],
                         ),
-                        Obx(
-                          () => SwitchWidget(
-                            onTap: () {
-                              if (homeController.offerTypeLoading.value !=
-                                  Loading.loading) {
-                                homeController.orderOfferSwitch[index] =
-                                    !controller.orderOfferSwitch[index];
-                              }
-                              // controller.updateOfferType(
-                              //   index: index,
-                              //   offerId: controller.homeData?.offers?.orderOffer?[index].id ?? 0,
-                              //   offerType: 1,
-                              //   value: !controller.orderOfferSwitch[index],
-                              // );
-                            },
-                            switchValue: homeController.orderOfferSwitch[index],
-                          ),
-                        ),
+                        SwitchWidget(
+                          onTap: () {
+                            orderOffer.isOn = !orderOffer.isOn!;
+                            homeController.update();
+                            homeController.updateOrderOffer(
+                              index: index,
+                              offerId: orderOffer.id ?? 0,
+                              value: orderOffer.isOn!,
+                            );
+
+                          },
+                          switchValue: orderOffer.isOn,
+                        )
                       ],
                     );
                   },
@@ -1610,7 +1612,7 @@ class HomeUI extends GetView<HomeController> {
             ],
           ),
           SizedBox(height: 10.h),
-           ListView.separated(
+          ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: controller!.homeData!.offers!.customOffer!.length,
@@ -1643,9 +1645,7 @@ class HomeUI extends GetView<HomeController> {
                     ],
                   ),
                   SwitchWidget(
-                    onTap:
-                        ()
-                        {
+                    onTap: () {
                       if (data.isOn!) {
                         data.isOn = !data.isOn!;
                         controller.updateOfferType(
