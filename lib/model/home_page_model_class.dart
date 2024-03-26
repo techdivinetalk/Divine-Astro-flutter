@@ -266,13 +266,15 @@ class OrderOffer {
   String? offerName;
   int? callRate;
   int? freeMinutes;
+  bool? isOn;
 
-  OrderOffer({this.id, this.offerName, this.callRate, this.freeMinutes});
+  OrderOffer({this.id, this.offerName, this.callRate, this.isOn, this.freeMinutes});
 
   OrderOffer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     offerName = json['offer_name'];
     callRate = json['call_rate'];
+    isOn = json['isOn'] ?? false;
     freeMinutes = json['free_minutes'];
   }
 
@@ -374,12 +376,14 @@ class OfferType {
   String? offerName;
   int? callRate;
   String? isActive;
+  bool? isOn;
 
   OfferType({
     this.id,
     this.offerName,
     this.callRate,
     this.isActive,
+    this.isOn,
   });
 
   factory OfferType.fromJson(Map<String, dynamic> json) => OfferType(
