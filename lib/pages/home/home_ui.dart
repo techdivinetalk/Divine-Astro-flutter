@@ -148,7 +148,8 @@ class HomeUI extends GetView<HomeController> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
+                                                "₹${abbreviateNumber(controller.homeData?.todaysEarning?.toStringAsFixed(2))}",
+                                               // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
                                                 style: AppTextStyle.textStyle16(
                                                     fontColor:
                                                         appColors.appRedColour,
@@ -208,7 +209,7 @@ class HomeUI extends GetView<HomeController> {
                                               Row(
                                                 children: [
                                                   Text(
-                                                    "₹${controller.homeData?.totalEarning?.toStringAsFixed(2)}",
+                                                    "₹${abbreviateNumber(controller.homeData?.totalEarning?.toStringAsFixed(2))}",
                                                     style: AppTextStyle
                                                         .textStyle16(
                                                             fontColor: appColors
@@ -310,7 +311,7 @@ class HomeUI extends GetView<HomeController> {
                               Expanded(
                                   child: RetentionWidget(
                                 title:
-                                    "Bonus Wallet - ₹${controller.homeData?.bonusWallet ?? 0}",
+                                    "Bonus Wallet - ₹${abbreviateNumber(controller.homeData?.bonusWallet)}",
                                 subTitle:
                                     "Retention Rate - ${controller.homeData?.retention ?? 0}%",
                                 borderColor: (controller.homeData!.retention! <
@@ -334,7 +335,7 @@ class HomeUI extends GetView<HomeController> {
                               Expanded(
                                 child: RetentionWidget(
                                   title:
-                                      "Paid Wallet - ₹${controller.homeData?.paidWallet ?? 0}",
+                                      "Paid Wallet - ₹${abbreviateNumber(controller.homeData?.paidWallet)}",
                                   subTitle:
                                       "Repurchase Rate - ${controller.homeData?.repurchaseRate ?? 0}%",
                                   borderColor:
@@ -388,7 +389,7 @@ class HomeUI extends GetView<HomeController> {
                                     ),
                                     SizedBox(height: 5.h),
                                     CustomText(
-                                      "₹${controller.homeData?.ecommerceWallet ?? 0}",
+                                      "₹${abbreviateNumber(controller.homeData?.ecommerceWallet)}",
                                       fontWeight: FontWeight.w400,
                                       textAlign: TextAlign.center,
                                       fontSize: 9.sp,
@@ -1437,6 +1438,35 @@ class HomeUI extends GetView<HomeController> {
       return SizedBox();
     }
   }
+
+  String abbreviateNumber(dynamic value) {
+    const List<String> suffixes = ['M', 'K', 'B', 'T'];
+
+    // Extract numeric part by removing non-numeric characters
+    String numericPart = value.toString().replaceAll(RegExp(r'[^0-9.]'), '');
+
+    double numericValue = double.tryParse(numericPart) ?? 0.0;
+
+    // Check if balance is greater than 0
+    if (numericValue > 0) {
+      int index = 0;
+
+      // Check if balance is above 9999
+      if (numericValue > 9999) {
+        while (numericValue >= 1000 && index < suffixes.length - 1) {
+          numericValue /= 1000;
+          index++;
+        }
+        return '${numericValue.toStringAsFixed(1)}${suffixes[index]}';
+      } else {
+        return numericValue.toStringAsFixed(0);
+      }
+    } else {
+      // If balance is 0, return '0'
+      return '0.00';
+    }
+  }
+
 
   Widget orderOfferWidget({HomeController? homeController}) {
     return homeController!.homeData!.offers!.orderOffer!.isNotEmpty

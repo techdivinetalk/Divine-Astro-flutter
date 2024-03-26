@@ -737,7 +737,7 @@ class HomeController extends GetxController {
         }
         switchType.value = value;
       } else if (response.statusCode == 400) {
-        Get.bottomSheet(const CantOnline());
+        Get.bottomSheet(CantOnline(message: response.message));
       }
       update();
     } catch (error) {

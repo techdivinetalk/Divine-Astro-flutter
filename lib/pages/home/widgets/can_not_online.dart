@@ -6,7 +6,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class CantOnline extends StatelessWidget {
-  const CantOnline({super.key});
+  final String? message;
+  const CantOnline({Key? key, required this.message}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +53,8 @@ class CantOnline extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                "To activate your presence ON THE PLATFORM, YOU NEED TO Stream live for 2 hours.",
+               // "To activate your presence ON THE PLATFORM, YOU NEED TO Stream live for 2 hours.",
+                message ?? '',
                 textAlign: TextAlign.center,
                 style: AppTextStyle.textStyle14(
                   fontWeight: FontWeight.w400,
