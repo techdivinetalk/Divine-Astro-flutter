@@ -615,10 +615,10 @@ class HomeUI extends GetView<HomeController> {
                           // if (controller.homeData?.offerType != null &&
                           //     controller.homeData?.offerType != [])
                           //   offerTypeWidget(),
-                          controller.homeData?.offers?.orderOffer != null
+                          controller.homeData?.offers?.orderOffer!.length != 0
                               ? orderOfferWidget(homeController: controller)
                               : const SizedBox(),
-                          controller.homeData?.offers?.customOffer != null
+                          controller.homeData?.offers?.customOffer!.length != 0
                               ? customerOfferWidget(context,
                                   controller: controller)
                               : const SizedBox(),
@@ -1580,10 +1580,10 @@ class HomeUI extends GetView<HomeController> {
             ],
           ),
           SizedBox(height: 10.h),
-          ListView.separated(
+           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: controller!.homeData?.offers?.customOffer?.length ?? 0,
+            itemCount: controller!.homeData!.offers!.customOffer!.length,
             separatorBuilder: (context, _) => SizedBox(height: 10.h),
             itemBuilder: (context, index) {
               DiscountOffer data =

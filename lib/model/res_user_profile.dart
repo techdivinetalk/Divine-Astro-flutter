@@ -82,7 +82,7 @@ class GetAstrolopgerDetails {
   String? accountType;
   dynamic totalPayout;
   dynamic totalPayment;
-  int? razorpayContactId;
+  dynamic razorpayContactId;
   String? employmentType;
   String? bankName;
   int? payoutType;

@@ -56,10 +56,9 @@ import 'package:cron/cron.dart';
 import 'widgets/can_not_online.dart';
 
 class HomeController extends GetxController {
-  bool isOpenBonusSheet =  false;
-  bool isOpenPaidSheet =  false;
-  bool isOpenECommerceSheet =  false;
-
+  bool isOpenBonusSheet = false;
+  bool isOpenPaidSheet = false;
+  bool isOpenECommerceSheet = false;
 
   RxBool liveSwitch = true.obs;
 
@@ -454,7 +453,7 @@ class HomeController extends GetxController {
         feedbackResponse = response.data?[0];
         feedbacksList = response.data;
 
-        if (feedbackResponse?.id != null && !isFeedbackAvailable.value ) {
+        if (feedbackResponse?.id != null && !isFeedbackAvailable.value) {
           showFeedbackBottomSheet();
           debugPrint('feed id: ${feedbackResponse?.id}');
         }
@@ -479,6 +478,9 @@ class HomeController extends GetxController {
       var response = await HomePageRepository().getDashboardData(params);
       isFeedbackAvailable.value = response.success ?? false;
       homeData = response.data;
+      print(homeData!.offers!.customOffer!.length);
+      print(homeData!.offers!.orderOffer!.length);
+      print("homeData!.offers!.orderOffer!.length");
       updateCurrentData();
       shopDataSync.value = true;
       loading = Loading.loaded;
@@ -719,14 +721,19 @@ class HomeController extends GetxController {
 
       if (response.statusCode == 200) {
         if (!videoSwitch.value && type == 3) {
-          print("is it true");
           selectDateTimePopupForVideo();
+        } else {
+          selectedVideoTime.value = "";
         }
         if (!callSwitch.value && type == 2) {
           selectDateTimePopupForCall();
+        } else {
+          selectedCallTime.value = "";
         }
         if (!chatSwitch.value && type == 1) {
           selectDateTimePopupForChat();
+        } else {
+          selectedChatTime.value = "";
         }
         switchType.value = value;
       } else if (response.statusCode == 400) {
