@@ -45,7 +45,7 @@ class GiftData {
   DateTime createdAt;
   DateTime updatedAt;
   String fullGiftImage;
-  String animation;
+  String? animation;
 
   GiftData({
     required this.id,

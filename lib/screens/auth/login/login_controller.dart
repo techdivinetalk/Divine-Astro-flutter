@@ -296,35 +296,35 @@ class LoginController extends GetxController {
     final FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
     final DatabaseReference ref = firebaseDatabase.ref();
     final DataSnapshot dataSnapshot = await ref.child(firebaseNodeUrl).get();
-    if (dataSnapshot.exists) {
-      final HashMap<String, dynamic> realTime = HashMap();
-      realTime["uniqueId"] = uniqueId;
-      realTime["voiceCallStatus"] = (data.data?.callPreviousStatus ?? 0);
-      realTime["chatStatus"] = (data.data?.chatPreviousStatus ?? 0);
-      realTime["videoCallStatus"] = (data.data?.videoCallPreviousStatus ?? 0);
-      realTime["is_call_enable"] = (data.data?.isCall ?? 0) == 1;
-      realTime["is_chat_enable"] = (data.data?.isChat ?? 0) == 1;
-      realTime["is_video_call_enable"] = (data.data?.isVideo ?? 0) == 1;
-      realTime["is_live_enable"] = (data.data?.isLive ?? 0) == 1;
-      final HashMap<String, dynamic> deviceTokenNode = HashMap();
-      deviceTokenNode["deviceToken"] =
-          deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
-      firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
-      firebaseDatabase
-          .ref()
-          .child("$firebaseNodeUrl/realTime")
-          .update(realTime);
-      navigateToDashboard(data);
-    } else {
-      final FirebaseUserData userData = FirebaseUserData(
-        data.data?.name ?? "",
-        deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "",
-        data.data?.image ?? "",
-        RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0),
-      );
-      firebaseDatabase.ref().child(firebaseNodeUrl).set(userData.toJson());
-      navigateToDashboard(data);
-    }
+    final HashMap<String, dynamic> realTime = HashMap();
+    realTime["uniqueId"] = uniqueId;
+    realTime["voiceCallStatus"] = (data.data?.callPreviousStatus ?? 0);
+    realTime["chatStatus"] = (data.data?.chatPreviousStatus ?? 0);
+    realTime["videoCallStatus"] = (data.data?.videoCallPreviousStatus ?? 0);
+    realTime["is_call_enable"] = (data.data?.isCall ?? 0) == 1;
+    realTime["is_chat_enable"] = (data.data?.isChat ?? 0) == 1;
+    realTime["is_video_call_enable"] = (data.data?.isVideo ?? 0) == 1;
+    realTime["is_live_enable"] = (data.data?.isLive ?? 0) == 1;
+    final HashMap<String, dynamic> deviceTokenNode = HashMap();
+    deviceTokenNode["deviceToken"] =
+        deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
+    firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
+    firebaseDatabase
+        .ref()
+        .child("$firebaseNodeUrl/realTime")
+        .update(realTime);
+    // if (dataSnapshot.exists) {
+    //
+    // } else {
+    //   final FirebaseUserData userData = FirebaseUserData(
+    //     data.data?.name ?? "",
+    //     deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "",
+    //     data.data?.image ?? "",
+    //     RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0),
+    //   );
+    //   firebaseDatabase.ref().child(firebaseNodeUrl).set(userData.toJson());
+    // }
+    navigateToDashboard(data);
     return Future<void>.value();
   }
 

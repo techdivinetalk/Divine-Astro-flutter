@@ -49,7 +49,7 @@ class GiftsSingleton {
     for (final GiftData itemData in gifts.data ?? <GiftData>[]) {
       giftItemList.add(
         gift.ZegoGiftItem(
-          sourceURL: itemData.animation,
+          sourceURL: itemData.animation ?? "",
           weight: 100,
           name: itemData.giftName,
           icon: itemData.giftImage,
@@ -67,7 +67,7 @@ class GiftsSingleton {
       // debugPrint(
       //   '${DateTime.now()} GiftsSingleton(): cache(): try cache ${itemData.animation}',
       // );
-      GiftCache().read(url: itemData.animation).then(
+      GiftCache().read(url: itemData.animation ?? "").then(
         (value) {
           // debugPrint(
           //   '${DateTime.now()} GiftsSingleton(): cache(): cache done: ${itemData.animation}',
