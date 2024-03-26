@@ -11,7 +11,7 @@ class ChatAssistSuggestRemedyController extends GetxController {
   late final ChatRemediesRepository remediesRepository;
   Rx<ChatSuggestRemediesListResponse> remedies =
       ChatSuggestRemediesListResponse().obs;
-  Loading loading = Loading.initial;
+  RxBool isLoading = false.obs;
 
   ChatAssistSuggestRemedyController(this.remediesRepository);
 
@@ -22,13 +22,12 @@ class ChatAssistSuggestRemedyController extends GetxController {
   }
 
   getChatRemediesListApi() async {
-    loading = Loading.loading;
+    isLoading(true);
     update();
     try {
       ChatSuggestRemediesListResponse response =
-          await remediesRepository.getChatSuggestRemediesList();
+      await remediesRepository.getChatSuggestRemediesList();
       remedies.value = response;
-      loading = Loading.loaded;
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
@@ -36,8 +35,9 @@ class ChatAssistSuggestRemedyController extends GetxController {
       } else {
         divineSnackBar(data: error.toString(), color: appColors.red);
       }
-      loading = Loading.loaded;
+    } finally {
+      isLoading(false);
+      update();
     }
-    update();
   }
 }

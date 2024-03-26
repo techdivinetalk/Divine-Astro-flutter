@@ -21,7 +21,7 @@ class CategoryDetailController extends GetxController {
   Products? productDetail;
   SaveRemediesResponse? saveRemediesResponse;
   RxBool productListSync = false.obs;
-  RxBool shopDataSync = false.obs;
+  RxBool isLoading = false.obs;
   int? productId;
   int? customerId;
   int? orderId;
@@ -58,7 +58,7 @@ class CategoryDetailController extends GetxController {
       var response = await shopRepository.getProductDetail(params);
       productDetail = response.data!.products![0];
       shopId = productDetail?.prodShopId;
-      shopDataSync.value = true;
+      isLoading.value = true;
     } catch (error) {
       if (error is AppException) {
         error.onException();
@@ -80,7 +80,7 @@ class CategoryDetailController extends GetxController {
       saveRemediesResponse = response;
       Get.offNamedUntil(
           RouteName.orderHistory, ModalRoute.withName(RouteName.dashboard));
-      shopDataSync.value = true;
+      isLoading.value = true;
     } catch (error) {
       if (error is AppException) {
         error.onException();
@@ -102,7 +102,7 @@ class CategoryDetailController extends GetxController {
       var response = await shopRepository.saveRemediesForChatAssist(params);
       saveRemediesResponse = response;
       // Get.offNamedUntil(RouteName.orderHistory, ModalRoute.withName(RouteName.dashboard));
-      shopDataSync.value = true;
+      isLoading.value = true;
       Get.back();
       Get.back();
       Get.back();

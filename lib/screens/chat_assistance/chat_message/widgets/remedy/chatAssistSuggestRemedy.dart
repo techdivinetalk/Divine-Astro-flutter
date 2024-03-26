@@ -26,9 +26,16 @@ class ChatAssistSuggestRemedyPage extends GetView<ChatAssistSuggestRemedyControl
         title: const CustomText('Suggest Remedies'),
       ),
       body: Obx(() {
-        if (controller.remedies.value.remedies?.isEmpty ?? true) {
+        if (controller.isLoading.value) {
+
           return const GenericLoadingWidget();
+        } else if (controller.remedies.value.remedies?.isEmpty ?? true) {
+
+          return const Center(
+            child: Text("No data found"),
+          );
         } else {
+          // Show GridView when data is available
           return GridView.builder(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -43,7 +50,7 @@ class ChatAssistSuggestRemedyPage extends GetView<ChatAssistSuggestRemedyControl
               final isLeftSide = index % 2 == 0; // Check if the item is on the left side
 
               return ElevatedButton(
-                onPressed: () =>  Get.toNamed(RouteName.chatSuggestRemedyDetails, arguments: {'remedy': remedy}),
+                onPressed: () => Get.toNamed(RouteName.chatSuggestRemedyDetails, arguments: {'remedy': remedy}),
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
@@ -58,7 +65,8 @@ class ChatAssistSuggestRemedyPage extends GetView<ChatAssistSuggestRemedyControl
             },
           );
         }
-      }),
+      })
+      ,
     );
   }
 }

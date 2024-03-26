@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -77,7 +78,7 @@ class SuggestProducts extends GetView<SuggestProductController> {
                                 SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 3,
                                     crossAxisSpacing: 25.h,
-                                    childAspectRatio: 0.60,
+                                    childAspectRatio: 0.55,
                                     mainAxisSpacing: 30.h),
                             itemBuilder: (BuildContext context, int index) {
                               Shop item = (controller.searchShopList.isNotEmpty
@@ -115,31 +116,34 @@ class SuggestProducts extends GetView<SuggestProductController> {
                                     ),
                                   ),
                                   child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(20),
-                                        child: LoadImage(
-                                          boxFit: BoxFit.cover,
-                                          imageModel: ImageModel(
-                                            imagePath:
-                                                '${controller.pref.getBaseImageURL()}/${item?.shopImage}',
-                                            loadingIndicator: const SizedBox(
-                                              child: CircularProgressIndicator(
-                                                color: Color(0XFFFDD48E),
-                                                strokeWidth: 2,
+                                      Center(
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(20),
+                                          child: LoadImage(
+                                            boxFit: BoxFit.cover,
+                                            imageModel: ImageModel(
+                                              imagePath:
+                                              '${controller.pref.getBaseImageURL()}/${item?.shopImage}',
+                                              loadingIndicator: const SizedBox(
+                                                child: CircularProgressIndicator(
+                                                  color: Color(0XFFFDD48E),
+                                                  strokeWidth: 2,
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
                                       SizedBox(height: 8.h),
-                                      Text(
+                                      CustomText(
                                         item.shopName ?? "",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 12.sp,
-                                          color: appColors.darkBlue,
-                                        ),
+                                        textAlign: TextAlign.center,
+                                        maxLines: item.shopName != null && item.shopName!.contains('\n') ? 1 : 2,
+                                        fontWeight: FontWeight.w600,
+                                        fontColor: appColors.darkBlue,
+                                        fontSize: 11.sp,
                                       ),
                                       const Expanded(child: SizedBox()),
                                       Container(

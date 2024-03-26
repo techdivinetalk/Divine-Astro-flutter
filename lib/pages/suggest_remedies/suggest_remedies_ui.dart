@@ -92,64 +92,69 @@ class SuggestRemediesUI extends GetView<SuggestRemediesController> {
               //   ),
               // ),
               SizedBox(height: 25.h),
-              Obx(() => controller.shopDataSync.value == true
+              Obx(() =>controller.shopDataSync.value == true
                   ? Expanded(
-                      child: GridView.builder(
-                          itemCount: controller.shopData?.shops?.length ?? 0,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 25.h,
-                                  childAspectRatio: 0.75,
-                                  mainAxisSpacing: 30.h),
-                          itemBuilder: (BuildContext context, int index) {
-                            var item = controller.shopData?.shops?[index];
-                            return InkWell(
-                              onTap: () {
-                                Get.toNamed(RouteName.suggestRemediesSubUI,
-                                    arguments: {"shodId":item?.id, "orderId": controller.orderId});
-                              },
-                              child: Container(
-                                width: 300,
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.black.withOpacity(0.2),
-                                        blurRadius: 3.0,
-                                        offset: const Offset(0.0, 3.0)),
-                                  ],
-                                  color: Colors.white,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(20),
-                                  ),
-                                ),
-                                child: Column(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: CachedNetworkImage(
-                                        imageUrl:
-                                            "${controller.preferenceService.getBaseImageURL()}/${item?.shopImage}",
-                                        fit: BoxFit.fill,
-                                        errorWidget: (context, url, error) =>
-                                            Assets.images.defaultProfile
-                                                .image(),
-                                      ),
-                                    ),
-                                    SizedBox(height: 8.h),
-                                    Text(item?.shopName ?? "",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 12.sp,
-                                          color: appColors.darkBlue,
-                                        )),
-                                  ],
+                  child: controller.shopData?.shops?.isNotEmpty == true
+                      ? GridView.builder(
+                    itemCount: controller.shopData?.shops?.length ?? 0,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 25.h,
+                      childAspectRatio: 0.75,
+                      mainAxisSpacing: 30.h,
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      var item = controller.shopData?.shops?[index];
+                      return InkWell(
+                        onTap: () {
+                          Get.toNamed(RouteName.suggestRemediesSubUI,
+                              arguments: {"shodId": item?.id, "orderId": controller.orderId});
+                        },
+                        child: Container(
+                          width: 300,
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 3.0,
+                                offset: const Offset(0.0, 3.0),
+                              ),
+                            ],
+                            color: Colors.white,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: CachedNetworkImage(
+                                  imageUrl: "${controller.preferenceService.getBaseImageURL()}/${item?.shopImage}",
+                                  fit: BoxFit.fill,
+                                  errorWidget: (context, url, error) => Assets.images.defaultProfile.image(),
                                 ),
                               ),
-                            );
-                          }),
-                    )
-                  : const SizedBox())
+                              SizedBox(height: 8.h),
+                              Text(
+                                item?.shopName ?? "",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12.sp,
+                                  color: appColors.darkBlue,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                      : Center(
+                    child: Text("No data found"),
+                  )
+              )
+                  : SizedBox())
             ],
           ),
         ));

@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../../../../../../common/appbar.dart';
 import '../../../../../../common/colors.dart';
@@ -136,7 +138,7 @@ class SubProductUi extends GetView<SubProductController> {
                               }),
                         ),
                       )
-                : const SizedBox())
+                : const GenericLoadingWidget())
           ],
         ));
   }
