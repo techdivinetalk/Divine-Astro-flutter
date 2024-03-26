@@ -68,9 +68,9 @@ class GiftData {
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         fullGiftImage: json["full_gift_image"],
-        animation: json["animation"],
+        animation: json["animation"] ??"",
       );
-
+ 
   Map<String, dynamic> toJson() => {
         "id": id,
         "gift_name": giftName,

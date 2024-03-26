@@ -62,7 +62,7 @@ class HomeData {
   int? paidWallet;
   int? bonusWallet;
   int? ecommerceWallet;
-  int? retention;
+  dynamic retention;
   int? repurchaseRate;
   int? minimumRetention;
   int? minimumRepurchaseRate;
@@ -133,7 +133,7 @@ class HomeData {
     paidWallet: json["paid_wallet"] ?? 0,
     bonusWallet: json["bonus_wallet"] ??0,
     ecommerceWallet: json["ecommerce_wallet"] ?? 0,
-    retention: json["retention"] ?? 0,
+    retention: json["retention"] ,
     repurchaseRate: json["repurchase_rate"] ?? 0,
     minimumRetention: json["minimum_retention"] ?? 0,
     minimumRepurchaseRate: json["minimum_repurchase_rate"] ?? 0,
