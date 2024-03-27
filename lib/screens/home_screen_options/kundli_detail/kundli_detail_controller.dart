@@ -293,7 +293,7 @@ class KundliDetailController extends GetxController {
     try {
       BirthDetailsModel response = await kundliRepository
           .getBirthDetails(fromKundali ? kundaliIdParms : params);
-      birthDetails.value = response;
+        birthDetails.value = response;
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
