@@ -4,6 +4,7 @@ import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/pages/home/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 class CommonInfoSheet extends StatelessWidget {
@@ -61,9 +62,12 @@ class CommonInfoSheet extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   Get.back();
-                  Get.toNamed(RouteName.noticeDetail,
-                      arguments: argument,
-                      parameters: {"from_list": "0"});
+                  if (argument != null){
+                    Get.toNamed(RouteName.noticeDetail,
+                        arguments: argument,
+                        parameters: {"from_list": "0"});
+                  }
+                  Fluttertoast.showToast(msg: "No info for now!");
                 },
                 child: Container(
                   height: 60,
