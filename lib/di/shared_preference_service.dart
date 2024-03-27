@@ -200,7 +200,8 @@ class SharedPreferenceService extends GetxService {
   Future<List<MessageTemplates>> getMessageTemplates() async {
     final SharedPreferences sharedInstance =
         await SharedPreferences.getInstance();
-    String data = sharedInstance.getString(messageTemplate) ?? 'dharam';
+    String data = sharedInstance.getString(messageTemplate) ?? '';
+    print("getMessageTemplates $data");
     final list = (json.decode(data));
     return list
         .map<MessageTemplates>((element) => MessageTemplates.fromJson(element))
