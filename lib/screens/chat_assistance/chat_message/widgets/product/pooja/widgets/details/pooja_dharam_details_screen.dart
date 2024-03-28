@@ -315,7 +315,7 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
                 Map<String, dynamic> params = {
                   "product_id": pooja.id,
                   "shop_id": 0,
-                  "customer_id": int.parse(AppFirebaseService().orderData.value["userId"]),
+                  "customer_id":AppFirebaseService().orderData.value["userId"] != null ? int.parse(AppFirebaseService().orderData.value["userId"]):_controller.customerId.value,
                   "order_id":AppFirebaseService().orderData.value["orderId"]
                 };
 

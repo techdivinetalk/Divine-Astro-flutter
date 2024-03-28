@@ -35,7 +35,10 @@ class SuggestProductController extends GetxController {
   void onReady() {
     imageUrl = pref.getAmazonUrl()!;
     print("image url in suggest Product ${imageUrl}");
-    customerId(Get.arguments['customerId']);
+
+    if(Get.arguments != null){
+      customerId(Get.arguments['customerId']);
+    }
     getShopList();
     super.onReady();
   }

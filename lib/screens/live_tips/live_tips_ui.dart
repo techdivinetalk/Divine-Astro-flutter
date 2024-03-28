@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
@@ -28,182 +29,185 @@ class LiveTipsUI extends GetView<LiveTipsController> {
       init: LiveTipsController(),
       builder: (controller) {
         return Scaffold(
-          body: Material(
-            child: Stack(children: <Widget>[
-              ShaderMask(
-                shaderCallback: (rect) {
-                  return const LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
+          body: Stack(children: <Widget>[
+            CameraPreview(
+              controller.controller!,
+
+            ),
+            /*ShaderMask(
+              shaderCallback: (rect) {
+                return const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.transparent, Colors.black],
+                ).createShader(
+                  Rect.fromLTRB(0, -140, rect.width, rect.height - 20),
+                );
+              },
+              blendMode: BlendMode.darken,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
                     colors: [Colors.transparent, Colors.black],
-                  ).createShader(
-                    Rect.fromLTRB(0, -140, rect.width, rect.height - 20),
-                  );
-                },
-                blendMode: BlendMode.darken,
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Colors.transparent, Colors.black],
-                      begin: FractionalOffset(0, 0),
-                      end: FractionalOffset(0, 1),
-                      stops: [
-                        0.0,
-                        2.0,
-                      ],
-                      tileMode: TileMode.clamp,
-                    ),
-                    image: DecorationImage(
-                      image: ExactAssetImage(Assets.images.bgLiveTemp.path),
-                      fit: BoxFit.cover,
-                    ),
+                    begin: FractionalOffset(0, 0),
+                    end: FractionalOffset(0, 1),
+                    stops: [
+                      0.0,
+                      2.0,
+                    ],
+                    tileMode: TileMode.clamp,
+                  ),
+                  image: DecorationImage(
+                    image: ExactAssetImage(Assets.images.bgLiveTemp.path),
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 25.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 0,
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 20.h),
-                            child: InkWell(
-                              onTap: () {
-                                Get.back();
-                              },
-                              child: Icon(
-                                Icons.chevron_left_outlined,
+            ),*/
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 25.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 0,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 20.h),
+                          child: InkWell(
+                            onTap: () {
+                              Get.back();
+                            },
+                            child: Icon(
+                              Icons.chevron_left_outlined,
+                              color: appColors.white,
+                              size: 45.sp,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      Expanded(
+                        flex: 0,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 20.h),
+                          child: InkWell(
+                            onTap: () {
+                              controller.isFrontCamera.value =
+                                  !controller.isFrontCamera.value;
+                              // controller.toggleCameraLens();
+                            },
+                            child: Obx(
+                              () => Icon(
+                                controller.isFrontCamera.value
+                                    ? Icons.camera_front
+                                    : Icons.camera_alt,
                                 color: appColors.white,
-                                size: 45.sp,
+                                size: 28.sp,
                               ),
                             ),
                           ),
                         ),
-                        const Spacer(),
-                        Expanded(
-                          flex: 0,
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 20.h),
-                            child: InkWell(
-                              onTap: () {
-                                controller.isFrontCamera.value =
-                                    !controller.isFrontCamera.value;
-                              },
-                              child: Obx(
-                                () => Icon(
-                                  controller.isFrontCamera.value
-                                      ? Icons.camera_front
-                                      : Icons.camera_alt,
-                                  color: appColors.white,
-                                  size: 28.sp,
-                                ),
-                              ),
-                            ),
-                          ),
+                      ),
+                    ],
+                  ),
+                  const Expanded(flex: 1, child: SizedBox()),
+                  Expanded(
+                    flex: 0,
+                    child: Text(
+                      "tips".tr,
+                      style: TextStyle(
+                          fontSize: 32.sp,
+                          color: appColors.white,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15.h,
+                  ),
+                  Expanded(
+                    flex: 0,
+                    child: Text(
+                      "Please make sure you and your background environment are ready to start a live check   your video and audio.",
+                      style: AppTextStyle.textStyle16(
+                          fontColor: appColors.white,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Expanded(
+                    flex: 0,
+                    child: Text(
+                      "To guarantee the user experience, please make sure you can live for 30 mins at least.",
+                      style: AppTextStyle.textStyle16(
+                          fontColor: appColors.white,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 25.h,
+                  ),
+                  // Expanded(
+                  //   flex: 0,
+                  //   child: InkWell(
+                  //     onTap: () async {},
+                  //     child: Container(
+                  //       width: double.infinity,
+                  //       decoration: BoxDecoration(
+                  //         borderRadius: BorderRadius.circular(50),
+                  //         color: appColors.lightYellow,
+                  //       ),
+                  //       child: Center(
+                  //         child: Padding(
+                  //           padding: EdgeInsets.symmetric(vertical: 20.h),
+                  //           child: Text(
+                  //             "startLive".tr,
+                  //             style: TextStyle(
+                  //               fontSize: 20.sp,
+                  //               color: appColors.brownColour,
+                  //               fontWeight: FontWeight.w600,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+
+                  StreamBuilder<Object>(
+                    initialData: false,
+                    stream: controller.streamController.stream,
+                    builder: (context, snapshot) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: CommonButton(
+                          buttonText: "startLive".tr,
+                          buttonCallback:
+                              snapshot.hasData && snapshot.data == false
+                                  ? () async {
+                                      controller.streamController.add(true);
+                                      await furtherProcedure();
+                                      controller.streamController.add(false);
+                                    }
+                                  : () {
+                                      divineSnackBar(
+                                          data: "Loading, please wait...");
+                                    },
                         ),
-                      ],
-                    ),
-                    const Expanded(flex: 1, child: SizedBox()),
-                    Expanded(
-                      flex: 0,
-                      child: Text(
-                        "tips".tr,
-                        style: TextStyle(
-                            fontSize: 32.sp,
-                            color: appColors.white,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Expanded(
-                      flex: 0,
-                      child: Text(
-                        "Please make sure you and your background environment are ready to start a live check   your video and audio.",
-                        style: AppTextStyle.textStyle16(
-                            fontColor: appColors.white,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Expanded(
-                      flex: 0,
-                      child: Text(
-                        "To guarantee the user experience, please make sure you can live for 30 mins at least.",
-                        style: AppTextStyle.textStyle16(
-                            fontColor: appColors.white,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 25.h,
-                    ),
-                    // Expanded(
-                    //   flex: 0,
-                    //   child: InkWell(
-                    //     onTap: () async {},
-                    //     child: Container(
-                    //       width: double.infinity,
-                    //       decoration: BoxDecoration(
-                    //         borderRadius: BorderRadius.circular(50),
-                    //         color: appColors.lightYellow,
-                    //       ),
-                    //       child: Center(
-                    //         child: Padding(
-                    //           padding: EdgeInsets.symmetric(vertical: 20.h),
-                    //           child: Text(
-                    //             "startLive".tr,
-                    //             style: TextStyle(
-                    //               fontSize: 20.sp,
-                    //               color: appColors.brownColour,
-                    //               fontWeight: FontWeight.w600,
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
+                      );
+                    },
+                  ),
 
-                    StreamBuilder<Object>(
-                      initialData: false,
-                      stream: controller.streamController.stream,
-                      builder: (context, snapshot) {
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: CommonButton(
-                            buttonText: "startLive".tr,
-                            buttonCallback:
-                                snapshot.hasData && snapshot.data == false
-                                    ? () async {
-                                        controller.streamController.add(true);
-                                        await furtherProcedure();
-                                        controller.streamController.add(false);
-                                      }
-                                    : () {
-                                        divineSnackBar(
-                                            data: "Loading, please wait...");
-                                      },
-                          ),
-                        );
-                      },
-                    ),
-
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                  ],
-                ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                ],
               ),
-            ]),
-          ),
+            ),
+          ]),
         );
       },
     );

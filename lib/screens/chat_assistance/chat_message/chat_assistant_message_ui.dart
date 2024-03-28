@@ -687,12 +687,20 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                         break;
                       case 2:
                         var result = await Get.toNamed(
-                            RouteName.chatAssistSuggestRemedy);
+                          RouteName.chatAssistSuggestRemedy,
+                          arguments:{
+                            "customer_id":controller.args?.id.toString(),
+                          }
+                        );
                         if (result != null) {
                           final String time =
                               "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
                           controller.sendMsg(
-                              MsgType.remedies, {'message': result.toString()});
+                            MsgType.remedies,
+                            {
+                              'message': result.toString(),
+                            },
+                          );
                           // controller.addNewMessage(time, "Remedies",
                           //     messageText: result.toString());
                           print("getting ul not add1");

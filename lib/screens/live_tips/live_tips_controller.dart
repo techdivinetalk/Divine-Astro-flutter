@@ -1,15 +1,18 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:divine_astrologer/common/routes.dart';
+import 'package:camera/camera.dart';
+
 import 'package:divine_astrologer/di/shared_preference_service.dart';
+import 'package:divine_astrologer/main.dart';
 import 'package:divine_astrologer/model/live/blocked_customer_list_res.dart';
 import 'package:divine_astrologer/repository/astrologer_profile_repository.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_global_singleton.dart';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_screen_recording/flutter_screen_recording.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
@@ -17,9 +20,12 @@ import 'package:get/get_connect/http/src/status/http_status.dart';
 import '../../common/app_textstyle.dart';
 import '../../common/colors.dart';
 import '../../common/common_bottomsheet.dart';
+import '../../common/routes.dart';
 import '../../gen/assets.gen.dart';
 
 class LiveTipsController extends GetxController {
+  CameraController? controller;
+
   var pref = Get.find<SharedPreferenceService>();
   String astroId = "", name = "", image = "";
   FirebaseDatabase database = FirebaseDatabase.instance;
@@ -32,11 +38,62 @@ class LiveTipsController extends GetxController {
     ..add(false);
 
   final UserRepository _userRepository = Get.put(UserRepository());
+
   // final SharedPreferenceService _pref = Get.put(SharedPreferenceService());
+
+  @override
+  void onInit() {
+    controller = CameraController(
+      cameras!.firstWhere((description) =>
+      description.lensDirection == CameraLensDirection.front),
+      ResolutionPreset.max,
+    );
+    controller!.initialize().then((_) {
+      if (!Get.context!.mounted) {
+        CameraLensDirection.front;
+        return;
+      }
+      update();
+    }).catchError((Object e) {
+      if (e is CameraException) {
+        switch (e.code) {
+          case 'CameraAccessDenied':
+            // Handle access errors here.
+            break;
+          default:
+            // Handle other errors here.
+            break;
+        }
+      }
+    });
+    super.onInit();
+  }
+
+  /*void toggleCameraLens() {
+    final lensDirection = controller!.description.lensDirection;
+    CameraDescription newDescription;
+    if (lensDirection == CameraLensDirection.front) {
+      newDescription = cameras!.firstWhere((description) =>
+          description.lensDirection == CameraLensDirection.back);
+    } else {
+      newDescription = cameras!.firstWhere((description) =>
+          description.lensDirection == CameraLensDirection.front);
+    }
+
+    // _initCamera(newDescription)
+    controller = CameraController(
+      newDescription,
+      ResolutionPreset.max,
+    );
+    update();
+  }*/
 
   @override
   void dispose() {
     streamController.close();
+    if (controller != null) {
+      controller!.dispose();
+    }
     super.dispose();
   }
 

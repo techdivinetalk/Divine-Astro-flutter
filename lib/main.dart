@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:camera/camera.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
@@ -49,11 +50,12 @@ import 'screens/live_page/constant.dart';
 
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
+late List<CameraDescription>? cameras;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   initMessaging();
+  cameras = await availableCameras();
   Get.put(AppColors());
 
   // await RemoteConfigService.instance.initFirebaseRemoteConfig();
