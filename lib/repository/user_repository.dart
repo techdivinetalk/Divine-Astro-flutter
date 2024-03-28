@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
@@ -453,6 +454,8 @@ class UserRepository extends ApiProvider {
           await post(constantDetails, headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
+        log(response.body);
+        print("json.decode(response.body)");
         final constantDetailsModelClass =
             ConstantDetailsModelClass.fromJson(json.decode(response.body));
         if (constantDetailsModelClass.statusCode == successResponse &&

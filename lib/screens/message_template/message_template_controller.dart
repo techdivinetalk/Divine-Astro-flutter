@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../common/colors.dart';
@@ -34,7 +35,8 @@ class MessageTemplateController extends GetxController {
   getMessageTemplatesLocally() async {
     final data = await sharedPreferencesInstance.getMessageTemplates();
     messageLocalTemplates = data;
-    print("message Template locally called ${messageLocalTemplates}");
+    print(
+        "message Template locally called ${jsonEncode(messageLocalTemplates)}");
     update();
   }
 
@@ -42,7 +44,6 @@ class MessageTemplateController extends GetxController {
     await sharedPreferencesInstance
         .saveMessageTemplates(json.encode(messageLocalTemplates));
     await getMessageTemplatesLocally();
-    // print("result: " + result);
   }
 
   addedMessageTemplates() async {
@@ -56,11 +57,15 @@ class MessageTemplateController extends GetxController {
     }
   }
 
+
   getMessageTemplates() async {
+
     try {
       final response = await repository.fetchTemplates();
       if (response.data != null) {
         messageTemplates = response.data!;
+        await sharedPreferencesInstance
+            .saveMessageTemplates(json.encode(messageTemplates));
         //await preferenceService.saveMessageTemplates(response.toPrettyString());
       }
       //MessageTemplateResponse? res = preferenceService.getMessageTemplates();
@@ -71,4 +76,6 @@ class MessageTemplateController extends GetxController {
       divineSnackBar(data: error.toString(), color: appColors.redColor);
     }
   }
+
+
 }

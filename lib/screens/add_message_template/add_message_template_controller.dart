@@ -103,7 +103,7 @@ class AddMessageTemplateController extends GetxController {
           await repository.updateTemplates(params);
       if (response.statusCode == 200) {
         Get.find<MessageTemplateController>().getMessageTemplates();
-        Get.back();
+        Get.back(result: 1);
       }
       if (response.statusCode == 400) {
         Fluttertoast.showToast(msg: response.message.toString());

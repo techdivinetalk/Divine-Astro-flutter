@@ -44,9 +44,10 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
             SizedBox(height: 24.h),
             GestureDetector(
               onTap: () {
-
-                Get.toNamed(RouteName.addMessageTemplate,
-                    arguments: [false, false]);
+                Get.toNamed(
+                  RouteName.addMessageTemplate,
+                  arguments: [false, false],
+                );
               },
               child: Container(
                 width: Get.width,
@@ -86,9 +87,18 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                             controller.messageTemplates[index];
                         return GestureDetector(
                           onTap: () {
-                            if(messageTemplate.type != 0){
-                            Get.toNamed(RouteName.addMessageTemplate,
-                                arguments: [false, true, messageTemplate]);}
+                            if (messageTemplate.type != 0) {
+                              Get.toNamed(
+                                RouteName.addMessageTemplate,
+                                arguments: [false, true, messageTemplate],
+                              )!
+                                  .then((value) {
+                                if (value == 1) {
+                                  print("here is updating");
+                                  controller.updateMessageTemplateLocally();
+                                }
+                              });
+                            }
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(
@@ -166,7 +176,8 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                                             } else {
                                               controller.messageLocalTemplates
                                                   .add(messageTemplate);
-                                              print("3 ${controller.messageLocalTemplates}");
+                                              print(
+                                                  "3 ${controller.messageLocalTemplates}");
                                             }
                                             await controller
                                                 .updateMessageTemplateLocally();
