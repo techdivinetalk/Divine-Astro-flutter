@@ -597,7 +597,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                             .value[
                                                         "max_order_time"]) ??
                                                     0),
-                                            style: TextStyle(
+                                            style: TextStyle( 
                                                 fontWeight: FontWeight.w600,
                                                 fontFamily:
                                                     FontFamily.metropolis,
