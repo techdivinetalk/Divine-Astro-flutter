@@ -5,6 +5,7 @@ import 'dart:io';
 
 import "package:contacts_service/contacts_service.dart";
 import 'package:divine_astrologer/app_socket/app_socket.dart';
+import 'package:divine_astrologer/common/MiddleWare.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 
@@ -968,13 +969,19 @@ class HomeController extends GetxController {
     );
   }
 
+
+
   showGiftBottomSheet(int giftCount, BuildContext? contextDetail,
       {String? baseUrl}) async {
+    // if(MiddleWare.instance.currentPage == RouteName.chatMessageUI || MiddleWare.instance.currentPage == RouteName.chatMessageWithSocketUI){
+    //   return;
+    // }
     PopupManager.showGiftCountPopup(contextDetail!,
         title: "Congratulations",
         btnTitle: "Check Order History",
         baseUrl: baseUrl,
         totalGift: giftCount);
+
     // await GiftCountPopup(
     //   Get.context!,
     //   title: "Congratulations!",
