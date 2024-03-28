@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../gen/assets.gen.dart';
 import '../../model/filter_performance_response.dart';
+import '../../model/performance_response.dart';
 
 class RankSystemController extends GetxController {
 

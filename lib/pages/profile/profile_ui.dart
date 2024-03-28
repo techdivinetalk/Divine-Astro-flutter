@@ -743,6 +743,16 @@ class ProfileUI extends GetView<ProfilePageController> {
             TextEditingController replyController = TextEditingController();
             var reviewData = controller.ratingsData?.data?.allReviews?[index];
 
+            String shortenName(reviewData) {
+              if (reviewData == null || reviewData.customerName == null) {
+                return "";
+              } else {
+                return reviewData.customerName.length > 15
+                    ? "${reviewData.customerName.substring(0, 15)}..."
+                    : reviewData.customerName;
+              }
+            }
+
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -766,9 +776,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            reviewData?.customerName != null
-                                ? "${reviewData?.customerName}"
-                                : "",
+                            shortenName(reviewData),
                             style: AppTextStyle.textStyle14(),
                           ),
                           Row(
@@ -912,6 +920,8 @@ class ProfileUI extends GetView<ProfilePageController> {
       },
     );
   }
+
+
 
   Widget replyTextView({
     required TextEditingController textController,

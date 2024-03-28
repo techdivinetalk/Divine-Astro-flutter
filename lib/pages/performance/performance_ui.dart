@@ -63,8 +63,8 @@ class PerformanceUI extends GetView<PerformanceController> {
                     height: 20.h,
                   ),
                   OverAllScoreData(
-                      performanceFilterResponse:
-                          controller.performanceFilterResponse),
+                      performanceResponse:
+                          controller.performanceData?.data?.overall),
                   SizedBox(
                     height: 30.h,
                   ),
@@ -110,7 +110,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                   childAspectRatio: 0.62,
                 ),
                 itemBuilder: (BuildContext context, int index) {
-                  Conversion? item = controller.overAllScoreList[index];
+                  dynamic item = controller.overAllScoreList[index];
                   ScoreModelClass model = controller.percentageSubTitle[index];
                   return GridTile(
                     child: Column(
@@ -132,8 +132,8 @@ class YourScoreWidget extends GetView<PerformanceController> {
                               ),
                             ),
                             Positioned(
-                              right: 26.h,
-                              top: 45.h,
+                              right: 32.h,
+                              top: 42.h,
                               child: CustomText(
                                 // "50",
                                 '${item?.performance?.marks?[1].max ?? 0}',
@@ -476,8 +476,10 @@ class LastAvailabilityWidget extends StatelessWidget {
               Row(
                 // mainAxisAlignment: MainAxisAlignment.start,
                 // crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Expanded(
+                    flex: 2,
                     child: Text(
                       textAlign: TextAlign.center,
                       "date".tr,
@@ -493,6 +495,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "availableChat".tr,
+                      maxLines: 2,
                       style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w500,
                           fontColor: appColors.darkBlue),
@@ -505,6 +508,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "availableCall".tr,
+                      maxLines: 2,
                       style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w500,
                           fontColor: appColors.darkBlue),
@@ -517,6 +521,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "busyChat".tr,
+                      maxLines: 2,
                       style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w500,
                           fontColor: appColors.darkBlue),
@@ -529,6 +534,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "busyCall".tr,
+                      maxLines: 2,
                       style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w500,
                           fontColor: appColors.darkBlue),
@@ -541,6 +547,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                     child: Text(
                       textAlign: TextAlign.center,
                       "availableLive".tr,
+                      maxLines: 2,
                       style: AppTextStyle.textStyle9(
                           fontWeight: FontWeight.w500,
                           fontColor: appColors.darkBlue),
@@ -556,12 +563,14 @@ class LastAvailabilityWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: Text(
+                    flex: 2,
+                    child: CustomText(
                       textAlign: TextAlign.center,
-                      "20-06-23",
-                      style: AppTextStyle.textStyle9(
-                          fontWeight: FontWeight.w500,
-                          fontColor: appColors.darkBlue),
+                      maxLines: 2,
+                      last30DaysAvailiblity?.data ?? "Date not available",
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.darkBlue,
+                      fontSize: 9.sp,
                     ),
                   ),
                   Expanded(
@@ -807,16 +816,16 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
 }
 
 class OverAllScoreData extends GetView<PerformanceController> {
-  final PerformanceFilterResponse? performanceFilterResponse;
+  final Overall? performanceResponse;
 
-  const OverAllScoreData({super.key, this.performanceFilterResponse});
+  const OverAllScoreData({super.key, this.performanceResponse});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         Get.toNamed(RouteName.rankSystemUI, arguments: [
-          controller.performanceFilterResponse?.data?.rankSystem
+          controller.performanceData?.data?.overall?.rankSystem
         ]);
       },
       child: Container(
@@ -855,7 +864,7 @@ class OverAllScoreData extends GetView<PerformanceController> {
                       ),
                       Text(
                         // "540/600 (90%)",
-                        "${performanceFilterResponse?.data?.score ?? '-'}/${performanceFilterResponse?.data?.totalScore ?? '-'} (${performanceFilterResponse?.data?.scorePrecentage ?? 0}%)",
+                        "${performanceResponse?.totalMarks ?? '-'}/${performanceResponse?.outOff ?? '-'} (${performanceResponse?.percent ?? 0}%)",
                         style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w400,
                             fontColor: appColors.darkBlue),
@@ -878,7 +887,7 @@ class OverAllScoreData extends GetView<PerformanceController> {
                       ),
                       Row(
                         children: [
-                          setImage(performanceFilterResponse?.data?.rank ??
+                          setImage(performanceResponse?.rank ??
                                   "") ??
                               SizedBox(
                                 width: 10.w,
@@ -889,7 +898,7 @@ class OverAllScoreData extends GetView<PerformanceController> {
                           //   width: 10.w,
                           // ),
                           Text(
-                            performanceFilterResponse?.data?.rank ?? '-',
+                            performanceResponse?.rank! ?? '-',
                             style: AppTextStyle.textStyle12(
                                 fontWeight: FontWeight.w400,
                                 fontColor: appColors.darkBlue),

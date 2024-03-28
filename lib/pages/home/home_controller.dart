@@ -12,6 +12,7 @@ import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/fcm_notification.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
 import 'package:divine_astrologer/model/feedback_response.dart';
+import 'package:divine_astrologer/model/performance_response.dart';
 import 'package:divine_astrologer/model/update_offer_type_response.dart';
 import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/model/wallet_deatils_response.dart';
@@ -381,30 +382,30 @@ class HomeController extends GetxController {
   ViewTrainingVideoModelClass? viewTrainingVideoModelClass;
   SendFeedBackModel? sendFeedBackModel;
 
-  PerformanceFilterResponse? performanceFilterResponse;
-  RxList<Conversion?> overAllScoreList = <Conversion?>[].obs;
-  RxList<Conversion?> performanceScoreList = <Conversion?>[].obs;
+  PerformanceResponse? performanceResponse;
+  RxList<dynamic> overAllScoreList = <dynamic>[].obs;
+  RxList<dynamic> performanceScoreList = <dynamic>[].obs;
 
   getFilteredPerformance() async {
     try {
-      Map<String, dynamic> params = {"filter": 'today'};
+      Map<String, dynamic> params = {"filter": 'yesterday'};
       var response =
-          await PerformanceRepository().getFilteredPerformance(params);
+          await PerformanceRepository().getPerformance(params);
       log("Res-->${jsonEncode(response.data)}");
-      performanceFilterResponse = response;
+      performanceResponse = response;
       overAllScoreList.value = [
-        response.data?.response?.conversion,
-        response.data?.response?.repurchaseRate,
-        response.data?.response?.onlineHours,
-        response.data?.response?.liveOnline,
-        response.data?.response?.averageServiceTime,
-        response.data?.response?.customerSatisfactionRatings,
+        response.data?.conversionRate,
+        response.data?.repurchaseRate,
+        response.data?.onlineHours,
+        response.data?.liveHours,
+        response.data?.ecom,
+        response.data?.busyHours,
       ];
 
       for (int i = 0; i < overAllScoreList.length; i++) {
         int averageScore =
             int.parse(overAllScoreList[i]?.performance?.marks?[1].max ?? '0');
-        int yourMarks = overAllScoreList[i]?.performance?.marksObtains ?? 0;
+        int yourMarks = int.parse(overAllScoreList[i]?.performance?.marksObtains ?? '0');
         if (averageScore > yourMarks) {
           performanceScoreList.add(overAllScoreList[i]);
         }
@@ -1023,7 +1024,7 @@ class HomeController extends GetxController {
   String getLabel() {
     if (performanceScoreList.isNotEmpty &&
         performanceScoreList.length > scoreIndex) {
-      final bool b1 = (performanceScoreList ?? <Conversion?>[]).isNotEmpty;
+      final bool b1 = (performanceScoreList ?? <dynamic>[]).isNotEmpty;
       final bool b2 = performanceScoreList[scoreIndex] != null;
       final bool b3 = performanceScoreList[scoreIndex]?.label != null;
       return (b1 && b2 && b3)

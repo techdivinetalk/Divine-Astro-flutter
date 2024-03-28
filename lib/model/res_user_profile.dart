@@ -71,11 +71,11 @@ class GetAstrolopgerDetails {
   int? anonymousCallMinimumTime;
   int? chatAmount;
   int? chatMinimumTime;
-  int? videoCallPayout;
-  int? audioCallPayout;
-  int? anonymousCallPayout;
-  int? chatPayout;
-  int? giftPayout;
+  dynamic videoCallPayout;
+  dynamic audioCallPayout;
+  dynamic anonymousCallPayout;
+  dynamic chatPayout;
+  dynamic giftPayout;
   String? accountNumber;
   String? ifscCode;
   String? accountHolderName;

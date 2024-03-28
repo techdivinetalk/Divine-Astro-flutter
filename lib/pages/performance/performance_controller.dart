@@ -46,23 +46,23 @@ class PerformanceController extends GetxController {
     PercentageModelClass("45+", '100'),
   ].obs;
 
-  var durationValue = ['today', 'last_week', 'last_month'].obs;
+  var durationValue = ['yesterday', 'last_week', 'last_month'].obs;
 
-  var durationOptions = ['Today', 'Last Week', 'Last Month'].obs;
-  RxString selectedValue = "today".obs;
-  RxString selectedOption = "Today".obs;
+  var durationOptions = ['Yesterday', 'Last Week', 'Last Month'].obs;
+  RxString selectedValue = "yesterday".obs;
+  RxString selectedOption = "Yesterday".obs;
 
   updateDurationValue(String val) {
     if (selectedOption.value != val) {
       selectedOption.value = val;
       int index = durationOptions.indexOf(val);
       selectedValue.value = durationValue[index];
-      getFilteredPerformance();
+      getPerformance();
     }
   }
 
   PerformanceResponse? performanceData;
-  PerformanceFilterResponse? performanceFilterResponse;
+ // PerformanceFilterResponse? performanceFilterResponse;
 
   @override
   void onInit() {
@@ -72,18 +72,27 @@ class PerformanceController extends GetxController {
 
   init() async {
     await getPerformance();
-    await getFilteredPerformance();
+   // await getFilteredPerformance();
   }
 
-  RxList<Conversion?> overAllScoreList = <Conversion?>[].obs;
+  RxList<dynamic> overAllScoreList = <dynamic?>[].obs;
 
   getPerformance() async {
     loading.value = Loading.loading;
     update();
     try {
-      var response = await PerformanceRepository().getPerformance();
+      Map<String, dynamic> params = {"filter": selectedValue.value};
+      var response = await PerformanceRepository().getPerformance(params);
       log("Res-->${jsonEncode(response.data)}");
       performanceData = response;
+      overAllScoreList.value = [
+        response.data?.conversionRate,
+        response.data?.repurchaseRate,
+        response.data?.onlineHours,
+        response.data?.liveHours,
+        response.data?.ecom,
+        response.data?.busyHours,
+      ];
 
       update();
       log("performanceData==>${jsonEncode(performanceData!.data)}");
@@ -98,7 +107,7 @@ class PerformanceController extends GetxController {
     loading.value = Loading.loaded;
   }
 
-  getFilteredPerformance() async {
+ /* getFilteredPerformance() async {
     loading.value = Loading.loading;
     update();
     try {
@@ -127,7 +136,7 @@ class PerformanceController extends GetxController {
       }
     }
     loading.value = Loading.loaded;
-  }
+  }*/
 }
 
 class ScoreModelClass {

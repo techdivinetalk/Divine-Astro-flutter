@@ -33,9 +33,10 @@ class PerformanceRepository extends ApiProvider {
     }
   }
 
-  Future<PerformanceResponse> getPerformance() async {
+  Future<PerformanceResponse> getPerformance(Map<String, dynamic> param) async {
     try {
       final response = await post(getPerformanceData,
+          body: jsonEncode(param).toString(),
           headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
@@ -55,7 +56,7 @@ class PerformanceRepository extends ApiProvider {
     }
   }
 
-  Future<PerformanceFilterResponse> getFilteredPerformance(Map<String, dynamic> param) async {
+/*  Future<PerformanceFilterResponse> getFilteredPerformance(Map<String, dynamic> param) async {
     try {
       final response = await post(getFilteredPerformace,
           body: jsonEncode(param).toString(),
@@ -76,6 +77,6 @@ class PerformanceRepository extends ApiProvider {
       debugPrint("we got $e $s");
       rethrow;
     }
-  }
+  }*/
 
 }
