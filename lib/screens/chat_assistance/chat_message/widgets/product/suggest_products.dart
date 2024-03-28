@@ -17,7 +17,6 @@ import '../../../../../repository/shop_repository.dart';
 import '../../../../../utils/load_image.dart';
 import 'suggestProducts_controller.dart';
 
-
 class SuggestProducts extends GetView<SuggestProductController> {
   const SuggestProducts({Key? key}) : super(key: key);
 
@@ -86,19 +85,22 @@ class SuggestProducts extends GetView<SuggestProductController> {
                                   : controller.shopList)[index];
                               return InkWell(
                                 onTap: () async {
-                                  if(index == 0){
-                                     Get.toNamed(
-                                      RouteName.poojaDharamMainScreen,
-                                     arguments: {  "customerId":controller.customerId.value,}
-                                    );
-                                  }else{
-                                  Get.toNamed(
-                                      RouteName.chatAssistProductSubPage,
-                                      arguments: {
-                                        "shodId": item.id,
-                                        "productName": item.shopName,
-                                        "customerId":controller.customerId.value,
-                                      });}
+                                  if (index == 0) {
+                                    Get.toNamed(RouteName.poojaDharamMainScreen,
+                                        arguments: {
+                                          "customerId":
+                                              controller.customerId.value,
+                                        });
+                                  } else {
+                                    Get.toNamed(
+                                        RouteName.chatAssistProductSubPage,
+                                        arguments: {
+                                          "shodId": item.id,
+                                          "productName": item.shopName,
+                                          "customerId":
+                                              controller.customerId.value,
+                                        });
+                                  }
                                 },
                                 child: Container(
                                   width: 300,
@@ -116,18 +118,21 @@ class SuggestProducts extends GetView<SuggestProductController> {
                                     ),
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Center(
                                         child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(20),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                           child: LoadImage(
                                             boxFit: BoxFit.cover,
                                             imageModel: ImageModel(
                                               imagePath:
-                                              '${controller.pref.getBaseImageURL()}/${item?.shopImage}',
+                                                  '${controller.pref.getBaseImageURL()}/${item?.shopImage}',
                                               loadingIndicator: const SizedBox(
-                                                child: CircularProgressIndicator(
+                                                child:
+                                                    CircularProgressIndicator(
                                                   color: Color(0XFFFDD48E),
                                                   strokeWidth: 2,
                                                 ),
@@ -140,7 +145,10 @@ class SuggestProducts extends GetView<SuggestProductController> {
                                       CustomText(
                                         item.shopName ?? "",
                                         textAlign: TextAlign.center,
-                                        maxLines: item.shopName != null && item.shopName!.contains('\n') ? 1 : 2,
+                                        maxLines: item.shopName != null &&
+                                                item.shopName!.contains('\n')
+                                            ? 1
+                                            : 2,
                                         fontWeight: FontWeight.w600,
                                         fontColor: appColors.darkBlue,
                                         fontSize: 11.sp,

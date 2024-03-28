@@ -38,6 +38,7 @@ class PoojaDharamMainController extends GetxController {
   void initData() {
     getPooja = GetPoojaResponse();
     customerId(Get.arguments["customerId"] ?? 0);
+
     getBookedPooja = GetBookedPoojaResponse();
     isLoading = false;
     return;

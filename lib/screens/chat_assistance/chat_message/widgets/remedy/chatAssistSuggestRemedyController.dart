@@ -15,8 +15,13 @@ class ChatAssistSuggestRemedyController extends GetxController {
 
   ChatAssistSuggestRemedyController(this.remediesRepository);
 
+  String customerId = "";
+
   @override
   void onInit() {
+    if (Get.arguments != null) {
+      customerId = Get.arguments["customer_id"];
+    }
     getChatRemediesListApi();
     super.onInit();
   }
@@ -26,7 +31,7 @@ class ChatAssistSuggestRemedyController extends GetxController {
     update();
     try {
       ChatSuggestRemediesListResponse response =
-      await remediesRepository.getChatSuggestRemediesList();
+          await remediesRepository.getChatSuggestRemediesList();
       remedies.value = response;
     } catch (error) {
       debugPrint("error $error");
