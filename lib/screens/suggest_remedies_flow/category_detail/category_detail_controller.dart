@@ -95,7 +95,7 @@ class CategoryDetailController extends GetxController {
       "product_id": productId,
       "shop_id": shopId,
       "order_id":AppFirebaseService().orderData.value["orderId"],
-      "customer_id": int.parse(AppFirebaseService().orderData.value["userId"]),
+      "customer_id":AppFirebaseService().orderData.value["userId"] == null ? null: int.parse(AppFirebaseService().orderData.value["userId"]),
     };
     print('save remedy called $params}');
     try {
