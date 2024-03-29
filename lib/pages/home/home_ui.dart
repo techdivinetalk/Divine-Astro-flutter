@@ -2535,19 +2535,25 @@ class PerformanceDialog extends StatelessWidget {
                                         Text(
                                           "Your Score",
                                           style: AppTextStyle.textStyle10(
-                                              fontColor: appColors.darkBlue),
+                                            fontColor: appColors.darkBlue,
+                                          ),
                                         ),
                                         SizedBox(height: 5.h),
-                                        Text(
-                                          '${controller.performanceScoreList[controller.scoreIndex]?.performance?.marksObtains ?? 0}',
-                                          // item?.performance?.isNotEmpty ?? false
-                                          //     ? '${item?.performance?[0].value ?? 0}'
-                                          //     : "0",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              color: appColors.darkBlue,
-                                              fontSize: 20.sp),
-                                        ),
+                                        controller.performanceScoreList
+                                                .asMap()
+                                                .containsKey(
+                                                    controller.scoreIndex)
+                                            ? Text(
+                                                '${controller.performanceScoreList[controller.scoreIndex]?.performance?.marksObtains ?? 0}',
+                                                // item?.performance?.isNotEmpty ?? false
+                                                //     ? '${item?.performance?[0].value ?? 0}'
+                                                //     : "0",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    color: appColors.darkBlue,
+                                                    fontSize: 20.sp),
+                                              )
+                                            : const SizedBox(),
                                         SizedBox(height: 5.h),
                                         Text(
                                           'Out of ${controller.performanceScoreList[controller.scoreIndex]?.performance?.totalMarks ?? 0}',

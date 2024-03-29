@@ -35,7 +35,7 @@ class SharedPreferenceService extends GetxService {
     return this;
   }
 
-  UserData? getUserDetail() {
+  UserData getUserDetail() {
     UserData? userDetail;
     String userData = prefs?.getString(userKey) ?? "";
     // log("userData:: $userData");
@@ -45,7 +45,7 @@ class SharedPreferenceService extends GetxService {
       var jsonDecoded = jsonDecode(userData);
       userDetail = UserData.fromJson(jsonDecoded);
     }
-    return userDetail;
+    return userDetail!;
   }
 
   Future<bool> setUserDetail(UserData userData) async {

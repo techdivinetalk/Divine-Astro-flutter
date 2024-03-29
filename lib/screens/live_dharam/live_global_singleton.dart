@@ -22,6 +22,7 @@ class LiveGlobalSingleton {
   set buildContext(BuildContext value) => _buildContext(value);
 
   Future<void> leaveLiveIfIsInLiveScreen() async {
+
     print(
         "LiveGlobalSingleton:: leaveLiveIfIsInLiveScreen():: isInLiveScreen:: $isInLiveScreen");
     bool canLeave = false;

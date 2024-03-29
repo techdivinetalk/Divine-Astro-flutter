@@ -32,7 +32,7 @@ class AppFirebaseService {
   AppFirebaseService._privateConstructor();
 
   static final AppFirebaseService _instance =
-  AppFirebaseService._privateConstructor();
+      AppFirebaseService._privateConstructor();
 
   factory AppFirebaseService() {
     return _instance;
@@ -61,10 +61,7 @@ class AppFirebaseService {
       var chatMessages = <ChatMessage>[].obs;
       var databaseMessage = ChatMessagesOffline().obs;
       await hiveServices.initialize();
-      database
-          .child(path)
-          .onValue
-          .listen((event) async {
+      database.child(path).onValue.listen((event) async {
         debugPrint("real time $path ---> ${event.snapshot.value}");
         if (preferenceService.getToken() == null ||
             preferenceService.getToken() == "") {
@@ -74,32 +71,32 @@ class AppFirebaseService {
         if (event.snapshot.value is Map<Object?, Object?>) {
           Map<String, dynamic>? realTimeData = Map<String, dynamic>.from(
               event.snapshot.value! as Map<Object?, Object?>);
-
           if (realTimeData["uniqueId"] != null) {
+            print("uniqueId ---- uniqueId ${realTimeData["uniqueId"]}");
+
             String uniqueId = await getDeviceId() ?? "";
             debugPrint(
-              'check uniqueId ${realTimeData['uniqueId']}\ngetDeviceId ${uniqueId
-                  .toString()}',
+              'check uniqueId ${realTimeData['uniqueId']}\ngetDeviceId ${uniqueId.toString()}',
             );
             if (realTimeData["uniqueId"] != uniqueId) {
+              print("logout --- start");
               await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
+              print("logout --- end");
               Get.put(SettingsController()).logOut();
             }
           }
 
           if (realTimeData["profilePhoto"] != null) {
             UserData? userData =
-            Get.find<SharedPreferenceService>().getUserDetail();
+                Get.find<SharedPreferenceService>().getUserDetail();
             userData!.image = realTimeData["profilePhoto"];
             String? baseAmazonUrl =
-            Get.find<SharedPreferenceService>().getBaseImageURL();
+                Get.find<SharedPreferenceService>().getBaseImageURL();
             Get.find<SharedPreferenceService>().setUserDetail(userData);
-            Get
-                .put(DashboardController(Get.put(PreDefineRepository())))
+            Get.put(DashboardController(Get.put(PreDefineRepository())))
                 .userProfileImage
                 .value = "$baseAmazonUrl/${userData.image!}";
-            Get
-                .put(ProfilePageController(Get.put(UserRepository())))
+            Get.put(ProfilePageController(Get.put(UserRepository())))
                 .userProfileImage
                 .value = "$baseAmazonUrl/${userData.image!}";
             Get.put(DashboardController(Get.put(PreDefineRepository())))
@@ -126,14 +123,14 @@ class AppFirebaseService {
           }
           if (realTimeData["notification"] != null) {
             final HiveServices hiveServices =
-            HiveServices(boxName: userChatData);
+                HiveServices(boxName: userChatData);
             await hiveServices.initialize();
             realTimeData["notification"].forEach((key, notificationData) async {
               if (notificationData["type"] == 2) {
                 final Map<String, dynamic> chatListMap =
-                jsonDecode(notificationData["chatList"]);
+                    jsonDecode(notificationData["chatList"]);
                 final ChatMessage chatMessage =
-                ChatMessage.fromOfflineJson(chatListMap);
+                    ChatMessage.fromOfflineJson(chatListMap);
                 chatMessages.add(chatMessage);
                 databaseMessage.value.chatMessages = chatMessages;
                 await hiveServices.addData(
@@ -257,20 +254,17 @@ class AppFirebaseService {
     // });
 
     watcher.nameStream.listen(
-          (value) {
+      (value) {
         if (value != "") {
-          database
-              .child("order/$value")
-              .onValue
-              .listen(
-                (DatabaseEvent event) async {
+          database.child("order/$value").onValue.listen(
+            (DatabaseEvent event) async {
               final DataSnapshot dataSnapshot = event.snapshot;
               if (dataSnapshot.exists) {
                 print("data from snapshot ${dataSnapshot.value}");
                 if (dataSnapshot.value is Map<dynamic, dynamic>) {
                   Map<dynamic, dynamic> map = <dynamic, dynamic>{};
                   map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-                  as Map<dynamic, dynamic>;
+                      as Map<dynamic, dynamic>;
                   orderData(Map<String, dynamic>.from(map));
                   if (orderData.value["status"] != null) {
                     switch ((orderData.value["status"])) {
