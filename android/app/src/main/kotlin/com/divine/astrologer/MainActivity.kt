@@ -1,11 +1,11 @@
-// package com.divine.astrologer
+// package app.divine.astrologer
 
 // import io.flutter.embedding.android.FlutterActivity
 
 // class MainActivity: FlutterActivity() {
 // }
 
-package com.divine.astrologer
+package app.divine.astrologer
 
 import io.flutter.embedding.android.FlutterActivityLaunchConfigs
 import io.flutter.embedding.android.FlutterFragmentActivity

@@ -189,7 +189,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                               snapshot.hasData && snapshot.data == false
                                   ? () async {
                                       controller.streamController.add(true);
-                                      await furtherProcedure();
+                                      await furtherProcedure(controller: controller);
                                       controller.streamController.add(false);
                                     }
                                   : () {
@@ -213,7 +213,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
     );
   }
 
-  Future<void> furtherProcedure() async {
+  Future<void> furtherProcedure({LiveTipsController? controller}) async {
     // showCupertinoModalPopup(
     //   context: context,
     //   barrierColor: appColors.darkBlue.withOpacity(0.5),
@@ -288,13 +288,13 @@ class LiveTipsUI extends GetView<LiveTipsController> {
 
     final bool hasAllPermission = await permissionCheck();
     if (hasAllPermission) {
-      final bool hasAllData = await dataCheck();
+      final bool hasAllData = await dataCheck(controller: controller);
       if (hasAllData) {
-        final (bool, String) can1 = await canEnter();
+        final (bool, String) can1 = await canEnter(controller: controller);
         if (can1.$1 == true && can1.$2 == "") {
-          connectSocket();
-          await controller.furtherProcedure();
-          final (bool, String) can2 = await canExit();
+          connectSocket(controller: controller);
+          await controller!.furtherProcedure();
+          final (bool, String) can2 = await canExit(controller: controller);
           if (can2.$1 == true && can2.$2 == "") {
           } else {
             divineSnackBar(data: can2.$2);
@@ -311,7 +311,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
 
     return Future<void>.value();
   }
-
+  //
   Future<bool> permissionCheck() async {
     bool hasAllPerm = false;
     await AppPermissionService.instance.onPressedAstrologerGoLive(
@@ -322,10 +322,10 @@ class LiveTipsUI extends GetView<LiveTipsController> {
     return Future<bool>.value(hasAllPerm);
   }
 
-  Future<bool> dataCheck() async {
+  Future<bool> dataCheck({LiveTipsController? controller}) async {
     bool hasAllData = false;
 
-    var pref = controller.pref;
+    var pref = controller!.pref;
 
     final String userId = (pref.getUserDetail()?.id ?? "").toString();
     final String userName = pref.getUserDetail()?.name ?? "";
@@ -342,10 +342,10 @@ class LiveTipsUI extends GetView<LiveTipsController> {
     return Future<bool>.value(hasAllData);
   }
 
-  Future<(bool, String)> canEnter() async {
+  Future<(bool, String)> canEnter({LiveTipsController? controller}) async {
     bool returnBool = false;
     String returnString = "";
-    await controller.astroOnlineAPI(
+    await controller!.astroOnlineAPI(
       entering: true,
       successCallBack: (message) {
         returnBool = true;
@@ -359,16 +359,16 @@ class LiveTipsUI extends GetView<LiveTipsController> {
     return Future<(bool, String)>.value((returnBool, returnString));
   }
 
-  void connectSocket() {
-    final int userId = controller.pref.getUserDetail()?.id ?? 0;
+  void connectSocket({LiveTipsController? controller}) {
+    final int userId = controller!.pref.getUserDetail()?.id ?? 0;
     AppSocket().joinLive(userType: "astrologer", userId: userId);
     return;
   }
 
-  Future<(bool, String)> canExit() async {
+  Future<(bool, String)> canExit({LiveTipsController? controller}) async {
     bool returnBool = false;
     String returnString = "";
-    await controller.astroOnlineAPI(
+    await controller!.astroOnlineAPI(
       entering: false,
       successCallBack: (message) {
         returnBool = true;

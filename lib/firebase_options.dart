@@ -67,6 +67,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'divine2-0-uat.appspot.com',
     androidClientId: '764246952124-ebi5t6dvglnm5picb03732ufvar0ekjm.apps.googleusercontent.com',
     iosClientId: '764246952124-o2nqves6l70ualttab3kd0dthfb0v7el.apps.googleusercontent.com',
-    iosBundleId: 'com.divine.astrologer',
+    iosBundleId: 'app.divine.astrologer',
   );
 }
