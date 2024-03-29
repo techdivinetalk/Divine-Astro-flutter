@@ -532,7 +532,7 @@ class _LivePage extends State<LiveDharamScreen>
     return;
   }
 
-  Future<void> manMessage() async {
+  /*Future<void> manMessage() async {
     var num = math.Random.secure().nextInt(30);
     var url = "https://xsgames.co/randomusers/assets/avatars/male/$num.jpg";
     final String fullName = RandomNames(Zone.india).manFullName();
@@ -552,9 +552,8 @@ class _LivePage extends State<LiveDharamScreen>
     );
     await sendMessageToZego(model);
     return Future<void>.value();
-  }
-
-  Future<void> womanMessage() async {
+  }*/
+  /*Future<void> womanMessage() async {
     var num = math.Random.secure().nextInt(30);
     var url = "https://xsgames.co/randomusers/assets/avatars/female/$num.jpg";
     final String fullName = RandomNames(Zone.india).womanFullName();
@@ -574,10 +573,11 @@ class _LivePage extends State<LiveDharamScreen>
     );
     await sendMessageToZego(model);
     return Future<void>.value();
-  }
+  }*/
 
   Future<void> onUserJoin(ZegoUIKitUser zegoUIKitUser) async {
     final bool cond1 = _controller.isHost;
+
     if (cond1) {
       // not needed
     } else {
@@ -994,7 +994,8 @@ class _LivePage extends State<LiveDharamScreen>
                   final String title = noticeBoardResData.title ?? "";
                   final String description =
                       noticeBoardResData.description ?? "";
-                  final String createdAt = noticeBoardResData.createdAt ?? "";
+                  final String createdAt =
+                      noticeBoardResData.createdAt ?? DateTime.now().toString();
                   final DateTime tzDateTime = DateTime.parse(createdAt).toUtc();
                   final String formattedDate = formatDate(tzDateTime);
                   return DecoratedBox(
@@ -1598,6 +1599,11 @@ class _LivePage extends State<LiveDharamScreen>
             physics: const ScrollPhysics(),
             itemBuilder: (BuildContext context, int index) {
               final ZegoInRoomMessage message = messages[index];
+              print(joinedAstrologerList);
+              print(message);
+
+
+              print("messagemessagemessagemessage");
               final ZegoCustomMessage msg =
                   receiveMessageToZego(message.message);
               final bool isBlocked =
@@ -2662,7 +2668,7 @@ class _LivePage extends State<LiveDharamScreen>
               //   for(int i = 0;i<animationsList.length;i++){
               print(item["animation"]);
               print("objectobjectobjectobject");
-               ZegoGiftPlayer().play(
+              ZegoGiftPlayer().play(
                 context,
                 GiftPlayerData(GiftPlayerSource.url, item["animation"]),
               );
@@ -4234,6 +4240,8 @@ class _LivePage extends State<LiveDharamScreen>
 
   Future<void> sendMessageToZego(ZegoCustomMessage model) async {
     final String encodedstring = json.encode(model.toJson());
+    print(encodedstring);
+    print("encodedstringencodedstring");
     await zegoController.message.send(encodedstring);
     return Future<void>.value();
   }
@@ -4567,7 +4575,7 @@ class _LivePage extends State<LiveDharamScreen>
       onEnded: (ZegoLiveStreamingEndEvent event, VoidCallback defaultAction) {},
       user: ZegoLiveStreamingUserEvents(
         onEnter: (ZegoUIKitUser zegoUIKitUser) async {
-          await onUserJoin(zegoUIKitUser);
+          // await onUserJoin(zegoUIKitUser);
         },
         onLeave: (ZegoUIKitUser zegoUIKitUser) async {
           await onUserLeave(zegoUIKitUser);
@@ -4575,6 +4583,8 @@ class _LivePage extends State<LiveDharamScreen>
       ),
     );
   }
+
+  List joinedAstrologerList = [];
 
   Future<void> onCoHostRequest({
     required ZegoUIKitUser user,
