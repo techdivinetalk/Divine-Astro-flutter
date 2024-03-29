@@ -1054,7 +1054,7 @@ class HomeUI extends GetView<HomeController> {
                             children: [
                               Text(
                                 '${dateToString(controller.homeData?.noticeBoard?.createdAt ?? DateTime.now(), format: "h:mm a")}  '
-                                '${formatDateTime(controller.homeData?.noticeBoard?.createdAt! ?? DateTime.now())} ',
+                                '${formatDateTime(controller.homeData?.noticeBoard?.createdAt ?? DateTime.now())} ',
                                 style: AppTextStyle.textStyle10(
                                     fontWeight: FontWeight.w400,
                                     fontColor: appColors.darkBlue),
