@@ -184,7 +184,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
   noticeAPi() async {
     try {
       final response = await noticeRepository.get(
-          ApiProvider.getAstroAllNoticeType3,
+          ApiProvider.getAstroAllNoticeType4,
           headers: await noticeRepository.getJsonHeaderURL());
 
       if (response.statusCode == 200) {

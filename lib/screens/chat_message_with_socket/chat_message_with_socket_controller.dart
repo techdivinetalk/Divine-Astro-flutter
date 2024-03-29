@@ -1405,7 +1405,7 @@ class ChatMessageWithSocketController extends GetxController
   noticeAPi() async {
     try {
       final response = await noticeRepository.get(
-          ApiProvider.getAstroAllNoticeType3,
+          ApiProvider.getAstroAllNoticeType4,
           headers: await noticeRepository.getJsonHeaderURL());
 
       if (response.statusCode == 200) {

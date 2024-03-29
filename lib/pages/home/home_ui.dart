@@ -151,7 +151,7 @@ class HomeUI extends GetView<HomeController> {
                                             children: [
                                               Text(
                                                 "₹${abbreviateNumber(controller.homeData?.todaysEarning?.toStringAsFixed(2))}",
-                                               // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
+                                                // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
                                                 style: AppTextStyle.textStyle16(
                                                     fontColor:
                                                         appColors.appRedColour,
@@ -1056,14 +1056,12 @@ class HomeUI extends GetView<HomeController> {
                             children: [
                               Text(
                                 '${dateToString(controller.homeData?.noticeBoard?.createdAt ?? DateTime.now(), format: "h:mm a")}  '
-                                '${formatDateTime(controller.homeData?.noticeBoard?.createdAt! ?? DateTime.now())} ',
+                                '${formatDateTime(controller.homeData?.noticeBoard?.createdAt ?? DateTime.now())} ',
                                 style: AppTextStyle.textStyle10(
                                     fontWeight: FontWeight.w400,
                                     fontColor: appColors.darkBlue),
                               ),
-                              SizedBox(
-                                width: 10.w,
-                              ),
+                              SizedBox(width: 10.w),
                               GestureDetector(
                                   onTap: () {
                                     Get.bottomSheet(CommonInfoSheet(
@@ -1476,7 +1474,6 @@ class HomeUI extends GetView<HomeController> {
     }
   }
 
-
   Widget orderOfferWidget({HomeController? homeController}) {
     return homeController!.homeData!.offers!.orderOffer!.isNotEmpty
         ? Container(
@@ -1521,7 +1518,8 @@ class HomeUI extends GetView<HomeController> {
                       homeController.homeData?.offers?.orderOffer?.length ?? 0,
                   separatorBuilder: (context, _) => SizedBox(height: 10.h),
                   itemBuilder: (context, index) {
-                    OrderOffer  orderOffer = homeController.homeData!.offers!.orderOffer![index];
+                    OrderOffer orderOffer =
+                        homeController.homeData!.offers!.orderOffer![index];
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1530,18 +1528,14 @@ class HomeUI extends GetView<HomeController> {
                           crossAxisAlignment: WrapCrossAlignment.center,
                           children: [
                             Text(
-                              "${orderOffer.offerName}"
-                                  .toUpperCase(),
+                              "${orderOffer.offerName}".toUpperCase(),
                               style: AppTextStyle.textStyle12(
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                            if ((orderOffer.callRate ??
-                                    0) >
-                                0)
+                            if ((orderOffer.callRate ?? 0) > 0)
                               CustomText(
-                                " (₹${orderOffer.callRate}/min)"
-                                    .toUpperCase(),
+                                " (₹${orderOffer.callRate}/min)".toUpperCase(),
                                 fontSize: 10.sp,
                               ),
                           ],
@@ -1555,7 +1549,6 @@ class HomeUI extends GetView<HomeController> {
                               offerId: orderOffer.id ?? 0,
                               value: orderOffer.isOn!,
                             );
-
                           },
                           switchValue: orderOffer.isOn,
                         )
