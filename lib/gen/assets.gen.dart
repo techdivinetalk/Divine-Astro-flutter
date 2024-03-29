@@ -248,6 +248,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_bankDetailNew.svg
   SvgGenImage get icBankDetailNew =>
       const SvgGenImage('assets/images/ic_bankDetailNew.svg');
+  /// File path: assets/images/ic_bankDetailNew.svg
+  SvgGenImage get updateSvg =>
+      const SvgGenImage('assets/svg/update.svg');
 
   /// File path: assets/images/ic_birthTIme.svg
   SvgGenImage get icBirthTIme =>

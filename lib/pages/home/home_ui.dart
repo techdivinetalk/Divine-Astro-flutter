@@ -19,7 +19,9 @@ import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/screens/order_feedback/widget/feedback_card_widget.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
+import 'package:divine_astrologer/utils/force_update_sheet.dart';
 import 'package:divine_astrologer/utils/load_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -528,7 +530,7 @@ class HomeUI extends GetView<HomeController> {
                                   ? Column(
                                       children: [
                                         SizedBox(height: 10.h),
-                                        InkWell(
+                                        GestureDetector(
                                           onTap: () async {
                                             bool hasOpenOrder = false;
                                             // hasOpenOrder = await controller.hasOpenOrder();

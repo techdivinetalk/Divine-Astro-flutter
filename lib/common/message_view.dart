@@ -207,46 +207,38 @@ class MessageView extends StatelessWidget {
 
   Widget giftMsgView(
       BuildContext context, ChatMessage chatMessage, bool yourMessage, String customerName) {
-    return SizedBox(
-      width: double.maxFinite,
-      child: Expanded(
-        child: Column(
-          crossAxisAlignment:
-              yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+    return Align(
+            alignment:yourMessage ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(40)),
+          color: appColors.guideColor,
+        ),
+        constraints: BoxConstraints(
+            maxWidth: ScreenUtil().screenWidth * 0.8,
+            minWidth: ScreenUtil().screenWidth * 0.27),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(40)),
-                color: appColors.guideColor,
-              ),
-              constraints: BoxConstraints(
-                  maxWidth: ScreenUtil().screenWidth * 0.8,
-                  minWidth: ScreenUtil().screenWidth * 0.27),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SizedBox(
-                    height: 32,
-                    width: 32,
-                    child: CustomImageWidget(
-                      imageUrl: chatMessage.awsUrl ?? '',
-                      rounded: true,
-                      // added by divine-dharam
-                      typeEnum: TypeEnum.gift,
-                      //
-                    ),
-                  ),
-                  SizedBox(width: 6.w),
-                  Flexible(
-                      child: CustomText(
-                    '$customerName has requested to send ${chatMessage.message}.',
-                    maxLines: 2,
-                  ))
-                ],
+            SizedBox(
+              height: 32,
+              width: 32,
+              child: CustomImageWidget(
+                imageUrl: chatMessage.awsUrl ?? '',
+                rounded: true,
+                // added by divine-dharam
+                typeEnum: TypeEnum.gift,
+                //
               ),
             ),
+            SizedBox(width: 6.w),
+            Flexible(
+                child: CustomText(
+                  '$customerName has requested to send ${chatMessage.message}.',
+                  maxLines: 2,
+                ))
           ],
         ),
       ),
