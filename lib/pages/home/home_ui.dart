@@ -313,9 +313,9 @@ class HomeUI extends GetView<HomeController> {
                               Expanded(
                                   child: RetentionWidget(
                                 title:
-                                    "Bonus Wallet - ₹${abbreviateNumber(controller.homeData?.bonusWallet)}",
+                                    "Bonus Wallet \n ₹${abbreviateNumber(controller.homeData?.bonusWallet)}",
                                 subTitle:
-                                    "Retention Rate - ${controller.homeData?.retention ?? 0}%",
+                                    "Retention Rate \n ${controller.homeData?.retention ?? 0}%",
                                 borderColor: (controller.homeData!.retention! <
                                         controller.homeData!.minimumRetention!)
                                     ? appColors.red
@@ -337,9 +337,9 @@ class HomeUI extends GetView<HomeController> {
                               Expanded(
                                 child: RetentionWidget(
                                   title:
-                                      "Paid Wallet - ₹${abbreviateNumber(controller.homeData?.paidWallet)}",
+                                      "Paid Wallet \n ₹${abbreviateNumber(controller.homeData?.paidWallet)}",
                                   subTitle:
-                                      "Repurchase Rate - ${controller.homeData?.repurchaseRate ?? 0}%",
+                                      "Repurchase Rate \n ${controller.homeData?.repurchaseRate ?? 0}%",
                                   borderColor:
                                       (controller.homeData!.repurchaseRate! <
                                               controller.homeData!

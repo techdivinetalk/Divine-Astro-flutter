@@ -31,7 +31,7 @@ class RetentionWidget extends StatelessWidget {
     final subTitleLines = (subTitle ?? "").split('\n').length;
     final totalLines = titleLines + subTitleLines;
 
-    final height = totalLines > 2 ? 70.h : 50.h;
+    final height = totalLines > 2 ? 60.h : 60.h;
 
     return GestureDetector(
       onTap: onTap,
