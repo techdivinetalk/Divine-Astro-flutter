@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
@@ -358,15 +359,15 @@ class MessageView extends StatelessWidget {
                       ),
                       if (yourMessage) SizedBox(width: 8.w),
                       if (yourMessage)
-                        Obx(() => msgType.value == 0
+                        Obx(() => (msgType.value == 0 || msgType.value == 0) && chatMessage.seenStatus == 0
                             ? Assets.images.icSingleTick.svg()
-                            : msgType.value == 1
-                                ? Assets.images.icDoubleTick.svg(
-                                    colorFilter: ColorFilter.mode(
-                                        appColors.greyColor, BlendMode.srcIn))
-                                : msgType.value == 3
-                                    ? Assets.images.icDoubleTick.svg()
-                                    : Assets.images.icSingleTick.svg())
+                            : (msgType.value == 1 || msgType.value == 0) && chatMessage.seenStatus == 1
+                            ? Assets.images.icDoubleTick.svg(
+                            colorFilter: ColorFilter.mode(
+                                appColors.greyColor, BlendMode.srcIn))
+                            : (msgType.value == 3 || msgType.value == 0 ) && chatMessage.seenStatus == 3
+                            ? Assets.images.icDoubleTick.svg()
+                            : Assets.images.icSingleTick.svg())
                     ],
                   ),
                 ),
@@ -725,7 +726,75 @@ class MessageView extends StatelessWidget {
               minWidth: ScreenUtil().screenWidth * 0.27,
             ),
             child: yourMessage
-                ? Stack(
+                ?  chatDetail.downloadedPath == null ? GestureDetector(
+              onTap: () {
+                Get.toNamed(RouteName.imagePreviewUi,
+                    arguments: chatDetail.message);
+              },
+              child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 4.h),
+                  padding: const EdgeInsets.all(8.0),
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 3.0,
+                          offset: const Offset(0.0, 3.0)),
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(8.r)),
+                  ),
+                  constraints: BoxConstraints(
+                      maxWidth: ScreenUtil().screenWidth * 0.7,
+                      minWidth: ScreenUtil().screenWidth * 0.27),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0.sp),
+                        child: CachedNetworkImage(
+                          imageUrl: chatDetail.message ?? '',
+                          fit: BoxFit.cover,
+                          height: 200.h,
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6)
+                                  .copyWith(left: 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    bottomRight: Radius.circular(10.r)),
+                                gradient: LinearGradient(
+                                  colors: [
+                                    appColors.darkBlue.withOpacity(0.0),
+                                    appColors.darkBlue.withOpacity(0.0),
+                                    appColors.darkBlue.withOpacity(0.5),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomCenter,
+                                ),
+                              ),
+                              child: Text(
+                                messageDateTime(
+                                    int.parse(chatDetail.time.toString())),
+                                style: AppTextStyle.textStyle10(
+                                    fontColor: appColors.white),
+                              ),
+                            ),
+                            SizedBox(width: 8.w),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
+            ) : Stack(
                     children: [
                       GestureDetector(
                         onTap: () {
@@ -904,6 +973,7 @@ class MessageView extends StatelessWidget {
       ),
     );
   }
+
 
   Widget kundliView({required ChatMessage chatDetail, required int index}) {
     String getKundliDateTime(ChatMessage chatDetail) {
