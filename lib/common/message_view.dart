@@ -407,7 +407,7 @@ class MessageView extends StatelessWidget {
                     absorbing: controller.isAudioPlaying.value,
                     child: VoiceMessageView(
                         controller: VoiceController(
-                            audioSrc: chatDetail.awsUrl!,
+                            audioSrc: chatDetail.awsUrl ?? chatDetail.message!,
                             maxDuration: const Duration(minutes: 30),
                             isFile: false,
                             onComplete: () {
@@ -693,6 +693,17 @@ class MessageView extends StatelessWidget {
   }
 
   Widget kundliView({required ChatMessage chatDetail, required int index}) {
+
+    String getKundliDateTime(ChatMessage chatDetail) {
+      if (chatDetail.kundliDateTime != null) {
+        return chatDetail.kundliDateTime!;
+      } else if (chatDetail.kundli != null && chatDetail.kundli!.kundliDateTime != null) {
+        return DateFormat('dd MMM yy, hh:mm a').format(chatDetail.kundli!.kundliDateTime!);
+      } else {
+        return "";
+      }
+    }
+
     return InkWell(
       onTap: () {
         Get.toNamed(RouteName.kundliDetail, arguments: {
@@ -719,7 +730,7 @@ class MessageView extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Text(
-                    chatDetail.kundliName?[0] ?? "",
+                    chatDetail.kundliName?[0] ?? chatDetail.kundli?.kundliName[0] ?? '',
                     style: AppTextStyle.textStyle24(
                         fontColor: appColors.white,
                         fontWeight: FontWeight.w600),
@@ -732,7 +743,7 @@ class MessageView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      chatDetail.kundliName ?? "",
+                      chatDetail.kundliName ?? chatDetail.kundli?.kundliName ?? "",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16.sp,
@@ -741,7 +752,7 @@ class MessageView extends StatelessWidget {
                     ),
                     SizedBox(height: 5.h),
                     Text(
-                      chatDetail.kundliDateTime ?? "",
+                      getKundliDateTime(chatDetail),
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 10.sp,
@@ -750,7 +761,7 @@ class MessageView extends StatelessWidget {
                     ),
                     SizedBox(height: 5.h),
                     Text(
-                      chatDetail.kundliPlace ?? "",
+                      chatDetail.kundliPlace ?? chatDetail.kundli?.kundliPlace ?? "",
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 10.sp,

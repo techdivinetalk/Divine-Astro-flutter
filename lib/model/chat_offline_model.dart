@@ -77,6 +77,7 @@ class ChatMessage {
   int? type;
   String? userType;
   String? productPrice;
+  Kundli? kundli;
 
   ChatMessage({
     this.id,
@@ -130,6 +131,7 @@ class ChatMessage {
     this.type,
     this.userType,
     this.productPrice,
+    this.kundli,
   });
 
   ChatMessage.fromOfflineJson(Map<String, dynamic> json) {
@@ -192,6 +194,7 @@ class ChatMessage {
     productPrice = json['productPrice'];
     title = json['title'];
     userType = json['userType'];
+    kundli = json['kundli'] != null ? Kundli.fromJson(json['kundli']) : null;
   }
 
   Map<String, dynamic> toOfflineJson() {
@@ -253,7 +256,44 @@ class ChatMessage {
     data['gender'] = gender;
     data['title'] = title;
     data['userType'] = userType;
+    data['kundli'] = kundli;
     return data;
+  }
+}
+
+class Kundli {
+  int id;
+  int kundliId;
+  String kundliName;
+  String kundliPlace;
+  DateTime kundliDateTime;
+
+  Kundli({
+    required this.id,
+    required this.kundliId,
+    required this.kundliName,
+    required this.kundliPlace,
+    required this.kundliDateTime,
+  });
+
+  factory Kundli.fromJson(Map<String, dynamic> json) {
+    return Kundli(
+      id: json['id'],
+      kundliId: json['kundliId'],
+      kundliName: json['kundliName'],
+      kundliPlace: json['kundliPlace'],
+      kundliDateTime: DateTime.parse(json['kundliDateTime']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'kundliId': kundliId,
+      'kundliName': kundliName,
+      'kundliPlace': kundliPlace,
+      'kundliDateTime': kundliDateTime.toIso8601String(),
+    };
   }
 }
 
