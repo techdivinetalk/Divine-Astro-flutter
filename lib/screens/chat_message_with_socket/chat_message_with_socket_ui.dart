@@ -129,10 +129,11 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                               : controller
                                                   .chatMessages[index + 1],
                                           chatMessage: chatMessage,
-                                          yourMessage: chatMessage.senderId ==
+                                         /* yourMessage: chatMessage.senderId ==
                                               preferenceService
                                                   .getUserDetail()!
-                                                  .id,
+                                                  .id,*/
+                                          yourMessage: chatMessage.msgSendBy == "0",
                                           userName:
                                               controller.customerName.value,
                                           unreadMessage: controller

@@ -94,6 +94,7 @@ class ApiProvider {
   final String getFeedback = "getNotSeenFeedback";
   final String getFeedbackList = "getAstroFeedbackList";
   final String getAstroFeedback = "getAstroFeedbackDetail";
+  final String viewChatHistory = "getAllChatHistory";
   final String agoraCallEnd = "agoraCallEnd";
   final String getWaitingListQueue = "getWaitingListQueue";
   final String partnerOfflineChoiceOrder = "PartnerOfflineChoiceOrder";

@@ -13,6 +13,7 @@ import "package:divine_astrologer/common/custom_widgets.dart";
 import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/di/hive_services.dart";
 import "package:divine_astrologer/di/shared_preference_service.dart";
+import "package:divine_astrologer/model/chat_histroy_response.dart";
 import "package:divine_astrologer/model/chat_offline_model.dart";
 import "package:divine_astrologer/model/res_login.dart";
 import "package:divine_astrologer/repository/message_template_repository.dart";
@@ -1255,9 +1256,9 @@ class ChatMessageWithSocketController extends GetxController
       throw IndexError(position, keysList, 'Index out of range');
     }
   }
-
+  final CallChatHistoryRepository callChatFeedBackRepository = Get.put(CallChatHistoryRepository());
   getChatList() async {
-    chatMessages.clear();
+/*    chatMessages.clear();
     print("get chat list 1");
     await hiveServices.initialize();
     print("get chat list 2");
@@ -1284,6 +1285,39 @@ class ChatMessageWithSocketController extends GetxController
       // Map<String, int> params = {"customer_id": currentUserId.value};
       // var response = await chatRepository.getChatListApi(params);
       // debugPrint("$response");
+    }*/
+    chatMessages.clear();
+    update();
+    try {
+     /* if (processedPages.contains(currentPage.value)) {
+        return;
+      }*/
+
+      var userId = int.parse(AppFirebaseService().orderData.value["userId"]);
+      var astroId = int.parse(AppFirebaseService().orderData.value["astroId"]);
+
+      var response = await callChatFeedBackRepository.getAstrologerChats(
+          userId, astroId);
+
+      if (response.success ?? false) {
+        List<ChatMessage> fetchedMessages = response.chatMessages ?? [];
+
+        if (fetchedMessages.isNotEmpty) {
+          chatMessages.addAll(fetchedMessages.reversed);
+
+          chatMessages.refresh();
+        }
+      } else {
+        throw CustomException(response.message ?? 'Failed to get chat history');
+      }
+    } catch (error) {
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.red);
+      }
+    } finally {
+      update();
     }
   }
 
