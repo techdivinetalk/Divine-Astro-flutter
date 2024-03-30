@@ -446,8 +446,6 @@ class UserRepository extends ApiProvider {
   }
 
   Future<ConstantDetailsModelClass> constantDetailsData() async {
-    print(DateTime.now());
-    print("DateTime.now()");
     try {
       // debugPrint("Params $param");
       final response =
@@ -455,7 +453,6 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         log(response.body);
-        print("json.decode(response.body)");
         final constantDetailsModelClass =
             ConstantDetailsModelClass.fromJson(json.decode(response.body));
         if (constantDetailsModelClass.statusCode == successResponse &&

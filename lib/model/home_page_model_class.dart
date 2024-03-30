@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:divine_astrologer/model/feedback_response.dart';
+import 'package:divine_astrologer/model/home_model/training_video_model.dart';
 
 HomePageModelClass homePageModelClassFromJson(String str) =>
     HomePageModelClass.fromJson(json.decode(str));
@@ -45,7 +46,7 @@ class HomeData {
   OnGoingCall? onGoingCall;
   SessionType? sessionType;
   List<OfferType>? offerType;
-  List<TrainingVideo>? trainingVideo;
+  List<TrainingVideoData>? trainingVideo;
   Offers? offers;
   Wallet? wallet;
   double? payoutPending;
@@ -124,8 +125,8 @@ class HomeData {
         json["offer_type"].map((x) => OfferType.fromJson(x))),
     trainingVideo: json["training_video"] == null
         ? []
-        : List<TrainingVideo>.from(
-        json["training_video"].map((x) => TrainingVideo.fromJson(x))),
+        : List<TrainingVideoData>.from(
+        json["training_video"].map((x) => TrainingVideoData.fromJson(x))),
     offers: json["offers"] == null ? null : Offers.fromJson(json["offers"]),
     inAppChatPrevStatus: json["chat_previous_status"] ?? 0,
     audioCallPrevStatus: json["call_previous_status"] ?? 0,
@@ -457,34 +458,4 @@ class SessionType {
       };
 }
 
-class TrainingVideo {
-  int? id;
-  String? title;
-  String? description;
-  String? url;
-  int? days;
 
-  TrainingVideo({
-    this.id,
-    this.title,
-    this.description,
-    this.url,
-    this.days,
-  });
-
-  factory TrainingVideo.fromJson(Map<String, dynamic> json) => TrainingVideo(
-        id: json["id"],
-        title: json["title"],
-        description: json["description"],
-        url: json["url"],
-        days: json["days"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "title": title,
-        "description": description,
-        "url": url,
-        "days": days,
-      };
-}

@@ -92,6 +92,7 @@ class ApiProvider {
   final String getTarotCardDataApi = "getTarotCard";
   final String getwalletPointDetail = "getwalletPointDetail";
   final String getFeedback = "getNotSeenFeedback";
+  final String getTrainingVideo = "getTrainingVideo";
   final String getFeedbackList = "getAstroFeedbackList";
   final String getAstroFeedback = "getAstroFeedbackDetail";
   final String viewChatHistory = "getAllChatHistory";

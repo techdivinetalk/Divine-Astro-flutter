@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:divine_astrologer/model/home_model/training_video_model.dart';
 import 'package:divine_astrologer/model/live/new_tarot_card_model.dart';
 import 'package:divine_astrologer/model/wallet_deatils_response.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart';
@@ -56,10 +57,12 @@ class HomePageRepository extends ApiProvider {
         if (json.decode(response.body)["status_code"] == 401) {
           throw CustomException(json.decode(response.body)["error"]);
         } else {
-          final tarotResponse = TarotResponse.fromJson(json.decode(response.body));
+          final tarotResponse =
+              TarotResponse.fromJson(json.decode(response.body));
           saveTarotCards(tarotResponse.data!);
 
-          NewTarotCardModel model = NewTarotCardModel.fromJson(json.decode(response.body));
+          NewTarotCardModel model =
+              NewTarotCardModel.fromJson(json.decode(response.body));
           await LiveSharedPreferencesSingleton().setAllTarotCard(model: model);
 
           return tarotResponse;
@@ -85,7 +88,7 @@ class HomePageRepository extends ApiProvider {
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final walletDetailsResponse =
-          WalletPointResponse.fromJson(json.decode(response.body));
+              WalletPointResponse.fromJson(json.decode(response.body));
           return walletDetailsResponse;
         }
       } else {
@@ -116,6 +119,30 @@ class HomePageRepository extends ApiProvider {
         } else {
           final feedbackResponse =
               FeedbackResponse.fromJson(json.decode(response.body));
+          return feedbackResponse;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<TrainingVideoModel> getAllTraningVideoApi() async {
+    try {
+      final response = await post(
+        getTrainingVideo,
+        headers: await getJsonHeaderURL(),
+      );
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final feedbackResponse =
+              TrainingVideoModel.fromJson(json.decode(response.body));
           return feedbackResponse;
         }
       } else {
