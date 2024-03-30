@@ -13,11 +13,13 @@ import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/fcm_notification.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
 import 'package:divine_astrologer/model/feedback_response.dart';
+import 'package:divine_astrologer/model/home_model/training_video_model.dart';
 import 'package:divine_astrologer/model/performance_response.dart';
 import 'package:divine_astrologer/model/update_offer_type_response.dart';
 import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/model/wallet_deatils_response.dart';
 import 'package:divine_astrologer/pages/home/home_ui.dart';
+import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
 import 'package:divine_astrologer/remote_config/remote_config_helper.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
@@ -26,6 +28,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -139,15 +142,7 @@ class HomeController extends GetxController {
 
     print("${preferenceService.getBaseImageURL()}/${userData.image}");
 
-    await getFilteredPerformance();
-    //await getContactList();
-    // fetchImportantNumbers();
-    getConstantDetailsData();
-    getDashboardDetail();
-    getFeedbackData();
-    tarotCardData();
-    getUserImage();
-
+    getAllDashboardData();
     final String path = "astrologer/${(userData.id ?? 0)}/realTime";
     FirebaseDatabase.instance.ref().child(path).onValue.listen(
       (event) async {
@@ -206,6 +201,23 @@ class HomeController extends GetxController {
     );
 
     // cron.schedule(Schedule.parse('*/5 * * * * *'), checkForScheduleUpdate);
+  }
+
+  getAllDashboardData({bool isReapeting = false}) async {
+    await getConstantDetailsData();
+
+    if (getConstantDetails!.data!.isForceTraningVideo == 1) {
+      getAllTrainingVideo(isReapeting: isReapeting);
+    } else {
+      print("else part");
+      await getFilteredPerformance();
+      //await getContactList();
+      // fetchImportantNumbers();
+      getDashboardDetail();
+      getFeedbackData();
+      tarotCardData();
+      getUserImage();
+    }
   }
 
   void checkForScheduleUpdate() {
@@ -390,8 +402,7 @@ class HomeController extends GetxController {
   getFilteredPerformance() async {
     try {
       Map<String, dynamic> params = {"filter": 'yesterday'};
-      var response =
-          await PerformanceRepository().getPerformance(params);
+      var response = await PerformanceRepository().getPerformance(params);
       log("Res-->${jsonEncode(response.data)}");
       performanceResponse = response;
       overAllScoreList.value = [
@@ -406,7 +417,8 @@ class HomeController extends GetxController {
       for (int i = 0; i < overAllScoreList.length; i++) {
         int averageScore =
             int.parse(overAllScoreList[i]?.performance?.marks?[1].max ?? '0');
-        int yourMarks = int.parse(overAllScoreList[i]?.performance?.marksObtains ?? '0');
+        int yourMarks =
+            int.parse(overAllScoreList[i]?.performance?.marksObtains ?? '0');
         if (averageScore > yourMarks) {
           performanceScoreList.add(overAllScoreList[i]);
         }
@@ -441,15 +453,23 @@ class HomeController extends GetxController {
     }
   }
 
-  trainingVideoViewData(int videoId) async {
+  trainingVideoViewData(int videoId,{bool isFromForceVideo = false}) async {
     Map<String, dynamic> params = {"training_video_id": videoId};
     try {
       var data = await userRepository.viewTrainingVideoApi(params);
       viewTrainingVideoModelClass = data;
-
       profileDataSync.value = true;
-      await getDashboardDetail();
-      Get.back();
+      await getConstantDetailsData();
+      if(isFromForceVideo){
+        if (getConstantDetails!.data!.isForceTraningVideo == 1) {
+          getAllDashboardData(isReapeting: true);
+        } else {
+          Get.back();
+        }
+      }else{
+        Get.back();
+      }
+
       update();
       log("DoneVideo-->${viewTrainingVideoModelClass!.message}");
     } catch (error) {
@@ -606,11 +626,62 @@ class HomeController extends GetxController {
   getConstantDetailsData() async {
     try {
       var data = await userRepository.constantDetailsData();
+      print(data);
+      log(jsonEncode(data));
       getConstantDetails = data;
       preferenceService.setConstantDetails(data);
+      print(getConstantDetails!.data!.isForceTraningVideo);
+      print("getConstantDetailsData");
+
       // debugPrint("ConstantDetails Data==> $data");
       profileDataSync.value = true;
-      //    getDashboardDetail();
+
+      // getDashboardDetail();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  List<TrainingVideoData> traingVideoData = [];
+
+  getAllTrainingVideo({bool isReapeting = false}) async {
+    try {
+      var data = await homePageRepository.getAllTraningVideoApi();
+      if (data.data!.isNotEmpty) {
+        traingVideoData = data.data!;
+      }
+      print(traingVideoData.length);
+      print("traingVideoData.length");
+      for (int i = 0; i < traingVideoData.length; i++) {
+        if (traingVideoData[i].isViwe == 0) {
+          SystemChrome.setPreferredOrientations([
+            DeviceOrientation.portraitUp,
+            DeviceOrientation.landscapeLeft,
+            DeviceOrientation.landscapeRight,
+          ]);
+          if (!isReapeting) {
+            Get.to(() {
+              return TrainingVideoUI(
+                video: traingVideoData[i],
+              );
+            });
+            print("isReapeting ----- ${isReapeting}");
+          } else {
+            print("isReapeting ----- ${isReapeting}");
+            Get.off(() {
+              return TrainingVideoUI(
+                video: traingVideoData[i],
+              );
+            });
+          }
+          break;
+        }
+      }
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
@@ -969,8 +1040,6 @@ class HomeController extends GetxController {
       // ),
     );
   }
-
-
 
   showGiftBottomSheet(int giftCount, BuildContext? contextDetail,
       {String? baseUrl}) async {

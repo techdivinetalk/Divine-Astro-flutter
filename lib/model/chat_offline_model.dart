@@ -73,7 +73,7 @@ class ChatMessage {
   String? kundliPlace;
   String? gender;
   String? title;
-  int? time;
+  dynamic time;
   int? type;
   String? userType;
   String? productPrice;

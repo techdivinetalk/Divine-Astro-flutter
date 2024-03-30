@@ -62,6 +62,7 @@ class Data {
   String whatsappNo;
   AwsCredential awsCredentails;
   String? taroCard;
+  int? isForceTraningVideo;
 
   Data({
     required this.leaderboardRankImage,
@@ -77,7 +78,8 @@ class Data {
     required this.notificationType,
     required this.whatsappNo,
     required this.awsCredentails,
-    this.taroCard
+    this.taroCard,
+    this.isForceTraningVideo,
   });
 
   Data copyWith({
@@ -95,6 +97,7 @@ class Data {
     AwsCredential? awsCredential,
     String? whatsappNo,
     String? taroCard,
+    int? isForceTraningVideo,
   }) =>
       Data(
         leaderboardRankImage: leaderboardRankImage ?? this.leaderboardRankImage,
@@ -103,6 +106,7 @@ class Data {
         giftTimeInterval: giftTimeInterval ?? this.giftTimeInterval,
         chat: chat ?? this.chat,
         call: call ?? this.call,
+        isForceTraningVideo: isForceTraningVideo ?? this.isForceTraningVideo,
         badWordsData: badWordsData ?? this.badWordsData,
         liveBackgroundImage: liveBackgroundImage ?? this.liveBackgroundImage,
         chatSuspiciousRegex: chatSuspiciousRegex ?? this.chatSuspiciousRegex,
@@ -124,6 +128,7 @@ class Data {
             .map((k, v) => MapEntry<String, String>(k, v)),
         reviewFreeAnimation: json["review_free_animation"],
         giftTimeInterval: json["gift_time_interval"],
+        isForceTraningVideo: json["is_force_traning_video"],
         chat: Chat.fromJson(json["chat"]),
         call: Call.fromJson(json["call"]),
         badWordsData: List<String>.from(json["bad_words_data"].map((x) => x)),
@@ -145,6 +150,7 @@ class Data {
             Map.from(lottiFile).map((k, v) => MapEntry<String, dynamic>(k, v)),
         "review_free_animation": reviewFreeAnimation,
         "gift_time_interval": giftTimeInterval,
+        "is_force_traning_video": isForceTraningVideo,
         "chat": chat.toJson(),
         "call": call.toJson(),
         "bad_words_data": List<dynamic>.from(badWordsData.map((x) => x)),

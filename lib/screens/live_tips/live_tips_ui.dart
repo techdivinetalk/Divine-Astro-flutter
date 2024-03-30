@@ -9,6 +9,7 @@ import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/common_button.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -30,9 +31,12 @@ class LiveTipsUI extends GetView<LiveTipsController> {
       builder: (controller) {
         return Scaffold(
           body: Stack(children: <Widget>[
-            CameraPreview(
-              controller.controller!,
-
+            Container(
+              height: double.infinity,
+              width: double.infinity,
+              child: CameraPreview(
+                controller.controller!,
+              ),
             ),
             /*ShaderMask(
               shaderCallback: (rect) {
@@ -147,8 +151,26 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                           fontWeight: FontWeight.w500),
                     ),
                   ),
-                  SizedBox(
-                    height: 25.h,
+                  SizedBox(height: 25.h),
+                  StreamBuilder<Object>(
+                    initialData: false,
+                    stream:
+                        controller.streamController.stream.asBroadcastStream(),
+                    builder: (context, snapshot) {
+                      return CommonButton(
+                        buttonText: "startLive".tr,
+                        buttonCallback: snapshot.hasData &&
+                                snapshot.data == false
+                            ? () async {
+                                controller.streamController.add(true);
+                                await furtherProcedure(controller: controller);
+                                controller.streamController.add(false);
+                              }
+                            : () {
+                                divineSnackBar(data: "Loading, please wait...");
+                              },
+                      );
+                    },
                   ),
                   // Expanded(
                   //   flex: 0,
@@ -177,33 +199,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                   //   ),
                   // ),
 
-                  StreamBuilder<Object>(
-                    initialData: false,
-                    stream: controller.streamController.stream,
-                    builder: (context, snapshot) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: CommonButton(
-                          buttonText: "startLive".tr,
-                          buttonCallback:
-                              snapshot.hasData && snapshot.data == false
-                                  ? () async {
-                                      controller.streamController.add(true);
-                                      await furtherProcedure(controller: controller);
-                                      controller.streamController.add(false);
-                                    }
-                                  : () {
-                                      divineSnackBar(
-                                          data: "Loading, please wait...");
-                                    },
-                        ),
-                      );
-                    },
-                  ),
-
-                  SizedBox(
-                    height: 10.h,
-                  ),
+                  SizedBox(height: 10.h),
                 ],
               ),
             ),
@@ -311,6 +307,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
 
     return Future<void>.value();
   }
+
   //
   Future<bool> permissionCheck() async {
     bool hasAllPerm = false;

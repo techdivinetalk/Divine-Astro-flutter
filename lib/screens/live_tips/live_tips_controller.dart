@@ -34,8 +34,8 @@ class LiveTipsController extends GetxController {
   final AstrologerProfileRepository liveRepository =
       AstrologerProfileRepository();
 
-  final StreamController<bool> streamController = StreamController<bool>()
-    ..add(false);
+
+  final StreamController<bool> streamController = StreamController<bool>.broadcast()..add(false);
 
   final UserRepository _userRepository = Get.put(UserRepository());
 
