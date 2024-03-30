@@ -91,8 +91,9 @@ class _TrainingVideoUIState extends State<TrainingVideoUI> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: GetBuilder<HomeController>(builder: (controller) {
-        return YoutubePlayer(
+      child: GetBuilder<HomeController>(init: HomeController(),builder: (controller) {
+
+        return _controller != null ?YoutubePlayer(
           progressIndicatorColor: Colors.red,
           onReady: () {},
           controller: _controller,
@@ -120,7 +121,7 @@ class _TrainingVideoUIState extends State<TrainingVideoUI> {
             ),
             FullScreenButton(controller: _controller),
           ],
-        );
+        ):SizedBox();
       }),
     );
   }
