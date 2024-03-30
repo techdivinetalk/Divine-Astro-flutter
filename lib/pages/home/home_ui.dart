@@ -2555,6 +2555,10 @@ class PerformanceDialog extends StatelessWidget {
                                               )
                                             : const SizedBox(),
                                         SizedBox(height: 5.h),
+                                        controller.performanceScoreList
+                                            .asMap()
+                                            .containsKey(
+                                            controller.scoreIndex)?
                                         Text(
                                           'Out of ${controller.performanceScoreList[controller.scoreIndex]?.performance?.totalMarks ?? 0}',
                                           // item?.performance?.isNotEmpty ?? false
@@ -2563,7 +2567,7 @@ class PerformanceDialog extends StatelessWidget {
                                           // "Out of 100",
                                           style: AppTextStyle.textStyle10(
                                               fontColor: appColors.darkBlue),
-                                        ),
+                                        ) : const SizedBox(),
                                       ],
                                     ),
                                   ),

@@ -36,34 +36,56 @@ class FAQsResponse {
 }
 
 class FAQData {
-  int id, sequenceNumber;
-  String question, answer;
-  DateTime createdAt, updatedAt;
+  final int id;
+  final int sequenceNumber;
+  final String question;
+  final String answer;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   FAQData({
     required this.id,
+    required this.sequenceNumber,
     required this.question,
     required this.answer,
-    required this.sequenceNumber,
     required this.createdAt,
     required this.updatedAt,
   });
 
-  factory FAQData.fromJson(Map<String, dynamic> json) => FAQData(
-        id: json["id"],
-        question: json["question"],
-        answer: json["answer"],
-        sequenceNumber: json["sequence_number"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-      );
+  factory FAQData.fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      // Handle the case where json is null (optional)
+      throw FormatException('Invalid JSON format');
+    }
+    return FAQData(
+      id: json["id"] as int,
+      question: json["question"] as String? ?? '',
+      answer: json["answer"] as String? ?? '',
+      sequenceNumber: json["sequence_number"] as int? ?? 0,
+      createdAt: _parseDateTime(json["created_at"]),
+      updatedAt: _parseDateTime(json["updated_at"]),
+    );
+  }
+
+  static DateTime _parseDateTime(dynamic dateTime) {
+    if (dateTime == null) {
+      return DateTime.now(); // Provide a default value
+    }
+    if (dateTime is DateTime) {
+      return dateTime;
+    } else {
+      return DateTime.tryParse(dateTime.toString()) ?? DateTime.now(); // Provide a default value
+    }
+  }
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "question": question,
-        "answer": answer,
-        "sequence_number": sequenceNumber,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
-      };
+    "id": id,
+    "question": question,
+    "answer": answer,
+    "sequence_number": sequenceNumber,
+    "created_at": createdAt.toIso8601String(),
+    "updated_at": updatedAt.toIso8601String(),
+  };
 }
+
+
