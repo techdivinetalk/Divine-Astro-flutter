@@ -228,7 +228,7 @@ class MessageView extends StatelessWidget {
               height: 32,
               width: 32,
               child: CustomImageWidget(
-                imageUrl: chatMessage.awsUrl ?? '',
+                imageUrl: chatMessage.message ?? '',
                 rounded: true,
                 // added by divine-dharam
                 typeEnum: TypeEnum.gift,
@@ -238,7 +238,7 @@ class MessageView extends StatelessWidget {
             SizedBox(width: 6.w),
             Flexible(
                 child: CustomText(
-              '$customerName has requested to send ${chatMessage.message}.',
+              '$customerName has requested to send ${chatMessage.awsUrl ?? ""}.',
               maxLines: 2,
             ))
           ],
@@ -482,7 +482,7 @@ class MessageView extends StatelessWidget {
           children: [
             Flexible(
               child: Text(
-                "$customerName have sent ${chatMessage.message}",
+                "$customerName have sent ${chatMessage.title ?? ""}",
                 style: const TextStyle(color: Colors.red),
               ),
             ),
@@ -491,7 +491,7 @@ class MessageView extends StatelessWidget {
               height: 32,
               width: 32,
               child: CustomImageWidget(
-                imageUrl: chatMessage.awsUrl ?? '',
+                imageUrl: chatMessage.message ?? '',
                 rounded: true,
                 // added by divine-dharam
                 typeEnum: TypeEnum.gift,

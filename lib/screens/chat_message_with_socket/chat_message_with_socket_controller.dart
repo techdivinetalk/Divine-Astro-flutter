@@ -877,6 +877,7 @@ class ChatMessageWithSocketController extends GetxController
     String? downloadedPath,
     String? kundliId,
     String? giftId,
+    String? title,
     String? productPrice,
     String? productId,
     String? shopId,
@@ -888,6 +889,7 @@ class ChatMessageWithSocketController extends GetxController
         orderId: AppFirebaseService().orderData.value["orderId"],
         id: int.parse(time),
         message: messageText,
+
         // createdAt: DateTime.now().toIso8601String(),
         receiverId: int.parse(
             AppFirebaseService().orderData.value["userId"].toString()),
@@ -973,9 +975,11 @@ class ChatMessageWithSocketController extends GetxController
         time: int.parse(time),
         awsUrl: awsUrl,
         msgSendBy: "1",
+        productId: productId,
         base64Image: base64Image,
         downloadedPath: downloadedPath,
         msgType: msgType,
+
         kundliId: kundliId,
         title: giftId ?? "${userData?.name} sent you a message.",
         type: 0,
@@ -1109,9 +1113,9 @@ class ChatMessageWithSocketController extends GetxController
       final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       unreadMessageIndex.value = -1;
       addNewMessage(time, MsgType.gift,
-          messageText:
-              "${quantity} ${item.giftName} ${quantity > 1 ? "gifts" : "gift"}",
-          awsUrl: item.fullGiftImage,
+          messageText:item.fullGiftImage,
+          productId: item.id.toString(),
+          awsUrl : "${quantity} ${item.giftName} ${quantity > 1 ? "gifts" : "gift"}",
           giftId: item.id.toString());
     }
   }
