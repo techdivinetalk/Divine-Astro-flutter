@@ -593,6 +593,7 @@ class ChatMessageWithSocketController extends GetxController
       );
       debugPrint("emited Data $data");
       chatStatus("Online");
+      updateReadMessage();
     });
   }
 
@@ -681,7 +682,7 @@ class ChatMessageWithSocketController extends GetxController
 
   void sendMessageListenerSocket() {
     socket.sendMessageListenerSocket((data) {
-      debugPrint("sendMessageListenerSocketssss $data");
+      debugPrint("sendMessageListenerSocketssss ${data["msgSendBy"]}");
       debugPrint("sendMessageListenerSocket context $context");
 
       if (data is Map<String, dynamic>) {

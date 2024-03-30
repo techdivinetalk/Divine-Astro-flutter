@@ -38,7 +38,7 @@ class ChatMessage {
 
   // String? createdAt;
   String? updatedAt;
-  int? msgSendBy;
+  String? msgSendBy;
   int? isSuspicious;
   int? isEmailSent;
   String? kundliId;

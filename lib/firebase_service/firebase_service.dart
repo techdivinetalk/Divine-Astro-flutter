@@ -200,59 +200,6 @@ class AppFirebaseService {
       debugPrint("Error reading data from the database: $e");
     }
 
-    // watcher.nameStream.listen((value) {
-    //   if (value != "") {
-    //     _database.child("order/$value").onValue.listen((event) async {
-    //       orderData(event.snapshot.value == null
-    //           ? <String, String>{}
-    //           : Map<String, dynamic>.from(
-    //               event.snapshot.value! as Map<Object?, Object?>));
-    //       if (event.snapshot.value != null) {
-    //         Map<String, dynamic>? orderData = Map<String, dynamic>.from(
-    //             event.snapshot.value! as Map<Object?, Object?>);
-    //         debugPrint("orderData-------> $orderData");
-    //         if (orderData["status"] != null) {
-    //           if (orderData["status"] == "0") {
-    //             acceptBottomWatcher.strValue = "0";
-    //             await Navigator.of(Get.context!).push(
-    //               MaterialPageRoute(
-    //                 builder: (context) {
-    //                   return const AcceptChatRequestScreen();
-    //                 },
-    //               ),
-    //             );
-    //           } else if (orderData["status"] == "1") {
-    //             if (acceptBottomWatcher.currentName != "1") {
-    //               acceptBottomWatcher.strValue = "1";
-    //               await Navigator.of(Get.context!).push(
-    //                 MaterialPageRoute(
-    //                   builder: (context) {
-    //                     return const AcceptChatRequestScreen();
-    //                   },
-    //                 ),
-    //               );
-    //             }
-    //           } else if (orderData["status"] == "2") {
-
-    //           } else if (orderData["status"] == "3") {
-    //            await sendBroadcast(BroadcastMessage(
-    //                 name: "ReJoinChat",
-    //                 data: {"orderId": value, "orderData": orderData}));
-    //             // WidgetsBinding.instance.endOfFrame.then(
-    //             //   (_) async {
-    //             //     await Get.toNamed(RouteName.chatMessageWithSocketUI,
-    //             //         arguments: {"orderData": orderData});
-    //             //   },
-    //             // );
-    //           }
-    //         }
-    //       }
-    //     });
-    //   }
-
-    //   debugPrint("value changed to: $value");
-    // });
-
     watcher.nameStream.listen(
       (value) {
         if (value != "") {
@@ -267,6 +214,7 @@ class AppFirebaseService {
                       as Map<dynamic, dynamic>;
                   orderData(Map<String, dynamic>.from(map));
                   if (orderData.value["status"] != null) {
+                  if (orderData.value["orderType"] == "chat") {
                     switch ((orderData.value["status"])) {
                       case "0":
                         if (Get.currentRoute !=
@@ -304,6 +252,9 @@ class AppFirebaseService {
                       default:
                         break;
                     }
+                  }else{
+                    orderData({});
+                  }
                   } else {}
                 } else {}
               } else {

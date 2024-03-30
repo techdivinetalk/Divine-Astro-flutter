@@ -141,14 +141,14 @@ void onDidReceiveNotificationResponse(
     //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
     // // if(payloadMap["type"] == "2") {
     if (payloadMap["type"] == "1") {
+      Get.toNamed(RouteName.chatMessageWithSocketUI);
+    }else if (payloadMap["type"] == "8") {
       final senderId = payloadMap["sender_id"];
-      final userId = AppFirebaseService().orderData.value["userId"];
-      if (senderId.toString() == userId.toString()) {
-        if (!await launchUrl(Uri.parse(payloadMap["url"].toString()))) {
-          throw Exception('Could not launch ${payloadMap["url"]}');
-        }
-      }
-    } else {
+      DataList dataList = DataList();
+      dataList.id = int.parse(senderId);
+      dataList.name = payloadMap["title"];
+      Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
+    }else {
       if (!await launchUrl(Uri.parse(payloadMap["url"].toString()))) {
         throw Exception('Could not launch ${payloadMap["url"]}');
       }
