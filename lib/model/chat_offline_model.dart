@@ -77,6 +77,7 @@ class ChatMessage {
   int? type;
   String? userType;
   String? productPrice;
+
   Kundli? kundli;
 
   ChatMessage({
@@ -85,6 +86,7 @@ class ChatMessage {
     this.memberId,
     this.roleId,
     this.productId,
+    this.title,
     this.shopId,
     this.customerId,
     this.msgSequence,
@@ -127,7 +129,7 @@ class ChatMessage {
     this.kundliDateTime,
     this.kundliPlace,
     this.gender,
-    this.title,
+
     this.type,
     this.userType,
     this.productPrice,
@@ -140,6 +142,7 @@ class ChatMessage {
     memberId = json['member_id'];
     roleId = json['role_id'];
     customerId = json['customer_id'];
+    title = json['title'];
     msgSequence = json['msg_sequence'];
     msgType = json['msg_type'] != null
         ? msgTypeValues.map[json["msg_type"].toString()]
@@ -192,7 +195,7 @@ class ChatMessage {
     kundliId = json['kundliId'];
     gender = json['gender'];
     productPrice = json['productPrice'];
-    title = json['title'];
+
     userType = json['userType'];
     kundli = json['kundli'] != null ? Kundli.fromJson(json['kundli']) : null;
   }
@@ -204,6 +207,7 @@ class ChatMessage {
     data['member_id'] = memberId;
     data['productPrice'] = productPrice;
     data['role_id'] = roleId;
+    data['title'] = title;
     data['customer_id'] = customerId;
     data['msg_sequence'] = msgSequence;
     data['msg_type'] = msgTypeValues.reverse[msgType];
@@ -254,7 +258,7 @@ class ChatMessage {
     data['kundliDateTime'] = kundliDateTime;
     data['kundliPlace'] = kundliPlace;
     data['gender'] = gender;
-    data['title'] = title;
+
     data['userType'] = userType;
     data['kundli'] = kundli;
     return data;
