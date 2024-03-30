@@ -27,6 +27,7 @@ class SavedRemediesBottomSheet extends StatelessWidget {
     return Wrap(
       children: [
         Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             GestureDetector(
               onTap: () {
@@ -56,6 +57,7 @@ class SavedRemediesBottomSheet extends StatelessWidget {
                 ),
               ),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     "Saved Remedies",

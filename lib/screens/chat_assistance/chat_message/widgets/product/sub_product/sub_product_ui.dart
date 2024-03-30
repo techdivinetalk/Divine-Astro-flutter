@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +98,16 @@ class SubProductUi extends GetView<SubProductController> {
                                     ),
                                     child: Column(
                                       children: [
-                                        ClipRRect(
+                                        CommonImageView(
+                                          imagePath:  "${controller.preferenceService.getBaseImageURL()}/${item?.prodImage}",
+                                          height: 150,
+
+                                          width: double.infinity,
+                                          fit: BoxFit.cover,
+                                          placeHolder: Assets.images.defaultProfile.path,
+                                          radius: BorderRadius.circular(20),
+                                        ),
+                                       /* ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(20),
                                           child: CachedNetworkImage(
@@ -109,7 +119,7 @@ class SubProductUi extends GetView<SubProductController> {
                                                     .images.defaultProfile
                                                     .image(),
                                           ),
-                                        ),
+                                        ),*/
                                         SizedBox(height: 12.h),
                                         Padding(
                                           padding: const EdgeInsets.only(
