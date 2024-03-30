@@ -20,6 +20,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
+import '../screens/chat_assistance/chat_message/widgets/product/pooja/widgets/custom_widget/pooja_common_list.dart';
 import '../utils/load_image.dart';
 
 class MessageView extends StatelessWidget {
@@ -730,10 +731,10 @@ class MessageView extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           Get.toNamed(RouteName.imagePreviewUi,
-                              arguments: chatMessage.awsUrl);
+                              arguments: chatMessage.message != null ? "${chatMessage.message}" : "${chatMessage.awsUrl}");
                         },
-                        child: Image.memory(
-                          bytesImage,
+                        child: Image.network(
+                          chatMessage.message != null ? "${chatMessage.message}" : "${chatMessage.awsUrl}",
                           fit: BoxFit.cover,
                           height: 200.h,
                         ),
@@ -796,29 +797,12 @@ class MessageView extends StatelessWidget {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(10.0.sp),
                             child: ImageFiltered(
-                              imageFilter: ImageFilter.blur(
-                                sigmaX: 5.0,
-                                sigmaY: 5.0,
-                              ),
-                              child: SizedBox(
+                              imageFilter:
+                              ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                              child: Image.network(
+                                "${chatDetail.message}",
+                                fit: BoxFit.cover,
                                 height: 200.h,
-                                width: 150.w,
-                                child: LoadImage(
-                                  boxFit: BoxFit.cover,
-                                  imageModel: ImageModel(
-                                    assetImage: false,
-                                    placeHolderPath:
-                                        Assets.images.defaultProfile.path,
-                                    imagePath: chatDetail.awsUrl ??
-                                        chatDetail.message!,
-                                    loadingIndicator: SizedBox(
-                                      child: CircularProgressIndicator(
-                                        color: appColors.guideColor,
-                                        strokeWidth: 2,
-                                      ),
-                                    ),
-                                  ),
-                                ),
                               ),
                             ),
                           ),
@@ -884,13 +868,21 @@ class MessageView extends StatelessWidget {
                     : InkWell(
                         onTap: () {
                           Get.toNamed(RouteName.imagePreviewUi,
-                              arguments: chatDetail.awsUrl);
+                              arguments:
+                              chatDetail.message != null
+                                  ? "${chatDetail.message}" :  "${pref.getAmazonUrl()}${chatDetail.awsUrl}");
                         },
                         child: Stack(
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(8.0.r),
-                              child: Image.file(
+                              child: chatDetail.message != null
+                                  ? Image.network(
+                                "${chatDetail.message}",
+                                fit: BoxFit.cover,
+                                height: 200.h,
+                              )
+                                  : Image.file(
                                 File(chatDetail.downloadedPath ?? ""),
                                 fit: BoxFit.cover,
                                 height: 200.h,

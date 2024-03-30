@@ -863,7 +863,7 @@ class ChatMessageWithSocketController extends GetxController
     if (uploadFile != "" || uploadFile != null) {
       print("image message upload file ${uploadFile} ${base64Image}");
       addNewMessage(time, MsgType.image,
-          awsUrl: uploadFile, base64Image: base64Image, downloadedPath: '');
+          messageText: uploadFile, base64Image: base64Image, downloadedPath: '');
     }
   }
 
