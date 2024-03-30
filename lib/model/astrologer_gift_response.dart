@@ -18,22 +18,26 @@ class GiftResponse {
     this.message,
   });
 
-  factory GiftResponse.fromJson(Map<String, dynamic> json) => GiftResponse(
-        data: json["data"] == null
-            ? []
-            : List<GiftData>.from(
-                json["data"].map((x) => GiftData.fromJson(x))),
-        success: json["success"],
-        statusCode: json["status_code"],
-        message: json["message"],
-      );
+  factory GiftResponse.fromJson(Map<String, dynamic> json) {
+    return GiftResponse(
+      data: json["data"] == null
+          ? []
+          : List<GiftData>.from(
+          (json["data"] as List<dynamic>).map((x) => GiftData.fromJson(x))),
+      success: json["success"],
+      statusCode: json["status_code"],
+      message: json["message"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
-        "success": success,
-        "status_code": statusCode,
-        "message": message,
-      };
+    "data": data == null
+        ? null
+        : List<dynamic>.from(data!.map((x) => x.toJson())),
+    "success": success,
+    "status_code": statusCode,
+    "message": message,
+  };
 }
 
 class GiftData {

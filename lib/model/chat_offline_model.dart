@@ -41,7 +41,7 @@ class ChatMessage {
   String? msgSendBy;
   int? isSuspicious;
   int? isEmailSent;
-  String? kundliId;
+  dynamic kundliId;
   int? seenStatus;
   String? base64Image;
   dynamic deletedAt;
@@ -73,7 +73,7 @@ class ChatMessage {
   String? kundliPlace;
   String? gender;
   String? title;
-  int? time;
+  dynamic time;
   int? type;
   String? userType;
   String? productPrice;

@@ -187,7 +187,7 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
     message: newMessage.message ?? "",
     receiverId: newMessage.receiverId,
     senderId: newMessage.senderId,
-    time: newMessage.time,
+    time: newMessage.time.toString(),
     type: type,
     msgType: newMessage.msgType,
     awsUrl: newMessage.awsUrl,

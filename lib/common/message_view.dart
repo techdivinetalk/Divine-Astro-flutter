@@ -350,7 +350,7 @@ class MessageView extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        messageDateTime(chatMessage.time ?? 0),
+                        messageDateTime(int.parse(chatMessage.time.toString())),
                         style: AppTextStyle.textStyle10(
                           fontColor: appColors.darkBlue,
                         ),
@@ -435,7 +435,7 @@ class MessageView extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          messageDateTime(chatDetail.time ?? 0),
+                          messageDateTime(int.parse(chatDetail.time.toString())),
                           style: AppTextStyle.textStyle10(
                               fontColor: appColors.black),
                         ),
@@ -568,7 +568,7 @@ class MessageView extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Text(
-                                  messageDateTime(chatDetail.time ?? 0),
+                                  messageDateTime(int.parse(chatDetail.time.toString())),
                                   style: AppTextStyle.textStyle10(
                                       fontColor: appColors.white),
                                 ),
@@ -658,7 +658,7 @@ class MessageView extends StatelessWidget {
                                       ),
                                     ),
                                     child: Text(
-                                      messageDateTime(chatDetail.time ?? 0),
+                                      messageDateTime(int.parse(chatDetail.time.toString())),
                                       style: AppTextStyle.textStyle10(
                                           fontColor: appColors.white),
                                     ),
@@ -745,7 +745,7 @@ class MessageView extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 10.sp,
-                        color: appColors.lightGrey,
+                        //color: appColors.lightGrey,
                       ),
                     ),
                     SizedBox(height: 5.h),

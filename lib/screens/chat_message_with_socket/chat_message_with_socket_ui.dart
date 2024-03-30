@@ -129,11 +129,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                               : controller
                                                   .chatMessages[index + 1],
                                           chatMessage: chatMessage,
-                                         /* yourMessage: chatMessage.senderId ==
-                                              preferenceService
-                                                  .getUserDetail()!
-                                                  .id,*/
-                                          yourMessage: chatMessage.msgSendBy == "0",
+                                        /*  yourMessage: "${chatMessage.senderId.toString()}" ==
+                                              "${preferenceService.getUserDetail()!.id.toString()}",*/
+                                          yourMessage: chatMessage.msgSendBy == "1",
                                           userName:
                                               controller.customerName.value,
                                           unreadMessage: controller
@@ -1075,7 +1073,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
     return InkWell(
       onTap: () {
         Get.toNamed(RouteName.kundliDetail, arguments: {
-          "kundli_id": chatDetail.kundliId,
+          "kundli_id": chatDetail.kundliId is int
+              ? chatDetail.kundliId
+              : chatDetail.kundliId.toString(),
           "from_kundli": true,
           "birth_place": chatDetail.kundliPlace,
           "gender": chatDetail.gender,
