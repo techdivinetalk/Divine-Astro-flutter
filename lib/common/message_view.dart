@@ -1084,12 +1084,11 @@ class MessageView extends StatelessWidget {
             CustomImageView(
               height: 165,
               width: 165,
-              imagePath: Get.find<SharedPreferenceService>().getAmazonUrl()! +
-                  "/${chatDetail.awsUrl}",
+              imagePath: "${chatDetail.awsUrl}",
               radius: BorderRadius.vertical(top: Radius.circular(10)),
               placeHolder: "assets/images/default_profiles.svg",
               fit: BoxFit.cover,
-            ),
+            ), 
             Text(
               chatDetail.message ?? "",
               maxLines: 1,

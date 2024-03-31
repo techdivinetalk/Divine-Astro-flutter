@@ -86,13 +86,15 @@ class SavedRemediesBottomSheet extends StatelessWidget {
                                   if (controller != null) {
                                     final String time =
                                         "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+                                    print("${Get.find<SharedPreferenceService>().getAmazonUrl()}${data.image}");
+                                    print("data.imagedata.imagedata.imagedata.image");
                                     controller!.addNewMessage(
                                       time,
                                       MsgType.customProduct,
                                       messageText: data.name,
                                       productPrice: data.amount.toString(),
                                       productId: data.id.toString(),
-                                      awsUrl: data.image,
+                                      awsUrl: "${Get.find<SharedPreferenceService>().getAmazonUrl()}/${data.image}",
                                     );
                                   } else if (chatMessageController != null) {
                                     chatMessageController!
