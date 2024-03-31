@@ -404,7 +404,7 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
             messageText: productName.text,
             productPrice: productPrice.text,
             productId: customProductData!.id.toString(),
-            awsUrl: productApiPath,
+            awsUrl: productImageUrl,
           );
         }else if(widget.chatMessageController != null){
           widget.chatMessageController!
