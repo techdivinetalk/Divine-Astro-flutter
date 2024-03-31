@@ -631,6 +631,8 @@ class HomeController extends GetxController {
       print(data);
       log(jsonEncode(data));
       getConstantDetails = data;
+      print(getConstantDetails!.data!.isForceTraningVideo);
+      print("getting is force training video flag");
       preferenceService.setConstantDetails(data);
       profileDataSync.value = true;
 
