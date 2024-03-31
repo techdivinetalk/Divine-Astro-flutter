@@ -1116,9 +1116,9 @@ class ChatMessageWithSocketController extends GetxController
       final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       unreadMessageIndex.value = -1;
       addNewMessage(time, MsgType.gift,
-          messageText:item.fullGiftImage,
+          messageText:quantity.toString() +" "+ item.giftName,
           productId: item.id.toString(),
-          awsUrl : "${quantity}",
+          awsUrl : item.fullGiftImage,
           giftId: item.id.toString());
     }
   }

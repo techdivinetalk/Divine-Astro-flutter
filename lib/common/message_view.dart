@@ -229,7 +229,7 @@ class MessageView extends StatelessWidget {
               height: 32,
               width: 32,
               child: CustomImageWidget(
-                imageUrl: chatMessage.message ?? '',
+                imageUrl: chatMessage.awsUrl ?? '',
                 rounded: true,
                 // added by divine-dharam
                 typeEnum: TypeEnum.gift,
@@ -239,7 +239,7 @@ class MessageView extends StatelessWidget {
             SizedBox(width: 6.w),
             Flexible(
                 child: CustomText(
-              '$customerName has requested to send ${chatMessage.awsUrl ?? ""}.',
+              '$customerName has requested to send ${chatMessage.message ?? ""}.',
               maxLines: 2,
             ))
           ],
@@ -412,6 +412,7 @@ class MessageView extends StatelessWidget {
                         controller: VoiceController(
                             audioSrc: chatDetail.awsUrl ?? chatDetail.message!,
                             maxDuration: const Duration(minutes: 30),
+
                             isFile: false,
                             onComplete: () {
                               controller.isAudioPlaying(false);
@@ -483,7 +484,7 @@ class MessageView extends StatelessWidget {
           children: [
             Flexible(
               child: Text(
-                "$customerName have sent ${chatMessage.title ?? ""}",
+                "$customerName have sent ${chatMessage.message ?? ""}",
                 style: const TextStyle(color: Colors.red),
               ),
             ),
@@ -492,7 +493,7 @@ class MessageView extends StatelessWidget {
               height: 32,
               width: 32,
               child: CustomImageWidget(
-                imageUrl: chatMessage.message ?? '',
+                imageUrl: chatMessage.awsUrl ?? '',
                 rounded: true,
                 // added by divine-dharam
                 typeEnum: TypeEnum.gift,

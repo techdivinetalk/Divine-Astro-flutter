@@ -148,7 +148,9 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
     await _player!.setSourceAsset("accept.mp3");
 
     _player!.play(AssetSource("accept.mp3"));
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -198,7 +200,6 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                       imageUrl: appended,
                                       rounded: true,
                                       typeEnum: TypeEnum.user,
-
                                     ),
                                   );
                                 },
@@ -596,8 +597,9 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                             .orderData
                                                             .value[
                                                         "max_order_time"]) ??
-                                                    0),  softWrap: true,
-                                            style: TextStyle( 
+                                                    0),
+                                            softWrap: true,
+                                            style: TextStyle(
                                                 fontWeight: FontWeight.w600,
                                                 fontFamily:
                                                     FontFamily.metropolis,
@@ -666,10 +668,20 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                               // },
                                               onPressed: () async {
                                                 await acceptOrRejectChat(
-                                                orderId: AppFirebaseService().orderData.value["orderId"] ?? 0,
-                                                queueId: AppFirebaseService().orderData.value["queue_id"] ?? 0,
+                                                  orderId: AppFirebaseService()
+                                                          .orderData
+                                                          .value["orderId"] ??
+                                                      0,
+                                                  queueId: AppFirebaseService()
+                                                          .orderData
+                                                          .value["queue_id"] ??
+                                                      0,
                                                 );
-                                                AppFirebaseService().database.child("order/${AppFirebaseService().orderData.value["orderId"]}").update({"status": "1"});
+                                                AppFirebaseService()
+                                                    .database
+                                                    .child(
+                                                        "order/${AppFirebaseService().orderData.value["orderId"]}")
+                                                    .update({"status": "1"});
                                               },
                                               // widget.onPressed
                                             )
@@ -727,5 +739,4 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
 
     return '$hours:$formattedMinutes:$formattedSeconds';
   }
-
 }

@@ -37,14 +37,21 @@ class WaitListUIController extends GetxController {
     }
   }
 
-  acceptChatButtonApi({String? queueId,orderId}) async {
+  acceptChatButtonApi({String? queueId, orderId, int? index}) async {
     try {
-      Map<String,dynamic> data =  {
-        "queue_id":queueId,
-        "order_id":orderId,
+      Map<String, dynamic> data = {
+        "queue_id": queueId,
+        "order_id": orderId,
       };
       final response = await repository.acceptChatApi(body: data);
-      if (response.isNotEmpty) {}
+      if (response.isNotEmpty) {
+        waitingPersons.removeAt(index!);
+        update(); // for (int i = 0; i < waitingPersons.length; i++) {
+        //   if (waitingPersons[i].id.toString() == queueId.toString()) {
+        //     waitingPersons.removeAt(i);
+        //     break;
+        //   }
+      }
 
       update();
     } catch (err) {
