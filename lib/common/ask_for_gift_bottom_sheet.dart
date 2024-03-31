@@ -72,16 +72,16 @@ class _AskForGiftState extends State<AskForGiftBottomSheet> {
                     'Ask Gift From ${widget.customerName}',
                     style: AppTextStyle.textStyle20(fontWeight: FontWeight.w500),
                   ),
-                  SizedBox(height: 20.h),
-                  const Divider(),
-                  SizedBox(height: 20.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      quantityWidget(),
-                     /* amountWidget(),*/
-                    ],
-                  ),
+                  // SizedBox(height: 20.h),
+                  // const Divider(),
+                  // SizedBox(height: 20.h),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     quantityWidget(),
+                  //    /* amountWidget(),*/
+                  //   ],
+                  // ),
                   SizedBox(height: 20.h),
                   Expanded(child: grid()),
                 ],

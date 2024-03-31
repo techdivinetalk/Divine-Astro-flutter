@@ -8,7 +8,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-
 class ChatSuggestRemedyPage extends GetView<ChatSuggestRemedyController> {
   const ChatSuggestRemedyPage({super.key});
 
@@ -39,14 +38,23 @@ class ChatSuggestRemedyPage extends GetView<ChatSuggestRemedyController> {
             itemCount: (controller.remedies.value.remedies ?? []).length,
             itemBuilder: (context, index) {
               final remedy = controller.remedies.value.remedies![index];
-              final isLeftSide = index % 2 == 0; // Check if the item is on the left side
-
+              print("remedyremedyremedyremedyremedy");
+              final isLeftSide =
+                  index % 2 == 0;
               return ElevatedButton(
-                onPressed: () =>  Get.toNamed(RouteName.chatSuggestRemedyDetails, arguments: {'remedy': remedy}),
+                onPressed: () => Get.toNamed(
+                  RouteName.chatSuggestRemedyDetails,
+                  arguments: {
+                    'remedy': remedy,
+                  },
+                ),
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
-                    side: BorderSide(color: isLeftSide ? appColors.lightBlack : appColors.black,),
+                    side: BorderSide(
+                      color:
+                          isLeftSide ? appColors.lightBlack : appColors.black,
+                    ),
                   ),
                 ),
                 child: CustomText(
@@ -61,4 +69,3 @@ class ChatSuggestRemedyPage extends GetView<ChatSuggestRemedyController> {
     );
   }
 }
-

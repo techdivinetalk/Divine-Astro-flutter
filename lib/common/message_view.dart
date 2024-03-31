@@ -1087,7 +1087,7 @@ class MessageView extends StatelessWidget {
               height: 165,
               width: 165,
               imagePath: "${chatDetail.awsUrl}",
-              radius: BorderRadius.vertical(top: Radius.circular(10)),
+              radius: const BorderRadius.vertical(top: Radius.circular(10)),
               placeHolder: "assets/images/default_profiles.svg",
               fit: BoxFit.cover,
             ), 

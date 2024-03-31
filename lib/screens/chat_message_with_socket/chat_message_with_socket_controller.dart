@@ -892,7 +892,6 @@ class ChatMessageWithSocketController extends GetxController
         orderId: AppFirebaseService().orderData.value["orderId"],
         id: int.parse(time),
         message: messageText,
-
         // createdAt: DateTime.now().toIso8601String(),
         receiverId: int.parse(
             AppFirebaseService().orderData.value["userId"].toString()),
@@ -907,7 +906,7 @@ class ChatMessageWithSocketController extends GetxController
         productPrice: productPrice,
         title: giftId ?? "${userData?.name} sent you a message.",
         type: 0,
-        productId: customProductId,
+        productId: productId,
         userType: "astrologer",
       );
     } else if (msgType == MsgType.product) {
@@ -942,6 +941,7 @@ class ChatMessageWithSocketController extends GetxController
         final productData =
             data?['data']['saveRemedies'] as SaveRemediesResponse;
         final productDetails = data?['data']['product_detail'] as Products;
+        print("going in");
         newMessage = ChatMessage(
           message: productDetails.prodName,
           title: productDetails.prodName,
@@ -1116,7 +1116,7 @@ class ChatMessageWithSocketController extends GetxController
       final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       unreadMessageIndex.value = -1;
       addNewMessage(time, MsgType.gift,
-          messageText:quantity.toString() +" "+ item.giftName,
+          messageText: item.giftName,
           productId: item.id.toString(),
           awsUrl : item.fullGiftImage,
           giftId: item.id.toString());

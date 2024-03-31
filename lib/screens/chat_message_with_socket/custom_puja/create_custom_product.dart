@@ -399,8 +399,8 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
           final String time =
               "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
           widget.controller!.addNewMessage(
-            time,
-            MsgType.customProduct,
+            time, 
+            MsgType.customProduct, 
             messageText: productName.text,
             productPrice: productPrice.text,
             productId: customProductData!.id.toString(),

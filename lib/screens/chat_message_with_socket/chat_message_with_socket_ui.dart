@@ -129,9 +129,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                               : controller
                                                   .chatMessages[index + 1],
                                           chatMessage: chatMessage,
-                                        /*  yourMessage: "${chatMessage.senderId.toString()}" ==
+                                          /*  yourMessage: "${chatMessage.senderId.toString()}" ==
                                               "${preferenceService.getUserDetail()!.id.toString()}",*/
-                                          yourMessage: chatMessage.msgSendBy == "1",
+                                          yourMessage:
+                                              chatMessage.msgSendBy == "1",
                                           userName:
                                               controller.customerName.value,
                                           unreadMessage: controller
@@ -869,9 +870,11 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         if (result != null) {
                           final String time =
                               "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-                          controller.addNewMessage(time, MsgType.remedies,
-                              messageText: result.toString());
-                          print("getting ul not add1");
+                          controller.addNewMessage(
+                            time,
+                            MsgType.remedies,
+                            messageText: result.toString(),
+                          );
                         }
                         break;
                       case 3:
