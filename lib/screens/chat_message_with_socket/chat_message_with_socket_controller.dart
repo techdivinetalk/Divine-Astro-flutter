@@ -1001,10 +1001,10 @@ class ChatMessageWithSocketController extends GetxController
     print("newMessage1 ");
     final int index = chatMessages
         .indexWhere((ChatMessage element) => newMessage.time == element.time);
-    print("newMessage2");
+    print("newMessage2 ${newMessage.type}");
     if (index >= 0) {
       print("newMessage3");
-      chatMessages[index].type = newMessage.type;
+      chatMessages[index].seenStatus = newMessage.type;
       chatMessages.refresh();
     } else {
       print("newMessage4");

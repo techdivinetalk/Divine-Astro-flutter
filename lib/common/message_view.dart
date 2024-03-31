@@ -698,8 +698,9 @@ class MessageView extends StatelessWidget {
 
   Widget imageMsgView(String image, bool yourMessage,
       {required ChatMessage chatDetail, required int index}) {
-    Uint8List bytesImage = base64.decode(image);
-    RxInt msgType = (chatDetail.type ?? 0).obs;
+   // Uint8List bytesImage = base64.decode(image);
+    Rx<int> msgType = (chatDetail.seenStatus ?? (chatDetail.type ?? 0)).obs;
+    print("chatDetail.type ${msgType.value} - ${chatDetail.type} - ${chatDetail.seenStatus} - ${yourMessage}");
     var chatController = Get.find<ChatMessageWithSocketController>();
 
     return SizedBox(

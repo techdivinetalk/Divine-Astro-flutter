@@ -412,7 +412,7 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
             'title': productName.text, 
             'image': productApiPath.toString(),
             'product_price':productPrice.text.toString() ,
-            'product_id': customProductData!.id,
+            'product_id': customProductData!.id.toString(),
           });
         }
 
