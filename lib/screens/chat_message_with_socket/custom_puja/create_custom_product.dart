@@ -403,7 +403,7 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
             MsgType.customProduct,
             messageText: productName.text,
             productPrice: productPrice.text,
-            productId: customProductData!.id,
+            productId: customProductData!.id.toString(),
             awsUrl: productApiPath,
           );
         }else if(widget.chatMessageController != null){
@@ -412,7 +412,7 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
             'title': productName.text, 
             'image': productApiPath.toString(),
             'product_price':productPrice.text.toString() ,
-            'product_id': customProductData!.id,
+            'product_id': customProductData!.id.toString(),
           });
         }
 
