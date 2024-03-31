@@ -207,9 +207,11 @@ class HomeController extends GetxController {
     await getConstantDetailsData();
 
     if (getConstantDetails!.data!.isForceTraningVideo == 1) {
+      print("if----getConstantDetails!.data!.isForceTraningVideo");
       getAllTrainingVideo(isReapeting: isReapeting);
     } else {
-      print("else part");
+      print("else----getConstantDetails!.data!.isForceTraningVideo");
+
       await getFilteredPerformance();
       //await getContactList();
       // fetchImportantNumbers();
@@ -630,10 +632,6 @@ class HomeController extends GetxController {
       log(jsonEncode(data));
       getConstantDetails = data;
       preferenceService.setConstantDetails(data);
-      print(getConstantDetails!.data!.isForceTraningVideo);
-      print("getConstantDetailsData");
-
-      // debugPrint("ConstantDetails Data==> $data");
       profileDataSync.value = true;
 
       // getDashboardDetail();
@@ -655,8 +653,6 @@ class HomeController extends GetxController {
       if (data.data!.isNotEmpty) {
         traingVideoData = data.data!;
       }
-      print(traingVideoData.length);
-      print("traingVideoData.length");
       for (int i = 0; i < traingVideoData.length; i++) {
         if (traingVideoData[i].isViwe == 0) {
           SystemChrome.setPreferredOrientations([
@@ -669,6 +665,9 @@ class HomeController extends GetxController {
               return TrainingVideoUI(
                 video: traingVideoData[i],
               );
+            })!.then((value) {
+              print("in side going");
+              getAllDashboardData();
             });
             print("isReapeting ----- ${isReapeting}");
           } else {
