@@ -130,10 +130,15 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
             ];
           },
           body: Obx(
-            () {
-              return _controller.isLoading ? const PoojaLoader() : mainWidget();
+                () {
+              if (_controller.isLoading) {
+                return const PoojaLoader();
+              } else {
+                return mainWidget();
+              }
             },
           ),
+
         ),
       ),
     );
@@ -141,7 +146,8 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
 
   Widget mainWidget() {
     final Pooja pooja =
-        _controller.getSinglePooja.data?.pooja?.first ?? Pooja();
+    _controller.getSinglePooja.data?.pooja?.isNotEmpty == true ? _controller.getSinglePooja.data!.pooja!.first : Pooja();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -2,6 +2,7 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/screens/faq/faqs_controller.dart';
+import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_ui.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -49,7 +50,12 @@ class FAQsUI extends GetView<FAQsController> {
                               children: [
                                 Divider(height: 1, color: appColors.darkBlue.withOpacity(0.1)),
                                 SizedBox(height: 8.h),
-                                CustomText(controller.faqsResponse.value.data?[index].answer ?? '')
+                                ExpandableHtml(
+                                  htmlData:
+                                  controller.faqsResponse.value.data?[index].answer ?? '',
+                                  trimLength: 100,
+                                )
+                               // CustomText(controller.faqsResponse.value.data?[index].answer ?? '', maxLines: 10,)
                               ],
                             ),
                           ),
