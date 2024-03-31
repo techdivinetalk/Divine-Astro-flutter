@@ -79,6 +79,7 @@ class ChatMessage {
   String? productPrice;
 
   Kundli? kundli;
+  dynamic getCustomProduct;
 
   ChatMessage({
     this.id,
@@ -134,6 +135,7 @@ class ChatMessage {
     this.userType,
     this.productPrice,
     this.kundli,
+    this.getCustomProduct,
   });
 
   ChatMessage.fromOfflineJson(Map<String, dynamic> json) {
@@ -148,6 +150,7 @@ class ChatMessage {
         ? msgTypeValues.map[json["msg_type"].toString()]
         : MsgType.text;
     message = json['message'];
+    getCustomProduct = json["get_custom_product"];
     productId = json['product_id'].toString();
     shopId = json['shop_id'].toString();
     isPoojaProduct = json['is_pooja_product'].toString() == "1" ? true : false;
@@ -204,6 +207,8 @@ class ChatMessage {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['chatMessageId'] = id;
     data['order_id'] = orderId;
+    data["get_custom_product"] = getCustomProduct;
+
     data['member_id'] = memberId;
     data['productPrice'] = productPrice;
     data['role_id'] = roleId;

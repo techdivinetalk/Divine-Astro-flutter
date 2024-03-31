@@ -1101,7 +1101,7 @@ class MessageView extends StatelessWidget {
             ),
             const SizedBox(height: 5),
             Text(
-              "₹${chatDetail.productPrice ?? "0"}",
+              "₹${chatDetail.getCustomProduct["amount"] ?? chatDetail.productPrice ?? "0"}",
               style: AppTextStyle.textStyle12(
                 fontColor: appColors.textColor,
                 fontWeight: FontWeight.w400,
