@@ -1442,7 +1442,7 @@ class HomeUI extends GetView<HomeController> {
         ),
       );
     } else {
-      return SizedBox();
+      return const SizedBox();
     }
   }
 
@@ -1501,13 +1501,13 @@ class HomeUI extends GetView<HomeController> {
                         fontColor: appColors.darkBlue,
                       ),
                     ),
-                    Text(
+                    /*Text(
                       "status".tr,
                       style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w500,
                         fontColor: appColors.darkBlue,
                       ),
-                    ),
+                    ),*/
                   ],
                 ),
                 SizedBox(height: 10.h),
@@ -1589,7 +1589,7 @@ class HomeUI extends GetView<HomeController> {
                   fontColor: appColors.darkBlue,
                 ),
               ),
-              InkWell(
+              /*InkWell(
                 onTap: () {
                   Get.toNamed(RouteName.discountOffers)!.then((value) {
                     controller!.homeData?.offers?.customOffer = value;
@@ -1603,7 +1603,7 @@ class HomeUI extends GetView<HomeController> {
                     fontColor: appColors.darkBlue,
                   ),
                 ),
-              ),
+              ),*/
             ],
           ),
           SizedBox(height: 10.h),
