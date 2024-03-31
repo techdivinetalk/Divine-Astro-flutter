@@ -63,10 +63,12 @@ class WaitListUI extends GetView<WaitListUIController> {
                         height: 15.h,
                       ),
                       waitingListTile(
-                          controller.waitingPersons[0].getCustomers!,
-                          controller.waitingPersons[0].waitTime ?? 0,
-                          controller.waitingPersons[0],
-                          controller: controller),
+                        controller.waitingPersons[0].getCustomers!,
+                        controller.waitingPersons[0].waitTime ?? 0,
+                        controller.waitingPersons[0],
+                        controller: controller,
+                        index: 0,
+                      ),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 10.h),
                         child: const Divider(),
@@ -88,7 +90,7 @@ class WaitListUI extends GetView<WaitListUIController> {
                               controller.waitingPersons[index + 1];
                           return waitingListTile(person.getCustomers!,
                               person.waitTime ?? 0, person,
-                              controller: controller);
+                              index: index + 1, controller: controller);
                         },
                       ),
                     ],
@@ -101,15 +103,18 @@ class WaitListUI extends GetView<WaitListUIController> {
   }
 
   Widget waitingListTile(
-      GetCustomers waitingCustomer, int waitTime, WaitingListQueueData person,
-      {WaitListUIController? controller}) {
+    GetCustomers waitingCustomer,
+    int waitTime,
+    WaitingListQueueData person, {
+    WaitListUIController? controller,
+    int? index,
+  }) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10.h),
       child: Row(
         children: [
           CachedNetworkPhoto(
-            url:
-                "${controller!.preference.getBaseImageURL()!}/${waitingCustomer.avatar ?? ""}",
+            url: "${waitingCustomer.avatar ?? ""}",
             height: 50,
             width: 50,
           ),
@@ -125,8 +130,10 @@ class WaitListUI extends GetView<WaitListUIController> {
               if (chatSwitch.value == false &&
                   callSwitch.value == false &&
                   videoSwitch.value == false) {
-                controller.acceptChatButtonApi(
-                    queueId: person.id.toString(), orderId: person.orderId);
+                controller!.acceptChatButtonApi(
+                  queueId: person.id.toString(),
+                  orderId: person.orderId,
+                );
               } else {
                 Fluttertoast.showToast(
                   msg: "Please turn off all session types.",
