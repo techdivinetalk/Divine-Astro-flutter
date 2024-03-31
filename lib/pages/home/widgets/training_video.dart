@@ -78,7 +78,7 @@ class _TrainingVideoUIState extends State<TrainingVideoUI> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return Container(
       child: GetBuilder<HomeController>(
           init: HomeController(),
           builder: (controller) {

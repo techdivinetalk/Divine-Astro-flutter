@@ -401,12 +401,15 @@ class ChatMessageWithSocketController extends GetxController
     }
   }
 
-  void startExtraTimer() {
+  void startExtraTimer(int futureTimeInEpochMillis) {
+    DateTime dateTime =
+    DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis);
     Duration timeLeft = const Duration(minutes: 1); // Start from 1 minute
-    final endTime = DateTime.now().add(timeLeft);
+    // final endTime = DateTime.now().add(timeLeft);
+    // Duration timeDifference = dateTime.difference(DateTime.now());
     extraTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      final currentTime = DateTime.now();
-      final difference = endTime.difference(currentTime);
+      // final currentTime = DateTime.now();
+      final difference = dateTime.difference(DateTime.now());
       if (difference.isNegative ||
           (difference.inSeconds == 0 &&
               difference.inMinutes == 0 &&
@@ -1145,7 +1148,6 @@ class ChatMessageWithSocketController extends GetxController
       unreadMessageIndex.value = -1;
       addNewMessage(time, MsgType.text,
           messageText: messageController.text.trim());
-
       messageController.clear();
       scrollToBottomFunc();
     }
@@ -1406,11 +1408,11 @@ class ChatMessageWithSocketController extends GetxController
       }
       return;
     }
-    if (p0["status"] == null || p0["status"] == "4") {
+    if (p0["status"] == "4") {
       print("chat status 4");
       showTalkTime.value = "-1";
       chatTimer?.cancel();
-      startExtraTimer();
+      startExtraTimer(p0["order_end_time"]);
       return;
     }
     if (p0["status"] == null || p0["status"] == "5") {

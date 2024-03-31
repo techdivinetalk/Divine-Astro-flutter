@@ -596,7 +596,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                             .orderData
                                                             .value[
                                                         "max_order_time"]) ??
-                                                    0),
+                                                    0),  softWrap: true,
                                             style: TextStyle( 
                                                 fontWeight: FontWeight.w600,
                                                 fontFamily:
