@@ -1115,7 +1115,7 @@ class ChatMessageWithSocketController extends GetxController
       addNewMessage(time, MsgType.gift,
           messageText:item.fullGiftImage,
           productId: item.id.toString(),
-          awsUrl : "${quantity} ${item.giftName} ${quantity > 1 ? "gifts" : "gift"}",
+          awsUrl : "${quantity}",
           giftId: item.id.toString());
     }
   }
