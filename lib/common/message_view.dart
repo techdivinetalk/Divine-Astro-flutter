@@ -1071,6 +1071,8 @@ class MessageView extends StatelessWidget {
 
   Widget CustomProductView(
       {required ChatMessage chatDetail, required int index, String? baseUrl}) {
+    print(chatDetail.id);
+    print("chatDetail.id");
     return Align(
       alignment: Alignment.bottomRight,
       child: Container(
