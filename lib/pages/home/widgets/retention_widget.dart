@@ -12,12 +12,14 @@ class RetentionWidget extends StatelessWidget {
   final String? title;
   final String? subTitle;
   final Widget? child;
+  final bool? isEligible;
   final VoidCallback? onTap;
 
   const RetentionWidget({
     super.key,
     this.onTap,
     this.borderColor,
+    this.isEligible = false,
     this.bottomColor,
     this.bottomTextColor,
     this.title,
@@ -92,7 +94,7 @@ class RetentionWidget extends StatelessWidget {
           fontWeight: FontWeight.w400,
           textAlign: TextAlign.center,
           fontSize: 12.sp,
-          fontColor: borderColor != appColors.textColor ? appColors.textColor:appColors.transparent,
+          fontColor: isEligible! ? borderColor :appColors.transparent,
         ),
       ],
     );

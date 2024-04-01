@@ -312,6 +312,7 @@ class HomeUI extends GetView<HomeController> {
                             children: [
                               Expanded(
                                   child: RetentionWidget(
+                                    isEligible: true,
                                 title:
                                     "Bonus Wallet \n ₹${abbreviateNumber(controller.homeData?.bonusWallet)}",
                                 subTitle:
