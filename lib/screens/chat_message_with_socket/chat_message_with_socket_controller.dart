@@ -616,8 +616,9 @@ class ChatMessageWithSocketController extends GetxController
       });
       debugPrint("astrojoined3 ${index}");
       if (index != -1) {
+        print("goinggoinggoinggoinggoing");
         chatMessages[index].type = 3;
-        chatMessages.refresh();
+        update();
       }
     }
     await hiveServices.addData(
@@ -670,7 +671,6 @@ class ChatMessageWithSocketController extends GetxController
         return element.id.toString() ==
             data['data']["chatMessageId"].toString();
       });
-
       if (index != -1) {
         chatMessages[index].type = 3;
         chatMessages.refresh();

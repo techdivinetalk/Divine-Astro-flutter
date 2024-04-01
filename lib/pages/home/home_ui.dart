@@ -409,7 +409,7 @@ class HomeUI extends GetView<HomeController> {
                             alignment: Alignment.centerLeft,
                             child: CustomText(
                               (controller.homeData!.retention! <
-                                  controller.homeData!.minimumRetention!) ? "You are Not Eligible Bonus wallet!" : "You are Eligible Bonus wallet!",
+                                  controller.homeData!.minimumRetention!) ? "You are Not Eligible for Bonus wallet!" : "You are Eligible for Bonus wallet!",
                               fontWeight: FontWeight.w400,
                               textAlign: TextAlign.start,
                               fontSize: 14,
