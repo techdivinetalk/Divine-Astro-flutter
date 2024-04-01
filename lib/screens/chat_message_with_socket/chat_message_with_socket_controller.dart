@@ -1345,7 +1345,7 @@ class ChatMessageWithSocketController extends GetxController
       required ChatMessage chatDetail,
       required int index}) async {
     final http.Response response =
-        await http.get(Uri.parse(chatDetail.awsUrl!));
+        await http.get(Uri.parse(chatDetail.message!));
     final Directory documentDirectory =
         await getApplicationDocumentsDirectory();
     final String firstPath = "${documentDirectory.path}/images";

@@ -901,7 +901,7 @@ class MessageView extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (chatDetail.awsUrl != null)
+                if (chatDetail.message != null)
                   InkWell(
                     onTap: () {
                       chatController.downloadImage(
@@ -1126,7 +1126,7 @@ class MessageView extends StatelessWidget {
         ),
         const SizedBox(height: 5),
         Text(
-            "₹${chatDetail.productPrice ?? chatDetail.getCustomProduct["amount"]}",
+          "₹${chatDetail.productPrice ?? '${chatDetail.getCustomProduct != null ?chatDetail.getCustomProduct["amount"] :"0"}'}",
         style: AppTextStyle.textStyle12(
         fontColor: appColors.textColor,
         fontWeight: FontWeight.w400,
