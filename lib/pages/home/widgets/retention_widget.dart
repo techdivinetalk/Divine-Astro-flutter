@@ -35,68 +35,56 @@ class RetentionWidget extends StatelessWidget {
 
     final height = totalLines > 2 ? 60.h : 60.h;
 
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: onTap,
-          child: Container(
-            height: height,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: appColors.transparent,
-              border: Border.all(color: borderColor ?? Colors.transparent),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: child ??
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Center(
-                        child: CustomText(
-                          title ?? "",
-                          fontWeight: FontWeight.w400,
-                          textAlign: TextAlign.center,
-                          fontSize: 9.sp,
-                          maxLines: 2,
-                          fontColor: appColors.textColor,
-                        ),
-                      ),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: height,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: appColors.transparent,
+          border: Border.all(color: borderColor ?? Colors.transparent),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: child ??
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Center(
+                    child: CustomText(
+                      title ?? "",
+                      fontWeight: FontWeight.w400,
+                      textAlign: TextAlign.center,
+                      fontSize: 9.sp,
+                      maxLines: 2,
+                      fontColor: appColors.textColor,
                     ),
-                    Expanded(
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: borderColor ?? Colors.transparent,
-                          borderRadius: const BorderRadius.vertical(
-                            bottom: Radius.circular(10),
-                          ),
-                        ),
-                        child: Center(
-                          child: CustomText(
-                            subTitle ?? "",
-                            fontWeight: FontWeight.w400,
-                            textAlign: TextAlign.center,
-                            fontSize: 8.5.sp,
-                            maxLines: 2,
-                            fontColor: bottomTextColor ?? appColors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-          ),
-        ),
-        const SizedBox(height: 5),
-        CustomText(
-          borderColor == appColors.red ? "Not Eligible" : "Eligible",
-          fontWeight: FontWeight.w400,
-          textAlign: TextAlign.center,
-          fontSize: 12.sp,
-          fontColor: isEligible! ? borderColor :appColors.transparent,
-        ),
-      ],
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: borderColor ?? Colors.transparent,
+                      borderRadius: const BorderRadius.vertical(
+                        bottom: Radius.circular(10),
+                      ),
+                    ),
+                    child: Center(
+                      child: CustomText(
+                        subTitle ?? "",
+                        fontWeight: FontWeight.w400,
+                        textAlign: TextAlign.center,
+                        fontSize: 8.5.sp,
+                        maxLines: 2,
+                        fontColor: bottomTextColor ?? appColors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+      ),
     );
   }
 }

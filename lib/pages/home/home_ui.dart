@@ -25,6 +25,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -402,6 +403,19 @@ class HomeUI extends GetView<HomeController> {
                                 ),
                               )),
                             ],
+                          ),
+                          SizedBox(height: 10.h),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: CustomText(
+                              (controller.homeData!.retention! <
+                                  controller.homeData!.minimumRetention!) ? "You are Not Eligible Bonus wallet!" : "You are Eligible Bonus wallet!",
+                              fontWeight: FontWeight.w400,
+                              textAlign: TextAlign.start,
+                              fontSize: 14,
+                              fontColor: !(controller.homeData!.retention! <
+                                  controller.homeData!.minimumRetention!)! ? appColors.green :appColors.red,
+                            ),
                           ),
                           SizedBox(height: 10.h),
                           Obx(
