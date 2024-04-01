@@ -897,7 +897,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           controller.addNewMessage(time, MsgType.product,
                               data: {'data': result}, messageText: 'Product');
                         }
-
                         break;
                       case 5:
                         print(controller.customProductData);
