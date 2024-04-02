@@ -206,7 +206,7 @@ class HomeController extends GetxController {
   getAllDashboardData({bool isReapeting = false}) async {
     await getConstantDetailsData();
 
-    if (getConstantDetails!.data!.isForceTraningVideo == 1) {
+    if (getConstantDetails!.data!.isForceTraningVideo == 0) {
       print("if----getConstantDetails!.data!.isForceTraningVideo");
       getAllTrainingVideo(isReapeting: isReapeting);
     } else {

@@ -93,59 +93,47 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   child: Stack(
                     children: [
                       Obx(
-                        () => AnimatedCrossFade(
-                          duration: const Duration(milliseconds: 200),
-                          crossFadeState: controller.chatMessages.isEmpty
-                              ? CrossFadeState.showSecond
-                              : CrossFadeState.showFirst,
-                          secondChild: Container(),
-                          firstChild: NotificationListener(
-                            onNotification: (t) {
-                              return true;
-                            },
-                            child: ListView.builder(
-                              controller: controller.messgeScrollController,
-                              itemCount: controller.chatMessages.length,
-                              shrinkWrap: true,
-                              padding: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(context).viewInsets.bottom),
-                              reverse: false,
-                              itemBuilder: (context, index) {
-                                var chatMessage =
-                                    controller.chatMessages[index];
-                                return Column(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 4.h, horizontal: 12.w),
-                                      child: MessageView(
-                                          index: index,
-                                          nextChatMessage: index ==
-                                                  controller
-                                                          .chatMessages.length -
-                                                      1
-                                              ? controller.chatMessages[index]
-                                              : controller
-                                                  .chatMessages[index + 1],
-                                          chatMessage: chatMessage,
-                                          /*  yourMessage: "${chatMessage.senderId.toString()}" ==
+                        () => ListView.builder(
+                          controller: controller.messgeScrollController,
+                          itemCount: controller.chatMessages.length,
+                          shrinkWrap: true,
+                          padding: EdgeInsets.only(
+                              bottom:
+                              MediaQuery.of(context).viewInsets.bottom),
+                          reverse: false,
+                          itemBuilder: (context, index) {
+                            var chatMessage =
+                            controller.chatMessages[index];
+                            return Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 4.h, horizontal: 12.w),
+                                  child: MessageView(
+                                      index: index,
+                                      nextChatMessage: index ==
+                                          controller
+                                              .chatMessages.length -
+                                              1
+                                          ? controller.chatMessages[index]
+                                          : controller
+                                          .chatMessages[index + 1],
+                                      chatMessage: chatMessage,
+                                      /*  yourMessage: "${chatMessage.senderId.toString()}" ==
                                               "${preferenceService.getUserDetail()!.id.toString()}",*/
-                                          yourMessage:
-                                              chatMessage.msgSendBy == "1",
-                                          userName:
-                                              controller.customerName.value,
-                                          unreadMessage: controller
-                                              .unreadMessageIndex.value),
-                                    ),
-                                    if (index ==
-                                        (controller.chatMessages.length - 1))
-                                      typingWidget()
-                                  ],
-                                );
-                              },
-                            ),
-                          ),
+                                      yourMessage:
+                                      chatMessage.msgSendBy == "1",
+                                      userName:
+                                      controller.customerName.value,
+                                      unreadMessage: controller
+                                          .unreadMessageIndex.value),
+                                ),
+                                if (index ==
+                                    (controller.chatMessages.length - 1))
+                                  typingWidget()
+                              ],
+                            );
+                          },
                         ),
                       ),
                       Positioned(

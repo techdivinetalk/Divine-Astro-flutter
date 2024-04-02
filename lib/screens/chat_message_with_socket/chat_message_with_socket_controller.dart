@@ -1078,19 +1078,11 @@ class ChatMessageWithSocketController extends GetxController
   scrollToBottomFunc() {
     messgeScrollController.hasClients
         ? messgeScrollController.animateTo(
-            messgeScrollController.position.maxScrollExtent * 2,
-            duration: const Duration(milliseconds: 600),
-            curve: Curves.easeOut)
+        messgeScrollController.position.maxScrollExtent * 2,
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeOut)
         : null;
-
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   messgeScrollController.hasClients
-    //       ? messgeScrollController.animateTo(
-    //           messgeScrollController.position.maxScrollExtent * 2,
-    //           duration: const Duration(milliseconds: 600),
-    //           curve: Curves.easeOut)
-    //       : null;
-    // });
+    update();
   }
 
   askForGift() async {
