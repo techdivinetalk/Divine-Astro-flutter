@@ -146,7 +146,7 @@ class AddPujaScreen extends GetView<AddPujaController> {
                 ),
                 SizedBox(height: 20.h),
                 controller.selectedPujaName != null &&
-                        controller.selectedPujaName!.id == 0
+                        controller.selectedPujaName!.id == 0 || controller.selectedValue.value  == "Product"
                     ? PoojaRemedyTextFiled(
                         title: "${controller.selectedValue} Name",
                         maxLength: 20,

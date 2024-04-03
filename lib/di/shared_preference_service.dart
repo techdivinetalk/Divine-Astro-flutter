@@ -41,7 +41,6 @@ class SharedPreferenceService extends GetxService {
     // log("userData:: $userData");
     if (userData.isNotEmpty) {
       log(userData);
-      log("userDatauserDatauserDatauserData");
       var jsonDecoded = jsonDecode(userData);
       userDetail = UserData.fromJson(jsonDecoded);
     }
