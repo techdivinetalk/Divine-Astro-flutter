@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -79,12 +80,34 @@ class UploadStoryController extends GetxController {
     }
   }
 
+  String encodeString(String originalString) {
+    String encodedString = base64Encode(utf8.encode(originalString));
+    return encodedString;
+  }
+
+  String encodedURLFunction() {
+    final Map<dynamic, dynamic> map = {
+      "astrologer_id": userData?.id.toString(),
+    };
+    final Uri encoded = Uri.parse("https://applinktesting.000webhostapp.com");
+    final String path = "page=zodiacSignDetailsPage&param=${json.encode(map)}";
+    final String encode = encodeString(path);
+    final String fullEncodeURL = "${encoded.scheme}://${encoded.host}?$encode";
+    return fullEncodeURL;
+  }
+
+
   Future<void> uploadStory(String url, {String? duration}) async {
+    String fullEncodeURL = encodedURLFunction();
+    print("fullEncodeURL: $fullEncodeURL");
+
+
     try {
       Map<String, dynamic> param = {
         "media_url": url,
         "astrologer_id": userData?.id,
         "duration": duration,
+        "link":fullEncodeURL,
       };
       final response = await userRepository.uploadAstroStory(param);
       if (response.statusCode == 200 && response.success == true) {

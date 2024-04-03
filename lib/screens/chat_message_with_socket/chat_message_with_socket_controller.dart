@@ -240,8 +240,6 @@ class ChatMessageWithSocketController extends GetxController
 
   var isCardVisible = false.obs;
 
-  // RxInt cardListCount = 0.obs;
-
   stateHandling() {
     WidgetsBinding.instance.addObserver(this);
     _state = SchedulerBinding.instance.lifecycleState;
@@ -403,7 +401,7 @@ class ChatMessageWithSocketController extends GetxController
 
   void startExtraTimer(int futureTimeInEpochMillis) {
     DateTime dateTime =
-    DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis);
+        DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis);
     Duration timeLeft = const Duration(minutes: 1); // Start from 1 minute
     // final endTime = DateTime.now().add(timeLeft);
     // Duration timeDifference = dateTime.difference(DateTime.now());
@@ -422,7 +420,7 @@ class ChatMessageWithSocketController extends GetxController
       } else {
         timeLeft = difference;
         extraTalkTime.value =
-        "${timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
+            "${timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
             "${timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
         print("time Left ${extraTalkTime.value}");
         if (MiddleWare.instance.currentPage == RouteName.dashboard) {
@@ -437,7 +435,7 @@ class ChatMessageWithSocketController extends GetxController
 
   void talkTimeStartTimer(int futureTimeInEpochMillis) {
     DateTime dateTime =
-    DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
+        DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
     print("futureTime.minute");
     if (chatTimer != null) {
       chatTimer?.cancel();
@@ -456,7 +454,7 @@ class ChatMessageWithSocketController extends GetxController
       } else {
         //         print('Countdown working');
         showTalkTime.value =
-        "${timeDifference.inHours.toString().padLeft(2, '0')}:"
+            "${timeDifference.inHours.toString().padLeft(2, '0')}:"
             "${timeDifference.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
             "${timeDifference.inSeconds.remainder(60).toString().padLeft(2, '0')}";
         if (MiddleWare.instance.currentPage == RouteName.dashboard) {
@@ -565,7 +563,7 @@ class ChatMessageWithSocketController extends GetxController
   @override
   void onReady() {
     super.onReady();
-    Future.delayed(const Duration(milliseconds: 600)).then((value) async {
+    Future.delayed(const Duration(milliseconds: 200)).then((value) async {
       scrollToBottomFunc();
       await ZegoService().canInit();
     });
@@ -643,19 +641,6 @@ class ChatMessageWithSocketController extends GetxController
     });
   }
 
-  bool isScrollAtBottom() {
-    // Ensure we have a scroll position to check against
-    if (messgeScrollController.hasClients == false) return false;
-
-    // The current scroll position is at the bottom if the current offset is equal
-    // or greater than the maximum scroll extent. A small threshold is used for
-    // ensuring a smoother detection, considering floating-point rounding issues or
-    // cases where the scroll physics allow slight overscrolling.
-    final threshold = 10.h; // Pixels tolerance
-    return messgeScrollController.offset >=
-        (messgeScrollController.position.maxScrollExtent - threshold);
-  }
-
   // void sendMessageSocketListenerSocket() {
   //   socket.sendMessageSocketListenerSocket((data) {
   //     debugPrint("sendMessageSocketListenerSocket $data");
@@ -695,9 +680,7 @@ class ChatMessageWithSocketController extends GetxController
         final ChatMessage chatMessage =
             ChatMessage.fromOfflineJson(data["data"]);
         final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-        log('${chatMessage.toOfflineJson()}');
-        log('sendGiftss ${chatMessage.msgType}');
-        log('sendGiftss ${chatMessage.msgType == MsgType.gift}');
+        log('chatMessage.msgType ${chatMessage.msgType}');
         if (chatMessage.msgType == MsgType.sendgifts) {
           if (chatMessage.title != null && chatMessage.title != "") {
             debugPrint("sendMesxxx $data");
@@ -715,6 +698,7 @@ class ChatMessageWithSocketController extends GetxController
           );
         }
         updateChatMessages(chatMessage, false, isSendMessage: false);
+        scrollToBottomFunc();
         //}
       }
       debugPrint("chatMessage.value.length ${chatMessages.length}");
@@ -866,7 +850,9 @@ class ChatMessageWithSocketController extends GetxController
     if (uploadFile != "" || uploadFile != null) {
       print("image message upload file ${uploadFile} ${base64Image}");
       addNewMessage(time, MsgType.image,
-          messageText: uploadFile, base64Image: base64Image, downloadedPath: '');
+          messageText: uploadFile,
+          base64Image: base64Image,
+          downloadedPath: '');
     }
   }
 
@@ -1019,9 +1005,7 @@ class ChatMessageWithSocketController extends GetxController
           updateMsgDelieveredStatus(newMessage, 2);
           if (messgeScrollController.position.pixels ==
               messgeScrollController.position.maxScrollExtent) {
-            Future.delayed(const Duration(seconds: 1)).then((value) {
-              scrollToBottomFunc();
-            });
+            scrollToBottomFunc();
           }
         } else {
           print("newMessage5");
@@ -1059,10 +1043,9 @@ class ChatMessageWithSocketController extends GetxController
     chatMessages.refresh();
     setHiveDataDatabase();
     if (!isFromNotification) {
+      print("isFromNotification-->>${isFromNotification}");
       updateReadMessageStatus();
-      Future.delayed(const Duration(milliseconds: 200)).then((value) {
-        scrollToBottomFunc();
-      });
+      // scrollToBottomFunc();
     }
   }
 
@@ -1076,12 +1059,15 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   scrollToBottomFunc() {
-    messgeScrollController.hasClients
-        ? messgeScrollController.animateTo(
-        messgeScrollController.position.maxScrollExtent * 2,
-        duration: const Duration(milliseconds: 600),
-        curve: Curves.easeOut)
-        : null;
+    if (messgeScrollController.hasClients) {
+      print("scrollToBottom");
+      Timer(
+        const Duration(milliseconds: 500),
+        () => messgeScrollController.jumpTo(
+          messgeScrollController.position.maxScrollExtent,
+        ),
+      );
+    }
     update();
   }
 
@@ -1110,7 +1096,7 @@ class ChatMessageWithSocketController extends GetxController
       addNewMessage(time, MsgType.gift,
           messageText: item.giftName,
           productId: item.id.toString(),
-          awsUrl : item.fullGiftImage,
+          awsUrl: item.fullGiftImage,
           giftId: item.id.toString());
     }
   }
@@ -1141,7 +1127,7 @@ class ChatMessageWithSocketController extends GetxController
       addNewMessage(time, MsgType.text,
           messageText: messageController.text.trim());
       messageController.clear();
-      scrollToBottomFunc();
+
     }
   }
 
@@ -1258,7 +1244,10 @@ class ChatMessageWithSocketController extends GetxController
       throw IndexError(position, keysList, 'Index out of range');
     }
   }
-  final CallChatHistoryRepository callChatFeedBackRepository = Get.put(CallChatHistoryRepository());
+
+  final CallChatHistoryRepository callChatFeedBackRepository =
+      Get.put(CallChatHistoryRepository());
+
   getChatList() async {
 /*    chatMessages.clear();
     print("get chat list 1");
@@ -1291,15 +1280,15 @@ class ChatMessageWithSocketController extends GetxController
     chatMessages.clear();
     update();
     try {
-     /* if (processedPages.contains(currentPage.value)) {
+      /* if (processedPages.contains(currentPage.value)) {
         return;
       }*/
 
       var userId = int.parse(AppFirebaseService().orderData.value["userId"]);
       var astroId = int.parse(AppFirebaseService().orderData.value["astroId"]);
 
-      var response = await callChatFeedBackRepository.getAstrologerChats(
-          userId, astroId);
+      var response =
+          await callChatFeedBackRepository.getAstrologerChats(userId, astroId);
 
       if (response.success ?? false) {
         List<ChatMessage> fetchedMessages = response.chatMessages ?? [];
@@ -1393,9 +1382,9 @@ class ChatMessageWithSocketController extends GetxController
 
   void initTask(Map<String, dynamic> p0) {
     if (MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
-      if(p0["status"] == null || p0["status"] == "5"){
+      if (p0["status"] == null || p0["status"] == "5") {
         print("chat status ${p0["status"]}");
-       // AppFirebaseService().orderData.value = {};
+        // AppFirebaseService().orderData.value = {};
         Get.delete<ChatMessageWithSocketController>();
       }
       return;
@@ -1482,14 +1471,9 @@ class ChatMessageWithSocketController extends GetxController
       } else {
         customProductData = [];
       }
-    } catch (e, s) { 
+    } catch (e, s) {
       debugPrint("we got $e $s");
       rethrow;
     }
   }
-
-
-
-
-
 }
