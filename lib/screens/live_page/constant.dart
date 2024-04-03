@@ -21,9 +21,9 @@ RxList assistChatNewMsg = [].obs;
 RxInt chatAssistantCurrentUserId = 0.obs;
 RxInt walletBalance = 0.obs;
 RxList<AssistChatData> assistChatUnreadMessages = <AssistChatData>[].obs;
-RxBool chatSwitch = true.obs;
-RxBool callSwitch = true.obs;
-RxBool videoSwitch = true.obs;
+RxBool chatSwitch = false.obs;
+RxBool callSwitch = false.obs;
+RxBool videoSwitch = false.obs;
 RxString userImage = ''.obs;
 
 

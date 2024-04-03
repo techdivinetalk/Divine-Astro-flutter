@@ -59,7 +59,7 @@ class AppSocket {
       "userType": 'astrologer',
       "chat": chat,
       "call": call,
-      "video": video
+      "video": video,
     });
   }
 

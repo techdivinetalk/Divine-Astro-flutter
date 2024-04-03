@@ -55,7 +55,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
   final keyboardVisibilityController = KeyboardVisibilityController();
   RxInt currentPage = 1.obs;
   Set<int> processedPages = {};
-  final messageController = TextEditingController();
+  TextEditingController messageController = TextEditingController();
   RxBool isEmojiShowing = false.obs;
   DataList? args;
   RxString? baseImageUrl = "".obs;

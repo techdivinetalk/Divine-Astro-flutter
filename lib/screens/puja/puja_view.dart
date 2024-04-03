@@ -18,7 +18,7 @@ import 'package:velocity_x/velocity_x.dart';
 import 'widget/pooja_delete_bottom_sheet.dart';
 
 class PujaScreen extends GetView<PujaController> {
-  const PujaScreen    ({super.key});
+  const PujaScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +75,10 @@ class PujaScreen extends GetView<PujaController> {
                   ? Text(
                       controller.noPoojaFound,
                       style: AppTextStyle.textStyle16(
-                          fontWeight: FontWeight.w600,
-                          fontColor: appColors.textColor),
-                     textAlign: TextAlign.center,
+                        fontWeight: FontWeight.w600,
+                        fontColor: appColors.textColor,
+                      ),
+                      textAlign: TextAlign.center,
                     ).centered()
                   : ListView.separated(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -87,7 +88,6 @@ class PujaScreen extends GetView<PujaController> {
                       itemCount: controller.pujaData.length,
                       itemBuilder: (context, index) {
                         PujaListingData data = controller.pujaData[index];
-
                         return Container(
                           padding: const EdgeInsets.all(12.0),
                           decoration: BoxDecoration(
@@ -106,7 +106,8 @@ class PujaScreen extends GetView<PujaController> {
                               CustomImageView(
                                 height: 65,
                                 width: 65,
-                                imagePath:controller.pref.getAmazonUrl()! + "${data.poojaImg ?? ""}",
+                                imagePath: controller.pref.getAmazonUrl()! +
+                                    "${data.poojaImg ?? ""}",
                                 radius: BorderRadius.circular(10),
                                 placeHolder:
                                     "assets/images/default_profiles.svg",
@@ -156,7 +157,8 @@ class PujaScreen extends GetView<PujaController> {
                                                 Get.bottomSheet(
                                                     PoojaDeleteBottomSheet(
                                                   pujaData: data,
-                                                  baseImageUrl: controller.pref.getAmazonUrl()! ,
+                                                  baseImageUrl: controller.pref
+                                                      .getAmazonUrl()!,
                                                   onTap: () {
                                                     controller.deletePujaApi(
                                                         deleteId:

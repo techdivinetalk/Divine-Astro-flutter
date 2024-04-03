@@ -70,6 +70,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       builder: (BuildContext context) {
                         return Container(
                             margin: const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+
                             width: MediaQuery.of(context).size.width,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -79,9 +81,11 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 borderRadius: BorderRadius.circular(20)),
                             child: Text(
                               '${i.description}',
+                              textAlign: TextAlign.center,
                               style: AppTextStyle.textStyle12(
                                 fontWeight: FontWeight.w400,
                                 fontColor: appColors.red,
+
                               ),
                             ));
                       },
@@ -97,13 +101,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           controller: controller.messgeScrollController,
                           itemCount: controller.chatMessages.length,
                           shrinkWrap: true,
-                          padding: EdgeInsets.only(
-                              bottom:
-                              MediaQuery.of(context).viewInsets.bottom),
                           reverse: false,
                           itemBuilder: (context, index) {
-                            var chatMessage =
-                            controller.chatMessages[index];
+                            var chatMessage = controller.chatMessages[index];
                             return Column(
                               children: [
                                 Padding(
@@ -112,21 +112,16 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   child: MessageView(
                                       index: index,
                                       nextChatMessage: index ==
-                                          controller
-                                              .chatMessages.length -
-                                              1
+                                              controller.chatMessages.length - 1
                                           ? controller.chatMessages[index]
-                                          : controller
-                                          .chatMessages[index + 1],
+                                          : controller.chatMessages[index + 1],
                                       chatMessage: chatMessage,
                                       /*  yourMessage: "${chatMessage.senderId.toString()}" ==
                                               "${preferenceService.getUserDetail()!.id.toString()}",*/
-                                      yourMessage:
-                                      chatMessage.msgSendBy == "1",
-                                      userName:
-                                      controller.customerName.value,
-                                      unreadMessage: controller
-                                          .unreadMessageIndex.value),
+                                      yourMessage: chatMessage.msgSendBy == "1",
+                                      userName: controller.customerName.value,
+                                      unreadMessage:
+                                          controller.unreadMessageIndex.value),
                                 ),
                                 if (index ==
                                     (controller.chatMessages.length - 1))
@@ -590,11 +585,12 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     //   height: 30,
                     // ),
                     child: Assets.lottie.loadingDots.lottie(
-                        width: 45,
-                        height: 30,
-                        repeat: true,
-                        frameRate: FrameRate(120),
-                        animate: true),
+                      width: 45,
+                      height: 30,
+                      repeat: true,
+                      frameRate: FrameRate(120),
+                      animate: true,
+                    ),
                   )
                 : const SizedBox(),
           )),

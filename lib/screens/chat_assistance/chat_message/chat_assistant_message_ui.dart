@@ -531,7 +531,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                             //     ? controller.scrollToBottomFunc()
                             //     : null;
                             controller.update();
-                            controller.scrollToBottomFunc();
+                            // controller.scrollToBottomFunc();
                           },
                           decoration: InputDecoration(
                             hintText: "message".tr,
