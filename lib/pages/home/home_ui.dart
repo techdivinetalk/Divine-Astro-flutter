@@ -1118,8 +1118,7 @@ class HomeUI extends GetView<HomeController> {
                   ),
                 ),*/
                       ExpandableHtml(
-                        htmlData:
-                            controller.homeData?.noticeBoard?.description ?? "",
+                        htmlData: controller.homeData?.noticeBoard?.description ?? "",
                         trimLength: 100,
                       ),
                     ],

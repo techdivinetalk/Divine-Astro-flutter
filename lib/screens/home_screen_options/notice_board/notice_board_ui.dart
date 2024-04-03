@@ -147,6 +147,7 @@ class _ExpandableHtmlState extends State<ExpandableHtml>
     return Column(
       children: [
         Html(
+          shrinkWrap: true,
           data: trimmedText,
           onLinkTap: (url, attributes, element) {
             launchUrl(Uri.parse(url ?? ''));
