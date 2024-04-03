@@ -14,7 +14,7 @@ import '../../../model/notice_response.dart';
 import 'notice_board_controller.dart';
 
 class NoticeBoardUi extends GetView<NoticeBoardController> {
-  const NoticeBoardUi({Key? key}) : super(key: key);
+  const NoticeBoardUi({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -128,18 +128,21 @@ class ExpandableHtml extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ExpandableHtmlState createState() => _ExpandableHtmlState();
+  State<ExpandableHtml> createState() => _ExpandableHtmlState();
 }
 
-class _ExpandableHtmlState extends State<ExpandableHtml> {
+class _ExpandableHtmlState extends State<ExpandableHtml>
+    with AutomaticKeepAliveClientMixin {
   bool _isExpanded = false;
+
+  String get trimmedText =>
+      _isExpanded || widget.htmlData.length <= widget.trimLength
+          ? widget.htmlData
+          : '${widget.htmlData.substring(0, widget.trimLength)}...';
 
   @override
   Widget build(BuildContext context) {
-    final String trimmedText =
-        widget.htmlData.length > widget.trimLength && !_isExpanded
-            ? widget.htmlData.substring(0, widget.trimLength) + '...'
-            : widget.htmlData;
+    super.build(context);
 
     return Column(
       children: [
@@ -149,27 +152,29 @@ class _ExpandableHtmlState extends State<ExpandableHtml> {
             launchUrl(Uri.parse(url ?? ''));
           },
         ),
-        widget.htmlData.length > widget.trimLength
-            ? Align(
-                alignment: Alignment.topRight,
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _isExpanded = !_isExpanded;
-                    });
-                  },
-                  child: Text(
-                    _isExpanded ? "Show Less" : "Show More",
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w700,
-                      color: appColors.blackColor,
-                    ),
-                  ),
+        if (widget.htmlData.length > widget.trimLength)
+          Align(
+            alignment: Alignment.topRight,
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _isExpanded = !_isExpanded;
+                });
+              },
+              child: Text(
+                _isExpanded ? "Show Less" : "Show More",
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w700,
+                  color: appColors.blackColor,
                 ),
-              )
-            : SizedBox(),
+              ),
+            ),
+          ),
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -151,40 +153,72 @@ class OtpVerificationField extends StatelessWidget {
   }
 }
 
-class NotReceiveOtpText extends StatelessWidget {
-  NotReceiveOtpText({Key? key, required this.onResend}) : super(key: key);
+class NotReceiveOtpText extends StatefulWidget {
+  const NotReceiveOtpText({Key? key, required this.onResend}) : super(key: key);
 
-  final void Function() onResend;
+  final VoidCallback onResend;
+
+  @override
+  State<NotReceiveOtpText> createState() => _NotReceiveOtpTextState();
+}
+
+class _NotReceiveOtpTextState extends State<NotReceiveOtpText> {
+  late Timer _timer;
+  int _remainingTime = 60;
   final controller = Get.find<OtpVerificationController>();
 
-  TextStyle get textStyle => TextStyle(
-      fontSize: 16.sp,
-      fontWeight: FontWeight.w500,
-      color: appColors.darkBlue,
-      fontFamily: FontFamily.notoSans);
+  @override
+  void initState() {
+    super.initState();
+    startTimer();
+  }
 
-  TextStyle get resendTextStyle => TextStyle(
-      fontSize: 16.sp,
-      fontWeight: FontWeight.w700,
-      color: appColors.darkBlue,
-      fontFamily: FontFamily.notoSans,
-      decoration: TextDecoration.underline);
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_remainingTime > 0) {
+          _remainingTime--;
+        } else {
+          _timer.cancel();
+        }
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           "notReceiveOTP".tr,
-          style: textStyle,
+          style: TextStyle(
+            fontSize: 15.sp,
+            fontWeight: FontWeight.w500,
+            color: appColors.textColor,
+            fontFamily: FontFamily.notoSans,
+          ),
         ),
+        // SizedBox(width: 4.w),
         CustomButton(
           padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 3.h),
-          onTap: onResend,
+          onTap: _remainingTime == 0 ? widget.onResend : () {},
           child: Text(
-            "resend".tr,
-            style: resendTextStyle,
+            _remainingTime == 0 ? "resend".tr : "Resend in $_remainingTime seconds",
+            style: TextStyle(
+              fontSize: 15.sp,
+              fontWeight: FontWeight.w700,
+              color: _remainingTime == 0 ? appColors.textColor : appColors.grey,
+              fontFamily: FontFamily.notoSans,
+              decoration: _remainingTime == 0 ? TextDecoration.underline : TextDecoration.none,
+            ),
           ),
         ),
       ],
