@@ -159,7 +159,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
       canPop: false,
       child: Container(
         decoration: BoxDecoration(
-          color: appColors.guideColor,
+          color: appColors.white,
         ),
         child: Scaffold(
             backgroundColor: appColors.transparent,

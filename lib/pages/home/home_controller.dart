@@ -649,6 +649,8 @@ class HomeController extends GetxController {
 
   List<TrainingVideoData> traingVideoData = [];
 
+  int videoPage = 1;
+
   getAllTrainingVideo({bool isReapeting = false}) async {
     try {
       var data = await homePageRepository.getAllTraningVideoApi();
