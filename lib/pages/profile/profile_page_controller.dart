@@ -101,9 +101,9 @@ class ProfilePageController extends GetxController {
           "bankDetails".tr,
           Assets.images.icBankDetailNew.svg(width: 30.h, height: 30.h),
           '/bankDetailsUI'),
-      ProfileOptionModelClass("uploadStory".tr,
+      ProfileOptionModelClass("Upload Story",
           Assets.images.icUploadStory.svg(width: 30.h, height: 30.h), ''),
-      ProfileOptionModelClass("uploadYourPhoto".tr,
+      ProfileOptionModelClass('Upload Your Photo',
           Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h), ''),
       ProfileOptionModelClass("customerSupport".tr,
           Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), ''),
@@ -113,10 +113,10 @@ class ProfilePageController extends GetxController {
           '/languagePopup'),
       ProfileOptionModelClass(
           "F&Q", Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
-      ProfileOptionModelClass(
+/*      ProfileOptionModelClass(
           "priceChange".tr,
           Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
-          '/priceHistoryUI'),
+          '/priceHistoryUI'),*/
       ProfileOptionModelClass(
           "numberChange".tr,
           Assets.images.icNumChanges.svg(width: 30.h, height: 30.h),
@@ -137,13 +137,13 @@ class ProfilePageController extends GetxController {
         Assets.images.icBankDetailNew.svg(width: 30.h, height: 30.h),
         '/bankDetailsUI'),
     ProfileOptionModelClass(
-        "uploadStory".tr,
+        "Upload Story".tr,
         Assets.images.icUploadStory.svg(width: 30.h, height: 30.h),
-        '/uploadStoryUi'),
+        '/Upload Story'),
     ProfileOptionModelClass(
-        "uploadYourPhoto".tr,
+        "Upload Your Photo",
         Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h),
-        '/uploadYourPhotosUi'),
+        '/Upload Your Photo'),
     ProfileOptionModelClass("customerSupport".tr,
         Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), ''),
     ProfileOptionModelClass(
@@ -152,10 +152,10 @@ class ProfilePageController extends GetxController {
         '/languagePopup'),
     ProfileOptionModelClass(
         "F&Q", Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
-    ProfileOptionModelClass(
+   /* ProfileOptionModelClass(
         "priceChange".tr,
         Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
-        '/priceHistoryUI'),
+        '/priceHistoryUI'),*/
     ProfileOptionModelClass(
         "numberChange".tr,
         Assets.images.icNumChanges.svg(width: 30.h, height: 30.h),
