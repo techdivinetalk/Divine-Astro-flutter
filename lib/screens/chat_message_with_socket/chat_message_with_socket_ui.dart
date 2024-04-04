@@ -69,15 +69,22 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     return Builder(
                       builder: (BuildContext context) {
                         return Container(
+                          clipBehavior: Clip.none,
                             margin: const EdgeInsets.symmetric(horizontal: 10),
                             padding: const EdgeInsets.symmetric(horizontal: 10),
-
                             width: MediaQuery.of(context).size.width,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                                 color: appColors.white,
-                                border:
-                                    Border.all(color: appColors.red, width: 2),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: appColors.textColor.withOpacity(0.4),
+                                    blurRadius: 3,
+                                    offset: const Offset(0, 1),
+                                  )
+                                ],
+                                // border:
+                                //     Border.all(color: appColors.red, width: 2),
                                 borderRadius: BorderRadius.circular(20)),
                             child: Text(
                               '${i.description}',
@@ -85,7 +92,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               style: AppTextStyle.textStyle12(
                                 fontWeight: FontWeight.w400,
                                 fontColor: appColors.red,
-
                               ),
                             ));
                       },
@@ -1183,17 +1189,17 @@ class AstrologerChatAppBar extends StatelessWidget {
       child: Container(
         // height: 90.h + Get.mediaQuery.viewPadding.top.h,
         alignment: Alignment.center,
-        margin: const EdgeInsets.symmetric(vertical: 5.0),
+        // margin: const EdgeInsets.symmetric(vertical: 5.0),
         padding: EdgeInsets.only(bottom: 12.h),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(20.r),
-            bottomLeft: Radius.circular(20.r),
-          ),
-          gradient: const LinearGradient(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+          gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFFFFEFDA), Color(0xFFFFD196)],
+            colors: [
+              Color(0xFFFFEFDA),
+              Color(0xFFFFD196),
+            ],
           ),
         ),
         child: Column(

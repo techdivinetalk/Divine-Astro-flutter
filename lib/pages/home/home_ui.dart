@@ -2487,7 +2487,6 @@ class PerformanceDialog extends StatelessWidget {
                                 //             controller.scoreIndex]
                                 //         ?.label ??
                                 //     '',
-
                                 // controller.yourScore[controller.scoreIndex]
                                 //     ['title'],
                                 style: AppTextStyle.textStyle14(
