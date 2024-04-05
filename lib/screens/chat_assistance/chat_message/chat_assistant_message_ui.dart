@@ -258,7 +258,8 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
       body: Stack(
         children: [
           Assets.images.bgChatWallpaper.image(
-              width: MediaQuery.of(context).size.width, fit: BoxFit.fitWidth),
+            height:MediaQuery.of(context).size.height ,
+              width: MediaQuery.of(context).size.width, fit: BoxFit.cover),
           Column(
             children: [
               Obx(() {

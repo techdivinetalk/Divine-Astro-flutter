@@ -167,44 +167,39 @@ class MessageView extends StatelessWidget {
           });
         }
       },
-      child: SizedBox(
-        width: double.maxFinite,
-        child: Column(
-          crossAxisAlignment:
-          yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          children: [
-            Card(
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: appColors.guideColor,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: ListTile(
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0.sp),
-                    child: Image.asset('assets/svg/Group 128714.png'),
-                  ),
-                  title: CustomText(
-                    "You have suggested a ${chatMessage.isPoojaProduct ?? false
-                        ? "Pooja"
-                        : "product"}",
-                    fontSize: 14.sp,
-                    maxLines: 2,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  subtitle: CustomText(
-                    chatMessage.message ?? '',
-                    fontSize: 12.sp,
-                    maxLines: 20,
-                  ),
-                  // onTap: () => Get.toNamed(RouteName.remediesDetail,
-                  //     arguments: {'title': temp[0], 'subtitle': temp[1]}),
-                ),
-              ),
-            ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: appColors.white,
+          boxShadow: [
+            BoxShadow(
+              color: appColors.textColor.withOpacity(0.4),
+              blurRadius: 3,
+              offset: const Offset(0, 1),
+            )
           ],
+          // border: Border.all(color: appColors.guidedColorOnChatPage),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: ListTile(
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(10.0.sp),
+            child: Image.asset('assets/svg/Group 128714.png'),
+          ),
+          title: CustomText(
+            "You have suggested a ${chatMessage.isPoojaProduct ?? false
+                ? "Pooja"
+                : "product"}",
+            fontSize: 14.sp,
+            maxLines: 2,
+            fontWeight: FontWeight.w600,
+          ),
+          subtitle: CustomText(
+            chatMessage.message ?? '',
+            fontSize: 12.sp,
+            maxLines: 20,
+          ),
+          // onTap: () => Get.toNamed(RouteName.remediesDetail,
+          //     arguments: {'title': temp[0], 'subtitle': temp[1]}),
         ),
       ),
     );
@@ -262,45 +257,40 @@ class MessageView extends StatelessWidget {
     if (temp.length < 2) {
       return const SizedBox.shrink();
     }
-    return SizedBox(
-      width: double.maxFinite,
-      child: Column(
-        crossAxisAlignment:
-        yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: [
-          Card(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: appColors.guideColor,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: appColors.red,
-                  child: CustomText(
-                    temp[0][0],
-                    fontColor: appColors.white,
-                  ), // Display the first letter of the name
-                ),
-                title: CustomText(
-                  temp[0],
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w600,
-                ),
-                subtitle: CustomText(
-                  temp[1] ?? '',
-                  fontSize: 12.sp,
-                  maxLines: 20,
-                ),
-                onTap: () =>
-                    Get.toNamed(RouteName.remediesDetail,
-                        arguments: {'title': temp[0], 'subtitle': temp[1]}),
-              ),
-            ),
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        color: appColors.white,
+        boxShadow: [
+          BoxShadow(
+            color: appColors.textColor.withOpacity(0.4),
+            blurRadius: 3,
+            offset: Offset(0, 1),
+          )
         ],
+        // border: Border.all(color: appColors.guidedColorOnChatPage),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: appColors.red,
+          child: CustomText(
+            temp[0][0],
+            fontColor: appColors.white,
+          ), // Display the first letter of the name
+        ),
+        title: CustomText(
+          temp[0],
+          fontSize: 14.sp,
+          fontWeight: FontWeight.w600,
+        ),
+        subtitle: CustomText(
+          temp[1] ?? '',
+          fontSize: 12.sp,
+          maxLines: 20,
+        ),
+        onTap: () =>
+            Get.toNamed(RouteName.remediesDetail,
+                arguments: {'title': temp[0], 'subtitle': temp[1]}),
       ),
     );
   }

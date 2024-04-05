@@ -69,10 +69,11 @@ Future<void> main() async {
   await GetStorage.init();
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print("pushNotification1");
-    print('Message data-: dasboardCurrentIndex}');
+    print('Message data-: dasboardCurrentIndex');
     print(
         'Message data-: ${MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI}');
     if (message.data["type"] == "2") {
+      print('msg ---- from notification');
       return;
     }
     if (message.data["type"] == "1" &&
@@ -157,6 +158,7 @@ Future<void> main() async {
         }
       }
     } else {
+      print("message.data");
       showNotification(message.data["title"], message.data["message"],
           message.data['type'], message.data);
     }
@@ -340,7 +342,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     checkForUpdate();
   }
-
 
   @override
   void dispose() {

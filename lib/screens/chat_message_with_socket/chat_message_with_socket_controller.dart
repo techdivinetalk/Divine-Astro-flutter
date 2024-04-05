@@ -343,7 +343,6 @@ class ChatMessageWithSocketController extends GetxController
     listenerMessageStatusSocket();
     // leavePrivateChat();
     customerLeavedPrivateChatListenerSocket();
-
     socket.startAstroCustumerSocketEvent(
       orderId: AppFirebaseService().orderData.value["orderId"].toString(),
       userId: AppFirebaseService().orderData.value["userId"],
@@ -651,7 +650,6 @@ class ChatMessageWithSocketController extends GetxController
     print('listener function called');
     socket.listenerMessageStatusSocket((data) {
       debugPrint("listenerMessageStatusSocket $data");
-
       final int index = chatMessages.indexWhere((ChatMessage element) {
         return element.id.toString() ==
             data['data']["chatMessageId"].toString();
@@ -682,9 +680,8 @@ class ChatMessageWithSocketController extends GetxController
         final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
         log('chatMessage.msgType ${chatMessage.msgType}');
         if (chatMessage.msgType == MsgType.sendgifts) {
-          if (chatMessage.title != null && chatMessage.title != "") {
-            debugPrint("sendMesxxx $data");
-            playAnimation(id: chatMessage.title ?? "");
+          if (chatMessage.productId != null) {
+            playAnimation(id: chatMessage.productId ?? "");
           }
         }
         if (data["data"]["receiverId"].toString() ==
@@ -713,7 +710,6 @@ class ChatMessageWithSocketController extends GetxController
           },
         ).toList() ??
         <GiftData>[];
-    print("playAnimation string id 2 ${jsonEncode(data)}");
     if (data.isNotEmpty) {
       print("playAnimation string id 2111 $id");
       ZegoGiftPlayer().play(
@@ -1127,7 +1123,6 @@ class ChatMessageWithSocketController extends GetxController
       addNewMessage(time, MsgType.text,
           messageText: messageController.text.trim());
       messageController.clear();
-
     }
   }
 

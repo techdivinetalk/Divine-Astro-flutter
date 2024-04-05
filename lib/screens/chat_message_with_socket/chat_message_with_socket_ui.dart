@@ -50,14 +50,15 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         return Stack(
           children: [
             Assets.images.bgChatWallpaper.image(
-                width: MediaQuery.of(context).size.width,
-                height: double.infinity,
-                fit: BoxFit.fitWidth),
+              width: MediaQuery.of(context).size.width,
+              height: double.infinity,
+              fit: BoxFit.cover,
+            ),
             Column(
               children: [
                 AstrologerChatAppBar(),
                 // permissionRequestWidget(),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 CarouselSlider(
                   options: CarouselOptions(
                     height: 50,
@@ -69,7 +70,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     return Builder(
                       builder: (BuildContext context) {
                         return Container(
-                          clipBehavior: Clip.none,
+                            clipBehavior: Clip.none,
                             margin: const EdgeInsets.symmetric(horizontal: 10),
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             width: MediaQuery.of(context).size.width,

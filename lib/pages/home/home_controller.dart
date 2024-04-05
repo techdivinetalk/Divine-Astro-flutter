@@ -135,7 +135,6 @@ class HomeController extends GetxController {
         }
       }
     });
-
     userData = preferenceService.getUserDetail()!;
     appbarTitle.value =
         "${userData.name.toString().capitalizeFirst} (${userData.id})";
