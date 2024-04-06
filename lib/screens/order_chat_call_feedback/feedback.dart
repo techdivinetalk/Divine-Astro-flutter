@@ -97,7 +97,8 @@ class FeedBack extends GetView<FeedbackController> {
                 children: [
                   Assets.images.bgChatWallpaper.image(
                     width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.fitWidth,
+                    fit: BoxFit.cover,
+                    height: double.infinity
                   ),
                   ListView.builder(
                     itemCount: controller.chatMessageList.length,

@@ -343,7 +343,6 @@ class ChatMessageWithSocketController extends GetxController
     listenerMessageStatusSocket();
     // leavePrivateChat();
     customerLeavedPrivateChatListenerSocket();
-
     socket.startAstroCustumerSocketEvent(
       orderId: AppFirebaseService().orderData.value["orderId"].toString(),
       userId: AppFirebaseService().orderData.value["userId"],
@@ -651,7 +650,6 @@ class ChatMessageWithSocketController extends GetxController
     print('listener function called');
     socket.listenerMessageStatusSocket((data) {
       debugPrint("listenerMessageStatusSocket $data");
-
       final int index = chatMessages.indexWhere((ChatMessage element) {
         return element.id.toString() ==
             data['data']["chatMessageId"].toString();
@@ -682,9 +680,8 @@ class ChatMessageWithSocketController extends GetxController
         final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
         log('chatMessage.msgType ${chatMessage.msgType}');
         if (chatMessage.msgType == MsgType.sendgifts) {
-          if (chatMessage.title != null && chatMessage.title != "") {
-            debugPrint("sendMesxxx $data");
-            playAnimation(id: chatMessage.title ?? "");
+          if (chatMessage.productId != null) {
+            playAnimation(id: chatMessage.productId ?? "");
           }
         }
         if (data["data"]["receiverId"].toString() ==
@@ -713,7 +710,6 @@ class ChatMessageWithSocketController extends GetxController
           },
         ).toList() ??
         <GiftData>[];
-    print("playAnimation string id 2 ${jsonEncode(data)}");
     if (data.isNotEmpty) {
       print("playAnimation string id 2111 $id");
       ZegoGiftPlayer().play(
@@ -1127,7 +1123,6 @@ class ChatMessageWithSocketController extends GetxController
       addNewMessage(time, MsgType.text,
           messageText: messageController.text.trim());
       messageController.clear();
-
     }
   }
 
@@ -1277,7 +1272,6 @@ class ChatMessageWithSocketController extends GetxController
       // var response = await chatRepository.getChatListApi(params);
       // debugPrint("$response");
     }*/
-    chatMessages.clear();
     update();
     try {
       /* if (processedPages.contains(currentPage.value)) {
@@ -1294,6 +1288,7 @@ class ChatMessageWithSocketController extends GetxController
         List<ChatMessage> fetchedMessages = response.chatMessages ?? [];
 
         if (fetchedMessages.isNotEmpty) {
+          chatMessages.clear();
           chatMessages.addAll(fetchedMessages.reversed);
 
           chatMessages.refresh();
@@ -1383,33 +1378,27 @@ class ChatMessageWithSocketController extends GetxController
   void initTask(Map<String, dynamic> p0) {
     if (MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
       if (p0["status"] == null || p0["status"] == "5") {
-        print("chat status ${p0["status"]}");
-        // AppFirebaseService().orderData.value = {};
-        Get.delete<ChatMessageWithSocketController>();
+        WidgetsBinding.instance.endOfFrame.then(
+              (_) async {
+            socket.socket?.disconnect();
+            chatTimer?.cancel();
+            print("WentBack Status-5");
+            extraTimer?.cancel();
+            Get.until(
+                  (route) {
+                return Get.currentRoute == RouteName.dashboard;
+              },
+            );
+          },
+        );
+        return;
       }
       return;
-    }
-    if (p0["status"] == "4") {
+    }else if (p0["status"] == "4") {
       print("chat status 4");
       showTalkTime.value = "-1";
       chatTimer?.cancel();
       startExtraTimer(p0["order_end_time"]);
-      return;
-    }
-    if (p0["status"] == null || p0["status"] == "5") {
-      WidgetsBinding.instance.endOfFrame.then(
-        (_) async {
-          socket.socket?.disconnect();
-          chatTimer?.cancel();
-          print("WentBack Status-5");
-          extraTimer?.cancel();
-          Get.until(
-            (route) {
-              return Get.currentRoute == RouteName.dashboard;
-            },
-          );
-        },
-      );
       return;
     }
     isCardVisible.value =

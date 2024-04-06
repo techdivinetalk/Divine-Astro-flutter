@@ -55,7 +55,7 @@ class AssistMessageView extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 25),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              color: appColors.guideColor),
+              color: Color(0xffFFF4E1)),
           child: Text(
             isToday
                 ? 'Today'
@@ -438,12 +438,8 @@ class AssistMessageView extends StatelessWidget {
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(40)),
-            border: Border.all(width: 2, color: appColors.guideColor),
-            gradient: LinearGradient(
-              colors: [appColors.white, appColors.guideColor],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
+
+           color: Color(0xffFFF4E1),
           ),
           constraints: BoxConstraints(
               maxWidth: ScreenUtil().screenWidth * 0.8,
@@ -598,69 +594,63 @@ class AssistMessageView extends StatelessWidget {
     if (temp.length < 2) {
       return const SizedBox.shrink();
     }
-    return SizedBox(
-      width: double.maxFinite,
-      child: Column(
-        crossAxisAlignment:
-            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: [
-          Card(
-            child: Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: appColors.guideColor,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: appColors.red,
-                      child: CustomText(
-                        temp[0][0],
-                        fontColor: appColors.white,
-                      ), // Display the first letter of the name
-                    ),
-                    title: CustomText(
-                      temp[0],
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    subtitle: CustomText(
-                      temp[1] ?? '',
-                      fontSize: 12.sp,
-                      maxLines: 20,
-                    ),
-                    onTap: () => Get.toNamed(RouteName.remediesDetail,
-                        arguments: {'title': temp[0], 'subtitle': temp[1]}),
-                  ),
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+              color: appColors.white,
+              borderRadius: BorderRadius.circular(8.0),
+              boxShadow: [
+                BoxShadow(
+                  color: appColors.textColor.withOpacity(0.4),
+                  offset: const Offset(0, 1),
+                  blurRadius: 3,
                 ),
-                Positioned(
-                  bottom: 5,
-                  right: 10,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        msgTimeFormat(chatMessage.createdAt),
-                        style: AppTextStyle.textStyle10(
-                          fontColor: appColors.textColor,
-                        ),
-                      ),
-                       SizedBox(width: 3.w),
-                      if ((chatMessage.sendBy) == SendBy.astrologer)
-                        chatSeenStatusWidget(
-                          seenStatus: chatMessage.seenStatus ?? SeenStatus.sent,
-                        ),
-                    ],
-                  ),
-                ),
-              ],
-            )
+              ]
           ),
-        ],
-      ),
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: appColors.red,
+              child: CustomText(
+                temp[0][0],
+                fontColor: appColors.white,
+              ), // Display the first letter of the name
+            ),
+            title: CustomText(
+              temp[0],
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w600,
+            ),
+            subtitle: CustomText(
+              temp[1] ?? '',
+              fontSize: 12.sp,
+              maxLines: 20,
+            ),
+            onTap: () => Get.toNamed(RouteName.remediesDetail,
+                arguments: {'title': temp[0], 'subtitle': temp[1]}),
+          ),
+        ),
+        Positioned(
+          bottom: 5,
+          right: 10,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                msgTimeFormat(chatMessage.createdAt),
+                style: AppTextStyle.textStyle10(
+                  fontColor: appColors.textColor,
+                ),
+              ),
+               SizedBox(width: 3.w),
+              if ((chatMessage.sendBy) == SendBy.astrologer)
+                chatSeenStatusWidget(
+                  seenStatus: chatMessage.seenStatus ?? SeenStatus.sent,
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -682,66 +672,63 @@ class AssistMessageView extends StatelessWidget {
             "isSentMessage": true,
             "customerId": chatMessage.customerId,
           });
-        }
+        } 
       },
-      child: SizedBox(
-        width: double.maxFinite,
-        child: Column(
-          crossAxisAlignment:
-              yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Stack(
           children: [
-            Card(
-              child: Stack(
+            Container(
+              decoration: BoxDecoration(
+                  color: appColors.white,
+                  borderRadius: BorderRadius.circular(8.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: appColors.textColor.withOpacity(0.4),
+                      offset: const Offset(0, 1),
+                      blurRadius: 3,
+                    ),
+                  ]
+              ),
+              child: ListTile(
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0.sp),
+                  child: Image.asset('assets/svg/Group 128714.png'),
+                ),
+                title: CustomText(
+                  "You have suggested a ${chatMessage.isPoojaProduct ?? false ? "Pooja" : "product"}",
+                  fontSize: 14.sp,
+                  maxLines: 2,
+                  fontWeight: FontWeight.w600,
+                ),
+                subtitle: CustomText(
+                  chatMessage.message ?? '',
+                  fontSize: 12.sp,
+                  maxLines: 20,
+                ),
+                // onTap: () => Get.toNamed(RouteName.remediesDetail,
+                //     arguments: {'title': temp[0], 'subtitle': temp[1]}),
+              ),
+            ),
+            Positioned(
+              bottom: 5,
+              right: 10,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: appColors.guideColor,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: ListTile(
-                      leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0.sp),
-                        child: Image.asset('assets/svg/Group 128714.png'),
-                      ),
-                      title: CustomText(
-                        "You have suggested a ${chatMessage.isPoojaProduct ?? false ? "Pooja" : "product"}",
-                        fontSize: 14.sp,
-                        maxLines: 2,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      subtitle: CustomText(
-                        chatMessage.message ?? '',
-                        fontSize: 12.sp,
-                        maxLines: 20,
-                      ),
-                      // onTap: () => Get.toNamed(RouteName.remediesDetail,
-                      //     arguments: {'title': temp[0], 'subtitle': temp[1]}),
+                  Text(
+                    msgTimeFormat(chatMessage.createdAt),
+                    style: AppTextStyle.textStyle10(
+                      fontColor: appColors.textColor,
                     ),
                   ),
-                  Positioned(
-                    bottom: 5,
-                    right: 10,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          msgTimeFormat(chatMessage.createdAt),
-                          style: AppTextStyle.textStyle10(
-                            fontColor: appColors.textColor,
-                          ),
-                        ),
-                        SizedBox(width: 3.w),
-                        if ((chatMessage.sendBy) == SendBy.astrologer)
-                          chatSeenStatusWidget(
-                            seenStatus: chatMessage.seenStatus ?? SeenStatus.sent,
-                          ),
-                      ],
+                  SizedBox(width: 3.w),
+                  if ((chatMessage.sendBy) == SendBy.astrologer)
+                    chatSeenStatusWidget(
+                      seenStatus: chatMessage.seenStatus ?? SeenStatus.sent,
                     ),
-                  ),
                 ],
-              )
+              ),
             ),
           ],
         ),

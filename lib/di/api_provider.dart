@@ -137,6 +137,7 @@ class ApiProvider {
 
   //chat
   final String getChatList = "getChatList";
+  final String saveKundliDetails = "saveKundliDetails";
   final String chatAcceptAPI = "partner_chat_accept";
   final String endChatAPI = "end_chat";
   final String uploadAstrologerimage = "uploadAstrologerimage";

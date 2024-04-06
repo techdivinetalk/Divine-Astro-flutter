@@ -5,6 +5,7 @@ import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_controller.dart';
@@ -32,6 +33,7 @@ class MessageView extends StatelessWidget {
   final String userName;
   final bool yourMessage;
   final int? unreadMessage;
+  final List<String>? myList;
 
   const MessageView({
     super.key,
@@ -41,6 +43,7 @@ class MessageView extends StatelessWidget {
     required this.nextChatMessage,
     required this.yourMessage,
     this.unreadMessage,
+    this.myList,
   });
 
   Widget buildMessageView(BuildContext context, ChatMessage chatMessage,
@@ -174,44 +177,39 @@ class MessageView extends StatelessWidget {
           });
         }
       },
-      child: SizedBox(
-        width: double.maxFinite,
-        child: Column(
-          crossAxisAlignment:
-          yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          children: [
-            Card(
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: appColors.guideColor,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: ListTile(
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0.sp),
-                    child: Image.asset('assets/svg/Group 128714.png'),
-                  ),
-                  title: CustomText(
-                    "You have suggested a ${chatMessage.isPoojaProduct ?? false
-                        ? "Pooja"
-                        : "product"}",
-                    fontSize: 14.sp,
-                    maxLines: 2,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  subtitle: CustomText(
-                    chatMessage.message ?? '',
-                    fontSize: 12.sp,
-                    maxLines: 20,
-                  ),
-                  // onTap: () => Get.toNamed(RouteName.remediesDetail,
-                  //     arguments: {'title': temp[0], 'subtitle': temp[1]}),
-                ),
-              ),
-            ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: appColors.white,
+          boxShadow: [
+            BoxShadow(
+              color: appColors.textColor.withOpacity(0.4),
+              blurRadius: 3,
+              offset: const Offset(0, 1),
+            )
           ],
+          // border: Border.all(color: appColors.guidedColorOnChatPage),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: ListTile(
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(10.0.sp),
+            child: Image.asset('assets/svg/Group 128714.png'),
+          ),
+          title: CustomText(
+            "You have suggested a ${chatMessage.isPoojaProduct ?? false
+                ? "Pooja"
+                : "product"}",
+            fontSize: 14.sp,
+            maxLines: 2,
+            fontWeight: FontWeight.w600,
+          ),
+          subtitle: CustomText(
+            chatMessage.message ?? '',
+            fontSize: 12.sp,
+            maxLines: 20,
+          ),
+          // onTap: () => Get.toNamed(RouteName.remediesDetail,
+          //     arguments: {'title': temp[0], 'subtitle': temp[1]}),
         ),
       ),
     );
@@ -269,45 +267,40 @@ class MessageView extends StatelessWidget {
     if (temp.length < 2) {
       return const SizedBox.shrink();
     }
-    return SizedBox(
-      width: double.maxFinite,
-      child: Column(
-        crossAxisAlignment:
-        yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: [
-          Card(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: appColors.guideColor,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: appColors.red,
-                  child: CustomText(
-                    temp[0][0],
-                    fontColor: appColors.white,
-                  ), // Display the first letter of the name
-                ),
-                title: CustomText(
-                  temp[0],
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w600,
-                ),
-                subtitle: CustomText(
-                  temp[1] ?? '',
-                  fontSize: 12.sp,
-                  maxLines: 20,
-                ),
-                onTap: () =>
-                    Get.toNamed(RouteName.remediesDetail,
-                        arguments: {'title': temp[0], 'subtitle': temp[1]}),
-              ),
-            ),
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        color: appColors.white,
+        boxShadow: [
+          BoxShadow(
+            color: appColors.textColor.withOpacity(0.4),
+            blurRadius: 3,
+            offset: Offset(0, 1),
+          )
         ],
+        // border: Border.all(color: appColors.guidedColorOnChatPage),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: appColors.red,
+          child: CustomText(
+            temp[0][0],
+            fontColor: appColors.white,
+          ), // Display the first letter of the name
+        ),
+        title: CustomText(
+          temp[0],
+          fontSize: 14.sp,
+          fontWeight: FontWeight.w600,
+        ),
+        subtitle: CustomText(
+          temp[1] ?? '',
+          fontSize: 12.sp,
+          maxLines: 20,
+        ),
+        onTap: () =>
+            Get.toNamed(RouteName.remediesDetail,
+                arguments: {'title': temp[0], 'subtitle': temp[1]}),
       ),
     );
   }
@@ -349,13 +342,32 @@ class MessageView extends StatelessWidget {
                         Text(
                           chatMessage.message ?? "",
                           style: AppTextStyle.textStyle14(
-                              fontColor: chatMessage.msgType == "text2"
+                              fontColor: myList == null ?
+                              appColors.black :
+                              (myList!.length > 1 ? (myList![1].toString() == chatMessage.time.toString()
                                   ? appColors.red
-                                  : appColors.black),
-                        ),
+                                  : appColors.black) : appColors.black),
+                        )),
                       ],
                     ),
-                    SizedBox(height: 20.h)
+                    SizedBox(
+                      height: (myList != null && myList!.isNotEmpty && chatMessage.time != null && myList![0].toString() == chatMessage.time.toString()) ? 10 : 0,
+                    ),
+                    Visibility(
+                      visible:  (myList != null && myList!.isNotEmpty && chatMessage.time != null && myList![0].toString() == chatMessage.time.toString()),
+                      child: CustomButton(
+                        color: appColors.guideColor,
+                        onTap: () {
+                          Get.toNamed(RouteName.kundliDetail, arguments: {
+                            "kundli_id": 0,
+                            "from_kundli": true,
+                            "birth_place": AppFirebaseService().orderData["placeOfBirth"],
+                            "gender":AppFirebaseService().orderData["gender"],
+                            "name": AppFirebaseService().orderData["customerName"],
+                          });
+                        }, child: Text("View Kundli",style: TextStyle(color: appColors.guideTextColor),)),
+                    ),
+                    const SizedBox(height:20),
                   ],
                 ),
                 Positioned(

@@ -1,3 +1,4 @@
+import "dart:collection";
 import "dart:convert";
 import "dart:io";
 import "dart:ui";
@@ -31,6 +32,7 @@ import "package:get/get.dart";
 import "package:get/get_state_manager/get_state_manager.dart";
 import "package:lottie/lottie.dart";
 import "package:permission_handler/permission_handler.dart";
+import "package:simple_html_css/simple_html_css.dart";
 
 import "package:voice_message_package/voice_message_package.dart";
 
@@ -40,24 +42,25 @@ import "chat_message_with_socket_controller.dart";
 
 class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   const ChatMessageWithSocketUI({super.key});
-
   @override
   Widget build(BuildContext context) {
     controller.setContext(context);
+    List<String> myList = [];
     return Scaffold(
       // resizeToAvoidBottomInset: true,
       body: GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
         return Stack(
           children: [
             Assets.images.bgChatWallpaper.image(
-                width: MediaQuery.of(context).size.width,
-                height: double.infinity,
-                fit: BoxFit.fitWidth),
+              width: MediaQuery.of(context).size.width,
+              height: double.infinity,
+              fit: BoxFit.cover,
+            ),
             Column(
               children: [
                 AstrologerChatAppBar(),
                 // permissionRequestWidget(),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 CarouselSlider(
                   options: CarouselOptions(
                     height: 50,
@@ -69,7 +72,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     return Builder(
                       builder: (BuildContext context) {
                         return Container(
-                          clipBehavior: Clip.none,
+                            clipBehavior: Clip.none,
                             margin: const EdgeInsets.symmetric(horizontal: 10),
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             width: MediaQuery.of(context).size.width,
@@ -86,13 +89,11 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 // border:
                                 //     Border.all(color: appColors.red, width: 2),
                                 borderRadius: BorderRadius.circular(20)),
-                            child: Text(
-                              '${i.description}',
+                            child: RichText(
                               textAlign: TextAlign.center,
-                              style: AppTextStyle.textStyle12(
-                                fontWeight: FontWeight.w400,
-                                fontColor: appColors.red,
-                              ),
+                              text:
+                                  HTML.toTextSpan(context, i.description ?? ""),
+                              maxLines: 2,
                             ));
                       },
                     );
@@ -110,6 +111,15 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           reverse: false,
                           itemBuilder: (context, index) {
                             var chatMessage = controller.chatMessages[index];
+                           print("AppFirebaseService().orderData");
+                           print("${myList.length < 3 && chatMessage.msgType == MsgType.text && chatMessage.orderId == AppFirebaseService().orderData["orderId"]}");
+                           print("${AppFirebaseService().orderData["orderId"]}");
+                            if(myList.length < 3 && chatMessage.msgType == MsgType.text && chatMessage.orderId == AppFirebaseService().orderData["orderId"]){
+                              myList.add(chatMessage.time.toString());
+                              print("timeSet ${chatMessage.time}");
+                              print("${chatMessage.msgType}");
+                              print("${chatMessage.msgType}");
+                            }
                             return Column(
                               children: [
                                 Padding(
@@ -127,7 +137,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                       yourMessage: chatMessage.msgSendBy == "1",
                                       userName: controller.customerName.value,
                                       unreadMessage:
-                                          controller.unreadMessageIndex.value),
+                                          controller.unreadMessageIndex.value,myList:myList,),
                                 ),
                                 if (index ==
                                     (controller.chatMessages.length - 1))
