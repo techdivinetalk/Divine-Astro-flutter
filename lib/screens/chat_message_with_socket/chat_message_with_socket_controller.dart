@@ -1272,7 +1272,6 @@ class ChatMessageWithSocketController extends GetxController
       // var response = await chatRepository.getChatListApi(params);
       // debugPrint("$response");
     }*/
-    chatMessages.clear();
     update();
     try {
       /* if (processedPages.contains(currentPage.value)) {
@@ -1289,6 +1288,7 @@ class ChatMessageWithSocketController extends GetxController
         List<ChatMessage> fetchedMessages = response.chatMessages ?? [];
 
         if (fetchedMessages.isNotEmpty) {
+          chatMessages.clear();
           chatMessages.addAll(fetchedMessages.reversed);
 
           chatMessages.refresh();
@@ -1378,33 +1378,27 @@ class ChatMessageWithSocketController extends GetxController
   void initTask(Map<String, dynamic> p0) {
     if (MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
       if (p0["status"] == null || p0["status"] == "5") {
-        print("chat status ${p0["status"]}");
-        // AppFirebaseService().orderData.value = {};
-        Get.delete<ChatMessageWithSocketController>();
+        WidgetsBinding.instance.endOfFrame.then(
+              (_) async {
+            socket.socket?.disconnect();
+            chatTimer?.cancel();
+            print("WentBack Status-5");
+            extraTimer?.cancel();
+            Get.until(
+                  (route) {
+                return Get.currentRoute == RouteName.dashboard;
+              },
+            );
+          },
+        );
+        return;
       }
       return;
-    }
-    if (p0["status"] == "4") {
+    }else if (p0["status"] == "4") {
       print("chat status 4");
       showTalkTime.value = "-1";
       chatTimer?.cancel();
       startExtraTimer(p0["order_end_time"]);
-      return;
-    }
-    if (p0["status"] == null || p0["status"] == "5") {
-      WidgetsBinding.instance.endOfFrame.then(
-        (_) async {
-          socket.socket?.disconnect();
-          chatTimer?.cancel();
-          print("WentBack Status-5");
-          extraTimer?.cancel();
-          Get.until(
-            (route) {
-              return Get.currentRoute == RouteName.dashboard;
-            },
-          );
-        },
-      );
       return;
     }
     isCardVisible.value =
