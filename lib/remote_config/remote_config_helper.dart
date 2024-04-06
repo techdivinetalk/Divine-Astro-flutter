@@ -61,7 +61,7 @@ class RemoteConfigHelper {
       Get.put(AppColors());
       final appColors = Get.find<AppColors>();
       appColors.guideColor =fromHex(remoteConfig.getString("guideColor"));
-
+      appColors.whiteGuidedColor = Color(int.parse('0xff${remoteConfig.getString("whiteGuidedColor")}'));
       appColors.brownColour =fromHex(remoteConfig.getString("brownColour"));
 
       Get.put(AppColors()).update();

@@ -130,8 +130,10 @@ class HomeController extends GetxController {
       debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
       if (event.name == "giftCount") {
         if (int.parse(event.data!["giftCount"].toString()) > 0) {
-          showGiftBottomSheet(event.data?["giftCount"], contextDetail,
-              baseUrl: preferenceService.getBaseImageURL());
+          if(MiddleWare.instance.currentPage != RouteName.chatMessageUI){
+            showGiftBottomSheet(event.data?["giftCount"], contextDetail,
+                baseUrl: preferenceService.getBaseImageURL());
+          }
         }
       }
     });
@@ -210,10 +212,7 @@ class HomeController extends GetxController {
       getAllTrainingVideo(isReapeting: isReapeting);
     } else {
       print("else----getConstantDetails!.data!.isForceTraningVideo");
-
       await getFilteredPerformance();
-      //await getContactList();
-      // fetchImportantNumbers();
       getDashboardDetail();
       getFeedbackData();
       tarotCardData();

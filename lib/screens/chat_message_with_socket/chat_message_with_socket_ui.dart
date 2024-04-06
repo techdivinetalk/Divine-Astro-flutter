@@ -31,6 +31,7 @@ import "package:get/get.dart";
 import "package:get/get_state_manager/get_state_manager.dart";
 import "package:lottie/lottie.dart";
 import "package:permission_handler/permission_handler.dart";
+import "package:simple_html_css/simple_html_css.dart";
 
 import "package:voice_message_package/voice_message_package.dart";
 
@@ -87,13 +88,11 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 // border:
                                 //     Border.all(color: appColors.red, width: 2),
                                 borderRadius: BorderRadius.circular(20)),
-                            child: Text(
-                              '${i.description}',
+                            child: RichText(
                               textAlign: TextAlign.center,
-                              style: AppTextStyle.textStyle12(
-                                fontWeight: FontWeight.w400,
-                                fontColor: appColors.red,
-                              ),
+                              text:
+                                  HTML.toTextSpan(context, i.description ?? ""),
+                              maxLines: 2,
                             ));
                       },
                     );

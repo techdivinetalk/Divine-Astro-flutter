@@ -24,6 +24,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
@@ -209,8 +210,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        "print image:: ${preferenceService.getAmazonUrl()}/${controller.args?.image ?? ''}");
+    print("print image:: ${preferenceService.getAmazonUrl()}/${controller.args?.image ?? ''}");
     Get.put(ChatMessageController(KundliRepository(), ChatRepository()));
     return Scaffold(
       appBar: AppBar(
@@ -223,7 +223,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
           },
           icon: Icon(
             Icons.arrow_back_ios_new_rounded,
-            color: appColors.white,
+            color: appColors.whiteGuidedColor,
           ),
         ),
         leadingWidth: 30,
@@ -251,7 +251,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
             SizedBox(width: 10.w),
             Text(controller.args!.name ?? '',
                 style: AppTextStyle.textStyle16(
-                    fontWeight: FontWeight.w500, fontColor: appColors.white))
+                    fontWeight: FontWeight.w500, fontColor: appColors.whiteGuidedColor))
           ],
         ),
       ),
@@ -312,15 +312,12 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                                                             BorderRadius
                                                                 .circular(20),
                                                       ),
-                                                      child: Text(
-                                                        '${i.description}',
-                                                        style: AppTextStyle
-                                                            .textStyle12(
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          fontColor:
-                                                              appColors.red,
-                                                        ),
+                                                      child: RichText(
+                                                        textAlign: TextAlign.center,
+                                                        text: HTML.toTextSpan(context, i.description ?? "") ,
+                                                        maxLines: 2,
+
+                                                        //...
                                                       ),
                                                     );
                                                   },
