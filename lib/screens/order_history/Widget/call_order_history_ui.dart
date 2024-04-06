@@ -94,7 +94,7 @@ class CallOrderHistory extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: detailView(),
+                          child: detailView(index, data),
                         ),
                       ],
                     ),
@@ -186,7 +186,17 @@ class CallOrderHistory extends StatelessWidget {
     );
   }
 
-  Widget detailView() {
+  Widget detailView(int index, List<CallHistoryData> data) {
+    String getGenderText(int? gender) {
+      switch (gender) {
+        case 0:
+          return 'Male';
+        case 1:
+          return 'Female';
+        default:
+          return 'Other';
+      }
+    }
     return Column(
       children: [
         Row(
@@ -196,13 +206,16 @@ class CallOrderHistory extends StatelessWidget {
               children: [
                 Assets.images.icOrder.svg(),
                 const SizedBox(width: 15),
-                Text("orderId".tr,
-                    style:
-                    AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+                Text(
+                  "orderId".tr,
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
               ],
             ),
-            Text("183837238231",
-                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+            Text(
+              "${data[index].orderId}",
+              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            ),
           ],
         ),
         const SizedBox(height: 10),
@@ -213,13 +226,16 @@ class CallOrderHistory extends StatelessWidget {
               children: [
                 Assets.images.icUser.svg(),
                 const SizedBox(width: 15),
-                Text("name".tr,
-                    style:
-                    AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+                Text(
+                  "name".tr,
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
               ],
             ),
-            Text("Mrigashree Baruah",
-                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+            Text(
+              "${data[index].getCustomers?.name ?? 'N/A'}",
+              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            ),
           ],
         ),
         const SizedBox(height: 10),
@@ -230,13 +246,16 @@ class CallOrderHistory extends StatelessWidget {
               children: [
                 Assets.images.icGender.svg(),
                 const SizedBox(width: 15),
-                Text("gender".tr,
-                    style:
-                    AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+                Text(
+                  "gender".tr,
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
               ],
             ),
-            Text("Female",
-                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+            Text(
+              getGenderText(data[index].getCustomers?.gender),
+              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            ),
           ],
         ),
         const SizedBox(height: 10),
@@ -247,13 +266,16 @@ class CallOrderHistory extends StatelessWidget {
               children: [
                 Assets.images.icCalendar.svg(),
                 const SizedBox(width: 15),
-                Text("dob".tr,
-                    style:
-                    AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+                Text(
+                  "dob".tr,
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
               ],
             ),
-            Text("21 May  2002, 12:38 PM",
-                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+            Text(
+              "${DateFormat('dd MMM yyyy, hh:mm a').format(data[index].getCustomers?.dateOfBirth ?? DateTime.now())}",
+              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            ),
           ],
         ),
         const SizedBox(height: 10),
@@ -264,13 +286,16 @@ class CallOrderHistory extends StatelessWidget {
               children: [
                 Assets.images.icLocation.svg(),
                 const SizedBox(width: 15),
-                Text("pob".tr,
-                    style:
-                    AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+                Text(
+                  "pob".tr,
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
               ],
             ),
-            Text("Guwahati, Assam, India",
-                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+            Text(
+              "${data[index].getCustomers?.placeOfBirth ?? 'N/A'}",
+              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            ),
           ],
         ),
         const SizedBox(height: 10),
@@ -281,13 +306,16 @@ class CallOrderHistory extends StatelessWidget {
               children: [
                 Assets.images.icCalendar.svg(),
                 const SizedBox(width: 15),
-                Text("orderDateTime".tr,
-                    style:
-                    AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+                Text(
+                  "orderDateTime".tr,
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
               ],
             ),
-            Text("09 Mar, 12:40Pm ",
-                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+            Text(
+              "${DateFormat('dd MMM, hh:mma').format(data[index].createdAt ?? DateTime.now())}",
+              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            ),
           ],
         ),
         const SizedBox(height: 10),
@@ -298,13 +326,16 @@ class CallOrderHistory extends StatelessWidget {
               children: [
                 Assets.images.icRate.svg(),
                 const SizedBox(width: 15),
-                Text("rate".tr,
-                    style:
-                    AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+                Text(
+                  "rate".tr,
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
               ],
             ),
-            Text("₹100/min",
-                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+            Text(
+              "₹${data[index].partnerPrice ?? "N/a"}/min",
+              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            ),
           ],
         ),
         const SizedBox(height: 10),
@@ -315,13 +346,16 @@ class CallOrderHistory extends StatelessWidget {
               children: [
                 Assets.images.icClock.svg(),
                 const SizedBox(width: 15),
-                Text("duration".tr,
-                    style:
-                    AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+                Text(
+                  "duration".tr,
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
               ],
             ),
-            Text("5 mins",
-                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+            Text(
+              "${data[index].duration ?? "N/a"} mins",
+              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            ),
           ],
         )
       ],

@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'all_order_history.dart';
+
 CallOrderHistoryModelClass callOrderHistoryModelClassFromJson(String str) => CallOrderHistoryModelClass.fromJson(json.decode(str));
 
 String callOrderHistoryModelClassToJson(CallOrderHistoryModelClass data) => json.encode(data.toJson());
@@ -50,8 +52,10 @@ class CallHistoryData {
   int? productId;
   String? duration;
   GetCustomers? getCustomers;
-  int? quantity; // New field
-  int? feedbackReviewStatus; // New field
+  int? quantity;
+  int? feedbackReviewStatus;
+  int? partnerPrice;
+  String? partnerOrderId;
 
   CallHistoryData({
     this.id,
@@ -69,6 +73,8 @@ class CallHistoryData {
     this.getCustomers,
     this.quantity,
     this.feedbackReviewStatus,
+    this.partnerPrice,
+    this.partnerOrderId,
   });
 
   factory CallHistoryData.fromJson(Map<String, dynamic> json) => CallHistoryData(
@@ -79,7 +85,7 @@ class CallHistoryData {
     transactionId: json["transaction_id"] as int?,
     createdAt: json["created_at"] == null
         ? null
-        : DateTime.parse(json["created_at"]),
+        : DateTime.parse(json["created_at"] as String),
     productType: json["product_type"] as int?,
     userId: json["user_id"] as int?,
     roleId: json["role_id"] as int?,
@@ -88,11 +94,12 @@ class CallHistoryData {
     duration: json["duration"] as String?,
     getCustomers: json["get_customers"] == null
         ? null
-        : GetCustomers.fromJson(json["get_customers"]),
+        : GetCustomers.fromJson(json["get_customers"] as Map<String, dynamic>),
     quantity: json["quantity"] as int?,
     feedbackReviewStatus: json["feedback_review_status"] as int?,
+    partnerPrice: json["partner_price"] as int?,
+    partnerOrderId: json["partner_order_id"] as String?,
   );
-
 
   Map<String, dynamic> toJson() => {
     "id": id,
@@ -108,34 +115,11 @@ class CallHistoryData {
     "product_id": productId,
     "duration": duration,
     "get_customers": getCustomers?.toJson(),
-    "quantity": quantity, // Include the new field in the JSON representation
-    "feedback_review_status": feedbackReviewStatus, // Include the new field in the JSON representation
-  };
+    "quantity": quantity,
+    "feedback_review_status": feedbackReviewStatus,
+    "partner_price": partnerPrice,
+    "partner_order_id": partnerOrderId,
+  }..removeWhere((key, value) => value == null);
 }
 
-class GetCustomers {
-  int? id;
-  String? name, avatar;
-  int? customerNo;
 
-  GetCustomers({
-    this.id,
-    this.name,
-    this.avatar,
-    this.customerNo,
-  });
-
-  factory GetCustomers.fromJson(Map<String, dynamic> json) => GetCustomers(
-    id: json["id"],
-    name: json["name"],
-    avatar: json["avatar"],
-    customerNo: json["customer_no"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "avatar": avatar,
-    "customer_no": customerNo,
-  };
-}

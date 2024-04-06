@@ -1,5 +1,7 @@
 
 
+import 'all_order_history.dart';
+
 class FeedBackOrder {
   List<FeedBackData>? data;
   bool? success;
@@ -49,7 +51,9 @@ class FeedBackData {
   GetCustomers? getCustomers;
   int? quantity;
   int? feedbackReviewStatus;
-  List<FeedbackFineAmount>? getFeedbackFineAmount; // New field
+  List<FeedbackFineAmount>? getFeedbackFineAmount;
+  int? partnerPrice;
+  String? partnerOrderId;
 
   FeedBackData({
     this.id,
@@ -68,6 +72,8 @@ class FeedBackData {
     this.quantity,
     this.feedbackReviewStatus,
     this.getFeedbackFineAmount,
+    this.partnerPrice,
+    this.partnerOrderId,
   });
 
   factory FeedBackData.fromJson(Map<String, dynamic> json) => FeedBackData(
@@ -94,6 +100,8 @@ class FeedBackData {
         ? null
         : List<FeedbackFineAmount>.from(json["get_feedback_fine_amount"]
         .map((x) => FeedbackFineAmount.fromJson(x))),
+    partnerPrice: json["partner_price"],
+    partnerOrderId: json["partnerOrderId"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -114,35 +122,10 @@ class FeedBackData {
     "feedback_review_status": feedbackReviewStatus,
     "get_feedback_fine_amount": getFeedbackFineAmount == null
         ? null
-        : List<dynamic>.from(getFeedbackFineAmount!.map((x) => x.toJson())),
-  };
-}
-
-class GetCustomers {
-  int? id;
-  String? name;
-  String? avatar;
-  int? customerNo;
-
-  GetCustomers({
-    this.id,
-    this.name,
-    this.avatar,
-    this.customerNo,
-  });
-
-  factory GetCustomers.fromJson(Map<String, dynamic> json) => GetCustomers(
-    id: json["id"],
-    name: json["name"],
-    avatar: json["avatar"],
-    customerNo: json["customer_no"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "avatar": avatar,
-    "customer_no": customerNo,
+        : List<dynamic>.from(
+        getFeedbackFineAmount!.map((x) => x.toJson())),
+    "partnerPrice": partnerPrice,
+    "partnerOrderId": partnerOrderId,
   };
 }
 

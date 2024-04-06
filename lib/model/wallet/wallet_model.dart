@@ -273,9 +273,10 @@ class PaymentLog {
   dynamic actualPayments;
   dynamic discount;
   dynamic orderId;
-  String? callDuration;  // Update this line
+  String? callDuration;
   String? callStatus;
   CustomerDetails? customerDetails;
+  int? partnerPrice;
 
   PaymentLog({
     this.id,
@@ -291,6 +292,7 @@ class PaymentLog {
     this.callDuration,
     this.callStatus,
     this.customerDetails,
+    this.partnerPrice,
   });
 
   factory PaymentLog.fromJson(Map<String, dynamic> json) => PaymentLog(
@@ -304,11 +306,12 @@ class PaymentLog {
     actualPayments: json['actual_payments'],
     discount: json['discount'],
     orderId: json['order_id'],
-    callDuration: json['call_duration'],  // Update this line
+    callDuration: json['call_duration'],
     callStatus: json['call_status'],
     customerDetails: json['customer_details'] != null
         ? CustomerDetails.fromJson(json['customer_details'])
         : null,
+    partnerPrice: json['partner_price'],
   );
 
   Map<String, dynamic> toJson() {
@@ -323,9 +326,10 @@ class PaymentLog {
       'actual_payments': actualPayments,
       'discount': discount,
       'order_id': orderId,
-      'call_duration': callDuration,  // Update this line
+      'call_duration': callDuration,
       'call_status': callStatus,
       'customer_details': customerDetails?.toJson(),
+      'partnerPrice': partnerPrice,
     };
   }
 }
@@ -334,18 +338,32 @@ class CustomerDetails {
   final int id;
   final String name;
   final String avatar;
+  final int? customerNo;
+  final DateTime? dateOfBirth;
+  final String? placeOfBirth;
+  final int? gender;
 
   CustomerDetails({
     required this.id,
     required this.name,
     required this.avatar,
+    this.customerNo,
+    this.dateOfBirth,
+    this.placeOfBirth,
+    this.gender,
   });
 
   factory CustomerDetails.fromJson(Map<String, dynamic> json) {
     return CustomerDetails(
-      id: json['id'],
-      name: json['name'],
-      avatar: json['avatar'],
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      avatar: json['avatar'] ?? '',
+      customerNo: json['customerNo'],
+      dateOfBirth: json['dateOfBirth'] != null
+          ? DateTime.tryParse(json['dateOfBirth'])
+          : null,
+      placeOfBirth: json['placeOfBirth'],
+      gender: json['gender'],
     );
   }
 
@@ -354,6 +372,11 @@ class CustomerDetails {
       'id': id,
       'name': name,
       'avatar': avatar,
+      'customerNo': customerNo,
+      'dateOfBirth': dateOfBirth?.toIso8601String(),
+      'placeOfBirth': placeOfBirth,
+      'gender': gender,
     };
   }
 }
+

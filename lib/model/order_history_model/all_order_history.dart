@@ -61,6 +61,8 @@ class AllHistoryData {
   int? feedbackReviewStatus;
   GetCustomers? getCustomers;
   dynamic getGift;
+  int? partnerPrice;
+  String? partnerOrderId;
 
   AllHistoryData({
     this.id,
@@ -79,6 +81,8 @@ class AllHistoryData {
     this.feedbackReviewStatus,
     this.getCustomers,
     this.getGift,
+    this.partnerPrice,
+    this.partnerOrderId,
   });
 
   factory AllHistoryData.fromJson(Map<String, dynamic> json) => AllHistoryData(
@@ -102,6 +106,8 @@ class AllHistoryData {
         ? null
         : GetCustomers.fromJson(json["get_customers"] as Map<String, dynamic>),
     getGift: json["get_gift"],
+    partnerPrice: json["partner_price"] as int?,
+    partnerOrderId: json["partner_order_id"] as String?,
   );
 
   Map<String, dynamic> toJson() => {
@@ -117,10 +123,12 @@ class AllHistoryData {
     "astrologer_id": astrologerId,
     "product_id": productId,
     "duration": duration,
-    "quantity": quantity, // Include new field in the JSON representation
+    "quantity": quantity,
     "feedback_review_status": feedbackReviewStatus,
     "get_customers": getCustomers?.toJson(),
     "get_gift": getGift,
+    "partner_price": partnerPrice,
+    "partner_order_id": partnerOrderId,
   }..removeWhere((key, value) => value == null);
 }
 
@@ -129,25 +137,40 @@ class GetCustomers {
   String? name;
   String? avatar;
   int? customerNo;
+  DateTime? dateOfBirth;
+  String? placeOfBirth;
+  int? gender;
 
   GetCustomers({
     this.id,
     this.name,
     this.avatar,
     this.customerNo,
+    this.dateOfBirth,
+    this.placeOfBirth,
+    this.gender,
   });
 
-  factory GetCustomers.fromJson(Map<String, dynamic> json) => GetCustomers(
-        id: json["id"],
-        name: json["name"],
-        avatar: json["avatar"],
-        customerNo: json["customer_no"],
-      );
+  factory GetCustomers.fromJson(Map<String, dynamic> json) {
+    return GetCustomers(
+      id: json["id"],
+      name: json["name"],
+      avatar: json["avatar"],
+      customerNo: json["customer_no"],
+      dateOfBirth: json["date_of_birth"] != null ? DateTime.parse(json["date_of_birth"]) : null,
+      placeOfBirth: json["place_of_birth"],
+      gender: json["gender"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "avatar": avatar,
-        "customer_no": customerNo,
-      };
+    "id": id,
+    "name": name,
+    "avatar": avatar,
+    "customer_no": customerNo,
+    "date_of_birth": dateOfBirth?.toIso8601String(),
+    "place_of_birth": placeOfBirth,
+    "gender": gender,
+  };
 }
+

@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'all_order_history.dart';
+
 ChatOrderHistoryModelClass chatOrderHistoryModelClassFromJson(String str) =>
     ChatOrderHistoryModelClass.fromJson(json.decode(str));
 
@@ -58,8 +60,11 @@ class ChatDataList {
   int? productId;
   String? duration;
   GetCustomers? getCustomers;
-  int? quantity; // New field
-  int? feedbackReviewStatus; // New field
+  int? quantity;
+  int? feedbackReviewStatus;
+
+  int? partnerPrice;
+  String? partnerOrderId;
 
   ChatDataList({
     this.id,
@@ -77,6 +82,8 @@ class ChatDataList {
     this.getCustomers,
     this.quantity,
     this.feedbackReviewStatus,
+    this.partnerPrice,
+    this.partnerOrderId,
   });
 
   factory ChatDataList.fromJson(Map<String, dynamic> json) => ChatDataList(
@@ -99,6 +106,8 @@ class ChatDataList {
         : GetCustomers.fromJson(json["get_customers"]),
     quantity: json["quantity"], // Assign value for the new field
     feedbackReviewStatus: json["feedback_review_status"], // Assign value for the new field
+    partnerPrice: json["partner_price"],
+    partnerOrderId: json["partner_order_id"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -117,33 +126,9 @@ class ChatDataList {
     "get_customers": getCustomers?.toJson(),
     "quantity": quantity, // Include the new field in the JSON representation
     "feedback_review_status": feedbackReviewStatus, // Include the new field in the JSON representation
+    "partner_price": partnerPrice,
+    "partner_order_id": partnerOrderId,
   };
 }
 
-class GetCustomers {
-  int? id;
-  String? name;
-  String? avatar;
-  int? customerNo;
 
-  GetCustomers({
-    this.id,
-    this.name,
-    this.avatar,
-    this.customerNo,
-  });
-
-  factory GetCustomers.fromJson(Map<String, dynamic> json) => GetCustomers(
-        id: json["id"],
-        name: json["name"],
-        avatar: json["avatar"],
-        customerNo: json["customer_no"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "avatar": avatar,
-        "customer_no": customerNo,
-      };
-}

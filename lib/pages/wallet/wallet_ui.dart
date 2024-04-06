@@ -8,6 +8,7 @@ import 'package:divine_astrologer/utils/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/appbar.dart';
@@ -229,7 +230,7 @@ class PaymentLogTile extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: detailView(),
+                          child: detailView(log),
                         ),
                       ],
                     ),
@@ -313,7 +314,17 @@ class PaymentLogTile extends StatelessWidget {
     );
   }
 
-  Widget detailView() {
+  Widget detailView(PaymentLog log) {
+    String getGenderText(int? gender) {
+      switch (gender) {
+        case 0:
+          return 'Male';
+        case 1:
+          return 'Female';
+        default:
+          return 'Other';
+      }
+    }
     return Column(
       children: [
         Row(
@@ -323,13 +334,16 @@ class PaymentLogTile extends StatelessWidget {
               children: [
                 Assets.images.icOrder.svg(),
                 const SizedBox(width: 15),
-                Text("orderId".tr,
-                    style:
-                        AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+                Text(
+                  "orderId".tr,
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
               ],
             ),
-            Text("183837238231",
-                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+            Text(
+              "${log.orderId}",
+              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            ),
           ],
         ),
         const SizedBox(height: 10),
@@ -340,13 +354,16 @@ class PaymentLogTile extends StatelessWidget {
               children: [
                 Assets.images.icUser.svg(),
                 const SizedBox(width: 15),
-                Text("name".tr,
-                    style:
-                        AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+                Text(
+                  "name".tr,
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
               ],
             ),
-            Text("Mrigashree Baruah",
-                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+            Text(
+              log.customerDetails?.name ?? 'N/A',
+              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            ),
           ],
         ),
         const SizedBox(height: 10),
@@ -357,13 +374,16 @@ class PaymentLogTile extends StatelessWidget {
               children: [
                 Assets.images.icGender.svg(),
                 const SizedBox(width: 15),
-                Text("gender".tr,
-                    style:
-                        AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+                Text(
+                  "gender".tr,
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
               ],
             ),
-            Text("Female",
-                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+            Text(
+              getGenderText(log.customerDetails?.gender),
+              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            ),
           ],
         ),
         const SizedBox(height: 10),
@@ -374,13 +394,16 @@ class PaymentLogTile extends StatelessWidget {
               children: [
                 Assets.images.icCalendar.svg(),
                 const SizedBox(width: 15),
-                Text("dob".tr,
-                    style:
-                        AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+                Text(
+                  "dob".tr,
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
               ],
             ),
-            Text("21 May  2002, 12:38 PM",
-                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+            Text(
+              "${DateFormat('dd MMM yyyy, hh:mm a').format(log.customerDetails?.dateOfBirth ?? DateTime.now())}",
+              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            ),
           ],
         ),
         const SizedBox(height: 10),
@@ -391,13 +414,16 @@ class PaymentLogTile extends StatelessWidget {
               children: [
                 Assets.images.icLocation.svg(),
                 const SizedBox(width: 15),
-                Text("pob".tr,
-                    style:
-                        AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+                Text(
+                  "pob".tr,
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
               ],
             ),
-            Text("Guwahati, Assam, India",
-                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+            Text(
+              "${log.customerDetails?.placeOfBirth ?? 'N/A'}",
+              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            ),
           ],
         ),
         const SizedBox(height: 10),
@@ -408,13 +434,16 @@ class PaymentLogTile extends StatelessWidget {
               children: [
                 Assets.images.icCalendar.svg(),
                 const SizedBox(width: 15),
-                Text("orderDateTime".tr,
-                    style:
-                        AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+                Text(
+                  "orderDateTime".tr,
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
               ],
             ),
-            Text("09 Mar, 12:40Pm ",
-                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+            Text(
+              log.date != null ? log.date! : "N/A",
+              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            ),
           ],
         ),
         const SizedBox(height: 10),
@@ -425,13 +454,16 @@ class PaymentLogTile extends StatelessWidget {
               children: [
                 Assets.images.icRate.svg(),
                 const SizedBox(width: 15),
-                Text("rate".tr,
-                    style:
-                        AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+                Text(
+                  "rate".tr,
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
               ],
             ),
-            Text("₹100/min",
-                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+            Text(
+              "₹${log.partnerPrice ?? "N/a"}/min",
+              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            ),
           ],
         ),
         const SizedBox(height: 10),
@@ -442,13 +474,16 @@ class PaymentLogTile extends StatelessWidget {
               children: [
                 Assets.images.icClock.svg(),
                 const SizedBox(width: 15),
-                Text("duration".tr,
-                    style:
-                        AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+                Text(
+                  "duration".tr,
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
               ],
             ),
-            Text("5 mins",
-                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400)),
+            Text(
+              "${log.callDuration?? "N/a"} mins",
+              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            ),
           ],
         )
       ],
