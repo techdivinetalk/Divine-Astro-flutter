@@ -1,3 +1,4 @@
+import "dart:collection";
 import "dart:convert";
 import "dart:io";
 import "dart:ui";
@@ -40,10 +41,10 @@ import "chat_message_with_socket_controller.dart";
 
 class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   const ChatMessageWithSocketUI({super.key});
-
   @override
   Widget build(BuildContext context) {
     controller.setContext(context);
+    List<String> myList = [];
     return Scaffold(
       // resizeToAvoidBottomInset: true,
       body: GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
@@ -111,6 +112,15 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           reverse: false,
                           itemBuilder: (context, index) {
                             var chatMessage = controller.chatMessages[index];
+                           print("AppFirebaseService().orderData");
+                           print("${myList.length < 3 && chatMessage.msgType == MsgType.text && chatMessage.orderId == AppFirebaseService().orderData["orderId"]}");
+                           print("${AppFirebaseService().orderData["orderId"]}");
+                            if(myList.length < 3 && chatMessage.msgType == MsgType.text && chatMessage.orderId == AppFirebaseService().orderData["orderId"]){
+                              myList.add(chatMessage.time.toString());
+                              print("timeSet ${chatMessage.time}");
+                              print("${chatMessage.msgType}");
+                              print("${chatMessage.msgType}");
+                            }
                             return Column(
                               children: [
                                 Padding(
@@ -128,7 +138,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                       yourMessage: chatMessage.msgSendBy == "1",
                                       userName: controller.customerName.value,
                                       unreadMessage:
-                                          controller.unreadMessageIndex.value),
+                                          controller.unreadMessageIndex.value,myList:myList,),
                                 ),
                                 if (index ==
                                     (controller.chatMessages.length - 1))

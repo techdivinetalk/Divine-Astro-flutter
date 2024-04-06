@@ -5,6 +5,7 @@ import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_controller.dart';
@@ -31,6 +32,7 @@ class MessageView extends StatelessWidget {
   final String userName;
   final bool yourMessage;
   final int? unreadMessage;
+  final List<String>? myList;
 
   const MessageView({
     super.key,
@@ -40,6 +42,7 @@ class MessageView extends StatelessWidget {
     required this.nextChatMessage,
     required this.yourMessage,
     this.unreadMessage,
+    this.myList,
   });
 
   Widget buildMessageView(BuildContext context, ChatMessage chatMessage,
@@ -332,13 +335,32 @@ class MessageView extends StatelessWidget {
                         Text(
                           chatMessage.message ?? "",
                           style: AppTextStyle.textStyle14(
-                              fontColor: chatMessage.msgType == "text2"
+                              fontColor: myList == null ?
+                              appColors.black :
+                              (myList!.length > 1 ? (myList![1].toString() == chatMessage.time.toString()
                                   ? appColors.red
-                                  : appColors.black),
-                        ),
+                                  : appColors.black) : appColors.black),
+                        )),
                       ],
                     ),
-                    SizedBox(height: 20.h)
+                    SizedBox(
+                      height: (myList != null && myList!.isNotEmpty && chatMessage.time != null && myList![0].toString() == chatMessage.time.toString()) ? 10 : 0,
+                    ),
+                    Visibility(
+                      visible:  (myList != null && myList!.isNotEmpty && chatMessage.time != null && myList![0].toString() == chatMessage.time.toString()),
+                      child: CustomButton(
+                        color: appColors.guideColor,
+                        onTap: () {
+                          Get.toNamed(RouteName.kundliDetail, arguments: {
+                            "kundli_id": 0,
+                            "from_kundli": true,
+                            "birth_place": AppFirebaseService().orderData["placeOfBirth"],
+                            "gender":AppFirebaseService().orderData["gender"],
+                            "name": AppFirebaseService().orderData["customerName"],
+                          });
+                        }, child: Text("View Kundli",style: TextStyle(color: appColors.guideTextColor),)),
+                    ),
+                    const SizedBox(height:20),
                   ],
                 ),
                 Positioned(
