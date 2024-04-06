@@ -119,6 +119,18 @@ class FeedBack extends GetView<FeedbackController> {
                                           int.parse(controller.chatMessageList[index - 1].createdAt!)))
                                       .day);
 
+                      String? createdAt = data.createdAt;
+                      String formattedTime = '';
+                      if (createdAt != null && createdAt.isNotEmpty) {
+                        try {
+                          DateTime parsedDateTime = DateTime.parse(createdAt);
+                          formattedTime = DateFormat.jm().format(parsedDateTime);
+                        } catch (e) {
+                          // Handle parsing error
+                          print('Error parsing createdAt: $e');
+                        }
+                      }
+
                       return controller.order?.productType == 12
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,11 +148,7 @@ class FeedBack extends GetView<FeedbackController> {
                                       ),
                                       child: Center(
                                         child: Text(
-                                          data.createdAt != null
-                                              ? DateFormat('dd MMM').format(
-                                                  DateTime.parse(
-                                                      data.createdAt!))
-                                              : 'Na',
+                                          formattedTime,
                                           style: AppTextStyle.textStyle10(
                                             fontColor: appColors.white,
                                           ),
@@ -149,8 +157,8 @@ class FeedBack extends GetView<FeedbackController> {
                                     ).centered(),
                                   ),
                                 // Display chat message
-                                data.msgType == 0
-                                    ? Padding(
+                               /* data.msgType == 0
+                                    ?*/ Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 12.w, vertical: 4.h),
                                   child: MessageView(
@@ -164,14 +172,11 @@ class FeedBack extends GetView<FeedbackController> {
                                         : controller
                                         .chatMessageList[index + 1],
                                     chatMessage: data,
-                                    yourMessage:
-                                    data.senderId ==
-                                        preferenceService
-                                            .getUserDetail()!
-                                            .id,
+                                    yourMessage: controller
+                                        .chatMessageList[index].msgSendBy == "1",
                                   ),
                                 )
-                                    : SizedBox(
+                                   /* : SizedBox(
                                   width: double.maxFinite,
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
@@ -242,15 +247,9 @@ class FeedBack extends GetView<FeedbackController> {
                                                 child: Row(
                                                   children: [
                                                     Text(
-                                                      DateFormat.jm().format(
-                                                        DateTime.parse(
-                                                            data.createdAt ??
-                                                                ''),
-                                                      ),
-                                                      style: AppTextStyle
-                                                          .textStyle10(
-                                                        fontColor:
-                                                            appColors.darkBlue,
+                                                      formattedTime,
+                                                      style: AppTextStyle.textStyle10(
+                                                        fontColor: appColors.darkBlue,
                                                       ),
                                                     ),
                                                     (data.seenStatus ?? 0) == 0
@@ -277,7 +276,7 @@ class FeedBack extends GetView<FeedbackController> {
                                       ],
                                     ),
                                   ),
-                                ),
+                                ),*/
                               ],
                             )
                           : Column(
@@ -295,8 +294,7 @@ class FeedBack extends GetView<FeedbackController> {
                                       ),
                                       child: Center(
                                         child: Text(
-                                          DateFormat('dd MMM').format(
-                                              DateTime.parse(data.createdAt!)),
+                                          formattedTime,
                                           style: AppTextStyle.textStyle10(
                                             fontColor: appColors.white,
                                           ),
@@ -311,6 +309,8 @@ class FeedBack extends GetView<FeedbackController> {
 
                               ],
                             );
+
+
                     },
                   ),
                 ],

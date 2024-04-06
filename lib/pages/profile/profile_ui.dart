@@ -520,7 +520,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                         }
                       } else if (index == 5) {
                         Get.toNamed(RouteName.faq);
-                      } else if (index == 9) {
+                      } else if (index == 8) {
                         Get.toNamed(RouteName.puja);
                       } /*else if (index == 10) {
                         Get.toNamed(RouteName.remedies);

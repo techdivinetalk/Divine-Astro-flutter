@@ -1148,7 +1148,7 @@ class HomeUI extends GetView<HomeController> {
           borderRadius: const BorderRadius.all(Radius.circular(20)),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Column(
@@ -1230,7 +1230,7 @@ class HomeUI extends GetView<HomeController> {
                     : const SizedBox(),
               ],
             ),
-            SizedBox(width: 20.h),
+            //SizedBox(width: 20.h),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1316,141 +1316,143 @@ class HomeUI extends GetView<HomeController> {
                     : const SizedBox(),
               ],
             ),
-            SizedBox(width: 20.h),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+            //SizedBox(width: 15.h),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                  children: [
+                    CustomText(
+                      "nextOnlineTiming".tr,
+                      fontWeight: FontWeight.w500,
+                      fontColor: appColors.darkBlue,
+                      textAlign: TextAlign.center,
+                      fontSize: 10.sp,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(
+                      width: 5.w,
+                    ),
+                    GestureDetector(
+                        onTap: () {
+                          Get.bottomSheet(CommonInfoSheet(
+                            title: "nextOnlineTime".tr,
+                            subTitle: "nextOnlineTimeDes".tr,
+                          ));
+                        },
+                        child: Assets.images.icInfo
+                            .svg(height: 16.h, width: 16.h)),
+                  ],
+                ),
+                SizedBox(height: 15.h),
+                cond2
+                    ? Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Column(
                     children: [
-                      CustomText(
-                        "nextOnlineTiming".tr,
-                        fontWeight: FontWeight.w500,
-                        fontColor: appColors.darkBlue,
-                        fontSize: 10.sp,
-                      ),
-                      SizedBox(
-                        width: 5.w,
-                      ),
-                      GestureDetector(
-                          onTap: () {
-                            Get.bottomSheet(CommonInfoSheet(
-                              title: "nextOnlineTime".tr,
-                              subTitle: "nextOnlineTimeDes".tr,
-                            ));
-                          },
-                          child: Assets.images.icInfo
-                              .svg(height: 16.h, width: 16.h)),
+                      Obx(() => controller
+                          .selectedChatTime.value.isEmpty
+                          ? InkWell(
+                        onTap:
+                        controller.selectDateTimePopupForChat,
+                        child: Container(
+                          // width: 128.w,
+                          height: 31.h,
+                          decoration: BoxDecoration(
+                            color: appColors.guideColor,
+                            borderRadius: const BorderRadius.all(
+                                Radius.circular(20)),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "scheduleNow".tr,
+                              style: AppTextStyle.textStyle10(
+                                  fontColor: appColors.white,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ).pSymmetric(h: 16),
+                        ),
+                      )
+                          : SelectedTimeForChat(
+                          controller: controller)),
                     ],
                   ),
-                  SizedBox(height: 15.h),
-                  cond2
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: Column(
-                            children: [
-                              Obx(() => controller
-                                      .selectedChatTime.value.isEmpty
-                                  ? InkWell(
-                                      onTap:
-                                          controller.selectDateTimePopupForChat,
-                                      child: Container(
-                                        // width: 128.w,
-                                        height: 31.h,
-                                        decoration: BoxDecoration(
-                                          color: appColors.guideColor,
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(20)),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            "scheduleNow".tr,
-                                            style: AppTextStyle.textStyle10(
-                                                fontColor: appColors.white,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : SelectedTimeForChat(
-                                      controller: controller)),
-                            ],
+                )
+                    : const SizedBox(),
+                cond1
+                    ? Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Column(
+                    children: [
+                      Obx(() => controller
+                          .selectedCallTime.value.isEmpty
+                          ? InkWell(
+                        onTap:
+                        controller.selectDateTimePopupForCall,
+                        child: Container(
+                          // width: 128.w,
+                          height: 31.h,
+                          decoration: BoxDecoration(
+                            color: appColors.guideColor,
+                            borderRadius: const BorderRadius.all(
+                                Radius.circular(20)),
                           ),
-                        )
-                      : const SizedBox(),
-                  cond1
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: Column(
-                            children: [
-                              Obx(() => controller
-                                      .selectedCallTime.value.isEmpty
-                                  ? InkWell(
-                                      onTap:
-                                          controller.selectDateTimePopupForCall,
-                                      child: Container(
-                                        // width: 128.w,
-                                        height: 31.h,
-                                        decoration: BoxDecoration(
-                                          color: appColors.guideColor,
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(20)),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            "scheduleNow".tr,
-                                            style: AppTextStyle.textStyle10(
-                                                fontColor: appColors.white,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : SelectedTimeForCall(
-                                      controller: controller)),
-                            ],
+                          child: Center(
+                            child: Text(
+                              "scheduleNow".tr,
+                              style: AppTextStyle.textStyle10(
+                                  fontColor: appColors.white,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ).pSymmetric(h: 16),
+                        ),
+                      )
+                          : SelectedTimeForCall(
+                          controller: controller)),
+                    ],
+                  ),
+                )
+                    : const SizedBox(),
+                cond3
+                    ? Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Column(
+                    children: [
+                      Obx(() => controller
+                          .selectedVideoTime.value.isEmpty
+                          ? InkWell(
+                        onTap: controller
+                            .selectDateTimePopupForVideo,
+                        child: Container(
+                          // width: 128.w,
+                          height: 31.h,
+                          decoration: BoxDecoration(
+                            color: appColors.guideColor,
+                            borderRadius: const BorderRadius.all(
+                                Radius.circular(20)),
                           ),
-                        )
-                      : const SizedBox(),
-                  cond3
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: Column(
-                            children: [
-                              Obx(() => controller
-                                      .selectedVideoTime.value.isEmpty
-                                  ? InkWell(
-                                      onTap: controller
-                                          .selectDateTimePopupForVideo,
-                                      child: Container(
-                                        // width: 128.w,
-                                        height: 31.h,
-                                        decoration: BoxDecoration(
-                                          color: appColors.guideColor,
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(20)),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            "scheduleNow".tr,
-                                            style: AppTextStyle.textStyle10(
-                                              fontColor: appColors.white,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : SelectedTimeForVideoCall(
-                                      controller: controller)),
-                            ],
-                          ),
-                        )
-                      : const SizedBox(),
-                ],
-              ),
+                          child: Center(
+                            child: Text(
+                              "scheduleNow".tr,
+                              style: AppTextStyle.textStyle10(
+                                fontColor: appColors.white,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ).pSymmetric(h: 16),
+                        ),
+                      )
+                          : SelectedTimeForVideoCall(
+                          controller: controller)),
+                    ],
+                  ),
+                )
+                    : const SizedBox(),
+              ],
             ),
           ],
         ),

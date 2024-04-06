@@ -14,6 +14,7 @@ import 'package:divine_astrologer/model/save_remedies_response.dart';
 import 'package:divine_astrologer/repository/chat_repository.dart';
 import 'package:divine_astrologer/repository/kundli_repository.dart';
 import 'package:divine_astrologer/repository/notice_repository.dart';
+import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_ui.dart';
 import 'package:divine_astrologer/utils/load_image.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -282,7 +283,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                                       child: noticeDataChat.isNotEmpty
                                           ? CarouselSlider(
                                               options: CarouselOptions(
-                                                height: 50,
+                                                height: 200,
                                                 autoPlay: true,
                                                 aspectRatio: 1,
                                                 viewportFraction: 1,
@@ -321,6 +322,10 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                                                               appColors.red,
                                                         ),
                                                       ),
+                                                       /* ExpandableHtml(
+                                                          htmlData: '${i.description}',
+                                                          trimLength: 3000,
+                                                        )*/
                                                     );
                                                   },
                                                 );

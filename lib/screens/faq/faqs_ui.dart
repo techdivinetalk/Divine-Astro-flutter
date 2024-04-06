@@ -44,7 +44,7 @@ class FAQsUI extends GetView<FAQsController> {
                             data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                             child: ExpansionTile(
                               initiallyExpanded: index == 0,
-                              title: CustomText(controller.faqsResponse.value.data?[index].question ?? ''),
+                              title: CustomText(controller.faqsResponse.value.data?[index].question ?? '', maxLines: 2, fontSize: 13,),
                               childrenPadding: EdgeInsets.symmetric(horizontal: 16.w).copyWith(bottom: 8.h),
                               expandedCrossAxisAlignment: CrossAxisAlignment.start,
                               children: [

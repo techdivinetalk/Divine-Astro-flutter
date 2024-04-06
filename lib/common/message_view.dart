@@ -24,6 +24,7 @@ import 'dart:ui';
 import '../screens/chat_assistance/chat_message/widgets/product/pooja/widgets/custom_widget/pooja_common_list.dart';
 import '../utils/load_image.dart';
 
+var chatController = Get.find<ChatMessageWithSocketController>();
 class MessageView extends StatelessWidget {
   final int index;
   final ChatMessage chatMessage;
@@ -69,6 +70,12 @@ class MessageView extends StatelessWidget {
         messageWidget = textMsgView(context, chatMessage, yourMessage);
         break;
       case MsgType.audio:
+        if (chatMessage.msgType == 15) {
+          messageWidget = audioView(context,
+              chatDetail: chatMessage, yourMessage: yourMessage);
+        } else {
+          messageWidget = const SizedBox.shrink();
+        }
         messageWidget = audioView(context,
             chatDetail: chatMessage, yourMessage: yourMessage);
         break;
@@ -357,7 +364,7 @@ class MessageView extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        messageDateTime(int.parse(chatMessage.time.toString())),
+                        messageDateTime(int.parse(chatMessage.msgTime.toString())),
                         style: AppTextStyle.textStyle10(
                           fontColor: appColors.darkBlue,
                         ),
@@ -448,7 +455,7 @@ class MessageView extends StatelessWidget {
                       children: [
                         Text(
                           messageDateTime(
-                              int.parse(chatDetail.time.toString())),
+                              int.parse(chatDetail.msgTime.toString())),
                           style: AppTextStyle.textStyle10(
                               fontColor: appColors.black),
                         ),
@@ -712,7 +719,6 @@ class MessageView extends StatelessWidget {
     print(
         "chatDetail.type ${msgType.value} - ${chatDetail.type} - ${chatDetail
             .seenStatus} - ${yourMessage}");
-    var chatController = Get.find<ChatMessageWithSocketController>();
 
     return SizedBox(
       width: double.maxFinite,
@@ -803,7 +809,7 @@ class MessageView extends StatelessWidget {
                               ),
                               child: Text(
                                 messageDateTime(int.parse(
-                                    chatDetail.time.toString())),
+                                    chatDetail.msgTime.toString())),
                                 style: AppTextStyle.textStyle10(
                                     fontColor: appColors.white),
                               ),
@@ -857,7 +863,7 @@ class MessageView extends StatelessWidget {
                       children: [
                         Text(
                           messageDateTime(
-                              int.parse(chatDetail.time.toString())),
+                              int.parse(chatDetail.msgTime.toString())),
                           style: AppTextStyle.textStyle10(
                             fontColor: appColors.white,
                           ),
@@ -948,7 +954,7 @@ class MessageView extends StatelessWidget {
                         ),
                         child: Text(
                           messageDateTime(
-                              int.parse(chatDetail.time.toString())),
+                              int.parse(chatDetail.msgTime.toString())),
                           style: AppTextStyle.textStyle10(
                             fontColor: appColors.white,
                           ),

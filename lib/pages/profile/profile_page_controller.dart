@@ -139,11 +139,11 @@ class ProfilePageController extends GetxController {
     ProfileOptionModelClass(
         "Upload Story".tr,
         Assets.images.icUploadStory.svg(width: 30.h, height: 30.h),
-        '/Upload Story'),
+        '/uploadStoryUi'),
     ProfileOptionModelClass(
         "Upload Your Photo",
         Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h),
-        '/Upload Your Photo'),
+        '/uploadYourPhotosUi'),
     ProfileOptionModelClass("customerSupport".tr,
         Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), ''),
     ProfileOptionModelClass(
