@@ -103,17 +103,17 @@ class AppFirebaseService {
                 .update();
             Get.put(ProfilePageController(Get.put(UserRepository()))).update();
           }
-          if (realTimeData["engageId"] != null) {
-            tableName = "chat_${realTimeData["engageId"]}";
-            debugPrint("tableName ${tableName}");
-          }
-          var res = await hiveServices.getData(key: tableName);
-          if (res != null) {
-            var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
-            chatMessages.value = msg.chatMessages ?? [];
-            databaseMessage.value.chatMessages = chatMessages;
-            debugPrint("msg.chatMessages ${msg.chatMessages?.length}");
-          }
+          // if (realTimeData["engageId"] != null) {
+          //   tableName = "chat_${realTimeData["engageId"]}";
+          //   debugPrint("tableName ${tableName}");
+          // }
+          // var res = await hiveServices.getData(key: tableName);
+          // if (res != null) {
+          //   var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
+          //   chatMessages.value = msg.chatMessages ?? [];
+          //   databaseMessage.value.chatMessages = chatMessages;
+          //   debugPrint("msg.chatMessages ${msg.chatMessages?.length}");
+          // }
           if (realTimeData["isEngagedStatus"] != null) {
             print(realTimeData["isEngagedStatus"]);
             print('realTimeData["isEngagedStatus"]');

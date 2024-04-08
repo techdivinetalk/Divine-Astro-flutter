@@ -201,7 +201,7 @@ class ZegoService {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            currentUserOnScreen.value,
+                            AppFirebaseService().orderData.value["customerName"],
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w600,
