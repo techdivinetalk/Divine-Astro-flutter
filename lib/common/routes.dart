@@ -7,6 +7,8 @@ import 'package:divine_astrologer/pages/wallet/wallet_binding.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_ui.dart';
 import 'package:divine_astrologer/screens/add_puja/add_puja_binding.dart';
 import 'package:divine_astrologer/screens/add_puja/add_puja_form.dart';
+import 'package:divine_astrologer/screens/all_fine_details/all_fine_detail_list.dart';
+import 'package:divine_astrologer/screens/all_fine_details/all_fine_details_binding.dart';
 import 'package:divine_astrologer/screens/auth/login/login_binding.dart';
 import 'package:divine_astrologer/screens/auth/login/login_ui.dart';
 import 'package:divine_astrologer/screens/blocked_user/blocked_user_bindings.dart';
@@ -186,6 +188,7 @@ class RouteName {
       "/chatAssistSuggestRemedyDetails";
   static const String chatSuggestRemedyDetails = "/chatSuggestRemedyDetails";
   static const String feedback = "/feedback";
+  static const String fineAllDetails = "/fineAllDetails";
   static const String liveDharamScreen = "/liveDharamScreen";
   static const String faq = "/faqPage";
   static const String puja = "/puja";
@@ -451,6 +454,11 @@ class Routes {
         page: () => const FeedBack(),
         name: RouteName.feedback,
         binding: FeedbackBinding()),
+
+    GetPage(
+        page: () => const AllFineDetailsList(),
+        name: RouteName.fineAllDetails,
+        binding: AllFineDetailsBindings()),
     GetPage<dynamic>(
       name: RouteName.liveDharamScreen,
       page: LiveDharamScreen.new,

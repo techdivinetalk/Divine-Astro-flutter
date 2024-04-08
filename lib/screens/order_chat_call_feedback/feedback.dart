@@ -108,7 +108,7 @@ class FeedBack extends GetView<FeedbackController> {
                     itemBuilder: (context, index) {
                       final data = controller.chatMessageList[index];
 
-                      bool isNewDay = index == 0 ||
+                     /* bool isNewDay = index == 0 ||
                           (data.createdAt != null &&
                               controller.chatMessageList[index - 1].createdAt != null &&
                               (DateTime.tryParse(data.createdAt!) ??
@@ -118,9 +118,9 @@ class FeedBack extends GetView<FeedbackController> {
                                   (DateTime.tryParse(controller.chatMessageList[index - 1].createdAt!) ??
                                       DateTime.fromMillisecondsSinceEpoch(
                                           int.parse(controller.chatMessageList[index - 1].createdAt!)))
-                                      .day);
+                                      .day);*/
 
-                      String? createdAt = data.createdAt;
+                     /* String? createdAt = data.createdAt;
                       String formattedTime = '';
                       if (createdAt != null && createdAt.isNotEmpty) {
                         try {
@@ -130,13 +130,13 @@ class FeedBack extends GetView<FeedbackController> {
                           // Handle parsing error
                           print('Error parsing createdAt: $e');
                         }
-                      }
+                      }*/
 
                       return controller.order?.productType == 12
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                if (isNewDay)
+                               /* if (isNewDay)
                                   Padding(
                                     padding:
                                         EdgeInsets.symmetric(vertical: 15.w),
@@ -156,13 +156,14 @@ class FeedBack extends GetView<FeedbackController> {
                                         ),
                                       ),
                                     ).centered(),
-                                  ),
+                                  ),*/
                                 // Display chat message
                                /* data.msgType == 0
                                     ?*/ Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 12.w, vertical: 4.h),
                                   child: MessageView(
+                                    unreadMessageShow: true,
                                     index: index,
                                     userName: '',
                                     nextChatMessage: index ==
@@ -282,7 +283,7 @@ class FeedBack extends GetView<FeedbackController> {
                             )
                           : Column(
                               children: [
-                                if (isNewDay)
+                               /* if (isNewDay)
                                   Padding(
                                     padding:
                                         EdgeInsets.symmetric(vertical: 15.w),
@@ -302,7 +303,7 @@ class FeedBack extends GetView<FeedbackController> {
                                         ),
                                       ),
                                     ).centered(),
-                                  ),
+                                  ),*/
                                 CustomVoicePlayer(
                                   playUrl: data.callRecording ?? "",
                                   callDuration: data.callDuration,
@@ -363,10 +364,7 @@ class FeedBack extends GetView<FeedbackController> {
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
-                          // Get.bottomSheet(CommonInfoSheet(
-                          //   title: "trainingVideos".tr,
-                          //   subTitle: "trainingVideosDes".tr,
-                          // ));
+                         // Get.toNamed(RouteName.fineAllDetails);
                         },
                         child: const Align(
                           alignment: Alignment.centerRight,

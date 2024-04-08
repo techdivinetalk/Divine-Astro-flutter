@@ -19,7 +19,7 @@ class AllFineDetailsList extends GetView<AllFineDetailsController> {
           leading: IconButton(
               onPressed: () => Get.back(),
               icon: const Icon(Icons.arrow_back_ios_new_rounded)),
-          title: const CustomText('FAQ')),
+          title: const CustomText('All Fine Details')),
       body: Obx(
         () => AnimatedCrossFade(
           duration: const Duration(milliseconds: 200),
