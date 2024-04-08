@@ -342,19 +342,15 @@ class MessageView extends StatelessWidget {
                         Text(
                           chatMessage.message ?? "",
                           style: AppTextStyle.textStyle14(
-                              fontColor: myList == null ?
-                              appColors.black :
-                              (myList!.length > 1 ? (myList![1].toString() == chatMessage.time.toString()
-                                  ? appColors.red
-                                  : appColors.black) : appColors.black),
+                              fontColor: chatMessage.id.toString() ==  AppFirebaseService().orderData["astroId"].toString() ?appColors.red:appColors.black,
                         )),
                       ],
                     ),
                     SizedBox(
-                      height: (myList != null && myList!.isNotEmpty && chatMessage.time != null && myList![0].toString() == chatMessage.time.toString()) ? 10 : 0,
+                      height: chatMessage.id.toString() ==  AppFirebaseService().orderData["userId"].toString() ? 10 : 0,
                     ),
                     Visibility(
-                      visible:  (myList != null && myList!.isNotEmpty && chatMessage.time != null && myList![0].toString() == chatMessage.time.toString()),
+                      visible: chatMessage.id.toString() ==  AppFirebaseService().orderData["userId"].toString(),
                       child: CustomButton(
                         color: appColors.guideColor,
                         onTap: () {

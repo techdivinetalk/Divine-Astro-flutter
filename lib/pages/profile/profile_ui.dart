@@ -305,6 +305,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                   color: appColors.transparent,
                   child: InkWell(
                     onTap: () async {
+
                       if (index == 4) {
                         openBottomSheet(
                           context,
@@ -521,6 +522,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                       } else if (index == 5) {
                         Get.toNamed(RouteName.faq);
                       } else if (index == 8) {
+                        print("index ---- ${index == 8}");
                         Get.toNamed(RouteName.puja);
                       } /*else if (index == 10) {
                         Get.toNamed(RouteName.remedies);
