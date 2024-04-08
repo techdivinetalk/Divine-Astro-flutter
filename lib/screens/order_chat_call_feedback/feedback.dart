@@ -167,12 +167,9 @@ class FeedBack extends GetView<FeedbackController> {
                                     index: index,
                                     userName: '',
                                     nextChatMessage: index ==
-                                        controller
-                                            .chatMessageList.length -
-                                            1
+                                        controller.chatMessageList.length - 1
                                         ? controller.chatMessageList[index]
-                                        : controller
-                                        .chatMessageList[index + 1],
+                                        : controller.chatMessageList[index + 1],
                                     chatMessage: data,
                                     yourMessage: controller
                                         .chatMessageList[index].msgSendBy == "1",
@@ -364,7 +361,7 @@ class FeedBack extends GetView<FeedbackController> {
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
-                         // Get.toNamed(RouteName.fineAllDetails);
+                          Get.toNamed(RouteName.fineAllDetails);
                         },
                         child: const Align(
                           alignment: Alignment.centerRight,
@@ -394,57 +391,6 @@ class FeedBack extends GetView<FeedbackController> {
           ],
         );
       }),
-    );
-  }
-
-  Widget remediesMsgView(
-      BuildContext context, ChatMessage chatMessage, bool yourMessage) {
-    var jsonString = (chatMessage.message ?? '').substring(1,(chatMessage.message ?? '').length -1);
-    List temp = jsonString.split(', ');
-
-    print("get templist $temp");
-
-    if (temp.length < 2) {
-      return const SizedBox.shrink();
-    }
-    return SizedBox(
-      width: double.maxFinite,
-      child: Column(
-        crossAxisAlignment:
-        yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: [
-          Card(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color:  appColors.guideColor ,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: appColors.red,
-                  child: CustomText(
-                    temp[0][0],
-                    fontColor: appColors.white,
-                  ), // Display the first letter of the name
-                ),
-                title: CustomText(
-                  temp[0],
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w600,
-                ),
-                subtitle: CustomText(
-                  temp[1] ?? '',
-                  fontSize: 12.sp,
-                  maxLines: 20,
-                ),
-                onTap: () => Get.toNamed(RouteName.remediesDetail, arguments:{'title': temp[0], 'subtitle': temp[1]}),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

@@ -48,9 +48,13 @@ class AllFineDetailsList extends GetView<AllFineDetailsController> {
                                 .copyWith(dividerColor: Colors.transparent),
                             child: ExpansionTile(
                               initiallyExpanded: index == 0,
-                              title: CustomText(controller.faqsResponse.value
-                                      .data?[index].question ??
-                                  ''),
+                              title: CustomText(
+                                controller
+                                        .faqsResponse.value.data?[index].name ??
+                                    '',
+                                fontColor: appColors.red,
+                                  fontWeight: FontWeight.w500
+                              ),
                               childrenPadding:
                                   EdgeInsets.symmetric(horizontal: 16.w)
                                       .copyWith(bottom: 8.h),
@@ -61,9 +65,37 @@ class AllFineDetailsList extends GetView<AllFineDetailsController> {
                                     height: 1,
                                     color: appColors.darkBlue.withOpacity(0.1)),
                                 SizedBox(height: 8.h),
-                                CustomText(controller.faqsResponse.value
-                                        .data?[index].answer ??
-                                    '')
+                                CustomText(
+                                  controller.faqsResponse.value.data?[index]
+                                          .fine?.label ??
+                                      '',
+                                  maxLines: 5,
+                                ),
+                                const SizedBox(height: 8),
+                                CustomText('Solution:',
+                                    fontColor: appColors.green,
+                                    fontWeight: FontWeight.w600),
+                                CustomText(
+                                  controller.faqsResponse.value.data?[index]
+                                          .solution?.name ??
+                                      '',
+                                  maxLines: 10,
+                                  fontColor: appColors.green,
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CustomText('Fine :-',
+                                        fontColor: appColors.red,
+                                        fontWeight: FontWeight.w500),
+                                    CustomText(
+                                      "₹${controller.faqsResponse.value.data?[index].fine?.amount}" ?? '',
+                                      maxLines: 10,
+                                      fontColor: appColors.red,
+                                    )
+                                  ],
+                                )
                               ],
                             ),
                           ),
@@ -83,8 +115,8 @@ class AllFineDetailsList extends GetView<AllFineDetailsController> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-           Padding(
-              padding:const EdgeInsets.all(8.0),
+          Padding(
+              padding: const EdgeInsets.all(8.0),
               child: CircularProgressIndicator(color: appColors.guideColor)),
           SizedBox(height: 8.h),
           CustomText('gettingData'.tr)

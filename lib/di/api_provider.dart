@@ -109,6 +109,7 @@ class ApiProvider {
   final String updateOfferFlag = "updateOfferFlag";
   final String customOfferManage = "customOfferManage";
   final String faq = "faq";
+  final String getAllFeedbackFineDetail = "getAllFeedbackFineDetail";
   final String walletPayout = "payoutDetails";
 
   //Astro Internal API

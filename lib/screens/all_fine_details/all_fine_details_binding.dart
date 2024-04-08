@@ -6,6 +6,6 @@ import 'package:get/get.dart';
 class AllFineDetailsBindings extends Bindings {
   @override
   void dependencies() {
-    Get.put(AllFineDetailsController(Get.put(AllFineDetailsRepository() as FAQsRepository)));
+    Get.put(AllFineDetailsController(Get.put(AllFineDetailsRepository())));
   }
 }

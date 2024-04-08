@@ -437,6 +437,7 @@ class MessageView extends StatelessWidget {
   Widget audioView(BuildContext context,
       {required ChatMessage chatDetail, required bool yourMessage}) {
     RxInt msgType = (chatDetail.type ?? 0).obs;
+    print("Type:: ${chatDetail.type ?? ""}");
     return GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
       return SizedBox(
         width: double.maxFinite,
@@ -464,7 +465,7 @@ class MessageView extends StatelessWidget {
                     absorbing: controller.isAudioPlaying.value,
                     child: VoiceMessageView(
                         controller: VoiceController(
-                            audioSrc: chatDetail.awsUrl ?? chatDetail.message ?? "",
+                            audioSrc: chatDetail.awsUrl ?? ""/*?? chatDetail.message ?? ""*/,
                             maxDuration: const Duration(minutes: 30),
                             isFile: false,
                             onComplete: () {

@@ -2,15 +2,17 @@
 import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/model/all_fine_details_model.dart';
 import 'package:divine_astrologer/model/faq_response.dart';
+import 'package:divine_astrologer/repository/all_fine_details_repository.dart';
 import 'package:divine_astrologer/repository/faqs_repository.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AllFineDetailsController extends GetxController {
-  late final FAQsRepository faqsRepository;
-  Rx<FAQsResponse> faqsResponse = FAQsResponse().obs;
+  late final AllFineDetailsRepository faqsRepository;
+  Rx<FeedbackFineResponse> faqsResponse = FeedbackFineResponse().obs;
   Loading loading = Loading.initial;
 
   AllFineDetailsController(this.faqsRepository);
@@ -25,7 +27,7 @@ class AllFineDetailsController extends GetxController {
     loading = Loading.loading;
     update();
     try {
-      FAQsResponse response = await faqsRepository.getFAQs();
+      FeedbackFineResponse response = await faqsRepository.getFeedBackDetails();
       faqsResponse.value = response;
       loading = Loading.loaded;
     } catch (error) {
