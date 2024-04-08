@@ -706,6 +706,8 @@ class ChatMessageWithSocketController extends GetxController
         <GiftData>[];
     if (data.isNotEmpty) {
       print("playAnimation string id 2111 $id");
+      print("data.first.animation ${data.first.animation}");
+      print("GiftPlayerSource.url ${GiftPlayerSource.url}");
       ZegoGiftPlayer().play(
         context!,
         GiftPlayerData(
