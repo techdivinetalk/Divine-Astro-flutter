@@ -35,6 +35,7 @@ class MessageView extends StatelessWidget {
   final String userName;
   final bool yourMessage;
   final int? unreadMessage;
+  final bool? unreadMessageShow;
   final List<String>? myList;
 
   const MessageView({
@@ -45,6 +46,7 @@ class MessageView extends StatelessWidget {
     required this.nextChatMessage,
     required this.yourMessage,
     this.unreadMessage,
+    this.unreadMessageShow = true,
     this.myList,
   });
 
@@ -75,12 +77,6 @@ class MessageView extends StatelessWidget {
         messageWidget = textMsgView(context, chatMessage, yourMessage);
         break;
       case MsgType.audio:
-        if (chatMessage.msgType == 15) {
-          messageWidget = audioView(context,
-              chatDetail: chatMessage, yourMessage: yourMessage);
-        } else {
-          messageWidget = const SizedBox.shrink();
-        }
         messageWidget = audioView(context,
             chatDetail: chatMessage, yourMessage: yourMessage);
         break;
@@ -103,7 +99,7 @@ class MessageView extends StatelessWidget {
 
     // Conditionally add unreadMessageView() based on chat
 
-    return Column(
+    return unreadMessageShow! == false ? Column(
       children: [
         if (chatMessage.id == unreadMessage) unreadMessageView(),
         // if (index == 0)
@@ -123,7 +119,7 @@ class MessageView extends StatelessWidget {
         //       isYesterday: (DateTime.now().day - currentMsgDate.day) == 1,
         //       differenceOfDays: 1),
       ],
-    );
+    ) : messageWidget;
   }
 
   Widget dayWidget(
@@ -406,8 +402,8 @@ class MessageView extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        messageDateTime(chatMessage.msgTime != null
-                            ? int.parse(chatMessage.msgTime!)
+                        messageDateTime(chatMessage.time != null
+                            ? int.parse(chatMessage.time!)
                             : 0),
                         style: AppTextStyle.textStyle10(
                           fontColor: appColors.darkBlue,
@@ -468,7 +464,7 @@ class MessageView extends StatelessWidget {
                     absorbing: controller.isAudioPlaying.value,
                     child: VoiceMessageView(
                         controller: VoiceController(
-                            audioSrc: chatDetail.awsUrl ?? chatDetail.message!,
+                            audioSrc: chatDetail.awsUrl ?? chatDetail.message ?? "",
                             maxDuration: const Duration(minutes: 30),
                             isFile: false,
                             onComplete: () {
@@ -496,23 +492,23 @@ class MessageView extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          messageDateTime(chatDetail.msgTime != null
-                              ? int.parse(chatDetail.msgTime!)
+                          messageDateTime(chatDetail.time != null
+                              ? int.parse(chatDetail.time!)
                               : 0),
                           style: AppTextStyle.textStyle10(
                               fontColor: appColors.black),
                         ),
                         if (yourMessage) SizedBox(width: 8.w),
                         if (yourMessage)
-                          msgType.value == 0
-                              ? Assets.images.icSingleTick.svg()
-                              : msgType.value == 1
-                                  ? Assets.images.icDoubleTick.svg(
-                                      colorFilter: ColorFilter.mode(
-                                          appColors.lightGrey, BlendMode.srcIn))
-                                  : msgType.value == 3
-                                      ? Assets.images.icDoubleTick.svg()
-                                      : Assets.images.icSingleTick.svg()
+                         Obx(() =>  msgType.value == 0
+                             ? Assets.images.icSingleTick.svg()
+                             : msgType.value == 1
+                             ? Assets.images.icDoubleTick.svg(
+                             colorFilter: ColorFilter.mode(
+                                 appColors.lightGrey, BlendMode.srcIn))
+                             : msgType.value == 3
+                             ? Assets.images.icDoubleTick.svg()
+                             : Assets.images.icSingleTick.svg())
                       ],
                     ),
                   ),
@@ -851,9 +847,9 @@ class MessageView extends StatelessWidget {
                                           ),
                                         ),
                                         child: Text(
-                                          messageDateTime(chatDetail.msgTime !=
+                                          messageDateTime(chatDetail.time !=
                                                   null
-                                              ? int.parse(chatDetail.msgTime!)
+                                              ? int.parse(chatDetail.time!)
                                               : 0),
                                           style: AppTextStyle.textStyle10(
                                               fontColor: appColors.white),
@@ -907,8 +903,8 @@ class MessageView extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Text(
-                                    messageDateTime(chatDetail.msgTime != null
-                                        ? int.parse(chatDetail.msgTime!)
+                                    messageDateTime(chatDetail.time != null
+                                        ? int.parse(chatDetail.time!)
                                         : 0),
                                     style: AppTextStyle.textStyle10(
                                       fontColor: appColors.white,
@@ -999,8 +995,8 @@ class MessageView extends StatelessWidget {
                                     ),
                                   ),
                                   child: Text(
-                                    messageDateTime(chatDetail.msgTime != null
-                                        ? int.parse(chatDetail.msgTime!)
+                                    messageDateTime(chatDetail.time != null
+                                        ? int.parse(chatDetail.time!)
                                         : 0),
                                     style: AppTextStyle.textStyle10(
                                       fontColor: appColors.white,

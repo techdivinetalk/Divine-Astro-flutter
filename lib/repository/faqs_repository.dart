@@ -27,4 +27,25 @@ class FAQsRepository extends ApiProvider {
       rethrow;
     }
   }
+
+  Future<FAQsResponse> getFeedBackDetails() async {
+    try {
+      final response = await get(faq);
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] == 401) {
+          preferenceService.erase();
+          Get.offNamed(RouteName.login);
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final faqs = faqsResponseFromJson(response.body);
+          return faqs;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
 }

@@ -36,7 +36,7 @@ class ChatMessage {
   String? multiImage;
   String? msgTime;
 
-  String? createdAt;
+  //String? createdAt;
   String? updatedAt;
   String? msgSendBy;
   int? isSuspicious;
@@ -96,7 +96,7 @@ class ChatMessage {
     this.message,
     this.multiImage,
     this.msgTime,
-    this.createdAt,
+    //this.createdAt,
     this.updatedAt,
     this.msgSendBy,
     this.isSuspicious,
@@ -156,7 +156,7 @@ class ChatMessage {
     isPoojaProduct = json['is_pooja_product'].toString() == "1" ? true : false;
     multiImage = json['multiimage'];
     msgTime = json['msg_time'];
-    createdAt = json['created_at'] != null ? DateTime.parse(json['created_at']).millisecondsSinceEpoch.toString() : "";
+   // createdAt = json['created_at'] != null ? DateTime.parse(json['created_at']).millisecondsSinceEpoch.toString() : "";
     updatedAt = json['updated_at'];
     msgSendBy = json['msg_send_by'];
     isSuspicious = json['is_suspicious'];
@@ -219,7 +219,7 @@ class ChatMessage {
     data['message'] = message;
     data['multiimage'] = multiImage;
     data['msg_time'] = msgTime;
-    data['created_at'] = createdAt;
+  //  data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['msg_send_by'] = msgSendBy;
     data['shop_id'] = shopId;
