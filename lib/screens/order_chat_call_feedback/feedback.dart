@@ -320,7 +320,7 @@ class FeedBack extends GetView<FeedbackController> {
                 ? ShimmerLoader()
                 : Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Column(
+              child: Obx(() => Column(
                 children: [
                   SizedBox(height: 20.h),
                   Row(
@@ -336,7 +336,7 @@ class FeedBack extends GetView<FeedbackController> {
                               children: [
                                 TextSpan(
                                   text:
-                                      '${controller.astroFeedbackDetailData.value?.totalProblem ?? 0}',
+                                  '${controller.astroFeedbackDetailData.value?.totalProblem ?? 0}',
                                   style:  TextStyle(color: appColors.red),
                                 ),
                               ],
@@ -351,7 +351,7 @@ class FeedBack extends GetView<FeedbackController> {
                               children: [
                                 TextSpan(
                                   text:
-                                      '-₹ ${controller.astroFeedbackDetailData.value?.fineAmounts ?? 0}',
+                                  '-₹ ${controller.astroFeedbackDetailData.value?.fineAmounts ?? 0}',
                                   style:  TextStyle(color: appColors.red),
                                 ),
                               ],
@@ -377,17 +377,17 @@ class FeedBack extends GetView<FeedbackController> {
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount:
-                        controller.astroFeedbackDetailData.value?.problems?.length ??
-                            0,
+                    controller.astroFeedbackDetailData.value?.problems?.length ??
+                        0,
                     itemBuilder: (context, index) {
                       final feedbackProblem =
-                          controller.astroFeedbackDetailData.value?.problems?[index];
+                      controller.astroFeedbackDetailData.value?.problems?[index];
                       return FeedbackCallChatCardWidget(
                           feedbackProblem: feedbackProblem!);
                     },
                   ),
                 ],
-              ),
+              )),
             ),
           ],
         );
@@ -400,7 +400,7 @@ class FeedBack extends GetView<FeedbackController> {
 
 class CustomVoicePlayer extends StatefulWidget {
   final String playUrl;
-  final String callDuration; // Add callDuration as a parameter
+  final String callDuration;
 
   const CustomVoicePlayer({
     super.key,
