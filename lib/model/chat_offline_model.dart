@@ -156,7 +156,7 @@ class ChatMessage {
     isPoojaProduct = json['is_pooja_product'].toString() == "1" ? true : false;
     multiImage = json['multiimage'];
     msgTime = json['msg_time'];
-    createdAt = DateTime.parse( json['created_at']).millisecondsSinceEpoch.toString();
+    createdAt = json['created_at'] != null ? DateTime.parse(json['created_at']).millisecondsSinceEpoch.toString() : "";
     updatedAt = json['updated_at'];
     msgSendBy = json['msg_send_by'];
     isSuspicious = json['is_suspicious'];

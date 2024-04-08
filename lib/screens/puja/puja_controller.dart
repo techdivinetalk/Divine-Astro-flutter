@@ -35,13 +35,13 @@ class PujaController extends GetxController {
         isPujaLoading = false;
       } else {
         isPujaLoading = false;
-        noPoojaFound = "No Puja found!.";
+        noPoojaFound = "No E-Commerce found!.";
       }
       update();
       log("Data Of Pooja ==> ${jsonEncode(response.data)}");
     } catch (error) {
       isPujaLoading = false;
-      noPoojaFound = "No Puja found!.";
+      noPoojaFound = "No E-Commerce found!.";
       debugPrint("error $error");
       if (error is AppException) {
         error.onException();

@@ -22,7 +22,7 @@ class NumberChangeReqRepository extends ApiProvider {
           preferenceService.erase();
           Get.offNamed(RouteName.login);
           throw CustomException(json.decode(response.body)["error"]);
-        } else {
+        }  else {
           final numberChangeResponse =
               NumberChangeResponse.fromJson(json.decode(response.body));
           if (numberChangeResponse.statusCode == successResponse &&

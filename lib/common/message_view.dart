@@ -376,7 +376,7 @@ class MessageView extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        messageDateTime(int.parse(chatMessage.msgTime.toString())),
+                       messageDateTime(chatMessage.msgTime != null ? int.parse(chatMessage.msgTime!) : 0),
                         style: AppTextStyle.textStyle10(
                           fontColor: appColors.darkBlue,
                         ),
@@ -466,8 +466,7 @@ class MessageView extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          messageDateTime(
-                              int.parse(chatDetail.msgTime.toString())),
+                          messageDateTime(chatDetail.msgTime != null ? int.parse(chatDetail.msgTime!) : 0),
                           style: AppTextStyle.textStyle10(
                               fontColor: appColors.black),
                         ),
@@ -511,7 +510,8 @@ class MessageView extends StatelessWidget {
           children: [
             Flexible(
               child: Text(
-                "$customerName have sent ${chatMessage.message ?? ""}",
+                "$customerName have sent ${chatMessage.message!.contains("https") ? "" : chatMessage.message ?? ""}",
+               // "$customerName have sent ${chatMessage.message ?? ""}",
                 style: const TextStyle(color: Colors.red),
               ),
             ),
@@ -820,8 +820,7 @@ class MessageView extends StatelessWidget {
                                 ),
                               ),
                               child: Text(
-                                messageDateTime(int.parse(
-                                    chatDetail.msgTime.toString())),
+                                messageDateTime(chatDetail.msgTime != null ? int.parse(chatDetail.msgTime!) : 0),
                                 style: AppTextStyle.textStyle10(
                                     fontColor: appColors.white),
                               ),
@@ -874,8 +873,7 @@ class MessageView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          messageDateTime(
-                              int.parse(chatDetail.msgTime.toString())),
+                          messageDateTime(chatDetail.msgTime != null ? int.parse(chatDetail.msgTime!) : 0),
                           style: AppTextStyle.textStyle10(
                             fontColor: appColors.white,
                           ),
@@ -965,8 +963,7 @@ class MessageView extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          messageDateTime(
-                              int.parse(chatDetail.msgTime.toString())),
+                          messageDateTime(chatDetail.msgTime != null ? int.parse(chatDetail.msgTime!) : 0),
                           style: AppTextStyle.textStyle10(
                             fontColor: appColors.white,
                           ),

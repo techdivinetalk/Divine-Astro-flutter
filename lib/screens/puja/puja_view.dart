@@ -33,7 +33,7 @@ class PujaScreen extends GetView<PujaController> {
               leading: IconButton(
                   onPressed: () => Get.back(),
                   icon: const Icon(Icons.arrow_back_ios_new_rounded)),
-              title: const CustomText('Pooja')),
+              title: const CustomText('E-Commerce')),
           bottomNavigationBar: Container(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
             child: Row(
@@ -58,7 +58,7 @@ class PujaScreen extends GetView<PujaController> {
                       );
                     },
                     child: Text(
-                      'Add New Pooja',
+                      'Add E-Commerce',
                       style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w600,
                         fontColor: appColors.white,
