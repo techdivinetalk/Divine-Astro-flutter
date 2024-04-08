@@ -110,7 +110,6 @@ class ChatMessageWithSocketController extends GetxController
   RxString customerName = "".obs;
   RxString profileImage = "".obs;
   RxBool isOngoingChat = false.obs;
-  RxString chatStatus = "Offline".obs;
 
   // DashboardController dashboardController = Get.find<DashboardController>();
   // MessageTemplateController messageTemplateController = Get.find<MessageTemplateController>();
@@ -142,7 +141,6 @@ class ChatMessageWithSocketController extends GetxController
         if (_start == 0) {
           timer.cancel();
           isTyping.value = false;
-          chatStatus("online");
         } else {
           _start--;
         }
@@ -252,7 +250,6 @@ class ChatMessageWithSocketController extends GetxController
           orderId: AppFirebaseService().orderData.value["orderId"].toString(),
           userId: AppFirebaseService().orderData.value["userId"],
         );
-        chatStatus("Online");
       },
       onHide: () {},
       onInactive: () {
@@ -350,7 +347,6 @@ class ChatMessageWithSocketController extends GetxController
     //  if (Get.arguments is ResAstroChatListener) {
     sendReadMessageStatus = true;
     // if (data!.customerId != null) {
-    chatStatus.value = "Online";
     isOngoingChat.value = true;
     //  currentChatUserId.value = data['userId'];
     currentUserId.value =
@@ -593,7 +589,6 @@ class ChatMessageWithSocketController extends GetxController
         userId: AppFirebaseService().orderData.value["userId"],
       );
       debugPrint("emited Data $data");
-      chatStatus("Online");
       updateReadMessage();
     });
   }
@@ -631,7 +626,7 @@ class ChatMessageWithSocketController extends GetxController
       if (data['data']["typist"].toString() ==
           AppFirebaseService().orderData.value["userId"].toString()) {
         isTyping.value = true;
-        chatStatus.value = "Typing";
+        //chatStatus.value = "Typing";
         // if (isScrollAtBottom()) {
         //   scrollToBottomFunc();
         // }
@@ -674,7 +669,6 @@ class ChatMessageWithSocketController extends GetxController
 
       if (data is Map<String, dynamic>) {
         isTyping.value = false;
-        chatStatus.value = "Online";
         final ChatMessage chatMessage =
             ChatMessage.fromOfflineJson(data["data"]);
         final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
@@ -1306,7 +1300,22 @@ class ChatMessageWithSocketController extends GetxController
       update();
     }
   }
-
+  @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+    print("keyBoardOpen");
+    final bool isKeyboardOpen =
+        MediaQuery.of(Get.context!).viewInsets.bottom > 0;
+    if (isKeyboardOpen) {
+      Timer(
+          const Duration(milliseconds: 300),
+              () => messgeScrollController.animateTo(
+                messgeScrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeOut,
+          ));
+    }
+  }
   uploadAudioFile(File soundFile) async {
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
     final uploadFile =
@@ -1349,7 +1358,7 @@ class ChatMessageWithSocketController extends GetxController
   void customerLeavedPrivateChatListenerSocket() {
     socket.customerLeavedPrivateChatListenerSocket((data) {
       debugPrint("Yes customer leaved chat successfully $data");
-      chatStatus("Offline");
+      //chatStatus("Offline");
     });
   }
 
@@ -1400,6 +1409,11 @@ class ChatMessageWithSocketController extends GetxController
       chatTimer?.cancel();
       startExtraTimer(p0["order_end_time"]);
       return;
+    }
+    print("extraTime ${p0["status"]}");
+    if(p0["status"] == "3") {
+      extraTimer?.cancel();
+      print("extraTime closing");
     }
     isCardVisible.value =
         p0["card"] != null ? (p0["card"]["isCardVisible"] ?? false) : false;

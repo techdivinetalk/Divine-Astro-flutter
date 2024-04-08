@@ -1279,9 +1279,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                                       duration:
                                           const Duration(milliseconds: 200),
                                       crossFadeState:
-                                          controller.chatStatus.value != ""
-                                              ? CrossFadeState.showFirst
-                                              : CrossFadeState.showSecond,
+                                           CrossFadeState.showFirst,
                                       secondChild: const SizedBox(),
                                       firstChild: Column(
                                         crossAxisAlignment:
@@ -1298,15 +1296,11 @@ class AstrologerChatAppBar extends StatelessWidget {
                                                 color: appColors.brownColour),
                                           ),
                                           Text(
-                                            controller.chatStatus.value,
+                                            "Chat in progress",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: 10.sp,
-                                                color: controller
-                                                            .chatStatus.value !=
-                                                        "Offline"
-                                                    ? appColors.darkGreen
-                                                    : appColors.redColor),
+                                                color:appColors.darkGreen),
                                           ),
                                         ],
                                       ),

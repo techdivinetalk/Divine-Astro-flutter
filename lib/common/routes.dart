@@ -390,7 +390,7 @@ class Routes {
       page: () =>  PrivacyPolicyUI(),
       name: RouteName.privacyPolicy,
     ),   GetPage(
-      page: () =>  RemediesScreen(),
+      page: () =>  const RemediesScreen(),
       name: RouteName.remedies,
         binding: RemediesBindings(),
       // name: RouteName.remedies,

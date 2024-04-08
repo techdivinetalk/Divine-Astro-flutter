@@ -126,7 +126,7 @@ class ProfilePageController extends GetxController {
           Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h),
           '/blockedUser'),
       ProfileOptionModelClass("Remedies",
-          Assets.images.remedies.svg(width: 30.h, height: 30.h), ''),
+          Assets.images.remedies.svg(width: 30.h, height: 30.h), '/remedies'),
     ].obs;
   }
 
@@ -165,7 +165,7 @@ class ProfilePageController extends GetxController {
         Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h),
         '/blockedUser'),
     ProfileOptionModelClass(
-        "E-Commerce", Assets.images.remedies.svg(width: 30.h, height: 30.h), ''),
+        "E-Commerce", Assets.images.remedies.svg(width: 30.h, height: 30.h), '/remedies'),
     // ProfileOptionModelClass("Add Remedies",
     //     Assets.images.remedies.svg(width: 30.h, height: 30.h), ''),
   ].obs;
