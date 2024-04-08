@@ -45,7 +45,7 @@ class _TrainingVideoUIState extends State<TrainingVideoUI> {
       initialVideoId: extractYoutubeVideoID(widget.video?.url ?? "") ?? "",
       flags: const YoutubePlayerFlags(
         autoPlay: true,
-        mute: true,
+        mute: false,
         showLiveFullscreenButton: true,
       ),
     );
