@@ -111,10 +111,15 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           reverse: false,
                           itemBuilder: (context, index) {
                             var chatMessage = controller.chatMessages[index];
-                           print("AppFirebaseService().orderData");
-                           print("${myList.length < 3 && chatMessage.msgType == MsgType.text && chatMessage.orderId == AppFirebaseService().orderData["orderId"]}");
-                           print("${AppFirebaseService().orderData["orderId"]}");
-                            if(myList.length < 3 && chatMessage.msgType == MsgType.text && chatMessage.orderId == AppFirebaseService().orderData["orderId"]){
+                            print("AppFirebaseService().orderData");
+                            print(
+                                "${myList.length < 3 && chatMessage.msgType == MsgType.text && chatMessage.orderId == AppFirebaseService().orderData["orderId"]}");
+                            print(
+                                "${AppFirebaseService().orderData["orderId"]}");
+                            if (myList.length < 3 &&
+                                chatMessage.msgType == MsgType.text &&
+                                chatMessage.orderId ==
+                                    AppFirebaseService().orderData["orderId"]) {
                               myList.add(chatMessage.time.toString());
                               print("timeSet ${chatMessage.time}");
                               print("${chatMessage.msgType}");
@@ -539,9 +544,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   child: Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: appColors.red,
-                      borderRadius: const BorderRadius.all(Radius.circular(18)),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFFFD196),
+                      borderRadius: BorderRadius.all(Radius.circular(18)),
                     ),
                     child: Text(
                       '+ Add',
@@ -780,8 +785,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 height: kToolbarHeight - Get.width * 0.008,
                                 width: kToolbarHeight - Get.width * 0.008,
                                 margin: EdgeInsets.only(right: 10.h),
-                                decoration: BoxDecoration(
-                                  color: appColors.guideColor,
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFFFD196),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Center(
@@ -893,7 +898,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         if (result != null) {
                           final String time =
                               "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-
                           controller.addNewMessage(time, MsgType.product,
                               data: {'data': result}, messageText: 'Product');
                         }
@@ -1278,8 +1282,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                                 Obx(() => AnimatedCrossFade(
                                       duration:
                                           const Duration(milliseconds: 200),
-                                      crossFadeState:
-                                           CrossFadeState.showFirst,
+                                      crossFadeState: CrossFadeState.showFirst,
                                       secondChild: const SizedBox(),
                                       firstChild: Column(
                                         crossAxisAlignment:
@@ -1300,7 +1303,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: 10.sp,
-                                                color:appColors.darkGreen),
+                                                color: appColors.darkGreen),
                                           ),
                                         ],
                                       ),

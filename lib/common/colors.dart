@@ -1,7 +1,4 @@
-import 'dart:async';
 
-import 'package:divine_astrologer/remote_config/remote_config_helper.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
