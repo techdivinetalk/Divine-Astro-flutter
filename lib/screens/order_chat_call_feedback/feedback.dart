@@ -301,6 +301,7 @@ class FeedBack extends GetView<FeedbackController> {
                                       ),
                                     ).centered(),
                                   ),*/
+                                SizedBox(height: 10),
                                 CustomVoicePlayer(
                                   playUrl: data.callRecording ?? "",
                                   callDuration: data.callDuration,
