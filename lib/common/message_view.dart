@@ -403,7 +403,7 @@ class MessageView extends StatelessWidget {
                     children: [
                       Text(
                         messageDateTime(chatMessage.time != null
-                            ? int.parse(chatMessage.time!)
+                            ? int.parse(chatMessage.time.toString())
                             : 0),
                         style: AppTextStyle.textStyle10(
                           fontColor: appColors.darkBlue,
