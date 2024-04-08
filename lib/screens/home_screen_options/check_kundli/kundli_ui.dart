@@ -192,6 +192,8 @@ class CheckYours extends GetView<KundliController> {
                             value: Gender.male,
                             groupValue: controller.yourGender.value,
                             onChanged: (value) {
+                              print(value);
+                              print("valuevaluevalue");
                               controller.yourGender.value = value;
                             },
                           ),

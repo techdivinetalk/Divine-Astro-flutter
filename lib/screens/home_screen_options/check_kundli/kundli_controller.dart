@@ -3,6 +3,7 @@ import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/res_login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 enum TabEnum { checkYours, checkOther }
 

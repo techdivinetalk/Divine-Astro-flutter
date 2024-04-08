@@ -9,6 +9,7 @@ import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_controller.dart';
+import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_controller.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart';
 import 'package:divine_astrologer/tarotCard/widget/custom_image_view.dart';
 import 'package:flutter/foundation.dart';
@@ -26,6 +27,7 @@ import '../screens/chat_assistance/chat_message/widgets/product/pooja/widgets/cu
 import '../utils/load_image.dart';
 
 var chatController = Get.find<ChatMessageWithSocketController>();
+
 class MessageView extends StatelessWidget {
   final int index;
   final ChatMessage chatMessage;
@@ -46,8 +48,8 @@ class MessageView extends StatelessWidget {
     this.myList,
   });
 
-  Widget buildMessageView(BuildContext context, ChatMessage chatMessage,
-      bool yourMessage) {
+  Widget buildMessageView(
+      BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     // print("message Detail $chatMessage");
     // final currentMsgDate = DateTime.fromMillisecondsSinceEpoch(
     //     int.parse(chatMessage.createdAt ?? '0'));
@@ -124,11 +126,12 @@ class MessageView extends StatelessWidget {
     );
   }
 
-  Widget dayWidget({required DateTime currentMsgDate,
-    required DateTime nextMsgDate,
-    required bool isToday,
-    required bool isYesterday,
-    required int differenceOfDays}) {
+  Widget dayWidget(
+      {required DateTime currentMsgDate,
+      required DateTime nextMsgDate,
+      required bool isToday,
+      required bool isYesterday,
+      required int differenceOfDays}) {
     if (differenceOfDays >= 1) {
       return Align(
         alignment: Alignment.center,
@@ -142,8 +145,8 @@ class MessageView extends StatelessWidget {
             isToday
                 ? 'Today'
                 : isYesterday
-                ? 'Yesterday'
-                : '${DateFormat('EEEE ,dd MMMM').format(nextMsgDate)}',
+                    ? 'Yesterday'
+                    : '${DateFormat('EEEE ,dd MMMM').format(nextMsgDate)}',
             style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
           ),
         ),
@@ -161,8 +164,7 @@ class MessageView extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         print(
-            "data from page ${chatMessage.productId} ${chatMessage
-                .isPoojaProduct} ${chatMessage.customerId}");
+            "data from page ${chatMessage.productId} ${chatMessage.isPoojaProduct} ${chatMessage.customerId}");
         if (chatMessage.isPoojaProduct ?? false) {
           Get.toNamed(RouteName.poojaDharamDetailsScreen, arguments: {
             'detailOnly': true,
@@ -196,9 +198,7 @@ class MessageView extends StatelessWidget {
             child: Image.asset('assets/svg/Group 128714.png'),
           ),
           title: CustomText(
-            "You have suggested a ${chatMessage.isPoojaProduct ?? false
-                ? "Pooja"
-                : "product"}",
+            "You have suggested a ${chatMessage.isPoojaProduct ?? false ? "Pooja" : "product"}",
             fontSize: 14.sp,
             maxLines: 2,
             fontWeight: FontWeight.w600,
@@ -246,18 +246,17 @@ class MessageView extends StatelessWidget {
             SizedBox(width: 6.w),
             Flexible(
                 child: CustomText(
-                  '$customerName has requested to send ${chatMessage.message ??
-                      ""}.',
-                  maxLines: 2,
-                ))
+              '$customerName has requested to send ${chatMessage.message ?? ""}.',
+              maxLines: 2,
+            ))
           ],
         ),
       ),
     );
   }
 
-  Widget remediesMsgView(BuildContext context, ChatMessage chatMessage,
-      bool yourMessage) {
+  Widget remediesMsgView(
+      BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     var jsonString = (chatMessage.message ?? '')
         .substring(1, (chatMessage.message ?? '').length - 1);
     List temp = jsonString.split(', ');
@@ -298,21 +297,20 @@ class MessageView extends StatelessWidget {
           fontSize: 12.sp,
           maxLines: 20,
         ),
-        onTap: () =>
-            Get.toNamed(RouteName.remediesDetail,
-                arguments: {'title': temp[0], 'subtitle': temp[1]}),
+        onTap: () => Get.toNamed(RouteName.remediesDetail,
+            arguments: {'title': temp[0], 'subtitle': temp[1]}),
       ),
     );
   }
 
-  Widget textMsgView(BuildContext context, ChatMessage chatMessage,
-      bool yourMessage) {
+  Widget textMsgView(
+      BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     RxInt msgType = (chatMessage.type ?? 0).obs;
     return SizedBox(
       width: double.maxFinite,
       child: Column(
         crossAxisAlignment:
-        yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -332,38 +330,74 @@ class MessageView extends StatelessWidget {
                 minWidth: ScreenUtil().screenWidth * 0.27),
             child: Stack(
               alignment:
-              yourMessage ? Alignment.centerRight : Alignment.centerLeft,
+                  yourMessage ? Alignment.centerRight : Alignment.centerLeft,
               children: [
                 Column(
                   children: [
                     Wrap(
                       alignment: WrapAlignment.end,
                       children: [
-                        Text(
-                          chatMessage.message ?? "",
-                          style: AppTextStyle.textStyle14(
-                              fontColor: chatMessage.id.toString() ==  AppFirebaseService().orderData["astroId"].toString() ?appColors.red:appColors.black,
-                        )),
+                        Text(chatMessage.message ?? "",
+                            style: AppTextStyle.textStyle14(
+                              fontColor: chatMessage.id.toString() ==
+                                      AppFirebaseService()
+                                          .orderData["astroId"]
+                                          .toString()
+                                  ? appColors.red
+                                  : appColors.black,
+                            )),
                       ],
                     ),
                     SizedBox(
-                      height: chatMessage.id.toString() ==  AppFirebaseService().orderData["userId"].toString() ? 10 : 0,
+                      height: chatMessage.id.toString() ==
+                              AppFirebaseService()
+                                  .orderData["userId"]
+                                  .toString()
+                          ? 10
+                          : 0,
                     ),
                     Visibility(
-                      visible: chatMessage.id.toString() ==  AppFirebaseService().orderData["userId"].toString(),
+                      visible: chatMessage.id.toString() ==
+                          AppFirebaseService().orderData["userId"].toString(),
                       child: CustomButton(
-                        color: appColors.guideColor,
-                        onTap: () {
-                          Get.toNamed(RouteName.kundliDetail, arguments: {
-                            "kundli_id": 0,
-                            "from_kundli": true,
-                            "birth_place": AppFirebaseService().orderData["placeOfBirth"],
-                            "gender":AppFirebaseService().orderData["gender"],
-                            "name": AppFirebaseService().orderData["customerName"],
-                          });
-                        }, child: Text("View Kundli",style: TextStyle(color: appColors.guideTextColor),)),
+                          color: appColors.guideColor,
+                          onTap: () {
+                            print(AppFirebaseService()
+                                .orderData["lat"]);
+                            print("objectobjectobjectobjectobject");
+                            final dateData = DateFormat("dd/MM/yyyy")
+                                .parse(AppFirebaseService().orderData["dob"]);
+                            DateTime timeData = DateFormat("h:mm a").parse(
+                                AppFirebaseService().orderData["timeOfBirth"]);
+                            Params params = Params(
+                              name: AppFirebaseService()
+                                  .orderData["customerName"],
+                              day: dateData.day,
+                              year: dateData.year,
+                              month: dateData.month,
+                              hour: timeData.hour,
+                              min: timeData.minute,
+                              lat: double.parse(AppFirebaseService()
+                                  .orderData["lat"].toString()),
+                              long: double.parse(AppFirebaseService()
+                                  .orderData["lng"]),
+                              location: AppFirebaseService()
+                                  .orderData["placeOfBirth"],
+                            );
+                            Get.toNamed(RouteName.kundliDetail, arguments: {
+                              "kundli_id": 0,
+                              "from_kundli": false,
+                              "params": params,
+                              "gender":
+                                  AppFirebaseService().orderData["gender"],
+                            });
+                          },
+                          child: Text(
+                            "View Kundli",
+                            style: TextStyle(color: appColors.guideTextColor),
+                          )),
                     ),
-                    const SizedBox(height:20),
+                    const SizedBox(height: 20),
                   ],
                 ),
                 Positioned(
@@ -372,26 +406,27 @@ class MessageView extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                       messageDateTime(chatMessage.msgTime != null ? int.parse(chatMessage.msgTime!) : 0),
+                        messageDateTime(chatMessage.msgTime != null
+                            ? int.parse(chatMessage.msgTime!)
+                            : 0),
                         style: AppTextStyle.textStyle10(
                           fontColor: appColors.darkBlue,
                         ),
                       ),
                       if (yourMessage) SizedBox(width: 8.w),
                       if (yourMessage)
-                        Obx(() =>
-                        (msgType.value == 0 || msgType.value == 0) &&
-                            chatMessage.seenStatus == 0
+                        Obx(() => (msgType.value == 0 || msgType.value == 0) &&
+                                chatMessage.seenStatus == 0
                             ? Assets.images.icSingleTick.svg()
                             : (msgType.value == 1 || msgType.value == 0) &&
-                            chatMessage.seenStatus == 1
-                            ? Assets.images.icDoubleTick.svg(
-                            colorFilter: ColorFilter.mode(
-                                appColors.greyColor, BlendMode.srcIn))
-                            : (msgType.value == 3 || msgType.value == 0) &&
-                            chatMessage.seenStatus == 3
-                            ? Assets.images.icDoubleTick.svg()
-                            : Assets.images.icSingleTick.svg())
+                                    chatMessage.seenStatus == 1
+                                ? Assets.images.icDoubleTick.svg(
+                                    colorFilter: ColorFilter.mode(
+                                        appColors.greyColor, BlendMode.srcIn))
+                                : (msgType.value == 3 || msgType.value == 0) &&
+                                        chatMessage.seenStatus == 3
+                                    ? Assets.images.icDoubleTick.svg()
+                                    : Assets.images.icSingleTick.svg())
                     ],
                   ),
                 ),
@@ -411,7 +446,7 @@ class MessageView extends StatelessWidget {
         width: double.maxFinite,
         child: Column(
           crossAxisAlignment:
-          yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
             Container(
               padding: const EdgeInsets.all(8.0),
@@ -444,8 +479,7 @@ class MessageView extends StatelessWidget {
                             },
                             onPlaying: () {
                               print(
-                                  "value of audio playing ${controller
-                                      .isAudioPlaying.value}");
+                                  "value of audio playing ${controller.isAudioPlaying.value}");
                               if (controller.isAudioPlaying.value) {
                                 Fluttertoast.showToast(
                                     msg: "Audio is Already playing");
@@ -462,7 +496,9 @@ class MessageView extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          messageDateTime(chatDetail.msgTime != null ? int.parse(chatDetail.msgTime!) : 0),
+                          messageDateTime(chatDetail.msgTime != null
+                              ? int.parse(chatDetail.msgTime!)
+                              : 0),
                           style: AppTextStyle.textStyle10(
                               fontColor: appColors.black),
                         ),
@@ -471,12 +507,12 @@ class MessageView extends StatelessWidget {
                           msgType.value == 0
                               ? Assets.images.icSingleTick.svg()
                               : msgType.value == 1
-                              ? Assets.images.icDoubleTick.svg(
-                              colorFilter: ColorFilter.mode(
-                                  appColors.lightGrey, BlendMode.srcIn))
-                              : msgType.value == 3
-                              ? Assets.images.icDoubleTick.svg()
-                              : Assets.images.icSingleTick.svg()
+                                  ? Assets.images.icDoubleTick.svg(
+                                      colorFilter: ColorFilter.mode(
+                                          appColors.lightGrey, BlendMode.srcIn))
+                                  : msgType.value == 3
+                                      ? Assets.images.icDoubleTick.svg()
+                                      : Assets.images.icSingleTick.svg()
                       ],
                     ),
                   ),
@@ -507,7 +543,7 @@ class MessageView extends StatelessWidget {
             Flexible(
               child: Text(
                 "$customerName have sent ${chatMessage.message!.contains("https") ? "" : chatMessage.message ?? ""}",
-               // "$customerName have sent ${chatMessage.message ?? ""}",
+                // "$customerName have sent ${chatMessage.message ?? ""}",
                 style: const TextStyle(color: Colors.red),
               ),
             ),
@@ -725,14 +761,13 @@ class MessageView extends StatelessWidget {
     // Uint8List bytesImage = base64.decode(image);
     Rx<int> msgType = (chatDetail.seenStatus ?? (chatDetail.type ?? 0)).obs;
     print(
-        "chatDetail.type ${msgType.value} - ${chatDetail.type} - ${chatDetail
-            .seenStatus} - ${yourMessage}");
+        "chatDetail.type ${msgType.value} - ${chatDetail.type} - ${chatDetail.seenStatus} - ${yourMessage}");
 
     return SizedBox(
       width: double.maxFinite,
       child: Column(
         crossAxisAlignment:
-        yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
             padding: const EdgeInsets.all(8.0),
@@ -754,249 +789,256 @@ class MessageView extends StatelessWidget {
             ),
             child: yourMessage
                 ? chatDetail.downloadedPath == null
-                ? GestureDetector(
-              onTap: () {
-                Get.toNamed(RouteName.imagePreviewUi,
-                    arguments: chatDetail.message);
-              },
-              child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 4.h),
-                  padding: const EdgeInsets.all(8.0),
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 3.0,
-                          offset: const Offset(0.0, 3.0)),
-                    ],
-                    color: Colors.white,
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(8.r)),
-                  ),
-                  constraints: BoxConstraints(
-                      maxWidth: ScreenUtil().screenWidth * 0.7,
-                      minWidth: ScreenUtil().screenWidth * 0.27),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0.sp),
-                        child: CachedNetworkImage(
-                          imageUrl: chatDetail.message ?? '',
-                          fit: BoxFit.cover,
-                          height: 200.h,
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 6)
+                    ? GestureDetector(
+                        onTap: () {
+                          Get.toNamed(RouteName.imagePreviewUi,
+                              arguments: chatDetail.message);
+                        },
+                        child: Container(
+                            margin: EdgeInsets.symmetric(vertical: 4.h),
+                            padding: const EdgeInsets.all(8.0),
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black.withOpacity(0.2),
+                                    blurRadius: 3.0,
+                                    offset: const Offset(0.0, 3.0)),
+                              ],
+                              color: Colors.white,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8.r)),
+                            ),
+                            constraints: BoxConstraints(
+                                maxWidth: ScreenUtil().screenWidth * 0.7,
+                                minWidth: ScreenUtil().screenWidth * 0.27),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0.sp),
+                                  child: CachedNetworkImage(
+                                    imageUrl: chatDetail.message ?? '',
+                                    fit: BoxFit.cover,
+                                    height: 200.h,
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                                horizontal: 6)
+                                            .copyWith(left: 10),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                              bottomRight:
+                                                  Radius.circular(10.r)),
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              appColors.darkBlue
+                                                  .withOpacity(0.0),
+                                              appColors.darkBlue
+                                                  .withOpacity(0.0),
+                                              appColors.darkBlue
+                                                  .withOpacity(0.5),
+                                            ],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomCenter,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          messageDateTime(chatDetail.msgTime !=
+                                                  null
+                                              ? int.parse(chatDetail.msgTime!)
+                                              : 0),
+                                          style: AppTextStyle.textStyle10(
+                                              fontColor: appColors.white),
+                                        ),
+                                      ),
+                                      SizedBox(width: 8.w),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )),
+                      )
+                    : Stack(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(RouteName.imagePreviewUi,
+                                  arguments: chatMessage.message != null
+                                      ? "${chatMessage.message}"
+                                      : "${chatMessage.awsUrl}");
+                            },
+                            child: Image.network(
+                              chatMessage.message != null
+                                  ? "${chatMessage.message}"
+                                  : "${chatMessage.awsUrl}",
+                              fit: BoxFit.cover,
+                              height: 200.h,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6)
                                   .copyWith(left: 10),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.only(
-                                    bottomRight:
-                                    Radius.circular(10.r)),
+                                  bottomRight: Radius.circular(10.r),
+                                ),
                                 gradient: LinearGradient(
                                   colors: [
-                                    appColors.darkBlue
-                                        .withOpacity(0.0),
-                                    appColors.darkBlue
-                                        .withOpacity(0.0),
-                                    appColors.darkBlue
-                                        .withOpacity(0.5),
+                                    appColors.darkBlue.withOpacity(0.0),
+                                    appColors.darkBlue.withOpacity(0.0),
+                                    appColors.darkBlue.withOpacity(0.5),
                                   ],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomCenter,
                                 ),
                               ),
-                              child: Text(
-                                messageDateTime(chatDetail.msgTime != null ? int.parse(chatDetail.msgTime!) : 0),
-                                style: AppTextStyle.textStyle10(
-                                    fontColor: appColors.white),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    messageDateTime(chatDetail.msgTime != null
+                                        ? int.parse(chatDetail.msgTime!)
+                                        : 0),
+                                    style: AppTextStyle.textStyle10(
+                                      fontColor: appColors.white,
+                                    ),
+                                  ),
+                                  if (yourMessage) SizedBox(width: 8.w),
+                                  if (yourMessage)
+                                    msgType.value == 0
+                                        ? Assets.images.icSingleTick.svg()
+                                        : msgType.value == 1
+                                            ? Assets.images.icDoubleTick.svg(
+                                                colorFilter: ColorFilter.mode(
+                                                  appColors.greyColor,
+                                                  BlendMode.srcIn,
+                                                ),
+                                              )
+                                            : msgType.value == 3
+                                                ? Assets.images.icDoubleTick
+                                                    .svg()
+                                                : Assets.images.icSingleTick
+                                                    .svg(),
+                                ],
                               ),
                             ),
-                            SizedBox(width: 8.w),
+                          ),
+                        ],
+                      )
+                : chatDetail.downloadedPath == "" ||
+                        chatDetail.downloadedPath == null
+                    ? Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0.sp),
+                            child: ImageFiltered(
+                              imageFilter:
+                                  ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                              child: Image.network(
+                                "${chatDetail.message}",
+                                fit: BoxFit.cover,
+                                height: 200.h,
+                              ),
+                            ),
+                          ),
+                          if (chatDetail.message != null)
+                            InkWell(
+                              onTap: () {
+                                chatController.downloadImage(
+                                  fileName: image,
+                                  chatDetail: chatDetail,
+                                  index: index,
+                                );
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: appColors.darkBlue.withOpacity(0.3),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.download_rounded,
+                                  color: appColors.white,
+                                ),
+                              ),
+                            ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 6,
+                                  ).copyWith(left: 10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      bottomRight: Radius.circular(10.r),
+                                    ),
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        appColors.darkBlue.withOpacity(0.0),
+                                        appColors.darkBlue.withOpacity(0.0),
+                                        appColors.darkBlue.withOpacity(0.5),
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomCenter,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    messageDateTime(chatDetail.msgTime != null
+                                        ? int.parse(chatDetail.msgTime!)
+                                        : 0),
+                                    style: AppTextStyle.textStyle10(
+                                      fontColor: appColors.white,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 8.w),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    : InkWell(
+                        onTap: () {
+                          Get.toNamed(RouteName.imagePreviewUi,
+                              arguments: chatDetail.message != null
+                                  ? "${chatDetail.message}"
+                                  : "${pref.getAmazonUrl()}${chatDetail.awsUrl}");
+                        },
+                        child: Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0.r),
+                              child: chatDetail.message != null
+                                  ? Image.network(
+                                      "${chatDetail.message}",
+                                      fit: BoxFit.cover,
+                                      height: 200.h,
+                                    )
+                                  : Image.file(
+                                      File(chatDetail.downloadedPath ?? ""),
+                                      fit: BoxFit.cover,
+                                      height: 200.h,
+                                    ),
+                            ),
                           ],
                         ),
                       ),
-                    ],
-                  )),
-            )
-                : Stack(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Get.toNamed(RouteName.imagePreviewUi,
-                        arguments: chatMessage.message != null
-                            ? "${chatMessage.message}"
-                            : "${chatMessage.awsUrl}");
-                  },
-                  child: Image.network(
-                    chatMessage.message != null
-                        ? "${chatMessage.message}"
-                        : "${chatMessage.awsUrl}",
-                    fit: BoxFit.cover,
-                    height: 200.h,
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6)
-                        .copyWith(left: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(10.r),
-                      ),
-                      gradient: LinearGradient(
-                        colors: [
-                          appColors.darkBlue.withOpacity(0.0),
-                          appColors.darkBlue.withOpacity(0.0),
-                          appColors.darkBlue.withOpacity(0.5),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomCenter,
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          messageDateTime(chatDetail.msgTime != null ? int.parse(chatDetail.msgTime!) : 0),
-                          style: AppTextStyle.textStyle10(
-                            fontColor: appColors.white,
-                          ),
-                        ),
-                        if (yourMessage) SizedBox(width: 8.w),
-                        if (yourMessage)
-                          msgType.value == 0
-                              ? Assets.images.icSingleTick.svg()
-                              : msgType.value == 1
-                              ? Assets.images.icDoubleTick.svg(
-                            colorFilter: ColorFilter.mode(
-                              appColors.greyColor,
-                              BlendMode.srcIn,
-                            ),
-                          )
-                              : msgType.value == 3
-                              ? Assets.images.icDoubleTick
-                              .svg()
-                              : Assets.images.icSingleTick
-                              .svg(),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            )
-                : chatDetail.downloadedPath == "" ||
-                chatDetail.downloadedPath == null
-                ? Stack(
-              alignment: Alignment.center,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0.sp),
-                  child: ImageFiltered(
-                    imageFilter:
-                    ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-                    child: Image.network(
-                      "${chatDetail.message}",
-                      fit: BoxFit.cover,
-                      height: 200.h,
-                    ),
-                  ),
-                ),
-                if (chatDetail.message != null)
-                  InkWell(
-                    onTap: () {
-                      chatController.downloadImage(
-                        fileName: image,
-                        chatDetail: chatDetail,
-                        index: index,
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: appColors.darkBlue.withOpacity(0.3),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.download_rounded,
-                        color: appColors.white,
-                      ),
-                    ),
-                  ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                        ).copyWith(left: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(10.r),
-                          ),
-                          gradient: LinearGradient(
-                            colors: [
-                              appColors.darkBlue.withOpacity(0.0),
-                              appColors.darkBlue.withOpacity(0.0),
-                              appColors.darkBlue.withOpacity(0.5),
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomCenter,
-                          ),
-                        ),
-                        child: Text(
-                          messageDateTime(chatDetail.msgTime != null ? int.parse(chatDetail.msgTime!) : 0),
-                          style: AppTextStyle.textStyle10(
-                            fontColor: appColors.white,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 8.w),
-                    ],
-                  ),
-                ),
-              ],
-            )
-                : InkWell(
-              onTap: () {
-                Get.toNamed(RouteName.imagePreviewUi,
-                    arguments: chatDetail.message != null
-                        ? "${chatDetail.message}"
-                        : "${pref.getAmazonUrl()}${chatDetail.awsUrl}");
-              },
-              child: Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0.r),
-                    child: chatDetail.message != null
-                        ? Image.network(
-                      "${chatDetail.message}",
-                      fit: BoxFit.cover,
-                      height: 200.h,
-                    )
-                        : Image.file(
-                      File(chatDetail.downloadedPath ?? ""),
-                      fit: BoxFit.cover,
-                      height: 200.h,
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ),
         ],
       ),
@@ -1119,34 +1161,34 @@ class MessageView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-          CustomImageView(
-          height: 165,
-          width: 165,
-          imagePath: "${chatDetail.awsUrl}",
-          radius: const BorderRadius.vertical(top: Radius.circular(10)),
-          placeHolder: "assets/images/default_profiles.svg",
-          fit: BoxFit.cover,
-        ),
-        Text(
-          chatDetail.message ?? "",
-          maxLines: 1,
-          style: AppTextStyle.textStyle12(
-            fontColor: appColors.textColor,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        const SizedBox(height: 5),
-        Text(
-          "₹${chatDetail.productPrice ?? '${chatDetail.getCustomProduct != null ?chatDetail.getCustomProduct["amount"] :"0"}'}",
-        style: AppTextStyle.textStyle12(
-        fontColor: appColors.textColor,
-        fontWeight: FontWeight.w400,
+            CustomImageView(
+              height: 165,
+              width: 165,
+              imagePath: "${chatDetail.awsUrl}",
+              radius: const BorderRadius.vertical(top: Radius.circular(10)),
+              placeHolder: "assets/images/default_profiles.svg",
+              fit: BoxFit.cover,
+            ),
+            Text(
+              chatDetail.message ?? "",
+              maxLines: 1,
+              style: AppTextStyle.textStyle12(
+                fontColor: appColors.textColor,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SizedBox(height: 5),
+            Text(
+              "₹${chatDetail.productPrice ?? '${chatDetail.getCustomProduct != null ? chatDetail.getCustomProduct["amount"] : "0"}'}",
+              style: AppTextStyle.textStyle12(
+                fontColor: appColors.textColor,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SizedBox(height: 5),
+          ],
         ),
       ),
-      const SizedBox(height: 5),
-      ],
-    ),)
-    ,
     );
   }
 
