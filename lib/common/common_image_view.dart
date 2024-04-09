@@ -19,6 +19,7 @@ class CommonImageView extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
   final BorderRadius? radius;
   final BoxBorder? border;
+  final Widget? placeholderWidget;
 
   CommonImageView({
     this.imagePath,
@@ -26,6 +27,7 @@ class CommonImageView extends StatelessWidget {
     this.width,
     this.color,
     this.fit,
+    this.placeholderWidget,
     this.alignment,
     this.onTap,
     this.radius,
@@ -129,7 +131,7 @@ class CommonImageView extends StatelessWidget {
                 backgroundColor: Colors.grey.shade100,
               ),
             ),
-            errorWidget: (context, url, error) => Center(
+            errorWidget: (context, url, error) =>placeholderWidget ?? Center(
               child:placeHolder.contains("images") ? Image.asset(placeHolder, height: height,
                 width: width,): SvgPicture.asset(
                 placeHolder ,
