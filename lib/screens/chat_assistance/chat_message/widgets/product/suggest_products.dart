@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
+import 'package:divine_astrologer/screens/puja/widget/multiple_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -77,15 +78,20 @@ class SuggestProducts extends GetView<SuggestProductController> {
                                 SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 3,
                                     crossAxisSpacing: 25.h,
-                                    childAspectRatio: 0.55,
-                                    mainAxisSpacing: 30.h),
+                                    childAspectRatio: 0.6,
+                                    mainAxisSpacing: 20.h),
                             itemBuilder: (BuildContext context, int index) {
                               Shop item = (controller.searchShopList.isNotEmpty
                                   ? controller.searchShopList
                                   : controller.shopList)[index];
+                              print(controller.imageUrl +
+                                  item.shopImage.toString());
+                              print("shop image");
                               return InkWell(
                                 onTap: () async {
-                                  if (index == 0) {
+                                  print(item.id);
+                                  print("item.iditem.iditem.iditem.id");
+                                  if (item.id == 0) {
                                     Get.toNamed(RouteName.poojaDharamMainScreen,
                                         arguments: {
                                           "customerId":
@@ -121,7 +127,7 @@ class SuggestProducts extends GetView<SuggestProductController> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Center(
+                                      /*Center(
                                         child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(20),
@@ -140,6 +146,24 @@ class SuggestProducts extends GetView<SuggestProductController> {
                                             ),
                                           ),
                                         ),
+                                      ),*/
+                                      MultipleTypeImageView(
+                                         height: 120,
+                                        width: double.infinity,
+                                        imageUrlData: item.id == 0
+                                            ? item.shopImage
+                                            : controller.imageUrl + "/"+
+                                                item.shopImage.toString(),
+                                        onTapOfLottie: (p0) async {
+                                          if (item.id == 0) {
+                                            Get.toNamed(
+                                                RouteName.poojaDharamMainScreen,
+                                                arguments: {
+                                                  "customerId": controller
+                                                      .customerId.value,
+                                                });
+                                          }
+                                        },
                                       ),
                                       SizedBox(height: 8.h),
                                       CustomText(

@@ -45,7 +45,7 @@ class AppSocket {
         "call": callSwitch.value ? "1" : "0",
         "video":videoSwitch.value ? "1" : "0"
       });
-      log('Socket connected successfully');
+
     });
   }
 

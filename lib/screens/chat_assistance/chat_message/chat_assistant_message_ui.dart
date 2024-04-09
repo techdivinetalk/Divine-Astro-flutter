@@ -211,7 +211,8 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
 
   @override
   Widget build(BuildContext context) {
-    print("print image:: ${preferenceService.getAmazonUrl()}/${controller.args?.image ?? ''}");
+    print(
+        "print image:: ${preferenceService.getAmazonUrl()}/${controller.args?.image ?? ''}");
     Get.put(ChatMessageController(KundliRepository(), ChatRepository()));
     return Scaffold(
       appBar: AppBar(
@@ -252,15 +253,17 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
             SizedBox(width: 10.w),
             Text(controller.args!.name ?? '',
                 style: AppTextStyle.textStyle16(
-                    fontWeight: FontWeight.w500, fontColor: appColors.whiteGuidedColor))
+                    fontWeight: FontWeight.w500,
+                    fontColor: appColors.whiteGuidedColor))
           ],
         ),
       ),
       body: Stack(
         children: [
           Assets.images.bgChatWallpaper.image(
-            height:MediaQuery.of(context).size.height ,
-              width: MediaQuery.of(context).size.width, fit: BoxFit.cover),
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              fit: BoxFit.cover),
           Column(
             children: [
               Obx(() {
@@ -314,13 +317,17 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                                                                 .circular(20),
                                                       ),
                                                       child: RichText(
-                                                        textAlign: TextAlign.center,
-                                                        text: HTML.toTextSpan(context, i.description ?? "") ,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        text: HTML.toTextSpan(
+                                                            context,
+                                                            i.description ??
+                                                                ""),
                                                         maxLines: 2,
 
                                                         //...
                                                       ),
-                                                       /* ExpandableHtml(
+                                                      /* ExpandableHtml(
                                                           htmlData: '${i.description}',
                                                           trimLength: 3000,
                                                         )*/
@@ -690,11 +697,10 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                         break;
                       case 2:
                         var result = await Get.toNamed(
-                          RouteName.chatAssistSuggestRemedy,
-                          arguments:{
-                            "customer_id":controller.args?.id.toString(),
-                          }
-                        );
+                            RouteName.chatAssistSuggestRemedy,
+                            arguments: {
+                              "customer_id": controller.args?.id.toString(),
+                            });
                         if (result != null) {
                           final String time =
                               "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
@@ -711,9 +717,15 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                         break;
                       case 3:
                         var result = await Get.toNamed(
-                            RouteName.chatAssistProductPage,
-                            arguments: {'customerId': controller.args?.id});
-                        controller.sendMsg(MsgType.product, {'data': result});
+                          RouteName.chatAssistProductPage,
+                          arguments: {'customerId': controller.args?.id},
+                        );
+                        controller.sendMsg(
+                          MsgType.product,
+                          {
+                            'data': result,
+                          },
+                        );
                         break;
                       case 4:
                         controller.getImage(false);
