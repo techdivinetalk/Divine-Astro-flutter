@@ -110,9 +110,9 @@ class AppSocket {
     });
   }
 
-  void isAstroJoinedChat(void Function(dynamic) callback) {
-    socket?.on(ApiProvider().astrologerJoinedPrivateChat, callback);
-  }
+  // void isAstroJoinedChat(void Function(dynamic) callback) {
+  //   socket?.on(ApiProvider().astrologerJoinedPrivateChat, callback);
+  // }
 
   void socketDisconnect() {
     socket?.disconnect();
