@@ -562,7 +562,7 @@ class LastAvailabilityWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
+                   Expanded(
                     flex: 2,
                     child: CustomText(
                       textAlign: TextAlign.center,

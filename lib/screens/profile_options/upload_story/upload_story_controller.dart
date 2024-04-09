@@ -90,7 +90,7 @@ class UploadStoryController extends GetxController {
       "astrologer_id": userData?.id.toString(),
     };
     final Uri encoded = Uri.parse("https://applinktesting.000webhostapp.com");
-    final String path = "page=zodiacSignDetailsPage&param=${json.encode(map)}";
+    final String path = "page=astrologerProfile&param=${json.encode(map)}";
     final String encode = encodeString(path);
     final String fullEncodeURL = "${encoded.scheme}://${encoded.host}?$encode";
     return fullEncodeURL;
