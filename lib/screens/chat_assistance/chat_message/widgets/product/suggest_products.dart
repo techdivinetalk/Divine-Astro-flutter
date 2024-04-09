@@ -152,8 +152,7 @@ class SuggestProducts extends GetView<SuggestProductController> {
                                         width: double.infinity,
                                         imageUrlData: item.id == 0
                                             ? item.shopImage
-                                            : controller.imageUrl + "/"+
-                                                item.shopImage.toString(),
+                                            : "${controller.imageUrl}/${item.shopImage}",
                                         onTapOfLottie: (p0) async {
                                           if (item.id == 0) {
                                             Get.toNamed(

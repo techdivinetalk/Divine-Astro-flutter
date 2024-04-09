@@ -572,7 +572,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                                 child: Assets.images.icAttechment.svg(),
                               ),
                             ),
-                            constraints: BoxConstraints(maxHeight: 50.h),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30.0.sp),
                                 borderSide: BorderSide(
@@ -720,12 +720,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                           RouteName.chatAssistProductPage,
                           arguments: {'customerId': controller.args?.id},
                         );
-                        controller.sendMsg(
-                          MsgType.product,
-                          {
-                            'data': result,
-                          },
-                        );
+                        controller.sendMsg(MsgType.product, {'data': result});
                         break;
                       case 4:
                         controller.getImage(false);
