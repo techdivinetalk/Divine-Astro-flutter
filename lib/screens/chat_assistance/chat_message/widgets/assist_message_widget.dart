@@ -590,7 +590,8 @@ class AssistMessageView extends StatelessWidget {
         .substring(1, (chatMessage.message ?? '').length - 1);
     List temp = jsonString.split(', ');
 
-    print("get templist $temp");
+  //  print("get templist $temp");
+    print("get templist ${temp.length}");
 
     if (temp.length < 2) {
       return const SizedBox.shrink();
@@ -622,13 +623,14 @@ class AssistMessageView extends StatelessWidget {
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
             ),
-            subtitle: CustomText(
-              temp[1] ?? '',
-              fontSize: 12.sp,
-              maxLines: 20,
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:
+              List.generate(temp.length, (index) {
+                return GestureDetector( onTap: () => Get.toNamed(RouteName.remediesDetail,
+                    arguments: {'title': temp[0], 'subtitle': jsonString}),child: CustomText(temp[index], fontSize: 12.sp));
+              }),
             ),
-            onTap: () => Get.toNamed(RouteName.remediesDetail,
-                arguments: {'title': temp[0], 'subtitle': temp[1]}),
           ),
         ),
         Positioned(
