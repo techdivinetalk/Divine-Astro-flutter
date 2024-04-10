@@ -760,7 +760,7 @@ class MessageView extends StatelessWidget {
     // Uint8List bytesImage = base64.decode(image);
     Rx<int> msgType = (chatDetail.seenStatus ?? (chatDetail.type ?? 0)).obs;
     print(
-        "chatDetail.type ${msgType.value} - ${chatDetail.type} - ${chatDetail.seenStatus} - ${yourMessage}");
+        "imageMsgView ${chatDetail.time}");
 
     return SizedBox(
       width: double.maxFinite,
@@ -907,7 +907,7 @@ class MessageView extends StatelessWidget {
                                 children: [
                                   Text(
                                     messageDateTime(chatDetail.time != null
-                                        ? int.parse(chatDetail.time!)
+                                        ? int.parse(chatDetail.time.toString())
                                         : 0),
                                     style: AppTextStyle.textStyle10(
                                       fontColor: appColors.white,

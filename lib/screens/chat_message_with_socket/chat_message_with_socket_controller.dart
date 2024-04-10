@@ -6,6 +6,7 @@ import "dart:io";
 import "dart:typed_data";
 
 import "package:audio_waveforms/audio_waveforms.dart";
+import "package:camera/camera.dart";
 import "package:device_info_plus/device_info_plus.dart";
 import "package:divine_astrologer/app_socket/app_socket.dart";
 import "package:divine_astrologer/common/colors.dart";
@@ -43,6 +44,7 @@ import "package:socket_io_client/socket_io_client.dart";
 import "../../common/MiddleWare.dart";
 import "../../common/app_exception.dart";
 import "../../common/ask_for_gift_bottom_sheet.dart";
+import "../../common/camera.dart";
 import "../../common/common_functions.dart";
 import "../../common/show_permission_widget.dart";
 import "../../di/api_provider.dart";
@@ -88,7 +90,6 @@ class ChatMessageWithSocketController extends GetxController
   ScrollController typingScrollController = ScrollController();
   File? image;
   ImagePicker picker = ImagePicker();
-  XFile? pickedFile;
   File? uploadFile;
   final SharedPreferenceService preference =
       Get.find<SharedPreferenceService>();
@@ -306,15 +307,16 @@ class ChatMessageWithSocketController extends GetxController
       print("orderData Changed");
       initTask(p0);
     });
-    stateHandling();
+    //stateHandling();
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) {
       if (event.name == 'deliveredMsg') {
         var response = event.data?['deliveredMsgList'];
+        print(
+            'deliveredData Outer Key:${response.toString()}');
         response.forEach((key, value) {
           value.forEach((innerKey, innerValue) {
-            print(
-                'deliveredData Outer Key: $key, Inner Key: $innerKey, Value: $innerValue');
+
             var index = chatMessages
                 .indexWhere((element) => innerKey == element.id.toString());
             if (index >= 0) {
@@ -764,21 +766,36 @@ class ChatMessageWithSocketController extends GetxController
 
   Future getImage(bool isCamera) async {
     isGalleryOpen = true;
-    final bool result = await permissionPhotoOrStorage();
-    print("photo permission $result");
-    if (result) {
-      pickedFile = await picker.pickImage(
-          source: isCamera ? ImageSource.camera : ImageSource.gallery);
-
-      if (pickedFile != null) {
-        image = File(pickedFile!.path);
+    if(isCamera){
+      // await availableCameras().then((value) => Navigator.push(context!,
+      //     MaterialPageRoute(builder: (_) => CameraPage(cameras: value))));
+      List<CameraDescription> cameras = await availableCameras();
+      final String? imagePath = await Get.to<String?>(
+            () => CameraPage(cameras: cameras),
+      );
+      print('Image path received in Page A: ${AppFirebaseService().imagePath}');
+      if (AppFirebaseService().imagePath != "") {
+        print('Image-in');
+        image = File(AppFirebaseService().imagePath);
         await cropImage();
       }
-    } else {
-      await showPermissionDialog(
-        permissionName: 'Gallery permission',
-        isForOverlayPermission: false,
-      );
+    }else {
+      final bool result = await permissionPhotoOrStorage();
+      print("photo permission $result");
+      if (result) {
+        var pickedFile = await picker.pickImage(
+            source: isCamera ? ImageSource.camera : ImageSource.gallery);
+        print("photo permission $result");
+        if (pickedFile != null) {
+          image = File(pickedFile!.path);
+          await cropImage();
+        }
+      } else {
+        await showPermissionDialog(
+          permissionName: 'Gallery permission',
+          isForOverlayPermission: false,
+        );
+      }
     }
   }
 
@@ -845,6 +862,7 @@ class ChatMessageWithSocketController extends GetxController
           messageText: uploadFile,
           base64Image: base64Image,
           downloadedPath: '');
+      scrollToBottomFunc();
     }
   }
 

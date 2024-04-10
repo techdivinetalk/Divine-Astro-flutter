@@ -4,8 +4,10 @@ import "dart:io";
 import "dart:ui";
 
 import "package:audio_waveforms/audio_waveforms.dart";
+import "package:camera/camera.dart";
 import "package:carousel_slider/carousel_slider.dart";
 import "package:divine_astrologer/common/app_textstyle.dart";
+import "package:divine_astrologer/common/camera.dart";
 
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/common_functions.dart";

@@ -42,6 +42,7 @@ class AppFirebaseService {
   var acceptBottomWatcher = RealTimeWatcher();
   final appSocket = AppSocket();
   var openChatUserId = "";
+  var imagePath = "";
   RxMap<String, dynamic> orderData = <String, dynamic>{}.obs;
   final DatabaseReference database = FirebaseDatabase.instance.ref();
 
@@ -179,6 +180,7 @@ class AppFirebaseService {
             callKunadliUpdated({});
           }
           if (realTimeData["deliveredMsg"] != null) {
+            print("deliveredMsg rec");
             sendBroadcast(BroadcastMessage(
                 name: "deliveredMsg",
                 data: {'deliveredMsgList': realTimeData["deliveredMsg"]}));
