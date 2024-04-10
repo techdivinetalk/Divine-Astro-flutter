@@ -510,8 +510,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                       } else if (index == 3) {
                         controller.whatsapp();
                       } else if (item.nav != "") {
-                        if (item.name == "bankDetails".tr ||
-                            item.name == "uploadYourPhoto".tr) {
+                        if (item.name == "uploadYourPhoto".tr) {
                           if (await PermissionHelper()
                               .askStoragePermission(Permission.photos)) {
                             Get.toNamed(item.nav.toString());
@@ -519,7 +518,10 @@ class ProfileUI extends GetView<ProfilePageController> {
                         } else {
                           Get.toNamed(item.nav.toString());
                         }
-                      } else if (index == 5) {
+                      } else if(index == 0){
+                        Get.toNamed(RouteName.bankDetailsUI);
+                      }
+                      else if (index == 5) {
                         Get.toNamed(RouteName.faq);
                       } else if (index == 8) {
                         print("index ---- ${index == 8}");

@@ -1002,14 +1002,15 @@ class HomeController extends GetxController {
       await preferenceService.setIntPrefs(
           SharedPreferenceService.performanceDialog,
           DateTime.now().millisecondsSinceEpoch);
-      showDialog(
+
+      performanceScoreList.isNotEmpty ? showDialog(
         context: Get.context!,
         barrierColor: appColors.darkBlue.withOpacity(0.5),
         builder: (_) => PerformanceDialog(),
       ).then((value) {
         getUserImage();
         update();
-      });
+      }):const SizedBox.shrink();
     }
   }
 

@@ -2445,7 +2445,7 @@ class PerformanceDialog extends StatelessWidget {
           assignId: true,
           init: HomeController(),
           builder: (controller) {
-            return controller.performanceScoreList.isNotEmpty ?Container(
+            return Container(
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(15)),
               child: Padding(
@@ -2714,7 +2714,7 @@ class PerformanceDialog extends StatelessWidget {
                   ],
                 ),
               ),
-            ):const SizedBox();
+            );
           }),
     );
   }

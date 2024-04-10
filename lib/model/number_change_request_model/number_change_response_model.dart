@@ -27,7 +27,8 @@ class NumberChangeResponse {
         message: json["message"],
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         "data": data?.toJson(),
         "success": success,
         "status_code": statusCode,
@@ -39,22 +40,28 @@ class NumberChangeData {
   String? sessionId;
   String? mobileNo;
   int? remainingAttempt;
+  int? alreadyInApproved;
 
   NumberChangeData({
     this.sessionId,
     this.mobileNo,
     this.remainingAttempt,
+    this.alreadyInApproved,
   });
 
-  factory NumberChangeData.fromJson(Map<String, dynamic> json) => NumberChangeData(
-        sessionId: json["session_id"],
-        mobileNo: json["mobile_no"],
-        remainingAttempt: json["remaining_attempt"],
+  factory NumberChangeData.fromJson(Map<String, dynamic> json) =>
+      NumberChangeData(
+          sessionId: json["session_id"],
+          mobileNo: json["mobile_no"],
+          remainingAttempt: json["remaining_attempt"],
+          alreadyInApproved: json["already_in_approval"]
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         "session_id": sessionId,
         "mobile_no": mobileNo,
         "remaining_attempt": remainingAttempt,
+        "already_in_approval": alreadyInApproved,
       };
 }

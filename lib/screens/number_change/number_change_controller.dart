@@ -1,4 +1,5 @@
 import 'package:divine_astrologer/common/app_exception.dart';
+import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
@@ -66,8 +67,15 @@ class NumberChangeReqController extends GetxController {
         numberChangeResponse = response;
         update();
         print("request to change mobile number");
-        Get.toNamed(RouteName.numberChangeOtpScreen);
-        focusNodeOtp.requestFocus();
+        var alreadyInApproved = numberChangeResponse.data?.alreadyInApproved == 1;
+        print("alreadyInApproved: $alreadyInApproved");
+        if(alreadyInApproved == true){
+          divineSnackBar(data: numberChangeResponse.message!,color: appColors.red);
+        }else{
+          Get.toNamed(RouteName.numberChangeOtpScreen);
+          focusNodeOtp.requestFocus();
+        }
+
       }
     } catch (err) {
       if (err is CustomException) {
