@@ -430,7 +430,7 @@ class ZegoService {
                       height: 64,
                       width: 64,
                       child: Image.asset(
-                        !isMicOn.value
+                        isMicOn.value
                             ? "assets/images/chat_video_call_mic_on.png"
                             : "assets/images/chat_video_call_mic_off.png",
                       ),
