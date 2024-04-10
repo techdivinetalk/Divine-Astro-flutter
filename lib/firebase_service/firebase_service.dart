@@ -184,6 +184,7 @@ class AppFirebaseService {
             sendBroadcast(BroadcastMessage(
                 name: "deliveredMsg",
                 data: {'deliveredMsgList': realTimeData["deliveredMsg"]}));
+
           }
           if (realTimeData["totalGift"] != null) {
             sendBroadcast(

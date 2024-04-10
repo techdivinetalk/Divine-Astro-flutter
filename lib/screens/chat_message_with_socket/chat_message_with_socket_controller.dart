@@ -311,16 +311,22 @@ class ChatMessageWithSocketController extends GetxController
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) {
       if (event.name == 'deliveredMsg') {
+        print(
+            'deliveredData-Key:${event.data}');
         var response = event.data?['deliveredMsgList'];
         print(
             'deliveredData Outer Key:${response.toString()}');
         response.forEach((key, value) {
+          print(
+              'deliveredRes:$key - $value');
           value.forEach((innerKey, innerValue) {
-
+            print('deliveredRes1:$innerKey - $innerValue');
             var index = chatMessages
                 .indexWhere((element) => innerKey == element.id.toString());
             if (index >= 0) {
-              chatMessages[index].type = innerValue;
+              print('deliveredRes2:$index');
+              chatMessages[index].type = 1;
+              chatMessages[index].seenStatus = 1;
               chatMessages.refresh();
             }
           });
@@ -372,7 +378,7 @@ class ChatMessageWithSocketController extends GetxController
     initTask(AppFirebaseService().orderData.value);
   }
 
-  navigateToOtherScreen() async {
+  navigateToOtherScreen() async {AppLifecycleState.resumed
     await Future.delayed(const Duration(milliseconds: 300));
     Get.offAllNamed(RouteName.dashboard);
   }
@@ -767,8 +773,6 @@ class ChatMessageWithSocketController extends GetxController
   Future getImage(bool isCamera) async {
     isGalleryOpen = true;
     if(isCamera){
-      // await availableCameras().then((value) => Navigator.push(context!,
-      //     MaterialPageRoute(builder: (_) => CameraPage(cameras: value))));
       List<CameraDescription> cameras = await availableCameras();
       final String? imagePath = await Get.to<String?>(
             () => CameraPage(cameras: cameras),
