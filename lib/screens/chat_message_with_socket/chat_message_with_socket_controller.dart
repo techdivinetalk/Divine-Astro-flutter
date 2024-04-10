@@ -378,7 +378,7 @@ class ChatMessageWithSocketController extends GetxController
     initTask(AppFirebaseService().orderData.value);
   }
 
-  navigateToOtherScreen() async {AppLifecycleState.resumed
+  navigateToOtherScreen() async {
     await Future.delayed(const Duration(milliseconds: 300));
     Get.offAllNamed(RouteName.dashboard);
   }
