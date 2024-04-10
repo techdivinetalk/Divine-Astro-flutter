@@ -150,6 +150,9 @@ class AppSocket {
   void sendMessageListenerSocket(void Function(dynamic) callback) {
     socket?.on(ApiProvider().messageSent, callback);
   }
+void astrologerJoinedPrivateChat(void Function(dynamic) callback) {
+    socket?.on(ApiProvider().astrologerJoinedPrivateChat, callback);
+  }
 
   void listenerMessageStatusSocket(void Function(dynamic) callback) {
     socket?.on(ApiProvider().msgStatusChanged, callback);
