@@ -81,14 +81,14 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                             isScrollable: true,
                             dividerColor: Colors.transparent,
                             labelPadding: EdgeInsets.zero,
-                            labelColor: appColors.brownColour,
+                            labelColor: appColors.whiteGuidedColor,
                             unselectedLabelColor: appColors.blackColor,
                             splashBorderRadius: BorderRadius.circular(20),
                             padding: EdgeInsets.symmetric(
                                 vertical: 6.w, horizontal: 24.w),
                             labelStyle: AppTextStyle.textStyle14(
                                 fontWeight: FontWeight.w500,
-                                fontColor: appColors.brownColour),
+                                fontColor: appColors.whiteGuidedColor),
                             indicator: BoxDecoration(
                               color: appColors.guideColor,
                               borderRadius: BorderRadius.circular(28),
