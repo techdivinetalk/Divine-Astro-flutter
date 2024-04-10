@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -44,6 +45,7 @@ class AddMessageTemplateUI extends GetView<AddMessageTemplateController> {
                 inputType: TextInputType.text,
                 inputAction: TextInputAction.next,
                 hintText: "Enter Template Name",
+                inputFormatters: [LengthLimitingTextInputFormatter(15)],
                 errorBorder: appColors.white,
                 suffixIcon: Padding(
                   padding: const EdgeInsets.only(top: 12),

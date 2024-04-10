@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'app_textstyle.dart';
@@ -59,6 +60,8 @@ class WhiteTextField extends StatefulWidget {
   final bool isDense;
   final EdgeInsets? contentPadding;
   final void Function(String? value)? onChanged;
+  final List<TextInputFormatter>? inputFormatters;
+  final int? maxLength;
 
   const WhiteTextField(
       {super.key,
@@ -75,6 +78,8 @@ class WhiteTextField extends StatefulWidget {
       this.suffixIcon,
       this.onChanged,
       this.contentPadding,
+        this.inputFormatters,
+        this.maxLength,
       this.validator});
 
   @override
@@ -103,6 +108,7 @@ class _WhiteTextFieldState extends State<WhiteTextField> {
         maxLines: widget.maxLines,
         keyboardType: widget.inputType,
         textInputAction: widget.inputAction,
+        inputFormatters: widget.inputFormatters,
         decoration: InputDecoration(
           hintText: widget.hintText,
           errorText: widget.errorText,
