@@ -48,7 +48,7 @@ class ChatOrderHistoryModelClass {
 
 class ChatDataList {
   int? id;
-  int? amount;
+  dynamic amount;
   String? orderId;
   String? status;
   int? transactionId;
@@ -88,7 +88,7 @@ class ChatDataList {
 
   factory ChatDataList.fromJson(Map<String, dynamic> json) => ChatDataList(
     id: json["id"],
-    amount: json["amount"],
+    amount: json["amount"] as dynamic,
     orderId: json["order_id"],
     status: json["status"],
     transactionId: json["transaction_id"],

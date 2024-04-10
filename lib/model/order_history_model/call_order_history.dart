@@ -40,7 +40,7 @@ class CallOrderHistoryModelClass {
 
 class CallHistoryData {
   int? id;
-  int? amount;
+  dynamic amount;
   String? orderId;
   String? status;
   int? transactionId;
@@ -79,7 +79,7 @@ class CallHistoryData {
 
   factory CallHistoryData.fromJson(Map<String, dynamic> json) => CallHistoryData(
     id: json["id"] as int?,
-    amount: json["amount"] as int?,
+    amount: json["amount"] as dynamic,
     orderId: json["order_id"] as String?,
     status: json["status"] as String?,
     transactionId: json["transaction_id"] as int?,

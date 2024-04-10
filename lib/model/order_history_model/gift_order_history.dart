@@ -47,7 +47,7 @@ class GiftOrderHistoryModelClass {
 
 class GiftDataList {
   int? id;
-  int? amount;
+  dynamic amount;
   String? orderId;
   String? status;
   int? transactionId;
@@ -83,7 +83,7 @@ class GiftDataList {
   factory GiftDataList.fromJson(Map<String, dynamic> json) =>
       GiftDataList(
         id: json["id"],
-        amount: json["amount"],
+        amount: json["amount"] as dynamic,
         orderId: json["order_id"],
         status: json["status"],
         transactionId: json["transaction_id"],
