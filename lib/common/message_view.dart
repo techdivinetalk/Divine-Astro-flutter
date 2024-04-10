@@ -215,7 +215,7 @@ class MessageView extends StatelessWidget {
   }
 
   Widget giftMsgView(BuildContext context, ChatMessage chatMessage,
-      bool yourMessage, String customerName) {
+      bool yourMessage, String customerName) { 
     return Align(
       alignment: yourMessage ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
@@ -247,6 +247,7 @@ class MessageView extends StatelessWidget {
                 child: CustomText(
               '$customerName has requested to send ${chatMessage.message ?? ""}.',
               maxLines: 2,
+                  fontColor: appColors.whiteGuidedColor,
             ))
           ],
         ),

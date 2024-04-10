@@ -130,7 +130,7 @@ class HomeController extends GetxController {
       debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
       if (event.name == "giftCount") {
         if (int.parse(event.data!["giftCount"].toString()) > 0) {
-          if(MiddleWare.instance.currentPage != RouteName.chatMessageUI){
+          if (MiddleWare.instance.currentPage != RouteName.chatMessageUI) {
             showGiftBottomSheet(event.data?["giftCount"], contextDetail,
                 baseUrl: preferenceService.getBaseImageURL());
           }
@@ -453,20 +453,20 @@ class HomeController extends GetxController {
     }
   }
 
-  trainingVideoViewData(int videoId,{bool isFromForceVideo = false}) async {
+  trainingVideoViewData(int videoId, {bool isFromForceVideo = false}) async {
     Map<String, dynamic> params = {"training_video_id": videoId};
     try {
       var data = await userRepository.viewTrainingVideoApi(params);
       viewTrainingVideoModelClass = data;
       profileDataSync.value = true;
       await getConstantDetailsData();
-      if(isFromForceVideo){
+      if (isFromForceVideo) {
         if (getConstantDetails!.data!.isForceTraningVideo == 1) {
           getAllDashboardData(isReapeting: true);
         } else {
           Get.back();
         }
-      }else{
+      } else {
         Get.back();
       }
 
@@ -667,7 +667,8 @@ class HomeController extends GetxController {
               return TrainingVideoUI(
                 video: traingVideoData[i],
               );
-            })!.then((value) {
+            })!
+                .then((value) {
               print("in side going");
               getAllDashboardData();
             });
@@ -1002,15 +1003,16 @@ class HomeController extends GetxController {
       await preferenceService.setIntPrefs(
           SharedPreferenceService.performanceDialog,
           DateTime.now().millisecondsSinceEpoch);
-
-      performanceScoreList.isNotEmpty ? showDialog(
-        context: Get.context!,
-        barrierColor: appColors.darkBlue.withOpacity(0.5),
-        builder: (_) => PerformanceDialog(),
-      ).then((value) {
-        getUserImage();
-        update();
-      }):const SizedBox.shrink();
+      if (performanceScoreList.isNotEmpty) {
+        showDialog(
+          context: Get.context!,
+          barrierColor: appColors.darkBlue.withOpacity(0.5),
+          builder: (_) => PerformanceDialog(),
+        ).then((value) {
+          getUserImage();
+          update();
+        });
+      }
     }
   }
 
