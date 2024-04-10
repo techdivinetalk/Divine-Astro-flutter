@@ -100,27 +100,29 @@ class MessageView extends StatelessWidget {
 
     // Conditionally add unreadMessageView() based on chat
 
-    return unreadMessageShow! == false ? Column(
-      children: [
-        if (chatMessage.id == unreadMessage) unreadMessageView(),
-        // if (index == 0)
-        //   dayWidget(
-        //       currentMsgDate: currentMsgDate,
-        //       nextMsgDate: nextMsgDate,
-        //       isToday: (DateTime.now().day - currentMsgDate.day) == 0,
-        //       isYesterday: (DateTime.now().day - currentMsgDate.day) == 1,
-        //       differenceOfDays: 1),
+    return unreadMessageShow! == false
+        ? Column(
+            children: [
+              if (chatMessage.id == unreadMessage) unreadMessageView(),
+              // if (index == 0)
+              //   dayWidget(
+              //       currentMsgDate: currentMsgDate,
+              //       nextMsgDate: nextMsgDate,
+              //       isToday: (DateTime.now().day - currentMsgDate.day) == 0,
+              //       isYesterday: (DateTime.now().day - currentMsgDate.day) == 1,
+              //       differenceOfDays: 1),
 
-        messageWidget,
-        // if (index != 0)
-        //   dayWidget(
-        //       currentMsgDate: currentMsgDate,
-        //       nextMsgDate: nextMsgDate,
-        //       isToday: (DateTime.now().day - currentMsgDate.day) == 0,
-        //       isYesterday: (DateTime.now().day - currentMsgDate.day) == 1,
-        //       differenceOfDays: 1),
-      ],
-    ) : messageWidget;
+              messageWidget,
+              // if (index != 0)
+              //   dayWidget(
+              //       currentMsgDate: currentMsgDate,
+              //       nextMsgDate: nextMsgDate,
+              //       isToday: (DateTime.now().day - currentMsgDate.day) == 0,
+              //       isYesterday: (DateTime.now().day - currentMsgDate.day) == 1,
+              //       differenceOfDays: 1),
+            ],
+          )
+        : messageWidget;
   }
 
   Widget dayWidget(
@@ -291,10 +293,11 @@ class MessageView extends StatelessWidget {
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children:
-          List.generate(temp.length, (index) {
-            return GestureDetector( onTap: () => Get.toNamed(RouteName.remediesDetail,
-                arguments: {'title': temp[0], 'subtitle': jsonString}),child: CustomText(temp[index], fontSize: 12.sp));
+          children: List.generate(temp.length, (index) {
+            return GestureDetector(
+                onTap: () => Get.toNamed(RouteName.remediesDetail,
+                    arguments: {'title': temp[0], 'subtitle': jsonString}),
+                child: CustomText(temp[index], fontSize: 12.sp));
           }),
         ),
       ),
@@ -360,8 +363,7 @@ class MessageView extends StatelessWidget {
                       child: CustomButton(
                           color: appColors.guideColor,
                           onTap: () {
-                            print(AppFirebaseService()
-                                .orderData["lat"]);
+                            print(AppFirebaseService().orderData["lat"]);
                             print("objectobjectobjectobjectobject");
                             final dateData = DateFormat("dd/MM/yyyy")
                                 .parse(AppFirebaseService().orderData["dob"]);
@@ -376,9 +378,10 @@ class MessageView extends StatelessWidget {
                               hour: timeData.hour,
                               min: timeData.minute,
                               lat: double.parse(AppFirebaseService()
-                                  .orderData["lat"].toString()),
-                              long: double.parse(AppFirebaseService()
-                                  .orderData["lng"]),
+                                  .orderData["lat"]
+                                  .toString()),
+                              long: double.parse(
+                                  AppFirebaseService().orderData["lng"]),
                               location: AppFirebaseService()
                                   .orderData["placeOfBirth"],
                             );
@@ -404,9 +407,7 @@ class MessageView extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        messageDateTime(chatMessage.time != null
-                            ? int.parse(chatMessage.time.toString())
-                            : 0),
+                        messageDateTime(int.parse("${chatMessage.time ??"0"}")),
                         style: AppTextStyle.textStyle10(
                           fontColor: appColors.darkBlue,
                         ),
@@ -467,7 +468,8 @@ class MessageView extends StatelessWidget {
                     absorbing: controller.isAudioPlaying.value,
                     child: VoiceMessageView(
                         controller: VoiceController(
-                            audioSrc: chatDetail.awsUrl ?? ""/*?? chatDetail.message ?? ""*/,
+                            audioSrc: chatDetail.awsUrl ??
+                                "" /*?? chatDetail.message ?? ""*/,
                             maxDuration: const Duration(minutes: 30),
                             isFile: false,
                             onComplete: () {
@@ -495,23 +497,22 @@ class MessageView extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          messageDateTime(chatDetail.time != null
-                              ? int.parse(chatDetail.time!)
-                              : 0),
+                          messageDateTime(
+                              int.parse("${chatDetail.time ?? "0"}")),
                           style: AppTextStyle.textStyle10(
                               fontColor: appColors.black),
                         ),
                         if (yourMessage) SizedBox(width: 8.w),
                         if (yourMessage)
-                         Obx(() =>  msgType.value == 0
-                             ? Assets.images.icSingleTick.svg()
-                             : msgType.value == 1
-                             ? Assets.images.icDoubleTick.svg(
-                             colorFilter: ColorFilter.mode(
-                                 appColors.lightGrey, BlendMode.srcIn))
-                             : msgType.value == 3
-                             ? Assets.images.icDoubleTick.svg()
-                             : Assets.images.icSingleTick.svg())
+                          Obx(() => msgType.value == 0
+                              ? Assets.images.icSingleTick.svg()
+                              : msgType.value == 1
+                                  ? Assets.images.icDoubleTick.svg(
+                                      colorFilter: ColorFilter.mode(
+                                          appColors.lightGrey, BlendMode.srcIn))
+                                  : msgType.value == 3
+                                      ? Assets.images.icDoubleTick.svg()
+                                      : Assets.images.icSingleTick.svg())
                       ],
                     ),
                   ),
@@ -760,7 +761,7 @@ class MessageView extends StatelessWidget {
     // Uint8List bytesImage = base64.decode(image);
     Rx<int> msgType = (chatDetail.seenStatus ?? (chatDetail.type ?? 0)).obs;
     print(
-        "imageMsgView ${chatDetail.time}");
+        "chatDetail.type ${msgType.value} - ${chatDetail.type} - ${chatDetail.seenStatus} - ${yourMessage}");
 
     return SizedBox(
       width: double.maxFinite,
@@ -850,10 +851,8 @@ class MessageView extends StatelessWidget {
                                           ),
                                         ),
                                         child: Text(
-                                          messageDateTime(chatDetail.time !=
-                                                  null
-                                              ? int.parse(chatDetail.time!)
-                                              : 0),
+
+                                          messageDateTime(int.parse("${chatDetail.time ??"0"}")),
                                           style: AppTextStyle.textStyle10(
                                               fontColor: appColors.white),
                                         ),
@@ -906,9 +905,8 @@ class MessageView extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Text(
-                                    messageDateTime(chatDetail.time != null
-                                        ? int.parse(chatDetail.time.toString())
-                                        : 0),
+
+                                    messageDateTime(int.parse("${chatDetail.time ??"0"}")),
                                     style: AppTextStyle.textStyle10(
                                       fontColor: appColors.white,
                                     ),
@@ -998,9 +996,7 @@ class MessageView extends StatelessWidget {
                                     ),
                                   ),
                                   child: Text(
-                                    messageDateTime(chatDetail.time != null
-                                        ? int.parse(chatDetail.time!)
-                                        : 0),
+                                    messageDateTime(int.parse("${chatDetail.time ??"0"}")),
                                     style: AppTextStyle.textStyle10(
                                       fontColor: appColors.white,
                                     ),

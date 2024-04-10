@@ -174,6 +174,7 @@ class ChatMessageWithSocketController extends GetxController
     _appLinkingStreamSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     ZegoGiftPlayer().clear();
+    messgeScrollController.dispose();
     chatTimer?.cancel();
     print("WentBack dispose-5");
     extraTimer?.cancel();
@@ -348,6 +349,7 @@ class ChatMessageWithSocketController extends GetxController
     listenerMessageStatusSocket();
     // leavePrivateChat();
     customerLeavedPrivateChatListenerSocket();
+    astrologerJoinedPrivateChat();
     socket.startAstroCustumerSocketEvent(
       orderId: AppFirebaseService().orderData.value["orderId"].toString(),
       userId: AppFirebaseService().orderData.value["userId"],
@@ -618,6 +620,7 @@ class ChatMessageWithSocketController extends GetxController
       if (index != -1) {
         print("goinggoinggoinggoinggoing");
         chatMessages[index].type = 3;
+        chatMessages[index].seenStatus = 3;
         update();
       }
     }
@@ -670,7 +673,12 @@ class ChatMessageWithSocketController extends GetxController
     });
   }
 
-  void sendMessageListenerSocket() {
+  void astrologerJoinedPrivateChat() {
+    socket.astrologerJoinedPrivateChat((data) {
+      debugPrint("Astro-joined-the-chat");
+    });
+  }
+ void sendMessageListenerSocket() {
     socket.sendMessageListenerSocket((data) {
       debugPrint("sendMessageListenerSocketssss ${data["msgSendBy"]}");
       debugPrint("sendMessageListenerSocket context $context");
@@ -990,8 +998,11 @@ class ChatMessageWithSocketController extends GetxController
       );
     }
     socket.sendMessageSocket(newMessage);
-    print("newMessage1");
+    print("newMessage10909");
     print(newMessage.toOfflineJson());
+    // chatMessages.add(newMessage);
+    // chatMessages.refresh();
+    // scrollToBottomFunc();
     updateChatMessages(newMessage, false, isSendMessage: true);
     print("last message  ${chatMessages.last.message}");
   }

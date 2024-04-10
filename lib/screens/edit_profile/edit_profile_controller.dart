@@ -64,13 +64,16 @@ class EditProfileController extends GetxController {
       };
       final response = await repository.updateProfile(param);
       if (response.statusCode == 200) {
-        UserData data = UserData.fromJson(response.data!.toJson());
-        state.preferenceService.setUserDetail(data);
-        Navigator.pop(Get.context!);
-        Get.find<ProfilePageController>()
-            .setUserData(state.preferenceService.getUserDetail());
-        divineSnackBar(data: "${'profileUpdatedSuccessfully'.tr}.");
-
+        if (response.data != null) {
+          UserData data = UserData.fromJson(response.data!.toJson());
+          state.preferenceService.setUserDetail(data);
+          Navigator.pop(Get.context!);
+          Get.find<ProfilePageController>()
+              .setUserData(state.preferenceService.getUserDetail());
+          divineSnackBar(data: "${'profileUpdatedSuccessfully'.tr}.");
+        } else {
+          Get.back();
+        }
       }
       if (response.statusCode == 400) {
         Fluttertoast.showToast(msg: response.statusCode.toString());
@@ -122,7 +125,8 @@ class EditProfileState {
   void assignData() {
     userData = preferenceService.getUserDetail();
     nameController.text = userData?.name ?? "";
-    experienceController.text = (userData?.experiance != "null" ? userData?.experiance :"")!;
+    experienceController.text =
+        (userData?.experiance != "null" ? userData?.experiance : "")!;
     Document description = parse(userData?.description ?? "");
     descriptionController.text = description.documentElement!.text;
     String specialityString = preferenceService.getSpecialAbility()!;

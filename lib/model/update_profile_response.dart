@@ -36,7 +36,7 @@ class UpdateProfileResponse {
 
   factory UpdateProfileResponse.fromJson(Map<String, dynamic> json) =>
       UpdateProfileResponse(
-        data: Data.fromJson(json["data"]),
+        data: json["data"] != null ?Data.fromJson(json["data"]) :null,
         success: json["success"],
         statusCode: json["status_code"],
         message: json["message"],
