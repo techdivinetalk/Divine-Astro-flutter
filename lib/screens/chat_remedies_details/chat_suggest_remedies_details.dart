@@ -48,7 +48,7 @@ class ChatSuggestRemediesDetailsPage
                   child: GestureDetector(
                     onTap: () {
                       final remedy = controller.remedies.value.remedies![controller.selectedIndex.value];
-                      List temp = [ remedy.name.upperCamelCase, remedy.content,remedy.id];
+                      List temp = [ remedy.name.upperCamelCase, remedy.content];
                       Get.back();
                       Get.back(result: temp);
                     },
