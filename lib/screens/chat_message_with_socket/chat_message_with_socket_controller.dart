@@ -312,14 +312,11 @@ class ChatMessageWithSocketController extends GetxController
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) {
       if (event.name == 'deliveredMsg') {
-        print(
-            'deliveredData-Key:${event.data}');
+        print('deliveredData-Key:${event.data}');
         var response = event.data?['deliveredMsgList'];
-        print(
-            'deliveredData Outer Key:${response.toString()}');
+        print('deliveredData Outer Key:${response.toString()}');
         response.forEach((key, value) {
-          print(
-              'deliveredRes:$key - $value');
+          print('deliveredRes:$key - $value');
           value.forEach((innerKey, innerValue) {
             print('deliveredRes1:$innerKey - $innerValue');
             var index = chatMessages
@@ -678,7 +675,8 @@ class ChatMessageWithSocketController extends GetxController
       debugPrint("Astro-joined-the-chat");
     });
   }
- void sendMessageListenerSocket() {
+
+  void sendMessageListenerSocket() {
     socket.sendMessageListenerSocket((data) {
       debugPrint("sendMessageListenerSocketssss ${data["msgSendBy"]}");
       debugPrint("sendMessageListenerSocket context $context");
@@ -780,10 +778,10 @@ class ChatMessageWithSocketController extends GetxController
 
   Future getImage(bool isCamera) async {
     isGalleryOpen = true;
-    if(isCamera){
+    if (isCamera) {
       List<CameraDescription> cameras = await availableCameras();
       final String? imagePath = await Get.to<String?>(
-            () => CameraPage(cameras: cameras),
+        () => CameraPage(cameras: cameras),
       );
       print('Image path received in Page A: ${AppFirebaseService().imagePath}');
       if (AppFirebaseService().imagePath != "") {
@@ -791,7 +789,7 @@ class ChatMessageWithSocketController extends GetxController
         image = File(AppFirebaseService().imagePath);
         await cropImage();
       }
-    }else {
+    } else {
       final bool result = await permissionPhotoOrStorage();
       print("photo permission $result");
       if (result) {
@@ -1009,7 +1007,6 @@ class ChatMessageWithSocketController extends GetxController
 
   updateChatMessages(ChatMessage newMessage, bool isFromNotification,
       {bool isSendMessage = false}) async {
-    print("newMessage1 ");
     final int index = chatMessages
         .indexWhere((ChatMessage element) => newMessage.time == element.time);
     print("newMessage2 ${newMessage.type}");
@@ -1017,7 +1014,7 @@ class ChatMessageWithSocketController extends GetxController
       print("newMessage3");
       chatMessages[index].seenStatus = newMessage.type;
       chatMessages.refresh();
-    } else {
+    } else {  
       print("newMessage4");
       if (isFromNotification && messgeScrollController.hasClients) {
         print("newMessage5");
@@ -1079,8 +1076,9 @@ class ChatMessageWithSocketController extends GetxController
     await hiveServices.initialize();
     databaseMessage.value.chatMessages = chatMessages;
     await hiveServices.addData(
-        key: userDataKey,
-        data: jsonEncode(databaseMessage.value.toOfflineJson()));
+      key: userDataKey,
+      data: jsonEncode(databaseMessage.value.toOfflineJson()),
+    );
   }
 
   scrollToBottomFunc() {
@@ -1130,7 +1128,7 @@ class ChatMessageWithSocketController extends GetxController
     for (int i = 0; i < chatMessages.length; i++) {
       if (chatMessages[i].type != 2 &&
           chatMessages[i].senderId != preference.getUserDetail()!.id) {
-        updateMsgDelieveredStatus(chatMessages[i], 2);
+        // updateMsgDelieveredStatus(chatMessages[i], 2);
         chatMessages[i].type = 2;
       }
     }
@@ -1335,6 +1333,7 @@ class ChatMessageWithSocketController extends GetxController
       update();
     }
   }
+
   @override
   void didChangeMetrics() {
     super.didChangeMetrics();
@@ -1344,13 +1343,14 @@ class ChatMessageWithSocketController extends GetxController
     if (isKeyboardOpen) {
       Timer(
           const Duration(milliseconds: 300),
-              () => messgeScrollController.animateTo(
+          () => messgeScrollController.animateTo(
                 messgeScrollController.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.easeOut,
-          ));
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeOut,
+              ));
     }
   }
+
   uploadAudioFile(File soundFile) async {
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
     final uploadFile =
@@ -1423,13 +1423,13 @@ class ChatMessageWithSocketController extends GetxController
     if (MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
       if (p0["status"] == null || p0["status"] == "5") {
         WidgetsBinding.instance.endOfFrame.then(
-              (_) async {
+          (_) async {
             socket.socket?.disconnect();
             chatTimer?.cancel();
             print("WentBack Status-5");
             extraTimer?.cancel();
             Get.until(
-                  (route) {
+              (route) {
                 return Get.currentRoute == RouteName.dashboard;
               },
             );
@@ -1438,7 +1438,7 @@ class ChatMessageWithSocketController extends GetxController
         return;
       }
       return;
-    }else if (p0["status"] == "4") {
+    } else if (p0["status"] == "4") {
       print("chat status 4");
       showTalkTime.value = "-1";
       chatTimer?.cancel();
@@ -1446,7 +1446,7 @@ class ChatMessageWithSocketController extends GetxController
       return;
     }
     print("extraTime ${p0["status"]}");
-    if(p0["status"] == "3") {
+    if (p0["status"] == "3") {
       extraTimer?.cancel();
       print("extraTime closing");
     }

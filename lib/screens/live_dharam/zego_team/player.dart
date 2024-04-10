@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/screens/live_dharam/zego_team/cache.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import 'package:svgaplayer_flutter/parser.dart';
 import 'package:svgaplayer_flutter/player.dart';
@@ -186,11 +187,9 @@ class ZegoGiftPlayer {
         },
       );
     });
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
       Overlay.of(context, rootOverlay: false).insert(currentGiftEntries!);
     });
-
   }
 
   bool clear() {

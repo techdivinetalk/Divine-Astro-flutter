@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:aws_s3_upload/aws_s3_upload.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:divine_astrologer/common/routes.dart';
+
 import 'package:divine_astrologer/model/chat/req_common_chat_model.dart';
 import 'package:divine_astrologer/repository/chat_repository.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -206,14 +206,14 @@ void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   // removeNotificationNode(nodeId: "/${newMessage.time}");
 }
 
-// removeNotificationNode({String? nodeId}) {
-//   var userData = preferenceService.getUserDetail();
-//   if (nodeId == null) {
-//     FirebaseDatabase.instance.ref().child("astrologer/${userData?.id}/realTime/notification").remove();
-//   } else {
-//     FirebaseDatabase.instance.ref().child("astrologer/${userData?.id}/realTime/notification$nodeId").remove();
-//   }
-// }
+removeNotificationNode({String? nodeId}) {
+  var userData = preferenceService.getUserDetail();
+  if (nodeId == null) {
+    FirebaseDatabase.instance.ref().child("astrologer/${userData?.id}/realTime/notification").remove();
+  } else {
+    FirebaseDatabase.instance.ref().child("astrologer/${userData?.id}/realTime/notification$nodeId").remove();
+  }
+}
 
 String messageDateTime(int datetime) {
   var millis = datetime;
