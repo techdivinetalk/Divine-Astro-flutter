@@ -103,7 +103,7 @@ class ProfilePageController extends GetxController {
           '/bankDetailsUI'),
       ProfileOptionModelClass("Upload Story",
           Assets.images.icUploadStory.svg(width: 30.h, height: 30.h), ''),
-      ProfileOptionModelClass('Upload Your Photo',
+      ProfileOptionModelClass('Upload Your Photos',
           Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h), ''),
       ProfileOptionModelClass("customerSupport".tr,
           Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), ''),
