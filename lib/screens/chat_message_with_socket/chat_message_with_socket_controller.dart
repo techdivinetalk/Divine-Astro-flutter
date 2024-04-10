@@ -173,6 +173,7 @@ class ChatMessageWithSocketController extends GetxController
     _appLinkingStreamSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     ZegoGiftPlayer().clear();
+    messgeScrollController.dispose();
     chatTimer?.cancel();
     print("WentBack dispose-5");
     extraTimer?.cancel();

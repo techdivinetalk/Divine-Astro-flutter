@@ -186,8 +186,11 @@ class ZegoGiftPlayer {
         },
       );
     });
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) {
+      Overlay.of(context, rootOverlay: false).insert(currentGiftEntries!);
+    });
 
-    Overlay.of(context, rootOverlay: false).insert(currentGiftEntries!);
   }
 
   bool clear() {

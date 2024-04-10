@@ -133,6 +133,7 @@ class WaitListUI extends GetView<WaitListUIController> {
                 controller!.acceptChatButtonApi(
                   queueId: person.id.toString(),
                   orderId: person.orderId,
+                  index: index,
                 );
               } else {
                 Fluttertoast.showToast(
