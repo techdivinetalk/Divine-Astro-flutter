@@ -143,13 +143,23 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                     return HelpersWidget().emptyChatWidget();
                   } else {
                     return Expanded(
-                      child: ListView.builder(
+                        child: /*NotificationListener<ScrollNotification>(
+                      onNotification: (ScrollNotification scrollInfo) {
+                        if (!controller.isLoadingMore.value &&
+                            scrollInfo.metrics.pixels ==
+                                scrollInfo.metrics.maxScrollExtent) {
+                          controller.loadMoreData();
+                          return true;
+                        }
+                        return false;
+                      },
+                      child:*/ ListView.builder(
                         padding: EdgeInsets.symmetric(vertical: 10.h),
                         itemCount: (controller.searchData).isNotEmpty ||
                                 controller.searchController.text.isNotEmpty
                             ? controller.searchData.length
-                            : controller.chatAssistantAstrologerListResponse!
-                                .data!.data!.length,
+                            : /*controller.chatDataList.length*/ controller.chatAssistantAstrologerListResponse!
+                            .data!.data!.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           return ChatAssistanceTile(
@@ -157,12 +167,12 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                             data: (controller.searchData).isNotEmpty ||
                                     controller.searchController.text.isNotEmpty
                                 ? controller.searchData[index]
-                                : controller.chatAssistantAstrologerListResponse!
-                                    .data!.data![index],
+                                : /*controller.chatDataList[index]*/ controller.chatAssistantAstrologerListResponse!
+                                .data!.data![index],
                           );
                         },
                       ),
-                    );
+                    )/*)*/;
                   }
                 } else {
                   if (controller.customerDetailsResponse == null ||
@@ -183,15 +193,18 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                             data: (controller.filteredUserData).isNotEmpty ||
                                     controller.searchController.text.isNotEmpty
                                 ? controller.filteredUserData[index]
-                                : controller.customerDetailsResponse!.data[index],
+                                : controller
+                                    .customerDetailsResponse!.data[index],
                           );
                         },
                       ),
                     );
                   }
                 }
-              })
-              ,const SizedBox(height: 10,)
+              }),
+              const SizedBox(
+                height: 10,
+              )
             ],
           );
         }
@@ -311,13 +324,15 @@ class ChatAssistanceTile extends StatelessWidget {
           if (newMessageFromlist) {
             data.lastMessage = element.message.toString();
           }
-          unreadMessageCount = (data.unreadMessage ?? 0) + userUnreadMessages(data.id??0);
+          unreadMessageCount =
+              (data.unreadMessage ?? 0) + userUnreadMessages(data.id ?? 0);
         }
       }
       return ListTile(
         onTap: () async {
           if (assistChatUnreadMessages.isNotEmpty) {
-           assistChatUnreadMessages.removeWhere((element) => element.customerId == data.id);
+            assistChatUnreadMessages
+                .removeWhere((element) => element.customerId == data.id);
           }
           chatAssistantCurrentUserId = 0.obs;
           await Get.toNamed(RouteName.chatMessageUI, arguments: data)

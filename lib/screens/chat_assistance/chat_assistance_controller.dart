@@ -15,10 +15,15 @@ class ChatAssistanceController extends GetxController {
   final chatAssistantRepository = ChatAssistantRepository();
   ChatAssistantAstrologerListResponse? chatAssistantAstrologerListResponse;
   CustomerDetailsResponse? customerDetailsResponse;
+  //ScrollController scrollController = ScrollController();
+ // RxList<DataList> chatDataList = <DataList>[].obs;
   Loading loading = Loading.initial;
   RxList searchData = [].obs;
   RxList filteredUserData = [].obs;
   final appSocket = AppSocket();
+ // RxBool isLoadingMore = false.obs;
+ // int _currentPage = 1;
+ // bool _hasMoreData = true;
 
   RxBool isSearchEnable = RxBool(false);
   RxBool keyboardActive = false.obs;
@@ -29,6 +34,14 @@ class ChatAssistanceController extends GetxController {
     super.onInit();
 
     getAssistantAstrologerList();
+   /* scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        if (_hasMoreData && !isLoadingMore.value) {
+          loadMoreData();
+        }
+      }
+    });*/
 
     update();
   }
@@ -75,7 +88,6 @@ class ChatAssistanceController extends GetxController {
   //   update();
   // }
 
-
   Future<void> getAssistantAstrologerList() async {
     try {
       loading = Loading.loading;
@@ -86,6 +98,41 @@ class ChatAssistanceController extends GetxController {
     }
     update();
   }
+  /*Future<void> getAssistantAstrologerList() async {
+    try {
+      if (_currentPage == 1) {
+        loading = Loading.loading;
+        update();
+      }
+      chatAssistantAstrologerListResponse = await chatAssistantRepository.getChatAssistantAstrologerList();
+      loading = Loading.loaded;
+      if (chatAssistantAstrologerListResponse != null &&
+          chatAssistantAstrologerListResponse!.data != null) {
+        if (_currentPage == 1) {
+          chatDataList.assignAll(chatAssistantAstrologerListResponse!.data!.data!);
+          loading = Loading.loaded;
+        } else {
+          chatDataList.addAll(chatAssistantAstrologerListResponse!.data!.data!);
+        }
+
+        _hasMoreData =
+            chatAssistantAstrologerListResponse!.data!.data!.isNotEmpty;
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (scrollController.position.pixels >=
+              scrollController.position.maxScrollExtent) {
+            loadMoreData();
+          }
+        });
+      } else {
+        loading = Loading.error;
+      }
+    } catch (err) {
+      loading = Loading.error;
+    }
+    update();
+  }*/
+
 Future<void> getConsulation() async {
     try {
       loading = Loading.loading;
@@ -96,6 +143,18 @@ Future<void> getConsulation() async {
     }
     update();
   }
+
+ /* Future<void> loadMoreData() async {
+    try {
+      isLoadingMore.value = true;
+      _currentPage++;
+      await getAssistantAstrologerList();
+    } catch (error) {
+      // Handle error
+    } finally {
+      isLoadingMore.value = false;
+    }
+  }*/
   void searchCall(String value) {
     searchData.clear();
     filteredUserData.clear();
