@@ -68,6 +68,8 @@ class ChatMessage {
   String? productId;
   String? shopId;
   String? downloadedPath;
+  String? latitude;
+  String? longitude;
   String? kundliName;
   String? kundliDateTime;
   String? kundliPlace;
@@ -89,6 +91,8 @@ class ChatMessage {
     this.productId,
     this.title,
     this.shopId,
+    this.latitude,
+    this.longitude,
     this.customerId,
     this.msgSequence,
     this.isPoojaProduct,
@@ -145,6 +149,8 @@ class ChatMessage {
     roleId = json['role_id'];
     customerId = json['customer_id'];
     title = json['title'];
+    latitude = json['latitude'];
+    longitude = json['longitude'];
     msgSequence = json['msg_sequence'];
     msgType = json['msg_type'] != null
         ? msgTypeValues.map[json["msg_type"].toString()]
@@ -212,6 +218,8 @@ class ChatMessage {
     data['member_id'] = memberId;
     data['productPrice'] = productPrice;
     data['role_id'] = roleId;
+    data['latitude'] = latitude;
+    data['longitude'] = longitude;
     data['title'] = title;
     data['customer_id'] = customerId;
     data['msg_sequence'] = msgSequence;
@@ -275,14 +283,20 @@ class Kundli {
   int kundliId;
   String kundliName;
   String kundliPlace;
-  DateTime kundliDateTime;
+  String kundliDateTime;
+  String longitude;
+  String latitude;
+  String gender;
 
   Kundli({
     required this.id,
     required this.kundliId,
     required this.kundliName,
     required this.kundliPlace,
+    required this.longitude,
+    required this.latitude,
     required this.kundliDateTime,
+    required this.gender,
   });
 
   factory Kundli.fromJson(Map<String, dynamic> json) {
@@ -291,7 +305,10 @@ class Kundli {
       kundliId: json['kundliId'],
       kundliName: json['kundliName'],
       kundliPlace: json['kundliPlace'],
-      kundliDateTime: DateTime.parse(json['kundliDateTime']),
+      longitude: json['longitude'],
+      latitude: json['latitude'],
+      gender: json['gender'],
+      kundliDateTime: json['kundliDateTime'],
     );
   }
 
@@ -301,7 +318,10 @@ class Kundli {
       'kundliId': kundliId,
       'kundliName': kundliName,
       'kundliPlace': kundliPlace,
-      'kundliDateTime': kundliDateTime.toIso8601String(),
+      'longitude': longitude,
+      'latitude': latitude,
+      'gender': gender,
+      'kundliDateTime': kundliDateTime,
     };
   }
 }

@@ -58,9 +58,7 @@ Future<void> main() async {
   initMessaging();
   cameras = await availableCameras();
   Get.put(AppColors());
-
   // await RemoteConfigService.instance.initFirebaseRemoteConfig();
-
   final remoteConfig = FirebaseRemoteConfig.instance;
   final remoteConfigHelper = RemoteConfigHelper(remoteConfig: remoteConfig);
   await remoteConfigHelper.initialize();
