@@ -378,7 +378,7 @@ class ChatMessageWithSocketController extends GetxController
     FirebaseDatabase.instance
         .ref()
         .child("order/${AppFirebaseService().orderData.value["orderId"].toString()}/isAstroEntered")
-        .set(DateTime.now().toString());
+        .set(DateTime.now().millisecond.toString());
   }
 
   navigateToOtherScreen() async {
@@ -1448,6 +1448,9 @@ class ChatMessageWithSocketController extends GetxController
       chatTimer?.cancel();
       startExtraTimer(p0["order_end_time"]);
       return;
+    }
+    if(p0["isCustEntered"] != null && p0["isCustEntered"] > DateTime.now().microsecondsSinceEpoch){
+      updateReadMessage();
     }
     print("extraTime ${p0["status"]}");
     if (p0["status"] == "3") {
