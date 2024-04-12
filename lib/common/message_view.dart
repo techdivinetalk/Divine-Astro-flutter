@@ -215,7 +215,7 @@ class MessageView extends StatelessWidget {
   }
 
   Widget giftMsgView(BuildContext context, ChatMessage chatMessage,
-      bool yourMessage, String customerName) { 
+      bool yourMessage, String customerName) {
     return Align(
       alignment: yourMessage ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
@@ -247,7 +247,7 @@ class MessageView extends StatelessWidget {
                 child: CustomText(
               '$customerName has requested to send ${chatMessage.message ?? ""}.',
               maxLines: 2,
-                  fontColor: appColors.whiteGuidedColor,
+              fontColor: appColors.whiteGuidedColor,
             ))
           ],
         ),
@@ -408,7 +408,8 @@ class MessageView extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        messageDateTime(int.parse("${chatMessage.time ??"0"}")),
+                        messageDateTime(
+                            int.parse("${chatMessage.time ?? "0"}")),
                         style: AppTextStyle.textStyle10(
                           fontColor: appColors.darkBlue,
                         ),
@@ -852,8 +853,8 @@ class MessageView extends StatelessWidget {
                                           ),
                                         ),
                                         child: Text(
-
-                                          messageDateTime(int.parse("${chatDetail.time ??"0"}")),
+                                          messageDateTime(int.parse(
+                                              "${chatDetail.time ?? "0"}")),
                                           style: AppTextStyle.textStyle10(
                                               fontColor: appColors.white),
                                         ),
@@ -906,8 +907,8 @@ class MessageView extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Text(
-
-                                    messageDateTime(int.parse("${chatDetail.time ??"0"}")),
+                                    messageDateTime(
+                                        int.parse("${chatDetail.time ?? "0"}")),
                                     style: AppTextStyle.textStyle10(
                                       fontColor: appColors.white,
                                     ),
@@ -997,7 +998,8 @@ class MessageView extends StatelessWidget {
                                     ),
                                   ),
                                   child: Text(
-                                    messageDateTime(int.parse("${chatDetail.time ??"0"}")),
+                                    messageDateTime(
+                                        int.parse("${chatDetail.time ?? "0"}")),
                                     style: AppTextStyle.textStyle10(
                                       fontColor: appColors.white,
                                     ),
@@ -1042,28 +1044,17 @@ class MessageView extends StatelessWidget {
   }
 
   Widget kundliView({required ChatMessage chatDetail, required int index}) {
-    String getKundliDateTime(ChatMessage chatDetail) {
-      if (chatDetail.kundliDateTime != null) {
-        return chatDetail.kundliDateTime!;
-      } else if (chatDetail.kundli != null &&
-          chatDetail.kundli!.kundliDateTime != null) {
-        return DateFormat('dd MMM yy, hh:mm a')
-            .format(chatDetail.kundli!.kundliDateTime!);
-      } else {
-        return "";
-      }
-    }
-
     return InkWell(
       onTap: () {
         Get.toNamed(RouteName.kundliDetail, arguments: {
-          "kundli_id": chatDetail.kundliId,
+          "kundli_id": chatDetail.kundliId ?? chatDetail.kundli!.kundliId,
           "from_kundli": true,
-          "birth_place": chatDetail.kundliPlace,
-          "gender": chatDetail.gender,
-          "name": chatDetail.kundliName,
+          "birth_place": chatDetail.kundliPlace ?? chatDetail.kundli!.kundliPlace,
+          "gender": chatDetail.gender ?? chatDetail.kundli!.gender,
+          "name": chatDetail.kundliName ?? chatDetail.kundli!.kundliName,
+          "longitude": chatDetail.longitude ?? chatDetail.kundli!.longitude,
+          "latitude": chatDetail.latitude ?? chatDetail.kundli!.latitude,
         });
-        debugPrint("KundliId : ${chatDetail.kundliId}");
       },
       child: Card(
         color: appColors.white,
@@ -1106,7 +1097,7 @@ class MessageView extends StatelessWidget {
                     ),
                     SizedBox(height: 5.h),
                     Text(
-                      getKundliDateTime(chatDetail),
+                      chatDetail.kundliDateTime ?? chatDetail.kundli!.kundliDateTime,
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 10.sp,
@@ -1140,6 +1131,8 @@ class MessageView extends StatelessWidget {
       ),
     );
   }
+
+
 
   Widget CustomProductView(
       {required ChatMessage chatDetail, required int index, String? baseUrl}) {

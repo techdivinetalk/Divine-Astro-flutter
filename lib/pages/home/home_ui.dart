@@ -888,6 +888,8 @@ class HomeUI extends GetView<HomeController> {
       stream: controller.broadcastReceiver.messages,
       builder: (context, broadcastSnapshot) {
         Map<String, dynamic>? data = broadcastSnapshot.data?.data;
+        print(data);
+        print("in call");
         return data?["userName"] == null
             ? const SizedBox()
             : Container(
@@ -917,7 +919,7 @@ class HomeUI extends GetView<HomeController> {
                                 fontWeight: FontWeight.w500),
                           ),
                           Text(
-                            '23 June 23, 02:46 PM',
+                            '${DateFormat('dd MMMM yyyy,hh:mm a').format(DateTime.now())}',
                             style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w400,
                               fontColor: appColors.darkBlue.withOpacity(.5),
@@ -933,7 +935,7 @@ class HomeUI extends GetView<HomeController> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'with ${data?["userName"]}(${data?["userId"]}) for 00:04:32 ',
+                        'with ${data?["userName"]}(${data?["userId"]})',
                         style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
                           fontColor: appColors.darkBlue.withOpacity(.5),
@@ -988,17 +990,18 @@ class HomeUI extends GetView<HomeController> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              DateTime time =
-                                  DateFormat('d MMMM yyyy').parse(data?["dob"]);
+
                               print(data);
                               print("datadatadatadatadata");
 
                               Get.toNamed(RouteName.kundliDetail, arguments: {
                                 "kundli_id": data?["kundli_id"],
                                 "from_kundli": true,
-                                "birth_place": data?["pob"],
+                                "birth_place": '${data?["pob"]}, ${data?["tob"]}',
                                 "gender": data?["gender"],
                                 "name": data?["userName"],
+                                "latitude": data?["latitude"],
+                                "longitude": data?["longitude"],
                               });
                             },
                             child: Container(
