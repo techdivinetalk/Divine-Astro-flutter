@@ -76,21 +76,7 @@ class KundliDetailController extends GetxController {
   String? kundaliId;
   Map<String, dynamic> kundaliIdParms = {};
 
-  List<List<String>> planetList = <List<String>>[
-    ["ME-RA", ''],
-    ["ME-RA", ''],
-    ["ME-RA", ''],
-  ];
-  List<List<String>> startDateList = <List<String>>[
-    ['Birth', ''],
-    ['12th-Apr', ''],
-    ['Birth', ''],
-  ];
-  List<List<String>> endDateList = <List<String>>[
-    ['12th-Apr', ''],
-    ['12th-Apr', ''],
-    ['12th-Apr', ''],
-  ];
+
 
   @override
   void onInit() {
@@ -123,7 +109,7 @@ class KundliDetailController extends GetxController {
       location: args["birth_place"].toString(),
     );
     log("Kundli===>$kundaliId");
-    getApiData(true);
+    getApiData(true,tab: 0);
   }
 
   getNewKundliData(dynamic args) async {
@@ -140,7 +126,7 @@ class KundliDetailController extends GetxController {
       min: args['params'].min ?? 0,
       lat: args['params'].lat ?? 0.0,
       long: args['params'].long ?? 0.0,
-      tzone: 5.5,
+      tzone:5.30,
       // tzone: args['params'].tzone,
       location: args['params'].location ?? "",
     );
@@ -152,13 +138,13 @@ class KundliDetailController extends GetxController {
       "min": args['params'].min,
       "lat": args['params'].lat,
       "lon": args['params'].long,
-      "tzone": 5.5,
+      "tzone": 5.30,
       // "tzone": args['params'].tzone,
     };
-    getApiData(false);
+    getApiData(false,tab: 0);
   }
 
-  getApiData(bool fromKundali) async {
+  /*getApiData(bool fromKundali) async {
     await Future.wait([
       astroDetailsApi(fromKundali),
       birthDetailsApi(fromKundali),
@@ -172,6 +158,67 @@ class KundliDetailController extends GetxController {
       getDashaTableDataListAPI(fromKundali),
       chalitChartApi(fromKundali),
     ]);
+  }*/
+  getApiData(bool fromKundali, {int tab = 0}) async {
+    switch (tab) {
+      case 0:
+        if (astroDetails.value.data == null) {
+          astroDetailsApi(fromKundali);
+        }
+        if (birthDetails.value.data == null) {
+          birthDetailsApi(fromKundali);
+        }
+        break;
+      case 1:
+        if (lagnaChart.value.data == null) {
+          lagnaChartApi(fromKundali);
+        }
+
+        break;
+      case 2:
+        if (moonChart.value.data == null) {
+          moonChartApi(fromKundali);
+        }
+        break;
+      case 3:
+        if (sunChart.value.data == null) {
+          sunChartApi(fromKundali);
+        }
+        break;
+      case 4:
+        if (navamashaChart.value.data == null) {
+          navamashaChartApi(fromKundali);
+        }
+        break;
+      case 5:
+        if (manglikDoshData.value.data == null) {
+          manglikDetails(fromKundali);
+        }
+        break;
+      case 6:
+        if (kpTableData.value.data == null) {
+          getKpTableDataListAPI(fromKundali);
+        }
+        break;
+      case 7:
+      // getKpTableDataListAPI(fromKundali);
+        if (dashaTableData.value.data == null) {
+          getDashaTableDataListAPI(fromKundali);
+        }
+
+        break;
+      case 8:
+        if (birthDetails.value.data == null) {
+          birthDetailsApi(fromKundali);
+        }
+
+        break;
+      case 9:
+        if (kundliPrediction.value.data == null) {
+          kundliPredictionApi(fromKundali);
+        }
+        break;
+    }
   }
 
   //Dasha table Data
