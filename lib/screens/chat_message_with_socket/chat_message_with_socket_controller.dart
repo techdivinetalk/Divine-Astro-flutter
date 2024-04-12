@@ -375,7 +375,7 @@ class ChatMessageWithSocketController extends GetxController
     getChatList();
     socketReconnect();
     initTask(AppFirebaseService().orderData.value);
-    FirebaseDatabase.instance.ref().child(AppFirebaseService().orderData.value["orderId"]).child("isAstroEntered").set(true);
+    FirebaseDatabase.instance.ref().child("order").child(AppFirebaseService().orderData.value["orderId"]).child("isAstroEntered").set(true);
   }
 
   navigateToOtherScreen() async {
