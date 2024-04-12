@@ -95,6 +95,7 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                             ),
                             onTap: (value) {
                               controller.currentIndex.value = value;
+                              controller.getApiData(Get.arguments['from_kundli'], tab: value);
                             },
                             tabs: [
                               Padding(
