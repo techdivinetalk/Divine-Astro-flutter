@@ -175,7 +175,6 @@ class _ExpandableHtmlState extends State<ExpandableHtml>
       ],
     );
   }
-
   @override
   bool get wantKeepAlive => true;
 }
