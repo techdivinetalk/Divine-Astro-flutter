@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:divine_astrologer/di/progress_service.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_global_singleton.dart';
+import 'package:divine_astrologer/screens/otp_verification/otp_verification_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -91,7 +92,7 @@ class ApiProvider {
   final String getHomePageData = "astroDashboard";
   final String getTarotCardDataApi = "getTarotCard";
   final String getwalletPointDetail = "getwalletPointDetail";
-  final String getFeedback = "getNotSeenFeedback";
+  final String getNotFeedback = "getNotSeenFeedback";
   final String getTrainingVideo = "getTrainingVideo";
   final String getFeedbackList = "getAstroFeedbackList";
   final String getAstroFeedback = "getAstroFeedbackDetail";
@@ -280,7 +281,7 @@ class ApiProvider {
     if (token != null) {
       return token;
     } else {
-      return "";
+      return globalToken;
     }
   }
 
