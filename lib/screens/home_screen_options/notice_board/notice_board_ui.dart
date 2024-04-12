@@ -179,3 +179,31 @@ class _ExpandableHtmlState extends State<ExpandableHtml>
   @override
   bool get wantKeepAlive => true;
 }
+
+class ExpandableHtmlView extends StatelessWidget {
+  final String htmlData;
+  final Color? color;
+  final String prodDesc;
+
+  const ExpandableHtmlView({
+    Key? key,
+    required this.htmlData,
+    this.color,
+    required this.prodDesc,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Html(
+          data: htmlData,
+          onLinkTap: (url, attributes, element) {
+            launchUrl(Uri.parse(url ?? ''));
+          },
+        ),
+      ],
+    );
+  }
+}

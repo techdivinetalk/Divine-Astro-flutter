@@ -50,10 +50,10 @@ class FAQsUI extends GetView<FAQsController> {
                               children: [
                                 Divider(height: 1, color: appColors.darkBlue.withOpacity(0.1)),
                                 SizedBox(height: 8.h),
-                                ExpandableHtml(
+                                ExpandableHtmlView(
                                   htmlData:
                                   controller.faqsResponse.value.data?[index].answer ?? '',
-                                  trimLength: 100,
+                                  prodDesc: '',
                                 )
                                // CustomText(controller.faqsResponse.value.data?[index].answer ?? '', maxLines: 10,)
                               ],
