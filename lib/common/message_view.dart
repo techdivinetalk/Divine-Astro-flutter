@@ -442,8 +442,7 @@ print("view kundli");
 
   Widget audioView(BuildContext context,
       {required ChatMessage chatDetail, required bool yourMessage}) {
-    RxInt msgType = (chatDetail.type ?? 0).obs;
-    print("Type:: ${chatDetail.type ?? ""}");
+    RxInt msgType = (chatDetail.seenStatus ?? 0).obs;
     return GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
       return SizedBox(
         width: double.maxFinite,

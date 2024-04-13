@@ -766,7 +766,7 @@ class HomeUI extends GetView<HomeController> {
                               fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          '23 June 23, 02:46 PM',
+                          '${DateFormat("dd MMMM yyyy, hh:mm a").format(DateTime.now())}',
                           style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w400,
                             fontColor: appColors.darkBlue.withOpacity(.5),
@@ -782,7 +782,7 @@ class HomeUI extends GetView<HomeController> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'with ${data["userName"]}(${data["userId"]}) for 00:04:32 ',
+                      'with ${data["userName"]}(${data["userId"]})',
                       style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue.withOpacity(.5),
@@ -846,9 +846,11 @@ class HomeUI extends GetView<HomeController> {
                               arguments: {
                                 "kundli_id": data["kundli_id"],
                                 "from_kundli": true,
-                                "birth_place": data["pob"],
+                                "birth_place": '${data["pob"]},${data["tob"]}',
                                 "gender": data["gender"],
                                 "name": data["userName"],
+                                "longitude": data["longitude"],
+                                "latitude": data["latitude"],
                               },
                             );
                           },
@@ -866,7 +868,7 @@ class HomeUI extends GetView<HomeController> {
                               child: Text(
                                 "View Kundali",
                                 style: AppTextStyle.textStyle14(
-                                    fontColor: appColors.textColor,
+                                    fontColor: appColors.whiteGuidedColor,
                                     fontWeight: FontWeight.w500),
                               ),
                             ),
@@ -882,157 +884,6 @@ class HomeUI extends GetView<HomeController> {
     });
   }
 
-  Widget viewKundliWidget() {
-    return StreamBuilder<BroadcastMessage>(
-      initialData: BroadcastMessage(name: '', data: {}),
-      stream: controller.broadcastReceiver.messages,
-      builder: (context, broadcastSnapshot) {
-        Map<String, dynamic>? data = broadcastSnapshot.data?.data;
-        print(data);
-        print("in call");
-        return data?["userName"] == null
-            ? const SizedBox()
-            : Container(
-                width: ScreenUtil().screenWidth,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: appColors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      blurRadius: 3.0,
-                      offset: const Offset(0, 3.0),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Order Id : ${data?["orderId"]}',
-                            style: AppTextStyle.textStyle12(
-                                fontWeight: FontWeight.w500),
-                          ),
-                          Text(
-                            '${DateFormat('dd MMMM yyyy,hh:mm a').format(DateTime.now())}',
-                            style: AppTextStyle.textStyle12(
-                              fontWeight: FontWeight.w400,
-                              fontColor: appColors.darkBlue.withOpacity(.5),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'On-Going CALL',
-                        style: AppTextStyle.textStyle12(
-                            fontWeight: FontWeight.w400),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'with ${data?["userName"]}(${data?["userId"]})',
-                        style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w400,
-                          fontColor: appColors.darkBlue.withOpacity(.5),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Gender: ${data?["gender"]}',
-                        style: AppTextStyle.textStyle10(
-                            fontWeight: FontWeight.w400),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'DOB: ${data?["dob"]}',
-                        style: AppTextStyle.textStyle10(
-                            fontWeight: FontWeight.w400),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'TOB: ${data?["tob"]}',
-                        style: AppTextStyle.textStyle10(
-                            fontWeight: FontWeight.w400),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'POB: ${data?["pob"]}',
-                        style: AppTextStyle.textStyle10(
-                            fontWeight: FontWeight.w400),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Marital Status: ${data?["marital"]}',
-                                  style: AppTextStyle.textStyle10(
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Problem Area: ${data?["problem"]}',
-                                  maxLines: 1,
-                                  style: AppTextStyle.textStyle10(
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ],
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-
-                              print(data);
-                              print("datadatadatadatadata");
-
-                              Get.toNamed(RouteName.kundliDetail, arguments: {
-                                "kundli_id": data?["kundli_id"],
-                                "from_kundli": true,
-                                "birth_place": '${data?["pob"]}, ${data?["tob"]}',
-                                "gender": data?["gender"],
-                                "name": data?["userName"],
-                                "latitude": data?["latitude"],
-                                "longitude": data?["longitude"],
-                              });
-                            },
-                            child: Container(
-                              height: 54.h,
-                              decoration: BoxDecoration(
-                                color: appColors.guideColor,
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(30)),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 8),
-                              // alignment: Alignment.center,
-                              child: Center(
-                                child: Text(
-                                  "View Kundali",
-                                  style: AppTextStyle.textStyle14(
-                                      fontColor: appColors.textColor,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              );
-      },
-    );
-  }
 
   Widget noticeBoardWidget({HomeController? controller}) {
     return controller!.homeData != null

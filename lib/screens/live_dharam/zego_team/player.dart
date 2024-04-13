@@ -159,6 +159,7 @@ class ZegoGiftPlayer {
         giftEntryPathCache.add(data);
       } else {
         currentGiftEntries?.remove();
+        // currentGiftEntries = null;
         clear();
         giftEntryPathCache.clear();
       }
@@ -195,6 +196,7 @@ class ZegoGiftPlayer {
   bool clear() {
     if (currentGiftEntries?.mounted ?? false) {
       currentGiftEntries?.remove();
+      currentGiftEntries = null;
     }
 
     currentGiftEntries = null;
