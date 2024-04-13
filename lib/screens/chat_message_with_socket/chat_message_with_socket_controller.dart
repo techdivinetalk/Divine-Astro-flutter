@@ -261,9 +261,9 @@ class ChatMessageWithSocketController extends GetxController
               socket.leavePrivateChatEmit(userData?.id.toString(),
                   AppFirebaseService().orderData.value["userId"], "0");
             }
-            if (AppFirebaseService().orderData.value["status"] == "4") {
-              endChatApi();
-            }
+            // if (AppFirebaseService().orderData.value["status"] == "4") {
+            //   endChatApi();
+            // }
           },
         );
       },
@@ -275,9 +275,9 @@ class ChatMessageWithSocketController extends GetxController
               socket.leavePrivateChatEmit(userData?.id.toString(),
                   AppFirebaseService().orderData.value["userId"], "0");
             }
-            if (AppFirebaseService().orderData.value["status"] == "4") {
-              endChatApi();
-            }
+            // if (AppFirebaseService().orderData.value["status"] == "4") {
+            //   endChatApi();
+            // }
           },
         );
       },
@@ -538,7 +538,7 @@ class ChatMessageWithSocketController extends GetxController
           //   // Error handling.
           //   print("Firebase error: $error");
           // });
-          await endChatApi();
+          // await endChatApi();
         }
       },
     );
