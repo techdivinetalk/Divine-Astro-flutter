@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
@@ -160,6 +161,7 @@ class MessageView extends StatelessWidget {
   }
 
   Widget productMsgView(ChatMessage chatMessage, bool yourMessage) {
+    GetProduct getProdust = chatMessage.getProduct!;
     return GestureDetector(
       onTap: () {
         print(
@@ -194,7 +196,13 @@ class MessageView extends StatelessWidget {
         child: ListTile(
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(10.0.sp),
-            child: Image.asset('assets/svg/Group 128714.png'),
+            child:CommonImageView(
+              height: 50,
+              width: 50,
+              placeHolder: Assets.images.defaultProfile.path,
+              imagePath:
+              "${Get.find<SharedPreferenceService>().getAmazonUrl()}/${getProdust.prodImage}",
+            ),
           ),
           title: CustomText(
             "You have suggested a ${chatMessage.isPoojaProduct ?? false ? "Pooja" : "product"}",
@@ -203,7 +211,7 @@ class MessageView extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
           subtitle: CustomText(
-            chatMessage.message ?? '',
+            getProdust.prodName ?? '',
             fontSize: 12.sp,
             maxLines: 20,
           ),

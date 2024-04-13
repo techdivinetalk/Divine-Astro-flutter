@@ -377,8 +377,9 @@ class ChatMessageWithSocketController extends GetxController
     initTask(AppFirebaseService().orderData.value);
     FirebaseDatabase.instance
         .ref()
-        .child("order/${AppFirebaseService().orderData.value["orderId"].toString()}/isAstroEntered")
-        .set((DateTime.now().millisecondsSinceEpoch)+1);
+        .child(
+            "order/${AppFirebaseService().orderData.value["orderId"].toString()}/isAstroEntered")
+        .set((DateTime.now().millisecondsSinceEpoch) + 1);
   }
 
   navigateToOtherScreen() async {
@@ -946,6 +947,15 @@ class ChatMessageWithSocketController extends GetxController
           receiverId: int.parse(
               AppFirebaseService().orderData.value["userId"].toString()),
           senderId: preference.getUserDetail()!.id,
+            getProduct: GetProduct(
+              prodName: productDetails.poojaName,
+              id: productDetails.id, 
+              gst: "3",
+              prodDesc: productDetails.poojaDesc,
+              prodImage: productDetails.poojaImg,
+              productLongDesc: productDetails.poojaDesc,
+              productPriceInr: productDetails.poojaStartingPriceInr,
+            )
         );
       } else {
         final productData =
@@ -953,27 +963,35 @@ class ChatMessageWithSocketController extends GetxController
         final productDetails = data?['data']['product_detail'] as Products;
         print("going in");
         newMessage = ChatMessage(
-          message: productDetails.prodName,
-          title: productDetails.prodName,
-          astrologerId: preferenceService.getUserDetail()!.id,
-          // createdAt: DateTime.now().toIso8601String(),
-          time: int.parse(time),
-          id: int.parse(time),
-          isSuspicious: 0,
-          userType: "astrologer",
-          isPoojaProduct: false,
-          awsUrl: userData?.image ?? '',
-          msgType: msgType,
-          msgSendBy: "1",
-          type: 0,
-          orderId: AppFirebaseService().orderData.value["orderId"],
-          memberId: productData.data?.id ?? 0,
-          productId: productData.data?.productId.toString(),
-          shopId: productData.data?.shopId.toString(),
-          receiverId: int.parse(
-              AppFirebaseService().orderData.value["userId"].toString()),
-          senderId: preference.getUserDetail()!.id,
-        );
+            message: productDetails.prodName,
+            title: productDetails.prodName,
+            astrologerId: preferenceService.getUserDetail()!.id,
+            // createdAt: DateTime.now().toIso8601String(),
+            time: int.parse(time),
+            id: int.parse(time),
+            isSuspicious: 0,
+            userType: "astrologer",
+            isPoojaProduct: false,
+            awsUrl: userData?.image ?? '',
+            msgType: msgType,
+            msgSendBy: "1",
+            type: 0,
+            orderId: AppFirebaseService().orderData.value["orderId"],
+            memberId: productData.data?.id ?? 0,
+            productId: productData.data?.productId.toString(),
+            shopId: productData.data?.shopId.toString(),
+            receiverId: int.parse(
+                AppFirebaseService().orderData.value["userId"].toString()),
+            senderId: preference.getUserDetail()!.id,
+            getProduct: GetProduct(
+              prodName: productDetails.prodName,
+              id: productDetails.id,
+              gst: "3",
+              prodDesc: productDetails.prodDesc,
+              prodImage: productDetails.prodImage,
+              productLongDesc: productDetails.productLongDesc,
+              productPriceInr: productDetails.productPriceInr,
+            ));
       }
     } else {
       print("new message added text type");
@@ -1018,7 +1036,7 @@ class ChatMessageWithSocketController extends GetxController
       print("newMessage3");
       chatMessages[index].seenStatus = newMessage.type;
       chatMessages.refresh();
-    } else {  
+    } else {
       print("newMessage4");
       if (isFromNotification && messgeScrollController.hasClients) {
         print("newMessage5");
@@ -1449,7 +1467,8 @@ class ChatMessageWithSocketController extends GetxController
       startExtraTimer(p0["order_end_time"]);
       return;
     }
-    if(p0["isCustEntered"] != null && p0["isCustEntered"] > DateTime.now().microsecondsSinceEpoch){
+    if (p0["isCustEntered"] != null &&
+        p0["isCustEntered"] > DateTime.now().microsecondsSinceEpoch) {
       updateReadMessage();
     }
     print("extraTime ${p0["status"]}");
