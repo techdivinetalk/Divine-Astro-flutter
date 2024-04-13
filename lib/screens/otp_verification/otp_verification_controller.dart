@@ -19,7 +19,7 @@ import '../../model/verify_otp.dart';
 import '../../repository/user_repository.dart';
 
 
-
+var globalToken = "";
 class OtpVerificationController extends GetxController with CodeAutoFill {
   OtpVerificationController(this.userRepository);
 
@@ -255,6 +255,7 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
     preferenceService.erase();
     preferenceService.setUserDetail(data.data!);
     preferenceService.setToken(data.token!);
+    globalToken = data.token!;
     preferenceService.setDeviceToken(deviceToken ?? "");
     Get.offAllNamed(RouteName.dashboard);
     //Get.offAllNamed(RouteName.dashboard, arguments: [data.data!.phoneNo, data.data!.sessionId]);

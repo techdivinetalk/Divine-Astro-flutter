@@ -375,10 +375,10 @@ class ChatMessageWithSocketController extends GetxController
     getChatList();
     socketReconnect();
     initTask(AppFirebaseService().orderData.value);
-    // FirebaseDatabase.instance
-    //     .ref()
-    //     .child("order/${AppFirebaseService().orderData.value["orderId"].toString()}/isAstroEntered")
-    //     .set(DateTime.now().millisecond.toString());
+    FirebaseDatabase.instance
+        .ref()
+        .child("order/${AppFirebaseService().orderData.value["orderId"].toString()}/isAstroEntered")
+        .set((DateTime.now().millisecondsSinceEpoch)+1);
   }
 
   navigateToOtherScreen() async {
@@ -992,6 +992,7 @@ class ChatMessageWithSocketController extends GetxController
         base64Image: base64Image,
         downloadedPath: downloadedPath,
         msgType: msgType,
+
         kundliId: kundliId,
         title: giftId ?? "${userData?.name} sent you a message.",
         type: 0,
