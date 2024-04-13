@@ -206,6 +206,24 @@ class PaymentLogTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+   /* String productTypeText;
+
+    switch (log.productType) {
+      case 7:
+        productTypeText = 'Chat';
+        break;
+      case 12:
+        productTypeText = 'Call';
+        break;
+      case 2:
+        productTypeText = 'Gifts';
+        break;
+      case 3:
+        productTypeText = 'Remedy Suggested';
+        break;
+      default:
+        productTypeText = 'Unknown';
+    }*/
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
@@ -256,7 +274,7 @@ class PaymentLogTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                log.payoutFor != "chat" ? 'Chat' : 'Call',
+                log.payoutFor ?? "Na",
                 style: AppTextStyle.textStyle12(
                   fontWeight: FontWeight.w400,
                   /*fontColor: "$type" == "PENALTY"
@@ -467,7 +485,7 @@ class PaymentLogTile extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 10),
-        Row(
+        log.payoutFor != 'gift'? Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
@@ -485,7 +503,7 @@ class PaymentLogTile extends StatelessWidget {
               style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
             ),
           ],
-        )
+        ) : SizedBox.shrink()
       ],
     );
   }
