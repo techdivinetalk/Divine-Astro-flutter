@@ -44,6 +44,7 @@ import "chat_message_with_socket_controller.dart";
 
 class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   const ChatMessageWithSocketUI({super.key});
+
   @override
   Widget build(BuildContext context) {
     controller.setContext(context);
@@ -133,18 +134,20 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   padding: EdgeInsets.symmetric(
                                       vertical: 4.h, horizontal: 12.w),
                                   child: MessageView(
-                                      index: index,
-                                      nextChatMessage: index ==
-                                              controller.chatMessages.length - 1
-                                          ? controller.chatMessages[index]
-                                          : controller.chatMessages[index + 1],
-                                      chatMessage: chatMessage,
-                                      /*  yourMessage: "${chatMessage.senderId.toString()}" ==
+                                    index: index,
+                                    nextChatMessage: index ==
+                                            controller.chatMessages.length - 1
+                                        ? controller.chatMessages[index]
+                                        : controller.chatMessages[index + 1],
+                                    chatMessage: chatMessage,
+                                    /*  yourMessage: "${chatMessage.senderId.toString()}" ==
                                               "${preferenceService.getUserDetail()!.id.toString()}",*/
-                                      yourMessage: chatMessage.msgSendBy == "1",
-                                      userName: controller.customerName.value,
-                                      unreadMessage:
-                                          controller.unreadMessageIndex.value,myList:myList,),
+                                    yourMessage: chatMessage.msgSendBy == "1",
+                                    userName: controller.customerName.value,
+                                    unreadMessage:
+                                        controller.unreadMessageIndex.value,
+                                    myList: myList,
+                                  ),
                                 ),
                                 if (index ==
                                     (controller.chatMessages.length - 1))

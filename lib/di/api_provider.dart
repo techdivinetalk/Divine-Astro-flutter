@@ -281,7 +281,7 @@ class ApiProvider {
     if (token != null) {
       return token;
     } else {
-      return globalToken;
+      return "";
     }
   }
 

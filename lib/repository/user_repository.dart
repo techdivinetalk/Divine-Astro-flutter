@@ -45,7 +45,10 @@ class UserRepository extends ApiProvider {
   Future sentOtp(Map<String, dynamic> param) async {
     //progressService.showProgressDialog(true);
     try {
-      final response = await post(sendOtp, body: jsonEncode(param).toString());
+      final response = await post(
+        sendOtp,
+        body: jsonEncode(param).toString(),
+      );
       //progressService.showProgressDialog(false);
       print(response.statusCode);
       print("response.statusCode");
@@ -514,6 +517,7 @@ class UserRepository extends ApiProvider {
       rethrow;
     }
   }
+
   Future<AddEditPujaModel> addEditProductApi(Map<String, dynamic> param) async {
     try {
       final response = await post(addProductByAstrologer,
@@ -558,6 +562,7 @@ class UserRepository extends ApiProvider {
       rethrow;
     }
   }
+
   Future<PujaProductCategoriesModel> getPoojaNamesApi(
       Map<String, dynamic> param) async {
     try {
@@ -965,11 +970,12 @@ class UserRepository extends ApiProvider {
     return Future<UpdateSessionTypeResponse>.value(data);
   }
 
-  Future<CustomProductModel> customeEcommerceApi(Map<String, dynamic> param) async {
+  Future<CustomProductModel> customeEcommerceApi(
+      Map<String, dynamic> param) async {
     //progressService.showProgressDialog(true);
     try {
       final response =
-      await post(customeEcommerce, body: jsonEncode(param).toString());
+          await post(customeEcommerce, body: jsonEncode(param).toString());
 
       print("messResponse");
       print(json.decode(response.body)["message"]);
@@ -980,7 +986,7 @@ class UserRepository extends ApiProvider {
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           CustomProductModel savedRemediesData =
-          CustomProductModel.fromJson(jsonDecode(response.body));
+              CustomProductModel.fromJson(jsonDecode(response.body));
 
           if (savedRemediesData.statusCode == successResponse &&
               savedRemediesData.success!) {
