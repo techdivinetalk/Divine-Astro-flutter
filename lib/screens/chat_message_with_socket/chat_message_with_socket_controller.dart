@@ -489,6 +489,10 @@ class ChatMessageWithSocketController extends GetxController
           chatTimer?.cancel();
           print("WentBack endChat");
           extraTimer?.cancel();
+          FirebaseDatabase.instance
+              .ref(
+              "user/${AppFirebaseService().orderData.value["userId"]}/realTime/queue_list/${param["order_id"]}")
+              .remove();
           Get.until(
             (route) {
               return Get.currentRoute == RouteName.dashboard;
@@ -534,7 +538,7 @@ class ChatMessageWithSocketController extends GetxController
           //   // Error handling.
           //   print("Firebase error: $error");
           // });
-          endChatApi();
+          await endChatApi();
         }
       },
     );
