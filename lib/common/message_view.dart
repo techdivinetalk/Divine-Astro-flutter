@@ -308,7 +308,9 @@ class MessageView extends StatelessWidget {
   Widget textMsgView(
       BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     RxInt msgType = (chatMessage.seenStatus ?? 0).obs;
-
+print(chatMessage.id.toString() ==
+    AppFirebaseService().orderData["userId"].toString());
+print("view kundli");
     return SizedBox(
       width: double.maxFinite,
       child: Column(
