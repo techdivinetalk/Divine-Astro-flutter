@@ -378,7 +378,7 @@ class ChatMessageWithSocketController extends GetxController
     FirebaseDatabase.instance
         .ref()
         .child("order/${AppFirebaseService().orderData.value["orderId"].toString()}/isAstroEntered")
-        .set(DateTime.now().millisecond.toString());
+        .set((DateTime.now().millisecondsSinceEpoch)+1);
   }
 
   navigateToOtherScreen() async {

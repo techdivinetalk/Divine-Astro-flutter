@@ -19,7 +19,7 @@ import '../../model/verify_otp.dart';
 import '../../repository/user_repository.dart';
 
 
-var globalToken;
+var globalToken = "";
 class OtpVerificationController extends GetxController with CodeAutoFill {
   OtpVerificationController(this.userRepository);
 
