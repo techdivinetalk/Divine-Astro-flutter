@@ -38,13 +38,14 @@ Future<void> firebaseMessagingConfig(BuildContext buildContext) async {
   final firebaseMessaging = FirebaseMessaging.instance;
 
   await firebaseMessaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true);
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+   );
 
   firebaseMessaging.setForegroundNotificationPresentationOptions(
     alert: true,
@@ -142,13 +143,13 @@ void onDidReceiveNotificationResponse(
     // // if(payloadMap["type"] == "2") {
     if (payloadMap["type"] == "1") {
       Get.toNamed(RouteName.chatMessageWithSocketUI);
-    }else if (payloadMap["type"] == "8") {
+    } else if (payloadMap["type"] == "8") {
       final senderId = payloadMap["sender_id"];
       DataList dataList = DataList();
       dataList.id = int.parse(senderId);
       dataList.name = payloadMap["title"];
       Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
-    }else {
+    } else {
       if (!await launchUrl(Uri.parse(payloadMap["url"].toString()))) {
         throw Exception('Could not launch ${payloadMap["url"]}');
       }

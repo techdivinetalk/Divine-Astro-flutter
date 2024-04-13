@@ -17,9 +17,9 @@ class GiftPlayerData {
   dynamic value = '';
 
   GiftPlayerData(
-      this.source,
-      this.value,
-      );
+    this.source,
+    this.value,
+  );
 
   @override
   String toString() {
@@ -61,8 +61,8 @@ class GiftPlayerWidgetState extends State<GiftPlayerWidget>
         GiftCache()
             .read(url: widget.data.value as String? ?? '')
             .then((byteData) {
-          movieEntity = SVGAParser.shared.decodeFromBuffer(byteData);
 
+          movieEntity = SVGAParser.shared.decodeFromBuffer(byteData);
           loadedNotifier.value = true;
         });
         // movieEntity = SVGAParser.shared.decodeFromURL();
@@ -150,9 +150,9 @@ class ZegoGiftPlayer {
   List<GiftPlayerData> giftEntryPathCache = [];
 
   void play(
-      BuildContext context,
-      GiftPlayerData data,
-      ) {
+    BuildContext context,
+    GiftPlayerData data,
+  ) {
     if (null != currentGiftEntries) {
       debugPrint("has gift displaying, cache, data:$data");
       if (!(giftEntryPathCache.length > 3)) {
@@ -188,7 +188,8 @@ class ZegoGiftPlayer {
         },
       );
     });
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      await Future.delayed(const Duration(seconds: 1));
       Overlay.of(context, rootOverlay: false).insert(currentGiftEntries!);
     });
   }

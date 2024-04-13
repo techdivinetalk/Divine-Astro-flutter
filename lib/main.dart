@@ -299,11 +299,13 @@ Future<void> showNotification(String title, String message, String type,
               : []);
   if (type == "1") {
     androidNotificationDetails = const AndroidNotificationDetails(
-        "DivineCustomer", "CustomerNotification",
-        sound: RawResourceAndroidNotificationSound('accept_ring'),
-        importance: Importance.max,
-        priority: Priority.high,
-        autoCancel: true);
+      "DivineCustomer", "CustomerNotification",
+      // sound: RawResourceAndroidNotificationSound('accept_ring'),
+      importance: Importance.max,
+
+      priority: Priority.high,
+      autoCancel: true,
+    );
   }
   NotificationDetails notificationDetails =
       NotificationDetails(android: androidNotificationDetails);
@@ -317,7 +319,8 @@ void initMessaging() async {
       AndroidInitializationSettings("@mipmap/ic_launcher");
   const DarwinInitializationSettings initializationSettingsDarwin =
       DarwinInitializationSettings(
-          onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+    onDidReceiveLocalNotification: onDidReceiveLocalNotification,
+  );
 
   const InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
