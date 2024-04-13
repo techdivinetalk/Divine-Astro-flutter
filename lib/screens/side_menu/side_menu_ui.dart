@@ -1,8 +1,10 @@
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../common/routes.dart';
 import '../../pages/home/home_controller.dart';
@@ -27,7 +29,7 @@ class SideMenuDrawer extends GetView<HomeController> {
               children: [
                 Text(
                   "${'version'.tr} 0.0.0.0.0",
-                  style:  TextStyle(fontSize: 16, color: appColors.grey),
+                  style: TextStyle(fontSize: 16, color: appColors.grey),
                 ),
                 InkWell(
                   onTap: () => Navigator.pop(context),
@@ -70,12 +72,17 @@ class SideMenuDrawer extends GetView<HomeController> {
             ListTile(
               leading: Assets.images.icImportContact.svg(),
               title: Text('importantNumbers'.tr),
-              onTap: () => {
-                Navigator.of(context).pop(),
-                Get.toNamed(RouteName.importantNumbers)
+              onTap: () async {
+                Navigator.of(context).pop();
+                bool isPermission = await requestPermissions();
+                if (isPermission) {
+                  Get.toNamed(RouteName.importantNumbers);
+                } else {
+                  divineSnackBar(data: "Please give permission for contacts");
+                }
               },
             ),
-          /*  ListTile(
+            /*  ListTile(
               leading: Assets.images.icDonations.svg(),
               title: Text('donation'.tr),
               onTap: () => {
@@ -87,5 +94,16 @@ class SideMenuDrawer extends GetView<HomeController> {
         ),
       ),
     );
+  }
+
+  requestPermissions() async {
+    var status = await Permission.contacts.status;
+    bool isGranted = false;
+    if (!status.isGranted) {
+      await Permission.contacts.request().then((value) {
+        print("is granted contact permission ? ==> ${isGranted}");
+      });
+    } else {}
+    return Permission.contacts.isGranted;
   }
 }

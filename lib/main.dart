@@ -74,6 +74,10 @@ Future<void> main() async {
       print('msg ---- from notification');
       return;
     }
+    if (message.data["type"] == "1") {
+      print('msg ---- from notification');
+      return;
+    }
     if (message.data["type"] == "1" &&
         MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
       showNotification(message.data["title"], message.data["message"],
@@ -284,28 +288,31 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> showNotification(String title, String message, String type,
     Map<String, dynamic> data) async {
-  AndroidNotificationDetails androidNotificationDetails =
-      AndroidNotificationDetails("DivineCustomer", "CustomerNotification",
-          importance: Importance.max,
-          priority: Priority.high,
-          autoCancel: true,
-          actions: type == "1"
-              ? [
-                  const AndroidNotificationAction(
-                    'accept',
-                    'Accept',
-                  ),
-                ]
-              : []);
+  AndroidNotificationDetails? androidNotificationDetails;
   if (type == "1") {
+    print("getting type --- ${type}");
     androidNotificationDetails = const AndroidNotificationDetails(
       "DivineCustomer", "CustomerNotification",
       // sound: RawResourceAndroidNotificationSound('accept_ring'),
       importance: Importance.max,
-
       priority: Priority.high,
       autoCancel: true,
+      playSound: true,
     );
+  } else {
+    androidNotificationDetails =
+        AndroidNotificationDetails("DivineCustomer", "CustomerNotification",
+            importance: Importance.max,
+            priority: Priority.high,
+            autoCancel: true,
+            actions: type == "1"
+                ? [
+                    const AndroidNotificationAction(
+                      'accept',
+                      'Accept',
+                    ),
+                  ]
+                : []);
   }
   NotificationDetails notificationDetails =
       NotificationDetails(android: androidNotificationDetails);

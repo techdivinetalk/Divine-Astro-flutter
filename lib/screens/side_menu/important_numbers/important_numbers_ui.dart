@@ -27,82 +27,85 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
               color: appColors.darkBlue,
             )),
       ),
-      body: GetBuilder<ImportantNumbersController>(builder: (context) {
-        return GetBuilder<ImportantNumbersController>(builder: (controller) {
-          if (controller.loading == Loading.loading ||
-              controller.importantNumbers.isEmpty) {
-            return const Center(
-              child: CircularProgressIndicator.adaptive(
-                valueColor: AlwaysStoppedAnimation(Colors.yellow),
-              ),
-            );
-          } else {
-            return SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.white.withOpacity(0.2),
-                                blurRadius: 1.0,
-                                offset: const Offset(0.0, 3.0)),
-                          ],
-                          border:
-                              Border.all(width: 1, color: appColors.redColor),
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Text("importNumText".tr,
-                            style: TextStyle(
-                              color: appColors.redColor,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 13.sp,
-                            )),
-                      ),
+      body: GetBuilder<ImportantNumbersController>(builder: (controller) {
+        if (controller.loading == Loading.loading) {
+          return const Center(
+            child: CircularProgressIndicator.adaptive(
+              valueColor: AlwaysStoppedAnimation(Colors.yellow),
+            ),
+          );
+        } else if (controller.importantNumbers.isEmpty) {
+          return Center(
+            child: Text(
+              "No data found!",
+              style: AppTextStyle.textStyle14(),
+            ),
+          );
+        } else {
+          return SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.white.withOpacity(0.2),
+                              blurRadius: 1.0,
+                              offset: const Offset(0.0, 3.0)),
+                        ],
+                        border: Border.all(width: 1, color: appColors.redColor),
+                        borderRadius: BorderRadius.circular(12)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text("importNumText".tr,
+                          style: TextStyle(
+                            color: appColors.redColor,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 13.sp,
+                          )),
                     ),
-                    SizedBox(height: 20.h),
-                    ListView.builder(
-                      itemCount: controller.importantNumbers.length,
-                      primary: false,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        MobileNumber phoneNumber =
-                            controller.importantNumbers[index];
-                        var exist =
-                            controller.checkForContactExist(phoneNumber);
+                  ),
+                  SizedBox(height: 20.h),
+                  ListView.builder(
+                    itemCount: controller.importantNumbers.length,
+                    primary: false,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      MobileNumber phoneNumber =
+                          controller.importantNumbers[index];
+                      var exist = controller.checkForContactExist(phoneNumber);
 
-                        return SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          phoneNumber.title ?? "",
-                                          style: AppTextStyle.textStyle16(
-                                              fontColor: appColors.darkBlue),
-                                        ),
-                                        SizedBox(height: 5.h),
-                                        Text(
-                                          phoneNumber.mobileNumber ?? "",
-                                          style: AppTextStyle.textStyle12(
-                                              fontColor: appColors.darkBlue),
-                                        ),
-                                      ],
-                                    ),
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        phoneNumber.title ?? "",
+                                        style: AppTextStyle.textStyle16(
+                                            fontColor: appColors.darkBlue),
+                                      ),
+                                      SizedBox(height: 5.h),
+                                      Text(
+                                        phoneNumber.mobileNumber ?? "",
+                                        style: AppTextStyle.textStyle12(
+                                            fontColor: appColors.darkBlue),
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(width: 10.w),
-                                  AddContactButton(
-                                      exist: exist, phoneNumber: phoneNumber)
-                                  /* GestureDetector(
+                                ),
+                                SizedBox(width: 10.w),
+                                AddContactButton(
+                                    exist: exist, phoneNumber: phoneNumber)
+                                /* GestureDetector(
                                       onTap: () {
                                         if (!exist) {
                                           List<String> phoneNumbers = phoneNumber
@@ -133,20 +136,19 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                                         ),
                                       ),
                                     )*/
-                                ],
-                              ),
-                              SizedBox(height: 25.h),
-                            ],
-                          ),
-                        );
-                      },
-                    )
-                  ],
-                ),
+                              ],
+                            ),
+                            SizedBox(height: 25.h),
+                          ],
+                        ),
+                      );
+                    },
+                  )
+                ],
               ),
-            );
-          }
-        });
+            ),
+          );
+        }
       }),
     );
   }
