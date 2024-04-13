@@ -81,7 +81,9 @@ class ChatMessage {
   String? productPrice;
 
   Kundli? kundli;
+  GetProduct? getProduct;
   dynamic getCustomProduct;
+
 
   ChatMessage({
     this.id,
@@ -134,6 +136,7 @@ class ChatMessage {
     this.kundliDateTime,
     this.kundliPlace,
     this.gender,
+    this.getProduct,
 
     this.type,
     this.userType,
@@ -204,6 +207,7 @@ class ChatMessage {
     kundliId = json['kundliId'];
     gender = json['gender'];
     productPrice = json['productPrice'];
+    getProduct = (json['get_product'] as Map<String,dynamic>?) != null ? GetProduct.fromJson(json['get_product'] as Map<String,dynamic>) : null;
 
     userType = json['userType'];
     kundli = json['kundli'] != null ? Kundli.fromJson(json['kundli']) : null;
@@ -220,6 +224,7 @@ class ChatMessage {
     data['role_id'] = roleId;
     data['latitude'] = latitude;
     data['longitude'] = longitude;
+    data['get_product'] =getProduct;
     data['title'] = title;
     data['customer_id'] = customerId;
     data['msg_sequence'] = msgSequence;
@@ -276,6 +281,46 @@ class ChatMessage {
     data['kundli'] = kundli;
     return data;
   }
+
+}
+
+class GetProduct {
+  final int? id;
+  final String? prodName;
+  final String? prodImage;
+  final String? prodDesc;
+  final int? productPriceInr;
+  final String? productLongDesc;
+  final String? gst;
+
+  GetProduct({
+    this.id,
+    this.prodName,
+    this.prodImage,
+    this.prodDesc,
+    this.productPriceInr,
+    this.productLongDesc,
+    this.gst,
+  });
+
+  GetProduct.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as int?,
+        prodName = json['prod_name'] as String?,
+        prodImage = json['prod_image'] as String?,
+        prodDesc = json['prod_desc'] as String?,
+        productPriceInr = json['product_price_inr'] as int?,
+        productLongDesc = json['product_long_desc'] as String?,
+        gst = json['gst'] as String?;
+
+  Map<String, dynamic> toJson() => {
+    'id' : id,
+    'prod_name' : prodName,
+    'prod_image' : prodImage,
+    'prod_desc' : prodDesc,
+    'product_price_inr' : productPriceInr,
+    'product_long_desc' : productLongDesc,
+    'gst' : gst
+  };
 }
 
 class Kundli {
