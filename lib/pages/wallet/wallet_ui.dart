@@ -163,9 +163,7 @@ class WalletPage extends GetView<WalletController> {
               const SizedBox(height: 20),
           Expanded(
             child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Obx(
+              child: Obx(
                       () {
                     final paymentLogList =
                         controller.walletListRepo.value.data?.paymentLog;
@@ -177,8 +175,8 @@ class WalletPage extends GetView<WalletController> {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: paymentLogList.length,
-                        separatorBuilder: (context, index) =>
-                        const SizedBox(height: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(bottom: 20),
+                        separatorBuilder: (context, index) => const SizedBox(height: 10),
                         itemBuilder: (context, index) {
                           final log = paymentLogList[index];
                           return PaymentLogTile(log: log!);
@@ -189,7 +187,6 @@ class WalletPage extends GetView<WalletController> {
                     }
                   },
                 ),
-              ),
             ),
           )
         ],

@@ -220,7 +220,7 @@ selectDateOrTime(
                   },
                   pickerTheme: DateTimePickerTheme(
                     pickerHeight: 180,
-                    itemHeight: 44,
+                    itemHeight: 43,
                     backgroundColor: appColors.white,
                     itemTextStyle:  TextStyle(
                         color: appColors.darkBlue,

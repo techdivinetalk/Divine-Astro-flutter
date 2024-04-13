@@ -47,273 +47,113 @@ class FeedBack extends GetView<FeedbackController> {
           ),
         ),
       ),
-      body: GetBuilder<FeedbackController>(
-          builder: (controller) {
-        print ("Product Id :: ${controller.order?.productType}");
+      body: GetBuilder<FeedbackController>(builder: (controller) {
+        print("Product Id :: ${controller.order?.productType}");
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             controller.order?.productType == null
                 ? ShimmerLoader()
                 : Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      controller.order?.productType == 12
-                          ? Assets.svg.message.svg(height: 12.h, width: 12.h)
-                          : Assets.svg.icCall1.svg(height: 12.h, width: 12.h),
-                      SizedBox(width: 8.w),
-                      Text(
-                        'ID : ${controller.order?.id ?? "N/A"}',
-                        style: AppTextStyle.textStyle12(
-                          fontWeight: FontWeight.w400,
-                          fontColor: appColors.darkBlue,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.w),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            controller.order?.productType == 12
+                                ? Assets.svg.message
+                                    .svg(height: 12.h, width: 12.h)
+                                : Assets.svg.icCall1
+                                    .svg(height: 12.h, width: 12.h),
+                            SizedBox(width: 8.w),
+                            Text(
+                              'ID : ${controller.order?.id ?? "N/A"}',
+                              style: AppTextStyle.textStyle12(
+                                fontWeight: FontWeight.w400,
+                                fontColor: appColors.darkBlue,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                        Row(
+                          children: [
+                            Text(
+                              controller.order?.createdAt != null
+                                  ? DateFormat('dd MMMM, hh:mma').format(
+                                      DateTime.parse(
+                                          controller.order!.createdAt!),
+                                    )
+                                  : "N/A",
+                              style: AppTextStyle.textStyle10(
+                                fontWeight: FontWeight.w400,
+                                fontColor: appColors.darkBlue.withOpacity(.5),
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        controller.order?.createdAt != null
-                            ? DateFormat('dd MMMM, hh:mma').format(
-                                DateTime.parse(controller.order!.createdAt!),
-                              )
-                            : "N/A",
-                        style: AppTextStyle.textStyle10(
-                          fontWeight: FontWeight.w400,
-                          fontColor: appColors.darkBlue.withOpacity(.5),
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
             SizedBox(
               height: Get.height * 0.4,
               child: Stack(
                 children: [
                   Assets.images.bgChatWallpaper.image(
-                    width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.cover,
-                    height: double.infinity
-                  ),
-                  ListView.builder(
-                    itemCount: controller.chatMessageList.length,
-                    controller: controller.messageScrollController,
-                    reverse: false,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      final data = controller.chatMessageList[index];
-
-                     /* bool isNewDay = index == 0 ||
-                          (data.createdAt != null &&
-                              controller.chatMessageList[index - 1].createdAt != null &&
-                              (DateTime.tryParse(data.createdAt!) ??
-                                  DateTime.fromMillisecondsSinceEpoch(
-                                      int.parse(data.createdAt!))) // Convert epoch time if parsing fails
-                                  .day !=
-                                  (DateTime.tryParse(controller.chatMessageList[index - 1].createdAt!) ??
-                                      DateTime.fromMillisecondsSinceEpoch(
-                                          int.parse(controller.chatMessageList[index - 1].createdAt!)))
-                                      .day);*/
-
-                     /* String? createdAt = data.createdAt;
-                      String formattedTime = '';
-                      if (createdAt != null && createdAt.isNotEmpty) {
-                        try {
-                          DateTime parsedDateTime = DateTime.parse(createdAt);
-                          formattedTime = DateFormat.jm().format(parsedDateTime);
-                        } catch (e) {
-                          // Handle parsing error
-                          print('Error parsing createdAt: $e');
-                        }
-                      }*/
-
-                      return controller.order?.productType == 12
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                               /* if (isNewDay)
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.cover,
+                      height: double.infinity),
+                  Visibility(
+                    visible: controller.chatMessageList.isNotEmpty,
+                    replacement: const Center(
+                      child: Text("No data found!"),
+                    ),
+                    child: ListView.builder(
+                      itemCount: controller.chatMessageList.length,
+                      controller: controller.messageScrollController,
+                      reverse: false,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        final data = controller.chatMessageList[index];
+                        return controller.order?.productType == 12
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
                                   Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 15.w),
-                                    child: Container(
-                                      width: 60,
-                                      height: 25,
-                                      decoration: BoxDecoration(
-                                        color: appColors.brown,
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          formattedTime,
-                                          style: AppTextStyle.textStyle10(
-                                            fontColor: appColors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ).centered(),
-                                  ),*/
-                                // Display chat message
-                               /* data.msgType == 0
-                                    ?*/ Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 12.w, vertical: 4.h),
-                                  child: MessageHistoryView(
-                                    unreadMessageShow: true,
-                                    index: index,
-                                    userName: '',
-                                    nextChatMessage: index ==
-                                        controller.chatMessageList.length - 1
-                                        ? controller.chatMessageList[index]
-                                        : controller.chatMessageList[index + 1],
-                                    chatMessage: data,
-                                    yourMessage: controller
-                                        .chatMessageList[index].msgSendBy == "1",
-                                  ),
-                                )
-                                   /* : SizedBox(
-                                  width: double.maxFinite,
-                                  child: Padding(
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 12.w, vertical: 4.h),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          (data.msgType ?? 0) == 1
-                                              ? CrossAxisAlignment.end
-                                              : CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 12, vertical: 8),
-                                          clipBehavior: Clip.antiAlias,
-                                          decoration: BoxDecoration(
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.2),
-                                                blurRadius: 3.0,
-                                                offset: const Offset(0.0, 3.0),
-                                              ),
-                                            ],
-                                            color: Colors.white,
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(10)),
-                                          ),
-                                          constraints: BoxConstraints(
-                                            maxWidth:
-                                                ScreenUtil().screenWidth * 0.7,
-                                            minWidth:
-                                                ScreenUtil().screenWidth * 0.27,
-                                          ),
-                                          child: Stack(
-                                            alignment: (data.msgType ?? 0) == 1
-                                                ? Alignment.centerRight
-                                                : Alignment.centerLeft,
-                                            children: [
-                                              Column(
-                                                children: [
-                                                  Wrap(
-                                                    alignment:
-                                                        WrapAlignment.end,
-                                                    children: [
-                                                      Text(
-                                                        data.message ?? "",
-                                                        style: AppTextStyle
-                                                            .textStyle14(
-                                                          fontColor:
-                                                              (data.msgType ??
-                                                                          0) ==
-                                                                      1
-                                                                  ? appColors
-                                                                      .darkBlue
-                                                                  : appColors
-                                                                      .darkBlue,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(height: 20.h),
-                                                ],
-                                              ),
-                                              Positioned(
-                                                bottom: 0,
-                                                right: 0,
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                      formattedTime,
-                                                      style: AppTextStyle.textStyle10(
-                                                        fontColor: appColors.darkBlue,
-                                                      ),
-                                                    ),
-                                                    (data.seenStatus ?? 0) == 0
-                                                        ? SizedBox(width: 8.w)
-                                                        : (data.seenStatus ??
-                                                                    0) ==
-                                                                1
-                                                            ? Assets.images
-                                                                .icSingleTick
-                                                                .svg()
-                                                            : (data.seenStatus ??
-                                                                        0) ==
-                                                                    2
-                                                                ? Assets.images
-                                                                    .icDoubleTick
-                                                                    .svg()
-                                                                : const SizedBox(),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
+                                    child: MessageHistoryView(
+                                      unreadMessageShow: true,
+                                      index: index,
+                                      userName: '',
+                                      nextChatMessage: index ==
+                                              controller
+                                                      .chatMessageList.length -
+                                                  1
+                                          ? controller.chatMessageList[index]
+                                          : controller
+                                              .chatMessageList[index + 1],
+                                      chatMessage: data,
+                                      yourMessage: controller
+                                              .chatMessageList[index]
+                                              .msgSendBy ==
+                                          "1",
                                     ),
+                                  )
+                                ],
+                              )
+                            : Column(
+                                children: [
+                                  const SizedBox(height: 10),
+                                  CustomVoicePlayer(
+                                    playUrl: data.callRecording ?? "",
+                                    callDuration: data.callDuration,
                                   ),
-                                ),*/
-                              ],
-                            )
-                          : Column(
-                              children: [
-                               /* if (isNewDay)
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 15.w),
-                                    child: Container(
-                                      width: 60,
-                                      height: 25,
-                                      decoration: BoxDecoration(
-                                        color: appColors.brown,
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          formattedTime,
-                                          style: AppTextStyle.textStyle10(
-                                            fontColor: appColors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ).centered(),
-                                  ),*/
-                                SizedBox(height: 10),
-                                CustomVoicePlayer(
-                                  playUrl: data.callRecording ?? "",
-                                  callDuration: data.callDuration,
-                                ),
-
-                              ],
-                            );
-
-
-                    },
+                                ],
+                              );
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -321,84 +161,86 @@ class FeedBack extends GetView<FeedbackController> {
             controller.order?.productType == null
                 ? ShimmerLoader()
                 : Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Obx(() => Column(
-                children: [
-                  SizedBox(height: 20.h),
-                  Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          RichText(
-                            text: TextSpan(
-                              text: 'Total problems Found : ',
-                              style: AppTextStyle.textStyle16(
-                                  fontWeight: FontWeight.w500),
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: Obx(() => Column(
+                          children: [
+                            SizedBox(height: 20.h),
+                            Row(
                               children: [
-                                TextSpan(
-                                  text:
-                                  '${controller.astroFeedbackDetailData.value?.totalProblem ?? 0}',
-                                  style:  TextStyle(color: appColors.red),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    RichText(
+                                      text: TextSpan(
+                                        text: 'Total problems Found : ',
+                                        style: AppTextStyle.textStyle16(
+                                            fontWeight: FontWeight.w500),
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                '${controller.astroFeedbackDetailData.value?.totalProblem ?? 0}',
+                                            style:
+                                                TextStyle(color: appColors.red),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    RichText(
+                                      text: TextSpan(
+                                        text: 'Total Applicable Fine : ',
+                                        style: AppTextStyle.textStyle16(
+                                            fontWeight: FontWeight.w500),
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                '-₹ ${controller.astroFeedbackDetailData.value?.fineAmounts ?? 0}',
+                                            style:
+                                                TextStyle(color: appColors.red),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed(RouteName.fineAllDetails);
+                                  },
+                                  child: const Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Icon(
+                                      Icons.info_outline,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
-                          SizedBox(height: 10.h),
-                          RichText(
-                            text: TextSpan(
-                              text: 'Total Applicable Fine : ',
-                              style: AppTextStyle.textStyle16(
-                                  fontWeight: FontWeight.w500),
-                              children: [
-                                TextSpan(
-                                  text:
-                                  '-₹ ${controller.astroFeedbackDetailData.value?.fineAmounts ?? 0}',
-                                  style:  TextStyle(color: appColors.red),
-                                ),
-                              ],
+                            SizedBox(height: 20.h),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: controller.astroFeedbackDetailData
+                                      .value?.problems?.length ??
+                                  0,
+                              itemBuilder: (context, index) {
+                                final feedbackProblem = controller
+                                    .astroFeedbackDetailData
+                                    .value
+                                    ?.problems?[index];
+                                return FeedbackCallChatCardWidget(
+                                    feedbackProblem: feedbackProblem!);
+                              },
                             ),
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          Get.toNamed(RouteName.fineAllDetails);
-                        },
-                        child: const Align(
-                          alignment: Alignment.centerRight,
-                          child: Icon(
-                            Icons.info_outline,
-                          ),
-                        ),
-                      ),
-                    ],
+                          ],
+                        )),
                   ),
-                  SizedBox(height: 20.h),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount:
-                    controller.astroFeedbackDetailData.value?.problems?.length ??
-                        0,
-                    itemBuilder: (context, index) {
-                      final feedbackProblem =
-                      controller.astroFeedbackDetailData.value?.problems?[index];
-                      return FeedbackCallChatCardWidget(
-                          feedbackProblem: feedbackProblem!);
-                    },
-                  ),
-                ],
-              )),
-            ),
           ],
         );
       }),
     );
   }
 }
-
-
 
 class CustomVoicePlayer extends StatefulWidget {
   final String playUrl;

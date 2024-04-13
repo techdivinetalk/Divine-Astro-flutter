@@ -102,6 +102,7 @@ class FeedbackController extends GetxController {
           // Access the order information
           order = response.order?.isNotEmpty == true ? response.order![0] : null;
           print(" Print order ${order?.productType.toString()}");
+          print(" Print ChatMessage ${chatMessages.isNotEmpty.toString()}");
           if (chatMessages.isNotEmpty) {
             chatMessageList.addAll(chatMessages);
             processedPages.add(currentPage.value);

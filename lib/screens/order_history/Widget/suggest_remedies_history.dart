@@ -36,8 +36,8 @@ class SuggestRemedies extends StatelessWidget {
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemCount: controller.remedySuggestedHistoryList.length,
-        padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(top: 30),
-        separatorBuilder: (context, index) => const SizedBox(height: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 30,bottom: 20),
+        separatorBuilder: (context, index) => const SizedBox(height: 10),
         itemBuilder: (context, index) {
           return remediesDetail(index, controller.remedySuggestedHistoryList);
         },
