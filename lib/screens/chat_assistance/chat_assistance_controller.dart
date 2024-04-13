@@ -52,10 +52,6 @@ class ChatAssistanceController extends GetxController {
     super.onReady();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
 
   // void listenSocket() {
